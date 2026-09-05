@@ -1,0 +1,13 @@
+{
+  "name": "push-kids-workspace",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "test": "node --test tests/frontend/*.test.js",
+    "lint:miniapp": "eslint apps/miniprogram tests/frontend --ext .js",
+    "check:miniapp": "python3 tools/validate_miniprogram.py"
+  },
+  "devDependencies": {
+    "eslint": "^9.35.0"
+  }
+}

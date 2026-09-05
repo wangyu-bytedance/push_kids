@@ -1,0 +1,13 @@
+.todo { padding: 26rpx; }
+.todo.optional { opacity: .86; }
+.subject { display: block; font-size: 31rpx; font-weight: 700; }
+.method { display: block; margin-top: 2rpx; color: #707873; font-size: 24rpx; }
+.minutes { color: #2f766d; font-size: 24rpx; }
+.practice-action { min-height: 56rpx; margin-top: 8rpx; padding: 0 16rpx; border: 1rpx solid #b9cec7; border-radius: 14rpx; background: #fff; color: #225b54; font-size: 22rpx; line-height: 54rpx; }
+.practice-action::after { border: 0; }
+.point { padding-top: 22rpx; margin-top: 18rpx; border-top: 1rpx solid #e6e7e3; }
+.point-name { display: block; margin-bottom: 16rpx; }
+.actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10rpx; }
+.action { width: 100%; min-width: 0; min-height: 68rpx; padding: 0; border-radius: 16rpx; background: #f0f3f0; color: #53605c; font-size: 23rpx; line-height: 68rpx; }
+.action::after { border: none; }
+.action.primary { background: #dcece7; color: #225b54; font-weight: 650; }

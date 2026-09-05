@@ -1,0 +1,198 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Push Kids 当前 MVP 部署与数据存储",
+    "locale": "zh-CN",
+    "quality_profile": "showcase",
+    "viewBox": [1380, 800],
+    "views": [
+      {
+        "id": "runtime_path",
+        "label": "线上请求路径",
+        "focus": ["wechat_platform", "parent_device", "nginx", "api"],
+        "note": "小程序包由微信平台分发，业务请求直接进入自建 HTTPS API。"
+      },
+      {
+        "id": "state_ownership",
+        "label": "持久数据",
+        "focus": ["api", "sqlite", "uploads"],
+        "note": "结构化数据和图片分别落在宿主机 bind mount 目录。"
+      },
+      {
+        "id": "analysis_path",
+        "label": "异步分析",
+        "focus": ["worker", "sqlite", "uploads", "ark"],
+        "note": "同进程 Worker 读取 Job 与原图，调用 Ark 后保存可编辑提案。"
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "miniprogram_source",
+      "type": "frontend",
+      "label": "原生小程序源码",
+      "sublabel": "apps/miniprogram",
+      "pos": [30, 72],
+      "size": [154, 64]
+    },
+    {
+      "id": "wechat_platform",
+      "type": "cloud",
+      "label": "微信平台",
+      "sublabel": "上传 / 审核 / 分发",
+      "pos": [230, 72],
+      "size": [150, 64]
+    },
+    {
+      "id": "parent_device",
+      "type": "external",
+      "label": "家长微信客户端",
+      "sublabel": "小程序运行在用户设备",
+      "pos": [430, 72],
+      "size": [170, 64]
+    },
+    {
+      "id": "nginx",
+      "type": "security",
+      "label": "Nginx TLS",
+      "sublabel": "HTTPS :443",
+      "pos": [660, 72],
+      "size": [138, 64]
+    },
+    {
+      "id": "api",
+      "type": "backend",
+      "label": "FastAPI API",
+      "sublabel": "单 Docker 容器 :8000",
+      "pos": [870, 72],
+      "size": [164, 64]
+    },
+    {
+      "id": "worker",
+      "type": "backend",
+      "label": "AnalysisWorker",
+      "sublabel": "API 同进程后台任务",
+      "pos": [870, 270],
+      "size": [164, 64]
+    },
+    {
+      "id": "sqlite",
+      "type": "database",
+      "label": "SQLite",
+      "sublabel": "data/push_kids.db",
+      "pos": [1100, 72],
+      "size": [164, 64]
+    },
+    {
+      "id": "uploads",
+      "type": "database",
+      "label": "私有图片目录",
+      "sublabel": "uploads/ + 路径引用",
+      "pos": [1100, 270],
+      "size": [164, 64]
+    },
+    {
+      "id": "ark",
+      "type": "external",
+      "label": "火山方舟 Ark",
+      "sublabel": "图文分析 Provider",
+      "pos": [1100, 468],
+      "size": [164, 64]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "单机 Linux 主机",
+      "wraps": ["nginx", "api", "worker", "sqlite", "uploads"],
+      "pad": 28
+    },
+    {
+      "kind": "security-group",
+      "label": "FastAPI Docker 容器",
+      "wraps": ["api", "worker"],
+      "pad": 18
+    }
+  ],
+  "connections": [
+    {
+      "from": "miniprogram_source",
+      "to": "wechat_platform",
+      "label": "开发者工具上传",
+      "labelAt": [207, 170]
+    },
+    {
+      "from": "wechat_platform",
+      "to": "parent_device",
+      "label": "分发小程序包",
+      "labelAt": [412, 170]
+    },
+    {
+      "from": "parent_device",
+      "to": "nginx",
+      "label": "HTTPS JSON + 图片",
+      "variant": "emphasis",
+      "labelAt": [637, 170]
+    },
+    {
+      "from": "nginx",
+      "to": "api",
+      "label": "反向代理 :8000",
+      "variant": "security",
+      "labelAt": [834, 170]
+    },
+    {
+      "from": "api",
+      "to": "worker",
+      "label": "同进程",
+      "labelAt": [952, 210]
+    },
+    {
+      "from": "api",
+      "to": "sqlite",
+      "label": "API + Worker：业务数据 / Job / 提案",
+      "labelAt": [1180, 50]
+    },
+    {
+      "from": "api",
+      "to": "uploads",
+      "label": "API 写入 / Worker 读取原图"
+    },
+    {
+      "from": "worker",
+      "to": "ark",
+      "label": "Responses API：图文请求 / 结构化提案",
+      "variant": "dashed"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "前后端关系",
+      "items": [
+        "小程序包不由 FastAPI 托管",
+        "客户端按构建配置直连 HTTPS API",
+        "本地开发可直接访问 localhost:8011"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "当前身份边界",
+      "items": [
+        "设备随机 familyId 通过 X-Family-ID 传入",
+        "服务端没有真实用户、会话或家庭成员关系",
+        "仅适合本地与受控体验"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "持久化与扩展点",
+      "items": [
+        "SQLite 与 uploads 依靠宿主机目录持久化",
+        "API 和 Worker 共享同一进程与数据库",
+        "多实例前需托管 SQL、对象存储和独立 Worker"
+      ]
+    }
+  ]
+}

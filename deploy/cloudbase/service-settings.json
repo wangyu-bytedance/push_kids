@@ -1,0 +1,13 @@
+{
+  "containerPort": 8000,
+  "minNum": 1,
+  "maxNum": 1,
+  "cpu": 0.5,
+  "mem": 1,
+  "policyType": "mem",
+  "policyThreshold": 70,
+  "customLogs": "stdout",
+  "initialDelaySeconds": 8,
+  "publicAccess": false,
+  "notes": "Staging baseline. Keep maxNum=1 until the in-process worker is split. Configure values in the Cloud Hosting console; version settings are immutable after creation."
+}

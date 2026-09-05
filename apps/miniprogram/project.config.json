@@ -1,0 +1,17 @@
+{
+  "description": "知芽 - 家庭学习持续跟进",
+  "miniprogramRoot": "./",
+  "compileType": "miniprogram",
+  "setting": {
+    "es6": true,
+    "enhance": true,
+    "postcss": true,
+    "minified": true,
+    "urlCheck": true,
+    "coverView": true,
+    "lazyloadPlaceholderEnable": true,
+    "minifyWXML": true
+  },
+  "appid": "wx5d2e0014690bf285",
+  "projectname": "push-kids"
+}

@@ -1,0 +1,54 @@
+[project]
+name = "push-kids"
+version = "0.1.0"
+description = "Parent-facing learning follow-up backend for a WeChat Mini Program"
+requires-python = ">=3.11"
+dependencies = [
+  "fastapi>=0.116,<1",
+  "uvicorn[standard]>=0.35,<1",
+  "sqlalchemy>=2.0,<3",
+  "alembic>=1.16,<2",
+  "pymysql>=1.1,<2",
+  "cos-python-sdk-v5>=1.9,<2",
+  "pydantic-settings>=2.10,<3",
+  "python-multipart>=0.0.20,<1",
+  "openai>=1.99,<3",
+]
+
+[dependency-groups]
+dev = [
+  "httpx>=0.28,<1",
+  "mypy>=1.17,<2",
+  "pytest>=8.4,<9",
+  "pytest-asyncio>=1.1,<2",
+  "pytest-cov>=6.2,<7",
+  "ruff>=0.12,<1",
+]
+
+[tool.uv]
+package = false
+
+[tool.pytest.ini_options]
+pythonpath = ["apps/api/src"]
+testpaths = ["tests"]
+addopts = "--strict-markers"
+markers = ["live: requires external credentials and network"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+extend-exclude = ["specs/_templates"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.mypy]
+python_version = "3.12"
+plugins = ["pydantic.mypy", "sqlalchemy.ext.mypy.plugin"]
+ignore_missing_imports = true
+warn_unused_ignores = true
+no_implicit_optional = true
+
+[tool.coverage.run]
+source = ["push_kids"]
+branch = true

@@ -1,0 +1,2728 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light" />
+  <title>知芽 · 家长端交互重设计评审稿</title>
+  <style>
+    :root {
+      --canvas: #efeee8;
+      --paper: #fbfaf6;
+      --paper-strong: #ffffff;
+      --ink: #17231f;
+      --ink-soft: #4d5b55;
+      --muted: #7c857f;
+      --line: #dcded7;
+      --line-strong: #c7cec8;
+      --accent: #22624f;
+      --accent-hover: #184c3d;
+      --accent-soft: #e3eee8;
+      --accent-pale: #f0f5f2;
+      --warm: #d9955b;
+      --warm-soft: #f6e9dc;
+      --danger: #a84d45;
+      --heat-low: #f5cec8;
+      --heat-mid: #df8b81;
+      --heat-high: #b84b42;
+      --reviewed: #3f7d68;
+      --activity-0: #e7ebe7;
+      --activity-1: #d2e5db;
+      --activity-2: #9fc8b6;
+      --activity-3: #5d9b81;
+      --activity-4: #22624f;
+      --shadow: 0 24px 70px rgba(30, 44, 38, 0.13);
+      --phone-width: 390px;
+      --radius-lg: 18px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; color: var(--ink); background: var(--canvas); }
+    body { min-height: 100vh; }
+    button, input, textarea { font: inherit; }
+    button { color: inherit; }
+    [hidden] { display: none !important; }
+
+    .review-shell {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: minmax(280px, 360px) minmax(430px, 1fr);
+    }
+
+    .review-panel {
+      position: sticky;
+      top: 0;
+      align-self: start;
+      height: 100vh;
+      padding: 48px 40px;
+      display: flex;
+      flex-direction: column;
+      background: #1d2d27;
+      color: #f4f5f0;
+      overflow: auto;
+    }
+
+    .brand-lockup { display: flex; align-items: center; gap: 12px; margin-bottom: 54px; }
+    .brand-mark {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border-radius: 50% 50% 42% 50%;
+      background: #dbe9df;
+      color: #245d4c;
+      font-size: 22px;
+      font-weight: 800;
+      transform: rotate(-5deg);
+    }
+    .brand-name { font-size: 17px; font-weight: 750; letter-spacing: 0.08em; }
+
+    .review-panel h1 {
+      max-width: 280px;
+      margin: 0;
+      font-family: "Songti SC", "STSong", serif;
+      font-size: clamp(34px, 3.2vw, 48px);
+      line-height: 1.18;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+    }
+    .review-lead {
+      max-width: 286px;
+      margin: 24px 0 34px;
+      color: #b8c7c0;
+      font-size: 14px;
+      line-height: 1.85;
+    }
+
+    .review-nav { display: grid; gap: 10px; }
+    .review-nav button {
+      min-height: 48px;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 10px;
+      background: transparent;
+      color: #d9e1dd;
+      cursor: pointer;
+      transition: .18s ease;
+    }
+    .review-nav button:hover { background: rgba(255,255,255,.07); }
+    .review-nav button[aria-pressed="true"] {
+      background: #edf2ee;
+      border-color: #edf2ee;
+      color: #1d2d27;
+      font-weight: 700;
+    }
+    .review-nav small { font-size: 11px; opacity: .7; }
+
+    .review-principles {
+      margin-top: auto;
+      padding-top: 32px;
+      color: #9fb0a8;
+      font-size: 12px;
+      line-height: 1.7;
+    }
+    .review-principles strong { display: block; margin-bottom: 8px; color: #eaf0ec; font-size: 12px; }
+    .review-principles ul { margin: 0; padding-left: 16px; }
+
+    .prototype-stage {
+      min-height: 100vh;
+      padding: 28px;
+      display: grid;
+      place-items: center;
+      background:
+        linear-gradient(rgba(34,98,79,.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(34,98,79,.035) 1px, transparent 1px),
+        var(--canvas);
+      background-size: 28px 28px;
+    }
+
+    .phone {
+      position: relative;
+      width: min(var(--phone-width), calc(100vw - 40px));
+      height: min(844px, calc(100vh - 56px));
+      min-height: 660px;
+      overflow: hidden;
+      overflow: clip;
+      border: 1px solid rgba(22,35,31,.18);
+      border-radius: 34px;
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+
+    .phone::before {
+      content: "";
+      position: absolute;
+      z-index: 20;
+      top: 9px;
+      left: 50%;
+      width: 92px;
+      height: 23px;
+      transform: translateX(-50%);
+      border-radius: 999px;
+      background: #15211d;
+    }
+
+    .app-frame { height: 100%; display: flex; flex-direction: column; }
+    .status-bar {
+      flex: 0 0 42px;
+      padding: 13px 24px 0;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .02em;
+    }
+    .status-icons { display: flex; gap: 5px; color: var(--ink-soft); }
+
+    .screen {
+      flex: 1;
+      min-height: 0;
+      overflow: auto;
+      scrollbar-width: none;
+      padding-bottom: 106px;
+    }
+    .screen::-webkit-scrollbar { display: none; }
+
+    .screen-inner { padding: 8px 20px 28px; }
+    .screen-header {
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+    .date-line { margin: 0; color: var(--muted); font-size: 12px; font-weight: 650; }
+
+    .content-heading { display: flex; align-items: end; justify-content: space-between; gap: 12px; margin: 0 0 12px; }
+    .content-heading h3 { margin: 0; font-size: 17px; }
+    .content-heading span { color: var(--muted); font-size: 11px; }
+    .today-section { margin-bottom: 14px; border-bottom: 1px solid var(--line); }
+    .today-section-heading { margin: 0; }
+    .today-section-toggle {
+      width: 100%;
+      min-height: 48px;
+      padding: 0;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 9px;
+      border: 0;
+      background: transparent;
+      color: var(--ink);
+      text-align: left;
+      cursor: pointer;
+    }
+    .today-section-title { font-size: 17px; font-weight: 800; }
+    .today-section-meta { color: var(--muted); font-size: 11px; font-weight: 500; }
+    .control-chevron {
+      display: inline-grid;
+      place-items: center;
+      flex: 0 0 auto;
+      color: var(--muted);
+      transform-origin: center;
+      transition: transform 160ms ease, color 160ms ease;
+    }
+    .control-chevron svg {
+      width: 12px;
+      height: 12px;
+      display: block;
+      overflow: visible;
+    }
+    .control-chevron path {
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.75;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      vector-effect: non-scaling-stroke;
+    }
+    .today-section-chevron {
+      width: 28px;
+      height: 28px;
+      color: var(--ink-soft);
+    }
+    .today-section-toggle[aria-expanded="true"] .today-section-chevron { transform: rotate(180deg); }
+    .today-section-toggle:hover .today-section-title { color: var(--accent); }
+    .today-section-toggle:active { opacity: .72; }
+    .today-section-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+    .today-section-panel[hidden] { display: none; }
+    .today-list { border-top: 1px solid var(--line); }
+    .today-item {
+      width: 100%;
+      min-height: 78px;
+      padding: 13px 0;
+      display: grid;
+      grid-template-columns: 35px 1fr auto;
+      align-items: center;
+      gap: 11px;
+      border: 0;
+      border-bottom: 1px solid var(--line);
+      background: transparent;
+      text-align: left;
+      cursor: pointer;
+    }
+    .today-check {
+      width: 31px;
+      height: 31px;
+      display: grid;
+      place-items: center;
+      border: 1px solid #9eb4aa;
+      border-radius: 50%;
+      color: transparent;
+      font-weight: 800;
+    }
+    .today-item[aria-pressed="true"] .today-check { border-color: var(--accent); background: var(--accent); color: #fff; }
+    .today-item[aria-pressed="true"] .today-copy { opacity: .55; }
+    .today-item[aria-pressed="true"] .today-copy strong { text-decoration: line-through; }
+    .today-copy strong { display: block; margin-bottom: 4px; font-size: 14px; }
+    .today-copy span { color: var(--muted); font-size: 11px; }
+    .subject-code { color: var(--accent); font-size: 11px; font-weight: 750; }
+
+    .today-learning-list { border-top: 1px solid var(--line); }
+    .today-learning-item {
+      min-height: 70px;
+      padding: 12px 0;
+      display: grid;
+      grid-template-columns: 35px 1fr;
+      align-items: center;
+      gap: 11px;
+      border-bottom: 1px solid var(--line);
+    }
+    .today-learning-item:last-child { border-bottom: 0; }
+    .learning-symbol {
+      width: 31px;
+      height: 31px;
+      display: grid;
+      place-items: center;
+      border-radius: 9px;
+      background: var(--accent-pale);
+      color: var(--accent);
+      font-family: "Songti SC", "STSong", serif;
+      font-size: 14px;
+      font-weight: 800;
+    }
+    .learning-copy strong { display: block; margin-bottom: 4px; font-size: 14px; line-height: 1.35; }
+    .learning-copy span { display: block; color: var(--muted); font-size: 11px; line-height: 1.45; }
+
+    .today-activity {
+      margin: 0 0 14px;
+      padding: 16px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 12px;
+      border-left: 3px solid var(--warm);
+      background: #f8f2eb;
+    }
+    .today-activity time { display: block; margin-bottom: 5px; color: #a36332; font-size: 12px; font-weight: 750; }
+    .today-activity strong { display: block; font-size: 15px; }
+    .today-activity p { margin: 5px 0 0; color: var(--muted); font-size: 11px; line-height: 1.5; }
+    .today-activity.is-past { border-left-color: #c4cac6; background: #f1f2f0; }
+    .today-activity.is-past time,
+    .today-activity.is-past strong,
+    .today-activity.is-past p { color: #8f9792; }
+    .schedule-empty { margin: 0 0 14px; padding: 16px 0; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; }
+    .quiet-action {
+      min-height: 40px;
+      padding: 0 12px;
+      border: 1px solid #c8b49e;
+      border-radius: 9px;
+      background: rgba(255,255,255,.62);
+      color: #80522f;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .calendar-screen .screen-inner { padding-inline: 0; }
+    .calendar-header { margin: 0 20px 15px; align-items: center; }
+    .calendar-fab {
+      position: absolute;
+      z-index: 8;
+      right: 20px;
+      bottom: calc(88px + env(safe-area-inset-bottom));
+      width: 52px;
+      height: 52px;
+      display: grid;
+      place-items: center;
+      border: 0;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      font-size: 29px;
+      font-weight: 300;
+      line-height: 1;
+      box-shadow: 0 10px 24px rgba(34,98,79,.28);
+      cursor: pointer;
+      transition: background .16s, transform .16s, box-shadow .16s;
+    }
+    .calendar-fab:hover { background: var(--accent-hover); box-shadow: 0 12px 28px rgba(34,98,79,.34); }
+    .calendar-fab:active { transform: scale(.96); }
+    .calendar-toolbar { margin: 0 20px 12px; display: flex; align-items: center; justify-content: space-between; }
+    .calendar-toolbar strong { font-family: "Songti SC", "STSong", serif; font-size: 17px; }
+    .calendar-toolbar button { min-height: 36px; padding: 0 8px; border: 0; background: transparent; color: var(--accent); font-size: 11px; font-weight: 700; cursor: pointer; }
+    .week-strip {
+      padding: 0 13px 13px;
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 2px;
+      border-bottom: 1px solid var(--line);
+    }
+    .calendar-day {
+      min-width: 0;
+      min-height: 59px;
+      padding: 3px 0;
+      display: grid;
+      justify-items: center;
+      align-content: start;
+      gap: 5px;
+      border: 0;
+      border-radius: 9px;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+    }
+    .calendar-day small { font-size: 10px; }
+    .calendar-day strong { width: 31px; height: 31px; display: grid; place-items: center; border-radius: 50%; color: var(--ink-soft); font-size: 12px; }
+    .calendar-day[aria-pressed="true"] { color: var(--accent); font-weight: 750; }
+    .calendar-day[aria-pressed="true"] strong { background: var(--accent); color: #fff; }
+    .calendar-day.has-event::after { content: ""; width: 4px; height: 4px; margin-top: -2px; border-radius: 50%; background: var(--warm); }
+    .calendar-date-heading { min-height: 55px; padding: 0 20px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--line); }
+    .calendar-date-heading strong { font-size: 14px; }
+    .calendar-date-heading span { color: var(--accent); font-size: 11px; font-weight: 700; }
+    .agenda-list { position: relative; padding: 11px 20px 24px; }
+    .agenda-item { width: 100%; min-height: 76px; padding: 0; display: grid; grid-template-columns: 47px 1fr; gap: 11px; border: 0; border-bottom: 1px solid var(--line); background: transparent; color: inherit; font: inherit; text-align: left; cursor: pointer; }
+    .agenda-time { padding-top: 14px; color: var(--ink-soft); font-variant-numeric: tabular-nums; font-size: 11px; font-weight: 720; }
+    .agenda-event { position: relative; margin: 8px 0; padding: 10px 30px 10px 14px; border-radius: 8px; background: var(--accent-soft); transition: background .16s, transform .16s; }
+    .agenda-event::before { content: ""; position: absolute; left: 0; top: 8px; bottom: 8px; width: 3px; border-radius: 2px; background: var(--accent); }
+    .agenda-event::after { content: "›"; position: absolute; right: 12px; top: 50%; color: var(--muted); font-size: 17px; transform: translateY(-50%); }
+    .agenda-item:hover .agenda-event, .agenda-item:focus-visible .agenda-event { background: #dcebe5; }
+    .agenda-item:active .agenda-event { transform: scale(.99); }
+    .agenda-event.warm { background: var(--warm-soft); }
+    .agenda-event.warm::before { background: var(--warm); }
+    .agenda-event strong { display: block; font-size: 13px; }
+    .agenda-event span { display: block; margin-top: 4px; color: var(--muted); font-size: 10px; }
+    .agenda-item.is-past .agenda-time { color: #9aa19d; }
+    .agenda-item.is-past .agenda-event,
+    .agenda-item.is-past:hover .agenda-event,
+    .agenda-item.is-past:focus-visible .agenda-event { background: #eef0ee; }
+    .agenda-item.is-past .agenda-event::before { background: #c4cac6; }
+    .agenda-item.is-past .agenda-event strong { color: #7f8883; }
+    .agenda-item.is-past .agenda-event span,
+    .agenda-item.is-past .agenda-event::after { color: #a1a8a4; }
+    .agenda-empty { padding: 54px 26px; text-align: center; }
+    .agenda-empty strong { display: block; font-family: "Songti SC", serif; font-size: 18px; }
+    .agenda-empty p { margin: 7px 0 17px; color: var(--muted); font-size: 11px; }
+    .agenda-empty button { min-height: 40px; padding: 0 14px; border: 1px solid var(--line-strong); border-radius: 9px; background: #fff; color: var(--accent); font-size: 12px; font-weight: 700; cursor: pointer; }
+
+    .event-form { display: grid; gap: 16px; }
+    .event-field { display: grid; gap: 7px; }
+    .event-field > label, .event-field > span { color: var(--ink-soft); font-size: 12px; font-weight: 700; }
+    .event-time-range { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 9px; }
+    .event-time-range input { width: 100%; min-height: 46px; padding: 0 9px; border: 1px solid var(--line-strong); border-radius: 10px; background: #fff; color: var(--ink); font-weight: 700; }
+    .event-time-range span { color: var(--muted); font-size: 11px; }
+    .event-date-options { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
+    .event-date-option { min-width: 0; min-height: 49px; padding: 5px 0; display: grid; place-items: center; gap: 1px; border: 1px solid var(--line); border-radius: 9px; background: #fff; color: var(--ink-soft); cursor: pointer; }
+    .event-date-option small { color: var(--muted); font-size: 9px; }
+    .event-date-option strong { font-size: 12px; }
+    .event-date-option[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
+    .event-date-option[aria-pressed="true"] small { color: var(--accent); }
+    .event-types { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; }
+    .event-type { min-height: 42px; border: 1px solid var(--line); border-radius: 9px; background: #fff; color: var(--ink-soft); font-size: 12px; cursor: pointer; }
+    .event-type[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); font-weight: 750; }
+    .repeat-row { min-height: 48px; padding: 0 2px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .repeat-row span { font-size: 12px; font-weight: 700; }
+    .repeat-toggle { width: 43px; height: 25px; padding: 3px; border: 0; border-radius: 999px; background: #d8dcd8; cursor: pointer; }
+    .repeat-toggle::after { content: ""; display: block; width: 19px; height: 19px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(23,35,31,.18); transition: transform .16s; }
+    .repeat-toggle[aria-pressed="true"] { background: var(--accent); }
+    .repeat-toggle[aria-pressed="true"]::after { transform: translateX(18px); }
+    .event-form-error { min-height: 16px; margin: -7px 0 0; color: var(--danger); font-size: 11px; }
+    .event-detail-summary { margin: 3px 0 20px; padding: 15px 0; display: grid; gap: 13px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .event-detail-row { display: grid; grid-template-columns: 62px 1fr; gap: 12px; align-items: start; }
+    .event-detail-row span { color: var(--muted); font-size: 11px; }
+    .event-detail-row strong { font-size: 13px; line-height: 1.5; }
+    .event-detail-actions { display: grid; grid-template-columns: 1fr auto; gap: 9px; }
+    .event-detail-actions .primary-action { margin: 0; }
+    .danger-action { min-height: 48px; padding: 0 18px; border: 1px solid #e5b5ae; border-radius: 10px; background: #fff; color: var(--danger); font-size: 13px; font-weight: 750; cursor: pointer; }
+    .delete-confirm { margin-top: 12px; padding: 12px; display: grid; grid-template-columns: 1fr auto auto; gap: 8px; align-items: center; border-radius: 9px; background: #fff0ed; }
+    .delete-confirm[hidden] { display: none; }
+    .delete-confirm span { color: #8b3d34; font-size: 11px; }
+    .delete-confirm button { min-height: 34px; padding: 0 10px; border: 0; border-radius: 7px; background: transparent; color: var(--ink-soft); font-size: 11px; font-weight: 700; cursor: pointer; }
+    .delete-confirm [data-confirm-delete-event] { background: var(--danger); color: #fff; }
+
+    .range-tabs {
+      margin: -6px 0 22px;
+      padding: 3px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 3px;
+      border-radius: 10px;
+      background: #e8e9e4;
+    }
+    .range-tabs button { min-height: 42px; border: 0; border-radius: 8px; background: transparent; color: var(--muted); font-size: 12px; cursor: pointer; }
+    .range-tabs button[aria-pressed="true"] { background: #fff; color: var(--ink); font-weight: 750; box-shadow: 0 1px 4px rgba(25,36,31,.1); }
+    .metric-strip { padding: 16px 0 22px; display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .metric-item { min-width: 0; padding: 0 9px; border-right: 1px solid var(--line); text-align: center; }
+    .metric-item:first-child { padding-left: 0; }
+    .metric-item:last-child { padding-right: 0; border-right: 0; }
+    .metric-item strong { display: block; font-family: "Songti SC", serif; font-size: 24px; line-height: 1; }
+    .metric-item span { display: block; margin-top: 7px; color: var(--muted); font-size: 10px; line-height: 1.3; }
+    .report-section { padding: 23px 0 0; }
+    .report-section h3 { margin: 0 0 15px; font-size: 16px; }
+    .bar-list { display: grid; gap: 14px; }
+    .bar-meta { margin-bottom: 6px; display: flex; justify-content: space-between; gap: 12px; font-size: 12px; }
+    .bar-meta span:last-child { color: var(--muted); }
+    .bar-track { height: 7px; overflow: hidden; border-radius: 999px; background: #e5e8e3; }
+    .bar-fill { height: 100%; border-radius: inherit; background: var(--accent); }
+    .memory-section { padding-top: 24px; }
+    .memory-explainer { margin: -4px 0 13px; color: var(--muted); font-size: 11px; line-height: 1.55; }
+    .memory-legend { margin-bottom: 13px; display: flex; align-items: center; flex-wrap: wrap; gap: 7px 11px; color: var(--ink-soft); font-size: 10px; }
+    .memory-legend span { display: inline-flex; align-items: center; gap: 5px; }
+    .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .legend-dot.low { background: var(--heat-low); }
+    .legend-dot.mid { background: var(--heat-mid); }
+    .legend-dot.high { background: var(--heat-high); }
+    .legend-dot.reviewed { background: var(--reviewed); }
+    .memory-heatmap {
+      padding: 14px 7px 12px;
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px 3px;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+    .memory-heatmap.paged {
+      padding-inline: 0;
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      overscroll-behavior-x: contain;
+      scrollbar-width: none;
+    }
+    .memory-heatmap.paged::-webkit-scrollbar { display: none; }
+    .memory-page {
+      flex: 0 0 100%;
+      min-width: 0;
+      padding: 0 7px;
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      align-content: start;
+      gap: 8px 3px;
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+    }
+    .memory-pager { min-height: 46px; display: grid; grid-template-columns: 42px minmax(0, 1fr) 42px; align-items: center; gap: 10px; }
+    .memory-pager button { width: 42px; height: 42px; border: 1px solid var(--line-strong); border-radius: 50%; background: transparent; color: var(--ink); font-size: 20px; cursor: pointer; }
+    .memory-pager button:disabled { opacity: .28; cursor: default; }
+    .memory-pager span { color: var(--muted); font-size: 10px; font-weight: 700; text-align: center; }
+    .memory-day {
+      min-width: 0;
+      min-height: 57px;
+      padding: 4px 1px;
+      display: grid;
+      grid-template-rows: 33px auto;
+      place-items: center;
+      gap: 4px;
+      border: 0;
+      border-radius: 8px;
+      background: transparent;
+      cursor: pointer;
+    }
+    .memory-day:hover { background: #f1f2ee; }
+    .memory-day[aria-pressed="true"] { background: #eceee9; }
+    .memory-dot {
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      font-size: 9px;
+      font-weight: 800;
+      transition: transform .16s, box-shadow .16s;
+    }
+    .memory-day:hover .memory-dot { transform: scale(1.06); }
+    .memory-day[aria-pressed="true"] .memory-dot { box-shadow: 0 0 0 2px var(--paper), 0 0 0 3px var(--ink-soft); }
+    .memory-dot.count-0 { width: 7px; height: 7px; background: #dfe2dd; }
+    .memory-dot.count-1 { width: 19px; height: 19px; }
+    .memory-dot.count-2 { width: 26px; height: 26px; }
+    .memory-dot.count-3 { width: 32px; height: 32px; }
+    .memory-dot.urgency-1 { background: var(--heat-low); color: #7c3731; }
+    .memory-dot.urgency-2 { background: var(--heat-mid); color: #fff; }
+    .memory-dot.urgency-3 { background: var(--heat-high); color: #fff; }
+    .memory-dot.reviewed { width: 24px; height: 24px; background: var(--reviewed); color: #fff; }
+    .memory-day-label { display: flex; align-items: baseline; gap: 2px; color: var(--muted); }
+    .memory-day-label strong { color: var(--ink-soft); font-size: 10px; }
+    .memory-day-label small { font-size: 10px; }
+    .memory-source { margin: 9px 0 0; color: var(--muted); font-size: 10px; line-height: 1.5; }
+    .memory-detail { margin-top: 17px; border-top: 1px solid var(--line); }
+    .memory-detail-head { min-height: 55px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .memory-detail-head strong { font-size: 13px; }
+    .memory-status { color: var(--danger); font-size: 10px; font-weight: 750; }
+    .memory-status.reviewed { color: var(--reviewed); }
+    .memory-items { border-top: 1px solid var(--line); }
+    .memory-item { min-height: 67px; padding: 9px 0; display: grid; grid-template-columns: 29px 1fr auto; align-items: center; gap: 9px; border-bottom: 1px solid var(--line); }
+    .memory-subject { width: 29px; height: 29px; display: grid; place-items: center; border-radius: 8px; background: var(--accent-soft); color: var(--accent); font-size: 10px; font-weight: 800; }
+    .memory-item-copy strong { display: block; font-size: 12px; }
+    .memory-item-copy span { display: block; margin-top: 4px; color: var(--muted); font-size: 10px; line-height: 1.35; }
+    .memory-item.reviewed .memory-item-copy { opacity: .56; }
+    .memory-review-action { min-height: 34px; padding: 0 9px; border: 1px solid #d7a19a; border-radius: 8px; background: #fff7f5; color: #95463e; font-size: 10px; font-weight: 700; cursor: pointer; }
+    .memory-review-action:disabled { border-color: #b8cec4; background: var(--accent-pale); color: var(--reviewed); cursor: default; }
+    .memory-empty-detail { padding: 21px 0; color: var(--muted); font-size: 11px; text-align: center; }
+    .contribution-section { padding-top: 24px; }
+    .contribution-explainer { margin: -4px 0 14px; color: var(--muted); font-size: 11px; line-height: 1.55; }
+    .contribution-chart { padding: 15px 10px 13px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .contribution-months { margin-left: 27px; display: grid; grid-template-columns: repeat(15, minmax(0, 1fr)); gap: 3px; color: var(--muted); font-size: 10px; }
+    .contribution-body { margin-top: 8px; display: grid; grid-template-columns: 20px minmax(0, 1fr); align-items: stretch; gap: 7px; }
+    .contribution-weekdays { display: grid; grid-template-rows: repeat(7, minmax(0, 1fr)); gap: 3px; color: var(--muted); font-size: 10px; }
+    .contribution-weekdays span { display: grid; place-items: center; }
+    .contribution-grid { min-width: 0; display: grid; grid-template-rows: repeat(7, auto); grid-template-columns: repeat(15, minmax(0, 1fr)); grid-auto-flow: column; gap: 3px; }
+    .contribution-chart.calendar-range .contribution-months { margin-left: 0; display: block; color: var(--ink-soft); font-weight: 700; }
+    .contribution-body.calendar-layout { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+    .contribution-body.calendar-layout .contribution-weekdays { grid-template-columns: repeat(7, minmax(0, 1fr)); grid-template-rows: 18px; gap: 4px; }
+    .contribution-body.calendar-layout .contribution-grid { grid-template-columns: repeat(7, minmax(0, 1fr)); grid-template-rows: none; grid-auto-flow: row; gap: 4px; }
+    .contribution-cell { width: 100%; min-width: 0; height: auto; aspect-ratio: 1; display: block; border-radius: 4px; }
+    .contribution-cell.level-0 { background: var(--activity-0); }
+    .contribution-cell.level-1 { background: var(--activity-1); }
+    .contribution-cell.level-2 { background: var(--activity-2); }
+    .contribution-cell.level-3 { background: var(--activity-3); }
+    .contribution-cell.level-4 { background: var(--activity-4); }
+    .contribution-cell.out-of-range { border: 1px solid #e5e7e3; background: #f5f6f3; opacity: .7; }
+    .contribution-legend { margin-top: 13px; display: flex; align-items: center; justify-content: flex-end; gap: 5px; color: var(--muted); font-size: 10px; }
+    .contribution-legend i { width: 12px; height: 12px; display: block; border-radius: 3px; }
+    .contribution-legend .level-0 { background: var(--activity-0); }
+    .contribution-legend .level-1 { background: var(--activity-1); }
+    .contribution-legend .level-2 { background: var(--activity-2); }
+    .contribution-legend .level-3 { background: var(--activity-3); }
+    .contribution-legend .level-4 { background: var(--activity-4); }
+    .contribution-thresholds { margin: 8px 0 0; color: var(--muted); font-size: 10px; text-align: right; }
+    .eyebrow {
+      margin: 0 0 5px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 650;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .screen-header .eyebrow { margin-bottom: 0; }
+
+    .child-trigger {
+      min-height: 40px;
+      max-width: 140px;
+      padding: 4px 9px 4px 5px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255,255,255,.72);
+      color: var(--ink);
+      cursor: pointer;
+      transition: border-color .18s, background .18s, box-shadow .18s;
+    }
+    .child-trigger:hover { border-color: #aebbb4; background: #fff; }
+    .child-trigger[aria-expanded="true"] { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(34,98,79,.09); }
+    .child-trigger .avatar {
+      width: 29px;
+      height: 29px;
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      border-radius: 50%;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 800;
+    }
+    .child-trigger .child-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; font-weight: 720; }
+    .child-chevron { width: 16px; height: 16px; }
+    .child-trigger[aria-expanded="true"] .child-chevron { transform: rotate(180deg); }
+
+    .section-block { padding: 22px 0; border-top: 1px solid var(--line); }
+    .section-block:first-of-type { border-top: 0; padding-top: 0; }
+    .section-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 15px; }
+    .section-heading h3 { margin: 0 0 4px; font-size: 16px; line-height: 1.3; }
+    .section-heading p { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.5; }
+    .section-count { color: var(--accent); font-size: 12px; font-weight: 700; }
+
+    .settings-header { min-height: auto; margin-bottom: 18px; align-items: center; }
+
+    .review-budget {
+      margin: 0 0 27px;
+      padding: 15px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+    .review-budget strong { display: block; font-size: 14px; }
+    .review-budget span { display: block; margin-top: 4px; color: var(--muted); font-size: 11px; }
+    .budget-options { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; }
+    .budget-options button {
+      min-width: 50px;
+      min-height: 38px;
+      padding: 0 8px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: transparent;
+      color: var(--ink-soft);
+      font-size: 11px;
+      cursor: pointer;
+    }
+    .budget-options button[aria-pressed="true"] { border-color: var(--accent); background: var(--accent); color: #fff; font-weight: 750; }
+
+    .settings-group { margin-bottom: 27px; }
+    .settings-group-head { margin-bottom: 10px; display: grid; grid-template-columns: 28px 1fr auto; align-items: center; gap: 9px; }
+    .settings-index { color: #a5ada8; font-family: ui-monospace, "SFMono-Regular", monospace; font-size: 11px; }
+    .settings-group-head h3 { margin: 0; font-size: 16px; }
+    .settings-group-head p { grid-column: 2 / -1; margin: -3px 0 0; color: var(--muted); font-size: 11px; line-height: 1.45; }
+    .selected-total { color: var(--accent); font-size: 11px; font-weight: 750; }
+
+    .settings-list { overflow: hidden; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .setting-row {
+      width: 100%;
+      min-height: 60px;
+      padding: 8px 2px;
+      display: grid;
+      grid-template-columns: 36px 1fr auto;
+      align-items: center;
+      gap: 11px;
+      border: 0;
+      border-bottom: 1px solid var(--line);
+      background: transparent;
+      text-align: left;
+      cursor: pointer;
+      transition: background .16s;
+    }
+    .setting-row:last-child { border-bottom: 0; }
+    .setting-row:hover { background: rgba(34,98,79,.035); }
+    .row-symbol {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 10px;
+      background: #eceeea;
+      color: var(--ink-soft);
+      font-family: "Songti SC", serif;
+      font-size: 15px;
+      font-weight: 800;
+    }
+    .subject-choice[aria-pressed="true"] .row-symbol { background: var(--accent-soft); color: var(--accent); }
+    .row-copy { min-width: 0; }
+    .row-copy strong { display: block; font-size: 13px; }
+    .row-copy span { display: block; margin-top: 3px; overflow: hidden; color: var(--muted); font-size: 10px; line-height: 1.4; text-overflow: ellipsis; white-space: nowrap; }
+    .row-check {
+      width: 24px;
+      height: 24px;
+      display: grid;
+      place-items: center;
+      border: 1px solid #c9cfca;
+      border-radius: 50%;
+      color: transparent;
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .subject-choice[aria-pressed="true"] .row-check { border-color: var(--accent); background: var(--accent); color: #fff; }
+    .add-setting-row .row-symbol { border: 1px dashed #bfc7c1; background: transparent; font-family: inherit; font-size: 19px; font-weight: 400; }
+    .add-setting-row .row-copy strong { color: var(--accent); }
+    .row-chevron { color: #9da6a1; font-size: 18px; }
+    .activity-plan-row .row-symbol { background: var(--warm-soft); color: #9a5d31; font-family: inherit; }
+
+    .plan-form-label { display: block; margin: 18px 0 8px; color: var(--ink-soft); font-size: 12px; font-weight: 750; }
+    .schedule-picker {
+      margin: 4px 0 20px;
+      padding: 17px 16px 14px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #fbfcfa;
+    }
+    .schedule-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .schedule-heading strong { font-size: 14px; }
+    .weekday-row { display: grid; grid-template-columns: repeat(7, 1fr); gap: 7px; margin-top: 15px; }
+    .weekday {
+      min-width: 0;
+      aspect-ratio: 1;
+      padding: 0;
+      border: 1px solid #d5dbd6;
+      border-radius: 50%;
+      background: #fff;
+      color: var(--ink-soft);
+      font-size: 12px;
+      cursor: pointer;
+      transition: border-color .16s, background .16s, color .16s, transform .16s;
+    }
+    .weekday:hover { border-color: #8eaa9f; transform: translateY(-1px); }
+    .weekday[aria-pressed="true"] { border-color: var(--accent); background: var(--accent); color: #fff; font-weight: 750; }
+    .flexible-schedule {
+      min-height: 40px;
+      padding: 0 9px 0 11px;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      background: #fff;
+      color: var(--ink-soft);
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .flexible-check {
+      width: 18px;
+      height: 18px;
+      display: grid;
+      place-items: center;
+      border: 1px solid #ccd3ce;
+      border-radius: 50%;
+      color: transparent;
+      font-size: 9px;
+    }
+    .flexible-schedule[aria-pressed="true"] { border-color: #8db4a6; background: var(--accent-soft); color: var(--accent); }
+    .flexible-schedule[aria-pressed="true"] .flexible-check { border-color: var(--accent); background: var(--accent); color: #fff; }
+    .plan-time-row {
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+    }
+    .plan-time-copy label { display: block; color: var(--ink); font-size: 12px; font-weight: 750; }
+    .plan-time-copy span { display: block; margin-top: 3px; color: var(--muted); font-size: 10px; }
+    .plan-time-range {
+      margin-top: 11px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+      align-items: end;
+      gap: 9px;
+    }
+    .plan-time-field > label { display: block; margin-bottom: 5px; color: var(--muted); font-size: 10px; font-weight: 700; }
+    .plan-time-separator { padding-bottom: 13px; color: var(--muted); font-size: 11px; }
+    .plan-time-control {
+      width: 100%;
+      min-height: 42px;
+      padding: 0 10px;
+      display: flex;
+      align-items: center;
+      border: 1px solid #cbd3cd;
+      border-radius: 9px;
+      background: #fff;
+    }
+    .plan-time-control input {
+      width: 100%;
+      padding: 0;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: var(--ink);
+      font: 750 13px/1 inherit;
+    }
+    .plan-time-control:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(34,98,79,.11); }
+    .plan-time-error { min-height: 16px; margin: 6px 0 0; color: var(--danger); font-size: 11px; }
+    .schedule-result { margin-top: 13px; color: var(--accent); font-size: 11px; line-height: 1.5; }
+
+    .subject-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; }
+    .subject-option {
+      position: relative;
+      min-height: 70px;
+      padding: 11px 9px;
+      display: grid;
+      place-items: center;
+      gap: 4px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      background: rgba(255,255,255,.56);
+      cursor: pointer;
+      transition: border-color .16s, background .16s, transform .16s;
+    }
+    .subject-option:hover { border-color: #a9b9b0; transform: translateY(-1px); }
+    .subject-option[aria-pressed="true"] { border-color: #8db4a6; background: var(--accent-soft); color: var(--accent); }
+    .subject-option .option-symbol { font-family: "Songti SC", serif; font-size: 20px; font-weight: 800; line-height: 1; }
+    .subject-option .option-name { font-size: 12px; font-weight: 650; }
+    .subject-option .check {
+      position: absolute;
+      top: 6px;
+      right: 7px;
+      color: var(--accent);
+      font-size: 11px;
+      opacity: 0;
+      transform: scale(.7);
+      transition: .16s;
+    }
+    .subject-option[aria-pressed="true"] .check { opacity: 1; transform: scale(1); }
+    .subject-option.add-option { border-style: dashed; color: var(--ink-soft); background: transparent; }
+    .subject-option.add-option .option-symbol { font-family: inherit; font-weight: 400; }
+
+    .activity-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+    .activity-chip {
+      min-height: 40px;
+      padding: 0 14px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255,255,255,.55);
+      font-size: 13px;
+      cursor: pointer;
+      transition: .16s;
+    }
+    .activity-chip[aria-pressed="true"] { border-color: #d8a475; background: var(--warm-soft); color: #7a4925; font-weight: 700; }
+    .activity-chip.add { border-style: dashed; background: transparent; color: var(--ink-soft); }
+
+    .budget-row { display: flex; align-items: center; justify-content: space-between; gap: 15px; }
+    .budget-copy strong { display: block; font-size: 14px; }
+    .budget-copy span { display: block; margin-top: 3px; color: var(--muted); font-size: 12px; }
+    .budget-select {
+      min-height: 40px;
+      padding: 0 11px;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      background: #fff;
+      color: var(--ink);
+      font-weight: 700;
+    }
+
+    .primary-action {
+      width: 100%;
+      min-height: 50px;
+      border: 0;
+      border-radius: 12px;
+      background: var(--accent);
+      color: #fff;
+      font-size: 15px;
+      font-weight: 750;
+      letter-spacing: .04em;
+      cursor: pointer;
+      transition: background .16s, transform .16s;
+    }
+    .primary-action:hover { background: var(--accent-hover); }
+    .primary-action:active { transform: scale(.99); }
+    .primary-action:disabled { cursor: wait; background: #77998d; }
+
+    .mode-tabs {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      padding: 4px;
+      border-radius: 12px;
+      background: #e8e9e3;
+      margin-bottom: 23px;
+    }
+    .mode-tabs button {
+      position: relative;
+      z-index: 1;
+      min-height: 40px;
+      border: 0;
+      border-radius: 9px;
+      background: transparent;
+      color: var(--ink-soft);
+      font-size: 13px;
+      font-weight: 650;
+      cursor: pointer;
+      transition: .16s;
+    }
+    .mode-tabs button[aria-selected="true"] { background: #fff; color: var(--ink); box-shadow: 0 1px 4px rgba(22,35,31,.08); }
+
+    .record-time-summary {
+      width: 100%;
+      min-height: 60px;
+      margin-bottom: 22px;
+      padding: 8px 2px;
+      display: grid;
+      grid-template-columns: 38px 1fr auto;
+      align-items: center;
+      gap: 11px;
+      border: 0;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      background: transparent;
+      text-align: left;
+      cursor: pointer;
+    }
+    .time-symbol { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 10px; background: var(--accent-soft); color: var(--accent); font-size: 17px; }
+    .record-time-copy small { display: block; color: var(--muted); font-size: 10px; }
+    .record-time-copy strong { display: block; margin-top: 3px; font-size: 13px; }
+    .record-time-edit { color: var(--accent); font-size: 11px; font-weight: 750; }
+
+    .form-section { margin-bottom: 22px; }
+    .form-label { display: flex; align-items: center; justify-content: space-between; margin-bottom: 9px; }
+    .form-label label, .form-label span:first-child { font-size: 14px; font-weight: 720; }
+    .form-label small { color: var(--muted); font-size: 10px; }
+
+    .upload-zone {
+      min-height: 0;
+    }
+    .upload-zone.has-photos {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 9px;
+    }
+    .photo-tile {
+      position: relative;
+      aspect-ratio: 1 / 1.18;
+      overflow: hidden;
+      border-radius: 10px;
+      background: #e9ebe6;
+    }
+    .photo-mock {
+      height: 100%;
+      padding: 10px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      color: #435149;
+      font-size: 9px;
+      background:
+        linear-gradient(transparent 23px, rgba(83,98,89,.12) 24px, transparent 25px) 0 0 / 100% 19px,
+        #f8f5ea;
+      transform: rotate(-1deg) scale(1.03);
+    }
+    .photo-mock strong { font-family: "Songti SC", serif; font-size: 11px; color: #24342d; }
+    .remove-photo {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      width: 23px;
+      height: 23px;
+      border: 0;
+      border-radius: 50%;
+      background: rgba(23,35,31,.72);
+      color: #fff;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .add-photo {
+      width: 100%;
+      min-height: 76px;
+      padding: 11px 13px;
+      display: grid;
+      grid-template-columns: 42px 1fr auto;
+      align-items: center;
+      gap: 11px;
+      border: 1px dashed #9db8ad;
+      border-radius: 10px;
+      background: var(--accent-pale);
+      color: var(--accent);
+      text-align: left;
+      cursor: pointer;
+    }
+    .photo-picker-icon { width: 42px; height: 42px; display: grid; place-items: center; border-radius: 10px; background: #fff; font-size: 23px; font-weight: 300; }
+    .photo-picker-copy strong { display: block; font-size: 13px; }
+    .photo-picker-copy small { display: block; margin-top: 4px; color: var(--muted); font-size: 10px; font-weight: 400; }
+    .photo-picker-next { font-size: 11px; font-weight: 750; }
+    .upload-zone.has-photos .add-photo { min-height: 0; padding: 0; grid-template-columns: 1fr; place-items: center; aspect-ratio: 1 / 1.18; }
+    .upload-zone.has-photos .photo-picker-copy, .upload-zone.has-photos .photo-picker-next { display: none; }
+    .upload-zone.has-photos .photo-picker-icon { background: transparent; }
+    .photo-preview { width: 100%; height: 100%; display: block; object-fit: cover; }
+    .photo-source-options { display: grid; gap: 10px; }
+    .photo-source-option {
+      width: 100%;
+      min-height: 70px;
+      padding: 12px 14px;
+      display: grid;
+      grid-template-columns: 40px 1fr auto;
+      align-items: center;
+      gap: 12px;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      background: #fff;
+      color: var(--ink);
+      text-align: left;
+      cursor: pointer;
+    }
+    .photo-source-option:hover, .photo-source-option:focus-visible { border-color: #7aa291; background: var(--accent-pale); }
+    .photo-source-symbol { width: 40px; height: 40px; display: grid; place-items: center; border-radius: 10px; background: var(--accent-soft); color: var(--accent); font-size: 18px; }
+    .photo-source-copy strong { display: block; font-size: 13px; }
+    .photo-source-copy span { display: block; margin-top: 4px; color: var(--muted); font-size: 10px; }
+    .photo-source-next { color: var(--muted); font-size: 16px; }
+    .photo-source-remaining { margin: 12px 0 0; color: var(--muted); font-size: 10px; text-align: center; }
+
+    .textarea-wrap {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(255,255,255,.65);
+      overflow: hidden;
+      transition: border-color .16s, box-shadow .16s;
+    }
+    .textarea-wrap:focus-within { border-color: #7aa291; box-shadow: 0 0 0 3px rgba(34,98,79,.09); }
+    .textarea-wrap textarea {
+      width: 100%;
+      min-height: 70px;
+      padding: 13px 13px 5px;
+      resize: none;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: var(--ink);
+      font-size: 13px;
+      line-height: 1.65;
+    }
+    .textarea-footer { padding: 0 12px 9px; display: flex; justify-content: flex-end; color: var(--muted); font-size: 10px; }
+
+    .date-choice { margin-bottom: 18px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; }
+    .date-choice label { position: relative; display: block; cursor: pointer; }
+    .date-choice input { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+    .date-choice span { min-height: 42px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 9px; background: #fff; color: var(--ink-soft); font-size: 12px; }
+    .date-choice input:checked + span { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); font-weight: 750; }
+    .date-choice input:focus-visible + span { outline: 3px solid rgba(34,98,79,.28); outline-offset: 2px; }
+    .time-edit-row { min-height: 58px; margin-bottom: 18px; padding: 7px 3px; display: flex; align-items: center; justify-content: space-between; gap: 14px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .time-edit-row label { font-size: 13px; font-weight: 700; }
+    .time-edit-row input { min-height: 40px; padding: 0 10px; border: 1px solid var(--line); border-radius: 8px; background: #fff; color: var(--ink); font-weight: 700; }
+
+    .sticky-action {
+      position: sticky;
+      bottom: 0;
+      z-index: 8;
+      margin: 24px -20px -28px;
+      padding: 12px 20px calc(14px + env(safe-area-inset-bottom));
+      border-top: 1px solid rgba(220,222,215,.88);
+      background: rgba(251,250,246,.94);
+      backdrop-filter: blur(12px);
+    }
+
+    .bottom-nav {
+      position: absolute;
+      z-index: 9;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      min-height: 74px;
+      padding: 8px 18px calc(7px + env(safe-area-inset-bottom));
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      border-top: 1px solid rgba(220,222,215,.9);
+      background: rgba(251,250,246,.96);
+      backdrop-filter: blur(14px);
+    }
+    .nav-item {
+      min-height: 48px;
+      display: grid;
+      place-items: center;
+      align-content: center;
+      gap: 3px;
+      border: 0;
+      border-radius: 9px;
+      background: transparent;
+      color: var(--muted);
+      font-size: 10px;
+      cursor: pointer;
+    }
+    .nav-icon { font-size: 18px; line-height: 1; }
+    .nav-item[aria-current="page"] { color: var(--accent); font-weight: 750; }
+    .nav-item[aria-current="page"] .nav-icon { transform: translateY(-1px); }
+
+    .backdrop {
+      position: absolute;
+      z-index: 30;
+      inset: 0;
+      background: rgba(14, 24, 20, .38);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity .18s, visibility .18s;
+    }
+    .backdrop.open { opacity: 1; visibility: visible; pointer-events: auto; }
+    .backdrop.subtle { background: rgba(14,24,20,.16); }
+    .sheet {
+      position: absolute;
+      z-index: 31;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      max-height: 75%;
+      overflow: auto;
+      padding: 9px 20px calc(22px + env(safe-area-inset-bottom));
+      border-radius: 22px 22px 0 0;
+      background: var(--paper-strong);
+      transform: translateY(102%);
+      visibility: hidden;
+      pointer-events: none;
+      transition: transform .22s cubic-bezier(.22,.8,.22,1), visibility 0s linear .22s;
+    }
+    .sheet.open {
+      transform: translateY(0);
+      visibility: visible;
+      pointer-events: auto;
+      transition-delay: 0s;
+    }
+    .child-popover {
+      left: auto;
+      right: 20px;
+      top: 112px;
+      bottom: auto;
+      width: min(260px, calc(100% - 40px));
+      max-height: none;
+      padding: 12px;
+      overflow: visible;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      box-shadow: 0 18px 46px rgba(23,35,31,.18);
+      opacity: 0;
+      transform: translateY(-8px) scale(.98);
+      transform-origin: top right;
+      transition: opacity .16s, transform .16s, visibility 0s linear .16s;
+    }
+    .child-popover.open { opacity: 1; transform: translateY(0) scale(1); transition-delay: 0s; }
+    .child-popover::before {
+      content: "";
+      position: absolute;
+      top: -6px;
+      right: 34px;
+      width: 11px;
+      height: 11px;
+      border-top: 1px solid var(--line);
+      border-left: 1px solid var(--line);
+      background: #fff;
+      transform: rotate(45deg);
+    }
+    .popover-title { margin: 1px 4px 9px; color: var(--muted); font-size: 11px; font-weight: 700; }
+    .child-popover .child-list { gap: 5px; }
+    .child-popover .child-option { min-height: 56px; padding: 7px 8px; border: 0; border-radius: 9px; }
+    .child-popover .child-avatar { width: 36px; height: 36px; }
+    .sheet-handle { width: 38px; height: 4px; margin: 0 auto 18px; border-radius: 999px; background: #d5d8d3; }
+    .sheet-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 15px; margin-bottom: 16px; }
+    .sheet-head h3 { margin: 0 0 4px; font-size: 20px; }
+    .sheet-head p { margin: 0; color: var(--muted); font-size: 12px; }
+    .close-sheet {
+      width: 36px;
+      height: 36px;
+      border: 0;
+      border-radius: 50%;
+      background: #eff0ec;
+      cursor: pointer;
+    }
+
+    .child-list { display: grid; gap: 9px; }
+    .child-option {
+      width: 100%;
+      min-height: 66px;
+      padding: 9px 11px;
+      display: grid;
+      grid-template-columns: 42px 1fr auto;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fff;
+      text-align: left;
+      cursor: pointer;
+    }
+    .child-option[aria-checked="true"] { border-color: #82aa9a; background: var(--accent-pale); }
+    .child-avatar { width: 42px; height: 42px; display: grid; place-items: center; border-radius: 50%; background: var(--accent-soft); color: var(--accent); font-weight: 800; }
+    .child-option:nth-child(2) .child-avatar { background: #f5e6db; color: #9a5e31; }
+    .child-main strong { display: block; font-size: 14px; }
+    .child-main span { display: block; margin-top: 3px; color: var(--muted); font-size: 11px; }
+    .child-check { color: var(--accent); font-weight: 800; }
+
+    .field-label { display: block; margin-bottom: 7px; color: var(--ink-soft); font-size: 12px; font-weight: 700; }
+    .text-input {
+      width: 100%;
+      min-height: 48px;
+      padding: 0 13px;
+      border: 1px solid var(--line-strong);
+      border-radius: 10px;
+      outline: 0;
+      background: #fff;
+    }
+    .text-input:focus { border-color: #6b9887; box-shadow: 0 0 0 3px rgba(34,98,79,.1); }
+    .preset-heading { margin: 0 0 9px; color: var(--ink-soft); font-size: 12px; font-weight: 750; }
+    .preset-list { margin-bottom: 13px; display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
+    .preset-option {
+      min-height: 52px;
+      padding: 7px 9px;
+      display: grid;
+      grid-template-columns: 30px 1fr;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      background: #fff;
+      text-align: left;
+      cursor: pointer;
+    }
+    .preset-option .preset-symbol { width: 30px; height: 30px; display: grid; place-items: center; border-radius: 8px; background: var(--accent-soft); color: var(--accent); font-family: "Songti SC", serif; font-weight: 800; }
+    .preset-option strong { display: block; font-size: 12px; }
+    .preset-option span:last-child { display: block; margin-top: 2px; color: var(--muted); font-size: 9px; }
+    .preset-option[aria-disabled="true"] { cursor: default; background: #f3f4f1; opacity: .58; }
+    .activity-catalog { max-height: 394px; margin: -2px -4px 4px 0; padding-right: 4px; overflow: auto; overscroll-behavior: contain; scrollbar-width: thin; }
+    .preset-category + .preset-category { margin-top: 14px; }
+    .preset-category-title { margin: 0 0 7px; color: var(--muted); font-size: 11px; font-weight: 700; }
+    .activity-catalog .preset-list { margin-bottom: 0; }
+    .custom-disclosure {
+      width: 100%;
+      min-height: 46px;
+      padding: 0 3px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border: 0;
+      border-top: 1px solid var(--line);
+      background: transparent;
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 750;
+      cursor: pointer;
+    }
+    .custom-fields { padding-top: 4px; }
+    .custom-fields .primary-action { margin-top: 13px; }
+
+    .toast {
+      position: absolute;
+      z-index: 50;
+      left: 50%;
+      bottom: 92px;
+      max-width: calc(100% - 40px);
+      padding: 10px 15px;
+      border-radius: 999px;
+      background: #1b2924;
+      color: #fff;
+      font-size: 12px;
+      box-shadow: 0 12px 30px rgba(20,31,27,.25);
+      opacity: 0;
+      transform: translate(-50%, 8px);
+      pointer-events: none;
+      transition: .18s;
+    }
+    .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+    :focus-visible { outline: 3px solid rgba(34,98,79,.28); outline-offset: 2px; }
+
+    @media (max-width: 760px) {
+      .review-shell { display: block; }
+      .review-panel { display: none; }
+      .prototype-stage { min-height: 100svh; padding: 0; background: var(--paper); }
+      .phone {
+        width: 100%;
+        height: 100svh;
+        min-height: 620px;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+      }
+      .phone::before { display: none; }
+      .status-bar { flex-basis: 27px; padding-top: 8px; }
+    }
+
+    @media (max-width: 340px) {
+      .screen-inner { padding-left: 14px; padding-right: 14px; }
+      .review-budget { align-items: stretch; flex-direction: column; }
+      .budget-options { width: 100%; }
+      .subject-grid { gap: 6px; }
+      .subject-option { min-height: 64px; padding-inline: 4px; }
+      .child-trigger .child-name { max-width: 48px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="review-shell">
+    <aside class="review-panel" aria-label="原型评审说明">
+      <div class="brand-lockup"><span class="brand-mark">芽</span><span class="brand-name">知芽</span></div>
+      <h1>把记录学习，做成一件顺手的事。</h1>
+      <p class="review-lead">这版重做今日、日程、设置、记录与报表五个核心场景。视觉从“大卡片堆叠”收敛为编辑式学习手册，信息只服务家长当下的判断与操作。</p>
+      <nav class="review-nav" aria-label="评审页面">
+        <button type="button" data-review-page="today" aria-pressed="false"><span>01 · 今日计划</span><small>只看今天</small></button>
+        <button type="button" data-review-page="calendar" aria-pressed="false"><span>02 · 日程表</span><small>课程安排</small></button>
+        <button type="button" data-review-page="settings" aria-pressed="false"><span>03 · 设置与科目</span><small>选项优先</small></button>
+        <button type="button" data-review-page="record" aria-pressed="false"><span>04 · 记录学习</span><small>轻量提交</small></button>
+        <button type="button" data-review-page="report" aria-pressed="true"><span>05 · 学习报表</span><small>复习紧迫度</small></button>
+      </nav>
+      <div class="review-principles">
+        <strong>本轮设计原则</strong>
+        <ul>
+          <li>常见内容直接选择，少让家长输入</li>
+          <li>一个页面只有一个明确主操作</li>
+          <li>解释只在需要决策时出现</li>
+          <li>本原型不连接真实数据</li>
+        </ul>
+      </div>
+    </aside>
+
+    <main class="prototype-stage">
+      <section class="phone" aria-label="知芽移动端原型">
+        <div class="app-frame">
+          <div class="status-bar" aria-hidden="true"><span>20:18</span><span class="status-icons">● ◒ ▰</span></div>
+
+          <section class="screen" data-screen="today" aria-label="今日计划" hidden>
+            <div class="screen-inner">
+              <header class="screen-header">
+                <p class="date-line">8 月 30 日 · 星期日</p>
+                <button class="child-trigger" type="button" data-open-sheet="child" aria-haspopup="dialog" aria-expanded="false" aria-label="切换孩子，当前小旺">
+                  <span class="avatar" data-child-initial>旺</span><span class="child-name" data-child-name>小旺</span><span class="control-chevron child-chevron" aria-hidden="true"><svg viewBox="0 0 12 12" focusable="false"><path d="M2.75 4.5 6 7.5l3.25-3" /></svg></span>
+                </button>
+              </header>
+
+              <section class="today-section" aria-labelledby="today-review-title">
+                <h3 class="today-section-heading" id="today-review-title">
+                  <button class="today-section-toggle" type="button" aria-expanded="true" aria-controls="today-review-panel" data-today-disclosure>
+                    <span class="today-section-title">今日复习</span><span class="today-section-meta">3 项 · 按建议顺序</span><span class="control-chevron today-section-chevron" aria-hidden="true"><svg viewBox="0 0 12 12" focusable="false"><path d="M2.75 4.5 6 7.5l3.25-3" /></svg></span>
+                  </button>
+                </h3>
+                <div class="today-section-panel" id="today-review-panel">
+                  <div class="today-list" id="today-list">
+                    <button class="today-item" type="button" aria-pressed="false" data-today-task>
+                      <span class="today-check">✓</span><span class="today-copy"><strong>两位数进位加法</strong><span>数学 · 口算 5 题 · 约 5 分钟</span></span><span class="subject-code">数学</span>
+                    </button>
+                    <button class="today-item" type="button" aria-pressed="false" data-today-task>
+                      <span class="today-check">✓</span><span class="today-copy"><strong>school、teacher 等 8 个单词</strong><span>英语 · 看中文说英文 · 约 5 分钟</span></span><span class="subject-code">英语</span>
+                    </button>
+                    <button class="today-item" type="button" aria-pressed="true" data-today-task>
+                      <span class="today-check">✓</span><span class="today-copy"><strong>古诗《山行》</strong><span>语文 · 背诵一遍 · 已完成</span></span><span class="subject-code">语文</span>
+                    </button>
+                  </div>
+                </div>
+              </section>
+
+              <section class="today-section" aria-labelledby="today-learning-title">
+                <h3 class="today-section-heading" id="today-learning-title">
+                  <button class="today-section-toggle" type="button" aria-expanded="true" aria-controls="today-learning-panel" data-today-disclosure>
+                    <span class="today-section-title">今日学习</span><span class="today-section-meta">已确认 3 项</span><span class="control-chevron today-section-chevron" aria-hidden="true"><svg viewBox="0 0 12 12" focusable="false"><path d="M2.75 4.5 6 7.5l3.25-3" /></svg></span>
+                  </button>
+                </h3>
+                <div class="today-section-panel" id="today-learning-panel">
+                  <div class="today-learning-list" aria-label="今日已确认学习内容">
+                    <article class="today-learning-item"><span class="learning-symbol">数</span><span class="learning-copy"><strong>两位数进位加法、竖式步骤</strong><span>20:05 · 练习册照片 2 张</span></span></article>
+                    <article class="today-learning-item"><span class="learning-symbol">语</span><span class="learning-copy"><strong>古诗《山行》与“径、斜”字词</strong><span>17:40 · 课本照片 1 张</span></span></article>
+                    <article class="today-learning-item"><span class="learning-symbol">EN</span><span class="learning-copy"><strong>school、teacher 等 8 个单词</strong><span>16:25 · 单词本照片 2 张</span></span></article>
+                  </div>
+                </div>
+              </section>
+
+              <section class="today-section" aria-labelledby="today-activity-title">
+                <h3 class="today-section-heading" id="today-activity-title">
+                  <button class="today-section-toggle" type="button" aria-expanded="true" aria-controls="today-activity-panel" data-today-disclosure>
+                    <span class="today-section-title">今日活动</span><span class="today-section-meta" id="today-activity-meta">2 项 · 今日安排</span><span class="control-chevron today-section-chevron" aria-hidden="true"><svg viewBox="0 0 12 12" focusable="false"><path d="M2.75 4.5 6 7.5l3.25-3" /></svg></span>
+                  </button>
+                </h3>
+                <div class="today-section-panel" id="today-activity-panel">
+                  <div id="today-activity-list" aria-label="今日活动安排"></div>
+                </div>
+              </section>
+            </div>
+          </section>
+
+          <section class="screen calendar-screen" data-screen="calendar" aria-label="日程表" hidden>
+            <div class="screen-inner">
+              <header class="screen-header calendar-header">
+                <p class="date-line"><span data-child-name>小旺</span>的课程与活动</p>
+                <button class="child-trigger" type="button" data-open-sheet="child" aria-haspopup="dialog" aria-expanded="false" aria-label="切换孩子，当前小旺">
+                  <span class="avatar" data-child-initial>旺</span><span class="child-name" data-child-name>小旺</span><span class="control-chevron child-chevron" aria-hidden="true"><svg viewBox="0 0 12 12" focusable="false"><path d="M2.75 4.5 6 7.5l3.25-3" /></svg></span>
+                </button>
+              </header>
+              <div class="calendar-toolbar"><strong id="calendar-month-label">2026 年 8 月</strong><button type="button" data-calendar-today>回到今天</button></div>
+              <div class="week-strip" role="group" aria-label="本周日期">
+                <button class="calendar-day has-event" type="button" data-calendar-day="0" data-date-label="8 月 30 日 · 星期日" aria-pressed="true"><small>日</small><strong>30</strong></button>
+                <button class="calendar-day has-event" type="button" data-calendar-day="1" data-date-label="8 月 31 日 · 星期一" aria-pressed="false"><small>一</small><strong>31</strong></button>
+                <button class="calendar-day" type="button" data-calendar-day="2" data-date-label="9 月 1 日 · 星期二" aria-pressed="false"><small>二</small><strong>1</strong></button>
+                <button class="calendar-day has-event" type="button" data-calendar-day="3" data-date-label="9 月 2 日 · 星期三" aria-pressed="false"><small>三</small><strong>2</strong></button>
+                <button class="calendar-day" type="button" data-calendar-day="4" data-date-label="9 月 3 日 · 星期四" aria-pressed="false"><small>四</small><strong>3</strong></button>
+                <button class="calendar-day" type="button" data-calendar-day="5" data-date-label="9 月 4 日 · 星期五" aria-pressed="false"><small>五</small><strong>4</strong></button>
+                <button class="calendar-day has-event" type="button" data-calendar-day="6" data-date-label="9 月 5 日 · 星期六" aria-pressed="false"><small>六</small><strong>5</strong></button>
+              </div>
+              <div class="calendar-date-heading"><strong id="calendar-date-label">8 月 30 日 · 星期日</strong><span id="calendar-day-status">今天 · 1 项</span></div>
+              <div class="agenda-list" id="agenda-list" aria-live="polite"></div>
+            </div>
+            <button class="calendar-fab" type="button" data-open-sheet="calendar-event" aria-label="新建日程" title="新建日程">＋</button>
+          </section>
+
+          <section class="screen" data-screen="settings" aria-label="设置与科目" hidden>
+            <div class="screen-inner">
+              <header class="screen-header settings-header">
+                <p class="eyebrow">学习档案</p>
+                <button class="child-trigger" type="button" data-open-sheet="child" aria-haspopup="dialog" aria-expanded="false" aria-label="切换孩子，当前小旺">
+                  <span class="avatar" data-child-initial>旺</span><span class="child-name" data-child-name>小旺</span><span class="control-chevron child-chevron" aria-hidden="true"><svg viewBox="0 0 12 12" focusable="false"><path d="M2.75 4.5 6 7.5l3.25-3" /></svg></span>
+                </button>
+              </header>
+
+              <section class="review-budget" aria-label="每日复习时间">
+                <div><strong>每日复习计划</strong><span>根据这个时长安排当天清单</span></div>
+                <div class="budget-options" role="group" aria-label="每天复习时间">
+                  <button type="button" aria-pressed="false" data-budget="10">10 分</button><button type="button" aria-pressed="true" data-budget="15">15 分</button><button type="button" aria-pressed="false" data-budget="20">20 分</button><button type="button" aria-pressed="false" data-budget="30">30 分</button>
+                </div>
+              </section>
+
+              <section class="settings-group" aria-labelledby="learning-subjects-title">
+                <div class="settings-group-head">
+                  <span class="settings-index">01</span><h3 id="learning-subjects-title">在学科目</h3><span class="selected-total" id="learning-count">已选 3 项</span>
+                  <p>勾选已经开始学习的科目，不需要预测下一步内容</p>
+                </div>
+                <div class="settings-list" id="learning-grid">
+                  <button class="setting-row subject-choice" type="button" aria-pressed="true" data-subject="语文"><span class="row-symbol">语</span><span class="row-copy"><strong>语文</strong><span>识字 · 古诗 · 阅读</span></span><span class="row-check">✓</span></button>
+                  <button class="setting-row subject-choice" type="button" aria-pressed="true" data-subject="数学"><span class="row-symbol">数</span><span class="row-copy"><strong>数学</strong><span>计算 · 概念 · 应用题</span></span><span class="row-check">✓</span></button>
+                  <button class="setting-row subject-choice" type="button" aria-pressed="true" data-subject="英语"><span class="row-symbol">EN</span><span class="row-copy"><strong>英语</strong><span>单词 · 听说 · 阅读</span></span><span class="row-check">✓</span></button>
+                  <button class="setting-row subject-choice" type="button" aria-pressed="false" data-subject="科学"><span class="row-symbol">科</span><span class="row-copy"><strong>科学</strong><span>观察 · 实验 · 基础概念</span></span><span class="row-check">✓</span></button>
+                  <button class="setting-row subject-choice" type="button" aria-pressed="false" data-subject="道德与法治"><span class="row-symbol">道</span><span class="row-copy"><strong>道德与法治</strong><span>课内相关学习内容</span></span><span class="row-check">✓</span></button>
+                  <button class="setting-row add-setting-row" type="button" data-open-sheet="custom" data-custom-type="learning"><span class="row-symbol">＋</span><span class="row-copy"><strong>添加其他科目</strong><span>仅在上面没有时添加</span></span><span class="row-chevron">›</span></button>
+                </div>
+              </section>
+
+              <section class="settings-group" aria-labelledby="activity-title">
+                <div class="settings-group-head">
+                  <span class="settings-index">02</span><h3 id="activity-title">活动安排</h3><span class="selected-total" id="activity-count">2 项</span>
+                  <p>只显示已添加的活动，点击后选择通常练习日</p>
+                </div>
+                <div class="settings-list" id="activity-grid">
+                  <button class="setting-row activity-plan-row" type="button" data-open-sheet="activity-plan" data-plan-activity="游泳" data-schedule="2,5" data-plan-time="18:00" data-plan-end="19:00"><span class="row-symbol">泳</span><span class="row-copy"><strong>游泳</strong><span>周三、周六 · 18:00–19:00</span></span><span class="row-chevron">›</span></button>
+                  <button class="setting-row activity-plan-row" type="button" data-open-sheet="activity-plan" data-plan-activity="乒乓球" data-schedule="6" data-plan-time="10:00" data-plan-end="11:00"><span class="row-symbol">乒</span><span class="row-copy"><strong>乒乓球</strong><span>周日 · 10:00–11:00</span></span><span class="row-chevron">›</span></button>
+                  <button class="setting-row add-setting-row" type="button" data-open-sheet="custom" data-custom-type="activity"><span class="row-symbol">＋</span><span class="row-copy"><strong>添加活动</strong><span>游泳、球类、乐器或其他练习</span></span><span class="row-chevron">›</span></button>
+                </div>
+              </section>
+            </div>
+          </section>
+
+          <section class="screen" data-screen="record" aria-label="记录学习" hidden>
+            <div class="screen-inner">
+              <header class="screen-header">
+                <p class="eyebrow">记录已学内容</p>
+                <button class="child-trigger" type="button" data-open-sheet="child" aria-haspopup="dialog" aria-expanded="false" aria-label="切换孩子，当前小旺">
+                  <span class="avatar" data-child-initial>旺</span><span class="child-name" data-child-name>小旺</span><span class="control-chevron child-chevron" aria-hidden="true"><svg viewBox="0 0 12 12" focusable="false"><path d="M2.75 4.5 6 7.5l3.25-3" /></svg></span>
+                </button>
+              </header>
+
+              <div class="mode-tabs" role="tablist" aria-label="记录方式">
+                <button type="button" role="tab" aria-selected="true" data-mode="photo">拍照记录</button>
+                <button type="button" role="tab" aria-selected="false" data-mode="manual">文字记录</button>
+              </div>
+
+              <button class="record-time-summary" type="button" data-open-sheet="record-time" aria-haspopup="dialog">
+                <span class="time-symbol">◷</span><span class="record-time-copy"><small>实际发生时间</small><strong id="record-time-summary">今天 · 20:18</strong></span><span class="record-time-edit">修改 ›</span>
+              </button>
+
+              <section class="form-section" data-photo-section>
+                <div class="form-label"><span>学习照片</span><small id="photo-count">0 / 9</small></div>
+                <div class="upload-zone" id="upload-zone">
+                  <button class="add-photo" type="button" data-open-sheet="photo-source" aria-haspopup="dialog"><span class="photo-picker-icon">＋</span><span class="photo-picker-copy"><strong>添加学习照片</strong><small>支持拍 1 张或从相册多选，最多 9 张</small></span><span class="photo-picker-next">选择 ›</span></button>
+                </div>
+              </section>
+
+              <section class="form-section">
+                <div class="form-label"><label for="learning-text" data-text-label>补充内容</label><small>选填</small></div>
+                <div class="textarea-wrap">
+                  <textarea id="learning-text" maxlength="4000" placeholder="例如：数学练习了两位数进位加法"></textarea>
+                  <div class="textarea-footer"><span id="text-count">0</span>&nbsp;/ 4000</div>
+                </div>
+              </section>
+
+              <div class="sticky-action"><button class="primary-action" type="button" data-submit>提交</button></div>
+            </div>
+          </section>
+
+          <section class="screen" data-screen="report" aria-label="学习报表">
+            <div class="screen-inner">
+              <header class="screen-header">
+                <p class="eyebrow">已确认的学习记录</p>
+                <button class="child-trigger" type="button" data-open-sheet="child" aria-haspopup="dialog" aria-expanded="false" aria-label="切换孩子，当前小旺">
+                  <span class="avatar" data-child-initial>旺</span><span class="child-name" data-child-name>小旺</span><span class="control-chevron child-chevron" aria-hidden="true"><svg viewBox="0 0 12 12" focusable="false"><path d="M2.75 4.5 6 7.5l3.25-3" /></svg></span>
+                </button>
+              </header>
+
+              <div class="range-tabs" role="group" aria-label="报表时间范围">
+                <button type="button" aria-pressed="true" data-report-range="7">近 7 天</button>
+                <button type="button" aria-pressed="false" data-report-range="30">近 30 天</button>
+                <button type="button" aria-pressed="false" data-report-range="100">近 100 天</button>
+              </div>
+
+              <section class="metric-strip" id="report-metric-strip" aria-label="近 7 天概览">
+                <div class="metric-item"><strong data-report-metric="records">6</strong><span>学习记录</span></div>
+                <div class="metric-item"><strong data-report-metric="knowledge">18</strong><span>新增知识点</span></div>
+                <div class="metric-item"><strong data-report-metric="reviews">11</strong><span>复习反馈</span></div>
+                <div class="metric-item"><strong data-report-metric="activities">2</strong><span>活动练习</span></div>
+              </section>
+
+              <section class="report-section memory-section" aria-labelledby="memory-urgency-title">
+                <div class="content-heading"><h3 id="memory-urgency-title">哪些内容最需要先复习</h3><span id="memory-range-label">近 7 天</span></div>
+                <p class="memory-explainer">圆点大小表示当天待复习知识数，红色越深表示复习越紧迫；复习通过后切换为绿色。</p>
+                <div class="memory-legend" aria-label="复习紧迫度图例">
+                  <span><i class="legend-dot low"></i>较低</span><span><i class="legend-dot mid"></i>较高</span><span><i class="legend-dot high"></i>优先复习</span><span><i class="legend-dot reviewed"></i>已通过</span>
+                </div>
+                <div class="memory-heatmap" id="memory-heatmap" role="group" aria-label="8 月 17 日至 30 日复习紧迫度"></div>
+                <div class="memory-pager" id="memory-pager" aria-label="100 天紧迫度分页" hidden>
+                  <button type="button" data-memory-page-step="-1" aria-label="查看更早的 30 天">‹</button>
+                  <span id="memory-page-label" aria-live="polite"></span>
+                  <button type="button" data-memory-page-step="1" aria-label="查看更近的 30 天">›</button>
+                </div>
+                <p class="memory-source">依据已确认学习日期、确定性复习间隔和家长反馈推算，不表示掌握率。</p>
+                <div class="memory-detail" id="memory-detail" aria-live="polite"></div>
+              </section>
+
+              <section class="report-section contribution-section" aria-labelledby="review-activity-title">
+                <div class="content-heading"><h3 id="review-activity-title">复习活跃度</h3><span id="review-activity-range">近 7 天</span></div>
+                <p class="contribution-explainer" id="review-activity-explainer">每个方格代表一天；当前范围内绿色越深，记录的复习反馈越多，灰色为范围外日期。</p>
+                <div class="contribution-chart">
+                  <div class="contribution-months" id="review-contribution-months" aria-hidden="true"></div>
+                  <div class="contribution-body">
+                    <div class="contribution-weekdays" aria-hidden="true"><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span><span>日</span></div>
+                    <div class="contribution-grid" id="review-contribution-grid" role="group" aria-label="6 月 8 日至 8 月 30 日每天复习次数"></div>
+                  </div>
+                  <div class="contribution-legend" aria-label="复习次数颜色图例"><span>少</span><i class="level-0"></i><i class="level-1"></i><i class="level-2"></i><i class="level-3"></i><i class="level-4"></i><span>多</span></div>
+                  <p class="contribution-thresholds">0 · 1–2 · 3–5 · 6–8 · 9+ 条</p>
+                </div>
+              </section>
+
+              <section class="report-section" aria-labelledby="subject-report-title">
+                <div class="content-heading"><h3 id="subject-report-title">科目学习记录</h3><span id="subject-range-label">近 7 天</span></div>
+                <div class="bar-list">
+                  <div data-subject-report="math"><div class="bar-meta"><span>数学</span><span>3 次记录</span></div><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div></div>
+                  <div data-subject-report="chinese"><div class="bar-meta"><span>语文</span><span>2 次记录</span></div><div class="bar-track"><div class="bar-fill" style="width:67%"></div></div></div>
+                  <div data-subject-report="english"><div class="bar-meta"><span>英语</span><span>1 次记录</span></div><div class="bar-track"><div class="bar-fill" style="width:34%"></div></div></div>
+                </div>
+              </section>
+
+            </div>
+          </section>
+
+          <nav class="bottom-nav" aria-label="主导航">
+            <button class="nav-item" type="button" data-page="today"><span class="nav-icon">⌂</span><span>今日</span></button>
+            <button class="nav-item" type="button" data-page="calendar"><span class="nav-icon">▣</span><span>日程</span></button>
+            <button class="nav-item" type="button" data-page="record"><span class="nav-icon">＋</span><span>记录</span></button>
+            <button class="nav-item" type="button" data-page="report" aria-current="page"><span class="nav-icon">▥</span><span>报表</span></button>
+            <button class="nav-item" type="button" data-page="settings"><span class="nav-icon">⚙</span><span>设置</span></button>
+          </nav>
+        </div>
+
+        <div class="backdrop" data-backdrop></div>
+
+        <section class="sheet child-popover" data-sheet="child" role="dialog" aria-modal="true" aria-labelledby="child-sheet-title" aria-hidden="true" inert>
+          <div class="popover-title" id="child-sheet-title">选择孩子</div>
+          <div class="child-list" role="radiogroup">
+            <button class="child-option" type="button" role="radio" aria-checked="true" data-child="小旺" data-initial="旺" data-meta="小学 · 每天 15 分钟">
+              <span class="child-avatar">旺</span><span class="child-main"><strong>小旺</strong><span>小学 · 每天 15 分钟</span></span><span class="child-check">✓</span>
+            </button>
+            <button class="child-option" type="button" role="radio" aria-checked="false" data-child="小雨" data-initial="雨" data-meta="小学 · 每天 20 分钟">
+              <span class="child-avatar">雨</span><span class="child-main"><strong>小雨</strong><span>小学 · 每天 20 分钟</span></span><span class="child-check"></span>
+            </button>
+          </div>
+        </section>
+
+        <section class="sheet" data-sheet="record-time" role="dialog" aria-modal="true" aria-labelledby="record-time-title" aria-hidden="true" inert>
+          <div class="sheet-handle"></div>
+          <div class="sheet-head"><div><h3 id="record-time-title">记录时间</h3><p>选择学习实际发生的日期和时间</p></div><button class="close-sheet" type="button" data-close-sheet aria-label="关闭">×</button></div>
+          <span class="plan-form-label">日期</span>
+          <div class="date-choice" role="group" aria-label="学习日期">
+            <label><input type="radio" name="record-day" value="今天" checked /><span>今天</span></label><label><input type="radio" name="record-day" value="昨天" /><span>昨天</span></label><label><input type="radio" name="record-day" value="8 月 28 日" /><span>8 月 28 日</span></label>
+          </div>
+          <div class="time-edit-row"><label for="record-time">具体时间</label><input id="record-time" type="time" value="20:18" /></div>
+          <button class="primary-action" type="button" data-save-record-time>确认时间</button>
+        </section>
+
+        <section class="sheet" data-sheet="photo-source" role="dialog" aria-modal="true" aria-labelledby="photo-source-title" aria-hidden="true" inert>
+          <div class="sheet-handle"></div>
+          <div class="sheet-head"><div><h3 id="photo-source-title">添加学习照片</h3><p>可以一次添加一张，也可以从相册选择多张</p></div><button class="close-sheet" type="button" data-close-sheet aria-label="关闭">×</button></div>
+          <div class="photo-source-options">
+            <button class="photo-source-option" type="button" data-photo-picker="single"><span class="photo-source-symbol">拍</span><span class="photo-source-copy"><strong>拍摄一张</strong><span>打开相机，一次添加 1 张</span></span><span class="photo-source-next">›</span></button>
+            <button class="photo-source-option" type="button" data-photo-picker="multiple"><span class="photo-source-symbol">册</span><span class="photo-source-copy"><strong>从相册选择</strong><span>可一次选择 1 张或多张</span></span><span class="photo-source-next">›</span></button>
+          </div>
+          <p class="photo-source-remaining" id="photo-source-remaining">还可添加 9 张</p>
+          <input id="single-photo-input" type="file" accept="image/*" capture="environment" hidden />
+          <input id="multiple-photo-input" type="file" accept="image/*" multiple hidden />
+        </section>
+
+        <section class="sheet" data-sheet="calendar-event" role="dialog" aria-modal="true" aria-labelledby="calendar-event-title" aria-hidden="true" inert>
+          <div class="sheet-handle"></div>
+          <div class="sheet-head"><div><h3 id="calendar-event-title">新建日程</h3><p>记录辅导班、课程或活动安排</p></div><button class="close-sheet" type="button" data-close-sheet aria-label="关闭">×</button></div>
+          <div class="event-form">
+            <div class="event-field"><label for="event-title">日程名称</label><input class="text-input" id="event-title" maxlength="30" placeholder="例如：英语辅导班" /></div>
+            <div class="event-field"><span>日期</span><div class="event-date-options" role="group" aria-label="日程日期"><button class="event-date-option" type="button" data-event-day="0" aria-pressed="true"><small>日</small><strong>30</strong></button><button class="event-date-option" type="button" data-event-day="1" aria-pressed="false"><small>一</small><strong>31</strong></button><button class="event-date-option" type="button" data-event-day="2" aria-pressed="false"><small>二</small><strong>1</strong></button><button class="event-date-option" type="button" data-event-day="3" aria-pressed="false"><small>三</small><strong>2</strong></button><button class="event-date-option" type="button" data-event-day="4" aria-pressed="false"><small>四</small><strong>3</strong></button><button class="event-date-option" type="button" data-event-day="5" aria-pressed="false"><small>五</small><strong>4</strong></button><button class="event-date-option" type="button" data-event-day="6" aria-pressed="false"><small>六</small><strong>5</strong></button></div></div>
+            <div class="event-field"><span>时间</span><div class="event-time-range"><input id="event-start" type="time" value="19:00" aria-label="开始时间" /><span>至</span><input id="event-end" type="time" value="20:00" aria-label="结束时间" /></div></div>
+            <div class="event-field"><span>类型</span><div class="event-types" role="group" aria-label="日程类型"><button class="event-type" type="button" data-event-type="辅导班" aria-pressed="true">辅导班</button><button class="event-type" type="button" data-event-type="活动" aria-pressed="false">活动</button><button class="event-type" type="button" data-event-type="其他" aria-pressed="false">其他</button></div></div>
+            <div class="repeat-row"><span>每周重复</span><button class="repeat-toggle" type="button" data-event-repeat aria-label="每周重复" aria-pressed="false"></button></div>
+            <p class="event-form-error" id="event-form-error" role="alert"></p>
+            <button class="primary-action" type="button" data-save-calendar-event>创建日程</button>
+          </div>
+        </section>
+
+        <section class="sheet" data-sheet="event-detail" role="dialog" aria-modal="true" aria-labelledby="event-detail-title" aria-hidden="true" inert>
+          <div class="sheet-handle"></div>
+          <div class="sheet-head"><div><h3 id="event-detail-title">日程详情</h3><p id="event-detail-date">8 月 30 日 · 星期日</p></div><button class="close-sheet" type="button" data-close-sheet aria-label="关闭">×</button></div>
+          <div class="event-detail-summary">
+            <div class="event-detail-row"><span>日程</span><strong id="event-detail-name">围棋课</strong></div>
+            <div class="event-detail-row"><span>时间</span><strong id="event-detail-time">18:30–20:00</strong></div>
+            <div class="event-detail-row"><span>类型</span><strong id="event-detail-type">活动 · 每周重复</strong></div>
+          </div>
+          <div class="event-detail-actions"><button class="primary-action" type="button" data-edit-calendar-event>编辑日程</button><button class="danger-action" type="button" data-delete-calendar-event>删除</button></div>
+          <div class="delete-confirm" data-delete-confirm hidden><span>删除后无法恢复</span><button type="button" data-cancel-delete-event>取消</button><button type="button" data-confirm-delete-event>确认删除</button></div>
+        </section>
+
+        <section class="sheet plan-sheet" data-sheet="activity-plan" role="dialog" aria-modal="true" aria-labelledby="activity-plan-title" aria-hidden="true" inert>
+          <div class="sheet-handle"></div>
+          <div class="sheet-head"><div><h3 id="activity-plan-title"><span data-plan-title>游泳</span>提醒</h3><p>选择通常练习的日子</p></div><button class="close-sheet" type="button" data-close-sheet aria-label="关闭">×</button></div>
+          <div class="schedule-picker">
+            <div class="schedule-heading"><strong>通常哪天练习？</strong><button class="flexible-schedule" type="button" data-flexible-schedule aria-label="时间不固定，根据上次练习时间给出建议" aria-pressed="false"><span>时间不固定</span><span class="flexible-check">✓</span></button></div>
+            <div class="weekday-row" aria-label="通常练习日">
+              <button class="weekday" type="button" aria-label="周一" data-day-name="周一" aria-pressed="false">一</button><button class="weekday" type="button" aria-label="周二" data-day-name="周二" aria-pressed="false">二</button><button class="weekday" type="button" aria-label="周三" data-day-name="周三" aria-pressed="true">三</button><button class="weekday" type="button" aria-label="周四" data-day-name="周四" aria-pressed="false">四</button><button class="weekday" type="button" aria-label="周五" data-day-name="周五" aria-pressed="false">五</button><button class="weekday" type="button" aria-label="周六" data-day-name="周六" aria-pressed="true">六</button><button class="weekday" type="button" aria-label="周日" data-day-name="周日" aria-pressed="false">日</button>
+            </div>
+            <div class="plan-time-row" data-plan-time-row>
+              <div class="plan-time-copy"><label>练习时间</label><span>完整时间段同步展示在日程与今日</span></div>
+              <div class="plan-time-range">
+                <div class="plan-time-field"><label for="activity-plan-time">开始</label><div class="plan-time-control"><input id="activity-plan-time" type="time" value="18:00" aria-label="练习开始时间" /></div></div>
+                <span class="plan-time-separator" aria-hidden="true">至</span>
+                <div class="plan-time-field"><label for="activity-plan-end">结束</label><div class="plan-time-control"><input id="activity-plan-end" type="time" value="19:00" aria-label="练习结束时间" /></div></div>
+              </div>
+              <p class="plan-time-error" id="activity-plan-time-error" role="alert"></p>
+            </div>
+            <div class="schedule-result" data-schedule-result>周三、周六 18:00–19:00 · 出现在日程与今日计划</div>
+          </div>
+          <button class="primary-action" type="button" data-save-plan>保存提醒</button>
+        </section>
+
+        <section class="sheet" data-sheet="custom" role="dialog" aria-modal="true" aria-labelledby="custom-sheet-title" aria-hidden="true" inert>
+          <div class="sheet-handle"></div>
+          <div class="sheet-head"><div><h3 id="custom-sheet-title" data-custom-title>添加科目</h3><p data-custom-description>选择已经开始学习的内容，列表里没有时再自定义</p></div><button class="close-sheet" type="button" data-close-sheet aria-label="关闭">×</button></div>
+
+          <div data-preset-group="learning">
+            <p class="preset-heading">可选学科</p>
+            <div class="preset-list">
+              <button class="preset-option" type="button" data-preset-choice="物理" data-preset-type="learning" data-preset-hint="力、声、光、电"><span class="preset-symbol">物</span><span><strong>物理</strong><span>力、声、光、电</span></span></button>
+              <button class="preset-option" type="button" data-preset-choice="化学" data-preset-type="learning" data-preset-hint="物质与实验"><span class="preset-symbol">化</span><span><strong>化学</strong><span>物质与实验</span></span></button>
+              <button class="preset-option" type="button" data-preset-choice="生物" data-preset-type="learning" data-preset-hint="生命与生态"><span class="preset-symbol">生</span><span><strong>生物</strong><span>生命与生态</span></span></button>
+              <button class="preset-option" type="button" data-preset-choice="历史" data-preset-type="learning" data-preset-hint="中国与世界历史"><span class="preset-symbol">史</span><span><strong>历史</strong><span>中国与世界历史</span></span></button>
+              <button class="preset-option" type="button" data-preset-choice="地理" data-preset-type="learning" data-preset-hint="地图与区域"><span class="preset-symbol">地</span><span><strong>地理</strong><span>地图与区域</span></span></button>
+              <button class="preset-option" type="button" data-preset-choice="政治" data-preset-type="learning" data-preset-hint="思想、法治与社会"><span class="preset-symbol">政</span><span><strong>政治</strong><span>思想、法治与社会</span></span></button>
+            </div>
+          </div>
+
+          <div data-preset-group="activity" hidden>
+            <p class="preset-heading">常见活动</p>
+            <div class="activity-catalog" aria-label="常见活动目录">
+              <section class="preset-category" aria-labelledby="sports-preset-title">
+                <p class="preset-category-title" id="sports-preset-title">运动与体能</p>
+                <div class="preset-list">
+                  <button class="preset-option" type="button" aria-disabled="true"><span class="preset-symbol">泳</span><span><strong>游泳</strong><span>已添加</span></span></button>
+                  <button class="preset-option" type="button" aria-disabled="true"><span class="preset-symbol">乒</span><span><strong>乒乓球</strong><span>已添加</span></span></button>
+                  <button class="preset-option" type="button" data-preset-choice="篮球" data-preset-type="activity"><span class="preset-symbol">篮</span><span><strong>篮球</strong><span>球类运动</span></span></button>
+                  <button class="preset-option" type="button" data-preset-choice="足球" data-preset-type="activity"><span class="preset-symbol">足</span><span><strong>足球</strong><span>球类运动</span></span></button>
+                  <button class="preset-option" type="button" data-preset-choice="羽毛球" data-preset-type="activity"><span class="preset-symbol">羽</span><span><strong>羽毛球</strong><span>球类运动</span></span></button>
+                  <button class="preset-option" type="button" data-preset-choice="网球" data-preset-type="activity"><span class="preset-symbol">网</span><span><strong>网球</strong><span>球类运动</span></span></button>
+                  <button class="preset-option" type="button" data-preset-choice="跑步" data-preset-type="activity"><span class="preset-symbol">跑</span><span><strong>跑步</strong><span>体能训练</span></span></button>
+                  <button class="preset-option" type="button" data-preset-choice="跳绳" data-preset-type="activity"><span class="preset-symbol">绳</span><span><strong>跳绳</strong><span>体能与协调</span></span></button>
+                  <button class="preset-option" type="button" data-preset-choice="武术" data-preset-type="activity"><span class="preset-symbol">武</span><span><strong>武术</strong><span>武术训练</span></span></button>
+                  <button class="preset-option" type="button" data-preset-choice="跆拳道" data-preset-type="activity"><span class="preset-symbol">跆</span><span><strong>跆拳道</strong><span>竞技与礼仪</span></span></button>
+                </div>
+              </section>
+              <section class="preset-category" aria-labelledby="arts-preset-title">
+                <p class="preset-category-title" id="arts-preset-title">艺术与表达</p>
+                <div class="preset-list">
+                  <button class="preset-option" type="button" data-preset-choice="钢琴" data-preset-type="activity"><span class="preset-symbol">琴</span><span><strong>钢琴</strong><span>键盘乐器</span></span></button>
+                  <button class="preset-option" type="button" data-preset-choice="舞蹈" data-preset-type="activity"><span class="preset-symbol">舞</span><span><strong>舞蹈</strong><span>形体与节奏</span></span></button>
+                  <button class="preset-option" type="button" data-preset-choice="绘画" data-preset-type="activity"><span class="preset-symbol">画</span><span><strong>绘画</strong><span>美术创作</span></span></button>
+                  <button class="preset-option" type="button" data-preset-choice="声乐" data-preset-type="activity"><span class="preset-symbol">声</span><span><strong>声乐</strong><span>演唱训练</span></span></button>
+                  <button class="preset-option" type="button" data-preset-choice="书法" data-preset-type="activity"><span class="preset-symbol">书</span><span><strong>书法</strong><span>汉字书写</span></span></button>
+                </div>
+              </section>
+              <section class="preset-category" aria-labelledby="thinking-preset-title">
+                <p class="preset-category-title" id="thinking-preset-title">棋类与科技</p>
+                <div class="preset-list">
+                  <button class="preset-option" type="button" data-preset-choice="围棋" data-preset-type="activity"><span class="preset-symbol">围</span><span><strong>围棋</strong><span>棋类练习</span></span></button>
+                  <button class="preset-option" type="button" data-preset-choice="象棋" data-preset-type="activity"><span class="preset-symbol">象</span><span><strong>象棋</strong><span>棋类练习</span></span></button>
+                  <button class="preset-option" type="button" data-preset-choice="国际象棋" data-preset-type="activity"><span class="preset-symbol">国</span><span><strong>国际象棋</strong><span>棋类练习</span></span></button>
+                  <button class="preset-option" type="button" data-preset-choice="乐高" data-preset-type="activity"><span class="preset-symbol">乐</span><span><strong>乐高</strong><span>搭建与创造</span></span></button>
+                  <button class="preset-option" type="button" data-preset-choice="编程" data-preset-type="activity"><span class="preset-symbol">码</span><span><strong>编程</strong><span>逻辑与编程</span></span></button>
+                </div>
+              </section>
+            </div>
+          </div>
+
+          <button class="custom-disclosure" type="button" data-show-custom><span>以上都没有？自定义科目</span><span>＋</span></button>
+          <div class="custom-fields" data-custom-fields hidden>
+            <label class="field-label" for="custom-name">名称</label>
+            <input class="text-input" id="custom-name" maxlength="20" placeholder="例如：校本课程" />
+            <button class="primary-action" type="button" data-add-custom>添加</button>
+          </div>
+        </section>
+
+        <div class="toast" role="status" aria-live="polite" data-toast></div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    (() => {
+      const phone = document.querySelector('.phone');
+      const screens = [...document.querySelectorAll('[data-screen]')];
+      const reviewButtons = [...document.querySelectorAll('[data-review-page]')];
+      const navButtons = [...document.querySelectorAll('.nav-item[data-page]')];
+      const backdrop = document.querySelector('[data-backdrop]');
+      const sheets = [...document.querySelectorAll('[data-sheet]')];
+      const toast = document.querySelector('[data-toast]');
+      let activePage = 'report';
+      let activeSheet = null;
+      let triggerBeforeSheet = null;
+      let customType = 'learning';
+      let photoNumber = 0;
+      let photoSeed = 1;
+      let activeCalendarDay = 0;
+      let eventDraftDay = 0;
+      let editingEventId = null;
+      let selectedEventId = null;
+      let selectedEventDay = null;
+      let calendarEventSeed = 5;
+      let selectedMemoryDay = '8/27';
+      let activeReportRange = 7;
+      let activeMemoryPage = 0;
+      let memoryPageGroups = [];
+      let memoryScrollTimer;
+      let toastTimer;
+      const prototypeNow = { dayIndex: 0, time: '20:18' };
+
+      const reportRangeData = {
+        7: { label: '近 7 天', metrics: { records: 6, knowledge: 18, reviews: 11, activities: 2 }, subjects: { math: 3, chinese: 2, english: 1 } },
+        30: { label: '近 30 天', metrics: { records: 22, knowledge: 64, reviews: 38, activities: 8 }, subjects: { math: 10, chinese: 8, english: 6 } },
+        100: { label: '近 100 天', metrics: { records: 68, knowledge: 196, reviews: 124, activities: 27 }, subjects: { math: 31, chinese: 24, english: 18 } }
+      };
+
+      const calendarEvents = {
+        0: [
+          { id: 'event-1', title: '围棋课', start: '18:30', end: '20:00', type: '活动', repeat: true },
+          { id: 'plan-乒乓球-0', title: '乒乓球练习', start: '10:00', end: '11:00', type: '活动', repeat: true, source: 'activity-plan', activityName: '乒乓球' }
+        ],
+        1: [{ id: 'event-2', title: '英语辅导班', start: '16:30', end: '18:00', type: '辅导班', repeat: true }],
+        2: [],
+        3: [{ id: 'plan-游泳-3', title: '游泳练习', start: '18:00', end: '19:00', type: '活动', repeat: true, source: 'activity-plan', activityName: '游泳' }],
+        4: [],
+        5: [],
+        6: [{ id: 'plan-游泳-6', title: '游泳练习', start: '18:00', end: '19:00', type: '活动', repeat: true, source: 'activity-plan', activityName: '游泳' }]
+      };
+
+      const earlierMemoryDays = Array.from({ length: 86 }, (_, index) => {
+        const date = new Date(Date.UTC(2026, 4, 23 + index));
+        const monthNumber = date.getUTCMonth() + 1;
+        const dayNumber = date.getUTCDate();
+        const weekday = ['日', '一', '二', '三', '四', '五', '六'][date.getUTCDay()];
+        const pattern = [1, 0, 'reviewed', 2, 1, 0, 2, 'reviewed'][index % 8];
+        const subjects = ['语文', '数学', '英语'];
+        const subject = subjects[index % subjects.length];
+        const titles = { 语文: '生字与阅读', 数学: '计算练习', 英语: '课内单词' };
+        const daysAgo = Math.round((Date.UTC(2026, 7, 30) - date.getTime()) / 86400000);
+        const items = pattern === 0 ? [] : [{ subject, title: titles[subject], learned: `${daysAgo} 天前学习`, passed: pattern === 'reviewed' }];
+        return { key: `${monthNumber}/${dayNumber}`, weekday, urgency: pattern, items };
+      });
+
+      const memoryDays = [...earlierMemoryDays,
+        { key: '8/17', weekday: '一', urgency: 0, items: [] },
+        { key: '8/18', weekday: '二', urgency: 1, items: [{ subject: '语文', title: '生字：露、霜', learned: '12 天前学习', passed: false }] },
+        { key: '8/19', weekday: '三', urgency: 'reviewed', items: [{ subject: '英语', title: '家庭成员单词', learned: '已复习通过', passed: true }] },
+        { key: '8/20', weekday: '四', urgency: 2, items: [{ subject: '数学', title: '整十数加减法', learned: '10 天前学习', passed: false }] },
+        { key: '8/21', weekday: '五', urgency: 0, items: [] },
+        { key: '8/22', weekday: '六', urgency: 1, items: [{ subject: '语文', title: '古诗《山行》', learned: '8 天前学习', passed: false }] },
+        { key: '8/23', weekday: '日', urgency: 'reviewed', items: [{ subject: '数学', title: '长度单位换算', learned: '已复习通过', passed: true }] },
+        { key: '8/24', weekday: '一', urgency: 2, items: [{ subject: '英语', title: 'school、teacher', learned: '6 天前学习', passed: false }] },
+        { key: '8/25', weekday: '二', urgency: 3, items: [{ subject: '数学', title: '两位数进位加法', learned: '5 天前学习', passed: false }, { subject: '语文', title: '形近字：晴、睛', learned: '5 天前学习', passed: false }] },
+        { key: '8/26', weekday: '三', urgency: 1, items: [{ subject: '英语', title: '课堂指令短语', learned: '4 天前学习', passed: false }] },
+        { key: '8/27', weekday: '四', urgency: 3, items: [{ subject: '数学', title: '两位数进位加法', learned: '3 天前学习 · 建议今天复习', passed: false }, { subject: '英语', title: 'school、teacher 等 8 个单词', learned: '3 天前学习 · 建议今天复习', passed: false }] },
+        { key: '8/28', weekday: '五', urgency: 'reviewed', items: [{ subject: '语文', title: '古诗《山行》', learned: '已复习通过', passed: true }] },
+        { key: '8/29', weekday: '六', urgency: 2, items: [{ subject: '数学', title: '人民币单位', learned: '昨天学习', passed: false }] },
+        { key: '8/30', weekday: '日', urgency: 1, items: [{ subject: '语文', title: '阅读《秋天》', learned: '今天学习', passed: false }] }
+      ];
+
+      const reviewActivityDays = Array.from({ length: 105 }, (_, index) => {
+        const date = new Date(Date.UTC(2026, 4, 18 + index));
+        const weekdayBias = [1, 2, 3, 2, 4, 1, 0][index % 7];
+        let count = Math.max(0, Math.min(12, Math.floor(index / 14) + weekdayBias + (index * 7 % 3) - 1));
+        if (index % 17 === 0 || (index % 7 === 6 && index % 3 === 0)) count = 0;
+        return { date, count };
+      });
+
+      function showToast(message) {
+        clearTimeout(toastTimer);
+        toast.textContent = message;
+        toast.classList.add('show');
+        toastTimer = setTimeout(() => toast.classList.remove('show'), 1800);
+      }
+
+      function showPage(page) {
+        activePage = page;
+        screens.forEach((screen) => { screen.hidden = screen.dataset.screen !== page; });
+        reviewButtons.forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.reviewPage === page)));
+        navButtons.forEach((button) => {
+          if (button.dataset.page === page) button.setAttribute('aria-current', 'page');
+          else button.removeAttribute('aria-current');
+        });
+        document.querySelectorAll('.screen').forEach((screen) => { screen.scrollTop = 0; });
+      }
+
+      function timeToMinutes(value) {
+        const [hours, minutes] = value.split(':').map(Number);
+        return hours * 60 + minutes;
+      }
+
+      function isAgendaItemPast(item, dayIndex) {
+        if (Number(dayIndex) < prototypeNow.dayIndex) return true;
+        if (Number(dayIndex) > prototypeNow.dayIndex) return false;
+        return timeToMinutes(item.end) <= timeToMinutes(prototypeNow.time);
+      }
+
+      function createAgendaItem(item, dayIndex) {
+        const isPast = isAgendaItemPast(item, dayIndex);
+        const row = document.createElement('button');
+        row.type = 'button';
+        row.className = `agenda-item${isPast ? ' is-past' : ''}`;
+        row.dataset.eventId = item.id;
+        row.setAttribute('aria-label', `${item.title}，${item.start} 至 ${item.end}，${item.type}${item.repeat ? '，每周重复' : ''}${isPast ? '，已结束' : ''}，查看详情`);
+        const time = document.createElement('time');
+        time.className = 'agenda-time';
+        time.textContent = item.start;
+        const eventBlock = document.createElement('div');
+        eventBlock.className = `agenda-event${item.type === '活动' ? ' warm' : ''}`;
+        const title = document.createElement('strong');
+        title.textContent = item.title;
+        const meta = document.createElement('span');
+        meta.textContent = `${item.start}–${item.end} · ${item.type}${item.repeat ? ' · 每周重复' : ''}`;
+        eventBlock.append(title, meta);
+        row.append(time, eventBlock);
+        return row;
+      }
+
+      function setEventDayChoice(dayIndex) {
+        eventDraftDay = Number(dayIndex);
+        document.querySelectorAll('[data-event-day]').forEach((button) => button.setAttribute('aria-pressed', String(Number(button.dataset.eventDay) === eventDraftDay)));
+      }
+
+      function prepareEventForm(item = null, dayIndex = activeCalendarDay) {
+        editingEventId = item?.id || null;
+        setEventDayChoice(dayIndex);
+        document.getElementById('calendar-event-title').textContent = item ? '编辑日程' : '新建日程';
+        document.querySelector('[data-sheet="calendar-event"] .sheet-head p').textContent = item ? '修改课程或活动安排' : '记录辅导班、课程或活动安排';
+        document.querySelector('[data-save-calendar-event]').textContent = item ? '保存修改' : '创建日程';
+        document.getElementById('event-title').value = item?.title || '';
+        document.getElementById('event-start').value = item?.start || '19:00';
+        document.getElementById('event-end').value = item?.end || '20:00';
+        document.getElementById('event-form-error').textContent = '';
+        document.querySelectorAll('[data-event-type]').forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.eventType === (item?.type || '辅导班'))));
+        document.querySelector('[data-event-repeat]').setAttribute('aria-pressed', String(Boolean(item?.repeat)));
+      }
+
+      function getSelectedCalendarEvent() {
+        if (selectedEventDay === null || !selectedEventId) return null;
+        return calendarEvents[selectedEventDay].find((item) => item.id === selectedEventId) || null;
+      }
+
+      function renderEventDetail() {
+        const item = getSelectedCalendarEvent();
+        if (!item) return;
+        document.getElementById('event-detail-date').textContent = document.querySelector(`[data-calendar-day="${selectedEventDay}"]`).dataset.dateLabel;
+        document.getElementById('event-detail-name').textContent = item.title;
+        document.getElementById('event-detail-time').textContent = `${item.start}–${item.end}`;
+        document.getElementById('event-detail-type').textContent = `${item.type}${item.repeat ? ' · 每周重复' : ' · 不重复'}`;
+        document.querySelector('[data-delete-confirm]').hidden = true;
+      }
+
+      function renderCalendarDay(dayIndex) {
+        activeCalendarDay = Number(dayIndex);
+        const dayButton = document.querySelector(`[data-calendar-day="${activeCalendarDay}"]`);
+        document.querySelectorAll('[data-calendar-day]').forEach((button) => button.setAttribute('aria-pressed', String(button === dayButton)));
+        document.getElementById('calendar-month-label').textContent = dayButton.dataset.dateLabel.startsWith('8 月') ? '2026 年 8 月' : '2026 年 9 月';
+        document.getElementById('calendar-date-label').textContent = dayButton.dataset.dateLabel;
+        const items = [...calendarEvents[activeCalendarDay]].sort((a, b) => a.start.localeCompare(b.start));
+        document.getElementById('calendar-day-status').textContent = `${activeCalendarDay === 0 ? '今天 · ' : ''}${items.length} 项`;
+        const list = document.getElementById('agenda-list');
+        list.replaceChildren();
+        if (items.length) items.forEach((item) => list.append(createAgendaItem(item, activeCalendarDay)));
+        else {
+          const empty = document.createElement('div');
+          empty.className = 'agenda-empty';
+          const title = document.createElement('strong');
+          title.textContent = '这天还没有日程';
+          const copy = document.createElement('p');
+          copy.textContent = '可以添加辅导班、课程或活动安排';
+          const action = document.createElement('button');
+          action.type = 'button';
+          action.dataset.openSheet = 'calendar-event';
+          action.textContent = '＋ 新建日程';
+          empty.append(title, copy, action);
+          list.append(empty);
+        }
+      }
+
+      function refreshCalendarMarkers() {
+        document.querySelectorAll('[data-calendar-day]').forEach((button) => {
+          button.classList.toggle('has-event', Boolean(calendarEvents[Number(button.dataset.calendarDay)]?.length));
+        });
+      }
+
+      function syncActivitySchedule(activityName, selectedIndexes, start, end) {
+        Object.keys(calendarEvents).forEach((day) => {
+          calendarEvents[day] = calendarEvents[day].filter((item) => !(item.source === 'activity-plan' && item.activityName === activityName));
+        });
+        selectedIndexes.forEach((weekdayIndex) => {
+          const calendarDay = (weekdayIndex + 1) % 7;
+          calendarEvents[calendarDay].push({
+            id: `plan-${activityName}-${calendarDay}`,
+            title: `${activityName}练习`,
+            start,
+            end,
+            type: '活动',
+            repeat: true,
+            source: 'activity-plan',
+            activityName
+          });
+        });
+        refreshCalendarMarkers();
+        renderCalendarDay(activeCalendarDay);
+        renderTodayActivities();
+      }
+
+      function renderTodayActivities() {
+        const activities = [...calendarEvents[0]].filter((item) => item.type === '活动').sort((a, b) => a.start.localeCompare(b.start));
+        const list = document.getElementById('today-activity-list');
+        const meta = document.getElementById('today-activity-meta');
+        meta.textContent = `${activities.length} 项 · 今日安排`;
+        list.replaceChildren();
+        if (!activities.length) {
+          const empty = document.createElement('p');
+          empty.className = 'schedule-empty';
+          empty.textContent = '今天没有固定活动安排';
+          list.append(empty);
+          return;
+        }
+        activities.forEach((item) => {
+          const isPast = isAgendaItemPast(item, 0);
+          const article = document.createElement('section');
+          article.className = `today-activity${isPast ? ' is-past' : ''}`;
+          article.setAttribute('aria-label', `${item.title}，${item.start} 至 ${item.end}${isPast ? '，已结束' : ''}`);
+          const copy = document.createElement('div');
+          const time = document.createElement('time');
+          time.dateTime = `2026-08-30T${item.start}`;
+          time.textContent = `${item.start}–${item.end}`;
+          const title = document.createElement('strong');
+          title.textContent = item.title;
+          const detail = document.createElement('p');
+          detail.textContent = `${item.source === 'activity-plan' ? '已从活动提醒同步到日程 · 每周重复' : '今天有固定安排 · 上次练习在 7 天前'}${isPast ? ' · 已结束' : ''}`;
+          copy.append(time, title, detail);
+          const action = document.createElement('button');
+          action.className = 'quiet-action';
+          action.type = 'button';
+          action.dataset.activityRecord = item.activityName || item.title.replace(/课$|练习$/, '');
+          action.textContent = '记录练习';
+          article.append(copy, action);
+          list.append(article);
+        });
+      }
+
+      function memoryUrgencyLabel(day) {
+        if (!day.items.length) return '无学习记录';
+        if (day.urgency === 'reviewed') return '已复习通过';
+        return day.urgency === 3 ? '需要优先复习' : day.urgency === 2 ? '建议尽快复习' : '紧迫度较低';
+      }
+
+      function memoryPageRangeLabel(days) {
+        const [firstMonth, firstDay] = days[0].key.split('/');
+        const [lastMonth, lastDay] = days.at(-1).key.split('/');
+        return firstMonth === lastMonth
+          ? `${firstMonth} 月 ${firstDay}–${lastDay} 日`
+          : `${firstMonth} 月 ${firstDay} 日–${lastMonth} 月 ${lastDay} 日`;
+      }
+
+      function createMemoryDayButton(day) {
+        const pendingCount = day.items.filter((item) => !item.passed).length;
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'memory-day';
+        button.dataset.memoryDay = day.key;
+        button.setAttribute('aria-pressed', String(day.key === selectedMemoryDay));
+        button.setAttribute('aria-label', `${day.key.replace('/', ' 月 ')} 日，${memoryUrgencyLabel(day)}${pendingCount ? `，${pendingCount} 项待复习` : ''}`);
+        const dot = document.createElement('span');
+        const countClass = `count-${Math.min(3, pendingCount || (day.items.length ? 1 : 0))}`;
+        dot.className = `memory-dot ${countClass} ${day.urgency === 'reviewed' ? 'reviewed' : `urgency-${day.urgency}`}`;
+        dot.textContent = day.urgency === 'reviewed' ? '✓' : pendingCount ? String(pendingCount) : '';
+        const label = document.createElement('span');
+        label.className = 'memory-day-label';
+        const date = document.createElement('strong');
+        date.textContent = day.key.split('/')[1];
+        const weekday = document.createElement('small');
+        weekday.textContent = day.weekday;
+        label.append(date, weekday);
+        button.append(dot, label);
+        return button;
+      }
+
+      function updateMemoryPager() {
+        const pager = document.getElementById('memory-pager');
+        if (!memoryPageGroups.length) {
+          pager.hidden = true;
+          return;
+        }
+        pager.hidden = false;
+        document.getElementById('memory-page-label').textContent = `${activeMemoryPage + 1} / ${memoryPageGroups.length} · ${memoryPageRangeLabel(memoryPageGroups[activeMemoryPage])}`;
+        pager.querySelector('[data-memory-page-step="-1"]').disabled = activeMemoryPage === 0;
+        pager.querySelector('[data-memory-page-step="1"]').disabled = activeMemoryPage === memoryPageGroups.length - 1;
+      }
+
+      function goToMemoryPage(pageIndex, smooth = true) {
+        const heatmap = document.getElementById('memory-heatmap');
+        activeMemoryPage = Math.max(0, Math.min(memoryPageGroups.length - 1, Number(pageIndex)));
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        heatmap.scrollTo({ left: activeMemoryPage * heatmap.clientWidth, behavior: smooth && !reduceMotion ? 'smooth' : 'auto' });
+        updateMemoryPager();
+      }
+
+      function renderMemoryHeatmap() {
+        const heatmap = document.getElementById('memory-heatmap');
+        const visibleDays = memoryDays.slice(-activeReportRange);
+        const paged = activeReportRange === 100;
+        if (!visibleDays.some((day) => day.key === selectedMemoryDay)) selectedMemoryDay = visibleDays.at(-1).key;
+        heatmap.replaceChildren();
+        heatmap.classList.toggle('paged', paged);
+        heatmap.setAttribute('aria-label', `${visibleDays[0].key.replace('/', ' 月 ')} 日至${visibleDays.at(-1).key.replace('/', ' 月 ')} 日复习紧迫度${paged ? '，每屏最多 30 天，可左右滑动' : ''}`);
+        heatmap.style.gridTemplateColumns = paged ? '' : `repeat(${Math.min(7, visibleDays.length)}, minmax(0, 1fr))`;
+        if (paged) {
+          const firstPageSize = visibleDays.length % 30 || 30;
+          memoryPageGroups = [visibleDays.slice(0, firstPageSize)];
+          for (let index = firstPageSize; index < visibleDays.length; index += 30) memoryPageGroups.push(visibleDays.slice(index, index + 30));
+          memoryPageGroups.forEach((days) => {
+            const page = document.createElement('section');
+            page.className = 'memory-page';
+            page.setAttribute('role', 'group');
+            page.setAttribute('aria-label', `${memoryPageRangeLabel(days)}复习紧迫度`);
+            days.forEach((day) => page.append(createMemoryDayButton(day)));
+            heatmap.append(page);
+          });
+          activeMemoryPage = Math.max(0, Math.min(activeMemoryPage, memoryPageGroups.length - 1));
+          updateMemoryPager();
+          requestAnimationFrame(() => goToMemoryPage(activeMemoryPage, false));
+        } else {
+          memoryPageGroups = [];
+          activeMemoryPage = 0;
+          visibleDays.forEach((day) => heatmap.append(createMemoryDayButton(day)));
+          updateMemoryPager();
+        }
+      }
+
+      function renderMemoryDetail() {
+        const day = memoryDays.find((item) => item.key === selectedMemoryDay);
+        const detail = document.getElementById('memory-detail');
+        detail.replaceChildren();
+        const head = document.createElement('div');
+        head.className = 'memory-detail-head';
+        const title = document.createElement('strong');
+        title.textContent = `${day.key.replace('/', ' 月 ')} 日 · 星期${day.weekday}`;
+        const status = document.createElement('span');
+        status.className = `memory-status${day.urgency === 'reviewed' ? ' reviewed' : ''}`;
+        status.textContent = memoryUrgencyLabel(day);
+        head.append(title, status);
+        detail.append(head);
+        if (!day.items.length) {
+          const empty = document.createElement('div');
+          empty.className = 'memory-empty-detail';
+          empty.textContent = '当天没有已确认的学习内容';
+          detail.append(empty);
+          return;
+        }
+        const list = document.createElement('div');
+        list.className = 'memory-items';
+        day.items.forEach((item, index) => {
+          const row = document.createElement('div');
+          row.className = `memory-item${item.passed ? ' reviewed' : ''}`;
+          const subject = document.createElement('span');
+          subject.className = 'memory-subject';
+          subject.textContent = item.subject.slice(0, 1);
+          const copy = document.createElement('span');
+          copy.className = 'memory-item-copy';
+          const itemTitle = document.createElement('strong');
+          itemTitle.textContent = item.title;
+          const meta = document.createElement('span');
+          meta.textContent = item.passed ? '家长已标记复习通过' : `${item.subject} · ${item.learned}`;
+          copy.append(itemTitle, meta);
+          const action = document.createElement('button');
+          action.type = 'button';
+          action.className = 'memory-review-action';
+          action.dataset.memoryItem = String(index);
+          action.disabled = item.passed;
+          action.textContent = item.passed ? '已通过' : '标记通过';
+          row.append(subject, copy, action);
+          list.append(row);
+        });
+        detail.append(list);
+      }
+
+      function reviewActivityLevel(count) {
+        if (count === 0) return 0;
+        if (count <= 2) return 1;
+        if (count <= 5) return 2;
+        if (count <= 8) return 3;
+        return 4;
+      }
+
+      function reviewActivityLevelLabel(count) {
+        if (count === 0) return '无复习反馈';
+        if (count <= 2) return '少量复习';
+        if (count <= 5) return '适量复习';
+        if (count <= 8) return '较多复习';
+        return '高活跃复习';
+      }
+
+      function reviewActivityDateLabel(date) {
+        return `${date.getUTCMonth() + 1} 月 ${date.getUTCDate()} 日`;
+      }
+
+      function renderReviewContribution() {
+        const grid = document.getElementById('review-contribution-grid');
+        const chart = grid.closest('.contribution-chart');
+        const body = grid.closest('.contribution-body');
+        const months = document.getElementById('review-contribution-months');
+        const calendarLayout = activeReportRange <= 30;
+        const displayCount = Math.ceil(activeReportRange / 7) * 7;
+        const visibleDays = reviewActivityDays.slice(-displayCount);
+        const weekCount = displayCount / 7;
+        const firstIncludedIndex = displayCount - activeReportRange;
+        const activeFirstDay = reviewActivityDays.at(-activeReportRange).date;
+        const activeLastDay = reviewActivityDays.at(-1).date;
+        chart.classList.toggle('calendar-range', calendarLayout);
+        body.classList.toggle('calendar-layout', calendarLayout);
+        months.replaceChildren();
+        if (calendarLayout) {
+          const label = document.createElement('span');
+          const sameMonth = activeFirstDay.getUTCMonth() === activeLastDay.getUTCMonth();
+          label.textContent = sameMonth
+            ? `${activeFirstDay.getUTCMonth() + 1} 月 ${activeFirstDay.getUTCDate()}–${activeLastDay.getUTCDate()} 日`
+            : `${reviewActivityDateLabel(activeFirstDay)}–${reviewActivityDateLabel(activeLastDay)}`;
+          months.append(label);
+        } else {
+          months.style.gridTemplateColumns = `repeat(${weekCount}, minmax(0, 1fr))`;
+          let previousMonth = -1;
+          visibleDays.forEach((day, index) => {
+            const month = day.date.getUTCMonth();
+            if (month === previousMonth) return;
+            previousMonth = month;
+            const label = document.createElement('span');
+            label.textContent = `${month + 1} 月`;
+            label.style.gridColumnStart = String(Math.floor(index / 7) + 1);
+            months.append(label);
+          });
+        }
+        grid.replaceChildren();
+        grid.style.gridTemplateColumns = `repeat(${calendarLayout ? 7 : weekCount}, minmax(0, 1fr))`;
+        grid.style.gridTemplateRows = calendarLayout ? `repeat(${weekCount}, auto)` : 'repeat(7, auto)';
+        grid.style.gridAutoFlow = calendarLayout ? 'row' : 'column';
+        visibleDays.forEach((day, index) => {
+          const inRange = index >= firstIncludedIndex;
+          const cell = document.createElement('span');
+          cell.className = `contribution-cell ${inRange ? `level-${reviewActivityLevel(day.count)}` : 'out-of-range'}`;
+          cell.setAttribute('role', 'img');
+          cell.setAttribute('aria-label', inRange
+            ? `${reviewActivityDateLabel(day.date)}，复习反馈 ${day.count} 条，${reviewActivityLevelLabel(day.count)}`
+            : `${reviewActivityDateLabel(day.date)}，不在当前筛选范围`);
+          grid.append(cell);
+        });
+        grid.setAttribute('aria-label', `${reportRangeData[activeReportRange].label}复习次数，${displayCount} 天自适应日期视图`);
+      }
+
+      function renderReportRange(range) {
+        activeReportRange = Number(range);
+        const data = reportRangeData[activeReportRange];
+        document.querySelectorAll('[data-report-range]').forEach((button) => button.setAttribute('aria-pressed', String(Number(button.dataset.reportRange) === activeReportRange)));
+        Object.entries(data.metrics).forEach(([key, value]) => {
+          document.querySelector(`[data-report-metric="${key}"]`).textContent = String(value);
+        });
+        document.getElementById('report-metric-strip').setAttribute('aria-label', `${data.label}概览`);
+        document.getElementById('memory-range-label').textContent = data.label;
+        document.getElementById('review-activity-range').textContent = data.label;
+        document.getElementById('subject-range-label').textContent = data.label;
+        const maxSubjectValue = Math.max(...Object.values(data.subjects), 1);
+        Object.entries(data.subjects).forEach(([key, value]) => {
+          const row = document.querySelector(`[data-subject-report="${key}"]`);
+          row.querySelector('.bar-meta span:last-child').textContent = `${value} 次记录`;
+          row.querySelector('.bar-fill').style.width = `${value / maxSubjectValue * 100}%`;
+        });
+        selectedMemoryDay = memoryDays.at(-1).key;
+        activeMemoryPage = activeReportRange === 100 ? Math.ceil(activeReportRange / 30) - 1 : 0;
+        renderMemoryHeatmap();
+        renderMemoryDetail();
+        renderReviewContribution();
+      }
+
+      function openSheet(name, trigger) {
+        closeSheet(false);
+        activeSheet = sheets.find((sheet) => sheet.dataset.sheet === name);
+        if (!activeSheet) return;
+        phone.scrollTop = 0;
+        triggerBeforeSheet = trigger;
+        activeSheet.inert = false;
+        backdrop.classList.add('open');
+        backdrop.classList.toggle('subtle', name === 'child');
+        activeSheet.classList.add('open');
+        activeSheet.setAttribute('aria-hidden', 'false');
+        if (name === 'child' && trigger?.classList.contains('child-trigger')) trigger.setAttribute('aria-expanded', 'true');
+        requestAnimationFrame(() => {
+          const focusTarget = activeSheet.querySelector('input, [role="radio"][aria-checked="true"], button');
+          focusTarget?.focus();
+        });
+      }
+
+      function closeSheet(restoreFocus = true) {
+        backdrop.classList.remove('open', 'subtle');
+        document.querySelectorAll('.child-trigger[aria-expanded="true"]').forEach((button) => button.setAttribute('aria-expanded', 'false'));
+        sheets.forEach((sheet) => {
+          sheet.classList.remove('open');
+          sheet.setAttribute('aria-hidden', 'true');
+          sheet.inert = true;
+        });
+        activeSheet = null;
+        phone.scrollTop = 0;
+        if (restoreFocus) triggerBeforeSheet?.focus();
+      }
+
+      function updatePhotoState() {
+        const uploadZone = document.getElementById('upload-zone');
+        photoNumber = uploadZone.querySelectorAll('.photo-tile').length;
+        uploadZone.classList.toggle('has-photos', photoNumber > 0);
+        document.getElementById('photo-count').textContent = `${photoNumber} / 9`;
+        document.getElementById('photo-source-remaining').textContent = `还可添加 ${9 - photoNumber} 张`;
+        document.querySelector('[data-open-sheet="photo-source"]').hidden = photoNumber >= 9;
+      }
+
+      function addPhotoFiles(fileList) {
+        const files = Array.from(fileList || []);
+        const remaining = 9 - photoNumber;
+        if (!remaining) { showToast('最多选择 9 张'); return; }
+        const selected = files.slice(0, remaining);
+        const uploadZone = document.getElementById('upload-zone');
+        const addButton = document.querySelector('[data-open-sheet="photo-source"]');
+        selected.forEach((file) => {
+          const tile = document.createElement('div');
+          tile.className = 'photo-tile';
+          const image = document.createElement('img');
+          image.className = 'photo-preview';
+          image.alt = `学习照片 ${photoSeed}`;
+          const objectUrl = URL.createObjectURL(file);
+          image.src = objectUrl;
+          const remove = document.createElement('button');
+          remove.className = 'remove-photo';
+          remove.type = 'button';
+          remove.dataset.objectUrl = objectUrl;
+          remove.setAttribute('aria-label', `删除学习照片 ${photoSeed}`);
+          remove.textContent = '×';
+          tile.append(image, remove);
+          uploadZone.insertBefore(tile, addButton);
+          photoSeed += 1;
+        });
+        updatePhotoState();
+        if (files.length > selected.length) showToast(`最多还能选择 ${remaining} 张`);
+        else if (selected.length) showToast(`已添加 ${selected.length} 张照片`);
+        if (selected.length) closeSheet(false);
+      }
+
+      function updateLearningCount() {
+        const selected = document.querySelectorAll('#learning-grid .subject-choice[aria-pressed="true"]').length;
+        document.getElementById('learning-count').textContent = `已选 ${selected} 项`;
+      }
+
+      function addLearningItem(name, hint = '自定义学习科目') {
+        const existing = [...document.querySelectorAll('#learning-grid [data-subject]')].find((button) => button.dataset.subject === name);
+        if (existing) {
+          existing.setAttribute('aria-pressed', 'true');
+          updateLearningCount();
+          return;
+        }
+        const button = document.createElement('button');
+        button.className = 'setting-row subject-choice';
+        button.type = 'button';
+        button.dataset.subject = name;
+        button.setAttribute('aria-pressed', 'true');
+        const symbol = document.createElement('span');
+        symbol.className = 'row-symbol';
+        symbol.textContent = name.slice(0, 1);
+        const copy = document.createElement('span');
+        copy.className = 'row-copy';
+        const label = document.createElement('strong');
+        label.textContent = name;
+        const detail = document.createElement('span');
+        detail.textContent = hint;
+        copy.append(label, detail);
+        const check = document.createElement('span');
+        check.className = 'row-check';
+        check.textContent = '✓';
+        button.append(symbol, copy, check);
+        document.getElementById('learning-grid').insertBefore(button, document.querySelector('#learning-grid .add-setting-row'));
+        updateLearningCount();
+      }
+
+      function addActivityItem(name, hint = '时间不固定') {
+        const existing = [...document.querySelectorAll('#activity-grid [data-plan-activity]')].find((button) => button.dataset.planActivity === name);
+        if (existing) return;
+        const button = document.createElement('button');
+        button.className = 'setting-row activity-plan-row';
+        button.type = 'button';
+        button.dataset.openSheet = 'activity-plan';
+        button.dataset.planActivity = name;
+        button.dataset.schedule = '';
+        button.dataset.planTime = '18:00';
+        button.dataset.planEnd = '19:00';
+        const symbol = document.createElement('span');
+        symbol.className = 'row-symbol';
+        symbol.textContent = name.slice(0, 1);
+        const copy = document.createElement('span');
+        copy.className = 'row-copy';
+        const label = document.createElement('strong');
+        label.textContent = name;
+        const detail = document.createElement('span');
+        detail.textContent = hint;
+        copy.append(label, detail);
+        const chevron = document.createElement('span');
+        chevron.className = 'row-chevron';
+        chevron.textContent = '›';
+        button.append(symbol, copy, chevron);
+        document.getElementById('activity-grid').insertBefore(button, document.querySelector('#activity-grid .add-setting-row'));
+        document.getElementById('activity-count').textContent = `${document.querySelectorAll('.activity-plan-row').length} 项`;
+      }
+
+      function updateScheduleSummary() {
+        const selectedDays = [...document.querySelectorAll('.plan-sheet .weekday[aria-pressed="true"]')].map((button) => button.dataset.dayName);
+        const isFlexible = document.querySelector('[data-flexible-schedule]').getAttribute('aria-pressed') === 'true';
+        const timeRow = document.querySelector('[data-plan-time-row]');
+        const start = document.getElementById('activity-plan-time').value || '18:00';
+        const end = document.getElementById('activity-plan-end').value || '19:00';
+        document.getElementById('activity-plan-time-error').textContent = '';
+        timeRow.hidden = isFlexible || !selectedDays.length;
+        document.querySelector('[data-schedule-result]').textContent = isFlexible || !selectedDays.length
+          ? '时间不固定，系统会参考上次练习时间给出建议'
+          : `${selectedDays.join('、')} ${start}–${end} · 出现在日程与今日计划`;
+      }
+
+      document.addEventListener('click', (event) => {
+        const pageButton = event.target.closest('[data-page]');
+        if (pageButton) showPage(pageButton.dataset.page);
+
+        const reviewButton = event.target.closest('[data-review-page]');
+        if (reviewButton) showPage(reviewButton.dataset.reviewPage);
+
+        const agendaItem = event.target.closest('[data-event-id]');
+        if (agendaItem) {
+          selectedEventId = agendaItem.dataset.eventId;
+          selectedEventDay = activeCalendarDay;
+          renderEventDetail();
+          openSheet('event-detail', agendaItem);
+        }
+
+        if (event.target.closest('[data-edit-calendar-event]')) {
+          const selectedItem = getSelectedCalendarEvent();
+          if (selectedItem) {
+            prepareEventForm(selectedItem, selectedEventDay);
+            openSheet('calendar-event', document.querySelector(`[data-event-id="${selectedEventId}"]`));
+          }
+        }
+
+        if (event.target.closest('[data-delete-calendar-event]')) document.querySelector('[data-delete-confirm]').hidden = false;
+        if (event.target.closest('[data-cancel-delete-event]')) document.querySelector('[data-delete-confirm]').hidden = true;
+        if (event.target.closest('[data-confirm-delete-event]')) {
+          calendarEvents[selectedEventDay] = calendarEvents[selectedEventDay].filter((item) => item.id !== selectedEventId);
+          refreshCalendarMarkers();
+          renderCalendarDay(selectedEventDay);
+          renderTodayActivities();
+          closeSheet();
+          showToast('日程已删除');
+        }
+
+        const openButton = event.target.closest('[data-open-sheet]');
+        if (openButton) {
+          if (openButton.dataset.openSheet === 'calendar-event') {
+            prepareEventForm();
+          }
+          if (openButton.dataset.customType) {
+            customType = openButton.dataset.customType;
+            document.querySelector('[data-custom-title]').textContent = customType === 'learning' ? '添加科目' : '添加活动';
+            document.querySelector('[data-custom-description]').textContent = customType === 'learning' ? '选择已经开始学习的内容，列表里没有时再自定义' : '选择正在练习的活动，列表里没有时再自定义';
+            document.querySelectorAll('[data-preset-group]').forEach((group) => { group.hidden = group.dataset.presetGroup !== customType; });
+            document.querySelector('[data-custom-fields]').hidden = true;
+            document.querySelector('[data-show-custom]').hidden = false;
+            document.querySelector('[data-show-custom] span').textContent = customType === 'learning' ? '以上都没有？自定义科目' : '以上都没有？自定义活动';
+            const input = document.getElementById('custom-name');
+            input.value = '';
+            input.placeholder = customType === 'learning' ? '例如：校本课程' : '例如：轮滑';
+          }
+          if (openButton.dataset.planActivity) {
+            const activityName = openButton.dataset.planActivity;
+            document.querySelector('[data-plan-title]').textContent = activityName;
+            const selectedIndexes = (openButton.dataset.schedule || '').split(',').filter(Boolean).map(Number);
+            document.getElementById('activity-plan-time').value = openButton.dataset.planTime || '18:00';
+            document.getElementById('activity-plan-end').value = openButton.dataset.planEnd || '19:00';
+            document.querySelectorAll('.plan-sheet .weekday').forEach((button, index) => {
+              button.setAttribute('aria-pressed', String(selectedIndexes.includes(index)));
+            });
+            document.querySelector('[data-flexible-schedule]').setAttribute('aria-pressed', String(!selectedIndexes.length));
+            updateScheduleSummary();
+          }
+          openSheet(openButton.dataset.openSheet, openButton);
+        }
+
+        if (event.target.closest('[data-close-sheet]') || event.target === backdrop) closeSheet();
+
+        const learning = event.target.closest('.subject-choice[data-subject]');
+        if (learning) {
+          learning.setAttribute('aria-pressed', String(learning.getAttribute('aria-pressed') !== 'true'));
+          updateLearningCount();
+        }
+
+        const activity = event.target.closest('.activity-chip[data-activity]');
+        if (activity) {
+          const next = activity.getAttribute('aria-pressed') !== 'true';
+          activity.setAttribute('aria-pressed', String(next));
+          if (next) document.getElementById('active-activity').textContent = activity.dataset.activity;
+          const anySelected = document.querySelector('.activity-chip[data-activity][aria-pressed="true"]');
+          document.getElementById('activity-settings').hidden = !anySelected;
+        }
+
+        const weekday = event.target.closest('.weekday');
+        if (weekday) {
+          weekday.setAttribute('aria-pressed', String(weekday.getAttribute('aria-pressed') !== 'true'));
+          const hasSelectedDay = document.querySelector('.plan-sheet .weekday[aria-pressed="true"]');
+          document.querySelector('[data-flexible-schedule]').setAttribute('aria-pressed', String(!hasSelectedDay));
+          updateScheduleSummary();
+        }
+
+        if (event.target.closest('[data-flexible-schedule]')) {
+          document.querySelectorAll('.plan-sheet .weekday').forEach((button) => button.setAttribute('aria-pressed', 'false'));
+          document.querySelector('[data-flexible-schedule]').setAttribute('aria-pressed', 'true');
+          updateScheduleSummary();
+        }
+
+        const todayDisclosure = event.target.closest('[data-today-disclosure]');
+        if (todayDisclosure) {
+          const isExpanded = todayDisclosure.getAttribute('aria-expanded') === 'true';
+          const panel = document.getElementById(todayDisclosure.getAttribute('aria-controls'));
+          todayDisclosure.setAttribute('aria-expanded', String(!isExpanded));
+          panel.hidden = isExpanded;
+        }
+
+        const todayTask = event.target.closest('[data-today-task]');
+        if (todayTask) {
+          todayTask.setAttribute('aria-pressed', String(todayTask.getAttribute('aria-pressed') !== 'true'));
+          showToast(todayTask.getAttribute('aria-pressed') === 'true' ? '已完成' : '已恢复为待复习');
+        }
+
+        const activityRecord = event.target.closest('[data-activity-record]');
+        if (activityRecord) showToast(`已记录今天的${activityRecord.dataset.activityRecord}练习`);
+
+        const memoryPageStep = event.target.closest('[data-memory-page-step]');
+        if (memoryPageStep) goToMemoryPage(activeMemoryPage + Number(memoryPageStep.dataset.memoryPageStep));
+
+        const memoryDay = event.target.closest('[data-memory-day]');
+        if (memoryDay) {
+          selectedMemoryDay = memoryDay.dataset.memoryDay;
+          renderMemoryHeatmap();
+          renderMemoryDetail();
+        }
+
+        const memoryItem = event.target.closest('[data-memory-item]');
+        if (memoryItem) {
+          const day = memoryDays.find((item) => item.key === selectedMemoryDay);
+          day.items[Number(memoryItem.dataset.memoryItem)].passed = true;
+          const pending = day.items.filter((item) => !item.passed).length;
+          day.urgency = pending ? Math.max(1, Number(day.urgency) - 1) : 'reviewed';
+          renderMemoryHeatmap();
+          renderMemoryDetail();
+          showToast(pending ? '已记录通过，仍有内容待复习' : '当天内容已全部复习通过');
+        }
+
+        const calendarDay = event.target.closest('[data-calendar-day]');
+        if (calendarDay) renderCalendarDay(calendarDay.dataset.calendarDay);
+
+        if (event.target.closest('[data-calendar-today]')) renderCalendarDay(0);
+
+        const eventDay = event.target.closest('[data-event-day]');
+        if (eventDay) setEventDayChoice(eventDay.dataset.eventDay);
+
+        const eventType = event.target.closest('[data-event-type]');
+        if (eventType) document.querySelectorAll('[data-event-type]').forEach((button) => button.setAttribute('aria-pressed', String(button === eventType)));
+
+        const repeatToggle = event.target.closest('[data-event-repeat]');
+        if (repeatToggle) repeatToggle.setAttribute('aria-pressed', String(repeatToggle.getAttribute('aria-pressed') !== 'true'));
+
+        const reportRange = event.target.closest('[data-report-range]');
+        if (reportRange) {
+          renderReportRange(reportRange.dataset.reportRange);
+          showToast(`已切换到${reportRange.textContent.trim()}`);
+        }
+
+        const budget = event.target.closest('[data-budget]');
+        if (budget) {
+          document.querySelectorAll('[data-budget]').forEach((button) => button.setAttribute('aria-pressed', String(button === budget)));
+          showToast(`每日复习时间已设为 ${budget.dataset.budget} 分钟`);
+        }
+
+        if (event.target.closest('[data-show-custom]')) {
+          document.querySelector('[data-show-custom]').hidden = true;
+          document.querySelector('[data-custom-fields]').hidden = false;
+          document.getElementById('custom-name').focus();
+        }
+
+        const presetChoice = event.target.closest('[data-preset-choice]');
+        if (presetChoice && presetChoice.getAttribute('aria-disabled') !== 'true') {
+          const name = presetChoice.dataset.presetChoice;
+          if (presetChoice.dataset.presetType === 'learning') addLearningItem(name, presetChoice.dataset.presetHint || '学习科目');
+          else addActivityItem(name);
+          closeSheet();
+          showToast(`已添加${name}`);
+        }
+
+        const child = event.target.closest('.child-option');
+        if (child) {
+          document.querySelectorAll('.child-option').forEach((option) => {
+            const selected = option === child;
+            option.setAttribute('aria-checked', String(selected));
+            option.querySelector('.child-check').textContent = selected ? '✓' : '';
+          });
+          document.querySelectorAll('[data-child-name]').forEach((element) => { element.textContent = child.dataset.child; });
+          document.querySelectorAll('[data-child-initial]').forEach((element) => { element.textContent = child.dataset.initial; });
+          document.querySelectorAll('.child-trigger').forEach((button) => button.setAttribute('aria-label', `切换孩子，当前${child.dataset.child}`));
+          closeSheet();
+          showToast(`已切换到 ${child.dataset.child}`);
+        }
+
+        if (event.target.closest('[data-add-custom]')) {
+          const input = document.getElementById('custom-name');
+          const name = input.value.trim();
+          if (!name) { input.focus(); showToast('请填写名称'); return; }
+          if (customType === 'learning') addLearningItem(name);
+          else addActivityItem(name);
+          input.value = '';
+          closeSheet();
+          showToast(`已添加${name}`);
+        }
+
+        const mode = event.target.closest('[data-mode]');
+        if (mode) {
+          document.querySelectorAll('[data-mode]').forEach((button) => button.setAttribute('aria-selected', String(button === mode)));
+          const isPhoto = mode.dataset.mode === 'photo';
+          document.querySelector('[data-photo-section]').hidden = !isPhoto;
+          document.querySelector('[data-text-label]').textContent = isPhoto ? '补充内容' : '今天学了什么';
+          document.getElementById('learning-text').placeholder = isPhoto ? '例如：数学练习了两位数进位加法' : '写下今天实际学过的内容';
+        }
+
+        const photoPicker = event.target.closest('[data-photo-picker]');
+        if (photoPicker) {
+          if (photoNumber >= 9) { showToast('最多选择 9 张'); return; }
+          const input = document.getElementById(photoPicker.dataset.photoPicker === 'single' ? 'single-photo-input' : 'multiple-photo-input');
+          input.click();
+        }
+
+        const remove = event.target.closest('.remove-photo');
+        if (remove) {
+          URL.revokeObjectURL(remove.dataset.objectUrl);
+          remove.closest('.photo-tile').remove();
+          updatePhotoState();
+        }
+
+        if (event.target.closest('[data-save-plan]')) {
+          const weekdayButtons = [...document.querySelectorAll('.plan-sheet .weekday')];
+          const selectedIndexes = weekdayButtons
+            .map((button, index) => button.getAttribute('aria-pressed') === 'true' ? index : null)
+            .filter((index) => index !== null);
+          const selectedDays = selectedIndexes.map((index) => weekdayButtons[index].dataset.dayName);
+          const start = document.getElementById('activity-plan-time').value || '18:00';
+          const end = document.getElementById('activity-plan-end').value || '19:00';
+          const error = document.getElementById('activity-plan-time-error');
+          if (selectedDays.length && end <= start) {
+            error.textContent = '结束时间需晚于开始时间';
+            document.getElementById('activity-plan-end').focus();
+            return;
+          }
+          if (triggerBeforeSheet?.matches('.activity-plan-row')) {
+            const activityName = triggerBeforeSheet.dataset.planActivity;
+            triggerBeforeSheet.dataset.schedule = selectedIndexes.join(',');
+            triggerBeforeSheet.dataset.planTime = selectedDays.length ? start : '';
+            triggerBeforeSheet.dataset.planEnd = selectedDays.length ? end : '';
+            triggerBeforeSheet.querySelector('.row-copy span').textContent = selectedDays.length ? `${selectedDays.join('、')} · ${start}–${end}` : '时间不固定';
+            syncActivitySchedule(activityName, selectedIndexes, start, end);
+          }
+          closeSheet();
+          showToast('活动提醒已保存');
+        }
+
+        if (event.target.closest('[data-save-record-time]')) {
+          const selectedDay = document.querySelector('input[name="record-day"]:checked')?.value || '今天';
+          const selectedTime = document.getElementById('record-time').value || '20:18';
+          document.getElementById('record-time-summary').textContent = `${selectedDay} · ${selectedTime}`;
+          closeSheet();
+          showToast('记录时间已更新');
+        }
+
+        if (event.target.closest('[data-save-calendar-event]')) {
+          const titleInput = document.getElementById('event-title');
+          const start = document.getElementById('event-start').value;
+          const end = document.getElementById('event-end').value;
+          const error = document.getElementById('event-form-error');
+          const title = titleInput.value.trim();
+          if (!title) { error.textContent = '请填写日程名称'; titleInput.focus(); return; }
+          if (!start || !end || start >= end) { error.textContent = '结束时间需要晚于开始时间'; document.getElementById('event-end').focus(); return; }
+          const type = document.querySelector('[data-event-type][aria-pressed="true"]').dataset.eventType;
+          const repeat = document.querySelector('[data-event-repeat]').getAttribute('aria-pressed') === 'true';
+          if (editingEventId) {
+            const sourceDay = selectedEventDay;
+            calendarEvents[sourceDay] = calendarEvents[sourceDay].filter((item) => item.id !== editingEventId);
+            calendarEvents[eventDraftDay].push({ id: editingEventId, title, start, end, type, repeat });
+            refreshCalendarMarkers();
+            selectedEventDay = eventDraftDay;
+            renderCalendarDay(eventDraftDay);
+            renderTodayActivities();
+            closeSheet(false);
+            showToast('日程已更新');
+          } else {
+            calendarEvents[eventDraftDay].push({ id: `event-${calendarEventSeed++}`, title, start, end, type, repeat });
+            refreshCalendarMarkers();
+            renderCalendarDay(eventDraftDay);
+            renderTodayActivities();
+            closeSheet(false);
+            showToast('日程已创建');
+          }
+        }
+
+        const submit = event.target.closest('[data-submit]');
+        if (submit) {
+          submit.disabled = true;
+          submit.textContent = '提交中…';
+          setTimeout(() => { submit.disabled = false; submit.textContent = '提交'; showToast('已提交'); }, 760);
+        }
+
+        const placeholder = event.target.closest('[data-placeholder-page]');
+        if (placeholder) showToast('本轮评审聚焦“记录”和“设置”');
+      });
+
+      const textArea = document.getElementById('learning-text');
+      textArea.addEventListener('input', () => { document.getElementById('text-count').textContent = textArea.value.length; });
+      document.getElementById('single-photo-input').addEventListener('change', (event) => { addPhotoFiles(event.target.files); event.target.value = ''; });
+      document.getElementById('multiple-photo-input').addEventListener('change', (event) => { addPhotoFiles(event.target.files); event.target.value = ''; });
+      document.getElementById('activity-plan-time').addEventListener('input', updateScheduleSummary);
+      document.getElementById('activity-plan-end').addEventListener('input', updateScheduleSummary);
+      document.getElementById('memory-heatmap').addEventListener('scroll', (event) => {
+        if (activeReportRange !== 100 || !memoryPageGroups.length) return;
+        const heatmap = event.currentTarget;
+        clearTimeout(memoryScrollTimer);
+        memoryScrollTimer = setTimeout(() => {
+          const pageIndex = Math.round(heatmap.scrollLeft / heatmap.clientWidth);
+          if (pageIndex !== activeMemoryPage) {
+            activeMemoryPage = pageIndex;
+            updateMemoryPager();
+          }
+        }, 80);
+      });
+
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && activeSheet) closeSheet();
+      });
+
+      phone.addEventListener('keydown', (event) => {
+        if (activeSheet && event.key === 'Tab') {
+          const focusable = [...activeSheet.querySelectorAll('button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled])')];
+          if (!focusable.length) return;
+          const first = focusable[0];
+          const last = focusable[focusable.length - 1];
+          if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+          else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+        }
+      });
+
+      refreshCalendarMarkers();
+      renderCalendarDay(0);
+      renderTodayActivities();
+      renderReportRange(7);
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,566 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>知芽 · 家庭协作 UI Review · DREV-20260831-05</title>
+  <style>
+    :root {
+      --canvas: #f5f3ec;
+      --surface: #fffefa;
+      --surface-soft: #e8f1ed;
+      --primary: #2f766d;
+      --primary-dark: #225b54;
+      --ink: #1f2926;
+      --muted: #707873;
+      --line: #e2e4df;
+      --warm: #f2e6cf;
+      --warning: #9a641f;
+      --danger: #a94f48;
+      --review-bg: #e9e8e2;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      background: var(--review-bg);
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    .review-head {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 18px 28px;
+      background: rgba(245, 243, 236, .94);
+      border-bottom: 1px solid rgba(31, 41, 38, .08);
+      backdrop-filter: blur(16px);
+    }
+    .review-title { margin: 0; font-size: 18px; line-height: 1.2; }
+    .review-meta { margin-top: 4px; color: var(--muted); font-size: 12px; }
+    .review-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
+    .review-tab {
+      min-height: 36px;
+      padding: 0 13px;
+      border: 1px solid #d6d8d3;
+      border-radius: 18px;
+      color: #53605c;
+      background: #fff;
+      font-size: 13px;
+    }
+    .review-tab.active { border-color: var(--primary); color: #fff; background: var(--primary); }
+    .review-board {
+      display: grid;
+      place-items: start center;
+      min-height: calc(100vh - 78px);
+      padding: 30px;
+    }
+    .phone-shell {
+      display: none;
+      width: 390px;
+      min-height: 844px;
+      overflow: hidden;
+      border: 9px solid #1f2422;
+      border-radius: 43px;
+      background: var(--canvas);
+      box-shadow: 0 28px 70px rgba(30, 38, 35, .18);
+    }
+    .phone-shell.active { display: flex; flex-direction: column; }
+    .board .review-head { position: relative; }
+    .board .review-actions { display: none; }
+    .board .review-board {
+      grid-template-columns: repeat(3, 390px);
+      gap: 48px 34px;
+      align-items: start;
+      justify-content: center;
+      padding: 42px;
+    }
+    .board .phone-shell { display: flex; flex-direction: column; }
+    .capture { background: var(--canvas); }
+    .capture .review-head { display: none; }
+    .capture .review-board {
+      min-height: 100vh;
+      padding: 0;
+    }
+    .capture .phone-shell {
+      width: 100vw;
+      min-height: 100vh;
+      height: 100vh;
+      border: 0;
+      border-radius: 0;
+      box-shadow: none;
+    }
+    .phone-status {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 32px;
+      padding: 4px 22px 0;
+      color: #202725;
+      background: var(--canvas);
+      font-size: 12px;
+      font-weight: 650;
+    }
+    .status-icons { letter-spacing: 2px; }
+    .nav-bar {
+      display: grid;
+      grid-template-columns: 54px 1fr 54px;
+      align-items: center;
+      min-height: 54px;
+      padding: 0 8px;
+      border-bottom: 1px solid rgba(31, 41, 38, .06);
+      background: var(--canvas);
+    }
+    .nav-back, .nav-more {
+      display: grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      border: 0;
+      color: var(--primary-dark);
+      background: transparent;
+      font-size: 22px;
+    }
+    .nav-back { font-family: serif; }
+    .nav-title { text-align: center; font-size: 17px; font-weight: 700; }
+    .screen {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      min-height: 0;
+      padding: 20px 16px 26px;
+      overflow: hidden;
+      background: var(--canvas);
+    }
+    .screen.scroll { overflow-y: auto; }
+    .screen.scroll > * { flex-shrink: 0; }
+    .eyebrow { color: var(--muted); font-size: 12px; }
+    .screen-title { margin: 5px 0 4px; font-size: 25px; line-height: 1.25; letter-spacing: -.5px; }
+    .screen-lead { margin: 0; color: #59645f; font-size: 14px; line-height: 1.55; }
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 23px 0 10px;
+    }
+    .section-title { font-size: 16px; font-weight: 750; }
+    .section-note { color: var(--muted); font-size: 12px; }
+    .child-context {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 15px 16px;
+      border: 1px solid rgba(56, 76, 69, .08);
+      border-radius: 18px;
+      background: var(--surface);
+    }
+    .avatar {
+      display: grid;
+      flex: 0 0 auto;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      color: var(--primary-dark);
+      background: #dcece7;
+      font-size: 16px;
+      font-weight: 750;
+    }
+    .avatar.warm { color: #805824; background: var(--warm); }
+    .avatar.rose { color: #894c48; background: #f4e2df; }
+    .grow { flex: 1; min-width: 0; }
+    .strong { display: block; font-size: 15px; font-weight: 720; }
+    .sub { display: block; margin-top: 2px; color: var(--muted); font-size: 12px; line-height: 1.45; }
+    .chev { color: #7b8580; font-size: 18px; }
+    .notice {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-top: 14px;
+      padding: 13px 14px;
+      border-radius: 14px;
+      color: #6f4b16;
+      background: #fff1d7;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+    .notice.teal { color: #2e5f57; background: var(--surface-soft); }
+    .notice.neutral { color: #58605d; background: #eeefeb; }
+    .notice-dot {
+      flex: 0 0 auto;
+      width: 8px;
+      height: 8px;
+      margin-top: 6px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+    .member-list {
+      overflow: hidden;
+      border: 1px solid rgba(56, 76, 69, .08);
+      border-radius: 18px;
+      background: var(--surface);
+    }
+    .member-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-height: 72px;
+      padding: 13px 14px;
+      border-bottom: 1px solid var(--line);
+    }
+    .member-row:last-child { border-bottom: 0; }
+    .role {
+      min-width: 56px;
+      padding: 5px 9px;
+      border-radius: 999px;
+      color: var(--primary-dark);
+      background: var(--surface-soft);
+      text-align: center;
+      font-size: 11px;
+      font-weight: 650;
+    }
+    .role.viewer { color: #666d69; background: #eceeeb; }
+    .role.owner { color: #7b541e; background: var(--warm); }
+    .role.pending { color: #875619; background: #fff0d1; }
+    .primary, .secondary, .danger-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      min-height: 48px;
+      border-radius: 14px;
+      font-size: 15px;
+      font-weight: 700;
+    }
+    .primary { border: 0; color: #fff; background: var(--primary); }
+    .secondary { border: 1px solid #b8cec8; color: var(--primary-dark); background: transparent; }
+    .danger-button { border: 0; color: var(--danger); background: #f6e7e4; }
+    .button-stack { display: grid; gap: 10px; margin-top: auto; padding-top: 18px; }
+    .inline-action {
+      min-height: 32px;
+      border: 0;
+      color: var(--primary);
+      background: transparent;
+      font-size: 13px;
+      font-weight: 650;
+    }
+    .form-card {
+      margin-top: 16px;
+      padding: 16px;
+      border: 1px solid rgba(56, 76, 69, .08);
+      border-radius: 18px;
+      background: var(--surface);
+    }
+    .field { margin-bottom: 17px; }
+    .field:last-child { margin-bottom: 0; }
+    .label { display: block; margin-bottom: 8px; color: #4c5854; font-size: 13px; font-weight: 650; }
+    .input-like {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 46px;
+      padding: 0 13px;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      color: #37403d;
+      background: #fff;
+      font-size: 14px;
+    }
+    .choice-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .choice {
+      display: grid;
+      place-items: center;
+      min-height: 43px;
+      padding: 0 5px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      color: #505a56;
+      background: #fff;
+      font-size: 13px;
+    }
+    .choice.selected { border-color: #77a89c; color: var(--primary-dark); background: var(--surface-soft); font-weight: 700; }
+    .permission-list { display: grid; gap: 9px; }
+    .permission {
+      display: flex;
+      gap: 11px;
+      align-items: flex-start;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: #fff;
+    }
+    .permission.selected { border-color: #78a99e; background: var(--surface-soft); }
+    .radio {
+      flex: 0 0 auto;
+      width: 18px;
+      height: 18px;
+      margin-top: 1px;
+      border: 2px solid #aeb5b1;
+      border-radius: 50%;
+    }
+    .selected .radio { border: 5px solid var(--primary); }
+    .permission-title { display: block; font-size: 14px; font-weight: 700; }
+    .permission-copy { display: block; margin-top: 2px; color: var(--muted); font-size: 11px; line-height: 1.4; }
+    .status-hero {
+      display: grid;
+      place-items: center;
+      padding: 54px 18px 26px;
+      text-align: center;
+    }
+    .status-mark {
+      display: grid;
+      place-items: center;
+      width: 74px;
+      height: 74px;
+      margin-bottom: 20px;
+      border-radius: 50%;
+      color: var(--primary);
+      background: var(--surface-soft);
+      font-size: 31px;
+      font-weight: 800;
+    }
+    .status-title { margin: 0 0 8px; font-size: 23px; }
+    .status-copy { max-width: 285px; margin: 0; color: var(--muted); font-size: 14px; line-height: 1.55; }
+    .detail-list {
+      overflow: hidden;
+      margin-top: 12px;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+    .detail-row { display: flex; justify-content: space-between; gap: 18px; padding: 13px 2px; border-bottom: 1px solid var(--line); font-size: 13px; }
+    .detail-row:last-child { border-bottom: 0; }
+    .detail-key { color: var(--muted); }
+    .privacy { margin: 15px 3px 0; color: #7a827e; font-size: 11px; line-height: 1.55; }
+    .split-actions { display: grid; grid-template-columns: 1fr 1.5fr; gap: 10px; margin-top: auto; padding-top: 18px; }
+    .bottom-tab {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      padding: 7px 8px 10px;
+      border-top: 1px solid rgba(31, 41, 38, .08);
+      background: rgba(255, 254, 250, .96);
+    }
+    .tab-item { display: grid; place-items: center; gap: 2px; color: #8a918d; font-size: 10px; }
+    .tab-icon { font-size: 17px; line-height: 1; }
+    .tab-item.active { color: var(--primary-dark); font-weight: 700; }
+    .empty-wrap {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      justify-content: center;
+      padding: 0 18px 38px;
+      text-align: center;
+    }
+    .empty-mark {
+      display: grid;
+      place-items: center;
+      width: 82px;
+      height: 82px;
+      margin: 0 auto 22px;
+      border-radius: 50%;
+      color: var(--primary-dark);
+      background: var(--surface-soft);
+      font-size: 28px;
+      font-weight: 800;
+    }
+    .empty-title { margin: 0 0 8px; font-size: 24px; }
+    .empty-copy { margin: 0 auto 26px; max-width: 280px; color: var(--muted); font-size: 14px; line-height: 1.55; }
+    .empty-actions { display: grid; gap: 10px; }
+    .screen-label {
+      position: absolute;
+      transform: translateY(-27px);
+      color: #5e6662;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .phone-shell { position: relative; }
+    .board .screen-label { display: block; }
+    .screen-label { display: none; }
+    @media (max-width: 760px) {
+      .review-head { align-items: flex-start; flex-direction: column; padding: 16px; }
+      .review-actions { justify-content: flex-start; overflow-x: auto; width: 100%; flex-wrap: nowrap; }
+      .review-board { padding: 18px 0 30px; }
+      .phone-shell { width: min(390px, calc(100vw - 20px)); min-height: 780px; border-width: 6px; border-radius: 34px; }
+      .board .review-board { grid-template-columns: 1fr; padding: 30px 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="review-head">
+    <div>
+      <h1 class="review-title">知芽 · 家庭协作 UI Review</h1>
+      <div class="review-meta">DREV-20260831-05 · 390×844 主视口 · 本地候选稿（Figma Starter/View 限额）</div>
+    </div>
+    <nav class="review-actions" aria-label="选择评审状态">
+      <button class="review-tab active" data-target="empty">首次进入</button>
+      <button class="review-tab" data-target="manager">管理者成员页</button>
+      <button class="review-tab" data-target="member">普通成员页</button>
+      <button class="review-tab" data-target="share">分享邀请</button>
+      <button class="review-tab" data-target="apply">申请授权</button>
+      <button class="review-tab" data-target="pending">等待审批</button>
+      <button class="review-tab" data-target="approve">审批申请</button>
+    </nav>
+  </header>
+
+  <main class="review-board">
+    <section class="phone-shell active" data-screen="empty">
+      <div class="screen-label">UI-010 / 首次登录无孩子</div>
+      <div class="phone-status"><span>9:41</span><span class="status-icons">● ◒ ▰</span></div>
+      <div class="nav-bar"><span></span><div class="nav-title">知芽</div><button class="nav-more" aria-label="更多">•••</button></div>
+      <div class="screen scroll">
+        <div class="empty-wrap">
+          <div class="empty-mark">芽</div>
+          <h2 class="empty-title">先添加一个孩子</h2>
+          <p class="empty-copy">创建新的学习档案，或者通过家人发来的邀请申请关注已有孩子。</p>
+          <div class="empty-actions">
+            <button class="primary">创建孩子</button>
+            <button class="secondary">使用邀请申请授权</button>
+          </div>
+          <p class="privacy">加入已有孩子必须由管理者确认，打开邀请不会直接看到学习内容。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="phone-shell" data-screen="manager">
+      <div class="screen-label">UI-009 / 管理者成员页</div>
+      <div class="phone-status"><span>9:41</span><span class="status-icons">● ◒ ▰</span></div>
+      <div class="nav-bar"><button class="nav-back" aria-label="返回">‹</button><div class="nav-title">家庭与成员</div><button class="nav-more" aria-label="更多">•••</button></div>
+      <div class="screen scroll">
+        <div class="child-context"><div class="avatar">满</div><div class="grow"><span class="strong">小满的家庭</span><span class="sub">小学二年级 · 3 位成员</span></div><span class="chev">›</span></div>
+        <div class="notice"><span class="notice-dot"></span><div class="grow"><span class="strong">有 2 个授权申请待处理</span><span class="sub">只有管理者可以查看和审批</span></div><span class="chev">›</span></div>
+        <div class="section-head"><span class="section-title">家庭成员</span><span class="section-note">所有成员可见</span></div>
+        <div class="member-list">
+          <div class="member-row"><div class="avatar">王</div><div class="grow"><span class="strong">王一</span><span class="sub">爸爸 · 创建者</span></div><span class="role owner">管理者</span><span class="chev">›</span></div>
+          <div class="member-row"><div class="avatar rose">李</div><div class="grow"><span class="strong">李琳</span><span class="sub">妈妈 · 昨天上传了英语学习</span></div><span class="role">可编辑</span><span class="chev">›</span></div>
+          <div class="member-row"><div class="avatar warm">奶</div><div class="grow"><span class="strong">奶奶</span><span class="sub">奶奶 · 最近查看 2 小时前</span></div><span class="role viewer">仅查看</span><span class="chev">›</span></div>
+        </div>
+        <p class="privacy">成员退出后立即失去访问权，历史上传与监督记录仍保留原作者。</p>
+        <div class="button-stack"><button class="primary">邀请家庭成员</button><button class="secondary">管理关系与权限</button></div>
+      </div>
+      <div class="bottom-tab"><span class="tab-item"><span class="tab-icon">⌂</span>今日</span><span class="tab-item"><span class="tab-icon">□</span>日程</span><span class="tab-item"><span class="tab-icon">＋</span>记录</span><span class="tab-item"><span class="tab-icon">▥</span>报表</span><span class="tab-item active"><span class="tab-icon">⚙</span>设置</span></div>
+    </section>
+
+    <section class="phone-shell" data-screen="member">
+      <div class="screen-label">UI-009 / 普通成员页</div>
+      <div class="phone-status"><span>9:41</span><span class="status-icons">● ◒ ▰</span></div>
+      <div class="nav-bar"><button class="nav-back" aria-label="返回">‹</button><div class="nav-title">家庭与成员</div><span></span></div>
+      <div class="screen scroll">
+        <div class="child-context"><div class="avatar">满</div><div class="grow"><span class="strong">小满的家庭</span><span class="sub">你是妈妈 · 可编辑</span></div></div>
+        <div class="notice teal"><span class="notice-dot"></span><div>家庭中的每个人都能看到成员和关系。邀请、审批与权限调整仅对管理者开放。</div></div>
+        <div class="section-head"><span class="section-title">家庭成员</span><span class="section-note">3 位</span></div>
+        <div class="member-list">
+          <div class="member-row"><div class="avatar">王</div><div class="grow"><span class="strong">王一</span><span class="sub">爸爸</span></div><span class="role owner">管理者</span></div>
+          <div class="member-row"><div class="avatar rose">李</div><div class="grow"><span class="strong">李琳（你）</span><span class="sub">妈妈</span></div><span class="role">可编辑</span></div>
+          <div class="member-row"><div class="avatar warm">奶</div><div class="grow"><span class="strong">奶奶</span><span class="sub">奶奶</span></div><span class="role viewer">仅查看</span></div>
+        </div>
+        <div class="section-head"><span class="section-title">我的权限</span></div>
+        <div class="notice neutral"><span class="notice-dot"></span><div>可以上传、监督和确认学习记录；不能邀请成员或处理授权申请。</div></div>
+        <div class="button-stack"><button class="danger-button">退出这个家庭</button></div>
+      </div>
+      <div class="bottom-tab"><span class="tab-item"><span class="tab-icon">⌂</span>今日</span><span class="tab-item"><span class="tab-icon">□</span>日程</span><span class="tab-item"><span class="tab-icon">＋</span>记录</span><span class="tab-item"><span class="tab-icon">▥</span>报表</span><span class="tab-item active"><span class="tab-icon">⚙</span>设置</span></div>
+    </section>
+
+    <section class="phone-shell" data-screen="share">
+      <div class="screen-label">UI-010 / 创建分享</div>
+      <div class="phone-status"><span>9:41</span><span class="status-icons">● ◒ ▰</span></div>
+      <div class="nav-bar"><button class="nav-back" aria-label="返回">‹</button><div class="nav-title">邀请家庭成员</div><span></span></div>
+      <div class="screen scroll">
+        <span class="eyebrow">邀请关注孩子</span>
+        <h2 class="screen-title">邀请家人加入小满的家庭</h2>
+        <p class="screen-lead">对方打开后需要填写关系并提交申请。管理者审批通过后，才能看到孩子内容。</p>
+        <div class="form-card">
+          <div class="child-context"><div class="avatar">满</div><div class="grow"><span class="strong">小满</span><span class="sub">小学二年级</span></div></div>
+          <div class="detail-list">
+            <div class="detail-row"><span class="detail-key">邀请有效期</span><strong>24 小时</strong></div>
+            <div class="detail-row"><span class="detail-key">邀请用途</span><strong>仅申请授权</strong></div>
+            <div class="detail-row"><span class="detail-key">审批人</span><strong>任一管理者</strong></div>
+          </div>
+        </div>
+        <div class="notice teal"><span class="notice-dot"></span><div>分享卡片不会展示学习记录、成员名单、照片或联系方式。</div></div>
+        <div class="button-stack"><button class="primary">分享给微信好友</button><button class="secondary">复制邀请口令</button></div>
+      </div>
+    </section>
+
+    <section class="phone-shell" data-screen="apply">
+      <div class="screen-label">UI-010 / 申请授权</div>
+      <div class="phone-status"><span>9:41</span><span class="status-icons">● ◒ ▰</span></div>
+      <div class="nav-bar"><button class="nav-back" aria-label="返回">‹</button><div class="nav-title">申请加入家庭</div><span></span></div>
+      <div class="screen scroll">
+        <span class="eyebrow">王一邀请你关注</span>
+        <h2 class="screen-title">小满的家庭</h2>
+        <p class="screen-lead">申请提交前，你不会看到孩子的学习记录、日程或家庭成员。</p>
+        <div class="form-card">
+          <div class="field"><label class="label">你的展示名</label><div class="input-like"><span>奶奶</span><span class="section-note">家庭内可见</span></div></div>
+          <div class="field"><label class="label">你和孩子的关系</label><div class="choice-grid"><button class="choice">爸爸</button><button class="choice">妈妈</button><button class="choice selected">奶奶</button><button class="choice">爷爷</button><button class="choice">外婆</button><button class="choice">其他</button></div></div>
+        </div>
+        <div class="notice neutral"><span class="notice-dot"></span><div>关系称谓只用于家庭展示，不自动决定你能做什么；最终权限由管理者审批。</div></div>
+        <div class="button-stack"><button class="primary">提交授权申请</button><button class="secondary">暂不申请</button></div>
+      </div>
+    </section>
+
+    <section class="phone-shell" data-screen="pending">
+      <div class="screen-label">UI-010 / 等待审批</div>
+      <div class="phone-status"><span>9:41</span><span class="status-icons">● ◒ ▰</span></div>
+      <div class="nav-bar"><button class="nav-back" aria-label="返回">‹</button><div class="nav-title">授权申请</div><span></span></div>
+      <div class="screen scroll">
+        <div class="status-hero">
+          <div class="status-mark">✓</div>
+          <h2 class="status-title">申请已提交</h2>
+          <p class="status-copy">正在等待小满的家庭管理者确认。审批完成后，这里会显示最新结果。</p>
+        </div>
+        <div class="form-card">
+          <div class="detail-row"><span class="detail-key">申请家庭</span><strong>小满的家庭</strong></div>
+          <div class="detail-row"><span class="detail-key">申请关系</span><strong>奶奶</strong></div>
+          <div class="detail-row"><span class="detail-key">当前状态</span><span class="role pending">等待审批</span></div>
+        </div>
+        <div class="button-stack"><button class="secondary">刷新状态</button><button class="inline-action">撤回申请</button></div>
+      </div>
+    </section>
+
+    <section class="phone-shell" data-screen="approve">
+      <div class="screen-label">UI-010 / 管理者审批</div>
+      <div class="phone-status"><span>9:41</span><span class="status-icons">● ◒ ▰</span></div>
+      <div class="nav-bar"><button class="nav-back" aria-label="返回">‹</button><div class="nav-title">审批授权申请</div><span></span></div>
+      <div class="screen scroll">
+        <div class="child-context"><div class="avatar warm">奶</div><div class="grow"><span class="strong">奶奶</span><span class="sub">申请成为“小满”的奶奶 · 8 分钟前</span></div></div>
+        <div class="section-head"><span class="section-title">确认家庭关系</span></div>
+        <div class="choice-grid"><button class="choice">妈妈</button><button class="choice selected">奶奶</button><button class="choice">其他</button></div>
+        <div class="section-head"><span class="section-title">选择访问权限</span><span class="section-note">可随时调整</span></div>
+        <div class="permission-list">
+          <div class="permission"><span class="radio"></span><div><span class="permission-title">仅查看</span><span class="permission-copy">查看学习、日程和家庭成员，不可修改</span></div></div>
+          <div class="permission selected"><span class="radio"></span><div><span class="permission-title">可编辑（推荐）</span><span class="permission-copy">可以上传、监督、确认和编辑记录</span></div></div>
+          <div class="permission"><span class="radio"></span><div><span class="permission-title">管理者</span><span class="permission-copy">额外拥有邀请、审批和权限管理能力</span></div></div>
+        </div>
+        <div class="notice"><span class="notice-dot"></span><div>批准后对方立即获得所选权限；操作会记录你的姓名和审批时间。</div></div>
+        <div class="split-actions"><button class="danger-button">拒绝</button><button class="primary">批准并加入家庭</button></div>
+      </div>
+    </section>
+  </main>
+  <script>
+    const params = new URLSearchParams(location.search);
+    if (params.get("board") === "1") document.body.classList.add("board");
+    if (params.get("capture") === "1") document.body.classList.add("capture");
+    const requestedScreen = params.get("screen");
+    if (requestedScreen && document.querySelector('[data-screen="' + requestedScreen + '"]')) {
+      document.querySelectorAll(".phone-shell").forEach(function (item) { item.classList.remove("active"); });
+      document.querySelectorAll(".review-tab").forEach(function (item) { item.classList.remove("active"); });
+      document.querySelector('[data-screen="' + requestedScreen + '"]').classList.add("active");
+      const requestedTab = document.querySelector('[data-target="' + requestedScreen + '"]');
+      if (requestedTab) requestedTab.classList.add("active");
+    }
+    document.querySelectorAll(".review-tab").forEach(function (button) {
+      button.addEventListener("click", function () {
+        document.querySelectorAll(".review-tab").forEach(function (item) { item.classList.remove("active"); });
+        document.querySelectorAll(".phone-shell").forEach(function (item) { item.classList.remove("active"); });
+        button.classList.add("active");
+        document.querySelector('[data-screen="' + button.dataset.target + '"]').classList.add("active");
+      });
+    });
+  </script>
+</body>
+</html>

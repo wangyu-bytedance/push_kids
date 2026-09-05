@@ -1,0 +1,10 @@
+.calendar-page { min-height: 100vh; box-sizing: border-box; }
+.compact-head { display:flex; justify-content:space-between; align-items:center; min-height:84rpx; }
+.week-strip { display:grid; grid-template-columns:repeat(7,1fr); gap:8rpx; padding:20rpx 0 28rpx; border-bottom:1rpx solid var(--line); }
+.week-day { margin:0; padding:10rpx 0; min-width:0; min-height:86rpx; border:0; background:transparent; color:var(--muted); font-size:22rpx; line-height:1.2; }
+.week-day::after { border:0; }.week-day text { display:block; }.week-day .day-number { margin-top:10rpx; color:var(--ink); font-size:28rpx; font-weight:650; }
+.week-day.active .day-number { width:54rpx; height:54rpx; line-height:54rpx; margin:8rpx auto 0; border-radius:50%; color:white; background:var(--primary); }
+.agenda { margin-top:14rpx; }.agenda-row { display:grid; grid-template-columns:110rpx 1fr; gap:10rpx; padding:16rpx 0; border-bottom:1rpx solid var(--line); }
+.agenda-time { padding-top:20rpx; font-weight:650; color:#485650; }.agenda-card { position:relative; padding:20rpx 24rpx; border-left:5rpx solid #D68C51; background:#F5EBDD; border-radius:8rpx; }
+.agenda-name { display:block; font-weight:700; }.agenda-row.past { opacity:.48; filter:grayscale(.7); }.past-label { position:absolute; right:18rpx; top:18rpx; font-size:22rpx; }
+.fab { position:fixed; right:34rpx; bottom:calc(46rpx + env(safe-area-inset-bottom)); width:104rpx; height:104rpx; padding:0; border-radius:52rpx; background:var(--primary); color:#fff; font-size:56rpx; line-height:100rpx; box-shadow:0 18rpx 44rpx rgba(33,107,88,.22); z-index:5; }.fab::after{border:0}.plain{background:transparent;padding-top:120rpx}.top-gap{margin-top:16rpx}

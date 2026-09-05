@@ -1,0 +1,226 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Push Kids 用户、家庭与孩子授权",
+    "locale": "zh-CN",
+    "quality_profile": "showcase",
+    "viewBox": [1380, 800],
+    "views": [
+      {
+        "id": "login_session",
+        "label": "登录与会话",
+        "focus": ["client", "auth_api", "wechat_login", "session_store"],
+        "note": "微信 code 只交给服务端换取身份，客户端持有 Push Kids 自有可撤销会话。"
+      },
+      {
+        "id": "authorization",
+        "label": "双层授权",
+        "focus": ["auth_api", "family_gate", "child_gate", "domain_services"],
+        "note": "先验证家庭成员，再验证指定孩子关系与 access_level。"
+      },
+      {
+        "id": "binding",
+        "label": "分享审批",
+        "focus": ["family_gate", "invitation_service", "child_gate", "audit_store"],
+        "note": "链接只创建申请；任一当前有效 manager 审批后才原子建立成员与孩子关系。"
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "client",
+      "type": "frontend",
+      "label": "家长微信小程序",
+      "sublabel": "创建孩子 / 申请授权",
+      "pos": [32, 250],
+      "size": [174, 66]
+    },
+    {
+      "id": "auth_api",
+      "type": "security",
+      "label": "Auth API",
+      "sublabel": "登录、登出、会话轮换",
+      "pos": [280, 250],
+      "size": [166, 66]
+    },
+    {
+      "id": "wechat_login",
+      "type": "external",
+      "label": "微信登录服务",
+      "sublabel": "code2Session",
+      "pos": [280, 64],
+      "size": [166, 66]
+    },
+    {
+      "id": "session_store",
+      "type": "database",
+      "label": "用户与会话",
+      "sublabel": "User / Identity / token hash",
+      "pos": [280, 454],
+      "size": [190, 66]
+    },
+    {
+      "id": "family_gate",
+      "type": "security",
+      "label": "家庭成员门禁",
+      "sublabel": "active FamilyMember",
+      "pos": [534, 250],
+      "size": [180, 66]
+    },
+    {
+      "id": "child_gate",
+      "type": "security",
+      "label": "孩子关系门禁",
+      "sublabel": "ChildGuardian + access_level",
+      "pos": [800, 250],
+      "size": [198, 66]
+    },
+    {
+      "id": "domain_services",
+      "type": "backend",
+      "label": "现有领域服务",
+      "sublabel": "学习 / 计划 / 活动 / 报表",
+      "pos": [1080, 250],
+      "size": [194, 66]
+    },
+    {
+      "id": "business_store",
+      "type": "database",
+      "label": "托管 SQL",
+      "sublabel": "业务数据 + 作者 / 版本",
+      "pos": [1080, 64],
+      "size": [194, 66]
+    },
+    {
+      "id": "invitation_service",
+      "type": "backend",
+      "label": "分享与申请服务",
+      "sublabel": "token / pending / 审批",
+      "pos": [534, 454],
+      "size": [190, 66]
+    },
+    {
+      "id": "audit_store",
+      "type": "database",
+      "label": "归属与安全审计",
+      "sublabel": "上传 / 审批 / 权限变更",
+      "pos": [800, 454],
+      "size": [198, 66]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "security-group",
+      "label": "Push Kids 服务端可信边界",
+      "wraps": ["auth_api", "session_store", "family_gate", "child_gate", "domain_services", "business_store", "invitation_service", "audit_store"],
+      "pad": 24
+    }
+  ],
+  "connections": [
+    {
+      "from": "client",
+      "to": "auth_api",
+      "label": "wx code / opaque session",
+      "variant": "emphasis",
+      "labelAt": [243, 330]
+    },
+    {
+      "from": "auth_api",
+      "to": "wechat_login",
+      "label": "服务端 code2Session",
+      "variant": "dashed"
+    },
+    {
+      "from": "auth_api",
+      "to": "session_store",
+      "label": "身份映射 / 会话撤销",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "auth_api",
+      "to": "family_gate",
+      "label": "verified user_id",
+      "variant": "security"
+    },
+    {
+      "from": "family_gate",
+      "to": "child_gate",
+      "label": "active member",
+      "variant": "security"
+    },
+    {
+      "from": "child_gate",
+      "to": "domain_services",
+      "label": "授权 user / family / child",
+      "variant": "security",
+      "labelAt": [1039, 330]
+    },
+    {
+      "from": "domain_services",
+      "to": "business_store",
+      "label": "双条件查询与写入"
+    },
+    {
+      "from": "family_gate",
+      "to": "invitation_service",
+      "label": "manager 创建 / 撤销分享",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "invitation_service",
+      "to": "child_gate",
+      "label": "manager 批准后建立关系",
+      "variant": "emphasis",
+      "labelAt": [820, 370]
+    },
+    {
+      "from": "invitation_service",
+      "to": "audit_store",
+      "label": "申请与审批审计",
+      "variant": "dashed",
+      "labelAt": [762, 550]
+    },
+    {
+      "from": "child_gate",
+      "to": "audit_store",
+      "label": "权限变更审计",
+      "variant": "dashed",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelAt": [940, 380]
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "关系与权限",
+      "items": [
+        "User 可参与多个 Family",
+        "relationship 只展示称谓",
+        "manager / editor / viewer 决定能力"
+      ]
+    },
+    {
+      "dot": "violet",
+      "title": "分享申请审批",
+      "items": [
+        "链接只能创建 pending 申请",
+        "任一有效 manager 可以批准或拒绝",
+        "所有已绑定成员可查看成员列表",
+        "批准时原子建立成员和孩子关系"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "业务作者归属",
+      "items": [
+        "学习记录显示监督、上传与确认人",
+        "活动记录区分监督人与记录人",
+        "日程修改保留作者、差异和版本"
+      ]
+    }
+  ]
+}

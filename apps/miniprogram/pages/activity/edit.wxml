@@ -1,0 +1,10 @@
+<view class="page">
+  <view class="card">
+    <view class="field"><text class="label">活动</text><picker range="{{subjects}}" range-key="name" value="{{subjectIndex}}" bindchange="changeSubject"><view class="picker">{{subjects.length ? subjects[subjectIndex].name : '请先在设置添加活动科目'}} ›</view></picker></view>
+    <view class="row"><view class="field grow"><text class="label">练习日期</text><picker mode="date" value="{{date}}" data-field="date" bindchange="setField"><view class="picker">{{date}}</view></picker></view><view class="field grow"><text class="label">时间</text><picker mode="time" value="{{time}}" data-field="time" bindchange="setField"><view class="picker">{{time}}</view></picker></view></view>
+    <view class="field"><text class="label">时长：{{duration}} 分钟</text><slider min="5" max="180" step="5" value="{{duration}}" data-field="duration" bindchange="setField" activeColor="#2F766D" /></view>
+    <view class="field"><text class="label">简单记录（可选）</text><textarea class="textarea" value="{{note}}" data-field="note" bindinput="setField" placeholder="例如：练习了换气和自由泳"></textarea></view>
+  </view>
+  <view class="notice">活动练习只记录频率，不进入记忆曲线，也不会产生强制 Todo。</view>
+  <button class="button" loading="{{saving}}" disabled="{{saving}}" bindtap="save">保存练习记录</button>
+</view>
