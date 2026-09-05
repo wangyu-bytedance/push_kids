@@ -1,1 +1,14 @@
-.materials{border-top:1px solid #DFE4DB;margin:20px 0;color:#263D35;font-size:14px}.toggle{display:flex;justify-content:space-between;align-items:center;min-height:44px;width:100%;margin:0;padding:10px 0;background:transparent;font-size:16px;font-weight:600;text-align:left;box-sizing:border-box}.toggle::after{border:0}.toggle text{font-size:14px;color:#2F766D}.photos{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:12px 0}.photos button{display:block;width:100%;min-width:0;min-height:80px;margin:0;padding:12px 6px;white-space:normal;background:#E8F1EB;line-height:1.6;font-size:14px;box-sizing:border-box}.photos image{width:100%;height:100px}.photos text{display:block}.hint{color:#65736C;font-size:14px}.original{display:block;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.8;margin:12px 0}.error{padding:12px;background:#FFF1EB;color:#963F2D}.error button{min-height:44px;font-size:14px}
+/* PKDS-1.0 · 原始材料（D7 / D8 / E1 §6）：只读展示照片与家长原文，几何量 rpx，字号 px，发丝线 1rpx。 */
+.materials { padding: 0; }
+.mat-head { display: flex; align-items: center; gap: 16rpx; min-height: 96rpx; padding: 0 28rpx; }
+.mat-head .mat-t { font-size: 17px; line-height: 1.45; font-weight: 600; }
+.mat-head .mat-c { flex: 1; min-width: 0; font-size: 13px; color: var(--pk-ink-3); font-variant-numeric: tabular-nums; }
+.mat-body { padding: 4rpx 28rpx 28rpx; }
+
+.pcell.gone { opacity: .55; }
+.mat-body .pcell .ph-center { position: absolute; left: 0; top: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center; background: var(--pk-surface-sunken); color: var(--pk-ink-3); }
+.pcell .cnote { position: absolute; left: 0; right: 0; bottom: 0; padding: 8rpx 10rpx; background: rgba(29, 43, 36, .66); color: #fff; font-size: 11px; line-height: 1.3; }
+.mat-body .help { display: block; }
+.mat-body .mat-lbl { display: block; margin-top: 24rpx; font-size: 13px; font-weight: 600; color: var(--pk-ink-2); }
+.mat-body .orig { display: block; margin-top: 12rpx; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 14px; line-height: 1.7; color: var(--pk-ink); }
+.mat-body .pk-notice { margin-bottom: 20rpx; }

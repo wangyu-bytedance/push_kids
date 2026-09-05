@@ -1,1 +1,6 @@
-{ "navigationBarTitleText": "今日", "usingComponents": { "todo-card": "/components/todo-card/index" } }
+{
+  "navigationBarTitleText": "今日",
+  "enablePullDownRefresh": true,
+  "backgroundColor": "#F4F3EC",
+  "usingComponents": { "todo-card": "/components/todo-card/index" }
+}

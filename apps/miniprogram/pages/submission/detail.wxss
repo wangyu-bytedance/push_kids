@@ -1,0 +1,47 @@
+/* PKDS-1.0 · 学习记录只读视图（D7）与待处理出口（D8）共享样式：几何量 rpx，字号 px，发丝线 1rpx。 */
+.rec-card { padding: 28rpx; }
+.rec-eyebrow { display: block; font-size: 13px; line-height: 1.45; color: var(--pk-ink-3); }
+.rec-summary { display: block; margin-top: 12rpx; font-size: 16px; line-height: 1.7; white-space: pre-wrap; overflow-wrap: anywhere; }
+
+.rec-kn-head { display: flex; align-items: baseline; gap: 12rpx; margin-top: 24rpx; }
+.rec-kn-head .rec-kn-count { font-size: 13px; color: var(--pk-ink-3); }
+.rec-kn { padding-top: 20rpx; }
+.rec-kn + .rec-kn { margin-top: 20rpx; border-top: var(--pk-border-soft); }
+.kn-top { display: flex; align-items: center; gap: 16rpx; min-height: 68rpx; }
+.kn-top .tag-sub { flex: none; }
+.kn-top .kn-name { font-size: 16px; line-height: 1.45; font-weight: 500; overflow-wrap: anywhere; }
+.kn-top .confidence { flex: none; }
+.kn-ev { margin-top: 12rpx; padding: 16rpx 20rpx; border-radius: var(--pk-r-md); background: var(--pk-surface-sunken); }
+.kn-ev .ev-line { display: block; font-size: 13px; line-height: 1.5; color: var(--pk-ink-2); overflow-wrap: anywhere; }
+.kn-ev .ev-note { display: block; margin-top: 6rpx; font-size: 13px; line-height: 1.5; color: var(--pk-ink-3); }
+
+.rec-fold { display: flex; align-items: center; gap: 16rpx; min-height: 88rpx; }
+.rec-fold .rec-fold-t { flex: none; font-size: 17px; line-height: 1.45; font-weight: 600; }
+.rec-fold .rec-fold-s { flex: 1; min-width: 0; font-size: 13px; line-height: 1.4; color: var(--pk-ink-3); }
+
+.rev-item { padding: 20rpx 0 4rpx; }
+.rev-item + .rev-item { border-top: var(--pk-border-soft); }
+.rev-top { display: flex; align-items: center; gap: 16rpx; min-height: 56rpx; }
+.rev-top .rev-name { font-size: 16px; line-height: 1.45; font-weight: 500; overflow-wrap: anywhere; }
+.rev-top .pill { flex: none; }
+.rev-fb { display: block; margin-top: 6rpx; font-size: 13px; line-height: 1.6; color: var(--pk-ink-3); overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
+.rev-item .link-btn { min-height: 72rpx; }
+
+.help.center { display: block; text-align: center; }
+.rec-actions { margin-top: 32rpx; }
+.rec-actions .btn + .btn { margin-top: 24rpx; }
+.rec-actions > .btn-row { margin-top: 24rpx; }
+.rec-actions .btn-row .btn { margin-top: 0; }
+.rec-danger { margin-top: 24rpx; text-align: center; }
+.rec-danger .link-btn.dan { color: var(--pk-danger); }
+
+/* 只读记录头部（D7 / D8）：时间 + 标题 + 状态 pill，确认页与详情页共用。 */
+.rec-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 24rpx; padding: 8rpx 0 24rpx; }
+.rec-head .rec-meta { display: block; font-size: 13px; line-height: 1.45; color: var(--pk-ink-3); font-variant-numeric: tabular-nums; }
+.rec-head .rec-title { display: block; margin-top: 4rpx; font-size: 22px; line-height: 1.3; font-weight: 700; letter-spacing: -.2px; overflow-wrap: anywhere; }
+.rec-head .pill { flex: none; margin-top: 8rpx; }
+
+/* 两行提示条（标题 + 说明），仍受 pk-notice 的 48px 最小高度约束。 */
+.pk-notice .n-t { display: block; font-size: 14px; line-height: 1.45; font-weight: 600; }
+.pk-notice .n-c { display: block; margin-top: 4rpx; font-size: 13px; line-height: 1.5; }
+.pk-notice .link-btn { flex: none; min-height: 72rpx; color: inherit; font-weight: 600; }

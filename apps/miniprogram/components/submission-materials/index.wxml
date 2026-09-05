@@ -1,10 +1,42 @@
-<view class="materials">
-  <button class="toggle" bindtap="toggle">上传内容 <text>{{open ? '收起' : '展开'}}</text></button>
-  <block wx:if="{{open}}">
-    <text wx:if="{{loading}}">正在读取上传内容…</text>
-    <view wx:if="{{error}}" class="error"><text>{{error}}</text><button bindtap="load">重新读取</button></view>
-    <view class="photos"><button wx:for="{{media}}" wx:key="id" data-id="{{item.id}}" disabled="{{!item.available || item.unavailable || previewBusy}}" bindtap="preview" aria-label="查看照片 {{item.index}}"><image wx:if="{{item.thumbnail}}" src="{{item.thumbnail}}" mode="aspectFit" /><text>照片 {{item.index}}</text><text class="hint">{{item.hint || (item.available ? '点开查看原图' : '原图已删除或不可用')}}</text></button></view>
-    <text wx:if="{{text}}" class="original" selectable="{{true}}">{{text}}</text>
-    <text wx:if="{{!loading && !error && !text && !media.length}}" class="hint">没有可展示的原始材料</text>
-  </block>
+<view class="materials pk-card">
+  <view class="mat-head" aria-role="button" aria-label="展开或收起原始材料" bindtap="toggle">
+    <view class="ico ico-image sm"></view>
+    <text class="mat-t">原始材料</text>
+    <text class="mat-c">{{countLabel}}</text>
+    <view class="chev {{open ? 'up' : ''}}"></view>
+  </view>
+
+  <view class="mat-body" wx:if="{{open}}">
+    <block wx:if="{{loading && !media.length && !text}}">
+      <view class="sk h20"></view>
+      <view class="sk h14"></view>
+    </block>
+
+    <view class="pk-notice err" wx:if="{{error}}">
+      <view class="ico ico-cloud-off-dan sm"></view>
+      <text class="n-txt">{{error}}</text>
+      <view class="ico ico-refresh-dan sm" aria-role="button" aria-label="重新读取原始材料" catchtap="load"></view>
+    </view>
+
+    <view class="pgrid" wx:if="{{media.length}}">
+      <view class="pcell {{item.unavailable ? 'gone' : ''}}" wx:for="{{media}}" wx:key="id"
+        aria-role="button" aria-label="第 {{item.index}} 张学习照片" data-id="{{item.id}}" bindtap="preview">
+        <image class="pimg" wx:if="{{item.thumbnail}}" src="{{item.thumbnail}}" mode="aspectFill" />
+        <view class="ph-center" wx:else><view class="ico ico-image-mute sm"></view></view>
+        <view class="idx">照片 {{item.index}}</view>
+        <view class="cnote" wx:if="{{item.hint}}">{{item.hint}}</view>
+      </view>
+    </view>
+    <text class="help" wx:if="{{media.length}}">照片仅供你核对，不用于展示或分享。点击可查看原图。</text>
+
+    <view class="hairline mt3" wx:if="{{text && media.length}}"></view>
+    <block wx:if="{{text}}">
+      <text class="mat-lbl">家长补充文字</text>
+      <text class="orig" selectable="{{true}}">{{text}}</text>
+    </block>
+
+    <view class="pk-empty inline" wx:if="{{!loading && !error && !text && !media.length}}">
+      <text class="et">没有可展示的原始材料</text>
+    </view>
+  </view>
 </view>

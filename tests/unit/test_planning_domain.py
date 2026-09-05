@@ -6,6 +6,7 @@ from push_kids.planning.domain import (
     apply_feedback,
     group_daily_todos,
     initial_review_date,
+    review_interval_days,
 )
 
 
@@ -54,3 +55,47 @@ def test_group_daily_todos_respects_budget_and_groups_subject_method() -> None:
     assert len(groups[0]["items"]) == 2
     assert groups[0]["optional"] is False
     assert groups[1]["optional"] is True
+
+
+def test_group_daily_todos_passes_through_todo_provenance() -> None:
+    items = [
+        DueKnowledge(
+            "r1",
+            "math",
+            "数学",
+            "进位加法",
+            "口算",
+            4,
+            date(2026, 9, 5),
+            source_submission_id="sub-1",
+            source_occurred_on=date(2026, 9, 2),
+            review_round=2,
+            interval_days=3,
+        )
+    ]
+    item = group_daily_todos(items, budget_minutes=15)[0]["items"][0]
+    assert item["source_submission_id"] == "sub-1"
+    assert item["source_occurred_on"] == "2026-09-02"
+    assert item["review_round"] == 2
+    assert item["interval_days"] == 3
+
+
+def test_group_daily_todos_keeps_history_without_provenance() -> None:
+    items = [DueKnowledge("r1", "math", "数学", "进位加法", "口算", 4, date(2026, 9, 5))]
+    item = group_daily_todos(items, budget_minutes=15)[0]["items"][0]
+    assert item["source_submission_id"] is None
+    assert item["source_occurred_on"] is None
+    assert item["review_round"] == 1
+    assert item["interval_days"] is None
+
+
+def test_interval_days_uses_first_learning_when_never_reviewed() -> None:
+    assert review_interval_days(date(2026, 9, 5), None, date(2026, 9, 2)) == 3
+
+
+def test_interval_days_prefers_last_review_over_first_learning() -> None:
+    assert review_interval_days(date(2026, 9, 5), date(2026, 9, 4), date(2026, 9, 2)) == 1
+
+
+def test_interval_days_is_unknown_without_any_anchor() -> None:
+    assert review_interval_days(date(2026, 9, 5), None, None) is None

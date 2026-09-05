@@ -1,0 +1,82 @@
+<import src="../submission/detail.wxml" />
+<view class="page rd-page">
+  <block wx:if="{{loading && !submission}}">
+    <view class="sk h20 mt2"></view>
+    <view class="sk card-sk"></view>
+    <view class="sk card-sk"></view>
+  </block>
+
+  <view class="pk-notice err mt2" wx:if="{{error}}">
+    <view class="ico ico-cloud-off-dan sm"></view>
+    <text class="n-txt">{{error}}。下拉可以再试一次，已经读到的内容还留着。</text>
+    <view class="ico ico-refresh-dan sm" aria-role="button" aria-label="重新读取这条记录" bindtap="load"></view>
+  </view>
+
+  <block wx:if="{{submission}}">
+    <view class="rec-head">
+      <view class="grow">
+        <text class="rec-meta">学习于 {{submission.time_label}} · 提交于 {{submission.submitted_label}}</text>
+        <text class="rec-title">{{titleText}}</text>
+      </view>
+      <view class="pill {{statusTone}}">{{statusLabel}}</view>
+    </view>
+
+    <view class="pk-notice err" wx:if="{{submission.state === 'failed'}}">
+      <view class="ico ico-cloud-off-dan sm"></view>
+      <view class="n-txt">
+        <text class="n-t">这次没整理出来</text>
+        <text class="n-c">可以重试整理，或改成人工录入。原图和文字都已保留。</text>
+      </view>
+    </view>
+    <view class="pk-notice" wx:elif="{{submission.state === 'pending_confirmation'}}">
+      <view class="ico ico-sparkle-att sm"></view>
+      <view class="n-txt">
+        <text class="n-t">草稿已经整理好了</text>
+        <text class="n-c">这还不是正式记录，确认后才会进入学习档案和复习计划。</text>
+      </view>
+    </view>
+    <view class="pk-notice info" wx:elif="{{submission.awaiting_upload}}">
+      <view class="ico ico-image sm"></view>
+      <view class="n-txt">
+        <text class="n-t">照片还没有传完</text>
+        <text class="n-c">已上传 {{submission.media_count}} 张，可以补传后再继续整理。</text>
+      </view>
+    </view>
+    <view class="pk-notice quiet" wx:elif="{{submission.state === 'queued' || submission.state === 'analyzing'}}">
+      <view class="ico ico-refresh sm"></view>
+      <text class="n-txt">正在整理，整理好会自动出现在这里，可以先去别的页面。</text>
+    </view>
+    <view class="pk-notice quiet" wx:elif="{{submission.state === 'cancelled'}}">
+      <view class="ico ico-info sm"></view>
+      <text class="n-txt">这条提交已取消，原图已删除或不可再查看。</text>
+    </view>
+
+    <view class="mt3" wx:if="{{detailView.hasRecord}}">
+      <template is="rec-summary" data="{{view: detailView}}" />
+    </view>
+
+    <view class="mt3">
+      <submission-materials child-id="{{submission.child_id}}" submission-id="{{id}}"
+        submission-state="{{submission.state}}" default-open="{{submission.state !== 'confirmed'}}" />
+    </view>
+
+    <view class="mt3" wx:if="{{detailView.hasRecord}}">
+      <template is="rec-reviews" data="{{view: detailView, reviewsOpen, reviews, reviewsLoading, reviewsError, hasDue}}" />
+    </view>
+
+    <view class="pk-notice err mt3" wx:if="{{actionError}}">
+      <view class="ico ico-warn-dan sm"></view>
+      <text class="n-txt">{{actionError}}</text>
+    </view>
+
+    <block wx:if="{{canWrite && submission.state !== 'confirmed' && submission.state !== 'cancelled'}}">
+      <template is="rec-draft-actions" data="{{state: submission.state, awaitingUpload: submission.awaiting_upload && submission.media_count < 9, canFinalize: submission.can_finalize_upload, saving}}" />
+    </block>
+    <view class="pk-notice quiet mt3" wx:elif="{{!canWrite}}">
+      <view class="ico ico-eye sm"></view>
+      <text class="n-txt">你现在是只读成员，可以查看这条记录，暂时不能修改。</text>
+    </view>
+  </block>
+
+  <view class="safe-tail"></view>
+</view>

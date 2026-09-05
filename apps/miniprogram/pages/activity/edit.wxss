@@ -1,1 +1,61 @@
-.textarea{min-height:160rpx}
+/* 活动练习记录（G6）：表单卡 + 安静提示 + 吸底主 CTA，只补本页几何。 */
+
+.activity-page { padding-top: 0; }
+.activity-page .head-intro { flex: 1; min-width: 0; }
+
+.form-card { padding: 32rpx 28rpx; }
+
+.form-card .pk-picker .pick-name {
+  flex: 1;
+  min-width: 0;
+  font-size: 16px;
+  color: var(--pk-ink);
+}
+.form-card .pk-picker .tag-sub { flex: none; }
+
+.time-row {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+.time-row .grow { flex: 1; min-width: 0; }
+.time-row .time-cell { flex: 0 0 220rpx; }
+
+.dur-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16rpx;
+}
+.dur-head .lbl { margin-bottom: 0; }
+.dur-head .dur-val {
+  flex: none;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--pk-ink);
+}
+.form-card slider {
+  margin: 16rpx 12rpx 4rpx;
+}
+.dur-scale {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 12rpx;
+  font-size: 12px;
+  color: var(--pk-ink-4);
+}
+
+.note-foot {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 12rpx;
+}
+
+.sk.form-sk { height: 720rpx; }
+
+.pk-cta-bar .cta-err {
+  display: block;
+  margin: 0 0 16rpx;
+  text-align: center;
+}

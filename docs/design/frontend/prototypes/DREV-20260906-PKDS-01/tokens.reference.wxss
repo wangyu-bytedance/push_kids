@@ -1,0 +1,131 @@
+/* 知芽 Push Kids · PKDS-1.0 · WeChat Mini Program tokens
+   用法：在 app.wxss 顶部 @import "styles/tokens.wxss";
+   单位约定：颜色/字号用 px（字号可控），圆角/间距/尺寸用 rpx（rpx = px@375 × 2）
+   发丝线固定 1rpx，不要写 2rpx。 */
+
+page {
+  /* ---- surface ---- */
+  --pk-canvas: #F4F3EC;
+  --pk-canvas-deep: #EDEBE1;
+  --pk-surface: #FFFFFF;
+  --pk-surface-warm: #FCFBF6;
+  --pk-surface-sunken: #EFEEE6;
+
+  /* ---- primary ---- */
+  --pk-primary: #2E6A56;
+  --pk-primary-strong: #21503F;
+  --pk-primary-pressed: #1A4133;
+  --pk-primary-tint: #E6F0EA;
+  --pk-primary-tint-2: #D3E4DB;
+  --pk-primary-hairline: #BCD5CA;
+
+  /* ---- ink ---- */
+  --pk-ink: #1D2B24;
+  --pk-ink-2: #46544D;
+  --pk-ink-3: #79857E;
+  --pk-ink-4: #A6AFA9;
+
+  /* ---- line ---- */
+  --pk-line: #E3E1D6;
+  --pk-line-soft: #EEECE3;
+  --pk-line-strong: #D3D0C3;
+
+  /* ---- status ---- */
+  --pk-attention: #9A6318;
+  --pk-attention-bg: #FBF0DA;
+  --pk-attention-line: #EDD9AF;
+  --pk-danger: #A6423B;
+  --pk-danger-bg: #F9E9E6;
+  --pk-danger-line: #EBCFCB;
+  --pk-success: #2C7A5A;
+  --pk-success-bg: #E5F1E9;
+  --pk-info: #3D5A6C;
+  --pk-info-bg: #E9EFF3;
+
+  /* ---- subject accents (only on <=68rpx surfaces) ---- */
+  --pk-sub-chinese: #B4693D;  --pk-sub-chinese-bg: #F8EDE3;
+  --pk-sub-math: #3A6491;     --pk-sub-math-bg: #E8EFF7;
+  --pk-sub-english: #6B5A9C;  --pk-sub-english-bg: #EDEAF7;
+  --pk-sub-activity: #2C7B69; --pk-sub-activity-bg: #E3F1EC;
+  --pk-sub-other: #6E7A72;    --pk-sub-other-bg: #EDEFEB;
+
+  /* ---- radius ---- */
+  --pk-r-xs: 8rpx;    /* 4px  进度条 / 图表小块 */
+  --pk-r-sm: 12rpx;   /* 6px  科目标签 */
+  --pk-r-md: 16rpx;   /* 8px  分段滑块 / 小按钮 / 热力格 */
+  --pk-r-lg: 24rpx;   /* 12px 输入 / 按钮 / 行卡 */
+  --pk-r-xl: 32rpx;   /* 16px 默认卡片 */
+  --pk-r-2xl: 40rpx;  /* 20px Hero / 半屏上圆角 */
+  --pk-r-pill: 999rpx;
+
+  /* ---- spacing (4px grid) ---- */
+  --pk-s1: 8rpx;  --pk-s2: 16rpx; --pk-s3: 24rpx; --pk-s4: 32rpx;
+  --pk-s5: 40rpx; --pk-s6: 48rpx; --pk-s7: 64rpx; --pk-s8: 80rpx;
+  --pk-gutter: 32rpx;        /* 16px 页面左右安全边距 */
+
+  /* ---- border ---- */
+  --pk-border: 1rpx solid var(--pk-line);
+  --pk-border-soft: 1rpx solid var(--pk-line-soft);
+  --pk-border-primary: 1rpx solid var(--pk-primary-hairline);
+
+  /* ---- elevation ---- */
+  --pk-e1: 0 2rpx 4rpx rgba(29, 43, 36, .04);
+  --pk-e2: 0 4rpx 16rpx rgba(29, 43, 36, .06);
+  --pk-e3: 0 16rpx 48rpx rgba(29, 43, 36, .10);
+  --pk-e-sheet: 0 -12rpx 56rpx rgba(29, 43, 36, .13);
+  --pk-e-fab: 0 12rpx 36rpx rgba(33, 80, 63, .26);
+
+  /* ---- size ---- */
+  --pk-touch-min: 88rpx;   /* 44px */
+  --pk-cta-h: 96rpx;       /* 48px */
+  --pk-btn-md: 88rpx;
+  --pk-btn-sm: 72rpx;
+  --pk-btn-xs: 64rpx;
+  --pk-row-min: 112rpx;    /* 56px */
+  --pk-tabbar: 98rpx;
+
+  /* ---- motion ---- */
+  --pk-dur-fast: 150ms;
+  --pk-dur-base: 200ms;
+  --pk-dur-slow: 240ms;
+  --pk-ease: cubic-bezier(.25, .46, .45, .94);
+  --pk-ease-sheet: cubic-bezier(.32, .72, 0, 1);
+
+  background: var(--pk-canvas);
+  color: var(--pk-ink);
+  font-family: -apple-system, "PingFang SC", "Helvetica Neue", sans-serif;
+  font-size: 16px;
+  line-height: 1.55;
+}
+
+/* ---- type scale (px, 不随 rpx 缩放) ---- */
+.t-display { font-size: 28px; line-height: 1.15; font-weight: 700; letter-spacing: -.4px; }
+.t-h1 { font-size: 22px; line-height: 1.3; font-weight: 700; letter-spacing: -.2px; }
+.t-h2 { font-size: 18px; line-height: 1.4; font-weight: 600; }
+.t-h3 { font-size: 17px; line-height: 1.45; font-weight: 600; }
+.t-body { font-size: 16px; line-height: 1.55; }
+.t-body-m { font-size: 16px; line-height: 1.55; font-weight: 500; }
+.t-sub { font-size: 14px; line-height: 1.5; }
+.t-sub-m { font-size: 14px; line-height: 1.5; font-weight: 500; }
+.t-cap { font-size: 13px; line-height: 1.45; }
+.t-micro { font-size: 11px; line-height: 1.3; font-weight: 500; }
+
+.c-ink { color: var(--pk-ink); }
+.c-ink-2 { color: var(--pk-ink-2); }
+.c-ink-3 { color: var(--pk-ink-3); }
+.c-pri { color: var(--pk-primary); }
+.c-att { color: var(--pk-attention); }
+.c-dan { color: var(--pk-danger); }
+.c-suc { color: var(--pk-success); }
+.tnum { font-variant-numeric: tabular-nums; }
+
+/* ---- page shells ---- */
+.pk-page { min-height: 100vh; padding: 0 var(--pk-gutter); box-sizing: border-box; }
+.pk-page--tabbed { padding-bottom: calc(40rpx + env(safe-area-inset-bottom)); }
+.pk-page--sticky-cta { padding-bottom: calc(160rpx + env(safe-area-inset-bottom)); }
+.pk-cta-bar {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 20;
+  padding: 24rpx var(--pk-gutter) calc(24rpx + env(safe-area-inset-bottom));
+  background: rgba(244, 243, 236, .92); backdrop-filter: blur(24rpx);
+  border-top: var(--pk-border);
+}

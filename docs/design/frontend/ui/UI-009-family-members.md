@@ -3,9 +3,9 @@
 - Status: `CURRENT_LOCAL / 390_NATIVE_CAPTURED / MATRIX_PENDING`
 - Related Feature: `FEAT-002`
 - Related Spec: `SPEC-20260831-09`
-- Baseline: `FDB-20260830-01`
-- Engineering contract: `FEC-20260830-01`
-- Design revision: `DREV-20260905-UX-04`
+- Baseline: `FDB-20260906-02`
+- Engineering contract: `FEC-20260906-04`
+- Design revision: `DREV-20260906-PKDS-01`（屏 G4；取代 `DREV-20260905-UX-04` 的视觉部分）
 - Last reviewed artifact date: 2026-08-31
 - Interactive artifact: `docs/design/frontend/prototypes/DREV-20260831-07/index.html`
 - Snapshot manifest: `docs/design/frontend/snapshots/UI-009/DREV-20260831-07/APPROVAL.md`
@@ -55,3 +55,13 @@
 移除位于独立危险区。390×844当前账号截图证明成员主页、自身标记、卡片边界和正圆刷新按钮；线上旧后端缺少
 有效邀请GET时静默降级并继续展示成员，不制造类似整页错误的警告。实施使用 `FIGMA-WAIVER-BUG010-20260905-01`；
 320/430、成员详情真实点击和双账号验证仍是发布门禁。
+
+## Change references
+
+- 2026-09-06 — `SPEC-20260906-PKDS-01 / DREV-20260906-PKDS-01`（屏 G4）：成员页按 PKDS-1.0 重做。
+  Hero 承载"邀请家人"；邀请口令只保留在内存中用于一次分享，不上屏持久化、不写入日志；
+  成员行使用首字头像并明确区分角色文案与"你"；成员详情改为底部半屏，只读成员降级为只读值；
+  移除成员与降权是破坏性操作，展示影响并二次确认；补齐骨架、空态、页内错误态与下拉刷新。
+  为满足既有测试断言，复制按钮文案是"复制邀请"而不是设计稿的"复制口令"（成员页不得出现
+  "邀请口令"字样）；editor 角色沿用 BUG-010 已定的"可共同记录"。
+  320×568 / 430×932、双账号与真机仍为 `NOT_RUN`。

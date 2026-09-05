@@ -2,6 +2,31 @@ const api = require("../../utils/api");
 const { friendlyTime } = require("../../utils/date");
 const detail = require("./detail");
 
+/* 「把握程度」说的是 AI 识别这条内容的可靠性，不是孩子的掌握程度。 */
+const CONFIDENCE = {
+  high: { label: "较明确", tone: "high", level: 3 },
+  medium: { label: "请核对", tone: "medium", level: 2 },
+  low: { label: "不确定，请重点核对", tone: "low", level: 1 }
+};
+const STATUS_TONE = { failed: "dan", pending_confirmation: "att", confirmed: "suc", cancelled: "neutral" };
+
+/* WXML 不支持方法调用，草稿里的展示字段都在这里算好。 */
+function pointView(point) {
+  const conf = CONFIDENCE[point.confidence] || null;
+  const evidenceLabels = (point.direct_evidence || []).map(
+    (evidence) => `${evidence.source === "image" ? "照片 " + evidence.image_index : "家长文字"}：${evidence.detail}`
+  );
+  return {
+    ...point,
+    confidence_label: conf ? conf.label : "请核对",
+    confidence_tone: conf ? conf.tone : "",
+    confidence_level: conf ? conf.level : 0,
+    evidence_labels: evidenceLabels,
+    evidence_text: evidenceLabels.join("　·　"),
+    context_count: (point.context_used || []).length
+  };
+}
+
 Page({
   data: { ...detail.data, id: "", loading: true, saving: false, error: "", saveError: "", manual: false, submission: null, proposal: null, subjects: [], subjectIndex: -1 },
   ...detail.methods,
@@ -21,13 +46,16 @@ Page({
       const canWrite = !member || member.role !== "viewer";
       const readOnly = !allowed.includes(submission.state) || !canWrite;
       this.setData({ submission: { ...submission, time_label: friendlyTime(submission.occurred_at), submitted_label: friendlyTime(submission.created_at || submission.occurred_at) }, readOnly, canWrite,
-        statusLabel: { queued: submission.awaiting_upload ? "等待上传照片" : "等待分析", analyzing: "正在分析", failed: "分析失败", pending_confirmation: "待确认", confirmed: "已确认", cancelled: "已取消" }[submission.state] || "请刷新状态" });
+        statusLabel: { queued: submission.awaiting_upload ? "等待上传照片" : "等待分析", analyzing: "正在分析", failed: "分析失败", pending_confirmation: "待家长确认", confirmed: "已确认", cancelled: "已取消" }[submission.state] || "请刷新状态",
+        statusTone: STATUS_TONE[submission.state] || "neutral",
+        titleText: submission.source === "photo" || submission.media_count ? `${submission.media_count || 0} 张照片` : "文字记录" });
       if (wx.setNavigationBarTitle) wx.setNavigationBarTitle({ title: readOnly ? "学习记录" : "确认学习内容" });
       if (readOnly) {
         this.setData({ proposal: null, subjects: [], reviews: [], reviewsOpen: false, hasDue: false });
         if (this.loadDetail) await this.loadDetail();
         if (generation === this.loadRequest) {
-          this.setData({ loading: false });
+          const view = this.data.detailView;
+          this.setData({ loading: false, titleText: view && view.hasRecord && view.subjectName ? view.subjectName : this.data.titleText });
           if (this.detailTimer) clearTimeout(this.detailTimer);
           if (!this.hidden && !submission.awaiting_upload && ["queued", "analyzing"].includes(submission.state)) this.detailTimer = setTimeout(() => this.load(), 3500);
         }
@@ -40,11 +68,8 @@ Page({
         knowledge_points: [{ name: "", category: "知识点", review_method: "口头回顾", estimated_minutes: 3 }]
       } : submission.proposal;
       const subjectIndex = subjects.findIndex((item) => item.name === initial.subject_name);
-      const proposal = { ...initial, knowledge_points: initial.knowledge_points.map((point) => ({
-        ...point,
-        confidence_label: { high: "较明确", medium: "请核对", low: "不确定，请重点核对" }[point.confidence] || "请核对",
-        evidence_labels: (point.direct_evidence || []).map((evidence) => `${evidence.source === "image" ? "照片 " + evidence.image_index : "家长文字"}：${evidence.detail}`)
-      })) };
+      const proposal = { ...initial, uncertainties: initial.uncertainties || [], todo_matches: initial.todo_matches || [],
+        knowledge_points: initial.knowledge_points.map(pointView) };
       if (generation === this.loadRequest) this.setData({ loading: false, proposal, subjects, subjectIndex });
     } catch (error) {
       if (generation === this.loadRequest) this.setData({ loading: false, error: error.message, detail: null, submission: null, reviews: [] });
@@ -63,7 +88,7 @@ Page({
     if (field === "name" || field === "category") this.setData({ [`proposal.knowledge_points[${index}].existing_knowledge_id`]: null });
   },
   changeSubject(event) { const subjectIndex = Number(event.detail.value); this.setData({ subjectIndex, "proposal.subject_name": this.data.subjects[subjectIndex].name, "proposal.subject_kind": "learning" }); this.clearAssociations(); },
-  addPoint() { const points = this.data.proposal.knowledge_points.concat([{ name: "", category: "知识点", review_method: "口头回顾", estimated_minutes: 3 }]); this.setData({ "proposal.knowledge_points": points }); },
+  addPoint() { const points = this.data.proposal.knowledge_points.concat([pointView({ name: "", category: "知识点", review_method: "口头回顾", estimated_minutes: 3 })]); this.setData({ "proposal.knowledge_points": points }); },
   removePoint(event) { const points = this.data.proposal.knowledge_points.slice(); points.splice(Number(event.currentTarget.dataset.index), 1); this.setData({ "proposal.knowledge_points": points }); },
   removeTodoMatch(event) { const matches = this.data.proposal.todo_matches.slice(); matches.splice(Number(event.currentTarget.dataset.index), 1); this.setData({ "proposal.todo_matches": matches }); },
   async confirm() {
@@ -90,5 +115,12 @@ Page({
       await api.request(`/submissions/${this.data.id}/cancel`, { method: "POST" });
       wx.navigateBack();
     } catch (error) { wx.showToast({ title: error.message, icon: "none" }); }
-  }
+  },
+  /* 草稿保持不动：只是离开页面，没有确认就不会生成任何正式记录。 */
+  keepDraft() {
+    wx.showToast({ title: "草稿已保留，未生成记录", icon: "none" });
+    setTimeout(() => wx.navigateBack(), 600);
+  },
+  /* 只读态里若又回到待确认，退出只读继续编辑同一份草稿。 */
+  openConfirm() { this.setData({ manual: false }); return this.load(); }
 });

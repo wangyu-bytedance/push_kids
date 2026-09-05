@@ -1,0 +1,99 @@
+<!-- PKDS-1.0 · 学习记录只读视图（D7）与待处理出口（D8）的共享模板：确认页与详情页共用同一套结构与文案。 -->
+
+<template name="rec-summary">
+  <view class="pk-card rec-card">
+    <text class="rec-eyebrow">这次学了什么</text>
+    <text class="rec-summary" selectable="{{true}}">{{view.summary}}</text>
+
+    <view class="hairline mt4"></view>
+    <view class="rec-kn-head">
+      <text class="rec-eyebrow">本次知识点</text>
+      <text class="rec-kn-count tnum">{{view.knowledgeCount}} 个</text>
+    </view>
+    <view class="rec-kn" wx:for="{{view.knowledge}}" wx:key="id">
+      <view class="kn-top">
+        <view class="tag-sub {{view.subjectClass}}">{{item.category}}</view>
+        <text class="kn-name grow">{{item.name}}</text>
+        <view class="confidence {{item.confTone}}" wx:if="{{item.confLabel}}">
+          <text>{{item.confLabel}}</text>
+          <view class="bars">
+            <view class="b {{item.confLevel >= 1 ? 'on' : ''}}"></view>
+            <view class="b {{item.confLevel >= 2 ? 'on' : ''}}"></view>
+            <view class="b {{item.confLevel >= 3 ? 'on' : ''}}"></view>
+          </view>
+        </view>
+      </view>
+      <view class="kn-ev" wx:if="{{item.evidence}}">
+        <text class="ev-line">证据：{{item.evidence}}</text>
+        <text class="ev-note">证据仅供你核对，不代表模型判断孩子已掌握。</text>
+      </view>
+    </view>
+    <view class="pk-empty inline" wx:if="{{!view.knowledgeCount}}">
+      <text class="et">这条记录没有单独的知识点</text>
+    </view>
+  </view>
+</template>
+
+<template name="rec-reviews">
+  <view class="pk-card rec-card">
+    <view class="rec-fold" aria-role="button" aria-label="展开或收起复习情况" bindtap="toggleReviews">
+      <text class="rec-fold-t">复习情况</text>
+      <text class="rec-fold-s">复习日期按固定的复习节奏安排</text>
+      <view class="chev {{reviewsOpen ? 'up' : ''}}"></view>
+    </view>
+
+    <block wx:if="{{reviewsOpen}}">
+      <view class="sk h20 mt2" wx:if="{{reviewsLoading && !reviews.length}}"></view>
+      <view class="pk-notice err mt2" wx:if="{{reviewsError}}">
+        <view class="ico ico-cloud-off-dan sm"></view>
+        <text class="n-txt">{{reviewsError}}</text>
+        <view class="ico ico-refresh-dan sm" aria-role="button" aria-label="重试读取复习情况" catchtap="loadReviews"></view>
+      </view>
+
+      <view class="rev-item" wx:for="{{reviews}}" wx:key="review_id">
+        <view class="rev-top">
+          <text class="rev-name grow">{{item.name}}</text>
+          <view class="pill {{item.statusTone}}">{{item.statusText}}</view>
+        </view>
+        <text class="rev-fb" wx:if="{{item.feedbackText}}">{{item.feedbackText}}</text>
+        <text class="rev-fb" wx:else>还没有复习反馈</text>
+        <view class="link-btn" wx:if="{{item.next_before}}" aria-role="button" aria-label="查看更早反馈" data-id="{{item.review_id}}" bindtap="loadReviews">
+          <text>查看更早反馈</text><view class="chev right pri"></view>
+        </view>
+      </view>
+
+      <view class="pk-empty inline" wx:if="{{!reviewsLoading && !reviewsError && !reviews.length}}">
+        <text class="et">{{view.isActivity ? '课外活动只做记录，不进入复习计划' : '这条记录暂时没有关联的复习计划'}}</text>
+      </view>
+
+      <view class="mt3" wx:if="{{hasDue}}">
+        <view class="btn secondary" aria-role="button" aria-label="去今日复习" bindtap="goReview">去今日复习</view>
+        <text class="help center">浏览材料不会记为完成复习。</text>
+      </view>
+    </block>
+  </view>
+</template>
+
+<template name="rec-draft-actions">
+  <view class="rec-actions">
+    <view class="btn" wx:if="{{state === 'pending_confirmation'}}" aria-role="button" aria-label="查看并确认" bindtap="openConfirm">
+      <view class="ico ico-check-inv sm"></view><text>查看并确认</text>
+    </view>
+    <view class="btn" wx:if="{{state === 'failed'}}" aria-role="button" aria-label="重试整理" data-action="retry" bindtap="runDraftAction">
+      <view class="ico ico-refresh-inv sm" wx:if="{{!saving}}"></view><text>{{saving ? '正在重试…' : '重试整理'}}</text>
+    </view>
+    <view class="btn secondary" wx:if="{{state !== 'pending_confirmation' && !awaitingUpload}}" aria-role="button" aria-label="改成人工录入" bindtap="startManual">
+      <view class="ico ico-pen-pri sm"></view><text>改成人工录入</text>
+    </view>
+    <view class="btn-row" wx:if="{{awaitingUpload || canFinalize}}">
+      <view class="btn neutral" wx:if="{{awaitingUpload}}" aria-role="button" aria-label="补传照片" bindtap="resumePhotos">{{saving ? '上传中…' : '补传照片'}}</view>
+      <view class="btn neutral" wx:if="{{canFinalize}}" aria-role="button" aria-label="继续整理" data-action="finalize" bindtap="runDraftAction">继续整理</view>
+    </view>
+    <view class="rec-danger">
+      <view class="link-btn dan" aria-role="button" aria-label="取消这条提交" data-action="cancel" bindtap="runDraftAction">
+        <view class="ico ico-trash-dan sm"></view><text>取消这条提交</text>
+      </view>
+      <text class="help center">取消后会删除已上传的照片，不可恢复。</text>
+    </view>
+  </view>
+</template>

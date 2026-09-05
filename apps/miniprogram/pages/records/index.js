@@ -13,9 +13,9 @@ Page({
     ...history.data,
     loading: true, error: "", children: [], childIndex: 0, childId: "", mode: "photo",
     date: "", dateLabel: "", time: "", text: "", photos: [], saving: false, uploadProgress: 0,
-    submissionKey: "", canWrite: true
+    submissionKey: "", canWrite: true, today: "", backfill: false, timeOpen: false
   },
-  onLoad() { const now = localParts(); this.setData({ date: now.date, dateLabel: shortDate(now.date), time: now.time, submissionKey: api.newIdempotencyKey("photo-batch") }); },
+  onLoad() { const now = localParts(); this.setData({ date: now.date, dateLabel: shortDate(now.date), time: now.time, today: now.date, submissionKey: api.newIdempotencyKey("photo-batch") }); },
   ...history.methods,
   onShow() {
     const tabBar = this.getTabBar && this.getTabBar();
@@ -23,6 +23,11 @@ Page({
     this.hidden = false;
     this.load().then(() => { if (this.recordScroll && wx.pageScrollTo) wx.pageScrollTo({ scrollTop: this.recordScroll, duration: 0 }); });
   },
+  async onPullDownRefresh() {
+    await this.load();
+    if (wx.stopPullDownRefresh) wx.stopPullDownRefresh();
+  },
+  toggleTime() { if (!this.data.saving) this.setData({ timeOpen: !this.data.timeOpen }); },
   onHide() { this.hidden = true; this.loadId = (this.loadId || 0) + 1; this.historyRequest = (this.historyRequest || 0) + 1; if (this.timer) clearTimeout(this.timer); },
   onUnload() { this.onHide(); },
   schedulePoll() {
@@ -50,7 +55,7 @@ Page({
         if (discard) this.setData({ text: "", photos: [], submissionKey: api.newIdempotencyKey("photo-batch") });
         else { childIndex = children.findIndex((c) => c.id === this.data.childId); if (childIndex < 0) throw new Error("当前学习档案已不可访问"); childId = this.data.childId; }
       }
-      if (childId !== this.data.childId && this.clearHistory) this.clearHistory();
+      if (childId !== this.data.childId && this.clearHistory) { this.clearHistory(); this.restoreFilters(childId); }
       getApp().selectChild(childId);
       const member = getApp().globalData.currentMember;
       const canWrite = !member || member.role !== "viewer";
@@ -84,7 +89,7 @@ Page({
     const field = event.currentTarget.dataset.field;
     const value = event.detail.value;
     const next = { [field]: value, submissionKey: api.newIdempotencyKey(this.data.mode) };
-    if (field === "date") next.dateLabel = shortDate(value);
+    if (field === "date") { next.dateLabel = shortDate(value); next.backfill = value < this.data.today; }
     this.setData(next);
   },
   chooseCamera() { this.choosePhotos(["camera"]); },
@@ -123,8 +128,8 @@ Page({
       }
       const now = localParts();
       this.setData({ submittedId: submitted ? submitted.id : "" });
-      this.setData({ saving: false, photos: [], text: "", uploadProgress: 0, date: now.date, time: now.time, submissionKey: api.newIdempotencyKey(this.data.mode) });
-      wx.showToast({ title: "已提交", icon: "success" });
+      this.setData({ saving: false, photos: [], text: "", uploadProgress: 0, date: now.date, dateLabel: shortDate(now.date), time: now.time, today: now.date, backfill: false, timeOpen: false, submissionKey: api.newIdempotencyKey(this.data.mode) });
+      wx.showToast({ title: "已提交，正在整理", icon: "success" });
       await this.load();
     } catch (error) { this.setData({ saving: false }); wx.showToast({ title: error.message, icon: "none", duration: 2600 }); }
   }

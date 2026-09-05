@@ -1,9 +1,11 @@
 # FEAT-001 — 家庭学习持续跟进系统 MVP
 
 - Status: `CURRENT`
-- Revision: `FEAT-STATE-20260905-HISTORY-01-LOCAL`
-- Last verified: 2026-09-05（本地回归 + 真实微信云托管 staging + 开发者工具 callContainer）
+- Revision: `FEAT-STATE-20260906-PKDS-01-LOCAL`
+- Last verified: 2026-09-06（本地全量自动化回归；三视口原生可见验收 NOT_RUN，本轮未部署）
 - Source Spec: `specs/completed/FEAT-001-PUSH-KIDS-FINAL-SPEC.md` revision `SPEC-20260831-08`
+- Latest applied Spec: `specs/active/SPEC-20260906-PKDS-01-DESIGN-SYSTEM-ROLLOUT.md` revision `SPEC-20260906-PKDS-01`
+- Current visible contract: `docs/design/frontend/prototypes/DREV-20260906-PKDS-01/FRONTEND-SPEC.md`
 - Intermediate design artifact: `docs/design/frontend/prototypes/DREV-20260830-03/index.html`
 
 ## Purpose and current behavior
@@ -12,14 +14,24 @@
 家长确认后才写入学习记录、知识点出现历史和复习计划。系统只安排已经学过的知识，不预测
 下一课，不自动批改或判断掌握。活动只进入日程、练习记录和温和提醒，不进入记忆曲线。
 
-原生微信小程序有五个 Tab：今日、日程、记录、报表、设置。HTML DREV-03 保留为评审过程的
-阶段性产物，不参与运行。
+原生微信小程序有五个 Tab：今日、日程、记录、报表、设置，共 12 个已注册页面。视觉与交互合同
+是 PKDS-1.0（`DREV-20260906-PKDS-01`）。HTML DREV-03 与 UX-03/UX-04 保留为评审过程的阶段性
+产物，不参与运行。
 
 ## Current invariants
 
+- 复习待办每项返回结构化来源：`source_submission_id`、`source_occurred_on`、`review_round`
+  （= `step + 1`）、`interval_days`（= 到期日减去最近一次复习反馈日期，无反馈则减去首次学习
+  日期，两者都缺为 `null`）。中文文案由前端拼装，后端不返回渲染句子；缺来源的历史数据返回
+  `null` 且仍出现在待办中。照片按写入时分配的 `sort_order` 稳定排序（详情、分析取图一致）。
+  正式知识点保存机器识别的 `confidence` 与 `evidence`（仅识别可靠度与出处，不表示掌握程度），
+  首次确认写入后不被后续确认覆盖；本次修订之前的历史数据没有这两个字段。科目区分系统预设
+  （`语文/数学/英语` 且 `kind=learning`，`is_custom=false`）与家长自建（`is_custom=true`）。
 - 历史回看已在本地实现：记录页同页切换新增/历史，已确认/待处理/全部共用分页入口；
-  详情复用确认页，展示正式总结、本次知识、原始材料和关联知识截至现在的复习反馈。
-  今日和报表可带日期/科目跳入；到期项回到今日反馈。浏览不写学习、知识、Review 或 Feedback。
+  详情由独立的只读页面 `pages/record-detail/` 承载（已入档只读态与待处理态），确认页只承载
+  可编辑草稿；两者共用同一份只读 mixin 与模板，展示正式总结、本次知识、原始材料和关联知识
+  截至现在的复习反馈。今日和报表可带日期/科目跳入；到期项回到今日反馈。浏览不写学习、
+  知识、Review 或 Feedback。
 - 历史列表每页 20 条、最多 50 条，稳定游标排序；已确认按学习日期，其他按提交日期。
   无 view 参数的旧 history 接口保留兼容；新 UI 不再依赖 100 条待处理草稿接口。
 - 原图每次经家庭/孩子/提交/媒体关联验证；viewer 允许读取，被移除成员拒绝新读取。
@@ -161,6 +173,16 @@ BUG-010 本地实现已通过微信开发者工具 registered AppID preview 编�
 - BUG-010 的受控 Figma waiver 同样在公开生产前失效；三视口、字体放大、键盘和 iOS/Android 实机证据仍待补齐。
 
 ## Change references
+
+- 2026-09-06 — `SPEC-20260906-PKDS-01`：小程序全部页面改为 PKDS-1.0 视觉与交互合同，新增只读
+  记录详情页并把"可编辑草稿"与"只读记录"拆成两个路由；后端字段级新增 Todo 溯源、媒体稳定
+  排序、知识点识别把握程度与证据、科目自定义标记，使界面上"为什么出现、来自哪张照片、
+  这条草稿有多可靠、这个科目是谁加的"都能被解释而不是被猜测。新字段全部可空、历史数据允许
+  `null`、界面缺字段时隐藏对应展示而不显示占位，因此对旧数据和旧客户端向后兼容。
+  Alembic head 由 `20260905_0002` 升至 `20260905_0003`（含 downgrade 与回填测试）。
+  自动化证据：后端 131 passed / 2 skipped，ruff / mypy / architecture check 通过，前端 59 passed、
+  ESLint 通过、`validate_miniprogram.py pages=12`。三视口原生几何、字体放大、键盘态与真机
+  弱网仍为 `NOT_RUN`，因此仍不满足公开发布门禁，本轮也未部署。
 
 - `SPEC-HISTORY-20260905-01 / DREV-20260905-HISTORY-01`: 历史列表、复用只读详情、原始材料读取、
   复习反馈回看和今日/报表联通。本地后端 119 passed / 2 MySQL skipped；前端 58 passed；

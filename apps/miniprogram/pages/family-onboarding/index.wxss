@@ -1,1 +1,41 @@
-.onboarding-page{padding-top:70rpx}.onboarding-mark{width:104rpx;height:104rpx;line-height:104rpx;margin-bottom:30rpx;border-radius:34rpx;background:var(--surface-soft);color:var(--primary);text-align:center;font-size:52rpx;font-weight:750}.intro{display:block;margin:18rpx 0 44rpx;color:var(--muted)}.choice{display:block;width:100%;min-height:164rpx;margin-bottom:20rpx;padding:28rpx;text-align:left;border:1rpx solid var(--line);border-radius:28rpx;background:var(--surface);color:var(--ink);font-size:26rpx}.choice::after,.text-action::after{border:0}.choice.primary-choice{background:#E4F0EB;border-color:#B8D6CC}.choice-title{display:block;margin-bottom:8rpx;color:var(--primary-dark);font-size:34rpx;font-weight:730}.text-action{width:100%;min-height:88rpx;margin-top:12rpx;border:0;background:transparent;color:var(--primary);font-size:27rpx}.pending-card .button{margin-top:30rpx}.request-code{display:block;margin:12rpx 0;padding:12rpx 16rpx;border-radius:14rpx;background:var(--surface-soft);color:var(--primary-dark);font-weight:700;text-align:center}
+/* 首次引导（A1/A2/A3/A4）：只写本页特有几何，其余复用 tokens / atoms / icons。 */
+.onboarding-page { padding-top: 48rpx; }
+/* 有吸底 CTA 时给内容留出空间，避免最后一个字段被遮住。 */
+.onboarding-page.sticky-cta { padding-bottom: calc(280rpx + env(safe-area-inset-bottom)); }
+
+/* A1 品牌与标题 */
+.brand { width: 112rpx; height: 112rpx; border-radius: var(--pk-r-xl); background: var(--pk-primary); display: flex; align-items: center; justify-content: center; }
+.brand-title { display: block; margin-top: 40rpx; }
+.brand-title text { display: block; font-size: 22px; line-height: 1.3; font-weight: 700; letter-spacing: -.2px; }
+.brand-copy { display: block; margin-top: 24rpx; }
+.brand-copy text { display: block; font-size: 14px; line-height: 1.55; color: var(--pk-ink-2); }
+
+/* A1 两张路径卡：整卡可点，右侧 chevron */
+.choice-card { display: flex; align-items: center; gap: 24rpx; min-height: 176rpx; margin-top: 40rpx; padding: 28rpx; box-sizing: border-box; background: var(--pk-surface); border: var(--pk-border); border-radius: var(--pk-r-xl); }
+.choice-card + .choice-card { margin-top: 24rpx; }
+.choice-card.primary { background: var(--pk-primary-tint); border-color: var(--pk-primary-hairline); }
+.choice-card .choice-mark { flex: none; width: 88rpx; height: 88rpx; border-radius: 50%; background: var(--pk-primary); display: flex; align-items: center; justify-content: center; }
+.choice-card .choice-mark.plain { background: var(--pk-surface-sunken); }
+.choice-card .choice-t { display: block; font-size: 17px; line-height: 1.45; font-weight: 600; color: var(--pk-primary-strong); }
+.choice-card:not(.primary) .choice-t { color: var(--pk-ink); }
+.choice-card .choice-s { display: block; margin-top: 6rpx; font-size: 13px; line-height: 1.5; color: var(--pk-ink-3); }
+
+/* A2 / A3 页内头部与吸底条 */
+.step-head { padding: 8rpx 0 32rpx; }
+.token-input { font-size: 15px; }
+.pk-cta-bar .cta-hint { display: block; margin-top: 12rpx; text-align: center; font-size: 13px; line-height: 1.45; color: var(--pk-ink-3); }
+.center-row { display: flex; align-items: center; justify-content: center; }
+
+/* A4 等待确认：琥珀色空态图 + 申请码卡 */
+.pending-empty { padding: 72rpx 48rpx 32rpx; }
+.pk-empty .em.att { background: var(--pk-attention-bg); }
+.code-card { text-align: center; }
+.code-card .code-cap { display: block; font-size: 13px; line-height: 1.45; color: var(--pk-ink-3); }
+.code-card .code-val { display: block; margin-top: 12rpx; font-size: 28px; line-height: 1.15; font-weight: 700; letter-spacing: 8rpx; color: var(--pk-primary-strong); }
+.code-card .code-help { display: block; margin-top: 12rpx; font-size: 13px; line-height: 1.5; color: var(--pk-ink-3); }
+.code-card .code-copy { display: flex; justify-content: center; margin-top: 24rpx; }
+.danger-link { color: var(--pk-danger); }
+
+/* 首屏骨架：沿用真实布局的圆角 */
+.sk.brand-sk { width: 112rpx; height: 112rpx; border-radius: var(--pk-r-xl); }
+.sk.card-sk { height: 176rpx; }

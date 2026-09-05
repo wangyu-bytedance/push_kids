@@ -31,6 +31,17 @@ def _boundary(day: date) -> datetime:
     return datetime.combine(day, datetime.min.time(), tzinfo=SHANGHAI)
 
 
+def _stored_evidence(payload: str | None) -> list:
+    """Stored evidence is untrusted history: unreadable or non-list content reads as empty."""
+    if not payload:
+        return []
+    try:
+        parsed = json.loads(payload)
+    except (ValueError, TypeError):
+        return []
+    return parsed if isinstance(parsed, list) else []
+
+
 class LearningHistory:
     @staticmethod
     def submission(db: Session, family: str, child: str, sid: str) -> LearningSubmission:
@@ -290,7 +301,7 @@ class LearningHistory:
             .where(
                 SubmissionMedia.submission_id == sid,
             )
-            .order_by(SubmissionMedia.created_at, SubmissionMedia.id)
+            .order_by(SubmissionMedia.sort_order, SubmissionMedia.created_at, SubmissionMedia.id)
         ).all()
         return {
             "submission_id": sid,
@@ -310,7 +321,16 @@ class LearningHistory:
             }
             if record and subject
             else None,
-            "knowledge": [{"id": k.id, "name": k.name, "category": k.category} for k in knowledge],
+            "knowledge": [
+                {
+                    "id": k.id,
+                    "name": k.name,
+                    "category": k.category,
+                    "confidence": k.confidence,
+                    "evidence": _stored_evidence(k.evidence_json),
+                }
+                for k in knowledge
+            ],
             "media": [
                 {
                     "id": m.id,

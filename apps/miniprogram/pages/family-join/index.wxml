@@ -1,6 +1,93 @@
-<view class="page join-page">
-  <text class="eyebrow">家人邀请</text><text class="title">先确认，再一起记录</text>
-  <view class="skeleton" wx:if="{{loading}}"></view><view class="notice error" wx:if="{{error}}" bindtap="load">{{error}} · 点此重试</view>
-  <view class="card" wx:if="{{preview && !applied}}"><text class="section-title">{{preview.family_name}}</text><text class="muted">家庭中的孩子：{{preview.childLabel}}</text><view class="privacy-note">这里只展示家庭称呼和孩子称呼。加入前不会展示学习记录、照片或成员名单。</view><view class="field"><label class="label" for="relationship">你与孩子的关系</label><input id="relationship" class="input" value="{{relationship}}" bindinput="setRelationship" placeholder="例如：爸爸、奶奶" maxlength="30"/></view><button class="button" loading="{{submitting}}" disabled="{{submitting}}" bindtap="apply">申请加入</button></view>
-  <view class="card empty" wx:if="{{applied}}"><view class="empty-mark">✓</view><text class="section-title">申请已发送</text><text class="request-code">申请码 {{requestCode}}</text><text class="muted">请把申请码告诉家庭管理员核对。管理员确认后，你才能看到家庭内容。</text><button class="button secondary" bindtap="goPending">查看申请状态</button></view>
+<view class="page join-page {{preview && !applied ? 'sticky-cta' : ''}}">
+  <view class="step-head">
+    <text class="pg-kicker">使用家人发来的邀请</text>
+    <text class="pg-title">申请加入家庭</text>
+  </view>
+
+  <view class="pk-notice err" wx:if="{{error && !preview && !tokenMissing}}">
+    <view class="ico ico-cloud-off-dan sm"></view>
+    <text class="n-txt">{{error}}。可以点右侧重试，或向家人重新获取邀请。</text>
+    <view class="ico ico-refresh-dan sm" aria-role="button" aria-label="重试" bindtap="load"></view>
+  </view>
+
+  <block wx:if="{{loading}}">
+    <view class="sk card-sk"></view>
+    <view class="sk card-sk"></view>
+  </block>
+
+  <!-- 申请已发送：等待管理员确认 -->
+  <block wx:elif="{{applied}}">
+    <view class="pk-empty applied-empty">
+      <view class="em att"><view class="ico ico-clock-att lg"></view></view>
+      <text class="et">申请已发送</text>
+      <text class="ec">管理员确认后，你才会看到这个家庭的内容。</text>
+    </view>
+
+    <view class="pk-card code-card" wx:if="{{requestCode}}">
+      <text class="code-cap">申请码</text>
+      <text class="code-val tnum">{{requestCode}}</text>
+      <text class="code-help">把申请码告诉管理员用于核对</text>
+      <view class="code-copy">
+        <view class="btn sm neutral" aria-role="button" aria-label="复制申请码" bindtap="copyRequestCode">复制申请码</view>
+      </view>
+    </view>
+
+    <view class="btn secondary mt3" aria-role="button" aria-label="查看申请状态" bindtap="goPending">
+      <view class="ico ico-refresh-pri sm"></view><text>查看申请状态</text>
+    </view>
+    <view class="pk-notice quiet mt3">
+      <view class="ico ico-info sm"></view>
+      <text class="n-txt">获批前不会看到孩子的学习记录或照片。</text>
+    </view>
+  </block>
+
+  <!-- 邀请预览 + 提交申请 -->
+  <block wx:elif="{{preview}}">
+    <view class="pk-card family-card">
+      <view class="flex">
+        <view class="fam-mark">{{preview.mark}}</view>
+        <view class="grow">
+          <text class="fam-name">{{preview.family_name}}</text>
+          <text class="fam-sub">家庭中的孩子：{{preview.childLabel}}</text>
+        </view>
+      </view>
+      <view class="hairline mt3"></view>
+      <text class="fam-note">申请后需要管理员确认。你会看到一个申请码，可以直接告诉家人核对。</text>
+    </view>
+
+    <view class="pk-card mt3">
+      <view class="pk-field">
+        <text class="lbl">你与孩子的关系</text>
+        <picker range="{{relations}}" value="{{relationIndex}}" bindchange="chooseRelation">
+          <view class="pk-picker"><text class="{{relationIndex < 0 ? 'pk-ph' : ''}}">{{relationText}}</text><view class="chev"></view></view>
+        </picker>
+        <input class="pk-input mt2" wx:if="{{customRelation}}" value="{{relationship}}" bindinput="setRelationship" placeholder="写下你希望家人看到的称谓" placeholder-class="pk-ph" maxlength="30" />
+        <view class="help">管理员会看到这个称谓，用来确认你是谁。</view>
+      </view>
+    </view>
+
+    <view class="pk-notice quiet mt3">
+      <view class="ico ico-shield sm"></view>
+      <text class="n-txt">这里只展示家庭称呼和孩子称呼。加入前不会展示学习记录、照片或成员名单。</text>
+    </view>
+
+    <view class="pk-cta-bar">
+      <text class="err-text cta-err" wx:if="{{error}}">{{error}}·可以修改称谓后再次提交</text>
+      <view class="btn {{canSubmit && !submitting ? '' : 'is-disabled'}}" aria-role="button" aria-label="提交加入申请" aria-disabled="{{!canSubmit || submitting}}" bindtap="apply">
+        <text>{{submitting ? '正在提交…' : '提交加入申请'}}</text>
+      </view>
+      <text class="cta-hint" wx:if="{{submitHint && !error}}">{{submitHint}}</text>
+      <view class="center-row">
+        <view class="link-btn" aria-role="button" aria-label="返回" bindtap="goBack"><text>返回</text></view>
+      </view>
+    </view>
+  </block>
+
+  <!-- 口令缺失或失效 -->
+  <view class="pk-empty" wx:else>
+    <view class="em"><view class="ico ico-family-pri lg"></view></view>
+    <text class="et">这条邀请用不了</text>
+    <text class="ec">邀请口令可能已过期或被撤销。请向家人重新获取一条邀请，再回到这里申请加入。</text>
+    <view class="ea"><view class="btn secondary" aria-role="button" aria-label="返回" bindtap="goBack">返回上一步</view></view>
+  </view>
 </view>

@@ -17,7 +17,7 @@ from push_kids.agent_processing.contracts import (
     AnalysisProposal,
     unique_knowledge_points,
 )
-from push_kids.children.service import ChildrenService
+from push_kids.children.service import ChildrenService, is_custom_subject
 from push_kids.knowledge.normalization import normalize_knowledge_name
 from push_kids.learning.schemas import (
     ConfirmationResult,
@@ -141,6 +141,16 @@ class LearningService:
         if item is None:
             raise NotFoundError("没有找到这条学习记录")
         return item
+
+    @staticmethod
+    def _next_media_sort_order(db: Session, submission_id: str) -> int:
+        """Next stable photo position for one submission; callers hold the submission row lock."""
+        current = db.scalar(
+            select(func.max(SubmissionMedia.sort_order)).where(
+                SubmissionMedia.submission_id == submission_id
+            )
+        )
+        return 0 if current is None else int(current) + 1
 
     @classmethod
     def create_manual(
@@ -380,6 +390,8 @@ class LearningService:
         ticket.sha256 = claimed.sha256
         ticket.state = MediaState.claimed.value
         ticket.claimed_at = utcnow()
+        if submission.id is None:
+            raise RuntimeError("submission id was not generated")
         db.add(
             SubmissionMedia(
                 submission_id=submission.id,
@@ -387,6 +399,7 @@ class LearningService:
                 path=claimed.storage_ref,
                 content_type=claimed.content_type,
                 byte_size=claimed.byte_size,
+                sort_order=cls._next_media_sort_order(db, submission.id),
             )
         )
         try:
@@ -444,7 +457,7 @@ class LearningService:
             raise RuntimeError("submission id was not generated")
         stored_paths: list[Path] = []
         try:
-            for upload in files:
+            for position, upload in enumerate(files):
                 stored = await media_store.save(family_id, submission.id, upload)
                 stored_paths.append(Path(stored.path))
                 db.add(
@@ -453,6 +466,7 @@ class LearningService:
                         path=stored.path,
                         content_type=stored.content_type,
                         byte_size=stored.byte_size,
+                        sort_order=position,
                     )
                 )
             if enqueue:
@@ -483,7 +497,8 @@ class LearningService:
         submission_id: str,
         upload: UploadFile,
     ) -> LearningSubmission:
-        submission = cls._submission(db, family_id, submission_id)
+        # Locking the submission row serializes concurrent appends so positions stay unique.
+        submission = cls._submission(db, family_id, submission_id, for_update=True)
         if submission.state != SubmissionState.queued.value:
             raise ConflictError("当前记录已经开始分析，不能继续添加照片")
         job = db.scalar(select(AgentJob).where(AgentJob.submission_id == submission.id))
@@ -509,6 +524,7 @@ class LearningService:
                     path=stored.path,
                     content_type=stored.content_type,
                     byte_size=stored.byte_size,
+                    sort_order=cls._next_media_sort_order(db, submission.id),
                 )
             )
             db.commit()
@@ -759,6 +775,9 @@ class LearningService:
                     child_id=submission.child_id,
                     name=data.proposal.subject_name,
                     kind=data.proposal.subject_kind,
+                    is_custom=is_custom_subject(
+                        data.proposal.subject_name, data.proposal.subject_kind
+                    ),
                 )
                 db.add(subject)
                 db.flush()
@@ -805,9 +824,21 @@ class LearningService:
                     category=point.category,
                     review_method=point.review_method,
                     estimated_minutes=point.estimated_minutes,
+                    confidence=point.confidence,
+                    evidence_json=json.dumps(
+                        [item.model_dump() for item in point.direct_evidence], ensure_ascii=False
+                    ),
                 )
                 db.add(knowledge)
                 db.flush()
+            else:
+                # Keep the first recognition provenance; only fill gaps left by older records.
+                if knowledge.confidence is None:
+                    knowledge.confidence = point.confidence
+                if knowledge.evidence_json is None:
+                    knowledge.evidence_json = json.dumps(
+                        [item.model_dump() for item in point.direct_evidence], ensure_ascii=False
+                    )
             db.add(
                 KnowledgeOccurrence(
                     family_id=family_id,
@@ -828,6 +859,7 @@ class LearningService:
                     family_id=family_id,
                     child_id=submission.child_id,
                     knowledge_item_id=knowledge.id,
+                    source_submission_id=submission.id,
                     due_date=due,
                 )
                 db.add(review)

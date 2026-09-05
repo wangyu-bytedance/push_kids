@@ -1,1 +1,91 @@
-<view class="page requests-page"><view class="page-head"><view><text class="eyebrow">管理员确认</text><text class="title">加入申请</text></view></view><view class="notice error" wx:if="{{error}}" bindtap="load">{{error}} · 点此重试</view><view class="skeleton" wx:if="{{loading}}"></view><view class="empty" wx:if="{{!loading && !requests.length}}"><view class="empty-mark">✓</view><text class="section-title">没有待处理申请</text><text class="muted">新的申请会出现在这里。</text></view><view class="card request-card" wx:for="{{requests}}" wx:key="id"><view class="request-head"><view class="grow"><text class="section-title request-title">{{item.relationship_label}}申请加入</text><text class="muted tiny">{{item.createdLabel}}</text></view><text class="request-code">申请码 {{item.request_code}}</text></view><text class="muted small block request-copy">请与申请人核对申请码，再选择协作权限。确认后，这条邀请会立即失效。</text><view class="role-actions"><button disabled="{{actingId}}" loading="{{actingId === item.id}}" data-id="{{item.id}}" data-role="viewer" bindtap="approve">同意 · 仅查看</button><button disabled="{{actingId}}" loading="{{actingId === item.id}}" data-id="{{item.id}}" data-role="editor" bindtap="approve">同意 · 可记录</button><button disabled="{{actingId}}" loading="{{actingId === item.id}}" data-id="{{item.id}}" data-role="manager" bindtap="approve">同意 · 管理员</button></view><button class="reject" disabled="{{actingId}}" data-id="{{item.id}}" bindtap="reject">拒绝申请</button></view></view>
+<view class="page requests-page">
+  <view class="pk-notice err" wx:if="{{error}}">
+    <view class="ico ico-cloud-off-dan sm"></view>
+    <text class="n-txt">{{error}}。已经读取到的申请还能继续处理。</text>
+    <view class="ico ico-refresh-dan sm" aria-role="button" aria-label="重试" bindtap="load"></view>
+  </view>
+
+  <view class="pg-head">
+    <view class="grow">
+      <text class="pg-kicker">管理员确认</text>
+      <text class="pg-title">加入申请</text>
+    </view>
+    <view class="icon-btn" aria-role="button" aria-label="刷新" bindtap="load"><view class="ico ico-refresh sm"></view></view>
+  </view>
+
+  <view class="pk-notice quiet" wx:if="{{isManager}}">
+    <view class="ico ico-info-mute sm"></view>
+    <text class="n-txt">同意后，对方就能看到这个家庭所有孩子的学习记录和照片。请先与申请人核对申请码。</text>
+  </view>
+
+  <block wx:if="{{loading && !requests.length}}">
+    <view class="sk card-sk mt3"></view>
+    <view class="sk card-sk"></view>
+  </block>
+
+  <block wx:elif="{{!isManager}}">
+    <view class="pk-empty">
+      <view class="em"><view class="ico ico-shield-pri lg"></view></view>
+      <text class="et">只有管理员可以处理加入申请</text>
+      <text class="ec">{{roleNote}}</text>
+    </view>
+  </block>
+
+  <block wx:else>
+    <view class="pk-empty" wx:if="{{!requests.length}}">
+      <view class="em"><view class="ico ico-check-pri lg"></view></view>
+      <text class="et">暂时没有待处理的申请</text>
+      <text class="ec">家人提交申请后会出现在这里，下拉这一页可以重新读取。</text>
+    </view>
+
+    <view class="pk-card req-card {{item.resultText ? 'is-done' : ''}}" wx:for="{{requests}}" wx:key="id">
+      <view class="flex top">
+        <view class="req-ava">{{item.avatar}}</view>
+        <view class="grow">
+          <text class="req-title">微信用户 · 申请加入</text>
+          <text class="req-sub">{{item.createdLabel}} 提交 · 通过邀请</text>
+        </view>
+      </view>
+
+      <view class="req-row" aria-role="button" aria-label="申请码 {{item.request_code}}，点击复制" data-code="{{item.request_code}}" bindtap="copyCode">
+        <text class="r-lbl">申请码</text>
+        <text class="r-code grow">{{item.request_code}}</text>
+        <view class="ico ico-note-pri sm"></view>
+      </view>
+
+      <view class="req-row">
+        <text class="r-lbl">希望称谓</text>
+        <view class="r-value grow trunc">{{item.relationship_label}}</view>
+      </view>
+
+      <view class="req-row" wx:if="{{!item.resultText}}">
+        <text class="r-lbl">协作权限</text>
+        <picker class="grow" range="{{roleOptions}}" range-key="text" value="{{item.roleIndex}}" data-index="{{index}}" bindchange="chooseRole">
+          <view class="pk-picker"><text class="trunc">{{item.roleText}}</text><view class="chev"></view></view>
+        </picker>
+      </view>
+      <view class="help" wx:if="{{!item.resultText}}">仅查看＝只能看不能改；可记录＝可以补记录和确认；管理员＝还能管理成员与申请。</view>
+
+      <text class="err-text" wx:if="{{item.rowError}}">{{item.rowError}}</text>
+
+      <view class="result-line" wx:if="{{item.resultText}}">
+        <view class="ico ico-check-pri sm"></view>
+        <text class="res-txt">{{item.resultText}}，这条申请马上会从列表里移出。</text>
+      </view>
+
+      <view class="btn-row mt3" wx:else>
+        <view class="btn md neutral {{actingId ? 'is-disabled' : ''}}" aria-role="button" aria-label="拒绝" aria-disabled="{{actingId ? true : false}}" data-index="{{index}}" bindtap="reject">
+          <text>拒绝</text>
+        </view>
+        <view class="btn md {{actingId ? 'is-disabled' : ''}}" aria-role="button" aria-label="同意加入" aria-disabled="{{actingId ? true : false}}" data-index="{{index}}" bindtap="approve">
+          <text>{{actingId === item.id ? '正在处理…' : '同意加入'}}</text>
+        </view>
+      </view>
+      <view class="help" wx:if="{{actingId === item.id}}">正在与服务器确认，这条申请还没变更，请稍等。</view>
+    </view>
+
+    <view class="help" wx:if="{{requests.length}}">同意后这条邀请会立即失效，需要再邀请其他家人时可以重新生成。</view>
+  </block>
+
+  <view class="safe-tail"></view>
+</view>

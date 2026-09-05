@@ -6,6 +6,7 @@
     "pages/reports/index",
     "pages/settings/index",
     "pages/submission/confirm",
+    "pages/record-detail/index",
     "pages/activity/edit",
     "pages/family-onboarding/index",
     "pages/family-join/index",
@@ -14,16 +15,16 @@
   ],
   "window": {
     "navigationBarTitleText": "知芽",
-    "navigationBarBackgroundColor": "#F6F6F0",
+    "navigationBarBackgroundColor": "#F4F3EC",
     "navigationBarTextStyle": "black",
-    "backgroundColor": "#F6F6F0",
+    "backgroundColor": "#F4F3EC",
     "backgroundTextStyle": "dark"
   },
   "tabBar": {
     "custom": true,
-    "color": "#69766F",
-    "selectedColor": "#296653",
-    "backgroundColor": "#FFFEFB",
+    "color": "#79857E",
+    "selectedColor": "#2E6A56",
+    "backgroundColor": "#FFFEFA",
     "borderStyle": "white",
     "list": [
       { "pagePath": "pages/today/index", "text": "今日", "iconPath": "assets/tab-today.png", "selectedIconPath": "assets/tab-today-active.png" },

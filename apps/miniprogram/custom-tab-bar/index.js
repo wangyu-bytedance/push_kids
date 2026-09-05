@@ -7,9 +7,9 @@ const tabs = [
 ];
 
 Component({
-  data: { selected: 0, tabs },
-  lifetimes: { attached() { this.syncSelected(); } },
-  pageLifetimes: { show() { this.syncSelected(); } },
+  data: { selected: 0, tabs, badges: {} },
+  lifetimes: { attached() { this.syncSelected(); this.syncBadges(); } },
+  pageLifetimes: { show() { this.syncSelected(); this.syncBadges(); } },
   methods: {
     syncSelected() {
       const pages = getCurrentPages();
@@ -17,6 +17,10 @@ Component({
       const route = `/${current ? current.route : ''}`;
       const selected = tabs.findIndex((item) => item.pagePath === route);
       if (selected >= 0 && selected !== this.data.selected) this.setData({ selected });
+    },
+    syncBadges() {
+      const badges = (getApp() && getApp().globalData.tabBadges) || {};
+      this.setData({ badges: { records: badges.records || 0 } });
     },
     switchTab(event) {
       const selected = Number(event.currentTarget.dataset.index);

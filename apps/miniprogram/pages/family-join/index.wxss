@@ -1,1 +1,27 @@
-.join-page{padding-top:54rpx}.join-page .title{margin:10rpx 0 34rpx}.privacy-note{margin:26rpx 0;padding:22rpx;border-left:6rpx solid #8DB8AA;background:#EEF5F1;color:#53635D;font-size:25rpx}.empty .button{margin-top:30rpx}.request-code{display:block;margin:16rpx 0;padding:12rpx 16rpx;border-radius:14rpx;background:var(--surface-soft);color:var(--primary-dark);font-weight:700}
+/* 加入家庭（A3 + 申请已发送态）：只写本页几何，其余复用 tokens / atoms / icons。 */
+.join-page { padding-top: 24rpx; }
+/* 有吸底 CTA 时给内容留出空间，避免隐私说明被遮住。 */
+.join-page.sticky-cta { padding-bottom: calc(300rpx + env(safe-area-inset-bottom)); }
+.step-head { padding: 8rpx 0 32rpx; }
+
+/* 邀请预览卡：主色浅底，只展示家庭称呼与孩子称呼 */
+.family-card { background: var(--pk-primary-tint); border-color: var(--pk-primary-hairline); }
+.family-card .fam-mark { flex: none; width: 88rpx; height: 88rpx; border-radius: var(--pk-r-lg); background: var(--pk-surface); color: var(--pk-primary-strong); font-size: 17px; font-weight: 700; line-height: 88rpx; text-align: center; }
+.family-card .fam-name { display: block; font-size: 17px; line-height: 1.45; font-weight: 600; color: var(--pk-primary-strong); }
+.family-card .fam-sub { display: block; margin-top: 4rpx; font-size: 13px; line-height: 1.45; color: #4C6459; }
+.family-card .fam-note { display: block; margin-top: 24rpx; font-size: 13px; line-height: 1.5; color: #4C6459; }
+
+/* 申请码卡与吸底条 */
+.applied-empty { padding: 64rpx 48rpx 32rpx; }
+.pk-empty .em.att { background: var(--pk-attention-bg); }
+.code-card { text-align: center; }
+.code-card .code-cap { display: block; font-size: 13px; line-height: 1.45; color: var(--pk-ink-3); }
+.code-card .code-val { display: block; margin-top: 12rpx; font-size: 28px; line-height: 1.15; font-weight: 700; letter-spacing: 8rpx; color: var(--pk-primary-strong); }
+.code-card .code-help { display: block; margin-top: 12rpx; font-size: 13px; line-height: 1.5; color: var(--pk-ink-3); }
+.code-card .code-copy { display: flex; justify-content: center; margin-top: 24rpx; }
+
+.pk-cta-bar .cta-err { display: block; margin: 0 0 16rpx; text-align: center; }
+.pk-cta-bar .cta-hint { display: block; margin-top: 12rpx; text-align: center; font-size: 13px; line-height: 1.45; color: var(--pk-ink-3); }
+.center-row { display: flex; align-items: center; justify-content: center; }
+
+.sk.card-sk { height: 232rpx; }

@@ -9,12 +9,18 @@ from sqlalchemy.orm import Session
 from push_kids.children.service import ChildrenService
 from push_kids.persistence.models import (
     KnowledgeItem,
+    LearningSubmission,
     ReviewFeedback,
     ReviewFeedbackRequest,
     ReviewItem,
     Subject,
 )
-from push_kids.planning.domain import DueKnowledge, apply_feedback, group_daily_todos
+from push_kids.planning.domain import (
+    DueKnowledge,
+    apply_feedback,
+    group_daily_todos,
+    review_interval_days,
+)
 from push_kids.platform.errors import ConflictError, NotFoundError
 from push_kids.platform.time import local_date
 
@@ -126,9 +132,17 @@ class PlanningService:
         child = ChildrenService.get_child(db, family_id, child_id)
         target = day or local_date()
         rows = db.execute(
-            select(ReviewItem, KnowledgeItem, Subject)
+            select(ReviewItem, KnowledgeItem, Subject, LearningSubmission.occurred_at)
             .join(KnowledgeItem, ReviewItem.knowledge_item_id == KnowledgeItem.id)
             .join(Subject, KnowledgeItem.subject_id == Subject.id)
+            .outerjoin(
+                LearningSubmission,
+                and_(
+                    LearningSubmission.id == ReviewItem.source_submission_id,
+                    LearningSubmission.family_id == family_id,
+                    LearningSubmission.child_id == child_id,
+                ),
+            )
             .where(
                 ReviewItem.family_id == family_id,
                 ReviewItem.child_id == child_id,
@@ -137,18 +151,48 @@ class PlanningService:
                 Subject.kind == "learning",
             )
         ).all()
-        items = [
-            DueKnowledge(
-                review_id=review.id,
-                subject_id=subject.id,
-                subject_name=subject.name,
-                knowledge_name=knowledge.name,
-                review_method=knowledge.review_method,
-                estimated_minutes=knowledge.estimated_minutes,
-                due_date=review.due_date,
+        review_ids = [review.id for review, _, _, _ in rows]
+        last_reviewed: dict[str, date] = {}
+        if review_ids:
+            for item_id, occurred_at in (
+                db.execute(
+                    select(
+                        ReviewFeedback.review_item_id,
+                        func.max(ReviewFeedback.occurred_at),
+                    )
+                    .where(
+                        ReviewFeedback.family_id == family_id,
+                        ReviewFeedback.review_item_id.in_(review_ids),
+                    )
+                    .group_by(ReviewFeedback.review_item_id)
+                )
+                .tuples()
+                .all()
+            ):
+                if item_id is not None and occurred_at is not None:
+                    last_reviewed[item_id] = local_date(occurred_at)
+        items = []
+        for review, knowledge, subject, source_occurred_at in rows:
+            source_occurred_on = (
+                local_date(source_occurred_at) if source_occurred_at is not None else None
             )
-            for review, knowledge, subject in rows
-        ]
+            items.append(
+                DueKnowledge(
+                    review_id=review.id,
+                    subject_id=subject.id,
+                    subject_name=subject.name,
+                    knowledge_name=knowledge.name,
+                    review_method=knowledge.review_method,
+                    estimated_minutes=knowledge.estimated_minutes,
+                    due_date=review.due_date,
+                    source_submission_id=review.source_submission_id,
+                    source_occurred_on=source_occurred_on,
+                    review_round=(review.step or 0) + 1,
+                    interval_days=review_interval_days(
+                        review.due_date, last_reviewed.get(review.id), source_occurred_on
+                    ),
+                )
+            )
         return group_daily_todos(items, child.daily_budget_minutes or 15)
 
     @staticmethod

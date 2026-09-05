@@ -1,13 +1,26 @@
-.todo { padding: 26rpx; }
-.todo.optional { opacity: .86; }
-.subject { display: block; font-size: 31rpx; font-weight: 700; }
-.method { display: block; margin-top: 2rpx; color: #707873; font-size: 24rpx; }
-.minutes { color: #2f766d; font-size: 24rpx; }
-.practice-action { min-height: 56rpx; margin-top: 8rpx; padding: 0 16rpx; border: 1rpx solid #b9cec7; border-radius: 14rpx; background: #fff; color: #225b54; font-size: 22rpx; line-height: 54rpx; }
-.practice-action::after { border: 0; }
-.point { padding-top: 22rpx; margin-top: 18rpx; border-top: 1rpx solid #e6e7e3; }
-.point-name { display: block; margin-bottom: 16rpx; }
-.actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10rpx; }
-.action { width: 100%; min-width: 0; min-height: 68rpx; padding: 0; border-radius: 16rpx; background: #f0f3f0; color: #53605c; font-size: 23rpx; line-height: 68rpx; }
-.action::after { border: none; }
-.action.primary { background: #dcece7; color: #225b54; font-weight: 650; }
+/* PKDS-1.0 · TodoCard（5.9 节）：卡片描边分层不加阴影，几何量 rpx，字号 px，发丝线 1rpx。 */
+.todo { padding: 28rpx 28rpx 24rpx; box-sizing: border-box; background: var(--pk-surface); border: var(--pk-border); border-radius: var(--pk-r-xl); }
+.todo.opt { background: var(--pk-surface-warm); }
+
+.todo-top { display: flex; align-items: flex-start; gap: 20rpx; }
+.todo-top .grow { flex: 1; min-width: 0; }
+.todo-title { display: block; font-size: 16px; line-height: 1.4; font-weight: 600; }
+.todo-meta { display: block; margin-top: 6rpx; font-size: 13px; line-height: 1.45; color: var(--pk-ink-3); }
+
+/* 「出现原因」：中文句由 utils/ui.reviewReason 拼装，来源缺失时整块不渲染。 */
+.todo-why { margin-top: 20rpx; padding: 16rpx 20rpx; border-radius: var(--pk-r-md); background: var(--pk-surface-sunken); font-size: 13px; line-height: 1.45; color: var(--pk-ink-2); }
+.todo.opt .todo-why { background: #F1F0E7; }
+
+.todo-points { margin-top: 20rpx; }
+.todo-pt { display: flex; align-items: center; gap: 16rpx; min-height: 88rpx; }
+.todo-pt + .todo-pt { border-top: var(--pk-border-soft); }
+.todo-pt .pt-n { flex: 1; min-width: 0; font-size: 15px; line-height: 1.45; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.todo-pt .pt-done { flex: none; display: inline-flex; align-items: center; gap: 10rpx; font-size: 13px; font-weight: 600; color: var(--pk-success); }
+.todo-pt .act-done { flex: none; width: auto; }
+.todo-top .pill { flex: none; }
+/* 视觉 32×32，热区用伪元素撑到 88rpx，兼顾规格与触控下限。 */
+.act-more { position: relative; flex: none; box-sizing: border-box; width: 64rpx; height: 64rpx; border: var(--pk-border); border-radius: var(--pk-r-md); background: var(--pk-surface); display: flex; align-items: center; justify-content: center; }
+.act-more::after { content: ""; position: absolute; left: -12rpx; right: -12rpx; top: -12rpx; bottom: -12rpx; }
+
+.todo-foot { display: flex; align-items: center; gap: 12rpx; min-height: 88rpx; margin-top: 20rpx; padding-top: 20rpx; border-top: var(--pk-border-soft); }
+.todo-foot .foot-txt { flex: 1; min-width: 0; font-size: 13px; line-height: 1.45; color: var(--pk-ink-3); }
