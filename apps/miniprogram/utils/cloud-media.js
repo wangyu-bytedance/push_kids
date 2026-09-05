@@ -46,12 +46,16 @@ async function submitCloudPhotoBatch(photos, fields, onProgress, batchKey) {
       input_text: fields.input_text || null
     }
   });
+  return uploadDraftPhotos(draft, photos, onProgress, batchKey, draft.media_count);
+}
+
+async function uploadDraftPhotos(draft, photos, onProgress, batchKey, startIndex = 0) {
   const total = photos.length;
-  for (let index = draft.media_count; index < total; index += 1) {
+  for (let index = startIndex; index < total; index += 1) {
     const metadata = await imageMetadata(photos[index]);
     const ticket = await api.request("/media/upload-tickets", {
       method: "POST",
-      idempotencyKey: `${batchKey}-media-${index}`,
+      idempotencyKey: `${batchKey}-media-${draft.media_count - startIndex + index}`,
       data: {
         submission_id: draft.id,
         content_type: metadata.contentType,
@@ -70,4 +74,4 @@ async function submitCloudPhotoBatch(photos, fields, onProgress, batchKey) {
   return api.request(`/submissions/${draft.id}/finalize`, { method: "POST" });
 }
 
-module.exports = { imageMetadata, uploadObject, submitCloudPhotoBatch };
+module.exports = { imageMetadata, uploadObject, submitCloudPhotoBatch, uploadDraftPhotos };

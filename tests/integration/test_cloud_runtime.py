@@ -3,7 +3,13 @@ from __future__ import annotations
 from datetime import UTC, datetime
 
 from push_kids.media.store import WeChatCloudMediaStore
-from push_kids.persistence.models import MediaObject, MediaState, WeChatActorBinding
+from push_kids.persistence.models import (
+    Family,
+    FamilyMember,
+    MediaObject,
+    MediaState,
+    WeChatActorBinding,
+)
 from push_kids.platform.config import Settings
 from push_kids.platform.context import subject_hmac
 
@@ -69,8 +75,8 @@ def _cloud_settings() -> Settings:
         CBR_ENV_ID="prod-test",
         WECHAT_APP_ID="wx-test-app",
         WECHAT_SERVICE_NAME="push-kids",
-        WECHAT_STORAGE_BUCKET="bucket-test",
-        WECHAT_STORAGE_CLOUD_PREFIX="cloud://prod-test",
+        COS_BUCKET="bucket-test",
+        COS_REGION="ap-guangzhou",
         PUSH_KIDS_ACTOR_HMAC_KEY="a" * 32,
         PUSH_KIDS_AI_PROVIDER="test",
     )
@@ -85,19 +91,44 @@ def _cloud_headers() -> dict[str, str]:
     }
 
 
+def _bind_family(db, family_id: str) -> None:
+    binding = WeChatActorBinding(
+        app_id="wx-test-app",
+        subject_hmac=subject_hmac("a" * 32, "wx-test-app", "openid-parent-a"),
+        family_id=family_id,
+    )
+    db.add_all([Family(id=family_id, display_name="测试家庭"), binding])
+    db.flush()
+    db.add(
+        FamilyMember(
+            family_id=family_id,
+            actor_binding_id=binding.id,
+            active_actor_binding_id=binding.id,
+            role="manager",
+            relationship_label="家长",
+        )
+    )
+    db.commit()
+
+
+def test_cloud_storage_uses_platform_cos_variables_without_cloud_prefix() -> None:
+    settings = _cloud_settings()
+    settings.database_url = "mysql+pymysql://app:secret@mysql.internal/push_kids"
+
+    settings.validate_cloud_runtime()
+
+    assert settings.wechat_storage_bucket == "bucket-test"
+    assert settings.wechat_storage_region == "ap-guangzhou"
+    store = FakeWeChatCloudMediaStore(settings, "openid-parent-a")
+    assert store._object_path("cloud://prod-test/uploads/example.png") == "uploads/example.png"
+
+
 def test_cloud_identity_rejects_public_family_header_and_resolves_binding(
     client, app, family_headers, child
 ) -> None:
     settings = _cloud_settings()
     with app.state.database.session_factory() as db:
-        db.add(
-            WeChatActorBinding(
-                app_id="wx-test-app",
-                subject_hmac=subject_hmac("a" * 32, "wx-test-app", "openid-parent-a"),
-                family_id=family_headers["X-Family-ID"],
-            )
-        )
-        db.commit()
+        _bind_family(db, family_headers["X-Family-ID"])
     app.state.settings = settings
 
     assert client.get("/api/v1/children").status_code == 401
@@ -112,14 +143,7 @@ def test_cloud_identity_rejects_public_family_header_and_resolves_binding(
 def test_cloud_photo_ticket_upload_claim_and_finalize(client, app, family_headers, child) -> None:
     settings = _cloud_settings()
     with app.state.database.session_factory() as db:
-        db.add(
-            WeChatActorBinding(
-                app_id="wx-test-app",
-                subject_hmac=subject_hmac("a" * 32, "wx-test-app", "openid-parent-a"),
-                family_id=family_headers["X-Family-ID"],
-            )
-        )
-        db.commit()
+        _bind_family(db, family_headers["X-Family-ID"])
     store = FakeWeChatCloudMediaStore(settings, "openid-parent-a")
     app.state.settings = settings
     app.state.media_store = store
@@ -200,14 +224,7 @@ def test_cloud_claim_rejects_metadata_owned_by_another_user(
 ) -> None:
     settings = _cloud_settings()
     with app.state.database.session_factory() as db:
-        db.add(
-            WeChatActorBinding(
-                app_id="wx-test-app",
-                subject_hmac=subject_hmac("a" * 32, "wx-test-app", "openid-parent-a"),
-                family_id=family_headers["X-Family-ID"],
-            )
-        )
-        db.commit()
+        _bind_family(db, family_headers["X-Family-ID"])
     store = FakeWeChatCloudMediaStore(settings, "openid-other")
     app.state.settings = settings
     app.state.media_store = store
@@ -237,3 +254,14 @@ def test_cloud_claim_rejects_metadata_owned_by_another_user(
     )
     assert response.status_code == 400
     assert response.json()["error"]["message"] == "上传文件归属校验失败"
+
+
+def test_cloud_store_rejects_file_id_without_resource_prefix() -> None:
+    store = FakeWeChatCloudMediaStore(_cloud_settings(), "openid-parent-a")
+
+    try:
+        store._object_path("cloud://uploads")
+    except ValueError as exc:
+        assert str(exc) == "非法云存储文件 ID"
+    else:
+        raise AssertionError("expected malformed file ID to be rejected")

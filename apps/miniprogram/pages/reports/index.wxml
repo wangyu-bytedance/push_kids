@@ -1,6 +1,6 @@
 <view class="page report-page">
   <view class="compact-head">
-    <text class="eyebrow">已确认的学习记录</text>
+    <view class="screen-intro"><text class="screen-kicker">只看已经确认的学习</text><text class="screen-heading">一点一滴，看得见</text></view>
     <picker wx:if="{{children.length}}" range="{{children}}" range-key="name" value="{{childIndex}}" bindchange="changeChild">
       <view class="child-trigger"><text class="avatar-small">{{children[childIndex].avatar}}</text><text>{{children[childIndex].name}}</text><text class="chevron"></text></view>
     </picker>
@@ -10,21 +10,53 @@
   <view class="notice error" wx:elif="{{error}}" bindtap="load">{{error}} · 点此重试</view>
   <view class="empty plain" wx:elif="{{!report}}">当前没有可展示的真实记录</view>
   <block wx:else>
-    <view class="overview"><view><text class="metric-value">{{report.overview.learning_records}}</text><text>学习记录</text></view><view><text class="metric-value">{{report.overview.new_knowledge_items}}</text><text>新增知识点</text></view><view><text class="metric-value">{{report.overview.review_feedback_count}}</text><text>复习反馈</text></view><view><text class="metric-value">{{report.overview.activity_records}}</text><text>活动练习</text></view></view>
+    <view class="overview"><view><text class="metric-value">{{report.overview.learning_records}}</text><text>学习记录<br/>条</text></view><view><text class="metric-value">{{report.overview.new_knowledge_items}}</text><text>新增知识点<br/>个</text></view><view><text class="metric-value">{{report.overview.review_feedback_count}}</text><text>复习反馈<br/>次</text></view><view><text class="metric-value">{{report.overview.activity_records}}</text><text>活动练习<br/>次</text></view></view>
+    <text class="report-lead" wx:if="{{!report.overview.learning_records}}">还没有已确认的学习记录。记录之后，这里会逐渐留下学习与复习的足迹。</text>
+
     <view class="report-section">
-      <view class="row between"><text class="report-title">哪些内容最需要先复习</text><text class="muted small">近 {{days}} 天</text></view>
-      <text class="muted small">数字为待复习知识数；红色越深越紧迫，绿色勾表示已通过。</text>
-      <scroll-view class="chart-scroll" scroll-x enhanced show-scrollbar="false" scroll-into-view="urgency-{{lastChunkId}}"><view class="chart-pages"><view class="chart-page" wx:for="{{urgencyChunks}}" wx:key="id" id="urgency-{{item.id}}"><text class="chart-label">{{item.label}}</text><view class="urgency-grid"><view class="urgency-cell" wx:for="{{item.items}}" wx:key="day"><view class="urgency-dot level-{{item.level}} {{item.passed ? 'passed' : ''}}">{{item.display}}</view><text>{{item.dayLabel}}</text></view></view></view></view></scroll-view>
+      <view class="row between"><text class="report-title">待复习的内容</text><text class="muted small">近 {{days}} 天</text></view>
+      <text class="muted small report-copy"><text wx:if="{{urgencyPages.length > 1}}">左右滑动查看，每屏最多 30 天。</text>数字表示待复习知识数，绿色勾表示已通过。</text>
+      <view class="report-swiper-shell">
+        <view class="swiper-head" wx:if="{{urgencyPages.length > 1}}">
+          <view class="pager-button {{urgencyPage === 0 ? 'disabled' : ''}}" aria-role="button" aria-label="上一屏" aria-disabled="{{urgencyPage === 0}}" data-chart="urgency" data-offset="-1" bindtap="shiftReportPage">‹</view>
+          <view class="pager-copy"><text>第 {{urgencyPage + 1}} 屏</text><text class="muted tiny">{{urgencyPageLabel}}</text></view>
+          <view class="pager-button {{urgencyPage >= urgencyPages.length - 1 ? 'disabled' : ''}}" aria-role="button" aria-label="下一屏" aria-disabled="{{urgencyPage >= urgencyPages.length - 1}}" data-chart="urgency" data-offset="1" bindtap="shiftReportPage">›</view>
+        </view>
+        <swiper class="day-swiper {{days === 7 ? 'short' : ''}}" current="{{urgencyPage}}" duration="180" bindchange="onUrgencyPageChange">
+          <swiper-item wx:for="{{urgencyPages}}" wx:key="id" wx:for-item="pageItem">
+            <view class="thirty-grid {{days === 7 ? 'week-grid' : ''}}">
+              <view class="urgency-cell" wx:for="{{pageItem.items}}" wx:key="day" wx:for-item="dayItem"><view class="urgency-dot level-{{dayItem.level}} {{dayItem.passed ? 'passed' : ''}}">{{dayItem.display}}</view><text>{{dayItem.dayLabel}}</text></view>
+            </view>
+          </swiper-item>
+        </swiper>
+        <view class="page-indicator" wx:if="{{urgencyPages.length > 1}}"><view wx:for="{{urgencyPages}}" wx:key="id" class="indicator-dot {{index === urgencyPage ? 'active' : ''}}"></view><text class="muted tiny">左右滑动</text></view>
+      </view>
     </view>
+
     <view class="report-section">
       <view class="row between"><text class="report-title">复习活跃度</text><text class="muted small">近 {{days}} 天</text></view>
-      <text class="muted small">每个方格代表一天，绿色越深表示当天记录的复习反馈越多。</text>
-      <scroll-view class="chart-scroll" scroll-x enhanced show-scrollbar="false" scroll-into-view="activity-{{lastChunkId}}"><view class="chart-pages"><view class="chart-page" wx:for="{{activityChunks}}" wx:key="id" id="activity-{{item.id}}"><text class="chart-label">{{item.label}}</text><view class="activity-grid"><view class="activity-cell activity-{{item.level}}" wx:for="{{item.items}}" wx:key="day"><text class="sr-value">{{item.day}} {{item.count}} 次</text></view></view></view></view></scroll-view>
+      <text class="muted small report-copy">每个方格代表一天，绿色越深表示当天记录的复习反馈越多。</text>
+      <view class="report-swiper-shell activity-shell">
+        <view class="swiper-head" wx:if="{{activityPages.length > 1}}">
+          <view class="pager-button {{activityPage === 0 ? 'disabled' : ''}}" aria-role="button" aria-label="上一屏" aria-disabled="{{activityPage === 0}}" data-chart="activity" data-offset="-1" bindtap="shiftReportPage">‹</view>
+          <view class="pager-copy"><text>第 {{activityPage + 1}} 屏</text><text class="muted tiny">{{activityPageLabel}}</text></view>
+          <view class="pager-button {{activityPage >= activityPages.length - 1 ? 'disabled' : ''}}" aria-role="button" aria-label="下一屏" aria-disabled="{{activityPage >= activityPages.length - 1}}" data-chart="activity" data-offset="1" bindtap="shiftReportPage">›</view>
+        </view>
+        <swiper class="day-swiper activity-swiper {{days === 7 ? 'short' : ''}}" current="{{activityPage}}" duration="180" bindchange="onActivityPageChange">
+          <swiper-item wx:for="{{activityPages}}" wx:key="id" wx:for-item="pageItem">
+            <view class="activity-grid {{days === 7 ? 'week-grid' : ''}}">
+              <view class="activity-cell-wrap" wx:for="{{pageItem.items}}" wx:key="day" wx:for-item="dayItem"><view class="activity-cell activity-{{dayItem.level}}"><text class="sr-value">{{dayItem.day}} {{dayItem.count}} 次</text></view><text>{{dayItem.dayLabel}}</text></view>
+            </view>
+          </swiper-item>
+        </swiper>
+        <view class="page-indicator" wx:if="{{activityPages.length > 1}}"><view wx:for="{{activityPages}}" wx:key="id" class="indicator-dot {{index === activityPage ? 'active' : ''}}"></view><text class="muted tiny">左右滑动</text></view>
+      </view>
       <view class="legend"><text>少</text><view class="activity-0"></view><view class="activity-1"></view><view class="activity-2"></view><view class="activity-3"></view><view class="activity-4"></view><text>多</text></view>
     </view>
+
     <view class="report-section">
       <view class="row between"><text class="report-title">科目学习记录</text><text class="muted small">近 {{days}} 天</text></view>
-      <view class="subject-bar" wx:for="{{report.subjects}}" wx:key="name"><view class="row between"><text>{{item.name}}</text><text class="muted small">{{item.occurrences}} 条</text></view><view class="bar-track"><view class="bar-fill" style="width:{{item.width}}%"></view></view></view>
+      <view class="subject-bar" wx:for="{{report.subjects}}" wx:key="name"><view class="row between"><text>{{item.name}}</text><button class="history-link" data-id="{{item.id}}" bindtap="openSubjectHistory">{{item.occurrences}} 条 · 查看记录 ›</button></view><view class="bar-track"><view class="bar-fill" style="width:{{item.width}}%"></view></view></view>
       <view class="empty inline" wx:if="{{!report.subjects.length}}">这个范围内还没有学习记录</view>
     </view>
   </block>

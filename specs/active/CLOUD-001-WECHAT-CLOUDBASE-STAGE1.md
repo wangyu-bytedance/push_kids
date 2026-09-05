@@ -59,6 +59,7 @@ FastAPI，结构化数据在 SQLite，本地磁盘保存图片，进程内 Worke
 目标是保留原生微信小程序和 FastAPI 领域/服务代码，把 staging 运行时迁到微信云托管：
 
 1. 小程序通过 `wx.cloud.callContainer` 调用 FastAPI 容器。
+   发布构建只携带环境 ID、服务名和 API path，不配置或调用云托管公网域名。
 2. FastAPI 使用微信云托管注入的可信 actor 映射 family scope；云环境拒绝 `X-Family-ID` 授权。
 3. SQLAlchemy 持久化切换到托管 MySQL/InnoDB，Schema 由 Alembic 管理。
 4. 儿童图片通过微信云托管官方 `wx.cloud.uploadFile` 直传私有对象存储 staging，再由后端校验平台文件元数据并 claim；MySQL 只保存元数据和私有引用。
@@ -243,6 +244,11 @@ Feature merge after verification:
 Business tables retain family/child keys and transaction semantics. `SubmissionMedia` references
 `media_object_id`; local absolute paths stay inside the local adapter, not the production contract.
 
+对象存储客户端遵循微信云托管原生接口：小程序上传和下载只使用环境 ID 与 `fileID`，不接收
+bucket、region 或 COS 凭据。服务端因需要校验归属、下载图片供分析和清理对象，读取平台提供的
+`COS_BUCKET`、`COS_REGION`，从上传返回的 `fileID` 提取对象路径，并通过开放接口解码元数据；
+不再要求人工配置 `WECHAT_STORAGE_CLOUD_PREFIX`。
+
 ### Identity state machine
 
 ```mermaid
@@ -404,11 +410,11 @@ schema mismatch、secret leakage、failed restore or unrecoverable lease.
 | `TP-004` | two accounts resolve stable actors；forged/public headers fail | PARTIAL 2026-09-03：cloud-mode Docker + MySQL 验证已绑定 actor 200，缺 header 401，伪造 `X-Family-ID`、错误 AppID/env 403；真实双账号 staging 待测 |
 | `TP-005` | 1–9 images stage/claim/analyze/cleanup；non-owner cannot read；wrong path/env/uploader, missing metadata and forged cloudID fail | PARTIAL：fake adapter owner/claim/cancel cleanup passed；real storage E2E pending |
 | `TP-006` | restart/lease/retry/cancel do not duplicate final effects | PARTIAL：SQLite lifecycle + MySQL Worker passed；forced cloud restart pending |
-| `TP-007` | callContainer preserves status/data/error/idempotency | PARTIAL：frontend unit passed；DevTools/real gateway pending |
-| `TP-008` | container port/live/ready/shutdown correct | PARTIAL 2026-09-05：真实云 Pod 证明 UID 10001 无权绑定 80；`BUG-SPEC-20260905-01` 已将容器内端口统一为 8000，静态契约通过，本地镜像 UID 10001/live/ready/shutdown 通过；新云版本 smoke pending |
+| `TP-007` | callContainer preserves status/data/error/idempotency | PARTIAL 2026-09-05：frontend unit passed；真实 DevTools 仅使用 env+service+path 调用 FastAPI live/ready 均为 200，未绑定 actor 保留 403 `forbidden`；线上写请求幂等仍待受控 actor 验证 |
+| `TP-008` | container port/live/ready/shutdown correct | PARTIAL 2026-09-05：`flask-ik19-003` 真实云版本以端口 8000 运行，live/ready 均为 200；本地 UID 10001 和 graceful shutdown 通过，云端强制重启/终止仍待验证 |
 | `TP-009` | no secret/OpenID/fileID/child content in repo/bundle/log sample | PARTIAL 2026-09-05：`.env*` excluded from Git/build context，Compose runtime file separated from developer credentials，built image declares no sensitive keys，running container had no CLI key；cloud log sample pending |
 | `TP-010` | backup/restore matches counts/invariants | retained restore report |
-| `TP-011` | public ingress disabled；callContainer healthy | control-plane evidence/smoke |
+| `TP-011` | public ingress disabled；callContainer healthy | PASS 2026-09-05：控制面仅保留 `MINIAPP`/`OA`，默认公网域名返回 403；关闭后 callContainer live/ready 均为 200 |
 | `TP-012` | architecture remains acyclic；pure policies unchanged | PASS：`ARCHITECTURE_VALID checked=2` + regression |
 
 Required local commands:
@@ -457,7 +463,7 @@ Real-environment checks are not replaceable by mocks. Skipped `TP-004/005/008/01
 Completion record: implementation、local/SQLite/MySQL/container checks and Feature/UI current-state merge are
 complete. Implementation self-review found and fixed cloud multipart bypass, cancelled-media cleanup,
 `SubmissionMedia` reference length and finalize/claim/Worker locking races. Independent R3 Review and real
-staging `TP-004/005/006/007/008/009/010/011` remain pending, so this Spec stays `VERIFYING` and must not be
+staging `TP-004/005/006/007/008/009/010` remain pending, so this Spec stays `VERIFYING` and must not be
 moved to completed. Residual debt: split Worker before multiple instances；FEAT-002/public privacy/deletion
 gates remain.
 
@@ -469,7 +475,8 @@ therefore supersedes the internal port with 8000. Readiness returned 200 locally
 returned 404, missing identity returned 401, a provisioned actor returned the expected child profile, and
 forged family/AppID/env inputs returned 403. Photo draft and server-owned upload-ticket issuance returned
 202/201; a small legacy multipart upload returned 409 and a request over the Cloud Hosting limit returned
-413. Omitting `CBR_ENV_ID` made the container fail startup. These checks do not substitute for the real
+413. 本地云模式模拟中省略平台内置的 `CBR_ENV_ID` 会使容器拒绝启动；真实云托管部署禁止用户
+创建 `CBR_*` 环境变量，由平台在运行时自动注入。这些检查不替代真实
 gateway, storage metadata, two-account, backup/restore or ingress checks.
 
 Runtime-secret boundary evidence 2026-09-05: local developer credentials remain in host-only `.env`; Docker
@@ -479,14 +486,17 @@ context, reached healthy readiness, exposed only the allowlisted application-var
 configuration declared none of `MYSQL_PASSWORD`, `WECHAT_CLI_PRIVATE_KEY`, `ARK_API_KEY` or
 `PUSH_KIDS_ACTOR_HMAC_KEY`. Cloud Hosting still injects required application secrets at container startup.
 
-Deployment evidence updated 2026-09-05: `@wxcloud/cli` 2.3.3 authenticated to target AppID and returned the
-single expected environment `prod-d2g14rwoycac6b45d`; service lookup returned `flask-ik19`. A sanitized
-release source with `wxcloud.config.json` completed `wxcloud deploy --dryRun` under Node 16 without replacing
-the verified Dockerfile. The current normal version still serves the official Flask counter template and a
-newer version is `deploy_failed`; project endpoints `/health/live` and `/health/ready` remain unavailable.
-The failed Pod stderr identified the immediate cause as UID 10001 receiving `Errno 13` while binding
-`0.0.0.0:80`; the approved BUG-003 amendment keeps the non-root UID and moves every internal deployment-port
-declaration to 8000.
-Actual deployment remains blocked until the exposed DB credential is rotated, a least-privilege MySQL user
-and schema are provisioned, required application/storage/model secrets are configured, and the real-environment
-test points can run.
+Deployment evidence updated 2026-09-05: `@wxcloud/cli` 2.3.3 authenticated to target AppID and deployed
+`flask-ik19-003`, which reached `normal`. Before release, the managed MySQL database was migrated to
+`20260903_0001`; the runtime account was restricted to `push_kids.*` CRUD and denied `CREATE`; the exposed
+root credential was rotated; and database WAN access was returned to `closed`. The service uses the database
+private address and platform-provided `CBR_ENV_ID`/COS settings. FastAPI live/ready returned 200 on port 8000.
+After smoke, service access removed `PUBLIC` and retained `MINIAPP`/`OA`; the default domain returned 403 after
+propagation while real DevTools callContainer live/ready remained 200. Remaining test points concern controlled
+actor binding, real storage/AI, restart and backup/restore, not core container or database startup.
+
+Domainless gateway evidence 2026-09-05: the logged-in WeChat DevTools compiled the real AppID project with no
+errors. An automation smoke invoked `wx.cloud.callContainer` with only environment ID, service name and path;
+before replacement, `/` returned HTTP 200 without any backend URL while `/health/live` returned 404. After
+`flask-ik19-003` deployment and public-ingress closure, the same domainless call returned 200 for FastAPI
+live/ready; the unbound business call returned the designed 403 without creating a family automatically.

@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "Push Kids 当前工程数据链路",
+    "locale": "zh-CN",
+    "output": "docs/architecture/diagrams/current-dataflow.html",
+    "viewBox": [1080, 900],
+    "animation": "none",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "learning-evidence",
+        "label": "学习证据链",
+        "focus": ["miniapp", "api_boundary", "analysis_worker", "ark", "submission_store", "formal_store"],
+        "note": "文字或图片先形成异步分析草稿；只有家长确认才进入正式学习与复习数据。"
+      },
+      {
+        "id": "media-path",
+        "label": "图片安全链",
+        "focus": ["miniapp", "private_media", "api_boundary", "analysis_worker"],
+        "note": "云端图片直传私有对象存储，API 仅处理 ticket/claim 元数据。"
+      },
+      {
+        "id": "review-loop",
+        "label": "复习闭环",
+        "focus": ["formal_store", "todo_policy", "miniapp"],
+        "note": "正式 ReviewItem 经确定性策略生成 Todo，反馈以幂等方式推进状态。"
+      },
+      {
+        "id": "read-models",
+        "label": "页面汇总",
+        "focus": ["formal_store", "read_models", "miniapp"],
+        "note": "今日、历史、日历和报表只消费已确认学习证据与独立活动数据。"
+      }
+    ]
+  },
+  "stages": [
+    { "label": "家长交互" },
+    { "label": "安全接入" },
+    { "label": "异步分析" },
+    { "label": "确认存储" },
+    { "label": "计划消费" }
+  ],
+  "nodes": [
+    { "id": "miniapp", "type": "frontend", "label": "微信小程序", "sublabel": "五个家长端页面", "stage": 0, "row": 2, "width": 144, "tag": "输入与反馈" },
+    { "id": "api_boundary", "type": "security", "label": "FastAPI 家庭边界", "sublabel": "身份解析与服务编排", "stage": 1, "row": 1, "width": 156, "tag": "family_id" },
+    { "id": "private_media", "type": "cloud", "label": "私有图片存储", "sublabel": "微信云或本地适配器", "stage": 1, "row": 4, "width": 156, "tag": "ticket + claim" },
+    { "id": "analysis_worker", "type": "messagebus", "label": "持久化 Job + Worker", "sublabel": "行锁租约与最多 3 次重试", "stage": 2, "row": 0, "width": 164, "tag": "agent_jobs" },
+    { "id": "ark", "type": "external", "label": "Ark Responses API", "sublabel": "仅生成结构化建议", "stage": 2, "row": 4, "width": 156, "tag": "不可信输出" },
+    { "id": "submission_store", "type": "database", "label": "Submission 草稿区", "sublabel": "状态、图片元数据与 proposal_json", "stage": 3, "row": 1, "width": 178, "tag": "待家长确认" },
+    { "id": "formal_store", "type": "database", "label": "正式领域数据", "sublabel": "学习、知识、复习、活动与日程", "stage": 3, "row": 3, "width": 176, "tag": "MySQL / SQLite" },
+    { "id": "todo_policy", "type": "backend", "label": "确定性复习计划", "sublabel": "记忆曲线与每日预算分组", "stage": 4, "row": 1, "width": 164, "tag": "ReviewItem" },
+    { "id": "read_models", "type": "frontend", "label": "页面读模型", "sublabel": "今日、历史、日历与报表", "stage": 4, "row": 4, "width": 164, "tag": "confirmed only" }
+  ],
+  "flows": [
+    { "id": "family-requests", "from": "miniapp", "to": "api_boundary", "label": "家庭范围请求", "classification": "云 actor HMAC / 本地 X-Family-ID", "variant": "security" },
+    { "id": "photo-upload", "from": "miniapp", "to": "private_media", "label": "图片直传", "classification": "1–9 张私有对象", "variant": "security" },
+    { "id": "ticket-claim", "from": "private_media", "to": "api_boundary", "label": "校验上传归属与内容", "variant": "security" },
+    { "id": "enqueue", "from": "api_boundary", "to": "analysis_worker", "label": "Submission + Job 入队", "variant": "emphasis", "labelAt": [345, 210] },
+    { "id": "materialize-media", "from": "private_media", "to": "analysis_worker", "label": "短期凭证取图", "variant": "security" },
+    { "id": "analyze", "from": "analysis_worker", "to": "ark", "label": "有限上下文 ⇄ 建议", "variant": "dashed" },
+    { "id": "proposal-write", "from": "analysis_worker", "to": "submission_store", "label": "写草稿或失败状态", "variant": "emphasis" },
+    { "id": "parent-confirm", "from": "submission_store", "to": "formal_store", "label": "家长编辑并确认", "classification": "单事务正式化", "variant": "security" },
+    { "id": "review-projection", "from": "formal_store", "to": "todo_policy", "label": "ReviewItem 状态", "classification": "1/3/7/14/30/60 天", "variant": "emphasis" },
+    { "id": "reporting-projection", "from": "formal_store", "to": "read_models", "label": "聚合确认学习与活动", "variant": "default" },
+    { "id": "todo-view", "from": "todo_policy", "to": "read_models", "label": "今日 Todo", "classification": "建议完成 / 有余力再做", "variant": "dashed" }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "主链：证据 → 建议 → 确认 → 计划",
+      "items": [
+        "图片或文字先创建 Submission 与异步 Job，AI 结果始终是可编辑草稿",
+        "只有家长确认才创建 LearningRecord、KnowledgeOccurrence 和 ReviewItem",
+        "复习日期由确定性策略计算，AI 不判分、不宣布掌握、不预测下一课"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "边界：家庭隔离与幂等",
+      "items": [
+        "云端由微信 actor binding 解析 family_id，本地才接受 X-Family-ID",
+        "图片不进入云 API 请求体；ticket/claim 校验上传者、路径与内容",
+        "Submission、复习反馈和日历事件用幂等键避免网络重试重复写入"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "运行约束与待验收项",
+      "items": [
+        "活动、日程和基础配置经 API 校验后直写正式领域数据，不经过 AI",
+        "云端使用 MySQL + 微信对象存储，本地使用 SQLite + 本地 MediaStore",
+        "Worker 与 API 同进程；受控 staging 需保持单实例，扩容前必须拆 Worker"
+      ]
+    }
+  ]
+}

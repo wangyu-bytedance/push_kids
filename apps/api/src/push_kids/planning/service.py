@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datetime import date
 
-from sqlalchemy import select
+from sqlalchemy import and_, func, or_, select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
@@ -20,6 +20,105 @@ from push_kids.platform.time import local_date
 
 
 class PlanningService:
+    @staticmethod
+    def history_for_knowledge(
+        db: Session,
+        family_id: str,
+        child_id: str,
+        knowledge_ids: list[str],
+        review_id: str | None = None,
+        before: str | None = None,
+    ) -> dict:
+        ChildrenService.get_child(db, family_id, child_id)
+        query = (
+            select(ReviewItem, KnowledgeItem)
+            .join(
+                KnowledgeItem,
+                ReviewItem.knowledge_item_id == KnowledgeItem.id,
+            )
+            .join(Subject, Subject.id == KnowledgeItem.subject_id)
+            .where(
+                ReviewItem.family_id == family_id,
+                ReviewItem.child_id == child_id,
+                KnowledgeItem.family_id == family_id,
+                KnowledgeItem.id.in_(knowledge_ids),
+                Subject.kind == "learning",
+            )
+        )
+        if review_id:
+            query = query.where(ReviewItem.id == review_id)
+        rows = db.execute(query.order_by(KnowledgeItem.name, KnowledgeItem.id)).all()
+        if review_id and not rows:
+            raise NotFoundError("没有找到这条记录关联的复习")
+        ids = [r.id for r, _ in rows]
+        feedback_query = select(
+            ReviewFeedback.id,
+            ReviewFeedback.review_item_id,
+            ReviewFeedback.action,
+            ReviewFeedback.occurred_at,
+            func.row_number()
+            .over(
+                partition_by=ReviewFeedback.review_item_id,
+                order_by=(ReviewFeedback.occurred_at.desc(), ReviewFeedback.id.desc()),
+            )
+            .label("rank"),
+        ).where(ReviewFeedback.family_id == family_id, ReviewFeedback.review_item_id.in_(ids))
+        if before:
+            anchor = (
+                db.scalar(
+                    select(ReviewFeedback).where(
+                        ReviewFeedback.id == before,
+                        ReviewFeedback.family_id == family_id,
+                        ReviewFeedback.review_item_id == review_id,
+                    )
+                )
+                if review_id
+                else None
+            )
+            if anchor is None:
+                raise ValueError("反馈分页已失效，请重新展开")
+            feedback_query = feedback_query.where(
+                or_(
+                    ReviewFeedback.occurred_at < anchor.occurred_at,
+                    and_(
+                        ReviewFeedback.occurred_at == anchor.occurred_at,
+                        ReviewFeedback.id < anchor.id,
+                    ),
+                )
+            )
+        ranked = feedback_query.subquery()
+        feedbacks = (
+            db.execute(select(ranked).where(ranked.c.rank <= 4).order_by(ranked.c.rank))
+            .mappings()
+            .all()
+        )
+        grouped: dict[str, list] = {}
+        for f in feedbacks:
+            grouped.setdefault(f["review_item_id"], []).append(
+                {
+                    "id": f["id"],
+                    "action": f["action"],
+                    "occurred_at": f["occurred_at"].isoformat(),
+                }
+            )
+        return {
+            "items": [
+                {
+                    "review_id": r.id,
+                    "knowledge_id": k.id,
+                    "name": k.name,
+                    "active": r.active,
+                    "due_date": r.due_date.isoformat(),
+                    "is_due": r.active and r.due_date <= local_date(),
+                    "feedback": grouped.get(r.id, [])[:3],
+                    "next_before": grouped[r.id][2]["id"]
+                    if len(grouped.get(r.id, [])) > 3
+                    else None,
+                }
+                for r, k in rows
+            ]
+        }
+
     @classmethod
     def daily_todos(
         cls, db: Session, family_id: str, child_id: str, day: date | None = None
@@ -35,6 +134,7 @@ class PlanningService:
                 ReviewItem.child_id == child_id,
                 ReviewItem.active.is_(True),
                 ReviewItem.due_date <= target,
+                Subject.kind == "learning",
             )
         ).all()
         items = [
@@ -59,6 +159,19 @@ class PlanningService:
         action: str,
         idempotency_key: str | None = None,
     ) -> dict:
+        review = db.scalar(
+            select(ReviewItem)
+            .join(KnowledgeItem, ReviewItem.knowledge_item_id == KnowledgeItem.id)
+            .join(Subject, KnowledgeItem.subject_id == Subject.id)
+            .where(
+                ReviewItem.id == review_id,
+                ReviewItem.family_id == family_id,
+                Subject.kind == "learning",
+            )
+            .with_for_update()
+        )
+        if review is None:
+            raise NotFoundError("没有找到这条复习任务")
         if idempotency_key:
             existing = db.scalar(
                 select(ReviewFeedbackRequest).where(
@@ -70,11 +183,8 @@ class PlanningService:
                 if existing.review_item_id != review_id or existing.action != action:
                     raise ConflictError("此反馈标识已用于不同操作，请重新操作")
                 return PlanningService._feedback_result(existing)
-        review = db.scalar(
-            select(ReviewItem).where(ReviewItem.id == review_id, ReviewItem.family_id == family_id)
-        )
-        if review is None:
-            raise NotFoundError("没有找到这条复习任务")
+        if not review.active:
+            raise ConflictError("这条复习已结束，请刷新列表后再操作")
         transition = apply_feedback(review.step, action, local_date())  # type: ignore[arg-type]
         review.step = transition.step
         review.due_date = transition.due_date
@@ -147,6 +257,7 @@ class PlanningService:
                 KnowledgeItem.family_id == family_id,
                 KnowledgeItem.child_id == child_id,
                 ReviewItem.active.is_(True),
+                Subject.kind == "learning",
             )
             .order_by(ReviewItem.due_date)
             .limit(limit)

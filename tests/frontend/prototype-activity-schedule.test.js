@@ -7,10 +7,6 @@ const prototypeSource = fs.readFileSync(
   path.resolve(__dirname, "../../docs/design/frontend/prototypes/DREV-20260830-03/index.html"),
   "utf8"
 );
-const recordsSource = fs.readFileSync(
-  path.resolve(__dirname, "../../apps/miniprogram/pages/records/index.js"),
-  "utf8"
-);
 const todaySource = fs.readFileSync(
   path.resolve(__dirname, "../../apps/miniprogram/pages/today/index.js"),
   "utf8"
@@ -80,9 +76,11 @@ test("photo records support single capture and repeated multi-select with one sh
 });
 
 test("interrupted native photo batches can be resumed or cancelled", () => {
-  assert.match(recordsSource, /item\.can_finalize_upload \? "照片已保存，可继续分析"/);
-  assert.match(recordsSource, /async finalizePending\(event\)/);
-  assert.match(recordsSource, /async cancelSubmission\(event\)/);
+  const detail = fs.readFileSync("apps/miniprogram/pages/submission/detail.js", "utf8");
+  const view = fs.readFileSync("apps/miniprogram/pages/submission/confirm.wxml", "utf8");
+  assert.match(view, /submission\.awaiting_upload/);
+  assert.match(detail, /async resumePhotos\(\)/);
+  assert.match(detail, /async runDraftAction\(event\)/);
 });
 
 test("native today consumes optional activity suggestions without duplicating fixed schedules", () => {
@@ -91,5 +89,5 @@ test("native today consumes optional activity suggestions without duplicating fi
 });
 
 test("native settings can remove an activity reminder", () => {
-  assert.match(settingsTemplate, /bindtap="removeActivity">移除活动/);
+  assert.match(settingsTemplate, /bindtap="removeActivity">移除这项活动/);
 });

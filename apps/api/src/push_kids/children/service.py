@@ -22,9 +22,15 @@ class ChildrenService:
 
     @classmethod
     def create_child(cls, db: Session, family_id: str, data: ChildCreate) -> Child:
+        child = cls.create_child_in_transaction(db, family_id, data)
+        db.commit()
+        return child
+
+    @staticmethod
+    def create_child_in_transaction(db: Session, family_id: str, data: ChildCreate) -> Child:
         child = Child(family_id=family_id, **data.model_dump())
         db.add(child)
-        db.commit()
+        db.flush()
         return child
 
     @classmethod

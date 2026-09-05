@@ -1,0 +1,25 @@
+<view class="page members-page">
+  <view class="family-banner"><view class="family-emblem">家</view><view class="grow"><text class="screen-kicker">一起记录，一起陪伴</text><text class="title">{{family.display_name || '家庭与成员'}}</text></view><view class="icon-button" bindtap="load" aria-role="button" aria-label="刷新">↻</view></view>
+  <view class="notice error" wx:if="{{error}}" bindtap="load">{{error}} · 点此重试</view><view class="skeleton" wx:if="{{loading}}"></view>
+  <view wx:if="{{!loading}}">
+    <view class="manager-panel invitation-card" wx:if="{{isManager && !shareReady}}">
+      <text class="invite-title">把家人邀请进来</text><text class="invite-copy">让家人一起查看学习记录，也可以按需参与日常记录。</text>
+      <view class="button invite-button {{sharing ? 'disabled' : ''}}" aria-role="button" aria-label="生成家人邀请" aria-disabled="{{sharing}}" bindtap="createInvite"><text>{{sharing ? '正在生成…' : '＋　邀请家人'}}</text></view><text class="invite-helper">加入前需要管理员确认</text>
+    </view>
+    <view class="share-card" wx:if="{{shareReady}}"><text class="share-title">邀请已准备好</text><text class="muted small block">24 小时内有效，对方申请后还需你确认。</text><button class="button share-button" open-type="share">微信邀请家人</button></view>
+    <view class="request-entry" wx:if="{{isManager}}" aria-role="button" aria-label="查看加入申请" bindtap="openRequests"><view class="request-icon">✓</view><view class="grow"><text class="entry-title">加入申请</text><text class="muted small block">{{requestCount ? requestCount + ' 份申请等待确认' : '暂无待处理申请'}}</text></view><view class="request-count" wx:if="{{requestCount}}">{{requestCount}}</view><text class="family-arrow">›</text></view>
+    <view class="family-help" wx:if="{{isManager && inviteListUnavailable}}">有效邀请暂不可查看，不影响成员管理。</view>
+    <view class="invite-list" wx:if="{{isManager && invites.length}}"><text class="section-label">有效邀请</text><view class="invite-row" wx:for="{{invites}}" wx:key="id"><view class="grow"><text class="entry-title">家人邀请</text><text class="muted tiny block">有效至 {{item.expiryLabel}}</text></view><button class="revoke-button" data-id="{{item.id}}" bindtap="revokeInvite">撤销</button></view></view>
+    <view class="members-heading"><text class="section-title">家庭成员</text><text class="muted small">{{members.length}} 人</text></view>
+    <view class="member-list" wx:if="{{members.length}}"><view class="member-row" wx:for="{{members}}" wx:key="id" data-id="{{item.id}}" aria-role="button" aria-label="{{item.relationship_label}}，{{item.roleLabel}}" bindtap="openMember"><view class="member-avatar">{{item.avatar}}</view><view class="grow"><view class="member-name-line"><text class="member-name">{{item.relationship_label}}</text><text class="self" wx:if="{{item.is_self}}">你</text></view><text class="muted small block">{{item.roleLabel}}</text></view><text class="family-arrow">›</text></view></view>
+    <view class="empty" wx:if="{{!members.length}}"><view class="empty-mark">家</view><text>暂时没有可显示的成员</text></view>
+  </view>
+</view>
+<view class="sheet-mask" wx:if="{{showMember}}" bindtap="closeMember"></view>
+<view class="sheet" wx:if="{{showMember}}">
+  <view class="sheet-handle"></view><text class="sheet-title">成员详情</text><text class="muted small block detail-intro">{{selectedMember.is_self ? '这是你在家庭中的资料' : '查看关系称谓与协作权限'}}</text>
+  <view class="field"><text class="label">关系称谓</text><input wx:if="{{isManager}}" class="input" value="{{relationshipDraft}}" bindinput="setRelationship" maxlength="30"/><view wx:else class="read-value">{{selectedMember.relationship_label}}</view></view>
+  <view class="field"><text class="label">协作权限</text><view wx:if="{{selectedMember.is_self || !isManager}}" class="read-value">{{selectedMember.roleLabel}}</view><picker wx:else range="{{roleOptions}}" range-key="label" value="{{roleIndex}}" bindchange="chooseRole"><view class="picker role-picker">{{roleOptions[roleIndex].label}}<text class="chevron"></text></view></picker></view>
+  <view class="action-row" wx:if="{{isManager}}"><button class="button full-button" loading="{{savingMember}}" disabled="{{savingMember}}" bindtap="saveMember">保存</button></view>
+  <view class="danger-zone" wx:if="{{isManager && !selectedMember.is_self}}"><text class="danger-title">移除成员</text><text class="muted small block">对方会失去访问权限，历史记录仍保留。</text><button class="danger-button" bindtap="removeSelectedMember">移除这个成员</button></view>
+</view>

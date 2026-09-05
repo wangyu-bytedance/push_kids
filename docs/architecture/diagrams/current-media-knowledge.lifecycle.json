@@ -1,0 +1,260 @@
+{
+  "schema_version": 1,
+  "diagram_type": "lifecycle",
+  "meta": {
+    "title": "Push Kids 图片与知识沉淀状态机",
+    "locale": "zh-CN",
+    "output": "docs/architecture/diagrams/current-media-knowledge-lifecycle.html",
+    "viewBox": [1320, 900],
+    "animation": "none",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "media-lifecycle",
+        "label": "图片对象",
+        "focus": ["media-ticketed", "media-claimed", "media-deleted"],
+        "note": "图片对象只有 ticketed、claimed、deleted 三个持久化状态。"
+      },
+      {
+        "id": "submission-lifecycle",
+        "label": "提交与分析",
+        "focus": ["submission-queued", "submission-analyzing", "submission-pending", "submission-failed", "submission-cancelled", "submission-confirmed"],
+        "note": "提交单承载上传等待、异步分析、失败重试和家长确认。"
+      },
+      {
+        "id": "knowledge-gate",
+        "label": "知识沉淀门禁",
+        "focus": ["submission-pending", "submission-confirmed", "formal-knowledge"],
+        "note": "AI 结果只是 proposal_json；家长确认后才创建或复用正式 KnowledgeItem。"
+      }
+    ]
+  },
+  "lanes": [
+    { "id": "media", "label": "图片对象 · MediaObject" },
+    { "id": "submission", "label": "学习提交 · LearningSubmission" },
+    { "id": "knowledge", "label": "正式知识 · KnowledgeItem" },
+    { "id": "exceptions", "label": "恢复与退出" }
+  ],
+  "states": [
+    {
+      "id": "media-ticketed",
+      "type": "start",
+      "label": "ticketed",
+      "sublabel": "已签发私有上传路径",
+      "tag": "可过期",
+      "step": "M1",
+      "lane": "media",
+      "col": 0
+    },
+    {
+      "id": "media-claimed",
+      "type": "active",
+      "label": "claimed",
+      "sublabel": "文件已校验并绑定提交单",
+      "tag": "可供分析",
+      "step": "M2",
+      "lane": "media",
+      "col": 2
+    },
+    {
+      "id": "media-deleted",
+      "type": "failure",
+      "label": "deleted",
+      "sublabel": "对象删除成功",
+      "tag": "清理结果",
+      "step": "M3",
+      "lane": "media",
+      "col": 4
+    },
+    {
+      "id": "submission-queued",
+      "type": "start",
+      "label": "queued",
+      "sublabel": "上传中或等待 Worker",
+      "tag": "草稿",
+      "step": "S1",
+      "lane": "submission",
+      "col": 0
+    },
+    {
+      "id": "submission-analyzing",
+      "type": "active",
+      "label": "analyzing",
+      "sublabel": "Worker 租约内调用 Ark",
+      "tag": "异步",
+      "step": "S2",
+      "lane": "submission",
+      "col": 1
+    },
+    {
+      "id": "submission-pending",
+      "type": "waiting",
+      "label": "pending_confirmation",
+      "sublabel": "proposal_json 可编辑",
+      "tag": "非正式知识",
+      "step": "S3",
+      "lane": "submission",
+      "col": 2,
+      "width": 230
+    },
+    {
+      "id": "submission-confirmed",
+      "type": "success",
+      "label": "confirmed",
+      "sublabel": "家长确认且事务提交",
+      "tag": "正式证据",
+      "step": "S4",
+      "lane": "submission",
+      "col": 4
+    },
+    {
+      "id": "formal-knowledge",
+      "type": "success",
+      "label": "KnowledgeItem 已存在",
+      "sublabel": "无 status；持续追加 Occurrence",
+      "tag": "正式知识",
+      "step": "K1",
+      "lane": "knowledge",
+      "col": 4,
+      "width": 240
+    },
+    {
+      "id": "submission-failed",
+      "type": "failure",
+      "label": "failed",
+      "sublabel": "三次分析仍失败",
+      "tag": "可人工重试",
+      "lane": "exceptions",
+      "col": 1
+    },
+    {
+      "id": "submission-cancelled",
+      "type": "failure",
+      "label": "cancelled",
+      "sublabel": "草稿撤销且清空提议",
+      "tag": "不写正式知识",
+      "lane": "exceptions",
+      "col": 3,
+      "width": 220
+    }
+  ],
+  "transitions": [
+    {
+      "id": "ticket-claim",
+      "from": "media-ticketed",
+      "to": "media-claimed",
+      "label": "上传后 claim：校验 owner / 路径 / 类型 / 大小 / hash",
+      "variant": "security"
+    },
+    {
+      "id": "ticket-cleanup",
+      "from": "media-ticketed",
+      "to": "media-deleted",
+      "label": "凭据过期或提交取消后清理",
+      "variant": "security"
+    },
+    {
+      "id": "claimed-cleanup",
+      "from": "media-claimed",
+      "to": "media-deleted",
+      "label": "提交取消，立即删除或后台补偿",
+      "variant": "security"
+    },
+    {
+      "id": "draft-finalize",
+      "from": "submission-queued",
+      "to": "submission-analyzing",
+      "label": "至少 1 张已 claim；finalize 创建 Job；Worker 取租约",
+      "variant": "emphasis"
+    },
+    {
+      "id": "analysis-proposal",
+      "from": "submission-analyzing",
+      "to": "submission-pending",
+      "label": "结构化 AI 提议写回",
+      "variant": "emphasis"
+    },
+    {
+      "id": "automatic-retry",
+      "from": "submission-analyzing",
+      "to": "submission-queued",
+      "label": "失败且 attempts < 3：退避重试",
+      "variant": "dashed"
+    },
+    {
+      "id": "retry-exhausted",
+      "from": "submission-analyzing",
+      "to": "submission-failed",
+      "label": "重试耗尽",
+      "variant": "security"
+    },
+    {
+      "id": "manual-retry",
+      "from": "submission-failed",
+      "to": "submission-queued",
+      "label": "家长重试，attempts 清零",
+      "variant": "emphasis"
+    },
+    {
+      "id": "parent-confirm",
+      "from": "submission-pending",
+      "to": "submission-confirmed",
+      "label": "家长编辑并确认；单事务正式化",
+      "variant": "security"
+    },
+    {
+      "id": "persist-knowledge",
+      "from": "submission-pending",
+      "to": "formal-knowledge",
+      "label": "按规范名 create / reuse + 新增 KnowledgeOccurrence",
+      "variant": "emphasis"
+    },
+    {
+      "id": "cancel-queued",
+      "from": "submission-queued",
+      "to": "submission-cancelled",
+      "label": "家长取消",
+      "variant": "security"
+    },
+    {
+      "id": "cancel-analyzing",
+      "from": "submission-analyzing",
+      "to": "submission-cancelled",
+      "label": "分析中取消",
+      "variant": "security"
+    },
+    {
+      "id": "cancel-pending",
+      "from": "submission-pending",
+      "to": "submission-cancelled",
+      "label": "删除待确认草稿",
+      "variant": "security"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "amber",
+      "title": "图片状态的边界",
+      "items": [
+        "分析和家长确认不会把 claimed 图片切换到新状态",
+        "当前正式图片保留期与家庭级删除仍是公开发布门禁"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "知识状态的真相",
+      "items": [
+        "AI 提议仅属于 LearningSubmission，不是 KnowledgeItem",
+        "KnowledgeItem 创建后没有 archived、deleted 或 mastered 状态"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "复习是独立生命周期",
+      "items": [
+        "ReviewItem.step、due_date、active 描述复习计划，不代表知识掌握",
+        "重复学习复用 KnowledgeItem、追加 Occurrence，并重启复习计划"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "Push Kids 核心家长操作时序",
+    "locale": "zh-CN",
+    "output": "docs/architecture/diagrams/core-parent-learning.html",
+    "viewBox": [1380, 1060],
+    "animation": "none",
+    "quality_profile": "showcase",
+    "column_fit": "spread",
+    "views": [
+      {
+        "id": "capture-upload",
+        "label": "记录与上传",
+        "focus": ["parent", "miniapp", "api", "media", "database"],
+        "note": "家长选择文字或 1–9 张图片；云图片直传对象存储并由 API claim。"
+      },
+      {
+        "id": "async-analysis",
+        "label": "异步分析",
+        "focus": ["database", "worker", "media", "ark"],
+        "note": "Worker 租约 Job，读取本次证据和有限历史上下文，Ark 只返回建议。"
+      },
+      {
+        "id": "confirm-review",
+        "label": "确认与复习",
+        "focus": ["parent", "miniapp", "api", "database"],
+        "note": "家长确认是正式入库唯一入口；复习日期与反馈推进由确定性策略计算。"
+      }
+    ]
+  },
+  "participants": [
+    { "id": "parent", "type": "external", "label": "家长" },
+    { "id": "miniapp", "type": "frontend", "label": "微信小程序" },
+    { "id": "api", "type": "security", "label": "FastAPI API" },
+    { "id": "media", "type": "cloud", "label": "私有对象存储" },
+    { "id": "database", "type": "database", "label": "MySQL / Job Store" },
+    { "id": "worker", "type": "backend", "label": "Analysis Worker" },
+    { "id": "ark", "type": "external", "label": "Ark Responses API" }
+  ],
+  "segments": [
+    { "from": 150, "to": 405, "label": "记录与私有上传" },
+    { "from": 420, "to": 680, "label": "异步分析与草稿" },
+    { "from": 695, "to": 975, "label": "家长确认与复习闭环" }
+  ],
+  "messages": [
+    { "id": "record-intent", "from": "parent", "to": "miniapp", "y": 178, "label": "选择文字/1–9 张图片并填写发生时间", "variant": "emphasis" },
+    { "id": "create-draft", "from": "miniapp", "to": "api", "y": 212, "label": "POST /submissions/photo-drafts + Idempotency-Key", "variant": "security" },
+    { "id": "persist-draft", "from": "api", "to": "database", "y": 246, "label": "保存 Submission 与请求指纹", "variant": "emphasis" },
+    { "id": "request-ticket", "from": "miniapp", "to": "api", "y": 280, "label": "POST /media/upload-tickets（逐图）", "variant": "security" },
+    { "id": "return-path", "from": "api", "to": "miniapp", "y": 314, "label": "ticket_id + 私有 cloud_path", "variant": "return" },
+    { "id": "upload-media", "from": "miniapp", "to": "media", "y": 348, "label": "wx.cloud.uploadFile → fileID", "variant": "security" },
+    { "id": "claim-finalize", "from": "miniapp", "to": "api", "y": 382, "label": "POST /media/claims；POST /finalize", "variant": "emphasis" },
+    { "id": "verify-media", "from": "api", "to": "media", "y": 432, "label": "校验上传人、路径、格式、大小与哈希", "variant": "security" },
+    { "id": "enqueue-job", "from": "api", "to": "database", "y": 466, "label": "claim Media；创建 queued AgentJob", "variant": "emphasis" },
+    { "id": "queued-response", "from": "api", "to": "miniapp", "y": 500, "label": "202 queued；原请求不等待模型", "variant": "return" },
+    { "id": "lease-context", "from": "worker", "to": "database", "y": 534, "label": "租约 Job；读取科目、最近 20 条与 Todo 候选", "variant": "emphasis" },
+    { "id": "materialize", "from": "worker", "to": "media", "y": 568, "label": "临时凭证物化本次图片", "variant": "security" },
+    { "id": "ark-analysis", "from": "worker", "to": "ark", "y": 602, "label": "发送本次证据与有限上下文", "variant": "dashed" },
+    { "id": "ark-proposal", "from": "ark", "to": "worker", "y": 636, "label": "返回结构化建议", "variant": "return" },
+    { "id": "persist-proposal", "from": "worker", "to": "database", "y": 670, "label": "pending_confirmation；失败则重试/failed", "variant": "emphasis" },
+    { "id": "poll-submission", "from": "miniapp", "to": "api", "y": 710, "label": "GET /submissions/{id}", "variant": "default" },
+    { "id": "return-proposal", "from": "api", "to": "miniapp", "y": 738, "label": "返回可编辑 proposal", "variant": "return" },
+    { "id": "parent-review", "from": "parent", "to": "miniapp", "y": 766, "label": "编辑科目、摘要、知识点并确认", "variant": "security" },
+    { "id": "confirm", "from": "miniapp", "to": "api", "y": 794, "label": "POST /submissions/{id}/confirm", "variant": "emphasis" },
+    { "id": "formalize", "from": "api", "to": "database", "y": 822, "label": "单事务写入 Record、Knowledge、Occurrence、Review", "variant": "emphasis" },
+    { "id": "dashboard", "from": "miniapp", "to": "api", "y": 850, "label": "GET /children/{id}/dashboard", "variant": "default" },
+    { "id": "dashboard-read", "from": "api", "to": "database", "y": 878, "label": "读取已确认证据与到期 ReviewItem", "variant": "default" },
+    { "id": "todo-view", "from": "api", "to": "miniapp", "y": 906, "label": "今日 Todo、学习摘要与活动建议", "variant": "return" },
+    { "id": "feedback", "from": "parent", "to": "miniapp", "y": 934, "label": "完成 / 需巩固 / 有点难 / 稍后", "variant": "security" },
+    { "id": "feedback-write", "from": "miniapp", "to": "api", "y": 962, "label": "POST /reviews/{id}/feedback + Idempotency-Key", "variant": "emphasis" }
+  ],
+  "activations": [
+    { "participant": "api", "from": 206, "to": 506, "type": "security" },
+    { "participant": "worker", "from": 528, "to": 676, "type": "backend" },
+    { "participant": "ark", "from": 596, "to": 642, "type": "external" },
+    { "participant": "api", "from": 704, "to": 970, "type": "backend" },
+    { "participant": "database", "from": 240, "to": 886, "type": "database" }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "正式数据门禁",
+      "items": [
+        "AI 结果始终是可编辑 proposal；只有家长确认才创建正式学习与复习记录",
+        "未确认、分析失败或取消都不会进入 Todo、历史或报表"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "确定性闭环",
+      "items": [
+        "Review 日期固定由 1/3/7/14/30/60 天策略计算，不由模型决定",
+        "反馈请求使用幂等键，网络重试不会重复推进 ReviewItem"
+      ]
+    }
+  ]
+}

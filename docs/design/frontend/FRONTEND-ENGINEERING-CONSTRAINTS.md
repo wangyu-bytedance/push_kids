@@ -4,11 +4,11 @@
 
 - Frontend engineering scope: PRESENT
 - Constraint status: APPROVED
-- Constraint revision: FEC-20260830-01
+- Constraint revision: FEC-20260905-03
 - Owner: 产品负责人（用户）
 - Approved by: 产品负责人（用户）
-- Approved at: 2026-08-30
-- Approval evidence: 用户批准 FEAT-001 实现并授权在既定设计基线下完成原生微信小程序
+- Approved at: 2026-09-05
+- Approval evidence: 用户批准 BUG-010 Spec revision 11 与 DREV-20260905-UX-03
 - Related frontend design baseline: FDB-20260830-01
 - Applies to: `apps/miniprogram`
 
@@ -21,7 +21,7 @@
 
 ## Information architecture and action hierarchy
 
-- Primary tabs remain 今日、记录、报表、设置; onboarding, submission, confirmation, family application and approval are deep flows.
+- Primary tabs remain 今日、日程、记录、报表、设置; onboarding, submission, confirmation, family application and approval are deep flows.
 - Each page exposes one dominant action. Secondary and destructive actions are visually separated.
 - Manager-only actions may be hidden for usability, but server authorization remains authoritative.
 
@@ -56,6 +56,10 @@
 
 - Required portrait viewports are 320×568, 390×844 and 430×932 logical pixels with safe-area insets.
 - Layout is single column with maximum content width 480px; long CJK labels wrap and key actions remain reachable with the keyboard open.
+- Ordinary pages and sheets never require horizontal dragging to find a field, date, option, or action. Seven-day, three-range, three-subject and seven-weekday controls use shrinkable tracks and remain fully visible.
+- The 100-day report is the single approved horizontal gesture surface: it paginates inside its own swiper as 30/30/30/10 items, while the root page remains horizontally fixed.
+- Native buttons define width/min-width, margin, padding, box sizing and line height for their role. Circular controls keep equal computed width and height and cannot shrink inside flex layouts.
+- Hiding horizontal overflow is not acceptance evidence. At all three required viewports every required control must stay within its container by no more than 1px and every regular touch target remains at least 44px.
 - Landscape needs a safe return/basic-action path but no dedicated MVP composition.
 
 ## Accessibility and inclusive content
@@ -122,6 +126,7 @@
 
 - FEAT-001 has a scoped Figma Starter-plan evidence waiver in `ARCHITECTURE.md`; it expires before public production release and does not cover FEAT-002.
 - Visible FEAT-002 work requires a new approved Figma Design Revision and snapshot unless the user explicitly approves another scoped, owned, expiring waiver.
+- BUG-010 uses approved waiver `FIGMA-WAIVER-BUG010-20260905-01`, limited to its named repair surfaces and expiring before public production release.
 - Exceptions require an approved Spec with owner, risk, expiry and remediation. Review checks design alignment, complete states, security/privacy, budgets and evidence.
 
 ## Constraint verification checklist

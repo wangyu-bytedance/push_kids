@@ -1,0 +1,194 @@
+const test = require("node:test");
+const assert = require("node:assert/strict");
+const fs = require("node:fs");
+const path = require("node:path");
+const vm = require("node:vm");
+
+function harness(entry, request, wxOverrides = {}, extraApi = {}) {
+  let page;
+  const timers = new Set();
+  const app = { globalData: { selectedChildId: "child" }, selectChild(id) { this.globalData.selectedChildId = id; } };
+  const wx = { showToast() {}, setNavigationBarTitle() {}, pageScrollTo() {}, navigateBack() {},
+    showModal({ success }) { success({ confirm: true }); }, ...wxOverrides };
+  const modules = new Map();
+  function load(file) {
+    if (file.endsWith("/utils/api.js")) return { request, newIdempotencyKey: () => "fixture-key", ...extraApi };
+    if (modules.has(file)) return modules.get(file);
+    const module = { exports: {} };
+    vm.runInNewContext(fs.readFileSync(file, "utf8"), {
+      module, require(name) { return load(path.resolve(path.dirname(file), name + ".js")); },
+      Page(p) { page = p; }, wx, getApp: () => app,
+      setTimeout(fn) { timers.add(fn); return fn; }, clearTimeout(fn) { timers.delete(fn); }
+    }, { filename: file });
+    modules.set(file, module.exports);
+    return module.exports;
+  }
+  load(path.resolve("apps/miniprogram", entry));
+  page.setData = (updates) => {
+    for (const [key, value] of Object.entries(updates)) {
+      const parts = key.replace(/\[(\d+)\]/g, ".$1").split(".");
+      let target = page.data;
+      for (const part of parts.slice(0, -1)) target = target[part];
+      target[parts.at(-1)] = value;
+    }
+  };
+  return { page, app, wx, timers };
+}
+const event = (dataset) => ({ currentTarget: { dataset } });
+const row = (id) => ({ submission_id: id, state: "confirmed", source: "manual", record_id: id,
+  occurred_at: "2026-09-04T16:30:00Z", created_at: "2026-09-05T12:00:00Z", summary: "已确认的加法", subject_name: "数学" });
+
+test("history paginates with bounded rows, restores cursor and does not write", async () => {
+  const calls = [];
+  const { page } = harness("pages/records/index.js", async (url, options) => {
+    calls.push({ url, options });
+    const second = url.includes("cursor=page2");
+    return { items: Array.from({ length: 20 }, (_, i) => row(`${second ? 'older' : 'recent'}-${i}`)), next_cursor: second ? null : "page2", pending_count: 7 };
+  });
+  page.data.childId = "child";
+  await page.fetchHistory();
+  assert.equal(page.data.historyItems[0].day, "2026-09-05");
+  assert.equal(page.data.pendingCount, 7);
+  await page.historyNextPage();
+  // Wait for the async event handler's fetch.
+  await Promise.resolve();
+  assert.equal(page.data.historyItems.length, 20);
+  assert.equal(page.data.historyPage, 2);
+  await page.historyPreviousPage();
+  assert.equal(page.data.historyItems[0].submission_id, "recent-0");
+  assert.ok(calls.every((c) => !c.options || !c.options.method));
+});
+
+test("late search response and hidden page cannot replace current history", async () => {
+  const pending = [];
+  const { page } = harness("pages/records/index.js", () => new Promise((resolve) => pending.push(resolve)));
+  page.data.childId = "child";
+  const old = page.fetchHistory();
+  page.data.historyFilters.q = "new";
+  const current = page.fetchHistory(null, 1);
+  pending[1]({ items: [row("new")], pending_count: 0 }); await current;
+  pending[0]({ items: [row("old")], pending_count: 0 }); await old;
+  assert.equal(page.data.historyItems[0].submission_id, "new");
+  const hidden = page.fetchHistory(); page.onHide();
+  pending[2]({ items: [row("hidden")], pending_count: 0 }); await hidden;
+  assert.equal(page.data.historyItems[0].submission_id, "new");
+});
+
+test("filter cancellation is read-only, date semantics reset, navigation intent consumed once", async () => {
+  const { page, app } = harness("pages/records/index.js", async (url) => url.includes("subjects") ? [] : { items: [], pending_count: 0 });
+  page.data.childId = "child";
+  page.data.historyFilters.q = "original";
+  await page.openHistoryFilters(); page.data.filterDraft.q = "changed"; page.closeHistoryFilters();
+  assert.equal(page.data.historyFilters.q, "original");
+  page.data.historyFilters.from = "2026-09-01";
+  await page.changeHistoryView(event({ view: "pending" }));
+  assert.equal(page.data.historyFilters.from, "");
+  app.globalData.recordIntent = { childId: "child", view: "history", status: "confirmed", filters: { subject_id: "math" } };
+  await page.consumeRecordIntent();
+  assert.equal(page.data.historyFilters.subject_id, "math");
+  assert.equal(app.globalData.recordIntent, undefined);
+  page.data.historyFilters.subject_id = "english";
+  await page.consumeRecordIntent();
+  assert.equal(page.data.historyFilters.subject_id, "english");
+});
+
+test("confirmed and cancelled submissions open read-only and cannot be reconfirmed", async () => {
+  for (const state of ["confirmed", "cancelled"]) {
+    const calls = [];
+    const { page } = harness("pages/submission/confirm.js", async (url, options) => {
+      calls.push({ url, options });
+      return url.includes("/history/") ? { state, record: state === "confirmed" ? { summary: "家长确认" } : null, knowledge: [], media: [] }
+        : { id: "sid", child_id: "child", state, occurred_at: "2026-09-05T00:00:00Z", created_at: "2026-09-05T01:00:00Z" };
+    });
+    page.data.id = "sid";
+    await page.load(); await page.confirm();
+    assert.equal(page.data.error, "");
+    assert.equal(page.data.readOnly, true);
+    assert.equal(page.data.proposal, null);
+    assert.ok(calls.every((c) => !c.options));
+  }
+});
+
+test("viewer sees submitted material without write affordances; conflicts preserve edits", async () => {
+  const { page, app } = harness("pages/submission/confirm.js", async (url) => url.includes("/history/") ? { record: null, knowledge: [] } : { state: "pending_confirmation", child_id: "child", occurred_at: "2026-09-05" });
+  app.globalData.currentMember = { role: "viewer" };
+  await page.load();
+  assert.equal(page.data.canWrite, false);
+  assert.equal(page.data.readOnly, true);
+  const conflict = harness("pages/submission/confirm.js", async () => { const err = new Error("已被确认"); err.statusCode = 409; throw err; }).page;
+  conflict.data.proposal = { subject_name: "数学", summary: "我的编辑", knowledge_points: [{ name: "加法" }] };
+  await conflict.confirm();
+  assert.equal(conflict.data.conflict, true);
+  assert.equal(conflict.data.proposal.summary, "我的编辑");
+});
+
+test("record-to-today review intent contains only existing due IDs and does not feedback", () => {
+  let switched;
+  const { page, app } = harness("pages/submission/confirm.js", () => { throw new Error("Unexpected write"); }, { switchTab({ url }) { switched = url; } });
+  page.data.id = "sid"; page.data.submission = { child_id: "child" };
+  page.data.reviews = [{ review_id: "due", is_due: true }, { review_id: "later", is_due: false }];
+  page.goReview();
+  assert.equal(switched, "/pages/today/index");
+  assert.deepEqual(Array.from(app.globalData.reviewReturn.reviewIds), ["due"]);
+});
+
+test("list permission failure clears protected history", async () => {
+  const { page } = harness("pages/records/index.js", async () => { const error = new Error("访问已失效"); error.statusCode = 403; throw error; });
+  page.data.childId = "child"; page.data.historyItems = [row("private")];
+  await page.fetchHistory();
+  assert.equal(page.data.historyItems.length, 0);
+  assert.equal(page.data.historyError, "访问已失效");
+});
+
+test("pending polling covers off-page jobs and stops in confirmed history or on hide", () => {
+  const { page, timers } = harness("pages/records/index.js", async () => ({}));
+  page.data.submissions = [{ state: "queued", awaiting_upload: true }];
+  page.schedulePoll(); assert.equal(timers.size, 0);
+  page.data.pendingProcessing = true;
+  page.schedulePoll(); assert.equal(timers.size, 1);
+  page.data.recordView = "history"; page.data.historyView = "confirmed";
+  page.schedulePoll(); assert.equal(timers.size, 0);
+  page.data.historyView = "pending"; page.schedulePoll();
+  page.onHide(); assert.equal(timers.size, 0);
+});
+
+test("resuming an upload in detail retains the same submission identity", async () => {
+  const calls = [];
+  const { page } = harness("pages/submission/confirm.js", async (url, options) => { calls.push({ url, method: options.method }); },
+    { chooseMedia({ success }) { success({ tempFiles: [{ tempFilePath: "synthetic-local-path" }] }); } },
+    { appendSubmissionMedia: async (id) => calls.push({ appended: id }) });
+  page.data.submission = { id: "original", child_id: "child", media_count: 0, awaiting_upload: true };
+  page.load = async () => {};
+  await page.resumePhotos();
+  assert.equal(calls[0].appended, "original");
+  assert.equal(calls[1].url, "/submissions/original/finalize");
+  assert.equal(page.data.saving, false);
+});
+
+test("changing a child cannot move a dirty or uploading form to another child", async () => {
+  const { page, app } = harness("pages/records/index.js", async (url) => {
+    if (url === "/children") return [{ id: "child", name: "A" }, { id: "other", name: "B" }];
+    if (url.includes("history")) return { pending_count: 0 };
+    return [];
+  }, { showModal({ success }) { success({ confirm: false }); } });
+  page.data.childId = "child"; page.data.text = "未提交的内容";
+  app.globalData.selectedChildId = "other";
+  await page.load();
+  assert.equal(page.data.childId, "child");
+  assert.equal(page.data.text, "未提交的内容");
+  page.data.saving = true;
+  await page.changeChild({ detail: { value: 1 } });
+  page.changeMode(event({ mode: "text" }));
+  assert.equal(page.data.childId, "child");
+  assert.equal(page.data.mode, "photo");
+});
+
+test("search text travels outside the URL and stays family scoped", async () => {
+  let call;
+  const { page } = harness("pages/records/index.js", async (url, options) => { call = { url, options }; return { items: [], pending_count: 0 }; });
+  page.data.childId = "child"; page.data.searchText = "孩子的学习内容";
+  await page.searchHistory();
+  assert.ok(!call.url.includes("q="));
+  assert.equal(call.options.historyQuery, "孩子的学习内容");
+  assert.ok(call.url.startsWith("/children/child/history?"));
+});

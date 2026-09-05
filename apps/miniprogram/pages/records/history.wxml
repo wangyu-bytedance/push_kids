@@ -1,0 +1,31 @@
+<template name="history">
+  <view class="history-search"><input class="input" value="{{searchText}}" bindinput="setHistorySearch" bindconfirm="searchHistory" confirm-type="search" maxlength="100" placeholder="搜索学习内容或上传文字" aria-label="搜索学习内容或上传文字" /><button bindtap="searchHistory">搜索</button><button bindtap="openHistoryFilters">筛选</button></view>
+  <view class="history-status"><button class="{{historyView === 'confirmed' ? 'selected' : ''}}" data-view="confirmed" bindtap="changeHistoryView">已确认</button><button class="{{historyView === 'pending' ? 'selected' : ''}}" data-view="pending" bindtap="changeHistoryView">待处理 {{pendingCount}}</button><button class="{{historyView === 'all' ? 'selected' : ''}}" data-view="all" bindtap="changeHistoryView">全部</button></view>
+  <view class="history-caption"><text>按{{historyView === 'confirmed' ? '学习' : '提交'}}时间 · 第 {{historyPage}} 页</text><button bindtap="reloadHistory" disabled="{{historyLoading}}">刷新</button></view>
+  <view wx:if="{{hasFilters}}" class="notice"><text>已筛选{{historyFilters.q ? ' · ' + historyFilters.q : ''}}{{historyFilters.from ? ' · ' + historyFilters.from : ''}}{{historyFilters.to ? ' 至 ' + historyFilters.to : ''}}</text><button class="history-clear" bindtap="clearHistoryFilters">清除筛选</button></view>
+  <view wx:if="{{historyError}}" class="notice error"><text>{{historyError}}</text><button bindtap="reloadHistory">重试</button></view>
+  <view wx:if="{{historyLoading}}" class="muted history-caption">正在读取记录…</view>
+  <block wx:for="{{historyItems}}" wx:key="submission_id">
+    <text wx:if="{{item.showDay}}" class="history-day">{{item.day}}</text>
+    <button class="history-row" data-id="{{item.submission_id}}" bindtap="openHistoryItem">
+      <view class="row between"><text class="history-title">{{item.label}}</text><text class="muted">›</text></view>
+      <text class="history-summary">{{item.summaryPreview}}</text>
+      <text class="muted history-meta">{{item.stateLabel}} · {{item.source === 'photo' ? '照片 ' + item.media_count + ' 张' : '文字记录'}}{{item.record_id ? ' · ' + item.knowledge_count + ' 个知识点' : ''}}</text>
+      <text wx:if="{{historyView !== 'confirmed'}}" class="muted history-meta">学习于 {{item.learned}}</text>
+      <text wx:if="{{item.state === 'failed'}}" class="muted history-meta">AI 暂时不可用，可重试或人工录入</text>
+    </button>
+  </block>
+  <view wx:if="{{!historyLoading && !historyError && !historyItems.length}}" class="empty plain">{{hasFilters ? '没有符合筛选条件的记录' : (historyView === 'pending' ? '当前没有待处理记录' : '还没有学习记录')}}<button wx:if="{{hasFilters}}" bindtap="clearHistoryFilters">清除筛选</button></view>
+  <view class="history-pagination" wx:if="{{historyPage > 1 || historyNext}}"><button disabled="{{historyLoading || historyPage === 1}}" bindtap="historyPreviousPage">上一页</button><button disabled="{{historyLoading || !historyNext}}" bindtap="historyNextPage">加载更多</button></view>
+  <view wx:if="{{filterOpen}}" class="history-mask" bindtap="closeHistoryFilters"><view class="history-sheet" catchtap="stopPropagation">
+    <view class="row between"><text class="history-title">筛选记录</text><button bindtap="closeHistoryFilters">关闭</button></view>
+    <text class="label">{{historyView === 'confirmed' ? '学习日期' : '提交日期'}}</text>
+    <picker mode="date" value="{{filterDraft.from}}" data-field="from" bindchange="setHistoryFilter"><view class="picker">起日：{{filterDraft.from || '不限'}}</view></picker>
+    <picker mode="date" value="{{filterDraft.to}}" data-field="to" bindchange="setHistoryFilter"><view class="picker">止日：{{filterDraft.to || '不限'}}</view></picker>
+    <text class="label">学习科目</text><picker range="{{filterSubjects}}" range-key="name" value="{{filterSubjectIndex}}" bindchange="chooseHistorySubject"><view class="picker">{{filterSubjects[filterSubjectIndex].name || '正在读取科目'}}</view></picker>
+    <text class="label">上传来源</text><view class="history-status"><button class="{{!filterDraft.source ? 'selected' : ''}}" data-source="" bindtap="chooseHistorySource">全部</button><button class="{{filterDraft.source === 'photo' ? 'selected' : ''}}" data-source="photo" bindtap="chooseHistorySource">照片</button><button class="{{filterDraft.source === 'text' ? 'selected' : ''}}" data-source="text" bindtap="chooseHistorySource">文字</button></view>
+    <view wx:if="{{historyView === 'all'}}" class="row between"><text>只看已取消</text><switch checked="{{filterDraft.cancelled}}" data-field="cancelled" bindchange="setHistoryFilter" aria-label="只看已取消" /></view>
+    <view wx:if="{{filterError}}" class="notice error">{{filterError}}</view>
+    <button class="button" bindtap="applyHistoryFilters">应用筛选</button>
+  </view></view>
+</template>

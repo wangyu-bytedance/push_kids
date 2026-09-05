@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Literal
 from urllib.parse import quote_plus
 
-from pydantic import Field, SecretStr
+from pydantic import AliasChoices, Field, SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -25,9 +25,14 @@ class Settings(BaseSettings):
     wechat_env_id: str | None = Field(None, alias="CBR_ENV_ID")
     wechat_expected_app_id: str | None = Field(None, alias="WECHAT_APP_ID")
     wechat_service_name: str = Field("flask-ik19", alias="WECHAT_SERVICE_NAME")
-    wechat_storage_bucket: str | None = Field(None, alias="WECHAT_STORAGE_BUCKET")
-    wechat_storage_region: str = Field("ap-shanghai", alias="WECHAT_STORAGE_REGION")
-    wechat_storage_cloud_prefix: str | None = Field(None, alias="WECHAT_STORAGE_CLOUD_PREFIX")
+    wechat_storage_bucket: str | None = Field(
+        None,
+        validation_alias=AliasChoices("COS_BUCKET", "WECHAT_STORAGE_BUCKET"),
+    )
+    wechat_storage_region: str = Field(
+        "ap-shanghai",
+        validation_alias=AliasChoices("COS_REGION", "WECHAT_STORAGE_REGION"),
+    )
     actor_hmac_key: SecretStr | None = Field(None, alias="PUSH_KIDS_ACTOR_HMAC_KEY")
     ai_provider: Literal["ark", "test"] = Field("ark", alias="PUSH_KIDS_AI_PROVIDER")
     run_worker: bool = Field(True, alias="PUSH_KIDS_RUN_WORKER")
@@ -79,12 +84,14 @@ class Settings(BaseSettings):
             return
         if not self.actor_hmac_key or len(self.actor_hmac_key.get_secret_value()) < 32:
             raise ValueError("云环境 PUSH_KIDS_ACTOR_HMAC_KEY 至少需要 32 个字符")
-        if not self.wechat_env_id or not self.wechat_expected_app_id:
-            raise ValueError("云环境必须配置 CBR_ENV_ID 与 WECHAT_APP_ID")
+        if not self.wechat_env_id:
+            raise ValueError("云托管运行环境缺少平台内置的 CBR_ENV_ID")
+        if not self.wechat_expected_app_id:
+            raise ValueError("云环境必须配置 WECHAT_APP_ID")
         if self.media_backend != "wechat_cloud":
             raise ValueError("云环境必须使用 PUSH_KIDS_MEDIA_BACKEND=wechat_cloud")
-        if not self.wechat_storage_bucket or not self.wechat_storage_cloud_prefix:
-            raise ValueError("云环境必须配置 WECHAT_STORAGE_BUCKET 与 WECHAT_STORAGE_CLOUD_PREFIX")
+        if not self.wechat_storage_bucket:
+            raise ValueError("云环境必须提供云托管注入的 COS_BUCKET")
         if not self.run_worker:
             raise ValueError("当前单实例 staging 必须启用 PUSH_KIDS_RUN_WORKER")
         database_url = self.resolved_database_url

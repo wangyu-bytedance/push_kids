@@ -1,15 +1,18 @@
 const api = require("../../utils/api");
 
 Page({
-  data: { loading: true, error: "", children: [], childIndex: 0, childId: "", dashboard: null, sections: { review: true, learning: true, activity: true } },
+  data: { loading: true, error: "", children: [], childIndex: 0, childId: "", dashboard: null, sections: { review: true, learning: true, activity: true }, reviewReturn: null, reviewGroupId: "", reviewFocusText: "" },
   onShow() { this.load(); },
   async load() {
+    const generation = (this.loadGeneration || 0) + 1;
+    this.loadGeneration = generation;
     this.setData({ loading: true, error: "" });
     try {
       const children = (await api.request("/children")).map((item) => ({
         ...item,
         avatar: item.name ? item.name.charAt(0) : "芽"
       }));
+      if (generation !== this.loadGeneration) return;
       if (!children.length) {
         this.setData({ loading: false, children, dashboard: null, childId: "" });
         return;
@@ -20,13 +23,28 @@ Page({
       const childId = children[childIndex].id;
       app.selectChild(childId);
       const dashboard = await api.request(`/children/${childId}/dashboard`);
+      if (generation !== this.loadGeneration) return;
       dashboard.daily_summary.subjects = dashboard.daily_summary.subjects.map((item) => ({ ...item, summary_text: item.summaries.join("；") }));
       dashboard.must_todo_groups = dashboard.todo_groups.filter((item) => !item.optional);
       dashboard.optional_todo_groups = dashboard.todo_groups.filter((item) => item.optional);
       const scheduledSubjects = new Set(dashboard.schedule_items.map((item) => item.subject_id).filter(Boolean));
       dashboard.optional_activity_suggestions = dashboard.activity_suggestions.filter((item) => item.suggested && !scheduledSubjects.has(item.subject_id));
+      dashboard.is_empty = !dashboard.todo_groups.length && !dashboard.daily_summary.record_count && !dashboard.schedule_items.length && !dashboard.optional_activity_suggestions.length;
+      dashboard.show_guide = !dashboard.todo_groups.length && !dashboard.daily_summary.record_count;
       this.setData({ loading: false, children, childIndex, childId, dashboard });
+      const back = app.globalData.reviewReturn;
+      if (back && back.childId === childId) {
+        const ids = new Set(back.reviewIds);
+        const target = dashboard.todo_groups.find((group) => group.items.some((item) => ids.has(item.review_id)));
+        this.setData({ reviewReturn: back, reviewGroupId: target ? target.id : "", "sections.review": true,
+          reviewFocusText: target ? "已定位这条学习记录的到期复习" : "这条记录当前没有待完成的到期复习" });
+        delete app.globalData.reviewReturn;
+        if (target && wx.pageScrollTo) wx.pageScrollTo({ selector: `#todo-group-${target.id}`, duration: 0 });
+      } else if (this.data.reviewReturn && this.data.reviewReturn.childId !== childId) {
+        this.setData({ reviewReturn: null, reviewGroupId: "", reviewFocusText: "" });
+      }
     } catch (error) {
+      if (generation !== this.loadGeneration) return;
       this.setData({ loading: false, error: error.message });
     }
   },
@@ -41,8 +59,18 @@ Page({
     this.setData({ childIndex, childId });
     await this.load();
   },
-  recordLearning() { wx.switchTab({ url: "/pages/records/index" }); },
-  openPending() { wx.switchTab({ url: "/pages/records/index" }); },
+  recordLearning() { getApp().globalData.recordIntent = { childId: this.data.childId, view: "new" }; wx.switchTab({ url: "/pages/records/index" }); },
+  addSchedule() { getApp().globalData.openCalendarCreate = true; wx.switchTab({ url: "/pages/calendar/index" }); },
+  openPending() { getApp().globalData.recordIntent = { childId: this.data.childId, view: "history", status: "pending" }; wx.switchTab({ url: "/pages/records/index" }); },
+  openLearningHistory(event) {
+    getApp().globalData.recordIntent = { childId: this.data.childId, view: "history", status: "confirmed",
+      filters: { subject_id: event.currentTarget.dataset.id, from: this.data.dashboard.day, to: this.data.dashboard.day } };
+    wx.switchTab({ url: "/pages/records/index" });
+  },
+  returnToRecord() {
+    if (!this.data.reviewReturn || this.data.reviewReturn.childId !== this.data.childId) return;
+    wx.navigateTo({ url: `/pages/submission/confirm?id=${this.data.reviewReturn.submissionId}` });
+  },
   openSettings() { wx.switchTab({ url: "/pages/settings/index" }); },
   openActivity(event) { wx.navigateTo({ url: `/pages/activity/edit?subjectId=${event.currentTarget.dataset.subjectId}` }); },
   async practice(event) {

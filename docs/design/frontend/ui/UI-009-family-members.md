@@ -1,18 +1,18 @@
 # UI-009 — 家庭与成员
 
-- Status: `DESIGN_CANDIDATE`
+- Status: `CURRENT_LOCAL / 390_NATIVE_CAPTURED / MATRIX_PENDING`
 - Related Feature: `FEAT-002`
 - Related Spec: `SPEC-20260831-09`
 - Baseline: `FDB-20260830-01`
 - Engineering contract: `FEC-20260830-01`
-- Design revision: `DREV-20260831-07`
+- Design revision: `DREV-20260905-UX-03 / AMENDMENT-02`
 - Last reviewed artifact date: 2026-08-31
 - Interactive artifact: `docs/design/frontend/prototypes/DREV-20260831-07/index.html`
 - Snapshot manifest: `docs/design/frontend/snapshots/UI-009/DREV-20260831-07/APPROVAL.md`
 - Figma file: https://www.figma.com/design/FAyfmjNrA3btWztwyxI6Zj
 - Figma node: `N/A` — 当前账号为 Starter/View，MCP 写入限额已触发
 
-> 本文记录待审批设计，不描述已上线行为，也不授权生产实现。
+> BUG-010 revision 11 已获产品负责人批准并在本地实现；390视口成员主页及本人详情已由CUA验证，未部署，其他视口、双账号与真机证据仍待补齐。
 
 ## Information architecture
 
@@ -25,7 +25,7 @@
 | State | Visible contract |
 |---|---|
 | manager content | 孩子上下文、加入申请数量、全部成员、关系、能力、邀请和管理入口 |
-| member content | 全部成员、自己的关系与能力、退出家庭；无申请处理、邀请或成员管理入口 |
+| member content | 全部成员、自己的关系与能力；无申请处理、邀请、退出或成员管理入口 |
 | narrow viewport | 成员列表保持内容高度并在页面内滚动，底部 Tab 可达 |
 
 关系称谓和授权角色分开表达。`爸爸/妈妈/奶奶/其他` 不自动映射为 manager。服务端角色仍为
@@ -36,8 +36,10 @@
 
 - 成员列表对所有 active guardian 可见。
 - 待审批数量、邀请、关系和权限调整只对 manager 可见。
-- 最后一位 manager 的退出、移除或降权必须阻止并说明先转交管理权。
-- 成员详情中的降权、移除和退出属于破坏性操作，展示影响并二次确认。
+- 本人详情不提供移除、退出或角色修改；服务端无条件拒绝成员管理接口自移除。
+- 最后一位 manager 的移除或降权必须阻止并说明先转交管理权。
+- 其他成员的降权和移除属于破坏性操作，展示影响并二次确认。
+- 管理入口和成员卡片占满统一内容列；导航型行不依赖原生 button 的默认宽度；邀请说明与接口降级状态只占一个提示区。
 - loading、empty、error、401/403、成员并发变更等工程状态遵循 `FEC-20260830-01`；本轮快照
   只评审权限差异最大的两个 content 状态。
 
@@ -49,6 +51,7 @@
 
 ## Approval status
 
-核心功能已由用户确认符合预期；`AWAITING_COPY_INTERACTION_REVIEW`。当前评审家庭化措辞、
-信息层级和 manager/member 能力差异；Figma
-node-specific URL 或用户明确批准的 scoped waiver 仍是生产实现门禁。
+本地页面已改为整行进入成员详情；本人只可在现有授权下编辑称谓，其他成员的权限保存先确认，
+移除位于独立危险区。390×844当前账号截图证明成员主页、自身标记和正圆刷新按钮；线上旧后端缺少
+有效邀请GET时页面显示局部降级提示并继续展示成员。实施使用 `FIGMA-WAIVER-BUG010-20260905-01`；
+320/430、成员详情真实点击和双账号验证仍是发布门禁。

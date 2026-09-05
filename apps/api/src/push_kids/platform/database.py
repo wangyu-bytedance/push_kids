@@ -1,7 +1,7 @@
 from collections.abc import Generator
 from pathlib import Path
 
-from sqlalchemy import create_engine, inspect, text
+from sqlalchemy import create_engine, event, inspect, text
 from sqlalchemy.orm import Session, sessionmaker
 from sqlalchemy.pool import StaticPool
 
@@ -10,7 +10,7 @@ from push_kids.platform.config import Settings
 
 
 class Database:
-    expected_cloud_revision = "20260903_0001"
+    expected_cloud_revision = "20260905_0002"
 
     def __init__(self, settings: Settings) -> None:
         database_url = settings.resolved_database_url
@@ -28,9 +28,19 @@ class Database:
                 {"pool_pre_ping": True, "pool_recycle": 1200, "pool_size": 5, "max_overflow": 5}
             )
         self.engine = create_engine(database_url, connect_args=connect_args, **engine_options)
+        if database_url.startswith("sqlite"):
+            event.listen(self.engine, "connect", self._enable_sqlite_foreign_keys)
         self.session_factory = sessionmaker(
             bind=self.engine, expire_on_commit=False, class_=Session
         )
+
+    @staticmethod
+    def _enable_sqlite_foreign_keys(dbapi_connection, _connection_record) -> None:
+        cursor = dbapi_connection.cursor()
+        try:
+            cursor.execute("PRAGMA foreign_keys=ON")
+        finally:
+            cursor.close()
 
     def create_schema(self) -> None:
         Base.metadata.create_all(self.engine)

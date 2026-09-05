@@ -4,5 +4,6 @@ module.exports = {
   cloudService: "flask-ik19",
   apiBasePath: "/api/v1",
   localApiBaseUrl: "http://127.0.0.1:8011/api/v1",
-  localFamilyId: "local-family"
+  localFamilyId: "local-family",
+  localActorId: "local-parent"
 };

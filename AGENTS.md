@@ -75,3 +75,5 @@ Before initial production coding, or before changing module boundaries, shared a
 ### Frontend Figma design gate
 
 User-visible frontend work requires an approved baseline covering style consistency, user interaction conventions, and an exact resolution/viewport matrix; affected UI current state; a Figma node-specific URL; and explicit approval of the Task Spec revision + Design Revision plus approval snapshot. Frontend engineering impact independently requires the approved FEC revision and affected component/state/form, accessibility, browser/device, performance/resource, security/privacy, and observability evidence. The existing FEAT-001 waiver does not authorize new FEAT-002 visible implementation.
+
+Native Mini Program viewport acceptance follows `docs/design/frontend/FRONTEND-ENGINEERING-CONSTRAINTS.md` FEC-20260905-02 and `docs/quality/TEST-STRATEGY.md`; hidden overflow or HTML rendering cannot replace native node geometry and three-viewport evidence.

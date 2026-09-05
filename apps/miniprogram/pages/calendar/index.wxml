@@ -1,25 +1,27 @@
 <view class="page calendar-page">
-  <view class="compact-head">
-    <text class="eyebrow">{{selectedDay}}</text>
+  <view class="compact-head calendar-context">
+    <view class="screen-intro"><text class="screen-kicker">安排好学习之外的时间</text><text class="screen-heading">日程安排</text></view>
     <picker wx:if="{{children.length}}" range="{{children}}" range-key="name" value="{{childIndex}}" bindchange="changeChild"><view class="child-trigger"><text class="avatar-small">{{children[childIndex].avatar}}</text><text>{{children[childIndex].name}}</text><text class="chevron"></text></view></picker>
   </view>
-  <view class="week-strip"><button wx:for="{{week}}" wx:key="key" class="week-day {{item.key === selectedDay ? 'active' : ''}}" data-day="{{item.key}}" bindtap="chooseDay"><text>{{item.weekday}}</text><text class="day-number">{{item.day}}</text></button></view>
+  <view class="calendar-card"><view class="week-nav"><button class="week-arrow" data-offset="-7" bindtap="shiftWeek">‹</button><picker class="date-picker" mode="date" value="{{selectedDay}}" bindchange="chooseDate"><view>{{selectedMonthLabel}}</view></picker><button class="week-arrow" data-offset="7" bindtap="shiftWeek">›</button></view>
+  <view class="week-strip"><button wx:for="{{week}}" wx:key="key" class="week-day {{item.key === selectedDay ? 'active' : ''}}" data-day="{{item.key}}" bindtap="chooseDay"><text>{{item.weekday}}</text><text class="day-number">{{item.day}}</text><text class="event-mark" wx:if="{{item.key === selectedDay && items.length}}"></text></button></view></view>
   <view class="notice error" wx:if="{{error}}" bindtap="load">{{error}} · 点此重试</view>
   <view class="skeleton" wx:if="{{loading}}"></view>
-  <view class="agenda" wx:elif="{{items.length}}">
+  <view class="agenda-title"><text class="section-title">{{selectedDateLabel}}</text><text class="muted small">{{items.length}} 项安排</text></view>
+  <view class="agenda" wx:if="{{!loading && items.length}}">
     <view class="agenda-row {{item.past ? 'past' : ''}}" wx:for="{{items}}" wx:key="id" data-id="{{item.id}}" bindtap="openEvent">
-      <text class="agenda-time">{{item.start_time}}</text><view class="agenda-card"><text class="agenda-name">{{item.name}}</text><text class="muted small">{{item.start_time}}–{{item.end_time}} · {{item.kind === 'class' ? '辅导班' : item.kind === 'activity' ? '活动' : '其他'}}{{item.repeat_weekly ? ' · 每周重复' : ''}}</text><text class="past-label" wx:if="{{item.past}}">已结束</text></view>
+      <text class="agenda-time">{{item.start_time}}</text><view class="agenda-card"><text class="agenda-name">{{item.name}}</text><text class="muted small">{{item.start_time}}–{{item.end_time}} · {{item.kind === 'class' ? '课外活动' : item.kind === 'activity' ? '自主活动' : '其他'}}{{item.repeat_weekly ? ' · 每周重复' : ''}}</text><text class="past-label" wx:if="{{item.past}}">已结束</text></view>
     </view>
   </view>
-  <view class="empty plain" wx:else><text>当天没有日程</text><text class="muted small">点击右下角添加辅导班、课程或活动。</text></view>
-  <button class="fab" aria-label="新建日程" bindtap="openCreate">＋</button>
+  <view class="empty plain" wx:if="{{!loading && !items.length}}"><text>当天没有日程</text><text class="muted small">添加课外活动或其他安排。</text></view>
+  <button class="calendar-add" aria-label="新建日程" bindtap="openCreate">＋　添加日程</button>
 </view>
 <view class="sheet-mask" wx:if="{{showEditor}}" bindtap="closeEditor"></view>
 <view class="sheet" wx:if="{{showEditor}}">
-  <view class="sheet-handle"></view><view class="row between"><view><text class="sheet-title">{{editingId ? '编辑日程' : '新建日程'}}</text><text class="muted small">重复日程的修改作用于整个系列</text></view><button class="icon-button" bindtap="closeEditor">×</button></view>
-  <view class="field"><text class="label">日程名称</text><input class="input" value="{{eventName}}" data-field="eventName" bindinput="setField" placeholder="例如：英语辅导班" /></view>
+  <view class="sheet-handle"></view><view class="row between"><view><text class="sheet-title">{{editingId ? '编辑日程' : '新建日程'}}</text><text class="muted small">重复日程的修改作用于整个系列</text></view><view class="icon-button" bindtap="closeEditor" aria-role="button" aria-label="关闭">×</view></view>
+  <view class="field"><text class="label">日程名称</text><input class="input" value="{{eventName}}" data-field="eventName" bindinput="setField" placeholder="例如：英语课外活动" /></view>
   <view class="row"><view class="field grow"><text class="label">开始</text><picker mode="time" value="{{startTime}}" data-field="startTime" bindchange="setField"><view class="picker">{{startTime}}</view></picker></view><text class="time-separator">至</text><view class="field grow"><text class="label">结束</text><picker mode="time" value="{{endTime}}" data-field="endTime" bindchange="setField"><view class="picker">{{endTime}}</view></picker></view></view>
-  <view class="segmented"><button class="{{eventKind === 'class' ? 'active' : ''}}" data-kind="class" bindtap="chooseKind">辅导班</button><button class="{{eventKind === 'activity' ? 'active' : ''}}" data-kind="activity" bindtap="chooseKind">活动</button><button class="{{eventKind === 'other' ? 'active' : ''}}" data-kind="other" bindtap="chooseKind">其他</button></view>
+  <view class="segmented"><button class="{{eventKind === 'class' ? 'active' : ''}}" data-kind="class" bindtap="chooseKind">课外活动</button><button class="{{eventKind === 'activity' ? 'active' : ''}}" data-kind="activity" bindtap="chooseKind">自主活动</button><button class="{{eventKind === 'other' ? 'active' : ''}}" data-kind="other" bindtap="chooseKind">其他</button></view>
   <view class="row between repeat-row"><text>每周重复</text><switch checked="{{repeatWeekly}}" color="#216B58" bindchange="toggleRepeat" /></view>
-  <button class="button" loading="{{saving}}" bindtap="saveEvent">{{editingId ? '保存修改' : '创建日程'}}</button><button wx:if="{{editingId}}" class="button danger top-gap" bindtap="deleteEvent">删除日程</button>
+  <view class="action-row"><button class="button" loading="{{saving}}" bindtap="saveEvent">{{editingId ? '保存修改' : '创建日程'}}</button></view><view class="action-row top-gap" wx:if="{{editingId}}"><button class="button danger" bindtap="deleteEvent">删除日程</button></view>
 </view>

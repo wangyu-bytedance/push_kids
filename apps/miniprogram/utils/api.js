@@ -15,11 +15,43 @@ function normalizedError(response) {
   return "网络有点慢，请稍后再试";
 }
 
+function responseError(response) {
+  const error = new Error(normalizedError(response));
+  error.statusCode = response.statusCode;
+  return error;
+}
+
+function downloadPreview(capability) {
+  const context = appContext();
+  const header = {};
+  if (capability.download_path) {
+    if (context.useCloud || !capability.download_path.startsWith("/submissions/")) return Promise.reject(new Error("照片预览不可用"));
+    if (context.localActorId) header["X-Debug-Actor"] = context.localActorId;
+    else header["X-Family-ID"] = context.familyId;
+  } else if (!/^https:\/\//.test(capability.url || "")) return Promise.reject(new Error("照片预览不可用"));
+  return new Promise((resolve, reject) => wx.downloadFile({
+    url: capability.download_path ? context.apiBaseUrl + capability.download_path : capability.url,
+    header,
+    success(result) {
+      if (result.statusCode === 200) resolve(result.tempFilePath);
+      else { removePreview(result.tempFilePath); reject(new Error("照片暂时无法读取，请重试")); }
+    },
+    fail: () => reject(new Error("照片下载失败，请检查网络后重试"))
+  }));
+}
+
+function removePreview(path) {
+  if (path && wx.getFileSystemManager) wx.getFileSystemManager().unlink({ filePath: path, fail() {} });
+}
+
 function request(path, options = {}) {
   const context = appContext();
   if (context.useCloud) return cloudRequest(path, options, context);
-  const header = { "content-type": "application/json", "X-Family-ID": context.familyId };
+  const header = { "content-type": "application/json" };
+  if (context.localActorId) header["X-Debug-Actor"] = context.localActorId;
+  else header["X-Family-ID"] = context.familyId;
   if (options.idempotencyKey) header["Idempotency-Key"] = options.idempotencyKey;
+  if (options.historyQuery) header["X-History-Query"] = encodeURIComponent(options.historyQuery);
   return new Promise((resolve, reject) => {
     wx.request({
       url: `${context.apiBaseUrl}${path}`,
@@ -28,7 +60,7 @@ function request(path, options = {}) {
       header,
       success(response) {
         if (response.statusCode >= 200 && response.statusCode < 300) resolve(response.data);
-        else reject(new Error(normalizedError(response)));
+        else reject(responseError(response));
       },
       fail() { reject(new Error("无法连接服务，请检查网络或服务地址")); }
     });
@@ -41,6 +73,7 @@ function cloudRequest(path, options, context) {
     "X-WX-SERVICE": context.cloudService
   };
   if (options.idempotencyKey) header["Idempotency-Key"] = options.idempotencyKey;
+  if (options.historyQuery) header["X-History-Query"] = encodeURIComponent(options.historyQuery);
   return new Promise((resolve, reject) => {
     wx.cloud.callContainer({
       config: { env: context.cloudEnv },
@@ -50,7 +83,7 @@ function cloudRequest(path, options, context) {
       header,
       success(response) {
         if (response.statusCode >= 200 && response.statusCode < 300) resolve(response.data);
-        else reject(new Error(normalizedError(response)));
+        else reject(responseError(response));
       },
       fail() { reject(new Error("无法连接云服务，请稍后重试")); }
     });
@@ -60,7 +93,7 @@ function cloudRequest(path, options, context) {
 function uploadSubmission(filePath, fields, onProgress, idempotencyKey) {
   const context = appContext();
   if (context.useCloud) return Promise.reject(new Error("云环境图片必须使用对象存储上传"));
-  const header = { "X-Family-ID": context.familyId };
+  const header = context.localActorId ? { "X-Debug-Actor": context.localActorId } : { "X-Family-ID": context.familyId };
   if (idempotencyKey) header["Idempotency-Key"] = idempotencyKey;
   return new Promise((resolve, reject) => {
     const task = wx.uploadFile({
@@ -89,7 +122,7 @@ function appendSubmissionMedia(submissionId, filePath, onProgress) {
       url: `${context.apiBaseUrl}/submissions/${submissionId}/media`,
       filePath,
       name: "file",
-      header: { "X-Family-ID": context.familyId },
+      header: context.localActorId ? { "X-Debug-Actor": context.localActorId } : { "X-Family-ID": context.familyId },
       success(response) {
         let data;
         try { data = JSON.parse(response.data); } catch { data = {}; }
@@ -102,4 +135,4 @@ function appendSubmissionMedia(submissionId, filePath, onProgress) {
   });
 }
 
-module.exports = { request, uploadSubmission, appendSubmissionMedia, normalizedError, newIdempotencyKey };
+module.exports = { request, uploadSubmission, appendSubmissionMedia, normalizedError, newIdempotencyKey, downloadPreview, removePreview };

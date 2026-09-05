@@ -1,10 +1,10 @@
 # 微信云托管开发与上线手册
 
-- Revision: `CLOUD-RUNBOOK-20260905-02`
+- Revision: `CLOUD-RUNBOOK-20260905-04`
 - Related Spec: `CLOUD-SPEC-20260903-03`
 - Related architecture: `ARCH-TARGET-20260903-06`
 - Scope: 原生微信小程序 + 微信云托管 FastAPI + 托管 MySQL + 云托管对象存储
-- Current status: 代码和本地自动化已落地；真实云环境验收尚未完成
+- Current status: staging FastAPI 已部署；核心运行时与无域名小程序链路已验证，真实身份、存储和恢复验收未完成
 
 本项目保留原生微信小程序和 FastAPI，不改写成 Flask。官方 Flask 模板只用于理解容器、
 MySQL 环境变量和发布约束；`flask-ik19` 是当前 staging 服务名，不代表后端框架。
@@ -28,23 +28,66 @@ flowchart LR
 - 图片不经过 `callContainer`，也不写容器磁盘。前端向后端申请一次性路径后直传私有对象存储，
   后端验证上传者、bucket、路径和文件内容后 claim。
 - 正式数据只进 MySQL；容器启动只校验 Alembic revision，不自动建表或迁移。
-- 当前 staging 固定 `min=1,max=1`，进程内 Worker 只在这个约束下成立。扩容前必须拆 Worker。
+- 当前代码仍包含进程内 Worker，但微信云托管在请求结束后不保证继续分配 CPU；`min=1,max=1`
+  不能解除该限制。云端异步任务执行器拆分完成前，不得把分析、重试或清理能力判定为可上线。
 - 模型继续使用 `ARK_MODEL=doubao-seed-2-1-pro-260628`；Ark 密钥只放云环境变量。
 
 ## 2. 微信云托管必须遵守的平台边界
 
 | 平台边界 | 本项目做法 | 开发注意事项 |
 |---|---|---|
-| `callContainer` 最长请求约 15 秒 | API 只入队，AI 在 Worker 异步执行 | 页面轮询状态；不得在 HTTP 请求内等待模型完成 |
+| `callContainer` 最长请求约 15 秒 | API 可以持久化 Job 后快速响应 | 长任务必须交给受支持的请求驱动任务或独立执行器，不得依赖云托管容器在响应后的后台执行 |
 | `callContainer` 请求体最大 100 KB | JSON 只传字段和 ticket/fileID | 图片必须 `wx.cloud.uploadFile`，禁止 base64、multipart 进容器 |
 | 一个服务只监听一个 HTTP 端口 | 非 root 容器监听 `PORT`，默认 8000 | 不启动第二端口，不使用低于 1024 的特权端口，不使用 TCP/UDP/MQTT 或 Docker Compose |
 | 容器文件系统不持久 | 云环境禁用本地媒体接口 | WebShell 修改、临时下载和运行时文件都不可作为数据源 |
+| 请求结束后容器不保证继续获得 CPU | 当前进程内 Worker 属于已知待整改项 | 不在 lifespan、请求回调外启动永久线程、进程、轮询协程或延迟清理；`minNum>0` 也不能作为例外 |
 | 版本创建时冻结配置 | 每版记录镜像、资源、实例数和环境变量版本 | 回滚会连同旧版配置一起恢复，发布前先核对配置差异 |
 | 发布后新旧版本可能共存约 2 分钟 | Job 使用数据库 lease；Schema 向前兼容 | 不做破坏性 Schema 改动；旧/新版本都要能访问 expand 后结构 |
 | `minNum=0` 会缩容并可能冷启动失败 | staging 使用 `min=1` | 如改为 0，客户端要把 `SERVICE_NOT_READY/ECONNREFUSED` 当可重试 |
 | 公网默认域名仅适合测试且无安全防护 | 短时 smoke 后关闭公网 | 小程序只走 `callContainer`；不要把默认域名当正式 API 域名 |
 | WebShell 修改不会进入版本 | 只把 WebShell 用于只读诊断 | 修复必须提交代码并发布新版本 |
 | 云托管不适合把数据库/Redis 放进容器 | 使用托管 MySQL 和对象存储 | 不依赖容器 volume，不把 Compose 当生产编排 |
+
+### 2.1 编写代码时的强制注意事项
+
+以下规则适用于所有微信云托管相关代码评审。它们来自微信云托管的
+[小程序调用云服务](https://developers.weixin.qq.com/miniprogram/dev/wxcloudservice/wxcloudrun/src/development/call/mini.html)、
+[微信身份信息](https://developers.weixin.qq.com/miniprogram/dev/wxcloudservice/wxcloudrun/src/development/weixin/)
+和[开发常识](https://developers.weixin.qq.com/miniprogram/dev/wxcloudservice/wxcloudrun/src/guide/debug/know.html)。
+
+小程序客户端 MUST：
+
+- 在 `App.onLaunch` 中全局调用一次 `wx.cloud.init`；调用失败时不得静默切换到公网 API。
+- 统一通过封装层调用 `wx.cloud.callContainer`，并显式传入正确的 `config.env`、以 `/` 开头的
+  `path`、HTTP `method` 和 `X-WX-SERVICE`。业务页面不得自行拼装另一套传输逻辑。
+- 把 `success` 回调理解为“网关调用完成”，继续检查 `statusCode` 和业务错误体；临时网络错误只能
+  在幂等安全且次数有界时重试，不得无限快速重试。
+- 不向请求体或自定义 Header 填写 `openid`、`appid`、`unionid`、family ID 或伪造 `X-WX-*`。
+  身份只能来自微信专用链路自动注入的信息。
+- 默认只访问与当前小程序已关联的云环境；跨环境调用必须显式采用官方环境共享机制，并重新审查
+  `X-WX-FROM-*` 身份语义，不能只替换环境 ID。
+- 图片使用 `wx.cloud.uploadFile` 直传私有存储；`callContainer` 只传业务字段、ticket 和 `fileID`，
+  不传 base64 图片、COS 密钥、bucket 或 region。
+- 不把 OpenID、UnionID、fileID、儿童图片、完整响应 Header 或原始错误对象写入 Storage、日志、
+  埋点和用户文案。排障时可记录平台返回的非敏感 request ID。
+
+云托管服务端 MUST：
+
+- 监听 HTTP，并优先使用平台注入的 `PORT`；部署配置的容器端口必须与实际监听端口一致。
+- 只在关闭公网后的微信专用链路上，把平台注入的 `X-WX-OPENID`、`X-WX-APPID`、`X-WX-ENV`
+  和 `X-WX-SOURCE` 作为身份上下文；仍要校验预期 AppID、环境、用户绑定和每个资源的 family scope。
+- 将 `X-WX-UNIONID` 视为条件性可用字段，不得假定一定存在；跨环境资源共享时单独处理
+  `X-WX-FROM-OPENID`、`X-WX-FROM-APPID` 和 `X-WX-FROM-UNIONID`，不得与普通调用混用。
+- 不把原始请求 Header、环境变量、`x-cloudbase-context`、OpenID、临时 COS 凭证、数据库密码或
+  API Key 回显给客户端，也不得写入日志。
+- 保持无状态：正式数据写入 MySQL/对象存储；容器文件只允许作为单次请求或受控任务的临时文件，
+  使用完成后立即清理。
+- 不在 FastAPI lifespan、响应回调或请求作用域外启动永久后台线程、进程或轮询协程；响应返回前
+  必须完成本次请求承诺的异步工作。长任务使用平台支持的任务触发方式或独立常驻执行器。
+- 使用精简依赖和镜像；内容变化必须重新构建不可变镜像，禁止把 WebShell 热修改当作发布。
+
+评审时如果任一身份 Header 来自客户端自报、公网仍开启、监听端口不一致、正式状态落到本地文件，
+或业务完成依赖响应后的容器后台活动，结论必须是阻断发布，而不是通过放宽校验绕过。
 
 ## 3. 小程序接入
 
@@ -152,8 +195,9 @@ PYTHONPATH=apps/api/src uv run alembic check
 `http://api.weixin.qq.com/_/cos/getauth` 返回的临时凭证；因此必须先启用“开放接口服务”，
 再创建包含该能力的新云托管版本。
 
-未 claim ticket 过期后、或照片草稿被取消后，Worker 会重试删除对象并把状态标记为 deleted。
-运维仍需监控 ticket/claim 比率和超期 orphan 数量。正式数据的保留期与家庭级删除属于公开发布门禁。
+未 claim ticket 过期后、或照片草稿被取消后的删除必须由受支持的任务执行器触发，并把状态标记为
+deleted；不能依赖云托管进程内 Worker 在请求结束后继续轮询。运维仍需监控 ticket/claim 比率和
+超期 orphan 数量。正式数据的保留期与家庭级删除属于公开发布门禁。
 
 ## 7. 云托管服务配置
 
@@ -175,18 +219,23 @@ PYTHONPATH=apps/api/src uv run alembic check
 PUSH_KIDS_ENV=cloud
 PUSH_KIDS_MEDIA_BACKEND=wechat_cloud
 PUSH_KIDS_AI_PROVIDER=ark
+# 当前代码仍要求 true，但该进程内 Worker 不符合云托管请求外 CPU 约束；整改后移除此配置
 PUSH_KIDS_RUN_WORKER=true
-CBR_ENV_ID=prod-d2g14rwoycac6b45d
 WECHAT_APP_ID=<当前小程序 AppID>
 WECHAT_SERVICE_NAME=flask-ik19
-WECHAT_STORAGE_BUCKET=<控制台 bucket>
-WECHAT_STORAGE_REGION=ap-shanghai
-WECHAT_STORAGE_CLOUD_PREFIX=<当前环境 cloud:// 前缀>
+COS_BUCKET=<云托管对象存储配置提供的 bucket>
+COS_REGION=<云托管对象存储配置提供的 region>
 PUSH_KIDS_ACTOR_HMAC_KEY=<随机且至少 32 字符>
 ARK_API_KEY=<当前有效 Ark 密钥>
 ARK_BASE_URL=https://ark.cn-beijing.volces.com/api/v3
 ARK_MODEL=doubao-seed-2-1-pro-260628
 ```
+
+`CBR_ENV_ID` 是云托管部署时自动注入的保留变量，控制台不允许手工创建 `CBR_*` 变量；应用只校验
+它存在且与请求中的环境一致。小程序上传、下载使用构建配置中的环境 ID 初始化云环境，并使用上传返回的 `fileID`；不向小程序下发
+bucket、region 或 COS 凭据。Python 服务端因需校验上传归属、读取图片供模型分析并清理孤儿对象，
+直接读取云托管提供的 `COS_BUCKET`、`COS_REGION`，对象路径从 `fileID` 解析，不再配置独立的
+`WECHAT_STORAGE_CLOUD_PREFIX`。
 
 敏感值只写云托管环境变量/密钥能力。不要写 `.env.example`、Dockerfile、发布包、日志、截图或
 Issue。版本配置变更与代码变更一起评审；回滚前要比较旧版的资源、实例数和环境变量。
@@ -200,7 +249,7 @@ Issue。版本配置变更与代码变更一起评审；回滚前要比较旧版
 
 1. 轮换曾暴露的数据库凭据，创建独立库与最小权限账号。
 2. 启用开放接口服务；确认新版本可获得临时 COS 凭证。
-3. 配置 owner-only 存储规则、bucket、region 和 cloud prefix；使用测试图片验证非 owner 拒绝。
+3. 配置 owner-only 存储规则；确认平台已提供 `COS_BUCKET`、`COS_REGION`，使用测试图片验证非 owner 拒绝。
 4. 从可访问 MySQL 的受控环境执行 Alembic，校验 exact head。
 5. 配置全部环境变量；确认日志、健康检查、端口、`min=1,max=1`。
 6. 本地构建并运行容器，验证 SIGTERM、live/ready、非 root 进程和无本地持久化依赖。
@@ -233,7 +282,7 @@ OpenID/HMAC、fileID、图片内容、孩子正文、模型 prompt/response。
 | ready 失败 | MySQL 连通、Alembic revision、必需环境变量 | 临时改回 SQLite |
 | 401/403 | 是否走 callContainer、AppID/env、actor binding、是否误带 family header | 放宽成客户端传 family |
 | 图片 claim 失败 | prefix/bucket/region、开放接口、metaid、owner、魔数与大小 | 只信任客户端 fileID |
-| Job 长时间 queued | Worker 是否启用、lease、Ark 配置、DB 锁 | 把 AI 改回同步请求 |
+| Job 长时间 queued | 任务触发器/独立执行器、lease、Ark 配置、DB 锁；同时确认未依赖容器后台 CPU | 把 AI 改回阻塞式 `callContainer`，或靠 `minNum=1` 维持后台轮询 |
 | 发布后行为不一致 | 方向测试/灰度版本、双版本窗口、冻结配置 | WebShell 直接改线上文件 |
 | 公网可访问 | 服务公网开关和域名设置 | 依赖自定义 header 充当公网鉴权 |
 
@@ -277,6 +326,9 @@ uv run python tools/audit_database.py data/push_kids.db --require-empty
 - 以上使用隔离的临时数据库、测试身份和虚拟 bucket，不包含真实用户 OpenID、真实图片或生产密钥。
   真实 `wx.cloud.callContainer`、`wx.cloud.uploadFile`、metadata claim、owner-only 规则和恢复演练仍须
   在目标 staging 环境验证。
+- 2026-09-05 已在登录真实 AppID 的微信开发者工具中验证无域名 `callContainer` 路由：仅传环境 ID、
+  `X-WX-SERVICE` 和 path，线上 `/` 返回 200；`/health/live` 返回 404，说明路由有效但线上仍是旧
+  Flask 模板。该记录仅是替换前基线，已被 10.3 的 FastAPI 真实部署证据取代。
 
 ### 10.2 2026-09-05 非 root 端口修正
 
@@ -284,13 +336,28 @@ uv run python tools/audit_database.py data/push_kids.db --require-empty
   liveness/readiness 连接被拒绝和容器重启。
 - `BUG-SPEC-20260905-01` 将 Dockerfile、Compose、CloudBase CLI 和 service settings 的容器内端口
   统一为 8000，并保留 UID 10001。
-- 2026-09-03 的 port 80 结果只是本地运行时证据，不再作为云托管可用性证据。新端口的真实
-  CloudBase live/ready smoke 仍为发布门禁。
+- 2026-09-05 `flask-ik19-003` 在真实 CloudBase 以端口 8000 启动，`/health/live` 和
+  `/health/ready` 均返回 200；端口修正已通过线上 smoke。
+
+### 10.3 2026-09-05 staging 发布记录
+
+- 托管 MySQL 已创建独立 `push_kids` 库并执行 Alembic 至 `20260903_0001`。运行账号仅有该库
+  `SELECT/INSERT/UPDATE/DELETE`，线上实测 `CREATE` 被拒绝；应用不使用 `root`。
+- 曾在会话中暴露的 MySQL `root` 凭据已轮换；新管理凭据与应用凭据仅保存在本机钥匙串和
+  云托管运行时。数据库公网只在迁移期间短时开启，迁移后 `wanStatus=closed`。
+- CLI 2.3.3 发布的不可变版本 `flask-ik19-003` 为 `normal`；运行时使用平台注入的
+  `CBR_ENV_ID`/COS 变量、数据库内网地址和专用 MySQL 账号。
+- 关闭服务 `PUBLIC` 后，默认公网域名在传播完成后返回 403；`MINIAPP` 保持开启。真实开发者工具
+  通过环境 ID + `X-WX-SERVICE` 调用 live/ready 均为 200，全程不需要后端域名。
+- 真实微信 actor 已到达 FastAPI；因尚未执行受控 family binding，`GET /api/v1/children`
+  返回预期的 403 `forbidden`。不自动创建家庭或儿童数据。
 
 ## 11. 官方资料索引
 
 以下内容已用于本迁移，不把页面中的示例值当作本项目配置：
 
+- [小程序 API 总索引](https://developers.weixin.qq.com/miniprogram/dev/api/)
+- [小程序调用云服务](https://developers.weixin.qq.com/miniprogram/dev/wxcloudservice/wxcloudrun/src/development/call/mini.html)
 - [服务管理](https://developers.weixin.qq.com/miniprogram/dev/wxcloudservice/wxcloudrun/src/guide/service/)
 - [部署发布](https://developers.weixin.qq.com/miniprogram/dev/wxcloudservice/wxcloudrun/src/guide/service/online.html)
 - [云端调试](https://developers.weixin.qq.com/miniprogram/dev/wxcloudservice/wxcloudrun/src/guide/service/debug.html)
@@ -314,12 +381,11 @@ uv run python tools/audit_database.py data/push_kids.db --require-empty
 
 ## 12. 当前阻塞与验收边界
 
-代码就绪不等于已上线。当前真实部署必须等待并验证：
+核心 staging 版本已上线，但下列项未验收前仍不能写入受控真实数据或对外发布：
 
-- 已暴露的数据库密码完成轮换，旧密码失效；
-- 最小权限 MySQL 账号、bucket/region/cloud prefix 和 HMAC 密钥已在控制台配置；
 - 开放接口服务已启用，并用新版本验证临时 COS 凭证和 metaid decode；
 - 两个真实微信账号完成 actor、跨家庭和非 owner 测试；
+- 分析、重试和 orphan 清理已迁出云托管进程内后台循环，并完成任务触发/重启恢复验证；
 - MySQL 备份恢复、容器重启/Job lease、灰度和关闭公网均有证据；
 - 未成年人隐私指引、保留期、导出/删除和投诉渠道在公开发布前完成。
 
@@ -328,6 +394,5 @@ uv run python tools/audit_database.py data/push_kids.db --require-empty
 
 2026-09-05 CLI 复核：`@wxcloud/cli` 2.3.3 已认证到目标 AppID，环境列表只包含
 `prod-d2g14rwoycac6b45d`，服务列表命中 `flask-ik19`。加入 `wxcloud.config.json` 后，隔离且不含
-`.env` 的发布源在 Node 16 下通过 `wxcloud deploy --dryRun`，没有覆盖已验证 Dockerfile。远端正常
-版本仍是微信官方 Flask 计数模板，另一个版本处于 `deploy_failed`；实际发布继续等待数据库密码
-轮换、最小权限账号/Schema 和完整运行环境变量配置。
+`.env` 的发布源通过 `wxcloud deploy --dryRun`；随后使用 `wxcloud run:deploy` 提交同一发布包，
+`flask-ik19-003` 已为 `normal`。旧 Flask 版本和失败版本仅作回滚/排障记录。

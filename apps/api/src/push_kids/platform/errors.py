@@ -27,6 +27,16 @@ class ConflictError(AppError):
     code = "conflict"
 
 
+class GoneError(AppError):
+    status_code = 410
+    code = "gone"
+
+
+class TooManyRequestsError(AppError):
+    status_code = 429
+    code = "rate_limited"
+
+
 class DependencyError(AppError):
     status_code = 503
     code = "dependency_failed"

@@ -4,8 +4,9 @@
 FastAPI + 托管 MySQL + 云托管对象存储”；完整配置、发布、回滚和排障以
 `docs/operations/WECHAT-CLOUD-HOSTING.md` 为准。
 
-> Current-state note: 云迁移代码已按 `CLOUD-SPEC-20260903-03` 实现，本地验证进行中；
-> 真实云环境、双账号、对象存储、恢复和关闭公网尚未形成验收证据，因此不能表述为已上线。
+> Current-state note: 云迁移代码已按 `CLOUD-SPEC-20260903-03` 部署到真实 staging；
+> FastAPI、MySQL/Alembic、无域名 callContainer 和关闭公网已形成验收证据。双账号、真实对象存储、
+> AI 和恢复演练仍未完成，因此不能表述为已对外生产发布。
 > 家庭协作、数据导出/删除和公开生产隐私门禁仍属于 FEAT-002。
 
 ## 1. 重要边界
@@ -42,9 +43,10 @@ uv run python tools/audit_database.py data/push_kids.db
 ```
 
 导入 `/absolute/path/to/push_kids/apps/miniprogram`。`project.config.json` 的
-`urlCheck=false` 仅用于本地；发布前要打开域名校验。服务地址由
-`apps/miniprogram/config.js` 固定，家长端不提供编辑入口；切换本地端口或部署环境时，
-由开发者同步修改该构建配置后重新编译小程序。
+`urlCheck=false` 仅用于本地；发布前要打开域名校验。云模式不配置后端域名，
+`apps/miniprogram/config.js` 只固定云托管环境 ID、服务名和 API 路径，所有 JSON 请求通过
+`wx.cloud.callContainer` 路由；家长端不提供编辑入口。`localApiBaseUrl` 只供本机开发回退，
+不会被 `useCloud=true` 的发布构建读取。
 
 `http://127.0.0.1:8011` 只适用于与 API 同一台 Mac 上的微信开发者工具。真机预览中的
 `127.0.0.1` 指向手机自身，不能访问电脑服务；受控局域网调试应让 Uvicorn 监听明确的局域网

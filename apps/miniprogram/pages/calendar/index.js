@@ -21,14 +21,20 @@ function weekFor(day) {
 
 Page({
   data: {
-    loading: true, error: "", children: [], childIndex: 0, childId: "", selectedDay: "",
+    loading: true, error: "", children: [], childIndex: 0, childId: "", selectedDay: "", selectedMonthLabel: "", selectedDateLabel: "",
     week: [], items: [], showEditor: false, editingId: "", eventName: "", eventKind: "class",
     startTime: "18:00", endTime: "19:00", repeatWeekly: true, saving: false, eventKey: ""
   },
-  onShow() { this.load(); },
+  onShow() {
+    const app = getApp();
+    const shouldOpenCreate = app.globalData.openCalendarCreate;
+    app.globalData.openCalendarCreate = false;
+    this.load().then(() => { if (shouldOpenCreate && this.data.children.length) this.openCreate(); });
+  },
   async load() {
     const selectedDay = this.data.selectedDay || localParts().date;
-    this.setData({ loading: true, error: "", selectedDay, week: weekFor(selectedDay) });
+    const [year, month, day] = selectedDay.split("-");
+    this.setData({ loading: true, error: "", selectedDay, selectedMonthLabel: `${year}年${Number(month)}月`, selectedDateLabel: `${Number(month)}月${Number(day)}日`, week: weekFor(selectedDay) });
     try {
       const children = (await api.request("/children")).map((item) => ({
         ...item,
@@ -45,6 +51,13 @@ Page({
   },
   changeChild(event) { getApp().selectChild(this.data.children[Number(event.detail.value)].id); this.load(); },
   chooseDay(event) { this.setData({ selectedDay: event.currentTarget.dataset.day }); this.load(); },
+  chooseDate(event) { this.setData({ selectedDay: event.detail.value }); this.load(); },
+  shiftWeek(event) {
+    const value = new Date(`${this.data.selectedDay}T12:00:00`);
+    value.setDate(value.getDate() + Number(event.currentTarget.dataset.offset));
+    this.setData({ selectedDay: dateKey(value) });
+    this.load();
+  },
   openCreate() {
     this.setData({ showEditor: true, editingId: "", eventName: "", eventKind: "class", startTime: "18:00", endTime: "19:00", repeatWeekly: true, eventKey: api.newIdempotencyKey("calendar") });
   },

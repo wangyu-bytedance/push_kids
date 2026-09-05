@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
-from contextlib import asynccontextmanager
+from contextlib import asynccontextmanager, suppress
 
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
@@ -12,7 +12,10 @@ from push_kids.activities.router import router as activities_router
 from push_kids.agent_processing.providers import build_provider
 from push_kids.agent_processing.worker import AnalysisWorker
 from push_kids.children.router import router as children_router
+from push_kids.families.rate_limit import InvitePreviewRateLimiter
+from push_kids.families.router import router as families_router
 from push_kids.learning.router import router as learning_router
+from push_kids.media.preview_limit import MediaPreviewLimiter
 from push_kids.media.store import build_media_store
 from push_kids.planning.router import router as planning_router
 from push_kids.platform.config import Settings, get_settings
@@ -31,6 +34,12 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     media_store = build_media_store(config)
     worker = AnalysisWorker(database, provider, media_store, config.worker_poll_seconds)
 
+    def worker_done(task: asyncio.Task) -> None:
+        if not task.cancelled():
+            error = task.exception()
+            if error is not None:
+                logger.warning("worker_task_exited error_type=%s", type(error).__name__)
+
     @asynccontextmanager
     async def lifespan(app: FastAPI):
         if config.is_cloud:
@@ -39,11 +48,20 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             config.media_root.mkdir(parents=True, exist_ok=True)
             database.create_schema()
         task = asyncio.create_task(worker.run()) if config.run_worker else None
-        yield
+        app.state.worker_task = task
         if task:
-            worker.stop()
-            await task
-        database.engine.dispose()
+            task.add_done_callback(worker_done)
+        try:
+            yield
+        finally:
+            try:
+                if task:
+                    worker.stop()
+                    # The completion callback consumes and safely reports task failure.
+                    with suppress(asyncio.CancelledError, Exception):
+                        await task
+            finally:
+                database.engine.dispose()
 
     app = FastAPI(
         title="Push Kids API",
@@ -58,13 +76,16 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.state.database = database
     app.state.analysis_provider = provider
     app.state.media_store = media_store
+    app.state.media_preview_limiter = MediaPreviewLimiter()
     app.state.worker = worker
+    app.state.worker_task = None
+    app.state.invite_preview_limiter = InvitePreviewRateLimiter()
     if config.cors_origin_list:
         app.add_middleware(
             CORSMiddleware,
             allow_origins=config.cors_origin_list,
             allow_methods=["GET", "POST", "PATCH", "DELETE"],
-            allow_headers=["Content-Type", "X-Family-ID"],
+            allow_headers=["Content-Type", "X-Family-ID", "X-Debug-Actor", "Idempotency-Key"],
         )
 
     @app.middleware("http")
@@ -106,14 +127,26 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         return {"status": "ok"}
 
     @app.get("/health/ready", tags=["system"])
-    def health_ready() -> dict[str, str]:
+    def health_ready():
         database.check_ready()
         if config.is_cloud:
             database.verify_cloud_schema()
+        task = app.state.worker_task
+        if config.run_worker and (task is None or task.done() or not worker.is_ready):
+            return JSONResponse(
+                status_code=503,
+                content={
+                    "error": {
+                        "code": "worker_unavailable",
+                        "message": "分析任务执行器暂不可用",
+                    }
+                },
+            )
         return {"status": "ready"}
 
     api_prefix = "/api/v1"
     app.include_router(children_router, prefix=api_prefix)
+    app.include_router(families_router, prefix=api_prefix)
     app.include_router(learning_router, prefix=api_prefix)
     app.include_router(planning_router, prefix=api_prefix)
     app.include_router(activities_router, prefix=api_prefix)

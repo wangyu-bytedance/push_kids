@@ -3,9 +3,10 @@ from __future__ import annotations
 from datetime import datetime
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, File, Form, Header, Request, UploadFile
+from fastapi import APIRouter, Depends, File, Form, Header, Query, Request, UploadFile
 from sqlalchemy.orm import Session
 
+from push_kids.learning.media_router import router as media_router
 from push_kids.learning.schemas import (
     ConfirmationResult,
     ConfirmSubmission,
@@ -23,6 +24,7 @@ from push_kids.platform.dependencies import get_db
 from push_kids.platform.errors import ConflictError
 
 router = APIRouter(tags=["learning"])
+router.include_router(media_router)
 
 
 def _idempotency_header():
@@ -172,8 +174,10 @@ def list_submissions(
     family: Annotated[str, Depends(family_id)],
     db: Annotated[Session, Depends(get_db)],
     state: str | None = None,
+    pending_only: bool = False,
+    offset: Annotated[int, Query(ge=0)] = 0,
 ):
-    return LearningService.list_views(db, family, child_id, state)
+    return LearningService.list_views(db, family, child_id, state, pending_only, offset)
 
 
 @router.get("/submissions/{submission_id}", response_model=SubmissionView)

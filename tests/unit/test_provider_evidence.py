@@ -1,0 +1,76 @@
+import json
+from pathlib import Path
+from types import SimpleNamespace
+
+import pytest
+from push_kids.agent_processing.contracts import AnalysisInput, AnalysisProposal
+from push_kids.agent_processing.providers import ArkAnalysisProvider
+from push_kids.platform.errors import DependencyError
+
+
+def valid_proposal():
+    return {
+        "summary": "本次学习",
+        "subject_name": "数学",
+        "knowledge_points": [
+            {
+                "name": "分数",
+                "direct_evidence": [{"source": "parent_text", "detail": "家长说明分数"}],
+            }
+        ],
+    }
+
+
+@pytest.mark.parametrize("invalid", ["empty", "context", "image", "no_text", "todo", "blank"])
+def test_ark_rejects_invalid_evidence(invalid):
+    data = AnalysisInput(text="分数", image_paths=[])
+    body = valid_proposal()
+    point = body["knowledge_points"][0]
+    if invalid == "empty":
+        point["direct_evidence"] = []
+    elif invalid == "context":
+        point["context_used"] = ["invented-record"]
+    elif invalid == "image":
+        point["direct_evidence"] = [{"source": "image", "image_index": 1, "detail": "图片"}]
+    elif invalid == "no_text":
+        data.text = None
+    elif invalid == "todo":
+        body["todo_matches"] = [{"review_id": "invented", "knowledge_name": "分数"}]
+    else:
+        point["direct_evidence"][0]["detail"] = "  "
+    provider = object.__new__(ArkAnalysisProvider)
+    provider.model = "test"
+    provider.client = SimpleNamespace(
+        responses=SimpleNamespace(create=lambda **kw: SimpleNamespace(output_text=json.dumps(body)))
+    )
+    with pytest.raises(DependencyError):
+        provider.analyze(data)
+
+
+def test_valid_evidence_and_parent_additions():
+    data = AnalysisInput(
+        text="分数",
+        image_paths=[Path("test.png")],
+        recent_learning=[
+            {
+                "record_id": "known",
+                "subject_name": "数学",
+                "summary": "已学",
+                "occurred_at": "2026-09-05",
+            }
+        ],
+    )
+    body = valid_proposal()
+    body["knowledge_points"][0]["context_used"] = ["known"]
+    body["knowledge_points"][0]["direct_evidence"].append(
+        {"source": "image", "image_index": 1, "detail": "题目"}
+    )
+    assert data.validate_proposal(AnalysisProposal.model_validate(body))
+    body["knowledge_points"][0]["direct_evidence"] = []
+    assert AnalysisProposal.model_validate(body)  # Parent-edited proposals remain valid.
+
+
+def test_prompt_keeps_all_accepted_text():
+    tail = "末尾内容必须保留"
+    content = "学" * (4000 - len(tail)) + tail
+    assert ArkAnalysisProvider._prompt(AnalysisInput(text=content)).endswith(content)

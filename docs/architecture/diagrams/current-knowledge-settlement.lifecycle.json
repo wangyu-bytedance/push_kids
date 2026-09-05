@@ -1,0 +1,186 @@
+{
+  "schema_version": 1,
+  "diagram_type": "lifecycle",
+  "meta": {
+    "title": "Push Kids 知识沉淀状态机",
+    "locale": "zh-CN",
+    "output": "docs/architecture/diagrams/current-knowledge-settlement-lifecycle.html",
+    "viewBox": [900, 820],
+    "animation": "none",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "formalization-gate",
+        "label": "正式化门禁",
+        "focus": ["submission-queued", "submission-analyzing", "submission-pending", "submission-confirmed", "formal-knowledge"],
+        "note": "AI 只产生候选；家长确认事务才形成正式知识。"
+      },
+      {
+        "id": "failure-recovery",
+        "label": "失败与恢复",
+        "focus": ["submission-analyzing", "submission-failed", "submission-queued"],
+        "note": "普通失败最多自动尝试三次，最终失败后允许家长重试。"
+      },
+      {
+        "id": "cancel-exit",
+        "label": "取消退出",
+        "focus": ["submission-pending", "submission-cancelled"],
+        "note": "取消草稿会清除 AI 提议，不创建 LearningRecord、KnowledgeItem 或 ReviewItem。"
+      }
+    ]
+  },
+  "lanes": [
+    { "id": "main", "label": "从提交草稿到正式知识" },
+    { "id": "exceptions", "label": "分析失败与恢复" },
+    { "id": "terminal", "label": "退出结果" }
+  ],
+  "states": [
+    {
+      "id": "submission-queued",
+      "type": "start",
+      "label": "排队草稿",
+      "sublabel": "LearningSubmission.queued",
+      "tag": "尚无候选",
+      "step": "K1",
+      "lane": "main",
+      "col": 0
+    },
+    {
+      "id": "submission-analyzing",
+      "type": "active",
+      "label": "分析中",
+      "sublabel": "LearningSubmission.analyzing",
+      "tag": "Worker + Ark",
+      "step": "K2",
+      "lane": "main",
+      "col": 1
+    },
+    {
+      "id": "submission-pending",
+      "type": "waiting",
+      "label": "AI 候选知识",
+      "sublabel": "proposal_json",
+      "tag": "可编辑，非正式",
+      "step": "K3",
+      "lane": "main",
+      "col": 2
+    },
+    {
+      "id": "submission-confirmed",
+      "type": "decision",
+      "label": "家长已确认",
+      "sublabel": "LearningSubmission.confirmed",
+      "tag": "事务门禁",
+      "step": "K4",
+      "lane": "main",
+      "col": 3
+    },
+    {
+      "id": "formal-knowledge",
+      "type": "success",
+      "label": "正式知识",
+      "sublabel": "KnowledgeItem · 无 status 字段",
+      "tag": "持续积累证据",
+      "step": "K5",
+      "lane": "main",
+      "col": 4
+    },
+    {
+      "id": "submission-failed",
+      "type": "failure",
+      "label": "failed",
+      "sublabel": "三次分析仍失败",
+      "tag": "可恢复",
+      "lane": "exceptions",
+      "col": 0,
+      "yOffset": 78
+    },
+    {
+      "id": "submission-cancelled",
+      "type": "failure",
+      "label": "cancelled",
+      "sublabel": "清空提议且不写正式表",
+      "tag": "退出",
+      "lane": "terminal",
+      "col": 1
+    }
+  ],
+  "transitions": [
+    {
+      "id": "start-analysis",
+      "from": "submission-queued",
+      "to": "submission-analyzing",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "id": "write-proposal",
+      "from": "submission-analyzing",
+      "to": "submission-pending",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "id": "parent-confirm",
+      "from": "submission-pending",
+      "to": "submission-confirmed",
+      "variant": "security",
+      "route": "straight"
+    },
+    {
+      "id": "transaction-persist",
+      "from": "submission-confirmed",
+      "to": "formal-knowledge",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "id": "analysis-failed",
+      "from": "submission-analyzing",
+      "to": "submission-failed",
+      "label": "重试耗尽",
+      "variant": "security"
+    },
+    {
+      "id": "manual-retry",
+      "from": "submission-failed",
+      "to": "submission-queued",
+      "label": "家长重试",
+      "variant": "emphasis",
+      "route": "left-channel"
+    },
+    {
+      "id": "discard-proposal",
+      "from": "submission-pending",
+      "to": "submission-cancelled",
+      "label": "取消或删除草稿",
+      "variant": "security"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "确认事务写入什么",
+      "items": [
+        "创建 LearningRecord；按 family、child、subject、规范名、category 查找或创建 KnowledgeItem",
+        "每次确认都新增 KnowledgeOccurrence；创建或重置 ReviewItem"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "KnowledgeItem 没有状态机",
+      "items": [
+        "正式知识一旦创建，目前没有 archived、deleted 或 mastered 字段",
+        "重复学习复用同一个 KnowledgeItem，只增加发生记录"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "复习状态不是知识状态",
+      "items": [
+        "ReviewItem.step、due_date、active 描述确定性复习计划",
+        "active=false 表示复习序列结束，不代表系统判定孩子已掌握"
+      ]
+    }
+  ]
+}

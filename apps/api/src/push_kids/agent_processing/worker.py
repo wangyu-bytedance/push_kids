@@ -1,30 +1,28 @@
 from __future__ import annotations
 
 import asyncio
+import json
 import logging
 from contextlib import ExitStack, suppress
 from datetime import timedelta
 from time import monotonic
 
 from sqlalchemy import or_, select
+from sqlalchemy.exc import SQLAlchemyError
 
-from push_kids.agent_processing.contracts import (
-    AnalysisInput,
-    AnalysisProvider,
-    RecentLearningContext,
-    TodoCandidate,
+from push_kids.agent_processing.context import (
+    build_analysis_input,
+    material_fingerprint,
+    repeated_material,
 )
+from push_kids.agent_processing.contracts import MATERIAL_FINGERPRINT_KEY, AnalysisProvider
 from push_kids.media.store import MediaStore, WeChatCloudMediaStore
 from push_kids.persistence.models import (
     AgentJob,
     JobState,
-    KnowledgeItem,
-    LearningRecord,
     LearningSubmission,
     MediaObject,
     MediaState,
-    ReviewItem,
-    Subject,
     SubmissionMedia,
     SubmissionState,
 )
@@ -48,21 +46,54 @@ class AnalysisWorker:
         self.poll_seconds = poll_seconds
         self._stop = asyncio.Event()
         self._last_cleanup = 0.0
+        self._healthy = False
+        self._running = False
+        self._consecutive_failures = 0
+
+    @property
+    def is_ready(self) -> bool:
+        return self._running and self._healthy and not self._stop.is_set()
 
     async def run(self) -> None:
-        while not self._stop.is_set():
-            processed = await asyncio.to_thread(self.process_one)
-            if not processed:
-                with suppress(asyncio.TimeoutError):
-                    await asyncio.wait_for(self._stop.wait(), timeout=self.poll_seconds)
+        self._running = True
+        self._healthy = False
+        try:
+            while not self._stop.is_set():
+                try:
+                    processed = await asyncio.to_thread(self.process_one)
+                except Exception as exc:
+                    self._healthy = False
+                    self._consecutive_failures += 1
+                    delay = min(30, 2 ** min(self._consecutive_failures - 1, 5))
+                    logger.warning(
+                        "worker_iteration_failed error_type=%s consecutive_failures=%s",
+                        type(exc).__name__,
+                        self._consecutive_failures,
+                    )
+                    await self._wait(delay)
+                    continue
+                self._healthy = True
+                self._consecutive_failures = 0
+                if not processed:
+                    await self._wait(self.poll_seconds)
+        finally:
+            self._running = False
+            self._healthy = False
+
+    async def _wait(self, delay: float) -> None:
+        with suppress(asyncio.TimeoutError):
+            await asyncio.wait_for(self._stop.wait(), timeout=delay)
 
     def stop(self) -> None:
         self._stop.set()
 
     def process_one(self) -> bool:
         if monotonic() - self._last_cleanup >= 60:
-            self._cleanup_expired_media()
             self._last_cleanup = monotonic()
+            try:
+                self._cleanup_expired_media()
+            except Exception as exc:
+                logger.warning("media_cleanup_iteration_failed error_type=%s", type(exc).__name__)
         with self.database.session_factory() as db:
             now = utcnow()
             job = db.scalar(
@@ -85,7 +116,10 @@ class AnalysisWorker:
                 .where(LearningSubmission.id == job.submission_id)
                 .with_for_update()
             )
-            if submission is None or submission.state == SubmissionState.cancelled.value:
+            if submission is None or submission.state not in (
+                SubmissionState.queued.value,
+                SubmissionState.analyzing.value,
+            ):
                 job.state = JobState.cancelled.value
                 db.commit()
                 return True
@@ -94,89 +128,97 @@ class AnalysisWorker:
             job.lease_until = now + timedelta(minutes=5)
             submission.state = SubmissionState.analyzing.value
             db.commit()
-            media = list(
-                db.scalars(
-                    select(SubmissionMedia).where(SubmissionMedia.submission_id == submission.id)
-                )
-            )
-            candidate_rows = db.execute(
-                select(ReviewItem, KnowledgeItem)
-                .join(KnowledgeItem, ReviewItem.knowledge_item_id == KnowledgeItem.id)
-                .where(
-                    ReviewItem.family_id == submission.family_id,
-                    ReviewItem.child_id == submission.child_id,
-                    ReviewItem.active.is_(True),
-                )
-                .limit(50)
-            ).all()
-            subject_names = list(
-                db.scalars(
-                    select(Subject.name)
-                    .where(
-                        Subject.family_id == submission.family_id,
-                        Subject.child_id == submission.child_id,
-                        Subject.active.is_(True),
-                    )
-                    .order_by(Subject.created_at)
-                )
-            )
-            recent_rows = db.execute(
-                select(LearningRecord, Subject)
-                .join(Subject, LearningRecord.subject_id == Subject.id)
-                .where(
-                    LearningRecord.family_id == submission.family_id,
-                    LearningRecord.child_id == submission.child_id,
-                    LearningRecord.occurred_at <= submission.occurred_at,
-                )
-                .order_by(LearningRecord.occurred_at.desc())
-                .limit(20)
-            ).all()
+            # The queue round trip succeeded; provider latency is not worker failure.
+            self._healthy = True
+            job_id, submission_id = job.id, submission.id
+            attempt, lease = job.attempts, job.lease_until
             try:
+                media = list(
+                    db.scalars(
+                        select(SubmissionMedia)
+                        .where(SubmissionMedia.submission_id == submission.id)
+                        .order_by(SubmissionMedia.created_at, SubmissionMedia.id)
+                    )
+                )
                 with ExitStack() as media_stack:
                     image_paths = [
                         media_stack.enter_context(self.media_store.materialize(item.path or ""))
                         for item in media
                     ]
-                    proposal = self.provider.analyze(
-                        AnalysisInput(
-                            text=submission.input_text,
-                            image_paths=image_paths,
-                            todo_candidates=[
-                                TodoCandidate(
-                                    review_id=review.id or "", knowledge_name=knowledge.name or ""
-                                )
-                                for review, knowledge in candidate_rows
-                                if review.id and knowledge.name
-                            ],
-                            existing_subjects=subject_names,
-                            recent_learning=[
-                                RecentLearningContext(
-                                    record_id=record.id or "",
-                                    subject_name=subject.name or "",
-                                    summary=record.summary or "",
-                                    occurred_at=record.occurred_at.isoformat(),
-                                )
-                                for record, subject in recent_rows
-                                if record.id and record.occurred_at and subject.name
-                            ],
-                        )
-                    )
-                db.refresh(job)
-                db.refresh(submission)
-                if submission.state == SubmissionState.cancelled.value:
-                    job.state = JobState.cancelled.value
-                else:
-                    submission.proposal_json = proposal.model_dump_json()
-                    submission.state = SubmissionState.pending_confirmation.value
-                    submission.error_code = None
-                    submission.error_message = None
-                    job.state = JobState.succeeded.value
+                    data = build_analysis_input(db, submission, image_paths)
+                    fingerprint = material_fingerprint(data.text, image_paths)
+                    repeated = repeated_material(db, submission, fingerprint)
+                    # End the read transaction before the external provider call.
+                    db.rollback()
+                    proposal = data.validate_proposal(self.provider.analyze(data))
+                job = db.scalar(
+                    select(AgentJob)
+                    .where(AgentJob.id == job_id)
+                    .with_for_update()
+                    .execution_options(populate_existing=True)
+                )
+                submission = db.scalar(
+                    select(LearningSubmission)
+                    .where(LearningSubmission.id == submission_id)
+                    .with_for_update()
+                    .execution_options(populate_existing=True)
+                )
+                if (
+                    job is None
+                    or submission is None
+                    or job.state != JobState.running.value
+                    or job.attempts != attempt
+                    or job.lease_until != lease
+                    or submission.state != SubmissionState.analyzing.value
+                ):
+                    db.rollback()
+                    return True
+                if repeated:
+                    proposal.uncertainties = [
+                        "这份材料与近期提交完全相同，请核对是否为新的学习记录；本次不自动标记Todo完成。"
+                    ] + proposal.uncertainties[:19]
+                    proposal.todo_matches = []
+                if not data.grade or not data.recent_learning:
+                    proposal.uncertainties = (
+                        proposal.uncertainties
+                        + ["年级或已确认历史不完整，请核对知识点粒度；未推断学习阶段。"]
+                    )[-20:]
+                stored = proposal.model_dump()
+                stored[MATERIAL_FINGERPRINT_KEY] = fingerprint
+                submission.proposal_json = json.dumps(stored, ensure_ascii=False)
+                submission.state = SubmissionState.pending_confirmation.value
+                submission.error_code = None
+                submission.error_message = None
+                job.state = JobState.succeeded.value
                 db.commit()
+            except SQLAlchemyError:
+                # A failed commit can have an unknown outcome. Preserve the durable lease
+                # and let a fresh session recover it instead of overwriting the job state.
+                db.rollback()
+                raise
             except Exception:
                 db.rollback()
-                job = db.get(AgentJob, job.id)
-                submission = db.get(LearningSubmission, submission.id)
-                if job is None or submission is None:
+                job = db.scalar(
+                    select(AgentJob)
+                    .where(AgentJob.id == job_id)
+                    .with_for_update()
+                    .execution_options(populate_existing=True)
+                )
+                submission = db.scalar(
+                    select(LearningSubmission)
+                    .where(LearningSubmission.id == submission_id)
+                    .with_for_update()
+                    .execution_options(populate_existing=True)
+                )
+                if (
+                    job is None
+                    or submission is None
+                    or job.state != JobState.running.value
+                    or job.attempts != attempt
+                    or job.lease_until != lease
+                    or submission.state != SubmissionState.analyzing.value
+                ):
+                    db.rollback()
                     return True
                 logger.warning(
                     "analysis_job_failed job_id=%s attempt=%s",

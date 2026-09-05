@@ -1,0 +1,6 @@
+<view class="page join-page">
+  <text class="eyebrow">家人邀请</text><text class="title">先确认，再一起记录</text>
+  <view class="skeleton" wx:if="{{loading}}"></view><view class="notice error" wx:if="{{error}}" bindtap="load">{{error}} · 点此重试</view>
+  <view class="card" wx:if="{{preview && !applied}}"><text class="section-title">{{preview.family_name}}</text><text class="muted">家庭中的孩子：{{preview.childLabel}}</text><view class="privacy-note">这里只展示家庭称呼和孩子称呼。加入前不会展示学习记录、照片或成员名单。</view><view class="field"><label class="label" for="relationship">你与孩子的关系</label><input id="relationship" class="input" value="{{relationship}}" bindinput="setRelationship" placeholder="例如：爸爸、奶奶" maxlength="30"/></view><button class="button" loading="{{submitting}}" disabled="{{submitting}}" bindtap="apply">申请加入</button></view>
+  <view class="card empty" wx:if="{{applied}}"><view class="empty-mark">✓</view><text class="section-title">申请已发送</text><text class="request-code">申请码 {{requestCode}}</text><text class="muted">请把申请码告诉家庭管理员核对。管理员确认后，你才能看到家庭内容。</text><button class="button secondary" bindtap="goPending">查看申请状态</button></view>
+</view>

@@ -1,0 +1,28 @@
+<view class="page onboarding-page">
+  <view class="onboarding-mark">芽</view>
+  <text class="title">一起记住孩子的成长</text>
+  <text class="intro">由家长确认学习记录、复习安排和课外活动。AI 只提供可编辑建议。</text>
+  <view class="skeleton" wx:if="{{loading}}"></view>
+  <view class="notice error" wx:if="{{error}}" bindtap="load">{{error}} · 点此重试</view>
+  <view class="card pending-card" wx:if="{{!loading && state === 'pending'}}">
+    <text class="section-title">申请已发送</text><text class="request-code" wx:if="{{request.request_code}}">申请码 {{request.request_code}}</text><text class="muted">请把申请码告诉家庭管理员用于核对。获批前不会展示孩子的学习或照片。</text>
+    <button class="button ghost" bindtap="load">查看最新结果</button><button class="text-action" bindtap="cancelRequest">撤回申请</button>
+  </view>
+  <view wx:if="{{!loading && state === 'unbound' && mode === 'choice'}}">
+    <button class="choice primary-choice" bindtap="chooseCreate"><text class="choice-title">开始记录</text><text>创建家庭并填写第一个孩子的基本信息</text></button>
+    <button class="choice" bindtap="openJoin"><text class="choice-title">申请加入家庭</text><text>使用家人发来的微信邀请或邀请口令</text></button>
+  </view>
+  <view class="card" wx:if="{{!loading && mode === 'create'}}">
+    <text class="section-title">建立家庭档案</text>
+    <view class="field"><label class="label" for="childName">孩子称呼</label><input id="childName" class="input" value="{{childName}}" data-field="childName" bindinput="setField" placeholder="例如：小雨" maxlength="40"/></view>
+    <view class="field"><label class="label" for="familyName">家庭名称</label><input id="familyName" class="input" value="{{familyName}}" data-field="familyName" bindinput="setField" placeholder="不填时使用“孩子称呼的家”" maxlength="60"/></view>
+    <view class="field"><label class="label" for="grade">年级</label><input id="grade" class="input" value="{{grade}}" data-field="grade" bindinput="setField" maxlength="20"/></view>
+    <view class="field"><label class="label" for="relationship">你与孩子的关系</label><input id="relationship" class="input" value="{{relationship}}" data-field="relationship" bindinput="setField" maxlength="30"/></view>
+    <button class="button" loading="{{submitting}}" disabled="{{submitting}}" bindtap="submitFamily">创建并开始记录</button><button class="text-action" bindtap="backToChoice">返回</button>
+  </view>
+  <view class="card" wx:if="{{!loading && mode === 'join'}}">
+    <text class="section-title">使用邀请口令</text><text class="muted small">从微信分享卡片进入时无需手动填写。</text>
+    <view class="field"><label class="label" for="inviteToken">邀请口令</label><input id="inviteToken" class="input" value="{{inviteToken}}" data-field="inviteToken" bindinput="setField" maxlength="120"/></view>
+    <button class="button" bindtap="openToken">查看邀请</button><button class="text-action" bindtap="backToChoice">返回</button>
+  </view>
+</view>

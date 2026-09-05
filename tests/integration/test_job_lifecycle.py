@@ -1,6 +1,10 @@
 from datetime import UTC, datetime
 
-from push_kids.agent_processing.contracts import AnalysisProposal, KnowledgeProposal
+from push_kids.agent_processing.contracts import (
+    AnalysisProposal,
+    EvidenceReference,
+    KnowledgeProposal,
+)
 from push_kids.agent_processing.providers import DeterministicTestProvider
 from push_kids.persistence.models import AgentJob
 from push_kids.platform.time import utcnow
@@ -21,7 +25,14 @@ class CapturingProvider:
         return AnalysisProposal(
             summary="结合近期记录整理了本次内容",
             subject_name="英语",
-            knowledge_points=[KnowledgeProposal(name="teacher")],
+            knowledge_points=[
+                KnowledgeProposal(
+                    name="英语学习",
+                    direct_evidence=[
+                        EvidenceReference(source="parent_text", detail="今天继续学英语")
+                    ],
+                )
+            ],
         )
 
 

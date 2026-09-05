@@ -5,7 +5,6 @@ from sqlalchemy import (
     Boolean,
     Column,
     Date,
-    DateTime,
     ForeignKey,
     Integer,
     String,
@@ -15,6 +14,7 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import declarative_base
 
+from push_kids.persistence.types import UTCDateTime
 from push_kids.platform.time import utcnow
 
 Base = declarative_base()
@@ -52,16 +52,139 @@ class MediaState(enum.StrEnum):
     deleted = "deleted"
 
 
+class FamilyStatus(enum.StrEnum):
+    active = "active"
+    disabled = "disabled"
+
+
+class MemberRole(enum.StrEnum):
+    viewer = "viewer"
+    editor = "editor"
+    manager = "manager"
+
+
+class MemberStatus(enum.StrEnum):
+    active = "active"
+    removed = "removed"
+    disabled = "disabled"
+
+
+class InviteStatus(enum.StrEnum):
+    active = "active"
+    exhausted = "exhausted"
+    expired = "expired"
+    revoked = "revoked"
+
+
+class JoinRequestStatus(enum.StrEnum):
+    pending = "pending"
+    approved = "approved"
+    rejected = "rejected"
+    cancelled = "cancelled"
+    expired = "expired"
+
+
 class WeChatActorBinding(Base):
     __tablename__ = "wechat_actor_bindings"
     __table_args__ = (UniqueConstraint("app_id", "subject_hmac", name="uq_wechat_actor_subject"),)
     id = Column(String(36), primary_key=True, default=new_id)
     app_id = Column(String(32), nullable=False)
     subject_hmac = Column(String(64), nullable=False)
-    family_id = Column(String(80), nullable=False, index=True)
+    family_id = Column(String(80), nullable=True, index=True)
     status = Column(String(20), nullable=False, default="active", index=True)
-    created_at = Column(DateTime(timezone=True), nullable=False, default=utcnow)
-    updated_at = Column(DateTime(timezone=True), nullable=False, default=utcnow, onupdate=utcnow)
+    created_at = Column(UTCDateTime(), nullable=False, default=utcnow)
+    updated_at = Column(UTCDateTime(), nullable=False, default=utcnow, onupdate=utcnow)
+
+
+class Family(Base):
+    __tablename__ = "families"
+    id = Column(String(80), primary_key=True, default=new_id)
+    display_name = Column(String(60), nullable=False)
+    status = Column(String(20), nullable=False, default=FamilyStatus.active.value, index=True)
+    created_at = Column(UTCDateTime(), nullable=False, default=utcnow)
+    updated_at = Column(UTCDateTime(), nullable=False, default=utcnow, onupdate=utcnow)
+
+
+class FamilyMember(Base):
+    __tablename__ = "family_members"
+    __table_args__ = (
+        UniqueConstraint("active_actor_binding_id", name="uq_family_member_active_actor"),
+    )
+    id = Column(String(36), primary_key=True, default=new_id)
+    family_id = Column(String(80), ForeignKey("families.id"), nullable=False, index=True)
+    actor_binding_id = Column(
+        String(36), ForeignKey("wechat_actor_bindings.id"), nullable=False, index=True
+    )
+    # MySQL and SQLite both allow multiple NULL values in a unique key. Keeping the
+    # active projection separate preserves removed membership history while enforcing
+    # at most one active family for an actor at the database boundary.
+    active_actor_binding_id = Column(
+        String(36), ForeignKey("wechat_actor_bindings.id"), nullable=True, index=True
+    )
+    role = Column(String(20), nullable=False, default=MemberRole.viewer.value, index=True)
+    relationship_label = Column(String(30), nullable=False)
+    status = Column(String(20), nullable=False, default=MemberStatus.active.value, index=True)
+    created_at = Column(UTCDateTime(), nullable=False, default=utcnow)
+    updated_at = Column(UTCDateTime(), nullable=False, default=utcnow, onupdate=utcnow)
+    removed_at = Column(UTCDateTime(), nullable=True)
+
+
+class FamilyInvite(Base):
+    __tablename__ = "family_invites"
+    __table_args__ = (
+        UniqueConstraint("token_hash", name="uq_family_invite_token"),
+        UniqueConstraint("family_id", "idempotency_key", name="uq_family_invite_request"),
+    )
+    id = Column(String(36), primary_key=True, default=new_id)
+    family_id = Column(String(80), ForeignKey("families.id"), nullable=False, index=True)
+    token_hash = Column(String(64), nullable=False)
+    idempotency_key = Column(String(100), nullable=False)
+    status = Column(String(20), nullable=False, default=InviteStatus.active.value, index=True)
+    expires_at = Column(UTCDateTime(), nullable=False, index=True)
+    created_by_member_id = Column(
+        String(36), ForeignKey("family_members.id"), nullable=False, index=True
+    )
+    created_at = Column(UTCDateTime(), nullable=False, default=utcnow)
+    updated_at = Column(UTCDateTime(), nullable=False, default=utcnow, onupdate=utcnow)
+
+
+class FamilyJoinRequest(Base):
+    __tablename__ = "family_join_requests"
+    __table_args__ = (
+        UniqueConstraint(
+            "applicant_binding_id", "idempotency_key", name="uq_family_join_request_key"
+        ),
+    )
+    id = Column(String(36), primary_key=True, default=new_id)
+    family_id = Column(String(80), ForeignKey("families.id"), nullable=False, index=True)
+    invite_id = Column(String(36), ForeignKey("family_invites.id"), nullable=False, index=True)
+    applicant_binding_id = Column(
+        String(36), ForeignKey("wechat_actor_bindings.id"), nullable=False, index=True
+    )
+    idempotency_key = Column(String(100), nullable=False)
+    relationship_label = Column(String(30), nullable=False)
+    status = Column(String(20), nullable=False, default=JoinRequestStatus.pending.value, index=True)
+    decided_role = Column(String(20), nullable=True)
+    decided_by_member_id = Column(String(36), ForeignKey("family_members.id"), nullable=True)
+    decision_reason = Column(String(160), nullable=True)
+    decision_idempotency_key = Column(String(100), nullable=True)
+    decided_at = Column(UTCDateTime(), nullable=True)
+    created_at = Column(UTCDateTime(), nullable=False, default=utcnow)
+    updated_at = Column(UTCDateTime(), nullable=False, default=utcnow, onupdate=utcnow)
+
+
+class FamilyAuditEvent(Base):
+    __tablename__ = "family_audit_events"
+    id = Column(String(36), primary_key=True, default=new_id)
+    family_id = Column(String(80), ForeignKey("families.id"), nullable=False, index=True)
+    actor_binding_id = Column(
+        String(36), ForeignKey("wechat_actor_bindings.id"), nullable=False, index=True
+    )
+    action = Column(String(50), nullable=False, index=True)
+    resource_type = Column(String(40), nullable=False)
+    resource_id = Column(String(36), nullable=True)
+    outcome = Column(String(20), nullable=False, default="success")
+    created_at = Column(UTCDateTime(), nullable=False, default=utcnow, index=True)
 
 
 class MediaObject(Base):
@@ -85,10 +208,10 @@ class MediaObject(Base):
     content_type = Column(String(80), nullable=True)
     byte_size = Column(Integer, nullable=True)
     sha256 = Column(String(64), nullable=True)
-    expires_at = Column(DateTime(timezone=True), nullable=False, index=True)
-    claimed_at = Column(DateTime(timezone=True), nullable=True)
-    created_at = Column(DateTime(timezone=True), nullable=False, default=utcnow)
-    updated_at = Column(DateTime(timezone=True), nullable=False, default=utcnow, onupdate=utcnow)
+    expires_at = Column(UTCDateTime(), nullable=False, index=True)
+    claimed_at = Column(UTCDateTime(), nullable=True)
+    created_at = Column(UTCDateTime(), nullable=False, default=utcnow)
+    updated_at = Column(UTCDateTime(), nullable=False, default=utcnow, onupdate=utcnow)
 
 
 class Child(Base):
@@ -98,7 +221,7 @@ class Child(Base):
     name = Column(String(40), nullable=False)
     grade = Column(String(20), nullable=True)
     daily_budget_minutes = Column(Integer, nullable=False, default=15)
-    created_at = Column(DateTime(timezone=True), nullable=False, default=utcnow)
+    created_at = Column(UTCDateTime(), nullable=False, default=utcnow)
 
 
 class Subject(Base):
@@ -111,7 +234,7 @@ class Subject(Base):
     kind = Column(String(20), nullable=False, default=SubjectKind.learning.value)
     color = Column(String(20), nullable=False, default="#39847A")
     active = Column(Boolean, nullable=False, default=True)
-    created_at = Column(DateTime(timezone=True), nullable=False, default=utcnow)
+    created_at = Column(UTCDateTime(), nullable=False, default=utcnow)
 
 
 class LearningSubmission(Base):
@@ -119,16 +242,16 @@ class LearningSubmission(Base):
     id = Column(String(36), primary_key=True, default=new_id)
     family_id = Column(String(80), nullable=False, index=True)
     child_id = Column(String(36), ForeignKey("children.id"), nullable=False, index=True)
-    occurred_at = Column(DateTime(timezone=True), nullable=False)
+    occurred_at = Column(UTCDateTime(), nullable=False)
     input_text = Column(Text, nullable=True)
     source = Column(String(30), nullable=False, default="manual")
     state = Column(String(30), nullable=False, default=SubmissionState.queued.value, index=True)
     proposal_json = Column(Text, nullable=True)
     error_code = Column(String(50), nullable=True)
     error_message = Column(String(300), nullable=True)
-    created_at = Column(DateTime(timezone=True), nullable=False, default=utcnow)
-    updated_at = Column(DateTime(timezone=True), nullable=False, default=utcnow, onupdate=utcnow)
-    confirmed_at = Column(DateTime(timezone=True), nullable=True)
+    created_at = Column(UTCDateTime(), nullable=False, default=utcnow)
+    updated_at = Column(UTCDateTime(), nullable=False, default=utcnow, onupdate=utcnow)
+    confirmed_at = Column(UTCDateTime(), nullable=True)
 
 
 class SubmissionMedia(Base):
@@ -141,7 +264,7 @@ class SubmissionMedia(Base):
     path = Column(String(700), nullable=False)
     content_type = Column(String(80), nullable=False)
     byte_size = Column(Integer, nullable=False)
-    created_at = Column(DateTime(timezone=True), nullable=False, default=utcnow)
+    created_at = Column(UTCDateTime(), nullable=False, default=utcnow)
 
 
 class AgentJob(Base):
@@ -153,11 +276,11 @@ class AgentJob(Base):
     state = Column(String(20), nullable=False, default=JobState.queued.value, index=True)
     attempts = Column(Integer, nullable=False, default=0)
     max_attempts = Column(Integer, nullable=False, default=3)
-    available_at = Column(DateTime(timezone=True), nullable=False, default=utcnow)
-    lease_until = Column(DateTime(timezone=True), nullable=True)
+    available_at = Column(UTCDateTime(), nullable=False, default=utcnow)
+    lease_until = Column(UTCDateTime(), nullable=True)
     error_message = Column(String(300), nullable=True)
-    created_at = Column(DateTime(timezone=True), nullable=False, default=utcnow)
-    updated_at = Column(DateTime(timezone=True), nullable=False, default=utcnow, onupdate=utcnow)
+    created_at = Column(UTCDateTime(), nullable=False, default=utcnow)
+    updated_at = Column(UTCDateTime(), nullable=False, default=utcnow, onupdate=utcnow)
 
 
 class SubmissionRequest(Base):
@@ -175,7 +298,7 @@ class SubmissionRequest(Base):
     submission_id = Column(
         String(36), ForeignKey("learning_submissions.id"), nullable=False, index=True
     )
-    created_at = Column(DateTime(timezone=True), nullable=False, default=utcnow)
+    created_at = Column(UTCDateTime(), nullable=False, default=utcnow)
 
 
 class LearningRecord(Base):
@@ -187,10 +310,10 @@ class LearningRecord(Base):
     submission_id = Column(
         String(36), ForeignKey("learning_submissions.id"), nullable=False, unique=True
     )
-    occurred_at = Column(DateTime(timezone=True), nullable=False, index=True)
+    occurred_at = Column(UTCDateTime(), nullable=False, index=True)
     summary = Column(String(500), nullable=False)
     source = Column(String(30), nullable=False)
-    created_at = Column(DateTime(timezone=True), nullable=False, default=utcnow)
+    created_at = Column(UTCDateTime(), nullable=False, default=utcnow)
 
 
 class KnowledgeItem(Base):
@@ -214,7 +337,7 @@ class KnowledgeItem(Base):
     category = Column(String(50), nullable=False, default="知识点")
     review_method = Column(String(60), nullable=False, default="口头回顾")
     estimated_minutes = Column(Integer, nullable=False, default=3)
-    created_at = Column(DateTime(timezone=True), nullable=False, default=utcnow)
+    created_at = Column(UTCDateTime(), nullable=False, default=utcnow)
 
 
 class KnowledgeOccurrence(Base):
@@ -227,8 +350,8 @@ class KnowledgeOccurrence(Base):
     learning_record_id = Column(
         String(36), ForeignKey("learning_records.id"), nullable=False, index=True
     )
-    occurred_at = Column(DateTime(timezone=True), nullable=False, index=True)
-    created_at = Column(DateTime(timezone=True), nullable=False, default=utcnow)
+    occurred_at = Column(UTCDateTime(), nullable=False, index=True)
+    created_at = Column(UTCDateTime(), nullable=False, default=utcnow)
 
 
 class ReviewItem(Base):
@@ -242,7 +365,7 @@ class ReviewItem(Base):
     due_date = Column(Date, nullable=False, index=True)
     last_feedback = Column(String(30), nullable=True)
     active = Column(Boolean, nullable=False, default=True)
-    updated_at = Column(DateTime(timezone=True), nullable=False, default=utcnow, onupdate=utcnow)
+    updated_at = Column(UTCDateTime(), nullable=False, default=utcnow, onupdate=utcnow)
 
 
 class ReviewFeedback(Base):
@@ -251,7 +374,7 @@ class ReviewFeedback(Base):
     family_id = Column(String(80), nullable=False, index=True)
     review_item_id = Column(String(36), ForeignKey("review_items.id"), nullable=False, index=True)
     action = Column(String(30), nullable=False)
-    occurred_at = Column(DateTime(timezone=True), nullable=False, default=utcnow)
+    occurred_at = Column(UTCDateTime(), nullable=False, default=utcnow)
 
 
 class ReviewFeedbackRequest(Base):
@@ -269,7 +392,7 @@ class ReviewFeedbackRequest(Base):
     result_step = Column(Integer, nullable=False)
     result_due_date = Column(Date, nullable=False)
     result_active = Column(Boolean, nullable=False)
-    created_at = Column(DateTime(timezone=True), nullable=False, default=utcnow)
+    created_at = Column(UTCDateTime(), nullable=False, default=utcnow)
 
 
 class ActivitySchedule(Base):
@@ -285,8 +408,8 @@ class ActivitySchedule(Base):
     target_per_week = Column(Integer, nullable=True)
     note = Column(String(200), nullable=True)
     active = Column(Boolean, nullable=False, default=True)
-    created_at = Column(DateTime(timezone=True), nullable=False, default=utcnow)
-    updated_at = Column(DateTime(timezone=True), nullable=False, default=utcnow, onupdate=utcnow)
+    created_at = Column(UTCDateTime(), nullable=False, default=utcnow)
+    updated_at = Column(UTCDateTime(), nullable=False, default=utcnow, onupdate=utcnow)
 
 
 class CalendarEvent(Base):
@@ -301,8 +424,8 @@ class CalendarEvent(Base):
     kind = Column(String(20), nullable=False, default="other")
     repeat_weekly = Column(Boolean, nullable=False, default=False)
     active = Column(Boolean, nullable=False, default=True)
-    created_at = Column(DateTime(timezone=True), nullable=False, default=utcnow)
-    updated_at = Column(DateTime(timezone=True), nullable=False, default=utcnow, onupdate=utcnow)
+    created_at = Column(UTCDateTime(), nullable=False, default=utcnow)
+    updated_at = Column(UTCDateTime(), nullable=False, default=utcnow, onupdate=utcnow)
 
 
 class CalendarEventRequest(Base):
@@ -315,7 +438,7 @@ class CalendarEventRequest(Base):
     idempotency_key = Column(String(100), nullable=False)
     request_fingerprint = Column(String(64), nullable=False)
     event_id = Column(String(36), ForeignKey("calendar_events.id"), nullable=False, index=True)
-    created_at = Column(DateTime(timezone=True), nullable=False, default=utcnow)
+    created_at = Column(UTCDateTime(), nullable=False, default=utcnow)
 
 
 class ActivityRecord(Base):
@@ -324,7 +447,7 @@ class ActivityRecord(Base):
     family_id = Column(String(80), nullable=False, index=True)
     child_id = Column(String(36), ForeignKey("children.id"), nullable=False, index=True)
     subject_id = Column(String(36), ForeignKey("subjects.id"), nullable=False, index=True)
-    occurred_at = Column(DateTime(timezone=True), nullable=False, index=True)
+    occurred_at = Column(UTCDateTime(), nullable=False, index=True)
     duration_minutes = Column(Integer, nullable=True)
     note = Column(String(300), nullable=True)
-    created_at = Column(DateTime(timezone=True), nullable=False, default=utcnow)
+    created_at = Column(UTCDateTime(), nullable=False, default=utcnow)

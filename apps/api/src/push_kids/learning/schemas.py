@@ -51,11 +51,14 @@ class SubmissionView(BaseModel):
     error_message: str | None
     media_count: int = 0
     can_finalize_upload: bool = False
+    awaiting_upload: bool = False
+    upload_batch_key: str | None = None
     created_at: datetime
     updated_at: datetime
 
 
 class ConfirmSubmission(BaseModel):
+    manual_entry: bool = False
     subject_id: str | None = None
     proposal: AnalysisProposal
 

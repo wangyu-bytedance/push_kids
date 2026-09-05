@@ -4,6 +4,7 @@ import base64
 import json
 import mimetypes
 import re
+from hashlib import sha256
 from pathlib import Path
 from typing import Any
 
@@ -15,6 +16,7 @@ from push_kids.agent_processing.contracts import (
     EvidenceReference,
     KnowledgeProposal,
 )
+from push_kids.agent_processing.prompt import ANALYSIS_RULES, PROMPT_REVISION
 from push_kids.knowledge.normalization import normalize_knowledge_name
 from push_kids.platform.config import Settings
 from push_kids.platform.errors import DependencyError
@@ -49,7 +51,7 @@ class DeterministicTestProvider:
         summary = f"整理了{subject}学习内容：" + "、".join(point.name for point in points[:3])
         normalized_text = normalize_knowledge_name(text)
         matches = [
-            candidate
+            candidate.model_copy(update={"evidence": "自动化测试输入"})
             for candidate in data.todo_candidates
             if normalize_knowledge_name(candidate.knowledge_name) in normalized_text
         ]
@@ -92,7 +94,27 @@ class ArkAnalysisProvider:
         if self.client is None:
             raise DependencyError("学习内容分析尚未配置，请设置 ARK_API_KEY 后重试")
         content: list[dict[str, str]] = []
-        for path in data.image_paths:
+        seen_images: dict[str, int] = {}
+        for index, path in enumerate(data.image_paths, start=1):
+            digest = sha256(path.read_bytes()).hexdigest()
+            if digest in seen_images:
+                content.append(
+                    {
+                        "type": "input_text",
+                        "text": (
+                            f"照片{index}与照片{seen_images[digest]}字节完全相同，"
+                            f"证据统一引用照片{seen_images[digest]}。"
+                        ),
+                    }
+                )
+                continue
+            seen_images[digest] = index
+            content.append(
+                {
+                    "type": "input_text",
+                    "text": f"以下是原始照片{index}，证据image_index使用{index}。",
+                }
+            )
             content.append({"type": "input_image", "image_url": self._data_url(path)})
         content.append(
             {
@@ -105,7 +127,7 @@ class ArkAnalysisProvider:
             response = self.client.responses.create(model=self.model, input=provider_input)
             raw = response.output_text.strip()
             raw = re.sub(r"^```(?:json)?\s*|\s*```$", "", raw)
-            return AnalysisProposal.model_validate(json.loads(raw))
+            return data.validate_proposal(AnalysisProposal.model_validate(json.loads(raw)))
         except Exception as exc:
             raise DependencyError("学习内容分析暂时失败，请稍后重试") from exc
 
@@ -128,6 +150,7 @@ class ArkAnalysisProvider:
             "knowledge_points": [
                 {
                     "name": "已学知识点",
+                    "existing_knowledge_id": "已有同义知识候选的knowledge_id，不匹配时为null",
                     "category": "类型",
                     "review_method": "不含批改的复习方式",
                     "estimated_minutes": 3,
@@ -150,17 +173,20 @@ class ArkAnalysisProvider:
         recent_json = json.dumps(
             [item.model_dump() for item in data.recent_learning], ensure_ascii=False
         )
+        knowledge_json = json.dumps(
+            [item.model_dump() for item in data.existing_knowledge], ensure_ascii=False
+        )
         return (
-            "你是小学学习内容整理助手。只提取材料中已经学过的内容，不判分、不判断掌握程度、"
-            "不预测课程。输出严格 JSON，不要 Markdown。每个知识点应具体且适合家长确认。"
-            "把图片/家长文字视为直接证据；近期记录只用于消歧，不能把上下文内容冒充本次学习。"
-            "每个知识点必须有 direct_evidence；context_used 只能复制给定 record_id。"
+            f"规则版本：{PROMPT_REVISION}。{ANALYSIS_RULES}\n"
             f"JSON 结构：{json.dumps(schema, ensure_ascii=False)}。"
             f"孩子已有科目：{json.dumps(data.existing_subjects, ensure_ascii=False)}。"
+            f"本次实际发生时间：{data.occurred_at or '未提供'}。"
+            f"年级：{data.grade or '未提供，不推断'}。"
+            f"已有知识及计划状态：{knowledge_json}。"
             f"近期已确认学习上下文：{recent_json}。"
             f"可匹配的现有 Todo 候选：{candidates_json}。"
             "todo_matches 只能逐字复制候选，不确定时返回空数组。"
-            f"家长补充文字：{(data.text or '无')[:2000]}"
+            f"家长补充文字：{data.text or '无'}"
         )
 
 

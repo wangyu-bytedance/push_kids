@@ -14,7 +14,7 @@ from urllib.request import Request, urlopen
 from fastapi import UploadFile
 
 from push_kids.platform.config import Settings
-from push_kids.platform.errors import DependencyError
+from push_kids.platform.errors import DependencyError, GoneError
 
 ALLOWED_IMAGE_TYPES = {"image/jpeg": ".jpg", "image/png": ".png", "image/webp": ".webp"}
 
@@ -101,11 +101,10 @@ class WeChatCloudMediaStore:
     decode_url = "http://api.weixin.qq.com/_/cos/metaid/decode"
 
     def __init__(self, settings: Settings) -> None:
-        if not settings.wechat_storage_bucket or not settings.wechat_storage_cloud_prefix:
+        if not settings.wechat_storage_bucket:
             raise ValueError("微信云托管对象存储配置不完整")
         self.bucket = settings.wechat_storage_bucket
         self.region = settings.wechat_storage_region
-        self.cloud_prefix = settings.wechat_storage_cloud_prefix.rstrip("/") + "/"
         self.max_bytes = settings.upload_max_bytes
 
     @staticmethod
@@ -144,9 +143,11 @@ class WeChatCloudMediaStore:
         return CosS3Client(config)
 
     def _object_path(self, storage_ref: str) -> str:
-        if not storage_ref.startswith(self.cloud_prefix):
-            raise ValueError("文件不属于当前云环境")
-        path = storage_ref.removeprefix(self.cloud_prefix)
+        if not storage_ref.startswith("cloud://"):
+            raise ValueError("非法云存储文件 ID")
+        resource, separator, path = storage_ref.removeprefix("cloud://").partition("/")
+        if not resource or not separator:
+            raise ValueError("非法云存储文件 ID")
         if not path or path.startswith("/") or ".." in Path(path).parts:
             raise ValueError("非法云存储路径")
         return path
@@ -210,6 +211,32 @@ class WeChatCloudMediaStore:
             self._client().delete_object(Bucket=self.bucket, Key=path)
         except Exception as exc:
             raise DependencyError("对象存储清理失败") from exc
+
+    def preview_url(self, storage_ref: str) -> str:
+        """Issue a GET-only, one-object capability after application authorization."""
+        path = self._object_path(storage_ref)
+        try:
+            client = self._client()
+            head = client.head_object(Bucket=self.bucket, Key=path)
+            size = int(head.get("Content-Length", head.get("ContentLength", 0)))
+            if size > self.max_bytes:
+                raise GoneError("图片超出允许大小")
+            return client.get_presigned_url(
+                Bucket=self.bucket,
+                Key=path,
+                Method="GET",
+                Expired=60,
+                Params={
+                    "x-cos-security-token": client.get_conf()._token,
+                    "response-cache-control": "no-store",
+                },
+            )
+        except GoneError:
+            raise
+        except Exception as exc:
+            if hasattr(exc, "get_status_code") and str(exc.get_status_code()) == "404":
+                raise GoneError("原图已删除或不可用") from exc
+            raise DependencyError("照片暂时无法读取，请重试") from exc
 
     def delete(self, storage_ref: str) -> None:
         self.delete_path(self._object_path(storage_ref))

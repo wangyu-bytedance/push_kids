@@ -1,0 +1,10 @@
+<view class="materials">
+  <button class="toggle" bindtap="toggle">上传内容 <text>{{open ? '收起' : '展开'}}</text></button>
+  <block wx:if="{{open}}">
+    <text wx:if="{{loading}}">正在读取上传内容…</text>
+    <view wx:if="{{error}}" class="error"><text>{{error}}</text><button bindtap="load">重新读取</button></view>
+    <view class="photos"><button wx:for="{{media}}" wx:key="id" data-id="{{item.id}}" disabled="{{!item.available || item.unavailable || previewBusy}}" bindtap="preview" aria-label="查看照片 {{item.index}}"><image wx:if="{{item.thumbnail}}" src="{{item.thumbnail}}" mode="aspectFit" /><text>照片 {{item.index}}</text><text class="hint">{{item.hint || (item.available ? '点开查看原图' : '原图已删除或不可用')}}</text></button></view>
+    <text wx:if="{{text}}" class="original" selectable="{{true}}">{{text}}</text>
+    <text wx:if="{{!loading && !error && !text && !media.length}}" class="hint">没有可展示的原始材料</text>
+  </block>
+</view>

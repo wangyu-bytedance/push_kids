@@ -3,15 +3,22 @@
 | ID | Behavior | Owner | Verification |
 |---|---|---|---|
 | `BHV-001` | Parent creates children and learning/activity subjects | children | API integration tests |
-| `BHV-002` | Parent uploads one or more photos or manually enters learning with occurrence time | learning | contract/integration tests |
-| `BHV-003` | Analysis runs asynchronously and yields editable proposal or actionable failure | agent_processing | worker tests |
-| `BHV-004` | Only parent confirmation creates formal learning/knowledge/review data | learning + knowledge + planning | transaction tests |
-| `BHV-005` | Repeated knowledge reuses identity and keeps every occurrence | knowledge | dedup unit/integration tests |
-| `BHV-006` | Review schedule follows deterministic memory-curve policy | planning | policy unit tests |
+| `BHV-002` | Parent uploads photos or enters text with occurrence time; empty interrupted drafts can resume/cancel, timestamps round-trip in UTC, pending records are filtered before pagination | learning + persistence | P2 boundary and page logic tests |
+| `BHV-003` | Analysis yields an editable proposal or actionable failure; ordinary loop faults back off and recover, cleanup faults are isolated, enabled unavailable workers fail readiness | agent_processing + bootstrap | worker fault-injection and readiness contract tests |
+| `BHV-004` | Only parent confirmation of a server-resolved learning subject creates formal learning/knowledge/review data; activity rejection retains the draft without writes | learning + knowledge + planning | transaction and activity-boundary tests |
+| `BHV-005` | Repeated learning reuses canonical knowledge, deduplicates occurrences within one confirmation, preserves existing Review progress and completes each current matched Todo at most once | knowledge + learning | AI reliability integration and context contract tests |
+| `BHV-006` | Review schedule follows deterministic memory-curve policy for learning subjects; activity reviews never enter Todo, practice materials or feedback | planning | policy unit and historical activity-boundary tests |
 | `BHV-007` | Historical backfill produces a current check, not past Todo debt | planning | backfill unit test |
-| `BHV-008` | Daily Todo is grouped under a time budget and accepts four feedback types | planning | service tests |
-| `BHV-009` | Activity schedules suggest practice and show last practice without mandatory review | activities | integration tests |
-| `BHV-010` | Dashboard/report/calendar summarize confirmed evidence only | reporting | reporting tests |
+| `BHV-008` | Daily Todo is grouped under a time budget and accepts four feedback types; closed reviews reject new feedback while successful idempotent requests replay their result | planning | service and P2 boundary tests |
+| `BHV-009` | Activity schedules suggest practice and show last practice without entering the memory curve | activities | integration and activity-boundary tests |
+| `BHV-010` | Dashboard/report/calendar summarize confirmed evidence; review statistics exclude historical activity reviews while activity records and historical learning evidence remain available | reporting | reporting and activity-boundary tests |
 | `BHV-011` | Every resource is isolated by family scope | platform | cross-family tests |
 | `BHV-012` | Cloud requests derive family scope from a bound WeChat actor and reject client family authorization | platform | cloud identity + real two-account tests |
 | `BHV-013` | Cloud images use server-issued private upload paths and are claimed only after uploader/path/content validation | media + learning | adapter tests + real storage E2E |
+| `BHV-014` | Analysis uses provided grade, balanced confirmed history and canonical knowledge candidates; repeated materials warn without auto feedback; evidence remains parent-confirmed | agent_processing | context / provider contract and reliability tests; live model quality not verified |
+| `BHV-015` | Manual confirmation works during queued/analyzing/failed/pending states; saves atomically and cancels unfinished work; stale provider success/failure cannot overwrite terminal states | learning + agent_processing | manual state / invalid input / late-result integration and page tests |
+| `BHV-016` | Settings shows three base learning subjects and only explicitly added other subjects/activities; opening or cancelling a catalog/reminder editor performs no write | children + activities + Mini Program | settings page state and activity integration tests |
+| `BHV-017` | A family invite approves at most one applicant; approval/revocation expires sibling pending requests and releases pending bindings; invite lists omit raw tokens | families | family onboarding integration tests |
+| `BHV-018` | Member management rejects self-removal at the service boundary and keeps role changes/removal of other members behind manager authorization and confirmation | families | role/self-removal integration and frontend state tests |
+| `BHV-019` | History searches/paginates confirmed and pending submissions without duplicating confirmation; reused detail exposes confirmed evidence, original media and current review feedback without business writes | learning + reporting + planning | learning_history integration, learning-history and submission-materials page tests; native/cloud acceptance pending |
+| `BHV-020` | Original media preview validates family/child/submission/media membership, permits viewers, rejects removed members and cancelled media; cloud GET capabilities expire within 60 seconds | learning + media | viewer/isolation/cancellation and signing/limiter tests; real cloud two-actor test pending |

@@ -8,7 +8,8 @@ test("cloud requests use callContainer without a client family header", async ()
     useCloud: true,
     cloudEnv: "prod-test",
     cloudService: "push-kids",
-    apiBasePath: "/api/v1"
+    apiBasePath: "/api/v1",
+    apiBaseUrl: "https://must-not-be-used.invalid/api/v1"
   } });
   let captured;
   global.wx = { cloud: { callContainer(options) {
@@ -18,11 +19,33 @@ test("cloud requests use callContainer without a client family header", async ()
   const result = await api.request("/children", { idempotencyKey: "stable-request-001" });
   assert.equal(result.ok, true);
   assert.equal(captured.path, "/api/v1/children");
+  assert.equal(captured.url, undefined);
   assert.equal(captured.config.env, "prod-test");
   assert.equal(captured.header["X-WX-SERVICE"], "push-kids");
   assert.equal(captured.header["X-Family-ID"], undefined);
   assert.equal(captured.header["Idempotency-Key"], "stable-request-001");
   delete global.getApp;
+  delete global.wx;
+});
+
+test("cloud startup initializes the configured environment without a backend domain", () => {
+  let appDefinition;
+  let initializedWith;
+  global.App = (definition) => { appDefinition = definition; };
+  global.wx = {
+    cloud: { init(options) { initializedWith = options; } },
+    getStorageSync() { return ""; },
+    setStorageSync() {}
+  };
+  const appPath = require.resolve("../../apps/miniprogram/app");
+  delete require.cache[appPath];
+  require(appPath);
+
+  appDefinition.onLaunch();
+
+  assert.deepEqual(initializedWith, { env: "prod-d2g14rwoycac6b45d" });
+  assert.equal(appDefinition.globalData.cloudService, "flask-ik19");
+  delete global.App;
   delete global.wx;
 });
 

@@ -12,7 +12,11 @@ from sqlalchemy import func, select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
-from push_kids.agent_processing.contracts import AnalysisProposal
+from push_kids.agent_processing.contracts import (
+    MATERIAL_FINGERPRINT_KEY,
+    AnalysisProposal,
+    unique_knowledge_points,
+)
 from push_kids.children.service import ChildrenService
 from push_kids.knowledge.normalization import normalize_knowledge_name
 from push_kids.learning.schemas import (
@@ -33,6 +37,7 @@ from push_kids.media.store import (
 )
 from push_kids.persistence.models import (
     AgentJob,
+    Child,
     JobState,
     KnowledgeItem,
     KnowledgeOccurrence,
@@ -131,7 +136,7 @@ class LearningService:
             LearningSubmission.id == submission_id, LearningSubmission.family_id == family_id
         )
         if for_update:
-            query = query.with_for_update()
+            query = query.with_for_update().execution_options(populate_existing=True)
         item = db.scalar(query)
         if item is None:
             raise NotFoundError("没有找到这条学习记录")
@@ -556,6 +561,21 @@ class LearningService:
             )
             or 0
         )
+        awaiting_upload = bool(
+            submission.source == "photo"
+            and submission.state == SubmissionState.queued.value
+            and not job_count
+        )
+        upload_batch_key = (
+            db.scalar(
+                select(SubmissionRequest.idempotency_key).where(
+                    SubmissionRequest.family_id == family_id,
+                    SubmissionRequest.submission_id == submission.id,
+                )
+            )
+            if awaiting_upload
+            else None
+        )
         return SubmissionView(
             id=submission.id,
             child_id=submission.child_id,
@@ -567,6 +587,8 @@ class LearningService:
             error_code=submission.error_code,
             error_message=submission.error_message,
             media_count=media_count,
+            awaiting_upload=awaiting_upload,
+            upload_batch_key=upload_batch_key,
             can_finalize_upload=bool(
                 submission.source == "photo"
                 and submission.state == SubmissionState.queued.value
@@ -579,7 +601,13 @@ class LearningService:
 
     @classmethod
     def list_views(
-        cls, db: Session, family_id: str, child_id: str, state: str | None = None
+        cls,
+        db: Session,
+        family_id: str,
+        child_id: str,
+        state: str | None = None,
+        pending_only: bool = False,
+        offset: int = 0,
     ) -> list[SubmissionView]:
         ChildrenService.get_child(db, family_id, child_id)
         query = select(LearningSubmission.id).where(
@@ -587,7 +615,22 @@ class LearningService:
         )
         if state:
             query = query.where(LearningSubmission.state == state)
-        ids = db.scalars(query.order_by(LearningSubmission.created_at.desc()).limit(100))
+        if pending_only:
+            query = query.where(
+                LearningSubmission.state.in_(
+                    [
+                        SubmissionState.queued.value,
+                        SubmissionState.analyzing.value,
+                        SubmissionState.pending_confirmation.value,
+                        SubmissionState.failed.value,
+                    ]
+                )
+            )
+        ids = db.scalars(
+            query.order_by(LearningSubmission.created_at.desc(), LearningSubmission.id.desc())
+            .offset(offset)
+            .limit(100)
+        )
         return [cls.get_view(db, family_id, item_id) for item_id in ids if item_id is not None]
 
     @classmethod
@@ -656,9 +699,40 @@ class LearningService:
     def confirm(
         cls, db: Session, family_id: str, submission_id: str, data: ConfirmSubmission
     ) -> ConfirmationResult:
-        submission = cls._submission(db, family_id, submission_id)
-        if submission.state != SubmissionState.pending_confirmation.value:
+        job = db.scalar(
+            select(AgentJob)
+            .where(
+                AgentJob.submission_id == submission_id,
+                AgentJob.family_id == family_id,
+            )
+            .with_for_update()
+            .execution_options(populate_existing=True)
+        )
+        submission = cls._submission(db, family_id, submission_id, for_update=True)
+        allowed = {SubmissionState.pending_confirmation.value}
+        if data.manual_entry:
+            allowed.update(
+                {
+                    SubmissionState.queued.value,
+                    SubmissionState.analyzing.value,
+                    SubmissionState.failed.value,
+                }
+            )
+            if data.proposal.todo_matches:
+                raise ValueError("人工录入不能自动标记Todo，请通过Todo反馈入口操作")
+        if submission.state not in allowed:
             raise ConflictError("只有待确认的草稿可以确认")
+        # Serialize knowledge creation by child as well as confirmation by submission.
+        db.scalar(
+            select(Child)
+            .where(Child.id == submission.child_id, Child.family_id == family_id)
+            .with_for_update()
+        )
+        stored_proposal = json.loads(submission.proposal_json or "{}")
+        original_matches = {
+            item["review_id"]: item for item in stored_proposal.get("todo_matches", [])
+        }
+        data.proposal.knowledge_points = unique_knowledge_points(data.proposal.knowledge_points)
         if data.subject_id:
             subject = db.scalar(
                 select(Subject).where(
@@ -678,6 +752,8 @@ class LearningService:
                 )
             )
             if subject is None:
+                if data.proposal.subject_kind != "learning":
+                    raise ValueError("活动请通过活动记录入口保存，不加入复习计划")
                 subject = Subject(
                     family_id=family_id,
                     child_id=submission.child_id,
@@ -686,6 +762,8 @@ class LearningService:
                 )
                 db.add(subject)
                 db.flush()
+        if subject.kind != "learning":
+            raise ValueError("活动请通过活动记录入口保存，不加入复习计划")
         record = LearningRecord(
             family_id=family_id,
             child_id=submission.child_id,
@@ -693,7 +771,7 @@ class LearningService:
             submission_id=submission.id,
             occurred_at=submission.occurred_at,
             summary=data.proposal.summary,
-            source=data.proposal.source,
+            source="人工录入" if data.manual_entry else data.proposal.source,
         )
         db.add(record)
         db.flush()
@@ -703,15 +781,20 @@ class LearningService:
             normalized = normalize_knowledge_name(point.name)
             if not normalized:
                 continue
-            knowledge = db.scalar(
-                select(KnowledgeItem).where(
-                    KnowledgeItem.family_id == family_id,
-                    KnowledgeItem.child_id == submission.child_id,
-                    KnowledgeItem.subject_id == subject.id,
-                    KnowledgeItem.normalized_name == normalized,
-                    KnowledgeItem.category == point.category,
-                )
+            knowledge_query = select(KnowledgeItem).where(
+                KnowledgeItem.family_id == family_id,
+                KnowledgeItem.child_id == submission.child_id,
+                KnowledgeItem.subject_id == subject.id,
+                KnowledgeItem.normalized_name == normalized,
+                KnowledgeItem.category == point.category,
             )
+            if point.existing_knowledge_id:
+                knowledge_query = knowledge_query.where(
+                    KnowledgeItem.id == point.existing_knowledge_id
+                )
+            knowledge = db.scalar(knowledge_query)
+            if point.existing_knowledge_id and knowledge is None:
+                raise ValueError("关联知识点与所选科目或编辑内容不一致，请取消关联后重试")
             if knowledge is None:
                 knowledge = KnowledgeItem(
                     family_id=family_id,
@@ -735,7 +818,10 @@ class LearningService:
             )
             due = initial_review_date(local_date(submission.occurred_at), local_date())
             review = db.scalar(
-                select(ReviewItem).where(ReviewItem.knowledge_item_id == knowledge.id)
+                select(ReviewItem)
+                .where(ReviewItem.knowledge_item_id == knowledge.id)
+                .with_for_update()
+                .execution_options(populate_existing=True)
             )
             if review is None:
                 review = ReviewItem(
@@ -746,26 +832,39 @@ class LearningService:
                 )
                 db.add(review)
                 db.flush()
-            else:
-                review.step = 0
-                review.due_date = due
-                review.active = True
             if knowledge.id is None or review.id is None:
                 raise RuntimeError("confirmed entities have no generated id")
             knowledge_ids.append(knowledge.id)
             review_ids.append(review.id)
         if not knowledge_ids:
             raise ValueError("至少需要保留一个有效知识点")
-        for match in data.proposal.todo_matches:
+        unique_matches = {item.review_id: item for item in data.proposal.todo_matches}
+        data.proposal.todo_matches = []
+        for match in unique_matches.values():
             matched_review = db.scalar(
-                select(ReviewItem).where(
+                select(ReviewItem)
+                .join(KnowledgeItem, ReviewItem.knowledge_item_id == KnowledgeItem.id)
+                .join(Subject, KnowledgeItem.subject_id == Subject.id)
+                .where(
                     ReviewItem.id == match.review_id,
                     ReviewItem.family_id == family_id,
                     ReviewItem.child_id == submission.child_id,
                     ReviewItem.active.is_(True),
+                    Subject.kind == "learning",
                 )
+                .with_for_update()
+                .execution_options(populate_existing=True)
             )
-            if matched_review is None:
+            if matched_review is None or matched_review.due_date is None:
+                continue
+            snapshot = original_matches.get(match.review_id)
+            if snapshot is None:
+                # Confirmation may remove matches, never add unobserved automatic feedback.
+                continue
+            if snapshot.get("step") is not None and (
+                snapshot["step"] != matched_review.step
+                or snapshot.get("due_date") != matched_review.due_date.isoformat()
+            ):
                 continue
             transition = apply_feedback(matched_review.step or 0, "complete", local_date())
             matched_review.step = transition.step
@@ -779,8 +878,22 @@ class LearningService:
                     action="complete",
                 )
             )
-        submission.proposal_json = data.proposal.model_dump_json()
+            data.proposal.todo_matches.append(match)
+        if data.manual_entry:
+            data.proposal.source = "人工录入"
+            if job and job.state in {
+                JobState.queued.value,
+                JobState.running.value,
+                JobState.failed.value,
+            }:
+                job.state = JobState.cancelled.value
+        stored = data.proposal.model_dump()
+        if MATERIAL_FINGERPRINT_KEY in stored_proposal:
+            stored[MATERIAL_FINGERPRINT_KEY] = stored_proposal[MATERIAL_FINGERPRINT_KEY]
+        submission.proposal_json = json.dumps(stored, ensure_ascii=False)
         submission.state = SubmissionState.confirmed.value
+        submission.error_code = None
+        submission.error_message = None
         submission.confirmed_at = utcnow()
         db.commit()
         return ConfirmationResult(

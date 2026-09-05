@@ -1,0 +1,206 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Push Kids 当前软件部署架构",
+    "locale": "zh-CN",
+    "output": "docs/architecture/diagrams/current-cloud-deployment.html",
+    "viewBox": [1380, 800],
+    "animation": "none",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "request-path",
+        "label": "小程序请求链",
+        "focus": ["miniapp", "wechat_gateway", "fastapi", "mysql"],
+        "note": "业务请求通过 wx.cloud.callContainer 进入云托管，服务端解析微信 actor 后访问 MySQL。"
+      },
+      {
+        "id": "media-path",
+        "label": "私有图片链",
+        "focus": ["miniapp", "object_storage", "fastapi", "worker"],
+        "note": "图片通过 wx.cloud.uploadFile 直传私有对象存储，API 负责 ticket/claim，Worker 临时物化。"
+      },
+      {
+        "id": "analysis-path",
+        "label": "异步分析链",
+        "focus": ["fastapi", "mysql", "worker", "object_storage", "ark"],
+        "note": "同进程 Worker 从 MySQL 租约任务、读取图片并调用 Ark，结果回写为可编辑草稿。"
+      }
+    ]
+  },
+  "layout": {
+    "mode": "grid",
+    "origin": [70, 95],
+    "cols": 12,
+    "cellW": 86,
+    "cellH": 90,
+    "gapX": 22,
+    "gapY": 28
+  },
+  "components": [
+    {
+      "id": "miniapp",
+      "type": "frontend",
+      "label": "微信小程序",
+      "sublabel": "apps/miniprogram",
+      "pos": [40, 310],
+      "size": [150, 64],
+      "tag": "家长设备"
+    },
+    {
+      "id": "wechat_gateway",
+      "type": "security",
+      "label": "微信云托管入口",
+      "sublabel": "callContainer + actor headers",
+      "pos": [260, 210],
+      "size": [192, 64],
+      "tag": "PUBLIC 关闭"
+    },
+    {
+      "id": "fastapi",
+      "type": "backend",
+      "label": "FastAPI API",
+      "sublabel": "Uvicorn · UID 10001 · :8000",
+      "pos": [520, 210],
+      "size": [170, 66],
+      "tag": "flask-ik19-003"
+    },
+    {
+      "id": "worker",
+      "type": "backend",
+      "label": "进程内 Worker",
+      "sublabel": "lease · retry · cleanup",
+      "pos": [520, 460],
+      "size": [170, 66],
+      "tag": "当前发布阻断项"
+    },
+    {
+      "id": "mysql",
+      "type": "database",
+      "label": "托管 MySQL",
+      "sublabel": "SQLAlchemy + Alembic",
+      "pos": [790, 210],
+      "size": [172, 66],
+      "tag": "私网 / InnoDB"
+    },
+    {
+      "id": "object_storage",
+      "type": "cloud",
+      "label": "微信私有对象存储",
+      "sublabel": "ticket + claim + temp credential",
+      "pos": [260, 460],
+      "size": [194, 66],
+      "tag": "儿童学习图片"
+    },
+    {
+      "id": "ark",
+      "type": "external",
+      "label": "Ark Responses API",
+      "sublabel": "Doubao 图文分析",
+      "pos": [830, 460],
+      "size": [180, 66],
+      "tag": "第三方处理方"
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "微信云环境 prod-d2g14rwoycac6b45d",
+      "wraps": ["wechat_gateway", "fastapi", "worker", "mysql", "object_storage"],
+      "pad": 24
+    },
+    {
+      "kind": "security-group",
+      "label": "云托管单实例容器",
+      "wraps": ["fastapi", "worker"],
+      "pad": 18
+    }
+  ],
+  "connections": [
+    {
+      "id": "miniapp-api-call",
+      "from": "miniapp",
+      "to": "wechat_gateway",
+      "label": "callContainer",
+      "variant": "security"
+    },
+    {
+      "id": "gateway-api",
+      "from": "wechat_gateway",
+      "to": "fastapi",
+      "label": "X-WX-* actor",
+      "variant": "security"
+    },
+    {
+      "id": "api-mysql",
+      "from": "fastapi",
+      "to": "mysql",
+      "label": "family-scoped SQL",
+      "variant": "emphasis"
+    },
+    {
+      "id": "miniapp-media",
+      "from": "miniapp",
+      "to": "object_storage",
+      "label": "uploadFile",
+      "variant": "security"
+    },
+    {
+      "id": "api-media",
+      "from": "fastapi",
+      "to": "object_storage",
+      "label": "ticket / claim",
+      "variant": "security"
+    },
+    {
+      "id": "worker-mysql",
+      "from": "worker",
+      "to": "mysql",
+      "label": "Job / context / result",
+      "variant": "emphasis"
+    },
+    {
+      "id": "worker-media",
+      "from": "worker",
+      "to": "object_storage",
+      "label": "取图 / 清理",
+      "variant": "default",
+      "labelDy": 50
+    },
+    {
+      "id": "worker-ark",
+      "from": "worker",
+      "to": "ark",
+      "label": "Ark HTTPS",
+      "variant": "dashed",
+      "labelDy": 50
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "部署单元",
+      "items": [
+        "小程序由微信平台分发；FastAPI 以非 root Docker 容器运行在云托管服务 flask-ik19",
+        "MySQL 与对象存储是容器外持久化资源，容器磁盘不承载业务数据"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "安全边界",
+      "items": [
+        "公网入口已关闭；云请求只接受微信入口注入的 actor，不接受客户端 X-Family-ID",
+        "图片保持私有，API 校验上传人、路径、格式、大小与哈希后才允许分析"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "当前约束",
+      "items": [
+        "Worker 与 API 同进程，依赖数据库行锁和租约；必须迁移到受支持的任务执行器",
+        "真实双账号隔离、对象 owner 规则、Ark 与备份恢复仍是公开发布门禁"
+      ]
+    }
+  ]
+}

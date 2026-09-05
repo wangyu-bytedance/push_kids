@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "diagram_type": "lifecycle",
+  "meta": {
+    "title": "Push Kids 上传图片状态机",
+    "locale": "zh-CN",
+    "output": "docs/architecture/diagrams/current-uploaded-image-lifecycle.html",
+    "viewBox": [1080, 660],
+    "animation": "none",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "normal-path",
+        "label": "正常上传",
+        "focus": ["media-ticketed", "media-claimed"],
+        "note": "服务端签发路径，微信直传后由服务端安全校验并 claim。"
+      },
+      {
+        "id": "cleanup-path",
+        "label": "清理路径",
+        "focus": ["media-ticketed", "media-claimed", "media-deleted"],
+        "note": "过期 ticket 或已取消提交的图片进入删除路径；删除失败时保持原状态。"
+      }
+    ]
+  },
+  "lanes": [
+    { "id": "main", "label": "MediaObject 主生命周期" },
+    { "id": "terminal", "label": "清理结果" }
+  ],
+  "states": [
+    {
+      "id": "media-ticketed",
+      "type": "start",
+      "label": "ticketed",
+      "sublabel": "上传凭据，可过期",
+      "tag": "对象可能未上传",
+      "step": "M1",
+      "lane": "main",
+      "col": 0
+    },
+    {
+      "id": "media-claimed",
+      "type": "active",
+      "label": "claimed",
+      "sublabel": "绑定提交，确认后仍保持",
+      "tag": "可供分析",
+      "step": "M2",
+      "lane": "main",
+      "col": 3,
+      "width": 150
+    },
+    {
+      "id": "media-deleted",
+      "type": "failure",
+      "label": "deleted",
+      "sublabel": "仅删除成功后写入",
+      "tag": "清理结果",
+      "step": "M3",
+      "lane": "terminal",
+      "col": 1
+    }
+  ],
+  "transitions": [
+    {
+      "id": "ticket-claim",
+      "from": "media-ticketed",
+      "to": "media-claimed",
+      "label": "校验 owner、路径、类型、魔数、大小与 hash",
+      "variant": "security",
+      "route": "straight"
+    },
+    {
+      "id": "ticket-cleanup",
+      "from": "media-ticketed",
+      "to": "media-deleted",
+      "label": "ticket 过期或提交取消",
+      "variant": "security"
+    },
+    {
+      "id": "claimed-cleanup",
+      "from": "media-claimed",
+      "to": "media-deleted",
+      "label": "提交取消：立即删除或后台补偿",
+      "variant": "security",
+      "labelAt": [556, 202]
+    }
+  ]
+}

@@ -45,14 +45,26 @@ Dependency direction is routers → services → pure policies. Infrastructure a
 
 - Every business row includes `family_id`; all lookups enforce it. Cloud family scope comes from an active
   HMAC actor binding, never from the client's `X-Family-ID`.
+- Timestamp columns use persistence-owned `UTCDateTime`: normalize aware input to UTC on bind, restore
+  UTC on read on SQLite/MySQL. Existing naive timestamps retain the previous UTC interpretation; no schema
+  migration or speculative correction of historical offsets is performed (`BUG-SPEC-20260905-05`).
 - A submission becomes immutable evidence after confirmation; parent edits are captured in the confirmed record.
-- `KnowledgeItem` is unique per family, child, subject, normalized name and category. Repeated learning creates `KnowledgeOccurrence` rows.
+- `KnowledgeItem` is unique per family, child, subject, normalized name and category. Repeated learning creates one `KnowledgeOccurrence` per knowledge per confirmation, preserving existing Review state.
 - `ReviewItem` owns current review step and due date. Feedback advances, reinforces, partially advances, or defers it deterministically.
 - Cloud media is server-ticketed and claimed only after verifying uploader metadata, exact bucket/path,
   magic bytes, size and hash. Expired tickets and cancelled submissions are cleanup candidates.
 - Public account-wide export/deletion remains deferred to FEAT-002; cancellation deletes its scoped media.
 
 ## Async analysis sequence
+
+BUG-009 keeps the existing module topology. `agent_processing/context.py` owns bounded read-only input
+assembly and material fingerprints; `prompt.py` owns deployment-versioned extraction rules. The personal
+Skill filesystem is not a runtime dependency. Model references are validated in contracts; learning owns
+final identity validation, occurrence deduplication and current Todo settlement in one transaction.
+Confirmation locks Job → Submission → Child, then affected Reviews; Worker writes lock Job → Submission
+and verify state/attempt/lease after ending the provider-input read transaction. Manual confirmation cancels
+unfinished jobs; both late success and late failure are discarded. No new provider extension or migration.
+Material fingerprints are server-owned proposal JSON metadata, preserved at confirmation and never logged.
 
 ```mermaid
 sequenceDiagram
@@ -75,6 +87,20 @@ sequenceDiagram
 ```
 
 ## Decisions and trade-offs
+
+`BUG-SPEC-20260905-03` adds recovery inside the existing process topology: Worker owns its health
+state and bounded 1–30 second backoff; bootstrap retains the background Task and maps unavailable
+workers to readiness 503. Healthy iteration resets backoff. Cleanup runs behind a separate exception
+boundary at the existing 60 second cadence. Claimed-task preparation and provider failures use bounded
+job retries; database failures close the session and preserve durable state for the existing five-minute
+lease recovery. Stop wakes idle/backoff waits; an already running synchronous provider thread cannot be
+forcibly stopped. Logs contain event/type/count/IDs only. This local fault-tolerance change does not
+resolve the independent Cloud Hosting task-execution release gate.
+
+`BUG-SPEC-20260905-04` keeps subject classification in existing service boundaries: learning confirmation
+requires server-resolved `Subject.kind=learning`; planning, Worker Todo candidates and review reporting
+exclude historical activity reviews. Activity records/schedules remain owned by activities. No new
+shared abstraction, dependency direction, schema migration or historical deletion is introduced.
 
 | Decision | Choice | Trade-off / revisit trigger |
 |---|---|---|
@@ -181,6 +207,21 @@ the recommended design, alternatives, trade-offs, dependency DAG, file changes,
 test points, architecture revision, and explicit owner confirmation. Public release
 remains blocked until real Cloud Hosting actor trust, family permissions, privacy and deletion flows are
 implemented and tested. The full cloud runbook is `docs/operations/WECHAT-CLOUD-HOSTING.md`.
+
+## History and source review — local implementation
+
+`SPEC-HISTORY-20260905-01 / ARCH-HISTORY-20260905-01` adds read projections without new tables or page routes.
+The reporting service aggregates `learning.history.LearningHistory` and PlanningService read contracts;
+learning/planning never import reporting. Routers only validate transport/identity and delegate.
+Original media reads validate the complete ownership chain before touching storage. Local responses require
+identity on each download; cloud responses use the existing COS client to sign a GET for one object, including
+the temporary security token, for at most 60 seconds. A removed member cannot obtain another capability;
+already issued capabilities can remain usable until expiry. The bucket remains private.
+Preview signing is capped per active member (local family fallback) at 30/minute, 1024 active windows,
+within the existing single-process staging boundary. Distributed limits and real cloud cross-account access
+remain release gates. Search text uses an encoded header to keep child content out of URL access logs.
+Read projections do not invoke AI or mutate deterministic planning state. Static imports across all 53 Python
+source modules were checked without a cycle; the repository policy checker also passed.
 
 ## Frontend evidence exception
 

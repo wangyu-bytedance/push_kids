@@ -1,0 +1,114 @@
+{
+  "schema_version": 1,
+  "diagram_type": "lifecycle",
+  "meta": {
+    "title": "Push Kids 上传图片状态机",
+    "locale": "zh-CN",
+    "output": "docs/architecture/diagrams/current-uploaded-image-lifecycle.html",
+    "viewBox": [900, 720],
+    "animation": "none",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "normal-path",
+        "label": "正常上传",
+        "focus": ["media-ticketed", "media-claimed"],
+        "note": "服务端先签发路径，微信直传后由服务端安全校验并 claim。"
+      },
+      {
+        "id": "cleanup-path",
+        "label": "清理路径",
+        "focus": ["media-ticketed", "media-claimed", "media-deleted"],
+        "note": "过期 ticket 或已取消提交的图片进入删除路径。"
+      }
+    ]
+  },
+  "lanes": [
+    { "id": "main", "label": "MediaObject 主生命周期" },
+    { "id": "terminal", "label": "清理结果" }
+  ],
+  "states": [
+    {
+      "id": "media-ticketed",
+      "type": "start",
+      "label": "ticketed",
+      "sublabel": "已签发私有上传路径",
+      "tag": "可过期",
+      "step": "M1",
+      "lane": "main",
+      "col": 0
+    },
+    {
+      "id": "media-claimed",
+      "type": "active",
+      "label": "claimed",
+      "sublabel": "校验完成并绑定提交单",
+      "tag": "可供分析",
+      "step": "M2",
+      "lane": "main",
+      "col": 3
+    },
+    {
+      "id": "media-deleted",
+      "type": "failure",
+      "label": "deleted",
+      "sublabel": "对象删除成功",
+      "tag": "清理结果",
+      "step": "M3",
+      "lane": "terminal",
+      "col": 1
+    }
+  ],
+  "transitions": [
+    {
+      "id": "ticket-claim",
+      "from": "media-ticketed",
+      "to": "media-claimed",
+      "label": "上传后安全 claim",
+      "variant": "security",
+      "route": "straight"
+    },
+    {
+      "id": "ticket-cleanup",
+      "from": "media-ticketed",
+      "to": "media-deleted",
+      "label": "ticket 过期或提交取消",
+      "variant": "security"
+    },
+    {
+      "id": "claimed-cleanup",
+      "from": "media-claimed",
+      "to": "media-deleted",
+      "label": "提交取消：立即删除或后台补偿",
+      "variant": "security",
+      "labelAt": [556, 202]
+    }
+  ],
+  "cards": [
+    {
+      "dot": "amber",
+      "title": "状态字段只有三个值",
+      "items": [
+        "ticketed：凭据已创建，文件可能尚未上传或尚未完成 claim",
+        "claimed：文件元数据已验证，并写入 SubmissionMedia",
+        "deleted：对象存储删除成功后才写入该状态"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "不会发生的迁移",
+      "items": [
+        "分析成功和家长确认都不会改变 claimed 状态",
+        "当前没有 archived、processed 或 retained 状态"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "当前边界",
+      "items": [
+        "删除失败时状态保持不变，等待下一次清理",
+        "正式图片保留期与家庭级删除仍属于公开发布门禁"
+      ]
+    }
+  ]
+}

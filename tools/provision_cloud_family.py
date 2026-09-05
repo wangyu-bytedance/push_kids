@@ -4,7 +4,15 @@ import argparse
 import os
 import sys
 
-from push_kids.persistence.models import Child, Subject, WeChatActorBinding
+from push_kids.persistence.models import (
+    Child,
+    Family,
+    FamilyMember,
+    MemberRole,
+    MemberStatus,
+    Subject,
+    WeChatActorBinding,
+)
 from push_kids.platform.config import Settings
 from push_kids.platform.context import subject_hmac
 from push_kids.platform.database import Database
@@ -46,16 +54,37 @@ def main() -> int:
             )
         )
         if binding is None:
-            db.add(
-                WeChatActorBinding(
-                    app_id=settings.wechat_expected_app_id,
-                    subject_hmac=subject,
-                    family_id=args.family_id,
-                )
+            binding = WeChatActorBinding(
+                app_id=settings.wechat_expected_app_id,
+                subject_hmac=subject,
+                family_id=args.family_id,
             )
+            db.add(binding)
+            db.flush()
         else:
             binding.family_id = args.family_id
             binding.status = "active"
+        family = db.get(Family, args.family_id)
+        if family is None:
+            family = Family(id=args.family_id, display_name=f"{args.child_name}的家")
+            db.add(family)
+            db.flush()
+        member = db.scalar(select(FamilyMember).where(FamilyMember.actor_binding_id == binding.id))
+        if member is None:
+            db.add(
+                FamilyMember(
+                    family_id=args.family_id,
+                    actor_binding_id=binding.id,
+                    active_actor_binding_id=binding.id,
+                    role=MemberRole.manager.value,
+                    relationship_label="家庭管理员",
+                )
+            )
+        else:
+            member.family_id = args.family_id
+            member.active_actor_binding_id = binding.id
+            member.role = MemberRole.manager.value
+            member.status = MemberStatus.active.value
         child = db.scalar(
             select(Child).where(Child.family_id == args.family_id, Child.name == args.child_name)
         )

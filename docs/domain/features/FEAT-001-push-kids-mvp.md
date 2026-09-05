@@ -1,8 +1,8 @@
 # FEAT-001 — 家庭学习持续跟进系统 MVP
 
 - Status: `CURRENT`
-- Revision: `FEAT-STATE-20260905-07`
-- Last verified: 2026-09-05（本地、非 root 8000 应用容器；真实微信云新版本 pending）
+- Revision: `FEAT-STATE-20260905-HISTORY-01-LOCAL`
+- Last verified: 2026-09-05（本地回归 + 真实微信云托管 staging + 开发者工具 callContainer）
 - Source Spec: `specs/completed/FEAT-001-PUSH-KIDS-FINAL-SPEC.md` revision `SPEC-20260831-08`
 - Intermediate design artifact: `docs/design/frontend/prototypes/DREV-20260830-03/index.html`
 
@@ -17,23 +17,69 @@
 
 ## Current invariants
 
+- 历史回看已在本地实现：记录页同页切换新增/历史，已确认/待处理/全部共用分页入口；
+  详情复用确认页，展示正式总结、本次知识、原始材料和关联知识截至现在的复习反馈。
+  今日和报表可带日期/科目跳入；到期项回到今日反馈。浏览不写学习、知识、Review 或 Feedback。
+- 历史列表每页 20 条、最多 50 条，稳定游标排序；已确认按学习日期，其他按提交日期。
+  无 view 参数的旧 history 接口保留兼容；新 UI 不再依赖 100 条待处理草稿接口。
+- 原图每次经家庭/孩子/提交/媒体关联验证；viewer 允许读取，被移除成员拒绝新读取。
+  云端签发最长 60 秒 GET 链接，本地下载每次带身份；临时文件退出清理。云端跨账号与合法域名尚未实测。
+  搜索文字经编码请求头传输，不进入访问日志 URL；预览签发在单进程内限制为每成员每分钟 30 次。
+
 - 所有查询与写入在 API 边界按家庭隔离；跨家庭资源返回 404。
 - 云环境由微信入口 actor 的 HMAC binding 解析家庭，拒绝客户端 `X-Family-ID`；本地/测试
   仍保留显式开发身份。
 - 运行时只允许 Ark；确定性 Provider 仅允许显式 `test/e2e` 环境，运行库没有种子/示例数据。
 - 未确认草稿不能改变正式学习、知识、复习、Todo 或报表。
-- AI 输入包含本次图片/文字、已有科目、最近 20 条已确认学习和当前 Todo 候选；近期上下文
-  只能消歧，不能冒充本次图片证据。
+- 学习确认只接受服务端解析为 `learning` 的科目；新 activity 提案、已有 activity ID 或同名
+  活动均返回 400，草稿保留且不写正式数据。家长显式选择已有 learning 科目时以该科目分类为准。
+- 活动从既有活动记录入口保存。历史 activity Review 保留但退出 Todo、带练、AI Todo 候选、
+  手动/匹配反馈和复习统计；原有活动记录、日程、练习频次与建议不变，历史学习记录不重写。
+- AI 输入包含本次图片/完整文字、实际发生时间、已填写年级、最多30个学习科目、分科目均衡
+  选取的最多30条已确认历史、最多100个已有知识身份/计划状态、最多50个有效Review候选。
+  每科学习历史先取最近20条、按家长文字词面相关性排序后最多10条；知识先取最近30个，再按
+  词面相关性排序，最终跨科目轮流取样。照片相关性由模型阅读，未声称语义检索。
+  历史/知识出现必须不晚于本次学习；不推断教材、单元、掌握程度或下一课。
+- 部署规则在 `agent_processing/prompt.py` 版本化，不读取个人SKILL目录。规则要求核心概念、
+  批次合并、排除故事/装饰和证据定位；历史只能消歧，不能冒充本次证据。语义正确性仍须家长核对。
+- 批内相同图片字节只传一次，证据保持原照片编号；最近100个同家庭同孩子的待确认/已确认
+  提交内，相同文字+图片字节摘要触发重复材料提示并清空自动Todo匹配。摘要保存在草稿JSON的
+  服务端元数据，不进模型/日志。无摘要旧记录、重新压缩/裁剪图片不保证识别；新学习事件仍可确认。
+- AI可关联候选已有知识ID，服务端校验并统一名称/类别，确认页可取消关联；确认再次检查身份
+  与科目/名称/类别。同份记录重复知识只产生一次出现；多次学习仍保留各次发生时间和记录。
+- 上传复习内容不再重置已有Review的step/due_date/active（包括已结束项）；只有新知识初始化。
+  每次确认每个保留的Todo最多反馈一次，草稿观察到的step/due_date已变化则忽略过时匹配。
+- AI排队、分析中、失败或待确认均可人工确认，人工表单不自动匹配Todo；保存时才取消未完成Job，
+  复用同一正式记录事务，来源标记人工录入。Worker成功/失败回写均校验状态、attempt和lease，
+  丢弃人工确认、取消或新租约后的迟到结果；不把取消结果复活用于旧任务。
 - Review 日期只来自 1/3/7/14/30/60 天确定性策略；历史补录只安排当前检查。
-- `daily_budget_minutes` 只把全部到期内容分为“建议完成/有余力再做”，不改变到期日。
+- `daily_budget_minutes` 只把全部到期内容分为“建议完成/有余力再做”，不改变到期日；家长端不展示或编辑该内部默认值。
 - 固定活动提醒的星期、开始和结束时间是设置、日程和今日的同一事实源。
+- 设置只固定展示数学、语文、英语；其他学习科目与课外活动必须由家长从目录或自定义名称显式添加。课外活动默认空，取消添加或提醒编辑不产生补偿写入。
+- 今日在成功且全部为空时提供记录学习和添加日程入口；单栏空文案居中。日程七天、报表三档、基础科目和活动七星期不依赖横向滚动。
 - 单次照片学习记录支持 1–9 张：相机单张、相册多选或反复追加；全部图片只创建一个 Job。
 - 云环境图片使用后端 ticket + `wx.cloud.uploadFile` + uploader metadata claim；不经过
-  `callContainer` 请求体或容器持久化磁盘。取消记录会删除已 claim 文件，失败由 Worker 重试。
+  `callContainer` 请求体或容器持久化磁盘。取消记录会同步尝试删除已 claim 文件；失败清理目前依赖
+  进程内 Worker，因此在迁移到受支持的任务执行器前属于云发布阻断项。
 - 照片批次在创建 Job 前中断时仍可从服务端状态继续分析或取消；待确认草稿也可删除。
+- Worker 普通循环异常以 1/2/4/8/16/30 秒退避自动继续，健康轮询后重置；清理故障单独隔离，
+  最多每 60 秒尝试一次，不阻塞分析。任务准备/Provider 普通失败沿用最多三次尝试；数据库写回
+  故障保留持久化状态，通过新 Session 和原 5 分钟过期租约恢复，避免伪造任务结果。
+- 启用 Worker 时，尚未启动、异常退避、停止或后台 Task 已结束均使 `/health/ready` 返回
+  `503 worker_unavailable`；健康轮询恢复后为 200，正常分析不按耗时判死。明确禁用 Worker
+  的开发/测试配置保留原 readiness；`/health/live` 保持进程存活语义。退避可被 stop 唤醒。
 - ReviewFeedback 与 CalendarEvent 创建都使用 family-scoped 幂等请求记录，网络重试不双推进或双建。
 - 活动建议按请求的历史目标日和目标周计算，不使用“当前周”污染历史结果。
 - `occurred_at` 与 `created_at` 分开保存；日历显示按 Asia/Shanghai 展开。
+- 数据库时间列统一先转 UTC 再保存，读取后带 UTC 时区；历史无时区值遵循既有 UTC 约定。
+  学习、活动、历史与任务时间不再因 SQLite/MySQL 丢失时区而让客户端误读当地时间。
+- 零照片且无 Job 的草稿明确为等待上传，可在原草稿补传或取消；补传复用原批次 key 和照片
+  槽号，失败后不重复占用上传票名额。已 claim 但响应丢失时，以服务端 media_count 恢复。
+- 兼容提交接口仍先筛选 queued/analyzing/pending_confirmation/failed，再每页 100 条查询；
+  新记录页改用 history 的 20 条游标分页及独立待处理总数，轮询保留当前页；已确认历史不轮询。
+- Ark 接收完整已接受文字，不再静默截断到 2000 字；输出逐点校验直接证据、图片索引、
+  上下文和 Todo 引用。家长可看到证据、低置信度和不确定项，手动新增知识点仍可确认。
+- 已结束 Review 的新反馈返回 409，不再重新激活；同一已成功幂等请求允许回放原结果。
 
 ## Current contracts
 
@@ -66,29 +112,53 @@ The local runtime database was reset after archiving all prototype databases und
 | Mini Program tests | 24 passed |
 | Ruff / Mypy | passed; 40 source files typed |
 | Container | 2026-09-05 image build passed；UID 10001；internal port 8000；`/health/live` and `/health/ready` passed；graceful stop passed |
+| Cloud staging | `flask-ik19-003` normal；managed MySQL at `20260903_0001`；least-privilege runtime account；DB WAN closed；service PUBLIC closed |
+| Real callContainer | domainless live/ready 200 after PUBLIC closure；unbound actor returns expected 403 |
 | Architecture validator | `ARCHITECTURE_VALID checked=2` |
 | Mini Program validator | 7 pages, 5 exact tabs, source package under budget |
 | Runtime DB audit | integrity/FK/family checks passed; all business tables empty |
 | WeChat DevTools CLI | project opened successfully; real preview/upload not run without registered AppID |
 | Live Ark | `NOT_RUN`: no `ARK_API_KEY`; the four supplied Desktop paths no longer exist |
 
+2026-09-05 BUG-005/006 本地增量验证：后端 unit/integration/contract **66 passed, 2 skipped**
+（未配置隔离 MySQL）；前端测试 **28 passed**；Mypy、架构校验及小程序校验通过。
+本次八个代码/测试文件 Ruff check 通过；全仓 Ruff check/format 在并行新增
+`families/domain.py:1` 有 import/空行格式问题。独立只读复审 **PASS**；详细命令和修复前后
+证据见对应 Spec。上述历史云端证据不代表本次修复已重新部署或完成云端验收。
+
+BUG-007 后续本地验证：后端 **80 passed, 2 skipped**（隔离 MySQL 未配置），前端 **34 passed**；
+Ruff check/format、Mypy（47 source files）、ESLint、架构和小程序校验通过，独立第二轮复审 PASS。
+此前并行家庭模块的格式问题在最新全仓检查中已消失。真实 Ark/云上传和受影响页面视口仍未验收。
+
 ## Current limitations / release blockers
 
-- Real Cloud Hosting actor headers, two-account isolation, owner-only object rules and metaid decode remain
-  unverified. Public ingress must be disabled before real data.
-- The first Push Kids cloud version failed because UID 10001 could not bind privileged port 80. BUG-003
-  moves all internal deployment-port declarations to 8000; a new immutable CloudBase version smoke remains
-  required before this fix is considered verified in the real cloud runtime.
-- Cloud staging must remain one instance while the Worker is in-process. Multi-instance requires a separate
-  Worker/queue and a new approved revision.
-- Database credential rotation, least-privilege account, backup/restore and cloud Alembic execution remain
-  deployment gates. A password previously shared in chat is treated as compromised and must not be used.
+BUG-010 本地实现已通过微信开发者工具 registered AppID preview 编译，最终预览包 175,099 bytes；
+执行时 macOS 锁屏导致 CUA 与三视口原生截图仍未运行，不能据此声称布局完成视觉验收或云端已更新。
+
+- Real Cloud Hosting actor binding, two-account isolation, owner-only object rules and metaid decode remain
+  unverified. Public ingress is disabled and unbound actors are rejected without creating data.
+- The current cloud code still runs the Worker in-process. Per the Cloud Hosting request-execution model,
+  it must move to a supported task executor before staging acceptance; limiting the service to one instance
+  does not make that release design valid. Multi-instance additionally requires a shared queue and distributed
+  Worker ownership under a new approved revision.
+- Database credential rotation, least-privilege account and cloud Alembic execution are complete. Backup/restore
+  remains a release gate; the previously shared password is revoked and must not be reused.
 - Registered AppID, HTTPS legal domains, privacy declaration, iOS/Android real-device verification and
   preview/upload remain mandatory before an experience or public build.
+- 小程序尚未留存最低基础库设置证据，也未对 `callContainer`、`uploadFile`、`chooseMedia` 做能力门禁；
+  媒体权限失败、安全错误分类和上传取消恢复按 `BUG-SPEC-20260905-02` 待批准实施。
 - Live Doubao image analysis remains unverified until a rotated secret and accessible test images are supplied.
+- BUG-005/006 的故障注入及分类回归目前仅在本地隔离环境验证，未重新部署或执行真实云端/MySQL
+  故障恢复验收。取消中的 Provider 失败竞争（CR-004）已在BUG-009本地修复；媒体路径清理
+  （CR-005）仍属独立问题。
 - Figma Starter waiver remains scoped to FEAT-001 and expires before public production release.
+- BUG-010 的受控 Figma waiver 同样在公开生产前失效；三视口、字体放大、键盘和 iOS/Android 实机证据仍待补齐。
 
 ## Change references
+
+- `SPEC-HISTORY-20260905-01 / DREV-20260905-HISTORY-01`: 历史列表、复用只读详情、原始材料读取、
+  复习反馈回看和今日/报表联通。本地后端 119 passed / 2 MySQL skipped；前端 58 passed；
+  Ruff/Mypy/ESLint/架构/包体检查通过；DevTools preview 编译通过。原生三视口、云端双账号预览和部署未完成。
 
 - `SPEC-20260831-08`: native five-Tab conversion, real local services, no runtime mock data,
   context-aware Doubao proposal, unified schedule and strict E2E/database validation.
@@ -98,3 +168,14 @@ The local runtime database was reset after archiving all prototype databases und
   to 8000 after the real cloud runtime rejected the privileged bind.
 - `CLOUD-SPEC-20260903-03`: WeChat Cloud Hosting callContainer, trusted actor binding, MySQL/Alembic,
   private object-storage ticket/claim and single-instance staging Worker.
+- `WX-API-BASELINE-20260905-01 / BUG-SPEC-20260905-02`: current `wx.*` inventory, minimum base-library
+  recommendation and proposed compatibility/permission/error/upload recovery hardening; implementation pending approval.
+- `BUG-005 / BUG-SPEC-20260905-03`: Worker 循环恢复、清理隔离、任务准备异常保护和执行器 readiness。
+- `BUG-006 / BUG-SPEC-20260905-04`: 服务端活动分类边界，以及历史活动 Review 的读写和统计隔离。
+- `BUG-007 / BUG-SPEC-20260905-05`: 六项 P2 修复（CR-010–015），上传恢复、UTC 时间、模型证据、
+  完整文字、待处理分页和复习终态；前端增量 `DREV-20260905-P2-01`，真机验证仍待完成。
+- `BUG-008/009 / BUG-SPEC-20260905-06/07`: AI上下文、重复材料/知识/Todo、保留复习进度、人工兜底
+  和迟到结果保护；UI增量 `DREV-20260905-AI-01`。本次仅本地修改，验证与未运行项见BUG-009。
+- `BUG-010 / BUG-SPEC-20260905-11 / DREV-20260905-UX-03`: 原生控件几何、设置目录、今日空态、
+  拍照对齐、家庭详情、邀请申请及100天30项分页；本地实现与390 CUA完成，其他视口证据待补齐。
+- BUG-010 后续截图回归：目录/星期/日历/FAB与报表切换条已继续修正，最新58项前端测试通过；390视觉与320部分复查。详见[回归证据](../../design/frontend/ui/BUG-010-20260905-layout-followup.md)，整体仍未完成真机矩阵或部署。

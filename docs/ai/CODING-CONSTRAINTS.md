@@ -308,3 +308,17 @@ data integrity, or observability.
 - CI policy。
 
 只有无法稳定自动化、且每次任务都需要 Agent 判断的规则，才加入 `AGENTS.md`。
+
+## 16. WeChat Cloud Hosting constraints
+
+修改微信小程序云调用、云身份、FastAPI 启动、异步任务、媒体存储或部署配置前，MUST 阅读
+[`docs/operations/WECHAT-CLOUD-HOSTING.md`](../operations/WECHAT-CLOUD-HOSTING.md) 的“微信云托管必须遵守的平台边界”和“编写代码时的强制注意事项”。最低约束是：
+
+- 小程序统一使用 `wx.cloud.init` + `wx.cloud.callContainer`，显式配置 env、path 和
+  `X-WX-SERVICE`；图片走 `wx.cloud.uploadFile`。
+- `X-WX-OPENID`、`X-WX-APPID`、`X-WX-ENV` 等身份只从关闭公网后的微信专用链路读取，客户端
+  不得自报或伪造；后端仍需执行 AppID/env/binding/family-scope 校验。
+- 服务监听平台 `PORT`，保持无状态，不回显或记录原始 Header、环境变量、凭证和儿童数据。
+- 云托管请求返回后不保证继续分配 CPU。MUST NOT 在 lifespan 或请求作用域外依赖后台线程、进程、
+  定时器或永久轮询协程完成业务；`minNum>0` 不是例外。
+- 任一上述约束被破坏时，代码评审和上线门禁必须标记为阻断。

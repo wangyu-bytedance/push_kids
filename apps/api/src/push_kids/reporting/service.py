@@ -8,6 +8,7 @@ from sqlalchemy.orm import Session
 
 from push_kids.activities.service import ActivitiesService
 from push_kids.children.service import ChildrenService
+from push_kids.learning.history import LearningHistory
 from push_kids.persistence.models import (
     ActivityRecord,
     KnowledgeItem,
@@ -28,6 +29,33 @@ def _utc_boundary(day: date) -> datetime:
 
 
 class ReportingService:
+    @staticmethod
+    def history_page(db: Session, family_id: str, child_id: str, **filters) -> dict:
+        return LearningHistory.page(db, family_id, child_id, **filters)
+
+    @staticmethod
+    def history_detail(db: Session, family_id: str, child_id: str, submission_id: str) -> dict:
+        return LearningHistory.detail(db, family_id, child_id, submission_id)
+
+    @staticmethod
+    def history_reviews(
+        db: Session,
+        family_id: str,
+        child_id: str,
+        submission_id: str,
+        review_id: str | None = None,
+        before: str | None = None,
+    ) -> dict:
+        detail = LearningHistory.detail(db, family_id, child_id, submission_id)
+        return PlanningService.history_for_knowledge(
+            db,
+            family_id,
+            child_id,
+            [item["id"] for item in detail["knowledge"]],
+            review_id,
+            before,
+        )
+
     @classmethod
     def dashboard(cls, db: Session, family_id: str, child_id: str, day: date | None = None) -> dict:
         child = ChildrenService.get_child(db, family_id, child_id)
@@ -127,6 +155,7 @@ class ReportingService:
 
     @staticmethod
     def history(db: Session, family_id: str, child_id: str, limit: int = 100) -> list[dict]:
+        ChildrenService.get_child(db, family_id, child_id)
         rows = db.execute(
             select(LearningRecord, Subject)
             .join(Subject, LearningRecord.subject_id == Subject.id)
@@ -210,16 +239,19 @@ class ReportingService:
             db.scalar(
                 select(func.count(ReviewFeedback.id))
                 .join(ReviewItem, ReviewFeedback.review_item_id == ReviewItem.id)
+                .join(KnowledgeItem, ReviewItem.knowledge_item_id == KnowledgeItem.id)
+                .join(Subject, KnowledgeItem.subject_id == Subject.id)
                 .where(
                     ReviewFeedback.family_id == family_id,
                     ReviewItem.child_id == child_id,
                     ReviewFeedback.occurred_at >= start,
+                    Subject.kind == "learning",
                 )
             )
             or 0
         )
         subject_rows = db.execute(
-            select(Subject.name, func.count(KnowledgeOccurrence.id))
+            select(Subject.id, Subject.name, func.count(KnowledgeOccurrence.id))
             .join(KnowledgeItem, KnowledgeItem.subject_id == Subject.id)
             .join(KnowledgeOccurrence, KnowledgeOccurrence.knowledge_item_id == KnowledgeItem.id)
             .where(
@@ -244,11 +276,14 @@ class ReportingService:
         occurrence_rows = db.execute(
             select(KnowledgeOccurrence.occurred_at, ReviewItem)
             .join(ReviewItem, ReviewItem.knowledge_item_id == KnowledgeOccurrence.knowledge_item_id)
+            .join(KnowledgeItem, ReviewItem.knowledge_item_id == KnowledgeItem.id)
+            .join(Subject, KnowledgeItem.subject_id == Subject.id)
             .where(
                 KnowledgeOccurrence.family_id == family_id,
                 KnowledgeOccurrence.occurred_at >= start,
                 ReviewItem.family_id == family_id,
                 ReviewItem.child_id == child_id,
+                Subject.kind == "learning",
             )
         ).all()
         urgency_by_day: dict[str, dict] = {}
@@ -272,10 +307,13 @@ class ReportingService:
         feedback_times = db.scalars(
             select(ReviewFeedback.occurred_at)
             .join(ReviewItem, ReviewFeedback.review_item_id == ReviewItem.id)
+            .join(KnowledgeItem, ReviewItem.knowledge_item_id == KnowledgeItem.id)
+            .join(Subject, KnowledgeItem.subject_id == Subject.id)
             .where(
                 ReviewFeedback.family_id == family_id,
                 ReviewItem.child_id == child_id,
                 ReviewFeedback.occurred_at >= start,
+                Subject.kind == "learning",
             )
         )
         feedback_by_day: dict[str, int] = defaultdict(int)
@@ -306,7 +344,9 @@ class ReportingService:
                 "review_feedback_count": reviews,
                 "activity_records": activity_count,
             },
-            "subjects": [{"name": name, "occurrences": count} for name, count in subject_rows],
+            "subjects": [
+                {"id": sid, "name": name, "occurrences": count} for sid, name, count in subject_rows
+            ],
             "review_urgency": urgency,
             "review_activity": activity,
         }
