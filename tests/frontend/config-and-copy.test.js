@@ -80,3 +80,14 @@ test("key native controls fit their own grid cells without page-level horizontal
   assert.match(globalStyles, /\.action-row \{ display: grid; grid-template-columns: minmax\(0, 1fr\); width: 100%/);
   assert.match(records, /class="action-row submit-row"/);
 });
+
+test("custom tab bar keeps icon geometry and restores the active tab after direct page entry", () => {
+  const app = JSON.parse(source("app.json"));
+  const tabMarkup = source("custom-tab-bar/index.wxml");
+  assert.equal(app.tabBar.custom, true);
+  assert.match(tabMarkup, /<image class="tab-icon"/);
+  assert.match(source("custom-tab-bar/index.wxss"), /width:40rpx;height:40rpx/);
+  ["today", "calendar", "records", "reports", "settings"].forEach((page, selected) => {
+    assert.match(source(`pages/${page}/index.js`), new RegExp(`setData\\(\\{ selected: ${selected} \\}\\)`));
+  });
+});

@@ -14,6 +14,7 @@
   - Enforced frontend engineering rules and budgets: `docs/design/frontend/FRONTEND-ENGINEERING-CONSTRAINTS.md`
   - Current frontend UI state: `docs/design/frontend/ui/`
   - Test policy: `docs/quality/TEST-STRATEGY.md`
+  - Release workflow and human-operation gates: `docs/deploy/`
   - Task intent and acceptance: `specs/`
 
 ## Commands
@@ -31,6 +32,16 @@ uv run uvicorn push_kids.bootstrap.app:create_app --factory --app-dir apps/api/s
 ```
 
 Never claim a check passed unless it ran. Record skipped checks and the reason.
+
+## Release workflow
+
+- Every frontend, backend, database, or combined release must follow `docs/deploy/README.md` and its linked
+  playbooks. Preserve the distinction between uploaded, experience, review, and production states.
+- When a release reaches a required manual action, stop before that gate and output the standardized
+  `【需要人工操作】` block from `docs/deploy/README.md`, including the direct console link, navigation path,
+  required values or decision criteria, success signal, and exact reply requested from the operator.
+- Never ask the operator to paste credentials, OpenID, database URLs, Ark keys, HMAC keys, or COS credentials
+  into chat. Secrets remain in the platform runtime configuration or an approved secret store.
 
 ## Non-negotiable product rules
 

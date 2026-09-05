@@ -1,0 +1,8 @@
+<view class="tabbar" aria-role="tablist" aria-label="主导航">
+  <view class="tab {{selected === index ? 'active' : ''}}" wx:for="{{tabs}}" wx:key="pagePath" data-index="{{index}}" bindtap="switchTab" aria-role="tab" aria-selected="{{selected === index}}">
+    <view class="active-line"></view>
+    <image class="tab-icon" src="/assets/tab-{{item.icon}}{{selected === index ? '-active' : ''}}.png" mode="aspectFit"/>
+    <text>{{item.text}}</text>
+  </view>
+  <view class="home-indicator"></view>
+</view>

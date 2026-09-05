@@ -34,7 +34,10 @@ module.exports = {
       const child = this.data.childId;
       try {
         const result = await api.request(`/children/${child}/history?view=pending&limit=1`);
-        if (!this.hidden && child === this.data.childId) this.setData({ pendingCount: result.pending_count, pendingProcessing: result.has_processing });
+        if (!this.hidden && child === this.data.childId) this.setData({
+          pendingCount: Number(result.pending_count || 0),
+          pendingProcessing: Boolean(result.has_processing)
+        });
       } catch (error) {
         if (error.statusCode === 401 || error.statusCode === 403) this.clearHistory();
         if (!this.hidden && child === this.data.childId) this.setData({ error: error.message });

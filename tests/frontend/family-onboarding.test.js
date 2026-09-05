@@ -63,13 +63,14 @@ test("invite and approval UI uses request codes without displaying raw tokens", 
   assert.match(requestLogic, /if \(this\.data\.actingId\) return/);
 });
 
-test("an unavailable active-invite list does not hide the member list", () => {
+test("an unavailable active-invite list stays non-blocking and does not add a false page warning", () => {
   const members = source("pages/family-members/index.wxml");
   const logic = source("pages/family-members/index.js");
   assert.match(logic, /let inviteListUnavailable = false/);
   assert.match(logic, /catch \{ inviteListUnavailable = true; \}/);
   assert.match(logic, /members, isManager, requests, invites, inviteListUnavailable/);
-  assert.match(members, /有效邀请暂不可查看，不影响成员管理/);
+  assert.doesNotMatch(members, /有效邀请暂不可查看，不影响成员管理/);
+  assert.match(members, /wx:if="\{\{members\.length\}\}"/);
   assert.doesNotMatch(members, /class="inline-status"/);
 });
 

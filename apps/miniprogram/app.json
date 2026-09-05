@@ -14,22 +14,23 @@
   ],
   "window": {
     "navigationBarTitleText": "知芽",
-    "navigationBarBackgroundColor": "#F5F3EC",
+    "navigationBarBackgroundColor": "#F6F6F0",
     "navigationBarTextStyle": "black",
-    "backgroundColor": "#F5F3EC",
+    "backgroundColor": "#F6F6F0",
     "backgroundTextStyle": "dark"
   },
   "tabBar": {
-    "color": "#747873",
-    "selectedColor": "#2F766D",
-    "backgroundColor": "#FFFEFA",
+    "custom": true,
+    "color": "#69766F",
+    "selectedColor": "#296653",
+    "backgroundColor": "#FFFEFB",
     "borderStyle": "white",
     "list": [
-      { "pagePath": "pages/today/index", "text": "今日" },
-      { "pagePath": "pages/calendar/index", "text": "日程" },
-      { "pagePath": "pages/records/index", "text": "记录" },
-      { "pagePath": "pages/reports/index", "text": "报表" },
-      { "pagePath": "pages/settings/index", "text": "设置" }
+      { "pagePath": "pages/today/index", "text": "今日", "iconPath": "assets/tab-today.png", "selectedIconPath": "assets/tab-today-active.png" },
+      { "pagePath": "pages/calendar/index", "text": "日程", "iconPath": "assets/tab-calendar.png", "selectedIconPath": "assets/tab-calendar-active.png" },
+      { "pagePath": "pages/records/index", "text": "记录", "iconPath": "assets/tab-records.png", "selectedIconPath": "assets/tab-records-active.png" },
+      { "pagePath": "pages/reports/index", "text": "报表", "iconPath": "assets/tab-reports.png", "selectedIconPath": "assets/tab-reports-active.png" },
+      { "pagePath": "pages/settings/index", "text": "设置", "iconPath": "assets/tab-settings.png", "selectedIconPath": "assets/tab-settings-active.png" }
     ]
   },
   "style": "v2",

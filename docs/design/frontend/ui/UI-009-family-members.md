@@ -5,7 +5,7 @@
 - Related Spec: `SPEC-20260831-09`
 - Baseline: `FDB-20260830-01`
 - Engineering contract: `FEC-20260830-01`
-- Design revision: `DREV-20260905-UX-03 / AMENDMENT-02`
+- Design revision: `DREV-20260905-UX-04`
 - Last reviewed artifact date: 2026-08-31
 - Interactive artifact: `docs/design/frontend/prototypes/DREV-20260831-07/index.html`
 - Snapshot manifest: `docs/design/frontend/snapshots/UI-009/DREV-20260831-07/APPROVAL.md`
@@ -51,7 +51,7 @@
 
 ## Approval status
 
-本地页面已改为整行进入成员详情；本人只可在现有授权下编辑称谓，其他成员的权限保存先确认，
-移除位于独立危险区。390×844当前账号截图证明成员主页、自身标记和正圆刷新按钮；线上旧后端缺少
-有效邀请GET时页面显示局部降级提示并继续展示成员。实施使用 `FIGMA-WAIVER-BUG010-20260905-01`；
+本地页面已改为整行进入成员详情；本人标记为“我”，只可在现有授权下编辑称谓，其他成员的权限保存先确认，
+移除位于独立危险区。390×844当前账号截图证明成员主页、自身标记、卡片边界和正圆刷新按钮；线上旧后端缺少
+有效邀请GET时静默降级并继续展示成员，不制造类似整页错误的警告。实施使用 `FIGMA-WAIVER-BUG010-20260905-01`；
 320/430、成员详情真实点击和双账号验证仍是发布门禁。

@@ -2,7 +2,11 @@ const api = require("../../utils/api");
 
 Page({
   data: { loading: true, error: "", children: [], childIndex: 0, childId: "", dashboard: null, sections: { review: true, learning: true, activity: true }, reviewReturn: null, reviewGroupId: "", reviewFocusText: "" },
-  onShow() { this.load(); },
+  onShow() {
+    const tabBar = this.getTabBar && this.getTabBar();
+    if (tabBar) tabBar.setData({ selected: 0 });
+    this.load();
+  },
   async load() {
     const generation = (this.loadGeneration || 0) + 1;
     this.loadGeneration = generation;
@@ -22,8 +26,13 @@ Page({
       if (childIndex < 0) childIndex = 0;
       const childId = children[childIndex].id;
       app.selectChild(childId);
-      const dashboard = await api.request(`/children/${childId}/dashboard`);
+      const [dashboard, subjects] = await Promise.all([
+        api.request(`/children/${childId}/dashboard`),
+        api.request(`/children/${childId}/subjects`)
+      ]);
       if (generation !== this.loadGeneration) return;
+      const activitiesByName = Object.fromEntries(subjects.filter((item) => item.kind === "activity" && item.active).map((item) => [item.name, item.id]));
+      dashboard.schedule_items = dashboard.schedule_items.map((item) => ({ ...item, subject_id: item.subject_id || activitiesByName[item.name] || "" }));
       dashboard.daily_summary.subjects = dashboard.daily_summary.subjects.map((item) => ({ ...item, summary_text: item.summaries.join("；") }));
       dashboard.must_todo_groups = dashboard.todo_groups.filter((item) => !item.optional);
       dashboard.optional_todo_groups = dashboard.todo_groups.filter((item) => item.optional);
@@ -61,10 +70,13 @@ Page({
   },
   recordLearning() { getApp().globalData.recordIntent = { childId: this.data.childId, view: "new" }; wx.switchTab({ url: "/pages/records/index" }); },
   addSchedule() { getApp().globalData.openCalendarCreate = true; wx.switchTab({ url: "/pages/calendar/index" }); },
+  openCalendar() { wx.switchTab({ url: "/pages/calendar/index" }); },
   openPending() { getApp().globalData.recordIntent = { childId: this.data.childId, view: "history", status: "pending" }; wx.switchTab({ url: "/pages/records/index" }); },
   openLearningHistory(event) {
+    const filters = { from: this.data.dashboard.day, to: this.data.dashboard.day };
+    if (event.currentTarget.dataset.id) filters.subject_id = event.currentTarget.dataset.id;
     getApp().globalData.recordIntent = { childId: this.data.childId, view: "history", status: "confirmed",
-      filters: { subject_id: event.currentTarget.dataset.id, from: this.data.dashboard.day, to: this.data.dashboard.day } };
+      filters };
     wx.switchTab({ url: "/pages/records/index" });
   },
   returnToRecord() {

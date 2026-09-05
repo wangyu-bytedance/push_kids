@@ -15,7 +15,11 @@ Page({
     weekdays: [], weekdaySelected: [false, false, false, false, false, false, false],
     startTime: "18:00", endTime: "19:00", flexible: false, scheduleSummary: "请选择至少一天", savingSchedule: false
   },
-  onShow() { this.load(); },
+  onShow() {
+    const tabBar = this.getTabBar && this.getTabBar();
+    if (tabBar) tabBar.setData({ selected: 4 });
+    this.load();
+  },
   openFamily() { wx.navigateTo({ url: "/pages/family-members/index" }); },
   async load() {
     this.setData({ loading: true, error: "" });

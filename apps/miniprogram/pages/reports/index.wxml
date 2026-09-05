@@ -10,17 +10,18 @@
   <view class="notice error" wx:elif="{{error}}" bindtap="load">{{error}} · 点此重试</view>
   <view class="empty plain" wx:elif="{{!report}}">当前没有可展示的真实记录</view>
   <block wx:else>
-    <view class="overview"><view><text class="metric-value">{{report.overview.learning_records}}</text><text>学习记录<br/>条</text></view><view><text class="metric-value">{{report.overview.new_knowledge_items}}</text><text>新增知识点<br/>个</text></view><view><text class="metric-value">{{report.overview.review_feedback_count}}</text><text>复习反馈<br/>次</text></view><view><text class="metric-value">{{report.overview.activity_records}}</text><text>活动练习<br/>次</text></view></view>
+    <view class="overview"><view><text class="metric-value">{{report.overview.learning_records}}</text><view class="metric-copy"><text>学习记录</text><text>条</text></view></view><view><text class="metric-value">{{report.overview.new_knowledge_items}}</text><view class="metric-copy"><text>新增知识点</text><text>个</text></view></view><view><text class="metric-value">{{report.overview.review_feedback_count}}</text><view class="metric-copy"><text>复习反馈</text><text>次</text></view></view><view><text class="metric-value">{{report.overview.activity_records}}</text><view class="metric-copy"><text>活动练习</text><text>次</text></view></view></view>
     <text class="report-lead" wx:if="{{!report.overview.learning_records}}">还没有已确认的学习记录。记录之后，这里会逐渐留下学习与复习的足迹。</text>
 
     <view class="report-section">
       <view class="row between"><text class="report-title">待复习的内容</text><text class="muted small">近 {{days}} 天</text></view>
       <text class="muted small report-copy"><text wx:if="{{urgencyPages.length > 1}}">左右滑动查看，每屏最多 30 天。</text>数字表示待复习知识数，绿色勾表示已通过。</text>
       <view class="report-swiper-shell">
+        <view class="single-chart-head" wx:if="{{urgencyPages.length === 1}}"><text>{{urgencyPageLabel}}</text><text>每天一格</text></view>
         <view class="swiper-head" wx:if="{{urgencyPages.length > 1}}">
-          <view class="pager-button {{urgencyPage === 0 ? 'disabled' : ''}}" aria-role="button" aria-label="上一屏" aria-disabled="{{urgencyPage === 0}}" data-chart="urgency" data-offset="-1" bindtap="shiftReportPage">‹</view>
+          <view class="pager-button {{urgencyPage === 0 ? 'disabled' : ''}}" aria-role="button" aria-label="上一屏" aria-disabled="{{urgencyPage === 0}}" data-chart="urgency" data-offset="-1" bindtap="shiftReportPage"><view class="ui-chevron left"></view></view>
           <view class="pager-copy"><text>第 {{urgencyPage + 1}} 屏</text><text class="muted tiny">{{urgencyPageLabel}}</text></view>
-          <view class="pager-button {{urgencyPage >= urgencyPages.length - 1 ? 'disabled' : ''}}" aria-role="button" aria-label="下一屏" aria-disabled="{{urgencyPage >= urgencyPages.length - 1}}" data-chart="urgency" data-offset="1" bindtap="shiftReportPage">›</view>
+          <view class="pager-button {{urgencyPage >= urgencyPages.length - 1 ? 'disabled' : ''}}" aria-role="button" aria-label="下一屏" aria-disabled="{{urgencyPage >= urgencyPages.length - 1}}" data-chart="urgency" data-offset="1" bindtap="shiftReportPage"><view class="ui-chevron right"></view></view>
         </view>
         <swiper class="day-swiper {{days === 7 ? 'short' : ''}}" current="{{urgencyPage}}" duration="180" bindchange="onUrgencyPageChange">
           <swiper-item wx:for="{{urgencyPages}}" wx:key="id" wx:for-item="pageItem">
@@ -37,10 +38,11 @@
       <view class="row between"><text class="report-title">复习活跃度</text><text class="muted small">近 {{days}} 天</text></view>
       <text class="muted small report-copy">每个方格代表一天，绿色越深表示当天记录的复习反馈越多。</text>
       <view class="report-swiper-shell activity-shell">
+        <view class="single-chart-head" wx:if="{{activityPages.length === 1}}"><text>{{activityPageLabel}}</text><text>每天一格</text></view>
         <view class="swiper-head" wx:if="{{activityPages.length > 1}}">
-          <view class="pager-button {{activityPage === 0 ? 'disabled' : ''}}" aria-role="button" aria-label="上一屏" aria-disabled="{{activityPage === 0}}" data-chart="activity" data-offset="-1" bindtap="shiftReportPage">‹</view>
+          <view class="pager-button {{activityPage === 0 ? 'disabled' : ''}}" aria-role="button" aria-label="上一屏" aria-disabled="{{activityPage === 0}}" data-chart="activity" data-offset="-1" bindtap="shiftReportPage"><view class="ui-chevron left"></view></view>
           <view class="pager-copy"><text>第 {{activityPage + 1}} 屏</text><text class="muted tiny">{{activityPageLabel}}</text></view>
-          <view class="pager-button {{activityPage >= activityPages.length - 1 ? 'disabled' : ''}}" aria-role="button" aria-label="下一屏" aria-disabled="{{activityPage >= activityPages.length - 1}}" data-chart="activity" data-offset="1" bindtap="shiftReportPage">›</view>
+          <view class="pager-button {{activityPage >= activityPages.length - 1 ? 'disabled' : ''}}" aria-role="button" aria-label="下一屏" aria-disabled="{{activityPage >= activityPages.length - 1}}" data-chart="activity" data-offset="1" bindtap="shiftReportPage"><view class="ui-chevron right"></view></view>
         </view>
         <swiper class="day-swiper activity-swiper {{days === 7 ? 'short' : ''}}" current="{{activityPage}}" duration="180" bindchange="onActivityPageChange">
           <swiper-item wx:for="{{activityPages}}" wx:key="id" wx:for-item="pageItem">

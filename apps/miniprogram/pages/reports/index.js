@@ -31,7 +31,11 @@ Page({
     report: null, ranges: [7, 30, 100], urgencyPages: [], activityPages: [],
     urgencyPage: 0, activityPage: 0, urgencyPageLabel: "", activityPageLabel: ""
   },
-  onShow() { this.load(); },
+  onShow() {
+    const tabBar = this.getTabBar && this.getTabBar();
+    if (tabBar) tabBar.setData({ selected: 3 });
+    this.load();
+  },
   async load() {
     const generation = (this.loadGeneration || 0) + 1;
     this.loadGeneration = generation;

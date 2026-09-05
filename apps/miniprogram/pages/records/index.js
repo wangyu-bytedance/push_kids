@@ -3,16 +3,26 @@ const cloudMedia = require("../../utils/cloud-media");
 const { localParts, toIso } = require("../../utils/date");
 const history = require("./history");
 
+function shortDate(value) {
+  const parts = value.split("-");
+  return `${parts[1]}月${parts[2]}日`;
+}
+
 Page({
   data: {
     ...history.data,
     loading: true, error: "", children: [], childIndex: 0, childId: "", mode: "photo",
-    date: "", time: "", text: "", photos: [], saving: false, uploadProgress: 0,
+    date: "", dateLabel: "", time: "", text: "", photos: [], saving: false, uploadProgress: 0,
     submissionKey: "", canWrite: true
   },
-  onLoad() { const now = localParts(); this.setData({ date: now.date, time: now.time, submissionKey: api.newIdempotencyKey("photo-batch") }); },
+  onLoad() { const now = localParts(); this.setData({ date: now.date, dateLabel: shortDate(now.date), time: now.time, submissionKey: api.newIdempotencyKey("photo-batch") }); },
   ...history.methods,
-  onShow() { this.hidden = false; this.load().then(() => { if (this.recordScroll && wx.pageScrollTo) wx.pageScrollTo({ scrollTop: this.recordScroll, duration: 0 }); }); },
+  onShow() {
+    const tabBar = this.getTabBar && this.getTabBar();
+    if (tabBar) tabBar.setData({ selected: 2 });
+    this.hidden = false;
+    this.load().then(() => { if (this.recordScroll && wx.pageScrollTo) wx.pageScrollTo({ scrollTop: this.recordScroll, duration: 0 }); });
+  },
   onHide() { this.hidden = true; this.loadId = (this.loadId || 0) + 1; this.historyRequest = (this.historyRequest || 0) + 1; if (this.timer) clearTimeout(this.timer); },
   onUnload() { this.onHide(); },
   schedulePoll() {
@@ -69,7 +79,14 @@ Page({
     await this.load();
   },
   changeMode(event) { if (!this.data.saving) this.setData({ mode: event.currentTarget.dataset.mode, submissionKey: api.newIdempotencyKey(event.currentTarget.dataset.mode) }); },
-  setField(event) { if (!this.data.saving) this.setData({ [event.currentTarget.dataset.field]: event.detail.value, submissionKey: api.newIdempotencyKey(this.data.mode) }); },
+  setField(event) {
+    if (this.data.saving) return;
+    const field = event.currentTarget.dataset.field;
+    const value = event.detail.value;
+    const next = { [field]: value, submissionKey: api.newIdempotencyKey(this.data.mode) };
+    if (field === "date") next.dateLabel = shortDate(value);
+    this.setData(next);
+  },
   chooseCamera() { this.choosePhotos(["camera"]); },
   chooseAlbum() { this.choosePhotos(["album"]); },
   choosePhotos(sourceType) {

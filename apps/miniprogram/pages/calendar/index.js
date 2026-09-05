@@ -26,6 +26,8 @@ Page({
     startTime: "18:00", endTime: "19:00", repeatWeekly: true, saving: false, eventKey: ""
   },
   onShow() {
+    const tabBar = this.getTabBar && this.getTabBar();
+    if (tabBar) tabBar.setData({ selected: 1 });
     const app = getApp();
     const shouldOpenCreate = app.globalData.openCalendarCreate;
     app.globalData.openCalendarCreate = false;
