@@ -2,19 +2,126 @@ const test = require("node:test");
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
+const vm = require("node:vm");
 
 const root = path.resolve(__dirname, "../../apps/miniprogram");
 const source = (name) => fs.readFileSync(path.join(root, name), "utf8");
 
-test("family onboarding is routed from the trusted bootstrap state", () => {
-  const app = JSON.parse(source("app.json"));
-  const appSource = source("app.js");
+function loadApp() {
+  let definition;
+  const filename = path.join(root, "app.js");
+  vm.runInNewContext(source("app.js"), {
+    require(name) {
+      if (name === "./config") return {
+        useCloud: false, cloudEnv: "", cloudService: "", apiBasePath: "/api/v1",
+        localFamilyId: "", localActorId: "actor", localApiBaseUrl: "http://localhost"
+      };
+      throw new Error(`unexpected require: ${name}`);
+    },
+    App(value) { definition = value; },
+    getCurrentPages() { return []; },
+    wx: { getStorageSync() { return ""; }, setStorageSync() {} }
+  }, { filename });
+  return definition;
+}
 
-  assert.ok(app.pages.includes("pages/family-onboarding/index"));
+function loadOnboarding(request, refreshBootstrap = async () => ({ state: "unbound" })) {
+  let definition;
+  const calls = [];
+  const relaunches = [];
+  const app = {
+    globalData: {},
+    refreshBootstrap,
+    selectChild() {}
+  };
+  const filename = path.join(root, "pages/family-onboarding/index.js");
+  vm.runInNewContext(source("pages/family-onboarding/index.js"), {
+    require(_name) {
+      return {
+        request: async (requestPath, options = {}) => {
+          calls.push({ path: requestPath, options });
+          return request(requestPath, options);
+        },
+        newIdempotencyKey: () => "family-grade-key"
+      };
+    },
+    Page(value) { definition = value; },
+    getApp: () => app,
+    wx: {
+      showToast() {}, reLaunch({ url }) { relaunches.push(url); }, navigateTo() {},
+      setClipboardData() {}, showModal() {}, stopPullDownRefresh() {}
+    }
+  }, { filename });
+  const page = {
+    ...definition,
+    data: JSON.parse(JSON.stringify(definition.data)),
+    setData(update, callback) {
+      Object.assign(this.data, update);
+      if (callback) callback();
+    }
+  };
+  return { page, calls, relaunches };
+}
+
+test("ordinary launch enters the family bootstrap gate before business tabs", async () => {
+  const app = JSON.parse(source("app.json"));
+  const application = loadApp();
+  let bootstrapCalls = 0;
+  application.refreshBootstrap = async () => { bootstrapCalls += 1; };
+
+  assert.equal(app.pages[0], "pages/family-onboarding/index");
   assert.ok(app.pages.includes("pages/family-join/index"));
-  assert.match(appSource, /request\("\/me"/);
-  assert.match(appSource, /result\.state !== "bound"/);
+  application.onLaunch({ path: "pages/family-onboarding/index" });
+  await Promise.resolve();
+  assert.equal(bootstrapCalls, 0);
+
+  application.onLaunch({ path: "pages/family-join/index" });
+  await Promise.resolve();
+  assert.equal(bootstrapCalls, 0);
+
+  application.onLaunch({ path: "pages/today/index" });
+  await Promise.resolve();
+  assert.equal(bootstrapCalls, 1);
   assert.doesNotMatch(source("utils/api.js"), /X-WX-OPENID|X-WX-APPID/);
+});
+
+test("family bootstrap states route without treating empty children or errors as no family", async () => {
+  const unbound = loadOnboarding(async () => ({}), async () => ({ state: "unbound" }));
+  await unbound.page.load();
+  assert.equal(unbound.page.data.state, "unbound");
+  assert.deepEqual(unbound.relaunches, []);
+
+  const request = { id: "request-1", request_code: "123456" };
+  const pending = loadOnboarding(async () => ({}), async () => ({ state: "pending", request }));
+  await pending.page.load();
+  assert.equal(pending.page.data.state, "pending");
+  assert.equal(pending.page.data.request.id, "request-1");
+  assert.deepEqual(pending.relaunches, []);
+
+  const boundWithoutChildren = loadOnboarding(async () => ({}), async () => ({ state: "bound", children: [] }));
+  await boundWithoutChildren.page.load();
+  assert.deepEqual(boundWithoutChildren.relaunches, ["/pages/today/index"]);
+
+  const failed = loadOnboarding(async () => ({}), async () => { throw new Error("暂时无法确认家庭状态"); });
+  await failed.page.load();
+  assert.equal(failed.page.data.state, "error");
+  assert.equal(failed.page.data.error, "暂时无法确认家庭状态");
+  assert.deepEqual(failed.relaunches, []);
+});
+
+test("family onboarding creates the family without attempting to create a child", async () => {
+  const { page, calls } = loadOnboarding(async (requestPath) => {
+    if (requestPath === "/families") return { family: { id: "family" }, children: [] };
+    throw new Error(`unexpected path: ${requestPath}`);
+  });
+  page.setData({ familyName: "小芽的家", relationship: "妈妈", canSubmit: true });
+  await page.submitFamily();
+
+  const created = calls.find((call) => call.path === "/families");
+  assert.equal(created.options.data.display_name, "小芽的家");
+  assert.equal(created.options.data.relationship_label, "妈妈");
+  assert.equal(Object.hasOwn(created.options.data, "child"), false);
+  assert.doesNotMatch(source("pages/family-onboarding/index.wxml"), /孩子称呼|年级/);
 });
 
 test("join preview explains approval and does not expose family records", () => {

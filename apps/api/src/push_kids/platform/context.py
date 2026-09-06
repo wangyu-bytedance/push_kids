@@ -118,12 +118,16 @@ def request_context(
             FamilyMember.status == MemberStatus.active.value,
         )
     )
-    family = db.scalar(
-        select(Family).where(
-            Family.id == binding.family_id,
-            Family.status == FamilyStatus.active.value,
-        )
+    family_statement = select(Family).where(
+        Family.id == binding.family_id,
+        Family.status == FamilyStatus.active.value,
     )
+    # Every authenticated family mutation takes the same row lock. A deletion request can
+    # therefore freeze its target only after older writes commit, while later writes observe
+    # the deleting state instead of slipping behind the cleanup inventory.
+    if request.method not in {"GET", "HEAD", "OPTIONS"}:
+        family_statement = family_statement.with_for_update()
+    family = db.scalar(family_statement)
     if member is None or family is None:
         raise ForbiddenError("当前微信用户尚未获得家庭权限")
     role = cast(str, member.role)

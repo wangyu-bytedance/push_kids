@@ -48,21 +48,33 @@
       <text class="day-count">{{itemCount}} 项安排</text>
     </view>
 
+    <view class="calendar-conflict-summary" wx:if="{{conflictCount}}" aria-label="{{conflictCount}}项安排存在时间冲突">
+      <view class="conflict-dot"></view>
+      <text>{{conflictCount}} 项存在时间冲突，请核对安排</text>
+    </view>
+
     <block wx:if="{{loading && !items.length}}">
       <view class="sk card-sk"></view>
       <view class="sk card-sk"></view>
     </block>
 
     <view class="tl" wx:elif="{{items.length}}">
-      <view class="tl-item {{item.past ? 'past' : ''}}" wx:for="{{items}}" wx:key="id" aria-role="button" aria-label="编辑这条日程" data-id="{{item.id}}" bindtap="openEvent">
+      <view class="tl-item {{item.past ? 'past' : ''}} {{item.has_conflict ? 'conflict' : ''}}" wx:for="{{items}}" wx:key="id" aria-role="button" aria-label="{{item.has_conflict ? '时间冲突，' : ''}}{{item.name}}，{{item.time_text}}" data-id="{{item.id}}" bindtap="openEvent">
         <text class="tl-time tnum">{{item.start_time}}</text>
         <view class="tl-node"></view>
-        <view class="tl-card {{item.kind === 'class' ? 'accent' : ''}}">
+        <view class="tl-card {{item.kind === 'class' ? 'accent' : ''}} {{item.has_conflict ? 'conflict-card' : ''}}">
           <view class="flex between">
             <text class="tl-name">{{item.name}}</text>
-            <view class="pill neutral">{{item.past ? '已结束' : item.kind_label}}</view>
+            <view class="pill {{item.has_conflict ? 'danger-outline' : 'neutral'}}">{{item.has_conflict ? '时间冲突' : (item.past ? '已结束' : item.kind_label)}}</view>
           </view>
           <text class="tl-sub">{{item.time_text}} · {{item.kind_label}}</text>
+          <view class="conflict-detail" wx:if="{{item.has_conflict}}">
+            <view class="ico ico-info-dan xs"></view>
+            <view class="conflict-copy">
+              <text class="conflict-summary" wx:if="{{item.conflict_summary}}">{{item.conflict_summary}}，请逐项核对：</text>
+              <text class="conflict-line" wx:for="{{item.conflict_lines}}" wx:for-item="conflictLine" wx:key="*this">{{conflictLine}}</text>
+            </view>
+          </view>
           <view class="link-btn" wx:if="{{item.subject_id}}" aria-role="button" aria-label="{{item.action_text}}" data-subject-id="{{item.subject_id}}" catchtap="openActivity">
             <text>{{item.action_text}}</text><view class="chev right pri"></view>
           </view>
@@ -73,13 +85,13 @@
     <view class="pk-empty" wx:elif="{{weekEmpty}}">
       <view class="em"><view class="ico ico-calendar-pri lg"></view></view>
       <text class="et">这一周还没有安排</text>
-      <text class="ec">课外活动的固定时间可以在设置里配置，之后每周都会自动出现在日程里；临时安排用下面的「加日程」。</text>
+      <text class="ec">课外活动和出行的固定时间可以在设置里配置，之后每周都会自动出现在日程里；临时安排用下面的「加日程」。</text>
       <view class="ea"><view class="btn secondary" aria-role="button" aria-label="去设置固定时间" bindtap="openSettings">去设置固定时间</view></view>
     </view>
 
     <view class="pk-empty inline" wx:else>
       <text class="et">这天还没有安排</text>
-      <text class="ec">固定的课外活动会自动出现在这里，临时安排可以用右下角的「加日程」。</text>
+      <text class="ec">固定的课外活动和出行会自动出现在这里，临时安排可以用右下角的「加日程」。</text>
     </view>
 
     <view class="pk-fab" aria-role="button" aria-label="加日程" bindtap="openCreate">

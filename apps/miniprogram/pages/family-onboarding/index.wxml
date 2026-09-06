@@ -46,40 +46,30 @@
     <view class="help">下拉这一页也可以刷新申请状态。</view>
   </block>
 
-  <!-- A2 建立家庭档案 -->
+  <!-- A2 创建家庭 -->
   <block wx:elif="{{mode === 'create'}}">
     <view class="step-head">
-      <text class="pg-kicker">第 1 步 · 基本信息</text>
-      <text class="pg-title">先认识一下孩子</text>
+      <text class="pg-kicker">第 1 步 · 家庭信息</text>
+      <text class="pg-title">创建家庭</text>
     </view>
     <view class="pk-card">
       <view class="pk-field">
-        <text class="lbl">孩子称呼</text>
-        <input class="pk-input" value="{{childName}}" data-field="childName" bindinput="setField" placeholder="例如：小雨" placeholder-class="pk-ph" maxlength="40" />
+        <text class="lbl">家庭名称</text>
+        <input class="pk-input" value="{{familyName}}" data-field="familyName" bindinput="setField" placeholder="例如：小雨的家" placeholder-class="pk-ph" maxlength="60" />
       </view>
       <view class="pk-field">
-        <text class="lbl">家庭名称<text class="opt">选填</text></text>
-        <input class="pk-input" value="{{familyName}}" data-field="familyName" bindinput="setField" placeholder="{{familyPlaceholder}}" placeholder-class="pk-ph" maxlength="60" />
-      </view>
-      <view class="pk-field">
-        <text class="lbl">年级</text>
-        <picker range="{{grades}}" value="{{gradeIndex}}" bindchange="chooseGrade">
-          <view class="pk-picker"><text>{{grade}}</text><view class="chev"></view></view>
-        </picker>
-      </view>
-      <view class="pk-field">
-        <text class="lbl">你与孩子的关系</text>
+        <text class="lbl">你在家庭中的关系</text>
         <picker range="{{relations}}" value="{{relationIndex}}" bindchange="chooseRelation">
           <view class="pk-picker"><text>{{relations[relationIndex]}}</text><view class="chev"></view></view>
         </picker>
         <input class="pk-input mt2" wx:if="{{customRelation}}" value="{{relationship}}" data-field="relationship" bindinput="setField" placeholder="写下你希望家人看到的称谓" placeholder-class="pk-ph" maxlength="30" />
       </view>
     </view>
-    <view class="help">称呼与关系只在家庭内部显示，之后可以随时修改。</view>
+    <view class="help">家庭创建后，再单独添加孩子的学习档案。</view>
 
     <view class="pk-cta-bar">
-      <view class="btn {{canSubmit && !submitting ? '' : 'is-disabled'}}" aria-role="button" aria-label="创建并开始记录" aria-disabled="{{!canSubmit || submitting}}" bindtap="submitFamily">
-        <text>{{submitting ? '正在创建…' : '创建并开始记录'}}</text>
+      <view class="btn {{canSubmit && !submitting ? '' : 'is-disabled'}}" aria-role="button" aria-label="创建家庭" aria-disabled="{{!canSubmit || submitting}}" bindtap="submitFamily">
+        <text>{{submitting ? '正在创建…' : '创建家庭'}}</text>
       </view>
       <text class="cta-hint" wx:if="{{submitHint}}">{{submitHint}}</text>
       <view class="center-row">
@@ -127,11 +117,11 @@
       <text>AI 只提供可编辑建议，不替你做判断。</text>
     </view>
 
-    <view class="choice-card primary" aria-role="button" aria-label="创建家庭并开始记录" bindtap="chooseCreate">
+    <view class="choice-card primary" aria-role="button" aria-label="创建家庭" bindtap="chooseCreate">
       <view class="choice-mark"><view class="ico ico-plus-inv sm"></view></view>
       <view class="grow">
-        <text class="choice-t">开始记录</text>
-        <text class="choice-s">创建家庭，并填写第一个孩子的基本信息</text>
+        <text class="choice-t">创建家庭</text>
+        <text class="choice-s">先建立家庭，再为孩子建立学习档案</text>
       </view>
       <view class="chev right"></view>
     </view>

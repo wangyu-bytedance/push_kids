@@ -5,7 +5,7 @@ const { localParts } = require("../../utils/date");
 
 const WEEK_LABELS = ["一", "二", "三", "四", "五", "六", "日"];
 const WEEKDAY_FULL = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
-const KIND_LABELS = { class: "课外活动", activity: "自主活动", other: "其他安排" };
+const KIND_LABELS = { class: "课外活动", activity: "自主活动", other: "其他安排", travel: "出行" };
 const WEEK_CONCURRENCY = 3;
 
 function dateKey(date) {
@@ -37,18 +37,25 @@ function weekFor(day, marks, todayKey) {
 
 /* 卡面文案在 JS 里拼好，WXML 不做任何方法调用。 */
 function decorateItem(item) {
+  const conflicts = item.conflicts || [];
+  const conflictLines = conflicts.map((conflict) =>
+    `与「${conflict.name}」${conflict.start_time}–${conflict.end_time} 重叠 ${conflict.overlap_minutes} 分钟`
+  );
   return {
     ...item,
     kind_label: KIND_LABELS[item.kind] || "其他安排",
     time_text: `${item.start_time}–${item.end_time}${item.repeat_weekly ? " · 每周重复" : " · 不重复"}`,
-    action_text: item.past ? "补记这次练习" : "记录这次练习"
+    action_text: item.past ? "补记这次练习" : "记录这次练习",
+    has_conflict: Boolean(item.has_conflict && conflicts.length),
+    conflict_summary: conflicts.length > 1 ? `与 ${conflicts.length} 项安排时间重叠` : "",
+    conflict_lines: conflictLines
   };
 }
 
 Page({
   data: {
     loading: true, error: "", children: [], childIndex: 0, childId: "", multiChild: false, canAddChild: true,
-    selectedDay: "", monthLabel: "", weekKicker: "", dayTitle: "", itemCount: 0, weekEmpty: false,
+    selectedDay: "", monthLabel: "", weekKicker: "", dayTitle: "", itemCount: 0, conflictCount: 0, weekEmpty: false,
     week: [], items: [], showChildSheet: false,
     showEditor: false, editingId: "", eventName: "", eventKind: "class", eventDate: "",
     startTime: "18:00", endTime: "19:00", repeatWeekly: true, saving: false, eventKey: "", endError: ""
@@ -87,7 +94,7 @@ Page({
       const children = selection.children;
       const canAddChild = childContext.canAddChild(profiles);
       if (!children.length) {
-        return this.setData({ loading: false, children, items: [], itemCount: 0, multiChild: false, canAddChild });
+        return this.setData({ loading: false, children, items: [], itemCount: 0, conflictCount: 0, multiChild: false, canAddChild });
       }
       const childIndex = selection.childIndex;
       const childId = selection.childId;
@@ -98,6 +105,7 @@ Page({
       this.cache[selectedDay] = items;
       this.marks[selectedDay] = items.length > 0;
       this.setData({ loading: false, children, childIndex, childId, items, itemCount: items.length,
+        conflictCount: items.filter((item) => item.has_conflict).length,
         multiChild: selection.multiChild, canAddChild, week: weekFor(selectedDay, this.marks, todayKey) });
       this.fillWeek(childId, selectedDay, generation);
     } catch (error) {
@@ -151,11 +159,12 @@ Page({
     const cached = this.cache ? this.cache[day] : undefined;
     if (cached) {
       /* 本周已缓存的日期直接切换，再静默刷新，避免整页重刷。 */
-      this.setData({ selectedDay: day, items: cached, itemCount: cached.length });
+      this.setData({ selectedDay: day, items: cached, itemCount: cached.length,
+        conflictCount: cached.filter((item) => item.has_conflict).length });
       this.load({ silent: true });
       return;
     }
-    this.setData({ selectedDay: day, items: [], itemCount: 0 });
+    this.setData({ selectedDay: day, items: [], itemCount: 0, conflictCount: 0 });
     this.load();
   },
   chooseDate(event) { this.setData({ selectedDay: event.detail.value, weekEmpty: false }); this.load(); },
@@ -188,6 +197,11 @@ Page({
     const item = this.data.items.find((row) => row.id === event.currentTarget.dataset.id);
     if (!item) return;
     if (item.source === "activity_schedule") {
+      wx.switchTab({ url: "/pages/settings/index" });
+      return;
+    }
+    if (item.source === "travel_arrangement") {
+      getApp().globalData.openTravelArrangementId = item.id;
       wx.switchTab({ url: "/pages/settings/index" });
       return;
     }

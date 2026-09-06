@@ -17,6 +17,50 @@
 .day-bar .day-title { font-size: 17px; line-height: 1.45; font-weight: 600; }
 .day-bar .day-count { flex: none; font-size: 13px; color: var(--pk-ink-3); }
 
+.calendar-conflict-summary {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  min-height: 56rpx;
+  padding: 0 4rpx 20rpx;
+  color: var(--pk-danger);
+  font-size: 13px;
+  line-height: 1.45;
+  font-weight: 500;
+}
+.conflict-dot {
+  flex: none;
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: 50%;
+  background: var(--pk-danger);
+}
+.tl-item.conflict .tl-node { background: var(--pk-danger); }
+.tl-item .conflict-card {
+  border-color: var(--pk-danger-line);
+  border-left: 8rpx solid var(--pk-danger);
+  background: var(--pk-danger-bg);
+}
+.pill.danger-outline {
+  border: 1rpx solid var(--pk-danger-line);
+  background: var(--pk-surface);
+  color: var(--pk-danger);
+}
+.conflict-detail {
+  display: flex;
+  align-items: flex-start;
+  gap: 10rpx;
+  margin-top: 16rpx;
+  color: var(--pk-danger);
+  font-size: 13px;
+  line-height: 1.5;
+}
+.conflict-detail .ico { flex: none; margin-top: 2rpx; }
+.conflict-copy { display: flex; flex: 1; min-width: 0; flex-direction: column; gap: 6rpx; }
+.conflict-summary { display: block; font-weight: 600; }
+.conflict-line { display: block; overflow-wrap: anywhere; }
+.tl-item.past.conflict { opacity: .72; }
+
 .tl .tl-card .link-btn { min-height: 72rpx; }
 
 /* 编辑半屏（C3） */

@@ -125,7 +125,7 @@
 | submission lifecycle | `learning` module with local multipart or cloud ticket/claim multi-media finalize |
 | provider/jobs | `agent_processing`; Ark + test-only deterministic adapter |
 | deterministic review | pure `planning/domain.py` |
-| schedule/activity | `activities`; CalendarEvent CRUD + ActivitySchedule projection |
+| schedule/activity | `activities`; CalendarEvent CRUD + ActivitySchedule projection, plus read-only TravelArrangement calendar projection and cross-source conflict metadata |
 | dashboard/report | `reporting`; today aggregation and 7/30/100-day ranges |
 | persistence/media | SQLAlchemy + Alembic；MySQL/cloud storage in cloud, SQLite/local media in dev/test |
 | native UI | `apps/miniprogram`; callContainer + cloud upload transport, UI-001 DREV-20260830-03 |
@@ -190,6 +190,11 @@ BUG-010 本地实现已通过微信开发者工具 registered AppID preview 编�
 - BUG-010 的受控 Figma waiver 同样在公开生产前失效；三视口、字体放大、键盘和 iOS/Android 实机证据仍待补齐。
 
 ## Change references
+
+- 2026-09-06 — `FEAT-007 / SPEC-20260906-TRAVEL-02 / DREV-20260906-TRAVEL-01`：设置新增按孩子维护的
+  每周出行安排；出行只进入日程，不进入今日、Todo、报表或活动练习。日程对 CalendarEvent、
+  ActivitySchedule 与 TravelArrangement 的明确时段统一采用半开区间检测，并为冲突双方返回结构化
+  对象与重叠分钟数。自动化已通过，原生三视口和 iOS/Android 仍为 `NOT_RUN`，本轮未部署。
 
 - 2026-09-06 — `BUG-013 / BUG-SPEC-20260906-16`：多科目照片一次确认后按科目分别入档（迁移
   `20260906_0004` 把 `learning_records.submission_id` 的唯一约束降为普通索引，Alembic head 由

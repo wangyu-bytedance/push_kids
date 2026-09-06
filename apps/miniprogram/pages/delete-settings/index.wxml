@@ -1,0 +1,72 @@
+<view class="page delete-page">
+  <view class="pk-notice err" wx:if="{{error}}"><text class="n-txt">{{error}}</text></view>
+
+  <block wx:if="{{loading}}">
+    <view class="sk h20"></view>
+    <view class="sk card-sk mt3"></view>
+  </block>
+
+  <block wx:elif="{{request}}">
+    <view class="pk-empty" wx:if="{{request.state === 'queued' || request.state === 'running'}}">
+      <view class="em att"><view class="ico ico-clock-att lg"></view></view>
+      <text class="et">正在清理资料</text>
+      <text class="ec">清理期间相关配置不可修改。离开页面不会中断，稍后回来仍可查看进度。</text>
+    </view>
+    <view class="pk-empty" wx:elif="{{request.state === 'failed'}}">
+      <view class="em danger-mark"><view class="ico ico-info-dan lg"></view></view>
+      <text class="et">本次清理未完成</text>
+      <text class="ec">资料仍处于保护状态，可以重试；如果持续失败，请联系维护人员。</text>
+    </view>
+    <view class="action-stack">
+      <button class="btn secondary" wx:if="{{request.state === 'queued' || request.state === 'running'}}" bindtap="refreshRequest">刷新进度</button>
+      <button class="btn danger" wx:if="{{request.state === 'failed'}}" loading="{{submitting}}" disabled="{{submitting}}" bindtap="retryRequest">重新清理</button>
+    </view>
+  </block>
+
+  <block wx:elif="{{mode}}">
+    <view class="screen-intro">
+      <text class="screen-kicker">最终确认</text>
+      <text class="screen-heading">清理「{{targetName}}」的资料</text>
+    </view>
+    <view class="pk-notice err">
+      <text class="n-txt" wx:if="{{mode === 'child'}}">孩子的学习记录、复习、活动、日程和照片会永久删除，无法恢复。</text>
+      <text class="n-txt" wx:else>当前家庭、全部孩子资料、成员关系和照片会永久删除，无法恢复。</text>
+    </view>
+    <view class="pk-card mt3">
+      <view class="pk-field">
+        <text class="lbl">输入“{{targetName}}”确认</text>
+        <input class="pk-input" value="{{confirmationName}}" bindinput="setConfirmation" maxlength="60" placeholder="请输入完整名称" placeholder-class="pk-ph" />
+      </view>
+      <button class="btn danger" loading="{{submitting}}" disabled="{{submitting || confirmationName !== targetName}}" bindtap="submitDeletion">确认永久清理</button>
+      <button class="quiet-link" disabled="{{submitting}}" bindtap="cancelConfirmation">取消</button>
+    </view>
+  </block>
+
+  <block wx:else>
+    <view class="screen-intro">
+      <text class="screen-kicker">数据管理</text>
+      <text class="screen-heading">删除配置</text>
+    </view>
+    <view class="pk-notice quiet"><text class="n-txt">归档适合暂时停用；这里的清理会永久移除资料，请谨慎操作。</text></view>
+
+    <text class="section-title">孩子资料</text>
+    <view class="rowlist" wx:if="{{children.length}}">
+      <view class="rowitem" wx:for="{{children}}" wx:key="id" aria-role="button" aria-label="清理{{item.name}}的资料" data-id="{{item.id}}" bindtap="chooseChild">
+        <view class="grow">
+          <text class="r-t">{{item.name}}</text>
+          <text class="r-s">{{item.active ? '当前在用' : '已归档'}} · 清理全部关联资料</text>
+        </view>
+        <view class="chev right"></view>
+      </view>
+    </view>
+    <view class="pk-card flat" wx:else><text class="muted small">当前没有孩子资料可清理</text></view>
+
+    <text class="section-title">当前家庭</text>
+    <view class="pk-card family-cleanup">
+      <text class="family-name">{{family.display_name}}</text>
+      <text class="family-copy" wx:if="{{members.length === 1}}">家庭中只有你一位成员，可以清理整个家庭。</text>
+      <text class="family-copy" wx:else>家庭中还有其他成员，暂不能清理整个家庭。请先在“家庭与成员”处理成员关系。</text>
+      <button class="btn danger mt3" disabled="{{members.length !== 1}}" bindtap="chooseFamily">清理当前家庭</button>
+    </view>
+  </block>
+</view>

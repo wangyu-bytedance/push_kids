@@ -133,6 +133,43 @@
   color: var(--pk-ink-3);
 }
 
+.travel-only-note {
+  margin-top: 12rpx;
+  padding: 20rpx 24rpx;
+  border-radius: var(--pk-r-lg);
+  background: var(--pk-primary-tint);
+  color: var(--pk-primary-strong);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.travel-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+.travel-preset {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-width: 120rpx;
+  min-height: 88rpx;
+  padding: 0 24rpx;
+  border: var(--pk-border);
+  border-radius: var(--pk-r-pill);
+  background: var(--pk-surface);
+  color: var(--pk-ink-2);
+  font-size: 14px;
+}
+.travel-preset.on {
+  border-color: var(--pk-primary-hairline);
+  background: var(--pk-primary-tint);
+  color: var(--pk-primary-strong);
+  font-weight: 600;
+}
+.travel-sheet .pk-picker.is-error { border-color: var(--pk-danger); }
+
 .rowlist .rowitem .pill { flex: none; }
 
 /* ---------------- G2 目录半屏 ---------------- */

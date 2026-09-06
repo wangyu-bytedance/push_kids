@@ -2,23 +2,23 @@
 
 - Status: `CURRENT_LOCAL / 390_NATIVE_CAPTURED / MATRIX_PENDING`
 - Related Feature: `FEAT-002`
-- Related Spec: `SPEC-20260831-10`
+- Related Specs: `SPEC-20260831-10`; `BUG-SPEC-20260906-18`
 - Baseline: `FDB-20260906-02`
 - Engineering contract: `FEC-20260906-04`
 - Design revision: `DREV-20260906-PKDS-01`（屏 A1–A4、G5；取代 `DREV-20260905-UX-03` 的视觉部分）
-- Last reviewed artifact date: 2026-08-31
+- Last reviewed artifact date: 2026-09-06
 - Interactive artifact: `docs/design/frontend/prototypes/DREV-20260831-08/index.html`
 - Snapshot manifest: `docs/design/frontend/snapshots/UI-010/DREV-20260831-08/APPROVAL.md`
 - Figma file: https://www.figma.com/design/FAyfmjNrA3btWztwyxI6Zj
 - Figma node: `N/A` — 当前账号为 Starter/View，MCP 写入限额已触发
 
-> BUG-010 revision 11 已获产品负责人批准并在本地实现；家庭入口层级已由390 CUA验证，未部署，双账号审批与其他视口仍待补齐。
+> BUG-010 revision 11 与 BUG-014 revision 18 已获产品负责人批准并在本地实现；家庭入口层级已由390 CUA验证，未部署，双账号审批、原生启动 smoke 与其他视口仍待补齐。
 
 ## Core journey
 
 ```text
-无孩子 → 开始记录 → 填写孩子基本信息
-       ↘ 使用邀请 → 最小预览 → 申请加入 → 等待确认
+未绑定家庭 → 创建家庭 → 进入家庭内空态 → 建立孩子档案
+          ↘ 申请加入家庭 → 最小预览 → 申请加入 → 等待确认
 manager → 邀请家人 ──────────────────────→ 确认关系与能力 → 加入家庭
 ```
 
@@ -29,10 +29,13 @@ manager → 邀请家人 ──────────────────�
 
 | State | Visible contract |
 |---|---|
-| first entry | “开始记录”和“申请加入家庭”两个主路径；描述用户目标，不把孩子表达成待添加对象 |
+| loading | 普通启动先解析 `/me`，不提前进入今日或请求家庭业务数据 |
+| unbound / first entry | “创建家庭”和“申请加入家庭”两个主路径；不把零孩子等同于未绑定家庭 |
+| bootstrap error | 停留在独立错误态并允许重试，不显示未绑定家庭选择项 |
 | share | 24 小时、管理员确认；明确最小披露和单一“微信邀请家人”操作 |
 | apply | 家庭称呼、拟申请关系；说明关系不决定加入后可以做什么 |
 | pending | 家庭、与孩子的关系、等待确认；允许查看最新结果和撤回 |
+| bound（含零孩子） | 进入今日；零孩子由业务区既有空态承接 |
 | approve | manager 确认最终关系与协作能力；同意/拒绝明确分层 |
 
 ## Interaction and safety contract
@@ -61,6 +64,10 @@ manager → 邀请家人 ──────────────────�
 
 ## Change references
 
+- 2026-09-06 — `BUG-SPEC-20260906-18`（BUG-014）：普通启动以本页为家庭 bootstrap gate，按
+  `/me` 的 unbound/pending/bound/error 状态分流；邀请分享继续直达 `family-join`，bound 且零孩子不回到
+  创建家庭。修复只改变 app/page 生命周期编排与错误状态，不改变本页 WXML/WXSS。Node 生命周期及完整
+  前端回归、lint、validator、架构检查、家庭 onboarding integration tests 已通过；DevTools/真机 smoke 未运行。
 - 2026-09-06 — `SPEC-20260906-PKDS-01 / DREV-20260906-PKDS-01`（屏 A1–A4、G5）：首次进入、建档、
   口令加入、等待确认和加入申请审批按 PKDS-1.0 重做。A1 提供两条并列路径卡；A2 表单有吸底 CTA
   与缺项提示；A3 展示口令错误态与隐私说明；A4 是明确的等待态，提供申请码复制与"查看最新结果"

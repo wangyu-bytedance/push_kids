@@ -8,7 +8,7 @@ from hashlib import sha256
 from pathlib import Path
 
 from fastapi import UploadFile
-from sqlalchemy import func, select
+from sqlalchemy import delete, func, select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
@@ -69,6 +69,27 @@ from push_kids.platform.time import local_date, utcnow
 
 
 class LearningService:
+    @staticmethod
+    def deletion_submission_ids(db: Session, family_id: str, child_id: str | None) -> list[str]:
+        query = select(LearningSubmission.id).where(LearningSubmission.family_id == family_id)
+        if child_id is not None:
+            query = query.where(LearningSubmission.child_id == child_id)
+        return list(db.scalars(query))
+
+    @classmethod
+    def purge_data(cls, db: Session, family_id: str, child_id: str | None) -> None:
+        submission_ids = cls.deletion_submission_ids(db, family_id, child_id)
+        record_query = select(LearningRecord.id).where(LearningRecord.family_id == family_id)
+        if child_id is not None:
+            record_query = record_query.where(LearningRecord.child_id == child_id)
+        record_ids = list(db.scalars(record_query))
+        db.execute(delete(LearningRecord).where(LearningRecord.id.in_(record_ids)))
+        db.execute(delete(AgentJob).where(AgentJob.submission_id.in_(submission_ids)))
+        db.execute(
+            delete(SubmissionRequest).where(SubmissionRequest.submission_id.in_(submission_ids))
+        )
+        db.execute(delete(LearningSubmission).where(LearningSubmission.id.in_(submission_ids)))
+
     @staticmethod
     def _request_fingerprint(
         *,
