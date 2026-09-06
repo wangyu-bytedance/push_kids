@@ -138,6 +138,46 @@ PYTHONPATH=apps/api/src uv run alembic check
 对象存储规则必须保持创建者读写，不得改成 public；需要图片处理时先确认开放接口服务已启用，
 并由目标后端版本验证临时 COS 凭证和 metaid decode。
 
+### 5.1 通知消息通道人工门禁
+
+只在启用或调整通知通道时执行。通道默认关闭：`PUSH_KIDS_NOTIFICATION_CHANNEL=disabled` 时服务照常运行，
+通道如实自报不可用，所有到期消息落 `skipped / channel_unavailable`，不会误报为已发送。
+
+```text
+【需要人工操作】申请订阅消息模板并注入通知通道配置
+原因：模板 ID 与字段名由微信平台分配，通知加密密钥与调度凭据属于运行时密钥，不能进入仓库、CLI 历史或聊天。
+操作入口：https://mp.weixin.qq.com/ （订阅消息）与 https://cloud.weixin.qq.com/ （云托管服务设置）
+导航路径：小程序后台 → 功能 → 订阅消息 → 我的模板；prod-d2g14rwoycac6b45d → 云托管 → flask-ik19 → 版本配置
+需要填写/选择：
+- 申请三类模板并记录模板 ID 与字段编号：家人加入申请、课程/日程提醒（需含孩子、时间、事项）、每日未复习摘要。
+- PUSH_KIDS_NOTIFICATION_CHANNEL=wechat。
+- PUSH_KIDS_NOTIFICATION_SECRET_KEY：至少 32 字符的随机值，用于加密接收标识；轮换会使既有接收标识失效，
+  成员需要重新授权，因此轮换必须单独安排。
+- PUSH_KIDS_NOTIFICATION_TEMPLATES：JSON，把每类通知映射到模板 ID 与语义字段（headline/detail/child/time/code）。
+- 若关闭进程内调度（PUSH_KIDS_RUN_NOTIFICATION_SCHEDULER=false），必须配置 PUSH_KIDS_NOTIFICATION_TRIGGER_TOKEN，
+  并由外部定时器按分钟级调用 POST /api/v1/notifications/dispatch，请求头 X-Notification-Trigger 携带该 token。
+决策标准：模板类型决定额度语义——长期模板可持续发送，一次性模板每次授权只发一条，成员需要反复授权。
+完成标志：GET /api/v1/notifications/settings 返回 channel.available=true 且 template_ids 与后台模板一致；
+一次 dispatch 之后 notification_tick 日志出现 sent>0 且没有 channel_unavailable。
+完成后回复：已完成通知通道配置
+```
+
+`PUSH_KIDS_NOTIFICATION_TEMPLATES` 的结构（字段编号按后台真实模板替换，语义键只允许
+`headline`/`detail`/`child`/`time`/`code`）：
+
+```json
+{
+  "member_application": {"template_id": "<TPL_ID_1>", "fields": {"thing1": "headline", "thing2": "detail", "character_string3": "code"}},
+  "schedule_reminder": {"template_id": "<TPL_ID_2>", "fields": {"thing1": "headline", "name2": "child", "time3": "time", "thing4": "detail"}, "long_term": false},
+  "review_digest": {"template_id": "<TPL_ID_3>", "fields": {"thing1": "headline", "thing2": "detail"}, "long_term": false}
+}
+```
+
+配置错误不会让服务崩溃：JSON 非法或类型未知时通道自报不可用并记录原因，业务接口照常工作。
+
+通道上线后必须确认：`recording` 通道在云环境被硬性拒绝；日志中不出现 OpenID、密文或消息正文；
+关闭通道即可立刻停止一切发送，且不删除任何历史数据。
+
 ## 6. 创建后端不可变版本
 
 先执行不会部署的 dry run：
