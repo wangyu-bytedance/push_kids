@@ -1,0 +1,22 @@
+/* 学习档案表单（新建/编辑/归档恢复）：只补本页几何，颜色与字号走 tokens/atoms。 */
+
+.child-edit-page { padding-top: 24rpx; }
+
+.form-card { padding: 32rpx 28rpx; }
+.form-card .card-head { display: flex; align-items: flex-start; gap: 16rpx; margin-bottom: 24rpx; }
+.form-card .card-head .c-t { display: block; font-size: 17px; line-height: 1.45; font-weight: 600; color: var(--pk-ink); }
+.form-card .card-head .c-s { display: block; margin-top: 4rpx; font-size: 13px; line-height: 1.5; color: var(--pk-ink-3); }
+
+/* 初始科目：与设置页同一套三列几何，避免两处观感不一致 */
+.form-card .subj-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16rpx; }
+.form-card .subj { display: flex; align-items: center; justify-content: center; gap: 10rpx; box-sizing: border-box; min-width: 0; height: 104rpx; border-radius: var(--pk-r-lg); background: var(--pk-surface-sunken); color: var(--pk-ink-2); font-size: 16px; line-height: 1.2; font-weight: 600; }
+.form-card .subj.on { background: var(--pk-primary); color: #fff; }
+
+.form-card .danger-zone { text-align: center; }
+.form-card .danger-copy { display: block; font-size: 13px; line-height: 1.5; color: var(--pk-ink-3); }
+.form-card .danger-link { color: var(--pk-danger); }
+
+.form-foot { margin-top: 32rpx; }
+.form-foot .btn { width: 100%; min-width: 0; box-sizing: border-box; }
+
+.sk.card-sk { height: 420rpx; }

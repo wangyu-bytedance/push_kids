@@ -1,6 +1,7 @@
 const api = require("../../utils/api");
 const ui = require("../../utils/ui");
 const { localParts, toIso } = require("../../utils/date");
+const childContext = require("../../utils/child-context");
 
 const DURATION_MIN = 5;
 const DURATION_MAX = 180;
@@ -22,10 +23,12 @@ Page({
   async load() {
     this.setData({ loading: true, error: "" });
     try {
-      const children = await api.request("/children");
-      const childId = getApp().globalData.selectedChildId || (children[0] && children[0].id);
+      const profiles = await api.request("/children");
+      /* 选中的档案可能已被归档，统一回落到在用的第一个，避免写到读不到的孩子身上。 */
+      const selection = childContext.syncSelection(getApp(), profiles);
+      const childId = selection.childId;
       if (!childId) throw new Error("请先建立学习档案");
-      const child = children.find((item) => item.id === childId);
+      const child = selection.children[selection.childIndex];
       const member = getApp().globalData.currentMember;
       const all = await api.request(`/children/${childId}/subjects`);
       const subjects = all.filter((item) => item.kind === "activity" && item.active !== false);

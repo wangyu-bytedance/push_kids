@@ -1,6 +1,7 @@
 const api = require("../../utils/api");
 const cloudMedia = require("../../utils/cloud-media");
 const { localParts, toIso } = require("../../utils/date");
+const childContext = require("../../utils/child-context");
 const history = require("./history");
 
 function shortDate(value) {
@@ -40,15 +41,14 @@ Page({
     if (this.timer) clearTimeout(this.timer);
     this.setData({ loading: true, error: "" });
     try {
-      const children = (await api.request("/children")).map((item) => ({
-        ...item,
-        avatar: item.name ? item.name.charAt(0) : "芽"
-      }));
+      const profiles = await api.request("/children");
       if (loadId !== this.loadId) return;
-      if (!children.length) { this.clearHistory(); return this.setData({ loading: false, children, childId: "" }); }
-      let childIndex = children.findIndex((item) => item.id === getApp().globalData.selectedChildId);
-      if (childIndex < 0) childIndex = 0;
-      let childId = children[childIndex].id;
+      /* 这一页有未提交内容的确认流程，所以先解析、等家长决定后再落回全局态。 */
+      const selection = childContext.resolveSelection(profiles, getApp().globalData.selectedChildId);
+      const children = selection.children;
+      if (!children.length) { this.clearHistory(); getApp().selectChild(""); return this.setData({ loading: false, children, childId: "" }); }
+      let childIndex = selection.childIndex;
+      let childId = selection.childId;
       if (this.data.childId && childId !== this.data.childId && (this.data.text || this.data.photos.length)) {
         const discard = !this.data.saving && await new Promise((resolve) => wx.showModal({ title: "切换孩子", content: "有尚未提交的内容，切换会放弃这些内容。是否继续？", success: (r) => resolve(r.confirm), fail: () => resolve(false) }));
         if (loadId !== this.loadId) return;

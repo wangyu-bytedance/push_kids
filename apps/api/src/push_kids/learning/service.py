@@ -170,7 +170,7 @@ class LearningService:
         data: SubmissionCreate,
         idempotency_key: str | None = None,
     ) -> LearningSubmission:
-        ChildrenService.get_child(db, family_id, data.child_id)
+        ChildrenService.require_active_child(db, family_id, data.child_id)
         fingerprint = cls._request_fingerprint(
             child_id=data.child_id,
             occurred_at=data.occurred_at,
@@ -205,7 +205,7 @@ class LearningService:
         data: PhotoDraftCreate,
         idempotency_key: str | None,
     ) -> LearningSubmission:
-        ChildrenService.get_child(db, family_id, data.child_id)
+        ChildrenService.require_active_child(db, family_id, data.child_id)
         fingerprint = cls._request_fingerprint(
             child_id=data.child_id,
             occurred_at=data.occurred_at,
@@ -432,7 +432,7 @@ class LearningService:
         idempotency_key: str | None = None,
         enqueue: bool = True,
     ) -> LearningSubmission:
-        ChildrenService.get_child(db, family_id, child_id)
+        ChildrenService.require_active_child(db, family_id, child_id)
         if not files:
             raise ValueError("请至少上传一张图片")
         if len(files) > 9:

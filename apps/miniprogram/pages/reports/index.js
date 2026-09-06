@@ -1,5 +1,6 @@
 const api = require("../../utils/api");
 const ui = require("../../utils/ui");
+const childContext = require("../../utils/child-context");
 
 const REPORT_PAGE_SIZE = 30;
 const RANGES = [7, 30, 100];
@@ -128,7 +129,7 @@ function activityRows(detail, startDay) {
 
 Page({
   data: {
-    loading: true, error: "", children: [], childIndex: 0, childId: "", multiChild: false, showChildSheet: false,
+    loading: true, error: "", children: [], childIndex: 0, childId: "", multiChild: false, showChildSheet: false, canAddChild: true,
     days: 7, ranges: RANGES, rangeLabel: "近 7 天", report: null, metrics: [], isEmpty: false,
     subjects: [], activityRows: [], activityDetailFailed: false, feedbackTotal: 0,
     urgencyPages: [], activityPages: [], urgencyPage: 0, activityPage: 0,
@@ -169,21 +170,18 @@ Page({
     this.loadGeneration = generation;
     this.setData({ loading: true, error: "" });
     try {
-      const children = (await api.request("/children")).map((item) => ({
-        ...item,
-        avatar: item.name ? item.name.charAt(0) : "芽",
-        label: item.grade ? `${item.name} · ${item.grade}` : item.name
-      }));
+      const profiles = await api.request("/children");
       if (generation !== this.loadGeneration) return;
+      const selection = childContext.syncSelection(getApp(), profiles);
+      const children = selection.children;
+      const canAddChild = childContext.canAddChild(profiles);
       if (!children.length) {
-        this.setData({ loading: false, children, multiChild: false, report: null, metrics: [], subjects: [],
+        this.setData({ loading: false, children, multiChild: false, canAddChild, report: null, metrics: [], subjects: [],
           activityRows: [], urgencyPages: [], activityPages: [], urgencyPageLabel: "", activityPageLabel: "" });
         return;
       }
-      let childIndex = children.findIndex((item) => item.id === getApp().globalData.selectedChildId);
-      if (childIndex < 0) childIndex = 0;
-      const childId = children[childIndex].id;
-      getApp().selectChild(childId);
+      const childIndex = selection.childIndex;
+      const childId = selection.childId;
       const days = this.data.days;
       const [report, detail] = await Promise.all([
         api.request(`/children/${childId}/report?days=${days}`),
@@ -201,7 +199,7 @@ Page({
       const startDay = report.review_activity.length ? report.review_activity[0].day : "";
       const overview = report.overview;
       this.setData({
-        loading: false, children, childIndex, childId, multiChild: children.length > 1,
+        loading: false, children, childIndex, childId, multiChild: selection.multiChild, canAddChild,
         report, subjects, urgencyPages, activityPages, urgencyPage: 0, activityPage: 0,
         urgencyPageLabel: urgencyPages.length ? urgencyPages[0].label : "",
         activityPageLabel: activityPages.length ? activityPages[0].label : "",
@@ -223,8 +221,12 @@ Page({
       if (generation === this.loadGeneration) this.setData({ loading: false, error: error.message });
     }
   },
-  openChildSheet() { if (this.data.multiChild) this.setData({ showChildSheet: true }); },
+  openChildSheet() { if (this.data.children.length) this.setData({ showChildSheet: true }); },
   closeChildSheet() { this.setData({ showChildSheet: false }); },
+  addChild() {
+    this.setData({ showChildSheet: false });
+    wx.navigateTo({ url: "/pages/child-edit/index?mode=create" });
+  },
   chooseChild(event) {
     const childIndex = Number(event.currentTarget.dataset.index);
     const childId = this.data.children[childIndex].id;

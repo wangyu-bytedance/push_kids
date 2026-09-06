@@ -13,7 +13,9 @@ Role = Literal["viewer", "editor", "manager"]
 class FamilyCreate(BaseModel):
     display_name: str = Field(min_length=1, max_length=60)
     relationship_label: str = Field(min_length=1, max_length=30)
-    child: ChildCreate
+    # Optional so opening a family and building a learning profile stay separate steps.
+    # A family with no profile is a valid state; settings offers the add-profile entry.
+    child: ChildCreate | None = None
 
 
 class FamilySummary(BaseModel):

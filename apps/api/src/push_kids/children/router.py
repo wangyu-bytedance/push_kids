@@ -12,7 +12,7 @@ from push_kids.children.schemas import (
     SubjectView,
 )
 from push_kids.children.service import ChildrenService
-from push_kids.platform.context import family_id
+from push_kids.platform.context import RequestContext, family_id, manager_context
 from push_kids.platform.dependencies import get_db
 
 router = APIRouter(tags=["children"])
@@ -20,9 +20,11 @@ router = APIRouter(tags=["children"])
 
 @router.get("/children", response_model=list[ChildView])
 def list_children(
-    family: Annotated[str, Depends(family_id)], db: Annotated[Session, Depends(get_db)]
+    family: Annotated[str, Depends(family_id)],
+    db: Annotated[Session, Depends(get_db)],
+    include_archived: bool = False,
 ):
-    return ChildrenService.list_children(db, family)
+    return ChildrenService.list_children(db, family, include_archived)
 
 
 @router.post("/children", response_model=ChildView, status_code=201)
@@ -42,6 +44,25 @@ def update_child(
     db: Annotated[Session, Depends(get_db)],
 ):
     return ChildrenService.update_child(db, family, child_id, body)
+
+
+@router.post("/children/{child_id}/archive", response_model=ChildView)
+def archive_child(
+    child_id: str,
+    context: Annotated[RequestContext, Depends(manager_context)],
+    db: Annotated[Session, Depends(get_db)],
+):
+    """Archiving hides a profile from the whole family, so it stays a manager decision."""
+    return ChildrenService.archive_child(db, context.family_id, child_id, context.actor_binding_id)
+
+
+@router.post("/children/{child_id}/restore", response_model=ChildView)
+def restore_child(
+    child_id: str,
+    context: Annotated[RequestContext, Depends(manager_context)],
+    db: Annotated[Session, Depends(get_db)],
+):
+    return ChildrenService.restore_child(db, context.family_id, child_id, context.actor_binding_id)
 
 
 @router.get("/children/{child_id}/subjects", response_model=list[SubjectView])

@@ -30,13 +30,58 @@
   <view class="pk-empty" wx:elif="{{!children.length}}">
     <view class="em"><view class="ico ico-sprout-pri lg"></view></view>
     <text class="et">还没有学习档案</text>
-    <text class="ec">家庭里建立学习档案之后，这里可以设置在学科目和课外活动。</text>
+    <text class="ec">先给孩子建一个学习档案，就可以设置在学科目和课外活动，开始记录已学内容。</text>
     <view class="ea">
-      <view class="btn secondary" aria-role="button" aria-label="打开家庭与成员" bindtap="openFamily"><text>家庭与成员</text></view>
+      <view class="btn-row one">
+        <view class="btn" wx:if="{{canWrite}}" aria-role="button" aria-label="建立学习档案" bindtap="addChild"><text>建立学习档案</text></view>
+        <view class="btn secondary" aria-role="button" aria-label="打开家庭与成员" bindtap="openFamily"><text>家庭与成员</text></view>
+      </view>
+    </view>
+    <view class="rowlist mt3" wx:if="{{archivedChildren.length}}">
+      <view class="rowitem" wx:for="{{archivedChildren}}" wx:key="id" aria-role="button" aria-label="恢复{{item.name}}的档案" data-id="{{item.id}}" bindtap="editChild">
+        <view class="act-mark"><text class="am-txt">{{item.avatar}}</text></view>
+        <view class="grow">
+          <text class="r-t">{{item.label}}</text>
+          <text class="r-s">已归档，打开可以恢复</text>
+        </view>
+        <view class="chev right"></view>
+      </view>
     </view>
   </view>
 
   <block wx:else>
+    <view class="sec">
+      <view class="sec-bar">
+        <text class="s-t">学习档案</text>
+        <text class="s-m">切换后所有页面同步</text>
+      </view>
+      <view class="sec-rule"></view>
+      <view class="rowlist">
+        <view class="rowitem" wx:for="{{children}}" wx:key="id" aria-role="button" aria-label="编辑{{item.name}}的档案" data-id="{{item.id}}" bindtap="editChild">
+          <view class="act-mark"><text class="am-txt">{{item.avatar}}</text></view>
+          <view class="grow">
+            <text class="r-t">{{item.label}}</text>
+            <text class="r-s">打开可以修改资料或归档</text>
+          </view>
+          <text class="pill" wx:if="{{item.id === childId}}">当前</text>
+          <view class="chev right"></view>
+        </view>
+        <view class="rowitem" wx:for="{{archivedChildren}}" wx:key="id" aria-role="button" aria-label="恢复{{item.name}}的档案" data-id="{{item.id}}" bindtap="editChild">
+          <view class="act-mark"><text class="am-txt">{{item.avatar}}</text></view>
+          <view class="grow">
+            <text class="r-t">{{item.label}}</text>
+            <text class="r-s">已归档，记录和报表仍可查看</text>
+          </view>
+          <text class="pill neutral">已归档</text>
+          <view class="chev right"></view>
+        </view>
+      </view>
+      <view class="add-entry" wx:if="{{canWrite && canAddChild}}" aria-role="button" aria-label="添加孩子" bindtap="addChild">
+        <view class="ico ico-plus-pri sm"></view><text>添加孩子</text>
+      </view>
+      <view class="help" wx:if="{{canWrite && !canAddChild}}">{{childLimitHint}}</view>
+    </view>
+
     <view class="pk-card set-card mt3">
       <view class="card-head">
         <view class="grow">
@@ -127,6 +172,9 @@
         <view class="grow"><text class="r-t">{{item.label}}</text></view>
         <view class="ico ico-check-pri sm" wx:if="{{index === childIndex}}"></view>
       </view>
+    </view>
+    <view class="add-entry" wx:if="{{canWrite && canAddChild}}" aria-role="button" aria-label="添加孩子" bindtap="addChild">
+      <view class="ico ico-plus-pri sm"></view><text>添加孩子</text>
     </view>
   </view>
 </view>

@@ -25,14 +25,14 @@ App({
   },
   async refreshBootstrap(redirect = false) {
     const api = require("./utils/api");
+    const childContext = require("./utils/child-context");
     try {
       const result = await api.request("/me", { actorOnly: true });
       this.globalData.bootstrapState = result.state;
       this.globalData.currentMember = result.member || null;
       if (result.family) this.globalData.familyId = result.family.id;
-      if (result.children && result.children.length && !this.globalData.selectedChildId) {
-        this.selectChild(result.children[0].id);
-      }
+      /* 档案可能已被别的家长归档或删档，这里统一回落，避免各页面读到失效的 childId。 */
+      childContext.syncSelection(this, result.children || []);
       if (redirect && result.state !== "bound" && wx.reLaunch) {
         wx.reLaunch({ url: "/pages/family-onboarding/index" });
       }

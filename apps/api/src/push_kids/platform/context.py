@@ -13,6 +13,7 @@ from push_kids.persistence.models import (
     Family,
     FamilyMember,
     FamilyStatus,
+    MemberRole,
     MemberStatus,
     WeChatActorBinding,
 )
@@ -144,3 +145,17 @@ def request_context(
 
 def family_id(context: Annotated[RequestContext, Depends(request_context)]) -> str:
     return context.family_id
+
+
+def manager_context(
+    context: Annotated[RequestContext, Depends(request_context)],
+) -> RequestContext:
+    """Manager-only gate for operations that change what the whole family can see.
+
+    Only the role is checked here. The local `X-Family-ID` path has no membership row, so
+    requiring a member id would lock managers out of local flows. Callers that need the
+    acting member's identity must resolve and validate it themselves.
+    """
+    if context.role != MemberRole.manager.value:
+        raise ForbiddenError("只有家庭管理员可以执行此操作")
+    return context

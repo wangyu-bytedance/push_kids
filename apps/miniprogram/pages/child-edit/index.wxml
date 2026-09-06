@@ -1,0 +1,82 @@
+<view class="page child-edit-page">
+  <view class="pk-notice err" wx:if="{{error}}">
+    <view class="ico ico-cloud-off-dan sm"></view>
+    <text class="n-txt">{{error}}</text>
+  </view>
+
+  <view class="pk-notice quiet mt2" wx:if="{{mode === 'edit' && !active}}">
+    <view class="ico ico-eye-mute sm"></view>
+    <text class="n-txt">这个档案已归档，不会出现在切换列表里，也不能再新增记录。已有的记录和报表仍可查看。</text>
+  </view>
+
+  <view class="pk-notice quiet mt2" wx:if="{{mode === 'create' && limitReached}}">
+    <view class="ico ico-info-pri sm"></view>
+    <text class="n-txt">{{limitHint}}</text>
+  </view>
+
+  <block wx:if="{{loading}}">
+    <view class="sk card-sk mt3"></view>
+  </block>
+
+  <block wx:else>
+    <view class="pk-card form-card mt3">
+      <view class="pk-field">
+        <text class="lbl">名字</text>
+        <input class="pk-input" value="{{nameDraft}}" bindinput="setName" maxlength="40" placeholder="孩子的名字或小名" placeholder-class="pk-ph" />
+        <view class="help">切换孩子时按名字区分，同时在用的档案不能重名。</view>
+      </view>
+      <view class="pk-field">
+        <text class="lbl">年级</text>
+        <picker range="{{gradeOptions}}" value="{{gradeIndex}}" bindchange="chooseGrade">
+          <view class="pk-picker"><text>{{gradeOptions[gradeIndex]}}</text><view class="chev"></view></view>
+        </picker>
+      </view>
+      <view class="pk-field">
+        <text class="lbl">每天复习时长</text>
+        <picker range="{{budgetOptions}}" value="{{budgetIndex}}" bindchange="chooseBudget">
+          <view class="pk-picker"><text>{{budgetOptions[budgetIndex]}} 分钟</text><view class="chev"></view></view>
+        </picker>
+        <view class="help">用来安排每天的复习量，之后可以随时调整。</view>
+      </view>
+      <view class="pk-field" wx:if="{{mode === 'create'}}">
+        <text class="lbl">已经在学的科目</text>
+        <view class="subj-grid">
+          <view class="subj {{item.selected ? 'on' : ''}}" wx:for="{{presetSubjects}}" wx:key="name" aria-role="button" aria-label="{{item.selected ? '取消' : '选择'}}{{item.name}}" data-index="{{index}}" bindtap="togglePreset">
+            <text>{{item.name}}</text>
+            <view class="ico ico-check-inv xs" wx:if="{{item.selected}}"></view>
+          </view>
+        </view>
+        <view class="help">先选已经开始学的科目，其他科目和课外活动可以在设置里继续添加。</view>
+      </view>
+    </view>
+
+    <view class="pk-card form-card" wx:if="{{mode === 'edit' && isManager}}">
+      <view class="card-head">
+        <view class="grow">
+          <text class="c-t">档案状态</text>
+          <text class="c-s">归档和恢复都不会删除任何记录</text>
+        </view>
+      </view>
+      <view class="danger-zone" wx:if="{{active}}">
+        <text class="danger-copy">归档后这个孩子不再出现在切换列表，也不能新增记录，报表和历史仍然可以查看。</text>
+        <view class="link-btn danger-link" aria-role="button" aria-label="归档这个档案" aria-disabled="{{working}}" bindtap="archive">
+          <view class="ico ico-trash-dan sm"></view><text>{{working ? '处理中…' : '归档这个档案'}}</text>
+        </view>
+      </view>
+      <view class="danger-zone" wx:else>
+        <text class="danger-copy">恢复后这个孩子会重新出现在切换列表里，可以继续记录。</text>
+        <view class="link-btn" aria-role="button" aria-label="恢复这个档案" aria-disabled="{{working}}" bindtap="restore">
+          <view class="ico ico-refresh-pri sm"></view><text>{{working ? '处理中…' : '恢复这个档案'}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="form-foot">
+      <view class="btn {{saving ? 'is-disabled' : ''}}" aria-role="button" aria-label="{{mode === 'edit' ? '保存档案' : '建立档案'}}" aria-disabled="{{saving}}" bindtap="save">
+        <text>{{saving ? '正在保存…' : (mode === 'edit' ? '保存' : '建立档案')}}</text>
+      </view>
+    </view>
+  </block>
+
+  <view class="safe-tail"></view>
+</view>

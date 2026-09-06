@@ -2,28 +2,27 @@ const test = require("node:test");
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
-const vm = require("node:vm");
+const { loadPage } = require("./harness");
 
 function dayAt(index) {
   const day = new Date(Date.UTC(2026, 5, 1 + index));
   return day.toISOString().slice(0, 10);
 }
 
-/* 报表页在 vm 里加载：wx 与 getApp 都用最小桩，只观察跳转意图与提示。 */
+/* 报表页用共享 harness 加载：页面真正 require 的 utils/ui 与 utils/child-context 都是真实实现，
+   只有 utils/api 被替换成桩，因此这里能同时覆盖多档案回落与指标跳转。 */
 function loadReportsPage(overview) {
-  let definition;
   const reportDays = Array.from({ length: 7 }, (_, index) => ({
     day: dayAt(index), level: 1, has_items: true, passed: false, pending_count: 1, count: 1
   }));
-  const api = {
-    async request(requestPath) {
-      if (requestPath === "/children") return [{ id: "child-1", name: "旺仔" }];
-      if (requestPath.includes("/report?days=7")) return { overview, review_urgency: reportDays, review_activity: reportDays, subjects: [] };
-      throw new Error(`unexpected path: ${requestPath}`);
-    }
-  };
   const calls = { toasts: [], tabs: [], scrolls: [] };
-  const globalData = { selectedChildId: "child-1" };
+  async function request(requestPath) {
+    if (requestPath === "/children") return [{ id: "child-1", name: "旺仔", active: true }];
+    if (requestPath.includes("/report?days=7")) {
+      return { overview, review_urgency: reportDays, review_activity: reportDays, subjects: [] };
+    }
+    throw new Error(`unexpected path: ${requestPath}`);
+  }
   const wx = {
     showToast(options) { calls.toasts.push(options); },
     switchTab(options) { calls.tabs.push(options.url); },
@@ -43,24 +42,8 @@ function loadReportsPage(overview) {
       };
     }
   };
-  const filename = path.resolve(__dirname, "../../apps/miniprogram/pages/reports/index.js");
-  vm.runInNewContext(fs.readFileSync(filename, "utf8"), {
-    require() { return api; },
-    Page(value) { definition = value; },
-    getApp() { return { globalData, selectChild() {} }; },
-    wx,
-    Date,
-    Math,
-    Number,
-    String,
-    Object,
-    Promise
-  }, { filename });
-  return {
-    page: { ...definition, data: { ...definition.data, days: 7 }, setData(update) { Object.assign(this.data, update); } },
-    calls,
-    globalData
-  };
+  const loaded = loadPage("pages/reports/index.js", request, { wx });
+  return { page: loaded.page, calls, globalData: loaded.app.globalData };
 }
 
 function tap(target) { return { currentTarget: { dataset: { target } } }; }
