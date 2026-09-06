@@ -242,6 +242,9 @@ class PlanningService:
         action: str,
         idempotency_key: str | None = None,
     ) -> dict:
+        # Feedback closes a review item that already exists, so it is scoped by review id and
+        # family only. An archived profile keeps accepting feedback on purpose (`BHV-025`);
+        # the deterministic planner never creates new review items here.
         review = db.scalar(
             select(ReviewItem)
             .join(KnowledgeItem, ReviewItem.knowledge_item_id == KnowledgeItem.id)
@@ -255,7 +258,6 @@ class PlanningService:
         )
         if review is None:
             raise NotFoundError("没有找到这条复习任务")
-        ChildrenService.require_active_child(db, family_id, review.child_id)
         if idempotency_key:
             existing = db.scalar(
                 select(ReviewFeedbackRequest).where(

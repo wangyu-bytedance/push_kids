@@ -6,7 +6,7 @@
 
   <view class="pk-notice quiet mt2" wx:if="{{mode === 'edit' && !active}}">
     <view class="ico ico-eye-mute sm"></view>
-    <text class="n-txt">这个档案已归档，不会出现在切换列表里，也不能再新增记录。已有的记录和报表仍可查看。</text>
+    <text class="n-txt">这个档案已归档，不会出现在切换列表里，也不能再新增记录。已有的记录和报表仍可查看，归档前留下的待确认草稿和复习反馈也仍能完成。</text>
   </view>
 
   <view class="pk-notice quiet mt2" wx:if="{{mode === 'create' && limitReached}}">
@@ -59,6 +59,10 @@
       </view>
       <view class="danger-zone" wx:if="{{active}}">
         <text class="danger-copy">归档后这个孩子不再出现在切换列表，也不能新增记录，报表和历史仍然可以查看。</text>
+        <view class="pk-notice quiet" wx:if="{{unfinishedHint}}">
+          <view class="ico ico-info-pri sm"></view>
+          <text class="n-txt">{{unfinishedHint}}</text>
+        </view>
         <view class="link-btn danger-link" aria-role="button" aria-label="归档这个档案" aria-disabled="{{working}}" bindtap="archive">
           <view class="ico ico-trash-dan sm"></view><text>{{working ? '处理中…' : '归档这个档案'}}</text>
         </view>

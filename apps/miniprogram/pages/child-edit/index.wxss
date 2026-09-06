@@ -14,6 +14,8 @@
 
 .form-card .danger-zone { text-align: center; }
 .form-card .danger-copy { display: block; font-size: 13px; line-height: 1.5; color: var(--pk-ink-3); }
+/* 归档前的未完成提醒是长句，必须左对齐，不能跟着 danger-zone 居中 */
+.form-card .danger-zone .pk-notice { margin-top: 20rpx; text-align: left; }
 .form-card .danger-link { color: var(--pk-danger); }
 
 .form-foot { margin-top: 32rpx; }
