@@ -28,7 +28,7 @@
 .member-row { display: flex; align-items: center; gap: 24rpx; width: 100%; min-height: var(--pk-row-min); padding: 24rpx 28rpx; box-sizing: border-box; }
 .member-row + .member-row { border-top: var(--pk-border-soft); }
 .member-row .mem-ava { flex: none; width: 72rpx; height: 72rpx; border-radius: 50%; background: var(--pk-surface-sunken); color: var(--pk-ink-2); font-size: 14px; font-weight: 600; line-height: 72rpx; text-align: center; }
-.member-row .mem-ava.mine { background: var(--pk-primary); color: #fff; }
+.member-row .mem-ava.mine { background: var(--pk-primary); color: var(--pk-ink-inv); }
 .member-row .mem-line { display: flex; align-items: center; gap: 12rpx; min-width: 0; }
 .member-row .mem-name { font-size: 16px; line-height: 1.45; font-weight: 500; max-width: 320rpx; }
 .member-row .mem-sub { display: block; margin-top: 4rpx; font-size: 13px; line-height: 1.45; color: var(--pk-ink-3); }

@@ -9,7 +9,6 @@
 .wk-nav .icon-btn { flex: 0 0 88rpx; width: 88rpx; height: 88rpx; min-height: 88rpx; background: transparent; }
 .wk-picker { min-width: 0; }
 .wk-month { min-height: 88rpx; display: flex; align-items: center; justify-content: center; font-size: 17px; line-height: 1.45; font-weight: 600; }
-.chev.left { transform: rotate(-135deg); }
 
 /* 7 列等宽，单元 124rpx，圆点表示这天有安排 */
 .week { display: grid; grid-template-columns: repeat(7,minmax(0,1fr)); gap: 8rpx; width: 100%; box-sizing: border-box; }
@@ -75,4 +74,4 @@
 
 /* 孩子切换半屏 */
 .child-sheet .rowitem.on { background: var(--pk-primary-tint); }
-.child-sheet .ava-lg { flex: none; width: 80rpx; height: 80rpx; border-radius: 50%; background: var(--pk-primary); color: #fff; font-size: 14px; font-weight: 600; line-height: 80rpx; text-align: center; }
+.child-sheet .ava-lg { flex: none; width: 80rpx; height: 80rpx; border-radius: 50%; background: linear-gradient(150deg, var(--pk-primary-mid), var(--pk-primary-strong)); color: var(--pk-ink-inv); font-size: 14px; font-weight: 600; line-height: 80rpx; text-align: center; }

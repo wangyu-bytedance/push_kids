@@ -6,31 +6,47 @@
 
 - Frontend scope: PRESENT
 - Baseline status: APPROVED
-- Baseline revision: FDB-20260906-02
+- Baseline revision: FDB-20260906-03
 - Owner: 产品负责人（用户）
-- Proposed by: Codex（FDB-20260830-01）、Aime（FDB-20260906-02）
+- Proposed by: Codex（FDB-20260830-01）、Aime（FDB-20260906-02、FDB-20260906-03）
 - Approved by: 产品负责人（用户）
 - Approved at: 2026-09-06
-- Approval evidence: 用户 2026-09-06 指令「最终需要的效果是 ui=你现在的设计，并功能是完整的」
-- Last verified: 2026-09-06（PKDS-1.0 本地实现，自动化检查通过；三视口原生证据仍为 NOT_RUN）
+- Approval evidence: 用户 2026-09-06 指令「最终需要的效果是 ui=你现在的设计，并功能是完整的」；同日指令「完全重新设计. 我只要最好的效果」→「按照这个方案 实现代码」（FDB-20260906-03）
+- Last verified: 2026-09-06（PKDS-2.0 本地实现，自动化检查通过 + 三视口近似渲染走查通过；三视口原生几何证据仍为 NOT_RUN）
 - Applies to: 家长使用的微信小程序；未来手机 Web 应保持相同信息架构
-- Related current implementation Spec: `specs/active/SPEC-20260906-PKDS-01-DESIGN-SYSTEM-ROLLOUT.md` revision `SPEC-20260906-PKDS-01`
-- Superseded baseline revision: `FDB-20260830-01`（信息架构与产品立场沿用，视觉 token 与组件层被 PKDS-1.0 取代）
+- Related current implementation Spec: `specs/active/SPEC-20260906-PKDS-03-PAPER-SPROUT-UI.md` revision `SPEC-20260906-PKDS-03`（前序：`SPEC-20260906-PKDS-01`）
+- Superseded baseline revision: `FDB-20260830-01`、`FDB-20260906-02`（信息架构与产品立场沿用，视觉 token 与组件层被 PKDS-2.0「纸 · 芽」取代）
 - Frontend engineering constraints: approved `FEC-20260906-04`
 
-本 baseline 的可见合同由 `DREV-20260906-PKDS-01` 定义：设计系统规格见
-`prototypes/DREV-20260906-PKDS-01/FRONTEND-SPEC.md`，39 屏参考屏见同目录
-`screenshots/`。`UI-001` 的 `DREV-20260830-03`、BUG-010 的 `DREV-20260905-UX-03`
-与 `DREV-20260905-UX-04` 降级为设计历史；Figma Starter 限额 waiver 见架构文档和
-BUG-010 Spec，仍在公开发布前到期。
+本 baseline 的可见合同由 `DREV-20260906-PKDS-03`（PKDS-2.0「纸 · 芽」）定义，
+落地记录见 `specs/active/SPEC-20260906-PKDS-03-PAPER-SPROUT-UI.md`，三视口走查产物由
+`node tools/preview/render.js` + `python3 tools/preview/shoot.py` 重放到 `dist/ui-preview/`。
+`DREV-20260906-PKDS-01` 的信息架构、状态四件套与产品立场继续有效，其色彩/圆角/阴影/图标层
+降级为设计历史；`DREV-20260830-03`、`DREV-20260905-UX-03`、`DREV-20260905-UX-04` 同为设计历史。
+Figma Starter 限额 waiver 见架构文档和 BUG-010 Spec，仍在公开发布前到期。
 
-### PKDS-1.0 视觉基线要点
+### PKDS-2.0「纸 · 芽」视觉基线要点
 
-- 底色 `#F4F3EC` 暖纸色，主色 `#2E6A56` 墨绿，卡片用描边分层而不叠阴影。
+- 纸面：画布 `#FAF7F0`，卡片 `#FFFDF8`，凹陷 `#F3EFE4`；分层靠大而淡的阴影 + 发丝线，不靠强描边。
+- 色彩：主色松绿 `#1F5B45`（确定、可信），成长嫩芽 `#7FA65C`（可选、余力），提醒赭石 `#A9762A`，
+  异常陶土 `#A85742`，信息远山蓝灰。颜色永远不是状态的唯一载体。
+- 字体：标题用衬线族（`Songti SC` / `Noto Serif SC`）制造纸感，正文用系统中文无衬线，
+  数字统一 `font-variant-numeric: tabular-nums`。
 - 圆角只允许 8 / 12 / 16 / 24 / 32 / 40 / 999rpx 七个值，每个值有唯一职责，禁止中间值。
-- 页面左右安全边距固定 32rpx；主 CTA 高 96rpx；触控目标不小于 88rpx。
-- 图标统一为 24×24 viewBox、stroke-width 2 的线性图标 class，禁止 emoji 或文字符号充当图标。
+- 页面左右安全边距由 `--pk-gutter` 统一给出；主 CTA 高 96rpx；触控目标不小于 88rpx。
+- 图标统一为 24×24 viewBox、stroke-width 1.8 的线性图标 class，禁止 emoji 或文字符号充当图标；
+  TabBar 位图与线性图标同源（`tools/gen_tabbar_icons.py`）。
 - 单位约定：颜色语义 token 无单位，几何量用 rpx，字号用 px，发丝线固定 1rpx。
+
+### PKDS-2.0 交互立场（可见合同的一部分）
+
+- 一屏一决定：首屏只回答"现在做什么"，其余信息折叠。
+- 草稿感可见：AI 草稿用虚线印章持续标注，与正式记录有持久分界。
+- 后果先行：复习反馈的每个选项旁必须写明它如何改变下次复习安排。
+- 手动路径平权：手动录入与手动反馈的入口层级不低于 AI 路径。
+- 报表只统计行为（记录数、知识点数、反馈次数、活动次数）与待复习压力，不评价能力、不预测掌握。
+- 科目归类由服务端确定性分组给出、家长可改：一次拍到多个科目分别成档，新增科目必须家长显式同意
+  （沿用 `BUG-013`，PKDS-2.0 只负责它的视觉呈现）。
 
 ## Figma sources and ownership
 
@@ -40,7 +56,7 @@ node-specific Figma URL、Design Revision 和 approval snapshot 后才能实现�
 
 ## Style consistency baseline
 
-全局风格以暖纸底色、墨绿主色、系统中文字体、4px 间距网格、清晰状态文字和
+全局风格以暖白纸面、松绿主色、衬线标题 + 系统中文正文、4px 间距网格、清晰状态文字和
 非游戏化反馈为唯一基线。token 的唯一来源是 `apps/miniprogram/styles/tokens.wxss`，
 组件类的唯一来源是 `styles/atoms.wxss`；页面 wxss 只允许写本页特有几何，不得重复定义
 token 或近似的第二套刻度。详细 token、组件层级和禁止项见第 2、3、6 节与
@@ -48,7 +64,8 @@ token 或近似的第二套刻度。详细 token、组件层级和禁止项见�
 
 ## User interaction conventions
 
-交互遵循微信原生导航、返回、分享、授权、Action Sheet、Toast 和 Dialog 习惯；
+交互遵循微信原生导航、返回、分享、授权、Toast 和 Dialog 习惯；复习反馈这类"需要看清后果"的
+选择改用卡片内嵌面板而不是系统 Action Sheet（PKDS-2.0）；
 核心写操作必须展示 pending/success/error，恢复性失败保留输入，破坏性操作二次确认。
 详细流程和完整状态见第 4、5、8、10 节。
 
@@ -91,7 +108,8 @@ MVP 支持手机竖屏 320×568、390×844、430×932 三个逻辑视口，安�
 
 - 遵循微信小程序“重点突出、流程明确、来去自如、减少干扰”的交互习惯。
 - 使用微信原生导航、返回、Action Sheet、Toast、Dialog、上传和权限流程能满足需求时，
-  不发明新的操作模型。
+  不发明新的操作模型。唯一例外是"必须看清后果"的复习反馈：它在卡片内展开面板，
+  以便每个选项旁写明对下次复习安排的影响（PKDS-2.0）。
 - 以 WeUI/微信小程序基础组件的行为和可访问状态作为平台原语；领域卡片、Todo、
   知识标签和报表建立独立语义组件。
 - 不为了视觉差异重写微信用户已经熟悉的确认、取消、返回和授权方式。
@@ -101,9 +119,10 @@ MVP 支持手机竖屏 320×568、390×844、430×932 三个逻辑视口，安�
 | Purpose | Figma source | Owner | Notes |
 |---|---|---|---|
 | Product UI | [Figma file](https://www.figma.com/design/FAyfmjNrA3btWztwyxI6Zj) | 产品负责人 | Starter 限额导致节点未完成，使用 scoped waiver |
-| Design tokens | `apps/miniprogram/styles/tokens.wxss` | 产品负责人 | PKDS-1.0 语义值唯一来源；设计侧原件见 `prototypes/DREV-20260906-PKDS-01/tokens.reference.wxss` |
+| Design tokens | `apps/miniprogram/styles/tokens.wxss` | 产品负责人 | PKDS-2.0 语义值唯一来源；PKDS-1.0 原件 `prototypes/DREV-20260906-PKDS-01/tokens.reference.wxss` 降级为设计历史 |
 | Design components | `apps/miniprogram/styles/atoms.wxss` | 产品负责人 | 组件类唯一来源；页面 wxss 只写本页几何 |
-| Design icons | `apps/miniprogram/styles/icons.wxss` | 产品负责人 | 由 `tools/gen_icon_styles.py` 生成，禁止手工编辑 |
+| Design icons | `apps/miniprogram/styles/icons.wxss` | 产品负责人 | 由 `tools/gen_icon_styles.py` 生成，禁止手工编辑；TabBar 位图由 `tools/gen_tabbar_icons.py` 生成 |
+| 三视口走查 | `tools/preview/` → `dist/ui-preview/` | 产品负责人 | WXML→HTML 近似渲染 + 320/390/430 截图；不能替代原生节点几何验收 |
 | Screen-level spec | `prototypes/DREV-20260906-PKDS-01/FRONTEND-SPEC.md` | 产品负责人 | 39 屏逐屏规格与参考屏，Figma 受限期间的可见合同 |
 | WeUI reference | 微信官方 WeUI / weui-wxss | 微信设计团队 | 参考平台行为，不直接决定业务视觉 |
 

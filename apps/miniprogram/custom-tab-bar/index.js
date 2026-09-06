@@ -1,7 +1,7 @@
 const tabs = [
   { pagePath: '/pages/today/index', text: '今日', icon: 'today' },
   { pagePath: '/pages/calendar/index', text: '日程', icon: 'calendar' },
-  { pagePath: '/pages/records/index', text: '记录', icon: 'records' },
+  { pagePath: '/pages/records/index', text: '记录', icon: 'records', center: true },
   { pagePath: '/pages/reports/index', text: '报表', icon: 'reports' },
   { pagePath: '/pages/settings/index', text: '设置', icon: 'settings' },
 ];

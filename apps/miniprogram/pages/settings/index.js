@@ -201,7 +201,7 @@ Page({
     if (!this.guardWrite()) return;
     const subject = this.data.addedLearning.find((item) => item.id === event.currentTarget.dataset.id);
     if (!subject) return;
-    wx.showModal({ title: `移出「${subject.name}」？`, content: "已有的学习记录会保留，只是不再出现在选项里。", confirmText: "移出", confirmColor: "#A6423B", success: async (result) => {
+    wx.showModal({ title: `移出「${subject.name}」？`, content: "已有的学习记录会保留，只是不再出现在选项里。", confirmText: "移出", confirmColor: "#A85742", success: async (result) => {
       if (!result.confirm) return;
       this.setData({ removingId: subject.id });
       try {
@@ -327,7 +327,7 @@ Page({
   },
   async removeActivity() {
     if (!this.guardWrite()) return;
-    const confirmed = await new Promise((resolve) => wx.showModal({ title: `移除「${this.data.scheduleSubject.name}」？`, content: "已有的练习记录会保留，只是不再出现在活动列表和日程里。", confirmText: "移除", confirmColor: "#A6423B", success: (result) => resolve(result.confirm) }));
+    const confirmed = await new Promise((resolve) => wx.showModal({ title: `移除「${this.data.scheduleSubject.name}」？`, content: "已有的练习记录会保留，只是不再出现在活动列表和日程里。", confirmText: "移除", confirmColor: "#A85742", success: (result) => resolve(result.confirm) }));
     if (!confirmed) return;
     this.setData({ removingActivity: true, scheduleError: "" });
     try {

@@ -11,9 +11,9 @@
 .kn-top .tag-sub { flex: none; }
 .kn-top .kn-name { font-size: 16px; line-height: 1.45; font-weight: 500; overflow-wrap: anywhere; }
 .kn-top .confidence { flex: none; }
-.kn-ev { margin-top: 12rpx; padding: 16rpx 20rpx; border-radius: var(--pk-r-md); background: var(--pk-surface-sunken); }
-.kn-ev .ev-line { display: block; font-size: 13px; line-height: 1.5; color: var(--pk-ink-2); overflow-wrap: anywhere; }
-.kn-ev .ev-note { display: block; margin-top: 6rpx; font-size: 13px; line-height: 1.5; color: var(--pk-ink-3); }
+.kn-ev { margin-top: 12rpx; padding: 16rpx 20rpx; border-radius: var(--pk-r-sm); background: var(--pk-surface-warm); border-left: 4rpx solid var(--pk-line-strong); }
+.kn-ev .ev-line { display: block; font-size: 12px; line-height: 1.5; color: var(--pk-ink-2); overflow-wrap: anywhere; }
+.kn-ev .ev-note { display: block; margin-top: 6rpx; font-size: 11px; line-height: 1.5; color: var(--pk-ink-3); }
 
 .rec-fold { display: flex; align-items: center; gap: 16rpx; min-height: 88rpx; }
 .rec-fold .rec-fold-t { flex: none; font-size: 17px; line-height: 1.45; font-weight: 600; }

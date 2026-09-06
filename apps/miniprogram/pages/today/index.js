@@ -7,12 +7,34 @@ const KIND_LABELS = { class: "课外活动", activity: "自主活动", other: "�
 /* 打开今日先看"今天要发生什么"：日程默认展开，复习与学习默认折叠，靠小标题上的数量摘要引导展开。 */
 const DEFAULT_SECTIONS = { review: false, learning: false, activity: true };
 const TODO_PREVIEW = 3;
+const RING_TICKS = 12;
 
 function dayLabel(iso) {
   const parts = String(iso || "").split("-");
   if (parts.length !== 3) return "";
   const value = new Date(`${iso}T12:00:00`);
   return `${Number(parts[1])} 月 ${Number(parts[2])} 日 ${WEEKDAYS[value.getDay()] || ""}`;
+}
+
+/* 安排环：12 个刻度只描述今天到期复习的构成（必做 / 有余力），不是完成率，也不是评价。
+   项数超过刻度数时按比例折算，中心数字始终是真实项数。 */
+function ringTicks(required, total) {
+  const sum = Math.max(0, Number(total) || 0);
+  const req = Math.min(Math.max(0, Number(required) || 0), sum);
+  let filled = Math.min(RING_TICKS, sum);
+  let reqTicks = req;
+  if (sum > RING_TICKS) {
+    filled = RING_TICKS;
+    reqTicks = req ? Math.max(1, Math.round((RING_TICKS * req) / sum)) : 0;
+  }
+  const ticks = [];
+  for (let index = 0; index < RING_TICKS; index += 1) {
+    let cls = "idle";
+    if (index < reqTicks) cls = "req";
+    else if (index < filled) cls = "opt";
+    ticks.push({ deg: Math.round((360 / RING_TICKS) * index), cls });
+  }
+  return ticks;
 }
 
 /* 折叠偏好只认三个布尔位，storage 里的脏数据一律按 DEFAULT_SECTIONS 回落。 */
@@ -39,7 +61,8 @@ Page({
   data: {
     loading: true, error: "", children: [], childIndex: 0, childId: "", dashboard: null,
     sections: { ...DEFAULT_SECTIONS }, reviewReturn: null, reviewGroupId: "",
-    reviewFocusText: "", dayLabel: "", hero: { required: 0, minutes: 0, note: "" },
+    reviewFocusText: "", dayLabel: "",
+    hero: { required: 0, optional: 0, total: 0, minutes: 0, note: "", ticks: [] },
     todoCards: [], hiddenTodoCount: 0, todosExpanded: false, showChildSheet: false, multiChild: false, canAddChild: true,
     sectionMeta: { review: "", learning: "", activity: "" }
   },
@@ -94,6 +117,9 @@ Page({
         dayLabel: dayLabel(dashboard.day),
         hero: {
           required: dashboard.required_todo_count || 0,
+          optional: Math.max(0, (dashboard.todo_count || 0) - (dashboard.required_todo_count || 0)),
+          total: dashboard.todo_count || 0,
+          ticks: ringTicks(dashboard.required_todo_count, dashboard.todo_count),
           minutes: dashboard.estimated_minutes || 0,
           note: dashboard.todo_count > dashboard.required_todo_count
             ? `其中 ${dashboard.todo_count - dashboard.required_todo_count} 项是可选的 · 都是之前确认过的学习内容`

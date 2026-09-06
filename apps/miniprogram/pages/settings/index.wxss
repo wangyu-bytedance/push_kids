@@ -54,7 +54,7 @@
   line-height: 1.2;
   font-weight: 600;
 }
-.subj.on { background: var(--pk-primary); color: #fff; }
+.subj.on { background: var(--pk-primary); color: var(--pk-ink-inv); }
 .subj.busy { opacity: .55; }
 .subj.off { opacity: .6; }
 
@@ -275,7 +275,7 @@
   font-weight: 600;
   aspect-ratio:1/1;
 }
-.wk.on { background: var(--pk-primary); color: #fff; }
+.wk.on { background: var(--pk-primary); color: var(--pk-ink-inv); }
 
 .time-row {
   display: flex;

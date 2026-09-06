@@ -60,7 +60,7 @@
           <text class="lbl">时长</text>
           <text class="dur-val tnum">{{durationText}}</text>
         </view>
-        <slider min="{{durationMin}}" max="{{durationMax}}" step="5" value="{{duration}}" data-field="duration" bindchange="setField" activeColor="#2E6A56" backgroundColor="#DCDACD" block-size="24" />
+        <slider min="{{durationMin}}" max="{{durationMax}}" step="5" value="{{duration}}" data-field="duration" bindchange="setField" activeColor="#1F5B45" backgroundColor="#EBE5D7" block-size="24" />
         <view class="dur-scale">
           <text class="tnum">{{durationMin}}</text>
           <text class="tnum">{{durationMax}}</text>

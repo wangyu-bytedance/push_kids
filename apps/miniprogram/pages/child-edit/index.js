@@ -119,7 +119,7 @@ Page({
       title: `归档「${this.data.nameDraft}」？`,
       content: "归档后这个孩子不再出现在切换列表里，已有的学习记录、复习安排和报表都会保留，随时可以恢复。",
       confirmText: "归档",
-      confirmColor: "#A6423B",
+      confirmColor: "#A85742",
       success: (result) => resolve(result.confirm)
     }));
     if (!confirmed) return;

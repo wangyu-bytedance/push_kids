@@ -170,17 +170,17 @@ ICONS: dict[str, str] = {
 
 # palette key -> hex
 COLORS: dict[str, str] = {
-    "": "#46544D",  # ink-2, default
-    "-pri": "#2E6A56",  # primary
-    "-inv": "#FFFFFF",  # on primary surfaces
-    "-mute": "#79857E",  # ink-3
-    "-att": "#9A6318",  # attention
-    "-dan": "#A6423B",  # danger
+    "": "#464E43",  # ink-2, default
+    "-pri": "#1F5B45",  # primary
+    "-inv": "#FFFDF8",  # on primary surfaces
+    "-mute": "#79826F",  # ink-3
+    "-att": "#A9762A",  # attention
+    "-dan": "#A85742",  # danger
 }
 
 TEMPLATE = (
     "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' "
-    "stroke='{color}' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'>"
+    "stroke='{color}' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'>"
     "{body}</svg>"
 )
 
@@ -190,7 +190,7 @@ ICO_BASE = (
     "background-repeat: no-repeat; background-position: center; background-size: 100% 100%; }"
 )
 
-HEADER = f"""/* 知芽 Push Kids · PKDS-1.0 线性图标
+HEADER = f"""/* 知芽 Push Kids · PKDS-2.0 线性图标
    由 tools/gen_icon_styles.py 生成，请勿手工编辑。
    用法：<view class="ico ico-camera"></view>；换色加后缀类，例如 ico-camera-pri。
    尺寸：默认 42rpx（21px），.ico.lg 48rpx，.ico.sm 32rpx，.ico.xs 28rpx。 */

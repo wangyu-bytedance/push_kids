@@ -31,26 +31,28 @@
 .sec-head .s-t {
   flex: 1;
   min-width: 0;
+  font-family: var(--pk-serif);
   font-size: 17px;
   line-height: 1.45;
   font-weight: 600;
+  letter-spacing: .4px;
   color: var(--pk-ink);
 }
 .sec-head .s-r {
   flex: none;
-  font-size: 13px;
+  font-size: 12px;
   line-height: 1.5;
   color: var(--pk-ink-3);
 }
 .read-hint {
   display: block;
   margin: 0 4rpx 16rpx;
-  font-size: 13px;
-  line-height: 1.55;
+  font-size: 12px;
+  line-height: 1.6;
   color: var(--pk-ink-3);
 }
 
-.chart-card { padding: 24rpx 20rpx; }
+.chart-card { padding: 24rpx 20rpx; box-shadow: var(--pk-e1); }
 .chart-card .pager { margin-bottom: 8rpx; }
 /* 翻屏按钮放大到触控下限，视觉圆点仍按设计保持小尺寸 */
 .chart-card .pager .pbtn {
@@ -59,7 +61,6 @@
   height: 88rpx;
   min-height: 88rpx;
 }
-.chev.left { transform: rotate(135deg); }
 
 .day-swiper { width: 100%; height: 470rpx; }
 .day-swiper.short { height: 120rpx; }
@@ -125,14 +126,14 @@
 }
 .quiet-card .q-t {
   display: block;
-  font-size: 15px;
+  font-size: 14px;
   line-height: 1.55;
   color: var(--pk-ink-2);
 }
 .quiet-card .q-s {
   display: block;
   margin-top: 6rpx;
-  font-size: 13px;
+  font-size: 12px;
   line-height: 1.5;
   color: var(--pk-ink-3);
 }
@@ -149,6 +150,7 @@
   background: var(--pk-primary-tint);
 }
 .act-mark .am-txt {
+  font-family: var(--pk-serif);
   font-size: 15px;
   font-weight: 600;
   color: var(--pk-primary-strong);

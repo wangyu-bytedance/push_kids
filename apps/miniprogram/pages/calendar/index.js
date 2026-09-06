@@ -247,7 +247,7 @@ Page({
       title: "删除这条日程？",
       content: "删除后它不会再出现在日程和今日；每周重复的安排会删除整个系列，已经记录的练习不受影响。",
       confirmText: "删除",
-      confirmColor: "#A6423B",
+      confirmColor: "#A85742",
       success: (result) => resolve(result.confirm)
     }));
     if (!confirmed) return;

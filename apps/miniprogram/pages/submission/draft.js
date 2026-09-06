@@ -271,7 +271,7 @@ module.exports = {
         title: "删除草稿",
         content: "这不会创建学习记录或复习任务。",
         confirmText: "删除草稿",
-        confirmColor: "#A6423B",
+        confirmColor: "#A85742",
         success: (result) => resolve(result.confirm),
         fail: () => resolve(false)
       }));

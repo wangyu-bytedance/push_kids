@@ -172,7 +172,7 @@
           <text class="r-t">每周重复</text>
           <text class="r-s">开启后，之后每周的同一时间都会出现这条安排</text>
         </view>
-        <switch checked="{{repeatWeekly}}" color="#2E6A56" bindchange="toggleRepeat" />
+        <switch checked="{{repeatWeekly}}" color="#1F5B45" bindchange="toggleRepeat" />
       </view>
     </view>
   </view>

@@ -165,7 +165,7 @@
               <text class="t-body-m">只看已取消</text>
               <text class="t-cap c-ink-3">仅在「全部」视图下可用</text>
             </view>
-            <switch checked="{{filterDraft.cancelled}}" data-field="cancelled" bindchange="setHistoryFilter" color="#2E6A56" aria-label="只看已取消" />
+            <switch checked="{{filterDraft.cancelled}}" data-field="cancelled" bindchange="setHistoryFilter" color="#1F5B45" aria-label="只看已取消" />
           </view>
         </view>
 

@@ -4,31 +4,46 @@
 .child-chip .chip-nm { max-width: 200rpx; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .child-chip.single { padding-right: 28rpx; }
 
-.pk-notice .back-link { flex: none; display: flex; align-items: center; gap: 8rpx; min-height: 88rpx; font-size: 13px; font-weight: 600; color: var(--pk-ink-2); }
+.pk-notice .back-link { flex: none; display: flex; align-items: center; gap: 8rpx; min-height: 88rpx; font-size: 12px; font-weight: 500; color: var(--pk-ink-2); }
+
+/* 复习安排 Hero：左侧结论句，右侧安排环。窄屏整体缩放，不改版式。 */
+.pk-hero .hero-main { position: relative; display: flex; align-items: center; gap: 24rpx; }
+.pk-hero .hero-main .grow { flex: 1; min-width: 0; }
+.pk-hero .hero-main .hero-line { margin-top: 14rpx; }
+.pk-hero .ring { flex: none; }
+.pk-hero .ring .rt { position: absolute; left: 50%; top: 50%; width: 6rpx; height: 20rpx; margin: -10rpx 0 0 -3rpx; border-radius: 3rpx; transform-origin: 50% 50%; }
+.pk-hero .ring .rt.req { background: var(--pk-primary); }
+.pk-hero .ring .rt.opt { background: var(--pk-sprout); }
+.pk-hero .ring .rt.idle { background: var(--pk-line-strong); opacity: .8; }
+.pk-hero .ring-legend { position: relative; }
+.pk-hero .hero-note { margin-top: 16rpx; }
+@media (max-width: 350px) {
+  .pk-hero .ring { transform: scale(.82); transform-origin: 100% 50%; }
+  .pk-hero .hero-main .hero-line { font-size: 17px; }
+}
 
 /* 首次引导 Hero（B3）：三步说明必须写清「你确认后才生效」。 */
-.pk-hero.guide .hero-line { font-size: 22px; line-height: 1.35; }
-.pk-hero.guide .steps { margin-top: 24rpx; }
-.pk-hero.guide .step { display: flex; align-items: flex-start; gap: 16rpx; min-height: 56rpx; }
-.pk-hero.guide .step .sn { flex: none; width: 36rpx; height: 36rpx; margin-top: 6rpx; border-radius: 50%; background: rgba(46, 106, 86, .12); color: var(--pk-primary-strong); font-size: 12px; font-weight: 700; line-height: 36rpx; text-align: center; }
-.pk-hero.guide .step .sc { flex: 1; min-width: 0; font-size: 14px; line-height: 1.5; color: #4C6459; }
-.pk-hero.guide .guide-link { display: flex; justify-content: center; margin-top: 8rpx; }
+.pk-hero.guide .hero-line { font-family: var(--pk-serif); font-size: 22px; line-height: 1.35; }
+.pk-hero.guide .steps { position: relative; margin-top: 28rpx; }
+.pk-hero.guide .step { display: flex; align-items: flex-start; gap: 16rpx; min-height: 64rpx; }
+.pk-hero.guide .step .sn { flex: none; width: 38rpx; height: 38rpx; margin-top: 6rpx; border-radius: 50%; background: rgba(31, 91, 69, .12); color: var(--pk-primary-strong); font-family: var(--pk-serif); font-size: 12px; font-weight: 600; line-height: 38rpx; text-align: center; }
+.pk-hero.guide .step .sc { flex: 1; min-width: 0; font-size: 13px; line-height: 1.65; color: var(--pk-ink-2); }
+.pk-hero.guide .guide-link { position: relative; display: flex; justify-content: center; margin-top: 8rpx; }
 
 /* 可选 Todo 分组小标题 */
 .opt-head { display: flex; align-items: center; gap: 16rpx; margin-top: 32rpx; padding: 0 4rpx; }
-.opt-head .opt-head-t { flex: none; font-size: 13px; color: var(--pk-ink-3); }
-.opt-head .opt-head-line { flex: 1; min-width: 0; height: 1rpx; background: var(--pk-line-soft); }
+.opt-head .opt-head-t { flex: none; font-size: 12px; color: var(--pk-sprout); font-weight: 500; letter-spacing: .4px; }
+.opt-head .opt-head-line { flex: 1; min-width: 0; height: 1rpx; background: var(--pk-sprout-line); }
 
 .sec-body .todo-slot { display: block; }
 .sec-body .todo-slot + .todo-slot { margin-top: 20rpx; }
 .sec-body .opt-head + .todo-slot { margin-top: 20rpx; }
-.sec-body .todo-slot.history-focus { border-left: 6rpx solid var(--pk-primary); border-radius: var(--pk-r-xs); }
-.more-todo { display: flex; align-items: center; justify-content: center; gap: 12rpx; min-height: 88rpx; margin-top: 20rpx; border: 1rpx dashed var(--pk-line-strong); border-radius: var(--pk-r-lg); background: var(--pk-surface-warm); color: var(--pk-ink-2); font-size: 14px; font-weight: 500; box-sizing: border-box; }
+.sec-body .todo-slot.history-focus { position: relative; border-radius: var(--pk-r-xl); box-shadow: 0 0 0 3rpx var(--pk-primary-hairline); }
+.more-todo { display: flex; align-items: center; justify-content: center; gap: 12rpx; min-height: 88rpx; margin-top: 20rpx; border: 1rpx dashed var(--pk-line-strong); border-radius: var(--pk-r-lg); background: var(--pk-surface-warm); color: var(--pk-ink-2); font-size: 13px; font-weight: 500; box-sizing: border-box; }
 
 .sec-body .tl-card .link-btn { min-height: 72rpx; }
 .pk-empty.inline .ea { margin-top: 24rpx; display: flex; justify-content: center; }
 
 /* 孩子切换半屏（B4） */
-.child-sheet .rowitem.on { background: var(--pk-primary-tint); }
-.child-sheet .ava-lg { flex: none; width: 80rpx; height: 80rpx; border-radius: 50%; background: var(--pk-primary); color: #fff; font-size: 14px; font-weight: 600; line-height: 80rpx; text-align: center; }
-.child-sheet .sheet-tip { display: block; padding: 24rpx 8rpx 8rpx; font-size: 13px; line-height: 1.5; color: var(--pk-ink-3); }
+.child-sheet .rowitem.on { background: var(--pk-primary-wash); }
+.child-sheet .ava-lg { flex: none; width: 80rpx; height: 80rpx; border-radius: 50%; background: linear-gradient(150deg, var(--pk-primary-mid), var(--pk-primary-strong)); color: var(--pk-ink-inv); font-family: var(--pk-serif); font-size: 15px; font-weight: 600; line-height: 80rpx; text-align: center; }

@@ -1,26 +1,45 @@
-/* PKDS-1.0 · TodoCard（5.9 节）：卡片描边分层不加阴影，几何量 rpx，字号 px，发丝线 1rpx。 */
-.todo { padding: 28rpx 28rpx 24rpx; box-sizing: border-box; background: var(--pk-surface); border: var(--pk-border); border-radius: var(--pk-r-xl); }
-.todo.opt { background: var(--pk-surface-warm); }
+/* PKDS-2.0 · TodoCard：左侧主色轨表达「必做 / 有余力」，反馈面板内嵌在卡内，
+   每个选项都先写清后果（复习日期由服务端确定性策略产生，文案与策略一一对应）。 */
+.todo { position: relative; overflow: hidden; padding: 30rpx 30rpx 22rpx 34rpx; box-sizing: border-box; background: var(--pk-surface); border: var(--pk-border); border-radius: var(--pk-r-xl); box-shadow: var(--pk-e0); }
+.todo .rail { position: absolute; left: 0; top: 0; bottom: 0; width: 8rpx; background: linear-gradient(180deg, var(--pk-primary-mid), var(--pk-primary)); }
+.todo.opt { background: var(--pk-surface-warm); box-shadow: none; }
+.todo.opt .rail { background: repeating-linear-gradient(180deg, var(--pk-sprout) 0 18rpx, rgba(127, 166, 92, .25) 18rpx 30rpx); }
 
 .todo-top { display: flex; align-items: flex-start; gap: 20rpx; }
 .todo-top .grow { flex: 1; min-width: 0; }
-.todo-title { display: block; font-size: 16px; line-height: 1.4; font-weight: 600; }
-.todo-meta { display: block; margin-top: 6rpx; font-size: 13px; line-height: 1.45; color: var(--pk-ink-3); }
+.todo-top .pill { flex: none; margin-top: 4rpx; }
+.todo-title { display: block; font-size: 16px; line-height: 1.4; font-weight: 600; letter-spacing: .2px; }
+.todo-meta { display: block; margin-top: 6rpx; font-size: 12px; line-height: 1.5; color: var(--pk-ink-3); font-variant-numeric: tabular-nums; }
 
 /* 「出现原因」：中文句由 utils/ui.reviewReason 拼装，来源缺失时整块不渲染。 */
-.todo-why { margin-top: 20rpx; padding: 16rpx 20rpx; border-radius: var(--pk-r-md); background: var(--pk-surface-sunken); font-size: 13px; line-height: 1.45; color: var(--pk-ink-2); }
-.todo.opt .todo-why { background: #F1F0E7; }
+.todo-why { display: flex; align-items: flex-start; gap: 12rpx; margin-top: 20rpx; padding: 16rpx 20rpx; border-radius: var(--pk-r-sm); background: var(--pk-surface-warm); border-left: 4rpx solid var(--pk-line-strong); }
+.todo-why .why-txt { flex: 1; min-width: 0; font-size: 12px; line-height: 1.6; color: var(--pk-ink-3); }
+.todo.opt .todo-why { background: rgba(243, 239, 228, .8); }
 
-.todo-points { margin-top: 20rpx; }
-.todo-pt { display: flex; align-items: center; gap: 16rpx; min-height: 88rpx; }
+.todo-points { margin-top: 12rpx; }
+.pt-row { display: flex; align-items: center; gap: 16rpx; min-height: 96rpx; }
 .todo-pt + .todo-pt { border-top: var(--pk-border-soft); }
-.todo-pt .pt-n { flex: 1; min-width: 0; font-size: 15px; line-height: 1.45; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.todo-pt .pt-done { flex: none; display: inline-flex; align-items: center; gap: 10rpx; font-size: 13px; font-weight: 600; color: var(--pk-success); }
-.todo-pt .act-done { flex: none; width: auto; }
-.todo-top .pill { flex: none; }
+.pt-dot { flex: none; width: 36rpx; height: 36rpx; border-radius: 50%; border: 2rpx solid var(--pk-line-strong); background: var(--pk-surface-raised); box-sizing: border-box; display: flex; align-items: center; justify-content: center; }
+.pt-dot.on { background: var(--pk-primary); border-color: var(--pk-primary); }
+.pt-n { flex: 1; min-width: 0; font-size: 15px; line-height: 1.45; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pt-n.is-done { color: var(--pk-ink-3); }
+.pt-done { flex: none; display: inline-flex; align-items: center; gap: 10rpx; font-size: 12px; font-weight: 500; color: var(--pk-primary); }
+.act-done { flex: none; width: auto; }
 /* 视觉 32×32，热区用伪元素撑到 88rpx，兼顾规格与触控下限。 */
-.act-more { position: relative; flex: none; box-sizing: border-box; width: 64rpx; height: 64rpx; border: var(--pk-border); border-radius: var(--pk-r-md); background: var(--pk-surface); display: flex; align-items: center; justify-content: center; }
+.act-more { position: relative; flex: none; box-sizing: border-box; width: 64rpx; height: 64rpx; border: var(--pk-border-line); border-radius: var(--pk-r-sm); background: var(--pk-surface); display: flex; align-items: center; justify-content: center; transition: background var(--pk-dur-fast) var(--pk-ease); }
 .act-more::after { content: ""; position: absolute; left: -12rpx; right: -12rpx; top: -12rpx; bottom: -12rpx; }
+.act-more.on { background: var(--pk-primary-tint); border-color: var(--pk-primary-hairline); }
 
-.todo-foot { display: flex; align-items: center; gap: 12rpx; min-height: 88rpx; margin-top: 20rpx; padding-top: 20rpx; border-top: var(--pk-border-soft); }
-.todo-foot .foot-txt { flex: 1; min-width: 0; font-size: 13px; line-height: 1.45; color: var(--pk-ink-3); }
+/* 反馈面板：不使用系统 ActionSheet，选项与它影响的复习安排写在同一屏。 */
+.fb-panel { margin: 4rpx 0 20rpx 52rpx; padding: 20rpx 22rpx 8rpx; border-radius: var(--pk-r-md); background: var(--pk-surface-warm); border: var(--pk-border-line); animation: fb-in var(--pk-dur-base) var(--pk-ease) both; }
+@keyframes fb-in { from { opacity: 0; transform: translateY(-8rpx); } to { opacity: 1; transform: none; } }
+.fb-hd { display: block; padding-bottom: 8rpx; font-size: 11px; line-height: 1.4; color: var(--pk-ink-4); letter-spacing: .4px; }
+.fb { display: flex; align-items: center; gap: 16rpx; min-height: 96rpx; }
+.fb + .fb { border-top: var(--pk-border-soft); }
+.fb .grow { flex: 1; min-width: 0; }
+.fb .fb-t { display: block; font-size: 14px; line-height: 1.4; font-weight: 500; }
+.fb .fb-s { display: block; margin-top: 4rpx; font-size: 11px; line-height: 1.5; color: var(--pk-ink-3); }
+.fb-cancel { min-height: 88rpx; display: flex; align-items: center; justify-content: center; border-top: var(--pk-border-soft); font-size: 13px; color: var(--pk-ink-3); }
+
+.todo-foot { display: flex; align-items: center; gap: 12rpx; min-height: 88rpx; margin-top: 4rpx; padding-top: 16rpx; border-top: var(--pk-border-soft); }
+.todo-foot .foot-txt { flex: 1; min-width: 0; font-size: 12px; line-height: 1.5; color: var(--pk-ink-3); }

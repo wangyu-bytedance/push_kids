@@ -7,7 +7,7 @@
 
 .pcell.gone { opacity: .55; }
 .mat-body .pcell .ph-center { position: absolute; left: 0; top: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center; background: var(--pk-surface-sunken); color: var(--pk-ink-3); }
-.pcell .cnote { position: absolute; left: 0; right: 0; bottom: 0; padding: 8rpx 10rpx; background: rgba(29, 43, 36, .66); color: #fff; font-size: 11px; line-height: 1.3; }
+.pcell .cnote { position: absolute; left: 0; right: 0; bottom: 0; padding: 8rpx 10rpx; background: rgba(24, 28, 20, .62); color: var(--pk-ink-inv); font-size: 11px; line-height: 1.3; }
 .mat-body .help { display: block; }
 .mat-body .mat-lbl { display: block; margin-top: 24rpx; font-size: 13px; font-weight: 600; color: var(--pk-ink-2); }
 .mat-body .orig { display: block; margin-top: 12rpx; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 14px; line-height: 1.7; color: var(--pk-ink); }

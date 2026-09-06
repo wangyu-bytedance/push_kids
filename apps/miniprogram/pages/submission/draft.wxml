@@ -1,4 +1,4 @@
-<!-- PKDS-1.0 · 可编辑草稿的共享模板：确认页与「待处理记录」页用同一套结构，家长在待确认页直接改直接确认。 -->
+<!-- PKDS-2.0 · 可编辑草稿的共享模板：确认页与「待处理记录」页用同一套结构，家长在待确认页直接改直接确认。 -->
 
 <template name="draft-form">
   <view class="pk-notice err mt2" wx:if="{{saveError}}">
@@ -46,8 +46,8 @@
 
   <view class="pk-card mt3">
     <view class="flex between">
-      <view class="pill" wx:if="{{!manual}}"><view class="ico ico-sparkle-pri xs"></view><text>AI 整理草稿</text></view>
-      <view class="pill neutral" wx:else>人工录入</view>
+      <view class="stamp" wx:if="{{!manual}}"><view class="ico ico-sparkle-pri xs"></view><text>AI 草稿 · 待确认</text></view>
+      <view class="stamp manual" wx:else><view class="ico ico-pen-mute xs"></view><text>人工录入</text></view>
       <text class="c-meta tnum">实际学习 {{submission.time_label}}</text>
     </view>
 
@@ -102,7 +102,7 @@
           <text class="n-c">打开开关会新增这个科目；也可以「换科目」并到已有科目里。</text>
         </view>
         <switch checked="{{item.create_subject}}" data-group="{{index}}" bindchange="toggleCreateSubject"
-          color="#2E6A56" aria-label="新增科目 {{item.subject_name}}" />
+          color="#1F5B45" aria-label="新增科目 {{item.subject_name}}" />
       </view>
     </view>
     <text class="help">每个科目会分别生成一条学习记录，复习计划也按科目各自安排。</text>
@@ -173,7 +173,7 @@
         <view class="pk-field">
           <text class="lbl">建议时长<text class="opt tnum">{{item.estimated_minutes}} 分钟</text></text>
           <slider min="1" max="20" value="{{item.estimated_minutes}}" data-index="{{index}}" data-field="estimated_minutes"
-            bindchange="setPoint" activeColor="#2E6A56" backgroundColor="#EFEEE6" block-size="22" />
+            bindchange="setPoint" activeColor="#1F5B45" backgroundColor="#EBE5D7" block-size="22" />
         </view>
       </view>
     </view>
