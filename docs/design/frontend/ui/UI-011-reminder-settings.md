@@ -58,7 +58,7 @@
 
 - 用户指令（2026-09-06）：「继续做，我需要一个完整的功能」——据此实现授权入口，`SPEC-20260906-CHANNEL-02` 待评审确认。
 - 已完成：`node --test tests/frontend/notifications.test.js`（11 项）、`npm test`、`npm run lint:miniapp`、
-  `tools/validate_miniprogram.py`（`pages=14`）、320/390/430 近似渲染走查。
+  `tools/validate_miniprogram.py`（`pages=15`）、320/390/430 近似渲染走查。
 - 待完成（发布门禁）：微信开发者工具编译与三视口原生节点几何证据、真机授权与真实送达、
   Figma 节点补录或新的 waiver、快照 manifest。
 
@@ -66,4 +66,4 @@
 
 - `specs/active/FEAT-003-NOTIFICATION-CHANNEL.md` revision `SPEC-20260906-CHANNEL-02`
 - `docs/domain/features/FEAT-003-notification-channel.md`
-- `docs/domain/BEHAVIOR-CATALOG.md` `BHV-027`
+- `docs/domain/BEHAVIOR-CATALOG.md` `BHV-028`

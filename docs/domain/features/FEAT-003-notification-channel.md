@@ -74,12 +74,16 @@
 
 ## Verification evidence（2026-09-06，本地）
 
-- `uv run ruff check .` PASS；`uv run ruff format --check .` PASS（202 files）
-- `uv run mypy apps/api/src` PASS（66 files）
+在 `origin/main`（`165c588`）之上 rebase 后重跑：
+
+- `uv run ruff check .` PASS；`uv run ruff format --check .` PASS（247 files）
+- `uv run mypy apps/api/src` PASS（79 files）
 - `uv run python tools/check_architecture.py` PASS（`ARCHITECTURE_VALID checked=3`）
-- `uv run pytest tests/unit tests/integration tests/contract -q` → 219 passed, 2 skipped
-- `uv run pytest tests/unit tests/integration tests/contract -q` → 223 passed, 2 skipped
-- `npm test` → 102 pass；`npm run lint:miniapp` PASS；`tools/validate_miniprogram.py` → `pages=14`
+- Alembic 单一 head：`20260906_0008`（迁移链 `…0006 → 0007 → 0008`）
+- `uv run pytest tests/unit tests/integration tests/contract -q` → 248 passed, 2 skipped, **2 failed**：
+  `tests/unit/test_reporting_trends.py`（等长分桶顺序）与 `tests/contract/test_worker_readiness.py`（就绪 503）
+  在 `origin/main` 上以相同方式失败，与通知通道无关，未在本分支修复
+- `npm test` → 119 pass；`npm run lint:miniapp` PASS；`tools/validate_miniprogram.py` → `pages=15`
 - 设计走查：320/390/430 近似渲染两态截图人工检查
 - 微信开发者工具编译、原生节点几何、真机授权与真实发送验收：`NOT RUN`
 

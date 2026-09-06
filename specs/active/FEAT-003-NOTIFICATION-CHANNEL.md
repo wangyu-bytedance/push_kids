@@ -329,7 +329,7 @@ Alembic `20260906_0008_notification_channel`，纯新增四张表与索引；
 - `uv run ruff check .` PASS；`uv run ruff format --check .` PASS（200 files）
 - `uv run mypy apps/api/src` PASS（66 files）
 - `uv run python tools/check_architecture.py` PASS（`ARCHITECTURE_VALID checked=3`）
-- `uv run pytest tests/unit tests/integration tests/contract -q` → 219 passed, 2 skipped
+- `uv run pytest tests/unit tests/integration tests/contract -q` → 219 passed, 2 skipped（rebase 前）
 - `npm test` → 91 pass；`npm run lint:miniapp` PASS；`tools/validate_miniprogram.py` → `MINIPROGRAM_VALID pages=13`
 - 全链迁移：`alembic upgrade head` → `20260906_0008 (head)`
 - NOT RUN：MySQL 门禁、云托管部署、微信真机授权与真实发送
@@ -340,18 +340,22 @@ Alembic `20260906_0008_notification_channel`，纯新增四张表与索引；
 - 新增：`tools/notification_config.py`、`tests/frontend/notifications.test.js`、`tests/unit/test_notification_config_tool.py`
 - 新增：`docs/design/frontend/ui/UI-011-reminder-settings.md`
 - 修改：`apps/miniprogram/app.json`、`apps/miniprogram/pages/settings/index.{js,wxml}`、
-  `docs/design/frontend/FRONTEND-DESIGN.md`、`docs/domain/BEHAVIOR-CATALOG.md`（`BHV-027`）、
+  `docs/design/frontend/FRONTEND-DESIGN.md`、`docs/domain/BEHAVIOR-CATALOG.md`（`BHV-028`）、
   `docs/quality/TEST-STRATEGY.md`、`docs/deploy/BACKEND-RELEASE.md`、
   `docs/domain/features/FEAT-003-notification-channel.md`
 
 ### `-02` Evidence（2026-09-06，本地）
 
-- `uv run ruff check .` PASS；`uv run ruff format --check .` PASS（202 files）
-- `uv run mypy apps/api/src` PASS（66 files）
+在 `origin/main`（`165c588`）之上 rebase 后重跑：
+
+- `uv run ruff check .` PASS；`uv run ruff format --check .` PASS（247 files）
+- `uv run mypy apps/api/src` PASS（79 files）
 - `uv run python tools/check_architecture.py` PASS（`ARCHITECTURE_VALID checked=3`）
-- `uv run pytest tests/unit tests/integration tests/contract -q` → 227 passed, 2 skipped
-- `npm test` → 102 pass（其中 `tests/frontend/notifications.test.js` 11 项）
-- `npm run lint:miniapp` PASS；`uv run python tools/validate_miniprogram.py` → `MINIPROGRAM_VALID pages=14`
+- `uv run pytest tests/unit tests/integration tests/contract -q` → 248 passed, 2 skipped, 2 failed
+  （`tests/unit/test_reporting_trends.py`、`tests/contract/test_worker_readiness.py`；两者在 `origin/main`
+  上同样失败，属主干既有问题，本分支未修）
+- `npm test` → 119 pass（其中 `tests/frontend/notifications.test.js` 11 项）
+- `npm run lint:miniapp` PASS；`uv run python tools/validate_miniprogram.py` → `MINIPROGRAM_VALID pages=15`
 - `tools/notification_config.py`：`secret` 产出 43 字符密钥；`scaffold` 与 `from-wechat` 的输出都能被
   运行时解析器解析；`from-wechat` 从模板正文解析字段键、按 `type` 判定长期/一次性、对未知类型与
   找不到的模板 ID 返回非 0，并把无内容可填的模板字段警告到 stderr；`check` 对缺 `template_id`、

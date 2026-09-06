@@ -1,4 +1,4 @@
-"""FEAT-003 TP：`20260906_0006` 迁移必须是纯新增，并且可以回滚。
+"""FEAT-003 TP：`20260906_0008` 迁移必须是纯新增，并且可以回滚。
 
 提醒能力上线时既有数据不能被改动，回滚时也只应丢掉提醒队列本身。
 """
@@ -13,8 +13,8 @@ from alembic.config import Config
 from sqlalchemy import create_engine, inspect, text
 
 ROOT = Path(__file__).resolve().parents[2]
-BASE_REVISION = "20260906_0005"
-TARGET_REVISION = "20260906_0006"
+BASE_REVISION = "20260906_0007"
+TARGET_REVISION = "20260906_0008"
 NOTIFICATION_TABLES = {
     "notification_preferences",
     "notification_destinations",
