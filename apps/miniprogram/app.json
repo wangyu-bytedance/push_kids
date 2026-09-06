@@ -1,5 +1,6 @@
 {
   "pages": [
+    "pages/family-onboarding/index",
     "pages/today/index",
     "pages/calendar/index",
     "pages/records/index",
@@ -9,10 +10,10 @@
     "pages/record-detail/index",
     "pages/activity/edit",
     "pages/child-edit/index",
-    "pages/family-onboarding/index",
     "pages/family-join/index",
     "pages/family-members/index",
-    "pages/family-requests/index"
+    "pages/family-requests/index",
+    "pages/delete-settings/index"
   ],
   "window": {
     "navigationBarTitleText": "知芽",

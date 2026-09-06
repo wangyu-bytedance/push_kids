@@ -18,8 +18,11 @@ App({
   onLaunch(options = {}) {
     if (config.useCloud) wx.cloud.init({ env: config.cloudEnv });
     this.globalData.selectedChildId = wx.getStorageSync("selectedChildId") || "";
-    const isJoinLaunch = options.path === "pages/family-join/index";
-    if ((!config.useCloud || wx.cloud.callContainer) && !isJoinLaunch) {
+    const isFamilyEntryLaunch = [
+      "pages/family-onboarding/index",
+      "pages/family-join/index"
+    ].includes(options.path);
+    if ((!config.useCloud || wx.cloud.callContainer) && !isFamilyEntryLaunch) {
       this.refreshBootstrap(true).catch(() => {});
     }
   },
@@ -30,7 +33,7 @@ App({
       const result = await api.request("/me", { actorOnly: true });
       this.globalData.bootstrapState = result.state;
       this.globalData.currentMember = result.member || null;
-      if (result.family) this.globalData.familyId = result.family.id;
+      this.globalData.familyId = result.family ? result.family.id : "";
       /* 档案可能已被别的家长归档或删档，这里统一回落，避免各页面读到失效的 childId。 */
       childContext.syncSelection(this, result.children || []);
       if (redirect && result.state !== "bound" && wx.reLaunch) {

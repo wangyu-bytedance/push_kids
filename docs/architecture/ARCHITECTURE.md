@@ -1,8 +1,8 @@
 # Push Kids current architecture
 
 - Status: `IMPLEMENTED_LOCALLY_PENDING_CLOUD_ACCEPTANCE`
-- Revision: `ARCH-TARGET-20260903-06`
-- Confirmed by: user approval of `CLOUD-SPEC-20260903-03`, 2026-09-03
+- Revision: `ARCH-20260906-TRAVEL-01`
+- Confirmed by: user approval of `SPEC-20260906-TRAVEL-02`, 2026-09-06
 - Scope: local adapters plus WeChat Cloud Hosting controlled staging
 
 ## Runtime context
@@ -34,6 +34,7 @@ and local media through the same bounded infrastructure ports.
 | `knowledge` | normalized knowledge identity and occurrences | normalization policy |
 | `planning` | memory-curve review state and Todo grouping | pure scheduler + application service |
 | `activities` | schedules and practice records | activity service |
+| `travel` | child-scoped recurring travel arrangements | travel service and HTTP routes; calendar projection contract |
 | `reporting` | read models for dashboard/report/calendar | reporting service |
 | `agent_processing` | provider contract, analysis jobs, retries, deterministic subject routing (`subject_routing.py`, pure) | analysis service and worker |
 | `media` | validated local/cloud files, cloud ownership claim and temporary materialization | media store port |
@@ -62,7 +63,15 @@ Dependency direction is routers → services → pure policies. Infrastructure a
   among profiles in use, manager-only archive/restore, and the `require_active_child` gate that every new
   learning/subject/activity write passes through. Read paths keep using `get_child`, so archiving never
   removes rows or hides history. Archiving is not deletion and there is no physical child deletion path.
-  `Database.expected_cloud_revision` tracks the single Alembic head, currently `20260906_0005`.
+  FEAT-007 adds `travel_arrangements` and create-idempotency rows in migration `20260906_0006`.
+  `Database.expected_cloud_revision` tracks the single Alembic head; the current working tree's separate
+  durable-deletion change extends that chain to `20260906_0007`.
+- Travel arrangements are independent from activities and project only into the Calendar query. The query
+  normalizes CalendarEvent, ActivitySchedule and TravelArrangement time spans, then applies one pure half-open
+  interval policy. Conflict metadata is derived at read time and marks every participant; it is never persisted.
+- `activities/capacity.py` owns the cross-source Calendar admission budget: a child row lock serializes creates,
+  then active CalendarEvent, timed ActivitySchedule and TravelArrangement rows are counted together against the
+  approved limit of 20. Existing over-limit rows remain readable and deletion releases capacity.
 
 ## Async analysis sequence
 
@@ -179,6 +188,7 @@ tests; indirect and test-only cycles are forbidden.
 | Media store | `media` | learning submission flow | `MediaStore` plus validation/path-isolation tests |
 | Review scheduling | `planning` | learning confirmation and Todo feedback | pure versioned policy; not a generic helper |
 | Child profile lifecycle | `children` | learning, activities, families, routers | `require_active_child` / `list_children(include_archived)`; archived profiles resolve for reads only |
+| Travel calendar projection | `travel` | activities calendar query | normalized active arrangements for one family/child/day; no Today, Todo, report or practice consumer |
 | Mini Program child context | `apps/miniprogram/utils/child-context.js` | today / calendar / records / reports / settings / activity edit | decorate, resolve-with-fallback, global selection sync, profile-limit hint; presentation only, no business rules |
 
 No global `common`, `utils`, or service locator may own business semantics. A new
@@ -198,8 +208,9 @@ family collaboration, data rights and privacy release gates remain in FEAT-002.
 Variation axes are deliberately classified in the Extension point registry.
 Open points use narrow ports owned by the affected capability. Closed points need
 a new approved Spec/ADR. Deferred points must not acquire speculative factories or
-plugin registries. The active baseline is `ARCH-TARGET-20260903-06`, approved on 2026-09-03.
-Its staging acceptance is still blocked by the real-cloud test points in `CLOUD-SPEC-20260903-03`.
+plugin registries. The active local baseline is `ARCH-20260906-TRAVEL-01`, approved on 2026-09-06.
+Its staging acceptance is still blocked by the real-cloud test points in `CLOUD-SPEC-20260903-03` and the
+FEAT-007 native viewport/device evidence recorded in `SPEC-20260906-TRAVEL-02`.
 
 ## Extension point registry
 

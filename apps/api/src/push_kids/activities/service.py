@@ -4,10 +4,12 @@ import json
 from datetime import UTC, date, datetime, time, timedelta
 from hashlib import sha256
 
-from sqlalchemy import func, select
+from sqlalchemy import delete, func, select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
+from push_kids.activities.capacity import ensure_timed_item_capacity
+from push_kids.activities.conflicts import attach_conflicts
 from push_kids.activities.schemas import (
     ActivityRecordCreate,
     ActivityScheduleCreate,
@@ -25,9 +27,30 @@ from push_kids.persistence.models import (
 )
 from push_kids.platform.errors import ConflictError, NotFoundError
 from push_kids.platform.time import SHANGHAI, local_date, utcnow
+from push_kids.travel.service import TravelService
 
 
 class ActivitiesService:
+    @staticmethod
+    def purge_data(db: Session, family_id: str, child_id: str | None) -> None:
+        event_query = select(CalendarEvent.id).where(CalendarEvent.family_id == family_id)
+        activity_scope = [ActivityRecord.family_id == family_id]
+        schedule_scope = [ActivitySchedule.family_id == family_id]
+        if child_id is not None:
+            event_query = event_query.where(CalendarEvent.child_id == child_id)
+            activity_scope.append(ActivityRecord.child_id == child_id)
+            schedule_scope.append(ActivitySchedule.child_id == child_id)
+        event_ids = list(db.scalars(event_query))
+        db.execute(
+            delete(CalendarEventRequest).where(
+                CalendarEventRequest.family_id == family_id,
+                CalendarEventRequest.event_id.in_(event_ids),
+            )
+        )
+        db.execute(delete(CalendarEvent).where(CalendarEvent.id.in_(event_ids)))
+        db.execute(delete(ActivityRecord).where(*activity_scope))
+        db.execute(delete(ActivitySchedule).where(*schedule_scope))
+
     @staticmethod
     def _activity_subject(db: Session, family_id: str, child_id: str, subject_id: str) -> Subject:
         subject = db.scalar(
@@ -66,6 +89,7 @@ class ActivitiesService:
             existing.note = data.note
             db.commit()
             return existing
+        ensure_timed_item_capacity(db, family_id, data.child_id)
         schedule = ActivitySchedule(
             family_id=family_id,
             child_id=data.child_id,
@@ -111,6 +135,7 @@ class ActivitiesService:
         )
         if schedule is None:
             raise NotFoundError("没有找到这个活动提醒")
+        ChildrenService.require_active_child(db, family_id, schedule.child_id)
         values = data.model_dump(exclude_unset=True, exclude={"child_id", "subject_id"})
         if "weekdays" in values:
             values["weekdays"] = ",".join(str(item) for item in (values["weekdays"] or []))
@@ -136,6 +161,7 @@ class ActivitiesService:
         )
         if schedule is None:
             raise NotFoundError("没有找到这个活动提醒")
+        ChildrenService.require_active_child(db, family_id, schedule.child_id)
         schedule.active = False
         subject = db.scalar(
             select(Subject).where(
@@ -173,6 +199,7 @@ class ActivitiesService:
                 if request.event_id is None:
                     raise RuntimeError("calendar event request is missing its event")
                 return cls._event(db, family_id, request.event_id)
+        ensure_timed_item_capacity(db, family_id, data.child_id)
         event = CalendarEvent(family_id=family_id, **data.model_dump())
         db.add(event)
         db.flush()
@@ -224,6 +251,7 @@ class ActivitiesService:
         cls, db: Session, family_id: str, event_id: str, data: CalendarEventPatch
     ) -> CalendarEvent:
         event = cls._event(db, family_id, event_id)
+        ChildrenService.require_active_child(db, family_id, event.child_id)
         for key, value in data.model_dump(exclude_unset=True).items():
             setattr(event, key, value)
         if event.start_time is None or event.end_time is None:
@@ -236,11 +264,20 @@ class ActivitiesService:
     @classmethod
     def delete_event(cls, db: Session, family_id: str, event_id: str) -> None:
         event = cls._event(db, family_id, event_id)
+        ChildrenService.require_active_child(db, family_id, event.child_id)
         event.active = False
         db.commit()
 
     @classmethod
-    def events_for_day(cls, db: Session, family_id: str, child_id: str, target: date) -> list[dict]:
+    def events_for_day(
+        cls,
+        db: Session,
+        family_id: str,
+        child_id: str,
+        target: date,
+        *,
+        include_travel: bool = False,
+    ) -> list[dict]:
         ChildrenService.get_child(db, family_id, child_id)
         direct = list(
             db.scalars(
@@ -308,7 +345,38 @@ class ActivitiesService:
                     subject.id,
                 )
             )
-        return sorted(result, key=lambda item: item["start_time"])
+        if include_travel:
+            for arrangement in TravelService.projections_for_day(db, family_id, child_id, target):
+                if (
+                    arrangement.id is None
+                    or arrangement.name is None
+                    or arrangement.start_time is None
+                    or arrangement.end_time is None
+                ):
+                    continue
+                result.append(
+                    cls._event_view(
+                        arrangement.id,
+                        arrangement.name,
+                        target,
+                        arrangement.start_time,
+                        arrangement.end_time,
+                        "travel",
+                        True,
+                        "travel_arrangement",
+                        None,
+                    )
+                )
+        ordered = sorted(
+            result,
+            key=lambda item: (
+                item["start_time"],
+                item["end_time"],
+                item["source"],
+                item["id"],
+            ),
+        )
+        return attach_conflicts(ordered)
 
     @staticmethod
     def _event_view(

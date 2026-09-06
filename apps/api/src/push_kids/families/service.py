@@ -5,7 +5,7 @@ import hashlib
 import hmac
 from datetime import datetime, timedelta
 
-from sqlalchemy import func, select
+from sqlalchemy import delete, func, select, update
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
@@ -71,6 +71,19 @@ def _request_code(request_id: str) -> str:
 
 
 class FamilyService:
+    @staticmethod
+    def purge_data(db: Session, family_id: str) -> None:
+        db.execute(
+            update(WeChatActorBinding)
+            .where(WeChatActorBinding.family_id == family_id)
+            .values(family_id=None, status="unbound")
+        )
+        db.execute(delete(FamilyJoinRequest).where(FamilyJoinRequest.family_id == family_id))
+        db.execute(delete(FamilyInvite).where(FamilyInvite.family_id == family_id))
+        db.execute(delete(FamilyAuditEvent).where(FamilyAuditEvent.family_id == family_id))
+        db.execute(delete(FamilyMember).where(FamilyMember.family_id == family_id))
+        db.execute(delete(Family).where(Family.id == family_id))
+
     @staticmethod
     def _member_view(member: FamilyMember, own_member_id: str | None) -> MemberView:
         return MemberView(

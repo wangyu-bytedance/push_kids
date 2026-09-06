@@ -131,6 +131,30 @@
       </view>
     </view>
 
+    <view class="pk-card set-card">
+      <view class="card-head">
+        <view class="grow">
+          <text class="c-t">出行安排</text>
+          <text class="c-s">上学、放学等固定出行，只显示在日程</text>
+        </view>
+      </view>
+      <view class="act-list" wx:if="{{travelArrangements.length}}">
+        <view class="act-row" wx:for="{{travelArrangements}}" wx:key="id" aria-role="button" aria-label="编辑{{item.name}}出行安排" data-id="{{item.id}}" bindtap="openTravel">
+          <view class="act-mark"><text class="am-txt">{{item.marker}}</text></view>
+          <view class="grow">
+            <text class="a-t trunc">{{item.name}}</text>
+            <text class="a-s">{{item.scheduleLabel}}</text>
+          </view>
+          <view class="chev right"></view>
+        </view>
+      </view>
+      <view class="inline-empty" wx:else>还没有出行安排</view>
+      <view class="add-entry" wx:if="{{canWrite}}" aria-role="button" aria-label="添加出行安排" bindtap="openTravelCreate">
+        <view class="ico ico-plus-pri sm"></view><text>添加出行安排</text>
+      </view>
+      <view class="travel-only-note">不会出现在「今日」或生成待办，只用于查看每天的时间占用。</view>
+    </view>
+
     <view class="rowlist mt3">
       <view class="rowitem" aria-role="button" aria-label="家庭与成员" bindtap="openFamily">
         <view class="act-mark"><view class="ico ico-family-pri sm"></view></view>
@@ -139,6 +163,14 @@
           <text class="r-s">邀请家人，一起记录与陪伴</text>
         </view>
         <text class="pill att" wx:if="{{requestsLabel}}">{{requestsLabel}}</text>
+        <view class="chev right"></view>
+      </view>
+      <view class="rowitem" wx:if="{{isManager}}" aria-role="button" aria-label="删除配置" bindtap="openDeleteSettings">
+        <view class="act-mark"><view class="ico ico-info-pri sm"></view></view>
+        <view class="grow">
+          <text class="r-t">删除配置</text>
+          <text class="r-s">清理孩子资料或当前家庭</text>
+        </view>
         <view class="chev right"></view>
       </view>
       <view class="rowitem" aria-role="button" aria-label="关于知芽" bindtap="openAbout">
@@ -153,6 +185,63 @@
   </block>
 
   <view class="safe-tail"></view>
+</view>
+
+<view class="pk-mask" wx:if="{{showTravelEditor}}" bindtap="closeTravelEditor"></view>
+<view class="pk-sheet travel-sheet" wx:if="{{showTravelEditor}}">
+  <view class="handle"></view>
+  <view class="sheet-head">
+    <view class="grow">
+      <text class="sheet-title">{{editingTravelId ? '编辑出行安排' : '新增出行安排'}}</text>
+      <text class="sheet-sub">保存后按所选星期重复，只显示在「日程」</text>
+    </view>
+    <view class="icon-btn" aria-role="button" aria-label="关闭" bindtap="closeTravelEditor"><view class="ico ico-close sm"></view></view>
+  </view>
+  <view class="sheet-body">
+    <view class="pk-field">
+      <text class="lbl">常用名称</text>
+      <view class="travel-presets">
+        <view class="travel-preset {{travelPreset === item ? 'on' : ''}}" wx:for="{{travelPresets}}" wx:key="*this" aria-role="button" aria-label="选择{{item}}" data-name="{{item}}" bindtap="chooseTravelPreset">{{item}}</view>
+      </view>
+    </view>
+    <view class="pk-field">
+      <text class="lbl">安排名称</text>
+      <input class="pk-input" value="{{travelName}}" maxlength="30" data-field="travelName" bindinput="setField" placeholder="例如：上学" placeholder-class="pk-ph" />
+    </view>
+    <view class="day-head">
+      <text class="lbl">每周哪几天</text>
+      <text class="t-cap">可多选</text>
+    </view>
+    <view class="wk-grid">
+      <view class="wk {{travelWeekdaySelected[index] ? 'on' : ''}}" wx:for="{{weekdayLabels}}" wx:key="*this" aria-role="button" aria-label="星期{{item}}" data-value="{{index}}" bindtap="toggleTravelWeekday">{{item}}</view>
+    </view>
+    <view class="time-row">
+      <view class="pk-field grow">
+        <text class="lbl">开始时间</text>
+        <picker mode="time" value="{{travelStartTime}}" data-field="travelStartTime" bindchange="setField">
+          <view class="pk-picker"><text class="tnum">{{travelStartTime}}</text><view class="chev"></view></view>
+        </picker>
+      </view>
+      <text class="time-dash">—</text>
+      <view class="pk-field grow">
+        <text class="lbl">结束时间</text>
+        <picker mode="time" value="{{travelEndTime}}" data-field="travelEndTime" bindchange="setField">
+          <view class="pk-picker {{travelEndError ? 'is-error' : ''}}"><text class="tnum">{{travelEndTime}}</text><view class="chev"></view></view>
+        </picker>
+      </view>
+    </view>
+    <view class="pk-notice quiet sum-note">
+      <text class="n-txt">这项安排只会显示在日程，不会生成今日待办。</text>
+    </view>
+  </view>
+  <view class="sheet-foot">
+    <text class="err-text" wx:if="{{travelError}}">{{travelError}}</text>
+    <button class="btn" loading="{{savingTravel}}" disabled="{{savingTravel || deletingTravel || !canWrite}}" bindtap="saveTravel">{{savingTravel ? '保存中…' : '保存安排'}}</button>
+    <view class="danger-row" wx:if="{{editingTravelId && canWrite}}">
+      <view class="ico ico-trash-dan xs"></view>
+      <text class="danger-link" aria-role="button" aria-label="删除这项出行安排" bindtap="deleteTravel">{{deletingTravel ? '删除中…' : '删除这项安排'}}</text>
+    </view>
+  </view>
 </view>
 
 <view class="pk-mask" wx:if="{{showChildSheet}}" bindtap="closeChildSheet"></view>

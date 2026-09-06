@@ -2,12 +2,13 @@
 
 - Feature ID: `FEAT-002`
 - Status: `IMPLEMENTING`
-- Current-state revision: `FEAT-STATE-20260905-06-BUG010-LOCAL`
+- Current-state revision: `FEAT-STATE-20260906-BUG014-LOCAL`
 - Owner: 产品负责人（用户）
-- Last verified: 2026-09-05
+- Last verified: 2026-09-06
 - Authoritative implementation: `apps/api/src/push_kids/families/`, family persistence models,
   `apps/miniprogram/pages/family-*`
-- Active change Spec: `specs/active/FEAT-002-USER-FAMILY-BINDING.md` revision `SPEC-20260905-12`
+- Active change Specs: `specs/active/FEAT-002-USER-FAMILY-BINDING.md` revision `SPEC-20260905-12`;
+  `specs/active/BUG-014-NEW-USER-FAMILY-ENTRY.md` revision `BUG-SPEC-20260906-18`
 
 > 本文只说明当前事实与已批准边界。家庭创建、邀请、申请、审批和成员角色已经在工作区实现并
 > 完成本地 SQLite/MySQL 验证，但尚未迁移或部署到微信云托管；因此不能描述为线上可用。
@@ -21,6 +22,9 @@
 
 - 新 actor 通过 `/api/v1/me` 得到 `unbound`，可原子创建家庭与 manager membership；首个孩子档案
   可以同批创建，也可以留空之后再建（FEAT-005）。或凭短时邀请提交待审批申请。
+- 普通小程序启动先进入 `family-onboarding` 启动门并只依据 `/me.state` 分流：`unbound` 显示创建家庭/
+  申请加入，`pending` 显示等待确认，`bound` 进入今日，查询失败停留在可重试错误态。邀请分享仍直达
+  `family-join`；已绑定但零孩子的家庭仍进入业务区空态，不会被误判为未绑定。
 - 云环境拒绝客户端家庭标识，并从可信微信 actor 解析 active membership；本地家庭流程可用
   `X-Debug-Actor`，旧的 `X-Family-ID` 仅保留给非家庭流程兼容测试。
 - active member 角色为 manager/editor/viewer；被移除成员保留历史记录，但 active 唯一投影被释放，
@@ -76,12 +80,17 @@ still remains on the previous revision until the controlled migration window.
 - Existing `UI-001` contains only the FEAT-001 parent application.
 - `UI-009` family/member and `UI-010` share/application/approval pages are implemented under the approved scoped
   `FIGMA-WAIVER-20260905-01`; three-viewport visual and real DevTools acceptance remain pending.
+- `UI-010` 也是普通启动的家庭状态门；`BUG-SPEC-20260906-18` 仅修正入口编排和错误状态，不改变
+  已批准 WXML/WXSS，并使用 `FIGMA-WAIVER-BUG014-20260906-01`。
 
 ## Current quality and operations
 
 - SQLite integration, frontend idempotency, clean MySQL migration, concurrent approval, and removed-member rejoin
   tests pass locally. The broader MySQL worker suite currently has an unrelated analyzing-state timeout under review.
 - Invite preview has trusted-actor in-process rate limiting and 429 tests. Remaining evidence includes shared multi-instance limiting, real AppID two-actor cloud staging, and three-viewport UI.
+- BUG-014 启动生命周期回归（10 passed）、完整前端测试（107 passed）、Mini Program lint/validator、
+  架构检查及家庭 onboarding integration tests（6 passed）已在本地通过；WeChat DevTools/真机普通启动与
+  邀请启动 smoke 尚未执行。
 - Public production remains blocked by `ARC-011`.
 
 ## Limitations
@@ -118,3 +127,7 @@ still remains on the previous revision until the controlled migration window.
 - 2026-09-06 — `SPEC-20260906-MULTI-CHILD-01`（FEAT-005）：创建家庭的 `child` 变为可选；`/me` 与邀请预览
   只列在用学习档案；归档/恢复孩子档案仅 manager 可执行，并在云身份路径写入 `FamilyAuditEvent`。
   角色仍是家庭级，按孩子授权仍是非目标。
+- 2026-09-06 — `BUG-SPEC-20260906-18`（BUG-014）：普通启动改由既有 `family-onboarding` 先解析
+  `/me` 状态，邀请入口保持直达；错误不再落入 unbound 选择态，bound 且零孩子仍进入今日。Node 生命周期
+  回归、完整前端测试、lint、validator、架构检查和家庭 onboarding integration tests 在本地通过；原生
+  DevTools/真机 smoke 待补。

@@ -10,7 +10,7 @@ from push_kids.platform.config import Settings
 
 
 class Database:
-    expected_cloud_revision = "20260906_0005"
+    expected_cloud_revision = "20260906_0007"
 
     def __init__(self, settings: Settings) -> None:
         database_url = settings.resolved_database_url
@@ -91,6 +91,11 @@ class Database:
             with self.engine.begin() as connection:
                 connection.execute(
                     text("ALTER TABLE children ADD COLUMN active BOOLEAN DEFAULT 1 NOT NULL")
+                )
+        if "deleting" not in child_columns:
+            with self.engine.begin() as connection:
+                connection.execute(
+                    text("ALTER TABLE children ADD COLUMN deleting BOOLEAN DEFAULT 0 NOT NULL")
                 )
 
     def session(self) -> Generator[Session, None, None]:

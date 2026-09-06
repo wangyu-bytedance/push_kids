@@ -5,9 +5,9 @@
 - Spec owner: 产品负责人（用户）
 - Implementer / Reviewer / Verifier: `TBD`
 - Created / Last updated: 2026-09-05
-- Spec revision: `SPEC-20260905-MULTI-FAMILY-02`
+- Spec revision: `SPEC-20260905-MULTI-FAMILY-03`
 - Supersedes: `SPEC-20260905-MULTI-FAMILY-01（错误假设一家庭仅一个孩子）`
-- User confirmation: `PENDING；用户已明确保留“一家庭多孩子”和现有角色模型，尚未批准本 revision 实施`
+- User confirmation: `PENDING；用户已明确保留“一家庭多孩子”和现有角色模型，并指出现有 UI 缺少为同一家庭建立第二个孩子档案的入口；尚未批准本 revision 实施`
 - Affected Feature IDs: `FEAT-002（主）；FEAT-001、planned FEAT-003、FEAT-004（上下文/隔离合同）`
 - Current-state baseline: `FEAT-002=FEAT-STATE-20260905-06-BUG010-LOCAL；实现前重新读取其余最新 revision`
 
@@ -16,9 +16,9 @@
 - Frontend impact: `yes — 新增家庭选择；保留当前孩子选择`
 - Affected UI IDs: `UI-001、UI-009、UI-010；建议新增 UI-014-family-switcher`
 - Current behavior retained: 五个 Tab、现有孩子切换、家庭角色与关系、家庭成员/邀请流程
-- New interaction: 当前家庭选择、按家庭记忆当前孩子、切换竞态与失权恢复
+- New interaction: 当前家庭选择、按家庭记忆当前孩子、为当前家庭建立另一位孩子的学习档案、切换竞态与失权恢复
 - Required viewports: `320×568、390×844、430×932`
-- Required states: `单家庭、多家庭、切换中、家庭失权、家庭内无孩子/多孩子、不同家庭不同角色、长名称`
+- Required states: `单家庭、多家庭、切换中、家庭失权、家庭内无孩子/多孩子、新建档案表单/提交中/失败/成功、不同家庭不同角色、长名称`
 - Figma node URL / Design Revision / approval snapshot: `PENDING`
 - Frontend engineering constraints: 实现前使用最新 approved FEC；家庭切换时不得短暂显示上一家庭数据
 - Figma waiver: `none；现有 waiver 不自动覆盖新交互`
@@ -41,6 +41,7 @@ WeChatActor 1 ── N FamilyMembership N ── 1 Family 1 ── N Child
 - 角色枚举、权限规则和关系标签保持不变。membership 按家庭独立，所以同一用户可以自然地在家庭 A、B 拥有不同的现有角色，但这不是新角色体系。
 - 唯一核心新增关系是：一个微信 actor 可以同时拥有多个家庭 membership，并显式选择当前家庭。
 - 当前家庭确定后，继续使用现有孩子选择；服务端验证该孩子属于当前家庭。
+- 当前后端已经存在 `POST /children` 且模型允许同家庭第二个孩子；实际缺口是没有用户可达的新增档案入口，同时接口缺少家庭配置级权限、幂等和审计合同。
 
 ### Feasibility and size
 
@@ -66,6 +67,8 @@ WeChatActor 1 ── N FamilyMembership N ── 1 Family 1 ── N Child
 | `F-005` | 当前 actor binding 和 active projection 限制 actor 只能有一个 active family | persistence/context/family service |
 | `F-006` | 当前前端已有家庭内孩子切换，但没有多家庭选择和按家庭保存孩子选择 | `apps/miniprogram/app.js` 与五 Tab pages |
 | `F-007` | 多数表包含 family_id/child_id，但数据库缺少覆盖全链路的复合 FK | schema inventory |
+| `F-008` | `POST /children` 已能在当前 family 下创建 Child，但小程序没有调用入口 | `children/router.py`、`children/service.py`、Mini Program pages |
+| `F-009` | 当前非 GET 请求只做通用 editor/manager 检查；创建 Child 未单独限制 manager，也未要求 idempotency key | `platform/context.py`、`children/router.py` |
 
 ### Decisions proposed
 
@@ -80,6 +83,8 @@ WeChatActor 1 ── N FamilyMembership N ── 1 Family 1 ── N Child
 | `D-007` | role 从当前 family membership 获取，不缓存为 actor 全局角色 | 防止家庭 A 权限串到 B |
 | `D-008` | 后台任务、文件、幂等请求从持久化归属恢复 family/child scope | 不依赖最近一次 UI 选择 |
 | `D-009` | 用复合 FK/unique 逐步加固 family-child-parent 一致性 | 满足严格隔离，防止漏写过滤造成串档 |
+| `D-010` | “建立孩子学习档案”作为家庭配置操作，仅 active manager 可执行 | 保持现有角色模型，并与邀请/成员等家庭管理操作一致 |
+| `D-011` | 创建 Child 使用服务端幂等键并写家庭审计事件；成功后客户端切换到新档案 | 避免重复点击/重试创建重复档案，并让结果可追溯 |
 
 ### Open questions
 
@@ -89,6 +94,7 @@ WeChatActor 1 ── N FamilyMembership N ── 1 Family 1 ── N Child
 | `Q-002` | 多家庭列表展示范围 | 家庭名、本人角色/关系、孩子简要列表；不预加载学习内容 | yes |
 | `Q-003` | 是否允许孩子跨家庭迁移 | 本 feature 不支持；另开高风险迁移 Spec | no |
 | `Q-004` | “完全隔离”是否要求数据库约束而非仅应用层 | 推荐 yes，作为第二 implementation slice | yes |
+| `Q-005` | 建立孩子学习档案是否只允许 manager | 推荐 yes；editor 继续记录内容但不改变家庭中的孩子集合 | yes |
 
 No blocking question may remain when status becomes `APPROVED`.
 
@@ -101,6 +107,7 @@ No blocking question may remain when status becomes `APPROVED`.
 - `/me` 返回可访问家庭及每个家庭的孩子摘要。
 - 显式选择 current family；家庭内继续显式选择 current child。
 - 创建、申请、邀请、审批和移除从“全局唯一家庭”改为“目标家庭内去重”。
+- 在当前家庭的管理页为另一位孩子建立学习档案，并在成功后切换到该档案。
 - 业务 API、文件和异步任务验证 current family；孩子资源验证 child 属于 family。
 - family/child/parent 复合约束、迁移审计和跨租户测试。
 
@@ -120,6 +127,7 @@ No blocking question may remain when status becomes `APPROVED`.
 - 同一家庭的角色对该家庭全部孩子一致生效。
 - 不同家庭之间的科目、记录、文件、配置、统计、job 和幂等空间完全隔离。
 - 客户端 family_id/child_id 永远不是授权证据。
+- 创建孩子档案必须属于当前 verified family、由 manager 发起、幂等提交；失败不留下半成品或改变当前选择。
 
 ## 3. Flows, state and call graph
 
@@ -193,6 +201,28 @@ stateDiagram-v2
 
 同一 actor 可同时在 A 为 active、在 B 为 pending、在 C 为 removed。
 
+### Establish another child profile
+
+```mermaid
+sequenceDiagram
+  participant M as Family manager
+  participant MP as Mini Program
+  participant API as Children API
+  participant DB as Database
+  M->>MP: 为另一位孩子建立学习档案
+  MP->>API: POST /children + selected family + Idempotency-Key
+  API->>DB: revalidate active manager in current family
+  API->>DB: create Child + audit event atomically
+  DB-->>API: ChildView
+  API-->>MP: created child
+  MP->>MP: update family child list and select new child
+  MP-->>M: 进入新档案的学习设置
+```
+
+- 重复提交同一 idempotency key 返回同一个 Child，不创建重复档案。
+- 取消表单零写入；失败保持原 current child，不出现空白或半切换状态。
+- 同名孩子不作为数据库冲突；列表需要用年级等辅助信息帮助家长区分。
+
 ## 4. Domain and data design
 
 ### Target entity constraints
@@ -265,6 +295,7 @@ media/job/nested rows:
 | create family | actor already in another family is allowed |
 | apply/join | duplicate/conflict check only for target family |
 | invitation/approval/removal | role semantics unchanged and evaluated inside selected family |
+| `POST /children` | 保留现有路径；增加 verified current family、manager-only、`Idempotency-Key` 和 audit contract |
 | idempotency | namespace/fingerprint includes family and relevant child/resource identity |
 
 | Case | Expected | Forbidden |
@@ -275,6 +306,8 @@ media/job/nested rows:
 | forged family | safe denial | reveal family metadata |
 | Child A under Family B | safe denial and DB rejection for writes | cross-family record/file |
 | async job A/A2 | always persisted A/A2 scope | current UI scope |
+| manager creates A3 | atomically creates A3 under current Family A and selects it | creates a new family or duplicates after retry |
+| editor/viewer submits child create | 403；现有内容访问权限不变 | modify family child collection |
 
 ## 6. Isolation and privacy
 
@@ -354,6 +387,29 @@ flowchart TB
 - 家庭角色显示在家庭行，避免误解成按孩子角色。
 - 单家庭用户尽量保持现有交互，不强制多一步选择。
 
+### Establish a child learning profile
+
+入口放在“家庭与成员”页的“孩子学习档案”分区，而不是藏在某个已选孩子的学科设置中：
+
+```text
+孩子学习档案                         2 份
+
+小雨        三年级                         ›
+小乐        一年级                         ›
+
+[＋ 为另一位孩子建立学习档案]       manager only
+```
+
+交互合同：
+
+- manager 点击入口后打开原生 bottom sheet 或独立表单页；字段为“孩子称呼”（必填，1–40）、“年级”（可选，最长 20）。
+- `daily_budget_minutes` 首次使用现有默认值 15，不为了此入口重新引入已移除的复习时长设置 UI。
+- 主按钮文案为“建立学习档案”，避免 BUG-002 已禁止的“添加孩子/保存孩子”对象化文案。
+- 提交中禁用关闭与重复点击；重试复用同一 idempotency key。
+- 成功后刷新当前家庭 children，设置新 child 为 current child，关闭表单并进入学习设置；不自动创建科目、学习记录或 Review。
+- editor/viewer 可看到并切换家庭内孩子，但不显示创建入口；直接调用接口返回 403。
+- 家庭内没有孩子时，manager 看到同一主操作；非 manager 看到“请联系家庭管理员建立学习档案”。
+
 ## 9. Expected change surface
 
 ### Must change for multi-family
@@ -363,8 +419,9 @@ flowchart TB
 | `persistence/models.py` + Alembic | actor-family active uniqueness；弃用单 family projection |
 | `families/domain.py`, `repository.py`, `service.py`, `schemas.py`, `router.py` | create/join per-family；多 membership bootstrap |
 | `platform/context.py` | trusted actor + selected family -> FamilyContext |
+| `children/router.py`, `service.py` and audit/idempotency boundary | create Child manager-only、幂等、事务审计；保留现有 schema/path |
 | API client / `apps/miniprogram/app.js` | selected family；按家庭保存 child；隔离 request/cache |
-| 全局头部/设置/家庭成员 UI | family switcher；复用 child switcher |
+| 全局头部/设置/家庭成员 UI | family switcher；复用 child switcher；家庭页新增孩子档案分区和建立表单 |
 | tests | 多家庭、现有角色、失权、切换竞态、旧客户端兼容 |
 
 ### Additional for DB-enforced isolation
@@ -384,6 +441,7 @@ flowchart TB
 - AI proposal、家长确认、确定性 Review 规则。
 - 五 Tab 和家庭内孩子切换能力。
 - 不需要一个孩子一个家庭的数据拆分迁移。
+- `ChildCreate` 的核心字段和现有 `POST /children` URL 无需重做；新增的是授权、幂等、审计与前端入口。
 
 准确文件数需在 implementation inventory 后锁定。第一层集中于身份/家庭上下文、bootstrap、全局 app state 和测试；第二层横跨 child-owned 表及迁移/contract tests，是主要工作量来源。
 
@@ -396,6 +454,7 @@ flowchart TB
 - `AC-003`：跨 family/child/resource 的读、写、文件、job 组合全部安全失败且不泄露存在性。
 - `AC-004`：切换 A→B 时 A 的迟到响应不渲染；B 被移除后下一请求立即失败并只清 B cache。
 - `AC-005`：SQLite/MySQL 拒绝 Family A + Child B/foreign parent 写入，有效 A/A1/A2 均通过。
+- `AC-006`：Family A 的 manager 可幂等建立 A3，成功后选择 A3；editor/viewer 被拒绝，取消/失败零写入且保留原选择。
 
 | Test point | Level | Evidence |
 |---|---|---|
@@ -409,6 +468,7 @@ flowchart TB
 | `TP-008` | migration | sanitized current data + isolated MySQL；no family splitting |
 | `TP-009` | real cloud | multiple accounts/families, role permutations/removal |
 | `TP-010` | repo gates | pytest/ruff/format/mypy/npm/architecture/miniapp evidence |
+| `TP-011` | API/frontend | child profile manager/editor/viewer matrix；double tap/retry；cancel/failure/success state |
 
 ## 11. Rollout, rollback and estimate
 
@@ -427,11 +487,12 @@ Before contract migration, rollback disables multi-family selection but preserve
 | `S1` | characterize current multi-child/roles | small |
 | `S2` | membership schema/service/bootstrap/context | medium |
 | `S3` | mini program family selector + per-family child state | medium |
+| `S3a` | family page child-profile list/form + manager-only idempotent API hardening | small-to-medium |
 | `S4` | cross-family API/file/job test matrix | medium |
 | `S5` | composite DB isolation across child-owned domains | medium-to-large |
 | `S6` | migration rehearsal, real cloud, current-state docs | medium |
 
-Without S5, multi-family can be protected at the application boundary but不能宣称最强的数据库强制“完全隔离”。With S5, total change is **中到较大**，但属于身份上下文扩展与隔离加固，不是领域模型重写。Revision 01 的家庭拆分、角色重做和孩子迁移工作全部取消。
+新增“为同一家庭建立另一位孩子档案”本身是 **小到中等增量**：后端创建能力已经存在，主要补 UI、manager 授权、幂等、审计和测试。Without S5, multi-family can be protected at the application boundary but不能宣称最强的数据库强制“完全隔离”。With S5, total change is **中到较大**，但属于身份上下文扩展与隔离加固，不是领域模型重写。Revision 01 的家庭拆分、角色重做和孩子迁移工作全部取消。
 
 ## 12. Completion gate and record
 
@@ -439,6 +500,7 @@ Without S5, multi-family can be protected at the application boundary but不能�
 - [ ] Frontend DREV、Figma node 与 approval snapshot 获批。
 - [ ] 现有 multi-child/role regression 通过。
 - [ ] Multi-family membership/context/switch acceptance 通过。
+- [ ] Manager 建立第二个孩子档案的表单、幂等、权限和失败恢复验收通过。
 - [ ] API/file/job cross-tenant matrix 通过。
 - [ ] 若完全隔离含 DB enforcement，SQLite/MySQL composite constraints 通过。
 - [ ] Real-account test、rollback rehearsal 和 current-state 文档合并完成。
@@ -446,4 +508,4 @@ Without S5, multi-family can be protected at the application boundary but不能�
 - Implementation: `NOT STARTED`，等待本 revision 明确批准。
 - Production files changed: `none`。
 - Full tests: `NOT RUN` for this documentation-only revision。
-- Residual blockers: Q-001/Q-002/Q-004、exact DDL、兼容期限、ADR 和 Figma approval。
+- Residual blockers: Q-001/Q-002/Q-004/Q-005、exact DDL、兼容期限、ADR 和 Figma approval。

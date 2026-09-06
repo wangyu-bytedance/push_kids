@@ -114,7 +114,7 @@ def schedule_for_day(
     family: Annotated[str, Depends(family_id)],
     db: Annotated[Session, Depends(get_db)],
 ):
-    items = ActivitiesService.events_for_day(db, family, child_id, day)
+    items = ActivitiesService.events_for_day(db, family, child_id, day, include_travel=True)
     return {"day": day.isoformat(), "items": items}
 
 

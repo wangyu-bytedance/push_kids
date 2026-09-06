@@ -1,4 +1,4 @@
-from sqlalchemy import func, select
+from sqlalchemy import delete, func, select
 from sqlalchemy.orm import Session
 
 from push_kids.children.schemas import ChildCreate, ChildUpdate, SubjectCreate, SubjectUpdate
@@ -20,9 +20,22 @@ def is_custom_subject(name: str, kind: str) -> bool:
 
 class ChildrenService:
     @staticmethod
+    def purge_data(db: Session, family_id: str, child_id: str | None) -> None:
+        subject_scope = [Subject.family_id == family_id]
+        child_scope = [Child.family_id == family_id]
+        if child_id is not None:
+            subject_scope.append(Subject.child_id == child_id)
+            child_scope.append(Child.id == child_id)
+        db.execute(delete(Subject).where(*subject_scope))
+        db.execute(delete(Child).where(*child_scope))
+
+    @staticmethod
     def list_children(db: Session, family_id: str, include_archived: bool = False) -> list[Child]:
         """Profiles in creation order. Archived profiles stay hidden unless asked for."""
-        statement = select(Child).where(Child.family_id == family_id)
+        statement = select(Child).where(
+            Child.family_id == family_id,
+            Child.deleting.is_(False),
+        )
         if not include_archived:
             statement = statement.where(Child.active.is_(True))
         return list(db.scalars(statement.order_by(Child.created_at)))
@@ -36,9 +49,13 @@ class ChildrenService:
         return child
 
     @classmethod
-    def require_active_child(cls, db: Session, family_id: str, child_id: str) -> Child:
+    def require_active_child(cls, db: Session, family_id: str, child_id: str | None) -> Child:
         """Resolve a profile that may receive a new record. Archiving must stop new writes."""
+        if not child_id:
+            raise NotFoundError("没有找到这个孩子")
         child = cls.get_child(db, family_id, child_id)
+        if child.deleting:
+            raise ConflictError("这个孩子的资料正在清理，暂时不能修改")
         if not child.active:
             raise ConflictError("这个学习档案已归档，恢复后才能继续记录")
         return child
@@ -122,7 +139,7 @@ class ChildrenService:
 
     @classmethod
     def update_child(cls, db: Session, family_id: str, child_id: str, data: ChildUpdate) -> Child:
-        child = cls.get_child(db, family_id, child_id)
+        child = cls.require_active_child(db, family_id, child_id)
         values = data.model_dump(exclude_unset=True)
         if "name" in values and values["name"] is not None:
             values["name"] = cls._require_free_name(
@@ -168,6 +185,8 @@ class ChildrenService:
     ) -> Child:
         """Archiving is reversible and never deletes a record; repeating it is a no-op."""
         child = cls.get_child(db, family_id, child_id)
+        if child.deleting:
+            raise ConflictError("这个孩子的资料正在清理")
         if child.active:
             child.active = False
             cls._audit(db, family_id, actor_binding_id, "child.archived", child_id)
@@ -183,6 +202,8 @@ class ChildrenService:
         actor_binding_id: str | None = None,
     ) -> Child:
         child = cls.get_child(db, family_id, child_id)
+        if child.deleting:
+            raise ConflictError("这个孩子的资料正在清理")
         if child.active:
             return child
         cls._require_capacity(db, family_id)
@@ -224,15 +245,16 @@ class ChildrenService:
             )
         )
 
-    @staticmethod
+    @classmethod
     def update_subject(
-        db: Session, family_id: str, subject_id: str, data: SubjectUpdate
+        cls, db: Session, family_id: str, subject_id: str, data: SubjectUpdate
     ) -> Subject:
         subject = db.scalar(
             select(Subject).where(Subject.id == subject_id, Subject.family_id == family_id)
         )
         if subject is None:
             raise NotFoundError("没有找到这个科目")
+        cls.require_active_child(db, family_id, subject.child_id)
         subject.active = data.active
         db.commit()
         return subject

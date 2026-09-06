@@ -24,6 +24,19 @@ def test_child_profile_lifecycle_is_part_of_the_contract(app) -> None:
     assert "child" not in family_create.get("required", [])
 
 
+def test_durable_data_deletion_is_part_of_the_contract(app) -> None:
+    document = app.openapi()
+    paths = document["paths"]
+    assert "/api/v1/children/{child_id}/deletion-requests" in paths
+    assert "/api/v1/families/current/deletion-requests" in paths
+    assert "/api/v1/deletion-requests/{request_id}" in paths
+    assert "/api/v1/deletion-requests/{request_id}/retry" in paths
+    status = document["components"]["schemas"]["DeletionRequestView"]
+    assert {"id", "target_type", "state", "retryable"}.issubset(status["properties"])
+    assert "target_id" not in status["properties"]
+    assert "confirmation_name" not in status["properties"]
+
+
 def test_family_header_is_required(client) -> None:
     response = client.get("/api/v1/children")
     assert response.status_code == 422
