@@ -3,9 +3,9 @@
 - Status: `CURRENT_LOCAL / 390_NATIVE_CAPTURED / MATRIX_PENDING`
 - Related Feature: `FEAT-002`
 - Related Spec: `SPEC-20260831-10`
-- Baseline: `FDB-20260830-01`
-- Engineering contract: `FEC-20260830-01`
-- Design revision: `DREV-20260905-UX-03`
+- Baseline: `FDB-20260906-02`
+- Engineering contract: `FEC-20260906-04`
+- Design revision: `DREV-20260906-PKDS-01`（屏 A1–A4、G5；取代 `DREV-20260905-UX-03` 的视觉部分）
 - Last reviewed artifact date: 2026-08-31
 - Interactive artifact: `docs/design/frontend/prototypes/DREV-20260831-08/index.html`
 - Snapshot manifest: `docs/design/frontend/snapshots/UI-010/DREV-20260831-08/APPROVAL.md`
@@ -58,3 +58,15 @@ manager → 邀请家人 ──────────────────�
 当前账号线上可回滚验证完成创建201、最小预览200、撤销204和撤销后预览410，证据未保存token；
 线上旧后端尚无有效邀请GET（405），本地端点必须和前端一起发布。多实例共享限流、真实微信双账号、
 320/430和 iOS/Android 仍是公开发布门禁。
+
+## Change references
+
+- 2026-09-06 — `SPEC-20260906-PKDS-01 / DREV-20260906-PKDS-01`（屏 A1–A4、G5）：首次进入、建档、
+  口令加入、等待确认和加入申请审批按 PKDS-1.0 重做。A1 提供两条并列路径卡；A2 表单有吸底 CTA
+  与缺项提示；A3 展示口令错误态与隐私说明；A4 是明确的等待态，提供申请码复制与"查看最新结果"
+  以及撤回二次确认，避免用户卡死。G5 从近乎空白的 WXML 重写为完整审批界面：申请卡展示申请码
+  （可复制）、希望称谓与协作权限选择，同意前用 Dialog 复述"加入后可以看到什么"，处理中整张卡
+  禁用，失败保留卡片并就地可重试，非管理员诚实降级。
+  已知限制：`GET /families/current/requests` 只返回 pending，因此"已处理"分组用就地结果态
+  2 秒后刷新替代；申请卡默认预选"可共同记录"，是否改为最小权限 viewer 待产品确认
+  （Spec 的 `Q-002`）。320×568 / 430×932、真实微信双账号与真机仍为 `NOT_RUN`。

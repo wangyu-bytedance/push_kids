@@ -1,8 +1,10 @@
 const api = require("../../utils/api");
 
+/* 展示层只做「可核对的原始材料」：不判断内容、不生成结论，缩略图按后端 sort_order 顺序渲染。 */
 Component({
+  options: { addGlobalClass: true },
   properties: { childId: String, submissionId: String, submissionState: String, defaultOpen: Boolean },
-  data: { open: false, loading: false, error: "", text: "", media: [], previewBusy: false },
+  data: { open: false, loading: false, error: "", text: "", media: [], previewBusy: false, countLabel: "" },
   lifetimes: { detached() { this.clear(); } },
   pageLifetimes: {
     hide() { this.visible = false; this.generation = (this.generation || 0) + 1; },
@@ -21,7 +23,7 @@ Component({
       this.generation = (this.generation || 0) + 1;
       (this.paths || []).forEach(api.removePreview);
       this.paths = [];
-      this.setData({ media: [], text: "", error: "", loading: false, previewBusy: false });
+      this.setData({ media: [], text: "", error: "", loading: false, previewBusy: false, countLabel: "" });
     },
     toggle() {
       this.setData({ open: !this.data.open });
@@ -34,7 +36,9 @@ Component({
       try {
         const result = await api.request(`/children/${this.data.childId}/history/${this.data.submissionId}`);
         if (generation !== this.generation || this.visible === false) return;
-        this.setData({ text: result.input_text || "", media: result.media, loading: false });
+        const media = result.media || [];
+        this.setData({ text: result.input_text || "", media, loading: false,
+          countLabel: media.length ? `${media.length} 张照片` : (result.input_text ? "仅文字" : "") });
         await this.loadThumbnails(generation);
       } catch (error) {
         if (generation === this.generation) {

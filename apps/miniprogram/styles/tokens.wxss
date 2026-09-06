@@ -1,0 +1,105 @@
+/* 知芽 Push Kids · PKDS-1.0 design tokens
+   单位约定：颜色语义 token 无单位；几何量 rpx（= px@375 × 2）；字号 px；发丝线固定 1rpx。 */
+
+page {
+  --pk-canvas: #F4F3EC;
+  --pk-canvas-deep: #EDEBE1;
+  --pk-surface: #FFFFFF;
+  --pk-surface-warm: #FCFBF6;
+  --pk-surface-sunken: #EFEEE6;
+
+  --pk-primary: #2E6A56;
+  --pk-primary-strong: #21503F;
+  --pk-primary-pressed: #1A4133;
+  --pk-primary-tint: #E6F0EA;
+  --pk-primary-tint-2: #D3E4DB;
+  --pk-primary-hairline: #BCD5CA;
+
+  --pk-ink: #1D2B24;
+  --pk-ink-2: #46544D;
+  --pk-ink-3: #79857E;
+  --pk-ink-4: #A6AFA9;
+
+  --pk-line: #E3E1D6;
+  --pk-line-soft: #EEECE3;
+  --pk-line-strong: #D3D0C3;
+
+  --pk-attention: #9A6318;
+  --pk-attention-bg: #FBF0DA;
+  --pk-attention-line: #EDD9AF;
+  --pk-danger: #A6423B;
+  --pk-danger-bg: #F9E9E6;
+  --pk-danger-line: #EBCFCB;
+  --pk-success: #2C7A5A;
+  --pk-success-bg: #E5F1E9;
+  --pk-info: #3D5A6C;
+  --pk-info-bg: #E9EFF3;
+
+  /* 科目色，仅允许出现在 <=68rpx 的小面积上 */
+  --pk-sub-chinese: #B4693D;
+  --pk-sub-chinese-bg: #F8EDE3;
+  --pk-sub-math: #3A6491;
+  --pk-sub-math-bg: #E8EFF7;
+  --pk-sub-english: #6B5A9C;
+  --pk-sub-english-bg: #EDEAF7;
+  --pk-sub-activity: #2C7B69;
+  --pk-sub-activity-bg: #E3F1EC;
+  --pk-sub-other: #6E7A72;
+  --pk-sub-other-bg: #EDEFEB;
+
+  /* 圆角：每个值只有一个职责，禁止中间值 */
+  --pk-r-xs: 8rpx;
+  --pk-r-sm: 12rpx;
+  --pk-r-md: 16rpx;
+  --pk-r-lg: 24rpx;
+  --pk-r-xl: 32rpx;
+  --pk-r-2xl: 40rpx;
+  --pk-r-pill: 999rpx;
+
+  /* 间距：4px 网格 */
+  --pk-s1: 8rpx;
+  --pk-s2: 16rpx;
+  --pk-s3: 24rpx;
+  --pk-s4: 32rpx;
+  --pk-s5: 40rpx;
+  --pk-s6: 48rpx;
+  --pk-s7: 64rpx;
+  --pk-s8: 80rpx;
+  --pk-gutter: 32rpx;
+
+  --pk-border: 1rpx solid var(--pk-line);
+  --pk-border-soft: 1rpx solid var(--pk-line-soft);
+  --pk-border-primary: 1rpx solid var(--pk-primary-hairline);
+
+  --pk-e0: none;
+  --pk-e1: 0 2rpx 4rpx rgba(29, 43, 36, .04);
+  --pk-e2: 0 4rpx 16rpx rgba(29, 43, 36, .06);
+  --pk-e3: 0 16rpx 48rpx rgba(29, 43, 36, .10);
+  --pk-e-sheet: 0 -12rpx 56rpx rgba(29, 43, 36, .13);
+  --pk-e-fab: 0 12rpx 36rpx rgba(33, 80, 63, .26);
+
+  --pk-touch-min: 88rpx;
+  --pk-cta-h: 96rpx;
+  --pk-btn-md: 88rpx;
+  --pk-btn-sm: 72rpx;
+  --pk-row-min: 112rpx;
+
+  --pk-dur-fast: 150ms;
+  --pk-dur-base: 200ms;
+  --pk-dur-slow: 240ms;
+  --pk-ease: cubic-bezier(.25, .46, .45, .94);
+  --pk-ease-sheet: cubic-bezier(.32, .72, 0, 1);
+
+  /* 兼容层：旧变量名指向 PKDS 值，存量页面无需改动即可继承新色板 */
+  --canvas: var(--pk-canvas);
+  --surface: var(--pk-surface);
+  --surface-soft: var(--pk-primary-tint);
+  --primary: var(--pk-primary);
+  --primary-dark: var(--pk-primary-strong);
+  --ink: var(--pk-ink);
+  --muted: var(--pk-ink-3);
+  --line: var(--pk-line);
+  --warm: var(--pk-attention-bg);
+  --warning: var(--pk-attention);
+  --danger: var(--pk-danger);
+}

@@ -1,31 +1,186 @@
+<!-- PKDS-1.0 · 历史记录列表（D4 / D5）与筛选半屏（D6）。所有展示字段都在 history.js 里算好。 -->
 <template name="history">
-  <view class="history-search"><input class="input" value="{{searchText}}" bindinput="setHistorySearch" bindconfirm="searchHistory" confirm-type="search" maxlength="100" placeholder="搜索学习内容或上传文字" aria-label="搜索学习内容或上传文字" /><button bindtap="searchHistory">搜索</button><button bindtap="openHistoryFilters">筛选</button></view>
-  <view class="history-status"><button class="{{historyView === 'confirmed' ? 'selected' : ''}}" data-view="confirmed" bindtap="changeHistoryView">已确认</button><button class="{{historyView === 'pending' ? 'selected' : ''}}" data-view="pending" bindtap="changeHistoryView">待处理 {{pendingCount}}</button><button class="{{historyView === 'all' ? 'selected' : ''}}" data-view="all" bindtap="changeHistoryView">全部</button></view>
-  <view class="history-caption"><text>按{{historyView === 'confirmed' ? '学习' : '提交'}}时间 · 第 {{historyPage}} 页</text><button bindtap="reloadHistory" disabled="{{historyLoading}}">刷新</button></view>
-  <view wx:if="{{hasFilters}}" class="notice"><text>已筛选{{historyFilters.q ? ' · ' + historyFilters.q : ''}}{{historyFilters.from ? ' · ' + historyFilters.from : ''}}{{historyFilters.to ? ' 至 ' + historyFilters.to : ''}}</text><button class="history-clear" bindtap="clearHistoryFilters">清除筛选</button></view>
-  <view wx:if="{{historyError}}" class="notice error"><text>{{historyError}}</text><button bindtap="reloadHistory">重试</button></view>
-  <view wx:if="{{historyLoading}}" class="muted history-caption">正在读取记录…</view>
-  <block wx:for="{{historyItems}}" wx:key="submission_id">
-    <text wx:if="{{item.showDay}}" class="history-day">{{item.day}}</text>
-    <button class="history-row" data-id="{{item.submission_id}}" bindtap="openHistoryItem">
-      <view class="row between"><text class="history-title">{{item.label}}</text><text class="muted">›</text></view>
-      <text class="history-summary">{{item.summaryPreview}}</text>
-      <text class="muted history-meta">{{item.stateLabel}} · {{item.source === 'photo' ? '照片 ' + item.media_count + ' 张' : '文字记录'}}{{item.record_id ? ' · ' + item.knowledge_count + ' 个知识点' : ''}}</text>
-      <text wx:if="{{historyView !== 'confirmed'}}" class="muted history-meta">学习于 {{item.learned}}</text>
-      <text wx:if="{{item.state === 'failed'}}" class="muted history-meta">AI 暂时不可用，可重试或人工录入</text>
-    </button>
+  <view class="h-search mt3">
+    <view class="s-box">
+      <view class="ico ico-search-mute sm"></view>
+      <input class="s-input" value="{{searchText}}" bindinput="setHistorySearch" bindconfirm="searchHistory"
+        confirm-type="search" maxlength="100" placeholder="搜索学习内容或上传文字" placeholder-class="pk-ph"
+        aria-label="搜索学习内容或上传文字" />
+    </view>
+    <view class="btn sm neutral s-filter" aria-role="button" aria-label="筛选记录" bindtap="openHistoryFilters">
+      <view class="ico ico-filter xs"></view><text>筛选</text>
+      <view class="dot" wx:if="{{hasFilters}}"></view>
+    </view>
+  </view>
+
+  <view class="chips mt3">
+    <view class="{{historyView === 'confirmed' ? 'on' : ''}}" aria-role="button" aria-label="只看已确认" data-view="confirmed" bindtap="changeHistoryView">已确认</view>
+    <view class="{{historyView === 'pending' ? 'on' : ''}}" aria-role="button" aria-label="只看待处理" data-view="pending" bindtap="changeHistoryView">
+      <text>待处理</text><text class="cnt tnum" wx:if="{{pendingCount}}">{{pendingCount}}</text>
+    </view>
+    <view class="{{historyView === 'all' ? 'on' : ''}}" aria-role="button" aria-label="看全部记录" data-view="all" bindtap="changeHistoryView">全部</view>
+  </view>
+
+  <view class="flex between h-cap">
+    <text class="t-cap c-ink-3 tnum">按{{historyView === 'confirmed' ? '学习' : '提交'}}时间 · 第 {{historyPage}} 页{{pendingProcessing ? ' · 正在自动刷新' : ''}}</text>
+    <view class="link-btn" aria-role="button" aria-label="刷新列表" bindtap="reloadHistory">
+      <view class="ico ico-refresh-pri xs"></view><text>刷新</text>
+    </view>
+  </view>
+
+  <view class="pk-notice quiet" wx:if="{{hasFilters}}">
+    <view class="ico ico-filter sm"></view>
+    <text class="n-txt">已筛选{{historyFilters.q ? ' · ' + historyFilters.q : ''}}{{historyFilters.from ? ' · ' + historyFilters.from : ''}}{{historyFilters.to ? ' 至 ' + historyFilters.to : ''}}{{historyFilters.cancelled ? ' · 只看已取消' : ''}}</text>
+    <view class="link-btn" aria-role="button" aria-label="清除筛选" bindtap="clearHistoryFilters">清除</view>
+  </view>
+
+  <view class="pk-notice err mt2" wx:if="{{historyError}}">
+    <view class="ico ico-cloud-off-dan sm"></view>
+    <view class="n-txt">
+      <text class="n-t">{{historyError}}</text>
+      <text class="n-c">下面还是刚才读到的内容，可以重试。</text>
+    </view>
+    <view class="ico ico-refresh-dan sm" aria-role="button" aria-label="重试读取记录" bindtap="reloadHistory"></view>
+  </view>
+
+  <block wx:if="{{historyLoading && !historyItems.length}}">
+    <view class="sk h14 mt3"></view>
+    <view class="sk card-sk"></view>
+    <view class="sk card-sk"></view>
   </block>
-  <view wx:if="{{!historyLoading && !historyError && !historyItems.length}}" class="empty plain">{{hasFilters ? '没有符合筛选条件的记录' : (historyView === 'pending' ? '当前没有待处理记录' : '还没有学习记录')}}<button wx:if="{{hasFilters}}" bindtap="clearHistoryFilters">清除筛选</button></view>
-  <view class="history-pagination" wx:if="{{historyPage > 1 || historyNext}}"><button disabled="{{historyLoading || historyPage === 1}}" bindtap="historyPreviousPage">上一页</button><button disabled="{{historyLoading || !historyNext}}" bindtap="historyNextPage">加载更多</button></view>
-  <view wx:if="{{filterOpen}}" class="history-mask" bindtap="closeHistoryFilters"><view class="history-sheet" catchtap="stopPropagation">
-    <view class="row between"><text class="history-title">筛选记录</text><button bindtap="closeHistoryFilters">关闭</button></view>
-    <text class="label">{{historyView === 'confirmed' ? '学习日期' : '提交日期'}}</text>
-    <picker mode="date" value="{{filterDraft.from}}" data-field="from" bindchange="setHistoryFilter"><view class="picker">起日：{{filterDraft.from || '不限'}}</view></picker>
-    <picker mode="date" value="{{filterDraft.to}}" data-field="to" bindchange="setHistoryFilter"><view class="picker">止日：{{filterDraft.to || '不限'}}</view></picker>
-    <text class="label">学习科目</text><picker range="{{filterSubjects}}" range-key="name" value="{{filterSubjectIndex}}" bindchange="chooseHistorySubject"><view class="picker">{{filterSubjects[filterSubjectIndex].name || '正在读取科目'}}</view></picker>
-    <text class="label">上传来源</text><view class="history-status"><button class="{{!filterDraft.source ? 'selected' : ''}}" data-source="" bindtap="chooseHistorySource">全部</button><button class="{{filterDraft.source === 'photo' ? 'selected' : ''}}" data-source="photo" bindtap="chooseHistorySource">照片</button><button class="{{filterDraft.source === 'text' ? 'selected' : ''}}" data-source="text" bindtap="chooseHistorySource">文字</button></view>
-    <view wx:if="{{historyView === 'all'}}" class="row between"><text>只看已取消</text><switch checked="{{filterDraft.cancelled}}" data-field="cancelled" bindchange="setHistoryFilter" aria-label="只看已取消" /></view>
-    <view wx:if="{{filterError}}" class="notice error">{{filterError}}</view>
-    <button class="button" bindtap="applyHistoryFilters">应用筛选</button>
-  </view></view>
+
+  <block wx:for="{{historyItems}}" wx:key="submission_id">
+    <text wx:if="{{item.showDay}}" class="h-day tnum">{{item.dayText}}</text>
+
+    <view class="pk-card h-card {{item.state === 'pending_confirmation' ? 'att' : ''}}{{item.state === 'failed' ? 'dan' : ''}}"
+      aria-role="button" aria-label="查看这条记录详情" data-id="{{item.submission_id}}" bindtap="openHistoryItem">
+      <block wx:if="{{item.isPending}}">
+        <view class="flex between">
+          <view class="pill {{item.stateTone}}">
+            <view class="ico ico-sparkle-att xs" wx:if="{{item.state === 'pending_confirmation'}}"></view>
+            <view class="ico ico-refresh xs" wx:elif="{{item.working}}"></view>
+            <view class="ico ico-warn-dan xs" wx:else></view>
+            <text>{{item.stateLabel}}</text>
+          </view>
+          <view class="chev right"></view>
+        </view>
+        <text class="h-title mt2">{{item.label}} · {{item.state === 'pending_confirmation' ? '草稿已整理好' : item.sourceLabel}}</text>
+        <text class="h-meta tnum">{{item.sourceLabel}}{{item.knowledgeLabel ? ' · ' + item.knowledgeLabel : ''}} · {{item.learnedText}}</text>
+        <view class="mt2" wx:if="{{item.working}}">
+          <view class="prog-line"><view class="pf w45"></view></view>
+          <text class="h-note">不显示预计时间，整理完会出现在这里。</text>
+        </view>
+        <text class="h-note" wx:if="{{item.state === 'failed'}}">这次没整理出来，原图和文字都已保留，进去可以重试或改成人工录入。</text>
+        <view class="btn secondary sm h-cta" wx:if="{{item.state === 'pending_confirmation' && canWrite}}"
+          aria-role="button" aria-label="查看并确认这份草稿" data-id="{{item.submission_id}}" catchtap="openHistoryItem">查看并确认</view>
+      </block>
+
+      <block wx:else>
+        <view class="flex top">
+          <view class="sub-mark {{item.markClass}}">{{item.mark}}</view>
+          <view class="grow">
+            <text class="h-title">{{item.label}}</text>
+            <text class="h-sum">{{item.summaryPreview}}</text>
+          </view>
+          <view class="chev right"></view>
+        </view>
+        <view class="flex wrap h-pills">
+          <view class="pill neutral">
+            <view class="ico ico-image xs" wx:if="{{item.source === 'photo'}}"></view>
+            <view class="ico ico-note xs" wx:else></view>
+            <text>{{item.sourceLabel}}</text>
+          </view>
+          <view class="pill neutral tnum" wx:if="{{item.knowledgeLabel}}">{{item.knowledgeLabel}}</view>
+          <view class="pill {{item.stateTone}}">{{item.stateLabel}}</view>
+        </view>
+      </block>
+    </view>
+  </block>
+
+  <view class="pk-empty" wx:if="{{!historyLoading && !historyItems.length}}">
+    <view class="em"><view class="ico ico-list-pri lg"></view></view>
+    <text class="et">{{hasFilters ? '没有符合筛选条件的记录' : (historyView === 'pending' ? '现在没有待处理的记录' : '这里还没有学习记录')}}</text>
+    <text class="ec">{{hasFilters ? '换个时间范围或科目再看看。' : '拍一张作业照片，或直接写几句，就能开始记录。'}}</text>
+    <view class="ea" wx:if="{{hasFilters}}">
+      <view class="btn ghost auto" aria-role="button" aria-label="清除筛选" bindtap="clearHistoryFilters">清除筛选</view>
+    </view>
+  </view>
+
+  <view class="btn-row h-pager" wx:if="{{historyPage > 1 || historyNext}}">
+    <view class="btn neutral {{historyLoading || historyPage === 1 ? 'is-disabled' : ''}}" aria-role="button" aria-label="上一页" bindtap="historyPreviousPage">上一页</view>
+    <view class="btn neutral {{historyLoading || !historyNext ? 'is-disabled' : ''}}" aria-role="button" aria-label="加载更多" bindtap="historyNextPage">{{historyLoading ? '正在读取…' : '加载更多'}}</view>
+  </view>
+
+  <view class="safe-tail"></view>
+
+  <block wx:if="{{filterOpen}}">
+    <view class="pk-mask" bindtap="closeHistoryFilters"></view>
+    <view class="pk-sheet filter-sheet" catchtap="stopPropagation">
+      <view class="handle"></view>
+      <view class="sheet-head">
+        <view class="grow">
+          <text class="sheet-title">筛选记录</text>
+          <text class="sheet-sub">筛选条件只留在这台手机上，不会写入分享链接</text>
+        </view>
+        <view class="icon-btn" aria-role="button" aria-label="关闭筛选" bindtap="closeHistoryFilters">
+          <view class="ico ico-close sm"></view>
+        </view>
+      </view>
+
+      <view class="sheet-body">
+        <view class="pk-field">
+          <text class="lbl">{{historyView === 'confirmed' ? '学习日期' : '提交日期'}}</text>
+          <view class="date-row">
+            <picker mode="date" value="{{filterDraft.from}}" data-field="from" bindchange="setHistoryFilter">
+              <view class="pk-picker"><text class="{{filterDraft.from ? 'tnum' : 'pk-ph'}}">{{filterDraft.from || '不限'}}</text><view class="chev"></view></view>
+            </picker>
+            <text class="t-cap c-ink-3">至</text>
+            <picker mode="date" value="{{filterDraft.to}}" data-field="to" bindchange="setHistoryFilter">
+              <view class="pk-picker"><text class="{{filterDraft.to ? 'tnum' : 'pk-ph'}}">{{filterDraft.to || '不限'}}</text><view class="chev"></view></view>
+            </picker>
+          </view>
+        </view>
+
+        <view class="pk-field">
+          <text class="lbl">学习科目</text>
+          <picker range="{{filterSubjects}}" range-key="name" value="{{filterSubjectIndex}}" bindchange="chooseHistorySubject">
+            <view class="pk-picker">
+              <text class="{{filterSubjects.length ? '' : 'pk-ph'}}">{{filterSubjects[filterSubjectIndex].name || '正在读取科目'}}</text>
+              <view class="chev"></view>
+            </view>
+          </picker>
+        </view>
+
+        <view class="pk-field">
+          <text class="lbl">上传来源</text>
+          <view class="seg n3">
+            <view wx:for="{{sourceOptions}}" wx:key="value" class="{{filterDraft.source === item.value ? 'on' : ''}}"
+              aria-role="button" aria-label="按来源筛选：{{item.label}}" data-source="{{item.value}}" bindtap="chooseHistorySource">{{item.label}}</view>
+          </view>
+        </view>
+
+        <view class="pk-card tight mt3" wx:if="{{historyView === 'all'}}">
+          <view class="flex between">
+            <view class="grow">
+              <text class="t-body-m">只看已取消</text>
+              <text class="t-cap c-ink-3">仅在「全部」视图下可用</text>
+            </view>
+            <switch checked="{{filterDraft.cancelled}}" data-field="cancelled" bindchange="setHistoryFilter" color="#2E6A56" aria-label="只看已取消" />
+          </view>
+        </view>
+
+        <view class="pk-notice err mt3" wx:if="{{filterError}}">
+          <view class="ico ico-warn-dan sm"></view>
+          <text class="n-txt">{{filterError}}</text>
+        </view>
+      </view>
+
+      <view class="sheet-foot">
+        <view class="btn-row">
+          <view class="btn neutral" aria-role="button" aria-label="清除筛选条件" bindtap="resetHistoryFilters">清除</view>
+          <view class="btn" aria-role="button" aria-label="应用筛选" bindtap="applyHistoryFilters">应用筛选</view>
+        </view>
+      </view>
+    </view>
+  </block>
 </template>

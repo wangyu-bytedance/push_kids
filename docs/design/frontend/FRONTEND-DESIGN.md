@@ -6,19 +6,31 @@
 
 - Frontend scope: PRESENT
 - Baseline status: APPROVED
-- Baseline revision: FDB-20260830-01
+- Baseline revision: FDB-20260906-02
 - Owner: 产品负责人（用户）
-- Proposed by: Codex
+- Proposed by: Codex（FDB-20260830-01）、Aime（FDB-20260906-02）
 - Approved by: 产品负责人（用户）
-- Approved at: 2026-08-30
-- Approval evidence: 用户接受推荐方案并明确要求完整实现
-- Last verified: 2026-09-05（BUG-010本地实现；三视口原生证据待补齐）
+- Approved at: 2026-09-06
+- Approval evidence: 用户 2026-09-06 指令「最终需要的效果是 ui=你现在的设计，并功能是完整的」
+- Last verified: 2026-09-06（PKDS-1.0 本地实现，自动化检查通过；三视口原生证据仍为 NOT_RUN）
 - Applies to: 家长使用的微信小程序；未来手机 Web 应保持相同信息架构
-- Related current implementation Spec: `specs/completed/FEAT-001-PUSH-KIDS-FINAL-SPEC.md` revision `SPEC-20260831-08`
-- Frontend engineering constraints: approved `FEC-20260905-02`
+- Related current implementation Spec: `specs/active/SPEC-20260906-PKDS-01-DESIGN-SYSTEM-ROLLOUT.md` revision `SPEC-20260906-PKDS-01`
+- Superseded baseline revision: `FDB-20260830-01`（信息架构与产品立场沿用，视觉 token 与组件层被 PKDS-1.0 取代）
+- Frontend engineering constraints: approved `FEC-20260906-04`
 
-本 baseline 与 `UI-001` 的 `DREV-20260830-03` 及 BUG-010 的 `DREV-20260905-UX-03`
-共同构成当前本地实现依据；Figma Starter 限额 waiver 见架构文档和BUG-010 Spec。
+本 baseline 的可见合同由 `DREV-20260906-PKDS-01` 定义：设计系统规格见
+`prototypes/DREV-20260906-PKDS-01/FRONTEND-SPEC.md`，39 屏参考屏见同目录
+`screenshots/`。`UI-001` 的 `DREV-20260830-03`、BUG-010 的 `DREV-20260905-UX-03`
+与 `DREV-20260905-UX-04` 降级为设计历史；Figma Starter 限额 waiver 见架构文档和
+BUG-010 Spec，仍在公开发布前到期。
+
+### PKDS-1.0 视觉基线要点
+
+- 底色 `#F4F3EC` 暖纸色，主色 `#2E6A56` 墨绿，卡片用描边分层而不叠阴影。
+- 圆角只允许 8 / 12 / 16 / 24 / 32 / 40 / 999rpx 七个值，每个值有唯一职责，禁止中间值。
+- 页面左右安全边距固定 32rpx；主 CTA 高 96rpx；触控目标不小于 88rpx。
+- 图标统一为 24×24 viewBox、stroke-width 2 的线性图标 class，禁止 emoji 或文字符号充当图标。
+- 单位约定：颜色语义 token 无单位，几何量用 rpx，字号用 px，发丝线固定 1rpx。
 
 ## Figma sources and ownership
 
@@ -28,8 +40,11 @@ node-specific Figma URL、Design Revision 和 approval snapshot 后才能实现�
 
 ## Style consistency baseline
 
-全局风格以低饱和青绿、温和中性色、系统中文字体、4px 间距网格、清晰状态文字和
-非游戏化反馈为唯一基线。详细 token、组件层级和禁止项见第 2、3、6 节。
+全局风格以暖纸底色、墨绿主色、系统中文字体、4px 间距网格、清晰状态文字和
+非游戏化反馈为唯一基线。token 的唯一来源是 `apps/miniprogram/styles/tokens.wxss`，
+组件类的唯一来源是 `styles/atoms.wxss`；页面 wxss 只允许写本页特有几何，不得重复定义
+token 或近似的第二套刻度。详细 token、组件层级和禁止项见第 2、3、6 节与
+`prototypes/DREV-20260906-PKDS-01/FRONTEND-SPEC.md`。
 
 ## User interaction conventions
 
@@ -86,7 +101,10 @@ MVP 支持手机竖屏 320×568、390×844、430×932 三个逻辑视口，安�
 | Purpose | Figma source | Owner | Notes |
 |---|---|---|---|
 | Product UI | [Figma file](https://www.figma.com/design/FAyfmjNrA3btWztwyxI6Zj) | 产品负责人 | Starter 限额导致节点未完成，使用 scoped waiver |
-| Design tokens/components | `apps/miniprogram/app.wxss` | 产品负责人 | 以实现 token 和 DevTools 截图作为 MVP 证据 |
+| Design tokens | `apps/miniprogram/styles/tokens.wxss` | 产品负责人 | PKDS-1.0 语义值唯一来源；设计侧原件见 `prototypes/DREV-20260906-PKDS-01/tokens.reference.wxss` |
+| Design components | `apps/miniprogram/styles/atoms.wxss` | 产品负责人 | 组件类唯一来源；页面 wxss 只写本页几何 |
+| Design icons | `apps/miniprogram/styles/icons.wxss` | 产品负责人 | 由 `tools/gen_icon_styles.py` 生成，禁止手工编辑 |
+| Screen-level spec | `prototypes/DREV-20260906-PKDS-01/FRONTEND-SPEC.md` | 产品负责人 | 39 屏逐屏规格与参考屏，Figma 受限期间的可见合同 |
 | WeUI reference | 微信官方 WeUI / weui-wxss | 微信设计团队 | 参考平台行为，不直接决定业务视觉 |
 
 ### 参考来源

@@ -1,28 +1,79 @@
 const api = require("../../utils/api");
 const { localParts, toIso } = require("../../utils/date");
 
+const DURATION_MIN = 5;
+const DURATION_MAX = 180;
+
 Page({
-  data: { childId: "", subjects: [], subjectIndex: 0, subjectId: "", date: "", time: "", duration: 45, note: "", saving: false },
-  onLoad(options) { const now = localParts(); this.setData({ date: now.date, time: now.time, subjectId: options.subjectId || "" }); this.load(); },
+  data: {
+    loading: true, error: "", saveError: "", canWrite: true,
+    childId: "", childName: "", kicker: "课外活动",
+    subjects: [], subjectIndex: 0, subjectId: "", subjectName: "",
+    date: "", time: "", today: "", duration: 45, durationText: "45 分钟",
+    durationMin: DURATION_MIN, durationMax: DURATION_MAX,
+    note: "", noteCount: 0, saving: false
+  },
+  onLoad(options) {
+    const now = localParts();
+    this.setData({ date: now.date, time: now.time, today: now.date, subjectId: options.subjectId || "" });
+    this.load();
+  },
   async load() {
+    this.setData({ loading: true, error: "" });
     try {
       const children = await api.request("/children");
       const childId = getApp().globalData.selectedChildId || (children[0] && children[0].id);
       if (!childId) throw new Error("请先建立学习档案");
+      const child = children.find((item) => item.id === childId);
+      const member = getApp().globalData.currentMember;
       const all = await api.request(`/children/${childId}/subjects`);
-      const subjects = all.filter((item) => item.kind === "activity");
-      let subjectIndex = Math.max(0, subjects.findIndex((item) => item.id === this.data.subjectId));
-      this.setData({ childId, subjects, subjectIndex, subjectId: subjects.length ? subjects[subjectIndex].id : "" });
-    } catch (error) { wx.showToast({ title: error.message, icon: "none" }); }
+      const subjects = all.filter((item) => item.kind === "activity" && item.active !== false);
+      const subjectIndex = Math.max(0, subjects.findIndex((item) => item.id === this.data.subjectId));
+      this.setData({
+        loading: false, childId,
+        childName: child ? child.name : "",
+        kicker: child ? `课外活动 · ${child.name}` : "课外活动",
+        canWrite: !member || member.role !== "viewer",
+        subjects, subjectIndex,
+        subjectId: subjects.length ? subjects[subjectIndex].id : "",
+        subjectName: subjects.length ? subjects[subjectIndex].name : ""
+      });
+    } catch (error) {
+      this.setData({ loading: false, error: error.message });
+    }
   },
-  setField(event) { this.setData({ [event.currentTarget.dataset.field]: event.detail.value }); },
-  changeSubject(event) { const subjectIndex = Number(event.detail.value); this.setData({ subjectIndex, subjectId: this.data.subjects[subjectIndex].id }); },
+  setField(event) {
+    const field = event.currentTarget.dataset.field;
+    const value = event.detail.value;
+    const update = { [field]: value, saveError: "" };
+    if (field === "duration") update.durationText = `${Number(value) || 0} 分钟`;
+    if (field === "note") update.noteCount = String(value).length;
+    this.setData(update);
+  },
+  changeSubject(event) {
+    const subjectIndex = Number(event.detail.value);
+    const subject = this.data.subjects[subjectIndex];
+    this.setData({ subjectIndex, subjectId: subject.id, subjectName: subject.name, saveError: "" });
+  },
+  openSettings() { wx.switchTab({ url: "/pages/settings/index" }); },
   async save() {
-    if (!this.data.subjectId) return wx.showToast({ title: "请先在设置添加活动科目", icon: "none" });
-    this.setData({ saving: true });
+    if (!this.data.canWrite) return wx.showToast({ title: "你是只读成员，改动请找管理员", icon: "none" });
+    if (!this.data.subjectId) return this.setData({ saveError: "先在设置里添加一项课外活动。" });
+    if (this.data.saving) return;
+    this.setData({ saving: true, saveError: "" });
     try {
-      await api.request("/activity-records", { method: "POST", data: { child_id: this.data.childId, subject_id: this.data.subjectId, occurred_at: toIso(this.data.date, this.data.time), duration_minutes: Number(this.data.duration) || null, note: this.data.note || null } });
-      wx.showToast({ title: "已记录", icon: "success" }); setTimeout(() => wx.navigateBack(), 400);
-    } catch (error) { this.setData({ saving: false }); wx.showToast({ title: error.message, icon: "none" }); }
+      await api.request("/activity-records", { method: "POST", data: {
+        child_id: this.data.childId,
+        subject_id: this.data.subjectId,
+        occurred_at: toIso(this.data.date, this.data.time),
+        duration_minutes: Number(this.data.duration) || null,
+        note: this.data.note || null
+      } });
+      wx.showToast({ title: "已记录", icon: "success" });
+      setTimeout(() => wx.navigateBack(), 400);
+    } catch (error) {
+      /* 失败时表单原样保留，只在吸底按钮上方给出可重试的说明。 */
+      this.setData({ saving: false, saveError: `${error.message}，这次练习还没保存，可以再试一次。` });
+    }
   }
 });

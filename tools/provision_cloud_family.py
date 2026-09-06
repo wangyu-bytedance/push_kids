@@ -4,6 +4,7 @@ import argparse
 import os
 import sys
 
+from push_kids.children.service import is_custom_subject
 from push_kids.persistence.models import (
     Child,
     Family,
@@ -116,6 +117,7 @@ def main() -> int:
                             child_id=child.id,
                             name=name,
                             kind=kind,
+                            is_custom=is_custom_subject(name, kind),
                         )
                     )
                 else:

@@ -1,0 +1,197 @@
+[
+  {
+    "id": "A1-onboarding-choice",
+    "name": "首次进入 · 选择路径",
+    "file": "A1-onboarding-choice.png"
+  },
+  {
+    "id": "A2-onboarding-create",
+    "name": "创建家庭档案",
+    "file": "A2-onboarding-create.png"
+  },
+  {
+    "id": "A3-onboarding-join",
+    "name": "使用邀请口令加入",
+    "file": "A3-onboarding-join.png"
+  },
+  {
+    "id": "A4-onboarding-pending",
+    "name": "申请已发送 · 等待确认",
+    "file": "A4-onboarding-pending.png"
+  },
+  {
+    "id": "B1-today-main",
+    "name": "今日 · 主态（首屏）",
+    "file": "B1-today-main.png"
+  },
+  {
+    "id": "B2-today-scroll",
+    "name": "今日 · 完整滚动视图",
+    "file": "B2-today-scroll.png"
+  },
+  {
+    "id": "B3-today-empty",
+    "name": "今日 · 首次引导空态",
+    "file": "B3-today-empty.png"
+  },
+  {
+    "id": "B4-today-child-sheet",
+    "name": "孩子切换 · 底部半屏",
+    "file": "B4-today-child-sheet.png"
+  },
+  {
+    "id": "B5-today-action-sheet",
+    "name": "记录入口 · Action Sheet",
+    "file": "B5-today-action-sheet.png"
+  },
+  {
+    "id": "C1-calendar-main",
+    "name": "日程 · 周轨 + 当天时间线",
+    "file": "C1-calendar-main.png"
+  },
+  {
+    "id": "C2-calendar-empty",
+    "name": "日程 · 当天空态",
+    "file": "C2-calendar-empty.png"
+  },
+  {
+    "id": "C3-calendar-editor",
+    "name": "新建 / 编辑日程 · 半屏",
+    "file": "C3-calendar-editor.png"
+  },
+  {
+    "id": "D1-record-photo-empty",
+    "name": "新增记录 · 拍照（未选照片）",
+    "file": "D1-record-photo-empty.png"
+  },
+  {
+    "id": "D2-record-photo-upload",
+    "name": "新增记录 · 拍照（已选 3 张 · 上传中）",
+    "file": "D2-record-photo-upload.png"
+  },
+  {
+    "id": "D3-record-text",
+    "name": "新增记录 · 文字",
+    "file": "D3-record-text.png"
+  },
+  {
+    "id": "D4-record-history",
+    "name": "历史记录 · 已确认",
+    "file": "D4-record-history.png"
+  },
+  {
+    "id": "D5-record-pending",
+    "name": "历史记录 · 待处理（AI 状态）",
+    "file": "D5-record-pending.png"
+  },
+  {
+    "id": "D6-record-filter",
+    "name": "历史筛选 · 半屏",
+    "file": "D6-record-filter.png"
+  },
+  {
+    "id": "D7-record-detail",
+    "name": "历史详情 · 已确认（只读）",
+    "file": "D7-record-detail.png"
+  },
+  {
+    "id": "D8-record-detail-pending",
+    "name": "待处理详情 · 可补传 / 重试 / 人工",
+    "file": "D8-record-detail-pending.png"
+  },
+  {
+    "id": "E1-confirm-draft",
+    "name": "AI 草稿确认 · 首屏",
+    "file": "E1-confirm-draft.png"
+  },
+  {
+    "id": "E2-confirm-draft-scroll",
+    "name": "AI 草稿确认 · 完整滚动",
+    "file": "E2-confirm-draft-scroll.png"
+  },
+  {
+    "id": "E3-confirm-manual",
+    "name": "人工录入（AI 兜底）",
+    "file": "E3-confirm-manual.png"
+  },
+  {
+    "id": "E4-confirm-save-error",
+    "name": "保存失败 · 保留全部编辑",
+    "file": "E4-confirm-save-error.png"
+  },
+  {
+    "id": "F1-report-7",
+    "name": "报表 · 近 7 天",
+    "file": "F1-report-7.png"
+  },
+  {
+    "id": "F2-report-100",
+    "name": "报表 · 近 100 天（组件内分页）",
+    "file": "F2-report-100.png"
+  },
+  {
+    "id": "F3-report-scroll",
+    "name": "报表 · 完整滚动（含科目）",
+    "file": "F3-report-scroll.png"
+  },
+  {
+    "id": "F4-report-empty",
+    "name": "报表 · 空态",
+    "file": "F4-report-empty.png"
+  },
+  {
+    "id": "G1-settings-main",
+    "name": "设置 · 主页",
+    "file": "G1-settings-main.png"
+  },
+  {
+    "id": "G2-settings-catalog",
+    "name": "添加科目 / 活动 · 半屏目录",
+    "file": "G2-settings-catalog.png"
+  },
+  {
+    "id": "G3-settings-schedule",
+    "name": "活动安排 · 半屏",
+    "file": "G3-settings-schedule.png"
+  },
+  {
+    "id": "G4-family-members",
+    "name": "家庭与成员 · 管理员视角",
+    "file": "G4-family-members.png"
+  },
+  {
+    "id": "G5-family-requests",
+    "name": "加入申请 · 审批",
+    "file": "G5-family-requests.png"
+  },
+  {
+    "id": "G6-activity-record",
+    "name": "活动练习记录",
+    "file": "G6-activity-record.png"
+  },
+  {
+    "id": "H1-state-loading",
+    "name": "加载 · 骨架屏",
+    "file": "H1-state-loading.png"
+  },
+  {
+    "id": "H2-state-error",
+    "name": "失败 / 离线 · 可重试",
+    "file": "H2-state-error.png"
+  },
+  {
+    "id": "H3-destructive",
+    "name": "破坏性操作 · 二次确认",
+    "file": "H3-destructive.png"
+  },
+  {
+    "id": "H4-toast-success",
+    "name": "轻反馈 · Toast + 卡内状态",
+    "file": "H4-toast-success.png"
+  },
+  {
+    "id": "H5-tokens",
+    "name": "设计 Token 速查（实现参考）",
+    "file": "H5-tokens.png"
+  }
+]

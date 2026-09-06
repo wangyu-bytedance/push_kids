@@ -1,20 +1,30 @@
-<view class="todo card {{group.optional ? 'optional' : ''}}">
-  <view class="row between">
-    <view>
-      <text class="subject">{{group.subject_name}}</text>
-      <text class="method">{{group.review_method}}</text>
+<view class="todo {{view.optional ? 'opt' : ''}}">
+  <view class="todo-top">
+    <view class="sub-mark {{view.subjectClass}}">{{view.subjectMark}}</view>
+    <view class="grow">
+      <text class="todo-title">{{view.title}}</text>
+      <text class="todo-meta">{{view.meta}}</text>
     </view>
-    <view><text class="minutes">约 {{group.estimated_minutes}} 分钟</text><button class="practice-action" bindtap="practice">带练提示</button></view>
+    <view class="pill {{view.optional ? 'neutral' : ''}}">{{view.status}}</view>
   </view>
-  <view class="points">
-    <view class="point" wx:for="{{group.items}}" wx:key="review_id">
-      <text class="point-name">{{item.knowledge_name}}</text>
-      <view class="actions">
-        <button class="action primary" data-review-id="{{item.review_id}}" data-action="complete" bindtap="feedback">完成</button>
-        <button class="action" data-review-id="{{item.review_id}}" data-action="reinforce" bindtap="feedback">需加强</button>
-        <button class="action" data-review-id="{{item.review_id}}" data-action="partial" bindtap="feedback">部分</button>
-        <button class="action" data-review-id="{{item.review_id}}" data-action="defer" bindtap="feedback">稍后</button>
+  <view class="todo-why" wx:if="{{view.reason}}">{{view.reason}}</view>
+  <view class="todo-points">
+    <view class="todo-pt" wx:for="{{view.items}}" wx:key="reviewId">
+      <text class="pt-n">{{item.name}}</text>
+      <view class="pt-done" wx:if="{{item.done}}">
+        <view class="ico ico-check-pri xs"></view><text>已完成</text>
       </view>
+      <block wx:else>
+        <button class="btn sm act-done" disabled="{{busyId === item.reviewId}}" data-review-id="{{item.reviewId}}" data-action="complete" bindtap="feedback">{{busyId === item.reviewId ? '记录中' : '完成'}}</button>
+        <view class="act-more" aria-role="button" aria-label="其他反馈" data-review-id="{{item.reviewId}}" bindtap="openMore">
+          <view class="ico ico-more sm"></view>
+        </view>
+      </block>
     </view>
+  </view>
+  <view class="todo-foot" aria-role="button" aria-label="查看带练提示" bindtap="practice">
+    <view class="ico ico-clock xs"></view>
+    <text class="foot-txt">{{view.hint}}</text>
+    <view class="chev right"></view>
   </view>
 </view>

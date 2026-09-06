@@ -1,15 +1,181 @@
-<view class="page">
-  <block wx:if="{{loading}}"><view class="skeleton"></view><view class="skeleton"></view><view class="skeleton"></view></block>
-  <view class="notice error" wx:elif="{{error}}" bindtap="load">{{error}} · 点此重试</view>
-  <view class="empty plain" wx:elif="{{!children.length}}"><view class="empty-mark">芽</view><text class="empty-title">还没有学习档案</text><text class="muted small empty-copy">请先完成家庭和孩子资料设置。</text><button class="button secondary full-action" bindtap="openSettings">前往设置</button></view>
-  <block wx:elif="{{dashboard}}">
-    <view class="compact-head"><view class="screen-intro"><text class="screen-kicker">{{dashboard.day}}</text><text class="screen-heading">今天，也慢慢来</text></view><picker range="{{children}}" range-key="name" value="{{childIndex}}" bindchange="changeChild"><view class="child-trigger"><text class="avatar-small">{{children[childIndex].avatar}}</text><text>{{children[childIndex].name}}</text><text class="chevron"></text></view></picker></view>
-    <view class="notice" wx:if="{{dashboard.pending_confirmation_count || dashboard.analyzing_count}}" bindtap="openPending">{{dashboard.analyzing_count}} 条正在整理，{{dashboard.pending_confirmation_count}} 条等你确认 ›</view>
-    <view class="notice error" wx:if="{{dashboard.failed_count}}" bindtap="openPending">{{dashboard.failed_count}} 条分析失败，可在记录页重试 ›</view>
-    <view class="start-guide" wx:if="{{dashboard.show_guide}}"><image class="guide-sprout" src="/assets/icon-leaf.png" mode="aspectFit"/><text class="guide-kicker">陪伴，从一条记录开始</text><text class="guide-title">记下今天学到的</text><text class="muted guide-copy">拍照或写几句，确认后安排复习。</text><view class="button guide-primary" aria-role="button" aria-label="记录学习" bindtap="recordLearning"><view class="ui-plus"></view><text>记录学习</text></view><button class="quiet-link" bindtap="addSchedule"><text>也可以先添加日程</text><view class="ui-chevron right"></view></button></view>
-    <view wx:if="{{reviewReturn}}" class="notice"><text>{{reviewFocusText}}</text><button class="history-link" bindtap="returnToRecord">返回这条学习记录 ›</button></view>
-    <view class="today-section"><view class="section-toggle" aria-role="button" aria-label="展开或收起今日复习" data-section="review" bindtap="toggleSection"><view class="section-name"><text>今日复习</text><text class="section-meta">{{dashboard.todo_count}} 项</text></view><text class="chevron {{sections.review ? 'up' : ''}}"></text></view><view wx:if="{{sections.review}}"><todo-card id="todo-group-{{item.id}}" class="{{reviewGroupId === item.id ? 'history-focus' : ''}}" wx:for="{{dashboard.must_todo_groups}}" wx:key="id" group="{{item}}" bindfeedback="feedback" bindpractice="practice"></todo-card><view class="subheading" wx:if="{{dashboard.optional_todo_groups.length}}">有余力再做</view><todo-card id="todo-group-{{item.id}}" class="{{reviewGroupId === item.id ? 'history-focus' : ''}}" wx:for="{{dashboard.optional_todo_groups}}" wx:key="id" group="{{item}}" bindfeedback="feedback" bindpractice="practice"></todo-card><view class="empty inline" wx:if="{{!dashboard.todo_groups.length}}">今天没有到期的复习</view></view></view>
-    <view class="today-section"><view class="section-header"><view class="section-name"><text>今日学习</text><text class="section-meta">{{dashboard.daily_summary.record_count}} 条</text></view><button class="section-link" bindtap="openLearningHistory"><text>查看记录</text><view class="ui-chevron right"></view></button></view><view class="fact-row" wx:for="{{dashboard.daily_summary.subjects}}" wx:key="subject_id"><text class="fact-subject">{{item.subject_name}}</text><text class="fact-summary">{{item.summary_text}}</text><button class="history-link" data-id="{{item.subject_id}}" bindtap="openLearningHistory">查看记录 ›</button></view><view class="empty inline" wx:if="{{!dashboard.daily_summary.record_count}}">今天还没有学习记录</view></view>
-    <view class="today-section activity-section"><view class="section-header"><view class="section-name"><text>今日活动</text><text class="section-meta">{{dashboard.schedule_items.length + dashboard.optional_activity_suggestions.length}} 项</text></view><button class="section-link" bindtap="openCalendar"><text>日程</text><view class="ui-chevron right"></view></button></view><view class="activity-row {{item.past ? 'past' : ''}}" wx:for="{{dashboard.schedule_items}}" wx:key="id"><text class="activity-time">{{item.start_time}}</text><view class="activity-body grow"><view class="activity-head"><text class="activity-name">{{item.name}}</text><text class="status-badge" wx:if="{{item.past}}">已结束</text></view><text class="muted activity-meta">{{item.start_time}}–{{item.end_time}} · 课外活动</text><button wx:if="{{item.subject_id}}" class="activity-record" data-subject-id="{{item.subject_id}}" bindtap="openActivity"><text>{{item.past ? '补记练习' : '记录练习'}}</text><view class="ui-chevron right"></view></button></view></view><view class="activity-row suggestion" wx:for="{{dashboard.optional_activity_suggestions}}" wx:key="schedule_id"><view class="grow"><text class="activity-name">{{item.subject_name}}</text><text class="muted small">{{item.message}}</text></view><button class="small-action" data-subject-id="{{item.subject_id}}" bindtap="openActivity">记录</button></view><view class="empty inline" wx:if="{{!dashboard.schedule_items.length && !dashboard.optional_activity_suggestions.length}}">今天没有活动安排或建议</view></view>
+<view class="page today-page">
+  <view class="pg-head">
+    <view class="head-intro">
+      <text class="pg-kicker">{{dayLabel}}</text>
+      <text class="pg-title">今天，也慢慢来</text>
+    </view>
+    <view class="child-chip {{multiChild ? '' : 'single'}}" wx:if="{{children.length}}" aria-role="button" aria-label="切换孩子" bindtap="openChildSheet">
+      <text class="ava">{{children[childIndex].avatar}}</text>
+      <text class="chip-nm">{{children[childIndex].name}}</text>
+      <view class="chev" wx:if="{{multiChild}}"></view>
+    </view>
+  </view>
+
+  <view class="pk-notice err mt2" wx:if="{{error}}">
+    <view class="ico ico-cloud-off-dan sm"></view>
+    <text class="n-txt">{{error}}。已经加载到的内容还能继续看。</text>
+    <view class="ico ico-refresh-dan sm" aria-role="button" aria-label="重试" bindtap="load"></view>
+  </view>
+
+  <block wx:if="{{loading && !dashboard}}">
+    <view class="sk hero-sk mt2"></view>
+    <view class="sk card-sk"></view>
+    <view class="sk card-sk"></view>
   </block>
+
+  <view class="pk-empty" wx:elif="{{!children.length}}">
+    <view class="em"><view class="ico ico-sprout-pri lg"></view></view>
+    <text class="et">还没有学习档案</text>
+    <text class="ec">先在设置里建好孩子的学习档案，之后每天的复习安排和课外活动都会出现在这一页。</text>
+    <view class="ea"><view class="btn" aria-role="button" aria-label="前往设置" bindtap="openSettings">前往设置</view></view>
+  </view>
+
+  <block wx:elif="{{dashboard}}">
+    <view class="pk-notice mt2" wx:if="{{dashboard.pending_confirmation_count || dashboard.analyzing_count}}" bindtap="openPending">
+      <view class="ico ico-sparkle-att sm"></view>
+      <text class="n-txt">{{dashboard.pending_confirmation_count}} 条等你确认，{{dashboard.analyzing_count}} 条还在整理</text>
+      <view class="chev right"></view>
+    </view>
+    <view class="pk-notice err mt2" wx:if="{{dashboard.failed_count}}" bindtap="openPending">
+      <view class="ico ico-warn-dan sm"></view>
+      <text class="n-txt">{{dashboard.failed_count}} 条这次没整理出来，可以去记录页重试或改成人工录入</text>
+      <view class="chev right"></view>
+    </view>
+    <view class="pk-notice quiet mt2" wx:if="{{reviewReturn}}">
+      <view class="ico ico-eye sm"></view>
+      <text class="n-txt">{{reviewFocusText}}</text>
+      <view class="back-link" aria-role="button" aria-label="返回这条学习记录" bindtap="returnToRecord"><text>返回记录</text><view class="chev right"></view></view>
+    </view>
+
+    <view class="pk-hero mt3" wx:if="{{!dashboard.show_guide}}">
+      <text class="hero-eyebrow">今天的复习安排</text>
+      <text class="hero-line" wx:if="{{hero.required}}">建议复习 <text class="hero-num">{{hero.required}}</text> 项，约 <text class="hero-num">{{hero.minutes}}</text> 分钟</text>
+      <text class="hero-line" wx:else>今天没有必须做的复习</text>
+      <text class="hero-note">{{hero.note}}</text>
+      <view class="btn-row mt4">
+        <view class="btn md" aria-role="button" aria-label="记录学习" bindtap="recordLearning"><view class="ico ico-camera-inv sm"></view><text>记录学习</text></view>
+        <view class="btn md neutral" aria-role="button" aria-label="添加日程" bindtap="addSchedule"><view class="ico ico-plus sm"></view><text>添加日程</text></view>
+      </view>
+    </view>
+
+    <view class="pk-hero guide mt3" wx:else>
+      <text class="hero-eyebrow">陪伴，从一条记录开始</text>
+      <text class="hero-line">记下今天学到的</text>
+      <text class="hero-note">拍照或写几句都可以，AI 只出草稿。</text>
+      <view class="steps">
+        <view class="step"><text class="sn">1</text><text class="sc">拍一张作业照片，或写一句今天学了什么</text></view>
+        <view class="step"><text class="sn">2</text><text class="sc">AI 整理成草稿，你确认后才生效</text></view>
+        <view class="step"><text class="sn">3</text><text class="sc">确认之后复习日期自动排好，出现在这一页</text></view>
+      </view>
+      <view class="mt4"><view class="btn" aria-role="button" aria-label="记录学习" bindtap="recordLearning"><view class="ico ico-camera-inv sm"></view><text>记录学习</text></view></view>
+      <view class="guide-link"><view class="link-btn" aria-role="button" aria-label="也可以先添加日程" bindtap="addSchedule"><text>也可以先添加日程</text><view class="chev right pri"></view></view></view>
+    </view>
+
+    <view class="sec">
+      <view class="sec-bar" aria-role="button" aria-label="展开或收起待复习" data-section="review" bindtap="toggleSection">
+        <text class="s-t">待复习</text><text class="s-m">{{sectionMeta.review}}</text>
+        <view class="chev {{sections.review ? 'up' : ''}}" wx:if="{{dashboard.todo_count}}"></view>
+      </view>
+      <view class="sec-rule"></view>
+      <view class="sec-body" wx:if="{{sections.review || !dashboard.todo_count}}">
+        <block wx:for="{{todoCards}}" wx:key="id">
+          <view class="opt-head" wx:if="{{item.first_optional}}"><text class="opt-head-t">有余力再做</text><view class="opt-head-line"></view></view>
+          <todo-card class="todo-slot {{reviewGroupId === item.id ? 'history-focus' : ''}}" id="todo-group-{{item.id}}" group="{{item}}" bindfeedback="feedback" bindpractice="practice"></todo-card>
+        </block>
+        <view class="more-todo" wx:if="{{hiddenTodoCount}}" aria-role="button" aria-label="展开其余复习" bindtap="expandTodos">
+          <text>还有 {{hiddenTodoCount}} 项 · 展开</text><view class="chev"></view>
+        </view>
+        <view class="pk-empty inline" wx:if="{{!dashboard.todo_count}}">
+          <text class="et">今天没有到期的复习</text>
+          <text class="ec">确认一条学习记录后，复习日期会自动排到这里。</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="sec">
+      <view class="sec-bar" aria-role="button" aria-label="展开或收起今天记录的学习" data-section="learning" bindtap="toggleSection">
+        <text class="s-t">今天记录的学习</text><text class="s-m">{{sectionMeta.learning}}</text>
+        <view class="chev {{sections.learning ? 'up' : ''}}" wx:if="{{dashboard.daily_summary.record_count}}"></view>
+      </view>
+      <view class="sec-rule"></view>
+      <view class="sec-body" wx:if="{{sections.learning || !dashboard.daily_summary.record_count}}">
+        <view class="rowlist" wx:if="{{dashboard.daily_summary.record_count}}">
+          <view class="rowitem" wx:for="{{dashboard.daily_summary.subjects}}" wx:key="subject_id" aria-role="button" aria-label="查看这门科目的记录" data-id="{{item.subject_id}}" bindtap="openLearningHistory">
+            <view class="sub-mark {{item.subject_class}}">{{item.subject_mark}}</view>
+            <view class="grow"><text class="r-t">{{item.subject_name}}</text><text class="r-s">{{item.summary_text}}</text></view>
+            <view class="chev right"></view>
+          </view>
+        </view>
+        <view class="pk-empty inline" wx:else>
+          <text class="et">今天还没有已确认的学习记录</text>
+          <text class="ec">记一条并确认后，这里会显示今天学了什么。</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="sec">
+      <view class="sec-bar" aria-role="button" aria-label="展开或收起课外活动" data-section="activity" bindtap="toggleSection">
+        <text class="s-t">课外活动</text><text class="s-m">{{sectionMeta.activity}}</text>
+        <view class="chev {{sections.activity ? 'up' : ''}}" wx:if="{{dashboard.activity_count}}"></view>
+      </view>
+      <view class="sec-rule"></view>
+      <view class="sec-body" wx:if="{{sections.activity || !dashboard.activity_count}}">
+        <view class="tl" wx:if="{{dashboard.activity_count}}">
+          <view class="tl-item {{item.past ? 'past' : ''}}" wx:for="{{dashboard.schedule_items}}" wx:key="id">
+            <text class="tl-time tnum">{{item.start_time}}</text>
+            <view class="tl-node"></view>
+            <view class="tl-card {{item.kind === 'class' ? 'accent' : ''}}">
+              <view class="flex between">
+                <text class="tl-name">{{item.name}}</text>
+                <view class="pill neutral">{{item.past ? '已结束' : item.kind_label}}</view>
+              </view>
+              <text class="tl-sub">{{item.time_text}} · {{item.kind_label}}</text>
+              <view class="link-btn" wx:if="{{item.subject_id}}" aria-role="button" aria-label="{{item.action_text}}" data-subject-id="{{item.subject_id}}" bindtap="openActivity">
+                <text>{{item.action_text}}</text><view class="chev right pri"></view>
+              </view>
+            </view>
+          </view>
+          <view class="tl-item hint" wx:for="{{dashboard.optional_activity_suggestions}}" wx:key="schedule_id">
+            <text class="tl-time">建议</text>
+            <view class="tl-node"></view>
+            <view class="tl-card">
+              <view class="flex between">
+                <text class="tl-name">{{item.subject_name}}</text>
+                <view class="pill att">可以考虑</view>
+              </view>
+              <text class="tl-sub">{{item.message}}</text>
+              <view class="btn sm secondary mt2" aria-role="button" aria-label="记录这次练习" data-subject-id="{{item.subject_id}}" bindtap="openActivity">记录这次练习</view>
+            </view>
+          </view>
+        </view>
+        <view class="pk-empty inline" wx:else>
+          <text class="et">今天没有活动安排</text>
+          <text class="ec">在日程里加一次安排，或在设置里配置固定时间。</text>
+          <view class="ea"><view class="btn sm neutral" aria-role="button" aria-label="添加日程" bindtap="addSchedule">添加日程</view></view>
+        </view>
+      </view>
+    </view>
+  </block>
+</view>
+
+<view class="pk-mask" wx:if="{{showChildSheet}}" bindtap="closeChildSheet"></view>
+<view class="pk-sheet child-sheet" wx:if="{{showChildSheet}}">
+  <view class="handle"></view>
+  <view class="sheet-head">
+    <view class="grow">
+      <text class="sheet-title">选择孩子</text>
+      <text class="sheet-sub">切换后所有页面同步，临时筛选会清空</text>
+    </view>
+    <view class="icon-btn" aria-role="button" aria-label="关闭" bindtap="closeChildSheet"><view class="ico ico-close sm"></view></view>
+  </view>
+  <view class="sheet-body">
+    <view class="rowlist">
+      <view class="rowitem {{index === childIndex ? 'on' : ''}}" wx:for="{{children}}" wx:key="id" aria-role="button" aria-label="切换到这个孩子" data-index="{{index}}" bindtap="chooseChild">
+        <text class="ava-lg">{{item.avatar}}</text>
+        <view class="grow"><text class="r-t">{{item.label}}</text></view>
+        <view class="ico ico-check-pri sm" wx:if="{{index === childIndex}}"></view>
+      </view>
+    </view>
+    <text class="sheet-tip">学习档案和家庭成员在设置里维护。</text>
+  </view>
 </view>

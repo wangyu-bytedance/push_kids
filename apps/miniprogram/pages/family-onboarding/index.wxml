@@ -1,28 +1,153 @@
-<view class="page onboarding-page">
-  <view class="onboarding-mark">芽</view>
-  <text class="title">一起记住孩子的成长</text>
-  <text class="intro">由家长确认学习记录、复习安排和课外活动。AI 只提供可编辑建议。</text>
-  <view class="skeleton" wx:if="{{loading}}"></view>
-  <view class="notice error" wx:if="{{error}}" bindtap="load">{{error}} · 点此重试</view>
-  <view class="card pending-card" wx:if="{{!loading && state === 'pending'}}">
-    <text class="section-title">申请已发送</text><text class="request-code" wx:if="{{request.request_code}}">申请码 {{request.request_code}}</text><text class="muted">请把申请码告诉家庭管理员用于核对。获批前不会展示孩子的学习或照片。</text>
-    <button class="button ghost" bindtap="load">查看最新结果</button><button class="text-action" bindtap="cancelRequest">撤回申请</button>
+<view class="page onboarding-page {{mode === 'create' || mode === 'join' ? 'sticky-cta' : ''}}">
+  <view class="pk-notice err" wx:if="{{error}}">
+    <view class="ico ico-cloud-off-dan sm"></view>
+    <text class="n-txt">{{error}}。检查网络后可以重试。</text>
+    <view class="ico ico-refresh-dan sm" aria-role="button" aria-label="重试" bindtap="load"></view>
   </view>
-  <view wx:if="{{!loading && state === 'unbound' && mode === 'choice'}}">
-    <button class="choice primary-choice" bindtap="chooseCreate"><text class="choice-title">开始记录</text><text>创建家庭并填写第一个孩子的基本信息</text></button>
-    <button class="choice" bindtap="openJoin"><text class="choice-title">申请加入家庭</text><text>使用家人发来的微信邀请或邀请口令</text></button>
-  </view>
-  <view class="card" wx:if="{{!loading && mode === 'create'}}">
-    <text class="section-title">建立家庭档案</text>
-    <view class="field"><label class="label" for="childName">孩子称呼</label><input id="childName" class="input" value="{{childName}}" data-field="childName" bindinput="setField" placeholder="例如：小雨" maxlength="40"/></view>
-    <view class="field"><label class="label" for="familyName">家庭名称</label><input id="familyName" class="input" value="{{familyName}}" data-field="familyName" bindinput="setField" placeholder="不填时使用“孩子称呼的家”" maxlength="60"/></view>
-    <view class="field"><label class="label" for="grade">年级</label><input id="grade" class="input" value="{{grade}}" data-field="grade" bindinput="setField" maxlength="20"/></view>
-    <view class="field"><label class="label" for="relationship">你与孩子的关系</label><input id="relationship" class="input" value="{{relationship}}" data-field="relationship" bindinput="setField" maxlength="30"/></view>
-    <button class="button" loading="{{submitting}}" disabled="{{submitting}}" bindtap="submitFamily">创建并开始记录</button><button class="text-action" bindtap="backToChoice">返回</button>
-  </view>
-  <view class="card" wx:if="{{!loading && mode === 'join'}}">
-    <text class="section-title">使用邀请口令</text><text class="muted small">从微信分享卡片进入时无需手动填写。</text>
-    <view class="field"><label class="label" for="inviteToken">邀请口令</label><input id="inviteToken" class="input" value="{{inviteToken}}" data-field="inviteToken" bindinput="setField" maxlength="120"/></view>
-    <button class="button" bindtap="openToken">查看邀请</button><button class="text-action" bindtap="backToChoice">返回</button>
-  </view>
+
+  <block wx:if="{{loading}}">
+    <view class="sk brand-sk"></view>
+    <view class="sk h20 mt4"></view>
+    <view class="sk card-sk mt4"></view>
+    <view class="sk card-sk"></view>
+  </block>
+
+  <!-- A4 申请已发送 · 等待确认 -->
+  <block wx:elif="{{state === 'pending'}}">
+    <view class="pk-empty pending-empty">
+      <view class="em att"><view class="ico ico-clock-att lg"></view></view>
+      <text class="et">申请已发送</text>
+      <text class="ec">等待家庭管理员确认，通常几分钟内就会有结果。</text>
+    </view>
+
+    <view class="pk-card code-card" wx:if="{{request.request_code}}">
+      <text class="code-cap">申请码</text>
+      <text class="code-val tnum">{{request.request_code}}</text>
+      <text class="code-help">把申请码告诉管理员用于核对</text>
+      <view class="code-copy">
+        <view class="btn sm neutral" aria-role="button" aria-label="复制申请码" bindtap="copyRequestCode">复制申请码</view>
+      </view>
+    </view>
+
+    <view class="btn secondary mt3 {{refreshing ? 'is-disabled' : ''}}" aria-role="button" aria-label="查看最新结果" bindtap="refreshStatus">
+      <view class="ico ico-refresh-pri sm" wx:if="{{!refreshing}}"></view>
+      <text>{{refreshing ? '正在查询…' : '查看最新结果'}}</text>
+    </view>
+    <view class="center-row">
+      <view class="link-btn danger-link" aria-role="button" aria-label="撤回申请" bindtap="cancelRequest">
+        <text>{{canceling ? '正在撤回…' : '撤回申请'}}</text>
+      </view>
+    </view>
+
+    <view class="pk-notice quiet mt2">
+      <view class="ico ico-info sm"></view>
+      <text class="n-txt">获批前不会看到孩子的学习记录或照片。</text>
+    </view>
+    <view class="help">下拉这一页也可以刷新申请状态。</view>
+  </block>
+
+  <!-- A2 建立家庭档案 -->
+  <block wx:elif="{{mode === 'create'}}">
+    <view class="step-head">
+      <text class="pg-kicker">第 1 步 · 基本信息</text>
+      <text class="pg-title">先认识一下孩子</text>
+    </view>
+    <view class="pk-card">
+      <view class="pk-field">
+        <text class="lbl">孩子称呼</text>
+        <input class="pk-input" value="{{childName}}" data-field="childName" bindinput="setField" placeholder="例如：小雨" placeholder-class="pk-ph" maxlength="40" />
+      </view>
+      <view class="pk-field">
+        <text class="lbl">家庭名称<text class="opt">选填</text></text>
+        <input class="pk-input" value="{{familyName}}" data-field="familyName" bindinput="setField" placeholder="{{familyPlaceholder}}" placeholder-class="pk-ph" maxlength="60" />
+      </view>
+      <view class="pk-field">
+        <text class="lbl">年级</text>
+        <picker range="{{grades}}" value="{{gradeIndex}}" bindchange="chooseGrade">
+          <view class="pk-picker"><text>{{grade}}</text><view class="chev"></view></view>
+        </picker>
+      </view>
+      <view class="pk-field">
+        <text class="lbl">你与孩子的关系</text>
+        <picker range="{{relations}}" value="{{relationIndex}}" bindchange="chooseRelation">
+          <view class="pk-picker"><text>{{relations[relationIndex]}}</text><view class="chev"></view></view>
+        </picker>
+        <input class="pk-input mt2" wx:if="{{customRelation}}" value="{{relationship}}" data-field="relationship" bindinput="setField" placeholder="写下你希望家人看到的称谓" placeholder-class="pk-ph" maxlength="30" />
+      </view>
+    </view>
+    <view class="help">称呼与关系只在家庭内部显示，之后可以随时修改。</view>
+
+    <view class="pk-cta-bar">
+      <view class="btn {{canSubmit && !submitting ? '' : 'is-disabled'}}" aria-role="button" aria-label="创建并开始记录" aria-disabled="{{!canSubmit || submitting}}" bindtap="submitFamily">
+        <text>{{submitting ? '正在创建…' : '创建并开始记录'}}</text>
+      </view>
+      <text class="cta-hint" wx:if="{{submitHint}}">{{submitHint}}</text>
+      <view class="center-row">
+        <view class="link-btn" aria-role="button" aria-label="返回" bindtap="backToChoice"><text>返回</text></view>
+      </view>
+    </view>
+  </block>
+
+  <!-- A3 使用邀请口令 -->
+  <block wx:elif="{{mode === 'join'}}">
+    <view class="step-head">
+      <text class="pg-kicker">从微信卡片进入时无需手动填写</text>
+      <text class="pg-title">使用邀请口令</text>
+    </view>
+    <view class="pk-card">
+      <view class="pk-field">
+        <text class="lbl">邀请口令</text>
+        <input class="pk-input token-input {{tokenError ? 'is-error' : ''}}" value="{{inviteToken}}" data-field="inviteToken" bindinput="setField" placeholder="粘贴家人发来的口令" placeholder-class="pk-ph" maxlength="120" />
+        <text class="err-text" wx:if="{{tokenError}}">{{tokenError}}</text>
+        <view class="help" wx:else>口令由家庭管理员在「家庭与成员」里生成，24 小时内有效，区分大小写。</view>
+      </view>
+    </view>
+    <view class="pk-notice quiet mt3">
+      <view class="ico ico-shield sm"></view>
+      <text class="n-txt">口令只用来找到这个家庭。管理员确认前，你看不到孩子的学习记录或照片。</text>
+    </view>
+
+    <view class="pk-cta-bar">
+      <view class="btn" aria-role="button" aria-label="查看邀请信息" bindtap="openToken"><text>查看邀请信息</text></view>
+      <view class="center-row">
+        <view class="link-btn" aria-role="button" aria-label="返回" bindtap="backToChoice"><text>返回</text></view>
+      </view>
+    </view>
+  </block>
+
+  <!-- A1 首次进入 · 选择路径 -->
+  <block wx:elif="{{state === 'unbound'}}">
+    <view class="brand"><view class="ico ico-sprout-inv xl"></view></view>
+    <view class="brand-title">
+      <text>一起记住</text>
+      <text>孩子成长的每一步</text>
+    </view>
+    <view class="brand-copy">
+      <text>学习记录、复习安排和课外活动，都由家长确认。</text>
+      <text>AI 只提供可编辑建议，不替你做判断。</text>
+    </view>
+
+    <view class="choice-card primary" aria-role="button" aria-label="创建家庭并开始记录" bindtap="chooseCreate">
+      <view class="choice-mark"><view class="ico ico-plus-inv sm"></view></view>
+      <view class="grow">
+        <text class="choice-t">开始记录</text>
+        <text class="choice-s">创建家庭，并填写第一个孩子的基本信息</text>
+      </view>
+      <view class="chev right"></view>
+    </view>
+
+    <view class="choice-card" aria-role="button" aria-label="申请加入家庭" bindtap="openJoin">
+      <view class="choice-mark plain"><view class="ico ico-family sm"></view></view>
+      <view class="grow">
+        <text class="choice-t">申请加入家庭</text>
+        <text class="choice-s">使用家人发来的微信邀请或邀请口令</text>
+      </view>
+      <view class="chev right"></view>
+    </view>
+
+    <view class="pk-notice quiet mt3">
+      <view class="ico ico-info sm"></view>
+      <text class="n-txt">加入家庭需要管理员确认。获批前不会看到孩子的学习记录或照片。</text>
+    </view>
+  </block>
 </view>

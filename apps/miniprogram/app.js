@@ -12,6 +12,7 @@ App({
     bootstrapState: "loading",
     openCalendarCreate: false,
     currentMember: null,
+    tabBadges: { records: 0 },
     apiBaseUrl: config.localApiBaseUrl
   },
   onLaunch(options = {}) {
@@ -44,5 +45,14 @@ App({
   selectChild(childId) {
     this.globalData.selectedChildId = childId;
     wx.setStorageSync("selectedChildId", childId);
+  },
+  setTabBadge(key, count) {
+    const value = Number(count) > 0 ? Number(count) : 0;
+    if (this.globalData.tabBadges[key] === value) return;
+    this.globalData.tabBadges[key] = value;
+    const pages = getCurrentPages();
+    const current = pages[pages.length - 1];
+    const bar = current && current.getTabBar && current.getTabBar();
+    if (bar && bar.syncBadges) bar.syncBadges();
   }
 });

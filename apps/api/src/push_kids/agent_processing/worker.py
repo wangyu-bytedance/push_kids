@@ -173,7 +173,11 @@ class AnalysisWorker:
                     db.scalars(
                         select(SubmissionMedia)
                         .where(SubmissionMedia.submission_id == submission.id)
-                        .order_by(SubmissionMedia.created_at, SubmissionMedia.id)
+                        .order_by(
+                            SubmissionMedia.sort_order,
+                            SubmissionMedia.created_at,
+                            SubmissionMedia.id,
+                        )
                     )
                 )
                 logger.info(

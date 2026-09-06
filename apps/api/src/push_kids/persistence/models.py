@@ -234,6 +234,8 @@ class Subject(Base):
     kind = Column(String(20), nullable=False, default=SubjectKind.learning.value)
     color = Column(String(20), nullable=False, default="#39847A")
     active = Column(Boolean, nullable=False, default=True)
+    # False marks the system preset catalog; True marks a parent- or proposal-created subject.
+    is_custom = Column(Boolean, nullable=False, default=True)
     created_at = Column(UTCDateTime(), nullable=False, default=utcnow)
 
 
@@ -264,6 +266,8 @@ class SubmissionMedia(Base):
     path = Column(String(700), nullable=False)
     content_type = Column(String(80), nullable=False)
     byte_size = Column(Integer, nullable=False)
+    # Stable parent-visible photo position inside one submission, assigned on write.
+    sort_order = Column(Integer, nullable=False, default=0, index=True)
     created_at = Column(UTCDateTime(), nullable=False, default=utcnow)
 
 
@@ -337,6 +341,10 @@ class KnowledgeItem(Base):
     category = Column(String(50), nullable=False, default="知识点")
     review_method = Column(String(60), nullable=False, default="口头回顾")
     estimated_minutes = Column(Integer, nullable=False, default=3)
+    # Machine recognition reliability of the extraction only; never a mastery judgement.
+    confidence = Column(String(10), nullable=True)
+    # Quoted material lines the extraction came from; never an evaluation of the child.
+    evidence_json = Column(Text, nullable=True)
     created_at = Column(UTCDateTime(), nullable=False, default=utcnow)
 
 
@@ -361,6 +369,10 @@ class ReviewItem(Base):
     family_id = Column(String(80), nullable=False, index=True)
     child_id = Column(String(36), ForeignKey("children.id"), nullable=False, index=True)
     knowledge_item_id = Column(String(36), ForeignKey("knowledge_items.id"), nullable=False)
+    # First confirmation that created this review item; NULL for unrecoverable history.
+    source_submission_id = Column(
+        String(36), ForeignKey("learning_submissions.id"), nullable=True, index=True
+    )
     step = Column(Integer, nullable=False, default=0)
     due_date = Column(Date, nullable=False, index=True)
     last_feedback = Column(String(30), nullable=True)

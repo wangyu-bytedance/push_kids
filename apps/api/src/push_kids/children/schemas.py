@@ -42,6 +42,7 @@ class SubjectView(BaseModel):
     kind: str
     color: str
     active: bool
+    is_custom: bool
     created_at: datetime
 
 

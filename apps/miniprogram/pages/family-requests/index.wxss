@@ -1,1 +1,19 @@
-.block{display:block}.tiny{font-size:20rpx}.request-card{margin-top:20rpx}.request-head{display:flex;align-items:flex-start;gap:12rpx}.request-title{margin:0}.request-code{flex:none;padding:7rpx 12rpx;border-radius:12rpx;background:var(--surface-soft);color:var(--primary-dark);font-size:20rpx;font-weight:700}.request-copy{margin-top:14rpx}.role-actions{display:grid;gap:12rpx;margin-top:24rpx}.role-actions button{width:100%;min-width:0;min-height:84rpx;margin:0;border:1rpx solid #B8D6CC;background:#E8F2EE;color:var(--primary-dark);font-size:26rpx;box-sizing:border-box}.role-actions button::after,.reject::after{border:0}.reject{width:100%;min-height:80rpx;margin:10rpx 0 0;border:0;background:transparent;color:var(--danger);font-size:25rpx}
+/* 加入申请审批（G5）：说明条 + 申请卡（申请码 / 希望称谓 / 协作权限）+ 就地结果态。 */
+.requests-page { padding-bottom: 8rpx; }
+
+.req-card { margin-top: 24rpx; }
+.req-card.is-done { background: var(--pk-surface-warm); }
+.req-ava { flex: none; width: 80rpx; height: 80rpx; border-radius: 50%; background: var(--pk-surface-sunken); color: var(--pk-ink-2); font-size: 15px; font-weight: 600; line-height: 80rpx; text-align: center; }
+.req-title { display: block; font-size: 17px; line-height: 1.45; font-weight: 600; }
+.req-sub { display: block; margin-top: 4rpx; font-size: 13px; line-height: 1.45; color: var(--pk-ink-3); }
+
+.req-row { display: flex; align-items: center; gap: 20rpx; min-height: 108rpx; margin-top: 16rpx; padding-top: 16rpx; box-sizing: border-box; }
+.req-row + .req-row { border-top: var(--pk-border-soft); }
+.req-row .r-lbl { flex: 0 0 148rpx; font-size: 14px; line-height: 1.45; color: var(--pk-ink-3); }
+.req-row .r-code { font-size: 20px; line-height: 1.3; font-weight: 700; letter-spacing: 8rpx; color: var(--pk-ink); font-variant-numeric: tabular-nums; }
+.req-row .r-value { min-height: 92rpx; padding: 24rpx 28rpx; box-sizing: border-box; border-radius: var(--pk-r-lg); background: var(--pk-surface-warm); border: var(--pk-border); font-size: 16px; line-height: 1.4; color: var(--pk-ink); }
+
+.result-line { display: flex; align-items: center; gap: 12rpx; margin-top: 24rpx; padding-top: 20rpx; border-top: var(--pk-border-soft); }
+.result-line .res-txt { flex: 1; min-width: 0; font-size: 13px; line-height: 1.5; color: var(--pk-primary-strong); }
+
+.sk.card-sk { height: 296rpx; }

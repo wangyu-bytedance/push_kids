@@ -47,6 +47,21 @@ class DueKnowledge:
     review_method: str
     estimated_minutes: int
     due_date: date
+    # Provenance of the Todo, supplied by the service layer; the client renders the wording.
+    source_submission_id: str | None = None
+    source_occurred_on: date | None = None
+    review_round: int = 1
+    interval_days: int | None = None
+
+
+def review_interval_days(
+    due_date: date, last_reviewed_on: date | None, source_occurred_on: date | None
+) -> int | None:
+    """Deterministic gap between this due date and the previous review or first learning."""
+    anchor = last_reviewed_on or source_occurred_on
+    if anchor is None:
+        return None
+    return (due_date - anchor).days
 
 
 def group_daily_todos(items: list[DueKnowledge], budget_minutes: int) -> list[dict]:
@@ -78,6 +93,12 @@ def group_daily_todos(items: list[DueKnowledge], budget_minutes: int) -> list[di
                 "review_id": item.review_id,
                 "knowledge_name": item.knowledge_name,
                 "due_date": item.due_date.isoformat(),
+                "source_submission_id": item.source_submission_id,
+                "source_occurred_on": item.source_occurred_on.isoformat()
+                if item.source_occurred_on
+                else None,
+                "review_round": item.review_round,
+                "interval_days": item.interval_days,
             }
         )
         used += minutes

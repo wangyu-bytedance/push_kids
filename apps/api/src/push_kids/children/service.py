@@ -5,6 +5,14 @@ from push_kids.children.schemas import ChildCreate, ChildUpdate, SubjectCreate, 
 from push_kids.persistence.models import Child, Subject
 from push_kids.platform.errors import ConflictError, NotFoundError
 
+# The system preset learning catalog owned by this module; everything else is parent-built.
+PRESET_LEARNING_SUBJECTS = ("语文", "数学", "英语")
+
+
+def is_custom_subject(name: str, kind: str) -> bool:
+    """A subject is custom unless it is one of the system preset learning subjects."""
+    return not (kind == "learning" and name.strip() in PRESET_LEARNING_SUBJECTS)
+
 
 class ChildrenService:
     @staticmethod
@@ -53,7 +61,11 @@ class ChildrenService:
         )
         if exists:
             raise ConflictError("这个科目已经存在")
-        subject = Subject(family_id=family_id, **data.model_dump())
+        subject = Subject(
+            family_id=family_id,
+            **data.model_dump(),
+            is_custom=is_custom_subject(data.name, data.kind),
+        )
         db.add(subject)
         db.commit()
         return subject

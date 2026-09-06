@@ -4,12 +4,13 @@
 
 - Frontend engineering scope: PRESENT
 - Constraint status: APPROVED
-- Constraint revision: FEC-20260905-03
+- Constraint revision: FEC-20260906-04
 - Owner: 产品负责人（用户）
 - Approved by: 产品负责人（用户）
-- Approved at: 2026-09-05
-- Approval evidence: 用户批准 BUG-010 Spec revision 11 与 DREV-20260905-UX-03
-- Related frontend design baseline: FDB-20260830-01
+- Approved at: 2026-09-06
+- Approval evidence: 用户批准 `SPEC-20260906-PKDS-01` 与 `DREV-20260906-PKDS-01`
+- Superseded revision: FEC-20260905-03（视口与横向手势条款不变，新增样式分层与图标生成条款）
+- Related frontend design baseline: FDB-20260906-02
 - Applies to: `apps/miniprogram`
 
 ## Engineering priorities and stack boundary
@@ -27,8 +28,12 @@
 
 ## Design tokens and component contracts
 
-- Global semantic colors, spacing, radii, typography and safe-area values live in `app.wxss`.
+- Styles are layered and the layers are one-directional: `styles/tokens.wxss` (semantic values) -> `styles/atoms.wxss` (component classes) -> page `.wxss` (page-only geometry). `app.wxss` only imports the layers and keeps legacy class shims.
+- Global semantic colors, spacing, radii, typography, elevation, motion and safe-area values live in `styles/tokens.wxss` and are the single source of truth. Pages must not redefine them.
 - Pages must not create near-duplicate token scales. Reusable components require shared product semantics, not visual similarity alone.
+- Radii are restricted to 8/12/16/24/32/40/999rpx; intermediate values require an approved Spec.
+- Icons are generated line icons from `tools/gen_icon_styles.py` (24x24 viewBox, stroke-width 2, no fill). Emoji, text glyphs and icon fonts are forbidden as icons. The generator must stay idempotent so `styles/icons.wxss` can be regenerated in verification.
+- Legacy CSS variable aliases in `styles/tokens.wxss` are a temporary compatibility layer owned by the PKDS rollout Spec and must be removed before public release.
 - Touch targets are at least 44 logical pixels; body text is at least 14px; color is never the sole state indicator.
 
 ## State ownership and data flow
@@ -117,6 +122,7 @@
 | unit/state/contract | `npm test` |
 | static mini-program rules | `npm run lint:miniapp` |
 | repository validator | `uv run python tools/validate_miniprogram.py` |
+| icon asset reproducibility | `uv run python tools/gen_icon_styles.py` then confirm an empty diff |
 | architecture boundaries | `uv run python tools/check_architecture.py` |
 | device/visual | WeChat DevTools compile/preview plus representative iOS and Android smoke |
 | viewport/state | 320×568, 390×844, 430×932 captures for changed states |

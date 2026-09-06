@@ -1,10 +1,87 @@
-<view class="page">
-  <view class="card">
-    <view class="field"><text class="label">活动</text><picker range="{{subjects}}" range-key="name" value="{{subjectIndex}}" bindchange="changeSubject"><view class="picker">{{subjects.length ? subjects[subjectIndex].name : '请先在设置添加活动科目'}} ›</view></picker></view>
-    <view class="row"><view class="field grow"><text class="label">练习日期</text><picker mode="date" value="{{date}}" data-field="date" bindchange="setField"><view class="picker">{{date}}</view></picker></view><view class="field grow"><text class="label">时间</text><picker mode="time" value="{{time}}" data-field="time" bindchange="setField"><view class="picker">{{time}}</view></picker></view></view>
-    <view class="field"><text class="label">时长：{{duration}} 分钟</text><slider min="5" max="180" step="5" value="{{duration}}" data-field="duration" bindchange="setField" activeColor="#2F766D" /></view>
-    <view class="field"><text class="label">简单记录（可选）</text><textarea class="textarea" value="{{note}}" data-field="note" bindinput="setField" placeholder="例如：练习了换气和自由泳"></textarea></view>
+<view class="page sticky-cta activity-page">
+  <view class="pg-head">
+    <view class="head-intro">
+      <text class="pg-kicker">{{kicker}}</text>
+      <text class="pg-title">记录这次练习</text>
+    </view>
   </view>
-  <view class="notice">活动练习只记录频率，不进入记忆曲线，也不会产生强制 Todo。</view>
-  <button class="button" loading="{{saving}}" disabled="{{saving}}" bindtap="save">保存练习记录</button>
+
+  <view class="pk-notice err" wx:if="{{error}}">
+    <view class="ico ico-cloud-off-dan sm"></view>
+    <text class="n-txt">{{error}}</text>
+    <view class="ico ico-refresh-dan sm" aria-role="button" aria-label="重新加载" bindtap="load"></view>
+  </view>
+
+  <view class="pk-notice quiet mt2" wx:if="{{!canWrite}}">
+    <view class="ico ico-eye-mute sm"></view>
+    <text class="n-txt">你在这个家庭是只读成员，可以查看，记录需要管理员或家长操作。</text>
+  </view>
+
+  <block wx:if="{{loading}}">
+    <view class="sk form-sk mt3"></view>
+  </block>
+
+  <view class="pk-empty" wx:elif="{{!subjects.length}}">
+    <view class="em"><view class="ico ico-ball-pri lg"></view></view>
+    <text class="et">还没有课外活动可以记录</text>
+    <text class="ec">在设置里添加一项课外活动之后，就可以记下每次练习。</text>
+    <view class="ea">
+      <view class="btn secondary" aria-role="button" aria-label="去设置添加活动" bindtap="openSettings"><text>去设置添加活动</text></view>
+    </view>
+  </view>
+
+  <block wx:else>
+    <view class="pk-card form-card mt3">
+      <view class="pk-field">
+        <text class="lbl">活动</text>
+        <picker range="{{subjects}}" range-key="name" value="{{subjectIndex}}" bindchange="changeSubject">
+          <view class="pk-picker">
+            <text class="tag-sub s-activity">课外活动</text>
+            <text class="pick-name trunc">{{subjectName}}</text>
+            <view class="chev"></view>
+          </view>
+        </picker>
+      </view>
+
+      <view class="pk-field">
+        <text class="lbl">练习时间</text>
+        <view class="time-row">
+          <picker class="grow" mode="date" end="{{today}}" value="{{date}}" data-field="date" bindchange="setField">
+            <view class="pk-picker"><text class="tnum">{{date}}</text><view class="chev"></view></view>
+          </picker>
+          <picker class="time-cell" mode="time" value="{{time}}" data-field="time" bindchange="setField">
+            <view class="pk-picker"><text class="tnum">{{time}}</text><view class="chev"></view></view>
+          </picker>
+        </view>
+      </view>
+
+      <view class="pk-field">
+        <view class="dur-head">
+          <text class="lbl">时长</text>
+          <text class="dur-val tnum">{{durationText}}</text>
+        </view>
+        <slider min="{{durationMin}}" max="{{durationMax}}" step="5" value="{{duration}}" data-field="duration" bindchange="setField" activeColor="#2E6A56" backgroundColor="#DCDACD" block-size="24" />
+        <view class="dur-scale">
+          <text class="tnum">{{durationMin}}</text>
+          <text class="tnum">{{durationMax}}</text>
+        </view>
+      </view>
+
+      <view class="pk-field">
+        <text class="lbl">简单记录<text class="opt">选填</text></text>
+        <textarea class="pk-textarea" value="{{note}}" data-field="note" bindinput="setField" placeholder="例如：练习了正手攻球和步伐" placeholder-class="pk-ph" maxlength="200" />
+        <view class="note-foot"><text class="counter">{{noteCount}}/200</text></view>
+      </view>
+    </view>
+
+    <view class="pk-notice quiet mt3">
+      <view class="ico ico-info-mute sm"></view>
+      <text class="n-txt">课外活动只做记录，不进入复习曲线，也不会产生复习任务。</text>
+    </view>
+  </block>
+
+  <view class="pk-cta-bar" wx:if="{{subjects.length && !loading}}">
+    <text class="err-text cta-err" wx:if="{{saveError}}">{{saveError}}</text>
+    <button class="btn" loading="{{saving}}" disabled="{{saving || !canWrite}}" bindtap="save">{{saving ? '保存中…' : '保存练习记录'}}</button>
+  </view>
 </view>
