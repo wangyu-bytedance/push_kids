@@ -362,7 +362,12 @@ class AnalysisWorker:
                     type(exc).__name__,
                 )
                 terminal = isinstance(exc, AnalysisTerminalError)
-                message = exc.public_message if terminal else "分析暂时失败，请重试"
+                if isinstance(exc, AnalysisTerminalError):
+                    message = exc.public_message
+                    terminal_code = exc.code
+                else:
+                    message = "分析暂时失败，请重试"
+                    terminal_code = "analysis_failed"
                 job.error_message = message
                 if not terminal and (job.attempts or 0) < (job.max_attempts or 3):
                     job.state = JobState.queued.value
@@ -371,7 +376,7 @@ class AnalysisWorker:
                 else:
                     job.state = JobState.failed.value
                     submission.state = SubmissionState.failed.value
-                    submission.error_code = exc.code if terminal else "analysis_failed"
+                    submission.error_code = terminal_code
                     submission.error_message = message
                 outcome = job.state
                 db.commit()

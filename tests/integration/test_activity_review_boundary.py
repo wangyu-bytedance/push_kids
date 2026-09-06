@@ -171,18 +171,20 @@ def test_historical_activity_reviews_are_inert(client, app, child, family_header
 
     with app.state.database.session_factory() as db:
         sid = pending(db, family, child["id"])
-        LearningService.confirm(
-            db,
-            family,
-            sid,
-            ConfirmSubmission(
-                proposal=proposal(
-                    subject_name="数学",
-                    subject_kind="learning",
-                    todo_matches=[{"review_id": rid, "knowledge_name": "换气"}],
-                )
-            ),
-        )
+        with pytest.raises(ValueError, match="不能添加"):
+            LearningService.confirm(
+                db,
+                family,
+                sid,
+                ConfirmSubmission(
+                    proposal=proposal(
+                        subject_name="数学",
+                        subject_kind="learning",
+                        todo_matches=[{"review_id": rid, "knowledge_name": "换气"}],
+                    )
+                ),
+            )
+        db.rollback()
         old = db.get(ReviewItem, rid)
         assert (old.step, old.due_date, old.active) == original
         assert db.scalar(select(func.count()).select_from(ReviewFeedback)) == 1
@@ -211,7 +213,7 @@ def test_historical_activity_reviews_are_inert(client, app, child, family_header
     assert report["overview"]["review_feedback_count"] == 0
     assert report["overview"]["activity_records"] == 1
     assert sum(day["count"] for day in report["review_activity"]) == 0
-    assert sum(day["pending_count"] for day in report["review_urgency"]) == 1  # learning only
+    assert sum(day["pending_count"] for day in report["review_urgency"]) == 0
     dashboard = client.get(prefix + "/dashboard", headers=family_headers).json()
     assert dashboard["activity_suggestions"][0]["last_practice_days_ago"] == 0
 

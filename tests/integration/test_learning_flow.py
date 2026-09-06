@@ -11,14 +11,22 @@ from push_kids.persistence.models import (
     LearningSubmission,
     ReviewFeedback,
     ReviewFeedbackRequest,
+    ReviewItem,
 )
+from push_kids.platform.time import local_date
 from sqlalchemy import func, select
 
 
 def _submit_and_process(
-    client: TestClient, app, headers: dict[str, str], child_id: str, text: str
+    client: TestClient,
+    app,
+    headers: dict[str, str],
+    child_id: str,
+    text: str,
+    *,
+    days_ago: int = 4,
 ) -> dict:
-    occurred = datetime.now(UTC) - timedelta(days=4)
+    occurred = datetime.now(UTC) - timedelta(days=days_ago)
     response = client.post(
         "/api/v1/submissions",
         headers=headers,
@@ -60,7 +68,7 @@ def test_async_confirmation_flow_and_family_isolation(client, app, family_header
     assert dashboard.json()["pending_confirmation_count"] == 0
 
 
-def test_confirmation_is_required_and_duplicate_knowledge_keeps_occurrences(
+def test_ai_generation_omits_same_day_duplicate_knowledge(
     client, app, family_headers, child
 ) -> None:
     first = _submit_and_process(client, app, family_headers, child["id"], "英语单词 animal")
@@ -68,12 +76,18 @@ def test_confirmation_is_required_and_duplicate_knowledge_keeps_occurrences(
         assert db.scalar(select(func.count(LearningRecord.id))) == 0
     _confirm(client, family_headers, first)
     second = _submit_and_process(client, app, family_headers, child["id"], "英语单词 animal")
-    _confirm(client, family_headers, second)
+    assert second["proposal"]["knowledge_points"] == []
+    response = client.post(
+        f"/api/v1/submissions/{second['id']}/confirm",
+        headers=family_headers,
+        json={"proposal": second["proposal"]},
+    )
+    assert response.status_code == 400
     with app.state.database.session_factory() as db:
         knowledge_count = db.scalar(select(func.count(KnowledgeItem.id)))
         occurrence_count = db.scalar(select(func.count(KnowledgeOccurrence.id)))
     assert knowledge_count == 1
-    assert occurrence_count == 2
+    assert occurrence_count == 1
 
 
 def test_review_feedback_updates_dashboard(client, app, family_headers, child) -> None:
@@ -113,16 +127,27 @@ def test_review_feedback_retry_is_idempotent(client, app, family_headers, child)
 def test_ai_todo_match_only_completes_after_parent_confirmation(
     client, app, family_headers, child
 ) -> None:
-    first = _submit_and_process(client, app, family_headers, child["id"], "数学，进位加法")
-    _confirm(client, family_headers, first)
-    second = _submit_and_process(client, app, family_headers, child["id"], "进位加法")
+    first = _submit_and_process(
+        client, app, family_headers, child["id"], "数学，进位加法", days_ago=0
+    )
+    confirmed = _confirm(client, family_headers, first)
+    with app.state.database.session_factory() as db:
+        for review_id in confirmed["review_item_ids"]:
+            review = db.get(ReviewItem, review_id)
+            knowledge = db.get(KnowledgeItem, review.knowledge_item_id)
+            if knowledge.name == "进位加法":
+                review.due_date = local_date()
+        db.commit()
+    second = _submit_and_process(client, app, family_headers, child["id"], "进位加法", days_ago=0)
     matches = second["proposal"]["todo_matches"]
     assert [item["knowledge_name"] for item in matches] == ["进位加法"]
     before = client.get(f"/api/v1/children/{child['id']}/dashboard", headers=family_headers)
-    assert before.json()["todo_count"] == 2
-    _confirm(client, family_headers, second)
+    assert before.json()["todo_count"] == 1
+    result = _confirm(client, family_headers, second)
+    assert result["records"] == []
+    assert len(result["updated_reviews"]) == 1
     after = client.get(f"/api/v1/children/{child['id']}/dashboard", headers=family_headers)
-    assert after.json()["todo_count"] == 1
+    assert after.json()["todo_count"] == 0
 
 
 def test_practice_materials_are_limited_to_selected_confirmed_reviews(

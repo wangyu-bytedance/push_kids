@@ -22,6 +22,7 @@ from push_kids.persistence.models import (
 )
 from push_kids.planning.service import PlanningService
 from push_kids.platform.time import SHANGHAI, local_date
+from push_kids.reporting.trends import TREND_METRIC_KEYS, build_overview_trends
 
 
 def _utc_boundary(day: date) -> datetime:
@@ -214,30 +215,32 @@ class ReportingService:
     def report(db: Session, family_id: str, child_id: str, days: int = 7) -> dict:
         child = ChildrenService.get_child(db, family_id, child_id)
         today = local_date()
-        start = _utc_boundary(today - timedelta(days=days - 1))
-        record_count = (
-            db.scalar(
-                select(func.count(LearningRecord.id)).where(
+        date_start = today - timedelta(days=days - 1)
+        start = _utc_boundary(date_start)
+        end = _utc_boundary(today + timedelta(days=1))
+        record_times = list(
+            db.scalars(
+                select(LearningRecord.occurred_at).where(
                     LearningRecord.family_id == family_id,
                     LearningRecord.child_id == child_id,
                     LearningRecord.occurred_at >= start,
+                    LearningRecord.occurred_at < end,
                 )
             )
-            or 0
         )
-        new_knowledge = (
-            db.scalar(
-                select(func.count(KnowledgeItem.id)).where(
+        knowledge_times = list(
+            db.scalars(
+                select(KnowledgeItem.created_at).where(
                     KnowledgeItem.family_id == family_id,
                     KnowledgeItem.child_id == child_id,
                     KnowledgeItem.created_at >= start,
+                    KnowledgeItem.created_at < end,
                 )
             )
-            or 0
         )
-        reviews = (
-            db.scalar(
-                select(func.count(ReviewFeedback.id))
+        feedback_times = list(
+            db.scalars(
+                select(ReviewFeedback.occurred_at)
                 .join(ReviewItem, ReviewFeedback.review_item_id == ReviewItem.id)
                 .join(KnowledgeItem, ReviewItem.knowledge_item_id == KnowledgeItem.id)
                 .join(Subject, KnowledgeItem.subject_id == Subject.id)
@@ -245,10 +248,10 @@ class ReportingService:
                     ReviewFeedback.family_id == family_id,
                     ReviewItem.child_id == child_id,
                     ReviewFeedback.occurred_at >= start,
+                    ReviewFeedback.occurred_at < end,
                     Subject.kind == "learning",
                 )
             )
-            or 0
         )
         subject_rows = db.execute(
             select(Subject.id, Subject.name, func.count(KnowledgeOccurrence.id))
@@ -258,21 +261,21 @@ class ReportingService:
                 Subject.family_id == family_id,
                 Subject.child_id == child_id,
                 KnowledgeOccurrence.occurred_at >= start,
+                KnowledgeOccurrence.occurred_at < end,
             )
             .group_by(Subject.id)
             .order_by(func.count(KnowledgeOccurrence.id).desc())
         ).all()
-        activity_count = (
-            db.scalar(
-                select(func.count(ActivityRecord.id)).where(
+        activity_times = list(
+            db.scalars(
+                select(ActivityRecord.occurred_at).where(
                     ActivityRecord.family_id == family_id,
                     ActivityRecord.child_id == child_id,
                     ActivityRecord.occurred_at >= start,
+                    ActivityRecord.occurred_at < end,
                 )
             )
-            or 0
         )
-        date_start = today - timedelta(days=days - 1)
         occurrence_rows = db.execute(
             select(KnowledgeOccurrence.occurred_at, ReviewItem)
             .join(ReviewItem, ReviewItem.knowledge_item_id == KnowledgeOccurrence.knowledge_item_id)
@@ -281,6 +284,7 @@ class ReportingService:
             .where(
                 KnowledgeOccurrence.family_id == family_id,
                 KnowledgeOccurrence.occurred_at >= start,
+                KnowledgeOccurrence.occurred_at < end,
                 ReviewItem.family_id == family_id,
                 ReviewItem.child_id == child_id,
                 Subject.kind == "learning",
@@ -304,18 +308,6 @@ class ReportingService:
                 item["pending_count"] += 1
                 item["level"] = max(item["level"], level)
                 item["passed"] = False
-        feedback_times = db.scalars(
-            select(ReviewFeedback.occurred_at)
-            .join(ReviewItem, ReviewFeedback.review_item_id == ReviewItem.id)
-            .join(KnowledgeItem, ReviewItem.knowledge_item_id == KnowledgeItem.id)
-            .join(Subject, KnowledgeItem.subject_id == Subject.id)
-            .where(
-                ReviewFeedback.family_id == family_id,
-                ReviewItem.child_id == child_id,
-                ReviewFeedback.occurred_at >= start,
-                Subject.kind == "learning",
-            )
-        )
         feedback_by_day: dict[str, int] = defaultdict(int)
         for occurred_at in feedback_times:
             feedback_by_day[local_date(occurred_at).isoformat()] += 1
@@ -335,15 +327,18 @@ class ReportingService:
             thresholds = (0, 2, 5, 8)
             activity_level = sum(count > threshold for threshold in thresholds) if count else 0
             activity.append({"day": key, "count": count, "level": activity_level})
+        event_days = {
+            "learning_records": [local_date(item) for item in record_times],
+            "new_knowledge_items": [local_date(item) for item in knowledge_times],
+            "review_feedback_count": [local_date(item) for item in feedback_times],
+            "activity_records": [local_date(item) for item in activity_times],
+        }
+        overview = {key: len(event_days[key]) for key in TREND_METRIC_KEYS}
         return {
             "child": {"id": child.id, "name": child.name},
             "range_days": days,
-            "overview": {
-                "learning_records": record_count,
-                "new_knowledge_items": new_knowledge,
-                "review_feedback_count": reviews,
-                "activity_records": activity_count,
-            },
+            "overview": overview,
+            "overview_trends": build_overview_trends(date_start, days, event_days),
             "subjects": [
                 {"id": sid, "name": name, "occurrences": count} for sid, name, count in subject_rows
             ],

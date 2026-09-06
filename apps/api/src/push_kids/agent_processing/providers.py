@@ -35,9 +35,7 @@ class DeterministicTestProvider:
         subject = self._subject(text)
         separators = str.maketrans({",": "\n", "，": "\n", "。": "\n", "；": "\n", ";": "\n"})
         raw_points = [
-            part.strip()
-            for part in text.translate(separators).splitlines()
-            if part.strip()
+            part.strip() for part in text.translate(separators).splitlines() if part.strip()
         ]
         if not raw_points:
             raw_points = ["图片中的学习内容"]

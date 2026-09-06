@@ -3,6 +3,7 @@ import logging
 from datetime import timedelta
 
 import pytest
+from push_kids.agent_processing.contracts import AnalysisOutputExhaustedError
 from push_kids.persistence.models import AgentJob, LearningRecord, LearningSubmission
 from push_kids.platform.time import utcnow
 from sqlalchemy import event, func, select, update
@@ -205,6 +206,28 @@ def test_preparation_error_is_bounded_and_next_job_runs(client, app, child, fami
         assert db.get(AgentJob, ids[0]).state == "failed"
         assert db.get(AgentJob, ids[0]).attempts == 3
         assert db.get(AgentJob, ids[1]).state == "succeeded"
+
+
+def test_invalid_structured_output_is_terminal_without_worker_retry(
+    client, app, child, family_headers, monkeypatch
+):
+    ids = add_jobs(app, child, family_headers, texts=("private-invalid-output",))
+
+    def fail_validation(_data):
+        raise AnalysisOutputExhaustedError()
+
+    monkeypatch.setattr(app.state.worker.provider, "analyze", fail_validation)
+    assert app.state.worker.process_one()
+    assert not app.state.worker.process_one()
+
+    with app.state.database.session_factory() as db:
+        job = db.get(AgentJob, ids[0])
+        submission = db.get(LearningSubmission, job.submission_id)
+        assert job.state == "failed"
+        assert job.attempts == 1
+        assert submission.state == "failed"
+        assert submission.error_code == "analysis_output_invalid"
+        assert submission.proposal_json is None
 
 
 def test_persisted_second_precision_lease_is_used_for_writeback(

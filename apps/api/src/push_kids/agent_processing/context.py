@@ -166,9 +166,9 @@ def build_analysis_input(
         raise ValueError("too many same-day learning items for bounded analysis")
 
     today = local_date()
-    reviews = []
+    reviews: list[tuple[ReviewItem, KnowledgeItem, Subject]] = []
     if occurrence_day == today:
-        reviews = db.execute(
+        review_rows = db.execute(
             select(ReviewItem, KnowledgeItem, Subject)
             .join(KnowledgeItem, ReviewItem.knowledge_item_id == KnowledgeItem.id)
             .join(Subject, KnowledgeItem.subject_id == Subject.id)
@@ -190,6 +190,7 @@ def build_analysis_input(
             .order_by(ReviewItem.due_date, ReviewItem.id)
             .limit(51)
         ).all()
+        reviews = [(review, item, subject) for review, item, subject in review_rows]
         if len(reviews) > 50:
             raise ValueError("too many due review candidates for bounded analysis")
     return AnalysisInput(
@@ -216,7 +217,7 @@ def build_analysis_input(
                 knowledge_id=item.id,
                 subject_name=subject.name,
                 step=review.step,
-                due_date=review.due_date.isoformat(),
+                due_date=review.due_date.isoformat() if review.due_date else None,
                 eligible_on=today.isoformat(),
             )
             for review, item, subject in reviews

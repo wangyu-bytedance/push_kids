@@ -95,10 +95,28 @@ def test_duplicate_images_send_once_with_original_numbering(tmp_path):
     for path, content in zip(paths, [b"same", b"same", b"different"], strict=True):
         path.write_bytes(content)
     captured = []
-    result = body([point()]).model_dump()
-    result["knowledge_points"][0]["direct_evidence"] = [
-        {"source": "image", "image_index": 3, "detail": "28+17"}
-    ]
+    result = {
+        "summary": "进位加法",
+        "source": "图片记录",
+        "subjects": {
+            "数学": [
+                {
+                    "kind": "new_learning",
+                    "name": "两位数进位加法",
+                    "review_id": None,
+                    "existing_knowledge_id": None,
+                    "category": "计算",
+                    "display_kind": "arithmetic",
+                    "review_method": "口算与讲解",
+                    "estimated_minutes": 3,
+                    "direct_evidence": [{"source": "image", "image_index": 3, "detail": "28+17"}],
+                    "context_used": [],
+                    "confidence": "high",
+                }
+            ]
+        },
+        "uncertainties": [],
+    }
 
     def respond(**kwargs):
         captured.append(kwargs)
@@ -107,7 +125,7 @@ def test_duplicate_images_send_once_with_original_numbering(tmp_path):
     provider = object.__new__(ArkAnalysisProvider)
     provider.model = "synthetic"
     provider.client = SimpleNamespace(responses=SimpleNamespace(create=respond))
-    output = provider.analyze(AnalysisInput(image_paths=paths))
+    output = provider.analyze(AnalysisInput(image_paths=paths, existing_subjects=["数学"]))
     sent = captured[0]["input"][0]["content"]
     assert sum(item["type"] == "input_image" for item in sent) == 2
     assert any("原始照片3" in item.get("text", "") for item in sent)
@@ -130,6 +148,9 @@ def test_deployed_prompt_covers_core_content_and_missing_stage():
         "2026-09-05T10:00:00Z",
         "不代表掌握程度",
         "不得生成复习日期",
+        "当天已经确认",
+        "new_learning",
+        "review",
     ]:
         assert required in prompt
     # This asserts the deployed instruction contract, not live model semantic accuracy.

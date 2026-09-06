@@ -4,30 +4,51 @@ from types import SimpleNamespace
 
 import pytest
 from push_kids.agent_processing import providers
-from push_kids.agent_processing.contracts import AnalysisInput, AnalysisProposal
+from push_kids.agent_processing.contracts import (
+    AnalysisInput,
+    AnalysisOutputExhaustedError,
+    AnalysisProposal,
+)
 from push_kids.agent_processing.providers import ArkAnalysisProvider
 from push_kids.platform.config import Settings
-from push_kids.platform.errors import DependencyError
 
 
 def valid_proposal():
     return {
         "summary": "本次学习",
-        "subject_name": "数学",
-        "knowledge_points": [
-            {
-                "name": "分数",
-                "direct_evidence": [{"source": "parent_text", "detail": "家长说明分数"}],
-            }
-        ],
+        "source": "家长文字",
+        "subjects": {
+            "数学": [
+                {
+                    "kind": "new_learning",
+                    "name": "分数",
+                    "review_id": None,
+                    "existing_knowledge_id": None,
+                    "category": "数学概念",
+                    "display_kind": "concept",
+                    "review_method": "口头回顾",
+                    "estimated_minutes": 3,
+                    "direct_evidence": [
+                        {
+                            "source": "parent_text",
+                            "image_index": None,
+                            "detail": "家长说明分数",
+                        }
+                    ],
+                    "context_used": [],
+                    "confidence": "high",
+                }
+            ]
+        },
+        "uncertainties": [],
     }
 
 
 @pytest.mark.parametrize("invalid", ["empty", "context", "image", "no_text", "todo", "blank"])
 def test_ark_rejects_invalid_evidence(invalid):
-    data = AnalysisInput(text="分数", image_paths=[])
+    data = AnalysisInput(text="分数", image_paths=[], existing_subjects=["数学"])
     body = valid_proposal()
-    point = body["knowledge_points"][0]
+    point = body["subjects"]["数学"][0]
     if invalid == "empty":
         point["direct_evidence"] = []
     elif invalid == "context":
@@ -37,7 +58,8 @@ def test_ark_rejects_invalid_evidence(invalid):
     elif invalid == "no_text":
         data.text = None
     elif invalid == "todo":
-        body["todo_matches"] = [{"review_id": "invented", "knowledge_name": "分数"}]
+        point["kind"] = "review"
+        point["review_id"] = "invented"
     else:
         point["direct_evidence"][0]["detail"] = "  "
     provider = object.__new__(ArkAnalysisProvider)
@@ -45,7 +67,7 @@ def test_ark_rejects_invalid_evidence(invalid):
     provider.client = SimpleNamespace(
         responses=SimpleNamespace(create=lambda **kw: SimpleNamespace(output_text=json.dumps(body)))
     )
-    with pytest.raises(DependencyError):
+    with pytest.raises(AnalysisOutputExhaustedError):
         provider.analyze(data)
 
 
@@ -62,7 +84,16 @@ def test_valid_evidence_and_parent_additions():
             }
         ],
     )
-    body = valid_proposal()
+    body = {
+        "summary": "本次学习",
+        "subject_name": "数学",
+        "knowledge_points": [
+            {
+                "name": "分数",
+                "direct_evidence": [{"source": "parent_text", "detail": "家长说明分数"}],
+            }
+        ],
+    }
     body["knowledge_points"][0]["context_used"] = ["known"]
     body["knowledge_points"][0]["direct_evidence"].append(
         {"source": "image", "image_index": 1, "detail": "题目"}

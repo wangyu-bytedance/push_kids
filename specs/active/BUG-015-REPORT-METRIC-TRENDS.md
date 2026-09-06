@@ -1,15 +1,15 @@
 # BUG-015 — 报表概览指标去跳转并增加区间趋势微图
 
-- Status: READY_FOR_REVIEW
+- Status: IMPLEMENTING
 - Severity: 中 — 当前四张概览卡的跳转缺少稳定预期，且总量数字无法回答“这段时间如何变化”
-- Risk: R2（本次批准只覆盖前端评审实现；后端趋势契约必须在视觉通过后的新 revision 中另行批准）
+- Risk: R2（前端交互与 additive API 响应同时变化；无 Schema migration）
 - Owner: 王宇
 - Implementer: Codex
 - Reviewer/Verifier: 王宇 / Codex
 - First observed: 2026-09-06，本地微信开发者工具，报表页 390×844
 - Related incident/ticket: 用户于 2026-09-06 提供的报表页截图与本轮需求
-- Spec revision: BUG-SPEC-20260906-20
-- User confirmation: pending — 用户于 2026-09-06 要求超过 7 个数据点时统一为 7 个等距离点；实施前仍需明确批准 `BUG-SPEC-20260906-20` + `DREV-20260906-REPORT-01`
+- Spec revision: BUG-SPEC-20260906-21
+- User confirmation: APPROVED — 用户于 2026-09-06 明确回复“批准 BUG-SPEC-20260906-21，开始前后端实现”
 - Affected Feature IDs: FEAT-001
 - Feature current-state documents: `docs/domain/features/FEAT-001-push-kids-mvp.md`
 - Feature baseline revision: 当前 FEAT-001 current state（2026-09-06）
@@ -34,14 +34,14 @@
 - Figma node URL(s): `https://www.figma.com/design/FAyfmjNrA3btWztwyxI6Zj?node-id=0-1`（仅为既有 FEAT-001 waiver anchor，不冒充本次 node-specific 设计）
 - Proposed Design Revision: DREV-20260906-REPORT-01
 - Required viewport/state exports: 320×568、390×844、430×932；每个视口至少覆盖“有趋势 mock”和“后端字段缺失/新用户无趋势”；另留存 7/30/100 天均为 7 点的切换证据
-- Prototype status: DRAFT — 独立固定 mock 原型已生成于 `docs/design/frontend/prototypes/DREV-20260906-REPORT-01/index.html`；它不连接后端、不修改生产小程序，供本轮批准前评审
-- Approved Task Spec revision: pending
-- Approved Design Revision: pending
-- Design approval evidence: pending
-- Snapshot manifest path: `docs/design/frontend/snapshots/UI-001/DREV-20260906-REPORT-01/APPROVAL.md`（批准与截图后创建）
+- Prototype status: APPROVED — 独立固定 mock 原型位于 `docs/design/frontend/prototypes/DREV-20260906-REPORT-01/index.html`；用户确认按该方案实现
+- Approved Task Spec revision: BUG-SPEC-20260906-21
+- Approved Design Revision: DREV-20260906-REPORT-01
+- Design approval evidence: 用户于 2026-09-06 回复“按照这个方案 生成代码，前后端都需要”
+- Snapshot manifest path: `docs/design/frontend/snapshots/UI-001/DREV-20260906-REPORT-01/APPROVAL.md`
 - Permitted implementation deviations: mock 只允许存在于本地评审注入/测试桩，不得进入运行时默认数据、生产 API 或提交历史
 - UI current-state merge owner: Codex
-- UI current-state merge evidence: pending；视觉通过并完成前端验证后再更新 UI-001，后端事实不在本 revision 合并
+- UI current-state merge evidence: pending；完成前后端验证后更新 UI-001
 - Frontend visual/a11y/resolution verification: pending
 - Frontend engineering verification evidence: pending
 - Figma waiver: 沿用已批准的 FEAT-001 Starter 限额 waiver；只覆盖本次 UI-001 报表概览卡局部修订，Owner 为 repository owner，公开生产发布前失效；不免除原生三视口、字体放大和 iOS/Android 真机验收，也不扩展到 FEAT-002
@@ -158,13 +158,13 @@
 - 折线不平滑、不填充、不带交互点或方向评价；避免用视觉插值编造峰谷，也不表达“进步/退步”。
 - 区间口径：所有范围统一显示 7 点。7 天逐日 7 点；30/100 天按时间顺序切成 7 个尽可能等宽的连续时间段，每段对事件计数求和。这里采用等宽聚合而不是只抽取 7 个日期，避免漏掉采样日之间的记录。数字始终是完整区间总量，并等于 7 段之和。
 - 每张卡只在自身序列内按 `0..max` 缩放；不同卡的线高不可横向比较绝对量。`max=0` 且序列真实存在时显示观测到的零基线；字段整体缺失时不画线并显示“暂无趋势”。
-- 时区沿用报表的 Asia/Shanghai 日边界；未来后端必须返回完整连续桶或明确的起止信息。前端不得把整个缺失序列擅自补为零。
+- 时区沿用报表的 Asia/Shanghai 日边界；后端返回完整 7 个连续桶及每桶起止日。前端不得把整个缺失序列擅自补为零。
 - 可访问文本包含指标名、区间总量、范围以及确定性摘要，例如“近 7 天逐日数据，最高 3，最近一天 1”；不使用颜色作为唯一信息。
 - 本轮 mock 使用固定、可复现数组，覆盖上升、回落、波动、真实全零四种形态，只用于本地视觉评审；不得提交为生产默认数据。
 
 ### Must not change
 
-- `/report` 当前后端请求、权限、汇总数字和 7/30/100 天选择器
+- `/report` 当前请求路径、权限、既有字段和 7/30/100 天选择器；只新增响应字段
 - 报表下方“接下来的复习压力”“复习活跃度”“科目学习记录”“课外活动投入”
 - 科目行进入筛选后历史记录的既有能力
 - 无孩子与无已确认记录的页面级空态
@@ -174,11 +174,11 @@
 - Current Feature sections affected: 报表交互；Change reference 中“报表指标可点”
 - Incorrect/obsolete statement to correct: `FEAT-001` 与 `UI-001` 中概览指标跳转合同
 - Final facts to merge after verification: 概览卡为只读、趋势缺失/全零语义、mock 不进入运行时
-- Change Reference to add: `BUG-015 / BUG-SPEC-20260906-20 / DREV-20260906-REPORT-01`
+- Change Reference to add: `BUG-015 / BUG-SPEC-20260906-21 / DREV-20260906-REPORT-01`
 
 ### Non-goals
 
-- 本 revision 不修改后端、数据库或 API schema。
+- 本 revision 不修改数据库 schema，不删除或重命名既有 API 字段。
 - 本 revision 不改变四项统计定义，也不承诺任一指标越高越好。
 - 不删除科目行的显式“可下钻”入口。
 - 不重做下方两块日历型图表，不新增动画、tooltip 或手势。
@@ -194,18 +194,48 @@
 
 ### Selected change
 
-- Existing path to modify: `pages/reports/index.{js,wxml,wxss}`
+- Existing path to modify: `reporting/service.py`、新增纯聚合策略、`pages/reports/index.{js,wxml,wxss}`
 - Logic to delete/replace: 删除 `METRIC_TARGETS`、指标 target/actionable/hint、`openMetric`、`scrollToSection`、仅供其使用的 rpx 换算；以纯函数把可选数字序列转换为固定尺寸点/线段
 - Why no parallel path is needed: 卡片不再导航；详细查看继续使用已经存在且语义明确的下方区块与科目行
-- Error/transaction/concurrency implications: 无事务；页面现有 generation guard 不变；缺趋势字段必须安全降级
+- Error/transaction/concurrency implications: 只读查询、无新事务；页面现有 generation guard 不变；缺趋势字段必须安全降级；全部查询继续 family/child scoped
 
 ### Data visualization decision
 
 - Named question: “所选区间内，这项记录是在什么时候发生、整体形态如何？”
-- Unit: 每日/每 5 日桶的事件计数；卡片大数字是区间事件总数
+- Unit: 7 个连续等宽时间桶的事件计数；卡片大数字是完整区间事件总数
 - Chart grammar selected: Lieflat Basics `F2 Hairline Line` 的直线折线语法，适配为小程序原生 WXML/WXSS 7 点微图
 - Axis/range: 不显示坐标轴；从 0 到该卡序列最大值；范围和计数通过卡片文本/aria 提供
-- Missing data: 整条序列缺失 = `暂无趋势`；序列存在且值为 0 = 真实零基线；部分缺桶由未来服务端契约决定，客户端不猜测
+- Missing data: 旧后端整字段缺失 = `暂无趋势`；新后端始终返回 7 桶，新用户为 7 个真实零桶；桶结构无效时客户端降级为 `暂无趋势`，不猜测
+
+### Additive API contract
+
+`GET /api/v1/children/{child_id}/report?days={7|30|100}` 保留全部既有字段，并新增：
+
+```json
+{
+  "overview_trends": {
+    "timezone": "Asia/Shanghai",
+    "aggregation": "equal_time_sum",
+    "buckets": [
+      {
+        "start_day": "2026-08-08",
+        "end_day": "2026-08-12",
+        "learning_records": 3,
+        "new_knowledge_items": 5,
+        "review_feedback_count": 2,
+        "activity_records": 1
+      }
+    ]
+  }
+}
+```
+
+- `buckets` 始终恰好 7 项，按 `start_day` 升序、互不重叠、首尾连续；`start_day/end_day` 均为 Asia/Shanghai 自然日且边界包含。
+- 7 天时每桶 1 天；30/100 天把 day offset `i` 确定性分配到 `floor(i * 7 / days)`，因此桶长之差不超过 1 天。
+- 四项均为非负整数，分别沿用 overview 的既有口径：LearningRecord/ActivityRecord/ReviewFeedback 按 `occurred_at`，KnowledgeItem 按 `created_at`。
+- 统计窗口明确为 `[起始日 00:00, 今天后一天 00:00)`（Asia/Shanghai 转 UTC 查询），避免未来时间记录进入“近 N 天”。每项 overview 总量必须等于 7 桶对应字段之和。
+- 新用户/有孩子但无业务数据仍返回完整 7 桶，四项均为 0。不存在 `null`、省略桶或 mock 值。
+- 这是响应字段级 additive change：旧客户端忽略它；新客户端遇到旧后端字段缺失、桶数不为 7、日期不连续或非整数负值时，只降级为“暂无趋势”，不影响既有总量和下方报表。
 
 ### Trade-offs and alternatives rejected
 
@@ -226,15 +256,18 @@
 sequenceDiagram
     participant P as Parent
     participant UI as Reports page
-    participant API as Current Report API
+    participant API as Report API
+    participant S as Reporting service
     P->>UI: choose 7 / 30 / 100 days
     UI->>API: GET /children/{id}/report?days=N
-    API-->>UI: current totals and existing charts
-    alt isolated local visual review
-        UI->>UI: inject deterministic mock trend series
-        UI->>UI: aggregate to 7 equal-time buckets and render
-    else current backend / new user
-        UI->>UI: trend field missing → render “暂无趋势”
+    API->>S: family-scoped report(child, N)
+    S->>S: group four timestamp streams into 7 equal-time buckets
+    S-->>API: existing report + overview_trends
+    API-->>UI: additive response
+    alt valid 7 buckets
+        UI->>UI: render four static 7-point lines
+    else old backend / invalid trend field
+        UI->>UI: keep totals and render “暂无趋势”
     end
     P->>UI: tap metric card
     UI-->>P: no navigation; card remains a read-only summary
@@ -245,11 +278,9 @@ sequenceDiagram
 ```mermaid
 stateDiagram-v2
     [*] --> Unavailable: trend field absent/null
-    Unavailable --> MockReview: isolated review injection only
-    Unavailable --> Observed: future backend returns complete series
+    Unavailable --> Observed: backend returns valid 7 buckets
     Observed --> ObservedZero: all values are zero
     Observed --> ObservedNonZero: at least one value is positive
-    MockReview --> Unavailable: remove review injection before commit/release
     ObservedZero --> Unavailable: later request omits/invalidates series
     ObservedNonZero --> Unavailable: later request omits/invalidates series
 ```
@@ -258,13 +289,14 @@ stateDiagram-v2
 
 ```mermaid
 flowchart LR
-    API[Current Report API\nunchanged in this revision] --> PAGE[reports/index.js]
-    MOCK[Isolated deterministic mock\nlocal review only] -. review injection .-> PAGE
-    PAGE --> PURE[buildMetricTrend pure transform]
+    DB[(Family-scoped records)] --> SERVICE[reporting/service.py]
+    POLICY[reporting/trends.py\n7-bucket pure policy] --> SERVICE
+    SERVICE --> API[Additive overview_trends]
+    API --> PAGE[reports/index.js]
+    PAGE --> PURE[buildMetricTrend geometry]
     PURE --> VIEW[WXML/WXSS read-only metric card]
     VIEW --> A11Y[Text total + range + summary]
     VIEW --> LINE[Native positioned line segments]
-    FUTURE[Future approved API revision] -. replaces mock .-> PAGE
 ```
 
 ### Exact visual contract for DREV-20260906-REPORT-01
@@ -285,25 +317,28 @@ flowchart LR
 |---|---|---|---|
 | `specs/active/BUG-015-REPORT-METRIC-TRENDS.md` | add/update | 本批准合同与验证证据 | 变更门禁与事实源 |
 | `docs/design/frontend/prototypes/DREV-20260906-REPORT-01/index.html` | add | 固定 mock 的 7/30/100 天与新用户候选界面 | 批准前视觉评审，不属于生产运行时 |
+| `docs/design/frontend/snapshots/UI-001/DREV-20260906-REPORT-01/APPROVAL.md` | add | 记录用户批准、原型 hash、waiver 与待补原生证据 | 设计门禁证据 |
+| `apps/api/src/push_kids/reporting/trends.py` | add | 纯 7 桶边界与计数聚合策略 | 统一服务端口径并可独立测试 |
+| `apps/api/src/push_kids/reporting/service.py` | modify | 查询四类 family/child scoped 时间戳，返回 additive `overview_trends`；overview 与桶和共源 | 后端权威读取路径 |
 | `apps/miniprogram/pages/reports/index.js` | modify | 删除概览跳转；增加纯趋势布局/摘要转换；兼容字段缺失 | 权威页面逻辑 |
 | `apps/miniprogram/pages/reports/index.wxml` | modify | 卡片改为只读并渲染数字 + 微图/缺失文案 | 可见与 a11y 合同 |
 | `apps/miniprogram/pages/reports/index.wxss` | modify | 微图几何、线段、三视口收缩规则 | 原生布局 |
 | `tests/frontend/reports-metrics.test.js` | modify | 反向断言跳转路径已删除，保留科目行下钻 | 回归既有缺陷 |
 | `tests/frontend/report-metric-trends.test.js` | add | 7/30/100、缺失、全零、静态模板与纯函数测试 | 趋势数据完整性 |
-| `docs/design/frontend/snapshots/UI-001/DREV-20260906-REPORT-01/APPROVAL.md` | add after approval | 批准语句、revision、截图与 hash | 设计证据 |
+| `tests/unit/test_reporting_trends.py` | add | 桶边界、总量守恒、7/30/100、时区和全零策略 | 纯策略回归 |
+| `tests/integration/test_activities_and_reports.py` | modify | API 新字段、四项口径、无数据、family scope 与未来时间上界 | 服务/API 集成回归 |
+| `tests/e2e/test_live_parent_journey.py` | modify | 完整旅程断言 additive 趋势与 overview 守恒 | 调用方契约回归 |
 | `docs/design/frontend/ui/UI-001-parent-miniapp.md` | modify after verification | 合并最终 UI current state | 当前态事实源 |
 | `docs/domain/features/FEAT-001-push-kids-mvp.md` | modify after verification | 删除“报表指标可点”事实并增加只读趋势合同 | Feature 当前态 |
 | `docs/domain/BEHAVIOR-CATALOG.md` | modify after verification | 登记概览只读与缺失趋势行为 | 行为事实源 |
 
-后端相关文件不在本 revision 的 expected changes 中。视觉通过后必须先审计 reporting schema/service，形成本文件的新 revision，定义可选逐日字段、客户端 7 桶聚合、时区、空数组/null、旧客户端与新用户兼容，再获得批准后实施。
-
 ### Compatibility and rollout
 
-- Deployment order: 本地前端 mock 评审 → 用户通过视觉 → 删除 mock → 提交真实前端缺字段降级 → 新后端 revision 审批与实现 → API 先部署可选字段 → 前端读取真实趋势
+- Deployment order: 本地实现与测试 → 后端先部署 additive 字段 → 小程序再上传；若仅本地联调可同时运行。用户本次未授权部署或上传
 - Feature flag: 不新增生产 flag；评审 mock 是隔离注入，不进入提交
-- Migration/backfill: 本 revision none；未来趋势应查询既有事件，不需伪造或回填业务记录
-- Rollback/restore: 回滚三份 reports 前端文件即可恢复旧卡片；无数据回滚
-- Success/abort metrics: 三视口无裁切、卡片无跳转、mock 形态可辨、缺字段不画假线；任一不满足则停止进入后端设计
+- Migration/backfill: none；趋势查询既有事件，不伪造或回填业务记录
+- Rollback/restore: 前端可独立回滚并忽略新字段；后端可独立回滚，已上线新前端自动显示“暂无趋势”；无数据回滚
+- Success/abort metrics: API 7 桶与 overview 总量守恒、空用户全零、跨家庭拒绝、三视口无裁切、卡片无跳转、旧后端缺字段不画假线
 
 ## 7. Regression verification
 
@@ -318,17 +353,24 @@ flowchart LR
 
 - Test point ID: TP-002
 - Acceptance/expected behavior: 7/30/100 天均形成 7 个有序点；30/100 天按连续等宽时间桶求和，桶大小之差不超过 1 天，7 点之和等于区间总量
-- Test level: pure JS unit
-- Pre-fix failure evidence: 当前无趋势转换函数
+- Test level: pure Python policy + frontend geometry unit
+- Pre-fix failure evidence: 当前无后端趋势聚合或前端趋势转换函数
 - Post-fix success evidence: pending
 - Why this test proves the bug: 证明不同范围在小卡上有明确、无抽样丢失的表示
 
 - Test point ID: TP-003
-- Acceptance/expected behavior: missing/null/invalid series 显示“暂无趋势”；显式完整全零序列显示零基线，二者不混淆
+- Acceptance/expected behavior: 旧后端 missing/null/invalid series 显示“暂无趋势”；新后端完整全零 7 桶显示零基线，二者不混淆
 - Test level: pure JS + template contract
 - Pre-fix failure evidence: 当前无趋势状态
 - Post-fix success evidence: pending
 - Why this test proves the bug: 覆盖新用户和旧后端兼容的核心诚信边界
+
+- Test point ID: TP-005
+- Acceptance/expected behavior: API 的四项 overview 分别等于 7 桶同名字段之和；窗口以 Asia/Shanghai 今天结束；所有查询 family/child scoped，其他家庭仍为 404
+- Test level: backend integration + contract/E2E
+- Pre-fix failure evidence: 当前响应没有 `overview_trends`
+- Post-fix success evidence: pending
+- Why this test proves the bug: 证明曲线来自真实、完整、隔离的数据，而不是前端 mock 或与总量不一致的旁路统计
 
 - Test point ID: TP-004
 - Acceptance/expected behavior: 320×568、390×844、430×932 原生节点无横向溢出、数字/折线/标签不重叠，7/30/100 切换稳定
@@ -354,6 +396,8 @@ flowchart LR
 |---|---|---|---|---|
 | TP-001–003 | `npm test` | local Node | not run | pending implementation |
 | TP-001–003 | `npx eslint apps/miniprogram tests/frontend` | local Node | not run | pending implementation |
+| TP-002/003/005 | `uv run pytest tests/unit/test_reporting_trends.py tests/integration/test_activities_and_reports.py tests/contract/test_api_contract.py -q` | local SQLite | not run | pending implementation |
+| backend typing/lint | `uv run ruff check . && uv run ruff format --check . && uv run mypy apps/api/src` | local | not run | pending implementation |
 | TP-001–003 | `uv run python tools/validate_miniprogram.py` | local | not run | pending implementation |
 | architecture | `uv run python tools/check_architecture.py` | local | not run | pending implementation |
 | TP-004 | WeChat DevTools 320×568 / 390×844 / 430×932, mock + missing | registered AppID local preview | not run | pending approval/implementation |

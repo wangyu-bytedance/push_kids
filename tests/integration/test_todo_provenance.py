@@ -14,8 +14,16 @@ from sqlalchemy import select
 PNG = b"\x89PNG\r\n\x1a\nvalid-image-content"
 
 
-def _confirmed(client: TestClient, app, headers: dict[str, str], child_id: str, text: str) -> dict:
-    occurred = datetime.now(UTC) - timedelta(days=4)
+def _confirmed(
+    client: TestClient,
+    app,
+    headers: dict[str, str],
+    child_id: str,
+    text: str,
+    *,
+    days_ago: int = 4,
+) -> dict:
+    occurred = datetime.now(UTC) - timedelta(days=days_ago)
     submission_id = client.post(
         "/api/v1/submissions",
         headers=headers,
@@ -166,7 +174,7 @@ def test_confirmation_keeps_first_recognition_provenance(
             item.knowledge_item_id: item.source_submission_id
             for item in db.scalars(select(ReviewItem))
         }
-    _confirmed(client, app, family_headers, child["id"], "英语单词 animal")
+    _confirmed(client, app, family_headers, child["id"], "英语单词 animal", days_ago=3)
     with app.state.database.session_factory() as db:
         assert {
             item.id: (item.confidence, item.evidence_json)

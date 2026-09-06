@@ -118,6 +118,8 @@ def test_duplicate_matches_advance_once_and_stale_proposal_cannot_advance_again(
     review_id = confirm(client, family_headers, first).json()["review_item_ids"][0]
     with app.state.database.session_factory() as db:
         review = db.get(ReviewItem, review_id)
+        review.due_date = local_date()
+        db.commit()
         match = {
             "review_id": review_id,
             "knowledge_name": "两位数进位加法",
@@ -126,14 +128,22 @@ def test_duplicate_matches_advance_once_and_stale_proposal_cannot_advance_again(
             "evidence": "本次练习",
         }
     body = proposal()
+    body["knowledge_points"] = []
     body["todo_matches"] = [match] * 6
     keys = [draft(client, app, family_headers, child["id"], body=body) for _ in range(2)]
-    for key in keys:
-        assert confirm(client, family_headers, key, body).status_code == 200
+    first_result = confirm(client, family_headers, keys[0], body)
+    assert first_result.status_code == 200
+    assert first_result.json()["records"] == []
+    assert len(first_result.json()["updated_reviews"]) == 1
+    stale = confirm(client, family_headers, keys[1], body)
+    assert stale.status_code == 409
+    assert stale.json()["error"]["code"] == "review_state_changed"
     with app.state.database.session_factory() as db:
         review = db.get(ReviewItem, review_id)
         assert review.step == 1 and review.active
         assert db.scalar(select(func.count(ReviewFeedback.id))) == 1
+        assert db.scalar(select(func.count(LearningRecord.id))) == 1
+        assert db.get(LearningSubmission, keys[1]).state == "pending_confirmation"
 
 
 @pytest.mark.parametrize("state", ["queued", "analyzing", "failed", "pending_confirmation"])
@@ -222,10 +232,13 @@ def test_repeated_material_warns_and_never_auto_completes(client, app, child, fa
         if index:
             assert any("完全相同" in message for message in body["uncertainties"])
             assert not body["todo_matches"]
-        assert confirm(client, family_headers, key, body).status_code == 200
+            assert not body["knowledge_points"]
+            assert confirm(client, family_headers, key, body).status_code == 400
+        else:
+            assert confirm(client, family_headers, key, body).status_code == 200
     with app.state.database.session_factory() as db:
         assert db.scalar(select(func.count(KnowledgeItem.id))) == 1
-        assert db.scalar(select(func.count(LearningRecord.id))) == 2
+        assert db.scalar(select(func.count(LearningRecord.id))) == 1
         assert db.scalar(select(func.count(ReviewFeedback.id))) == 0
 
 

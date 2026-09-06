@@ -198,11 +198,11 @@ class AnalysisInput(BaseModel):
         candidates = {item.review_id: item for item in self.todo_candidates}
         knowledge = {item.knowledge_id: item for item in self.existing_knowledge}
         same_day = {
-            (item.subject_name, normalize_knowledge_name(item.name), item.category.strip())
+            (item.subject_name, normalize_knowledge_name(item.name))
             for item in self.same_day_learning
         }
         historical = {
-            (item.subject_name, normalize_knowledge_name(item.name), item.category.strip())
+            (item.subject_name, normalize_knowledge_name(item.name))
             for item in self.existing_knowledge
         }
         points: list[KnowledgeProposal] = []
@@ -212,19 +212,26 @@ class AnalysisInput(BaseModel):
 
         for subject_name, items in result.subjects.items():
             for item in items:
+                if (
+                    not normalize_knowledge_name(item.name)
+                    or not item.category.strip()
+                    or not item.review_method.strip()
+                ):
+                    errors.append("item.blank")
                 if not set(item.context_used).issubset(context_ids):
                     errors.append("context.reference")
                 for evidence in item.direct_evidence:
+                    if not evidence.detail.strip():
+                        errors.append("evidence.detail")
                     if evidence.source == "image" and (
-                        evidence.image_index is None
-                        or evidence.image_index > len(self.image_paths)
+                        evidence.image_index is None or evidence.image_index > len(self.image_paths)
                     ):
                         errors.append("evidence.image_index")
                     if evidence.source == "parent_text" and (
                         not (self.text or "").strip() or evidence.image_index is not None
                     ):
                         errors.append("evidence.parent_text")
-                key = (subject_name, normalize_knowledge_name(item.name), item.category.strip())
+                key = (subject_name, normalize_knowledge_name(item.name))
                 if item.kind == "review":
                     candidate = candidates.get(item.review_id or "")
                     if (
@@ -260,7 +267,9 @@ class AnalysisInput(BaseModel):
                     continue
                 if key in historical:
                     if len(uncertainties) < 20:
-                        uncertainties.append(f"{subject_name}“{item.name}”是已有知识，未作为新学条目输出。")
+                        uncertainties.append(
+                            f"{subject_name}“{item.name}”是已有知识，未作为新学条目输出。"
+                        )
                     continue
                 points.append(
                     KnowledgeProposal(
@@ -291,9 +300,9 @@ class AnalysisInput(BaseModel):
             else next(item.subject_name for item in matches if item.subject_name)
         )
         return AnalysisProposal(
-            summary=result.summary or "请确认识别出的学习与复习条目",
+            summary=result.summary.strip() or "请确认识别出的学习与复习条目",
             subject_name=primary_subject or self.existing_subjects[0],
-            source=result.source,
+            source=result.source.strip(),
             knowledge_points=points,
             todo_matches=matches,
             uncertainties=uncertainties[:20],
