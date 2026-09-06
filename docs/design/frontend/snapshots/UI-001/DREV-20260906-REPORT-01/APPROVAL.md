@@ -11,4 +11,7 @@
 - Prototype SHA-256: `f52a44ed6ab18f6d7d1602e1ffa0dfc35c2a7207d8327ac5e42bd769d82d20fc`
 - Figma node: `N/A — 沿用 FEAT-001 scoped Starter-plan waiver；根节点 anchor 不冒充 node-specific 证据`
 - Waiver owner/expiry: repository owner；公开生产发布前失效。
-- Native viewport evidence: pending implementation；必须补 320×568、390×844、430×932，且不能以本 HTML 原型代替。
+- Implementation state: 前后端与自动化验证已完成；报表指标卡使用原生 WXML/WXSS 线段，不含运行时 mock 或图表依赖。
+- Approximate viewport evidence: `tools/preview` 已生成 320/390/430 三档源码近似 HTML；390px 已于 2026-09-06 走查，数字、折线和标签无明显重叠。该证据不替代原生验收。
+- Local compile evidence: 微信开发者工具 CLI 已登录并完成 `open` + `preview`，包体 545.7 KB（558772 bytes）；只生成本地预览，未上传。
+- Native viewport evidence: `NOT_RUN`；仍须补报表页 320×568、390×844、430×932 微信开发者工具节点几何、字体放大和真机证据。Playwright fallback 因本机缺少 Chromium 未运行。

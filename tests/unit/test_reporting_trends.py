@@ -1,7 +1,6 @@
 from datetime import date, timedelta
 
 import pytest
-
 from push_kids.reporting.trends import (
     TREND_METRIC_KEYS,
     build_overview_trends,
@@ -14,7 +13,7 @@ from push_kids.reporting.trends import (
     [
         (7, [1, 1, 1, 1, 1, 1, 1]),
         (30, [5, 4, 4, 5, 4, 4, 4]),
-        (100, [15, 14, 14, 14, 15, 14, 14]),
+        (100, [15, 14, 14, 15, 14, 14, 14]),
     ],
 )
 def test_overview_trends_use_seven_contiguous_near_equal_buckets(
@@ -29,16 +28,15 @@ def test_overview_trends_use_seven_contiguous_near_equal_buckets(
     assert result["aggregation"] == "equal_time_sum"
     assert len(buckets) == 7
     lengths = [
-        (date.fromisoformat(item["end_day"]) - date.fromisoformat(item["start_day"])).days
-        + 1
+        (date.fromisoformat(item["end_day"]) - date.fromisoformat(item["start_day"])).days + 1
         for item in buckets
     ]
     assert lengths == expected_lengths
     assert sum(lengths) == range_days
     for previous, current in zip(buckets, buckets[1:], strict=False):
-        assert date.fromisoformat(previous["end_day"]) + timedelta(
-            days=1
-        ) == date.fromisoformat(current["start_day"])
+        assert date.fromisoformat(previous["end_day"]) + timedelta(days=1) == date.fromisoformat(
+            current["start_day"]
+        )
     assert all(item[key] == 0 for item in buckets for key in TREND_METRIC_KEYS)
 
 

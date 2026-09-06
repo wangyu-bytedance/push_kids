@@ -40,12 +40,18 @@
 
   <block wx:elif="{{report}}">
     <view class="metrics mt3">
-      <view class="metric {{item.actionable ? '' : 'quiet'}}" wx:for="{{metrics}}" wx:key="label" hover-class="is-press" hover-stay-time="80" aria-role="button" aria-label="{{item.ariaLabel}}" data-target="{{item.target}}" bindtap="openMetric">
-        <text class="mv tnum {{item.zero ? 'zero' : ''}} {{item.tight ? 'tight' : ''}}">{{item.text}}</text>
-        <view class="m-foot">
-          <text class="ml">{{item.label}}</text>
-          <view class="chev right" wx:if="{{item.actionable}}"></view>
+      <view class="metric" wx:for="{{metrics}}" wx:key="label" aria-label="{{item.ariaLabel}}">
+        <view class="metric-top">
+          <text class="mv tnum {{item.zero ? 'zero' : ''}} {{item.tight ? 'tight' : ''}}">{{item.text}}</text>
+          <view class="metric-trend" wx:if="{{item.trend.available}}" aria-hidden="true">
+            <view class="trend-floor"></view>
+            <view class="trend-tick" wx:for="{{item.trend.dots}}" wx:key="id" style="{{item.tickStyle}}"></view>
+            <view class="trend-segment" wx:for="{{item.trend.segments}}" wx:key="id" style="{{item.style}}"></view>
+            <view class="trend-dot {{item.last ? 'last' : ''}}" wx:for="{{item.trend.dots}}" wx:key="id" style="{{item.style}}"></view>
+          </view>
+          <text class="trend-missing" wx:else>暂无趋势</text>
         </view>
+        <text class="ml">{{item.label}}</text>
       </view>
     </view>
 

@@ -1,6 +1,6 @@
 # BUG-015 — 报表概览指标去跳转并增加区间趋势微图
 
-- Status: IMPLEMENTING
+- Status: VERIFYING — implementation and automated checks complete; native viewport/device evidence remains open
 - Severity: 中 — 当前四张概览卡的跳转缺少稳定预期，且总量数字无法回答“这段时间如何变化”
 - Risk: R2（前端交互与 additive API 响应同时变化；无 Schema migration）
 - Owner: 王宇
@@ -41,9 +41,9 @@
 - Snapshot manifest path: `docs/design/frontend/snapshots/UI-001/DREV-20260906-REPORT-01/APPROVAL.md`
 - Permitted implementation deviations: mock 只允许存在于本地评审注入/测试桩，不得进入运行时默认数据、生产 API 或提交历史
 - UI current-state merge owner: Codex
-- UI current-state merge evidence: pending；完成前后端验证后更新 UI-001
-- Frontend visual/a11y/resolution verification: pending
-- Frontend engineering verification evidence: pending
+- UI current-state merge evidence: `docs/design/frontend/ui/UI-001-parent-miniapp.md` 已合并本地最终事实
+- Frontend visual/a11y/resolution verification: 390px 近似源码预览已走查；320/390/430 微信原生节点、字体放大和真机仍为 `NOT_RUN`
+- Frontend engineering verification evidence: `npm test` 109 passed；ESLint、小程序静态校验通过；无新增 canvas/图表依赖
 - Figma waiver: 沿用已批准的 FEAT-001 Starter 限额 waiver；只覆盖本次 UI-001 报表概览卡局部修订，Owner 为 repository owner，公开生产发布前失效；不免除原生三视口、字体放大和 iOS/Android 真机验收，也不扩展到 FEAT-002
 
 ## 1. Symptom and impact
@@ -101,9 +101,9 @@
 
 | Hypothesis | Supports | Contradicts | Experiment | Result |
 |---|---|---|---|---|
-| 被误认为可下钻主要来自按钮角色、按压态和箭头 | 当前四项均具备这些 affordance | 无 | 移除三者后做原生截图评审 | pending |
-| 数字右侧微型折线能在不增加选择项的前提下回答“如何变化” | 只读编码，不增加点击目标；适合时间序列 | 小卡空间有限 | 7/30/100 天 mock + 三视口评审 | pending |
-| 缺字段时画 0 线会误导新用户 | “未采集”与“采集后为零”语义不同 | 无 | 分别渲染 missing 与 observed-zero | pending |
+| 被误认为可下钻主要来自按钮角色、按压态和箭头 | 当前四项均具备这些 affordance | 无 | 移除三者后做原生截图评审 | 代码与静态契约已删除；原生截图待补 |
+| 数字右侧微型折线能在不增加选择项的前提下回答“如何变化” | 只读编码，不增加点击目标；适合时间序列 | 小卡空间有限 | 7/30/100 天 mock + 三视口评审 | 7 点布局与 390px 近似走查通过；原生三视口待补 |
+| 缺字段时画 0 线会误导新用户 | “未采集”与“采集后为零”语义不同 | 无 | 分别渲染 missing 与 observed-zero | JS 回归覆盖缺失/异常占位与 observed-zero 水平线 |
 
 ### Blast radius
 
@@ -231,7 +231,7 @@
 ```
 
 - `buckets` 始终恰好 7 项，按 `start_day` 升序、互不重叠、首尾连续；`start_day/end_day` 均为 Asia/Shanghai 自然日且边界包含。
-- 7 天时每桶 1 天；30/100 天把 day offset `i` 确定性分配到 `floor(i * 7 / days)`，因此桶长之差不超过 1 天。
+- 7 天时每桶 1 天；30/100 天把 day offset `i` 确定性分配到 `floor(i * 7 / days)`，因此桶长之差不超过 1 天。由该公式得到的 30 天桶长为 `5/4/4/5/4/4/4`，100 天桶长为 `15/14/14/15/14/14/14`。
 - 四项均为非负整数，分别沿用 overview 的既有口径：LearningRecord/ActivityRecord/ReviewFeedback 按 `occurred_at`，KnowledgeItem 按 `created_at`。
 - 统计窗口明确为 `[起始日 00:00, 今天后一天 00:00)`（Asia/Shanghai 转 UTC 查询），避免未来时间记录进入“近 N 天”。每项 overview 总量必须等于 7 桶对应字段之和。
 - 新用户/有孩子但无业务数据仍返回完整 7 桶，四项均为 0。不存在 `null`、省略桶或 mock 值。
@@ -348,35 +348,35 @@ flowchart LR
 - Acceptance/expected behavior: 概览卡无 `bindtap=openMetric`、button role、press state 或 chevron；源码不存在仅供其服务的导航/滚动分支
 - Test level: frontend static + page unit
 - Pre-fix failure evidence: 当前 `reports-metrics.test.js` 反向断言会失败，因为模板仍绑定 `openMetric`
-- Post-fix success evidence: pending
+- Post-fix success evidence: `tests/frontend/reports-metrics.test.js` 通过；模板和页面实例均确认无 `openMetric`
 - Why this test proves the bug: 直接证明四张卡不能再触发不一致跳转
 
 - Test point ID: TP-002
 - Acceptance/expected behavior: 7/30/100 天均形成 7 个有序点；30/100 天按连续等宽时间桶求和，桶大小之差不超过 1 天，7 点之和等于区间总量
 - Test level: pure Python policy + frontend geometry unit
 - Pre-fix failure evidence: 当前无后端趋势聚合或前端趋势转换函数
-- Post-fix success evidence: pending
+- Post-fix success evidence: Python 聚合策略与 JS 几何覆盖 7/30/100 天，定向 13 passed、前端全量 109 passed
 - Why this test proves the bug: 证明不同范围在小卡上有明确、无抽样丢失的表示
 
 - Test point ID: TP-003
 - Acceptance/expected behavior: 旧后端 missing/null/invalid series 显示“暂无趋势”；新后端完整全零 7 桶显示零基线，二者不混淆
 - Test level: pure JS + template contract
 - Pre-fix failure evidence: 当前无趋势状态
-- Post-fix success evidence: pending
+- Post-fix success evidence: `tests/frontend/report-metric-trends.test.js` 覆盖 missing、总量不符、日期不连续和全零，全部通过
 - Why this test proves the bug: 覆盖新用户和旧后端兼容的核心诚信边界
 
 - Test point ID: TP-005
 - Acceptance/expected behavior: API 的四项 overview 分别等于 7 桶同名字段之和；窗口以 Asia/Shanghai 今天结束；所有查询 family/child scoped，其他家庭仍为 404
 - Test level: backend integration + contract/E2E
 - Pre-fix failure evidence: 当前响应没有 `overview_trends`
-- Post-fix success evidence: pending
+- Post-fix success evidence: integration 覆盖四项守恒、未来时间上界、空用户和跨家庭；E2E 已增加守恒断言，但完整旅程在更早的既有 AI 匹配步骤失败，未执行到该断言
 - Why this test proves the bug: 证明曲线来自真实、完整、隔离的数据，而不是前端 mock 或与总量不一致的旁路统计
 
 - Test point ID: TP-004
 - Acceptance/expected behavior: 320×568、390×844、430×932 原生节点无横向溢出、数字/折线/标签不重叠，7/30/100 切换稳定
 - Test level: WeChat DevTools visual/native geometry
 - Pre-fix failure evidence: N/A — 新布局测试
-- Post-fix success evidence: pending
+- Post-fix success evidence: 320/390/430 近似 HTML 生成成功且 390 走查无重叠；原生节点仍 `NOT_RUN`，不能关闭此测试点
 - Why this test proves the bug: 证明微图在目标设备矩阵内可用，而非仅 HTML 模拟可见
 
 ### Adjacent cases
@@ -394,13 +394,16 @@ flowchart LR
 
 | Test point | Command/case | Environment | Result | Evidence |
 |---|---|---|---|---|
-| TP-001–003 | `npm test` | local Node | not run | pending implementation |
-| TP-001–003 | `npx eslint apps/miniprogram tests/frontend` | local Node | not run | pending implementation |
-| TP-002/003/005 | `uv run pytest tests/unit/test_reporting_trends.py tests/integration/test_activities_and_reports.py tests/contract/test_api_contract.py -q` | local SQLite | not run | pending implementation |
-| backend typing/lint | `uv run ruff check . && uv run ruff format --check . && uv run mypy apps/api/src` | local | not run | pending implementation |
-| TP-001–003 | `uv run python tools/validate_miniprogram.py` | local | not run | pending implementation |
-| architecture | `uv run python tools/check_architecture.py` | local | not run | pending implementation |
-| TP-004 | WeChat DevTools 320×568 / 390×844 / 430×932, mock + missing | registered AppID local preview | not run | pending approval/implementation |
+| TP-001–003 | `npm test` | local Node | PASS | 109 passed |
+| TP-001–003 | `npm run lint:miniapp` | local Node | PASS | ESLint exit 0 |
+| TP-002/003/005 | `uv run pytest tests/unit/test_reporting_trends.py tests/integration/test_activities_and_reports.py -q` | local SQLite | PASS | 13 passed |
+| backend regression | `uv run pytest tests/unit tests/integration tests/contract tests/e2e/test_live_parent_journey.py -q` | local SQLite/live HTTP | PARTIAL | 212 passed / 2 skipped / 1 failed；失败在既有 AI todo match，早于本次报表断言 |
+| backend typing/lint | `uv run ruff check . && uv run ruff format --check . && uv run mypy apps/api/src` | local | PASS | 225 files formatted；mypy 68 source files |
+| TP-001–003 | `uv run python tools/validate_miniprogram.py` | local | PASS | pages=14, source_bytes=606116 |
+| architecture | `uv run python tools/check_architecture.py` | local | PASS | `ARCHITECTURE_VALID checked=2` |
+| TP-004 approximation | `node tools/preview/render.js reports` + in-app 390 screenshot | local HTML approximation | PASS WITH LIMIT | 三档 HTML 生成；390 无明显重叠；不是原生验收 |
+| TP-004 native | WeChat DevTools 320×568 / 390×844 / 430×932, real API + missing fixture | registered AppID local preview | NOT_RUN | 已完成开发者工具编译，但未执行报表页三视口节点验收；Playwright fallback 亦因缺 Chromium 失败 |
+| local compile preview | WeChat DevTools CLI `open` + `preview` | AppID `wx5d2e0014690bf285` | PASS | 登录有效；编译预览成功；包体 545.7 KB / 558772 bytes；未上传 |
 
 All required test points must run after implementation. Mock 截图必须显式标记“本地评审数据”，不能作为后端已实现或真实用户数据证据。
 
@@ -414,21 +417,21 @@ All required test points must run after implementation. Mock 截图必须显式�
 - [x] Required design views are complete or marked pending with reasons.
 - [x] Expected changed, added, moved, and deleted files were reviewed.
 - [ ] Required regression test fails pre-fix.
-- [ ] Every required test point ran or has an explicit skipped-check risk.
-- [ ] Historical behavior tests pass.
+- [x] Every required test point ran or has an explicit skipped-check risk.
+- [ ] Historical behavior tests pass（212 passed / 2 skipped；完整 E2E 在工作区既有 AI 匹配改动处失败）。
 - [x] Data repair, compatibility and rollback are addressed.
 - [x] Monitoring impact is N/A and explained.
 - [x] No unrelated refactor is mixed in.
 
 ## 9. Closure and prevention
 
-- Changed behavior: pending implementation
-- Deleted workaround/logic: pending — metric navigation/scroll/toast path
+- Changed behavior: 四张概览卡改为只读；API 返回 7 个连续等时间求和桶；前端渲染 7 点微图并区分缺失与真实全零
+- Deleted workaround/logic: 已删除 `METRIC_TARGETS`、`openMetric`、`scrollToSection`、rpx 滚动换算及概览按钮/箭头/按压态
 - Data repaired: N/A
 - Monitoring added: N/A；由静态/单元/三视口回归守护
-- Behavior catalog update: pending verification
-- Feature current-state document update and Change Reference: pending verification
+- Behavior catalog update: 已更新 `BHV-010`
+- Feature current-state document update and Change Reference: 已更新 FEAT-001 / UI-001
 - Architecture/test/process change preventing recurrence: 把“摘要是否可点击”和“是否存在一致详情目的地”纳入 UI Spec；把 missing 与 observed-zero 作为图表必测状态
-- Independent Review: pending
-- Residual risk: 真实趋势口径与 API 体积尚未设计；本 revision 明确不授权后端实现
-- Follow-up owner/date: 王宇视觉确认后，由 Codex 在同日提交后端 Spec revision 供再次批准
+- Independent Review: NOT_RUN — 当前会话未获授权启用独立子代理；Codex 已做本地 diff/self-review，不能冒充独立复核
+- Residual risk: 微信原生三视口、字体放大、iOS/Android 真机未验收；完整 E2E 被工作区既有 AI 匹配失败阻断；API 每次新增 7 个小对象，无数据库迁移
+- Follow-up owner/date: 王宇在本地开发者工具确认三视口视觉后关闭 TP-004；既有 AI 匹配分支修复后重跑完整 E2E

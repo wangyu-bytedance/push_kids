@@ -42,6 +42,11 @@ def test_activity_schedule_record_and_report(client, family_headers, child) -> N
     assert suggestions[0]["last_practice_days_ago"] == 0
     report = client.get(f"/api/v1/children/{child['id']}/report", headers=family_headers).json()
     assert report["overview"]["activity_records"] == 1
+    trends = report["overview_trends"]
+    assert trends["timezone"] == "Asia/Shanghai"
+    assert trends["aggregation"] == "equal_time_sum"
+    assert len(trends["buckets"]) == 7
+    assert sum(item["activity_records"] for item in trends["buckets"]) == 1
     assert "notice" not in report
     assert len(report["review_activity"]) == 7
 
@@ -179,9 +184,16 @@ def test_calendar_event_crud_and_report_ranges(client, family_headers, child) ->
             params={"days": days},
         )
         assert report.status_code == 200
-        assert report.json()["range_days"] == days
-        assert len(report.json()["review_urgency"]) == days
-        assert len(report.json()["review_activity"]) == days
+        payload = report.json()
+        assert payload["range_days"] == days
+        assert len(payload["review_urgency"]) == days
+        assert len(payload["review_activity"]) == days
+        assert len(payload["overview_trends"]["buckets"]) == 7
+        assert payload["overview_trends"]["timezone"] == "Asia/Shanghai"
+        assert payload["overview_trends"]["aggregation"] == "equal_time_sum"
+        for key, total in payload["overview"].items():
+            assert total == 0
+            assert sum(item[key] for item in payload["overview_trends"]["buckets"]) == total
     assert (
         client.get(
             f"/api/v1/children/{child['id']}/report",
@@ -189,6 +201,53 @@ def test_calendar_event_crud_and_report_ranges(client, family_headers, child) ->
             params={"days": 14},
         ).status_code
         == 400
+    )
+
+
+def test_report_trends_end_at_today_and_remain_family_scoped(
+    client, app, family_headers, child
+) -> None:
+    subject = client.post(
+        "/api/v1/subjects",
+        headers=family_headers,
+        json={"child_id": child["id"], "name": "轮滑", "kind": "activity"},
+    ).json()
+    today_at = datetime.combine(local_date(), time(12), tzinfo=SHANGHAI).astimezone(UTC)
+    future_at = datetime.combine(
+        local_date() + timedelta(days=1), time(0, 30), tzinfo=SHANGHAI
+    ).astimezone(UTC)
+    with app.state.database.session_factory() as db:
+        db.add_all(
+            [
+                ActivityRecord(
+                    family_id=family_headers["X-Family-ID"],
+                    child_id=child["id"],
+                    subject_id=subject["id"],
+                    occurred_at=today_at,
+                ),
+                ActivityRecord(
+                    family_id=family_headers["X-Family-ID"],
+                    child_id=child["id"],
+                    subject_id=subject["id"],
+                    occurred_at=future_at,
+                ),
+            ]
+        )
+        db.commit()
+
+    report = client.get(
+        f"/api/v1/children/{child['id']}/report?days=7", headers=family_headers
+    ).json()
+
+    assert report["overview"]["activity_records"] == 1
+    assert sum(item["activity_records"] for item in report["overview_trends"]["buckets"]) == 1
+    assert report["overview_trends"]["buckets"][-1]["end_day"] == local_date().isoformat()
+    assert (
+        client.get(
+            f"/api/v1/children/{child['id']}/report?days=7",
+            headers={"X-Family-ID": "other-family"},
+        ).status_code
+        == 404
     )
 
 

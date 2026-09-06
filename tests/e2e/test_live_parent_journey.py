@@ -494,6 +494,12 @@ def test_complete_parent_journey_over_live_http(tmp_path: Path) -> None:
             "review_feedback_count": 5,
             "activity_records": 1,
         }
+        trends = report["overview_trends"]
+        assert trends["timezone"] == "Asia/Shanghai"
+        assert trends["aggregation"] == "equal_time_sum"
+        assert len(trends["buckets"]) == 7
+        for key, total in report["overview"].items():
+            assert sum(bucket[key] for bucket in trends["buckets"]) == total
         assert "notice" not in report
         assert "future_load" not in report
         assert len(report["review_urgency"]) == 30

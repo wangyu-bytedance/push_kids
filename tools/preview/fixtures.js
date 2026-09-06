@@ -193,15 +193,40 @@ function days(count, kind) {
   });
 }
 
+/* 报表概览只用固定评审数据；几何与生产页相同，预览不会把 mock 注入运行时。 */
+function reportTrend(values) {
+  const width = 128;
+  const top = 6;
+  const bottom = 42;
+  const maximum = Math.max(...values);
+  const points = values.map((value, index) => ({
+    x: index * width / 6,
+    y: maximum ? bottom - value / maximum * (bottom - top) : bottom
+  }));
+  return {
+    available: true,
+    segments: points.slice(0, -1).map((point, index) => {
+      const next = points[index + 1];
+      const dx = next.x - point.x;
+      const dy = next.y - point.y;
+      return { id: String(index), style: `left:${point.x.toFixed(1)}rpx;top:${point.y.toFixed(1)}rpx;width:${Math.hypot(dx, dy).toFixed(1)}rpx;transform:rotate(${(Math.atan2(dy, dx) * 180 / Math.PI).toFixed(1)}deg)` };
+    }),
+    dots: points.map((point, index) => ({
+      id: String(index), last: index === 6, tickStyle: `left:${point.x.toFixed(1)}rpx`,
+      style: `left:${(point.x - 3).toFixed(1)}rpx;top:${(point.y - 3).toFixed(1)}rpx`
+    }))
+  };
+}
+
 const reports = {
   loading: false, error: "", children, childIndex: 0, multiChild: true, showChildSheet: false,
   days: 30, ranges: [7, 30, 100], report: { day: "2026-09-06" }, isEmpty: false,
   rangeLabel: "近 30 天", feedbackTotal: 41, activityDetailFailed: false,
   metrics: [
-    { label: "学习记录", text: "24", zero: false, tight: false, actionable: true, target: "records", ariaLabel: "查看 24 条学习记录" },
-    { label: "新增知识点", text: "62", zero: false, tight: false, actionable: true, target: "records", ariaLabel: "查看 62 个新增知识点" },
-    { label: "复习反馈", text: "41", zero: false, tight: false, actionable: true, target: "feedback", ariaLabel: "查看 41 条复习反馈" },
-    { label: "活动练习", text: "9", zero: false, tight: false, actionable: false, target: "", ariaLabel: "活动练习 9 次" }
+    { label: "学习记录", text: "24", zero: false, tight: false, trend: reportTrend([2, 5, 3, 6, 2, 1, 5]), ariaLabel: "学习记录 24，近 30 天分为 7 段" },
+    { label: "新增知识", text: "62", zero: false, tight: false, trend: reportTrend([5, 12, 8, 14, 9, 6, 8]), ariaLabel: "新增知识 62，近 30 天分为 7 段" },
+    { label: "复习反馈", text: "41", zero: false, tight: false, trend: reportTrend([3, 4, 9, 8, 4, 7, 6]), ariaLabel: "复习反馈 41，近 30 天分为 7 段" },
+    { label: "活动练习", text: "9", zero: false, tight: false, trend: reportTrend([0, 2, 0, 1, 3, 1, 2]), ariaLabel: "活动练习 9，近 30 天分为 7 段" }
   ],
   urgencyPage: 0, urgencyPageLabel: "08-01 至 08-30",
   urgencyPages: [{ id: "0", pageNumber: 1, items: days(30, "urgency"), label: "08-01 至 08-30" }],

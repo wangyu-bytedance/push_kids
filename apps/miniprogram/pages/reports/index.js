@@ -4,48 +4,105 @@ const childContext = require("../../utils/child-context");
 
 const REPORT_PAGE_SIZE = 30;
 const RANGES = [7, 30, 100];
-/* 吸顶区间条约 100rpx（12+72+16），再留 24rpx 余量，页内定位后标题不会贴边或被盖住。 */
-const SCROLL_MARGIN_RPX = 124;
+const TREND_KEYS = ["learning_records", "new_knowledge_items", "review_feedback_count", "activity_records"];
+const TREND_WIDTH_RPX = 128;
+const TREND_TOP_RPX = 6;
+const TREND_BOTTOM_RPX = 42;
 
-/* 4 个概览指标各自的落点：学习记录跨 Tab 去历史列表，其余三个在本页定位到对应区块。 */
-const METRIC_TARGETS = {
-  learning: { section: "", action: "看这段时间已确认的学习记录", empty: "这段时间还没有已确认的学习记录" },
-  knowledge: { section: "#sec-subjects", action: "看科目学习记录分布", empty: "这段时间还没有新增知识" },
-  feedback: { section: "#sec-feedback", action: "看复习活跃度", empty: "这段时间还没有复习反馈" },
-  activity: { section: "#sec-activities", action: "看课外活动投入", empty: "这段时间还没有活动练习" }
-};
+function dayNumber(value) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value || "")) return null;
+  const parts = value.split("-").map(Number);
+  const result = Date.UTC(parts[0], parts[1] - 1, parts[2]);
+  return new Date(result).toISOString().slice(0, 10) === value ? result / 86400000 : null;
+}
+
+/* 趋势字段来自新版服务端。任何结构、日期或合计不一致都整体降级，避免画出误导性的曲线。 */
+function normalizeTrendBuckets(report, overview, days) {
+  const trend = report && report.overview_trends;
+  if (!trend || trend.timezone !== "Asia/Shanghai" || trend.aggregation !== "equal_time_sum"
+      || !Array.isArray(trend.buckets) || trend.buckets.length !== 7) return null;
+  const totals = Object.fromEntries(TREND_KEYS.map((key) => [key, 0]));
+  let previousEnd = null;
+  const buckets = [];
+  for (const raw of trend.buckets) {
+    const start = dayNumber(raw.start_day);
+    const end = dayNumber(raw.end_day);
+    if (start === null || end === null || start > end || (previousEnd !== null && start !== previousEnd + 1)) return null;
+    const bucket = { start_day: raw.start_day, end_day: raw.end_day };
+    for (const key of TREND_KEYS) {
+      const value = raw[key];
+      if (!Number.isInteger(value) || value < 0) return null;
+      bucket[key] = value;
+      totals[key] += value;
+    }
+    previousEnd = end;
+    buckets.push(bucket);
+  }
+  if (TREND_KEYS.some((key) => totals[key] !== (Number(overview[key]) || 0))) return null;
+  const expectedStarts = Array(7).fill(null);
+  const expectedEnds = Array(7).fill(null);
+  const rangeStart = dayNumber(buckets[0].start_day);
+  for (let offset = 0; offset < days; offset += 1) {
+    const index = Math.floor(offset * 7 / days);
+    if (expectedStarts[index] === null) expectedStarts[index] = rangeStart + offset;
+    expectedEnds[index] = rangeStart + offset;
+  }
+  if (buckets.some((bucket, index) => dayNumber(bucket.start_day) !== expectedStarts[index]
+      || dayNumber(bucket.end_day) !== expectedEnds[index])) return null;
+  return buckets;
+}
+
+function metricTrend(buckets, key, days) {
+  if (!buckets) return { available: false, segments: [], dots: [], summary: `近 ${days} 天趋势数据暂不可用` };
+  const values = buckets.map((bucket) => bucket[key]);
+  const maximum = Math.max(...values);
+  const xStep = TREND_WIDTH_RPX / (values.length - 1);
+  const chartHeight = TREND_BOTTOM_RPX - TREND_TOP_RPX;
+  const points = values.map((value, index) => ({
+    x: index * xStep,
+    y: maximum ? TREND_BOTTOM_RPX - value / maximum * chartHeight : TREND_BOTTOM_RPX,
+    value
+  }));
+  const segments = points.slice(0, -1).map((point, index) => {
+    const next = points[index + 1];
+    const dx = next.x - point.x;
+    const dy = next.y - point.y;
+    return {
+      id: String(index),
+      style: `left:${point.x.toFixed(1)}rpx;top:${point.y.toFixed(1)}rpx;width:${Math.hypot(dx, dy).toFixed(1)}rpx;transform:rotate(${(Math.atan2(dy, dx) * 180 / Math.PI).toFixed(1)}deg)`
+    };
+  });
+  const dots = points.map((point, index) => ({
+    id: String(index),
+    last: index === points.length - 1,
+    tickStyle: `left:${point.x.toFixed(1)}rpx`,
+    style: `left:${(point.x - 3).toFixed(1)}rpx;top:${(point.y - 3).toFixed(1)}rpx`
+  }));
+  return {
+    available: true,
+    segments,
+    dots,
+    summary: `近 ${days} 天分为 7 段，最高 ${maximum}，最近一段 ${values[values.length - 1]}`
+  };
+}
 
 /* 报表只呈现客观事实：记了多少、复习反馈了多少、活动练了多少。
    正确率、掌握度、进步幅度、下一步该学什么都不属于这一页。 */
-function metricCell(value, label, target) {
+function metricCell(value, label, key, buckets, days) {
   const count = Number(value) || 0;
-  const meta = METRIC_TARGETS[target];
+  const trend = metricTrend(buckets, key, days);
   return {
     label,
-    target,
     text: count > 9999 ? "9999+" : String(count),
     zero: count === 0,
     tight: count >= 1000,
-    actionable: count > 0,
-    hint: meta.empty,
-    ariaLabel: count > 0 ? `${label} ${count}，${meta.action}` : `${label} 0，${meta.empty}`
+    trend,
+    ariaLabel: `${label} ${count}，${trend.summary}`
   };
 }
 
 function localDay(value) {
   return `${value.getFullYear()}-${String(value.getMonth() + 1).padStart(2, "0")}-${String(value.getDate()).padStart(2, "0")}`;
-}
-
-/* rpx 换 px：滚动接口只认 px，窗口宽度取不到时按 375 基准估算。 */
-function rpxToPx(value) {
-  let width = 0;
-  try {
-    const info = (wx.getWindowInfo ? wx.getWindowInfo() : wx.getSystemInfoSync()) || {};
-    width = Number(info.windowWidth) || 0;
-  } catch {
-    width = 0;
-  }
-  return value * (width || 375) / 750;
 }
 
 /* 报表区间换算成历史列表的 from/to：服务端已给出逐日序列时用它的首尾，口径与图表完全一致。 */
@@ -198,6 +255,7 @@ Page({
       const activityPages = reportPages(report.review_activity, "activity");
       const startDay = report.review_activity.length ? report.review_activity[0].day : "";
       const overview = report.overview;
+      const trendBuckets = normalizeTrendBuckets(report, overview, days);
       this.setData({
         loading: false, children, childIndex, childId, multiChild: selection.multiChild, canAddChild,
         report, subjects, urgencyPages, activityPages, urgencyPage: 0, activityPage: 0,
@@ -205,10 +263,10 @@ Page({
         activityPageLabel: activityPages.length ? activityPages[0].label : "",
         rangeLabel: `近 ${days} 天`,
         metrics: [
-          metricCell(overview.learning_records, "学习记录", "learning"),
-          metricCell(overview.new_knowledge_items, "新增知识", "knowledge"),
-          metricCell(overview.review_feedback_count, "复习反馈", "feedback"),
-          metricCell(overview.activity_records, "活动练习", "activity")
+          metricCell(overview.learning_records, "学习记录", "learning_records", trendBuckets, days),
+          metricCell(overview.new_knowledge_items, "新增知识", "new_knowledge_items", trendBuckets, days),
+          metricCell(overview.review_feedback_count, "复习反馈", "review_feedback_count", trendBuckets, days),
+          metricCell(overview.activity_records, "活动练习", "activity_records", trendBuckets, days)
         ],
         feedbackTotal: Number(overview.review_feedback_count) || 0,
         activityRows: activityRows(detail, startDay),
@@ -249,38 +307,6 @@ Page({
     getApp().globalData.recordIntent = { childId: this.data.childId, view: "history", status: "confirmed",
       filters: { subject_id: event.currentTarget.dataset.id, ...rangeFilters(report, this.data.days) } };
     wx.switchTab({ url: "/pages/records/index" });
-  },
-  /* 指标为 0 时不跳到空页面，只说明这段时间没有对应记录。 */
-  openMetric(event) {
-    const target = event.currentTarget.dataset.target;
-    const metric = this.data.metrics.find((item) => item.target === target);
-    if (!metric) return;
-    if (!metric.actionable) {
-      wx.showToast({ title: metric.hint, icon: "none" });
-      return;
-    }
-    if (target === "learning") {
-      getApp().globalData.recordIntent = { childId: this.data.childId, view: "history", status: "confirmed",
-        filters: rangeFilters(this.data.report, this.data.days) };
-      wx.switchTab({ url: "/pages/records/index" });
-      return;
-    }
-    this.scrollToSection(METRIC_TARGETS[target].section);
-  },
-  /* 页内定位用 boundingClientRect + scrollOffset，兼容性比 selector 直跳更稳。 */
-  scrollToSection(selector) {
-    if (!selector || !wx.createSelectorQuery) return;
-    const query = wx.createSelectorQuery();
-    query.select(selector).boundingClientRect();
-    query.selectViewport().scrollOffset();
-    query.exec((result) => {
-      const rect = result && result[0];
-      const viewport = result && result[1];
-      if (!rect || !viewport) return;
-      const margin = rpxToPx(SCROLL_MARGIN_RPX);
-      const scrollTop = Math.max(0, rect.top + viewport.scrollTop - margin);
-      wx.pageScrollTo({ scrollTop, duration: 200 });
-    });
   },
   goRecord() {
     getApp().globalData.recordIntent = { childId: this.data.childId, view: "new" };

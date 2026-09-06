@@ -19,6 +19,14 @@
 
 .metrics .mv.zero { color: var(--pk-ink-4); }
 .metrics .mv.tight { font-size: 20px; }
+.metric-top { display: flex; align-items: center; justify-content: space-between; gap: 12rpx; min-width: 0; }
+.metric-trend { position: relative; flex: 0 0 128rpx; width: 128rpx; height: 52rpx; }
+.trend-floor { position: absolute; left: 0; right: 0; top: 46rpx; height: 2rpx; background: var(--pk-line); }
+.trend-tick { position: absolute; top: 46rpx; width: 1rpx; height: 6rpx; background: var(--pk-line); }
+.trend-segment { position: absolute; height: 2rpx; border-radius: 2rpx; background: var(--pk-primary); transform-origin: 0 50%; }
+.trend-dot { position: absolute; box-sizing: border-box; width: 6rpx; height: 6rpx; border: 2rpx solid var(--pk-primary); border-radius: 50%; background: var(--pk-surface); }
+.trend-dot.last { width: 10rpx; height: 10rpx; margin: -2rpx 0 0 -2rpx; background: var(--pk-primary); }
+.trend-missing { flex: 0 0 128rpx; font-size: 10px; line-height: 52rpx; text-align: center; color: var(--pk-ink-4); }
 
 .sec-head {
   display: flex;
@@ -156,6 +164,6 @@
   color: var(--pk-primary-strong);
 }
 
-/* 与真实 2×2 指标卡等高：152rpx × 2 行 + 16rpx 间距 */
-.sk.metrics-sk { height: 320rpx; }
+/* 与真实 2×2 指标卡等高：168rpx × 2 行 + 16rpx 间距 */
+.sk.metrics-sk { height: 352rpx; }
 .sk.chart-sk { height: 420rpx; }
