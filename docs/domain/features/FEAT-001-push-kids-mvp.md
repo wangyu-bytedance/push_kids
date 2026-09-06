@@ -191,4 +191,8 @@ BUG-010 本地实现已通过微信开发者工具 registered AppID preview 编�
 - `BUG-011 / BUG-SPEC-20260906-15`: 修复 MySQL `DATETIME` 精度导致的 lease 假冲突，并阻止过期
   running 任务突破 max_attempts；本地回归通过，灰度版本 `flask-ik19-009` 已达到 `normal`，
   新图片端到端 smoke 已进入待家长确认。
+- `2026-09-06 release 010`: 远端前端样式基线与 BUG-011/BUG-012 本地修复已在 commit `72970f3`
+  合并并推送；最小白名单后端版本 `flask-ik19-010` 已达到 `normal`。开发者工具五个主 Tab、
+  320/390/430 视口和云数据加载通过且 0 console error；真机双账号、前端上传和全量切流仍为门禁。
+  证据见[发布记录](../../deploy/releases/20260906-010.md)。
 - BUG-010 后续截图回归：目录/星期/日历/FAB与报表切换条已继续修正，最新58项前端测试通过；390视觉与320部分复查。详见[回归证据](../../design/frontend/ui/BUG-010-20260905-layout-followup.md)，整体仍未完成真机矩阵或部署。
