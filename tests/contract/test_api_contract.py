@@ -4,6 +4,8 @@ def test_openapi_contains_core_contracts(app) -> None:
     assert "/api/v1/children/{child_id}/dashboard" in paths
     assert "/api/v1/reviews/{review_id}/feedback" in paths
     assert "/api/v1/activity-records" in paths
+    submission = app.openapi()["components"]["schemas"]["SubmissionView"]
+    assert submission["properties"]["display_groups"]["type"] == "array"
 
 
 def test_family_header_is_required(client) -> None:

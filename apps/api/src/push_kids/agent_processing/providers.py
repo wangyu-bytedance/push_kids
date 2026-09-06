@@ -15,6 +15,7 @@ from push_kids.agent_processing.contracts import (
     AnalysisProposal,
     EvidenceReference,
     KnowledgeProposal,
+    infer_display_kind,
 )
 from push_kids.agent_processing.prompt import ANALYSIS_RULES, PROMPT_REVISION
 from push_kids.knowledge.normalization import normalize_knowledge_name
@@ -35,6 +36,7 @@ class DeterministicTestProvider:
             KnowledgeProposal(
                 name=point[:120],
                 category=self._category(subject),
+                display_kind=infer_display_kind(point[:120], self._category(subject)),
                 review_method=self._method(subject),
                 estimated_minutes=3,
                 direct_evidence=[
@@ -56,7 +58,7 @@ class DeterministicTestProvider:
             if normalize_knowledge_name(candidate.knowledge_name) in normalized_text
         ]
         return AnalysisProposal(
-            summary=summary[:500],
+            summary=summary[:120],
             subject_name=subject,
             source="手动记录" if text else "图片记录",
             knowledge_points=points,
@@ -146,7 +148,7 @@ class ArkAnalysisProvider:
             [item.model_dump() for item in data.todo_candidates], ensure_ascii=False
         )
         schema = {
-            "summary": "一句中文总结",
+            "summary": "不超过120字的可选补充说明，不重复知识列表",
             "subject_name": "语文/数学/英语或家长明确的科目",
             "subject_kind": "learning",
             "source": "课内/作业/辅导班/自主学习/图片记录",
@@ -155,6 +157,7 @@ class ArkAnalysisProvider:
                     "name": "已学知识点",
                     "existing_knowledge_id": "已有同义知识候选的knowledge_id，不匹配时为null",
                     "category": "类型",
+                    "display_kind": "hanzi/word/poem/arithmetic/concept/activity/other之一",
                     "review_method": "不含批改的复习方式",
                     "estimated_minutes": 3,
                     "direct_evidence": [

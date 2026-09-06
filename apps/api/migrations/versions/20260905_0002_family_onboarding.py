@@ -39,12 +39,20 @@ def upgrade() -> None:
     if unowned:
         raise RuntimeError("存在没有 active 微信绑定的历史家庭，必须先人工确认归属")
 
-    op.alter_column(
-        "wechat_actor_bindings",
-        "family_id",
-        existing_type=sa.String(length=80),
-        nullable=True,
-    )
+    if connection.dialect.name == "sqlite":
+        with op.batch_alter_table("wechat_actor_bindings") as batch_op:
+            batch_op.alter_column(
+                "family_id",
+                existing_type=sa.String(length=80),
+                nullable=True,
+            )
+    else:
+        op.alter_column(
+            "wechat_actor_bindings",
+            "family_id",
+            existing_type=sa.String(length=80),
+            nullable=True,
+        )
     op.create_table(
         "families",
         sa.Column("id", sa.String(length=80), nullable=False),
@@ -217,14 +225,23 @@ def upgrade() -> None:
 
 
 def downgrade() -> None:
+    connection = op.get_bind()
     op.drop_table("family_audit_events")
     op.drop_table("family_join_requests")
     op.drop_table("family_invites")
     op.drop_table("family_members")
     op.drop_table("families")
-    op.alter_column(
-        "wechat_actor_bindings",
-        "family_id",
-        existing_type=sa.String(length=80),
-        nullable=False,
-    )
+    if connection.dialect.name == "sqlite":
+        with op.batch_alter_table("wechat_actor_bindings") as batch_op:
+            batch_op.alter_column(
+                "family_id",
+                existing_type=sa.String(length=80),
+                nullable=False,
+            )
+    else:
+        op.alter_column(
+            "wechat_actor_bindings",
+            "family_id",
+            existing_type=sa.String(length=80),
+            nullable=False,
+        )

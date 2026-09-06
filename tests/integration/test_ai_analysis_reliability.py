@@ -229,6 +229,38 @@ def test_repeated_material_warns_and_never_auto_completes(client, app, child, fa
         assert db.scalar(select(func.count(ReviewFeedback.id))) == 0
 
 
+def test_submission_view_adds_structured_groups_without_changing_confirm_payload(
+    client, app, child, family_headers
+):
+    body = proposal("20 以内加法")
+    body["knowledge_points"].extend(
+        [
+            {
+                "name": "春",
+                "category": "汉字",
+                "display_kind": "hanzi",
+                "direct_evidence": [{"source": "parent_text", "detail": "家长记录春"}],
+            },
+            {
+                "name": "晓",
+                "category": "汉字",
+                "display_kind": "hanzi",
+                "direct_evidence": [{"source": "parent_text", "detail": "家长记录晓"}],
+            },
+        ]
+    )
+    key = draft(client, app, family_headers, child["id"], body=body)
+
+    view = client.get(f"/api/v1/submissions/{key}", headers=family_headers)
+
+    assert view.status_code == 200
+    assert view.json()["display_groups"] == [
+        {"kind": "hanzi", "label": "汉字", "items": ["春", "晓"]},
+        {"kind": "arithmetic", "label": "运算", "items": ["20 以内加法"]},
+    ]
+    assert confirm(client, family_headers, key, view.json()["proposal"]).status_code == 200
+
+
 def test_existing_knowledge_reference_is_scoped_and_consistent(client, app, child, family_headers):
     first = draft(client, app, family_headers, child["id"])
     known = confirm(client, family_headers, first).json()["knowledge_item_ids"][0]

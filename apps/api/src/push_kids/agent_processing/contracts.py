@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Protocol
+from typing import Literal, Protocol
 
 from pydantic import BaseModel, Field
 
@@ -9,11 +9,42 @@ from push_kids.knowledge.normalization import normalize_knowledge_name
 
 MATERIAL_FINGERPRINT_KEY = "_analysis_material_fingerprint"
 
+DisplayKind = Literal[
+    "hanzi",
+    "word",
+    "poem",
+    "arithmetic",
+    "concept",
+    "activity",
+    "other",
+]
+
+
+def infer_display_kind(name: str, category: str) -> DisplayKind:
+    """Map legacy/free-form categories into the bounded parent-facing vocabulary."""
+    normalized_name = normalize_knowledge_name(name)
+    normalized_category = normalize_knowledge_name(category)
+    combined = f"{normalized_category} {normalized_name}"
+    if any(token in normalized_category for token in ("汉字", "生字")):
+        return "hanzi"
+    if any(token in normalized_category for token in ("单词", "词汇")):
+        return "word"
+    if any(token in combined for token in ("古诗", "诗词")) or name.strip().startswith("《"):
+        return "poem"
+    if any(token in combined for token in ("运算", "计算", "加法", "减法", "乘法", "除法", "口算")):
+        return "arithmetic"
+    if "活动" in normalized_category:
+        return "activity"
+    if normalized_category in {"", "其他"}:
+        return "other"
+    return "concept"
+
 
 class KnowledgeProposal(BaseModel):
     existing_knowledge_id: str | None = None
     name: str = Field(min_length=1, max_length=120)
     category: str = Field(default="知识点", max_length=50)
+    display_kind: DisplayKind | None = None
     review_method: str = Field(default="口头回顾", max_length=60)
     estimated_minutes: int = Field(default=3, ge=1, le=20)
     direct_evidence: list[EvidenceReference] = Field(default_factory=list, max_length=20)
@@ -74,6 +105,8 @@ class AnalysisInput(BaseModel):
 
     def validate_proposal(self, proposal: AnalysisProposal) -> AnalysisProposal:
         """Validate model references against this input, not parent-edited proposals."""
+        if len(proposal.summary) > 120:
+            raise ValueError("model summary is too long for parent confirmation")
         context_ids = {item.record_id for item in self.recent_learning}
         candidates = {item.review_id: item for item in self.todo_candidates}
         knowledge = {item.knowledge_id: item for item in self.existing_knowledge}
@@ -83,6 +116,9 @@ class AnalysisInput(BaseModel):
                 if existing is None or existing.subject_name != proposal.subject_name:
                     raise ValueError("model knowledge reference is outside the input subject")
                 point.name, point.category = existing.name, existing.category
+            point.display_kind = point.display_kind or infer_display_kind(
+                point.name, point.category
+            )
             if not point.direct_evidence:
                 raise ValueError("model knowledge point has no direct evidence")
             if not set(point.context_used).issubset(context_ids):

@@ -6,6 +6,7 @@ from typing import Literal
 from pydantic import BaseModel, ConfigDict, Field
 
 from push_kids.agent_processing.contracts import AnalysisProposal
+from push_kids.agent_processing.presentation import DisplayGroup
 
 
 class SubmissionCreate(BaseModel):
@@ -47,6 +48,7 @@ class SubmissionView(BaseModel):
     source: str
     state: str
     proposal: AnalysisProposal | None = None
+    display_groups: list[DisplayGroup] = Field(default_factory=list, max_length=7)
     error_code: str | None
     error_message: str | None
     media_count: int = 0

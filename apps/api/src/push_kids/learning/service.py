@@ -17,6 +17,7 @@ from push_kids.agent_processing.contracts import (
     AnalysisProposal,
     unique_knowledge_points,
 )
+from push_kids.agent_processing.presentation import project_display_groups
 from push_kids.children.service import ChildrenService, is_custom_subject
 from push_kids.knowledge.normalization import normalize_knowledge_name
 from push_kids.learning.schemas import (
@@ -600,6 +601,7 @@ class LearningService:
             source=submission.source,
             state=submission.state,
             proposal=proposal,
+            display_groups=(project_display_groups(proposal.knowledge_points) if proposal else []),
             error_code=submission.error_code,
             error_message=submission.error_message,
             media_count=media_count,

@@ -1,6 +1,6 @@
 """Deployment-owned analysis rules; no dependency on a developer's personal Skill directory."""
 
-PROMPT_REVISION = "learning-evidence-20260905-01"
+PROMPT_REVISION = "structured-learning-20260906-01"
 
 ANALYSIS_RULES = """
 你是小学学习内容整理助手。只整理本次确实学过的内容，输出可供家长编辑确认的严格JSON，不要Markdown。
@@ -19,4 +19,11 @@ ANALYSIS_RULES = """
 context_used只能复制提供的record_id，历史不能作为direct_evidence。
 todo_matches必须有本次实际练习该知识的直接证据，只能逐字复制候选ID/名称，每个ID最多一次；不确定返回空数组。
 复习step只是计划进度，不代表掌握程度；复习候选和知识目录也不是要求本次必须学习的内容。
+summary只写可选补充说明，最多120个字符，不重复罗列所有知识点，不写成长段评价。
+每个knowledge_point只写一个可独立确认和复习的原子内容，name使用短词或短语，不写解释段落。
+display_kind必须从hanzi、word、poem、arithmetic、concept、activity、other中选择；
+汉字用hanzi，英文单词/词组用word，古诗词篇目用poem，算式与运算能力用arithmetic，
+其他学科概念用concept，课外活动用activity，确实无法归类才用other。
+例如应输出汉字“春”“晓”、单词“spring”、古诗“《春晓》”、运算“20以内加法”等原子项；
+不得把“汉字：春、晓；单词：spring”整段塞进summary或单个name。
 """.strip()
