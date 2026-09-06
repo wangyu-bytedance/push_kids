@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from dataclasses import dataclass
 from datetime import UTC, date, datetime, time, timedelta
 from hashlib import sha256
 
@@ -23,11 +24,31 @@ from push_kids.persistence.models import (
     ActivitySchedule,
     CalendarEvent,
     CalendarEventRequest,
+    Child,
     Subject,
 )
 from push_kids.platform.errors import ConflictError, NotFoundError
 from push_kids.platform.time import SHANGHAI, local_date, utcnow
 from push_kids.travel.service import TravelService
+
+
+@dataclass(frozen=True)
+class ScheduledOccurrence:
+    """One concrete instance of a schedule on one day, expanded in Asia/Shanghai.
+
+    `occurrence_id` is the identity of the *source* row, not of the instance: combined with the
+    local day it lets a reminder for a moved event be refreshed rather than duplicated.
+    """
+
+    family_id: str
+    child_id: str
+    child_name: str
+    occurrence_id: str
+    name: str
+    local_day: date
+    start_at: datetime
+    start_time_text: str
+    kind: str
 
 
 class ActivitiesService:
@@ -377,6 +398,117 @@ class ActivitiesService:
             ),
         )
         return attach_conflicts(ordered)
+
+    @classmethod
+    def occurrences_in_window(
+        cls, db: Session, window_start: datetime, window_end: datetime
+    ) -> list[ScheduledOccurrence]:
+        """Every active schedule instance starting inside a bounded UTC window, all families.
+
+        Reminders must not pre-materialise the whole future, so the caller passes a short window
+        and re-derives it on every tick. Both sources of the calendar are included: dated events
+        and the fixed weekly activity slots that the calendar screen also shows.
+        """
+        if window_end <= window_start:
+            return []
+        days = cls._local_days(window_start, window_end)
+        children = {
+            str(child.id): str(child.name)
+            for child in db.scalars(select(Child).where(Child.active.is_(True)))
+        }
+        occurrences: list[ScheduledOccurrence] = []
+        events = list(
+            db.scalars(
+                select(CalendarEvent).where(
+                    CalendarEvent.active.is_(True),
+                    CalendarEvent.event_date <= max(days),
+                )
+            )
+        )
+        for event in events:
+            if (
+                event.id is None
+                or event.child_id not in children
+                or event.name is None
+                or event.event_date is None
+                or event.start_time is None
+            ):
+                continue
+            for day in days:
+                if event.event_date != day and not (
+                    event.repeat_weekly and event.event_date.weekday() == day.weekday()
+                ):
+                    continue
+                if event.event_date > day:
+                    continue
+                candidate = cls._occurrence(
+                    str(event.family_id),
+                    str(event.child_id),
+                    children[str(event.child_id)],
+                    str(event.id),
+                    str(event.name),
+                    day,
+                    event.start_time,
+                    str(event.kind or "other"),
+                )
+                if window_start <= candidate.start_at <= window_end:
+                    occurrences.append(candidate)
+        rows = db.execute(
+            select(ActivitySchedule, Subject)
+            .join(Subject, ActivitySchedule.subject_id == Subject.id)
+            .where(ActivitySchedule.active.is_(True), Subject.active.is_(True))
+        ).all()
+        for schedule, subject in rows:
+            if str(schedule.child_id) not in children or not schedule.start_time:
+                continue
+            weekdays = [int(item) for item in (schedule.weekdays or "").split(",") if item]
+            for day in days:
+                if day.weekday() not in weekdays:
+                    continue
+                candidate = cls._occurrence(
+                    str(schedule.family_id),
+                    str(schedule.child_id),
+                    children[str(schedule.child_id)],
+                    str(schedule.id),
+                    str(subject.name),
+                    day,
+                    schedule.start_time,
+                    "activity",
+                )
+                if window_start <= candidate.start_at <= window_end:
+                    occurrences.append(candidate)
+        return sorted(occurrences, key=lambda item: (item.start_at, item.occurrence_id))
+
+    @staticmethod
+    def _local_days(window_start: datetime, window_end: datetime) -> list[date]:
+        first = window_start.astimezone(SHANGHAI).date()
+        last = window_end.astimezone(SHANGHAI).date()
+        span = (last - first).days
+        return [first + timedelta(days=offset) for offset in range(span + 1)]
+
+    @staticmethod
+    def _occurrence(
+        family_id: str,
+        child_id: str,
+        child_name: str,
+        occurrence_id: str,
+        name: str,
+        day: date,
+        start: time,
+        kind: str,
+    ) -> ScheduledOccurrence:
+        start_at = datetime.combine(day, start, tzinfo=SHANGHAI).astimezone(UTC)
+        return ScheduledOccurrence(
+            family_id=family_id,
+            child_id=child_id,
+            child_name=child_name,
+            occurrence_id=occurrence_id,
+            name=name,
+            local_day=day,
+            start_at=start_at,
+            start_time_text=start.strftime("%H:%M"),
+            kind=kind,
+        )
 
     @staticmethod
     def _event_view(

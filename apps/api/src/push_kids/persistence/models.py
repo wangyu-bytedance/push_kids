@@ -92,6 +92,30 @@ class DeletionState(enum.StrEnum):
     failed = "failed"
 
 
+class NotificationType(enum.StrEnum):
+    member_application = "member_application"
+    schedule_reminder = "schedule_reminder"
+    review_digest = "review_digest"
+
+
+class SubscriptionStatus(enum.StrEnum):
+    unknown = "unknown"
+    accepted = "accepted"
+    rejected = "rejected"
+    expired = "expired"
+    # Membership ended: the grant is unusable until the member joins and grants again.
+    revoked = "revoked"
+
+
+class DeliveryState(enum.StrEnum):
+    pending = "pending"
+    sending = "sending"
+    sent = "sent"
+    skipped = "skipped"
+    failed = "failed"
+    cancelled = "cancelled"
+
+
 class WeChatActorBinding(Base):
     __tablename__ = "wechat_actor_bindings"
     __table_args__ = (UniqueConstraint("app_id", "subject_hmac", name="uq_wechat_actor_subject"),)
@@ -534,3 +558,88 @@ class ActivityRecord(Base):
     duration_minutes = Column(Integer, nullable=True)
     note = Column(String(300), nullable=True)
     created_at = Column(UTCDateTime(), nullable=False, default=utcnow)
+
+
+class NotificationPreference(Base):
+    """One family member's own opt-in for one reminder type. Never a family-wide switch."""
+
+    __tablename__ = "notification_preferences"
+    __table_args__ = (
+        UniqueConstraint("member_id", "type", name="uq_notification_preference_member_type"),
+    )
+    id = Column(String(36), primary_key=True, default=new_id)
+    family_id = Column(String(80), ForeignKey("families.id"), nullable=False, index=True)
+    member_id = Column(String(36), ForeignKey("family_members.id"), nullable=False, index=True)
+    type = Column(String(30), nullable=False, index=True)
+    enabled = Column(Boolean, nullable=False, default=True)
+    created_at = Column(UTCDateTime(), nullable=False, default=utcnow)
+    updated_at = Column(UTCDateTime(), nullable=False, default=utcnow, onupdate=utcnow)
+
+
+class NotificationDestination(Base):
+    """Encrypted external receiver identity. The plaintext OpenID is never stored or indexed.
+
+    The row is keyed by family member so the scheduled dispatcher can route a queued message
+    without reading membership tables that belong to the families domain.
+    """
+
+    __tablename__ = "notification_destinations"
+    __table_args__ = (UniqueConstraint("member_id", name="uq_notification_destination_member"),)
+    id = Column(String(36), primary_key=True, default=new_id)
+    family_id = Column(String(80), ForeignKey("families.id"), nullable=False, index=True)
+    member_id = Column(String(36), ForeignKey("family_members.id"), nullable=False, index=True)
+    actor_binding_id = Column(
+        String(36), ForeignKey("wechat_actor_bindings.id"), nullable=True, index=True
+    )
+    app_id = Column(String(32), nullable=False)
+    key_version = Column(String(10), nullable=False, default="v1")
+    ciphertext = Column(Text, nullable=False)
+    status = Column(String(20), nullable=False, default="active", index=True)
+    created_at = Column(UTCDateTime(), nullable=False, default=utcnow)
+    updated_at = Column(UTCDateTime(), nullable=False, default=utcnow, onupdate=utcnow)
+
+
+class NotificationSubscription(Base):
+    """Latest WeChat one-off subscription grant per member and reminder type."""
+
+    __tablename__ = "notification_subscriptions"
+    __table_args__ = (
+        UniqueConstraint("member_id", "type", name="uq_notification_subscription_member_type"),
+    )
+    id = Column(String(36), primary_key=True, default=new_id)
+    family_id = Column(String(80), ForeignKey("families.id"), nullable=False, index=True)
+    member_id = Column(String(36), ForeignKey("family_members.id"), nullable=False, index=True)
+    type = Column(String(30), nullable=False, index=True)
+    status = Column(String(20), nullable=False, default=SubscriptionStatus.unknown.value)
+    # One accepted WeChat one-off subscription authorises exactly one message, so the balance
+    # is a real spend counter, not a boolean. Long-term templates set it to -1 (unlimited).
+    remaining_quota = Column(Integer, nullable=False, default=0)
+    granted_at = Column(UTCDateTime(), nullable=True)
+    created_at = Column(UTCDateTime(), nullable=False, default=utcnow)
+    updated_at = Column(UTCDateTime(), nullable=False, default=utcnow, onupdate=utcnow)
+
+
+class NotificationDelivery(Base):
+    """Durable outbox row: one intended message to one member, claimed and retried at most once."""
+
+    __tablename__ = "notification_deliveries"
+    __table_args__ = (UniqueConstraint("dedupe_key", name="uq_notification_delivery_dedupe"),)
+    id = Column(String(36), primary_key=True, default=new_id)
+    family_id = Column(String(80), ForeignKey("families.id"), nullable=False, index=True)
+    member_id = Column(String(36), ForeignKey("family_members.id"), nullable=False, index=True)
+    type = Column(String(30), nullable=False, index=True)
+    # Stable identity of the real-world source (join request id, occurrence id, digest day) so an
+    # edited schedule updates the same row instead of queueing a second message.
+    dedupe_key = Column(String(200), nullable=False)
+    payload_json = Column(Text, nullable=False)
+    scheduled_at = Column(UTCDateTime(), nullable=False, index=True)
+    state = Column(String(20), nullable=False, default=DeliveryState.pending.value, index=True)
+    attempts = Column(Integer, nullable=False, default=0)
+    max_attempts = Column(Integer, nullable=False, default=3)
+    available_at = Column(UTCDateTime(), nullable=False, default=utcnow)
+    lease_until = Column(UTCDateTime(), nullable=True)
+    # Safe classification only: never the WeChat payload, template content or receiver identity.
+    result_code = Column(String(50), nullable=True)
+    sent_at = Column(UTCDateTime(), nullable=True)
+    created_at = Column(UTCDateTime(), nullable=False, default=utcnow)
+    updated_at = Column(UTCDateTime(), nullable=False, default=utcnow, onupdate=utcnow)

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from dataclasses import dataclass
 from datetime import date
 
 from sqlalchemy import and_, delete, func, or_, select
@@ -8,6 +9,7 @@ from sqlalchemy.orm import Session
 
 from push_kids.children.service import ChildrenService
 from push_kids.persistence.models import (
+    Child,
     KnowledgeItem,
     KnowledgeOccurrence,
     LearningRecord,
@@ -25,6 +27,22 @@ from push_kids.planning.domain import (
 )
 from push_kids.platform.errors import ConflictError, NotFoundError
 from push_kids.platform.time import local_date
+
+
+@dataclass(frozen=True)
+class PendingReviewLoad:
+    """How much review one child still owes as of a local day.
+
+    The count is the number of outstanding knowledge points, using exactly the same rule as the
+    Today list: a review that has been given feedback is no longer due, so this stays a read of
+    planning policy and never advances a schedule.
+    """
+
+    family_id: str
+    child_id: str
+    child_name: str
+    pending_count: int
+    subject_names: tuple[str, ...]
 
 
 class PlanningService:
@@ -233,6 +251,54 @@ class PlanningService:
                 )
             )
         return group_daily_todos(items, child.daily_budget_minutes or 15)
+
+    @classmethod
+    def pending_review_loads(cls, db: Session, target: date) -> list[PendingReviewLoad]:
+        """Outstanding review per active child across families, for the evening digest.
+
+        Only learning subjects count, matching `daily_todos`; activities never create review debt.
+        """
+        rows = db.execute(
+            select(
+                ReviewItem.family_id,
+                ReviewItem.child_id,
+                Child.name,
+                Subject.name,
+                func.count(ReviewItem.id),
+            )
+            .join(KnowledgeItem, ReviewItem.knowledge_item_id == KnowledgeItem.id)
+            .join(Subject, KnowledgeItem.subject_id == Subject.id)
+            .join(Child, ReviewItem.child_id == Child.id)
+            .where(
+                ReviewItem.active.is_(True),
+                ReviewItem.due_date <= target,
+                Subject.kind == "learning",
+                Child.active.is_(True),
+            )
+            .group_by(ReviewItem.family_id, ReviewItem.child_id, Child.name, Subject.name)
+            .order_by(func.count(ReviewItem.id).desc(), Subject.name)
+        ).all()
+        totals: dict[tuple[str, str], PendingReviewLoad] = {}
+        for family_id, child_id, child_name, subject_name, count in rows:
+            key = (str(family_id), str(child_id))
+            current = totals.get(key)
+            if current is None:
+                totals[key] = PendingReviewLoad(
+                    family_id=str(family_id),
+                    child_id=str(child_id),
+                    child_name=str(child_name),
+                    pending_count=int(count or 0),
+                    subject_names=(str(subject_name),),
+                )
+                continue
+            totals[key] = PendingReviewLoad(
+                family_id=current.family_id,
+                child_id=current.child_id,
+                child_name=current.child_name,
+                pending_count=current.pending_count + int(count or 0),
+                subject_names=(*current.subject_names, str(subject_name)),
+            )
+        return list(totals.values())
 
     @staticmethod
     def feedback(

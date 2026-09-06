@@ -3,6 +3,7 @@ from __future__ import annotations
 import base64
 import hashlib
 import hmac
+from dataclasses import dataclass
 from datetime import datetime, timedelta
 
 from sqlalchemy import delete, func, select, update
@@ -68,6 +69,27 @@ def _expired(value: datetime) -> bool:
 
 def _request_code(request_id: str) -> str:
     return request_id.replace("-", "").upper()[:6]
+
+
+@dataclass(frozen=True)
+class AudienceMember:
+    """An active member that a background job may address without a request context."""
+
+    family_id: str
+    member_id: str
+    role: str
+    relationship_label: str
+
+
+@dataclass(frozen=True)
+class PendingApplication:
+    """A join request still waiting for a manager decision, safe to hand to a background job."""
+
+    family_id: str
+    request_id: str
+    request_code: str
+    relationship_label: str
+    created_at: datetime
 
 
 class FamilyService:
@@ -229,6 +251,78 @@ class FamilyService:
             )
         )
         return [cls._member_view(item, context.member_id) for item in items]
+
+    @classmethod
+    def notification_audience(
+        cls, db: Session, family_id: str, *, managers_only: bool = False
+    ) -> list[AudienceMember]:
+        """Active members a notification may be addressed to.
+
+        Membership lifecycle belongs to this domain, so background senders ask here instead of
+        reading `family_members` themselves. Removing a member immediately removes them from
+        every future audience.
+        """
+        statement = select(FamilyMember).where(
+            FamilyMember.family_id == family_id,
+            FamilyMember.status == MemberStatus.active.value,
+        )
+        if managers_only:
+            statement = statement.where(FamilyMember.role == MemberRole.manager.value)
+        rows = db.scalars(statement.order_by(FamilyMember.created_at))
+        return [
+            AudienceMember(
+                family_id=family_id,
+                member_id=str(item.id),
+                role=str(item.role),
+                relationship_label=str(item.relationship_label or ""),
+            )
+            for item in rows
+        ]
+
+    @classmethod
+    def active_member_ids(cls, db: Session, member_ids: set[str]) -> set[str]:
+        """Filter a set of member ids down to the ones still active in their family.
+
+        Background senders hold member ids that were resolved earlier. Membership can end in the
+        meantime, so this contract lets them re-check without reading `family_members` directly.
+        """
+        if not member_ids:
+            return set()
+        rows = db.scalars(
+            select(FamilyMember.id).where(
+                FamilyMember.id.in_(member_ids),
+                FamilyMember.status == MemberStatus.active.value,
+            )
+        )
+        return {str(item) for item in rows}
+
+    @classmethod
+    def pending_applications(cls, db: Session, limit: int = 200) -> list[PendingApplication]:
+        """Join requests still awaiting a decision, across families.
+
+        A background job cannot carry a family scope, so the scope is applied per row by the
+        caller when it resolves that family's managers.
+        """
+        rows = db.scalars(
+            select(FamilyJoinRequest)
+            .where(FamilyJoinRequest.status == JoinRequestStatus.pending.value)
+            .order_by(FamilyJoinRequest.created_at)
+            .limit(limit)
+        )
+        applications: list[PendingApplication] = []
+        for item in rows:
+            if not item.id or not item.family_id or item.created_at is None:
+                continue
+            applications.append(
+                PendingApplication(
+                    family_id=str(item.family_id),
+                    request_id=str(item.id),
+                    request_code=_request_code(str(item.id)),
+                    relationship_label=str(item.relationship_label or ""),
+                    created_at=item.created_at,
+                )
+            )
+        return applications
 
     @classmethod
     def update_member(
