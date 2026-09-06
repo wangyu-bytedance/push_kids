@@ -5,7 +5,9 @@
 const MAX_ACTIVE_CHILDREN = 5;
 const FALLBACK_AVATAR = "芽";
 const GRADE_OPTIONS = [
-  "学前",
+  "学前-小班",
+  "学前-中班",
+  "学前-大班",
   "小学一年级",
   "小学二年级",
   "小学三年级",
@@ -15,6 +17,26 @@ const GRADE_OPTIONS = [
   "初中一年级",
   "其他"
 ];
+
+/* 新建只展示 canonical 值；编辑历史档案时，把已有但不在列表中的值临时放回 picker。
+   “学前”无法可靠推断成小/中/大班，因此只改变展示标签，提交值仍保持原样。 */
+function gradeChoices(currentGrade = null, includeEmpty = false) {
+  const choices = GRADE_OPTIONS.map((value) => ({ label: value, value }));
+  if (typeof currentGrade === "string" && currentGrade && !GRADE_OPTIONS.includes(currentGrade)) {
+    choices.unshift({
+      label: currentGrade === "学前" ? "学前（未细分）" : currentGrade,
+      value: currentGrade,
+      legacy: true
+    });
+  }
+  if (includeEmpty) choices.unshift({ label: "暂不填写", value: null });
+  return choices;
+}
+
+function gradeChoiceIndex(choices, grade) {
+  const index = (choices || []).findIndex((item) => item.value === (grade || null));
+  return index < 0 ? 0 : index;
+}
 
 function decorate(child) {
   const name = child && child.name ? child.name : "";
@@ -77,6 +99,8 @@ function limitHint() {
 module.exports = {
   MAX_ACTIVE_CHILDREN,
   GRADE_OPTIONS,
+  gradeChoices,
+  gradeChoiceIndex,
   decorate,
   decorateAll,
   resolveSelection,

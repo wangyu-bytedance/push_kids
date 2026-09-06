@@ -2,13 +2,15 @@ from __future__ import annotations
 
 from datetime import date
 
-from sqlalchemy import and_, func, or_, select
+from sqlalchemy import and_, delete, func, or_, select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from push_kids.children.service import ChildrenService
 from push_kids.persistence.models import (
     KnowledgeItem,
+    KnowledgeOccurrence,
+    LearningRecord,
     LearningSubmission,
     ReviewFeedback,
     ReviewFeedbackRequest,
@@ -26,6 +28,43 @@ from push_kids.platform.time import local_date
 
 
 class PlanningService:
+    @staticmethod
+    def purge_data(db: Session, family_id: str, child_id: str | None) -> None:
+        review_query = select(ReviewItem.id).where(ReviewItem.family_id == family_id)
+        knowledge_query = select(KnowledgeItem.id).where(KnowledgeItem.family_id == family_id)
+        if child_id is not None:
+            review_query = review_query.where(ReviewItem.child_id == child_id)
+            knowledge_query = knowledge_query.where(KnowledgeItem.child_id == child_id)
+        review_ids = list(db.scalars(review_query))
+        knowledge_ids = list(db.scalars(knowledge_query))
+        record_query = select(LearningRecord.id).where(LearningRecord.family_id == family_id)
+        if child_id is not None:
+            record_query = record_query.where(LearningRecord.child_id == child_id)
+        record_ids = list(db.scalars(record_query))
+        db.execute(
+            delete(ReviewFeedbackRequest).where(
+                ReviewFeedbackRequest.family_id == family_id,
+                ReviewFeedbackRequest.review_item_id.in_(review_ids),
+            )
+        )
+        db.execute(
+            delete(ReviewFeedback).where(
+                ReviewFeedback.family_id == family_id,
+                ReviewFeedback.review_item_id.in_(review_ids),
+            )
+        )
+        db.execute(
+            delete(KnowledgeOccurrence).where(
+                KnowledgeOccurrence.family_id == family_id,
+                or_(
+                    KnowledgeOccurrence.knowledge_item_id.in_(knowledge_ids),
+                    KnowledgeOccurrence.learning_record_id.in_(record_ids),
+                ),
+            )
+        )
+        db.execute(delete(ReviewItem).where(ReviewItem.id.in_(review_ids)))
+        db.execute(delete(KnowledgeItem).where(KnowledgeItem.id.in_(knowledge_ids)))
+
     @staticmethod
     def history_for_knowledge(
         db: Session,
@@ -219,6 +258,7 @@ class PlanningService:
         )
         if review is None:
             raise NotFoundError("没有找到这条复习任务")
+        ChildrenService.require_active_child(db, family_id, review.child_id)
         if idempotency_key:
             existing = db.scalar(
                 select(ReviewFeedbackRequest).where(

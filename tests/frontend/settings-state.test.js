@@ -43,5 +43,30 @@ test("opening and cancelling settings editors performs zero writes", () => {
   assert.equal(page.data.showSchedule, true);
   page.closeSchedule();
   assert.equal(page.data.showSchedule, false);
+
+  page.openTravelCreate();
+  assert.equal(page.data.showTravelEditor, true);
+  assert.deepEqual(Array.from(page.data.travelWeekdays), [0, 1, 2, 3, 4]);
+  page.closeTravelEditor();
+  assert.equal(page.data.showTravelEditor, false);
   assert.deepEqual(calls, []);
+});
+
+test("travel form preserves validation state and creates one weekly arrangement", async () => {
+  const { page, calls } = loadSettingsPage();
+  page.load = async () => {};
+  page.openTravelCreate();
+  page.data.travelEndTime = "07:00";
+  await page.saveTravel();
+  assert.match(page.data.travelError, /结束时间/);
+  assert.deepEqual(calls, []);
+
+  page.data.travelEndTime = "08:10";
+  await page.saveTravel();
+  assert.equal(calls.length, 1);
+  assert.equal(calls[0][0], "/travel-arrangements");
+  assert.equal(calls[0][1].method, "POST");
+  assert.equal(calls[0][1].idempotencyKey, "key");
+  assert.deepEqual(Array.from(calls[0][1].data.weekdays), [0, 1, 2, 3, 4]);
+  assert.equal(page.data.showTravelEditor, false);
 });

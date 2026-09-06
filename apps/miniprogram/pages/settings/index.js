@@ -6,6 +6,7 @@ const BASIC_LEARNING = ["数学", "语文", "英语"];
 const LEARNING_CATALOG = ["科学", "道德与法治", "物理", "化学", "生物", "历史", "地理", "政治", "美术", "音乐", "体育", "劳动"];
 const ACTIVITY_CATALOG = ["游泳", "乒乓球", "篮球", "羽毛球", "足球", "网球", "围棋", "国际象棋", "钢琴", "小提琴", "舞蹈", "武术", "跆拳道", "书法", "绘画", "编程", "机器人"];
 const WEEKDAY_LABELS = ["一", "二", "三", "四", "五", "六", "日"];
+const TRAVEL_PRESETS = ["上学", "放学", "接送", "自定义"];
 
 /* 只有 is_custom 的科目/活动允许移出或改安排，预置的三科只切换在学状态。 */
 function isCustom(subject) {
@@ -28,6 +29,11 @@ function scheduleLabel(schedule) {
   return `每周${days}`;
 }
 
+function travelLabel(item) {
+  const days = weekdayText(item.weekdays || []);
+  return `每周${days} · ${item.start_time.slice(0, 5)}–${item.end_time.slice(0, 5)}`;
+}
+
 Page({
   data: {
     loading: true, error: "", children: [], childIndex: 0, childId: "", multiChild: false, showChildSheet: false,
@@ -42,18 +48,28 @@ Page({
     weekdayLabels: WEEKDAY_LABELS,
     weekdays: [], weekdaySelected: [false, false, false, false, false, false, false],
     startTime: "18:00", endTime: "19:00", flexible: false, scheduleSummary: "请选择至少一天",
-    savingSchedule: false, scheduleError: "", removingActivity: false
+    savingSchedule: false, scheduleError: "", removingActivity: false,
+    travelArrangements: [], travelPresets: TRAVEL_PRESETS, showTravelEditor: false,
+    editingTravelId: "", travelName: "", travelPreset: "", travelWeekdays: [],
+    travelWeekdaySelected: [false, false, false, false, false, false, false],
+    travelStartTime: "07:30", travelEndTime: "08:10", travelError: "", travelEndError: false,
+    savingTravel: false, deletingTravel: false, travelKey: ""
   },
-  onShow() {
+  async onShow() {
     const tabBar = this.getTabBar && this.getTabBar();
     if (tabBar) tabBar.setData({ selected: 4 });
-    this.load();
+    await this.load();
+    const app = getApp();
+    const travelId = app.globalData.openTravelArrangementId;
+    app.globalData.openTravelArrangementId = "";
+    if (travelId) this.openTravelById(travelId);
   },
   async onPullDownRefresh() {
     await this.load();
     if (wx.stopPullDownRefresh) wx.stopPullDownRefresh();
   },
   openFamily() { wx.navigateTo({ url: "/pages/family-members/index" }); },
+  openDeleteSettings() { wx.navigateTo({ url: "/pages/delete-settings/index" }); },
   openAbout() {
     wx.showModal({
       title: "关于知芽",
@@ -93,12 +109,13 @@ Page({
       };
       if (!selection.children.length) {
         return this.setData({ loading: false, ...shared, childIndex: 0, childId: "", subjects: [],
-          baseLearning: [], addedLearning: [], addedActivities: [] });
+          baseLearning: [], addedLearning: [], addedActivities: [], travelArrangements: [] });
       }
       const childId = selection.childId;
-      const [subjects, scheduleData, pendingRequests] = await Promise.all([
+      const [subjects, scheduleData, travelData, pendingRequests] = await Promise.all([
         api.request(`/children/${childId}/subjects`),
         api.request(`/children/${childId}/activity-schedules`),
+        api.request(`/children/${childId}/travel-arrangements`),
         this.loadPendingRequests(member)
       ]);
       if (this.loadGeneration !== generation) return;
@@ -124,8 +141,14 @@ Page({
           iconClass: ui.activityIcon(item.name, "pri"),
           custom: isCustom(item) && !ACTIVITY_CATALOG.includes(item.name) };
       });
+      const travelArrangements = (travelData.items || []).map((item) => ({
+        ...item,
+        scheduleLabel: travelLabel(item),
+        marker: item.name.charAt(0) || "行"
+      }));
       this.setData({ loading: false, ...shared, childIndex: selection.childIndex, childId,
         subjects, baseLearning, addedLearning, addedActivities, togglingName: "", removingId: "",
+        travelArrangements,
         pendingRequests, requestsLabel: pendingRequests ? `${pendingRequests} 份申请` : "" });
     } catch (error) {
       /* 弱网时保留已加载的科目与活动，只在顶部给一条可重试的说明。 */
@@ -224,6 +247,11 @@ Page({
     this.setData({ [field]: event.detail.value });
     if (field === "customCatalogName") this.setData({ catalogError: "" });
     if (field === "startTime" || field === "endTime") this.updateScheduleSummary();
+    if (field === "travelName" || field === "travelStartTime" || field === "travelEndTime") {
+      const start = field === "travelStartTime" ? event.detail.value : this.data.travelStartTime;
+      const end = field === "travelEndTime" ? event.detail.value : this.data.travelEndTime;
+      this.setData({ travelError: "", travelEndError: end <= start });
+    }
   },
   async addCatalog() {
     if (!this.guardWrite()) return;
@@ -310,6 +338,101 @@ Page({
       await this.load();
     } catch (error) {
       this.setData({ removingActivity: false, scheduleError: `${error.message}，这项活动还在，可以再试一次。` });
+    }
+  },
+  openTravelCreate() {
+    if (!this.guardWrite()) return;
+    this.setData({
+      showTravelEditor: true, editingTravelId: "", travelName: "上学", travelPreset: "上学",
+      travelWeekdays: [0, 1, 2, 3, 4],
+      travelWeekdaySelected: [true, true, true, true, true, false, false],
+      travelStartTime: "07:30", travelEndTime: "08:10", travelError: "", travelEndError: false,
+      savingTravel: false, deletingTravel: false,
+      travelKey: api.newIdempotencyKey("travel")
+    });
+  },
+  openTravel(event) {
+    if (!this.guardWrite()) return;
+    this.openTravelById(event.currentTarget.dataset.id);
+  },
+  openTravelById(travelId) {
+    const item = this.data.travelArrangements.find((row) => row.id === travelId);
+    if (!item) return;
+    const weekdays = item.weekdays || [];
+    this.setData({
+      showTravelEditor: true, editingTravelId: item.id, travelName: item.name,
+      travelPreset: TRAVEL_PRESETS.includes(item.name) ? item.name : "自定义",
+      travelWeekdays: weekdays,
+      travelWeekdaySelected: Array.from({ length: 7 }, (_, day) => weekdays.includes(day)),
+      travelStartTime: item.start_time.slice(0, 5), travelEndTime: item.end_time.slice(0, 5),
+      travelError: "", travelEndError: false, savingTravel: false, deletingTravel: false, travelKey: ""
+    });
+  },
+  closeTravelEditor() {
+    if (!this.data.savingTravel && !this.data.deletingTravel) this.setData({ showTravelEditor: false });
+  },
+  chooseTravelPreset(event) {
+    const preset = event.currentTarget.dataset.name;
+    const update = { travelPreset: preset, travelError: "" };
+    if (preset !== "自定义") update.travelName = preset;
+    else if (TRAVEL_PRESETS.includes(this.data.travelName)) update.travelName = "";
+    this.setData(update);
+  },
+  toggleTravelWeekday(event) {
+    const value = Number(event.currentTarget.dataset.value);
+    const weekdays = this.data.travelWeekdays.slice();
+    const index = weekdays.indexOf(value);
+    if (index >= 0) weekdays.splice(index, 1); else weekdays.push(value);
+    weekdays.sort();
+    this.setData({
+      travelWeekdays: weekdays,
+      travelWeekdaySelected: Array.from({ length: 7 }, (_, day) => weekdays.includes(day)),
+      travelError: ""
+    });
+  },
+  async saveTravel() {
+    if (!this.guardWrite() || this.data.savingTravel) return;
+    const name = this.data.travelName.trim();
+    if (!name) return this.setData({ travelError: "请填写出行安排名称。" });
+    if (!this.data.travelWeekdays.length) return this.setData({ travelError: "请至少选择一天。" });
+    if (this.data.travelEndTime <= this.data.travelStartTime) {
+      return this.setData({ travelError: "结束时间要晚于开始时间。", travelEndError: true });
+    }
+    const payload = {
+      name, weekdays: this.data.travelWeekdays,
+      start_time: this.data.travelStartTime, end_time: this.data.travelEndTime
+    };
+    this.setData({ savingTravel: true, travelError: "" });
+    try {
+      if (this.data.editingTravelId) {
+        await api.request(`/travel-arrangements/${this.data.editingTravelId}`, { method: "PATCH", data: payload });
+      } else {
+        await api.request("/travel-arrangements", { method: "POST", data: { ...payload, child_id: this.data.childId }, idempotencyKey: this.data.travelKey });
+      }
+      this.setData({ showTravelEditor: false, savingTravel: false });
+      wx.showToast({ title: "已保存出行安排", icon: "success" });
+      await this.load();
+    } catch (error) {
+      this.setData({ savingTravel: false, travelError: `${error.message}，安排还没保存，可以再试一次。` });
+    }
+  },
+  async deleteTravel() {
+    if (!this.guardWrite() || !this.data.editingTravelId) return;
+    const confirmed = await new Promise((resolve) => wx.showModal({
+      title: `删除「${this.data.travelName}」？`,
+      content: "删除后不会再出现在日程里，其他活动和学习记录不受影响。",
+      confirmText: "删除", confirmColor: "#A6423B",
+      success: (result) => resolve(result.confirm)
+    }));
+    if (!confirmed) return;
+    this.setData({ deletingTravel: true, travelError: "" });
+    try {
+      await api.request(`/travel-arrangements/${this.data.editingTravelId}`, { method: "DELETE" });
+      this.setData({ showTravelEditor: false, deletingTravel: false });
+      wx.showToast({ title: "已删除", icon: "success" });
+      await this.load();
+    } catch (error) {
+      this.setData({ deletingTravel: false, travelError: `${error.message}，这项安排还在，可以再试一次。` });
     }
   }
 });

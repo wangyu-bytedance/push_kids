@@ -3,29 +3,23 @@ const childContext = require("../../utils/child-context");
 
 const BUDGET_OPTIONS = [10, 15, 20, 30, 45, 60];
 const PRESET_SUBJECTS = ["语文", "数学", "英语"];
-const GRADE_OPTIONS = ["暂不填写"].concat(childContext.GRADE_OPTIONS);
 
 function budgetIndex(minutes) {
   const index = BUDGET_OPTIONS.indexOf(Number(minutes));
   return index < 0 ? BUDGET_OPTIONS.indexOf(15) : index;
 }
 
-function gradeIndex(grade) {
-  const index = GRADE_OPTIONS.indexOf(grade || "");
-  return index < 0 ? 0 : index;
-}
-
 Page({
   data: {
     mode: "create", childId: "", loading: false, error: "", saving: false, working: false,
     title: "新建学习档案", isManager: true, active: true,
-    nameDraft: "", gradeOptions: GRADE_OPTIONS, gradeIndex: 0,
+    nameDraft: "", gradeChoices: childContext.gradeChoices(null, true), gradeIndex: 0,
     budgetOptions: BUDGET_OPTIONS, budgetIndex: budgetIndex(15),
     presetSubjects: PRESET_SUBJECTS.map((name) => ({ name, selected: false })),
     limitReached: false, limitHint: childContext.limitHint(),
     unfinishedCount: 0, unfinishedHint: ""
   },
-  onLoad(query = {}) {
+  async onLoad(query = {}) {
     const mode = query.mode === "edit" ? "edit" : "create";
     const member = getApp().globalData.currentMember;
     this.setData({
@@ -35,7 +29,17 @@ Page({
       isManager: !member || member.role === "manager"
     });
     wx.setNavigationBarTitle({ title: this.data.title });
-    this.load();
+    const app = getApp();
+    let bootstrap = { state: app.globalData.bootstrapState };
+    if (bootstrap.state !== "bound") {
+      try { bootstrap = await app.refreshBootstrap(false); }
+      catch (error) { return this.setData({ loading: false, error: error.message }); }
+    }
+    if (bootstrap.state !== "bound") {
+      wx.reLaunch({ url: "/pages/family-onboarding/index" });
+      return;
+    }
+    await this.load();
   },
   async load() {
     this.setData({ loading: true, error: "" });
@@ -52,11 +56,13 @@ Page({
       if (!child) {
         return this.setData({ loading: false, error: "这个学习档案已经不存在了" });
       }
+      const gradeChoices = childContext.gradeChoices(child.grade, true);
       this.setData({
         loading: false,
         active: child.active !== false,
         nameDraft: child.name,
-        gradeIndex: gradeIndex(child.grade),
+        gradeChoices,
+        gradeIndex: childContext.gradeChoiceIndex(gradeChoices, child.grade),
         budgetIndex: budgetIndex(child.daily_budget_minutes)
       });
       if (child.active !== false) await this.loadUnfinished();
@@ -92,10 +98,10 @@ Page({
     this.setData({ presetSubjects });
   },
   formPayload() {
-    const grade = this.data.gradeIndex === 0 ? null : GRADE_OPTIONS[this.data.gradeIndex];
+    const choice = this.data.gradeChoices[this.data.gradeIndex];
     return {
       name: this.data.nameDraft.trim(),
-      grade,
+      grade: choice ? choice.value : null,
       daily_budget_minutes: BUDGET_OPTIONS[this.data.budgetIndex]
     };
   },

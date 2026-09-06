@@ -14,9 +14,9 @@ function loadPage(entry, request, overrides = {}) {
   const toasts = [];
   const modals = [];
   const app = {
-    globalData: { selectedChildId: overrides.selectedChildId || "", currentMember: overrides.member || null },
+    globalData: { selectedChildId: overrides.selectedChildId || "", currentMember: overrides.member || null, bootstrapState: overrides.bootstrapState || "bound" },
     selectChild(id) { this.globalData.selectedChildId = id; },
-    refreshBootstrap: async () => ({ state: "bound", children: [] })
+    refreshBootstrap: async () => ({ state: overrides.bootstrapState || "bound", children: [] })
   };
   const filename = path.resolve(__dirname, "../../apps/miniprogram", entry);
   vm.runInNewContext(fs.readFileSync(filename, "utf8"), {
@@ -34,6 +34,7 @@ function loadPage(entry, request, overrides = {}) {
       showModal(options) { modals.push(options); if (options.success) options.success({ confirm: overrides.confirm !== false }); },
       navigateTo(options) { navigations.push(options.url); },
       navigateBack() { navigations.push("back"); },
+      reLaunch(options) { navigations.push(options.url); },
       setNavigationBarTitle() {},
       stopPullDownRefresh() {}
     },
@@ -70,6 +71,20 @@ test("child selection keeps the parent's choice and derives switcher labels", ()
   assert.equal(resolved.children[0].avatar, "小");
 });
 
+test("preschool choices are granular and legacy values remain lossless", () => {
+  assert.deepEqual(childContext.GRADE_OPTIONS.slice(0, 3), ["学前-小班", "学前-中班", "学前-大班"]);
+  assert.equal(childContext.GRADE_OPTIONS.includes("学前"), false, "新建档案不应继续产生未细分值");
+
+  const legacy = childContext.gradeChoices("学前", true);
+  assert.deepEqual(legacy[0], { label: "暂不填写", value: null });
+  assert.deepEqual(legacy[1], { label: "学前（未细分）", value: "学前", legacy: true });
+  assert.equal(childContext.gradeChoiceIndex(legacy, "学前"), 1);
+
+  const unknown = childContext.gradeChoices("国际学校预备班", true);
+  assert.equal(unknown[1].label, "国际学校预备班");
+  assert.equal(unknown[1].value, "国际学校预备班");
+});
+
 test("selection sync writes the fallback back into global state exactly once", () => {
   const writes = [];
   const app = { globalData: { selectedChildId: "gone" }, selectChild(id) { writes.push(id); this.globalData.selectedChildId = id; } };
@@ -93,6 +108,7 @@ test("settings lists profiles in use, archived profiles and an add entry", async
     if (requestPath.startsWith("/children?include_archived")) return profiles;
     if (requestPath.endsWith("/subjects")) return [];
     if (requestPath.endsWith("/activity-schedules")) return { items: [] };
+    if (requestPath.endsWith("/travel-arrangements")) return { items: [] };
     if (requestPath === "/families/current/requests") return [];
     throw new Error(`unexpected path: ${requestPath}`);
   }, { selectedChildId: "b" });
@@ -116,6 +132,7 @@ test("settings drops a stale response when the parent switched child mid-flight"
     if (requestPath.startsWith("/children?include_archived")) return [profile("a", "小雨"), profile("b", "小星")];
     if (requestPath.endsWith("/subjects")) return new Promise((resolve) => { subjectsGate = () => resolve([{ id: "s", name: "语文", kind: "learning", active: true, is_custom: false }]); });
     if (requestPath.endsWith("/activity-schedules")) return { items: [] };
+    if (requestPath.endsWith("/travel-arrangements")) return { items: [] };
     if (requestPath === "/families/current/requests") return [];
     throw new Error(`unexpected path: ${requestPath}`);
   }, { selectedChildId: "a" });
@@ -161,7 +178,8 @@ test("creating a profile seeds the picked subjects and switches to the new child
   page.onLoad({ mode: "create" });
   await new Promise((resolve) => setImmediate(resolve));
   page.setName({ detail: { value: " 小星 " } });
-  page.chooseGrade({ detail: { value: 4 } });
+  const gradeIndex = page.data.gradeChoices.findIndex((item) => item.value === "小学三年级");
+  page.chooseGrade({ detail: { value: gradeIndex } });
   page.togglePreset({ currentTarget: { dataset: { index: 1 } } });
   await page.save();
 
@@ -171,6 +189,65 @@ test("creating a profile seeds the picked subjects and switches to the new child
   assert.deepEqual(created.options.data.subject_names, ["数学"]);
   assert.equal(app.globalData.selectedChildId, "new", "建完直接切过去，家长下一步就是记录");
   assert.deepEqual(navigations, ["back"]);
+});
+
+test("an unbound user is returned to the family gate before loading children", async () => {
+  const { page, calls, navigations } = loadPage("pages/child-edit/index.js", async () => {
+    throw new Error("child endpoint must not be called");
+  }, { bootstrapState: "unbound" });
+
+  await page.onLoad({ mode: "create" });
+
+  assert.equal(calls.length, 0);
+  assert.deepEqual(navigations, ["/pages/family-onboarding/index"]);
+});
+
+test("creating a preschool profile submits the selected class verbatim", async () => {
+  const { page, calls } = loadPage("pages/child-edit/index.js", async (requestPath, options) => {
+    if (requestPath.startsWith("/children?include_archived")) return [];
+    if (requestPath === "/children" && options.method === "POST") return profile("new", options.data.name);
+    throw new Error(`unexpected path: ${requestPath}`);
+  });
+
+  page.onLoad({ mode: "create" });
+  await new Promise((resolve) => setImmediate(resolve));
+  page.setName({ detail: { value: "小芽" } });
+  const gradeIndex = page.data.gradeChoices.findIndex((item) => item.value === "学前-中班");
+  page.chooseGrade({ detail: { value: gradeIndex } });
+  await page.save();
+
+  const created = calls.find((call) => call.path === "/children" && call.options.method === "POST");
+  assert.equal(created.options.data.grade, "学前-中班");
+});
+
+test("editing a legacy preschool grade shows an explicit label and preserves its stored value", async () => {
+  const { page, calls } = loadPage("pages/child-edit/index.js", async (requestPath) => {
+    if (requestPath.startsWith("/children?include_archived")) return [profile("legacy", "小苗", { grade: "学前" })];
+    throw new Error(`unexpected path: ${requestPath}`);
+  });
+
+  page.onLoad({ mode: "edit", child_id: "legacy" });
+  await new Promise((resolve) => setImmediate(resolve));
+
+  const choice = page.data.gradeChoices[page.data.gradeIndex];
+  assert.equal(choice.label, "学前（未细分）");
+  assert.equal(page.formPayload().grade, "学前");
+  assert.equal(calls.filter((call) => call.options.method !== undefined).length, 0, "打开档案不能自动改写年级");
+});
+
+test("editing an unknown valid grade keeps it visible and lossless", async () => {
+  const { page } = loadPage("pages/child-edit/index.js", async (requestPath) => {
+    if (requestPath.startsWith("/children?include_archived")) {
+      return [profile("custom", "小禾", { grade: "国际学校预备班" })];
+    }
+    throw new Error(`unexpected path: ${requestPath}`);
+  });
+
+  page.onLoad({ mode: "edit", child_id: "custom" });
+  await new Promise((resolve) => setImmediate(resolve));
+
+  assert.equal(page.data.gradeChoices[page.data.gradeIndex].label, "国际学校预备班");
+  assert.equal(page.formPayload().grade, "国际学校预备班");
 });
 
 test("an empty name never reaches the server", async () => {

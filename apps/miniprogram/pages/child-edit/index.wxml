@@ -27,8 +27,8 @@
       </view>
       <view class="pk-field">
         <text class="lbl">年级</text>
-        <picker range="{{gradeOptions}}" value="{{gradeIndex}}" bindchange="chooseGrade">
-          <view class="pk-picker"><text>{{gradeOptions[gradeIndex]}}</text><view class="chev"></view></view>
+        <picker range="{{gradeChoices}}" range-key="label" value="{{gradeIndex}}" bindchange="chooseGrade">
+          <view class="pk-picker"><text>{{gradeChoices[gradeIndex].label}}</text><view class="chev"></view></view>
         </picker>
       </view>
       <view class="pk-field">

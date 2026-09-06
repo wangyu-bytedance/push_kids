@@ -4,7 +4,7 @@
 - Related Feature: `FEAT-001`
 - Baseline: `FDB-20260906-02`
 - Engineering contract: `FEC-20260906-04`
-- Design revision: `DREV-20260906-PKDS-02`（PKDS-1.0 视觉不变的交互增量；PKDS-01 取代 `DREV-20260830-03` / `DREV-20260905-UX-03` / `DREV-20260905-UX-04` 的视觉部分）
+- Design revision: `DREV-20260906-PKDS-02` + `DREV-20260906-TRAVEL-01`（FEAT-007 scoped Figma waiver）
 - Current-state revision: `UI-STATE-20260906-PKDS-02-LOCAL`
 - Related Spec: `specs/active/SPEC-20260906-PKDS-01-DESIGN-SYSTEM-ROLLOUT.md` revision `SPEC-20260906-PKDS-01`；
   `specs/active/BUG-013-MULTI-SUBJECT-AND-PARENT-FLOW.md` revision `BUG-SPEC-20260906-16`
@@ -22,10 +22,10 @@
 | Tab | Current responsibility |
 |---|---|
 | 今日 | 可折叠的今日复习、今日学习、今日活动；待确认/失败提示 |
-| 日程 | 周日期轨、当天时间线、过去日程灰显、FAB 新建、编辑/删除日程 |
+| 日程 | 周日期轨、当天时间线、出行投影、全部日程项冲突提示、过去日程灰显、FAB 新建、编辑/删除日程 |
 | 记录 | 同页新增/历史；照片/文字与实际时间；已确认/待处理/全部、搜索/半屏筛选/分页；列表进入独立的只读记录详情页 |
 | 报表 | 7/30/100 天概览、组件内30天分页的复习紧迫度与活跃度、科目记录 |
-| 设置 | 三项基础学科、手动添加的其他科目与课外活动、活动安排、家庭成员入口 |
+| 设置 | 三项基础学科、手动添加的其他科目与课外活动、活动安排、出行安排、家庭成员入口 |
 
 学习流程的深层页面分成两类责任：`pages/submission/confirm` 是**可编辑草稿**的独立入口（从新增流程
 或通知进入），`pages/record-detail` 承载**记录详情**——已入档为只读态，待确认态则在同页就地编辑并确认，
@@ -74,6 +74,8 @@
 - 今日还消费不与固定日程重复的柔性活动建议；活动提醒可直接移除。
 - Todo 的“带练提示”只提交当前所选且已确认的 Review IDs。
 - 日程卡点击编辑；重复日程 MVP 修改整个系列。结束时间早于当前时刻后统一灰显。
+- 设置页是出行安排的唯一写入口；日程点击出行会回到设置并定位该项。出行不进入今日。
+  日程中任意明确时段相交时，冲突双方以危险色、文字原因、冲突对象和重叠分钟数共同提示；端点相接不冲突。
 - 报表范围切换会重新请求 7/30/100 天数据并回到第1屏；100天在组件内部按30/30/30/10左右分页，页面根容器不横向移动。
 - 报表四个概览指标是 2×2 独立描边卡片并保留间距；学习记录跳记录页并带上当前区间筛选，新增知识/
   复习反馈/活动练习在页内滚动定位到对应区块；指标为 0 时弱化显示并用 Toast 说明，不跳到空页面。
@@ -158,6 +160,10 @@ guards for `callContainer`、`uploadFile` and `chooseMedia`; media permission fa
 classification and cancelable uploads are tracked by `BUG-SPEC-20260905-02` and remain unimplemented.
 
 ## Change references
+
+- 2026-09-06 — `FEAT-007 / DREV-20260906-TRAVEL-01`：设置新增出行列表与新增/编辑半屏，日程新增
+  出行类型、冲突摘要、冲突卡片和定位回设置的交互。用户批准本地 HTML 设计及仅限 FEAT-007 的
+  Figma 临时豁免；前端自动化与静态校验通过，原生 320/390/430、字体放大、键盘和真机仍未运行。
 
 - 2026-09-06 — `BUG-013 / BUG-SPEC-20260906-16 / DREV-20260906-PKDS-02`：六项家长动线修复。
   (1) 多科目草稿按服务端确定性归类分组展示，可整组或按知识点改科目，新增科目需家长显式同意，

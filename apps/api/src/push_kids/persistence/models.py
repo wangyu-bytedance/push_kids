@@ -54,6 +54,7 @@ class MediaState(enum.StrEnum):
 
 class FamilyStatus(enum.StrEnum):
     active = "active"
+    deleting = "deleting"
     disabled = "disabled"
 
 
@@ -82,6 +83,13 @@ class JoinRequestStatus(enum.StrEnum):
     rejected = "rejected"
     cancelled = "cancelled"
     expired = "expired"
+
+
+class DeletionState(enum.StrEnum):
+    queued = "queued"
+    running = "running"
+    succeeded = "succeeded"
+    failed = "failed"
 
 
 class WeChatActorBinding(Base):
@@ -187,6 +195,34 @@ class FamilyAuditEvent(Base):
     created_at = Column(UTCDateTime(), nullable=False, default=utcnow, index=True)
 
 
+class DeletionRequest(Base):
+    __tablename__ = "deletion_requests"
+    __table_args__ = (
+        UniqueConstraint(
+            "actor_binding_id", "idempotency_key_hash", name="uq_deletion_actor_request"
+        ),
+    )
+    id = Column(String(36), primary_key=True, default=new_id)
+    actor_binding_id = Column(
+        String(36), ForeignKey("wechat_actor_bindings.id"), nullable=False, index=True
+    )
+    family_id = Column(String(80), nullable=True, index=True)
+    target_type = Column(String(20), nullable=False, index=True)
+    target_id = Column(String(80), nullable=True, index=True)
+    idempotency_key_hash = Column(String(64), nullable=False)
+    request_fingerprint = Column(String(64), nullable=False)
+    state = Column(String(20), nullable=False, default=DeletionState.queued.value, index=True)
+    attempts = Column(Integer, nullable=False, default=0)
+    max_attempts = Column(Integer, nullable=False, default=3)
+    available_at = Column(UTCDateTime(), nullable=False, default=utcnow, index=True)
+    lease_until = Column(UTCDateTime(), nullable=True)
+    error_code = Column(String(50), nullable=True)
+    created_at = Column(UTCDateTime(), nullable=False, default=utcnow)
+    updated_at = Column(UTCDateTime(), nullable=False, default=utcnow, onupdate=utcnow)
+    completed_at = Column(UTCDateTime(), nullable=True)
+    expires_at = Column(UTCDateTime(), nullable=True, index=True)
+
+
 class MediaObject(Base):
     __tablename__ = "media_objects"
     __table_args__ = (
@@ -224,6 +260,8 @@ class Child(Base):
     # False archives the profile: it leaves the switcher and refuses new writes, while every
     # existing record, review item and report stays readable. There is no physical delete.
     active = Column(Boolean, nullable=False, default=True, index=True)
+    # A durable deletion request freezes all new writes before the cross-store purge starts.
+    deleting = Column(Boolean, nullable=False, default=False, index=True)
     created_at = Column(UTCDateTime(), nullable=False, default=utcnow)
 
 
@@ -454,6 +492,35 @@ class CalendarEventRequest(Base):
     idempotency_key = Column(String(100), nullable=False)
     request_fingerprint = Column(String(64), nullable=False)
     event_id = Column(String(36), ForeignKey("calendar_events.id"), nullable=False, index=True)
+    created_at = Column(UTCDateTime(), nullable=False, default=utcnow)
+
+
+class TravelArrangement(Base):
+    __tablename__ = "travel_arrangements"
+    id = Column(String(36), primary_key=True, default=new_id)
+    family_id = Column(String(80), nullable=False, index=True)
+    child_id = Column(String(36), ForeignKey("children.id"), nullable=False, index=True)
+    name = Column(String(30), nullable=False)
+    weekdays = Column(String(30), nullable=False)
+    start_time = Column(Time, nullable=False)
+    end_time = Column(Time, nullable=False)
+    active = Column(Boolean, nullable=False, default=True)
+    created_at = Column(UTCDateTime(), nullable=False, default=utcnow)
+    updated_at = Column(UTCDateTime(), nullable=False, default=utcnow, onupdate=utcnow)
+
+
+class TravelArrangementRequest(Base):
+    __tablename__ = "travel_arrangement_requests"
+    __table_args__ = (
+        UniqueConstraint("family_id", "idempotency_key", name="uq_travel_request_key"),
+    )
+    id = Column(String(36), primary_key=True, default=new_id)
+    family_id = Column(String(80), nullable=False, index=True)
+    idempotency_key = Column(String(100), nullable=False)
+    request_fingerprint = Column(String(64), nullable=False)
+    arrangement_id = Column(
+        String(36), ForeignKey("travel_arrangements.id"), nullable=False, index=True
+    )
     created_at = Column(UTCDateTime(), nullable=False, default=utcnow)
 
 

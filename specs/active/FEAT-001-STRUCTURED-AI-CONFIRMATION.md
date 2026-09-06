@@ -83,10 +83,10 @@
 
 | ID | Decision | Owner/date | Rationale |
 |---|---|---|---|
-| `D-001` | 选择“原子知识点 + 确定性展示聚合”，不让模型直接生成最终展示文案。 | 待产品负责人批准 / 2026-09-06 | 保留复习粒度，展示可预测且可测试。 |
-| `D-002` | 第一版类别码关闭为 `hanzi/word/poem/arithmetic/concept/activity/other`，中文标签由产品代码映射。 | 待批准 | 避免模型任意制造类别和 UI 文案。 |
-| `D-003` | AI 生成的 `summary` 改为次要、可折叠补充说明；兼容字段仍保留，AI 建议上限 120 字。 | 待批准 | 降低首屏阅读负担而不破坏旧记录。 |
-| `D-004` | 证据、低置信度、不确定项、关联知识和复习方式不删除，放到每行详情中按需展开。 | 待批准 | 简化不等于隐藏风险或削弱人工核对。 |
+| `D-001` | 选择“原子知识点 + 确定性展示聚合”，不让模型直接生成最终展示文案。 | 产品负责人 / 2026-09-06 | 保留复习粒度，展示可预测且可测试。 |
+| `D-002` | 第一版类别码关闭为 `hanzi/word/poem/arithmetic/concept/activity/other`，中文标签由产品代码映射。 | 产品负责人 / 2026-09-06 | 避免模型任意制造类别和 UI 文案。 |
+| `D-003` | AI 生成的 `summary` 改为次要、可折叠补充说明；兼容字段仍保留，AI 建议上限 120 字。 | 产品负责人 / 2026-09-06 | 降低首屏阅读负担而不破坏旧记录。 |
+| `D-004` | 证据、低置信度、不确定项、关联知识和复习方式不删除，放到每行详情中按需展开。 | 产品负责人 / 2026-09-06 | 简化不等于隐藏风险或削弱人工核对。 |
 | `D-005` | “汉子”按上下文解释为“汉字”。 | Codex / 2026-09-06 | 与示例类别和小学学习语义一致。 |
 
 ### Assumptions
@@ -654,17 +654,20 @@ flowchart LR
 | Ruff / format / Mypy | local | pass | 167 files formatted；54 source files typed | 无问题 |
 | ESLint / Mini Program / architecture | local | pass | 12 pages / 465083 bytes；architecture valid | 静态验证不能替代原生视觉验收 |
 | TP-006 Figma/native visual | Figma Starter / WeChat DevTools | blocked | wrapper node `1:2`；MCP call-limit error | 未获得 waiver，不实施前端 |
-| TP-007 real Ark staging | cloud staging | not run | N/A | 等待发布包、数据库与灰度门禁 |
+| 后端生产 migration | cloud MySQL | pass | `20260905_0002` → `20260905_0003 (head)`；`alembic check` 无待生成操作 | 用户确认发布前备份；公网关闭仍为人工门禁 |
+| 后端不可变灰度版本 | WeChat Cloud Hosting | pass | `flask-ik19-011` = `normal`；服务 = `normal`；PUBLIC = 关闭 | commit `8192d5f`，发布包 58 files / 692721 bytes |
+| 微信开发者工具本地预览 | Stable v2.01.2510290 | pass | 登录正常，真实 AppID 编译预览成功，424.2 KB | 现有前端可运行；新列表 UI 尚未实现 |
+| TP-007 real Ark staging | cloud staging | not run | N/A | 系统锁屏阻塞 `wx.cloud.callContainer` 真实冒烟；不得以平台 `normal` 替代 |
 
 ### Review
 
 - Review report: pending。
-- Blocker/Major status: `Q-001` 与设计审批未关闭。
+- Blocker/Major status: 产品决策已关闭；设计审批与独立审查未关闭。
 - Re-review: Spec 批准后先完成 DREV/Figma 审批；实现后独立代码复审。
 
 ### Deviations from approved Spec
 
-- N/A；尚未批准或实现。
+- 后端按已批准 Spec 实现并灰度；前端没有在缺少 DREV/Figma 证据时提前编码，无实现偏差。
 
 ### Residual risks and follow-up
 
@@ -676,8 +679,8 @@ flowchart LR
 
 ## 17. Completion gate
 
-- [ ] `Q-001` 已由产品负责人确认。
-- [ ] R2 approval 与 `ARCH-AI-OUTPUT-20260906-01` 已记录。
+- [x] `Q-001` 已由产品负责人确认。
+- [x] R2 approval 与 `ARCH-AI-OUTPUT-20260906-01` 已记录。
 - [ ] `DREV-20260906-AI-02` 的 node-specific Figma URL 与审批快照已记录。
 - [ ] Scope/non-goals/invariants 保持。
 - [x] Link/call graph、sequence、state machine、architecture、trade-offs 已覆盖。
@@ -690,7 +693,7 @@ flowchart LR
 - [ ] 发布 playbook 和人工门禁完成。
 - [ ] Final Diff 不含无关改动。
 
-Final status: `READY_FOR_REVIEW`
+Final status: `BACKEND_GRAY_RELEASED_FRONTEND_DESIGN_BLOCKED`
 
 ## 18. Revision history
 
