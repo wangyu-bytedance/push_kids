@@ -194,8 +194,8 @@ classification and cancelable uploads are tracked by `BUG-SPEC-20260905-02` and 
   `ARCHITECTURE_VALID checked=2`、三视口预览 15 组页面 45 个视口无横向溢出。
   真机/开发者工具原生几何仍为 `NOT_RUN`，未部署。
   设计稿与实现走查（外部只读参考，非验收依据）：
-  <https://82fbce4b551d.aime-app.bytedance.net>（可点击原型）与
-  <https://82fbce4b551d.aime-app.bytedance.net/impl.html>（15 页 × 320/390/430 源码渲染截图，
+  <https://0e91e62cff85.aime-app.bytedance.net>（可点击原型）与
+  <https://0e91e62cff85.aime-app.bytedance.net/impl.html>（15 页 × 320/390/430 源码渲染截图，
   取自合并后的源码）。
 
 - 2026-09-06 — `BUG-013 / BUG-SPEC-20260906-16 / DREV-20260906-PKDS-02`：六项家长动线修复。
