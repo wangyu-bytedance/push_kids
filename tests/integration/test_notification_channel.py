@@ -6,6 +6,7 @@
 
 from __future__ import annotations
 
+import re
 from datetime import UTC, datetime, time, timedelta
 
 import pytest
@@ -117,8 +118,10 @@ def test_join_request_notifies_managers_only_after_a_grant(client: TestClient, a
     assert len(_sent(app)) == 1
     message = _sent(app)[0]
     assert message["template_id"] == "tpl-application"
-    assert message["data"]["thing1"]["value"] == "有家人申请加入家庭"
-    assert "奶奶" in message["data"]["thing2"]["value"]
+    # 姓名/申请时间/温馨提示三个槽位都要有真实内容，缺一个微信就会整条拒发。
+    assert message["data"]["thing1"]["value"] == "奶奶"
+    assert re.fullmatch(r"\d+年\d+月\d+日 \d{2}:\d{2}", message["data"]["time3"]["value"])
+    assert "请审批" in message["data"]["thing5"]["value"]
     assert message["deep_link"] == "/pages/family-requests/index"
 
     # 一次性订阅只买一条消息，用完后必须重新授权。
@@ -209,12 +212,13 @@ def test_schedule_reminder_reaches_the_whole_family_one_hour_ahead(client: TestC
 
     one_hour_before = start_at - timedelta(minutes=60)
     assert _dispatch(app, one_hour_before)["sent"] == 2
-    payloads = {item["data"]["thing1"]["value"] for item in _sent(app)}
-    assert payloads == {"小雨"}
-    times = {item["data"]["time2"]["value"] for item in _sent(app)}
-    assert times == {"17:30"}
-    headlines = {item["data"]["thing3"]["value"] for item in _sent(app)}
-    assert headlines == {"钢琴课"}
+    # 日程主题一眼看出是谁的什么事，时间/时长/距离开始时间都来自日程本身。
+    subjects = {item["data"]["thing1"]["value"] for item in _sent(app)}
+    assert subjects == {"小雨 钢琴课"}
+    starts = {item["data"]["time15"]["value"] for item in _sent(app)}
+    assert starts == {f"{day.year}年{day.month}月{day.day}日 17:30"}
+    assert {item["data"]["thing2"]["value"] for item in _sent(app)} == {"1小时"}
+    assert {item["data"]["short_thing18"]["value"] for item in _sent(app)} == {"1小时"}
     assert {item["deep_link"] for item in _sent(app)} == {"/pages/calendar/index"}
 
 
@@ -257,7 +261,7 @@ def test_moving_and_deleting_a_schedule_refreshes_instead_of_duplicating(
     assert _dispatch(app, original_start - timedelta(minutes=60))["sent"] == 0
     new_start = datetime.combine(day, time(18, 30), tzinfo=SHANGHAI).astimezone(UTC)
     assert _dispatch(app, new_start - timedelta(minutes=60))["sent"] == 1
-    assert _sent(app)[0]["data"]["time2"]["value"] == "18:30"
+    assert _sent(app)[0]["data"]["time15"]["value"] == f"{day.year}年{day.month}月{day.day}日 18:30"
 
     client.delete(f"/api/v1/calendar-events/{event_id}", headers=_actor("parent-a"))
     later = client.post(
@@ -360,8 +364,9 @@ def test_evening_digest_only_reports_real_outstanding_review(client: TestClient,
     assert _dispatch(app, evening)["sent"] == 1
     message = _sent(app)[0]
     assert message["template_id"] == "tpl-digest"
-    assert "没复习" in message["data"]["thing1"]["value"]
+    # 复习内容说清是谁还剩多少，备注承载可行动的那句话。
     assert "小雨" in message["data"]["thing2"]["value"]
+    assert "没复习" in message["data"]["thing4"]["value"]
     assert message["deep_link"] == "/pages/today/index"
 
 

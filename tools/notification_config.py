@@ -22,11 +22,40 @@ sys.path.insert(0, str(ROOT / "apps" / "api" / "src"))
 from push_kids.notifications.domain import KINDS  # noqa: E402
 from push_kids.notifications.templates import ALLOWED_SEMANTICS, parse_templates  # noqa: E402
 
-# Semantics each type can actually fill, so the operator maps WeChat fields to real content.
-USED_SEMANTICS: dict[str, tuple[str, ...]] = {
-    "member_application": ("headline", "detail", "code"),
-    "schedule_reminder": ("headline", "child", "time", "detail"),
+# What each type can actually fill, best first. A console template may expose more slots than the
+# product needs, and every slot it does expose must get real content or WeChat rejects the message.
+AVAILABLE_SEMANTICS: dict[str, tuple[str, ...]] = {
+    "member_application": ("applicant", "applied_at", "detail", "headline", "code"),
+    "schedule_reminder": (
+        "headline",
+        "duration",
+        "time",
+        "notified_at",
+        "countdown",
+        "child",
+        "detail",
+    ),
+    "review_digest": ("detail", "headline", "child"),
+}
+# The minimum a reminder has to say to be worth sending.
+REQUIRED_SEMANTICS: dict[str, tuple[str, ...]] = {
+    "member_application": ("applicant", "detail"),
+    "schedule_reminder": ("headline", "time"),
     "review_digest": ("headline", "detail"),
+}
+# WeChat field types that can carry each semantic, best first. `time`/`date` fields must receive a
+# timestamp, so prose semantics never go there.
+SEMANTIC_FIELD_TYPES: dict[str, tuple[str, ...]] = {
+    "headline": ("thing", "phrase", "const"),
+    "detail": ("thing", "phrase", "const"),
+    "child": ("name", "thing", "phrase"),
+    "applicant": ("name", "thing", "phrase"),
+    "code": ("character_string", "number", "letter"),
+    "time": ("time", "date"),
+    "applied_at": ("time", "date"),
+    "notified_at": ("time", "date"),
+    "duration": ("short_thing", "phrase", "thing"),
+    "countdown": ("short_thing", "phrase", "thing"),
 }
 # A plausible WeChat field key per semantic, used only for the scaffold skeleton.
 SAMPLE_FIELD: dict[str, str] = {
@@ -35,6 +64,11 @@ SAMPLE_FIELD: dict[str, str] = {
     "child": "name3",
     "time": "time4",
     "code": "character_string5",
+    "applicant": "name6",
+    "applied_at": "time7",
+    "duration": "short_thing8",
+    "countdown": "short_thing9",
+    "notified_at": "time10",
 }
 
 
@@ -57,7 +91,9 @@ def cmd_scaffold(_: argparse.Namespace) -> int:
     skeleton = {
         kind.type: {
             "template_id": f"<{kind.type}_模板ID>",
-            "fields": {SAMPLE_FIELD[semantic]: semantic for semantic in USED_SEMANTICS[kind.type]},
+            "fields": {
+                SAMPLE_FIELD[semantic]: semantic for semantic in REQUIRED_SEMANTICS[kind.type]
+            },
             "long_term": False,
         }
         for kind in KINDS
@@ -73,6 +109,7 @@ def cmd_scaffold(_: argparse.Namespace) -> int:
         "  文档 https://developers.weixin.qq.com/miniprogram/dev/server/API/"
         "mp-message-management/subscribe-message/api_getwxapubnewtemplate.html",
         "fields 的值是本项目的语义名，只能取：" + "、".join(sorted(ALLOWED_SEMANTICS)),
+        "骨架只给出每类提醒必须说清的内容；后台模板多出来的槽位也要映射，否则微信会整条拒发。",
         "字段名（如 thing1 / time4）必须与后台模板的实际字段完全一致，否则微信会拒发。",
     ]
     for note in notes:
@@ -80,42 +117,72 @@ def cmd_scaffold(_: argparse.Namespace) -> int:
     return 0
 
 
-# Which WeChat field prefixes plausibly carry each semantic, best first.
-FIELD_PREFERENCE: dict[str, tuple[str, ...]] = {
-    "time": ("time", "date"),
-    "code": ("character_string", "number", "letter"),
-    "child": ("name", "thing", "phrase"),
-    "headline": ("thing", "phrase", "const"),
-    "detail": ("thing", "phrase", "const"),
-}
-# Resolve the narrow semantics first so they win the obvious fields.
-GUESS_ORDER: tuple[str, ...] = ("time", "code", "child", "headline", "detail")
-FIELD_TOKEN = re.compile(r"\{\{\s*([A-Za-z_]+[0-9]*)\.DATA\s*\}\}")
+FIELD_TOKEN = re.compile(r"([^\n{}]*)\{\{\s*([A-Za-z_]+[0-9]*)\.DATA\s*\}\}")
+# The console prints a human label in front of every slot, and that label is the only reliable way
+# to tell `开始时间` from `时间`. Rules are applied in this order, so the specific ones win.
+LABEL_RULES: tuple[tuple[str, tuple[str, ...]], ...] = (
+    ("距离开始", ("countdown",)),
+    ("开始时间", ("time",)),
+    ("申请时间", ("applied_at",)),
+    ("提交时间", ("applied_at",)),
+    ("提醒时间", ("notified_at",)),
+    ("发送时间", ("notified_at",)),
+    ("时长", ("duration",)),
+    ("姓名", ("applicant", "child")),
+    ("孩子", ("child",)),
+    ("内容", ("detail",)),
+    ("说明", ("detail",)),
+    ("提示", ("detail",)),
+    ("备注", ("detail",)),
+    # Generic last: a plain `时间` slot is the start time unless the start time already has one.
+    ("时间", ("time", "notified_at")),
+)
 
 
-def _field_keys(content: str) -> list[str]:
-    """Read the field keys WeChat prints inside a template body, in template order."""
-    seen: list[str] = []
-    for key in FIELD_TOKEN.findall(content or ""):
-        if key not in seen:
-            seen.append(key)
+def _field_labels(content: str) -> list[tuple[str, str]]:
+    """Read `(field_key, label)` pairs in template order, e.g. `("time15", "开始时间")`."""
+    seen: list[tuple[str, str]] = []
+    for label, key in FIELD_TOKEN.findall(content or ""):
+        if any(key == item[0] for item in seen):
+            continue
+        seen.append((key, label.strip().strip(":：").strip()))
     return seen
 
 
-def _guess_fields(kind_type: str, keys: list[str]) -> dict[str, str]:
-    """Propose a field→semantic map; the operator still verifies it against the console."""
-    wanted = [s for s in GUESS_ORDER if s in USED_SEMANTICS[kind_type]]
+def _field_keys(content: str) -> list[str]:
+    return [key for key, _ in _field_labels(content)]
+
+
+def _guess_fields(kind_type: str, fields: list[tuple[str, str]]) -> dict[str, str]:
+    """Propose a field→semantic map; the operator still verifies it against the console.
+
+    Every slot is filled if the type has content that fits it, because a slot left empty makes
+    WeChat reject the whole message rather than send a partial card.
+    """
+    available = AVAILABLE_SEMANTICS[kind_type]
     taken: dict[str, str] = {}
-    for semantic in wanted:
-        for prefix in FIELD_PREFERENCE[semantic]:
-            match = next(
-                (k for k in keys if k not in taken and k.rstrip("0123456789") == prefix),
-                None,
-            )
-            if match is not None:
-                taken[match] = semantic
-                break
-    return {key: taken[key] for key in keys if key in taken}
+    used: set[str] = set()
+
+    def claim(key: str, candidates: tuple[str, ...]) -> None:
+        field_type = key.rstrip("0123456789")
+        for semantic in candidates:
+            if semantic in used or semantic not in available:
+                continue
+            if field_type not in SEMANTIC_FIELD_TYPES[semantic]:
+                continue
+            taken[key] = semantic
+            used.add(semantic)
+            return
+
+    for keyword, candidates in LABEL_RULES:
+        for key, label in fields:
+            if key not in taken and keyword in label:
+                claim(key, candidates)
+    # Whatever the labels did not resolve falls back to the field type and the product's priority.
+    for key, _ in fields:
+        if key not in taken:
+            claim(key, available)
+    return {key: taken[key] for key, _ in fields if key in taken}
 
 
 def _wechat_templates(raw: str) -> list[dict[str, object]]:
@@ -145,7 +212,7 @@ def cmd_from_wechat(args: argparse.Namespace) -> int:
     assignments: dict[str, str] = {}
     for pair in args.map or []:
         kind_type, _, template_id = pair.partition("=")
-        if kind_type not in USED_SEMANTICS or not template_id:
+        if kind_type not in AVAILABLE_SEMANTICS or not template_id:
             print(f"WECHAT_TEMPLATE_MAP_INVALID: {pair}（格式为 通知类型=模板ID）")
             return 1
         assignments[kind_type] = template_id
@@ -174,8 +241,9 @@ def cmd_from_wechat(args: argparse.Namespace) -> int:
         if item is None:
             print(f"WECHAT_TEMPLATE_NOT_FOUND: {kind.type} 找不到模板 {template_id}")
             return 1
-        keys = _field_keys(str(item.get("content", "")))
-        fields = _guess_fields(kind.type, keys)
+        labelled = _field_labels(str(item.get("content", "")))
+        keys = [key for key, _ in labelled]
+        fields = _guess_fields(kind.type, labelled)
         entry: dict[str, object] = {"template_id": template_id, "fields": fields}
         if item.get("type") == 3:
             entry["long_term"] = True
@@ -185,6 +253,12 @@ def cmd_from_wechat(args: argparse.Namespace) -> int:
             print(
                 f"{kind.type}: 模板字段 {'、'.join(unmapped)} 没有对应内容，"
                 "微信会按参数缺失拒发（47003），请换字段更贴合的模板",
+                file=sys.stderr,
+            )
+        absent = [item for item in REQUIRED_SEMANTICS[kind.type] if item not in fields.values()]
+        if absent:
+            print(
+                f"{kind.type}: 这个模板放不下 {'、'.join(absent)}，提醒会缺少关键信息",
                 file=sys.stderr,
             )
     print(json.dumps(result, ensure_ascii=False, indent=2))
@@ -223,15 +297,23 @@ def cmd_check(args: argparse.Namespace) -> int:
             print(f"- {kind.type}: 未配置 → 这类提醒会显示为「暂不可用」")
             continue
         mapped = set(binding.fields.values())
-        expected = set(USED_SEMANTICS[kind.type])
-        missing = sorted(expected - mapped)
-        unused = sorted(mapped - expected)
+        available = set(AVAILABLE_SEMANTICS[kind.type])
+        required = set(REQUIRED_SEMANTICS[kind.type])
         term = "长期" if binding.long_term else "一次性"
         print(f"- {kind.type}: {binding.template_id} · {term} · 字段 {len(binding.fields)} 个")
-        if missing:
-            print(f"    未映射的内容：{'、'.join(missing)}（这些内容不会出现在提醒里）")
-        if unused:
-            problems.append(f"{kind.type} 映射了这类提醒不会产生的内容：{'、'.join(unused)}")
+        unfillable = sorted(mapped - available)
+        if unfillable:
+            # 这类槽位在运行时会被记成 template_field_missing 并整条跳过。
+            problems.append(
+                f"{kind.type} 映射了这类提醒不会产生的内容：{'、'.join(unfillable)}"
+                "（微信会整条拒发，服务会跳过并记录 template_field_missing）"
+            )
+        absent = sorted(required - mapped)
+        if absent:
+            problems.append(f"{kind.type} 缺少必须说清的内容：{'、'.join(absent)}")
+        optional = sorted(available - mapped - required)
+        if optional:
+            print(f"    模板没有这些槽位，将不会出现：{'、'.join(optional)}")
 
     key = os.environ.get("PUSH_KIDS_NOTIFICATION_SECRET_KEY", "").strip()
     if not key:

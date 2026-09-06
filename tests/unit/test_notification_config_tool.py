@@ -52,9 +52,11 @@ def test_scaffold_output_parses_with_the_runtime_parser(
     printed = capsys.readouterr().out
     bindings = parse_templates(printed)
     assert set(bindings) == {"member_application", "schedule_reminder", "review_digest"}
-    # 骨架里的语义映射必须覆盖每类提醒真实会产生的内容。
-    for type_name, semantics in tool.USED_SEMANTICS.items():
-        assert set(bindings[type_name].fields.values()) == set(semantics)
+    # 骨架至少要覆盖每类提醒必须说清的内容，且不能出现这类提醒产不出的内容。
+    for type_name, required in tool.REQUIRED_SEMANTICS.items():
+        mapped = set(bindings[type_name].fields.values())
+        assert set(required) <= mapped
+        assert mapped <= set(tool.AVAILABLE_SEMANTICS[type_name])
 
 
 def test_check_rejects_configs_the_runtime_would_reject(
@@ -97,7 +99,18 @@ def test_check_flags_a_short_secret_key(
     assert "NOTIFICATION_CONFIG_PROBLEM" in output
 
     monkeypatch.setenv("PUSH_KIDS_NOTIFICATION_SECRET_KEY", "y" * 40)
-    assert tool.cmd_check(argparse.Namespace(file=str(good))) == 0
+    complete = tmp_path / "complete.json"
+    complete.write_text(
+        json.dumps(
+            {
+                "review_digest": {
+                    "template_id": "t",
+                    "fields": {"thing2": "detail", "thing4": "headline"},
+                }
+            }
+        )
+    )
+    assert tool.cmd_check(argparse.Namespace(file=str(complete))) == 0
     ok = capsys.readouterr().out
     assert "NOTIFICATION_TEMPLATES_VALID types=1" in ok
     # 未配置的类型要如实说明会显示为不可用，而不是静默通过。
@@ -106,16 +119,17 @@ def test_check_flags_a_short_secret_key(
     assert "y" * 40 not in ok
 
 
-# 微信「获取已有模板列表」的返回样例，字段结构取自官方文档 api_getwxapubnewtemplate。
+# 微信「获取已有模板列表」的真实返回形状（字段结构取自官方文档 api_getwxapubnewtemplate），
+# 三个模板与本项目线上后台已选用的模板一致：新队员加入提醒 / 日程提醒 / 复习通知。
 WECHAT_TEMPLATE_LIST = {
     "errcode": 0,
     "errmsg": "ok",
     "data": [
         {
             "priTmplId": "TPL_APPLY",
-            "title": "申请提醒",
+            "title": "新队员加入提醒",
             "content": (
-                "提醒事项:{{thing1.DATA}}\n说明:{{thing2.DATA}}\n编号:{{character_string3.DATA}}\n"
+                "姓名:{{thing1.DATA}}\n申请时间:{{time3.DATA}}\n温馨提示:{{thing5.DATA}}\n"
             ),
             "type": 2,
         },
@@ -123,15 +137,15 @@ WECHAT_TEMPLATE_LIST = {
             "priTmplId": "TPL_SCHEDULE",
             "title": "日程提醒",
             "content": (
-                "提醒事项:{{thing1.DATA}}\n姓名:{{name2.DATA}}\n"
-                "时间:{{time3.DATA}}\n内容:{{thing4.DATA}}\n"
+                "日程主题:{{thing1.DATA}}\n时长:{{thing2.DATA}}\n时间:{{time3.DATA}}\n"
+                "开始时间:{{time15.DATA}}\n距离开始时间:{{short_thing18.DATA}}\n"
             ),
             "type": 3,
         },
         {
             "priTmplId": "TPL_DIGEST",
-            "title": "复习提醒",
-            "content": "提醒事项:{{thing1.DATA}}\n说明:{{thing2.DATA}}\n",
+            "title": "复习通知",
+            "content": "复习内容:{{thing2.DATA}}\n备注:{{thing4.DATA}}\n",
             "type": 2,
         },
     ],
@@ -150,7 +164,7 @@ def test_from_wechat_lists_templates_without_choosing_for_the_operator(
     out = capsys.readouterr().out
     assert "WECHAT_TEMPLATE_LIST count=3" in out
     # 字段键必须从模板正文里解析出来，长期/一次性要如实标注。
-    assert "thing1、name2、time3、thing4" in out
+    assert "thing1、thing2、time3、time15、short_thing18" in out
     assert "TPL_SCHEDULE · 长期" in out
     assert "TPL_DIGEST · 一次性" in out
 
@@ -177,11 +191,20 @@ def test_from_wechat_output_parses_with_the_runtime_parser(
     assert bindings["schedule_reminder"].template_id == "TPL_SCHEDULE"
     assert bindings["schedule_reminder"].long_term is True
     assert bindings["review_digest"].long_term is False
-    # 推测出的映射必须覆盖每类提醒真实会产生的内容，否则提醒会缺内容。
-    for type_name, semantics in tool.USED_SEMANTICS.items():
-        assert set(bindings[type_name].fields.values()) == set(semantics)
-    assert bindings["schedule_reminder"].fields["name2"] == "child"
-    assert bindings["schedule_reminder"].fields["time3"] == "time"
+    # 后台模板的每个槽位都必须映射到真实内容，否则微信会整条拒发。
+    for type_name, required in tool.REQUIRED_SEMANTICS.items():
+        mapped = set(bindings[type_name].fields.values())
+        assert set(required) <= mapped
+        assert mapped <= set(tool.AVAILABLE_SEMANTICS[type_name])
+    # 「开始时间」必须拿到真正的开始时间，泛化的「时间」只能退到提醒发出时间。
+    assert bindings["schedule_reminder"].fields["time15"] == "time"
+    assert bindings["schedule_reminder"].fields["time3"] == "notified_at"
+    assert bindings["schedule_reminder"].fields["thing2"] == "duration"
+    assert bindings["schedule_reminder"].fields["short_thing18"] == "countdown"
+    assert bindings["member_application"].fields["thing1"] == "applicant"
+    assert bindings["member_application"].fields["time3"] == "applied_at"
+    assert bindings["review_digest"].fields["thing2"] == "detail"
+    assert bindings["review_digest"].fields["thing4"] == "headline"
 
 
 def test_from_wechat_refuses_unknown_types_and_missing_templates(

@@ -555,6 +555,19 @@ class NotificationsService:
                 continue
             payload = json.loads(row.payload_json or "{}")
             values = {str(k): str(v) for k, v in (payload.get("fields") or {}).items()}
+            missing = binding.missing_fields(values)
+            if missing:
+                # WeChat rejects the whole message when a mapped slot is empty, and a rejected
+                # one-off message still costs the member's grant, so the mismatch is reported as a
+                # diagnosable skip. Only field keys are logged, never their values.
+                logger.warning(
+                    "notification_template_field_missing type=%s fields=%s",
+                    type_name,
+                    ",".join(missing),
+                )
+                cls._terminate(db, row, DeliveryState.skipped, "template_field_missing")
+                counts["skipped"] += 1
+                continue
             outcome = channel.sender.send(
                 receiver=receiver,
                 binding=binding,

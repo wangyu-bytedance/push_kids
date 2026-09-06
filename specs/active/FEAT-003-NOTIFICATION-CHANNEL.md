@@ -245,6 +245,45 @@ Alembic `20260906_0008_notification_channel`，纯新增四张表与索引；
 - AC-104：通道不可用或微信版本过低时不调用授权接口，并给出可行动的说明。
 - AC-105：投递记录读取失败只降级该分段，开关与授权仍可用。
 
+## 8ter. `-03` 对齐后台已选用模板的字段语义
+
+用户在小程序后台选用了三个真实模板（新队员加入提醒 / 日程提醒 / 复习通知），它们的槽位比 `-01`
+假设的 `headline/detail/child/time/code` 更细：日程提醒要求「时长」「时间」「开始时间」「距离开始时间」，
+新队员加入提醒要求「姓名」「申请时间」「温馨提示」，复习通知要求「复习内容」「备注」。微信的规则是
+**模板里出现的每个槽位都必须给值**，缺一个就按 `47003` 整条拒发，而一次性订阅下被拒的消息同样吃掉授权额度。
+
+### In scope（`-03`）
+
+- 扩展确定性内容语义：`applicant`、`applied_at`、`duration`、`countdown`、`notified_at`。
+- 内容按所属微信字段类型逐字段裁剪（`thing` 20 字、`short_thing` 5 字、`name` 10 字，时间类不裁剪）。
+- `ScheduledOccurrence` 带出同日 `duration_minutes`（结束时间不晚于开始时间视为未知）。
+- dispatch 在调用微信之前检测「已映射但当次没有内容」的槽位，落 `skipped / template_field_missing`
+  并只记录字段名；该结果码可 re-arm。
+- `tools/notification_config.py`：按模板正文的中文标签推断映射（「开始时间」优先于泛化的「时间」），
+  区分「必须说清的内容」与「模板放得下就填的内容」，并把「映射了这类提醒产不出的语义」判为配置错误。
+
+### Out of scope（`-03`）
+
+- 不改数据库结构、不改调度与去重语义、不改前端交互结构（仅新增一条结果码文案）。
+- 不把模板 ID 写进仓库；模板 ID 属于部署环境变量。
+- 不申请或替换模板，长期/一次性的选择仍在后台人工决定。
+
+### Invariants（`-03`）
+
+- 时间类槽位只接受真实时间戳，未知时间不得用散文占位，也不得截断时间文本。
+- 时长未知时如实写「未设置」，不得凭结束时间缺失就不发提醒，也不得编造时长。
+- 语义值仍只来自已存事实与确定性策略，不引入模型生成文案。
+- 配错模板的代价必须是「跳过 + 可诊断」，不能是「烧掉家长的一次授权」。
+
+### Acceptance criteria（`-03`）
+
+- AC-201：日程提醒能同时给出主题、时长、时间、开始时间、距离开始时间，且每个值不超过其字段类型上限。
+- AC-202：`短_thing` 类字段（距离开始时间）永不超过 5 个字，`即将开始` 用于已到点的情况。
+- AC-203：家人申请提醒能给出申请人与申请时间；申请时间未知时该槽位不被填入非时间文本。
+- AC-204：已映射槽位缺内容时不调用发送、不消耗额度，落 `skipped / template_field_missing`，
+  修正映射后同一条提醒可重新排队发出。
+- AC-205：`from-wechat` 对后台这三个模板产出的映射与人工核对结果一致，且 `check` 判定为可用。
+
 ## 9. Expected file changes
 
 新增上述 `notifications` 包、迁移、四个测试文件；修改 `persistence/models.py`、`platform/config.py`、
@@ -365,6 +404,37 @@ Alembic `20260906_0008_notification_channel`，纯新增四张表与索引；
 - NOT RUN：微信开发者工具编译与原生节点几何、真机 `wx.requestSubscribeMessage` 授权、真实送达、
   MySQL 门禁、云托管部署
 
+### `-03` Files changed（模板字段语义）
+
+- `apps/api/src/push_kids/notifications/domain.py`：字段类型上限与逐字段裁剪、`local_datetime_text`、
+  `duration_text`、`countdown_text`，三类内容新增申请人/申请时间/时长/距离开始/提醒时间。
+- `apps/api/src/push_kids/notifications/templates.py`：语义白名单扩展、`render` 逐字段裁剪、`missing_fields`。
+- `apps/api/src/push_kids/notifications/service.py`：发送前检测缺槽位，落 `template_field_missing`。
+- `apps/api/src/push_kids/notifications/outbox.py`：`template_field_missing` 列入可 re-arm 结果码。
+- `apps/api/src/push_kids/notifications/planner.py`：传入申请时间、开始时间、时长与提醒发出时间。
+- `apps/api/src/push_kids/activities/service.py`：`ScheduledOccurrence.duration_minutes`。
+- `apps/miniprogram/utils/notifications.js`：新增 `template_field_missing` 的家长可读解释。
+- `tools/notification_config.py`：标签驱动的映射推断、必需/可选语义区分、配置错误判定。
+- `tests/conftest.py`：测试模板改成与线上模板同形状（字段编号一致，仅模板 ID 为假值）。
+- 测试：`tests/unit/test_notification_policy.py`、`tests/unit/test_notification_config_tool.py`、
+  `tests/integration/test_notification_channel.py`、`tests/integration/test_notification_resilience.py`、
+  `tests/frontend/notifications.test.js`。
+
+### `-03` Evidence（2026-09-06，本地）
+
+- `uv run ruff check .` PASS；`uv run ruff format --check .` PASS（247 files）
+- `uv run mypy apps/api/src` PASS（79 files）
+- `uv run python tools/check_architecture.py` PASS（`ARCHITECTURE_VALID checked=3`）
+- `uv run pytest tests/unit tests/integration tests/contract -q` → 251 passed, 2 skipped, 2 failed
+  （仍是 `tests/unit/test_reporting_trends.py` 与 `tests/contract/test_worker_readiness.py` 两个主干既有失败）
+- `npm test` → 120 pass；`npm run lint:miniapp` PASS；`tools/validate_miniprogram.py` → `pages=15`
+- AC-201 ~ AC-204：`tests/unit/test_notification_policy.py`、`tests/integration/test_notification_channel.py`
+  （断言 `thing1/thing2/time3/time15/short_thing18` 与 `thing1/time3/thing5`、`thing2/thing4` 的真实槽位）、
+  `tests/integration/test_notification_resilience.py::test_template_slot_without_content_is_skipped_before_calling_wechat`
+- AC-205：`tests/unit/test_notification_config_tool.py` 用与后台一致的模板正文断言映射；
+  另在本地对三个真实模板 ID 跑过 `from-wechat` + `check`，输出 `NOTIFICATION_TEMPLATES_VALID types=3`
+- NOT RUN：真实微信送达（仍需云托管环境变量与真机授权）
+
 ### Deviations from approved Spec
 
 `-02` 同样是先实现后确认：用户指令「继续做，我需要一个完整的功能」明确要求补齐能力，但仓库契约要求
@@ -377,8 +447,9 @@ Alembic `20260906_0008_notification_channel`，纯新增四张表与索引；
 
 1. 授权入口已实现，但微信开发者工具编译、三视口原生节点几何与真机授权/送达仍 `NOT RUN`，
    因此仍不能声称家长已经能收到微信提醒。
-2. 模板类型（长期/一次性）未定，直接影响额度语义与重复授权频率；一次性模板下家长需要反复授权，
-   页面已如实说明但体验成本真实存在。
+2. 后台已选用的三个模板都是**一次性订阅**：每条提醒消耗一次授权，日程提醒与每日复习提醒会退化成
+   「每次都要家长再点一次」。页面已如实说明，但体验成本真实存在；能选到同题材长期模板时应替换并把
+   `long_term` 设为 `true`。
 3. 云端部署、MySQL 门禁未做，公开发布仍被阻断。
 4. Figma 节点级 URL 缺失，`-02` 的 waiver 属于请求状态，未获批准前不得进入生产可见发布。
 
@@ -387,4 +458,5 @@ Alembic `20260906_0008_notification_channel`，纯新增四张表与索引；
 | Revision | 日期 | 变更 |
 |---|---|---|
 | `SPEC-20260906-CHANNEL-01` | 2026-09-06 | 首版：只覆盖服务端消息通道；记录实现先于确认的流程偏差；前端授权入口另开 revision |
+| `SPEC-20260906-CHANNEL-03` | 2026-09-06 | 对齐后台已选用的三个真实模板：新增 `applicant`/`applied_at`/`duration`/`countdown`/`notified_at` 语义、按字段类型逐字段裁剪、槽位缺内容时 `skipped / template_field_missing`（不烧额度、可 re-arm）、`tools/notification_config.py` 改为按模板标签推断映射；三个模板均为一次性订阅，已记入风险 |
 | `SPEC-20260906-CHANNEL-02` | 2026-09-06 | 补齐完整功能：小程序提醒设置页与 `wx.requestSubscribeMessage` 授权入口、设置页入口、部署配置助手 `tools/notification_config.py`；新增 `UI-011`；Figma waiver 处于请求状态，原生视口证据未跑 |

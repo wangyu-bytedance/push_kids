@@ -8,12 +8,29 @@ and retry contract can be tested without a database or a WeChat account.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from datetime import date
+from datetime import date, datetime
 
 # WeChat subscribe-message `thing` fields reject long values, so every field the template can
 # render is capped here instead of at the provider boundary.
 FIELD_LIMIT = 20
 RETRY_DELAYS_SECONDS = (60, 300, 900)
+
+# WeChat validates a field by the type prefix of its key and rejects the whole message when one
+# value is too long, so each value is clamped to the limit of its own field type.
+FIELD_TYPE_LIMITS = {
+    "short_thing": 5,
+    "phrase": 5,
+    "name": 10,
+    "amount": 13,
+    "thing": 20,
+    "const": 20,
+    "character_string": 32,
+    "number": 32,
+    "letter": 32,
+    "symbol": 5,
+}
+# Time-like fields carry a formatted timestamp; truncating one would make it unparseable.
+UNCLAMPED_FIELD_TYPES = {"time", "date", "date_time"}
 
 
 @dataclass(frozen=True)
@@ -68,6 +85,40 @@ def truncate(text: str, limit: int = FIELD_LIMIT) -> str:
     return value[: limit - 1] + "…"
 
 
+def field_type(field_key: str) -> str:
+    """`short_thing18` -> `short_thing`. WeChat encodes the field type in the key prefix."""
+    return field_key.rstrip("0123456789")
+
+
+def clamp_field(field_key: str, value: str) -> str:
+    kind = field_type(field_key)
+    if kind in UNCLAMPED_FIELD_TYPES:
+        return " ".join(value.split())
+    return truncate(value, FIELD_TYPE_LIMITS.get(kind, FIELD_LIMIT))
+
+
+def local_datetime_text(moment: datetime) -> str:
+    """WeChat time format: `2026年9月6日 19:00`. The caller passes an already-local datetime."""
+    return f"{moment.year}年{moment.month}月{moment.day}日 {moment:%H:%M}"
+
+
+def duration_text(minutes: int | None) -> str:
+    """Human duration for a `时长` field. Empty when the source has no end time to trust."""
+    if minutes is None or minutes <= 0:
+        return ""
+    hours, rest = divmod(minutes, 60)
+    if hours and rest:
+        return f"{hours}时{rest}分"
+    if hours:
+        return f"{hours}小时"
+    return f"{rest}分钟"
+
+
+def countdown_text(minutes: int) -> str:
+    """Short `距离开始时间` value; WeChat caps `short_thing` at 5 characters."""
+    return duration_text(minutes) or "即将开始"
+
+
 def retry_delay_seconds(attempts: int) -> int:
     """Bounded backoff. `attempts` is the number of attempts already made."""
     index = max(0, attempts - 1)
@@ -109,40 +160,63 @@ class NotificationContent:
         }
 
 
-def member_application_content(relationship_label: str, request_code: str) -> NotificationContent:
+def member_application_content(
+    relationship_label: str, request_code: str, applied_at_text: str = ""
+) -> NotificationContent:
     relationship = relationship_label.strip() or "家人"
     full_text = f"{relationship} 申请加入家庭，申请码 {request_code}，请在小程序里审批"
+    fields = {
+        "headline": "有家人申请加入家庭",
+        "detail": f"申请码 {request_code}，请审批",
+        "code": request_code,
+        "applicant": relationship,
+    }
+    # A time field must carry a real timestamp, so an unknown application time is left out rather
+    # than filled with prose that WeChat would reject.
+    if applied_at_text:
+        fields["applied_at"] = applied_at_text
     return NotificationContent(
         headline=truncate("有家人申请加入家庭"),
         detail=truncate(f"关系：{relationship}"),
         full_text=full_text,
         deep_link="/pages/family-requests/index",
-        fields={
-            "headline": truncate("有家人申请加入家庭"),
-            "detail": truncate(f"关系：{relationship}"),
-            "code": truncate(request_code),
-        },
+        fields=fields,
     )
 
 
 def schedule_reminder_content(
-    child_name: str, event_name: str, start_time_text: str, lead_minutes: int
+    child_name: str,
+    event_name: str,
+    start_time_text: str,
+    lead_minutes: int,
+    *,
+    start_datetime_text: str = "",
+    duration_minutes: int | None = None,
+    notified_at_text: str = "",
 ) -> NotificationContent:
     child = child_name.strip() or "孩子"
     name = event_name.strip() or "日程"
     lead_text = f"{lead_minutes} 分钟后开始" if lead_minutes < 60 else "1 小时后开始"
     full_text = f"{child} {start_time_text} {name}，{lead_text}"
+    fields = {
+        "headline": f"{child} {name}",
+        "detail": lead_text,
+        "child": child,
+        "countdown": countdown_text(lead_minutes),
+        # A full local timestamp reads better in the card, but a clock-only source is still valid.
+        "time": start_datetime_text or start_time_text,
+    }
+    if notified_at_text:
+        fields["notified_at"] = notified_at_text
+    # A template slot must always carry a value, and a missing end time is stated as such instead
+    # of being invented or silently dropping the whole reminder.
+    fields["duration"] = duration_text(duration_minutes) or "未设置"
     return NotificationContent(
         headline=truncate(f"{child} {start_time_text} {name}"),
         detail=truncate(lead_text),
         full_text=full_text,
         deep_link="/pages/calendar/index",
-        fields={
-            "headline": truncate(name),
-            "detail": truncate(lead_text),
-            "child": truncate(child),
-            "time": truncate(start_time_text),
-        },
+        fields=fields,
     )
 
 

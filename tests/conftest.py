@@ -46,17 +46,25 @@ def child(client: TestClient, family_headers: dict[str, str]) -> dict:
 # 通知通道需要真实的模板映射和凭据才算"可用"，这里用 recording 通道让断言落在"本该发出什么"上。
 NOTIFICATION_TEMPLATES = json.dumps(
     {
+        # 字段形状与线上真实模板一致（姓名/申请时间/温馨提示、日程主题/时长/时间/开始时间/距离
+        # 开始时间、复习内容/备注），只有模板 ID 是测试用的假值。
         "member_application": {
             "template_id": "tpl-application",
-            "fields": {"thing1": "headline", "thing2": "detail", "character_string3": "code"},
+            "fields": {"thing1": "applicant", "time3": "applied_at", "thing5": "detail"},
         },
         "schedule_reminder": {
             "template_id": "tpl-schedule",
-            "fields": {"thing1": "child", "time2": "time", "thing3": "headline"},
+            "fields": {
+                "thing1": "headline",
+                "thing2": "duration",
+                "time3": "notified_at",
+                "time15": "time",
+                "short_thing18": "countdown",
+            },
         },
         "review_digest": {
             "template_id": "tpl-digest",
-            "fields": {"thing1": "headline", "thing2": "detail"},
+            "fields": {"thing2": "detail", "thing4": "headline"},
         },
     },
     ensure_ascii=False,

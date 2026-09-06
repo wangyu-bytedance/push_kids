@@ -2,7 +2,7 @@
 
 - Feature ID: `FEAT-003`
 - Status: `IMPLEMENTING`
-- Current-state revision: `FEAT-STATE-20260906-CHANNEL-02-LOCAL`
+- Current-state revision: `FEAT-STATE-20260906-CHANNEL-03-LOCAL`
 - Owner: 产品负责人（用户）
 - Last verified: 2026-09-06
 - Authoritative implementation: `apps/api/src/push_kids/notifications/`、通知持久化模型、
@@ -10,6 +10,7 @@
   `apps/miniprogram/utils/notifications.js`、`tools/notification_config.py`
 - Active change Spec: `specs/active/FEAT-003-NOTIFICATION-CHANNEL.md` revisions
   `SPEC-20260906-CHANNEL-01`（服务端通道）+ `SPEC-20260906-CHANNEL-02`（授权入口）
+  + `SPEC-20260906-CHANNEL-03`（对齐后台已选用模板的字段语义）
 - UI current state: `docs/design/frontend/ui/UI-011-reminder-settings.md`
 
 > 本文只描述当前事实。服务端通道与小程序授权入口都已实现并通过本地全量门禁；**尚未部署到微信
@@ -34,7 +35,13 @@
   `failed / destination_unreadable`，日志中不出现接收人、密文与消息正文。
 - 计划幂等：每个 tick 重新推导应存在的消息集合；pending 行原地刷新（日程改时间不会发两条），
   不再对应现实的 pending 行作废为 `cancelled / source_changed`。
-- 未开启或未授权时**不入队**；因通道不可用/关闭/未授权而 skip 的行，在条件恢复后可 re-arm 重新排队。
+- 未开启或未授权时**不入队**；因通道不可用/关闭/未授权/模板槽位缺内容而 skip 的行，条件恢复后可 re-arm 重新排队。
+- 模板字段语义（对齐后台已选用的三个模板）：`headline`（主题）、`detail`（可行动说明）、`child`、
+  `applicant`（申请人关系）、`time`（日程开始时间）、`notified_at`（提醒发出时间）、`applied_at`（申请时间）、
+  `duration`（时长，无结束时间时为「未设置」）、`countdown`（距开始多久，≤5 字）、`code`（申请码）。
+  每个值按所属微信字段类型的上限裁剪（`thing` 20 字、`short_thing` 5 字，时间类不裁剪）。
+- 模板配错时不烧额度：若某个已映射槽位当次没有内容，dispatch 在调用微信之前就落
+  `skipped / template_field_missing` 并只记录字段名（不记内容），修正映射后同一条提醒可重新排队。
 - 投递：租约 claim（MySQL 用 `FOR UPDATE SKIP LOCKED`）、有界退避重试、崩溃租约回收，
   终态为 `sent / skipped / failed / cancelled`，每条都有结果码。
 - 时间语义：19:00 与「开始前 60 分钟」按 Asia/Shanghai 计算，落库为 UTC；时间永不取自客户端；
@@ -60,6 +67,8 @@
 | Capability | Current status | Evidence |
 |---|---|---|
 | 三类通知的入队与内容 | implemented locally | `notifications/planner.py`、`tests/integration/test_notification_channel.py` |
+| 模板字段语义与逐字段裁剪 | implemented locally | `notifications/domain.py`、`notifications/templates.py`、`tests/unit/test_notification_policy.py` |
+| 槽位缺内容时跳过而非被微信拒发 | implemented locally | `notifications/service.py`、`tests/integration/test_notification_resilience.py` |
 | 成员级开关与自服务边界 | implemented locally | `notifications/router.py` + `platform/context.py` |
 | 微信授权与额度 | implemented locally | `notifications/service.py::register_subscription` |
 | 加密接收标识 | implemented locally | `notifications/destinations.py`、`tests/unit/test_notification_policy.py` |
@@ -89,7 +98,8 @@
 
 ## Known gaps
 
-1. 生产环境仍未真的发出过一条消息：模板未申请、云托管未配置、真机授权未验证。
-2. 模板类型（长期 vs 一次性）未定，影响额度与重复授权体验；一次性模板需要家长反复授权。
+1. 生产环境仍未真的发出过一条消息：云托管未配置、真机授权与真实送达未验证。
+2. 后台已选用的三个模板（新队员加入提醒 / 日程提醒 / 复习通知）都是**一次性订阅**：每条提醒消耗一次授权，
+   日程与复习提醒会退化成「每次都要家长再点一次」；若能选到同题材长期模板应替换并把 `long_term` 设为 `true`。
 3. 云端部署、MySQL 门禁、微信开发者工具三视口原生几何证据未做。
 4. `UI-011` 缺 Figma 节点级 URL，waiver 处于请求状态。

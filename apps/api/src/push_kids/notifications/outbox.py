@@ -29,7 +29,14 @@ from push_kids.platform.time import utcnow
 UNLIMITED_QUOTA = -1
 # A message skipped for a condition the member can still fix may be re-armed once that condition
 # changes. `sent`, `failed` and `cancelled` are never resurrected.
-RE_ARMABLE_RESULT_CODES = {"channel_unavailable", "member_disabled", "not_authorized"}
+RE_ARMABLE_RESULT_CODES = {
+    "channel_unavailable",
+    "member_disabled",
+    "not_authorized",
+    # A template whose slots do not match the content is a deployment mistake, so the reminder is
+    # allowed to go out once the mapping is corrected.
+    "template_field_missing",
+}
 
 
 class EnqueueOutcome(enum.StrEnum):

@@ -49,6 +49,8 @@ class ScheduledOccurrence:
     start_at: datetime
     start_time_text: str
     kind: str
+    # None when the source row has no trustworthy end time; a reminder then omits the duration.
+    duration_minutes: int | None = None
 
 
 class ActivitiesService:
@@ -450,6 +452,7 @@ class ActivitiesService:
                     day,
                     event.start_time,
                     str(event.kind or "other"),
+                    event.end_time,
                 )
                 if window_start <= candidate.start_at <= window_end:
                     occurrences.append(candidate)
@@ -474,6 +477,7 @@ class ActivitiesService:
                     day,
                     schedule.start_time,
                     "activity",
+                    schedule.end_time,
                 )
                 if window_start <= candidate.start_at <= window_end:
                     occurrences.append(candidate)
@@ -486,8 +490,9 @@ class ActivitiesService:
         span = (last - first).days
         return [first + timedelta(days=offset) for offset in range(span + 1)]
 
-    @staticmethod
+    @classmethod
     def _occurrence(
+        cls,
         family_id: str,
         child_id: str,
         child_name: str,
@@ -496,6 +501,7 @@ class ActivitiesService:
         day: date,
         start: time,
         kind: str,
+        end: time | None = None,
     ) -> ScheduledOccurrence:
         start_at = datetime.combine(day, start, tzinfo=SHANGHAI).astimezone(UTC)
         return ScheduledOccurrence(
@@ -508,7 +514,16 @@ class ActivitiesService:
             start_at=start_at,
             start_time_text=start.strftime("%H:%M"),
             kind=kind,
+            duration_minutes=cls._span_minutes(start, end),
         )
+
+    @staticmethod
+    def _span_minutes(start: time, end: time | None) -> int | None:
+        """Same-day span only: an end time at or before the start is treated as unknown."""
+        if end is None:
+            return None
+        minutes = (end.hour * 60 + end.minute) - (start.hour * 60 + start.minute)
+        return minutes if minutes > 0 else None
 
     @staticmethod
     def _event_view(

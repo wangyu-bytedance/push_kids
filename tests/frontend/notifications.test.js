@@ -202,6 +202,24 @@ test("delivery history keeps failures visible with a reason", async () => {
   assert.match(row.reason, /微信授权/);
 });
 
+test("a broken template mapping is explained instead of shown as a bare skip", () => {
+  const row = notifications.describeDelivery({
+    type: "schedule_reminder",
+    state: "skipped",
+    headline: "小雨 18:00 游泳课",
+    detail: "1 小时后开始",
+    scheduled_at: "2026-09-06T17:00:00",
+    sent_at: null,
+    result_code: "template_field_missing"
+  });
+
+  assert.equal(row.stateText, "未发送");
+  assert.equal(row.stateTone, "neutral");
+  /* 家长这边没有可操作项，所以只说清"不是你的问题、修好会重排"。 */
+  assert.match(row.reason, /模板/);
+  assert.match(row.reason, /重新排队/);
+});
+
 test("unreadable delivery history never blocks the switches", async () => {
   const { page } = loadNotifications({ deliveries: new Error("读取失败") });
   await page.load();

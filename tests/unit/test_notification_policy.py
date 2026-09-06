@@ -5,15 +5,19 @@
 
 from __future__ import annotations
 
-from datetime import date
+from datetime import date, datetime
 
 import pytest
 from push_kids.notifications.destinations import DestinationCipher, DestinationCipherError
 from push_kids.notifications.domain import (
     FIELD_LIMIT,
+    FIELD_TYPE_LIMITS,
     KINDS,
     ChildReviewLoad,
+    countdown_text,
+    duration_text,
     kind_for,
+    local_datetime_text,
     member_application_content,
     member_application_key,
     retry_delay_seconds,
@@ -42,37 +46,77 @@ def test_reminder_types_are_closed_and_named() -> None:
         kind_for("marketing_push")
 
 
-def test_every_rendered_field_fits_the_wechat_limit() -> None:
+def test_every_field_is_clamped_to_its_own_wechat_field_type() -> None:
     long_name = "很长很长很长很长很长很长很长的课程名称"
-    contents = [
-        member_application_content("外公外婆一起提交的申请", "AB12CD34"),
-        schedule_reminder_content("小雨", long_name, "17:30", 60),
-        review_digest_content(
-            [
-                ChildReviewLoad("小雨", 3, ("数学", "语文", "英语")),
-                ChildReviewLoad("小满", 2, ("数学",)),
-            ]
-        ),
-    ]
-    for content in contents:
-        assert content is not None
-        for value in content.fields.values():
-            assert len(value) <= FIELD_LIMIT, value
-        assert content.deep_link.startswith("/pages/")
+    content = schedule_reminder_content(
+        "小雨", long_name, "17:30", 45, duration_minutes=90, notified_at_text="2026年9月7日 16:45"
+    )
+    binding = parse_templates(
+        '{"schedule_reminder": {"template_id": "tpl-1", "fields": {'
+        '"thing1": "headline", "thing2": "duration", "time3": "notified_at", '
+        '"time15": "time", "short_thing18": "countdown"}}}'
+    )["schedule_reminder"]
+    rendered = binding.render(content.fields)
+    # thing 上限 20、short_thing 上限 5，任何一个超长都会让整条消息被拒。
+    assert len(rendered["thing1"]["value"]) <= FIELD_TYPE_LIMITS["thing"]
+    assert rendered["thing1"]["value"].endswith("…")
+    assert len(rendered["short_thing18"]["value"]) <= FIELD_TYPE_LIMITS["short_thing"]
+    assert rendered["short_thing18"]["value"] == "45分钟"
+    assert rendered["thing2"]["value"] == "1时30分"
+    # 时间字段不能被截断，否则微信无法解析。
+    assert rendered["time15"]["value"] == "17:30"
+    assert rendered["time3"]["value"] == "2026年9月7日 16:45"
     assert truncate("一二三四五六七八九十一二三四五六七八九十一") == (
         "一二三四五六七八九十一二三四五六七八九" + "…"
     )
+    assert FIELD_TYPE_LIMITS["thing"] == FIELD_LIMIT
+
+
+def test_time_and_span_wording_matches_the_wechat_field_semantics() -> None:
+    assert local_datetime_text(datetime(2026, 9, 7, 17, 30)) == "2026年9月7日 17:30"
+    assert duration_text(None) == ""
+    assert duration_text(0) == ""
+    assert duration_text(45) == "45分钟"
+    assert duration_text(60) == "1小时"
+    assert duration_text(90) == "1时30分"
+    # 距离开始时间是 short_thing（上限 5 个字），且"已经到点"要说得明确。
+    assert countdown_text(0) == "即将开始"
+    assert countdown_text(60) == "1小时"
+    assert all(len(countdown_text(minutes)) <= 5 for minutes in (0, 1, 20, 60, 95))
 
 
 def test_schedule_reminder_says_which_child_when_and_what() -> None:
-    content = schedule_reminder_content("小雨", "钢琴课", "17:30", 60)
+    content = schedule_reminder_content(
+        "小雨",
+        "钢琴课",
+        "17:30",
+        60,
+        start_datetime_text="2026年9月7日 17:30",
+        duration_minutes=60,
+    )
     assert content.fields["child"] == "小雨"
-    assert content.fields["time"] == "17:30"
-    assert content.fields["headline"] == "钢琴课"
+    assert content.fields["time"] == "2026年9月7日 17:30"
+    # 日程主题一个字段就要说清是谁的什么事。
+    assert content.fields["headline"] == "小雨 钢琴课"
+    assert content.fields["duration"] == "1小时"
+    assert content.fields["countdown"] == "1小时"
     assert content.full_text == "小雨 17:30 钢琴课，1 小时后开始"
     # 不足一小时的日程照样提醒，但要说清真实的剩余时间。
     late = schedule_reminder_content("小雨", "钢琴课", "17:30", 20)
     assert late.full_text.endswith("20 分钟后开始")
+    assert late.fields["countdown"] == "20分钟"
+    # 没有可信的结束时间就如实说没设置，而不是编一个时长、也不能因此不发提醒。
+    assert late.fields["duration"] == "未设置"
+
+
+def test_member_application_carries_the_applicant_and_when_they_applied() -> None:
+    content = member_application_content("奶奶", "AB12CD34", "2026年9月6日 20:15")
+    assert content.fields["applicant"] == "奶奶"
+    assert content.fields["applied_at"] == "2026年9月6日 20:15"
+    assert content.fields["code"] == "AB12CD34"
+    assert "AB12CD34" in content.fields["detail"]
+    # 申请时间未知时不能拿散文填进时间字段。
+    assert "applied_at" not in member_application_content("奶奶", "AB12CD34").fields
 
 
 def test_evening_digest_stays_silent_without_outstanding_review() -> None:
@@ -125,6 +169,9 @@ def test_template_map_is_validated_before_it_can_be_used() -> None:
     }
     # 缺失语义值不能渲染成空字符串塞给微信。
     assert binding.render({"headline": "只有标题"}) == {"thing1": {"value": "只有标题"}}
+    # 模板留了槽位却没有内容，必须在调用微信之前就能看出来。
+    assert binding.missing_fields({"headline": "只有标题"}) == ("thing2",)
+    assert binding.missing_fields({"headline": "标题", "detail": "详情"}) == ()
     assert parse_templates("") == {}
     for broken in (
         "{",

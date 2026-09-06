@@ -19,6 +19,7 @@ from push_kids.notifications.domain import (
     REVIEW_DIGEST,
     SCHEDULE_REMINDER,
     ChildReviewLoad,
+    local_datetime_text,
     member_application_content,
     member_application_key,
     review_digest_content,
@@ -72,7 +73,9 @@ class NotificationPlanner:
                 db, application.family_id, managers_only=True
             )
             content = member_application_content(
-                application.relationship_label, application.request_code
+                application.relationship_label,
+                application.request_code,
+                local_datetime_text(application.created_at.astimezone(SHANGHAI)),
             )
             for manager in managers:
                 key = member_application_key(application.request_id, manager.member_id)
@@ -117,6 +120,9 @@ class NotificationPlanner:
                 occurrence.name,
                 occurrence.start_time_text,
                 lead_minutes,
+                start_datetime_text=local_datetime_text(occurrence.start_at.astimezone(SHANGHAI)),
+                duration_minutes=occurrence.duration_minutes,
+                notified_at_text=local_datetime_text(send_at.astimezone(SHANGHAI)),
             )
             if occurrence.family_id not in audiences:
                 audiences[occurrence.family_id] = FamilyService.notification_audience(

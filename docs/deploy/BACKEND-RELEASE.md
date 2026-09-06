@@ -145,7 +145,7 @@ PYTHONPATH=apps/api/src uv run alembic check
 | 配置 | 来源 | 怎么得到 | 注意 |
 |---|---|---|---|
 | `PUSH_KIDS_NOTIFICATION_SECRET_KEY` | **自己生成**，与微信无关 | `uv run python tools/notification_config.py secret`（等价于 `openssl rand -base64 32`） | 它只用来 AES-GCM 加密存储的微信 OpenID；至少 32 字符；只写入云托管「版本配置」的环境变量，不进仓库、不进聊天、不进 CLI 历史；轮换会让既有接收标识无法解密，成员必须重新授权，必须单独安排 |
-| `PUSH_KIDS_NOTIFICATION_TEMPLATES` | **微信公众平台**（小程序后台）的订阅消息模板 | 小程序管理后台 → 功能 → 订阅消息 → 我的模板：从公共模板库选用三类模板，记录每个模板的模板 ID 与字段编号（如 `thing1`、`time4`、`name3`），再用 `tools/notification_config.py scaffold` 或 `from-wechat` 生成配置（完整地址见下一节） | `fields` 的键必须与后台模板的实际字段编号完全一致，值只能取本项目的语义键 `headline`/`detail`/`child`/`time`/`code`；某类未配置时该类如实显示「暂不可用」，不会伪造发送 |
+| `PUSH_KIDS_NOTIFICATION_TEMPLATES` | **微信公众平台**（小程序后台）的订阅消息模板 | 小程序管理后台 → 功能 → 订阅消息 → 我的模板：从公共模板库选用三类模板，记录每个模板的模板 ID 与字段编号（如 `thing1`、`time4`、`name3`），再用 `tools/notification_config.py scaffold` 或 `from-wechat` 生成配置（完整地址见下一节） | `fields` 的键必须与后台模板的实际字段编号完全一致，值只能取本项目的语义键 `headline`/`detail`/`child`/`time`/`code`/`applicant`/`applied_at`/`duration`/`countdown`/`notified_at`；**后台模板暴露的每个槽位都必须映射到有内容的语义**，否则微信按 `47003` 整条拒发，服务会记 `skipped / template_field_missing`；某类未配置时该类如实显示「暂不可用」，不会伪造发送 |
 
 ##### `PUSH_KIDS_NOTIFICATION_TEMPLATES` 的完整获取地址
 
@@ -206,6 +206,34 @@ PUSH_KIDS_NOTIFICATION_SECRET_KEY=<生成的密钥> \
   uv run python tools/notification_config.py check --file /tmp/templates.json
 ```
 
+##### 本项目语义键与已选用模板的对应关系
+
+语义键是本项目**确定性生成**的内容，模板槽位是微信侧的形状，二者必须一一对上：
+
+| 语义键 | 内容 | 适合的微信字段类型 |
+|---|---|---|
+| `headline` | 一句话主题（如「小雨 钢琴课」「还有 3 个知识点没复习」） | `thing` / `phrase` / `const` |
+| `detail` | 可行动的补充说明（如「1 小时后开始」「申请码 XXXX，请审批」） | `thing` / `phrase` / `const` |
+| `child` | 孩子名字 | `name` / `thing` |
+| `applicant` | 申请人（家庭关系，如「奶奶」） | `name` / `thing` |
+| `time` | 日程开始时间，`2026年9月7日 17:30` | `time` / `date` |
+| `notified_at` | 这条提醒发出的时间 | `time` / `date` |
+| `applied_at` | 提交加入申请的时间 | `time` / `date` |
+| `duration` | 日程时长（如 `1小时`、`1时30分`；没有结束时间则为 `未设置`） | `short_thing` / `phrase` / `thing` |
+| `countdown` | 距离开始还有多久（`1小时`、`45分钟`、`即将开始`） | `short_thing`（上限 5 字） |
+| `code` | 申请码 | `character_string` / `number` |
+
+当前后台已选用的三个模板与推荐映射（模板 ID 属于部署配置，只在云托管环境变量里填，不写进仓库）：
+
+| 通知类型 | 后台模板 | 槽位 → 语义 |
+|---|---|---|
+| `member_application` | 新队员加入提醒 | `thing1` 姓名 → `applicant`；`time3` 申请时间 → `applied_at`；`thing5` 温馨提示 → `detail` |
+| `schedule_reminder` | 日程提醒 | `thing1` 日程主题 → `headline`；`thing2` 时长 → `duration`；`time3` 时间 → `notified_at`；`time15` 开始时间 → `time`；`short_thing18` 距离开始时间 → `countdown` |
+| `review_digest` | 复习通知 | `thing2` 复习内容 → `detail`；`thing4` 备注 → `headline` |
+
+`from-wechat` 会读取模板正文里的中文标签来推断映射（「开始时间」优先于泛化的「时间」），
+上面三个模板可以直接由它产出；仍需对照后台详情复核一次再上线。
+
 `check` 使用与服务端相同的解析器：输出 `NOTIFICATION_TEMPLATES_VALID` 才说明这份配置能被运行时接受；
 它还会列出每类提醒缺哪些语义字段（缺的内容不会出现在提醒里）。校验通过后把 JSON 压成一行填进
 云托管环境变量，`/tmp/templates.json` 用后删除。
@@ -229,7 +257,9 @@ PUSH_KIDS_NOTIFICATION_SECRET_KEY=<生成的密钥> \
 - PUSH_KIDS_NOTIFICATION_CHANNEL=wechat。
 - PUSH_KIDS_NOTIFICATION_SECRET_KEY：至少 32 字符的随机值，用于加密接收标识；轮换会使既有接收标识失效，
   成员需要重新授权，因此轮换必须单独安排。
-- PUSH_KIDS_NOTIFICATION_TEMPLATES：JSON，把每类通知映射到模板 ID 与语义字段（headline/detail/child/time/code）。
+- PUSH_KIDS_NOTIFICATION_TEMPLATES：JSON，把每类通知映射到模板 ID 与语义字段
+  （headline/detail/child/time/code/applicant/applied_at/duration/countdown/notified_at），
+  模板里出现的每个槽位都要映射，缺一个微信就整条拒发。
 - 若关闭进程内调度（PUSH_KIDS_RUN_NOTIFICATION_SCHEDULER=false），必须配置 PUSH_KIDS_NOTIFICATION_TRIGGER_TOKEN，
   并由外部定时器按分钟级调用 POST /api/v1/notifications/dispatch，请求头 X-Notification-Trigger 携带该 token。
 决策标准：模板类型决定额度语义——长期模板可持续发送，一次性模板每次授权只发一条，成员需要反复授权。
@@ -238,16 +268,20 @@ PUSH_KIDS_NOTIFICATION_SECRET_KEY=<生成的密钥> \
 完成后回复：已完成通知通道配置
 ```
 
-`PUSH_KIDS_NOTIFICATION_TEMPLATES` 的结构（字段编号按后台真实模板替换，语义键只允许
-`headline`/`detail`/`child`/`time`/`code`）：
+`PUSH_KIDS_NOTIFICATION_TEMPLATES` 的结构（下面的字段编号就是当前后台三个模板的真实槽位，
+只需把 `<TPL_ID_n>` 换成「我的模板」里的模板 ID；`long_term` 按详情页标注的一次性/长期填）：
 
 ```json
 {
-  "member_application": {"template_id": "<TPL_ID_1>", "fields": {"thing1": "headline", "thing2": "detail", "character_string3": "code"}},
-  "schedule_reminder": {"template_id": "<TPL_ID_2>", "fields": {"thing1": "headline", "name2": "child", "time3": "time", "thing4": "detail"}, "long_term": false},
-  "review_digest": {"template_id": "<TPL_ID_3>", "fields": {"thing1": "headline", "thing2": "detail"}, "long_term": false}
+  "member_application": {"template_id": "<TPL_ID_新队员加入提醒>", "fields": {"thing1": "applicant", "time3": "applied_at", "thing5": "detail"}, "long_term": false},
+  "schedule_reminder": {"template_id": "<TPL_ID_日程提醒>", "fields": {"thing1": "headline", "thing2": "duration", "time3": "notified_at", "time15": "time", "short_thing18": "countdown"}, "long_term": false},
+  "review_digest": {"template_id": "<TPL_ID_复习通知>", "fields": {"thing2": "detail", "thing4": "headline"}, "long_term": false}
 }
 ```
+
+三个模板都是**一次性订阅**，所以每条提醒都要消耗一次授权：家长在「提醒设置」里每次授权只换来一条。
+若后台能选到同题材的长期模板，日程提醒与复习通知优先换成长期并把 `long_term` 改为 `true`，
+否则这两类会退化成「每次都要家长再点一次」。
 
 配置错误不会让服务崩溃：JSON 非法或类型未知时通道自报不可用并记录原因，业务接口照常工作。
 

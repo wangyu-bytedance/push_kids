@@ -10,10 +10,22 @@ from __future__ import annotations
 import json
 from dataclasses import dataclass
 
-from push_kids.notifications.domain import KINDS_BY_TYPE
+from push_kids.notifications.domain import KINDS_BY_TYPE, clamp_field
 
-# Semantic keys produced by notifications.domain content builders.
-ALLOWED_SEMANTICS = {"headline", "detail", "child", "time", "code"}
+# Semantic keys produced by notifications.domain content builders. A console template may expose
+# more slots than the product needs, so the deployment maps only the slots it actually has.
+ALLOWED_SEMANTICS = {
+    "headline",
+    "detail",
+    "child",
+    "time",
+    "code",
+    "applicant",
+    "applied_at",
+    "duration",
+    "countdown",
+    "notified_at",
+}
 
 
 @dataclass(frozen=True)
@@ -26,12 +38,22 @@ class TemplateBinding:
     long_term: bool = False
 
     def render(self, values: dict[str, str]) -> dict[str, dict[str, str]]:
+        """Clamp each field to the limit of its own WeChat type; one long value rejects all."""
         data: dict[str, dict[str, str]] = {}
         for field_key, semantic in self.fields.items():
             value = values.get(semantic)
             if value:
-                data[field_key] = {"value": value}
+                data[field_key] = {"value": clamp_field(field_key, value)}
         return data
+
+    def missing_fields(self, values: dict[str, str]) -> tuple[str, ...]:
+        """WeChat rejects a message whose template has an unfilled slot, so absence is detected
+        before the call instead of being discovered as an opaque 47003."""
+        return tuple(
+            sorted(
+                field_key for field_key, semantic in self.fields.items() if not values.get(semantic)
+            )
+        )
 
 
 def parse_templates(raw: str) -> dict[str, TemplateBinding]:

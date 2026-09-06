@@ -228,6 +228,42 @@ def test_channel_without_templates_skips_instead_of_pretending(client: TestClien
         )
 
 
+def test_template_slot_without_content_is_skipped_before_calling_wechat(
+    client: TestClient, app
+) -> None:
+    due = _queued_reminder(client, app, datetime(2026, 1, 1, 17, 30))
+    # 运维配了一个本项目产不出内容的槽位（这里用申请码），微信会整条拒发并吃掉一次授权额度。
+    broken = TemplateBinding(
+        type="schedule_reminder",
+        template_id="tpl-schedule",
+        fields={"thing1": "headline", "character_string9": "code"},
+    )
+    sender = ScriptedSender([])
+    channel = dataclasses.replace(
+        _channel_with(app, sender),
+        bindings={**app.state.notification_channel.bindings, "schedule_reminder": broken},
+    )
+    with app.state.database.session_factory() as db:
+        assert NotificationsService.dispatch_due(db, channel, due)["skipped"] == 1
+    # 没有真的调用发送，额度也就没有被浪费。
+    assert sender.calls == 0
+    row = _row(app)
+    assert row.state == DeliveryState.skipped.value
+    assert row.result_code == "template_field_missing"
+    settings = client.get("/api/v1/notifications/settings", headers=_actor("parent-a")).json()
+    reminder = next(item for item in settings["preferences"] if item["type"] == "schedule_reminder")
+    assert reminder["subscription_status"] == "accepted"
+    assert reminder["remaining_quota"] == 1
+    # 换回字段完整的模板，同一条提醒重新排队后就能发出去。
+    with app.state.database.session_factory() as db:
+        assert (
+            NotificationPlanner.plan_schedule_reminders(db, due - timedelta(minutes=1)).queued == 1
+        )
+        assert (
+            NotificationsService.dispatch_due(db, app.state.notification_channel, due)["sent"] == 1
+        )
+
+
 def test_settings_report_an_unavailable_channel_truthfully(client: TestClient, app) -> None:
     _family(client)
     app.state.notification_channel = dataclasses.replace(

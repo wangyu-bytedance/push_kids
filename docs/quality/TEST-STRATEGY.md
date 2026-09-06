@@ -10,12 +10,17 @@
 - Visual/runtime: WeChat DevTools compile plus 320×568、390×844、430×932 captures for changed states. Record renderer, base library, DPR, font scale and source revision.
 - Native geometry: ordinary page roots must not move horizontally; seven-day, three-range, four-budget and seven-weekday controls must all be visible. Circular controls have a width/height difference of at most 1px and regular touch targets are at least 44px. `overflow-x:hidden` and HTML screenshots do not satisfy this gate.
 - Interaction state: adding a subject/activity writes only after explicit confirmation; cancelling a catalog or reminder editor performs zero writes. Member self-removal is checked in both UI state and service integration tests.
-- Notification channel: no test may reach a real WeChat endpoint. Unit covers notification policy, field
-  truncation, dedupe keys, retry backoff, template parsing and AES-GCM receiver encryption; integration
+- Notification channel: no test may reach a real WeChat endpoint. Unit covers notification policy,
+  per-field-type clamping (`thing` 20, `short_thing` 5, timestamps never truncated), dedupe keys, retry
+  backoff, template parsing and AES-GCM receiver encryption; integration
   drives the whole channel through the `recording` sender and a scripted sender, and must cover queueing
   conditions, in-place refresh, cancellation, member switches, grant quota, bounded retry, refusal, lease
   recovery, an undecryptable receiver, an unavailable channel, revocation on leaving the family,
-  membership re-check at send time, the 30-day retention window and the dispatch trigger token. Business
+  membership re-check at send time, a mapped template slot with no content (skipped as
+  `template_field_missing` without calling the provider or spending a grant, then re-armable), the 30-day
+  retention window and the dispatch trigger token. Integration template fixtures must keep the field
+  shape of the templates actually selected in the WeChat console, so a mapping mistake fails a test
+  instead of a real send. Business
   time is injected explicitly; a test that reads wall-clock 19:00 is invalid. Live WeChat send and real
   `wx.requestSubscribeMessage` acceptance remain manual, staged gates.
 - Reminder settings screen: page tests must prove that the switch state and the WeChat grant state stay
@@ -26,7 +31,9 @@
 - Deployment configuration: `tools/notification_config.py check` must agree with the runtime template
   parser and the 32-character key rule, and must never print the key itself. `from-wechat` converts a
   WeChat `gettemplate` response offline; its output must parse with the runtime parser and it must
-  refuse unknown notification types, unknown template ids and error payloads.
+  refuse unknown notification types, unknown template ids and error payloads. Its label-driven mapping
+  must be asserted against the console template bodies, including that `开始时间` wins over a generic
+  `时间` slot.
 - MySQL: fresh Alembic migration, schema drift check, identity/family isolation, idempotency, Worker lease and confirmation transaction using `PUSH_KIDS_TEST_MYSQL_URL`.
 - Cloud storage/identity: local fakes cover contract branches, but real two-account owner rules, metaid decode and public-ingress rejection are mandatory staging tests.
   Staging status: **PASS (2026-09-06, operator-confirmed)** — two real accounts exercised owner isolation,

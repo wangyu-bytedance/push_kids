@@ -24,6 +24,7 @@ const RESULT_TEXT = {
   not_authorized: "还没拿到微信授权，需要重新点一次开启",
   member_disabled: "这类提醒当时是关闭的",
   channel_unavailable: "当时提醒服务不可用，恢复后会重新排队",
+  template_field_missing: "提醒模板缺少内容，已跳过；修好配置后会重新排队",
   no_destination: "还没记录到你的微信接收信息",
   user_refused: "你在微信里选择了不再接收，需要重新开启",
   destination_unreadable: "接收信息失效，请重新开启一次提醒",
