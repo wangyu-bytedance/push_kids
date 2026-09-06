@@ -22,7 +22,8 @@ Page({
     nameDraft: "", gradeOptions: GRADE_OPTIONS, gradeIndex: 0,
     budgetOptions: BUDGET_OPTIONS, budgetIndex: budgetIndex(15),
     presetSubjects: PRESET_SUBJECTS.map((name) => ({ name, selected: false })),
-    limitReached: false, limitHint: childContext.limitHint()
+    limitReached: false, limitHint: childContext.limitHint(),
+    unfinishedCount: 0, unfinishedHint: ""
   },
   onLoad(query = {}) {
     const mode = query.mode === "edit" ? "edit" : "create";
@@ -58,9 +59,27 @@ Page({
         gradeIndex: gradeIndex(child.grade),
         budgetIndex: budgetIndex(child.daily_budget_minutes)
       });
+      if (child.active !== false) await this.loadUnfinished();
     } catch (error) {
       this.setData({ loading: false, error: error.message });
     }
+  },
+  /* 归档不会中断已经上传或待确认的记录，但归档后这个孩子不在切换列表里，
+     所以先把未完成的数量摆到家长眼前，让他自己决定是先处理完还是直接归档。 */
+  async loadUnfinished() {
+    /* 这只是归档前的提醒：读不到就退回通用文案，不阻塞编辑与归档。 */
+    const dashboard = await api.request(`/children/${this.data.childId}/dashboard`).catch(() => null);
+    const count = dashboard
+      ? Number(dashboard.pending_confirmation_count || 0)
+        + Number(dashboard.analyzing_count || 0)
+        + Number(dashboard.failed_count || 0)
+      : 0;
+    this.setData({
+      unfinishedCount: count,
+      unfinishedHint: count
+        ? `还有 ${count} 条记录在分析中或等着确认。归档不会丢掉它们，确认和复习反馈仍然可以完成，但归档后这个档案不在切换列表里，建议先处理完再归档。`
+        : ""
+    });
   },
   setName(event) { this.setData({ nameDraft: event.detail.value, error: "" }); },
   chooseGrade(event) { this.setData({ gradeIndex: Number(event.detail.value) }); },
@@ -109,9 +128,12 @@ Page({
   },
   async archive() {
     if (this.data.working) return;
+    const unfinished = this.data.unfinishedCount
+      ? `当前还有 ${this.data.unfinishedCount} 条记录在分析中或等着确认，归档不会丢掉它们，但建议先处理完。`
+      : "";
     const confirmed = await new Promise((resolve) => wx.showModal({
       title: `归档「${this.data.nameDraft}」？`,
-      content: "归档后这个孩子不再出现在切换列表里，已有的学习记录、复习安排和报表都会保留，随时可以恢复。",
+      content: `归档后这个孩子不再出现在切换列表里，也不能再新增记录；已有的学习记录、复习安排和报表都会保留，随时可以恢复。${unfinished}`,
       confirmText: "归档",
       confirmColor: "#A6423B",
       success: (result) => resolve(result.confirm)

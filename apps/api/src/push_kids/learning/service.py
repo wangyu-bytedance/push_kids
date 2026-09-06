@@ -546,6 +546,9 @@ class LearningService:
 
     @classmethod
     def finalize_upload(cls, db: Session, family_id: str, submission_id: str) -> LearningSubmission:
+        # Finishing an upload that already has media is in-flight work, not new intake, so an
+        # archived profile still gets its analysis (`BHV-025`); otherwise the photos the parent
+        # already sent would become dead rows.
         submission = cls._submission(db, family_id, submission_id, for_update=True)
         if submission.state != SubmissionState.queued.value:
             raise ConflictError("当前记录不能再次提交分析")
@@ -753,6 +756,7 @@ class LearningService:
 
     @classmethod
     def retry(cls, db: Session, family_id: str, submission_id: str) -> SubmissionView:
+        # Retry re-runs an existing failed submission; archiving does not freeze it (`BHV-025`).
         submission = cls._submission(db, family_id, submission_id)
         if submission.state != SubmissionState.failed.value:
             raise ConflictError("只有失败的分析可以重试")
@@ -799,6 +803,9 @@ class LearningService:
         if submission.state not in allowed:
             raise ConflictError("只有待确认的草稿可以确认")
         # Serialize knowledge creation by child as well as confirmation by submission.
+        # The lock intentionally reads the profile without an `active` check: a draft that already
+        # exists may be finished even if the profile was archived meanwhile (`BHV-025`). New intake
+        # is blocked earlier, in `create_manual` / `create_photo_draft` / `create_with_photos`.
         db.scalar(
             select(Child)
             .where(Child.id == submission.child_id, Child.family_id == family_id)

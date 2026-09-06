@@ -308,6 +308,65 @@ def test_archiving_stops_new_writes_but_keeps_history_readable(
     )
 
 
+def test_archived_profile_finishes_work_that_started_before_archiving(
+    client: TestClient, app, family_headers: dict[str, str]
+) -> None:
+    """BUG-014：归档只拦新增。归档前已经存在的草稿仍可确认，复习反馈仍可提交。
+
+    这条边界之前没人定义过：一个家长在手机上确认草稿、另一个家长同时归档档案，
+    如果确认被拒，家长刚才编辑的草稿就变成永远确认不掉的僵尸数据。
+    """
+    child = _create_child(client, family_headers, "小雨")
+    submission = _submit_and_process(
+        client, app, family_headers, child["id"], "数学，两位数进位加法"
+    )
+
+    assert (
+        client.post(f"{API}/children/{child['id']}/archive", headers=family_headers).status_code
+        == 200
+    )
+
+    # 归档前留下的草稿仍然可以确认，并且真的写出正式记录。
+    confirmed = client.post(
+        f"{API}/submissions/{submission['id']}/confirm",
+        headers=family_headers,
+        json={"proposal": submission["proposal"]},
+    )
+    assert confirmed.status_code == 200, confirmed.text
+    body = confirmed.json()
+    assert body["records"], "确认必须落出正式学习记录，否则草稿等于被丢弃"
+    review_ids = [rid for record in body["records"] for rid in record["review_item_ids"]]
+    assert review_ids
+
+    # 确定性排期出来的复习项仍然可以反馈，家长带练完不会卡在“无法提交”。
+    feedback = client.post(
+        f"{API}/reviews/{review_ids[0]}/feedback",
+        headers=family_headers,
+        json={"action": "complete"},
+    )
+    assert feedback.status_code == 200, feedback.text
+    assert feedback.json()["review_id"] == review_ids[0]
+
+    # 收尾放行不等于放开新增：新的学习提交仍然被拒。
+    blocked = client.post(
+        f"{API}/submissions",
+        headers=family_headers,
+        json={
+            "child_id": child["id"],
+            "occurred_at": "2026-09-06T03:00:00Z",
+            "input_text": "再记一条",
+            "source": "manual",
+        },
+    )
+    assert blocked.status_code == 409
+    assert "归档" in blocked.json()["error"]["message"]
+
+    # 收尾结果进入历史与看板，家长恢复档案后看到的是完整事实。
+    dashboard = client.get(f"{API}/children/{child['id']}/dashboard", headers=family_headers)
+    assert dashboard.status_code == 200
+    assert dashboard.json()["pending_confirmation_count"] == 0
+
+
 def test_creating_a_child_can_seed_the_subjects_the_parent_picked(
     client: TestClient, family_headers: dict[str, str]
 ) -> None:

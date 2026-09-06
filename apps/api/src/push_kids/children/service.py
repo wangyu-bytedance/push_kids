@@ -29,7 +29,12 @@ class ChildrenService:
 
     @staticmethod
     def get_child(db: Session, family_id: str, child_id: str) -> Child:
-        """Resolve a profile for reading. Archived profiles resolve so history stays readable."""
+        """Resolve a profile for reading or for finishing work that started before archiving.
+
+        Archived profiles resolve here on purpose (`BHV-025`): history, reports and original media
+        stay readable, and a draft, upload or review that already exists can still be completed.
+        Anything that starts a new record must use `require_active_child` instead.
+        """
         child = db.scalar(select(Child).where(Child.id == child_id, Child.family_id == family_id))
         if child is None:
             raise NotFoundError("没有找到这个孩子")
@@ -37,7 +42,13 @@ class ChildrenService:
 
     @classmethod
     def require_active_child(cls, db: Session, family_id: str, child_id: str) -> Child:
-        """Resolve a profile that may receive a new record. Archiving must stop new writes."""
+        """Resolve a profile that may receive a *new* record. Archiving must stop new intake.
+
+        Scope is deliberately limited to intake (new submission, subject, activity, schedule).
+        Finishing an in-flight draft/upload or answering an existing review keeps using
+        `get_child`, so archiving on one device never destroys work another parent is mid-way
+        through. See `specs/active/BUG-014-ARCHIVED-CHILD-WRITE-BOUNDARY.md`.
+        """
         child = cls.get_child(db, family_id, child_id)
         if not child.active:
             raise ConflictError("这个学习档案已归档，恢复后才能继续记录")

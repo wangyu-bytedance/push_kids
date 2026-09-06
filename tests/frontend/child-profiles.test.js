@@ -12,6 +12,7 @@ function loadPage(entry, request, overrides = {}) {
   const calls = [];
   const navigations = [];
   const toasts = [];
+  const modals = [];
   const app = {
     globalData: { selectedChildId: overrides.selectedChildId || "", currentMember: overrides.member || null },
     selectChild(id) { this.globalData.selectedChildId = id; },
@@ -30,7 +31,7 @@ function loadPage(entry, request, overrides = {}) {
     Page(value) { definition = value; },
     wx: {
       showToast(options) { toasts.push(options.title); },
-      showModal(options) { if (options.success) options.success({ confirm: overrides.confirm !== false }); },
+      showModal(options) { modals.push(options); if (options.success) options.success({ confirm: overrides.confirm !== false }); },
       navigateTo(options) { navigations.push(options.url); },
       navigateBack() { navigations.push("back"); },
       setNavigationBarTitle() {},
@@ -43,7 +44,7 @@ function loadPage(entry, request, overrides = {}) {
     data: JSON.parse(JSON.stringify(definition.data)),
     setData(update) { Object.assign(this.data, update); }
   };
-  return { page, app, calls, navigations, toasts };
+  return { page, app, calls, navigations, toasts, modals };
 }
 
 const profile = (id, name, extra = {}) => ({ id, name, grade: null, daily_budget_minutes: 15, active: true, ...extra });
@@ -237,4 +238,65 @@ test("archiving asks first and reports the server's refusal", async () => {
   await page.lifecycle("archive", "已归档");
   assert.match(page.data.error, /只有家庭管理员/);
   assert.equal(page.data.working, false);
+});
+
+/* 页面 load() 里串了两次 await（档案列表 -> 看板），多冲几拍再断言。 */
+async function settle() {
+  for (let index = 0; index < 6; index += 1) await new Promise((resolve) => setImmediate(resolve));
+}
+
+test("archiving warns how many records are still unfinished but never blocks", async () => {
+  const { page, calls, modals } = loadPage("pages/child-edit/index.js", async (requestPath, options = {}) => {
+    if (requestPath.startsWith("/children?include_archived")) return [profile("a", "小雨")];
+    if (requestPath === "/children/a/dashboard") {
+      return { pending_confirmation_count: 2, analyzing_count: 1, failed_count: 0 };
+    }
+    if (requestPath === "/children/a/archive" && options.method === "POST") {
+      return profile("a", "小雨", { active: false });
+    }
+    throw new Error(`unexpected path: ${requestPath}`);
+  });
+
+  page.onLoad({ mode: "edit", child_id: "a" });
+  await settle();
+  assert.equal(page.data.unfinishedCount, 3, "待确认 + 分析中 + 失败都算未完成");
+  assert.match(page.data.unfinishedHint, /3 条/);
+  assert.match(page.data.unfinishedHint, /不会丢掉/);
+
+  await page.archive();
+  assert.match(modals[0].content, /3 条/, "归档确认弹窗必须把未完成数量说清楚");
+  assert.match(modals[0].content, /不能再新增记录/);
+  assert.ok(calls.some((call) => call.path === "/children/a/archive"), "提醒只是提醒，不能拦住归档");
+});
+
+test("an unreadable dashboard falls back to the plain archive copy", async () => {
+  const { page, modals } = loadPage("pages/child-edit/index.js", async (requestPath, options = {}) => {
+    if (requestPath.startsWith("/children?include_archived")) return [profile("a", "小雨")];
+    if (requestPath === "/children/a/dashboard") throw new Error("网络不给力");
+    if (requestPath === "/children/a/archive" && options.method === "POST") {
+      return profile("a", "小雨", { active: false });
+    }
+    throw new Error(`unexpected path: ${requestPath}`);
+  });
+
+  page.onLoad({ mode: "edit", child_id: "a" });
+  await settle();
+  assert.equal(page.data.unfinishedCount, 0);
+  assert.equal(page.data.unfinishedHint, "", "读不到未完成数量时不能编一个数字出来");
+  assert.equal(page.data.error, "", "这只是提醒，失败不该把编辑页变成错误页");
+
+  await page.archive();
+  assert.doesNotMatch(modals[0].content, /条记录/);
+});
+
+test("an archived profile never asks the server for unfinished counts", async () => {
+  const { page, calls } = loadPage("pages/child-edit/index.js", async (requestPath) => {
+    if (requestPath.startsWith("/children?include_archived")) {
+      return [profile("c", "毕业了", { active: false })];
+    }
+    throw new Error(`unexpected path: ${requestPath}`);
+  });
+  page.onLoad({ mode: "edit", child_id: "c" });
+  await settle();
+  assert.ok(calls.every((call) => !call.path.endsWith("/dashboard")));
 });

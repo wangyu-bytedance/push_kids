@@ -2,12 +2,13 @@
 
 - Feature ID: `FEAT-005`
 - Status: `IMPLEMENTED_LOCALLY`
-- Current-state revision: `FEAT-STATE-20260906-01-MULTI-CHILD`
+- Current-state revision: `FEAT-STATE-20260906-02-MULTI-CHILD`
 - Owner: 产品负责人（用户 王宇）
 - Last verified: 2026-09-06
 - Authoritative implementation: `apps/api/src/push_kids/children/`、`apps/api/migrations/versions/20260906_0005_child_profile_lifecycle.py`、
   `apps/miniprogram/utils/child-context.js`、`apps/miniprogram/pages/child-edit/`
-- Active change Spec: `specs/active/FEAT-005-MULTI-CHILD-PROFILE-MANAGEMENT.md` revision `SPEC-20260906-MULTI-CHILD-01`
+- Active change Spec: `specs/active/FEAT-005-MULTI-CHILD-PROFILE-MANAGEMENT.md` revision `SPEC-20260906-MULTI-CHILD-01`；
+  归档写入边界见 `specs/active/BUG-014-ARCHIVED-CHILD-WRITE-BOUNDARY.md` revision `BUG-SPEC-20260906-17`
 
 > 本文只描述当前事实。多档案管理已在工作区实现并通过本地 SQLite 自动化验证，尚未执行云端迁移、
 > 尚未发布小程序，也没有三视口原生视觉证据；因此不能描述为线上可用。
@@ -32,6 +33,13 @@
   返回全部，`ChildView.active` 明确标记状态。
 - 归档只停新增、不删历史：已归档档案的学习提交、科目、活动与日程新增返回 409「这个学习档案已归档，
   恢复后才能继续记录」；看板、报表、历史列表、原图预览仍然 200 可读。
+- 归档拦的是「开始一件新的事」，不拦「结束一件已经开始的事」（`BUG-SPEC-20260906-17`）：归档前已存在的
+  待确认草稿仍可确认并落出正式记录，已存在的复习项仍可反馈，已上传照片仍可补传/继续分析/重试，
+  档案资料仍可编辑。这样两个家长一个在确认、一个在归档时，先前编辑的草稿不会变成确认不掉的僵尸数据；
+  确认仍然是家长显式动作，复习日期仍由确定性策略产生。
+- 小程序在归档前把未完成数量（待确认 + 分析中 + 失败）摆给家长：危险区提醒与二次确认弹窗都写明
+  「归档不会丢掉它们，但归档后档案不在切换列表里，建议先处理完再归档」；数量读不到时退回通用文案，
+  提醒不阻塞归档。已归档档案不请求这个数量。
 - 归档与恢复幂等：重复归档或恢复已在用档案返回 200，不产生重复副作用。
 - 归档/恢复是家庭可见范围的变更，只有 manager 可执行（403「只有家庭管理员可以执行此操作」）；
   editor 可以新建与编辑日常档案；viewer 任何写入都是 403。角色仍是家庭级，没有按孩子授权。
@@ -52,6 +60,8 @@
 | 在用档案上限 5 | implemented locally | `test_active_child_limit_is_enforced` |
 | 在用档案名字唯一、归档释放名字 | implemented locally | `test_duplicate_active_child_name_is_rejected_but_archived_name_is_reusable` |
 | 归档停新增、保历史 | implemented locally | `test_archiving_stops_new_writes_but_keeps_history_readable` |
+| 归档后仍可完成归档前的草稿确认与复习反馈 | implemented locally | `test_archived_profile_finishes_work_that_started_before_archiving` |
+| 归档前提示未完成数量且不阻塞归档 | implemented locally | `tests/frontend/child-profiles.test.js`（数量汇总、看板失败降级、归档档案不请求） |
 | 建档可预置初始科目 | implemented locally | `test_creating_a_child_can_seed_the_subjects_the_parent_picked` |
 | 家庭开通与建档解耦 | implemented locally | `test_family_can_be_opened_without_a_child_and_get_one_later` |
 | 跨家庭隔离 | implemented locally | `test_child_profiles_are_scoped_to_their_own_family` |
@@ -72,7 +82,8 @@ active --archive--> archived（幂等，重复归档仍 200）
 archived --restore--> active（受上限与在用重名校验约束）
 ```
 
-没有物理删除态。归档只改变默认可见性与新增写入许可，不改变任何历史行数据。
+没有物理删除态。归档只改变默认可见性与新增写入许可，不改变任何历史行数据，也不冻结归档前
+已经开始的草稿、上传与复习项。
 
 ## Current contracts
 
@@ -94,7 +105,8 @@ archived --restore--> active（受上限与在用重名校验约束）
 - 应用启动时的云 Schema 校验 `Database.expected_cloud_revision` 已同步为 `20260906_0005`；
   本地既有 SQLite 开发库在 `create_schema()` 时自愈补列。
 - 所有 child 维度读写继续按 `(family_id, child_id)` 双键校验；跨家庭访问返回 404。
-- 读路径使用 `ChildrenService.get_child`（允许归档档案），新增写入统一使用 `require_active_child`。
+- 读路径与「收尾类写入」使用 `ChildrenService.get_child`（允许归档档案），新增意图统一使用
+  `require_active_child`；两个方法的 docstring 写明了这条边界，避免后续被顺手改成任一极端。
 
 ## Architecture mapping
 
@@ -116,11 +128,11 @@ archived --restore--> active（受上限与在用重名校验约束）
 
 ## Current quality and operations
 
-- `uv run pytest tests/unit tests/integration tests/contract -q`：169 passed, 2 skipped（基线 155 passed, 2 skipped）。
-- `npm test`：72 pass（基线 59 pass）。
+- `uv run pytest tests/unit tests/integration tests/contract -q`：186 passed, 2 skipped（与 BUG-013 合并并补齐 BUG-014 边界用例后）。
+- `npm test`：94 pass。
 - `uv run ruff check .`、`uv run ruff format --check .`、`uv run mypy apps/api/src`、`npm run lint:miniapp` 全部通过。
 - `uv run python tools/check_architecture.py`：`ARCHITECTURE_VALID checked=2`。
-- `uv run python tools/validate_miniprogram.py`：`MINIPROGRAM_VALID pages=13 source_bytes=484544`。
+- `uv run python tools/validate_miniprogram.py`：`MINIPROGRAM_VALID pages=13 source_bytes=554513`。
 - 发布顺序为「迁移 → 后端 → 小程序」，遵循 `docs/deploy/`；新后端 + 旧小程序可用，旧后端 + 新小程序
   仅归档/恢复不可用。
 
@@ -131,6 +143,8 @@ archived --restore--> active（受上限与在用重名校验约束）
 - 本地 `X-Family-ID` 路径的归档/恢复不留审计痕迹（无成员绑定，不伪造操作人）。
 - 红点与首屏摘要仍是「当前孩子」口径，多孩子家长可能漏看另一个孩子的待确认（Spec Q-001）。
 - 上限 5 是产品默认值，不可按家庭配置。
+- 归档档案的待确认草稿没有直达入口：家长只能在归档前处理，或恢复档案后处理。
+- 归档不取消 `queued/analyzing` 的批次，所以归档后仍可能有一次后台分析完成并进入待确认。
 - 无孩子档案头像、生日、学校等扩展字段，也无物理删除与数据清理路径。
 
 ## Source index
@@ -147,3 +161,6 @@ archived --restore--> active（受上限与在用重名校验约束）
   归档/恢复接口与审计留痕、在用上限与重名规则、初始科目预置、家庭开通与建档解耦，新增小程序
   `pages/child-edit` 与共享 `utils/child-context.js`，并修复设置页无档案空态的死路指引。
   本地自动化全绿；云端迁移、发布与三视口视觉证据仍待补齐。
+- 2026-09-06 — `BUG-SPEC-20260906-17`：把归档后的写入边界显式确定为「拦新增、放收尾」，
+  在 `children/service.py`、`learning/service.py`、`planning/service.py` 写明该决定（无行为回退），
+  补两条服务端边界断言与三条小程序用例，并在归档前展示未完成记录数量。无迁移、无契约变更。
