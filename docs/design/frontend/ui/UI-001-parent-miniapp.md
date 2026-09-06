@@ -2,11 +2,11 @@
 
 - Status: `CURRENT_LOCAL / AUTOMATION_PASSED / VIEWPORT_MATRIX_NOT_RUN`
 - Related Feature: `FEAT-001`
-- Baseline: `FDB-20260906-02`
+- Baseline: `FDB-20260906-03`
 - Engineering contract: `FEC-20260906-04`
-- Design revision: `DREV-20260906-PKDS-01`（PKDS-1.0；取代 `DREV-20260830-03` / `DREV-20260905-UX-03` / `DREV-20260905-UX-04` 的视觉部分）
-- Current-state revision: `UI-STATE-20260906-PKDS-01-LOCAL`
-- Related Spec: `specs/active/SPEC-20260906-PKDS-01-DESIGN-SYSTEM-ROLLOUT.md` revision `SPEC-20260906-PKDS-01`
+- Design revision: `DREV-20260906-PKDS-02`（PKDS-2.0「纸 · 芽」；取代 `DREV-20260906-PKDS-01` 的视觉与两处交互，信息架构沿用）
+- Current-state revision: `UI-STATE-20260906-PKDS-02-LOCAL`
+- Related Spec: `specs/active/SPEC-20260906-PKDS-02-PAPER-SPROUT-UI.md` revision `SPEC-20260906-PKDS-02`（前序：`SPEC-20260906-PKDS-01`）
 - Last verified: 2026-09-06（全量自动化检查通过；320/390/430 原生几何与真机为 NOT_RUN）
 - Screen-level spec: `docs/design/frontend/prototypes/DREV-20260906-PKDS-01/FRONTEND-SPEC.md`
 - Reference screens: `docs/design/frontend/prototypes/DREV-20260906-PKDS-01/screenshots/`（39 屏）
@@ -63,6 +63,8 @@
 - ActivitySchedule 是设置、今日和日程的统一来源；固定安排必须有开始/结束时间。
 - 今日还消费不与固定日程重复的柔性活动建议；活动提醒可直接移除。
 - Todo 的“带练提示”只提交当前所选且已确认的 Review IDs。
+- Todo 的主观反馈在卡片内展开，选项旁写明对复习安排的影响；文案与服务端确定性策略一一对应
+  （reinforce = 退一步、明天再出现；partial = 下一轮间隔取一半；defer = 同一步、明天再出现）。
 - 日程卡点击编辑；重复日程 MVP 修改整个系列。结束时间早于当前时刻后统一灰显。
 - 报表范围切换会重新请求 7/30/100 天数据并回到第1屏；100天在组件内部按30/30/30/10左右分页，页面根容器不横向移动。
 - 紧迫度同时显示数字/勾与颜色，活跃度同时保留次数语义，颜色不是唯一信息。
@@ -78,11 +80,28 @@
 
 ## Visual system
 
-当前视觉系统是 PKDS-1.0，可见合同见 `DREV-20260906-PKDS-01`。
+当前视觉系统是 PKDS-2.0「纸 · 芽」，可见合同见 `DREV-20260906-PKDS-02`。
 
-方向是暖纸色背景 `#F4F3EC`、墨绿色主色 `#2E6A56`、克制分隔线和低阴影。信息依靠排版和留白
-建立层级，不采用儿童游戏化、排行榜、玻璃拟态或企业 BI 密集卡片。底部半屏层使用统一 handle、
-标题、关闭和主操作；日程新增使用右下角浮动加号。
+方向是暖白纸面 `#FAF7F0`（卡片 `#FFFDF8`）、松绿主色 `#1F5B45`、嫩芽成长色 `#7FA65C`、
+提醒赭石 `#A9762A`、异常陶土 `#A85742`。阴影大而淡，卡片像纸叠在纸上；标题使用衬线族
+（`Songti SC` / `Noto Serif SC`）制造纸感，正文用系统中文无衬线，数字统一 tabular-nums。
+信息依靠排版和留白建立层级，不采用儿童游戏化、排行榜、玻璃拟态或企业 BI 密集卡片。
+底部半屏层使用统一 handle、标题、关闭和主操作；日程新增使用右下角浮动加号。
+
+PKDS-2.0 相对 PKDS-1.0 的可见变化：
+
+- 底部 TabBar 为半透明毛玻璃底栏 + 中央凸起的「记录」主键（拍照即主操作），徽标显示待处理数。
+- 今日页首屏是"安排环"：12 刻度按 必做 / 有余力 / 未占用 三态着色，中心是「N 项 今日到期」。
+  它只描述今天到期复习的构成，不是完成率、不是评分。
+- Todo 卡片左侧有主色轨区分"建议完成 / 可选"；「其他反馈」在卡片内展开面板，
+  三个选项各自标注对下次复习的影响（明天再出现一次 / 间隔取一半 / 今天不再提醒）。
+  不再使用系统 ActionSheet。
+- 确认页用「AI 草稿 · 待确认」虚线印章持续标注草稿态，人工录入用 `.stamp.manual`。
+- 确认页科目字段只有一个决定点：命中已在学科目时显示 picker + 「换成新科目」；
+  新科目态显示输入框 + 「选已在学的科目」。
+- 报表第一段标题是「接下来的复习压力」，只陈述待复习数量与是否已全部通过，不含能力评价词。
+- 原生自定义 TabBar 是独立图层，页面内 `fixed` 半屏无法遮住它，因此 `.pk-sheet` 默认预留
+  TabBar 高度；非 Tab 页用 `.pk-sheet.plain` 收回这段预留。
 
 实现分三层且方向单一：
 
@@ -90,7 +109,7 @@
 |---|---|---|
 | token | `apps/miniprogram/styles/tokens.wxss` | 语义色、科目色、圆角、间距、高度、动效、触控尺寸的唯一来源；含旧变量名兼容别名 |
 | 原子/组件 | `apps/miniprogram/styles/atoms.wxss` | Card / Hero / Section / Button / Pill / SubMark / Confidence / Notice / Segmented / Chips / 表单 / RowList / Timeline / WeekStrip / FAB / Metrics / PhotoUploader / 浮层四件套 / 空态 / 骨架 |
-| 图标 | `apps/miniprogram/styles/icons.wxss` | 27 个线性图标 × 6 个语义色变体，由 `tools/gen_icon_styles.py` 生成，禁止手工编辑 |
+| 图标 | `apps/miniprogram/styles/icons.wxss` | 27 个线性图标 × 6 个语义色变体（24×24 viewBox，stroke 1.8），由 `tools/gen_icon_styles.py` 生成，禁止手工编辑；TabBar 位图由 `tools/gen_tabbar_icons.py` 用同一图标语法生成 |
 | 页面 | `pages/*/**.wxss` | 只写本页特有几何，不重复定义 token |
 
 `apps/miniprogram/utils/ui.js` 承担纯展示派生（科目色/首字标记、置信度档位、反馈文案、
@@ -108,7 +127,7 @@
 
 | Contract | Path/evidence | Result |
 |---|---|---|
-| shell/tokens | `apps/miniprogram/app.*`, `apps/miniprogram/styles/*` | five exact tabs; PKDS-1.0 三层样式 |
+| shell/tokens | `apps/miniprogram/app.*`, `apps/miniprogram/styles/*` | five exact tabs; PKDS-2.0 三层样式 |
 | pages | `apps/miniprogram/pages` | 12 pages validated（新增 `pages/record-detail/index`） |
 | display helpers | `apps/miniprogram/utils/ui.js` | 纯函数，无网络与业务状态 |
 | icons | `tools/gen_icon_styles.py` | 重跑产物 diff 为空（幂等） |
@@ -143,6 +162,18 @@ guards for `callContainer`、`uploadFile` and `chooseMedia`; media permission fa
 classification and cancelable uploads are tracked by `BUG-SPEC-20260905-02` and remain unimplemented.
 
 ## Change references
+
+- 2026-09-06 — `SPEC-20260906-PKDS-02 / DREV-20260906-PKDS-02`：视觉语言换为 PKDS-2.0「纸 · 芽」
+  （暖白纸面 + 松绿 + 嫩芽色，衬线标题，大扩散淡阴影），重做 TabBar（中央「记录」凸起键）、
+  今日页安排环、Todo 卡片内嵌反馈面板、确认页草稿印章与科目单一路径、报表首段文案。
+  修复：日程页/报表页 `.chev.left` 被错误覆盖导致左箭头显示为上箭头；`.pk-sheet` 未预留原生
+  TabBar 高度导致半屏末条被遮；课外活动图标观感为地球仪。新增本地设计走查工具
+  `tools/preview/`（WXML→HTML 近似渲染 + 320/390/430 截图 + 横向溢出扫描）。
+  自动化证据：前端 59 passed、ESLint 通过、`validate_miniprogram.py` pages=12、
+  三视口预览 14 组页面无横向溢出。真机/开发者工具原生几何仍为 `NOT_RUN`，未部署。
+  设计稿与实现走查（外部只读参考，非验收依据）：
+  <https://82fbce4b551d.aime-app.bytedance.net>（可点击原型）与
+  <https://82fbce4b551d.aime-app.bytedance.net/impl.html>（14 页 × 320/390/430 源码渲染截图）。
 
 - 2026-09-06 — `SPEC-20260906-PKDS-01 / DREV-20260906-PKDS-01`：全部 12 个页面与 2 个组件按
   PKDS-1.0 重做；新增 `apps/miniprogram/styles/{tokens,atoms,icons}.wxss` 与 `utils/ui.js`；
