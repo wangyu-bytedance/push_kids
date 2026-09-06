@@ -54,7 +54,7 @@ class ChildrenService:
         return child
 
     @classmethod
-    def require_active_child(cls, db: Session, family_id: str, child_id: str) -> Child:
+    def require_active_child(cls, db: Session, family_id: str, child_id: str | None) -> Child:
         """Resolve a profile that may receive a *new* record. Archiving must stop new intake.
 
         Scope is deliberately limited to intake (new submission, subject, activity, schedule).
@@ -62,8 +62,6 @@ class ChildrenService:
         `get_child`, so archiving on one device never destroys work another parent is mid-way
         through. See `specs/active/BUG-014-ARCHIVED-CHILD-WRITE-BOUNDARY.md`.
         """
-    def require_active_child(cls, db: Session, family_id: str, child_id: str | None) -> Child:
-        """Resolve a profile that may receive a new record. Archiving must stop new writes."""
         if not child_id:
             raise NotFoundError("没有找到这个孩子")
         child = cls.get_child(db, family_id, child_id)
