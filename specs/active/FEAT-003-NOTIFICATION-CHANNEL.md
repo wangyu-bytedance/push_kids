@@ -220,7 +220,8 @@ Alembic `20260906_0008_notification_channel`，纯新增四张表与索引；
 - 新增非 Tab 二级页 `pages/notifications/index`（提醒设置）：通道状态、三类开关、授权入口、最近投递记录。
 - 新增纯展示策略 `utils/notifications.js`：把服务端的通道/授权/投递状态翻译成家长看得懂的文案。
 - 设置页新增「提醒设置」入口（含无学习档案的空态，家人申请提醒在建档前就有意义）。
-- 新增部署配置助手 `tools/notification_config.py`：生成密钥、打印模板骨架、按运行时同一套规则校验。
+- 新增部署配置助手 `tools/notification_config.py`：生成密钥、打印模板骨架、把微信已有模板列表
+  （`/wxaapi/newtmpl/gettemplate` 返回）离线转成环境变量、按运行时同一套规则校验。
 
 ### Out of scope（`-02`）
 
@@ -348,11 +349,13 @@ Alembic `20260906_0008_notification_channel`，纯新增四张表与索引；
 - `uv run ruff check .` PASS；`uv run ruff format --check .` PASS（202 files）
 - `uv run mypy apps/api/src` PASS（66 files）
 - `uv run python tools/check_architecture.py` PASS（`ARCHITECTURE_VALID checked=3`）
-- `uv run pytest tests/unit tests/integration tests/contract -q` → 223 passed, 2 skipped
+- `uv run pytest tests/unit tests/integration tests/contract -q` → 227 passed, 2 skipped
 - `npm test` → 102 pass（其中 `tests/frontend/notifications.test.js` 11 项）
 - `npm run lint:miniapp` PASS；`uv run python tools/validate_miniprogram.py` → `MINIPROGRAM_VALID pages=14`
-- `tools/notification_config.py`：`secret` 产出 43 字符密钥；`scaffold` 输出可被运行时解析器解析；
-  `check` 对缺 `template_id`、未知语义、空配置、短密钥都返回非 0
+- `tools/notification_config.py`：`secret` 产出 43 字符密钥；`scaffold` 与 `from-wechat` 的输出都能被
+  运行时解析器解析；`from-wechat` 从模板正文解析字段键、按 `type` 判定长期/一次性、对未知类型与
+  找不到的模板 ID 返回非 0，并把无内容可填的模板字段警告到 stderr；`check` 对缺 `template_id`、
+  未知语义、空配置、短密钥都返回非 0
 - 设计走查：`tools/preview`（来自 UI 分支，未提交到本分支）在 320/390/430 渲染「通道可用 · 待授权」与
   「通道不可用 + 微信版本过低」两态并截图人工检查
 - NOT RUN：微信开发者工具编译与原生节点几何、真机 `wx.requestSubscribeMessage` 授权、真实送达、

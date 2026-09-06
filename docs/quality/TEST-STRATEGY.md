@@ -24,7 +24,9 @@
   history degrades only that section. `wx.requestSubscribeMessage` is stubbed; the grant call must be
   asserted to happen before any awaited request so the real client keeps its user gesture.
 - Deployment configuration: `tools/notification_config.py check` must agree with the runtime template
-  parser and the 32-character key rule, and must never print the key itself.
+  parser and the 32-character key rule, and must never print the key itself. `from-wechat` converts a
+  WeChat `gettemplate` response offline; its output must parse with the runtime parser and it must
+  refuse unknown notification types, unknown template ids and error payloads.
 - MySQL: fresh Alembic migration, schema drift check, identity/family isolation, idempotency, Worker lease and confirmation transaction using `PUSH_KIDS_TEST_MYSQL_URL`.
 - Cloud storage/identity: local fakes cover contract branches, but real two-account owner rules, metaid decode and public-ingress rejection are mandatory staging tests.
   Staging status: **PASS (2026-09-06, operator-confirmed)** — two real accounts exercised owner isolation,

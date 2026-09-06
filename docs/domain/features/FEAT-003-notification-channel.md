@@ -50,7 +50,8 @@
 - 授权动作在用户点击的同一次手势里第一时间调用 `wx.requestSubscribeMessage`，一次最多 3 个模板；
   只有 `accept` 回传 `accepted=true`；通道不可用或微信版本过低时不发起授权，也不显示授权入口；
   偏好写入失败时开关回滚到服务端状态，不留下假的「已开启」。
-- 部署配置助手：`tools/notification_config.py secret | scaffold | check`——生成加密密钥、打印模板骨架、
+- 部署配置助手：`tools/notification_config.py secret | scaffold | from-wechat | check`——生成加密密钥、
+  打印模板骨架、把微信 `/wxaapi/newtmpl/gettemplate` 的返回转成 `PUSH_KIDS_NOTIFICATION_TEMPLATES`、
   用与运行时相同的解析器校验模板并检查密钥长度；它从不打印既有密钥，也不联网访问微信。
 - 尚不存在：早间摘要、其他渠道、通知内的 AI 文案、站内消息中心。
 

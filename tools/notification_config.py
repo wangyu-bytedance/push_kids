@@ -11,6 +11,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import secrets
 import sys
 from pathlib import Path
@@ -65,12 +66,131 @@ def cmd_scaffold(_: argparse.Namespace) -> int:
     notes = [
         "",
         "模板 ID 与 fields 的键来自微信公众平台后台：",
-        "  小程序管理后台 → 功能 → 订阅消息 → 我的模板（选用公共模板库并记录字段名）",
+        "  https://mp.weixin.qq.com/ → 功能 → 订阅消息 → 公共模板库（选用）",
+        "  再进入「我的模板」，展开模板即可看到模板 ID 与 {{thing1.DATA}} 这类字段名",
+        "也可以用服务端接口精确导出，再用 from-wechat 子命令转换：",
+        "  GET https://api.weixin.qq.com/wxaapi/newtmpl/gettemplate?access_token=ACCESS_TOKEN",
+        "  文档 https://developers.weixin.qq.com/miniprogram/dev/server/API/"
+        "mp-message-management/subscribe-message/api_getwxapubnewtemplate.html",
         "fields 的值是本项目的语义名，只能取：" + "、".join(sorted(ALLOWED_SEMANTICS)),
         "字段名（如 thing1 / time4）必须与后台模板的实际字段完全一致，否则微信会拒发。",
     ]
     for note in notes:
         print(note, file=sys.stderr)
+    return 0
+
+
+# Which WeChat field prefixes plausibly carry each semantic, best first.
+FIELD_PREFERENCE: dict[str, tuple[str, ...]] = {
+    "time": ("time", "date"),
+    "code": ("character_string", "number", "letter"),
+    "child": ("name", "thing", "phrase"),
+    "headline": ("thing", "phrase", "const"),
+    "detail": ("thing", "phrase", "const"),
+}
+# Resolve the narrow semantics first so they win the obvious fields.
+GUESS_ORDER: tuple[str, ...] = ("time", "code", "child", "headline", "detail")
+FIELD_TOKEN = re.compile(r"\{\{\s*([A-Za-z_]+[0-9]*)\.DATA\s*\}\}")
+
+
+def _field_keys(content: str) -> list[str]:
+    """Read the field keys WeChat prints inside a template body, in template order."""
+    seen: list[str] = []
+    for key in FIELD_TOKEN.findall(content or ""):
+        if key not in seen:
+            seen.append(key)
+    return seen
+
+
+def _guess_fields(kind_type: str, keys: list[str]) -> dict[str, str]:
+    """Propose a field→semantic map; the operator still verifies it against the console."""
+    wanted = [s for s in GUESS_ORDER if s in USED_SEMANTICS[kind_type]]
+    taken: dict[str, str] = {}
+    for semantic in wanted:
+        for prefix in FIELD_PREFERENCE[semantic]:
+            match = next(
+                (k for k in keys if k not in taken and k.rstrip("0123456789") == prefix),
+                None,
+            )
+            if match is not None:
+                taken[match] = semantic
+                break
+    return {key: taken[key] for key in keys if key in taken}
+
+
+def _wechat_templates(raw: str) -> list[dict[str, object]]:
+    payload = json.loads(raw)
+    if isinstance(payload, list):
+        return [item for item in payload if isinstance(item, dict)]
+    if not isinstance(payload, dict):
+        raise ValueError("需要 gettemplate 返回的 JSON 对象")
+    if payload.get("errcode") not in (None, 0):
+        raise ValueError(f"微信返回错误 errcode={payload.get('errcode')} {payload.get('errmsg')}")
+    data = payload.get("data")
+    if not isinstance(data, list):
+        raise ValueError("返回里没有 data 数组")
+    return [item for item in data if isinstance(item, dict)]
+
+
+def cmd_from_wechat(args: argparse.Namespace) -> int:
+    """Turn a `/wxaapi/newtmpl/gettemplate` response into the env value (offline, no network)."""
+    raw = Path(args.file).read_text(encoding="utf-8") if args.file else sys.stdin.read()
+    try:
+        templates = _wechat_templates(raw)
+    except (ValueError, json.JSONDecodeError) as exc:
+        print(f"WECHAT_TEMPLATE_LIST_INVALID: {exc}")
+        return 1
+    by_id = {str(item.get("priTmplId", "")): item for item in templates}
+
+    assignments: dict[str, str] = {}
+    for pair in args.map or []:
+        kind_type, _, template_id = pair.partition("=")
+        if kind_type not in USED_SEMANTICS or not template_id:
+            print(f"WECHAT_TEMPLATE_MAP_INVALID: {pair}（格式为 通知类型=模板ID）")
+            return 1
+        assignments[kind_type] = template_id
+
+    if not assignments:
+        print(f"WECHAT_TEMPLATE_LIST count={len(templates)}")
+        for item in templates:
+            keys = _field_keys(str(item.get("content", "")))
+            term = "长期" if item.get("type") == 3 else "一次性"
+            print(f"- {item.get('priTmplId')} · {term} · {item.get('title')}")
+            print(f"    字段：{'、'.join(keys) or '（未解析到字段）'}")
+        print("", file=sys.stderr)
+        print(
+            "再选定归属即可产出配置，例如："
+            "--map schedule_reminder=<模板ID> --map review_digest=<模板ID>",
+            file=sys.stderr,
+        )
+        return 0
+
+    result: dict[str, object] = {}
+    for kind in KINDS:
+        template_id = assignments.get(kind.type)
+        if template_id is None:
+            continue
+        item = by_id.get(template_id)
+        if item is None:
+            print(f"WECHAT_TEMPLATE_NOT_FOUND: {kind.type} 找不到模板 {template_id}")
+            return 1
+        keys = _field_keys(str(item.get("content", "")))
+        fields = _guess_fields(kind.type, keys)
+        entry: dict[str, object] = {"template_id": template_id, "fields": fields}
+        if item.get("type") == 3:
+            entry["long_term"] = True
+        result[kind.type] = entry
+        unmapped = [key for key in keys if key not in fields]
+        if unmapped:
+            print(
+                f"{kind.type}: 模板字段 {'、'.join(unmapped)} 没有对应内容，"
+                "微信会按参数缺失拒发（47003），请换字段更贴合的模板",
+                file=sys.stderr,
+            )
+    print(json.dumps(result, ensure_ascii=False, indent=2))
+    print("", file=sys.stderr)
+    print("fields 的映射是按字段名推测的，请对照后台模板详情确认后再上线。", file=sys.stderr)
+    print("enum_string 只能取枚举值，不适合本项目的自由文本内容。", file=sys.stderr)
     return 0
 
 
@@ -141,6 +261,18 @@ def main() -> int:
     check = sub.add_parser("check", help="校验模板配置与密钥长度")
     check.add_argument("--file", help="模板 JSON 文件路径；缺省读管道或环境变量")
     check.set_defaults(func=cmd_check)
+    from_wechat = sub.add_parser(
+        "from-wechat",
+        help="把 /wxaapi/newtmpl/gettemplate 的返回转成 PUSH_KIDS_NOTIFICATION_TEMPLATES",
+    )
+    from_wechat.add_argument("--file", help="gettemplate 返回的 JSON 文件；缺省读标准输入")
+    from_wechat.add_argument(
+        "--map",
+        action="append",
+        metavar="类型=模板ID",
+        help="指定通知类型使用哪个模板，可重复；不给则只列出后台已有模板",
+    )
+    from_wechat.set_defaults(func=cmd_from_wechat)
     args = parser.parse_args()
     return int(args.func(args))
 

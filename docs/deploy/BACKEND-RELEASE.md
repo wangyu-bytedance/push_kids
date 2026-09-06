@@ -145,7 +145,58 @@ PYTHONPATH=apps/api/src uv run alembic check
 | 配置 | 来源 | 怎么得到 | 注意 |
 |---|---|---|---|
 | `PUSH_KIDS_NOTIFICATION_SECRET_KEY` | **自己生成**，与微信无关 | `uv run python tools/notification_config.py secret`（等价于 `openssl rand -base64 32`） | 它只用来 AES-GCM 加密存储的微信 OpenID；至少 32 字符；只写入云托管「版本配置」的环境变量，不进仓库、不进聊天、不进 CLI 历史；轮换会让既有接收标识无法解密，成员必须重新授权，必须单独安排 |
-| `PUSH_KIDS_NOTIFICATION_TEMPLATES` | **微信公众平台**（小程序后台）的订阅消息模板 | 小程序管理后台 → 功能 → 订阅消息 → 我的模板：从公共模板库选用三类模板，记录每个模板的模板 ID 与字段编号（如 `thing1`、`time4`、`name3`），再用 `tools/notification_config.py scaffold` 生成骨架填入 | `fields` 的键必须与后台模板的实际字段编号完全一致，值只能取本项目的语义键 `headline`/`detail`/`child`/`time`/`code`；某类未配置时该类如实显示「暂不可用」，不会伪造发送 |
+| `PUSH_KIDS_NOTIFICATION_TEMPLATES` | **微信公众平台**（小程序后台）的订阅消息模板 | 小程序管理后台 → 功能 → 订阅消息 → 我的模板：从公共模板库选用三类模板，记录每个模板的模板 ID 与字段编号（如 `thing1`、`time4`、`name3`），再用 `tools/notification_config.py scaffold` 或 `from-wechat` 生成配置（完整地址见下一节） | `fields` 的键必须与后台模板的实际字段编号完全一致，值只能取本项目的语义键 `headline`/`detail`/`child`/`time`/`code`；某类未配置时该类如实显示「暂不可用」，不会伪造发送 |
+
+##### `PUSH_KIDS_NOTIFICATION_TEMPLATES` 的完整获取地址
+
+这个环境变量没有下载地址：微信只提供**模板 ID** 与**字段编号**，JSON 由部署方自己组装。两条获取路径都可用。
+
+路径 A · 后台页面（人工，首次必走，因为「选用模板」需要人工确认类目与场景说明）
+
+| 步骤 | 地址 / 位置 |
+|---|---|
+| 登录小程序管理后台 | <https://mp.weixin.qq.com/> （用该小程序的管理员账号扫码；不要用公众号账号） |
+| 进入订阅消息 | 左侧菜单「功能」→「订阅消息」（部分版本在「基础功能」下）。首次进入需先开通该能力 |
+| 选用模板 | 「公共模板库」→ 按关键词搜索 → 选用；三类分别对应：家人加入申请、课程/日程提醒（需含孩子、时间、事项）、每日未复习摘要 |
+| 取模板 ID 与字段编号 | 「我的模板」→ 展开某个模板：`模板ID` 直接复制；详情里的 `{{thing1.DATA}}`、`{{time4.DATA}}` 中的 `thing1`、`time4` 就是 `fields` 的键 |
+| 判断额度语义 | 同一详情页标注「一次性订阅」或「长期订阅」，对应 JSON 的 `long_term` |
+
+官方文档（页面导航与截图以官方为准）：
+- 订阅消息开发指南：<https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/subscribe-message.html>
+- 云托管场景下的订阅消息接入指引（含「我的模板」取值示意）：
+  <https://developers.weixin.qq.com/minigame/dev/wxcloudrun/src/scene/deploy/subscribe.html>
+
+路径 B · 服务端接口（模板已选用后，用来精确导出模板 ID 与字段，避免手抄出错）
+
+| 用途 | 完整地址 | 接口文档 |
+|---|---|---|
+| 取 access_token | `GET https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET` | <https://developers.weixin.qq.com/miniprogram/dev/server/API/mp-access-token/api_getaccesstoken.html> |
+| 账号所属类目 | `GET https://api.weixin.qq.com/wxaapi/newtmpl/getcategory?access_token=ACCESS_TOKEN` | <https://developers.weixin.qq.com/miniprogram/dev/server/API/mp-message-management/subscribe-message/api_getcategory.html> |
+| 类目下的公共模板标题 | `GET https://api.weixin.qq.com/wxaapi/newtmpl/getpubtemplatetitles?access_token=ACCESS_TOKEN&ids=CATE_IDS&start=0&limit=30` | <https://developers.weixin.qq.com/miniprogram/dev/server/API/mp-message-management/subscribe-message/api_getpubnewtemplatetitles.html> |
+| 模板标题下的关键词（字段候选） | `GET https://api.weixin.qq.com/wxaapi/newtmpl/getpubtemplatekeywords?access_token=ACCESS_TOKEN&tid=TID` | <https://developers.weixin.qq.com/miniprogram/dev/server/API/mp-message-management/subscribe-message/api_getpubnewtemplatekeywords.html> |
+| 选用模板到私有库 | `POST https://api.weixin.qq.com/wxaapi/newtmpl/addtemplate?access_token=ACCESS_TOKEN`，body `{"tid","kidList","sceneDesc"}` | <https://developers.weixin.qq.com/miniprogram/dev/server/API/mp-message-management/subscribe-message/api_addwxanewtemplate.html> |
+| **取已有模板列表（模板 ID + 字段）** | `GET https://api.weixin.qq.com/wxaapi/newtmpl/gettemplate?access_token=ACCESS_TOKEN` | <https://developers.weixin.qq.com/miniprogram/dev/server/API/mp-message-management/subscribe-message/api_getwxapubnewtemplate.html> |
+| 发送（运行时由本服务调用） | `POST https://api.weixin.qq.com/cgi-bin/message/subscribe/send?access_token=ACCESS_TOKEN` | <https://developers.weixin.qq.com/miniprogram/dev/server/API/mp-message-management/subscribe-message/api_sendmessage.html> |
+
+`gettemplate` 每条返回 `priTmplId`（发订阅消息时用的模板 ID）、`title`、`content`（形如
+`会议时间:{{date2.DATA}}\n会议地点:{{thing1.DATA}}`，花括号里的 `date2`、`thing1` 就是 `fields` 的键）、
+`example` 与 `type`（**2 = 一次性订阅，3 = 长期订阅**，对应 JSON 的 `long_term`）。在微信云托管容器内可走
+内网免鉴权域名 `http://api.weixin.qq.com/wxaapi/newtmpl/gettemplate`，不必自取 access_token，也避免
+AppSecret 落到本机。
+
+把返回直接转成本项目的环境变量（离线转换，不联网、不需要密钥）：
+
+```bash
+# 1) 列出后台已有模板、字段与一次性/长期
+uv run python tools/notification_config.py from-wechat --file /tmp/gettemplate.json
+# 2) 指定每类通知用哪个模板，产出可直接填的 JSON
+uv run python tools/notification_config.py from-wechat --file /tmp/gettemplate.json \
+  --map member_application=<模板ID> --map schedule_reminder=<模板ID> --map review_digest=<模板ID>
+```
+
+两条硬性约束：`fields` 的语义映射是按字段名推测的，必须对照后台模板详情确认；模板里出现而未被映射的
+字段会导致微信按参数缺失拒发（`47003`），因此要选字段数量与内容都对得上的模板，`enum_string*` 这类
+只能取枚举值的字段不适用本项目的自由文本。确认后用下面的 `check` 复核。
 
 填好后本地自检（不联网、不打印密钥）：
 
