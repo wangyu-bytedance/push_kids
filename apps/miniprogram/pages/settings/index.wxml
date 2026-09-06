@@ -117,7 +117,7 @@
       </view>
       <view class="act-list" wx:if="{{addedActivities.length}}">
         <view class="act-row" wx:for="{{addedActivities}}" wx:key="id" aria-role="button" aria-label="设置{{item.name}}的安排" data-index="{{index}}" bindtap="openActivitySchedule">
-          <view class="act-mark"><view class="ico ico-ball-pri sm"></view></view>
+          <view class="act-mark"><view class="ico {{item.iconClass}} sm"></view></view>
           <view class="grow">
             <text class="a-t trunc">{{item.name}}</text>
             <text class="a-s">{{item.scheduleLabel}}</text>

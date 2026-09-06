@@ -21,7 +21,8 @@
     <view class="pgrid" wx:if="{{media.length}}">
       <view class="pcell {{item.unavailable ? 'gone' : ''}}" wx:for="{{media}}" wx:key="id"
         aria-role="button" aria-label="第 {{item.index}} 张学习照片" data-id="{{item.id}}" bindtap="preview">
-        <image class="pimg" wx:if="{{item.thumbnail}}" src="{{item.thumbnail}}" mode="aspectFill" />
+        <image class="pimg" wx:if="{{item.thumbnail}}" src="{{item.thumbnail}}" mode="aspectFill"
+          data-id="{{item.id}}" binderror="thumbnailFailed" bindload="thumbnailLoaded" />
         <view class="ph-center" wx:else><view class="ico ico-image-mute sm"></view></view>
         <view class="idx">照片 {{item.index}}</view>
         <view class="cnote" wx:if="{{item.hint}}">{{item.hint}}</view>

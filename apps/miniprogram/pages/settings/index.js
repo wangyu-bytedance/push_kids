@@ -1,5 +1,6 @@
 const api = require("../../utils/api");
 const childContext = require("../../utils/child-context");
+const ui = require("../../utils/ui");
 
 const BASIC_LEARNING = ["数学", "语文", "英语"];
 const LEARNING_CATALOG = ["科学", "道德与法治", "物理", "化学", "生物", "历史", "地理", "政治", "美术", "音乐", "体育", "劳动"];
@@ -120,6 +121,7 @@ Page({
       const addedActivities = activeActivities.map((item) => {
         const schedule = scheduleMap[item.id] || null;
         return { ...item, short: item.name.charAt(0), schedule, scheduleLabel: scheduleLabel(schedule),
+          iconClass: ui.activityIcon(item.name, "pri"),
           custom: isCustom(item) && !ACTIVITY_CATALOG.includes(item.name) };
       });
       this.setData({ loading: false, ...shared, childIndex: selection.childIndex, childId,

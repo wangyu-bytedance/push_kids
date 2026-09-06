@@ -1,4 +1,4 @@
-"""FEAT-005 TP-010：`20260906_0004` 迁移必须让存量档案落为在用，并且可以回滚。"""
+"""FEAT-005 TP-010：`20260906_0005` 迁移必须让存量档案落为在用，并且可以回滚。"""
 
 from __future__ import annotations
 
@@ -15,7 +15,7 @@ from sqlalchemy import create_engine, text
 
 ROOT = Path(__file__).resolve().parents[2]
 BASE_REVISION = "20260905_0003"
-TARGET_REVISION = "20260906_0004"
+TARGET_REVISION = "20260906_0005"
 
 
 def _config(url: str) -> Config:

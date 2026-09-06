@@ -22,7 +22,7 @@
   </block>
 
   <view class="pk-empty" wx:elif="{{!subjects.length}}">
-    <view class="em"><view class="ico ico-ball-pri lg"></view></view>
+    <view class="em"><view class="ico {{iconClass}} lg"></view></view>
     <text class="et">还没有课外活动可以记录</text>
     <text class="ec">在设置里添加一项课外活动之后，就可以记下每次练习。</text>
     <view class="ea">

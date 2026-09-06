@@ -314,8 +314,9 @@ class LearningRecord(Base):
     family_id = Column(String(80), nullable=False, index=True)
     child_id = Column(String(36), ForeignKey("children.id"), nullable=False, index=True)
     subject_id = Column(String(36), ForeignKey("subjects.id"), nullable=False, index=True)
+    # Not unique: one photo batch can span several subjects and then holds one record per subject.
     submission_id = Column(
-        String(36), ForeignKey("learning_submissions.id"), nullable=False, unique=True
+        String(36), ForeignKey("learning_submissions.id"), nullable=False, index=True
     )
     occurred_at = Column(UTCDateTime(), nullable=False, index=True)
     summary = Column(String(500), nullable=False)

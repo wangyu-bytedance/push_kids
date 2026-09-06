@@ -423,7 +423,7 @@ flowchart LR
 | File/path | Action | Expected change | Replacement/authority | Why |
 |---|---|---|---|---|
 | `apps/api/src/push_kids/persistence/models.py` | modify | `Child` 增 `active` | — | 归档投影 |
-| `apps/api/migrations/versions/20260906_0004_child_profile_lifecycle.py` | add | 加列 + 索引 + downgrade | — | 迁移 |
+| `apps/api/migrations/versions/20260906_0005_child_profile_lifecycle.py` | add | 加列 + 索引 + downgrade | — | 迁移 |
 | `apps/api/src/push_kids/children/schemas.py` | modify | `ChildCreate.subject_names`、`ChildView.active` | — | 初始科目与归档态 |
 | `apps/api/src/push_kids/children/service.py` | modify | 上限/重名/归档/恢复/`require_active_child`/初始科目 | 取代散落判断 | 规则单点 |
 | `apps/api/src/push_kids/children/router.py` | modify | `include_archived`、archive、restore | — | 新接口 |
@@ -535,7 +535,7 @@ None。`include_archived` 是长期逃生阀而非过渡态。
 
 ### Rollout
 
-1. 执行迁移 `20260906_0004`（纯加列 + 索引，读写兼容，可先于应用发布）。
+1. 执行迁移 `20260906_0005`（纯加列 + 索引，读写兼容，可先于应用发布；它排在 BUG-013 的 `20260906_0004` 之后）。
 2. 发布后端；旧客户端不受影响（`GET /children` 仅多一个字段）。
 3. 发布小程序；家长即可看到新入口。
 
@@ -622,10 +622,10 @@ None。`include_archived` 是长期逃生阀而非过渡态。
 
 与第 9 节一致，另有 4 处第 9 节未预列的必要改动（见 Deviations）：
 
-- Backend：`persistence/models.py`、`migrations/versions/20260906_0004_child_profile_lifecycle.py`、
+- Backend：`persistence/models.py`、`migrations/versions/20260906_0005_child_profile_lifecycle.py`、
   `children/{schemas,service,router}.py`、`families/{schemas,service}.py`、`learning/service.py`、
   `activities/service.py`、`platform/context.py`（新增 `manager_context`）、`platform/database.py`
-  （`expected_cloud_revision` 升至 `20260906_0004` + 本地 SQLite 自愈补列）。
+  （`expected_cloud_revision` 升至 `20260906_0005` + 本地 SQLite 自愈补列）。
 - Frontend：`utils/child-context.js`(new)、`pages/child-edit/*`(new)、`app.js`、`app.json`、
   `pages/{today,calendar,reports,settings}/index.{js,wxml}`、`pages/records/index.js`、
   `pages/activity/edit.js`、`pages/settings/index.wxss`、`styles/atoms.wxss`（`.add-entry` 提升为全局原子）。
@@ -652,7 +652,7 @@ None。`include_archived` 是长期逃生阀而非过渡态。
 | `npm run lint:miniapp` | node v22.23.2 | pass | 无输出（ESLint 通过） | TP-009 |
 | `uv run python tools/check_architecture.py` | 本地 | pass | `ARCHITECTURE_VALID checked=2` | TP-008 |
 | `uv run python tools/validate_miniprogram.py` | 本地 | pass | `MINIPROGRAM_VALID pages=13 source_bytes=484544` | TP-007；五 Tab 顺序不变，包体在 1.5 MiB 预算内 |
-| `PYTHONPATH=apps/api/src uv run alembic heads` | 本地 | pass | `20260906_0004 (head)` | 单 head，与应用校验值一致 |
+| `PYTHONPATH=apps/api/src uv run alembic heads` | 本地 | pass | `20260906_0005 (head)` | 单 head，与应用校验值一致 |
 | `tests/e2e` | 本地 | pre-existing failure | `httpx.InvalidURL: Invalid port: ':'` | 与本次改动无关：在改动前的干净工作区（git stash）复现相同失败，属沙箱代理/环境变量问题 |
 | 三视口原生节点几何 | 微信开发者工具 | not run | — | 本环境无该工具，见 Q-002 与 Figma waiver |
 | 云端迁移 + 双账号真机验证 | 微信云托管 | not run | — | 本轮不部署，按 `docs/deploy/` 单独执行 |
@@ -666,7 +666,7 @@ None。`include_archived` 是长期逃生阀而非过渡态。
    `child-context`、设置页档案区与 `pages/child-edit`，拆成两个文件会让同一场景的装配重复两遍。
 3. 第 9 节未预列但必须做的改动：`platform/context.py` 新增 `manager_context`（归档/恢复的 manager 门禁，
    本地路径无 membership 行，故只校验 role）；`platform/database.py` 把 `expected_cloud_revision` 升到
-   `20260906_0004` 并为既有本地 SQLite 库补列（否则迁移后云服务拒绝启动、本地旧库首屏 500）；
+   `20260906_0005` 并为既有本地 SQLite 库补列（否则迁移后云服务拒绝启动、本地旧库首屏 500）；
    新增迁移测试文件承载 TP-010；`styles/atoms.wxss` 提升 `.add-entry` 以免四处复制样式。
 4. 归档/恢复审计（第 7 节要求）实现在 `children/service.py` 直接写共享 `FamilyAuditEvent`，而非经
    `families` 服务，避免为一条审计记录制造 children → families 反向依赖；本地 `X-Family-ID` 路径无

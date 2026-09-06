@@ -69,10 +69,6 @@ ICONS: dict[str, str] = {
         "<path d='M20 5.4A1.4 1.4 0 0 0 18.6 4h-5.2A2 2 0 0 0 12 5.8v13"
         "a1.8 1.8 0 0 1 1.4-1.2H20Z'/>"
     ),
-    "ball": (
-        "<circle cx='12' cy='12' r='8.6'/><path d='M12 3.4c-2.6 2.3-4 5.4-4 8.6s1.4 6.3 4 8.6'/>"
-        "<path d='M12 3.4c2.6 2.3 4 5.4 4 8.6s-1.4 6.3-4 8.6'/><path d='M3.6 10.2h16.8'/>"
-    ),
     "list": "<path d='M4.6 7h14.8'/><path d='M4.6 12h14.8'/><path d='M4.6 17h9.6'/>",
     "cloud-off": (
         "<path d='M6.6 18.4h9.6a4 4 0 0 0 1-7.9'/><path d='M15.6 8.6A5.2 5.2 0 0 0 7 9.9"
@@ -93,6 +89,82 @@ ICONS: dict[str, str] = {
     "note": (
         "<path d='M5.4 4h9.2L19 8.4V20H5.4Z'/><path d='M14.2 4v4.6H19'/>"
         "<path d='M8.4 13h7'/><path d='M8.4 16.6h4.6'/>"
+    ),
+    # 课外活动图标：按活动语义区分，映射规则见 utils/ui.js 的 activityIcon。
+    "swim": (
+        "<circle cx='16.2' cy='6.8' r='1.9'/><path d='M14.4 8 5.2 12.4'/>"
+        "<path d='M9.8 10.2 6.4 5.8'/><path d='M2.4 18q2.4-2.2 4.8 0t4.8 0t4.8 0t4.8 0'/>"
+    ),
+    "pingpong": (
+        "<circle cx='9.4' cy='9' r='5.4'/><path d='M12.4 13.4 16.8 20.2'/>"
+        "<circle cx='18.6' cy='6' r='1.9'/>"
+    ),
+    "basketball": (
+        "<circle cx='12' cy='12' r='8.6'/><path d='M3.4 12h17.2'/><path d='M12 3.4v17.2'/>"
+        "<path d='M6 6c3.3 3.3 3.3 8.7 0 12'/><path d='M18 6c-3.3 3.3-3.3 8.7 0 12'/>"
+    ),
+    "badminton": (
+        "<path d='M14.6 14.8 18 5.4H6l3.4 9.4Z'/><path d='M12 5.4v9.4'/>"
+        "<path d='M10.2 10.8h3.6'/><path d='M9.4 14.8q2.6 3.6 5.2 0'/>"
+    ),
+    "soccer": (
+        "<circle cx='12' cy='12' r='8.6'/><path d='M12 8.2l3.4 2.5-1.3 4h-4.2l-1.3-4Z'/>"
+        "<path d='M12 8.2V3.6'/><path d='M15.4 10.7 19.8 9'/><path d='M14.1 14.7 16.8 18.4'/>"
+        "<path d='M9.9 14.7 7.2 18.4'/><path d='M8.6 10.7 4.2 9'/>"
+    ),
+    "tennis": (
+        "<circle cx='12' cy='8.6' r='5.6'/><path d='M12 3v11.2'/><path d='M6.4 8.6h11.2'/>"
+        "<path d='M12 14.2v6.2'/><path d='M9.8 20.4h4.4'/>"
+    ),
+    "chess": (
+        "<rect x='3.4' y='3.4' width='17.2' height='17.2' rx='2.6'/><path d='M3.4 9.2h17.2'/>"
+        "<path d='M3.4 14.8h17.2'/><path d='M9.2 3.4v17.2'/><path d='M14.8 3.4v17.2'/>"
+        "<circle cx='14.8' cy='9.2' r='2.9' fill='CURRENT' stroke='none'/>"
+    ),
+    "piano": (
+        "<rect x='3.4' y='4.6' width='17.2' height='14.8' rx='2.2'/><path d='M9 4.6v14.8'/>"
+        "<path d='M15 4.6v14.8'/>"
+        "<rect x='7.3' y='4.6' width='3.4' height='8' rx='0.8' fill='CURRENT' stroke='none'/>"
+        "<rect x='13.3' y='4.6' width='3.4' height='8' rx='0.8' fill='CURRENT' stroke='none'/>"
+    ),
+    "music": (
+        "<circle cx='7' cy='17.4' r='2.6'/><circle cx='17.4' cy='15.4' r='2.6'/>"
+        "<path d='M9.6 17.4V6.2l10.4-2.2v11.4'/>"
+    ),
+    "dance": (
+        "<circle cx='13.8' cy='4.6' r='2.1'/>"
+        "<path d='M13.2 6.8 10.8 12.6l3.4 3.2-1.2 4.8'/><path d='M10.8 12.6 6.6 16.4'/>"
+        "<path d='M12.2 9.2 17 7.2'/><path d='M12.2 9.2 8.2 6.6'/>"
+    ),
+    "martial": (
+        "<rect x='2.6' y='9.4' width='18.8' height='5.2' rx='1.6'/>"
+        "<rect x='9' y='7.8' width='6' height='8.4' rx='1.6'/>"
+        "<path d='M10.4 16.2 8.4 20.4'/><path d='M13.6 16.2 15.6 20.4'/>"
+    ),
+    "brush": (
+        "<path d='M12 3.4v7.4'/><rect x='9.6' y='10.8' width='4.8' height='2.8' rx='1'/>"
+        "<path d='M9.6 13.6c0 3 1.1 5.4 2.4 6.8 1.3-1.4 2.4-3.8 2.4-6.8Z'/>"
+    ),
+    "palette": (
+        "<path d='M12 3.6a8.4 8.4 0 0 0 0 16.8c1.5 0 2.2-1 2.2-2.1 0-1.4 1-2.3 2.4-2.3h1.6"
+        "a2.6 2.6 0 0 0 2.6-2.6A9.8 9.8 0 0 0 12 3.6Z'/>"
+        "<circle cx='8.4' cy='9.4' r='1.2' fill='CURRENT' stroke='none'/>"
+        "<circle cx='13.4' cy='7.8' r='1.2' fill='CURRENT' stroke='none'/>"
+        "<circle cx='7.6' cy='14.4' r='1.2' fill='CURRENT' stroke='none'/>"
+    ),
+    "code": (
+        "<path d='M9.4 7.6 4.6 12l4.8 4.4'/><path d='M14.6 7.6 19.4 12l-4.8 4.4'/>"
+        "<path d='M13.4 5.2 10.6 18.8'/>"
+    ),
+    "robot": (
+        "<rect x='4.4' y='7.6' width='15.2' height='11.6' rx='3'/><path d='M12 4.2v3.4'/>"
+        "<circle cx='12' cy='3' r='1.2'/><path d='M2.6 11.8v3.4'/><path d='M21.4 11.8v3.4'/>"
+        "<circle cx='9.4' cy='12.8' r='1.3' fill='CURRENT' stroke='none'/>"
+        "<circle cx='14.6' cy='12.8' r='1.3' fill='CURRENT' stroke='none'/>"
+        "<path d='M9.6 16.4h4.8'/>"
+    ),
+    "star": (
+        "<path d='M12 3.6l2.7 5.7 6.1.8-4.5 4.3 1.1 6.2L12 17.6l-5.4 3 1.1-6.2L3.2 10.1l6.1-.8Z'/>"
     ),
 }
 

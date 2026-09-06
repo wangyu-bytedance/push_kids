@@ -1,0 +1,42 @@
+/* PKDS-1.0 · 可编辑草稿共享样式：确认页与「待处理记录」页共用。
+   只写草稿区特有几何，其余复用 tokens / atoms / icons。几何量 rpx，字号 px，发丝线 1rpx。 */
+
+/* 卡片内小标签与元信息 */
+.c-lbl { font-size: 13px; line-height: 1.45; font-weight: 600; color: var(--pk-ink-2); }
+.c-meta { font-size: 13px; line-height: 1.45; color: var(--pk-ink-3); }
+
+/* 人工录入时保留的家长原文，永不截断 */
+.orig-text { display: block; margin-top: 16rpx; padding: 20rpx 24rpx; border-radius: var(--pk-r-md); background: var(--pk-surface-sunken); font-size: 14px; line-height: 1.7; color: var(--pk-ink-2); white-space: pre-wrap; overflow-wrap: anywhere; }
+
+/* 科目归类卡：一个科目一张卡；不在科目表里的用注意色描边，等家长回答是否新增 */
+.grp-card { padding: 24rpx 28rpx; }
+.grp-card.warn { border-color: var(--pk-attention-line); background: var(--pk-attention-bg); }
+.grp-card .sub-mark { margin-top: 4rpx; }
+.grp-card .grp-n { display: block; font-size: 16px; line-height: 1.45; font-weight: 600; overflow-wrap: anywhere; }
+.grp-card .grp-m { display: block; margin-top: 4rpx; font-size: 13px; line-height: 1.5; color: var(--pk-ink-3); overflow-wrap: anywhere; }
+.grp-card .btn.sm { flex: none; }
+.grp-card .pk-notice { margin-bottom: 0; }
+.grp-card .pk-notice switch { flex: none; transform: scale(.82); transform-origin: right center; }
+
+/* 知识点草稿卡：把握程度低的用注意色描边提示需要核对 */
+.kn-card { padding: 28rpx; }
+.kn-card.warn { border-color: var(--pk-attention-line); background: var(--pk-attention-bg); }
+.kn-card .kn-n { font-size: 13px; line-height: 1.45; font-weight: 600; color: var(--pk-ink-3); font-variant-numeric: tabular-nums; }
+.kn-card .confidence { flex: none; }
+.kn-card .link-btn.dan { color: var(--pk-danger); min-height: 72rpx; }
+.kn-card .pk-input { background: var(--pk-surface); }
+
+/* 知识点所属科目：一行一个触控目标，点开就是科目选择器 */
+.kn-sub { display: flex; align-items: center; gap: 16rpx; min-height: 88rpx; margin-top: 16rpx; padding: 0 24rpx; box-sizing: border-box; border: var(--pk-border); border-radius: var(--pk-r-md); background: var(--pk-surface); }
+.kn-sub .ks-l { flex: none; font-size: 13px; font-weight: 600; color: var(--pk-ink-3); }
+.kn-sub .ks-v { flex: 1; min-width: 0; font-size: 14px; line-height: 1.45; overflow-wrap: anywhere; }
+
+.kn-more { margin-top: 24rpx; padding-top: 24rpx; border-top: var(--pk-border-soft); }
+.kn-more .btn-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20rpx; }
+.kn-more .btn-row .pk-field + .pk-field { margin-top: 0; }
+.kn-more .pk-field + .pk-field { margin-top: 28rpx; }
+
+/* 吸底确认条下的两条弱化出口：保留草稿 / 删除草稿 */
+.pk-cta-bar .cta-links { display: flex; align-items: center; justify-content: space-between; gap: 24rpx; }
+.pk-cta-bar .cta-links .link-btn { min-height: 76rpx; }
+.pk-cta-bar .cta-links .link-btn.dan { color: var(--pk-danger); }

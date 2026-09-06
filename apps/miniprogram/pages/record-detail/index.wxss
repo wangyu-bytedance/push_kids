@@ -1,5 +1,6 @@
-/* 历史记录详情（D7 只读 / D8 待处理）：几何量 rpx，字号 px，发丝线 1rpx。 */
+/* 历史记录详情（D7 只读 / D8 待确认就地编辑）：几何量 rpx，字号 px，发丝线 1rpx。 */
 @import "../submission/detail.wxss";
+@import "../submission/draft.wxss";
 
 .rd-page { padding-top: 0; }
 .rd-page .rec-head { padding-top: 16rpx; }

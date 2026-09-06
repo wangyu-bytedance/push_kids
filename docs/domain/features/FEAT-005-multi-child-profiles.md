@@ -5,7 +5,7 @@
 - Current-state revision: `FEAT-STATE-20260906-01-MULTI-CHILD`
 - Owner: 产品负责人（用户 王宇）
 - Last verified: 2026-09-06
-- Authoritative implementation: `apps/api/src/push_kids/children/`、`apps/api/migrations/versions/20260906_0004_child_profile_lifecycle.py`、
+- Authoritative implementation: `apps/api/src/push_kids/children/`、`apps/api/migrations/versions/20260906_0005_child_profile_lifecycle.py`、
   `apps/miniprogram/utils/child-context.js`、`apps/miniprogram/pages/child-edit/`
 - Active change Spec: `specs/active/FEAT-005-MULTI-CHILD-PROFILE-MANAGEMENT.md` revision `SPEC-20260906-MULTI-CHILD-01`
 
@@ -89,9 +89,9 @@ archived --restore--> active（受上限与在用重名校验约束）
 
 ## Data and permissions
 
-- `children.active BOOLEAN NOT NULL DEFAULT 1` 加索引 `ix_children_active`，由迁移 `20260906_0004` 引入；
+- `children.active BOOLEAN NOT NULL DEFAULT 1` 加索引 `ix_children_active`，由迁移 `20260906_0005` 引入（该迁移在与 BUG-013 一起合并时重链到 `20260906_0004` 之后）；
   存量行全部落为在用，`downgrade()` 可回滚（只丢归档信息，不丢档案本体）。
-- 应用启动时的云 Schema 校验 `Database.expected_cloud_revision` 已同步为 `20260906_0004`；
+- 应用启动时的云 Schema 校验 `Database.expected_cloud_revision` 已同步为 `20260906_0005`；
   本地既有 SQLite 开发库在 `create_schema()` 时自愈补列。
 - 所有 child 维度读写继续按 `(family_id, child_id)` 双键校验；跨家庭访问返回 404。
 - 读路径使用 `ChildrenService.get_child`（允许归档档案），新增写入统一使用 `require_active_child`。

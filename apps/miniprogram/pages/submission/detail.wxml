@@ -76,9 +76,6 @@
 
 <template name="rec-draft-actions">
   <view class="rec-actions">
-    <view class="btn" wx:if="{{state === 'pending_confirmation'}}" aria-role="button" aria-label="查看并确认" bindtap="openConfirm">
-      <view class="ico ico-check-inv sm"></view><text>查看并确认</text>
-    </view>
     <view class="btn" wx:if="{{state === 'failed'}}" aria-role="button" aria-label="重试整理" data-action="retry" bindtap="runDraftAction">
       <view class="ico ico-refresh-inv sm" wx:if="{{!saving}}"></view><text>{{saving ? '正在重试…' : '重试整理'}}</text>
     </view>

@@ -9,6 +9,17 @@ from push_kids.agent_processing.contracts import AnalysisProposal
 from push_kids.agent_processing.presentation import DisplayGroup
 
 
+class SubjectGroupView(BaseModel):
+    """How the draft splits across the child's configured subjects."""
+
+    subject_id: str | None = None
+    subject_name: str
+    # False means the name is not in the child's catalogue yet and needs a parent decision.
+    listed: bool
+    knowledge_indexes: list[int] = Field(default_factory=list)
+    knowledge_names: list[str] = Field(default_factory=list)
+
+
 class SubmissionCreate(BaseModel):
     child_id: str
     occurred_at: datetime
@@ -49,6 +60,10 @@ class SubmissionView(BaseModel):
     state: str
     proposal: AnalysisProposal | None = None
     display_groups: list[DisplayGroup] = Field(default_factory=list, max_length=7)
+    # Deterministic split of the draft against the child's configured subjects.
+    subject_groups: list[SubjectGroupView] = Field(default_factory=list, max_length=6)
+    # True when the model merged several subjects, guessed a subject, or named an unlisted one.
+    subject_review_needed: bool = False
     error_code: str | None
     error_message: str | None
     media_count: int = 0
@@ -59,10 +74,35 @@ class SubmissionView(BaseModel):
     updated_at: datetime
 
 
+class ConfirmGroup(BaseModel):
+    """One subject worth of a confirmation; a batch spanning subjects sends several."""
+
+    subject_id: str | None = None
+    subject_name: str = Field(min_length=1, max_length=40)
+    # A parent must answer "add this subject?" before a name outside the catalogue is created.
+    create_subject: bool = False
+    # Defaults to the batch summary when the parent did not write a per-subject one.
+    summary: str | None = Field(default=None, max_length=500)
+    # Positions inside `ConfirmSubmission.proposal.knowledge_points` that belong to this subject.
+    knowledge_indexes: list[int] = Field(min_length=1, max_length=20)
+
+
 class ConfirmSubmission(BaseModel):
     manual_entry: bool = False
     subject_id: str | None = None
+    create_subject: bool = False
     proposal: AnalysisProposal
+    # When present this is authoritative for the records to create; `proposal` still carries the
+    # batch-level Todo matches and source so older clients keep working unchanged.
+    groups: list[ConfirmGroup] | None = Field(default=None, max_length=6)
+
+
+class ConfirmedRecord(BaseModel):
+    record_id: str
+    subject_id: str
+    subject_name: str
+    knowledge_item_ids: list[str]
+    review_item_ids: list[str]
 
 
 class ConfirmationResult(BaseModel):
@@ -70,6 +110,7 @@ class ConfirmationResult(BaseModel):
     subject_id: str
     knowledge_item_ids: list[str]
     review_item_ids: list[str]
+    records: list[ConfirmedRecord] = Field(default_factory=list)
 
 
 class FeedbackRequest(BaseModel):

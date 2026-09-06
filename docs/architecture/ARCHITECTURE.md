@@ -35,7 +35,7 @@ and local media through the same bounded infrastructure ports.
 | `planning` | memory-curve review state and Todo grouping | pure scheduler + application service |
 | `activities` | schedules and practice records | activity service |
 | `reporting` | read models for dashboard/report/calendar | reporting service |
-| `agent_processing` | provider contract, analysis jobs, retries | analysis service and worker |
+| `agent_processing` | provider contract, analysis jobs, retries, deterministic subject routing (`subject_routing.py`, pure) | analysis service and worker |
 | `media` | validated local/cloud files, cloud ownership claim and temporary materialization | media store port |
 | `platform` | config, database, errors, request context | infrastructure only |
 
@@ -49,17 +49,20 @@ Dependency direction is routers → services → pure policies. Infrastructure a
   UTC on read on SQLite/MySQL. Existing naive timestamps retain the previous UTC interpretation; no schema
   migration or speculative correction of historical offsets is performed (`BUG-SPEC-20260905-05`).
 - A submission becomes immutable evidence after confirmation; parent edits are captured in the confirmed record.
+- A submission may own several `LearningRecord` rows, one per routed subject; `submission_id` is a plain
+  index since `20260906_0004`. Subject identity always resolves against the child's configured catalogue
+  through pure routing; model text never becomes a subject, and an unlisted name needs explicit parent consent.
 - `KnowledgeItem` is unique per family, child, subject, normalized name and category. Repeated learning creates one `KnowledgeOccurrence` per knowledge per confirmation, preserving existing Review state.
 - `ReviewItem` owns current review step and due date. Feedback advances, reinforces, partially advances, or defers it deterministically.
 - Cloud media is server-ticketed and claimed only after verifying uploader metadata, exact bucket/path,
   magic bytes, size and hash. Expired tickets and cancelled submissions are cleanup candidates.
 - Public account-wide export/deletion remains deferred to FEAT-002; cancellation deletes its scoped media.
 - A family may keep several child profiles; `children.active` is the profile lifecycle flag introduced by
-  migration `20260906_0004`. `children` owns the whole rule set: at most five profiles in use, unique names
+  migration `20260906_0005`. `children` owns the whole rule set: at most five profiles in use, unique names
   among profiles in use, manager-only archive/restore, and the `require_active_child` gate that every new
   learning/subject/activity write passes through. Read paths keep using `get_child`, so archiving never
   removes rows or hides history. Archiving is not deletion and there is no physical child deletion path.
-  `Database.expected_cloud_revision` tracks the single Alembic head, currently `20260906_0004`.
+  `Database.expected_cloud_revision` tracks the single Alembic head, currently `20260906_0005`.
 
 ## Async analysis sequence
 

@@ -101,7 +101,7 @@ test("confirmed and cancelled submissions open read-only and cannot be reconfirm
         : { id: "sid", child_id: "child", state, occurred_at: "2026-09-05T00:00:00Z", created_at: "2026-09-05T01:00:00Z" };
     });
     page.data.id = "sid";
-    await page.load(); await page.confirm();
+    await page.load(); await page.confirmDraft();
     assert.equal(page.data.error, "");
     assert.equal(page.data.readOnly, true);
     assert.equal(page.data.proposal, null);
@@ -116,8 +116,9 @@ test("viewer sees submitted material without write affordances; conflicts preser
   assert.equal(page.data.canWrite, false);
   assert.equal(page.data.readOnly, true);
   const conflict = harness("pages/submission/confirm.js", async () => { const err = new Error("已被确认"); err.statusCode = 409; throw err; }).page;
-  conflict.data.proposal = { subject_name: "数学", summary: "我的编辑", knowledge_points: [{ name: "加法" }] };
-  await conflict.confirm();
+  conflict.data.subjects = [{ id: "math", name: "数学" }];
+  conflict.data.proposal = { subject_name: "数学", summary: "我的编辑", knowledge_points: [{ name: "加法", subject_name: "数学" }] };
+  await conflict.confirmDraft();
   assert.equal(conflict.data.conflict, true);
   assert.equal(conflict.data.proposal.summary, "我的编辑");
 });
