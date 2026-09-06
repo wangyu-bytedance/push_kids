@@ -37,6 +37,16 @@
         <view class="btn secondary" aria-role="button" aria-label="打开家庭与成员" bindtap="openFamily"><text>家庭与成员</text></view>
       </view>
     </view>
+    <view class="rowlist mt3">
+      <view class="rowitem" aria-role="button" aria-label="提醒设置" bindtap="openNotifications">
+        <view class="act-mark"><view class="ico ico-clock-pri sm"></view></view>
+        <view class="grow">
+          <text class="r-t">提醒设置</text>
+          <text class="r-s">家人申请、课前一小时、每晚复习</text>
+        </view>
+        <view class="chev right"></view>
+      </view>
+    </view>
     <view class="rowlist mt3" wx:if="{{archivedChildren.length}}">
       <view class="rowitem" wx:for="{{archivedChildren}}" wx:key="id" aria-role="button" aria-label="恢复{{item.name}}的档案" data-id="{{item.id}}" bindtap="editChild">
         <view class="act-mark"><text class="am-txt">{{item.avatar}}</text></view>
@@ -170,6 +180,14 @@
         <view class="grow">
           <text class="r-t">删除配置</text>
           <text class="r-s">清理孩子资料或当前家庭</text>
+        </view>
+        <view class="chev right"></view>
+      </view>
+      <view class="rowitem" aria-role="button" aria-label="提醒设置" bindtap="openNotifications">
+        <view class="act-mark"><view class="ico ico-clock-pri sm"></view></view>
+        <view class="grow">
+          <text class="r-t">提醒设置</text>
+          <text class="r-s">课前一小时、每晚复习、家人申请</text>
         </view>
         <view class="chev right"></view>
       </view>

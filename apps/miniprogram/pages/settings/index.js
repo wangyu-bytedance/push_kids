@@ -70,6 +70,7 @@ Page({
   },
   openFamily() { wx.navigateTo({ url: "/pages/family-members/index" }); },
   openDeleteSettings() { wx.navigateTo({ url: "/pages/delete-settings/index" }); },
+  openNotifications() { wx.navigateTo({ url: "/pages/notifications/index" }); },
   openAbout() {
     wx.showModal({
       title: "关于知芽",

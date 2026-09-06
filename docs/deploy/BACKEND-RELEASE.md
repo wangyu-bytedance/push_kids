@@ -140,6 +140,31 @@ PYTHONPATH=apps/api/src uv run alembic check
 
 ### 5.1 通知消息通道人工门禁
 
+#### 5.1.0 两个配置值分别从哪里来
+
+| 配置 | 来源 | 怎么得到 | 注意 |
+|---|---|---|---|
+| `PUSH_KIDS_NOTIFICATION_SECRET_KEY` | **自己生成**，与微信无关 | `uv run python tools/notification_config.py secret`（等价于 `openssl rand -base64 32`） | 它只用来 AES-GCM 加密存储的微信 OpenID；至少 32 字符；只写入云托管「版本配置」的环境变量，不进仓库、不进聊天、不进 CLI 历史；轮换会让既有接收标识无法解密，成员必须重新授权，必须单独安排 |
+| `PUSH_KIDS_NOTIFICATION_TEMPLATES` | **微信公众平台**（小程序后台）的订阅消息模板 | 小程序管理后台 → 功能 → 订阅消息 → 我的模板：从公共模板库选用三类模板，记录每个模板的模板 ID 与字段编号（如 `thing1`、`time4`、`name3`），再用 `tools/notification_config.py scaffold` 生成骨架填入 | `fields` 的键必须与后台模板的实际字段编号完全一致，值只能取本项目的语义键 `headline`/`detail`/`child`/`time`/`code`；某类未配置时该类如实显示「暂不可用」，不会伪造发送 |
+
+填好后本地自检（不联网、不打印密钥）：
+
+```bash
+uv run python tools/notification_config.py scaffold > /tmp/templates.json   # 生成骨架后手工替换模板 ID 与字段
+PUSH_KIDS_NOTIFICATION_SECRET_KEY=<生成的密钥> \
+  uv run python tools/notification_config.py check --file /tmp/templates.json
+```
+
+`check` 使用与服务端相同的解析器：输出 `NOTIFICATION_TEMPLATES_VALID` 才说明这份配置能被运行时接受；
+它还会列出每类提醒缺哪些语义字段（缺的内容不会出现在提醒里）。校验通过后把 JSON 压成一行填进
+云托管环境变量，`/tmp/templates.json` 用后删除。
+
+另外两个相关值：`PUSH_KIDS_NOTIFICATION_CHANNEL`（`disabled`/`recording`/`wechat`，`recording` 在云环境
+被硬性拒绝）与 `PUSH_KIDS_NOTIFICATION_TRIGGER_TOKEN`（关闭进程内调度时由部署自己生成的共享 token，
+生成方式同密钥）。
+
+#### 5.1.1 门禁
+
 只在启用或调整通知通道时执行。通道默认关闭：`PUSH_KIDS_NOTIFICATION_CHANNEL=disabled` 时服务照常运行，
 通道如实自报不可用，所有到期消息落 `skipped / channel_unavailable`，不会误报为已发送。
 

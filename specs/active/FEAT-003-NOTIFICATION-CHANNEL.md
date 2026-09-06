@@ -3,14 +3,15 @@
 - Status: `IMPLEMENTED_PENDING_REVIEW`
 - Risk: `R3`
 - Spec owner: 产品负责人（用户）
-- Implementer: Aime（后端）
+- Implementer: Aime（后端 + 小程序授权入口）
 - Reviewer: `PENDING（后端、隐私/安全、微信平台）——通过 MR 评审`
 - Verifier: `PENDING`
 - Created: 2026-09-06
 - Last updated: 2026-09-06
 - Target release: `PENDING；生产发送还依赖微信订阅消息模板与运行时配置`
-- Spec revision: `SPEC-20260906-CHANNEL-01`
-- User confirmation: `CONFIRMED 2026-09-06 — 用户对本 revision 的确认语：「按照这个spec 编写代码，并提交mr」`
+- Spec revision: `SPEC-20260906-CHANNEL-02`（前端授权入口；`-01` 为服务端通道，已实现）
+- User confirmation: `-01: CONFIRMED 2026-09-06 —「按照这个spec 编写代码，并提交mr」；`
+  `-02: 依据 2026-09-06 用户指令「继续做，我需要一个完整的功能」实现，revision 文本待用户确认`
 - Additional R2/R3 approval: `CONFIRMED 2026-09-06（与 Spec revision 同一次确认）`
 - Affected Feature IDs: `FEAT-003（新增，本 revision 只覆盖通道）；FEAT-002（成员生命周期读契约）`
 - Feature current-state documents: 新增 `docs/domain/features/FEAT-003-notification-channel.md`
@@ -19,15 +20,18 @@
 
 ## Frontend Design Impact and Figma Approval
 
-- Frontend impact: `no（本 revision）`
-- Frontend impact reason: 本 revision 只交付服务端通道：配置、授权存储、出站队列、投递、重试、终态与调度。
-  小程序侧的提醒设置页与 `wx.requestSubscribeMessage` 授权动作显式拆到后续 revision，因此本 revision
-  不新增、不修改任何可见前端界面。
-- Frontend engineering impact: `no（本 revision）`
-- Affected UI IDs: `none（本 revision）；后续 revision 规划 UI-011-reminder-settings`
-- Figma waiver: `none；FEAT-001 的 waiver 不覆盖 FEAT-003`
-- 后续依赖：没有小程序授权入口时，微信通道在生产环境永远拿不到订阅额度，通道会如实回报
-  `not_authorized` 而不会假装发送。这是已知且被显式接受的中间状态。
+- Frontend impact: `-01: no；-02: yes`
+- Frontend impact reason: `-01` 只交付服务端通道（配置、授权存储、出站队列、投递、重试、终态、调度），
+  不改任何界面。`-02` 补上「完整功能」缺的那一半：没有小程序里的授权动作，微信通道在生产环境永远拿不到
+  订阅额度，通道只会如实回报 `not_authorized`。因此 `-02` 新增提醒设置页与设置页入口。
+- Frontend engineering impact: `-02: yes`
+- Affected UI IDs: `UI-011-reminder-settings`（新增，`docs/design/frontend/ui/UI-011-reminder-settings.md`）
+- Baseline / Design revision: `FDB-20260906-02` / `DREV-20260906-PKDS-03`（复用 PKDS 2.0，不新增视觉语言）
+- Engineering contract: `FEC-20260905-02`
+- Figma waiver: `REQUESTED` — 当前 Figma 账号为 Starter/View 且写入限额已触发，无法产出节点级 URL；
+  FEAT-001 的 waiver 不覆盖 FEAT-003，节点补录与三视口原生几何证据仍是发布门禁。
+- 视口矩阵: 320×568、390×844、430×932；本轮只有 `tools/preview` 近似渲染走查，
+  微信开发者工具编译与原生节点几何 `NOT RUN`。
 
 ## 0. Executive summary
 
@@ -209,11 +213,49 @@ Alembic `20260906_0008_notification_channel`，纯新增四张表与索引；
   通知类型为 `open`（新增类型必须提供模板绑定、dedupe key 与受众规则）；
   通知内容生成为 `closed`（不接受模型生成文案）。
 
+## 8bis. `-02` 前端范围与约束
+
+### In scope（`-02`）
+
+- 新增非 Tab 二级页 `pages/notifications/index`（提醒设置）：通道状态、三类开关、授权入口、最近投递记录。
+- 新增纯展示策略 `utils/notifications.js`：把服务端的通道/授权/投递状态翻译成家长看得懂的文案。
+- 设置页新增「提醒设置」入口（含无学习档案的空态，家人申请提醒在建档前就有意义）。
+- 新增部署配置助手 `tools/notification_config.py`：生成密钥、打印模板骨架、按运行时同一套规则校验。
+
+### Out of scope（`-02`）
+
+- 不改任何服务端契约、数据模型、调度或文案生成逻辑。
+- 不做通知详情页、不做站内消息中心、不做除微信订阅消息以外的渠道。
+
+### Invariants（`-02`）
+
+- 开关（意愿）与授权（能力）必须分开显示；任一写入失败都不得留下假的「已开启」。
+- `wx.requestSubscribeMessage` 必须在用户点击的同一次手势里第一时间调用，其前不得 `await` 网络请求。
+- 只有 `accept` 计为授权；`reject / ban / filter` 一律按未授权回传服务端。
+- 通道不可用或微信版本过低时不发起授权，也不显示授权入口。
+- 前端不自行放行权限：`member_application` 的可见与可改仍由服务端裁决。
+- 页面不评价孩子、不预测该学什么；明确声明提醒是尽力而为。
+
+### Acceptance criteria（`-02`）
+
+- AC-101：通道可用且存在未授权类别时，页面报出待授权数量并提供一次最多 3 个模板的授权入口。
+- AC-102：微信返回 `reject/ban/filter` 时，页面不显示「已开启」，且服务端收到 `accepted=false`。
+- AC-103：偏好写入失败时开关回滚到服务端状态并显示错误。
+- AC-104：通道不可用或微信版本过低时不调用授权接口，并给出可行动的说明。
+- AC-105：投递记录读取失败只降级该分段，开关与授权仍可用。
+
 ## 9. Expected file changes
 
 新增上述 `notifications` 包、迁移、四个测试文件；修改 `persistence/models.py`、`platform/config.py`、
 `platform/context.py`、`platform/database.py`、`bootstrap/app.py`、`families/service.py`、
 `activities/service.py`、`planning/service.py`、`tools/check_architecture.py`、`pyproject.toml`。
+
+`-02`：新增 `apps/miniprogram/pages/notifications/index.{js,json,wxml,wxss}`、
+`apps/miniprogram/utils/notifications.js`、`tests/frontend/notifications.test.js`、
+`tools/notification_config.py`、`tests/unit/test_notification_config_tool.py`、
+`docs/design/frontend/ui/UI-011-reminder-settings.md`；修改 `apps/miniprogram/app.json`、
+`apps/miniprogram/pages/settings/index.{js,wxml}`、`docs/design/frontend/FRONTEND-DESIGN.md`、
+`docs/domain/BEHAVIOR-CATALOG.md`、`docs/quality/TEST-STRATEGY.md`、`docs/deploy/BACKEND-RELEASE.md`。
 
 ## 10. Non-functional requirements
 
@@ -291,18 +333,51 @@ Alembic `20260906_0008_notification_channel`，纯新增四张表与索引；
 - 全链迁移：`alembic upgrade head` → `20260906_0008 (head)`
 - NOT RUN：MySQL 门禁、云托管部署、微信真机授权与真实发送
 
+### `-02` Files changed（前端与配置助手）
+
+- 新增：`apps/miniprogram/pages/notifications/index.{js,json,wxml,wxss}`、`apps/miniprogram/utils/notifications.js`
+- 新增：`tools/notification_config.py`、`tests/frontend/notifications.test.js`、`tests/unit/test_notification_config_tool.py`
+- 新增：`docs/design/frontend/ui/UI-011-reminder-settings.md`
+- 修改：`apps/miniprogram/app.json`、`apps/miniprogram/pages/settings/index.{js,wxml}`、
+  `docs/design/frontend/FRONTEND-DESIGN.md`、`docs/domain/BEHAVIOR-CATALOG.md`（`BHV-027`）、
+  `docs/quality/TEST-STRATEGY.md`、`docs/deploy/BACKEND-RELEASE.md`、
+  `docs/domain/features/FEAT-003-notification-channel.md`
+
+### `-02` Evidence（2026-09-06，本地）
+
+- `uv run ruff check .` PASS；`uv run ruff format --check .` PASS（202 files）
+- `uv run mypy apps/api/src` PASS（66 files）
+- `uv run python tools/check_architecture.py` PASS（`ARCHITECTURE_VALID checked=3`）
+- `uv run pytest tests/unit tests/integration tests/contract -q` → 223 passed, 2 skipped
+- `npm test` → 102 pass（其中 `tests/frontend/notifications.test.js` 11 项）
+- `npm run lint:miniapp` PASS；`uv run python tools/validate_miniprogram.py` → `MINIPROGRAM_VALID pages=14`
+- `tools/notification_config.py`：`secret` 产出 43 字符密钥；`scaffold` 输出可被运行时解析器解析；
+  `check` 对缺 `template_id`、未知语义、空配置、短密钥都返回非 0
+- 设计走查：`tools/preview`（来自 UI 分支，未提交到本分支）在 320/390/430 渲染「通道可用 · 待授权」与
+  「通道不可用 + 微信版本过低」两态并截图人工检查
+- NOT RUN：微信开发者工具编译与原生节点几何、真机 `wx.requestSubscribeMessage` 授权、真实送达、
+  MySQL 门禁、云托管部署
+
 ### Deviations from approved Spec
 
-无功能偏差。唯一流程偏差见 §0（实现先于确认，已于 2026-09-06 由用户确认闭环）。
+`-02` 同样是先实现后确认：用户指令「继续做，我需要一个完整的功能」明确要求补齐能力，但仓库契约要求
+可见前端变更先取得 Spec revision + Design Revision + Figma 节点批准。当前 Figma 账号无法产出节点级 URL，
+因此 `-02` 记录为 waiver `REQUESTED`，并把原生视口证据列为未跑的发布门禁，不主张已验收。
+
+`-01` 无功能偏差。唯一流程偏差见 §0（实现先于确认，已于 2026-09-06 由用户确认闭环）。
 
 ### Residual risks and follow-up
 
-1. 没有小程序授权入口，生产环境不会产生任何实际发送（通道如实回报 `not_authorized`）。
-2. 模板类型（长期/一次性）未定，直接影响额度语义与重复授权频率。
-3. 云端部署、MySQL 门禁与真机验收未做，公开发布仍被阻断。
+1. 授权入口已实现，但微信开发者工具编译、三视口原生节点几何与真机授权/送达仍 `NOT RUN`，
+   因此仍不能声称家长已经能收到微信提醒。
+2. 模板类型（长期/一次性）未定，直接影响额度语义与重复授权频率；一次性模板下家长需要反复授权，
+   页面已如实说明但体验成本真实存在。
+3. 云端部署、MySQL 门禁未做，公开发布仍被阻断。
+4. Figma 节点级 URL 缺失，`-02` 的 waiver 属于请求状态，未获批准前不得进入生产可见发布。
 
 ## 18. Revision history
 
 | Revision | 日期 | 变更 |
 |---|---|---|
 | `SPEC-20260906-CHANNEL-01` | 2026-09-06 | 首版：只覆盖服务端消息通道；记录实现先于确认的流程偏差；前端授权入口另开 revision |
+| `SPEC-20260906-CHANNEL-02` | 2026-09-06 | 补齐完整功能：小程序提醒设置页与 `wx.requestSubscribeMessage` 授权入口、设置页入口、部署配置助手 `tools/notification_config.py`；新增 `UI-011`；Figma waiver 处于请求状态，原生视口证据未跑 |

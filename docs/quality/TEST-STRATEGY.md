@@ -18,6 +18,13 @@
   membership re-check at send time, the 30-day retention window and the dispatch trigger token. Business
   time is injected explicitly; a test that reads wall-clock 19:00 is invalid. Live WeChat send and real
   `wx.requestSubscribeMessage` acceptance remain manual, staged gates.
+- Reminder settings screen: page tests must prove that the switch state and the WeChat grant state stay
+  separate — a failed preference write rolls the switch back, only an `accept` decision is reported as
+  authorized, an unavailable channel or an old WeChat client requests nothing, and unreadable delivery
+  history degrades only that section. `wx.requestSubscribeMessage` is stubbed; the grant call must be
+  asserted to happen before any awaited request so the real client keeps its user gesture.
+- Deployment configuration: `tools/notification_config.py check` must agree with the runtime template
+  parser and the 32-character key rule, and must never print the key itself.
 - MySQL: fresh Alembic migration, schema drift check, identity/family isolation, idempotency, Worker lease and confirmation transaction using `PUSH_KIDS_TEST_MYSQL_URL`.
 - Cloud storage/identity: local fakes cover contract branches, but real two-account owner rules, metaid decode and public-ingress rejection are mandatory staging tests.
   Staging status: **PASS (2026-09-06, operator-confirmed)** — two real accounts exercised owner isolation,

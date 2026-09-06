@@ -1,0 +1,24 @@
+/* 提醒设置（G9）：通道 Hero + 三类提醒行 + 最近投递记录。
+   这一页的视觉重点是"状态"，所以状态胶囊与开关分列两侧，互不遮挡。 */
+.notifications-page { padding-bottom: 8rpx; }
+
+.notice-hero .hero-ok { display: flex; align-items: flex-start; gap: 12rpx; margin-top: 20rpx; }
+.notice-hero .hero-ok .ok-txt { flex: 1; min-width: 0; font-size: 13px; line-height: 1.5; color: #5A6E64; }
+
+.off-hero { margin-top: 8rpx; background: var(--pk-surface-warm); }
+.off-hero .off-mark { flex: none; width: 72rpx; height: 72rpx; border-radius: 50%; background: var(--pk-surface-sunken); display: flex; align-items: center; justify-content: center; }
+.off-hero .off-title { display: block; font-size: 17px; line-height: 1.45; font-weight: 600; }
+.off-hero .off-sub { display: block; margin-top: 4rpx; font-size: 13px; line-height: 1.5; color: var(--pk-ink-3); }
+
+.noti-row { align-items: flex-start; gap: 20rpx; }
+.noti-row .noti-mark { flex: none; width: 72rpx; height: 72rpx; margin-top: 4rpx; border-radius: var(--pk-r-lg); background: var(--pk-surface-sunken); display: flex; align-items: center; justify-content: center; }
+.noti-line { display: flex; align-items: center; gap: 12rpx; min-width: 0; }
+.noti-line .r-t { flex: 1; min-width: 0; }
+.noti-line .pill { flex: none; }
+.noti-state { display: flex; align-items: center; gap: 16rpx; margin-top: 12rpx; }
+.noti-state .grant-link { font-size: 13px; line-height: 1.45; font-weight: 500; color: var(--pk-primary); }
+.noti-switch { flex: none; margin-top: 4rpx; transform: scale(.86); transform-origin: right center; }
+
+.log-row { align-items: flex-start; }
+.log-row .log-meta { display: block; margin-top: 8rpx; font-size: 12px; line-height: 1.45; color: var(--pk-ink-4); }
+.log-row .log-why { display: block; margin-top: 8rpx; font-size: 13px; line-height: 1.5; color: var(--pk-ink-3); }

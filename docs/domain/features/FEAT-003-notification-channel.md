@@ -2,16 +2,20 @@
 
 - Feature ID: `FEAT-003`
 - Status: `IMPLEMENTING`
-- Current-state revision: `FEAT-STATE-20260906-CHANNEL-01-LOCAL`
+- Current-state revision: `FEAT-STATE-20260906-CHANNEL-02-LOCAL`
 - Owner: 产品负责人（用户）
 - Last verified: 2026-09-06
 - Authoritative implementation: `apps/api/src/push_kids/notifications/`、通知持久化模型、
-  Alembic `20260906_0008_notification_channel`
-- Active change Spec: `specs/active/FEAT-003-NOTIFICATION-CHANNEL.md` revision `SPEC-20260906-CHANNEL-01`
+  Alembic `20260906_0008_notification_channel`、`apps/miniprogram/pages/notifications/`、
+  `apps/miniprogram/utils/notifications.js`、`tools/notification_config.py`
+- Active change Spec: `specs/active/FEAT-003-NOTIFICATION-CHANNEL.md` revisions
+  `SPEC-20260906-CHANNEL-01`（服务端通道）+ `SPEC-20260906-CHANNEL-02`（授权入口）
+- UI current state: `docs/design/frontend/ui/UI-011-reminder-settings.md`
 
-> 本文只描述当前事实。服务端通道已实现并通过本地全量门禁；**尚未部署到微信云托管，也尚无小程序
-> 授权入口**，因此不能描述为「家长已经能收到微信提醒」。Spec revision `SPEC-20260906-CHANNEL-01`
-> 已于 2026-09-06 获用户确认，代码评审通过 MR 进行。
+> 本文只描述当前事实。服务端通道与小程序授权入口都已实现并通过本地全量门禁；**尚未部署到微信
+> 云托管，微信开发者工具与真机授权/送达均未验证**，因此不能描述为「家长已经能收到微信提醒」。
+> `-01` 已于 2026-09-06 获用户确认；`-02` 依据同日指令「继续做，我需要一个完整的功能」实现，
+> revision 文本待确认，代码评审通过 MR 进行。
 
 ## Purpose and scope
 
@@ -40,7 +44,15 @@
 - 终态投递记录保留 30 天后清理，在途记录永不被清理。
 - 调度：进程内 tick（`PUSH_KIDS_RUN_NOTIFICATION_SCHEDULER`）或外部 cron 调
   `POST /notifications/dispatch`（`X-Notification-Trigger` 共享 token，未配置则该路由 404）。
-- 尚不存在：小程序提醒设置页与授权入口、早间摘要、其他渠道、通知内的 AI 文案。
+- 小程序入口：「设置 → 提醒设置」（`pages/notifications/index`，非 Tab 二级页；无学习档案的空态也提供入口）。
+  页面把「想不想收」（开关）与「能不能收到」（微信授权）分成两件事显示：Hero 报出待授权类别数与
+  授权主操作，每行显示状态胶囊与行内「去授权」，最下方按 30 天窗口列出最近投递结果及失败原因。
+- 授权动作在用户点击的同一次手势里第一时间调用 `wx.requestSubscribeMessage`，一次最多 3 个模板；
+  只有 `accept` 回传 `accepted=true`；通道不可用或微信版本过低时不发起授权，也不显示授权入口；
+  偏好写入失败时开关回滚到服务端状态，不留下假的「已开启」。
+- 部署配置助手：`tools/notification_config.py secret | scaffold | check`——生成加密密钥、打印模板骨架、
+  用与运行时相同的解析器校验模板并检查密钥长度；它从不打印既有密钥，也不联网访问微信。
+- 尚不存在：早间摘要、其他渠道、通知内的 AI 文案、站内消息中心。
 
 ## Current behavior matrix
 
@@ -55,7 +67,9 @@
 | 离开家庭收回通道 | implemented locally | `tests/integration/test_notification_channel_lifecycle.py` |
 | 历史保留窗口 | implemented locally | `NotificationsService.prune_history` |
 | 微信真实发送 | not verified | 依赖模板申请与云托管配置 |
-| 小程序授权入口 | not implemented | 后续 revision + Design Revision |
+| 小程序提醒设置与授权入口 | implemented locally | `apps/miniprogram/pages/notifications/`、`tests/frontend/notifications.test.js` |
+| 部署配置生成与校验 | implemented locally | `tools/notification_config.py`、`tests/unit/test_notification_config_tool.py` |
+| 微信开发者工具 / 真机授权 | not verified | 需要微信开发者工具与真机；三视口原生几何未跑 |
 
 ## Verification evidence（2026-09-06，本地）
 
@@ -63,11 +77,14 @@
 - `uv run mypy apps/api/src` PASS（66 files）
 - `uv run python tools/check_architecture.py` PASS（`ARCHITECTURE_VALID checked=3`）
 - `uv run pytest tests/unit tests/integration tests/contract -q` → 219 passed, 2 skipped
-- `npm test` → 91 pass；`npm run lint:miniapp` PASS；`tools/validate_miniprogram.py` → `pages=13`
-- 微信开发者工具/真机授权与发送验收：`NOT RUN`
+- `uv run pytest tests/unit tests/integration tests/contract -q` → 223 passed, 2 skipped
+- `npm test` → 102 pass；`npm run lint:miniapp` PASS；`tools/validate_miniprogram.py` → `pages=14`
+- 设计走查：320/390/430 近似渲染两态截图人工检查
+- 微信开发者工具编译、原生节点几何、真机授权与真实发送验收：`NOT RUN`
 
 ## Known gaps
 
-1. 没有前端授权入口，生产环境实际收不到微信消息（通道如实回报 `not_authorized`）。
-2. 模板类型（长期 vs 一次性）未定，影响额度与重复授权体验。
-3. 云端部署、MySQL 门禁与真机验收未做。
+1. 生产环境仍未真的发出过一条消息：模板未申请、云托管未配置、真机授权未验证。
+2. 模板类型（长期 vs 一次性）未定，影响额度与重复授权体验；一次性模板需要家长反复授权。
+3. 云端部署、MySQL 门禁、微信开发者工具三视口原生几何证据未做。
+4. `UI-011` 缺 Figma 节点级 URL，waiver 处于请求状态。
