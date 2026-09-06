@@ -24,8 +24,8 @@ rg -n "expected_cloud_revision" apps/api/src/push_kids/platform/database.py
 wxcloud --version
 ```
 
-当前代码库的 Alembic head 和应用 `expected_cloud_revision` 必须完全一致。本文编写时二者均为
-`20260905_0003`；后续发布以命令输出为准，不复制历史文档中的旧值。
+当前代码库的 Alembic head 和应用 `expected_cloud_revision` 必须完全一致。本文最近核对时二者均为
+`20260906_0004`；后续发布以命令输出为准，不复制历史文档中的旧值。
 
 有未提交改动时，必须在发布报告中列出并确认它们属于本次范围；不能无记录地把整个脏工作区发布。
 

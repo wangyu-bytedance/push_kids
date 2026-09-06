@@ -55,6 +55,8 @@ API 向后兼容：`ConfirmSubmission.groups` 为可选，缺省时沿用旧的�
 迁移 `20260906_0004`（`down_revision=20260905_0003`）移除 `learning_records.submission_id` 唯一约束，
 改为普通索引 `ix_learning_records_submission_id`；downgrade 在已存在“一份提交多条记录”的数据上抛
 `RuntimeError`，避免静默丢数据。SQLite 用 batch 模式重建表，MySQL 额外处理内联唯一索引名 `submission_id`。
+`Database.expected_cloud_revision` 与 `docs/deploy/BACKEND-RELEASE.md` 同步升到 `20260906_0004`：
+云启动闸门要求应用内记录的 revision 等于唯一 Alembic head，漏改会让迁移后的服务直接启动失败。
 
 ```text
 photos -> Job -> Provider(batch subject + per-point subject)
