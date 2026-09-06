@@ -400,7 +400,7 @@ flowchart LR
 | Alternative | Benefit | Why rejected | Revisit condition |
 |---|---|---|---|
 | 只做前端本地定时器 | 快 | 小程序关闭后不可靠，不能后台准点 | never for promised reminders |
-| 复用 FastAPI lifespan Worker | 改动少 | 云托管响应后无 CPU 保证，当前已是发布阻断项 | 平台执行模型正式改变且有证据 |
+| 复用 FastAPI lifespan Worker | 改动少 | 当前 Worker 决策只引用 `ADR-001 / TD-001` | 平台执行模型正式改变且有证据 |
 | 仅保存 actor HMAC | 最小隐私面 | 无法构造微信 `touser` | 微信提供可用的不暴露 recipient handle API |
 | 保存 raw OpenID | 实现直接 | 违反当前隐私规则且泄漏影响大 | rejected；不得采用 |
 | 每分钟预生成所有未来课程 delivery | 查询简单 | 修改/删除易产生 stale 队列，数据膨胀 | 规模/SLO 数据证明需要 |
@@ -573,4 +573,3 @@ Temporary coexistence: old clients have no preference and remain disabled. No le
 - [ ] FEAT-001/002 current facts re-read; FEAT-003/UI/Behavior current-state merged.
 - [ ] No plaintext recipient identity or child content exists in DB/logs/errors/client Storage.
 - [ ] Rollback/cleanup rehearsed.
-

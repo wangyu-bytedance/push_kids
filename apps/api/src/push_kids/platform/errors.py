@@ -27,6 +27,10 @@ class ConflictError(AppError):
     code = "conflict"
 
 
+class ReviewStateChangedError(ConflictError):
+    code = "review_state_changed"
+
+
 class ConsentRequiredError(AppError):
     """The request is valid but needs one more explicit human decision before it may proceed."""
 

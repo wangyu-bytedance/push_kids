@@ -3,7 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Literal, Protocol
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 from push_kids.knowledge.normalization import normalize_knowledge_name
 
@@ -64,9 +64,12 @@ class EvidenceReference(BaseModel):
 class TodoCandidate(BaseModel):
     review_id: str
     knowledge_name: str
+    knowledge_id: str | None = None
+    subject_name: str | None = None
     evidence: str | None = Field(default=None, max_length=200)
     step: int | None = None
     due_date: str | None = None
+    eligible_on: str | None = None
 
 
 class ExistingKnowledgeContext(BaseModel):
@@ -86,12 +89,77 @@ class RecentLearningContext(BaseModel):
     occurred_at: str
 
 
+class SameDayKnowledgeContext(BaseModel):
+    knowledge_id: str
+    subject_name: str
+    name: str
+    category: str
+
+
+class ModelEvidenceReference(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    source: Literal["image", "parent_text"]
+    image_index: int | None = Field(ge=1, le=9)
+    detail: str = Field(min_length=1, max_length=200)
+
+
+class ModelLearningItem(BaseModel):
+    """One item in the provider-only, strict subject-grouped response."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    kind: Literal["new_learning", "review"]
+    name: str = Field(min_length=1, max_length=120)
+    review_id: str | None
+    existing_knowledge_id: str | None
+    category: str = Field(min_length=1, max_length=50)
+    display_kind: DisplayKind
+    review_method: str = Field(min_length=1, max_length=60)
+    estimated_minutes: int = Field(ge=1, le=20)
+    direct_evidence: list[ModelEvidenceReference] = Field(min_length=1, max_length=20)
+    context_used: list[str] = Field(max_length=20)
+    confidence: Literal["high", "medium", "low"]
+
+
+class ModelAnalysisResult(BaseModel):
+    """Untrusted provider result before deterministic validation and projection."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    summary: str = Field(max_length=120)
+    source: str = Field(min_length=1, max_length=30)
+    subjects: dict[str, list[ModelLearningItem]]
+    uncertainties: list[str] = Field(max_length=20)
+
+
+class AnalysisTerminalError(Exception):
+    code = "analysis_failed"
+    public_message = "分析暂时失败，请重试"
+
+
+class AnalysisOutputExhaustedError(AnalysisTerminalError):
+    code = "analysis_output_invalid"
+    public_message = "图片内容暂时无法整理成有效条目，请修改补充说明后重试"
+
+
+class AnalysisCapabilityError(AnalysisTerminalError):
+    code = "analysis_schema_unsupported"
+    public_message = "当前 AI 模型不支持所需的结构化输出，请联系管理员检查模型配置"
+
+
+class AnalysisOutputValidationError(ValueError):
+    def __init__(self, codes: list[str]) -> None:
+        self.codes = list(dict.fromkeys(codes))[:20]
+        super().__init__(",".join(self.codes))
+
+
 class AnalysisProposal(BaseModel):
     summary: str = Field(min_length=1, max_length=500)
     subject_name: str = Field(min_length=1, max_length=40)
     subject_kind: str = Field(default="learning", pattern="^(learning|activity)$")
     source: str = Field(default="课内", max_length=30)
-    knowledge_points: list[KnowledgeProposal] = Field(min_length=1, max_length=20)
+    knowledge_points: list[KnowledgeProposal] = Field(default_factory=list, max_length=20)
     todo_matches: list[TodoCandidate] = Field(default_factory=list, max_length=20)
     uncertainties: list[str] = Field(default_factory=list, max_length=20)
 
@@ -105,6 +173,131 @@ class AnalysisInput(BaseModel):
     existing_subjects: list[str] = Field(default_factory=list, max_length=30)
     recent_learning: list[RecentLearningContext] = Field(default_factory=list, max_length=30)
     existing_knowledge: list[ExistingKnowledgeContext] = Field(default_factory=list, max_length=100)
+    same_day_learning: list[SameDayKnowledgeContext] = Field(default_factory=list, max_length=200)
+
+    def structured_output_schema(self) -> dict:
+        """Return an exact-key schema so the model cannot invent or omit subjects."""
+        schema = ModelAnalysisResult.model_json_schema()
+        item_schema = {"type": "array", "items": {"$ref": "#/$defs/ModelLearningItem"}}
+        schema["properties"]["subjects"] = {
+            "type": "object",
+            "properties": {name: item_schema for name in self.existing_subjects},
+            "required": list(self.existing_subjects),
+            "additionalProperties": False,
+        }
+        return schema
+
+    def validate_model_result(self, result: ModelAnalysisResult) -> AnalysisProposal:
+        """Validate references/invariants, then expose the compatible editable proposal."""
+        if set(result.subjects) != set(self.existing_subjects):
+            raise AnalysisOutputValidationError(["subjects.keys"])
+        if sum(len(items) for items in result.subjects.values()) > 20:
+            raise AnalysisOutputValidationError(["subjects.max_items"])
+
+        context_ids = {item.record_id for item in self.recent_learning}
+        candidates = {item.review_id: item for item in self.todo_candidates}
+        knowledge = {item.knowledge_id: item for item in self.existing_knowledge}
+        same_day = {
+            (item.subject_name, normalize_knowledge_name(item.name), item.category.strip())
+            for item in self.same_day_learning
+        }
+        historical = {
+            (item.subject_name, normalize_knowledge_name(item.name), item.category.strip())
+            for item in self.existing_knowledge
+        }
+        points: list[KnowledgeProposal] = []
+        matches: list[TodoCandidate] = []
+        errors: list[str] = []
+        uncertainties = list(result.uncertainties)
+
+        for subject_name, items in result.subjects.items():
+            for item in items:
+                if not set(item.context_used).issubset(context_ids):
+                    errors.append("context.reference")
+                for evidence in item.direct_evidence:
+                    if evidence.source == "image" and (
+                        evidence.image_index is None
+                        or evidence.image_index > len(self.image_paths)
+                    ):
+                        errors.append("evidence.image_index")
+                    if evidence.source == "parent_text" and (
+                        not (self.text or "").strip() or evidence.image_index is not None
+                    ):
+                        errors.append("evidence.parent_text")
+                key = (subject_name, normalize_knowledge_name(item.name), item.category.strip())
+                if item.kind == "review":
+                    candidate = candidates.get(item.review_id or "")
+                    if (
+                        candidate is None
+                        or candidate.subject_name != subject_name
+                        or normalize_knowledge_name(candidate.knowledge_name)
+                        != normalize_knowledge_name(item.name)
+                        or item.existing_knowledge_id not in (None, candidate.knowledge_id)
+                    ):
+                        errors.append("review.reference")
+                        continue
+                    matches.append(
+                        candidate.model_copy(
+                            update={
+                                "evidence": "；".join(
+                                    evidence.detail for evidence in item.direct_evidence
+                                )[:200]
+                            }
+                        )
+                    )
+                    continue
+                if item.review_id is not None:
+                    errors.append("new_learning.review_id")
+                if key in same_day:
+                    continue
+                existing = knowledge.get(item.existing_knowledge_id or "")
+                if existing is not None and (
+                    existing.subject_name != subject_name
+                    or normalize_knowledge_name(existing.name)
+                    != normalize_knowledge_name(item.name)
+                ):
+                    errors.append("knowledge.reference")
+                    continue
+                if key in historical:
+                    if len(uncertainties) < 20:
+                        uncertainties.append(f"{subject_name}“{item.name}”是已有知识，未作为新学条目输出。")
+                    continue
+                points.append(
+                    KnowledgeProposal(
+                        existing_knowledge_id=item.existing_knowledge_id,
+                        name=item.name,
+                        subject_name=subject_name,
+                        category=item.category,
+                        display_kind=item.display_kind,
+                        review_method=item.review_method,
+                        estimated_minutes=item.estimated_minutes,
+                        direct_evidence=[
+                            EvidenceReference.model_validate(evidence.model_dump())
+                            for evidence in item.direct_evidence
+                        ],
+                        context_used=item.context_used,
+                        confidence=item.confidence,
+                    )
+                )
+        if errors:
+            raise AnalysisOutputValidationError(errors)
+        points = unique_knowledge_points(points)
+        matches = list({item.review_id: item for item in matches}.values())
+        if not points and not matches:
+            raise AnalysisOutputValidationError(["proposal.empty"])
+        primary_subject = (
+            points[0].subject_name
+            if points
+            else next(item.subject_name for item in matches if item.subject_name)
+        )
+        return AnalysisProposal(
+            summary=result.summary or "请确认识别出的学习与复习条目",
+            subject_name=primary_subject or self.existing_subjects[0],
+            source=result.source,
+            knowledge_points=points,
+            todo_matches=matches,
+            uncertainties=uncertainties[:20],
+        )
 
     def validate_proposal(self, proposal: AnalysisProposal) -> AnalysisProposal:
         """Validate model references against this input, not parent-edited proposals."""

@@ -15,7 +15,11 @@ from push_kids.agent_processing.context import (
     material_fingerprint,
     repeated_material,
 )
-from push_kids.agent_processing.contracts import MATERIAL_FINGERPRINT_KEY, AnalysisProvider
+from push_kids.agent_processing.contracts import (
+    MATERIAL_FINGERPRINT_KEY,
+    AnalysisProvider,
+    AnalysisTerminalError,
+)
 from push_kids.media.store import MediaStore, WeChatCloudMediaStore
 from push_kids.persistence.models import (
     AgentJob,
@@ -357,16 +361,17 @@ class AnalysisWorker:
                     stage,
                     type(exc).__name__,
                 )
-                message = "分析暂时失败，请重试"
+                terminal = isinstance(exc, AnalysisTerminalError)
+                message = exc.public_message if terminal else "分析暂时失败，请重试"
                 job.error_message = message
-                if (job.attempts or 0) < (job.max_attempts or 3):
+                if not terminal and (job.attempts or 0) < (job.max_attempts or 3):
                     job.state = JobState.queued.value
                     job.available_at = utcnow() + timedelta(seconds=job.attempts or 1)
                     submission.state = SubmissionState.queued.value
                 else:
                     job.state = JobState.failed.value
                     submission.state = SubmissionState.failed.value
-                    submission.error_code = "analysis_failed"
+                    submission.error_code = exc.code if terminal else "analysis_failed"
                     submission.error_message = message
                 outcome = job.state
                 db.commit()

@@ -13,6 +13,7 @@ from push_kids.agent_processing.contracts import (
     AnalysisInput,
     ExistingKnowledgeContext,
     RecentLearningContext,
+    SameDayKnowledgeContext,
     TodoCandidate,
 )
 from push_kids.children.service import ChildrenService
@@ -24,6 +25,7 @@ from push_kids.persistence.models import (
     ReviewItem,
     Subject,
 )
+from push_kids.platform.time import local_date, local_day_bounds
 
 
 def material_fingerprint(text: str | None, paths: list[Path]) -> str:
@@ -139,27 +141,57 @@ def build_analysis_input(
     knowledge = [
         row for group in zip_longest(*knowledge_groups) for row in group if row is not None
     ][:100]
-    reviews = db.execute(
-        select(ReviewItem, KnowledgeItem)
-        .join(KnowledgeItem, ReviewItem.knowledge_item_id == KnowledgeItem.id)
+    occurrence_day = local_date(submission.occurred_at)
+    day_start, day_end = local_day_bounds(occurrence_day)
+    same_day_rows = db.execute(
+        select(KnowledgeItem, Subject)
+        .join(
+            KnowledgeOccurrence,
+            KnowledgeOccurrence.knowledge_item_id == KnowledgeItem.id,
+        )
         .join(Subject, KnowledgeItem.subject_id == Subject.id)
         .where(
-            ReviewItem.family_id == submission.family_id,
-            ReviewItem.child_id == submission.child_id,
-            ReviewItem.active.is_(True),
-            Subject.kind == "learning",
+            KnowledgeItem.family_id == submission.family_id,
+            KnowledgeItem.child_id == submission.child_id,
+            KnowledgeOccurrence.family_id == submission.family_id,
+            KnowledgeOccurrence.occurred_at >= day_start,
+            KnowledgeOccurrence.occurred_at <= day_end,
             Subject.active.is_(True),
-            select(KnowledgeOccurrence.id)
-            .where(
-                KnowledgeOccurrence.knowledge_item_id == KnowledgeItem.id,
-                KnowledgeOccurrence.family_id == submission.family_id,
-                KnowledgeOccurrence.occurred_at <= submission.occurred_at,
-            )
-            .exists(),
+            Subject.kind == "learning",
         )
-        .order_by(ReviewItem.due_date, ReviewItem.id)
-        .limit(50)
+        .distinct()
+        .limit(201)
     ).all()
+    if len(same_day_rows) > 200:
+        raise ValueError("too many same-day learning items for bounded analysis")
+
+    today = local_date()
+    reviews = []
+    if occurrence_day == today:
+        reviews = db.execute(
+            select(ReviewItem, KnowledgeItem, Subject)
+            .join(KnowledgeItem, ReviewItem.knowledge_item_id == KnowledgeItem.id)
+            .join(Subject, KnowledgeItem.subject_id == Subject.id)
+            .where(
+                ReviewItem.family_id == submission.family_id,
+                ReviewItem.child_id == submission.child_id,
+                ReviewItem.active.is_(True),
+                ReviewItem.due_date <= today,
+                Subject.kind == "learning",
+                Subject.active.is_(True),
+                select(KnowledgeOccurrence.id)
+                .where(
+                    KnowledgeOccurrence.knowledge_item_id == KnowledgeItem.id,
+                    KnowledgeOccurrence.family_id == submission.family_id,
+                    KnowledgeOccurrence.occurred_at <= submission.occurred_at,
+                )
+                .exists(),
+            )
+            .order_by(ReviewItem.due_date, ReviewItem.id)
+            .limit(51)
+        ).all()
+        if len(reviews) > 50:
+            raise ValueError("too many due review candidates for bounded analysis")
     return AnalysisInput(
         text=submission.input_text,
         occurred_at=submission.occurred_at.isoformat(),
@@ -168,14 +200,26 @@ def build_analysis_input(
         existing_subjects=[subject.name for subject in subjects],
         recent_learning=histories,
         existing_knowledge=knowledge,
+        same_day_learning=[
+            SameDayKnowledgeContext(
+                knowledge_id=item.id,
+                subject_name=subject.name,
+                name=item.name,
+                category=item.category,
+            )
+            for item, subject in same_day_rows
+        ],
         todo_candidates=[
             TodoCandidate(
                 review_id=review.id,
                 knowledge_name=item.name,
+                knowledge_id=item.id,
+                subject_name=subject.name,
                 step=review.step,
                 due_date=review.due_date.isoformat(),
+                eligible_on=today.isoformat(),
             )
-            for review, item in reviews
+            for review, item, subject in reviews
         ],
     )
 

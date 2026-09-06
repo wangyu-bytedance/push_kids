@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>知芽 · 报表指标趋势 Mock</title>
+  <style>
+    :root {
+      --canvas: #f8f6ef;
+      --surface: #fffef9;
+      --surface-warm: #fbfaf4;
+      --sunken: #eeece4;
+      --ink: #202a24;
+      --ink-2: #4d5851;
+      --ink-3: #849087;
+      --ink-4: #a8b0aa;
+      --primary: #276b55;
+      --primary-strong: #184a39;
+      --primary-tint: #e6efe8;
+      --primary-hairline: #bdd4c8;
+      --line: #e5e1d5;
+      --line-soft: #efede5;
+      --shadow: 0 8px 22px rgba(38, 49, 41, .07);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      background: #2d2f2f;
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+    button { font: inherit; }
+    .review-shell {
+      display: grid;
+      grid-template-columns: 250px minmax(320px, 390px);
+      justify-content: center;
+      gap: 28px;
+      padding: 28px 18px 56px;
+    }
+    .review-panel {
+      position: sticky;
+      top: 28px;
+      align-self: start;
+      padding: 20px;
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 18px;
+      color: #f5f3eb;
+      background: #202322;
+    }
+    .review-panel h1 { margin: 0 0 8px; font-family: Georgia, "Songti SC", serif; font-size: 20px; }
+    .review-panel p { margin: 0 0 18px; color: #bfc5c0; font-size: 13px; line-height: 1.65; }
+    .review-label { margin: 18px 0 8px; color: #99a39c; font-size: 11px; letter-spacing: .08em; }
+    .review-actions { display: grid; gap: 8px; }
+    .review-actions.ranges { grid-template-columns: repeat(3, 1fr); }
+    .review-actions button {
+      min-height: 40px;
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 11px;
+      color: #d8ddd9;
+      background: transparent;
+      cursor: pointer;
+    }
+    .review-actions button.on { border-color: #77aa94; color: #fff; background: #2f6b56; }
+    .review-note { margin-top: 18px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,.1); }
+    .review-note b { display: block; margin-bottom: 6px; font-size: 12px; color: #e5e9e6; }
+    .review-note span { color: #aeb6b0; font-size: 11px; line-height: 1.55; }
+
+    .phone {
+      width: 390px;
+      min-height: 844px;
+      overflow: hidden;
+      border-radius: 36px;
+      background: var(--canvas);
+      box-shadow: 0 22px 70px rgba(0,0,0,.3);
+    }
+    .status {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      height: 54px;
+      padding: 14px 20px 0;
+      background: #faf8f2;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .island { width: 90px; height: 28px; margin-top: -14px; border-radius: 0 0 18px 18px; background: #050505; }
+    .nav {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      height: 54px;
+      padding: 0 16px;
+      background: #faf8f2;
+    }
+    .nav-title { grid-column: 2; font-size: 17px; font-weight: 600; }
+    .nav-menu { grid-column: 3; justify-self: end; padding: 6px 13px; border: 1px solid #d9d9d9; border-radius: 18px; letter-spacing: 3px; background: rgba(255,255,255,.72); }
+    main { padding: 24px 16px 110px; }
+    .head { display: flex; justify-content: space-between; align-items: center; }
+    .kicker { display: block; margin-bottom: 6px; color: #368b70; font-size: 13px; font-weight: 600; letter-spacing: .04em; }
+    .title { margin: 0; font-family: Georgia, "Songti SC", serif; font-size: 28px; font-weight: 500; letter-spacing: .04em; }
+    .child { display: flex; align-items: center; gap: 7px; padding: 5px 10px 5px 5px; border: 1px solid var(--line); border-radius: 24px; background: var(--surface-warm); box-shadow: 0 2px 5px rgba(35,47,38,.04); }
+    .avatar { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; color: var(--primary-strong); background: var(--primary-tint); font-family: Georgia, "Songti SC", serif; }
+    .child-name { color: var(--ink-2); font-size: 14px; font-weight: 600; }
+    .down { width: 9px; height: 9px; border-right: 1.5px solid var(--ink-4); border-bottom: 1.5px solid var(--ink-4); transform: rotate(45deg) translateY(-2px); }
+    .range {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      margin-top: 22px;
+      padding: 3px;
+      border-radius: 24px;
+      background: var(--sunken);
+    }
+    .range span { padding: 11px 0; border-radius: 21px; color: var(--ink-3); text-align: center; font-size: 14px; }
+    .range span.on { color: var(--primary-strong); background: #fff; box-shadow: 0 3px 8px rgba(38,49,41,.06); font-weight: 600; }
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 22px;
+    }
+    .metric {
+      min-width: 0;
+      min-height: 108px;
+      padding: 18px 14px 15px;
+      border: 1px solid var(--line-soft);
+      border-radius: 20px;
+      background: var(--surface);
+      box-shadow: 0 4px 12px rgba(35,47,38,.035);
+    }
+    .metric-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-width: 0; }
+    .metric-value { flex: 0 0 auto; font-family: Georgia, "Songti SC", serif; font-size: 30px; line-height: 1; font-variant-numeric: tabular-nums; }
+    .metric-value.zero { color: var(--ink-4); }
+    .metric-label { display: block; margin-top: 15px; color: var(--ink-3); font-size: 13px; }
+    .spark-wrap { flex: 1 1 auto; min-width: 64px; max-width: 88px; height: 36px; }
+    .spark { display: block; width: 100%; height: 36px; overflow: visible; }
+    .spark .floor { stroke: var(--line); stroke-width: 1; }
+    .spark .tick { stroke: var(--primary-hairline); stroke-width: .65; opacity: .55; }
+    .spark .line { fill: none; stroke: var(--primary); stroke-width: 1.35; stroke-linecap: round; stroke-linejoin: round; }
+    .spark .dot { fill: var(--surface); stroke: var(--primary); stroke-width: 1; }
+    .spark .last { fill: var(--primary); }
+    .trend-missing { display: grid; place-items: center; flex: 1 1 auto; min-width: 64px; max-width: 88px; height: 36px; color: var(--ink-4); font-size: 11px; }
+    .empty-note { display: none; margin: 26px 14px 0; text-align: center; }
+    .empty-note.show { display: block; }
+    .empty-note h2 { margin: 0 0 8px; font-family: Georgia, "Songti SC", serif; font-size: 18px; font-weight: 500; }
+    .empty-note p { margin: 0; color: var(--ink-3); font-size: 13px; line-height: 1.6; }
+    .section { margin-top: 30px; }
+    .section-head { display: flex; justify-content: space-between; align-items: baseline; }
+    .section h2 { margin: 0; font-family: Georgia, "Songti SC", serif; font-size: 18px; font-weight: 500; }
+    .section small { color: var(--ink-3); font-size: 12px; }
+    .section p { margin: 8px 0 14px; color: var(--ink-3); font-size: 12px; line-height: 1.6; }
+    .week-card { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; padding: 14px; border: 1px solid var(--line-soft); border-radius: 20px; background: var(--surface); box-shadow: var(--shadow); }
+    .day { text-align: center; }
+    .day b { display: grid; place-items: center; aspect-ratio: 1; border-radius: 11px; color: var(--ink-4); background: #f1eee6; font-size: 14px; font-weight: 500; }
+    .day:last-child b { color: var(--primary-strong); background: #dfebe4; }
+    .day span { display: block; margin-top: 7px; color: var(--ink-4); font-size: 10px; }
+    .tabbar { position: sticky; bottom: 0; display: grid; grid-template-columns: repeat(5, 1fr); height: 74px; margin-top: -74px; border-top: 1px solid var(--line-soft); background: rgba(255,254,249,.96); }
+    .tab { display: grid; place-items: center; align-content: center; gap: 4px; color: var(--ink-3); font-size: 10px; }
+    .tab i { display: block; width: 19px; height: 15px; border: 2px solid currentColor; border-radius: 4px; }
+    .tab.on { color: var(--primary); font-weight: 600; }
+
+    @media (max-width: 720px) {
+      body { background: var(--canvas); }
+      .review-shell { display: block; padding: 0; }
+      .review-panel { position: relative; top: 0; width: 100%; border-radius: 0; }
+      .phone { width: 100%; min-height: 844px; border-radius: 0; box-shadow: none; }
+    }
+    @media (max-width: 340px) {
+      main { padding-inline: 12px; }
+      .metric { padding-inline: 11px; }
+      .spark-wrap, .trend-missing { min-width: 56px; max-width: 72px; }
+      .title { font-size: 25px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="review-shell">
+    <aside class="review-panel" aria-label="Mock 评审控制">
+      <h1>报表概览 · Mock</h1>
+      <p>固定演示数据，不连接后端。所有区间统一显示 7 个等宽时间段；切到新用户检查“暂无趋势”语义。</p>
+      <div class="review-label">时间范围</div>
+      <div class="review-actions ranges" id="rangeControls">
+        <button class="on" data-days="7">7 天</button>
+        <button data-days="30">30 天</button>
+        <button data-days="100">100 天</button>
+      </div>
+      <div class="review-label">数据状态</div>
+      <div class="review-actions" id="stateControls">
+        <button class="on" data-state="mock">有记录 · 固定 Mock</button>
+        <button data-state="missing">新用户 · 暂无趋势</button>
+      </div>
+      <div class="review-note">
+        <b>读法</b>
+        <span>大数字是整个区间总量；折线固定为 7 个点，每个点汇总对应时间段。每张卡独立缩放，不用于比较四项的绝对高低。</span>
+      </div>
+    </aside>
+
+    <section class="phone" aria-label="390 乘 844 小程序报表预览">
+      <div class="status"><span>21:16</span><span class="island"></span><span>⌁ ▰</span></div>
+      <div class="nav"><span class="nav-title">报表</span><span class="nav-menu">••• ◎</span></div>
+      <main>
+        <div class="head">
+          <div><span class="kicker">只统计已确认的学习</span><h1 class="title">一点一滴，看得见</h1></div>
+          <div class="child"><span class="avatar">旺</span><span class="child-name">旺仔</span><i class="down"></i></div>
+        </div>
+        <div class="range" id="phoneRange" aria-label="当前报表区间"></div>
+        <div class="metrics" id="metrics"></div>
+        <div class="empty-note" id="emptyNote"><h2>还没有已确认的学习记录</h2><p>记录并确认之后，这里会逐渐留下学习与复习的足迹。</p></div>
+        <section class="section" id="detailSection">
+          <div class="section-head"><h2>接下来的复习压力</h2><small id="rangeText">近 7 天</small></div>
+          <p>数字表示当天待复习知识数，绿色表示当天已全部通过。</p>
+          <div class="week-card" id="weekCard"></div>
+        </section>
+      </main>
+      <nav class="tabbar" aria-label="主导航">
+        <span class="tab"><i></i>今日</span><span class="tab"><i></i>日程</span><span class="tab"><i></i>记录</span><span class="tab on"><i></i>报表</span><span class="tab"><i></i>设置</span>
+      </nav>
+    </section>
+  </div>
+
+  <script>
+    const labels = ["学习记录", "新增知识", "复习反馈", "活动练习"];
+    const seven = [
+      [0, 1, 0, 0, 1, 0, 1],
+      [0, 2, 0, 1, 2, 1, 2],
+      [0, 0, 1, 0, 2, 1, 0],
+      [0, 0, 0, 0, 0, 0, 0]
+    ];
+    function deterministicSeries(days, metric) {
+      return Array.from({ length: days }, (_, index) => {
+        if (metric === 3) return index % 13 === 4 ? 1 : 0;
+        const wave = Math.sin((index + metric * 3) / (3.7 + metric)) + Math.sin((index + 2) / 8);
+        const pulse = (index * (metric + 3) + metric) % (9 + metric) === 0 ? 2 : 0;
+        return Math.max(0, Math.round(wave + 1 + pulse));
+      });
+    }
+    const sources = {
+      7: seven,
+      30: labels.map((_, metric) => deterministicSeries(30, metric)),
+      100: labels.map((_, metric) => deterministicSeries(100, metric))
+    };
+    const model = { days: 7, state: "mock" };
+
+    function bucket(values) {
+      if (values.length <= 7) return values.slice();
+      const result = Array(7).fill(0);
+      values.forEach((value, index) => {
+        const bucketIndex = Math.min(6, Math.floor(index * 7 / values.length));
+        result[bucketIndex] += value;
+      });
+      return result;
+    }
+    function sparkline(values, label, days) {
+      const data = bucket(values);
+      const width = 88, height = 36, floor = 31, top = 4;
+      const max = Math.max(0, ...data);
+      const x = index => data.length === 1 ? width / 2 : index / (data.length - 1) * width;
+      const y = value => max === 0 ? floor : floor - value / max * (floor - top);
+      const points = data.map((value, index) => `${x(index).toFixed(2)},${y(value).toFixed(2)}`).join(" ");
+      const ticks = data.map((_, index) => `<line class="tick" x1="${x(index)}" y1="31" x2="${x(index)}" y2="34"></line>`).join("");
+      const dots = data.map((value, index) => `<circle class="dot ${index === data.length - 1 ? "last" : ""}" cx="${x(index)}" cy="${y(value)}" r="${index === data.length - 1 ? 2.1 : 1.15}"></circle>`).join("");
+      const unit = days === 7 ? "逐日" : "按 7 个等宽时间段汇总";
+      return `<svg class="spark" viewBox="0 0 88 36" role="img" aria-label="${label}近 ${days} 天${unit}趋势，最高 ${max}，最近一段 ${data[data.length - 1]}">
+        <line class="floor" x1="0" y1="31" x2="88" y2="31"></line>${ticks}
+        <polyline class="line" points="${points}"></polyline>${dots}
+      </svg>`;
+    }
+    function render() {
+      const isMissing = model.state === "missing";
+      document.querySelectorAll("[data-days]").forEach(button => button.classList.toggle("on", Number(button.dataset.days) === model.days));
+      document.querySelectorAll("[data-state]").forEach(button => button.classList.toggle("on", button.dataset.state === model.state));
+      document.getElementById("phoneRange").innerHTML = [7,30,100].map(days => `<span class="${days === model.days ? "on" : ""}">近 ${days} 天</span>`).join("");
+      const series = sources[model.days];
+      document.getElementById("metrics").innerHTML = labels.map((label, index) => {
+        const total = isMissing ? 0 : series[index].reduce((sum, value) => sum + value, 0);
+        const trend = isMissing ? `<span class="trend-missing">暂无趋势</span>` : `<span class="spark-wrap">${sparkline(series[index], label, model.days)}</span>`;
+        const aria = isMissing ? `${label} 0，近 ${model.days} 天暂无趋势数据` : `${label} ${total}，近 ${model.days} 天趋势见微图`;
+        return `<article class="metric" aria-label="${aria}"><div class="metric-top"><span class="metric-value ${total === 0 ? "zero" : ""}">${total}</span>${trend}</div><span class="metric-label">${label}</span></article>`;
+      }).join("");
+      document.getElementById("emptyNote").classList.toggle("show", isMissing);
+      document.getElementById("detailSection").hidden = isMissing;
+      document.getElementById("rangeText").textContent = `近 ${model.days} 天`;
+      const dates = ["31","01","02","03","04","05","06"];
+      document.getElementById("weekCard").innerHTML = dates.map((date,index) => `<div class="day"><b>${index === 6 ? 4 : 0}</b><span>${date}</span></div>`).join("");
+    }
+    document.getElementById("rangeControls").addEventListener("click", event => {
+      if (!event.target.dataset.days) return;
+      model.days = Number(event.target.dataset.days);
+      render();
+    });
+    document.getElementById("stateControls").addEventListener("click", event => {
+      if (!event.target.dataset.state) return;
+      model.state = event.target.dataset.state;
+      render();
+    });
+    render();
+  </script>
+</body>
+</html>

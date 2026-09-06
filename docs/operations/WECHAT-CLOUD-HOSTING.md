@@ -4,7 +4,8 @@
 - Related Spec: `CLOUD-SPEC-20260903-03`
 - Related architecture: `ARCH-TARGET-20260903-06`
 - Scope: 原生微信小程序 + 微信云托管 FastAPI + 托管 MySQL + 云托管对象存储
-- Current status: staging FastAPI 已部署；核心运行时与无域名小程序链路已验证，真实身份、存储和恢复验收未完成
+- Current status: staging FastAPI 已部署；核心运行时、无域名小程序链路和真实双账号
+  actor/owner/metaid/公网拒绝已验证；其余存储生命周期与恢复验收按各自记录维护
 
 本项目保留原生微信小程序和 FastAPI，不改写成 Flask。官方 Flask 模板只用于理解容器、
 MySQL 环境变量和发布约束；`flask-ik19` 是当前 staging 服务名，不代表后端框架。
@@ -28,8 +29,8 @@ flowchart LR
 - 图片不经过 `callContainer`，也不写容器磁盘。前端向后端申请一次性路径后直传私有对象存储，
   后端验证上传者、bucket、路径和文件内容后 claim。
 - 正式数据只进 MySQL；容器启动只校验 Alembic revision，不自动建表或迁移。
-- 当前代码仍包含进程内 Worker，但微信云托管在请求结束后不保证继续分配 CPU；`min=1,max=1`
-  不能解除该限制。云端异步任务执行器拆分完成前，不得把分析、重试或清理能力判定为可上线。
+- 当前拓扑包含单实例进程内 Worker；相关决策只引用
+  `docs/decisions/ADR-001-WECHAT-CLOUD-HOSTING-MYSQL.md` 的 `TD-001`。
 - 模型继续使用 `ARK_MODEL=doubao-seed-2-1-pro-260628`；Ark 密钥只放云环境变量。
 
 ## 2. 微信云托管必须遵守的平台边界
@@ -40,7 +41,7 @@ flowchart LR
 | `callContainer` 请求体最大 100 KB | JSON 只传字段和 ticket/fileID | 图片必须 `wx.cloud.uploadFile`，禁止 base64、multipart 进容器 |
 | 一个服务只监听一个 HTTP 端口 | 非 root 容器监听 `PORT`，默认 8000 | 不启动第二端口，不使用低于 1024 的特权端口，不使用 TCP/UDP/MQTT 或 Docker Compose |
 | 容器文件系统不持久 | 云环境禁用本地媒体接口 | WebShell 修改、临时下载和运行时文件都不可作为数据源 |
-| 请求结束后容器不保证继续获得 CPU | 当前进程内 Worker 属于已知待整改项 | 不在 lifespan、请求回调外启动永久线程、进程、轮询协程或延迟清理；`minNum>0` 也不能作为例外 |
+| 请求结束后容器不保证继续获得 CPU | Worker 决策引用 `ADR-001 / TD-001` | 不在 lifespan、请求回调外新增永久线程、进程、轮询协程或延迟清理 |
 | 版本创建时冻结配置 | 每版记录镜像、资源、实例数和环境变量版本 | 回滚会连同旧版配置一起恢复，发布前先核对配置差异 |
 | 发布后新旧版本可能共存约 2 分钟 | Job 使用数据库 lease；Schema 向前兼容 | 不做破坏性 Schema 改动；旧/新版本都要能访问 expand 后结构 |
 | `minNum=0` 会缩容并可能冷启动失败 | staging 使用 `min=1` | 如改为 0，客户端要把 `SERVICE_NOT_READY/ECONNREFUSED` 当可重试 |
@@ -195,9 +196,9 @@ PYTHONPATH=apps/api/src uv run alembic check
 `http://api.weixin.qq.com/_/cos/getauth` 返回的临时凭证；因此必须先启用“开放接口服务”，
 再创建包含该能力的新云托管版本。
 
-未 claim ticket 过期后、或照片草稿被取消后的删除必须由受支持的任务执行器触发，并把状态标记为
-deleted；不能依赖云托管进程内 Worker 在请求结束后继续轮询。运维仍需监控 ticket/claim 比率和
-超期 orphan 数量。正式数据的保留期与家庭级删除属于公开发布门禁。
+未 claim ticket 过期后、或照片草稿被取消后的删除执行策略统一引用 `ADR-001 / TD-001`；状态必须
+标记为 deleted。运维仍需监控 ticket/claim 比率和超期 orphan 数量。正式数据的保留期与家庭级
+删除属于公开发布门禁。
 
 ## 7. 云托管服务配置
 
@@ -219,7 +220,7 @@ deleted；不能依赖云托管进程内 Worker 在请求结束后继续轮询�
 PUSH_KIDS_ENV=cloud
 PUSH_KIDS_MEDIA_BACKEND=wechat_cloud
 PUSH_KIDS_AI_PROVIDER=ark
-# 当前代码仍要求 true，但该进程内 Worker 不符合云托管请求外 CPU 约束；整改后移除此配置
+# 当前单实例 Worker 决策见 ADR-001 / TD-001
 PUSH_KIDS_RUN_WORKER=true
 WECHAT_APP_ID=<当前小程序 AppID>
 WECHAT_SERVICE_NAME=flask-ik19

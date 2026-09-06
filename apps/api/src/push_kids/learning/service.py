@@ -38,6 +38,7 @@ from push_kids.learning.schemas import (
     SubjectGroupView,
     SubmissionCreate,
     SubmissionView,
+    UpdatedReview,
 )
 from push_kids.media.store import (
     ALLOWED_IMAGE_TYPES,
@@ -64,7 +65,12 @@ from push_kids.persistence.models import (
 )
 from push_kids.planning.domain import apply_feedback, initial_review_date
 from push_kids.platform.context import RequestContext
-from push_kids.platform.errors import ConflictError, ConsentRequiredError, NotFoundError
+from push_kids.platform.errors import (
+    ConflictError,
+    ConsentRequiredError,
+    NotFoundError,
+    ReviewStateChangedError,
+)
 from push_kids.platform.time import local_date, utcnow
 
 
@@ -833,6 +839,47 @@ class LearningService:
         # would shift the positions the client sent in `groups.knowledge_indexes`.
         catalogue = cls._learning_subjects(db, submission)
         plans = cls._confirmation_plans(db, family_id, submission, catalogue, data)
+        review_transitions = []
+        unique_matches = {item.review_id: item for item in data.proposal.todo_matches}
+        today = local_date()
+        for match in unique_matches.values():
+            snapshot = original_matches.get(match.review_id)
+            if snapshot is None:
+                raise ValueError("不能添加 AI 草稿中没有识别出的复习项")
+            row = db.execute(
+                select(ReviewItem, KnowledgeItem, Subject)
+                .join(KnowledgeItem, ReviewItem.knowledge_item_id == KnowledgeItem.id)
+                .join(Subject, KnowledgeItem.subject_id == Subject.id)
+                .where(
+                    ReviewItem.id == match.review_id,
+                    ReviewItem.family_id == family_id,
+                    ReviewItem.child_id == submission.child_id,
+                    Subject.kind == "learning",
+                )
+                .with_for_update()
+                .execution_options(populate_existing=True)
+            ).one_or_none()
+            if row is None:
+                raise ReviewStateChangedError("复习事项状态已变化，请刷新草稿后重新确认")
+            matched_review, matched_knowledge, matched_subject = row
+            stale = (
+                not matched_review.active
+                or matched_review.due_date is None
+                or matched_review.due_date > today
+                or snapshot.get("eligible_on") not in (None, today.isoformat())
+                or snapshot.get("step") != matched_review.step
+                or snapshot.get("due_date") != matched_review.due_date.isoformat()
+                or normalize_knowledge_name(snapshot.get("knowledge_name", ""))
+                != normalize_knowledge_name(matched_knowledge.name)
+                or normalize_knowledge_name(match.knowledge_name)
+                != normalize_knowledge_name(snapshot.get("knowledge_name", ""))
+                or snapshot.get("subject_name") not in (None, matched_subject.name)
+            )
+            if stale:
+                raise ReviewStateChangedError("复习事项状态已变化，请刷新草稿后重新确认")
+            transition = apply_feedback(matched_review.step or 0, "complete", today)
+            review_transitions.append((match, matched_review, transition))
+
         records: list[ConfirmedRecord] = []
         kept_points: list[KnowledgeProposal] = []
         for subject, summary, points in plans:
@@ -857,36 +904,11 @@ class LearningService:
             kept_points.extend(points)
         # The stored draft keeps exactly what was written, with every point carrying its subject.
         data.proposal.knowledge_points = kept_points
-        data.proposal.subject_name = records[0].subject_name
-        unique_matches = {item.review_id: item for item in data.proposal.todo_matches}
+        if records:
+            data.proposal.subject_name = records[0].subject_name
         data.proposal.todo_matches = []
-        for match in unique_matches.values():
-            matched_review = db.scalar(
-                select(ReviewItem)
-                .join(KnowledgeItem, ReviewItem.knowledge_item_id == KnowledgeItem.id)
-                .join(Subject, KnowledgeItem.subject_id == Subject.id)
-                .where(
-                    ReviewItem.id == match.review_id,
-                    ReviewItem.family_id == family_id,
-                    ReviewItem.child_id == submission.child_id,
-                    ReviewItem.active.is_(True),
-                    Subject.kind == "learning",
-                )
-                .with_for_update()
-                .execution_options(populate_existing=True)
-            )
-            if matched_review is None or matched_review.due_date is None:
-                continue
-            snapshot = original_matches.get(match.review_id)
-            if snapshot is None:
-                # Confirmation may remove matches, never add unobserved automatic feedback.
-                continue
-            if snapshot.get("step") is not None and (
-                snapshot["step"] != matched_review.step
-                or snapshot.get("due_date") != matched_review.due_date.isoformat()
-            ):
-                continue
-            transition = apply_feedback(matched_review.step or 0, "complete", local_date())
+        updated_reviews: list[UpdatedReview] = []
+        for match, matched_review, transition in review_transitions:
             matched_review.step = transition.step
             matched_review.due_date = transition.due_date
             matched_review.active = transition.active
@@ -899,6 +921,14 @@ class LearningService:
                 )
             )
             data.proposal.todo_matches.append(match)
+            updated_reviews.append(
+                UpdatedReview(
+                    review_id=matched_review.id,
+                    step=transition.step,
+                    due_date=transition.due_date,
+                    active=transition.active,
+                )
+            )
         if data.manual_entry:
             data.proposal.source = "人工录入"
             if job and job.state in {
@@ -919,11 +949,12 @@ class LearningService:
         # The flat fields describe the first record so clients built before multi-subject
         # confirmation keep working; `records` is the complete result.
         return ConfirmationResult(
-            record_id=records[0].record_id,
-            subject_id=records[0].subject_id,
+            record_id=records[0].record_id if records else None,
+            subject_id=records[0].subject_id if records else None,
             knowledge_item_ids=[item for record in records for item in record.knowledge_item_ids],
             review_item_ids=[item for record in records for item in record.review_item_ids],
             records=records,
+            updated_reviews=updated_reviews,
         )
 
     @classmethod
@@ -971,7 +1002,7 @@ class LearningService:
                 buckets.append((group, unique_knowledge_points(bucket)))
         if data.groups is not None and len(assigned) != len(points):
             raise ValueError("每个知识点都要归到一个科目，请核对后再确认")
-        if not buckets:
+        if not buckets and not data.proposal.todo_matches:
             raise ValueError("至少需要保留一个有效知识点")
         plans: list[tuple[Subject, str, list[KnowledgeProposal]]] = []
         for group, bucket in buckets:

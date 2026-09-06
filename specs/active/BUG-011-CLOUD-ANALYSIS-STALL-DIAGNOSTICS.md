@@ -80,7 +80,7 @@ submission 长期为 `analyzing`；Job 被租约重复回收至 attempt 4，但�
 | 普通受控异常路径没有完成 | attempt 超过 max，错误为空，状态未进入 queued/failed |
 | 当前代码没有显式阶段事件 | `agent_processing/worker.py` 只记录最终 failure |
 | Ark 客户端未显式配置本项目 timeout | `agent_processing/providers.py` |
-| 云托管进程内 Worker 是已知发布门禁 | Feature current-state / Cloud Hosting runbook |
+| 云托管为单实例进程内 Worker | 决策只引用 `ADR-001 / TD-001` |
 
 ### Hypotheses
 

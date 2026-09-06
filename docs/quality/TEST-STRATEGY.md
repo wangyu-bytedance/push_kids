@@ -12,6 +12,9 @@
 - Interaction state: adding a subject/activity writes only after explicit confirmation; cancelling a catalog or reminder editor performs zero writes. Member self-removal is checked in both UI state and service integration tests.
 - MySQL: fresh Alembic migration, schema drift check, identity/family isolation, idempotency, Worker lease and confirmation transaction using `PUSH_KIDS_TEST_MYSQL_URL`.
 - Cloud storage/identity: local fakes cover contract branches, but real two-account owner rules, metaid decode and public-ingress rejection are mandatory staging tests.
+  Staging status: **PASS (2026-09-06, operator-confirmed)** — two real accounts exercised owner isolation,
+  metaid decoding, and public-ingress rejection. This closes this test-strategy gate but does not close the
+  separate privacy/deletion, backup/restore, worker-topology, device, or production-release gates.
 - Container: build, non-root UID, unprivileged internal port 8000, deployment-config consistency,
   live/ready and graceful termination.
 

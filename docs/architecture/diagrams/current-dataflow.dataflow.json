@@ -91,7 +91,7 @@
       "items": [
         "活动、日程和基础配置经 API 校验后直写正式领域数据，不经过 AI",
         "云端使用 MySQL + 微信对象存储，本地使用 SQLite + 本地 MediaStore",
-        "Worker 与 API 同进程；受控 staging 需保持单实例，扩容前必须拆 Worker"
+        "Worker 决策只见 ADR-001 / TD-001"
       ]
     }
   ]

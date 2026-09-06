@@ -50,6 +50,16 @@ test("parent-facing actions guide an unconfigured family without pretending the 
   assert.doesNotMatch(source("pages/settings/index.wxml"), /新建档案|保存资料|保存设置/);
 });
 
+test("today review section starts collapsed even when there are no due reviews", () => {
+  const script = source("pages/today/index.js");
+  const template = source("pages/today/index.wxml");
+
+  assert.match(script, /const DEFAULT_SECTIONS = \{ review: false, learning: false, activity: true \}/);
+  assert.match(script, /if \(!counts\[section\] && section !== "review"\) return/);
+  assert.match(template, /<view class="sec-body" wx:if="\{\{sections\.review\}\}">/);
+  assert.doesNotMatch(template, /sections\.review \|\| !dashboard\.todo_count/);
+});
+
 test("mini program JavaScript parses before static copy assertions run", () => {
   const childProcess = require("node:child_process");
   const walk = (directory) => fs.readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {

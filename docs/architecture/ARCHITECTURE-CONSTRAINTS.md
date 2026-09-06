@@ -1,4 +1,8 @@
-# Architecture constraints — `ARCH-20260830-01`
+# Architecture constraints — aligned with `ARCH-20260906-TRAVEL-01`
+
+These constraints originated in `ARCH-20260830-01`; the enforceable rules below remain active under the current
+architecture revision. Historical `FDB`/`FEC`/`DREV-20260830-*` references are frontend design revisions, not
+architecture-revision pointers.
 
 - `ARC-001`: planning and normalization policies MUST be framework/database/network independent. Enforced by `tools/check_architecture.py` and unit tests.
 - `ARC-002`: routers MUST only validate/map transport and call services; no review scheduling or provider calls in routers.
@@ -10,7 +14,10 @@
 - `ARC-008`: retryable submission/job creation MUST use idempotency or duplicate detection; a running/succeeded job cannot be leased twice.
 - `ARC-009`: job states are `queued`, `running`, `succeeded`, `failed`, `cancelled`; retries are bounded and errors omit secrets/raw child content.
 - `ARC-010`: secrets MUST come from environment variables. `.env`, media and local databases are ignored by Git.
-- `ARC-011`: public production deployment is blocked until `X-Family-ID` is replaced with verified WeChat identity and a privacy/deletion policy.
+- `ARC-011`: public production deployment requires both (a) verified WeChat identity with public ingress rejecting
+  client `X-Family-ID`, and (b) an approved privacy/deletion policy and operational flow. Gate (a) passed controlled
+  staging on 2026-09-06 with two real accounts, owner isolation, metaid decoding and public-ingress rejection;
+  gate (b) remains open, so public production is still blocked.
 - `ARC-012`: no new global `common`, `utils`, `helpers` or service-locator module without an owned semantic contract.
 - `ARC-013`: schema and public API changes require a Spec compatibility note and forward-safe migration plan.
 

@@ -90,10 +90,10 @@
     <view class="sec">
       <view class="sec-bar" aria-role="button" aria-label="展开或收起待复习" data-section="review" bindtap="toggleSection">
         <text class="s-t">待复习</text><text class="s-m">{{sectionMeta.review}}</text>
-        <view class="chev {{sections.review ? 'up' : ''}}" wx:if="{{dashboard.todo_count}}"></view>
+        <view class="chev {{sections.review ? 'up' : ''}}"></view>
       </view>
       <view class="sec-rule"></view>
-      <view class="sec-body" wx:if="{{sections.review || !dashboard.todo_count}}">
+      <view class="sec-body" wx:if="{{sections.review}}">
         <block wx:for="{{todoCards}}" wx:key="id">
           <view class="opt-head" wx:if="{{item.first_optional}}"><text class="opt-head-t">有余力再做</text><view class="opt-head-line"></view></view>
           <todo-card class="todo-slot {{reviewGroupId === item.id ? 'history-focus' : ''}}" id="todo-group-{{item.id}}" group="{{item}}" bindfeedback="feedback" bindpractice="practice"></todo-card>

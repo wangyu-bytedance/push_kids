@@ -20,10 +20,9 @@ flowchart LR
   WORKER --> DB
 ```
 
-Controlled staging is exactly one Cloud Hosting instance with an in-process worker and durable MySQL job
-rows. Row locking and leases cover restart and the short old/new-version overlap, but `maxNum` must remain 1.
-The worker contract is the mandatory split point before horizontal scale. Local development retains SQLite
-and local media through the same bounded infrastructure ports.
+Controlled staging is one Cloud Hosting instance with an in-process worker and durable MySQL job rows.
+The Worker decision is referenced only as `ADR-001 / TD-001`. Local development retains SQLite and local
+media through the same bounded infrastructure ports.
 
 ## Modules
 
@@ -113,7 +112,7 @@ boundary at the existing 60 second cadence. Claimed-task preparation and provide
 job retries; database failures close the session and preserve durable state for the existing five-minute
 lease recovery. Stop wakes idle/backoff waits; an already running synchronous provider thread cannot be
 forcibly stopped. Logs contain event/type/count/IDs only. This local fault-tolerance change does not
-resolve the independent Cloud Hosting task-execution release gate.
+change the Worker decision in `ADR-001 / TD-001`.
 
 `BUG-SPEC-20260905-04` keeps subject classification in existing service boundaries: learning confirmation
 requires server-resolved `Subject.kind=learning`; planning, Worker Todo candidates and review reporting
@@ -123,7 +122,7 @@ shared abstraction, dependency direction, schema migration or historical deletio
 | Decision | Choice | Trade-off / revisit trigger |
 |---|---|---|
 | Database | MySQL/InnoDB cloud; SQLite local/test; Alembic owns cloud schema | Keep both dialects in the test matrix. |
-| Job execution | durable rows + locked lease + in-process worker at one instance | Split before `maxNum>1` or queue-age SLO pressure. |
+| Job execution | durable rows + locked lease + in-process worker at one instance | Decision: `ADR-001 / TD-001`. |
 | AI provider | Ark-compatible provider port plus test-only deterministic adapter | Add a provider only through contract tests; no provider logic in domain code. |
 | Authentication | Cloud gateway actor → HMAC binding → family; `X-Family-ID` local only | Public ingress stays disabled; FEAT-002 owns collaboration/revocation UX. |
 | Media | `wx.cloud.uploadFile` + ticket/claim cloud; local adapter for dev | Owner-only rules and orphan cleanup are operational requirements. |
@@ -199,9 +198,9 @@ compatible consumers, acyclic dependencies, and contract tests.
 
 The monorepo keeps the independently packaged mini program and API in one repository while preserving
 deployable-unit boundaries. The API remains a modular monolith. Cloud persistence is MySQL plus private
-object storage; SQLite/local media exist only as local adapters. The staging identity boundary is implemented,
-but its real Cloud Hosting trust and owner-metadata behavior remain pending environment acceptance. Public
-family collaboration, data rights and privacy release gates remain in FEAT-002.
+object storage; SQLite/local media exist only as local adapters. The staging identity boundary and owner-metadata
+behavior passed operator-confirmed two-account Cloud Hosting acceptance on 2026-09-06, including metaid decoding
+and public-ingress rejection. Public family collaboration, data rights and privacy release gates remain in FEAT-002.
 
 ## Extensibility policy and architecture confirmation
 
@@ -209,8 +208,9 @@ Variation axes are deliberately classified in the Extension point registry.
 Open points use narrow ports owned by the affected capability. Closed points need
 a new approved Spec/ADR. Deferred points must not acquire speculative factories or
 plugin registries. The active local baseline is `ARCH-20260906-TRAVEL-01`, approved on 2026-09-06.
-Its staging acceptance is still blocked by the real-cloud test points in `CLOUD-SPEC-20260903-03` and the
-FEAT-007 native viewport/device evidence recorded in `SPEC-20260906-TRAVEL-02`.
+Its identity/storage acceptance points for two-account ownership, metaid decoding and public-ingress rejection
+passed controlled staging on 2026-09-06. Remaining staging and release gates are recorded in
+`CLOUD-SPEC-20260903-03`, plus the FEAT-007 native viewport/device evidence in `SPEC-20260906-TRAVEL-02`.
 
 ## Extension point registry
 
@@ -227,8 +227,9 @@ Before production coding changes modules, shared abstractions, dependency direct
 database/storage/job topology, or an extension status, the active Spec must record
 the recommended design, alternatives, trade-offs, dependency DAG, file changes,
 test points, architecture revision, and explicit owner confirmation. Public release
-remains blocked until real Cloud Hosting actor trust, family permissions, privacy and deletion flows are
-implemented and tested. The full cloud runbook is `docs/operations/WECHAT-CLOUD-HOSTING.md`.
+remains blocked until family permissions and the privacy/deletion flows are implemented and tested; the real
+Cloud Hosting actor/owner/metaid/public-ingress gate passed controlled staging on 2026-09-06. The full cloud
+runbook is `docs/operations/WECHAT-CLOUD-HOSTING.md`.
 
 ## History and source review — local implementation
 

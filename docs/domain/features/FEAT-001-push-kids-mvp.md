@@ -1,8 +1,8 @@
 # FEAT-001 — 家庭学习持续跟进系统 MVP
 
 - Status: `CURRENT`
-- Revision: `FEAT-STATE-20260906-PKDS-02-LOCAL`
-- Last verified: 2026-09-06（本地全量自动化回归；三视口原生可见验收 NOT_RUN，本轮未部署）
+- Revision: `FEAT-STATE-20260906-PKDS-03-STAGING`
+- Last verified: 2026-09-06（本地全量自动化回归；真实双账号 owner/metaid/公网拒绝 staging 验收由用户确认 PASS；三视口原生可见验收仍为 NOT_RUN）
 - Source Spec: `specs/completed/FEAT-001-PUSH-KIDS-FINAL-SPEC.md` revision `SPEC-20260831-08`
 - Latest applied Spec: `specs/active/BUG-013-MULTI-SUBJECT-AND-PARENT-FLOW.md` revision `BUG-SPEC-20260906-16`
 - Previous applied Spec: `specs/active/SPEC-20260906-PKDS-01-DESIGN-SYSTEM-ROLLOUT.md` revision `SPEC-20260906-PKDS-01`
@@ -36,7 +36,8 @@
 - 历史列表每页 20 条、最多 50 条，稳定游标排序；已确认按学习日期，其他按提交日期。
   无 view 参数的旧 history 接口保留兼容；新 UI 不再依赖 100 条待处理草稿接口。
 - 原图每次经家庭/孩子/提交/媒体关联验证；viewer 允许读取，被移除成员拒绝新读取。
-  云端签发最长 60 秒 GET 链接，本地下载每次带身份；临时文件退出清理。云端跨账号与合法域名尚未实测。
+  云端签发最长 60 秒 GET 链接，本地下载每次带身份；临时文件退出清理。真实云端双账号 owner
+  隔离与 metaid 解码已于 2026-09-06 由用户确认验收通过；合法域名和设备矩阵仍按各自发布门禁记录。
   搜索文字经编码请求头传输，不进入访问日志 URL；预览签发在单进程内限制为每成员每分钟 120 次
   （一次展开九图并逐张查看原图不再被自身限流打断）。云环境客户端直接使用签发的 HTTPS 地址渲染，
   本地环境保留带身份的容器下载。
@@ -85,7 +86,7 @@
 - 单次照片学习记录支持 1–9 张：相机单张、相册多选或反复追加；全部图片只创建一个 Job。
 - 云环境图片使用后端 ticket + `wx.cloud.uploadFile` + uploader metadata claim；不经过
   `callContainer` 请求体或容器持久化磁盘。取消记录会同步尝试删除已 claim 文件；失败清理目前依赖
-  进程内 Worker，因此在迁移到受支持的任务执行器前属于云发布阻断项。
+  当前 Worker 拓扑；相关决策只引用 `ADR-001 / TD-001`。
 - 照片批次在创建 Job 前中断时仍可从服务端状态继续分析或取消；待确认草稿也可删除。
 - Worker 普通循环异常以 1/2/4/8/16/30 秒退避自动继续，健康轮询后重置；清理故障单独隔离，
   最多每 60 秒尝试一次，不阻塞分析。任务准备/Provider 普通失败沿用最多三次尝试；数据库写回
@@ -170,12 +171,10 @@ Ruff check/format、Mypy（47 source files）、ESLint、架构和小程序校�
 BUG-010 本地实现已通过微信开发者工具 registered AppID preview 编译，最终预览包 175,099 bytes；
 执行时 macOS 锁屏导致 CUA 与三视口原生截图仍未运行，不能据此声称布局完成视觉验收或云端已更新。
 
-- Real Cloud Hosting actor binding, two-account isolation, owner-only object rules and metaid decode remain
-  unverified. Public ingress is disabled and unbound actors are rejected without creating data.
-- The current cloud code still runs the Worker in-process. Per the Cloud Hosting request-execution model,
-  it must move to a supported task executor before staging acceptance; limiting the service to one instance
-  does not make that release design valid. Multi-instance additionally requires a shared queue and distributed
-  Worker ownership under a new approved revision.
+- Real Cloud Hosting actor binding, two-account isolation, owner-only object rules, metaid decode and public-ingress
+  rejection passed operator-confirmed staging acceptance on 2026-09-06. This is no longer a release blocker.
+- Current cloud Worker topology is documented here only as a runtime fact; its decision is referenced as
+  `ADR-001 / TD-001`.
 - Database credential rotation, least-privilege account and cloud Alembic execution are complete. Backup/restore
   remains a release gate; the previously shared password is revoked and must not be reused.
 - Registered AppID, HTTPS legal domains, privacy declaration, iOS/Android real-device verification and
@@ -190,6 +189,11 @@ BUG-010 本地实现已通过微信开发者工具 registered AppID preview 编�
 - BUG-010 的受控 Figma waiver 同样在公开生产前失效；三视口、字体放大、键盘和 iOS/Android 实机证据仍待补齐。
 
 ## Change references
+
+- 2026-09-06 — 云端验收状态更新：用户确认 `BHV-019` 原生/云端验收与 `BHV-020` 真实双参与者
+  owner/metaid 测试通过；测试策略要求的真实双账号 owner 规则、metaid 解码和公网拒绝标记为 PASS。
+  该证据只关闭对应 staging 安全测试，不关闭隐私/删除、备份恢复或真机视口门禁；Worker 状态只见
+  `ADR-001 / TD-001`。
 
 - 2026-09-06 — `FEAT-007 / SPEC-20260906-TRAVEL-02 / DREV-20260906-TRAVEL-01`：设置新增按孩子维护的
   每周出行安排；出行只进入日程，不进入今日、Todo、报表或活动练习。日程对 CalendarEvent、

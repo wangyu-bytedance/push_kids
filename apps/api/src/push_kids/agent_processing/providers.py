@@ -3,18 +3,22 @@ from __future__ import annotations
 import base64
 import json
 import mimetypes
-import re
 from hashlib import sha256
 from pathlib import Path
 from typing import Any
 
-from openai import OpenAI
+from openai import BadRequestError, OpenAI
+from pydantic import ValidationError
 
 from push_kids.agent_processing.contracts import (
+    AnalysisCapabilityError,
     AnalysisInput,
+    AnalysisOutputExhaustedError,
+    AnalysisOutputValidationError,
     AnalysisProposal,
     EvidenceReference,
     KnowledgeProposal,
+    ModelAnalysisResult,
     infer_display_kind,
 )
 from push_kids.agent_processing.prompt import ANALYSIS_RULES, PROMPT_REVISION
@@ -29,7 +33,12 @@ class DeterministicTestProvider:
     def analyze(self, data: AnalysisInput) -> AnalysisProposal:
         text = (data.text or "").strip()
         subject = self._subject(text)
-        raw_points = [part.strip() for part in re.split(r"[\n,，。；;]+", text) if part.strip()]
+        separators = str.maketrans({",": "\n", "，": "\n", "。": "\n", "；": "\n", ";": "\n"})
+        raw_points = [
+            part.strip()
+            for part in text.translate(separators).splitlines()
+            if part.strip()
+        ]
         if not raw_points:
             raw_points = ["图片中的学习内容"]
         points = [
@@ -47,6 +56,7 @@ class DeterministicTestProvider:
                     )
                 ],
                 confidence="high",
+                subject_name=subject,
             )
             for point in raw_points[:8]
         ]
@@ -56,6 +66,20 @@ class DeterministicTestProvider:
             candidate.model_copy(update={"evidence": "自动化测试输入"})
             for candidate in data.todo_candidates
             if normalize_knowledge_name(candidate.knowledge_name) in normalized_text
+        ]
+        reviewed_names = {
+            (candidate.subject_name or subject, normalize_knowledge_name(candidate.knowledge_name))
+            for candidate in matches
+        }
+        same_day_names = {
+            (item.subject_name, normalize_knowledge_name(item.name))
+            for item in data.same_day_learning
+        }
+        points = [
+            point
+            for point in points
+            if (point.subject_name or subject, normalize_knowledge_name(point.name))
+            not in reviewed_names | same_day_names
         ]
         return AnalysisProposal(
             summary=summary[:120],
@@ -121,20 +145,49 @@ class ArkAnalysisProvider:
                 }
             )
             content.append({"type": "input_image", "image_url": self._data_url(path)})
-        content.append(
-            {
-                "type": "input_text",
-                "text": self._prompt(data),
-            }
-        )
-        try:
-            provider_input: Any = [{"role": "user", "content": content}]
-            response = self.client.responses.create(model=self.model, input=provider_input)
-            raw = response.output_text.strip()
-            raw = re.sub(r"^```(?:json)?\s*|\s*```$", "", raw)
-            return data.validate_proposal(AnalysisProposal.model_validate(json.loads(raw)))
-        except Exception as exc:
-            raise DependencyError("学习内容分析暂时失败，请稍后重试") from exc
+        validation_codes: list[str] = []
+        for _attempt in range(3):
+            attempt_content = list(content)
+            attempt_content.append(
+                {
+                    "type": "input_text",
+                    "text": self._prompt(data, validation_codes),
+                }
+            )
+            try:
+                provider_input: Any = [{"role": "user", "content": attempt_content}]
+                response = self.client.responses.create(
+                    model=self.model,
+                    input=provider_input,
+                    store=False,
+                    text={
+                        "format": {
+                            "type": "json_schema",
+                            "name": "subject_grouped_learning_analysis",
+                            "strict": True,
+                            "schema": data.structured_output_schema(),
+                        }
+                    },
+                )
+                raw = response.output_text.strip()
+                result = ModelAnalysisResult.model_validate(json.loads(raw))
+                return data.validate_model_result(result)
+            except BadRequestError as exc:
+                raise AnalysisCapabilityError() from exc
+            except json.JSONDecodeError:
+                validation_codes = ["json.parse"]
+            except ValidationError as exc:
+                validation_codes = [
+                    "schema." + ".".join(str(part) for part in error["loc"])
+                    for error in exc.errors()[:20]
+                ]
+            except AnalysisOutputValidationError as exc:
+                validation_codes = exc.codes
+            except (AnalysisCapabilityError, AnalysisOutputExhaustedError):
+                raise
+            except Exception as exc:
+                raise DependencyError("学习内容分析暂时失败，请稍后重试") from exc
+        raise AnalysisOutputExhaustedError()
 
     @staticmethod
     def _data_url(path: Path) -> str:
@@ -143,58 +196,36 @@ class ArkAnalysisProvider:
         return f"data:{mime};base64,{encoded}"
 
     @staticmethod
-    def _prompt(data: AnalysisInput) -> str:
+    def _prompt(data: AnalysisInput, validation_codes: list[str] | None = None) -> str:
         candidates_json = json.dumps(
             [item.model_dump() for item in data.todo_candidates], ensure_ascii=False
         )
-        schema = {
-            "summary": "不超过120字的可选补充说明，不重复知识列表",
-            "subject_name": "只能逐字取自已有科目中的单一科目名，禁止拼接",
-            "subject_kind": "learning",
-            "source": "课内/作业/辅导班/自主学习/图片记录",
-            "knowledge_points": [
-                {
-                    "name": "已学知识点",
-                    "subject_name": "跨科目时写该点所属单一科目名，同一科目可省略",
-                    "existing_knowledge_id": "已有同义知识候选的knowledge_id，不匹配时为null",
-                    "category": "类型",
-                    "display_kind": "hanzi/word/poem/arithmetic/concept/activity/other之一",
-                    "review_method": "不含批改的复习方式",
-                    "estimated_minutes": 3,
-                    "direct_evidence": [
-                        {"source": "image", "image_index": 1, "detail": "可定位证据"}
-                    ],
-                    "context_used": ["仅允许提供的 record_id"],
-                    "confidence": "high/medium/low",
-                }
-            ],
-            "todo_matches": [
-                {
-                    "review_id": "必须来自候选",
-                    "knowledge_name": "候选知识点",
-                    "evidence": "直接证据",
-                }
-            ],
-            "uncertainties": ["需要家长核对的歧义"],
-        }
         recent_json = json.dumps(
             [item.model_dump() for item in data.recent_learning], ensure_ascii=False
         )
         knowledge_json = json.dumps(
             [item.model_dump() for item in data.existing_knowledge], ensure_ascii=False
         )
+        same_day_json = json.dumps(
+            [item.model_dump() for item in data.same_day_learning], ensure_ascii=False
+        )
+        feedback = (
+            "上次输出未通过校验，仅修正这些字段路径/规则代码："
+            + json.dumps(validation_codes, ensure_ascii=False)
+            + "。"
+            if validation_codes
+            else ""
+        )
         return (
             f"规则版本：{PROMPT_REVISION}。{ANALYSIS_RULES}\n"
-            f"JSON 结构：{json.dumps(schema, ensure_ascii=False)}。"
             f"孩子已有科目：{json.dumps(data.existing_subjects, ensure_ascii=False)}。"
-            "subject_name 必须逐字取自该列表中的一个；"
-            "跨科目时用 knowledge_point.subject_name 分别标注。"
             f"本次实际发生时间：{data.occurred_at or '未提供'}。"
             f"年级：{data.grade or '未提供，不推断'}。"
             f"已有知识及计划状态：{knowledge_json}。"
             f"近期已确认学习上下文：{recent_json}。"
-            f"可匹配的现有 Todo 候选：{candidates_json}。"
-            "todo_matches 只能逐字复制候选，不确定时返回空数组。"
+            f"本次发生日已经确认的学习条目（必须去重）：{same_day_json}。"
+            f"今日可复习Todo候选（只有这些可以标记review）：{candidates_json}。"
+            f"{feedback}"
             f"家长补充文字：{data.text or '无'}"
         )
 

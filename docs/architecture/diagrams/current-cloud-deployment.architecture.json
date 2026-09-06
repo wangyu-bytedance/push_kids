@@ -73,7 +73,7 @@
       "sublabel": "lease · retry · cleanup",
       "pos": [520, 460],
       "size": [170, 66],
-      "tag": "当前发布阻断项"
+      "tag": "单实例 staging"
     },
     {
       "id": "mysql",
@@ -198,8 +198,8 @@
       "dot": "amber",
       "title": "当前约束",
       "items": [
-        "Worker 与 API 同进程，依赖数据库行锁和租约；必须迁移到受支持的任务执行器",
-        "真实双账号隔离、对象 owner 规则、Ark 与备份恢复仍是公开发布门禁"
+        "Worker 决策只见 ADR-001 / TD-001",
+        "真实双账号 owner/metaid/公网拒绝已通过 staging；Ark、备份恢复与隐私仍是发布门禁"
       ]
     }
   ]

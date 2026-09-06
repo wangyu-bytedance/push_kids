@@ -63,7 +63,7 @@ FastAPI，结构化数据在 SQLite，本地磁盘保存图片，进程内 Worke
 2. FastAPI 使用微信云托管注入的可信 actor 映射 family scope；云环境拒绝 `X-Family-ID` 授权。
 3. SQLAlchemy 持久化切换到托管 MySQL/InnoDB，Schema 由 Alembic 管理。
 4. 儿童图片通过微信云托管官方 `wx.cloud.uploadFile` 直传私有对象存储 staging，再由后端校验平台文件元数据并 claim；MySQL 只保存元数据和私有引用。
-5. staging 固定单实例并保留 durable DB Job + 进程内 Worker；扩到多实例前拆分 Worker。
+5. staging 固定单实例并保留 durable DB Job + 进程内 Worker；决策只引用 `ADR-001 / TD-001`。
 6. 本地开发/自动测试继续使用 SQLite 和本地媒体 adapter。
 
 ## 1. Facts, decisions, assumptions, and gates
@@ -92,7 +92,7 @@ FastAPI，结构化数据在 SQLite，本地磁盘保存图片，进程内 Worke
 | `D-004` | JSON 请求走 `callContainer`；smoke 后关闭公网 | 缩小入口并避免公网身份伪造 |
 | `D-005` | 云环境由可信 actor 映射 family；`X-Family-ID` 只留 local/test | 服务端 family isolation |
 | `D-006` | 后端签发一次性随机 staging 路径，小程序用 `wx.cloud.uploadFile` 直传，后端校验元数据后 claim | 避免图片穿过容器请求体；容器磁盘不持久化；关系库不存大对象 |
-| `D-007` | staging `min=1,max=1`，保留但修正 MySQL 原子 lease Worker | 控制第一阶段复杂度；多实例前必须拆分 |
+| `D-007` | staging `min=1,max=1`，保留但修正 MySQL 原子 lease Worker | 控制第一阶段复杂度；决策见 `ADR-001 / TD-001` |
 | `D-008` | cloud 启动只验证 Alembic revision，不执行 `create_all` | 防止隐式/部分 Schema 变化 |
 | `D-009` | SQLite/local media 保留为 development/test adapter | 保留快速离线测试 |
 | `D-010` | 计数器表不导入、不依赖、不主动删除；使用独立数据库和最小权限账号 | 避免破坏现有模板资源 |
@@ -106,7 +106,7 @@ FastAPI，结构化数据在 SQLite，本地磁盘保存图片，进程内 Worke
 | `G-002` | 云入口能隔离伪造的 `X-WX-*` header | 两账号得到不同稳定 actor hash；公网/伪造 header 被拒绝 | 改为 `wx.login -> code2Session` session 方案并修订 Spec |
 | `G-003` | MySQL 环境变量可被新容器读取 | 轮换后的最小权限账号连接独立 DB 并完成 Alembic | 不回退 SQLite；停止部署 |
 | `G-004` | 微信云托管对象存储支持私有 staging/claim/download/delete | 创建者规则阻止非 owner；后端能 HEAD/读取/删除并解码元数据，确认 uploader 与当前 actor 相同 | 停止图片迁移并修订 Spec；不得退回公开读或只校验路径 |
-| `G-005` | 单实例 Worker 可恢复 lease | 强制中断后 Job 最终单次成功或明确失败 | 拆 Worker 后再测试 |
+| `G-005` | 单实例 Worker 架构状态 | 只引用 `ADR-001 / TD-001` | 命中其中的触发条件时重开 ADR/Spec |
 | `G-006` | cutover 时本地库仍为空 | `audit_database.py --require-empty` 通过 | 新增 SQLite→MySQL 数据迁移 revision |
 | `G-SEC-001` | 已轮换聊天中暴露的 DB 密码 | 新凭据生效、旧凭据失效、仓库/日志无凭据 | 阻断 cloud write/deploy |
 
@@ -359,7 +359,7 @@ stays isolated. No generic repository or global common/helpers package is introd
 | public request/upload | simple compatibility | public attack surface/weaker actor trust | rejected after smoke |
 | multipart upload through FastAPI | one server authorization point | doubles media traffic；20 MiB cloud-hosting request limit；container temp-file pressure | rejected |
 | client upload without ticket/metadata verification | fewer calls | cloudID/path is attacker-controlled；overwrite/orphan/ownership ambiguity | rejected |
-| split Worker now | multi-instance ready | extra deployment unit before evidence | deferred, mandatory before scaling |
+| split Worker now | multi-instance ready | extra deployment unit before evidence | deferred；唯一决策记录见 `ADR-001 / TD-001` |
 
 ## 9. Expected file changes
 
@@ -407,8 +407,8 @@ schema mismatch、secret leakage、failed restore or unrecoverable lease.
 | `TP-001` | FEAT-001 behavior unchanged with SQLite local adapter | PASS 2026-09-03：full Python 38 passed；frontend 24 passed |
 | `TP-002` | MySQL installs from zero at exact Alembic head | PASS 2026-09-03：fresh MySQL 8 upgrade/current/check，`20260903_0001`，no drift |
 | `TP-003` | MySQL confirmation/idempotency/family isolation atomic | PASS 2026-09-03：isolated MySQL integration 1 passed |
-| `TP-004` | two accounts resolve stable actors；forged/public headers fail | PARTIAL 2026-09-03：cloud-mode Docker + MySQL 验证已绑定 actor 200，缺 header 401，伪造 `X-Family-ID`、错误 AppID/env 403；真实双账号 staging 待测 |
-| `TP-005` | 1–9 images stage/claim/analyze/cleanup；non-owner cannot read；wrong path/env/uploader, missing metadata and forged cloudID fail | PARTIAL：fake adapter owner/claim/cancel cleanup passed；real storage E2E pending |
+| `TP-004` | two accounts resolve stable actors；forged/public headers fail | PASS 2026-09-06（用户确认）：真实双账号 staging actor/家庭隔离通过，公网入口拒绝通过；此前 cloud-mode Docker + MySQL 已验证绑定 actor 200、缺 header 401、伪造 `X-Family-ID` 与错误 AppID/env 403 |
+| `TP-005` | 1–9 images stage/claim/analyze/cleanup；non-owner cannot read；wrong path/env/uploader, missing metadata and forged cloudID fail | PARTIAL：fake adapter owner/claim/cancel cleanup passed；2026-09-06 用户确认真实双账号 owner 规则与 metaid decode 通过；其余完整 1–9 图 lifecycle/异常分支仍按独立证据记录 |
 | `TP-006` | restart/lease/retry/cancel do not duplicate final effects | PARTIAL：SQLite lifecycle + MySQL Worker passed；forced cloud restart pending |
 | `TP-007` | callContainer preserves status/data/error/idempotency | PARTIAL 2026-09-05：frontend unit passed；真实 DevTools 仅使用 env+service+path 调用 FastAPI live/ready 均为 200，未绑定 actor 保留 403 `forbidden`；线上写请求幂等仍待受控 actor 验证 |
 | `TP-008` | container port/live/ready/shutdown correct | PARTIAL 2026-09-05：`flask-ik19-003` 真实云版本以端口 8000 运行，live/ready 均为 200；本地 UID 10001 和 graceful shutdown 通过，云端强制重启/终止仍待验证 |
@@ -431,7 +431,9 @@ uv run python tools/validate_miniprogram.py
 uv run python tools/audit_database.py data/push_kids.db --require-empty
 ```
 
-Real-environment checks are not replaceable by mocks. Skipped `TP-004/005/008/010/011` blocks acceptance.
+Real-environment checks are not replaceable by mocks. `TP-004` and the real owner/metaid/public-ingress portion
+of `TP-005` are complete as of 2026-09-06; the remaining incomplete real-environment portions of
+`TP-005/006/007/008/009/010` continue to block full Spec acceptance.
 
 ## 12. Official evidence ledger
 
@@ -462,10 +464,15 @@ Real-environment checks are not replaceable by mocks. Skipped `TP-004/005/008/01
 
 Completion record: implementation、local/SQLite/MySQL/container checks and Feature/UI current-state merge are
 complete. Implementation self-review found and fixed cloud multipart bypass, cancelled-media cleanup,
-`SubmissionMedia` reference length and finalize/claim/Worker locking races. Independent R3 Review and real
-staging `TP-004/005/006/007/008/009/010` remain pending, so this Spec stays `VERIFYING` and must not be
-moved to completed. Residual debt: split Worker before multiple instances；FEAT-002/public privacy/deletion
-gates remain.
+`SubmissionMedia` reference length and finalize/claim/Worker locking races. Independent R3 Review and the
+remaining portions of real staging `TP-005/006/007/008/009/010` remain pending, so this Spec stays `VERIFYING`
+and must not be moved to completed. Worker decision: `ADR-001 / TD-001`；FEAT-002/public
+privacy/deletion gates remain.
+
+2026-09-06 acceptance addendum: the product owner confirmed that the real two-account actor/owner isolation,
+metaid decode and public-ingress rejection staging tests passed. This closes `TP-004` and the named real-storage
+security portion of `TP-005`; it does not convert the remaining partial test points or the privacy/deletion gate
+to PASS.
 
 Cloud-mode local E2E evidence 2026-09-03: a fresh MySQL 8 database was migrated to `20260903_0001`; a
 runtime account limited to `SELECT/INSERT/UPDATE/DELETE` could read/write application data and was denied

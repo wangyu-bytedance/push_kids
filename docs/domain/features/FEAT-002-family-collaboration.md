@@ -2,7 +2,7 @@
 
 - Feature ID: `FEAT-002`
 - Status: `IMPLEMENTING`
-- Current-state revision: `FEAT-STATE-20260906-BUG014-LOCAL`
+- Current-state revision: `FEAT-STATE-20260906-BUG014-STAGING-EVIDENCE`
 - Owner: 产品负责人（用户）
 - Last verified: 2026-09-06
 - Authoritative implementation: `apps/api/src/push_kids/families/`, family persistence models,
@@ -34,7 +34,8 @@
 - 邀请是单次批准凭据：首个批准将邀请置为 exhausted，并使同邀请的其他 pending 申请失效；撤销邀请也同步释放 pending actor。
 - 成员管理接口无条件拒绝自移除；客户端本人详情不提供移除或角色修改。有效邀请列表不返回 token，申请双方通过六位申请码核对。
 - 当前学习/活动记录没有可信的上传人、监督人、确认人和编辑版本归属。
-- 云端迁移、真实双 actor 和限流验收尚未完成，公开发布仍被阻断。
+- FEAT-001 云身份链路的真实双 actor、owner/metaid 与公网拒绝验收已完成；FEAT-002 家庭协作迁移、
+  完整角色生命周期与共享多实例限流验收尚未完成，公开发布仍被阻断。
 
 ## Current behavior matrix
 
@@ -87,7 +88,9 @@ still remains on the previous revision until the controlled migration window.
 
 - SQLite integration, frontend idempotency, clean MySQL migration, concurrent approval, and removed-member rejoin
   tests pass locally. The broader MySQL worker suite currently has an unrelated analyzing-state timeout under review.
-- Invite preview has trusted-actor in-process rate limiting and 429 tests. Remaining evidence includes shared multi-instance limiting, real AppID two-actor cloud staging, and three-viewport UI.
+- Invite preview has trusted-actor in-process rate limiting and 429 tests. The base real-AppID two-actor
+  actor/owner/metaid/public-ingress staging gate passed on 2026-09-06; remaining FEAT-002 evidence includes the
+  collaboration lifecycle, shared multi-instance limiting, and three-viewport UI.
 - BUG-014 启动生命周期回归（10 passed）、完整前端测试（107 passed）、Mini Program lint/validator、
   架构检查及家庭 onboarding integration tests（6 passed）已在本地通过；WeChat DevTools/真机普通启动与
   邀请启动 smoke 尚未执行。
@@ -95,8 +98,9 @@ still remains on the previous revision until the controlled migration window.
 
 ## Limitations
 
-- Cloud actor code exists, but real two-account gateway trust and lifecycle evidence is pending.
-- Cloud deployment and real two-account gateway evidence are pending.
+- Base two-account gateway trust and media-owner evidence passed staging on 2026-09-06; FEAT-002 collaboration
+  lifecycle evidence is still pending.
+- FEAT-002 cloud migration/deployment evidence remains pending; this is distinct from the completed base actor test.
 - Invite-preview in-process limiting is implemented for controlled staging; shared multi-instance limiting is still required before public production.
 - Session/account lifecycle and public-production privacy evidence remain incomplete.
 
@@ -108,6 +112,9 @@ still remains on the previous revision until the controlled migration window.
 - Existing feature: `docs/domain/features/FEAT-001-push-kids-mvp.md`
 
 ## Change References
+
+- 2026-09-06 — 用户确认真实双账号 actor/owner 隔离、metaid 解码和公网拒绝 staging 测试通过。
+  FEAT-002 的协作迁移、完整角色生命周期、共享限流和隐私/删除政策仍是独立未完成项。
 
 - 2026-08-30 — Baseline created as `PLANNED`; no implementation or runtime verification exists yet.
 - 2026-08-31 — Planned target revised by `SPEC-20260831-06` from unapproved CloudBase/MySQL to single-host SQLite + standard WeChat login; implementation remains absent.

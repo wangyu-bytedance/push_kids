@@ -42,7 +42,7 @@
     { "id": "miniapp", "type": "frontend", "label": "微信小程序", "sublabel": "apps/miniprogram", "pos": [40, 310], "size": [150, 64], "tag": "家长设备" },
     { "id": "wechat_gateway", "type": "security", "label": "微信云托管入口", "sublabel": "callContainer + actor headers", "pos": [260, 210], "size": [192, 64], "tag": "PUBLIC 关闭" },
     { "id": "fastapi", "type": "backend", "label": "FastAPI API", "sublabel": "Uvicorn · UID 10001 · :8000", "pos": [520, 210], "size": [170, 66], "tag": "flask-ik19-003" },
-    { "id": "worker", "type": "backend", "label": "进程内 Worker", "sublabel": "lease · retry · cleanup", "pos": [520, 460], "size": [170, 66], "tag": "当前发布阻断项" },
+    { "id": "worker", "type": "backend", "label": "进程内 Worker", "sublabel": "lease · retry · cleanup", "pos": [520, 460], "size": [170, 66], "tag": "单实例 staging" },
     { "id": "mysql", "type": "database", "label": "托管 MySQL", "sublabel": "SQLAlchemy + Alembic", "pos": [790, 210], "size": [172, 66], "tag": "私网 / InnoDB" },
     { "id": "object_storage", "type": "cloud", "label": "微信私有对象存储", "sublabel": "ticket + claim + temp credential", "pos": [260, 460], "size": [194, 66], "tag": "儿童学习图片" },
     { "id": "ark", "type": "external", "label": "Ark Responses API", "sublabel": "Doubao 图文分析", "pos": [1090, 460], "size": [180, 66], "tag": "外部第三方" }
@@ -82,8 +82,8 @@
       "dot": "amber",
       "title": "当前约束",
       "items": [
-        "Worker 与 API 同进程，依赖数据库行锁和租约；必须迁移到受支持的任务执行器",
-        "真实双账号隔离、对象 owner 规则、Ark 与备份恢复仍是公开发布门禁"
+        "Worker 决策只见 ADR-001 / TD-001",
+        "真实双账号 owner/metaid/公网拒绝已通过 staging；Ark、备份恢复与隐私仍是发布门禁"
       ]
     }
   ]

@@ -88,7 +88,7 @@
       "title": "直写分支与运行约束",
       "items": [
         "活动、日程和配置经 API 校验后直写正式数据，不经过 AI",
-        "云端 MySQL + 微信对象存储；同进程 Worker 的 staging 必须保持单实例"
+        "云端 MySQL + 微信对象存储；Worker 决策只见 ADR-001 / TD-001"
       ]
     }
   ]

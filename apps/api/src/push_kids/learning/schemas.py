@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import date, datetime
 from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field
@@ -105,12 +105,20 @@ class ConfirmedRecord(BaseModel):
     review_item_ids: list[str]
 
 
+class UpdatedReview(BaseModel):
+    review_id: str
+    step: int
+    due_date: date
+    active: bool
+
+
 class ConfirmationResult(BaseModel):
-    record_id: str
-    subject_id: str
+    record_id: str | None = None
+    subject_id: str | None = None
     knowledge_item_ids: list[str]
     review_item_ids: list[str]
     records: list[ConfirmedRecord] = Field(default_factory=list)
+    updated_reviews: list[UpdatedReview] = Field(default_factory=list)
 
 
 class FeedbackRequest(BaseModel):

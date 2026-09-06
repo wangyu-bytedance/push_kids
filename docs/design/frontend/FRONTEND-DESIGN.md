@@ -387,6 +387,8 @@ Todo 卡片必须包含：
 | UI-006 | 历史日历与每日详情 | FEAT-001 | proposed DREV-20260830-01 | not prototyped |
 | UI-007 | 科目与知识详情 | FEAT-001 | proposed DREV-20260830-01 | not prototyped |
 | UI-008 | 活动日程与练习记录 | FEAT-001 | proposed DREV-20260830-01 | not prototyped |
+| UI-009 | 家庭与成员 | FEAT-002 | current DREV-20260906-PKDS-01；proposed DREV-20260906-MULTI-FAMILY-02 | current local；成员资料/退出扩展 pending |
+| UI-014 | 家庭与孩子上下文切换 | FEAT-002 | proposed DREV-20260906-MULTI-FAMILY-02 | proposed, Figma/approval pending |
 | UI-015 | 学习档案管理与切换入口 | FEAT-005 | DREV-20260906-CHILD-01 | implemented locally, matrix pending |
 
 ## 12. Review decisions requested

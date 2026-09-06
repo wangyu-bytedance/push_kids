@@ -159,8 +159,8 @@ Page({
       learning: dashboard.daily_summary ? dashboard.daily_summary.record_count : 0,
       activity: dashboard.activity_count
     };
-    /* 分区为空时不折叠，始终显示 inline 空态说明。 */
-    if (!counts[section]) return;
+    /* 待复习即使为空也遵循默认折叠；家长仍可主动展开查看空态说明。 */
+    if (!counts[section] && section !== "review") return;
     const sections = { ...this.data.sections, [section]: !this.data.sections[section] };
     this.setData({ sections });
     ui.writePreference("todaySections", this.data.childId, sections);
