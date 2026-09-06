@@ -96,6 +96,10 @@
   图片读取、Ark 调用和 proposal 校验成功，但 MySQL 秒级 lease 与内存微秒值比较误判导致写回跳过。
   revision 15 已在 claim 后重载持久化 lease，并将达到最大次数的过期任务终态化；
   `flask-ik19-009` 已达到 `normal`，真实新图片已完成 Ark 与写回并进入待家长确认。
+- `SPEC-AI-OUTPUT-20260906-01` 的后端已实现并以 `flask-ik19-011` 灰度部署：新 AI 提案使用
+  `hanzi/word/poem/arithmetic/concept/activity/other` 受控展示类别，AI summary 上限为 120 字，
+  Submission read API 从原子知识点确定性派生有序 `display_groups`；旧提案按 category/name 兼容。
+  该投影不参与授权、确认或正式知识写入。新列表前端仍受 `DREV-20260906-AI-02` 设计门禁阻塞。
 - 启用 Worker 时，尚未启动、异常退避、停止或后台 Task 已结束均使 `/health/ready` 返回
   `503 worker_unavailable`；健康轮询恢复后为 200，正常分析不按耗时判死。明确禁用 Worker
   的开发/测试配置保留原 readiness；`/health/live` 保持进程存活语义。退避可被 stop 唤醒。
