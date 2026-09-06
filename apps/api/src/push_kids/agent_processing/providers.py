@@ -84,7 +84,10 @@ class DeterministicTestProvider:
 class ArkAnalysisProvider:
     def __init__(self, settings: Settings) -> None:
         self.client = (
-            OpenAI(base_url=settings.ark_base_url, api_key=settings.ark_api_key)
+            OpenAI(
+                base_url=settings.ark_base_url,
+                api_key=settings.ark_api_key.get_secret_value(),
+            )
             if settings.ark_api_key
             else None
         )

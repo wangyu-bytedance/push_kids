@@ -64,6 +64,10 @@ ARK_BASE_URL=https://ark.cn-beijing.volces.com/api/v3
 ARK_MODEL=doubao-seed-2-1-pro-260628
 ```
 
+`ARK_API_KEY` 必须由云托管在容器启动时注入，不能使用 Docker `ARG`、Dockerfile `ENV` 或
+`COPY .env`。云环境选择 `ark` 时，应用会在接收流量前校验 Key；缺失、空字符串或纯空格都会
+拒绝启动。配置对象使用秘密类型，日志和异常只允许出现变量名，不能出现变量值。
+
 安全烟测：
 
 ```bash
@@ -74,6 +78,19 @@ PYTHONPATH=apps/api/src uv run python tools/smoke_ark.py --image /absolute/path/
 脚本只输出科目和数量，不打印密钥、原图、完整提示词或模型原文。没有密钥时 API 仍可读取
 档案、日程和报表，但学习分析会明确失败并支持密钥配置后重试。自动化只在显式 `test/e2e`
 环境使用确定性测试适配器，development/production 没有模拟回退。
+
+发布云托管后端前先生成最小白名单目录；不要直接把仓库根目录交给上传工具：
+
+```bash
+uv run python tools/prepare_cloud_release.py
+(cd dist/cloud-release && wxcloud deploy --dryRun \
+  -e prod-d2g14rwoycac6b45d \
+  -s flask-ik19)
+```
+
+生成目录只包含 Dockerfile、Python 依赖锁、云托管构建配置和 `apps/api/src` 下的 Python
+生产源码，并带 SHA-256 manifest。工具拒绝 `.git`、`.env*`、`__pycache__`，还会扫描当前
+进程中已配置的 `ARK_API_KEY`、`MYSQL_PASSWORD` 和 `PUSH_KIDS_ACTOR_HMAC_KEY` 是否误入文件。
 
 ## 4. 单机 Docker（仅本地兼容，不作为云上线方案）
 

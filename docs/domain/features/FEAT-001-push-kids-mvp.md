@@ -65,6 +65,12 @@
 - Worker 普通循环异常以 1/2/4/8/16/30 秒退避自动继续，健康轮询后重置；清理故障单独隔离，
   最多每 60 秒尝试一次，不阻塞分析。任务准备/Provider 普通失败沿用最多三次尝试；数据库写回
   故障保留持久化状态，通过新 Session 和原 5 分钟过期租约恢复，避免伪造任务结果。
+- Worker attempt 现记录媒体查询、对象存储 materialize、上下文构建、Provider 和写回的脱敏阶段边界
+  与耗时；只记录 Job ID、attempt、对象数、stage 和异常类型，不记录儿童内容、对象路径、模型输入输出
+  或异常原文。云端 INFO 路由与 Ark Key 启动门禁已随 `flask-ik19-008` 灰度部署；真实日志确认
+  图片读取、Ark 调用和 proposal 校验成功，但 MySQL 秒级 lease 与内存微秒值比较误判导致写回跳过。
+  revision 15 已在 claim 后重载持久化 lease，并将达到最大次数的过期任务终态化；
+  `flask-ik19-009` 已达到 `normal`，真实新图片已完成 Ark 与写回并进入待家长确认。
 - 启用 Worker 时，尚未启动、异常退避、停止或后台 Task 已结束均使 `/health/ready` 返回
   `503 worker_unavailable`；健康轮询恢复后为 200，正常分析不按耗时判死。明确禁用 Worker
   的开发/测试配置保留原 readiness；`/health/live` 保持进程存活语义。退避可被 stop 唤醒。
@@ -178,4 +184,11 @@ BUG-010 本地实现已通过微信开发者工具 registered AppID preview 编�
   和迟到结果保护；UI增量 `DREV-20260905-AI-01`。本次仅本地修改，验证与未运行项见BUG-009。
 - `BUG-010 / BUG-SPEC-20260905-11 / DREV-20260905-UX-03`: 原生控件几何、设置目录、今日空态、
   拍照对齐、家庭详情、邀请申请及100天30项分页；本地实现与390 CUA完成，其他视口证据待补齐。
+- `BUG-011 + BUG-012 / BUG-SPEC-20260905-14`: 安全阶段日志云端 INFO 路由、Worker 生命周期事件、
+  Ark Key `SecretStr` 与 cloud+ark 启动门禁；本地回归通过，冻结白名单目录已灰度部署为
+  `flask-ik19-008` 并达到 `normal`。尚未用新图片证明对象存储、Ark 与写回全链路成功；本 revision
+  没有修改重试、租约、数据或 Worker 架构。
+- `BUG-011 / BUG-SPEC-20260906-15`: 修复 MySQL `DATETIME` 精度导致的 lease 假冲突，并阻止过期
+  running 任务突破 max_attempts；本地回归通过，灰度版本 `flask-ik19-009` 已达到 `normal`，
+  新图片端到端 smoke 已进入待家长确认。
 - BUG-010 后续截图回归：目录/星期/日历/FAB与报表切换条已继续修正，最新58项前端测试通过；390视觉与320部分复查。详见[回归证据](../../design/frontend/ui/BUG-010-20260905-layout-followup.md)，整体仍未完成真机矩阵或部署。

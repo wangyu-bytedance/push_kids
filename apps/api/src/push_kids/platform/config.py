@@ -37,7 +37,7 @@ class Settings(BaseSettings):
     ai_provider: Literal["ark", "test"] = Field("ark", alias="PUSH_KIDS_AI_PROVIDER")
     run_worker: bool = Field(True, alias="PUSH_KIDS_RUN_WORKER")
     cors_origins: str = Field("", alias="PUSH_KIDS_CORS_ORIGINS")
-    ark_api_key: str | None = Field(None, alias="ARK_API_KEY")
+    ark_api_key: SecretStr | None = Field(None, alias="ARK_API_KEY")
     ark_base_url: str = Field("https://ark.cn-beijing.volces.com/api/v3", alias="ARK_BASE_URL")
     ark_model: str = Field("doubao-seed-2-1-pro-260628", alias="ARK_MODEL")
     upload_max_bytes: int = 10 * 1024 * 1024
@@ -94,6 +94,10 @@ class Settings(BaseSettings):
             raise ValueError("云环境必须提供云托管注入的 COS_BUCKET")
         if not self.run_worker:
             raise ValueError("当前单实例 staging 必须启用 PUSH_KIDS_RUN_WORKER")
+        if self.ai_provider == "ark" and (
+            not self.ark_api_key or not self.ark_api_key.get_secret_value().strip()
+        ):
+            raise ValueError("云环境使用 Ark 时必须配置 ARK_API_KEY")
         database_url = self.resolved_database_url
         if not database_url.startswith("mysql+pymysql://"):
             raise ValueError("云环境数据库必须使用 mysql+pymysql")

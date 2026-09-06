@@ -2,7 +2,9 @@ from __future__ import annotations
 
 import asyncio
 import logging
+import sys
 from contextlib import asynccontextmanager, suppress
+from typing import TextIO
 
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
@@ -24,10 +26,30 @@ from push_kids.platform.errors import AppError
 from push_kids.reporting.router import router as reporting_router
 
 logger = logging.getLogger("push_kids")
+_CLOUD_HANDLER_MARKER = "_push_kids_cloud_handler"
+
+
+def configure_cloud_logging(stream: TextIO | None = None) -> None:
+    """Route application INFO events to cloud stderr without changing root logging."""
+    application_logger = logging.getLogger("push_kids")
+    application_logger.setLevel(logging.INFO)
+    has_cloud_handler = any(
+        getattr(item, _CLOUD_HANDLER_MARKER, False) for item in application_logger.handlers
+    )
+    if has_cloud_handler:
+        return
+    handler = logging.StreamHandler(stream or sys.stderr)
+    handler.setLevel(logging.INFO)
+    handler.setFormatter(logging.Formatter("%(levelname)s: %(message)s"))
+    setattr(handler, _CLOUD_HANDLER_MARKER, True)
+    application_logger.addHandler(handler)
+    application_logger.propagate = False
 
 
 def create_app(settings: Settings | None = None) -> FastAPI:
     config = settings or get_settings()
+    if config.is_cloud:
+        configure_cloud_logging()
     config.validate_cloud_runtime()
     database = Database(config)
     provider = build_provider(config)

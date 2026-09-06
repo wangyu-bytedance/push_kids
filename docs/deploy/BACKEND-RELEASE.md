@@ -140,28 +140,104 @@ PYTHONPATH=apps/api/src uv run alembic check
 先执行不会部署的 dry run：
 
 ```bash
+uv run python tools/prepare_cloud_release.py
+cd dist/cloud-release
 wxcloud deploy --dryRun \
   -e prod-d2g14rwoycac6b45d \
   -s flask-ik19
+cd ../..
 ```
 
-检查打包清单、Dockerfile、端口和 `.dockerignore`，确认没有 `.env`、文档、测试、图片、本地数据库
-或过期 `dist/*.zip`。随后创建灰度版本；版本备注必须唯一且能关联 commit/spec：
+检查 `dist/cloud-release/release-manifest.json`、Dockerfile 和端口，确认没有 `.env`、`.git`、文档、
+测试、图片、本地数据库或过期压缩包。发布工具使用允许列表并扫描当前进程中的秘密值；任何命中都
+停止发布。随后创建灰度版本；版本备注必须唯一且能关联 commit/spec：
 
 ```bash
 BACKEND_RELEASE_REMARK='push-kids-YYYYMMDD-NNN-<short-sha>'
 
-wxcloud run:deploy . \
+wxcloud run:deploy dist/cloud-release \
   -e prod-d2g14rwoycac6b45d \
   -s flask-ik19 \
   --containerPort 8000 \
+  --dockerfile Dockerfile \
+  --targetDir . \
   --releaseType GRAY \
   --remark "$BACKEND_RELEASE_REMARK" \
   --override
 ```
 
 不要添加包含密钥的 `--envParams`，也不要用 `--noConfirm` 跳过 CLI 的发布确认。记录平台返回的
-不可变版本号、镜像/源码摘要、创建时间和发布范围。
+不可变版本号、镜像/源码摘要、创建时间和发布范围。wxcloud CLI 2.3.3 即使在 dry run 中读取到
+`Dockerfile`，实际 `run:deploy` 仍可能在未显式传参时以“缺少Dockerfile”拒绝发布，因此以上两个
+参数不得省略；若上传日志仍出现 `.venv` 或 `dist`，停止全量放量并记录为打包门禁缺陷。
+
+### 6.1 发布确认表门禁
+
+输入 `yes` 前逐项核对 CLI 确认表：
+
+| 字段 | 必须显示 |
+|---|---|
+| 环境 ID | `prod-d2g14rwoycac6b45d` |
+| 服务名称 | `flask-ik19` |
+| 发布模式 | 灰度发布 |
+| Dockerfile 文件名 | `Dockerfile`，不得为空 |
+| 目标目录 | `.`，不得为空 |
+| 端口号 | `8000` |
+| 版本备注 | 唯一并包含日期、Spec/序号和 short SHA |
+
+任一字段为空或不一致都输入 `no`。不要依赖 `--override` 自动继承 Dockerfile 和目标目录；
+2026-09-05 的首次发布正是在这两个字段为空时被平台以“缺少Dockerfile”拒绝。
+
+### 6.2 上传包门禁
+
+`wxcloud deploy --dryRun` 通过不代表实际上传包完全遵守 `.dockerignore`。必须从刚生成且已审查
+manifest 的 `dist/cloud-release` 发布，并观察实际上传/解压日志。若出现下列任一内容，立即停止
+该版本继续放量并重新生成发布目录：
+
+- 仓库根 `.venv`、`.git`、`dist` 或历史 ZIP；
+- `.env*`、密钥值、数据库、儿童图片或日志；
+- `docs`、`specs`、`tests`、`tools`、`apps/miniprogram`；
+- manifest 中不存在的未知文件。
+
+Dockerfile 最终没有 `COPY` 某个多余文件，不等于上传边界合格。发布报告必须保留 manifest 文件数、
+总字节数和实际上传日志核对结果。源码在 manifest 生成后有任何变化，都必须重新生成发布目录，防止
+发布期间的并行工作混入版本。
+
+### 6.3 CLI 日志异常时的权威判定
+
+wxcloud CLI 2.3.3 可能在镜像构建和实例部署期间重复输出：
+
+```text
+ResourceNotFound.TopicNotExist: topic not exist
+```
+
+这是 CLI 实时日志 Topic 订阅失败，既不能证明部署失败，也不能证明成功。另开终端使用以下只读命令
+确认平台状态：
+
+```bash
+wxcloud version:list -e prod-d2g14rwoycac6b45d -s flask-ik19
+wxcloud service:list -e prod-d2g14rwoycac6b45d
+```
+
+- 新版本为 `creating`：继续等待，不切流、不修改任务数据；
+- 新版本为 `normal` 且服务为 `normal`：记录完成时间，进入健康检查；
+- 新版本为 `deploy_failed`：停止发布，保留上一正常版本；
+- 只有独立确认新版本为 `normal` 后，才可终止仍重复 Topic 错误的本地 CLI 监听；终止监听不会
+  停止已完成的云版本。
+
+### 6.4 2026-09-05 真实发布复盘
+
+| 现象 | 结果 | 后续强制措施 |
+|---|---|---|
+| Dockerfile/目标目录未显式传入 | 发布在创建版本前被拒绝，线上未切流 | 显式参数 + 确认表非空门禁 |
+| dry run 展示忽略规则，但实际上传出现 `.venv` 和旧 `dist/*.zip` | 上传约耗时数分钟；Dockerfile 白名单 COPY 避免进入镜像，但上传包不合格 | 只发布最小白名单目录并审查 manifest/实际日志 |
+| 构建期间反复 `TopicNotExist` | 镜像最终成功，`flask-ik19-006` 于 23:33:53 达到 `normal`，CLI 未正常结束 | `version:list`/`service:list` 是权威状态源 |
+| 活动仓库在发布期间继续产生并行修改 | `006` 打包开始时已核对范围，但当前工作区随后变化 | 发布命令只指向冻结目录，源码变化后重新生成 manifest |
+| revision 14 与 Ark Key 门禁联合发布 | 冻结白名单目录共 57 个文件；`flask-ik19-008` 于 23:58:58 达到 `normal`，服务 `normal`、公网关闭 | 运行时秘密只由人工在云控制台配置；`normal` 只证明启动门禁通过，仍须真实图片 smoke |
+| revision 15 租约精度修复 | MySQL 秒级 `DATETIME` 与内存微秒值严格比较导致有效 proposal 被丢弃；`flask-ik19-009` 于 00:27:48 达到 `normal` | claim 后 refresh 持久化 lease；达到 max_attempts 的过期任务终态化；真实新图片已完成 Ark 与写回并进入待家长确认 |
+
+上述问题未触发数据库 migration、密钥写入或稳定版本回退，但均是后续每次发布的停止条件，不能只作
+提示性备注。
 
 ## 7. 灰度、验收与全量
 
@@ -201,4 +277,3 @@ secret 泄漏、ready 持续失败、Job 无法恢复或数据库备份不可恢
 
 发布报告必须记录：Git SHA/工作区差异、Alembic before/after、备份 ID、后端版本与摘要、运行配置版本、
 所有检查 PASS/FAIL/NOT_RUN、灰度指标、人工操作人、全量时间、前端版本和回滚目标。
-

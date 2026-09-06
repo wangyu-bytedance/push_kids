@@ -1,10 +1,11 @@
 import asyncio
+import logging
 from datetime import timedelta
 
 import pytest
 from push_kids.persistence.models import AgentJob, LearningRecord, LearningSubmission
 from push_kids.platform.time import utcnow
-from sqlalchemy import event, func, select
+from sqlalchemy import event, func, select, update
 from sqlalchemy.exc import OperationalError
 from sqlalchemy.orm import Session
 
@@ -31,6 +32,55 @@ def add_jobs(app, child, family_headers, texts=("bad", "good")):
             ids.append(job.id)
         db.commit()
     return ids
+
+
+def test_analysis_stage_logs_are_complete_and_safe(client, app, child, family_headers, caplog):
+    ids = add_jobs(app, child, family_headers, texts=("private-child-content",))
+    caplog.set_level(logging.INFO, logger="push_kids.worker")
+
+    assert app.state.worker.process_one()
+
+    expected = [
+        "analysis_attempt_started",
+        "analysis_media_query_started",
+        "analysis_media_query_completed",
+        "analysis_media_materialize_started",
+        "analysis_media_materialize_completed",
+        "analysis_context_build_started",
+        "analysis_context_build_completed",
+        "analysis_provider_started",
+        "analysis_provider_completed",
+        "analysis_writeback_started",
+        "analysis_writeback_completed",
+    ]
+    positions = [caplog.text.index(event_name) for event_name in expected]
+    assert positions == sorted(positions)
+    assert "duration_ms=" in caplog.text
+    assert ids[0] in caplog.text
+    assert "private-child-content" not in caplog.text
+
+
+def test_failed_stage_log_contains_only_safe_diagnostics(
+    client, app, child, family_headers, monkeypatch, caplog
+):
+    ids = add_jobs(app, child, family_headers, texts=("private-child-content",))
+    caplog.set_level(logging.INFO, logger="push_kids.worker")
+
+    def fail_provider(_data):
+        raise RuntimeError("private-provider-response")
+
+    monkeypatch.setattr(app.state.worker.provider, "analyze", fail_provider)
+    assert app.state.worker.process_one()
+
+    assert "analysis_provider_started" in caplog.text
+    assert "analysis_provider_completed" not in caplog.text
+    assert (
+        f"analysis_job_failed job_id={ids[0]} attempt=1 max_attempts=3 "
+        "stage=provider error_type=RuntimeError"
+    ) in caplog.text
+    assert "analysis_job_requeued" in caplog.text
+    assert "private-child-content" not in caplog.text
+    assert "private-provider-response" not in caplog.text
 
 
 @pytest.mark.asyncio
@@ -155,6 +205,82 @@ def test_preparation_error_is_bounded_and_next_job_runs(client, app, child, fami
         assert db.get(AgentJob, ids[0]).state == "failed"
         assert db.get(AgentJob, ids[0]).attempts == 3
         assert db.get(AgentJob, ids[1]).state == "succeeded"
+
+
+def test_persisted_second_precision_lease_is_used_for_writeback(
+    client, app, child, family_headers, monkeypatch
+):
+    ids = add_jobs(app, child, family_headers, texts=("precision regression",))
+    original_commit = Session.commit
+    truncated = False
+
+    def commit_with_mysql_precision(session):
+        nonlocal truncated
+        original_commit(session)
+        if truncated:
+            return
+        running = next(
+            (
+                item
+                for item in session.identity_map.values()
+                if isinstance(item, AgentJob)
+                and item.state == "running"
+                and item.lease_until is not None
+            ),
+            None,
+        )
+        if running is None:
+            return
+        persisted = running.lease_until.replace(microsecond=0)
+        with app.state.database.engine.begin() as connection:
+            connection.execute(
+                update(AgentJob)
+                .where(AgentJob.id == running.id)
+                .values(lease_until=persisted)
+                .execution_options(synchronize_session=False)
+            )
+        truncated = True
+
+    monkeypatch.setattr(Session, "commit", commit_with_mysql_precision)
+
+    assert app.state.worker.process_one()
+    assert truncated
+    with app.state.database.session_factory() as db:
+        job = db.get(AgentJob, ids[0])
+        assert job.state == "succeeded"
+        assert job.attempts == 1
+        assert db.get(LearningSubmission, job.submission_id).state == "pending_confirmation"
+
+
+def test_expired_job_at_attempt_limit_becomes_terminal_without_provider_call(
+    client, app, child, family_headers, monkeypatch, caplog
+):
+    ids = add_jobs(app, child, family_headers, texts=("exhausted",))
+    with app.state.database.session_factory() as db:
+        job = db.get(AgentJob, ids[0])
+        submission = db.get(LearningSubmission, job.submission_id)
+        job.state = "running"
+        job.attempts = job.max_attempts
+        job.lease_until = utcnow() - timedelta(seconds=1)
+        submission.state = "analyzing"
+        db.commit()
+
+    def unexpected_provider_call(_data):
+        raise AssertionError("provider must not run for an exhausted job")
+
+    monkeypatch.setattr(app.state.worker.provider, "analyze", unexpected_provider_call)
+    caplog.set_level(logging.WARNING, logger="push_kids.worker")
+
+    assert app.state.worker.process_one()
+    assert not app.state.worker.process_one()
+    with app.state.database.session_factory() as db:
+        job = db.get(AgentJob, ids[0])
+        submission = db.get(LearningSubmission, job.submission_id)
+        assert job.state == "failed"
+        assert job.attempts == job.max_attempts == 3
+        assert submission.state == "failed"
+        assert submission.error_code == "analysis_failed"
+    assert "stage=lease_recovery_exhausted" in caplog.text
 
 
 @pytest.mark.asyncio

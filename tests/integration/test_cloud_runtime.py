@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from datetime import UTC, datetime
 
+import pytest
 from push_kids.media.store import WeChatCloudMediaStore
 from push_kids.persistence.models import (
     Family,
@@ -12,6 +13,7 @@ from push_kids.persistence.models import (
 )
 from push_kids.platform.config import Settings
 from push_kids.platform.context import subject_hmac
+from pydantic import SecretStr
 
 
 class _Body:
@@ -89,6 +91,31 @@ def _cloud_headers() -> dict[str, str]:
         "X-WX-APPID": "wx-test-app",
         "X-WX-ENV": "prod-test",
     }
+
+
+@pytest.mark.parametrize("ark_api_key", [None, "", "   "])
+def test_cloud_ark_requires_non_blank_runtime_secret(ark_api_key: str | None) -> None:
+    settings = _cloud_settings()
+    settings.database_url = "mysql+pymysql://app:secret@mysql.internal/push_kids"
+    settings.ai_provider = "ark"
+    settings.ark_api_key = SecretStr(ark_api_key) if ark_api_key is not None else None
+
+    with pytest.raises(ValueError, match="ARK_API_KEY") as error:
+        settings.validate_cloud_runtime()
+
+    assert str(error.value) == "云环境使用 Ark 时必须配置 ARK_API_KEY"
+
+
+def test_cloud_ark_accepts_masked_runtime_secret() -> None:
+    sentinel = "ark-test-secret-sentinel"
+    settings = _cloud_settings()
+    settings.database_url = "mysql+pymysql://app:secret@mysql.internal/push_kids"
+    settings.ai_provider = "ark"
+    settings.ark_api_key = SecretStr(sentinel)
+
+    settings.validate_cloud_runtime()
+
+    assert sentinel not in repr(settings)
 
 
 def _bind_family(db, family_id: str) -> None:

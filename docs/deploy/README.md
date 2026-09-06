@@ -6,7 +6,8 @@
 
 ## 固定发布模式
 
-1. 先冻结发布范围，记录 Git commit、未提交差异、目标环境和发布版本。
+1. 先冻结发布范围，记录 Git commit、未提交差异、目标环境和发布版本；后端生成最小白名单发布目录
+   和 SHA-256 manifest，禁止直接从活动仓库根目录上传。
 2. 先执行自动检查；任何必需检查失败都停止发布，不得以“先上线再修复”替代。
 3. 有数据库变更时，先完成兼容性审查、备份和 Alembic migration，再发布兼容的新后端。
 4. 后端先灰度并完成健康检查和业务 smoke；公网入口保持关闭。
@@ -62,4 +63,3 @@
 - [微信开发者工具下载](https://developers.weixin.qq.com/miniprogram/dev/devtools/download.html)
 - [微信云托管部署文档](https://developers.weixin.qq.com/miniprogram/dev/wxcloudservice/wxcloudrun/src/guide/service/online.html)
 - [火山方舟控制台](https://console.volcengine.com/ark)
-

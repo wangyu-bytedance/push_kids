@@ -15,11 +15,21 @@
 发布前从可访问 MySQL 内网的受控环境执行 `uv run alembic upgrade head`。应用容器不会自动
 建表或迁移；Schema 不在 `20260903_0001` 时会拒绝启动。
 
-控制台“本地代码/源码上传”或 CLI 可使用本地生成的 `dist/push-kids-cloud-20260905.zip`。该包只含
-Dockerfile、Python 依赖锁和 API 源码，不含 `.env`、测试、文档、图片或本地数据库；当前
-验证大小约 177 KiB，低于官方 2 MiB 源码包限制。任何源码变更后必须重新生成、检查清单并
-重新执行 Docker 验证，不能复用旧包。
+控制台“本地代码/源码上传”或 CLI 只使用本地生成的 `dist/cloud-release`：
 
-使用微信云托管 CLI 部署时，项目根目录的 `wxcloud.config.json` 明确选择 `run` 模式、容器内端口 8000
-和现有 Dockerfile，避免 CLI 自动迁移并覆盖已经验证的容器配置。CLI 登录密钥只保存在被 Git
-忽略且权限为 0600 的本地 `.env` 中，不得加入发布包。
+```bash
+uv run python tools/prepare_cloud_release.py
+(cd dist/cloud-release && wxcloud deploy --dryRun \
+  -e prod-d2g14rwoycac6b45d \
+  -s flask-ik19)
+```
+
+该目录只含 Dockerfile、Python 依赖锁、云托管构建配置和 API Python 源码，不含 `.env`、`.git`、
+测试、文档、图片、本地数据库或 pycache；`release-manifest.json` 记录文件大小和 SHA-256。
+工具还会拒绝当前进程持有的 Ark、MySQL 和 actor HMAC 秘密值出现在发布文件中。任何源码变更后
+必须重新生成、检查清单并重新执行 Docker 验证，不能复用旧目录或旧压缩包。
+
+使用微信云托管 CLI 部署时，生成目录中的 `wxcloud.config.json` 明确选择 `run` 模式、容器内端口
+8000 和现有 Dockerfile，避免 CLI 自动迁移并覆盖已经验证的容器配置。CLI 登录密钥只保存在被
+Git 忽略且权限为 0600 的本地 `.env` 中，不得加入发布包。`ARK_API_KEY` 在云托管控制台作为
+运行时环境变量配置，禁止通过 Docker build 参数或带值的 CLI 参数传递。

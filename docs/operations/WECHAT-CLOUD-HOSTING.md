@@ -240,6 +240,11 @@ bucket、region 或 COS 凭据。Python 服务端因需校验上传归属、读�
 敏感值只写云托管环境变量/密钥能力。不要写 `.env.example`、Dockerfile、发布包、日志、截图或
 Issue。版本配置变更与代码变更一起评审；回滚前要比较旧版的资源、实例数和环境变量。
 
+云环境选择 `PUSH_KIDS_AI_PROVIDER=ark` 时，应用启动门禁要求非空 `ARK_API_KEY`。该字段在配置
+对象中保持为秘密类型，只在构造 Ark SDK 客户端时读取一次明文值。缺失或纯空格会让版本启动
+失败，避免一个无法分析的实例通过健康检查并继续接收任务。development 环境仍允许未配置 Key
+启动非 AI 功能。
+
 这里的“写入容器”专指平台在容器启动时注入进程环境变量，不是把密码写进 Dockerfile、镜像层
 或源码包。生产容器需要读取 `MYSQL_PASSWORD`，但构建产物不应包含它。本地开发者凭据保存在
 宿主机 `.env`；本地 Compose 只读取 `.env.runtime`，因此 CLI Token 不会进入应用容器。两个真实
@@ -259,7 +264,10 @@ Issue。版本配置变更与代码变更一起评审；回滚前要比较旧版
 10. 关闭公网，再用 `callContainer` 重跑 ready 和主流程。
 11. 完成备份恢复演练、日志脱敏检查和 orphan 审计后，才可写入受控真实数据。
 
-源码上传模式的压缩包必须不超过官方 2 MiB 限制；镜像/源码、服务配置和数据库 migration 是三个独立发布物，
+源码上传模式的压缩包必须不超过官方 2 MiB 限制。先执行
+`uv run python tools/prepare_cloud_release.py`，再只从 `dist/cloud-release` 运行 dry-run/部署。
+该目录由生产文件允许列表生成，并包含文件大小和 SHA-256 manifest；不要直接上传仓库根目录。
+镜像/源码、服务配置和数据库 migration 是三个独立发布物，
 任何一个失败都停止切流。不能在 WebShell 里热修。
 
 ## 9. 日志、监控与排障

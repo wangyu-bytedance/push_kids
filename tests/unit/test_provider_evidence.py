@@ -3,8 +3,10 @@ from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
+from push_kids.agent_processing import providers
 from push_kids.agent_processing.contracts import AnalysisInput, AnalysisProposal
 from push_kids.agent_processing.providers import ArkAnalysisProvider
+from push_kids.platform.config import Settings
 from push_kids.platform.errors import DependencyError
 
 
@@ -74,3 +76,20 @@ def test_prompt_keeps_all_accepted_text():
     tail = "末尾内容必须保留"
     content = "学" * (4000 - len(tail)) + tail
     assert ArkAnalysisProvider._prompt(AnalysisInput(text=content)).endswith(content)
+
+
+def test_ark_provider_unwraps_secret_only_for_sdk(monkeypatch):
+    sentinel = "ark-test-secret-sentinel"
+    captured: dict[str, str] = {}
+
+    def fake_openai(*, base_url: str, api_key: str):
+        captured.update(base_url=base_url, api_key=api_key)
+        return SimpleNamespace()
+
+    monkeypatch.setattr(providers, "OpenAI", fake_openai)
+    settings = Settings(PUSH_KIDS_ENV="development", ARK_API_KEY=sentinel)
+
+    ArkAnalysisProvider(settings)
+
+    assert captured["api_key"] == sentinel
+    assert sentinel not in repr(settings)
