@@ -81,7 +81,7 @@ Page({
   },
   revokeInvite(event) {
     const id = event.currentTarget.dataset.id;
-    wx.showModal({ title: "撤销邀请？", content: "使用这条邀请提交但还未审批的申请也会失效。", confirmText: "撤销", confirmColor: "#A6423B", success: async (result) => {
+    wx.showModal({ title: "撤销邀请？", content: "使用这条邀请提交但还未审批的申请也会失效。", confirmText: "撤销", confirmColor: "#A85742", success: async (result) => {
       if (!result.confirm) return;
       try { await api.request(`/families/current/invites/${id}`, { method: "DELETE" }); wx.showToast({ title: "邀请已撤销", icon: "success" }); await this.load(); }
       catch (error) { this.setData({ error: error.message }); wx.showToast({ title: error.message, icon: "none" }); }
@@ -117,7 +117,7 @@ Page({
   removeSelectedMember() {
     const member = this.data.selectedMember;
     if (!member || member.is_self) return;
-    wx.showModal({ title: "移除这位家人？", content: `移除后，“${member.relationship_label}”不能再查看或记录这个家庭的内容，已有的学习记录会保留。此操作不可撤销。`, confirmText: "移除", confirmColor: "#A6423B", success: async (result) => {
+    wx.showModal({ title: "移除这位家人？", content: `移除后，“${member.relationship_label}”不能再查看或记录这个家庭的内容，已有的学习记录会保留。此操作不可撤销。`, confirmText: "移除", confirmColor: "#A85742", success: async (result) => {
       if (!result.confirm) return;
       this.setData({ savingMember: true, sheetError: "" });
       try {

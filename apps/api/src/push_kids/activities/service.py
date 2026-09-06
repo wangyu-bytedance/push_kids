@@ -47,7 +47,7 @@ class ActivitiesService:
     def create_schedule(
         cls, db: Session, family_id: str, data: ActivityScheduleCreate
     ) -> ActivitySchedule:
-        ChildrenService.get_child(db, family_id, data.child_id)
+        ChildrenService.require_active_child(db, family_id, data.child_id)
         cls._activity_subject(db, family_id, data.child_id, data.subject_id)
         existing = db.scalar(
             select(ActivitySchedule).where(
@@ -156,7 +156,7 @@ class ActivitiesService:
         data: CalendarEventWrite,
         idempotency_key: str | None = None,
     ) -> CalendarEvent:
-        ChildrenService.get_child(db, family_id, data.child_id)
+        ChildrenService.require_active_child(db, family_id, data.child_id)
         fingerprint = sha256(
             json.dumps(data.model_dump(mode="json"), sort_keys=True, ensure_ascii=False).encode()
         ).hexdigest()
@@ -343,7 +343,7 @@ class ActivitiesService:
     def create_record(
         cls, db: Session, family_id: str, data: ActivityRecordCreate
     ) -> ActivityRecord:
-        ChildrenService.get_child(db, family_id, data.child_id)
+        ChildrenService.require_active_child(db, family_id, data.child_id)
         cls._activity_subject(db, family_id, data.child_id, data.subject_id)
         record = ActivityRecord(family_id=family_id, **data.model_dump())
         db.add(record)

@@ -27,6 +27,13 @@ class ConflictError(AppError):
     code = "conflict"
 
 
+class ConsentRequiredError(AppError):
+    """The request is valid but needs one more explicit human decision before it may proceed."""
+
+    status_code = 409
+    code = "consent_required"
+
+
 class GoneError(AppError):
     status_code = 410
     code = "gone"

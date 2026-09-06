@@ -64,7 +64,7 @@
           </view>
           <view class="chev right"></view>
         </view>
-        <text class="h-title mt2">{{item.label}} · {{item.state === 'pending_confirmation' ? '草稿已整理好' : item.sourceLabel}}</text>
+        <text class="h-title mt2">{{item.label}} · {{item.state === 'pending_confirmation' ? '草稿已整理好，打开就能改' : item.sourceLabel}}</text>
         <text class="h-meta tnum">{{item.sourceLabel}}{{item.knowledgeLabel ? ' · ' + item.knowledgeLabel : ''}} · {{item.learnedText}}</text>
         <view class="mt2" wx:if="{{item.working}}">
           <view class="prog-line"><view class="pf w45"></view></view>
@@ -72,7 +72,7 @@
         </view>
         <text class="h-note" wx:if="{{item.state === 'failed'}}">这次没整理出来，原图和文字都已保留，进去可以重试或改成人工录入。</text>
         <view class="btn secondary sm h-cta" wx:if="{{item.state === 'pending_confirmation' && canWrite}}"
-          aria-role="button" aria-label="查看并确认这份草稿" data-id="{{item.submission_id}}" catchtap="openHistoryItem">查看并确认</view>
+          aria-role="button" aria-label="打开草稿直接确认" data-id="{{item.submission_id}}" catchtap="openHistoryItem">去确认</view>
       </block>
 
       <block wx:else>
@@ -165,7 +165,7 @@
               <text class="t-body-m">只看已取消</text>
               <text class="t-cap c-ink-3">仅在「全部」视图下可用</text>
             </view>
-            <switch checked="{{filterDraft.cancelled}}" data-field="cancelled" bindchange="setHistoryFilter" color="#2E6A56" aria-label="只看已取消" />
+            <switch checked="{{filterDraft.cancelled}}" data-field="cancelled" bindchange="setHistoryFilter" color="#1F5B45" aria-label="只看已取消" />
           </view>
         </view>
 

@@ -1,5 +1,6 @@
 const api = require("../../utils/api");
 const detail = require("../submission/detail");
+const draft = require("../submission/draft");
 const { friendlyTime } = require("../../utils/date");
 
 /* 状态文案不暗示 AI 已经给出结论：只说明这条提交现在处于哪一步。 */
@@ -30,15 +31,17 @@ function titleOf(submission, view) {
 Page({
   data: {
     ...detail.data,
-    id: "", loading: true, saving: false, error: "", submission: null, canWrite: true,
+    ...draft.data,
+    id: "", loading: true, error: "", submission: null, canWrite: true,
     statusTone: "neutral", titleText: ""
   },
   ...detail.methods,
+  ...draft.methods,
   onLoad(options) {
     this.setData({ id: (options && options.id) || "" });
     this.load();
   },
-  onShow() { const stale = this.hidden; this.hidden = false; if (stale) this.load(); },
+  onShow() { const stale = this.hidden; this.hidden = false; if (stale && !this.data.editing) this.load(); },
   onHide() {
     this.hidden = true;
     this.loadRequest = (this.loadRequest || 0) + 1;
@@ -70,6 +73,16 @@ Page({
       if (wx.setNavigationBarTitle) {
         wx.setNavigationBarTitle({ title: submission.state === "confirmed" ? "学习记录详情" : "待处理记录" });
       }
+      /* 待确认的草稿直接在这一页编辑并确认：不再跳一次「查看并确认」。
+         只读成员、以及还在整理 / 失败的提交仍然只看结果与出口。 */
+      const editable = canWrite && submission.state === "pending_confirmation";
+      if (editable) {
+        await this.prepareDraft(this.data.submission, false);
+        if (generation !== this.loadRequest) return;
+        this.setData({ loading: false, titleText: titleOf(submission, null) });
+        return;
+      }
+      this.setData({ editing: false, proposal: null, groups: [] });
       await this.loadDetail();
       if (generation !== this.loadRequest) return;
       this.setData({ loading: false, titleText: titleOf(submission, this.data.detailView) });
@@ -92,7 +105,12 @@ Page({
         reviews: gone ? [] : this.data.reviews });
     }
   },
-  /* 确认与人工录入都只在确认页发生，这里只负责把家长送过去。 */
-  openConfirm() { wx.navigateTo({ url: `/pages/submission/confirm?id=${this.data.id}` }); },
+  /* 确认或删除草稿后就地刷新成结果视图，家长留在同一页看到刚入档的记录。 */
+  afterConfirm() { return this.load(); },
+  keepDraft() {
+    wx.showToast({ title: "草稿已保留，未生成记录", icon: "none" });
+    setTimeout(() => wx.navigateBack(), 600);
+  },
+  /* 人工录入要换一套输入（没有 AI 草稿），仍走确认页的深链。 */
   startManual() { wx.navigateTo({ url: `/pages/submission/confirm?id=${this.data.id}&manual=1` }); }
 });

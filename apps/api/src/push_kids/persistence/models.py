@@ -221,6 +221,9 @@ class Child(Base):
     name = Column(String(40), nullable=False)
     grade = Column(String(20), nullable=True)
     daily_budget_minutes = Column(Integer, nullable=False, default=15)
+    # False archives the profile: it leaves the switcher and refuses new writes, while every
+    # existing record, review item and report stays readable. There is no physical delete.
+    active = Column(Boolean, nullable=False, default=True, index=True)
     created_at = Column(UTCDateTime(), nullable=False, default=utcnow)
 
 
@@ -311,8 +314,9 @@ class LearningRecord(Base):
     family_id = Column(String(80), nullable=False, index=True)
     child_id = Column(String(36), ForeignKey("children.id"), nullable=False, index=True)
     subject_id = Column(String(36), ForeignKey("subjects.id"), nullable=False, index=True)
+    # Not unique: one photo batch can span several subjects and then holds one record per subject.
     submission_id = Column(
-        String(36), ForeignKey("learning_submissions.id"), nullable=False, unique=True
+        String(36), ForeignKey("learning_submissions.id"), nullable=False, index=True
     )
     occurred_at = Column(UTCDateTime(), nullable=False, index=True)
     summary = Column(String(500), nullable=False)

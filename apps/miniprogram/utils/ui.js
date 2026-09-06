@@ -85,9 +85,42 @@ function writePreference(scope, childId, value) {
   }
 }
 
+/* 课外活动图标：关键字包含匹配，家长自己写的「少儿篮球班」也能命中；
+   越具体的关键字排在前面，命中不了用默认星形图标。 */
+const ACTIVITY_ICONS = [
+  ["swim", ["游泳", "泳", "swim"]],
+  ["pingpong", ["乒乓", "pingpong", "ping pong", "table tennis"]],
+  ["basketball", ["篮球", "篮", "basketball"]],
+  ["badminton", ["羽毛球", "羽球", "羽毛", "badminton"]],
+  ["soccer", ["足球", "soccer", "football"]],
+  ["tennis", ["网球", "tennis"]],
+  ["chess", ["围棋", "象棋", "五子棋", "棋", "chess"]],
+  ["piano", ["钢琴", "电子琴", "piano"]],
+  ["music", ["提琴", "音乐", "声乐", "唱歌", "合唱", "吉他", "琴", "music", "violin"]],
+  ["dance", ["舞蹈", "芭蕾", "舞", "dance", "ballet"]],
+  ["martial", ["武术", "跆拳道", "空手道", "散打", "柔道", "拳", "击剑", "剑道"]],
+  ["brush", ["书法", "毛笔", "硬笔", "练字", "写字"]],
+  ["palette", ["绘画", "美术", "素描", "水彩", "国画", "画", "手工", "陶艺"]],
+  ["robot", ["机器人", "乐高", "lego", "robot"]],
+  ["code", ["编程", "代码", "scratch", "python", "code"]]
+];
+const ACTIVITY_ICON_FALLBACK = "star";
+
+/* 返回图标基类名；tone 是 PKDS 色后缀（如 "pri"），留空取默认墨色。 */
+function activityIcon(name, tone) {
+  const key = String(name || "").trim().toLowerCase();
+  let icon = ACTIVITY_ICON_FALLBACK;
+  if (key) {
+    const hit = ACTIVITY_ICONS.find((entry) => entry[1].some((word) => key.includes(word)));
+    if (hit) icon = hit[0];
+  }
+  return tone ? `ico-${icon}-${tone}` : `ico-${icon}`;
+}
+
 module.exports = {
   subjectClass,
   subjectMark,
+  activityIcon,
   confidence,
   feedbackLabel,
   monthDay,

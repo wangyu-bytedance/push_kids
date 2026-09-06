@@ -1,9 +1,11 @@
 const api = require("../../utils/api");
 const ui = require("../../utils/ui");
+const childContext = require("../../utils/child-context");
 
 const WEEKDAYS = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
 const KIND_LABELS = { class: "课外活动", activity: "自主活动", other: "其他安排" };
-const DEFAULT_SECTIONS = { review: true, learning: true, activity: true };
+/* 打开今日先看"今天要发生什么"：日程默认展开，复习与学习默认折叠，靠小标题上的数量摘要引导展开。 */
+const DEFAULT_SECTIONS = { review: false, learning: false, activity: true };
 const TODO_PREVIEW = 3;
 const RING_TICKS = 12;
 
@@ -35,14 +37,11 @@ function ringTicks(required, total) {
   return ticks;
 }
 
-/* 折叠偏好只认三个布尔位，storage 里的脏数据一律回落默认展开。 */
+/* 折叠偏好只认三个布尔位，storage 里的脏数据一律按 DEFAULT_SECTIONS 回落。 */
 function normalizeSections(value) {
   const source = value && typeof value === "object" ? value : {};
-  return {
-    review: source.review !== false,
-    learning: source.learning !== false,
-    activity: source.activity !== false
-  };
+  const pick = (key) => (typeof source[key] === "boolean" ? source[key] : DEFAULT_SECTIONS[key]);
+  return { review: pick("review"), learning: pick("learning"), activity: pick("activity") };
 }
 
 /* Todo 超过 3 张折叠；「有余力再做」小标题挂在第一张可选卡上。 */
@@ -61,10 +60,10 @@ function todoView(must, optional, expanded) {
 Page({
   data: {
     loading: true, error: "", children: [], childIndex: 0, childId: "", dashboard: null,
-    sections: { review: true, learning: true, activity: true }, reviewReturn: null, reviewGroupId: "",
+    sections: { ...DEFAULT_SECTIONS }, reviewReturn: null, reviewGroupId: "",
     reviewFocusText: "", dayLabel: "",
     hero: { required: 0, optional: 0, total: 0, minutes: 0, note: "", ticks: [] },
-    todoCards: [], hiddenTodoCount: 0, todosExpanded: false, showChildSheet: false, multiChild: false,
+    todoCards: [], hiddenTodoCount: 0, todosExpanded: false, showChildSheet: false, multiChild: false, canAddChild: true,
     sectionMeta: { review: "", learning: "", activity: "" }
   },
   onShow() {
@@ -81,21 +80,18 @@ Page({
     this.loadGeneration = generation;
     this.setData({ loading: true, error: "" });
     try {
-      const children = (await api.request("/children")).map((item) => ({
-        ...item,
-        avatar: item.name ? item.name.charAt(0) : "芽",
-        label: item.grade ? `${item.name} · ${item.grade}` : item.name
-      }));
+      const profiles = await api.request("/children");
       if (generation !== this.loadGeneration) return;
+      const app = getApp();
+      const selection = childContext.syncSelection(app, profiles);
+      const children = selection.children;
+      const canAddChild = childContext.canAddChild(profiles);
       if (!children.length) {
-        this.setData({ loading: false, children, dashboard: null, childId: "", multiChild: false });
+        this.setData({ loading: false, children, dashboard: null, childId: "", multiChild: false, canAddChild });
         return;
       }
-      const app = getApp();
-      let childIndex = children.findIndex((item) => item.id === app.globalData.selectedChildId);
-      if (childIndex < 0) childIndex = 0;
-      const childId = children[childIndex].id;
-      app.selectChild(childId);
+      const childIndex = selection.childIndex;
+      const childId = selection.childId;
       const [dashboard, subjects] = await Promise.all([
         api.request(`/children/${childId}/dashboard`),
         api.request(`/children/${childId}/subjects`)
@@ -117,7 +113,7 @@ Page({
       dashboard.activity_count = dashboard.schedule_items.length + dashboard.optional_activity_suggestions.length;
       const view = todoView(dashboard.must_todo_groups, dashboard.optional_todo_groups, this.data.todosExpanded);
       this.setData({ loading: false, children, childIndex, childId, dashboard,
-        multiChild: children.length > 1,
+        multiChild: selection.multiChild, canAddChild,
         dayLabel: dayLabel(dashboard.day),
         hero: {
           required: dashboard.required_todo_count || 0,
@@ -175,8 +171,12 @@ Page({
     const view = todoView(dashboard.must_todo_groups, dashboard.optional_todo_groups, true);
     this.setData({ todosExpanded: true, todoCards: view.cards, hiddenTodoCount: view.hidden });
   },
-  openChildSheet() { if (this.data.multiChild) this.setData({ showChildSheet: true }); },
+  openChildSheet() { if (this.data.children.length) this.setData({ showChildSheet: true }); },
   closeChildSheet() { this.setData({ showChildSheet: false }); },
+  addChild() {
+    this.setData({ showChildSheet: false });
+    wx.navigateTo({ url: "/pages/child-edit/index?mode=create" });
+  },
   async chooseChild(event) {
     const childIndex = Number(event.currentTarget.dataset.index);
     const childId = this.data.children[childIndex].id;

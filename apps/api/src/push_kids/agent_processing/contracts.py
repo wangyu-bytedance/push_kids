@@ -43,6 +43,9 @@ def infer_display_kind(name: str, category: str) -> DisplayKind:
 class KnowledgeProposal(BaseModel):
     existing_knowledge_id: str | None = None
     name: str = Field(min_length=1, max_length=120)
+    # Which subject this single point belongs to. Set when one batch of photos spans several
+    # subjects; empty means "the batch subject". Never a merged label like "数学、语文".
+    subject_name: str | None = Field(default=None, max_length=40)
     category: str = Field(default="知识点", max_length=50)
     display_kind: DisplayKind | None = None
     review_method: str = Field(default="口头回顾", max_length=60)
@@ -113,9 +116,13 @@ class AnalysisInput(BaseModel):
         for point in proposal.knowledge_points:
             if point.existing_knowledge_id:
                 existing = knowledge.get(point.existing_knowledge_id)
-                if existing is None or existing.subject_name != proposal.subject_name:
+                # A linked point must stay inside its own subject; when the batch spans several
+                # subjects the point-level subject is what has to agree, not the batch label.
+                claimed = point.subject_name or proposal.subject_name
+                if existing is None or existing.subject_name != claimed:
                     raise ValueError("model knowledge reference is outside the input subject")
                 point.name, point.category = existing.name, existing.category
+                point.subject_name = existing.subject_name
             point.display_kind = point.display_kind or infer_display_kind(
                 point.name, point.category
             )
@@ -147,9 +154,14 @@ class AnalysisInput(BaseModel):
 
 def unique_knowledge_points(points: list[KnowledgeProposal]) -> list[KnowledgeProposal]:
     """Merge exact/canonical duplicates, retaining evidence without semantic guessing."""
-    result: dict[tuple[str, str], KnowledgeProposal] = {}
+    result: dict[tuple[str, str, str], KnowledgeProposal] = {}
     for point in points:
-        key = (normalize_knowledge_name(point.name), point.category.strip())
+        # Same wording under two different subjects is two different things to review.
+        key = (
+            normalize_knowledge_name(point.name),
+            point.category.strip(),
+            (point.subject_name or "").strip(),
+        )
         if key not in result:
             result[key] = point.model_copy(deep=True)
             continue

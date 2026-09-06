@@ -87,7 +87,7 @@ Page({
     const index = Number(event.currentTarget.dataset.index);
     const item = this.data.requests[index];
     if (!item) return;
-    wx.showModal({ title: "拒绝这次申请？", content: `拒绝后，“${item.relationship_label}”不会获得这个家庭内容的访问权限。对方可以重新申请。`, confirmText: "拒绝", confirmColor: "#A6423B", success: async (result) => {
+    wx.showModal({ title: "拒绝这次申请？", content: `拒绝后，“${item.relationship_label}”不会获得这个家庭内容的访问权限。对方可以重新申请。`, confirmText: "拒绝", confirmColor: "#A85742", success: async (result) => {
       if (!result.confirm) return;
       await this.decide("reject", index, "");
     } });

@@ -105,7 +105,7 @@ Page({
     wx.showModal({
       title: "撤回这次申请？",
       content: "撤回后管理员就看不到这条申请了，你可以重新用邀请口令再申请一次。",
-      confirmText: "撤回申请", confirmColor: "#A6423B",
+      confirmText: "撤回申请", confirmColor: "#A85742",
       success: async (result) => {
         if (!result.confirm) return;
         this.setData({ canceling: true, error: "" });

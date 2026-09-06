@@ -156,5 +156,6 @@
   color: var(--pk-primary-strong);
 }
 
-.sk.metrics-sk { height: 172rpx; }
+/* 与真实 2×2 指标卡等高：152rpx × 2 行 + 16rpx 间距 */
+.sk.metrics-sk { height: 320rpx; }
 .sk.chart-sk { height: 420rpx; }

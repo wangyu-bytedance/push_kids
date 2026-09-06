@@ -1,4 +1,4 @@
-# SPEC-20260906-PKDS-02 — PKDS-2.0「纸 · 芽」视觉与交互落地
+# SPEC-20260906-PKDS-03 — PKDS-2.0「纸 · 芽」视觉与交互落地
 
 - Status: IMPLEMENTING
 - Risk: R2
@@ -9,7 +9,7 @@
 - Created: 2026-09-06
 - Last updated: 2026-09-06
 - Target release: 未部署（仅本地实现）
-- Spec revision: `SPEC-20260906-PKDS-02`
+- Spec revision: `SPEC-20260906-PKDS-03`
 - User confirmation: 用户 2026-09-06 指令「结合这个工程的定位和产品需求.设计 ui 交互，你不需要考虑工程中对于 ui 的要求，完全重新设计. 我只要最好的效果」+「按照这个方案 实现代码」+「继续」
 - Additional R2 approval: 同上（用户即架构与设计 Owner）
 - Affected Feature IDs: `FEAT-001`（可见层），`FEAT-002`（家庭协作界面沿用同一 token 层）
@@ -35,11 +35,11 @@
 - Current Design Revision(s): `DREV-20260906-PKDS-01`
 - Figma project/file URL: https://www.figma.com/design/FAyfmjNrA3btWztwyxI6Zj?node-id=0-1
 - Figma node URL(s): N/A — 沿用 FEAT-001 的 Figma Starter 限额 waiver；本轮设计稿以可运行 HTML 原型 `zhiya-ui` 与仓内三视口截图为准
-- Proposed Design Revision: `DREV-20260906-PKDS-02`
+- Proposed Design Revision: `DREV-20260906-PKDS-03`
 - Required viewport/state exports: 320×568 / 390×844 / 430×932 × content/empty/sheet/draft 状态
 - Prototype status: APPROVED（用户 2026-09-06 指令「按照这个方案 实现代码」）
-- Approved Task Spec revision: `SPEC-20260906-PKDS-02`
-- Approved Design Revision: `DREV-20260906-PKDS-02`
+- Approved Task Spec revision: `SPEC-20260906-PKDS-03`
+- Approved Design Revision: `DREV-20260906-PKDS-03`
 - Design approval evidence: 用户 2026-09-06 连续三条指令（重新设计 → 实现代码 → 继续）
 - Snapshot manifest path: `dist/ui-preview/`（本地生成，未纳入 git；截图脚本可重放）
 - Permitted implementation deviations: 见 §10
@@ -96,7 +96,7 @@
 - Current Feature sections affected：FEAT-001 的"界面现状"与 UI-001 的视觉/交互现状段。
 - Final facts to merge：PKDS-2.0 token 名单、Todo 反馈交互、确认页科目单一路径、报表文案。
 - Superseded statements：PKDS-1.0 的色值/圆角/图标线宽描述、"Todo 更多反馈使用系统 ActionSheet"。
-- Change Reference to add：`SPEC-20260906-PKDS-02`。
+- Change Reference to add：`SPEC-20260906-PKDS-03`。
 
 ## 3. Impact map
 
@@ -205,9 +205,12 @@ Old path/logic to delete or retain：
 
 - Given 一份 AI 草稿；When 停留在确认页任意位置；Then 顶部通知与卡片印章都说明"确认后才进入学习档案和复习计划"；And not 出现"已保存/已完成"的暗示。
 
-### AC-005 — 科目单一决定点
+### AC-005 — 科目输入只有一个决定点（已被 BUG-013 取代，本轮作废）
 
-- Given AI 给出的科目已在学；When 打开确认页；Then 只显示 picker + 「换成新科目」链接；And 切到新科目态后只显示输入框 + 「选已在学的科目」链接。
+- 原文：Given AI 给出的科目已在学；When 打开确认页；Then 只显示 picker + 「换成新科目」链接。
+- 取代说明：`BUG-013 / BUG-SPEC-20260906-16` 把科目下沉到每个知识点，并按科目分组成独立学习记录，
+  页面级「单科目」字段已不存在，本 AC 在合并后不适用；草稿区的视觉合同（印章、滑杆配色）改由共享模板
+  `pages/submission/draft.*` 承担，确认页与待确认页同时生效。
 
 ### AC-006 — 三视口无横向溢出
 
@@ -217,9 +220,9 @@ Old path/logic to delete or retain：
 
 | Test point | AC | Level | Command | Required result |
 |---|---|---|---|---|
-| TP-001 | AC-001..005 | unit/static | `npm test` | 59 passed |
+| TP-001 | AC-001..004 | unit/static | `npm test` | all pass |
 | TP-002 | AC-001 | static | `npm run lint:miniapp` | no error |
-| TP-003 | AC-001/AC-004 | static | `python3 tools/validate_miniprogram.py` | `MINIPROGRAM_VALID pages=12` |
+| TP-003 | AC-001/AC-004 | static | `uv run python tools/validate_miniprogram.py` | `MINIPROGRAM_VALID` |
 | TP-004 | AC-002/003/004/005 | visual | `node tools/preview/render.js && python3 tools/preview/shoot.py` | 三视口截图人工走查通过 |
 | TP-005 | AC-006 | visual | 预览页横向溢出扫描（Playwright） | 全部页面无溢出 |
 | TP-006 | AC-001..006 | native | 微信开发者工具/真机三视口原生几何 | NOT_RUN（需人工） |
@@ -235,25 +238,34 @@ Old path/logic to delete or retain：
 
 | Test point / command | Result | Evidence/notes |
 |---|---|---|
-| TP-001 `npm test` | pass | 59 pass / 0 fail |
+| TP-001 `npm test` | pass | 合并 `BUG-013` 后 91 pass / 0 fail（合并前 59 pass） |
 | TP-002 `npm run lint:miniapp` | pass | eslint 无输出 |
-| TP-003 `python3 tools/validate_miniprogram.py` | pass | `MINIPROGRAM_VALID pages=12 source_bytes=492141` |
-| TP-004 三视口截图走查 | pass | `dist/ui-preview/`：today / today-guide / today-sheet / records / records-history / record-detail / confirm / reports / calendar / calendar-editor / settings / activity-edit / onboarding / family-members × 320/390/430 |
-| TP-005 横向溢出扫描 | pass | 全部预览页 `scrollWidth <= viewport`，无越界元素 |
+| TP-003 `uv run python tools/validate_miniprogram.py` | pass | `MINIPROGRAM_VALID pages=13 source_bytes=580105` |
+| 后端回归 `uv run pytest tests/unit tests/integration tests/contract -q` | pass | 186 passed / 2 skipped |
+| 静态检查 `ruff check` / `ruff format --check` / `mypy apps/api/src` | pass | 185 files formatted、55 files 无问题 |
+| 架构检查 `uv run python tools/check_architecture.py` | pass | `ARCHITECTURE_VALID checked=2` |
+| 图标生成器幂等 | pass | 连续两次 `gen_icon_styles.py` 产物一致，`icons=42 variants=6` |
+| TP-004 三视口截图走查 | pass | `dist/ui-preview/`：today / today-guide / today-sheet / records / records-history / record-detail / confirm / reports / calendar / calendar-editor / settings / activity-edit / onboarding / onboarding-create / family-members × 320/390/430 |
+| TP-005 横向溢出扫描 | pass | 15 组页面 × 3 视口 = 45 页，无越界元素 |
 | TP-006 原生三视口几何 | not run | 需微信开发者工具/真机；预览为 HTML 近似渲染，不能替代原生节点几何 |
 
 走查中发现并修复的缺陷：
 
 1. `.chev.left` 在日程页/报表页被错误覆盖为 `rotate(-135deg)`，左箭头显示为上箭头。
 2. 页面内 `fixed` 半屏无法遮住原生自定义 TabBar，`.pk-sheet` 底部未预留 TabBar 高度导致末条被遮。
-3. 确认页科目字段同时显示 picker 与同值 input。
-4. 课外活动图标是"地球仪"观感，改为球体缝线。
+3. 确认页科目字段同时显示 picker 与同值 input（该修复已被 `BUG-013` 的按知识点分组取代）。
+4. 课外活动图标是"地球仪"观感（该修复已被 `BUG-013` 的按活动语义派生图标取代）。
+5. `app.json`（导航栏/背景/TabBar 兜底色）与 `wx.showModal`、`switch` 等原生控件仍写死 PKDS-1.0 色值，
+   与纸面底色不一致；已统一替换为 PKDS-2.0 值。
 
 ## 10. Completion
 
-- Changed behavior：Todo 反馈改为卡片内嵌面板（含后果文案）；确认页科目改为单控件 + 切换；其余为纯视觉替换。
-- Deleted/replaced behavior：`wx.showActionSheet` 反馈路径、确认页第二个科目输入控件、两处错误的 `.chev.left` 覆盖。
-- Files changed：见 §5（38 个已跟踪文件 + `tools/gen_tabbar_icons.py`、`tools/preview/`、`assets/tab-records-key.png`）。
+- Changed behavior：Todo 反馈改为卡片内嵌面板（含后果文案）；其余为纯视觉替换。
+- Deleted/replaced behavior：`wx.showActionSheet` 反馈路径、两处错误的 `.chev.left` 覆盖、原生控件与 `app.json` 里的 PKDS-1.0 色值。
+- Merge outcome：与 `origin/main` 的 `BUG-013`（多科目分组、共享草稿模块、按语义派生的活动图标、报表 2×2 可点指标、
+  今日默认折叠）合并；冲突处一律保留上游功能语义，只把 PKDS-2.0 视觉层重新贴到新结构上；
+  本轮的 `ico-ball` 与确认页单科目路径作废。
+- Files changed：见 §5，另加合并后新增的 `pages/submission/draft.wxml`（印章与滑杆配色）与 `app.json` 色值。
 - Permitted implementation deviations：`dist/ui-preview/` 是本地产物不入库；Figma node URL 仍缺，沿用 waiver。
 - Residual risk：`backdrop-filter`、`@media (max-width: 350px)` 在部分低端机型/基础库上的表现未在真机验证；三视口原生几何 NOT_RUN。
 

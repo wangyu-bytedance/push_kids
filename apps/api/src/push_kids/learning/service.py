@@ -15,18 +15,27 @@ from sqlalchemy.orm import Session
 from push_kids.agent_processing.contracts import (
     MATERIAL_FINGERPRINT_KEY,
     AnalysisProposal,
+    KnowledgeProposal,
     unique_knowledge_points,
 )
 from push_kids.agent_processing.presentation import project_display_groups
+from push_kids.agent_processing.subject_routing import (
+    is_merged_subject_label,
+    match_subject,
+    route_subjects,
+)
 from push_kids.children.service import ChildrenService, is_custom_subject
 from push_kids.knowledge.normalization import normalize_knowledge_name
 from push_kids.learning.schemas import (
     ConfirmationResult,
+    ConfirmedRecord,
+    ConfirmGroup,
     ConfirmSubmission,
     MediaClaimRequest,
     MediaUploadTicket,
     MediaUploadTicketRequest,
     PhotoDraftCreate,
+    SubjectGroupView,
     SubmissionCreate,
     SubmissionView,
 )
@@ -55,7 +64,7 @@ from push_kids.persistence.models import (
 )
 from push_kids.planning.domain import apply_feedback, initial_review_date
 from push_kids.platform.context import RequestContext
-from push_kids.platform.errors import ConflictError, NotFoundError
+from push_kids.platform.errors import ConflictError, ConsentRequiredError, NotFoundError
 from push_kids.platform.time import local_date, utcnow
 
 
@@ -161,7 +170,7 @@ class LearningService:
         data: SubmissionCreate,
         idempotency_key: str | None = None,
     ) -> LearningSubmission:
-        ChildrenService.get_child(db, family_id, data.child_id)
+        ChildrenService.require_active_child(db, family_id, data.child_id)
         fingerprint = cls._request_fingerprint(
             child_id=data.child_id,
             occurred_at=data.occurred_at,
@@ -196,7 +205,7 @@ class LearningService:
         data: PhotoDraftCreate,
         idempotency_key: str | None,
     ) -> LearningSubmission:
-        ChildrenService.get_child(db, family_id, data.child_id)
+        ChildrenService.require_active_child(db, family_id, data.child_id)
         fingerprint = cls._request_fingerprint(
             child_id=data.child_id,
             occurred_at=data.occurred_at,
@@ -423,7 +432,7 @@ class LearningService:
         idempotency_key: str | None = None,
         enqueue: bool = True,
     ) -> LearningSubmission:
-        ChildrenService.get_child(db, family_id, child_id)
+        ChildrenService.require_active_child(db, family_id, child_id)
         if not files:
             raise ValueError("请至少上传一张图片")
         if len(files) > 9:
@@ -557,6 +566,52 @@ class LearningService:
         return submission
 
     @classmethod
+    def _learning_subjects(cls, db: Session, submission: LearningSubmission) -> list[Subject]:
+        return list(
+            db.scalars(
+                select(Subject)
+                .where(
+                    Subject.family_id == submission.family_id,
+                    Subject.child_id == submission.child_id,
+                    Subject.kind == "learning",
+                )
+                .order_by(Subject.created_at, Subject.id)
+            )
+        )
+
+    @classmethod
+    def _subject_groups(
+        cls, db: Session, submission: LearningSubmission, proposal: AnalysisProposal | None
+    ) -> tuple[list[SubjectGroupView], bool]:
+        """Split the draft across the child's configured subjects without writing anything.
+
+        The parent sees one group per subject and can move any point before confirming, so a batch
+        that mixes subjects never turns into a merged subject such as "数学、语文".
+        """
+        if proposal is None or proposal.subject_kind != "learning":
+            return [], False
+        subjects = cls._learning_subjects(db, submission)
+        by_name = {str(subject.name): subject for subject in subjects}
+        routing = route_subjects([str(item.name) for item in subjects if item.active], proposal)
+        # Write the routed subject back onto each point so the client edits exactly one field.
+        for index, name in enumerate(routing.point_subjects):
+            if name and index < len(proposal.knowledge_points):
+                proposal.knowledge_points[index].subject_name = name
+        views = [
+            SubjectGroupView(
+                subject_id=by_name[group.subject_name].id
+                if group.subject_name in by_name
+                else None,
+                subject_name=group.subject_name,
+                listed=group.listed and group.subject_name in by_name,
+                knowledge_indexes=group.knowledge_indexes,
+                knowledge_names=group.knowledge_names,
+            )
+            for group in routing.groups
+        ]
+        return views[:6], routing.needs_review
+
+    @classmethod
     def get_view(cls, db: Session, family_id: str, submission_id: str) -> SubmissionView:
         submission = cls._submission(db, family_id, submission_id)
         media_count = (
@@ -572,6 +627,7 @@ class LearningService:
             if submission.proposal_json
             else None
         )
+        subject_groups, subject_review_needed = cls._subject_groups(db, submission, proposal)
         job_count = (
             db.scalar(
                 select(func.count(AgentJob.id)).where(AgentJob.submission_id == submission.id)
@@ -602,6 +658,8 @@ class LearningService:
             state=submission.state,
             proposal=proposal,
             display_groups=(project_display_groups(proposal.knowledge_points) if proposal else []),
+            subject_groups=subject_groups,
+            subject_review_needed=subject_review_needed,
             error_code=submission.error_code,
             error_message=submission.error_message,
             media_count=media_count,
@@ -750,55 +808,259 @@ class LearningService:
         original_matches = {
             item["review_id"]: item for item in stored_proposal.get("todo_matches", [])
         }
-        data.proposal.knowledge_points = unique_knowledge_points(data.proposal.knowledge_points)
-        if data.subject_id:
+        # Deduplication happens per subject inside `_confirmation_plans`; doing it here as well
+        # would shift the positions the client sent in `groups.knowledge_indexes`.
+        catalogue = cls._learning_subjects(db, submission)
+        plans = cls._confirmation_plans(db, family_id, submission, catalogue, data)
+        records: list[ConfirmedRecord] = []
+        kept_points: list[KnowledgeProposal] = []
+        for subject, summary, points in plans:
+            record, knowledge_ids, review_ids = cls._create_learning_record(
+                db,
+                family_id,
+                submission,
+                subject=subject,
+                summary=summary,
+                points=points,
+                source="人工录入" if data.manual_entry else data.proposal.source,
+            )
+            records.append(
+                ConfirmedRecord(
+                    record_id=record.id,
+                    subject_id=subject.id,
+                    subject_name=subject.name,
+                    knowledge_item_ids=knowledge_ids,
+                    review_item_ids=review_ids,
+                )
+            )
+            kept_points.extend(points)
+        # The stored draft keeps exactly what was written, with every point carrying its subject.
+        data.proposal.knowledge_points = kept_points
+        data.proposal.subject_name = records[0].subject_name
+        unique_matches = {item.review_id: item for item in data.proposal.todo_matches}
+        data.proposal.todo_matches = []
+        for match in unique_matches.values():
+            matched_review = db.scalar(
+                select(ReviewItem)
+                .join(KnowledgeItem, ReviewItem.knowledge_item_id == KnowledgeItem.id)
+                .join(Subject, KnowledgeItem.subject_id == Subject.id)
+                .where(
+                    ReviewItem.id == match.review_id,
+                    ReviewItem.family_id == family_id,
+                    ReviewItem.child_id == submission.child_id,
+                    ReviewItem.active.is_(True),
+                    Subject.kind == "learning",
+                )
+                .with_for_update()
+                .execution_options(populate_existing=True)
+            )
+            if matched_review is None or matched_review.due_date is None:
+                continue
+            snapshot = original_matches.get(match.review_id)
+            if snapshot is None:
+                # Confirmation may remove matches, never add unobserved automatic feedback.
+                continue
+            if snapshot.get("step") is not None and (
+                snapshot["step"] != matched_review.step
+                or snapshot.get("due_date") != matched_review.due_date.isoformat()
+            ):
+                continue
+            transition = apply_feedback(matched_review.step or 0, "complete", local_date())
+            matched_review.step = transition.step
+            matched_review.due_date = transition.due_date
+            matched_review.active = transition.active
+            matched_review.last_feedback = "complete"
+            db.add(
+                ReviewFeedback(
+                    family_id=family_id,
+                    review_item_id=matched_review.id,
+                    action="complete",
+                )
+            )
+            data.proposal.todo_matches.append(match)
+        if data.manual_entry:
+            data.proposal.source = "人工录入"
+            if job and job.state in {
+                JobState.queued.value,
+                JobState.running.value,
+                JobState.failed.value,
+            }:
+                job.state = JobState.cancelled.value
+        stored = data.proposal.model_dump()
+        if MATERIAL_FINGERPRINT_KEY in stored_proposal:
+            stored[MATERIAL_FINGERPRINT_KEY] = stored_proposal[MATERIAL_FINGERPRINT_KEY]
+        submission.proposal_json = json.dumps(stored, ensure_ascii=False)
+        submission.state = SubmissionState.confirmed.value
+        submission.error_code = None
+        submission.error_message = None
+        submission.confirmed_at = utcnow()
+        db.commit()
+        # The flat fields describe the first record so clients built before multi-subject
+        # confirmation keep working; `records` is the complete result.
+        return ConfirmationResult(
+            record_id=records[0].record_id,
+            subject_id=records[0].subject_id,
+            knowledge_item_ids=[item for record in records for item in record.knowledge_item_ids],
+            review_item_ids=[item for record in records for item in record.review_item_ids],
+            records=records,
+        )
+
+    @classmethod
+    def _confirmation_plans(
+        cls,
+        db: Session,
+        family_id: str,
+        submission: LearningSubmission,
+        catalogue: list[Subject],
+        data: ConfirmSubmission,
+    ) -> list[tuple[Subject, str, list[KnowledgeProposal]]]:
+        """Turn one confirmation request into one plan per subject, or fail before writing.
+
+        Grouping is decided by the parent's request, never re-guessed here: `groups` says which
+        knowledge point belongs to which subject, and a subject outside the child's catalogue needs
+        an explicit `create_subject` answer.
+        """
+        points = data.proposal.knowledge_points
+        groups = (
+            data.groups
+            or [
+                ConfirmGroup(
+                    subject_id=data.subject_id,
+                    subject_name=data.proposal.subject_name,
+                    create_subject=data.create_subject,
+                    knowledge_indexes=list(range(len(points))),
+                )
+            ]
+            if points
+            else []
+        )
+        assigned: set[int] = set()
+        buckets: list[tuple[ConfirmGroup, list[KnowledgeProposal]]] = []
+        for group in groups:
+            bucket: list[KnowledgeProposal] = []
+            for index in group.knowledge_indexes:
+                if index < 0 or index >= len(points):
+                    raise ValueError("科目分组和知识点对不上，请刷新草稿后重试")
+                if index in assigned:
+                    raise ValueError("同一个知识点不能同时归到两个科目")
+                assigned.add(index)
+                if normalize_knowledge_name(points[index].name):
+                    bucket.append(points[index])
+            if bucket:
+                buckets.append((group, unique_knowledge_points(bucket)))
+        if data.groups is not None and len(assigned) != len(points):
+            raise ValueError("每个知识点都要归到一个科目，请核对后再确认")
+        if not buckets:
+            raise ValueError("至少需要保留一个有效知识点")
+        plans: list[tuple[Subject, str, list[KnowledgeProposal]]] = []
+        for group, bucket in buckets:
+            subject = cls._resolve_confirm_subject(
+                db,
+                family_id,
+                submission,
+                catalogue,
+                group=group,
+                subject_kind=data.proposal.subject_kind,
+                manual_entry=data.manual_entry,
+            )
+            if subject.kind != "learning":
+                raise ValueError("活动请通过活动记录入口保存，不加入复习计划")
+            if any(plan[0].id == subject.id for plan in plans):
+                raise ValueError("同一个科目只能出现一次，请把它的知识点合并到一组")
+            summary = (group.summary or data.proposal.summary).strip()
+            if not summary:
+                raise ValueError("请填写这次学习的总结")
+            for point in bucket:
+                point.subject_name = subject.name
+            plans.append((subject, summary, bucket))
+        return plans
+
+    @classmethod
+    def _resolve_confirm_subject(
+        cls,
+        db: Session,
+        family_id: str,
+        submission: LearningSubmission,
+        catalogue: list[Subject],
+        *,
+        group: ConfirmGroup,
+        subject_kind: str,
+        manual_entry: bool,
+    ) -> Subject:
+        if group.subject_id:
             subject = db.scalar(
                 select(Subject).where(
-                    Subject.id == data.subject_id,
+                    Subject.id == group.subject_id,
                     Subject.family_id == family_id,
                     Subject.child_id == submission.child_id,
                 )
             )
             if subject is None:
                 raise NotFoundError("没有找到所选科目")
-        else:
-            subject = db.scalar(
-                select(Subject).where(
-                    Subject.family_id == family_id,
-                    Subject.child_id == submission.child_id,
-                    Subject.name == data.proposal.subject_name,
-                )
+            return subject
+        name = group.subject_name.strip()
+        names = [str(item.name) for item in catalogue]
+        if not name:
+            raise ValueError("请为这段内容选择科目")
+        if is_merged_subject_label(name, names):
+            raise ValueError("科目里像是写了好几个科目，请分别归类后再确认")
+        existing = db.scalar(
+            select(Subject).where(
+                Subject.family_id == family_id,
+                Subject.child_id == submission.child_id,
+                Subject.name == name,
             )
-            if subject is None:
-                if data.proposal.subject_kind != "learning":
-                    raise ValueError("活动请通过活动记录入口保存，不加入复习计划")
-                subject = Subject(
-                    family_id=family_id,
-                    child_id=submission.child_id,
-                    name=data.proposal.subject_name,
-                    kind=data.proposal.subject_kind,
-                    is_custom=is_custom_subject(
-                        data.proposal.subject_name, data.proposal.subject_kind
-                    ),
-                )
-                db.add(subject)
-                db.flush()
-        if subject.kind != "learning":
+        )
+        if existing is not None:
+            return existing
+        # "英文" and "英语" are the same subject: reuse the configured one instead of adding a twin.
+        matched = match_subject(name, names)
+        if matched is not None:
+            return next(item for item in catalogue if item.name == matched)
+        if subject_kind != "learning":
             raise ValueError("活动请通过活动记录入口保存，不加入复习计划")
+        # A name outside the catalogue means a new subject. Only a parent may add one: an explicit
+        # answer is required unless they typed it themselves or no catalogue exists yet.
+        if catalogue and not group.create_subject and not manual_entry:
+            raise ConsentRequiredError(f"「{name}」还不在科目列表里，要新增这个科目吗？")
+        subject = Subject(
+            family_id=family_id,
+            child_id=submission.child_id,
+            name=name,
+            kind=subject_kind,
+            is_custom=is_custom_subject(name, subject_kind),
+        )
+        db.add(subject)
+        db.flush()
+        catalogue.append(subject)
+        return subject
+
+    @classmethod
+    def _create_learning_record(
+        cls,
+        db: Session,
+        family_id: str,
+        submission: LearningSubmission,
+        *,
+        subject: Subject,
+        summary: str,
+        points: list[KnowledgeProposal],
+        source: str,
+    ) -> tuple[LearningRecord, list[str], list[str]]:
         record = LearningRecord(
             family_id=family_id,
             child_id=submission.child_id,
             subject_id=subject.id,
             submission_id=submission.id,
             occurred_at=submission.occurred_at,
-            summary=data.proposal.summary,
-            source="人工录入" if data.manual_entry else data.proposal.source,
+            summary=summary,
+            source=source,
         )
         db.add(record)
         db.flush()
         knowledge_ids: list[str] = []
         review_ids: list[str] = []
-        for point in data.proposal.knowledge_points:
+        for point in points:
             normalized = normalize_knowledge_name(point.name)
             if not normalized:
                 continue
@@ -870,69 +1132,6 @@ class LearningService:
                 raise RuntimeError("confirmed entities have no generated id")
             knowledge_ids.append(knowledge.id)
             review_ids.append(review.id)
-        if not knowledge_ids:
-            raise ValueError("至少需要保留一个有效知识点")
-        unique_matches = {item.review_id: item for item in data.proposal.todo_matches}
-        data.proposal.todo_matches = []
-        for match in unique_matches.values():
-            matched_review = db.scalar(
-                select(ReviewItem)
-                .join(KnowledgeItem, ReviewItem.knowledge_item_id == KnowledgeItem.id)
-                .join(Subject, KnowledgeItem.subject_id == Subject.id)
-                .where(
-                    ReviewItem.id == match.review_id,
-                    ReviewItem.family_id == family_id,
-                    ReviewItem.child_id == submission.child_id,
-                    ReviewItem.active.is_(True),
-                    Subject.kind == "learning",
-                )
-                .with_for_update()
-                .execution_options(populate_existing=True)
-            )
-            if matched_review is None or matched_review.due_date is None:
-                continue
-            snapshot = original_matches.get(match.review_id)
-            if snapshot is None:
-                # Confirmation may remove matches, never add unobserved automatic feedback.
-                continue
-            if snapshot.get("step") is not None and (
-                snapshot["step"] != matched_review.step
-                or snapshot.get("due_date") != matched_review.due_date.isoformat()
-            ):
-                continue
-            transition = apply_feedback(matched_review.step or 0, "complete", local_date())
-            matched_review.step = transition.step
-            matched_review.due_date = transition.due_date
-            matched_review.active = transition.active
-            matched_review.last_feedback = "complete"
-            db.add(
-                ReviewFeedback(
-                    family_id=family_id,
-                    review_item_id=matched_review.id,
-                    action="complete",
-                )
-            )
-            data.proposal.todo_matches.append(match)
-        if data.manual_entry:
-            data.proposal.source = "人工录入"
-            if job and job.state in {
-                JobState.queued.value,
-                JobState.running.value,
-                JobState.failed.value,
-            }:
-                job.state = JobState.cancelled.value
-        stored = data.proposal.model_dump()
-        if MATERIAL_FINGERPRINT_KEY in stored_proposal:
-            stored[MATERIAL_FINGERPRINT_KEY] = stored_proposal[MATERIAL_FINGERPRINT_KEY]
-        submission.proposal_json = json.dumps(stored, ensure_ascii=False)
-        submission.state = SubmissionState.confirmed.value
-        submission.error_code = None
-        submission.error_message = None
-        submission.confirmed_at = utcnow()
-        db.commit()
-        return ConfirmationResult(
-            record_id=record.id,
-            subject_id=subject.id,
-            knowledge_item_ids=knowledge_ids,
-            review_item_ids=review_ids,
-        )
+        if record.id is None:
+            raise RuntimeError("confirmed record has no generated id")
+        return record, knowledge_ids, review_ids

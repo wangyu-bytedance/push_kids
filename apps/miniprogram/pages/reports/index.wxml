@@ -40,9 +40,12 @@
 
   <block wx:elif="{{report}}">
     <view class="metrics mt3">
-      <view class="metric" wx:for="{{metrics}}" wx:key="label">
+      <view class="metric {{item.actionable ? '' : 'quiet'}}" wx:for="{{metrics}}" wx:key="label" hover-class="is-press" hover-stay-time="80" aria-role="button" aria-label="{{item.ariaLabel}}" data-target="{{item.target}}" bindtap="openMetric">
         <text class="mv tnum {{item.zero ? 'zero' : ''}} {{item.tight ? 'tight' : ''}}">{{item.text}}</text>
-        <text class="ml">{{item.label}}</text>
+        <view class="m-foot">
+          <text class="ml">{{item.label}}</text>
+          <view class="chev right" wx:if="{{item.actionable}}"></view>
+        </view>
       </view>
     </view>
 
@@ -90,7 +93,7 @@
         </view>
       </view>
 
-      <view class="sec">
+      <view class="sec" id="sec-feedback">
         <view class="sec-head">
           <text class="s-t">复习活跃度</text>
           <text class="s-r">{{rangeLabel}}</text>
@@ -123,7 +126,7 @@
         </view>
       </view>
 
-      <view class="sec">
+      <view class="sec" id="sec-subjects">
         <view class="sec-head">
           <text class="s-t">科目学习记录</text>
           <text class="s-r">可下钻</text>
@@ -141,14 +144,14 @@
         </view>
       </view>
 
-      <view class="sec">
+      <view class="sec" id="sec-activities">
         <view class="sec-head">
           <text class="s-t">课外活动投入</text>
           <text class="s-r">{{rangeLabel}}</text>
         </view>
         <view class="rowlist" wx:if="{{activityRows.length}}">
           <view class="rowitem" wx:for="{{activityRows}}" wx:key="id">
-            <view class="act-mark"><view class="ico ico-ball-pri sm"></view></view>
+            <view class="act-mark"><view class="ico {{item.iconClass}} sm"></view></view>
             <view class="grow">
               <text class="r-t trunc">{{item.name}}</text>
               <text class="r-s">{{item.meta}}</text>
@@ -189,6 +192,9 @@
         </view>
         <view class="ico ico-check-pri sm" wx:if="{{index === childIndex}}"></view>
       </view>
+    </view>
+    <view class="add-entry" wx:if="{{canAddChild}}" aria-role="button" aria-label="添加孩子" bindtap="addChild">
+      <view class="ico ico-plus-pri sm"></view><text>添加孩子</text>
     </view>
   </view>
 </view>

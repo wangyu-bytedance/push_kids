@@ -158,14 +158,23 @@ const confirmDraft = {
   id: "sub-1", conflict: false,
   submission: { id: "sub-1", child_id: "c1", state: "awaiting_confirmation", time_label: "9 月 6 日 19:20", submitted_label: "9 月 6 日 19:22", media_count: 2, input_text: "" },
   subjects: [{ id: "s1", name: "语文" }, { id: "s2", name: "数学" }],
-  subjectIndex: 0, subjectCustom: false,
+  editing: true, consent: { 书法: true }, subjectReview: true,
+  subjectPicks: ["语文", "数学", "书法（新增）"],
+  /* 一次拍到多个科目：按科目分组，未在列表里的科目要家长显式同意才新增 */
+  groups: [
+    { key: "语文", subject_name: "语文", subject_id: "s1", listed: true, create_subject: false, count: 2,
+      names_text: "《望庐山瀑布》默写、生字：瀑、炉、疑", mark: "语", mark_class: "s-chinese" },
+    { key: "书法", subject_name: "书法", subject_id: null, listed: false, create_subject: true, count: 1,
+      names_text: "毛笔横画", mark: "书", mark_class: "s-default" }
+  ],
   proposal: {
-    summary: "复习了《望庐山瀑布》，重点是「疑是银河落九天」的默写和三个生字。",
+    summary: "复习了《望庐山瀑布》，重点是「疑是银河落九天」的默写和三个生字，另外练了一页毛笔横画。",
     subject_name: "语文", source: "语文作业本 P12",
     uncertainties: ["第 2 张照片有一行字被手挡住了"],
     knowledge_points: [
-      { name: "《望庐山瀑布》默写", category: "古诗", review_method: "默写一遍", estimated_minutes: 6, confidence: "high", confidence_tone: "high", confidence_label: "识别可靠", confidence_level: 3, evidence_text: "照片第 1 张有整首诗的抄写", context_count: 2, existing_knowledge_id: "k1" },
-      { name: "生字：瀑、炉、疑", category: "生字", review_method: "听写", estimated_minutes: 4, confidence: "low", confidence_tone: "low", confidence_label: "不确定", confidence_level: 1, evidence_text: "", context_count: 0, existing_knowledge_id: "" }
+      { name: "《望庐山瀑布》默写", subject_name: "语文", category: "古诗", review_method: "默写一遍", estimated_minutes: 6, confidence: "high", confidence_tone: "high", confidence_label: "识别可靠", confidence_level: 3, evidence_text: "照片第 1 张有整首诗的抄写", context_count: 2, existing_knowledge_id: "k1" },
+      { name: "生字：瀑、炉、疑", subject_name: "语文", category: "生字", review_method: "听写", estimated_minutes: 4, confidence: "low", confidence_tone: "low", confidence_label: "不确定", confidence_level: 1, evidence_text: "", context_count: 0, existing_knowledge_id: "" },
+      { name: "毛笔横画", subject_name: "书法", category: "笔画", review_method: "临写一行", estimated_minutes: 5, confidence: "mid", confidence_tone: "mid", confidence_label: "一般", confidence_level: 2, evidence_text: "第 3 张照片是一页横画练习", context_count: 0, existing_knowledge_id: "" }
     ],
     todo_matches: [{ review_id: "r1", knowledge_name: "两位数进位加法", evidence: "第 2 张照片右下角有 12 道口算" }]
   }
@@ -189,10 +198,10 @@ const reports = {
   days: 30, ranges: [7, 30, 100], report: { day: "2026-09-06" }, isEmpty: false,
   rangeLabel: "近 30 天", feedbackTotal: 41, activityDetailFailed: false,
   metrics: [
-    { label: "学习记录", text: "24", zero: false, tight: false },
-    { label: "新增知识点", text: "62", zero: false, tight: false },
-    { label: "复习反馈", text: "41", zero: false, tight: false },
-    { label: "活动练习", text: "9", zero: false, tight: false }
+    { label: "学习记录", text: "24", zero: false, tight: false, actionable: true, target: "records", ariaLabel: "查看 24 条学习记录" },
+    { label: "新增知识点", text: "62", zero: false, tight: false, actionable: true, target: "records", ariaLabel: "查看 62 个新增知识点" },
+    { label: "复习反馈", text: "41", zero: false, tight: false, actionable: true, target: "feedback", ariaLabel: "查看 41 条复习反馈" },
+    { label: "活动练习", text: "9", zero: false, tight: false, actionable: false, target: "", ariaLabel: "活动练习 9 次" }
   ],
   urgencyPage: 0, urgencyPageLabel: "08-01 至 08-30",
   urgencyPages: [{ id: "0", pageNumber: 1, items: days(30, "urgency"), label: "08-01 至 08-30" }],

@@ -297,12 +297,15 @@ def test_viewer_original_preview_and_removed_member_denial(client, app):
 
 
 def test_preview_limiter_is_bounded_and_recovers(monkeypatch):
-    from push_kids.media.preview_limit import MediaPreviewLimiter
+    from push_kids.media.preview_limit import PER_MINUTE_LIMIT, MediaPreviewLimiter
     from push_kids.platform.errors import TooManyRequestsError
 
     monkeypatch.setattr("push_kids.media.preview_limit.monotonic", lambda: 100.0)
     limiter = MediaPreviewLimiter()
-    for _ in range(30):
+    # A nine-photo submission must stay well inside the window, otherwise browsing a few records
+    # makes every thumbnail fail at once.
+    assert PER_MINUTE_LIMIT >= 9 * 8
+    for _ in range(PER_MINUTE_LIMIT):
         limiter.check("member")
     with pytest.raises(TooManyRequestsError):
         limiter.check("member")

@@ -29,13 +29,13 @@ and local media through the same bounded infrastructure ports.
 
 | Module | Owns | Public boundary |
 |---|---|---|
-| `children` | children and subjects | child/subject services and HTTP routes |
+| `children` | children and subjects, child profile lifecycle | child/subject services and HTTP routes; `require_active_child` write gate |
 | `learning` | submissions and confirmed learning records | submission lifecycle service |
 | `knowledge` | normalized knowledge identity and occurrences | normalization policy |
 | `planning` | memory-curve review state and Todo grouping | pure scheduler + application service |
 | `activities` | schedules and practice records | activity service |
 | `reporting` | read models for dashboard/report/calendar | reporting service |
-| `agent_processing` | provider contract, analysis jobs, retries | analysis service and worker |
+| `agent_processing` | provider contract, analysis jobs, retries, deterministic subject routing (`subject_routing.py`, pure) | analysis service and worker |
 | `media` | validated local/cloud files, cloud ownership claim and temporary materialization | media store port |
 | `platform` | config, database, errors, request context | infrastructure only |
 
@@ -49,11 +49,20 @@ Dependency direction is routers → services → pure policies. Infrastructure a
   UTC on read on SQLite/MySQL. Existing naive timestamps retain the previous UTC interpretation; no schema
   migration or speculative correction of historical offsets is performed (`BUG-SPEC-20260905-05`).
 - A submission becomes immutable evidence after confirmation; parent edits are captured in the confirmed record.
+- A submission may own several `LearningRecord` rows, one per routed subject; `submission_id` is a plain
+  index since `20260906_0004`. Subject identity always resolves against the child's configured catalogue
+  through pure routing; model text never becomes a subject, and an unlisted name needs explicit parent consent.
 - `KnowledgeItem` is unique per family, child, subject, normalized name and category. Repeated learning creates one `KnowledgeOccurrence` per knowledge per confirmation, preserving existing Review state.
 - `ReviewItem` owns current review step and due date. Feedback advances, reinforces, partially advances, or defers it deterministically.
 - Cloud media is server-ticketed and claimed only after verifying uploader metadata, exact bucket/path,
   magic bytes, size and hash. Expired tickets and cancelled submissions are cleanup candidates.
 - Public account-wide export/deletion remains deferred to FEAT-002; cancellation deletes its scoped media.
+- A family may keep several child profiles; `children.active` is the profile lifecycle flag introduced by
+  migration `20260906_0005`. `children` owns the whole rule set: at most five profiles in use, unique names
+  among profiles in use, manager-only archive/restore, and the `require_active_child` gate that every new
+  learning/subject/activity write passes through. Read paths keep using `get_child`, so archiving never
+  removes rows or hides history. Archiving is not deletion and there is no physical child deletion path.
+  `Database.expected_cloud_revision` tracks the single Alembic head, currently `20260906_0005`.
 
 ## Async analysis sequence
 
@@ -169,6 +178,8 @@ tests; indirect and test-only cycles are forbidden.
 | Analysis provider | `agent_processing` | worker | `AnalysisProvider` plus provider contract tests |
 | Media store | `media` | learning submission flow | `MediaStore` plus validation/path-isolation tests |
 | Review scheduling | `planning` | learning confirmation and Todo feedback | pure versioned policy; not a generic helper |
+| Child profile lifecycle | `children` | learning, activities, families, routers | `require_active_child` / `list_children(include_archived)`; archived profiles resolve for reads only |
+| Mini Program child context | `apps/miniprogram/utils/child-context.js` | today / calendar / records / reports / settings / activity edit | decorate, resolve-with-fallback, global selection sync, profile-limit hint; presentation only, no business rules |
 
 No global `common`, `utils`, or service locator may own business semantics. A new
 shared abstraction requires at least a stable semantic contract, an owner,
@@ -222,6 +233,20 @@ within the existing single-process staging boundary. Distributed limits and real
 remain release gates. Search text uses an encoded header to keep child content out of URL access logs.
 Read projections do not invoke AI or mutate deterministic planning state. Static imports across all 53 Python
 source modules were checked without a cycle; the repository policy checker also passed.
+
+## Multi-child profile lifecycle — local implementation
+
+`SPEC-20260906-MULTI-CHILD-01` adds a profile lifecycle without new modules or a new dependency direction.
+`children` stays the single owner of capacity, naming, archive/restore and the write gate; `learning` and
+`activities` call `ChildrenService.require_active_child` instead of implementing their own archived check.
+`families` depends on `children` for creating the first profile and for listing profiles in use, and
+`children` never depends back on `families`, so the graph stays acyclic. Archive/restore audit rows are
+written straight to the shared `FamilyAuditEvent` persistence model rather than through the families
+service, which avoids a reverse edge for one log row; the local `X-Family-ID` path has no actor binding and
+is therefore left unattributed instead of logged against a fabricated actor. The migration is additive
+(`active` column plus index) and reversible, and the local SQLite bootstrap self-heals an existing
+development database. The Mini Program keeps its business rules on the server: `utils/child-context.js`
+owns only child decoration, selection resolution with fallback and the global selection sync.
 
 ## Frontend evidence exception
 

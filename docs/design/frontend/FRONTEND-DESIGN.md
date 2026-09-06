@@ -14,12 +14,12 @@
 - Approval evidence: 用户 2026-09-06 指令「最终需要的效果是 ui=你现在的设计，并功能是完整的」；同日指令「完全重新设计. 我只要最好的效果」→「按照这个方案 实现代码」（FDB-20260906-03）
 - Last verified: 2026-09-06（PKDS-2.0 本地实现，自动化检查通过 + 三视口近似渲染走查通过；三视口原生几何证据仍为 NOT_RUN）
 - Applies to: 家长使用的微信小程序；未来手机 Web 应保持相同信息架构
-- Related current implementation Spec: `specs/active/SPEC-20260906-PKDS-02-PAPER-SPROUT-UI.md` revision `SPEC-20260906-PKDS-02`（前序：`SPEC-20260906-PKDS-01`）
+- Related current implementation Spec: `specs/active/SPEC-20260906-PKDS-03-PAPER-SPROUT-UI.md` revision `SPEC-20260906-PKDS-03`（前序：`SPEC-20260906-PKDS-01`）
 - Superseded baseline revision: `FDB-20260830-01`、`FDB-20260906-02`（信息架构与产品立场沿用，视觉 token 与组件层被 PKDS-2.0「纸 · 芽」取代）
 - Frontend engineering constraints: approved `FEC-20260906-04`
 
-本 baseline 的可见合同由 `DREV-20260906-PKDS-02`（PKDS-2.0「纸 · 芽」）定义，
-落地记录见 `specs/active/SPEC-20260906-PKDS-02-PAPER-SPROUT-UI.md`，三视口走查产物由
+本 baseline 的可见合同由 `DREV-20260906-PKDS-03`（PKDS-2.0「纸 · 芽」）定义，
+落地记录见 `specs/active/SPEC-20260906-PKDS-03-PAPER-SPROUT-UI.md`，三视口走查产物由
 `node tools/preview/render.js` + `python3 tools/preview/shoot.py` 重放到 `dist/ui-preview/`。
 `DREV-20260906-PKDS-01` 的信息架构、状态四件套与产品立场继续有效，其色彩/圆角/阴影/图标层
 降级为设计历史；`DREV-20260830-03`、`DREV-20260905-UX-03`、`DREV-20260905-UX-04` 同为设计历史。
@@ -45,6 +45,8 @@ Figma Starter 限额 waiver 见架构文档和 BUG-010 Spec，仍在公开发布
 - 后果先行：复习反馈的每个选项旁必须写明它如何改变下次复习安排。
 - 手动路径平权：手动录入与手动反馈的入口层级不低于 AI 路径。
 - 报表只统计行为（记录数、知识点数、反馈次数、活动次数）与待复习压力，不评价能力、不预测掌握。
+- 科目归类由服务端确定性分组给出、家长可改：一次拍到多个科目分别成档，新增科目必须家长显式同意
+  （沿用 `BUG-013`，PKDS-2.0 只负责它的视觉呈现）。
 
 ## Figma sources and ownership
 
@@ -385,6 +387,7 @@ Todo 卡片必须包含：
 | UI-006 | 历史日历与每日详情 | FEAT-001 | proposed DREV-20260830-01 | not prototyped |
 | UI-007 | 科目与知识详情 | FEAT-001 | proposed DREV-20260830-01 | not prototyped |
 | UI-008 | 活动日程与练习记录 | FEAT-001 | proposed DREV-20260830-01 | not prototyped |
+| UI-015 | 学习档案管理与切换入口 | FEAT-005 | DREV-20260906-CHILD-01 | implemented locally, matrix pending |
 
 ## 12. Review decisions requested
 

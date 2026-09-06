@@ -1,30 +1,7 @@
-/* PKDS-1.0 · 确认页（E1~E4）：AI 草稿确认 / 人工录入 / 保存失败。
-   只写本页特有几何，其余复用 tokens / atoms / icons；只读态样式来自 detail.wxss。 */
+/* PKDS-2.0 · 确认页（E1~E4）：AI 草稿确认 / 人工录入 / 保存失败。
+   只读态样式来自 detail.wxss，草稿编辑样式来自 draft.wxss，本页只写页面外壳的几何。 */
 @import "detail.wxss";
+@import "draft.wxss";
 
 .confirm-page { padding-top: 0; }
 .confirm-page .rec-head { padding-top: 16rpx; }
-
-/* 卡片内小标签与元信息 */
-.c-lbl { font-size: 13px; line-height: 1.45; font-weight: 600; color: var(--pk-ink-2); }
-.c-meta { font-size: 13px; line-height: 1.45; color: var(--pk-ink-3); }
-
-/* 人工录入时保留的家长原文，永不截断 */
-.orig-text { display: block; margin-top: 16rpx; padding: 20rpx 24rpx; border-radius: var(--pk-r-md); background: var(--pk-surface-sunken); font-size: 14px; line-height: 1.7; color: var(--pk-ink-2); white-space: pre-wrap; overflow-wrap: anywhere; }
-
-/* 知识点草稿卡：把握程度低的用注意色描边提示需要核对 */
-.kn-card { padding: 28rpx; }
-.kn-card.warn { border-color: var(--pk-attention-line); background: var(--pk-attention-bg); }
-.kn-card .kn-n { font-size: 13px; line-height: 1.45; font-weight: 600; color: var(--pk-ink-3); font-variant-numeric: tabular-nums; }
-.kn-card .confidence { flex: none; }
-.kn-card .link-btn.dan { color: var(--pk-danger); min-height: 72rpx; }
-.kn-card .pk-input { background: var(--pk-surface); }
-.kn-more { margin-top: 24rpx; padding-top: 24rpx; border-top: var(--pk-border-soft); }
-.kn-more .btn-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20rpx; }
-.kn-more .btn-row .pk-field + .pk-field { margin-top: 0; }
-.kn-more .pk-field + .pk-field { margin-top: 28rpx; }
-
-/* 吸底确认条下的两条弱化出口：保留草稿 / 删除草稿 */
-.pk-cta-bar .cta-links { display: flex; align-items: center; justify-content: space-between; gap: 24rpx; }
-.pk-cta-bar .cta-links .link-btn { min-height: 76rpx; }
-.pk-cta-bar .cta-links .link-btn.dan { color: var(--pk-danger); }

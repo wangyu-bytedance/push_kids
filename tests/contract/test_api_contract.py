@@ -8,6 +8,22 @@ def test_openapi_contains_core_contracts(app) -> None:
     assert submission["properties"]["display_groups"]["type"] == "array"
 
 
+def test_child_profile_lifecycle_is_part_of_the_contract(app) -> None:
+    """多孩子切换依赖档案生命周期与 active 标记，客户端要能据此渲染切换列表。"""
+    document = app.openapi()
+    paths = document["paths"]
+    assert "/api/v1/children/{child_id}/archive" in paths
+    assert "/api/v1/children/{child_id}/restore" in paths
+    parameters = {item["name"] for item in paths["/api/v1/children"]["get"].get("parameters", [])}
+    assert "include_archived" in parameters
+    child_view = document["components"]["schemas"]["ChildView"]
+    assert child_view["properties"]["active"]["type"] == "boolean"
+    assert "active" in child_view["required"]
+    # 开通家庭时孩子信息可选，家长可以先建家庭再建档案。
+    family_create = document["components"]["schemas"]["FamilyCreate"]
+    assert "child" not in family_create.get("required", [])
+
+
 def test_family_header_is_required(client) -> None:
     response = client.get("/api/v1/children")
     assert response.status_code == 422

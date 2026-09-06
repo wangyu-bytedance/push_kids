@@ -106,6 +106,9 @@
         <view class="ico ico-check-pri sm" wx:if="{{index === childIndex}}"></view>
       </view>
     </view>
+    <view class="add-entry" wx:if="{{canAddChild}}" aria-role="button" aria-label="添加孩子" bindtap="addChild">
+      <view class="ico ico-plus-pri sm"></view><text>添加孩子</text>
+    </view>
   </view>
 </view>
 
@@ -157,7 +160,7 @@
           <text class="r-t">每周重复</text>
           <text class="r-s">开启后，之后每周的同一时间都会出现这条安排</text>
         </view>
-        <switch checked="{{repeatWeekly}}" color="#2E6A56" bindchange="toggleRepeat" />
+        <switch checked="{{repeatWeekly}}" color="#1F5B45" bindchange="toggleRepeat" />
       </view>
     </view>
   </view>
