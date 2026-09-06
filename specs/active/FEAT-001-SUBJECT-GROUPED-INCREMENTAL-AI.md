@@ -3,7 +3,7 @@
 - Status: `APPROVED`（backend implementation；frontend implementation remains design-gated）
 - Risk: `R2`（模型输出合同、分析上下文和异步写回行为同时变化）
 - Spec owner: 产品负责人
-- Implementer: Codex（待批准）
+- Implementer: Codex
 - Reviewer: 独立只读 Reviewer
 - Verifier: Codex
 - Created: 2026-09-06
@@ -154,6 +154,7 @@ sequenceDiagram
       {
         "kind": "new_learning",
         "name": "两位数进位加法",
+        "review_id": null,
         "existing_knowledge_id": null,
         "category": "计算与概念",
         "display_kind": "arithmetic",
@@ -169,15 +170,20 @@ sequenceDiagram
         "kind": "review",
         "name": "20以内加法",
         "review_id": "review-id-from-today-candidates",
+        "existing_knowledge_id": null,
+        "category": "计算与概念",
+        "display_kind": "arithmetic",
+        "review_method": "口算与讲解",
+        "estimated_minutes": 3,
         "direct_evidence": [
           {"source": "image", "image_index": 2, "detail": "口算练习页包含20以内加法"}
         ],
+        "context_used": [],
         "confidence": "high"
       }
     ],
     "语文": []
   },
-  "todo_matches": [],
   "uncertainties": []
 }
 ```
@@ -185,7 +191,7 @@ sequenceDiagram
 Contract rules:
 
 - `subjects` 的 key 必须逐字等于输入中的 active learning subject；不得出现合成、别名或未知 key。
-- 每个 value 必须是数组；空数组有效。响应可以省略无内容科目，但服务端按配置科目顺序扁平化。
+- 每个 value 必须是数组；空数组有效。每个配置科目键都必须出现，服务端按配置科目顺序扁平化。
 - 单个 item 不再含 `subject_name`；科目只继承自所在 key。
 - `new_learning` 不得带 `review_id`；验证后进入兼容 proposal 的 `knowledge_points`。
 - `review` 必须带精确的 `review_id`，且 ID、科目、规范知识名、step、due_date 必须与输入的 Today Todo
@@ -737,21 +743,35 @@ Temporary coexistence: 新 Provider 输出只走 grouped DTO；旧 flat `proposa
 
 ## 16. Implementation and verification record
 
-- Changed behavior: `PENDING APPROVAL/IMPLEMENTATION`
-- Deleted/replaced behavior: `PENDING`
-- Files changed: 当前仅新增本 Spec；生产代码未修改
-- Evidence: discovery only；required tests 尚未运行
-- Review: `NOT_RUN`
-- Deviations: none
+- Changed behavior: 后端已实现动态 strict JSON Schema、固定科目桶、同发生日增量过滤、Today Todo
+  分类、脱敏有限重生成、终态错误，以及 new/review 分流确认和纯复习响应。
+- Deleted/replaced behavior: Ark 路径删除 Markdown fence 正则修复和 prompt-only JSON；输出校验失败不再与
+  Worker 三次重试相乘；stale Review 不再静默跳过；Review 不再作为新学习 occurrence 写入。
+- Database: 无 migration、无新表/列；仅最终 canonical `AnalysisProposal` 写现有 `proposal_json`，纯复习
+  只更新现有 Review 并新增既有类型的 ReviewFeedback。
+- Files changed: `agent_processing/{contracts,context,prompt,providers,worker}.py`、
+  `learning/{schemas,service}.py`、`platform/errors.py`、相关 unit/integration tests、Feature/Behavior 本页事实。
+- Evidence:
+  - focused AI/确认/Worker 回归：`79 passed`；
+  - 完整 backend：首次 readiness 时序 case 波动，单 case 复跑通过；随后 `212 passed, 2 skipped`，
+    skipped 为既有 MySQL gates；
+  - `ruff check`、本次文件 `ruff format --check`、`mypy`：PASS；
+  - `npm test`：`109 passed`；architecture：`ARCHITECTURE_VALID checked=2`；
+    Mini Program：`MINIPROGRAM_VALID pages=14 source_bytes=605629`；
+  - global `ruff format --check .`：NOT PASS，两个并行报表改动文件未格式化，未擅自修改；与本 Spec
+    相关文件格式检查通过；
+  - Ark live smoke：`NOT_RUN`（`ark_configured=False`），不能确认部署模型真实兼容 strict schema。
+- Review: 实现者完成逐文件自查，未发现本范围 Blocker/Major；独立只读 Reviewer `NOT_RUN`。
+- Deviations: 前端 Step 5 未实施，遵守 `DREV-20260906-AI-03` 门禁；未部署、未改 DB schema。
 - Residual risks: 部署 Ark 模型对 strict JSON Schema 的真实支持、语义近重复和新学习/复习分类准确率需 live smoke；自动化不能替代家长确认。
 
 ## 17. Completion gate
 
 - [x] 无阻断问题；关键默认值已显式列为待批准 Decisions
-- [ ] 用户明确批准 `SPEC-AI-INCREMENT-20260906-03`
+- [x] 用户明确批准 `SPEC-AI-INCREMENT-20260906-03`
 - [ ] `DREV-20260906-AI-03` node-specific 原型、snapshot 与用户批准齐备
-- [ ] 实施范围未偏离批准 revision
-- [ ] Required test points 已全部执行或记录 not run/风险
+- [x] 后端实施范围未偏离批准 revision；前端按门禁保留
+- [x] Required test points 已全部执行或记录 not run/风险
 - [ ] 独立只读 Review 完成且无 Blocker/Major
-- [ ] FEAT-001、Behavior Catalog、Architecture 合并最终事实
+- [x] FEAT-001、Behavior Catalog 已合并最终事实；Architecture 无边界变化为 N/A
 - [ ] 若部署，遵循 release playbook 并在人工 gate 停止

@@ -8,6 +8,7 @@ from push_kids.agent_processing.contracts import (
     ModelAnalysisResult,
 )
 from push_kids.agent_processing.providers import ArkAnalysisProvider
+from push_kids.platform.errors import DependencyError
 
 
 def item(name: str, *, kind: str = "new_learning", review_id: str | None = None):
@@ -74,6 +75,29 @@ def test_provider_stops_after_three_invalid_structured_results():
     with pytest.raises(AnalysisOutputExhaustedError):
         provider.analyze(AnalysisInput(text="分数", existing_subjects=["数学"]))
     assert len(calls) == 3
+
+
+def test_incomplete_provider_response_uses_worker_transport_retry():
+    provider = object.__new__(ArkAnalysisProvider)
+    provider.model = "synthetic"
+    provider.client = SimpleNamespace(
+        responses=SimpleNamespace(
+            create=lambda **_kwargs: SimpleNamespace(status="incomplete", output_text="")
+        )
+    )
+
+    with pytest.raises(DependencyError):
+        provider.analyze(AnalysisInput(text="分数", existing_subjects=["数学"]))
+
+
+def test_all_empty_subject_buckets_are_a_valid_incremental_proposal():
+    data = AnalysisInput(text="重复材料", existing_subjects=["数学", "语文"])
+
+    proposal = data.validate_model_result(ModelAnalysisResult.model_validate(result()))
+
+    assert proposal.knowledge_points == []
+    assert proposal.todo_matches == []
+    assert proposal.subject_name == "数学"
 
 
 def test_validation_outputs_only_increment_and_maps_due_review():

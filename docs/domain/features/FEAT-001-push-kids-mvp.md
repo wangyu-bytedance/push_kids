@@ -1,11 +1,11 @@
 # FEAT-001 — 家庭学习持续跟进系统 MVP
 
 - Status: `CURRENT`
-- Revision: `FEAT-STATE-20260906-PKDS-03-STAGING`
-- Last verified: 2026-09-06（本地全量自动化回归；真实双账号 owner/metaid/公网拒绝 staging 验收由用户确认 PASS；三视口原生可见验收仍为 NOT_RUN）
+- Revision: `FEAT-STATE-20260906-PKDS-04-AI-INCREMENT`
+- Last verified: 2026-09-06（AI 增量后端本地 212 passed / 2 MySQL skipped，前端 109 passed，架构与小程序校验通过；Ark strict JSON Schema live smoke 因本机未配置 Key 为 NOT_RUN；确认页新分区仍受设计门禁阻塞）
 - Source Spec: `specs/completed/FEAT-001-PUSH-KIDS-FINAL-SPEC.md` revision `SPEC-20260831-08`
-- Latest applied Spec: `specs/active/BUG-013-MULTI-SUBJECT-AND-PARENT-FLOW.md` revision `BUG-SPEC-20260906-16`
-- Previous applied Spec: `specs/active/SPEC-20260906-PKDS-01-DESIGN-SYSTEM-ROLLOUT.md` revision `SPEC-20260906-PKDS-01`
+- Latest applied Spec: `specs/active/FEAT-001-SUBJECT-GROUPED-INCREMENTAL-AI.md` revision `SPEC-AI-INCREMENT-20260906-03`（backend only）
+- Previous applied Spec: `specs/active/BUG-013-MULTI-SUBJECT-AND-PARENT-FLOW.md` revision `BUG-SPEC-20260906-16`
 - Current visible contract: `docs/design/frontend/prototypes/DREV-20260906-PKDS-01/FRONTEND-SPEC.md`
 - Intermediate design artifact: `docs/design/frontend/prototypes/DREV-20260830-03/index.html`
 
@@ -62,19 +62,27 @@
 - 活动从既有活动记录入口保存。历史 activity Review 保留但退出 Todo、带练、AI Todo 候选、
   手动/匹配反馈和复习统计；原有活动记录、日程、练习频次与建议不变，历史学习记录不重写。
 - AI 输入包含本次图片/完整文字、实际发生时间、已填写年级、最多30个学习科目、分科目均衡
-  选取的最多30条已确认历史、最多100个已有知识身份/计划状态、最多50个有效Review候选。
+  选取的最多30条已确认历史、最多100个已有知识身份/计划状态、目标上海自然日内最多200个已确认
+  条目，以及确认当天最多50个 active 且已到期/逾期的 learning Review 候选；历史发生日提交不带
+  今日 Review 候选，未来未到期 Review 也不作为可完成候选。
   每科学习历史先取最近20条、按家长文字词面相关性排序后最多10条；知识先取最近30个，再按
   词面相关性排序，最终跨科目轮流取样。照片相关性由模型阅读，未声称语义检索。
   历史/知识出现必须不晚于本次学习；不推断教材、单元、掌握程度或下一课。
-- 部署规则在 `agent_processing/prompt.py` 版本化，不读取个人SKILL目录。规则要求核心概念、
-  批次合并、排除故事/装饰和证据定位；历史只能消歧，不能冒充本次证据。语义正确性仍须家长核对。
+- 部署规则在 `agent_processing/prompt.py` 以 `subject-grouped-incremental-20260906-03` 版本化，不读取
+  个人SKILL目录。Ark 必须按当前 active learning subjects 返回固定键的 strict JSON Schema，条目明确
+  为 `new_learning` 或 `review`；Markdown fence、额外科目/字段和非法引用不再由正则修补。Provider
+  失败后只携带脱敏校验代码最多重生成两次；最终非法输出终态为 `analysis_output_invalid`，不保存原文。
+  服务端再校验证据、历史/知识/Review引用并精确过滤同发生日重复项；语义正确性仍须家长核对。
 - 批内相同图片字节只传一次，证据保持原照片编号；最近100个同家庭同孩子的待确认/已确认
   提交内，相同文字+图片字节摘要触发重复材料提示并清空自动Todo匹配。摘要保存在草稿JSON的
   服务端元数据，不进模型/日志。无摘要旧记录、重新压缩/裁剪图片不保证识别；新学习事件仍可确认。
 - AI可关联候选已有知识ID，服务端校验并统一名称/类别，确认页可取消关联；确认再次检查身份
   与科目/名称/类别。同份记录重复知识只产生一次出现；多次学习仍保留各次发生时间和记录。
-- 上传复习内容不再重置已有Review的step/due_date/active（包括已结束项）；只有新知识初始化。
-  每次确认每个保留的Todo最多反馈一次，草稿观察到的step/due_date已变化则忽略过时匹配。
+- 上传材料中的复习内容必须引用同科目的当日到期/逾期 Todo，不能同时作为新学习条目。家长确认后
+  只写一条 `ReviewFeedback(complete)` 并按确定性策略推进已有 Review，不创建 LearningRecord、
+  KnowledgeOccurrence 或新 Review；纯复习确认返回空 `records[]` 和 `updated_reviews[]`。混合确认同一
+  事务处理新学与复习。step/due/active/确认日变化时返回 `409 review_state_changed` 并保持草稿，
+  不再静默忽略；未来或已结束 Review 不会提前推进。
 - AI排队、分析中、失败或待确认均可人工确认，人工表单不自动匹配Todo；保存时才取消未完成Job，
   复用同一正式记录事务，来源标记人工录入。Worker成功/失败回写均校验状态、attempt和lease，
   丢弃人工确认、取消或新租约后的迟到结果；不把取消结果复活用于旧任务。

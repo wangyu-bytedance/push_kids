@@ -167,6 +167,8 @@ class ArkAnalysisProvider:
                         }
                     },
                 )
+                if getattr(response, "status", "completed") != "completed":
+                    raise DependencyError("学习内容分析未完整返回，请稍后重试")
                 raw = response.output_text.strip()
                 result = ModelAnalysisResult.model_validate(json.loads(raw))
                 return data.validate_model_result(result)

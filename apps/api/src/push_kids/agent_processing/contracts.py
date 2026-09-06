@@ -177,6 +177,8 @@ class AnalysisInput(BaseModel):
 
     def structured_output_schema(self) -> dict:
         """Return an exact-key schema so the model cannot invent or omit subjects."""
+        if not self.existing_subjects:
+            raise AnalysisOutputValidationError(["subjects.input_empty"])
         schema = ModelAnalysisResult.model_json_schema()
         item_schema = {"type": "array", "items": {"$ref": "#/$defs/ModelLearningItem"}}
         schema["properties"]["subjects"] = {
@@ -209,6 +211,9 @@ class AnalysisInput(BaseModel):
         matches: list[TodoCandidate] = []
         errors: list[str] = []
         uncertainties = list(result.uncertainties)
+        new_keys: set[tuple[str, str]] = set()
+        if not result.source.strip():
+            errors.append("source.blank")
 
         for subject_name, items in result.subjects.items():
             for item in items:
@@ -258,6 +263,9 @@ class AnalysisInput(BaseModel):
                 if key in same_day:
                     continue
                 existing = knowledge.get(item.existing_knowledge_id or "")
+                if item.existing_knowledge_id is not None and existing is None:
+                    errors.append("knowledge.reference")
+                    continue
                 if existing is not None and (
                     existing.subject_name != subject_name
                     or normalize_knowledge_name(existing.name)
@@ -271,6 +279,9 @@ class AnalysisInput(BaseModel):
                             f"{subject_name}“{item.name}”是已有知识，未作为新学条目输出。"
                         )
                     continue
+                if key in new_keys:
+                    continue
+                new_keys.add(key)
                 points.append(
                     KnowledgeProposal(
                         existing_knowledge_id=item.existing_knowledge_id,
@@ -292,12 +303,13 @@ class AnalysisInput(BaseModel):
             raise AnalysisOutputValidationError(errors)
         points = unique_knowledge_points(points)
         matches = list({item.review_id: item for item in matches}.values())
-        if not points and not matches:
-            raise AnalysisOutputValidationError(["proposal.empty"])
         primary_subject = (
             points[0].subject_name
             if points
-            else next(item.subject_name for item in matches if item.subject_name)
+            else next(
+                (item.subject_name for item in matches if item.subject_name),
+                self.existing_subjects[0] if self.existing_subjects else "",
+            )
         )
         return AnalysisProposal(
             summary=result.summary.strip() or "请确认识别出的学习与复习条目",
