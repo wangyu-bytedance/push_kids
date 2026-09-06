@@ -42,6 +42,16 @@ def _stored_evidence(payload: str | None) -> list:
     return parsed if isinstance(parsed, list) else []
 
 
+def _knowledge_view(item: KnowledgeItem) -> dict:
+    return {
+        "id": item.id,
+        "name": item.name,
+        "category": item.category,
+        "confidence": item.confidence,
+        "evidence": _stored_evidence(item.evidence_json),
+    }
+
+
 class LearningHistory:
     @staticmethod
     def submission(db: Session, family: str, child: str, sid: str) -> LearningSubmission:
@@ -86,9 +96,12 @@ class LearningHistory:
             )
             if subject is None:
                 raise NotFoundError("没有找到所选科目")
+        # "r2" marks the row identity used by the cursor: one row per learning record, because a
+        # submission that spans subjects now holds several records. Older cursors stop matching and
+        # the client is told to refresh instead of silently skipping rows.
         scope = hashlib.sha256(
             json.dumps(
-                [family, child, view, q, subject_id, source, str(start), str(end), cancelled],
+                ["r2", family, child, view, q, subject_id, source, str(start), str(end), cancelled],
                 ensure_ascii=False,
             ).encode()
         ).hexdigest()
@@ -100,8 +113,14 @@ class LearningHistory:
                 if payload["scope"] != scope:
                     raise ValueError
                 upper = datetime.fromisoformat(payload["upper"])
-                anchor = (datetime.fromisoformat(payload["at"]), payload["id"])
-                if not upper.tzinfo or not anchor[0].tzinfo or not isinstance(anchor[1], str):
+                anchor = (
+                    datetime.fromisoformat(payload["at"]),
+                    payload["id"],
+                    payload["record_id"],
+                )
+                if not upper.tzinfo or not anchor[0].tzinfo:
+                    raise ValueError
+                if not isinstance(anchor[1], str) or not isinstance(anchor[2], str):
                     raise ValueError
             except (ValueError, KeyError, TypeError, UnicodeError) as exc:
                 raise ValueError("分页已失效，请刷新列表") from exc
@@ -159,11 +178,22 @@ class LearningHistory:
                     and_(s.state != "confirmed", draft_summary.contains(q, autoescape=True)),
                 )
             )
+        record_key = func.coalesce(r.id, "")
         if anchor:
             query = query.where(
-                or_(timestamp < anchor[0], and_(timestamp == anchor[0], s.id < anchor[1]))
+                or_(
+                    timestamp < anchor[0],
+                    and_(timestamp == anchor[0], s.id < anchor[1]),
+                    and_(
+                        timestamp == anchor[0],
+                        s.id == anchor[1],
+                        record_key < anchor[2],
+                    ),
+                )
             )
-        rows = db.execute(query.order_by(timestamp.desc(), s.id.desc()).limit(limit + 1)).all()
+        rows = db.execute(
+            query.order_by(timestamp.desc(), s.id.desc(), record_key.desc()).limit(limit + 1)
+        ).all()
         more = len(rows) > limit
         rows = rows[:limit]
         ids = [s.id for s, _, _ in rows]
@@ -222,7 +252,7 @@ class LearningHistory:
             )
         next_cursor = None
         if more and rows:
-            last = rows[-1][0]
+            last, last_record, _ = rows[-1]
             at = last.occurred_at if view == "confirmed" else last.created_at
             next_cursor = base64.urlsafe_b64encode(
                 json.dumps(
@@ -231,6 +261,7 @@ class LearningHistory:
                         "upper": upper.isoformat(),
                         "at": at.isoformat(),
                         "id": last.id,
+                        "record_id": last_record.id if last_record else "",
                     }
                 ).encode()
             ).decode()
@@ -270,16 +301,22 @@ class LearningHistory:
     def detail(cls, db: Session, family: str, child: str, sid: str) -> dict:
         item = cls.submission(db, family, child, sid)
         assert item.occurred_at is not None and item.created_at is not None
-        record = db.scalar(
-            select(LearningRecord).where(
+        # One submission holds one record per subject, in confirmation order.
+        rows = db.execute(
+            select(LearningRecord, Subject)
+            .join(Subject, Subject.id == LearningRecord.subject_id)
+            .where(
                 LearningRecord.submission_id == sid,
                 LearningRecord.family_id == family,
                 LearningRecord.child_id == child,
+                Subject.family_id == family,
             )
-        )
-        subject = db.get(Subject, record.subject_id) if record else None
-        knowledge = (
-            db.scalars(
+            .order_by(LearningRecord.created_at, LearningRecord.id)
+        ).all()
+        records = []
+        knowledge_rows: list = []
+        for record, subject in rows:
+            knowledge = db.scalars(
                 select(KnowledgeItem)
                 .join(
                     KnowledgeOccurrence,
@@ -293,9 +330,18 @@ class LearningHistory:
                 )
                 .order_by(KnowledgeItem.name, KnowledgeItem.id)
             ).all()
-            if record
-            else []
-        )
+            knowledge_rows.extend(knowledge)
+            records.append(
+                {
+                    "id": record.id,
+                    "summary": record.summary,
+                    "source": record.source,
+                    "subject_id": subject.id,
+                    "subject_name": subject.name,
+                    "subject_kind": subject.kind,
+                    "knowledge": [_knowledge_view(entry) for entry in knowledge],
+                }
+            )
         media = db.scalars(
             select(SubmissionMedia)
             .where(
@@ -311,26 +357,13 @@ class LearningHistory:
             "created_at": item.created_at.isoformat(),
             "input_text": item.input_text,
             "source": item.source,
-            "record": {
-                "id": record.id,
-                "summary": record.summary,
-                "source": record.source,
-                "subject_id": subject.id,
-                "subject_name": subject.name,
-                "subject_kind": subject.kind,
-            }
-            if record and subject
+            "records": records,
+            # `record` and `knowledge` describe the first subject and the union of all knowledge, so
+            # readers written before multi-subject submissions keep working.
+            "record": {key: value for key, value in records[0].items() if key != "knowledge"}
+            if records
             else None,
-            "knowledge": [
-                {
-                    "id": k.id,
-                    "name": k.name,
-                    "category": k.category,
-                    "confidence": k.confidence,
-                    "evidence": _stored_evidence(k.evidence_json),
-                }
-                for k in knowledge
-            ],
+            "knowledge": [_knowledge_view(entry) for entry in knowledge_rows],
             "media": [
                 {
                     "id": m.id,

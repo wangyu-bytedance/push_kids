@@ -1,23 +1,9 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
-const fs = require("node:fs");
-const vm = require("node:vm");
+const { loadPage } = require("./harness");
 
-function confirmation(request) {
-  let page;
-  vm.runInNewContext(fs.readFileSync("apps/miniprogram/pages/submission/confirm.js", "utf8"), {
-    require(name) { return name.includes("api") ? { request } : { friendlyTime: (value) => value }; },
-    Page(value) { page = value; }, wx: { showToast() {}, navigateBack() {} }, setTimeout() {}
-  });
-  page.setData = (updates) => {
-    for (const [path, value] of Object.entries(updates)) {
-      const parts = path.replace(/\[(\d+)\]/g, ".$1").split(".");
-      let target = page.data;
-      for (const part of parts.slice(0, -1)) target = target[part];
-      target[parts.at(-1)] = value;
-    }
-  };
-  return page;
+function confirmation(request, options) {
+  return loadPage("pages/submission/confirm.js", request, options).page;
 }
 
 test("manual form handles failed AI, retains full original text and filters activities", async () => {
@@ -44,12 +30,15 @@ test("manual save bypasses analysis, blocks duplicate click and retains form on 
   });
   page.data.id = "original";
   page.data.manual = true;
-  page.data.proposal = { summary: "练习加法", subject_name: "数学", knowledge_points: [{ name: "加法" }], todo_matches: [] };
-  const saving = page.confirm();
-  await page.confirm();
+  page.data.subjects = [{ id: "math", name: "数学" }];
+  page.data.proposal = { summary: "练习加法", subject_name: "数学", knowledge_points: [{ name: "加法", subject_name: "数学" }], todo_matches: [] };
+  const saving = page.confirmDraft();
+  await page.confirmDraft();
   assert.equal(calls.length, 1);
   assert.equal(calls[0].path, "/submissions/original/confirm");
   assert.equal(calls[0].options.data.manual_entry, true);
+  assert.equal(calls[0].options.data.groups.length, 1);
+  assert.equal(calls[0].options.data.groups[0].subject_id, "math");
   rejectSave(new Error("服务暂时不可用"));
   await saving;
   assert.equal(page.data.proposal.summary, "练习加法");
@@ -57,13 +46,16 @@ test("manual save bypasses analysis, blocks duplicate click and retains form on 
   assert.equal(page.data.saving, false);
 });
 
-test("editing a matched concept or subject clears the old identity", () => {
+test("editing a matched concept or moving its subject clears the old identity", async () => {
   const page = confirmation(async () => ({}));
-  page.data.proposal = { knowledge_points: [{ name: "加法", existing_knowledge_id: "known" }], todo_matches: [{ review_id: "review" }] };
+  page.data.subjects = [{ id: "math", name: "数学" }, { id: "english", name: "英语" }];
+  page.data.subjectPicks = ["数学", "英语", "＋ 写一个新科目"];
+  page.data.proposal = { knowledge_points: [{ name: "加法", subject_name: "数学", existing_knowledge_id: "known" }], todo_matches: [{ review_id: "review" }] };
   page.setPoint({ currentTarget: { dataset: { index: 0, field: "name" } }, detail: { value: "除法" } });
   assert.equal(page.data.proposal.knowledge_points[0].existing_knowledge_id, null);
-  page.data.subjects = [{ name: "英语" }];
-  page.changeSubject({ detail: { value: "0" } });
-  assert.equal(page.data.proposal.todo_matches.length, 0);
-  assert.equal(page.data.proposal.subject_kind, "learning");
+  page.data.proposal.knowledge_points[0].existing_knowledge_id = "known";
+  await page.movePointSubject({ currentTarget: { dataset: { index: 0 } }, detail: { value: "1" } });
+  assert.equal(page.data.proposal.knowledge_points[0].subject_name, "英语");
+  assert.equal(page.data.proposal.knowledge_points[0].existing_knowledge_id, null);
+  assert.equal(page.data.groups[0].subject_id, "english");
 });

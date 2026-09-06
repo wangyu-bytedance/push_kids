@@ -4,10 +4,11 @@
 - Related Feature: `FEAT-001`
 - Baseline: `FDB-20260906-02`
 - Engineering contract: `FEC-20260906-04`
-- Design revision: `DREV-20260906-PKDS-01`（PKDS-1.0；取代 `DREV-20260830-03` / `DREV-20260905-UX-03` / `DREV-20260905-UX-04` 的视觉部分）
-- Current-state revision: `UI-STATE-20260906-PKDS-01-LOCAL`
-- Related Spec: `specs/active/SPEC-20260906-PKDS-01-DESIGN-SYSTEM-ROLLOUT.md` revision `SPEC-20260906-PKDS-01`
-- Last verified: 2026-09-06（全量自动化检查通过；320/390/430 原生几何与真机为 NOT_RUN）
+- Design revision: `DREV-20260906-PKDS-02`（PKDS-1.0 视觉不变的交互增量；PKDS-01 取代 `DREV-20260830-03` / `DREV-20260905-UX-03` / `DREV-20260905-UX-04` 的视觉部分）
+- Current-state revision: `UI-STATE-20260906-PKDS-02-LOCAL`
+- Related Spec: `specs/active/SPEC-20260906-PKDS-01-DESIGN-SYSTEM-ROLLOUT.md` revision `SPEC-20260906-PKDS-01`；
+  `specs/active/BUG-013-MULTI-SUBJECT-AND-PARENT-FLOW.md` revision `BUG-SPEC-20260906-16`
+- Last verified: 2026-09-06（BUG-013 后全量自动化检查通过；320/390/430 原生几何与真机为 NOT_RUN）
 - Screen-level spec: `docs/design/frontend/prototypes/DREV-20260906-PKDS-01/FRONTEND-SPEC.md`
 - Reference screens: `docs/design/frontend/prototypes/DREV-20260906-PKDS-01/screenshots/`（39 屏）
 - Intermediate artifact: `docs/design/frontend/prototypes/DREV-20260830-03/index.html`（设计历史）
@@ -26,9 +27,10 @@
 | 报表 | 7/30/100 天概览、组件内30天分页的复习紧迫度与活跃度、科目记录 |
 | 设置 | 三项基础学科、手动添加的其他科目与课外活动、活动安排、家庭成员入口 |
 
-学习流程的深层页面分成两类责任：`pages/submission/confirm` 只承载**可编辑草稿**（AI 草稿确认与
-人工录入），`pages/record-detail` 承载**只读记录详情**（已入档只读态 D7 与待处理态 D8）。两者共用
-`pages/submission/detail.js` 的只读 mixin 与 `detail.wxml` 模板，因此"已入档"的表述在两处逐字一致。
+学习流程的深层页面分成两类责任：`pages/submission/confirm` 是**可编辑草稿**的独立入口（从新增流程
+或通知进入），`pages/record-detail` 承载**记录详情**——已入档为只读态，待确认态则在同页就地编辑并确认，
+不再要求家长再跳一层。只读部分共用 `pages/submission/detail.js` 的 mixin 与 `detail.wxml` 模板，
+可编辑草稿部分共用 `pages/submission/draft.js|wxml|wxss`，因此两个入口的文案与行为逐字一致。
 另有活动练习记录页。产品 UI 不编辑服务地址、不展示账号占位；这些由后台配置或后续微信身份版本负责。
 
 ## State and interaction contract
@@ -45,9 +47,17 @@
   待处理详情可补传、继续分析、人工录入、重试或确认后取消；人工表单和既有确认逻辑保留。
 - 原始材料展开后最多并发下载两张照片，缩略图点击重新鉴权取得原图；临时引用/文件在退出时清理，
   无图、图片删除、权限失效和网络失败分别呈现；搜索文字不进入 URL。真实云端预览仍待验证。
+- 云环境的照片预览直接使用服务端签发的短期 HTTPS 地址（`<image>` / `previewImage` 不受 request
+  合法域名限制，`wx.downloadFile` 受限），本地联调仍走带身份的容器下载并落临时文件；远端地址
+  不做 unlink。图片自身的 load/error 也会落到状态上，失败只影响该张照片。
 - 报表科目、今日学习/待处理进入同一历史入口，日期/科目意图只消费一次；列表返回保留条件与页码。
   详情可查看每个知识的当前计划与每页 3 条反馈，到期时跳回今日；浏览材料不记为完成复习。
-- AI 草稿可编辑；“确认”是创建正式记录、知识和复习项的唯一入口。
+- AI 草稿可编辑；“确认”是创建正式记录、知识和复习项的唯一入口。待确认记录在记录详情页直接编辑确认，
+  确认页与详情页共用同一份草稿实现，不存在两套编辑逻辑。
+- 一次提交跨多个科目时，草稿按服务端 `subject_groups` 分组展示“科目归类”：每组可整体换科目，
+  单个知识点也可单独换科目；确认后每个科目各生成一条学习记录，不会出现“数学、语文”这类合成科目。
+- 科目名不在孩子的科目列表里时该组显示提醒，并要求家长明确回答“新增这个科目吗”；未回答时确认
+  返回 `consent_required`，界面用弹窗再问一次，草稿与输入保留，不静默创建科目。
 - 草稿展示知识点的置信度文字、照片编号/家长文字证据及总体不确定项；缺证据的旧草稿/家长
   新增点明确提示核对原始材料。证据仅供核对，不代表模型判定掌握。
 - 关联已有知识显示复用/保留进度说明，并可取消关联；改名/类型会解除该点关联，改科目会清空
@@ -56,7 +66,7 @@
   AI置信度或证据，不自动匹配Todo。保存失败保留输入和可见错误，保存中防重复操作。
 - 重复材料提示放入“需要核对”；Todo匹配显示证据，已更新的任务不会再次推进。
 - 今日从同一个 Dashboard 读取复习、已确认学习和日程。三栏独立折叠，不使用只计算复习的
-  “今日总体进度”卡。
+  “今日总体进度”卡。默认复习与学习折叠、日程展开；本地偏好里的非布尔脏值回落到该默认。
 - 设置页不展示或编辑每日复习预算；当前服务端默认值继续用于 required/optional 分组。
 - 设置主页固定展示数学、语文、英语及真实已添加项；其他科目和课外活动从候选目录或自定义名称显式添加。打开或取消添加/提醒弹层不写数据。
 - 三栏成功空结果显示居中空文案；全部为空且没有待处理记录时显示“记录学习/添加日程”引导，添加日程意图只消费一次。
@@ -65,6 +75,8 @@
 - Todo 的“带练提示”只提交当前所选且已确认的 Review IDs。
 - 日程卡点击编辑；重复日程 MVP 修改整个系列。结束时间早于当前时刻后统一灰显。
 - 报表范围切换会重新请求 7/30/100 天数据并回到第1屏；100天在组件内部按30/30/30/10左右分页，页面根容器不横向移动。
+- 报表四个概览指标是 2×2 独立描边卡片并保留间距；学习记录跳记录页并带上当前区间筛选，新增知识/
+  复习反馈/活动练习在页内滚动定位到对应区块；指标为 0 时弱化显示并用 Toast 说明，不跳到空页面。
 - 紧迫度同时显示数字/勾与颜色，活跃度同时保留次数语义，颜色不是唯一信息。
 - 孩子切换器和折叠箭头都使用 CSS 矢量 chevron，不使用字体字形 `⌄`。
 - Todo 卡片的"为什么出现"由服务端结构化字段拼装：来源提交、来源学习日期、复习轮次和间隔天数。
@@ -90,12 +102,15 @@
 |---|---|---|
 | token | `apps/miniprogram/styles/tokens.wxss` | 语义色、科目色、圆角、间距、高度、动效、触控尺寸的唯一来源；含旧变量名兼容别名 |
 | 原子/组件 | `apps/miniprogram/styles/atoms.wxss` | Card / Hero / Section / Button / Pill / SubMark / Confidence / Notice / Segmented / Chips / 表单 / RowList / Timeline / WeekStrip / FAB / Metrics / PhotoUploader / 浮层四件套 / 空态 / 骨架 |
-| 图标 | `apps/miniprogram/styles/icons.wxss` | 27 个线性图标 × 6 个语义色变体，由 `tools/gen_icon_styles.py` 生成，禁止手工编辑 |
+| 图标 | `apps/miniprogram/styles/icons.wxss` | 42 个线性图标 × 6 个语义色变体，由 `tools/gen_icon_styles.py` 生成，禁止手工编辑 |
 | 页面 | `pages/*/**.wxss` | 只写本页特有几何，不重复定义 token |
 
-`apps/miniprogram/utils/ui.js` 承担纯展示派生（科目色/首字标记、置信度档位、反馈文案、
+`apps/miniprogram/utils/ui.js` 承担纯展示派生（科目色/首字标记、活动图标映射、置信度档位、反馈文案、
 月日格式、复习原因文案、本地偏好读写），不发请求、不持有业务状态；这是为了满足 WXML 不支持
 方法调用的平台约束。圆角只允许 8/12/16/24/32/40/999rpx；图标不允许使用 emoji 或文字符号。
+课外活动图标由 `activityIcon(name, tone)` 按名称关键字包含匹配派生（游泳/乒乓球/篮球/羽毛球/
+足球/网球/棋/钢琴/音乐/舞蹈/武术/书法/绘画/机器人/编程各自一个图标），家长自建且命中不了的活动
+统一使用默认星形图标；页面在 JS 里算好 `iconClass` 后 setData，WXML 只做拼接。
 
 ## Responsive and accessibility
 
@@ -113,8 +128,8 @@
 | display helpers | `apps/miniprogram/utils/ui.js` | 纯函数，无网络与业务状态 |
 | icons | `tools/gen_icon_styles.py` | 重跑产物 diff 为空（幂等） |
 | API/config | `utils/api.js`, `utils/cloud-media.js`, `config.js` | cloud env/service + callContainer + server-issued upload path；local fallback retained |
-| JS behavior | `tests/frontend` | 59 passed |
-| static package | `tools/validate_miniprogram.py` | `MINIPROGRAM_VALID pages=12`; no WXML method calls |
+| JS behavior | `tests/frontend` | 78 passed |
+| static package | `tools/validate_miniprogram.py` | `MINIPROGRAM_VALID pages=12 source_bytes=533311`; no WXML method calls |
 | lint | ESLint | passed |
 | WeChat DevTools | registered AppID preview | compiled; final 175,099-byte preview package |
 | WeChat platform API audit | `WECHAT-MINIPROGRAM-API-BASELINE.md` | compatibility/error-recovery changes proposed; not implemented |
@@ -143,6 +158,20 @@ guards for `callContainer`、`uploadFile` and `chooseMedia`; media permission fa
 classification and cancelable uploads are tracked by `BUG-SPEC-20260905-02` and remain unimplemented.
 
 ## Change references
+
+- 2026-09-06 — `BUG-013 / BUG-SPEC-20260906-16 / DREV-20260906-PKDS-02`：六项家长动线修复。
+  (1) 多科目草稿按服务端确定性归类分组展示，可整组或按知识点改科目，新增科目需家长显式同意，
+  不再出现「数学、语文」这类合成科目；(2) 待确认记录在 `pages/record-detail/` 就地编辑确认，
+  新增共享草稿模块 `pages/submission/draft.*`，确认页与详情页不再各写一套；(3) 课外活动图标
+  按活动语义派生，生成器新增 swim/pingpong/basketball/badminton/soccer/tennis/chess/piano/music/
+  dance/martial/brush/palette/robot/code/star 共 16 个图标并删除通用 `ico-ball`，自建活动用星形默认；
+  (4) 报表四指标改 2×2 独立卡片并加 `gap`，支持跳转记录页或页内定位，0 值只提示不跳空页；
+  (5) 今日默认折叠复习与学习、展开日程；(6) 云环境照片预览改用服务端签发的 HTTPS 地址，
+  远端地址不再 unlink，预览签发限额从 30/min 提到 120/min，解决「照片暂时无法读取」。
+  自动化证据：前端 78 passed、ESLint 通过、图标生成器两次产物 md5 一致（幂等）、
+  `validate_miniprogram.py pages=12 source_bytes=533311`、后端 171 passed / 2 skipped、
+  ruff check + format（172 files）、mypy（55 files）、`ARCHITECTURE_VALID checked=2`。
+  320×568 / 430×932 原生几何、字体放大、键盘态、真机弱网与真实云端图片预览仍为 `NOT_RUN`，未部署。
 
 - 2026-09-06 — `SPEC-20260906-PKDS-01 / DREV-20260906-PKDS-01`：全部 12 个页面与 2 个组件按
   PKDS-1.0 重做；新增 `apps/miniprogram/styles/{tokens,atoms,icons}.wxss` 与 `utils/ui.js`；

@@ -1,4 +1,5 @@
 <import src="detail.wxml" />
+<import src="draft.wxml" />
 <view class="page confirm-page {{loading || error || readOnly ? '' : 'sticky-cta'}}">
   <block wx:if="{{loading}}">
     <view class="sk h20 mt2"></view>
@@ -76,178 +77,11 @@
 
     <!-- 可编辑草稿：AI 整理草稿（E1 / E2）、人工录入（E3）、保存失败（E4） -->
     <block wx:else>
-      <view class="pk-notice err mt2" wx:if="{{saveError}}">
-        <view class="ico ico-cloud-off-dan sm"></view>
-        <view class="n-txt">
-          <text class="n-t">保存没有成功</text>
-          <text class="n-c">{{saveError}}。你的修改都还在，可以直接重试。</text>
-        </view>
-      </view>
-
-      <view class="pk-notice ai mt2" wx:if="{{!manual}}">
-        <view class="ico ico-sparkle-pri sm"></view>
-        <view class="n-txt">
-          <text class="n-t">这是 AI 整理的草稿</text>
-          <text class="n-c">点「确认」后才会进入学习档案和复习计划</text>
-        </view>
-      </view>
-      <view class="pk-notice quiet mt2" wx:else>
-        <view class="ico ico-pen sm"></view>
-        <view class="n-txt">
-          <text class="n-t">这条由你手动填写</text>
-          <text class="n-c">无需 AI 分析。填写本次实际学过的内容，确认后直接保存。</text>
-        </view>
-      </view>
-
-      <view class="pk-notice mt2" wx:if="{{!manual && proposal.uncertainties.length}}">
-        <view class="ico ico-info-att sm"></view>
-        <view class="n-txt">
-          <text class="n-t">需要核对 {{proposal.uncertainties.length}} 项</text>
-          <text class="n-c" wx:for="{{proposal.uncertainties}}" wx:key="index">{{item}}</text>
-        </view>
-      </view>
-
-      <view class="pk-card mt3" wx:if="{{manual && submission.input_text}}">
-        <view class="flex between">
-          <text class="c-lbl">原始记录</text>
-          <view class="pill neutral tnum">{{submission.input_text.length}} 字</view>
-        </view>
-        <text class="orig-text" selectable="{{true}}">{{submission.input_text}}</text>
-        <view class="pk-notice mt2" wx:if="{{submission.input_text.length > 500}}">
-          <view class="ico ico-info-att sm"></view>
-          <text class="n-txt">原文超过 500 字，请另写一段 500 字以内的总结。原文会完整保留，不会被截断。</text>
-        </view>
-      </view>
-
-      <view class="pk-card mt3">
-        <view class="flex between">
-          <view class="pill" wx:if="{{!manual}}"><view class="ico ico-sparkle-pri xs"></view><text>AI 整理草稿</text></view>
-          <view class="pill neutral" wx:else>人工录入</view>
-          <text class="c-meta tnum">实际学习 {{submission.time_label}}</text>
-        </view>
-
-        <view class="pk-field mt3">
-          <text class="lbl">学习总结<text class="opt">{{manual ? '必填' : '可修改'}}</text></text>
-          <textarea class="pk-textarea" value="{{proposal.summary}}" data-field="summary" bindinput="setProposal"
-            maxlength="500" adjust-position="{{true}}" placeholder="用一两句话写清这次实际学过什么" placeholder-class="pk-ph"></textarea>
-          <view class="flex between">
-            <text class="help">写清学过什么就够了，不用写评价。</text>
-            <text class="counter tnum">{{proposal.summary.length}} / 500</text>
-          </view>
-        </view>
-
-        <view class="pk-field">
-          <text class="lbl">科目</text>
-          <picker wx:if="{{subjects.length}}" range="{{subjects}}" range-key="name" value="{{subjectIndex < 0 ? 0 : subjectIndex}}" bindchange="changeSubject">
-            <view class="pk-picker">
-              <text class="{{proposal.subject_name ? '' : 'pk-ph'}}">{{proposal.subject_name || '选择已在学的科目'}}</text>
-              <view class="chev"></view>
-            </view>
-          </picker>
-          <input class="pk-input mt2" value="{{proposal.subject_name}}" data-field="subject_name" bindinput="setProposal"
-            maxlength="40" placeholder="也可以输入新的学习科目名称" placeholder-class="pk-ph" />
-          <text class="help">只能选择已在学的科目，也可以输入新的学习科目。</text>
-        </view>
-
-        <view class="pk-field" wx:if="{{!manual}}">
-          <text class="lbl">来源<text class="opt">可修改</text></text>
-          <input class="pk-input" value="{{proposal.source}}" data-field="source" bindinput="setProposal" maxlength="40" />
-        </view>
-      </view>
-
-      <view class="sec">
-        <view class="sec-bar">
-          <text class="s-t">知识点</text>
-          <text class="s-m tnum">{{proposal.knowledge_points.length}} 个</text>
-          <view class="btn sm neutral {{saving || proposal.knowledge_points.length >= 20 ? 'is-disabled' : ''}}"
-            aria-role="button" aria-label="添加一个知识点" bindtap="addPoint">
-            <view class="ico ico-plus xs"></view><text>添加</text>
-          </view>
-        </view>
-        <view class="sec-rule"></view>
-
-        <view class="pk-card kn-card {{item.confidence === 'low' ? 'warn' : ''}}" wx:for="{{proposal.knowledge_points}}" wx:key="index">
-          <view class="flex between">
-            <text class="kn-n">知识点 {{index + 1}}</text>
-            <view class="flex">
-              <view class="confidence {{item.confidence_tone}}" wx:if="{{!manual && item.confidence_tone}}">
-                <text>{{item.confidence_label}}</text>
-                <view class="bars">
-                  <view class="b {{item.confidence_level >= 1 ? 'on' : ''}}"></view>
-                  <view class="b {{item.confidence_level >= 2 ? 'on' : ''}}"></view>
-                  <view class="b {{item.confidence_level >= 3 ? 'on' : ''}}"></view>
-                </view>
-              </view>
-              <view class="link-btn dan" aria-role="button" aria-label="移除这个知识点" data-index="{{index}}" bindtap="removePoint">移除</view>
-            </view>
-          </view>
-
-          <input class="pk-input mt2" value="{{item.name}}" data-index="{{index}}" data-field="name" bindinput="setPoint"
-            maxlength="120" placeholder="知识点名称" placeholder-class="pk-ph" />
-
-          <view class="kn-ev" wx:if="{{!manual}}">
-            <text class="ev-line" wx:if="{{item.evidence_text}}">证据：{{item.evidence_text}}</text>
-            <text class="ev-line" wx:else>没有直接证据说明，请核对原始材料后再决定是否保留。</text>
-            <text class="ev-note">证据仅供你核对，不代表模型判断孩子已掌握。</text>
-            <text class="ev-note" wx:if="{{item.context_count}}">参考了 {{item.context_count}} 条近期记录，仅用于理解本次材料。</text>
-          </view>
-
-          <view class="pk-notice info mt2" wx:if="{{item.existing_knowledge_id}}">
-            <view class="ico ico-info sm"></view>
-            <text class="n-txt">已关联已有知识点，会保留原有复习进度。请核对是否为同一概念。</text>
-            <view class="link-btn" aria-role="button" aria-label="取消关联" data-index="{{index}}" bindtap="unlinkPoint">取消关联</view>
-          </view>
-
-          <view class="kn-more">
-            <view class="btn-row">
-              <view class="pk-field">
-                <text class="lbl">类型</text>
-                <input class="pk-input" value="{{item.category}}" data-index="{{index}}" data-field="category" bindinput="setPoint" maxlength="50" />
-              </view>
-              <view class="pk-field">
-                <text class="lbl">复习方式</text>
-                <input class="pk-input" value="{{item.review_method}}" data-index="{{index}}" data-field="review_method" bindinput="setPoint" maxlength="60" />
-              </view>
-            </view>
-            <view class="pk-field">
-              <text class="lbl">建议时长<text class="opt tnum">{{item.estimated_minutes}} 分钟</text></text>
-              <slider min="1" max="20" value="{{item.estimated_minutes}}" data-index="{{index}}" data-field="estimated_minutes"
-                bindchange="setPoint" activeColor="#2E6A56" backgroundColor="#EFEEE6" block-size="22" />
-            </view>
-          </view>
-        </view>
-      </view>
-
-      <view class="sec" wx:if="{{!manual && proposal.todo_matches.length}}">
-        <view class="sec-bar">
-          <text class="s-t">可能已完成的复习</text>
-          <text class="s-m tnum">{{proposal.todo_matches.length}} 项</text>
-        </view>
-        <view class="sec-rule"></view>
-        <view class="pk-notice quiet">
-          <view class="ico ico-info sm"></view>
-          <text class="n-txt">AI 猜的，保留前请核对。保留的项目会在这次确认时一并标记为完成，已更新的任务不会重复推进。</text>
-        </view>
-        <view class="rowlist mt2">
-          <view class="rowitem" wx:for="{{proposal.todo_matches}}" wx:key="review_id">
-            <view class="grow">
-              <text class="r-t">{{item.knowledge_name}}</text>
-              <text class="r-s" wx:if="{{item.evidence}}">证据：{{item.evidence}}</text>
-            </view>
-            <view class="link-btn dan" aria-role="button" aria-label="不标记这一项" data-index="{{index}}" bindtap="removeTodoMatch">不标记</view>
-          </view>
-        </view>
-      </view>
+      <template is="draft-form" data="{{manual, saving, saveError, conflict, proposal, groups, subjectPicks, subjectReview, submission}}" />
 
       <view class="mt4">
         <submission-materials child-id="{{submission.child_id}}" submission-id="{{id}}"
           submission-state="{{submission.state}}" default-open="{{false}}" />
-      </view>
-
-      <view class="pk-notice mt3" wx:if="{{conflict}}">
-        <view class="ico ico-warn-att sm"></view>
-        <text class="n-txt">这条记录已经被处理过了。查看最新内容会离开当前编辑的草稿。</text>
-        <view class="link-btn" aria-role="button" aria-label="查看最新记录" bindtap="load"><text>查看最新</text><view class="chev right pri"></view></view>
       </view>
 
       <view class="safe-tail"></view>
@@ -255,14 +89,6 @@
   </block>
 </view>
 
-<view class="pk-cta-bar" wx:if="{{!loading && !error && !readOnly}}">
-  <view class="btn {{saving ? 'is-disabled' : ''}}" aria-role="button" aria-label="{{saveError ? '重试确认' : '确认并保存学习记录'}}" bindtap="confirm">
-    <view class="ico ico-check-inv sm" wx:if="{{!saving}}"></view>
-    <text>{{saving ? '正在保存…' : (saveError ? '重试确认' : '确认并保存学习记录')}}</text>
-  </view>
-  <text class="help center">确认后会创建正式记录、知识点和复习计划。</text>
-  <view class="cta-links">
-    <view class="link-btn" aria-role="button" aria-label="先保留草稿稍后再来" bindtap="keepDraft">先保留草稿，稍后再来</view>
-    <view class="link-btn dan" aria-role="button" aria-label="删除这份草稿" bindtap="cancelDraft">删除这份草稿</view>
-  </view>
-</view>
+<block wx:if="{{!loading && !error && !readOnly}}">
+  <template is="draft-cta" data="{{saving, saveError}}" />
+</block>

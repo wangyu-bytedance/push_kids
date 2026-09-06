@@ -149,12 +149,13 @@ class ArkAnalysisProvider:
         )
         schema = {
             "summary": "不超过120字的可选补充说明，不重复知识列表",
-            "subject_name": "语文/数学/英语或家长明确的科目",
+            "subject_name": "只能逐字取自已有科目中的单一科目名，禁止拼接",
             "subject_kind": "learning",
             "source": "课内/作业/辅导班/自主学习/图片记录",
             "knowledge_points": [
                 {
                     "name": "已学知识点",
+                    "subject_name": "跨科目时写该点所属单一科目名，同一科目可省略",
                     "existing_knowledge_id": "已有同义知识候选的knowledge_id，不匹配时为null",
                     "category": "类型",
                     "display_kind": "hanzi/word/poem/arithmetic/concept/activity/other之一",
@@ -186,6 +187,8 @@ class ArkAnalysisProvider:
             f"规则版本：{PROMPT_REVISION}。{ANALYSIS_RULES}\n"
             f"JSON 结构：{json.dumps(schema, ensure_ascii=False)}。"
             f"孩子已有科目：{json.dumps(data.existing_subjects, ensure_ascii=False)}。"
+            "subject_name 必须逐字取自该列表中的一个；"
+            "跨科目时用 knowledge_point.subject_name 分别标注。"
             f"本次实际发生时间：{data.occurred_at or '未提供'}。"
             f"年级：{data.grade or '未提供，不推断'}。"
             f"已有知识及计划状态：{knowledge_json}。"
