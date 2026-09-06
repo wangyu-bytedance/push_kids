@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import importlib.util
 from datetime import UTC, datetime
 from pathlib import Path
 
@@ -13,6 +14,13 @@ from sqlalchemy import create_engine, inspect, text
 ROOT = Path(__file__).resolve().parents[2]
 BASE_REVISION = "20260905_0003"
 TARGET_REVISION = "20260906_0004"
+MIGRATION_SPEC = importlib.util.spec_from_file_location(
+    "multi_subject_migration",
+    ROOT / "apps" / "api" / "migrations" / "versions" / "20260906_0004_multi_subject_records.py",
+)
+assert MIGRATION_SPEC is not None and MIGRATION_SPEC.loader is not None
+MIGRATION = importlib.util.module_from_spec(MIGRATION_SPEC)
+MIGRATION_SPEC.loader.exec_module(MIGRATION)
 
 
 def _config(url: str) -> Config:
@@ -149,3 +157,34 @@ def test_multi_subject_migration_keeps_rows_and_guards_downgrade(tmp_path, monke
     assert _submission_is_unique(engine), "downgrade restores the single-record rule"
     with engine.begin() as connection:
         assert connection.execute(text("SELECT COUNT(*) FROM learning_records")).scalar() == 1
+
+
+def test_mysql_index_replacement_never_leaves_the_foreign_key_unindexed(monkeypatch) -> None:
+    indexes = {MIGRATION.MYSQL_UNIQUE_NAME}
+    operations: list[tuple[str, str]] = []
+
+    monkeypatch.setattr(MIGRATION, "_has_index", lambda name: name in indexes)
+
+    def create_index(name, *_args, **_kwargs):
+        operations.append(("create", name))
+        indexes.add(name)
+
+    def drop_index(name, **_kwargs):
+        operations.append(("drop", name))
+        indexes.remove(name)
+
+    monkeypatch.setattr(MIGRATION.op, "create_index", create_index)
+    monkeypatch.setattr(MIGRATION.op, "drop_index", drop_index)
+
+    MIGRATION._replace_mysql_unique_with_plain_index()
+    assert operations == [
+        ("create", MIGRATION.INDEX_NAME),
+        ("drop", MIGRATION.MYSQL_UNIQUE_NAME),
+    ]
+
+    operations.clear()
+    MIGRATION._restore_mysql_unique_index()
+    assert operations == [
+        ("create", MIGRATION.MYSQL_UNIQUE_NAME),
+        ("drop", MIGRATION.INDEX_NAME),
+    ]

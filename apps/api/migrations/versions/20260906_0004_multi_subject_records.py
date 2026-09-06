@@ -52,6 +52,23 @@ def _has_index(name: str) -> bool:
     return any(index["name"] == name for index in inspector.get_indexes("learning_records"))
 
 
+def _replace_mysql_unique_with_plain_index() -> None:
+    # MySQL requires an index for the submission foreign key at every DDL step. Create the
+    # replacement first; dropping the unique index first fails with error 1553.
+    if not _has_index(INDEX_NAME):
+        op.create_index(INDEX_NAME, "learning_records", ["submission_id"], unique=False)
+    if _has_index(MYSQL_UNIQUE_NAME):
+        op.drop_index(MYSQL_UNIQUE_NAME, table_name="learning_records")
+
+
+def _restore_mysql_unique_index() -> None:
+    # Keep the foreign key covered while reversing the index shape as well.
+    if not _has_index(MYSQL_UNIQUE_NAME):
+        op.create_index(MYSQL_UNIQUE_NAME, "learning_records", ["submission_id"], unique=True)
+    if _has_index(INDEX_NAME):
+        op.drop_index(INDEX_NAME, table_name="learning_records")
+
+
 def upgrade() -> None:
     dialect = op.get_bind().dialect.name
     if dialect == "sqlite":
@@ -64,8 +81,8 @@ def upgrade() -> None:
         ):
             pass
     else:
-        if _has_index(MYSQL_UNIQUE_NAME):
-            op.drop_index(MYSQL_UNIQUE_NAME, table_name="learning_records")
+        _replace_mysql_unique_with_plain_index()
+        return
     if not _has_index(INDEX_NAME):
         op.create_index(INDEX_NAME, "learning_records", ["submission_id"], unique=False)
 
@@ -85,9 +102,9 @@ def downgrade() -> None:
             "cannot restore the unique constraint: "
             f"{duplicated} submission(s) already hold several subject records"
         )
-    if _has_index(INDEX_NAME):
-        op.drop_index(INDEX_NAME, table_name="learning_records")
     if connection.dialect.name == "sqlite":
+        if _has_index(INDEX_NAME):
+            op.drop_index(INDEX_NAME, table_name="learning_records")
         with op.batch_alter_table(
             "learning_records",
             recreate="always",
@@ -95,4 +112,4 @@ def downgrade() -> None:
         ):
             pass
     else:
-        op.create_index(MYSQL_UNIQUE_NAME, "learning_records", ["submission_id"], unique=True)
+        _restore_mysql_unique_index()
