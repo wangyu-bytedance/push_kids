@@ -15,22 +15,36 @@ function normalizedError(response) {
   return "网络有点慢，请稍后再试";
 }
 
+/* 保留服务端错误码：界面要区分「冲突」和「需要家长再确认一次」（如新增科目）。 */
 function responseError(response) {
   const error = new Error(normalizedError(response));
   error.statusCode = response.statusCode;
+  const detail = response && response.data;
+  error.code = (detail && detail.error && detail.error.code) || "";
   return error;
 }
 
+/*
+ * 返回一个可以直接喂给 <image src> / wx.previewImage 的地址。
+ * 云环境用服务端签发的短期 https 地址：<image> 与 previewImage 不受 request 合法域名限制，
+ * 而 wx.downloadFile 受限，真机上会让所有照片一起加载失败。
+ * 本地联调仍走容器内的鉴权下载，落成临时文件。
+ */
 function downloadPreview(capability) {
   const context = appContext();
-  const header = {};
-  if (capability.download_path) {
-    if (context.useCloud || !capability.download_path.startsWith("/submissions/")) return Promise.reject(new Error("照片预览不可用"));
-    if (context.localActorId) header["X-Debug-Actor"] = context.localActorId;
-    else header["X-Family-ID"] = context.familyId;
-  } else if (!/^https:\/\//.test(capability.url || "")) return Promise.reject(new Error("照片预览不可用"));
+  if (context.useCloud) {
+    if (/^https:\/\//.test(capability.url || "")) return Promise.resolve(capability.url);
+    return Promise.reject(new Error("照片预览不可用，请稍后重试"));
+  }
+  if (!capability.download_path || !capability.download_path.startsWith("/submissions/")) {
+    return Promise.reject(new Error("照片预览不可用"));
+  }
+  if (!wx.downloadFile) return Promise.reject(new Error("当前微信版本无法读取照片，请更新微信后重试"));
+  const header = context.localActorId
+    ? { "X-Debug-Actor": context.localActorId }
+    : { "X-Family-ID": context.familyId };
   return new Promise((resolve, reject) => wx.downloadFile({
-    url: capability.download_path ? context.apiBaseUrl + capability.download_path : capability.url,
+    url: context.apiBaseUrl + capability.download_path,
     header,
     success(result) {
       if (result.statusCode === 200) resolve(result.tempFilePath);
@@ -40,8 +54,10 @@ function downloadPreview(capability) {
   }));
 }
 
+/* 只清理本地落盘的临时文件；云环境拿到的是远端地址，没有本地副本可删。 */
 function removePreview(path) {
-  if (path && wx.getFileSystemManager) wx.getFileSystemManager().unlink({ filePath: path, fail() {} });
+  if (!path || /^https?:\/\//.test(path)) return;
+  if (wx.getFileSystemManager) wx.getFileSystemManager().unlink({ filePath: path, fail() {} });
 }
 
 function request(path, options = {}) {

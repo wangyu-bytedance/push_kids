@@ -3,17 +3,57 @@ const ui = require("../../utils/ui");
 
 const REPORT_PAGE_SIZE = 30;
 const RANGES = [7, 30, 100];
+/* 吸顶区间条约 100rpx（12+72+16），再留 24rpx 余量，页内定位后标题不会贴边或被盖住。 */
+const SCROLL_MARGIN_RPX = 124;
+
+/* 4 个概览指标各自的落点：学习记录跨 Tab 去历史列表，其余三个在本页定位到对应区块。 */
+const METRIC_TARGETS = {
+  learning: { section: "", action: "看这段时间已确认的学习记录", empty: "这段时间还没有已确认的学习记录" },
+  knowledge: { section: "#sec-subjects", action: "看科目学习记录分布", empty: "这段时间还没有新增知识" },
+  feedback: { section: "#sec-feedback", action: "看复习活跃度", empty: "这段时间还没有复习反馈" },
+  activity: { section: "#sec-activities", action: "看课外活动投入", empty: "这段时间还没有活动练习" }
+};
 
 /* 报表只呈现客观事实：记了多少、复习反馈了多少、活动练了多少。
    正确率、掌握度、进步幅度、下一步该学什么都不属于这一页。 */
-function metricCell(value, label) {
+function metricCell(value, label, target) {
   const count = Number(value) || 0;
+  const meta = METRIC_TARGETS[target];
   return {
     label,
+    target,
     text: count > 9999 ? "9999+" : String(count),
     zero: count === 0,
-    tight: count >= 1000
+    tight: count >= 1000,
+    actionable: count > 0,
+    hint: meta.empty,
+    ariaLabel: count > 0 ? `${label} ${count}，${meta.action}` : `${label} 0，${meta.empty}`
   };
+}
+
+function localDay(value) {
+  return `${value.getFullYear()}-${String(value.getMonth() + 1).padStart(2, "0")}-${String(value.getDate()).padStart(2, "0")}`;
+}
+
+/* rpx 换 px：滚动接口只认 px，窗口宽度取不到时按 375 基准估算。 */
+function rpxToPx(value) {
+  let width = 0;
+  try {
+    const info = (wx.getWindowInfo ? wx.getWindowInfo() : wx.getSystemInfoSync()) || {};
+    width = Number(info.windowWidth) || 0;
+  } catch {
+    width = 0;
+  }
+  return value * (width || 375) / 750;
+}
+
+/* 报表区间换算成历史列表的 from/to：服务端已给出逐日序列时用它的首尾，口径与图表完全一致。 */
+function rangeFilters(report, days) {
+  const dates = report && report.review_activity ? report.review_activity : [];
+  if (dates.length) return { from: dates[0].day, to: dates[dates.length - 1].day };
+  const to = new Date();
+  const from = new Date(to.getTime() - (Math.max(1, Number(days) || 1) - 1) * 86400000);
+  return { from: localDay(from), to: localDay(to) };
 }
 
 /* 圆点档位、色块档位、日期刻度、读法说明全部在这里算好，WXML 不做任何方法调用。 */
@@ -79,6 +119,7 @@ function activityRows(detail, startDay) {
   rows.sort((left, right) => right.count - left.count);
   return rows.map((row) => ({
     ...row,
+    iconClass: ui.activityIcon(row.name, "pri"),
     meta: row.minutes
       ? `${row.count} 次 · 共 ${row.minutes} 分钟 · 上次 ${row.lastDay.slice(5)}`
       : `${row.count} 次 · 上次 ${row.lastDay.slice(5)}`
@@ -166,10 +207,10 @@ Page({
         activityPageLabel: activityPages.length ? activityPages[0].label : "",
         rangeLabel: `近 ${days} 天`,
         metrics: [
-          metricCell(overview.learning_records, "学习记录"),
-          metricCell(overview.new_knowledge_items, "新增知识"),
-          metricCell(overview.review_feedback_count, "复习反馈"),
-          metricCell(overview.activity_records, "活动练习")
+          metricCell(overview.learning_records, "学习记录", "learning"),
+          metricCell(overview.new_knowledge_items, "新增知识", "knowledge"),
+          metricCell(overview.review_feedback_count, "复习反馈", "feedback"),
+          metricCell(overview.activity_records, "活动练习", "activity")
         ],
         feedbackTotal: Number(overview.review_feedback_count) || 0,
         activityRows: activityRows(detail, startDay),
@@ -203,10 +244,41 @@ Page({
   openSubjectHistory(event) {
     const report = this.data.report;
     if (!report) return;
-    const dates = report.review_activity;
     getApp().globalData.recordIntent = { childId: this.data.childId, view: "history", status: "confirmed",
-      filters: { subject_id: event.currentTarget.dataset.id, from: dates.length ? dates[0].day : "", to: dates.length ? dates[dates.length - 1].day : "" } };
+      filters: { subject_id: event.currentTarget.dataset.id, ...rangeFilters(report, this.data.days) } };
     wx.switchTab({ url: "/pages/records/index" });
+  },
+  /* 指标为 0 时不跳到空页面，只说明这段时间没有对应记录。 */
+  openMetric(event) {
+    const target = event.currentTarget.dataset.target;
+    const metric = this.data.metrics.find((item) => item.target === target);
+    if (!metric) return;
+    if (!metric.actionable) {
+      wx.showToast({ title: metric.hint, icon: "none" });
+      return;
+    }
+    if (target === "learning") {
+      getApp().globalData.recordIntent = { childId: this.data.childId, view: "history", status: "confirmed",
+        filters: rangeFilters(this.data.report, this.data.days) };
+      wx.switchTab({ url: "/pages/records/index" });
+      return;
+    }
+    this.scrollToSection(METRIC_TARGETS[target].section);
+  },
+  /* 页内定位用 boundingClientRect + scrollOffset，兼容性比 selector 直跳更稳。 */
+  scrollToSection(selector) {
+    if (!selector || !wx.createSelectorQuery) return;
+    const query = wx.createSelectorQuery();
+    query.select(selector).boundingClientRect();
+    query.selectViewport().scrollOffset();
+    query.exec((result) => {
+      const rect = result && result[0];
+      const viewport = result && result[1];
+      if (!rect || !viewport) return;
+      const margin = rpxToPx(SCROLL_MARGIN_RPX);
+      const scrollTop = Math.max(0, rect.top + viewport.scrollTop - margin);
+      wx.pageScrollTo({ scrollTop, duration: 200 });
+    });
   },
   goRecord() {
     getApp().globalData.recordIntent = { childId: this.data.childId, view: "new" };

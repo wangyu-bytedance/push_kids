@@ -48,7 +48,6 @@ Component({
       }
     },
     async loadThumbnails(generation) {
-      if (!wx.downloadFile) return;
       let next = 0;
       const worker = async () => {
         while (generation === this.generation && this.visible !== false && next < this.data.media.length) {
@@ -69,14 +68,26 @@ Component({
             if ([401, 403, 404].includes(error.statusCode)) { this.clear(); this.setData({ error: error.message }); return; }
             this.setData({ [`media[${index}].unavailable`]: error.statusCode === 410,
               [`media[${index}].hint`]: error.statusCode === 410 ? "原图已删除或不可用" : "暂时无法读取，点此重试" });
+            this.setData({ error: error.message });
           }
         }
       };
       await Promise.all([worker(), worker()]);
     },
+    /* 地址过期或网络抖动会让 <image> 直接渲染失败，此时给出可重试的提示而不是留一个空格子。 */
+    thumbnailFailed(event) {
+      const index = this.data.media.findIndex((m) => m.id === event.currentTarget.dataset.id);
+      if (index < 0) return;
+      this.setData({ [`media[${index}].thumbnail`]: "", [`media[${index}].hint`]: "暂时无法读取，点此重试" });
+    },
+    thumbnailLoaded(event) {
+      const index = this.data.media.findIndex((m) => m.id === event.currentTarget.dataset.id);
+      if (index < 0 || !this.data.media[index].hint) return;
+      this.setData({ [`media[${index}].hint`]: "" });
+    },
     async preview(event) {
       if (this.data.previewBusy) return;
-      if (!wx.previewImage || !wx.downloadFile) { this.setData({ error: "当前微信版本无法预览图片，请更新微信后重试" }); return; }
+      if (!wx.previewImage) { this.setData({ error: "当前微信版本无法预览图片，请更新微信后重试" }); return; }
       const id = event.currentTarget.dataset.id;
       const index = this.data.media.findIndex((m) => m.id === id);
       if (index < 0 || !this.data.media[index].available) return;

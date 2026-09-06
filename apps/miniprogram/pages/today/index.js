@@ -3,7 +3,8 @@ const ui = require("../../utils/ui");
 
 const WEEKDAYS = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
 const KIND_LABELS = { class: "课外活动", activity: "自主活动", other: "其他安排" };
-const DEFAULT_SECTIONS = { review: true, learning: true, activity: true };
+/* 打开今日先看"今天要发生什么"：日程默认展开，复习与学习默认折叠，靠小标题上的数量摘要引导展开。 */
+const DEFAULT_SECTIONS = { review: false, learning: false, activity: true };
 const TODO_PREVIEW = 3;
 
 function dayLabel(iso) {
@@ -13,14 +14,11 @@ function dayLabel(iso) {
   return `${Number(parts[1])} 月 ${Number(parts[2])} 日 ${WEEKDAYS[value.getDay()] || ""}`;
 }
 
-/* 折叠偏好只认三个布尔位，storage 里的脏数据一律回落默认展开。 */
+/* 折叠偏好只认三个布尔位，storage 里的脏数据一律按 DEFAULT_SECTIONS 回落。 */
 function normalizeSections(value) {
   const source = value && typeof value === "object" ? value : {};
-  return {
-    review: source.review !== false,
-    learning: source.learning !== false,
-    activity: source.activity !== false
-  };
+  const pick = (key) => (typeof source[key] === "boolean" ? source[key] : DEFAULT_SECTIONS[key]);
+  return { review: pick("review"), learning: pick("learning"), activity: pick("activity") };
 }
 
 /* Todo 超过 3 张折叠；「有余力再做」小标题挂在第一张可选卡上。 */
@@ -39,7 +37,7 @@ function todoView(must, optional, expanded) {
 Page({
   data: {
     loading: true, error: "", children: [], childIndex: 0, childId: "", dashboard: null,
-    sections: { review: true, learning: true, activity: true }, reviewReturn: null, reviewGroupId: "",
+    sections: { ...DEFAULT_SECTIONS }, reviewReturn: null, reviewGroupId: "",
     reviewFocusText: "", dayLabel: "", hero: { required: 0, minutes: 0, note: "" },
     todoCards: [], hiddenTodoCount: 0, todosExpanded: false, showChildSheet: false, multiChild: false,
     sectionMeta: { review: "", learning: "", activity: "" }

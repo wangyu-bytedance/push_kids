@@ -1,10 +1,11 @@
 # FEAT-001 — 家庭学习持续跟进系统 MVP
 
 - Status: `CURRENT`
-- Revision: `FEAT-STATE-20260906-PKDS-01-LOCAL`
+- Revision: `FEAT-STATE-20260906-PKDS-02-LOCAL`
 - Last verified: 2026-09-06（本地全量自动化回归；三视口原生可见验收 NOT_RUN，本轮未部署）
 - Source Spec: `specs/completed/FEAT-001-PUSH-KIDS-FINAL-SPEC.md` revision `SPEC-20260831-08`
-- Latest applied Spec: `specs/active/SPEC-20260906-PKDS-01-DESIGN-SYSTEM-ROLLOUT.md` revision `SPEC-20260906-PKDS-01`
+- Latest applied Spec: `specs/active/BUG-013-MULTI-SUBJECT-AND-PARENT-FLOW.md` revision `BUG-SPEC-20260906-16`
+- Previous applied Spec: `specs/active/SPEC-20260906-PKDS-01-DESIGN-SYSTEM-ROLLOUT.md` revision `SPEC-20260906-PKDS-01`
 - Current visible contract: `docs/design/frontend/prototypes/DREV-20260906-PKDS-01/FRONTEND-SPEC.md`
 - Intermediate design artifact: `docs/design/frontend/prototypes/DREV-20260830-03/index.html`
 
@@ -36,7 +37,9 @@
   无 view 参数的旧 history 接口保留兼容；新 UI 不再依赖 100 条待处理草稿接口。
 - 原图每次经家庭/孩子/提交/媒体关联验证；viewer 允许读取，被移除成员拒绝新读取。
   云端签发最长 60 秒 GET 链接，本地下载每次带身份；临时文件退出清理。云端跨账号与合法域名尚未实测。
-  搜索文字经编码请求头传输，不进入访问日志 URL；预览签发在单进程内限制为每成员每分钟 30 次。
+  搜索文字经编码请求头传输，不进入访问日志 URL；预览签发在单进程内限制为每成员每分钟 120 次
+  （一次展开九图并逐张查看原图不再被自身限流打断）。云环境客户端直接使用签发的 HTTPS 地址渲染，
+  本地环境保留带身份的容器下载。
 
 - 所有查询与写入在 API 边界按家庭隔离；跨家庭资源返回 404。
 - 云环境由微信入口 actor 的 HMAC binding 解析家庭，拒绝客户端 `X-Family-ID`；本地/测试
@@ -45,6 +48,16 @@
 - 未确认草稿不能改变正式学习、知识、复习、Todo 或报表。
 - 学习确认只接受服务端解析为 `learning` 的科目；新 activity 提案、已有 activity ID 或同名
   活动均返回 400，草稿保留且不写正式数据。家长显式选择已有 learning 科目时以该科目分类为准。
+- 一份提交可以产生多条学习记录，每个科目一条：`learning_records.submission_id` 从唯一约束改为
+  普通索引（Alembic `20260906_0004`）。科目身份由 `agent_processing/subject_routing.py` 的确定性
+  路由决定，不采信模型字面：拆分 `、，,；;／/｜|＋+&＆·・.。：:` 与空格、去掉 `以及/和/与/及/跟`
+  连接词与 `自定义/综合/混合/其他/未知/多科目/跨科目/多学科/合并` 等 stopword，再按家庭已配置科目
+  别名匹配（`英文`→`英语`、`math`→`数学`）。因此不再创建 `数学、语文` 这类合成科目。
+- 目录里没有的科目名标记为未列出，必须家长在确认时显式同意新增；缺同意时确认返回
+  `409 consent_required`，草稿保留、不写任何正式数据，也不自动建科目。
+- 确认支持 `groups[]`（每组 = 一个科目 + 该科目的知识点位置 + 可选摘要）。索引以客户端看到的
+  知识点位置为权威，服务端只在每个科目桶内去重，避免全局去重造成索引移位。缺 `groups` 的旧客户端
+  仍走单科目路径；`ConfirmationResult` 保留 `record_id`/`subject_id` 并新增 `records[]`。
 - 活动从既有活动记录入口保存。历史 activity Review 保留但退出 Todo、带练、AI Todo 候选、
   手动/匹配反馈和复习统计；原有活动记录、日程、练习频次与建议不变，历史学习记录不重写。
 - AI 输入包含本次图片/完整文字、实际发生时间、已填写年级、最多30个学习科目、分科目均衡
@@ -173,6 +186,17 @@ BUG-010 本地实现已通过微信开发者工具 registered AppID preview 编�
 - BUG-010 的受控 Figma waiver 同样在公开生产前失效；三视口、字体放大、键盘和 iOS/Android 实机证据仍待补齐。
 
 ## Change references
+
+- 2026-09-06 — `BUG-013 / BUG-SPEC-20260906-16`：多科目照片一次确认后按科目分别入档（迁移
+  `20260906_0004` 把 `learning_records.submission_id` 的唯一约束降为普通索引，Alembic head 由
+  `20260905_0003` 升至 `20260906_0004`，downgrade 遇到多记录数据会显式报错而不是丢数据）；
+  新增确定性科目路由与 `consent_required` 同意闸门；待确认草稿可在记录详情页就地确认；
+  活动图标按语义派生；报表指标可点；今日默认折叠复习与学习；云环境照片预览改用签发 HTTPS 地址、
+  预览限额提至 120/min。API 全部新增字段可选、旧客户端不变。自动化证据：后端 171 passed / 2 skipped，
+  ruff check + format（172 files）、mypy（55 files）、`ARCHITECTURE_VALID checked=2`，前端 78 passed、
+  ESLint 通过、`validate_miniprogram.py pages=12 source_bytes=533311`、图标生成器幂等。
+  三视口原生几何、真机与真实 Ark 多科目语义准确率仍为 `NOT_RUN`，本轮未部署；历史上已落库的
+  合成科目名不做自动回改。
 
 - 2026-09-06 — `SPEC-20260906-PKDS-01`：小程序全部页面改为 PKDS-1.0 视觉与交互合同，新增只读
   记录详情页并把"可编辑草稿"与"只读记录"拆成两个路由；后端字段级新增 Todo 溯源、媒体稳定
