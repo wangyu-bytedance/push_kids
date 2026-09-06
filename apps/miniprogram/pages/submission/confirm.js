@@ -28,7 +28,7 @@ function pointView(point) {
 }
 
 Page({
-  data: { ...detail.data, id: "", loading: true, saving: false, error: "", saveError: "", manual: false, submission: null, proposal: null, subjects: [], subjectIndex: -1 },
+  data: { ...detail.data, id: "", loading: true, saving: false, error: "", saveError: "", manual: false, submission: null, proposal: null, subjects: [], subjectIndex: -1, subjectCustom: false },
   ...detail.methods,
   onLoad(options) { this.setData({ id: options.id, manual: options.manual === "1" }); this.load(); },
   onHide() { this.hidden = true; this.loadRequest = (this.loadRequest || 0) + 1; if (this.detailTimer) clearTimeout(this.detailTimer); },
@@ -70,7 +70,7 @@ Page({
       const subjectIndex = subjects.findIndex((item) => item.name === initial.subject_name);
       const proposal = { ...initial, uncertainties: initial.uncertainties || [], todo_matches: initial.todo_matches || [],
         knowledge_points: initial.knowledge_points.map(pointView) };
-      if (generation === this.loadRequest) this.setData({ loading: false, proposal, subjects, subjectIndex });
+      if (generation === this.loadRequest) this.setData({ loading: false, proposal, subjects, subjectIndex, subjectCustom: subjectIndex < 0 });
     } catch (error) {
       if (generation === this.loadRequest) this.setData({ loading: false, error: error.message, detail: null, submission: null, reviews: [] });
     }
@@ -87,7 +87,8 @@ Page({
     this.setData({ [`proposal.knowledge_points[${index}].${field}`]: field === "estimated_minutes" ? Number(event.detail.value) : event.detail.value });
     if (field === "name" || field === "category") this.setData({ [`proposal.knowledge_points[${index}].existing_knowledge_id`]: null });
   },
-  changeSubject(event) { const subjectIndex = Number(event.detail.value); this.setData({ subjectIndex, "proposal.subject_name": this.data.subjects[subjectIndex].name, "proposal.subject_kind": "learning" }); this.clearAssociations(); },
+  toggleSubjectCustom() { this.setData({ subjectCustom: !this.data.subjectCustom }); },
+  changeSubject(event) { const subjectIndex = Number(event.detail.value); this.setData({ subjectIndex, subjectCustom: false, "proposal.subject_name": this.data.subjects[subjectIndex].name, "proposal.subject_kind": "learning" }); this.clearAssociations(); },
   addPoint() { const points = this.data.proposal.knowledge_points.concat([pointView({ name: "", category: "知识点", review_method: "口头回顾", estimated_minutes: 3 })]); this.setData({ "proposal.knowledge_points": points }); },
   removePoint(event) { const points = this.data.proposal.knowledge_points.slice(); points.splice(Number(event.currentTarget.dataset.index), 1); this.setData({ "proposal.knowledge_points": points }); },
   removeTodoMatch(event) { const matches = this.data.proposal.todo_matches.slice(); matches.splice(Number(event.currentTarget.dataset.index), 1); this.setData({ "proposal.todo_matches": matches }); },

@@ -121,8 +121,8 @@
 
       <view class="pk-card mt3">
         <view class="flex between">
-          <view class="pill" wx:if="{{!manual}}"><view class="ico ico-sparkle-pri xs"></view><text>AI 整理草稿</text></view>
-          <view class="pill neutral" wx:else>人工录入</view>
+          <view class="stamp" wx:if="{{!manual}}"><view class="ico ico-sparkle-pri xs"></view><text>AI 草稿 · 待确认</text></view>
+          <view class="stamp manual" wx:else><view class="ico ico-pen-mute xs"></view><text>人工录入</text></view>
           <text class="c-meta tnum">实际学习 {{submission.time_label}}</text>
         </view>
 
@@ -138,15 +138,18 @@
 
         <view class="pk-field">
           <text class="lbl">科目</text>
-          <picker wx:if="{{subjects.length}}" range="{{subjects}}" range-key="name" value="{{subjectIndex < 0 ? 0 : subjectIndex}}" bindchange="changeSubject">
+          <picker wx:if="{{subjects.length && !subjectCustom}}" range="{{subjects}}" range-key="name" value="{{subjectIndex < 0 ? 0 : subjectIndex}}" bindchange="changeSubject">
             <view class="pk-picker">
               <text class="{{proposal.subject_name ? '' : 'pk-ph'}}">{{proposal.subject_name || '选择已在学的科目'}}</text>
               <view class="chev"></view>
             </view>
           </picker>
-          <input class="pk-input mt2" value="{{proposal.subject_name}}" data-field="subject_name" bindinput="setProposal"
-            maxlength="40" placeholder="也可以输入新的学习科目名称" placeholder-class="pk-ph" />
-          <text class="help">只能选择已在学的科目，也可以输入新的学习科目。</text>
+          <input wx:if="{{subjectCustom || !subjects.length}}" class="pk-input" value="{{proposal.subject_name}}" data-field="subject_name" bindinput="setProposal"
+            maxlength="40" placeholder="输入新的科目名称" placeholder-class="pk-ph" focus="{{subjectCustom && subjects.length}}" />
+          <view class="fd-row" wx:if="{{subjects.length}}">
+            <text class="help">{{subjectCustom ? '新科目会在你确认后加入这个孩子的学习科目。' : '只列出这个孩子已在学的科目。'}}</text>
+            <text class="lk" bindtap="toggleSubjectCustom">{{subjectCustom ? '选已在学的科目' : '换成新科目'}}</text>
+          </view>
         </view>
 
         <view class="pk-field" wx:if="{{!manual}}">
@@ -212,7 +215,7 @@
             <view class="pk-field">
               <text class="lbl">建议时长<text class="opt tnum">{{item.estimated_minutes}} 分钟</text></text>
               <slider min="1" max="20" value="{{item.estimated_minutes}}" data-index="{{index}}" data-field="estimated_minutes"
-                bindchange="setPoint" activeColor="#2E6A56" backgroundColor="#EFEEE6" block-size="22" />
+                bindchange="setPoint" activeColor="#1F5B45" backgroundColor="#EBE5D7" block-size="22" />
             </view>
           </view>
         </view>

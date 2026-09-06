@@ -48,9 +48,25 @@
     </view>
 
     <view class="pk-hero mt3" wx:if="{{!dashboard.show_guide}}">
-      <text class="hero-eyebrow">今天的复习安排</text>
-      <text class="hero-line" wx:if="{{hero.required}}">建议复习 <text class="hero-num">{{hero.required}}</text> 项，约 <text class="hero-num">{{hero.minutes}}</text> 分钟</text>
-      <text class="hero-line" wx:else>今天没有必须做的复习</text>
+      <view class="hero-main">
+        <view class="grow">
+          <text class="hero-eyebrow">今天的复习安排</text>
+          <text class="hero-line" wx:if="{{hero.required}}">建议复习 <text class="hero-num">{{hero.required}}</text> 项，约 <text class="hero-num">{{hero.minutes}}</text> 分钟</text>
+          <text class="hero-line" wx:else>今天没有必须做的复习</text>
+        </view>
+        <view class="ring" wx:if="{{hero.total}}">
+          <view class="rt {{item.cls}}" wx:for="{{hero.ticks}}" wx:key="index" style="transform: rotate({{item.deg}}deg) translateY(-74rpx)"></view>
+          <view class="ring-plate"></view>
+          <view class="ring-mid">
+            <text class="rv">{{hero.total}}<text class="ru">项</text></text>
+            <text class="rl">今天到期</text>
+          </view>
+        </view>
+      </view>
+      <view class="ring-legend" wx:if="{{hero.total}}">
+        <view class="rg"><view class="rgd"></view><text>必做 {{hero.required}}</text></view>
+        <view class="rg opt" wx:if="{{hero.optional}}"><view class="rgd"></view><text>有余力 {{hero.optional}}</text></view>
+      </view>
       <text class="hero-note">{{hero.note}}</text>
       <view class="btn-row mt4">
         <view class="btn md" aria-role="button" aria-label="记录学习" bindtap="recordLearning"><view class="ico ico-camera-inv sm"></view><text>记录学习</text></view>

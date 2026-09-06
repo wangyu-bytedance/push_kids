@@ -37,8 +37,8 @@
 .h-day { display: block; margin: var(--pk-s4) 0 var(--pk-s2); padding-left: 4rpx; font-size: 13px; font-weight: 600; color: var(--pk-ink-3); }
 
 .h-card { margin-top: var(--pk-s3); }
-.h-card.att { border-color: var(--pk-attention-line); background: #FFFDF7; }
-.h-card.dan { border-color: var(--pk-danger-line); background: #FFFCFB; }
+.h-card.att { border-color: var(--pk-attention-line); background: rgba(248, 239, 220, .35); }
+.h-card.dan { border-color: var(--pk-danger-line); background: rgba(247, 232, 226, .32); }
 .h-card .h-title { display: block; font-size: 16px; font-weight: 600; line-height: 1.4; color: var(--pk-ink); overflow-wrap: anywhere; }
 .h-card .h-sum { display: block; margin-top: 6rpx; font-size: 14px; line-height: 1.5; color: var(--pk-ink-2); overflow-wrap: anywhere; }
 .h-card .h-meta { display: block; margin-top: 8rpx; font-size: 13px; line-height: 1.5; color: var(--pk-ink-3); overflow-wrap: anywhere; }

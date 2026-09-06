@@ -70,8 +70,9 @@ ICONS: dict[str, str] = {
         "a1.8 1.8 0 0 1 1.4-1.2H20Z'/>"
     ),
     "ball": (
-        "<circle cx='12' cy='12' r='8.6'/><path d='M12 3.4c-2.6 2.3-4 5.4-4 8.6s1.4 6.3 4 8.6'/>"
-        "<path d='M12 3.4c2.6 2.3 4 5.4 4 8.6s-1.4 6.3-4 8.6'/><path d='M3.6 10.2h16.8'/>"
+        "<circle cx='12' cy='12' r='8.6'/>"
+        "<path d='M7.4 5.2c3.4 2.4 5.3 6.6 5 12.8'/>"
+        "<path d='M20.2 14c-3.7-1.7-8.1-1.2-11.9 1.5'/>"
     ),
     "list": "<path d='M4.6 7h14.8'/><path d='M4.6 12h14.8'/><path d='M4.6 17h9.6'/>",
     "cloud-off": (
@@ -98,17 +99,17 @@ ICONS: dict[str, str] = {
 
 # palette key -> hex
 COLORS: dict[str, str] = {
-    "": "#46544D",  # ink-2, default
-    "-pri": "#2E6A56",  # primary
-    "-inv": "#FFFFFF",  # on primary surfaces
-    "-mute": "#79857E",  # ink-3
-    "-att": "#9A6318",  # attention
-    "-dan": "#A6423B",  # danger
+    "": "#464E43",  # ink-2, default
+    "-pri": "#1F5B45",  # primary
+    "-inv": "#FFFDF8",  # on primary surfaces
+    "-mute": "#79826F",  # ink-3
+    "-att": "#A9762A",  # attention
+    "-dan": "#A85742",  # danger
 }
 
 TEMPLATE = (
     "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' "
-    "stroke='{color}' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'>"
+    "stroke='{color}' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'>"
     "{body}</svg>"
 )
 
@@ -118,7 +119,7 @@ ICO_BASE = (
     "background-repeat: no-repeat; background-position: center; background-size: 100% 100%; }"
 )
 
-HEADER = f"""/* 知芽 Push Kids · PKDS-1.0 线性图标
+HEADER = f"""/* 知芽 Push Kids · PKDS-2.0 线性图标
    由 tools/gen_icon_styles.py 生成，请勿手工编辑。
    用法：<view class="ico ico-camera"></view>；换色加后缀类，例如 ico-camera-pri。
    尺寸：默认 42rpx（21px），.ico.lg 48rpx，.ico.sm 32rpx，.ico.xs 28rpx。 */

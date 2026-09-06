@@ -1,6 +1,10 @@
 <view class="tabbar">
-  <view class="tab {{selected === index ? 'active' : ''}}" wx:for="{{tabs}}" wx:key="pagePath" data-index="{{index}}" bindtap="switchTab">
-    <view class="icon-slot">
+  <view class="tab {{selected === index ? 'active' : ''}} {{item.center ? 'is-center' : ''}}" wx:for="{{tabs}}" wx:key="pagePath" data-index="{{index}}" bindtap="switchTab">
+    <view class="key" wx:if="{{item.center}}">
+      <image class="tab-icon key-icon" src="/assets/tab-records-key.png" mode="aspectFit"/>
+      <text class="tab-badge on-key" wx:if="{{badges[item.icon]}}">{{badges[item.icon] > 99 ? '99+' : badges[item.icon]}}</text>
+    </view>
+    <view class="icon-slot" wx:else>
       <image class="tab-icon" src="/assets/tab-{{item.icon}}{{selected === index ? '-active' : ''}}.png" mode="aspectFit"/>
       <text class="tab-badge" wx:if="{{badges[item.icon]}}">{{badges[item.icon] > 99 ? '99+' : badges[item.icon]}}</text>
     </view>

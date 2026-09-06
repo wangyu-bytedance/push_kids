@@ -4,11 +4,11 @@
 .onboarding-page.sticky-cta { padding-bottom: calc(280rpx + env(safe-area-inset-bottom)); }
 
 /* A1 品牌与标题 */
-.brand { width: 112rpx; height: 112rpx; border-radius: var(--pk-r-xl); background: var(--pk-primary); display: flex; align-items: center; justify-content: center; }
+.brand { width: 112rpx; height: 112rpx; border-radius: var(--pk-r-xl); background: linear-gradient(150deg, var(--pk-primary-mid), var(--pk-primary-strong)); box-shadow: var(--pk-e-btn); display: flex; align-items: center; justify-content: center; }
 .brand-title { display: block; margin-top: 40rpx; }
-.brand-title text { display: block; font-size: 22px; line-height: 1.3; font-weight: 700; letter-spacing: -.2px; }
-.brand-copy { display: block; margin-top: 24rpx; }
-.brand-copy text { display: block; font-size: 14px; line-height: 1.55; color: var(--pk-ink-2); }
+.brand-title text { display: block; font-family: var(--pk-serif); font-size: 24px; line-height: 1.35; font-weight: 600; letter-spacing: .6px; color: var(--pk-ink); }
+.brand-copy { display: block; margin-top: 28rpx; }
+.brand-copy text { display: block; font-size: 14px; line-height: 1.75; color: var(--pk-ink-3); }
 
 /* A1 两张路径卡：整卡可点，右侧 chevron */
 .choice-card { display: flex; align-items: center; gap: 24rpx; min-height: 176rpx; margin-top: 40rpx; padding: 28rpx; box-sizing: border-box; background: var(--pk-surface); border: var(--pk-border); border-radius: var(--pk-r-xl); }

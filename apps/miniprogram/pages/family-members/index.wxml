@@ -98,7 +98,7 @@
 </view>
 
 <view class="pk-mask" wx:if="{{showMember}}" bindtap="closeMember"></view>
-<view class="pk-sheet member-sheet" wx:if="{{showMember}}">
+<view class="pk-sheet plain member-sheet" wx:if="{{showMember}}">
   <view class="handle"></view>
   <view class="sheet-head">
     <view class="grow">

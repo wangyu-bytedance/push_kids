@@ -8,8 +8,8 @@
 .family-card { background: var(--pk-primary-tint); border-color: var(--pk-primary-hairline); }
 .family-card .fam-mark { flex: none; width: 88rpx; height: 88rpx; border-radius: var(--pk-r-lg); background: var(--pk-surface); color: var(--pk-primary-strong); font-size: 17px; font-weight: 700; line-height: 88rpx; text-align: center; }
 .family-card .fam-name { display: block; font-size: 17px; line-height: 1.45; font-weight: 600; color: var(--pk-primary-strong); }
-.family-card .fam-sub { display: block; margin-top: 4rpx; font-size: 13px; line-height: 1.45; color: #4C6459; }
-.family-card .fam-note { display: block; margin-top: 24rpx; font-size: 13px; line-height: 1.5; color: #4C6459; }
+.family-card .fam-sub { display: block; margin-top: 4rpx; font-size: 13px; line-height: 1.45; color: var(--pk-ink-2); }
+.family-card .fam-note { display: block; margin-top: 24rpx; font-size: 13px; line-height: 1.5; color: var(--pk-ink-2); }
 
 /* 申请码卡与吸底条 */
 .applied-empty { padding: 64rpx 48rpx 32rpx; }
