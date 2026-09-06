@@ -3,6 +3,7 @@ const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
 const vm = require("node:vm");
+const childContext = require("../../apps/miniprogram/utils/child-context");
 
 function dayAt(index) {
   const day = new Date(Date.UTC(2026, 5, 1 + index));
@@ -33,7 +34,7 @@ function loadReportsPage() {
   };
   const filename = path.resolve(__dirname, "../../apps/miniprogram/pages/reports/index.js");
   vm.runInNewContext(fs.readFileSync(filename, "utf8"), {
-    require() { return api; },
+    require(name) { return name.includes("child-context") ? childContext : api; },
     Page(value) { definition = value; },
     getApp() { return { globalData: { selectedChildId: "child-1" }, selectChild() {} }; }
   }, { filename });

@@ -19,13 +19,14 @@
 
 ## Current user/system behavior
 
-- 新 actor 通过 `/api/v1/me` 得到 `unbound`，可原子创建家庭、manager membership 和首个孩子，
-  或凭短时邀请提交待审批申请。
+- 新 actor 通过 `/api/v1/me` 得到 `unbound`，可原子创建家庭与 manager membership；首个孩子档案
+  可以同批创建，也可以留空之后再建（FEAT-005）。或凭短时邀请提交待审批申请。
 - 云环境拒绝客户端家庭标识，并从可信微信 actor 解析 active membership；本地家庭流程可用
   `X-Debug-Actor`，旧的 `X-Family-ID` 仅保留给非家庭流程兼容测试。
 - active member 角色为 manager/editor/viewer；被移除成员保留历史记录，但 active 唯一投影被释放，
   因而可以再次加入原家庭或创建新家庭。
 - 创建家庭、邀请、申请、审批和拒绝具有服务端幂等语义；小程序在失败重试时复用同一幂等键。
+- `/api/v1/me` 与邀请预览的 `child_names` 只列在用学习档案，已归档档案不会出现在受邀家人面前（FEAT-005）。
 - 邀请是单次批准凭据：首个批准将邀请置为 exhausted，并使同邀请的其他 pending 申请失效；撤销邀请也同步释放 pending actor。
 - 成员管理接口无条件拒绝自移除；客户端本人详情不提供移除或角色修改。有效邀请列表不返回 token，申请双方通过六位申请码核对。
 - 当前学习/活动记录没有可信的上传人、监督人、确认人和编辑版本归属。
@@ -42,6 +43,7 @@
 | share/apply/approve | implemented locally | invite/request APIs + Mini Program pages |
 | manager/editor/viewer enforcement | implemented locally | server boundary role checks |
 | actor/supervisor attribution | not implemented | current persistence schema |
+| child profile archive/restore audit | implemented locally | `FamilyAuditEvent` `child.archived`/`child.restored`（FEAT-005，云身份路径） |
 
 ## Current state machine
 
@@ -113,3 +115,6 @@ still remains on the previous revision until the controlled migration window.
   remains blocked on rate limiting and the controlled MySQL migration window.
 - 2026-09-05 — BUG-010 revision 10 added self-removal protection, single-use invite lifecycle, request-code verification,
   active invite management, cascading pending-request cleanup and the member-detail interaction locally. Cloud rollout and native visual evidence remain pending.
+- 2026-09-06 — `SPEC-20260906-MULTI-CHILD-01`（FEAT-005）：创建家庭的 `child` 变为可选；`/me` 与邀请预览
+  只列在用学习档案；归档/恢复孩子档案仅 manager 可执行，并在云身份路径写入 `FamilyAuditEvent`。
+  角色仍是家庭级，按孩子授权仍是非目标。

@@ -39,9 +39,11 @@ test("API base URL is build configuration and cannot be overridden from storage"
 test("parent-facing actions guide an unconfigured family without pretending the app failed", () => {
   const uiSource = userInterfaceSource();
 
-  assert.doesNotMatch(uiSource, /添加孩子|保存孩子|孩子昵称|先添加一个孩子/);
+  /* FEAT-005 起「添加孩子」是正式入口文案；这里只继续拦截会误导家长的旧说法。 */
+  assert.doesNotMatch(uiSource, /保存孩子|孩子昵称|先添加一个孩子/);
   assert.match(uiSource, /学习档案/);
   assert.match(source("pages/settings/index.wxml"), /还没有学习档案/);
+  assert.match(source("pages/settings/index.wxml"), /添加孩子/);
   assert.match(source("pages/today/index.wxml"), /记下今天学到的/);
   assert.match(source("pages/today/index.wxml"), /记录学习/);
   assert.match(source("pages/today/index.wxml"), /添加日程/);

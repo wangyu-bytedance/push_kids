@@ -1,4 +1,5 @@
 const api = require("../../utils/api");
+const childContext = require("../../utils/child-context");
 
 const BASIC_LEARNING = ["数学", "语文", "英语"];
 const LEARNING_CATALOG = ["科学", "道德与法治", "物理", "化学", "生物", "历史", "地理", "政治", "美术", "音乐", "体育", "劳动"];
@@ -29,6 +30,7 @@ function scheduleLabel(schedule) {
 Page({
   data: {
     loading: true, error: "", children: [], childIndex: 0, childId: "", multiChild: false, showChildSheet: false,
+    archivedChildren: [], canAddChild: true, isManager: true, childLimitHint: childContext.limitHint(),
     canWrite: true, subjects: [],
     baseLearning: [], addedLearning: [], addedActivities: [], togglingName: "", removingId: "",
     pendingRequests: 0, requestsLabel: "",
@@ -70,28 +72,35 @@ Page({
     }
   },
   async load() {
+    /* 切换孩子会重新进入 load，用代际号丢弃上一轮迟到的响应，避免串档。 */
+    const generation = (this.loadGeneration || 0) + 1;
+    this.loadGeneration = generation;
     this.setData({ loading: true, error: "" });
     try {
-      const children = (await api.request("/children")).map((item) => ({
-        ...item,
-        avatar: item.name ? item.name.charAt(0) : "芽",
-        label: item.grade ? `${item.name} · ${item.grade}` : item.name
-      }));
+      /* 一次取全量档案：切换列表只放在用的，已归档的单独列出来供恢复。 */
+      const profiles = await api.request("/children?include_archived=true");
+      if (this.loadGeneration !== generation) return;
+      const active = profiles.filter((item) => item.active !== false);
+      const archivedChildren = childContext.decorateAll(profiles.filter((item) => item.active === false));
+      const selection = childContext.syncSelection(getApp(), active);
       const member = getApp().globalData.currentMember;
       const canWrite = !member || member.role !== "viewer";
-      if (!children.length) {
-        return this.setData({ loading: false, canWrite, children, multiChild: false, subjects: [],
+      const isManager = !member || member.role === "manager";
+      const shared = {
+        children: selection.children, multiChild: selection.multiChild,
+        archivedChildren, canAddChild: childContext.canAddChild(active), canWrite, isManager
+      };
+      if (!selection.children.length) {
+        return this.setData({ loading: false, ...shared, childIndex: 0, childId: "", subjects: [],
           baseLearning: [], addedLearning: [], addedActivities: [] });
       }
-      let childIndex = children.findIndex((item) => item.id === getApp().globalData.selectedChildId);
-      if (childIndex < 0) childIndex = 0;
-      const childId = children[childIndex].id;
-      getApp().selectChild(childId);
+      const childId = selection.childId;
       const [subjects, scheduleData, pendingRequests] = await Promise.all([
         api.request(`/children/${childId}/subjects`),
         api.request(`/children/${childId}/activity-schedules`),
         this.loadPendingRequests(member)
       ]);
+      if (this.loadGeneration !== generation) return;
       const scheduleMap = {};
       scheduleData.items.forEach((item) => { scheduleMap[item.subject_id] = item; });
       const activeLearning = subjects.filter((item) => item.kind === "learning" && item.active);
@@ -113,11 +122,12 @@ Page({
         return { ...item, short: item.name.charAt(0), schedule, scheduleLabel: scheduleLabel(schedule),
           custom: isCustom(item) && !ACTIVITY_CATALOG.includes(item.name) };
       });
-      this.setData({ loading: false, canWrite, children, childIndex, childId, multiChild: children.length > 1,
+      this.setData({ loading: false, ...shared, childIndex: selection.childIndex, childId,
         subjects, baseLearning, addedLearning, addedActivities, togglingName: "", removingId: "",
         pendingRequests, requestsLabel: pendingRequests ? `${pendingRequests} 份申请` : "" });
     } catch (error) {
       /* 弱网时保留已加载的科目与活动，只在顶部给一条可重试的说明。 */
+      if (this.loadGeneration !== generation) return;
       this.setData({ loading: false, error: error.message });
     }
   },
@@ -128,6 +138,19 @@ Page({
     getApp().selectChild(this.data.children[childIndex].id);
     this.setData({ childIndex, showChildSheet: false });
     this.load();
+  },
+  /* 新建与编辑走同一个表单页，避免两处重复维护名字与时长的校验文案。 */
+  addChild() {
+    if (!this.guardWrite()) return;
+    if (!this.data.canAddChild) return wx.showToast({ title: this.data.childLimitHint, icon: "none" });
+    this.setData({ showChildSheet: false });
+    wx.navigateTo({ url: "/pages/child-edit/index?mode=create" });
+  },
+  editChild(event) {
+    if (!this.guardWrite()) return;
+    const childId = event.currentTarget.dataset.id || this.data.childId;
+    if (!childId) return;
+    wx.navigateTo({ url: `/pages/child-edit/index?mode=edit&child_id=${childId}` });
   },
   guardWrite() {
     if (this.data.canWrite) return true;

@@ -368,6 +368,7 @@ Todo 卡片必须包含：
 | UI-006 | 历史日历与每日详情 | FEAT-001 | proposed DREV-20260830-01 | not prototyped |
 | UI-007 | 科目与知识详情 | FEAT-001 | proposed DREV-20260830-01 | not prototyped |
 | UI-008 | 活动日程与练习记录 | FEAT-001 | proposed DREV-20260830-01 | not prototyped |
+| UI-015 | 学习档案管理与切换入口 | FEAT-005 | DREV-20260906-CHILD-01 | implemented locally, matrix pending |
 
 ## 12. Review decisions requested
 

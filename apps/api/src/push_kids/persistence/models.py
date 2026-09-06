@@ -221,6 +221,9 @@ class Child(Base):
     name = Column(String(40), nullable=False)
     grade = Column(String(20), nullable=True)
     daily_budget_minutes = Column(Integer, nullable=False, default=15)
+    # False archives the profile: it leaves the switcher and refuses new writes, while every
+    # existing record, review item and report stays readable. There is no physical delete.
+    active = Column(Boolean, nullable=False, default=True, index=True)
     created_at = Column(UTCDateTime(), nullable=False, default=utcnow)
 
 

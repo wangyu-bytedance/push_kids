@@ -3,13 +3,17 @@ const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
 const vm = require("node:vm");
+const childContext = require("../../apps/miniprogram/utils/child-context");
 
 function loadSettingsPage() {
   const calls = [];
   let definition;
   const filename = path.resolve(__dirname, "../../apps/miniprogram/pages/settings/index.js");
   vm.runInNewContext(fs.readFileSync(filename, "utf8"), {
-    require() { return { request: async (...args) => { calls.push(args); return {}; }, newIdempotencyKey: () => "key" }; },
+    require(name) {
+      if (name.includes("child-context")) return childContext;
+      return { request: async (...args) => { calls.push(args); return {}; }, newIdempotencyKey: () => "key" };
+    },
     Page(value) { definition = value; },
     wx: { showToast() {}, showModal() {} },
     getApp() { return { globalData: {}, selectChild() {} }; },

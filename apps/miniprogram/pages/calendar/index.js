@@ -1,5 +1,6 @@
 const api = require("../../utils/api");
 const ui = require("../../utils/ui");
+const childContext = require("../../utils/child-context");
 const { localParts } = require("../../utils/date");
 
 const WEEK_LABELS = ["一", "二", "三", "四", "五", "六", "日"];
@@ -46,7 +47,7 @@ function decorateItem(item) {
 
 Page({
   data: {
-    loading: true, error: "", children: [], childIndex: 0, childId: "", multiChild: false,
+    loading: true, error: "", children: [], childIndex: 0, childId: "", multiChild: false, canAddChild: true,
     selectedDay: "", monthLabel: "", weekKicker: "", dayTitle: "", itemCount: 0, weekEmpty: false,
     week: [], items: [], showChildSheet: false,
     showEditor: false, editingId: "", eventName: "", eventKind: "class", eventDate: "",
@@ -80,17 +81,16 @@ Page({
       dayTitle: `${ui.monthDay(selectedDay)} · ${WEEKDAY_FULL[new Date(`${selectedDay}T12:00:00`).getDay()]}`
     });
     try {
-      const children = (await api.request("/children")).map((item) => ({
-        ...item,
-        avatar: item.name ? item.name.charAt(0) : "芽",
-        label: item.grade ? `${item.name} · ${item.grade}` : item.name
-      }));
+      const profiles = await api.request("/children");
       if (generation !== this.loadGeneration) return;
-      if (!children.length) return this.setData({ loading: false, children, items: [], itemCount: 0, multiChild: false });
-      let childIndex = children.findIndex((item) => item.id === getApp().globalData.selectedChildId);
-      if (childIndex < 0) childIndex = 0;
-      const childId = children[childIndex].id;
-      getApp().selectChild(childId);
+      const selection = childContext.syncSelection(getApp(), profiles);
+      const children = selection.children;
+      const canAddChild = childContext.canAddChild(profiles);
+      if (!children.length) {
+        return this.setData({ loading: false, children, items: [], itemCount: 0, multiChild: false, canAddChild });
+      }
+      const childIndex = selection.childIndex;
+      const childId = selection.childId;
       if (this.cacheChildId !== childId) { this.cache = {}; this.marks = {}; this.cacheChildId = childId; }
       const schedule = await api.request(`/children/${childId}/schedule?day=${selectedDay}`);
       if (generation !== this.loadGeneration) return;
@@ -98,7 +98,7 @@ Page({
       this.cache[selectedDay] = items;
       this.marks[selectedDay] = items.length > 0;
       this.setData({ loading: false, children, childIndex, childId, items, itemCount: items.length,
-        multiChild: children.length > 1, week: weekFor(selectedDay, this.marks, todayKey) });
+        multiChild: selection.multiChild, canAddChild, week: weekFor(selectedDay, this.marks, todayKey) });
       this.fillWeek(childId, selectedDay, generation);
     } catch (error) {
       if (generation !== this.loadGeneration) return;
@@ -132,8 +132,12 @@ Page({
     const empty = known.length === keys.length && known.every((key) => !this.cache[key].length);
     this.setData({ week: weekFor(selectedDay, this.marks, localParts().date), weekEmpty: empty });
   },
-  openChildSheet() { if (this.data.multiChild) this.setData({ showChildSheet: true }); },
+  openChildSheet() { if (this.data.children.length) this.setData({ showChildSheet: true }); },
   closeChildSheet() { this.setData({ showChildSheet: false }); },
+  addChild() {
+    this.setData({ showChildSheet: false });
+    wx.navigateTo({ url: "/pages/child-edit/index?mode=create" });
+  },
   chooseChild(event) {
     const index = Number(event.currentTarget.dataset.index);
     getApp().selectChild(this.data.children[index].id);

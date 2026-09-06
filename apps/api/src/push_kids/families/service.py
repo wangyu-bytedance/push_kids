@@ -127,11 +127,8 @@ class FamilyService:
             member = FamilyRepository.active_member(db, binding.id)
             family = db.get(Family, binding.family_id) if binding.family_id else None
             if member and family and family.status == FamilyStatus.active.value:
-                children = list(
-                    db.scalars(
-                        select(Child).where(Child.family_id == family.id).order_by(Child.created_at)
-                    )
-                )
+                # Bootstrap drives the child switcher, so it must only offer profiles in use.
+                children = ChildrenService.list_children(db, str(family.id))
                 return BootstrapView(
                     state="bound",
                     family=FamilySummary.model_validate(family),
@@ -200,7 +197,8 @@ class FamilyService:
         db.add(member)
         db.flush()
         assert binding.id
-        ChildrenService.create_child_in_transaction(db, family.id, body.child)
+        if body.child is not None:
+            ChildrenService.create_child_in_transaction(db, family.id, body.child)
         cls._audit(db, family.id, binding.id, "family.created", "family", family.id)
         db.commit()
         return cls.bootstrap(db, actor)
@@ -428,7 +426,9 @@ class FamilyService:
             raise GoneError("邀请已失效")
         names = list(
             db.scalars(
-                select(Child.name).where(Child.family_id == family.id).order_by(Child.created_at)
+                select(Child.name)
+                .where(Child.family_id == family.id, Child.active.is_(True))
+                .order_by(Child.created_at)
             )
         )
         return InvitePreview(
