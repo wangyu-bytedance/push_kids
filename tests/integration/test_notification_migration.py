@@ -15,6 +15,8 @@ from sqlalchemy import create_engine, inspect, text
 ROOT = Path(__file__).resolve().parents[2]
 BASE_REVISION = "20260906_0007"
 TARGET_REVISION = "20260906_0008"
+DELETION_SCOPE_REVISION = "20260907_0009"
+DELIVERY_CHILD_TABLE = "notification_delivery_children"
 NOTIFICATION_TABLES = {
     "notification_preferences",
     "notification_destinations",
@@ -114,5 +116,42 @@ def test_notification_migration_is_additive_and_reversible(tmp_path: Path, monke
     assert NOTIFICATION_TABLES & rolled_back == set()
     with engine.connect() as connection:
         # 回滚只丢提醒队列，家庭与孩子数据必须保留。
+        assert connection.execute(text("SELECT COUNT(*) FROM children")).scalar() == 1
+    engine.dispose()
+
+
+def test_notification_delivery_child_scope_migration_is_reversible(
+    tmp_path: Path, monkeypatch
+) -> None:
+    url = f"sqlite:///{tmp_path / 'notification-scope.db'}"
+    monkeypatch.setenv("PUSH_KIDS_DATABASE_URL", url)
+    config = _config(url)
+    command.upgrade(config, TARGET_REVISION)
+    _seed(url)
+
+    command.upgrade(config, DELETION_SCOPE_REVISION)
+    engine = create_engine(url)
+    inspector = inspect(engine)
+    assert DELIVERY_CHILD_TABLE in inspector.get_table_names()
+    indexes = {item["name"] for item in inspector.get_indexes(DELIVERY_CHILD_TABLE)}
+    assert indexes >= {
+        "ix_notification_delivery_children_child_id",
+        "ix_notification_delivery_children_delivery_id",
+    }
+    unique = {item["name"] for item in inspector.get_unique_constraints(DELIVERY_CHILD_TABLE)}
+    assert "uq_notification_delivery_child_scope" in unique
+    foreign_keys = {
+        tuple(item["constrained_columns"]): tuple(item["referred_columns"])
+        for item in inspector.get_foreign_keys(DELIVERY_CHILD_TABLE)
+    }
+    assert foreign_keys == {("delivery_id",): ("id",), ("child_id",): ("id",)}
+    engine.dispose()
+
+    command.downgrade(config, TARGET_REVISION)
+    engine = create_engine(url)
+    inspector = inspect(engine)
+    assert DELIVERY_CHILD_TABLE not in inspector.get_table_names()
+    assert set(inspector.get_table_names()) >= NOTIFICATION_TABLES
+    with engine.connect() as connection:
         assert connection.execute(text("SELECT COUNT(*) FROM children")).scalar() == 1
     engine.dispose()

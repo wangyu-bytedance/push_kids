@@ -13,9 +13,10 @@ import logging
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 
-from sqlalchemy import select
+from sqlalchemy import delete, exists, or_, select
 from sqlalchemy.orm import Session
 
+from push_kids.children.service import ChildrenService
 from push_kids.families.service import FamilyService
 from push_kids.notifications.destinations import DestinationCipher, DestinationCipherError
 from push_kids.notifications.domain import KINDS, kind_for, retry_delay_seconds
@@ -33,9 +34,11 @@ from push_kids.persistence.models import (
     DeliveryState,
     MemberRole,
     NotificationDelivery,
+    NotificationDeliveryChild,
     NotificationDestination,
     NotificationPreference,
     NotificationSubscription,
+    NotificationType,
     SubscriptionStatus,
 )
 from push_kids.platform.config import Settings
@@ -115,6 +118,101 @@ def build_channel(settings: Settings) -> NotificationChannel:
 
 
 class NotificationsService:
+    @staticmethod
+    def _lock_claimed_delivery(db: Session, delivery_id: str) -> NotificationDelivery | None:
+        """Revalidate a claimed row after target locks and before external delivery.
+
+        Deletion locks the target before purging notification rows. Dispatch follows the same
+        target-then-delivery lock order, so a purge that wins the race is observed as a missing row
+        and its in-memory payload is never sent.
+        """
+        return db.scalar(
+            select(NotificationDelivery)
+            .where(
+                NotificationDelivery.id == delivery_id,
+                NotificationDelivery.state == DeliveryState.sending.value,
+            )
+            .with_for_update()
+        )
+
+    @staticmethod
+    def _delivery_target_result_code(db: Session, row: NotificationDelivery) -> str | None:
+        family_id = str(row.family_id)
+        member_id = str(row.member_id)
+        if not FamilyService.notification_member_is_active(db, family_id, member_id):
+            if FamilyService.notification_family_is_active(db, family_id):
+                return "member_departed"
+            return "target_deleting"
+        if row.type not in (
+            NotificationType.schedule_reminder.value,
+            NotificationType.review_digest.value,
+        ):
+            return None
+        child_ids = {
+            child_id
+            for child_id in db.scalars(
+                select(NotificationDeliveryChild.child_id).where(
+                    NotificationDeliveryChild.delivery_id == row.id
+                )
+            )
+            if child_id is not None
+        }
+        if not ChildrenService.notification_scope_is_active(db, family_id, child_ids or None):
+            return "target_deleting"
+        return None
+
+    @staticmethod
+    def purge_data(db: Session, family_id: str, child_id: str | None) -> None:
+        """Purge notification-owned rows within the deletion worker's transaction."""
+        delivery_query = select(NotificationDelivery.id).where(
+            NotificationDelivery.family_id == family_id
+        )
+        if child_id is not None:
+            scoped_delivery_ids = select(NotificationDeliveryChild.delivery_id).where(
+                NotificationDeliveryChild.child_id == child_id
+            )
+            has_child_scope = exists(
+                select(NotificationDeliveryChild.id).where(
+                    NotificationDeliveryChild.delivery_id == NotificationDelivery.id
+                )
+            )
+            delivery_query = delivery_query.where(
+                or_(
+                    NotificationDelivery.id.in_(scoped_delivery_ids),
+                    NotificationDelivery.type.in_(
+                        (
+                            NotificationType.schedule_reminder.value,
+                            NotificationType.review_digest.value,
+                        )
+                    )
+                    & ~has_child_scope,
+                )
+            )
+        delivery_ids = list(db.scalars(delivery_query))
+        if delivery_ids:
+            db.execute(
+                delete(NotificationDeliveryChild).where(
+                    NotificationDeliveryChild.delivery_id.in_(delivery_ids)
+                )
+            )
+            db.execute(
+                delete(NotificationDelivery).where(NotificationDelivery.id.in_(delivery_ids))
+            )
+        if child_id is None:
+            db.execute(
+                delete(NotificationSubscription).where(
+                    NotificationSubscription.family_id == family_id
+                )
+            )
+            db.execute(
+                delete(NotificationPreference).where(NotificationPreference.family_id == family_id)
+            )
+            db.execute(
+                delete(NotificationDestination).where(
+                    NotificationDestination.family_id == family_id
+                )
+            )
+
     @staticmethod
     def _require_member(context: RequestContext) -> str:
         if not context.member_id:
@@ -500,15 +598,21 @@ class NotificationsService:
         counts = {"sent": 0, "skipped": 0, "retried": 0, "failed": 0, "dropped": 0}
         cls.reclaim_expired(db, current)
         claimed = cls._claim(db, current, limit)
-        # Membership is re-checked at send time: a row may have been queued before the member left.
-        active_members = FamilyService.active_member_ids(
-            db, {str(row.member_id) for row in claimed}
-        )
-        for row in claimed:
-            type_name = str(row.type)
-            member_id = str(row.member_id)
-            if member_id not in active_members:
-                cls._terminate(db, row, DeliveryState.cancelled, "member_departed")
+        for claimed_row in claimed:
+            type_name = str(claimed_row.type)
+            member_id = str(claimed_row.member_id)
+            # Locks make deletion acceptance and external delivery serial: whichever acquires the
+            # family/child rows first completes before the other can claim the newer state.
+            result_code = cls._delivery_target_result_code(db, claimed_row)
+            row = cls._lock_claimed_delivery(db, str(claimed_row.id))
+            if row is None:
+                # A deletion worker may have purged the claimed row while it was waiting for the
+                # target lock. Roll back the read transaction to release any locks it acquired.
+                db.rollback()
+                counts["dropped"] += 1
+                continue
+            if result_code is not None:
+                cls._terminate(db, row, DeliveryState.cancelled, result_code)
                 counts["dropped"] += 1
                 continue
             binding = channel.binding(type_name)

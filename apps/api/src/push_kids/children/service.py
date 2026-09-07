@@ -20,6 +20,26 @@ def is_custom_subject(name: str, kind: str) -> bool:
 
 class ChildrenService:
     @staticmethod
+    def notification_scope_is_active(
+        db: Session, family_id: str, child_ids: set[str] | None
+    ) -> bool:
+        """Lock and validate children immediately before a notification is queued or sent.
+
+        ``None`` represents a legacy child-bearing delivery whose exact children were not stored.
+        Such a delivery is blocked while any child in its family is being deleted.
+        """
+        statement = select(Child).where(Child.family_id == family_id).with_for_update()
+        if child_ids is None:
+            return not any(bool(child.deleting) for child in db.scalars(statement))
+        if not child_ids:
+            return True
+        rows = list(db.scalars(statement.where(Child.id.in_(child_ids))))
+        found = {str(child.id) for child in rows}
+        return found == child_ids and all(
+            bool(child.active) and not bool(child.deleting) for child in rows
+        )
+
+    @staticmethod
     def purge_data(db: Session, family_id: str, child_id: str | None) -> None:
         subject_scope = [Subject.family_id == family_id]
         child_scope = [Child.family_id == family_id]

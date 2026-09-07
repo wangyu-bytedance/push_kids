@@ -274,6 +274,7 @@ class PlanningService:
                 ReviewItem.due_date <= target,
                 Subject.kind == "learning",
                 Child.active.is_(True),
+                Child.deleting.is_(False),
             )
             .group_by(ReviewItem.family_id, ReviewItem.child_id, Child.name, Subject.name)
             .order_by(func.count(ReviewItem.id).desc(), Subject.name)

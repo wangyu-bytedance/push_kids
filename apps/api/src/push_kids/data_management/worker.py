@@ -14,6 +14,7 @@ from push_kids.families.service import FamilyService
 from push_kids.learning.service import LearningService
 from push_kids.media.cleanup import MediaCleanup
 from push_kids.media.store import MediaStore, WeChatCloudMediaStore
+from push_kids.notifications.service import NotificationsService
 from push_kids.persistence.models import (
     Child,
     DeletionRequest,
@@ -173,6 +174,7 @@ class DataDeletionWorker:
 
     def _purge_owned_rows(self, db, family_id: str, child_id: str | None) -> None:
         submission_ids = LearningService.deletion_submission_ids(db, family_id, child_id)
+        NotificationsService.purge_data(db, family_id, child_id)
         PlanningService.purge_data(db, family_id, child_id)
         ActivitiesService.purge_data(db, family_id, child_id)
         TravelService.purge_data(db, family_id, child_id)

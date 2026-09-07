@@ -142,6 +142,7 @@ class NotificationPlanner:
                         dedupe_key=key,
                         content=content,
                         scheduled_at=send_at,
+                        child_ids=(occurrence.child_id,),
                     )
                 )
         cancelled = NotificationOutbox.cancel_pending_outside(
@@ -162,17 +163,22 @@ class NotificationPlanner:
         if local.hour < DIGEST_HOUR:
             return PlanResult()
         day = local_date(current)
-        by_family: dict[str, list[ChildReviewLoad]] = {}
+        by_family: dict[str, list[tuple[str, ChildReviewLoad]]] = {}
         for load in PlanningService.pending_review_loads(db, day):
             by_family.setdefault(load.family_id, []).append(
-                ChildReviewLoad(
-                    child_name=load.child_name,
-                    pending_count=load.pending_count,
-                    subject_names=load.subject_names,
+                (
+                    load.child_id,
+                    ChildReviewLoad(
+                        child_name=load.child_name,
+                        pending_count=load.pending_count,
+                        subject_names=load.subject_names,
+                    ),
                 )
             )
         outcomes: list[EnqueueOutcome] = []
-        for family_id, loads in by_family.items():
+        for family_id, scoped_loads in by_family.items():
+            child_ids = tuple(child_id for child_id, _load in scoped_loads)
+            loads = [load for _child_id, load in scoped_loads]
             content = review_digest_content(loads)
             if content is None:
                 continue
@@ -186,6 +192,7 @@ class NotificationPlanner:
                         dedupe_key=review_digest_key(day, member.member_id),
                         content=content,
                         scheduled_at=current,
+                        child_ids=child_ids,
                     )
                 )
         db.commit()

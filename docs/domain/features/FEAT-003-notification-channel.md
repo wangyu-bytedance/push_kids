@@ -2,15 +2,16 @@
 
 - Feature ID: `FEAT-003`
 - Status: `IMPLEMENTING`
-- Current-state revision: `FEAT-STATE-20260906-CHANNEL-03-LOCAL`
+- Current-state revision: `FEAT-STATE-20260907-CHANNEL-04-LOCAL`
 - Owner: 产品负责人（用户）
-- Last verified: 2026-09-06
+- Last verified: 2026-09-07
 - Authoritative implementation: `apps/api/src/push_kids/notifications/`、通知持久化模型、
-  Alembic `20260906_0008_notification_channel`、`apps/miniprogram/pages/notifications/`、
+  Alembic `20260906_0008_notification_channel` + `20260907_0009_notification_deletion_scope`、`apps/miniprogram/pages/notifications/`、
   `apps/miniprogram/utils/notifications.js`、`tools/notification_config.py`
 - Active change Spec: `specs/active/FEAT-003-NOTIFICATION-CHANNEL.md` revisions
   `SPEC-20260906-CHANNEL-01`（服务端通道）+ `SPEC-20260906-CHANNEL-02`（授权入口）
-  + `SPEC-20260906-CHANNEL-03`（对齐后台已选用模板的字段语义）
+  + `SPEC-20260906-CHANNEL-03`（对齐后台已选用模板的字段语义）+
+  `BUG-SPEC-20260907-22`（永久删除与冻结边界）
 - UI current state: `docs/design/frontend/ui/UI-011-reminder-settings.md`
 
 > 本文只描述当前事实。服务端通道与小程序授权入口都已实现并通过本地全量门禁；**尚未部署到微信
@@ -48,6 +49,11 @@
   距开始不足一小时的日程仍发一条（发送时间钳到当前）。
 - 成员离开家庭立即切断通道：授权 `revoked`、接收标识 `revoked`、在途消息 `cancelled / member_departed`；
   即使没跑清理，发送前的成员身份复核也会挡住该消息（dispatch 计数 `dropped`）。
+- 日程提醒与复习摘要通过 `notification_delivery_children` 保存完整 child ownership。永久删除孩子时删除所有
+  引用该孩子的 delivery（多孩子摘要整条删除），但保留家庭级偏好、授权与接收标识；永久删除家庭时清空全部通知数据。
+  对 migration 前无 child link 的旧日程/复习 delivery 采用隐私优先清理。
+- 删除请求冻结 family/child 后，planner 数据源、outbox 入队与 dispatch 发送前都会在同一数据库事务中锁定复核
+  active/deleting 状态；因此删除接受后不会重新入队或调用渠道发送。若发送先持锁完成，删除请求在其后才被接受。
 - 终态投递记录保留 30 天后清理，在途记录永不被清理。
 - 调度：进程内 tick（`PUSH_KIDS_RUN_NOTIFICATION_SCHEDULER`）或外部 cron 调
   `POST /notifications/dispatch`（`X-Notification-Trigger` 共享 token，未配置则该路由 404）。
@@ -75,15 +81,24 @@
 | 去重/刷新/取消 | implemented locally | `notifications/outbox.py` |
 | 重试/租约/终态 | implemented locally | `tests/integration/test_notification_resilience.py` |
 | 离开家庭收回通道 | implemented locally | `tests/integration/test_notification_channel_lifecycle.py` |
+| 永久删除通知清理与冻结并发边界 | implemented locally | `tests/integration/test_data_deletion.py`、`tests/integration/test_notification_channel.py` |
 | 历史保留窗口 | implemented locally | `NotificationsService.prune_history` |
 | 微信真实发送 | not verified | 依赖模板申请与云托管配置 |
 | 小程序提醒设置与授权入口 | implemented locally | `apps/miniprogram/pages/notifications/`、`tests/frontend/notifications.test.js` |
 | 部署配置生成与校验 | implemented locally | `tools/notification_config.py`、`tests/unit/test_notification_config_tool.py` |
 | 微信开发者工具 / 真机授权 | not verified | 需要微信开发者工具与真机；三视口原生几何未跑 |
 
-## Verification evidence（2026-09-06，本地）
+## Verification evidence（2026-09-07，本地）
 
-在 `origin/main`（`165c588`）之上 rebase 后重跑：
+通知删除专项回归：
+
+- `PYTHONPATH=. uv run pytest tests/integration/test_data_deletion.py tests/integration/test_notification_channel.py tests/integration/test_notification_channel_lifecycle.py tests/integration/test_notification_migration.py -q` → 24 passed，包含 claim 后 purge 先提交的 child/family 确定性交错。
+- `PYTHONPATH=. uv run pytest tests/unit tests/integration tests/contract -q` → 264 passed, 2 skipped。
+- `uv run ruff check .`、`uv run ruff format --check .`、`uv run mypy apps/api/src`、`uv run python tools/check_architecture.py` 均 PASS。
+- `npm test` → 124 passed；Mini Program lint PASS；validator → 15 pages / 628174 bytes。
+- fresh SQLite `upgrade head/current` PASS（`20260907_0009`）；`alembic check` 仍报告 `origin/main` 已存在的学习记录单列索引与通知 claim 复合索引 ORM drift，本次 `0009` 未新增 drift。
+
+此前通知通道基线在 `origin/main`（`165c588`）之上的证据：
 
 - `uv run ruff check .` PASS；`uv run ruff format --check .` PASS（247 files）
 - `uv run mypy apps/api/src` PASS（79 files）
@@ -103,3 +118,7 @@
    日程与复习提醒会退化成「每次都要家长再点一次」；若能选到同题材长期模板应替换并把 `long_term` 设为 `true`。
 3. 云端部署、MySQL 门禁、微信开发者工具三视口原生几何证据未做。
 4. `UI-011` 缺 Figma 节点级 URL，waiver 处于请求状态。
+
+## Change References
+
+- 2026-09-07 — `BUG-016 / BUG-SPEC-20260907-22`：补齐 delivery-child ownership、family/child 通知 purge、legacy 隐私优先清理，以及删除冻结后的入队/发送锁定复核；云端迁移与真实发送仍待发布验收。

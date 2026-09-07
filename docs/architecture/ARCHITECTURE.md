@@ -1,7 +1,7 @@
 # Push Kids current architecture
 
 - Status: `IMPLEMENTED_LOCALLY_PENDING_CLOUD_ACCEPTANCE`
-- Revision: `ARCH-20260906-TRAVEL-01`
+- Revision: `ARCH-20260907-NOTIFICATION-DELETION-01`
 - Confirmed by: user approval of `SPEC-20260906-TRAVEL-02`, 2026-09-06
 - Scope: local adapters plus WeChat Cloud Hosting controlled staging
 
@@ -38,6 +38,7 @@ media through the same bounded infrastructure ports.
 | `agent_processing` | provider contract, analysis jobs, retries, deterministic subject routing (`subject_routing.py`, pure) | analysis service and worker |
 | `media` | validated local/cloud files, cloud ownership claim and temporary materialization | media store port |
 | `notifications` | notification kinds and copy policy (`domain.py`, pure), member preferences, WeChat grants and quota, encrypted receiver, durable outbox with dedupe/lease/retry, planner and tick | notification service + HTTP routes + scheduler |
+| `data_management` | durable child/family deletion requests, freeze/retry/tombstone lifecycle and cross-domain purge orchestration | deletion service + worker; each domain retains its own purge contract |
 | `platform` | config, database, errors, request context | infrastructure only |
 
 Dependency direction is routers → services → pure policies. Infrastructure adapters implement contracts and may depend inward; pure policies do not depend outward.
@@ -62,10 +63,12 @@ Dependency direction is routers → services → pure policies. Infrastructure a
   migration `20260906_0005`. `children` owns the whole rule set: at most five profiles in use, unique names
   among profiles in use, manager-only archive/restore, and the `require_active_child` gate that every new
   learning/subject/activity write passes through. Read paths keep using `get_child`, so archiving never
-  removes rows or hides history. Archiving is not deletion and there is no physical child deletion path.
+  removes rows or hides history. Archiving is not deletion. FEAT-006 separately provides manager-confirmed,
+  durable physical child/family deletion with a freeze-before-purge lifecycle and domain-owned purge contracts.
   FEAT-007 adds `travel_arrangements` and create-idempotency rows in migration `20260906_0006`.
   `Database.expected_cloud_revision` tracks the single Alembic head; durable deletion extends that chain to
-  `20260906_0007` and the notification channel to `20260906_0008`.
+  `20260906_0007`, the notification channel to `20260906_0008`, and notification deletion ownership to
+  `20260907_0009`.
 - Travel arrangements are independent from activities and project only into the Calendar query. The query
   normalizes CalendarEvent, ActivitySchedule and TravelArrangement time spans, then applies one pure half-open
   interval policy. Conflict metadata is derived at read time and marks every participant; it is never persisted.
@@ -78,8 +81,12 @@ Dependency direction is routers → services → pure policies. Infrastructure a
   (WeChat OpenID) is stored AES-GCM encrypted with a key version, never in plaintext, never indexed and
   never logged. Business time (19:00 Asia/Shanghai, one hour before a schedule) is computed server-side and
   stored as a UTC instant. Membership is authoritative twice: when the audience is resolved and again
-  immediately before sending, so a departed member cannot receive a family's child names. Introduced by
-  migration `20260906_0008`.
+  immediately before sending, so a departed member cannot receive a family's child names. Child-bearing
+  deliveries also own normalized `notification_delivery_children` links. Planner/outbox/dispatch lock and
+  re-check active/deleting family and child state, so a deletion accepted after its freeze cannot be followed
+  by a newly queued or externally sent notification. Child purge removes every delivery that references the
+  child (including a multi-child digest); family purge removes all notification-owned rows. Introduced by
+  migrations `20260906_0008` and `20260907_0009`.
 
 ## Async analysis sequence
 

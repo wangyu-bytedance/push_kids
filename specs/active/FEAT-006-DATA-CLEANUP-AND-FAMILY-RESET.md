@@ -7,7 +7,7 @@
 - Reviewer: `TBD（实现后必须独立只读 Review）`
 - Verifier: `TBD`
 - Created: 2026-09-06
-- Last updated: 2026-09-06
+- Last updated: 2026-09-07
 - Target release: `TBD；不得随未验收的云端迁移一起发布`
 - Spec revision: `SPEC-20260906-DATA-CLEANUP-01`
 - User confirmation: `2026-09-06 用户明确回复“批准 SPEC-20260906-DATA-CLEANUP-01 和 ADR-002，并批准为 DREV-20260906-DATA-01 使用一次性 Figma waiver 后实现”`
@@ -528,16 +528,16 @@ Each slice must preserve the approved API/state model; discovering a missing own
 ## 16. Evidence record
 
 - Discovery: repository docs/code/tests inspected 2026-09-06.
-- Production implementation: `NOT STARTED — blocked by exact Spec/DREV/ADR approval`.
-- Tests: `NOT RUN — documentation-only revision; no production behavior changed`.
+- Production implementation: `IMPLEMENTED LOCALLY` in PR #6; `BUG-SPEC-20260907-22` subsequently adds the missing notification owned-data purge and freeze/send boundary before deployment.
+- Tests: 2026-09-07 local full gates PASS — backend 264 passed / 2 skipped, frontend 124 passed, ruff/format/mypy/architecture/lint/validator PASS; notification deletion subset 24 passed including claim→purge→resume interleavings; fresh SQLite reaches Alembic `20260907_0009`. Production MySQL and cloud acceptance remain pending.
 - Known concurrent change: `specs/active/FEAT-002-MULTI-FAMILY-CHILD-TENANT-ISOLATION.md` has pre-existing user work and was not modified.
 
 ## 17. Completion gate
 
-- [ ] No blocking question remains.
-- [ ] User approved exactly `SPEC-20260906-DATA-CLEANUP-01` and Q-001..Q-004 recommended answers.
-- [ ] User approved `DREV-20260906-DATA-01` with node-specific Figma URLs and snapshot.
-- [ ] ADR and R3 architecture are approved.
+- [x] No blocking product question remains.
+- [x] User approved exactly `SPEC-20260906-DATA-CLEANUP-01` and Q-001..Q-004 recommended answers.
+- [x] User approved `DREV-20260906-DATA-01` through the recorded scoped Figma waiver; node-specific URLs remain a public-release gate.
+- [x] ADR and R3 architecture are approved.
 - [ ] Every TP executed or explicitly recorded not run with impact/residual risk.
 - [ ] Independent R3 review covers correctness, necessity, placement, redundancy, authorization, residue and rollback.
 - [ ] `FEAT-006` becomes verified current state; FEAT-002/005 and UI-010/015/016 are semantically merged.

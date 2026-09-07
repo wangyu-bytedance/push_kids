@@ -1,8 +1,11 @@
 from __future__ import annotations
 
+import json
 from datetime import date, time
 
+import pytest
 from fastapi.testclient import TestClient
+from push_kids.notifications.service import NotificationsService
 from push_kids.persistence.models import (
     ActivityRecord,
     ActivitySchedule,
@@ -11,12 +14,19 @@ from push_kids.persistence.models import (
     CalendarEventRequest,
     Child,
     DeletionRequest,
+    DeliveryState,
     Family,
+    FamilyMember,
     KnowledgeItem,
     KnowledgeOccurrence,
     LearningRecord,
     LearningSubmission,
     MediaObject,
+    NotificationDelivery,
+    NotificationDeliveryChild,
+    NotificationDestination,
+    NotificationPreference,
+    NotificationSubscription,
     ReviewFeedback,
     ReviewFeedbackRequest,
     ReviewItem,
@@ -28,6 +38,7 @@ from push_kids.persistence.models import (
 )
 from push_kids.platform.time import utcnow
 from sqlalchemy import select
+from sqlalchemy.exc import SQLAlchemyError
 
 
 def _actor(name: str, key: str | None = None) -> dict[str, str]:
@@ -208,6 +219,81 @@ def _seed_child_owned_rows(app, family_id: str, child_id: str) -> tuple[dict, ob
     return owned, media_path
 
 
+def _seed_notification_rows(
+    app, family_id: str, child_id: str, sibling_id: str | None = None
+) -> dict[str, str]:
+    now = utcnow()
+    with app.state.database.session_factory() as db:
+        member = db.scalar(select(FamilyMember).where(FamilyMember.family_id == family_id))
+        assert member is not None
+        preference = NotificationPreference(
+            family_id=family_id,
+            member_id=member.id,
+            type="schedule_reminder",
+            enabled=True,
+        )
+        destination = NotificationDestination(
+            family_id=family_id,
+            member_id=member.id,
+            actor_binding_id=member.actor_binding_id,
+            app_id="wx-test",
+            key_version="v1",
+            ciphertext="encrypted-fixture",
+            status="active",
+        )
+        subscription = NotificationSubscription(
+            family_id=family_id,
+            member_id=member.id,
+            type="schedule_reminder",
+            status="accepted",
+            remaining_quota=3,
+            granted_at=now,
+        )
+        db.add_all([preference, destination, subscription])
+
+        def delivery(type_name: str, suffix: str, payload: str) -> NotificationDelivery:
+            row = NotificationDelivery(
+                family_id=family_id,
+                member_id=member.id,
+                type=type_name,
+                dedupe_key=f"deletion-fixture:{family_id}:{suffix}",
+                payload_json=json.dumps({"detail": payload}, ensure_ascii=False),
+                scheduled_at=now,
+                available_at=now,
+                state=DeliveryState.pending.value,
+            )
+            db.add(row)
+            db.flush()
+            return row
+
+        target = delivery("schedule_reminder", "target", "小芽的日程")
+        mixed = delivery("review_digest", "mixed", "小芽和小树的复习")
+        terminal = delivery("schedule_reminder", "terminal", "已经发送的小芽日程")
+        terminal.state = DeliveryState.sent.value
+        legacy = delivery("review_digest", "legacy", "旧版未标记孩子的复习")
+        application = delivery("member_application", "application", "家人申请")
+        db.add(NotificationDeliveryChild(delivery_id=target.id, child_id=child_id))
+        db.add(NotificationDeliveryChild(delivery_id=mixed.id, child_id=child_id))
+        db.add(NotificationDeliveryChild(delivery_id=terminal.id, child_id=child_id))
+        sibling = None
+        if sibling_id is not None:
+            sibling = delivery("schedule_reminder", "sibling", "小树的日程")
+            db.add(NotificationDeliveryChild(delivery_id=sibling.id, child_id=sibling_id))
+            db.add(NotificationDeliveryChild(delivery_id=mixed.id, child_id=sibling_id))
+        db.commit()
+        return {
+            "preference": str(preference.id),
+            "destination": str(destination.id),
+            "subscription": str(subscription.id),
+            "target": str(target.id),
+            "mixed": str(mixed.id),
+            "terminal": str(terminal.id),
+            "legacy": str(legacy.id),
+            "application": str(application.id),
+            "sibling": str(sibling.id) if sibling is not None else "",
+        }
+
+
 def test_child_deletion_is_idempotent_freezes_writes_and_purges_owned_rows(
     client: TestClient, app
 ) -> None:
@@ -217,6 +303,7 @@ def test_child_deletion_is_idempotent_freezes_writes_and_purges_owned_rows(
     sibling = _child(client, actor, "小树")
     family_id = client.get("/api/v1/me", headers=_actor(actor)).json()["family"]["id"]
     owned_ids, media_path = _seed_child_owned_rows(app, family_id, child["id"])
+    notification_ids = _seed_notification_rows(app, family_id, child["id"], sibling["id"])
 
     wrong = client.post(
         f"/api/v1/children/{child['id']}/deletion-requests",
@@ -257,6 +344,23 @@ def test_child_deletion_is_idempotent_freezes_writes_and_purges_owned_rows(
     with app.state.database.session_factory() as db:
         assert db.get(Child, child["id"]) is None
         assert db.get(Child, sibling["id"]) is not None
+        assert db.get(NotificationDelivery, notification_ids["target"]) is None
+        assert db.get(NotificationDelivery, notification_ids["mixed"]) is None
+        assert db.get(NotificationDelivery, notification_ids["terminal"]) is None
+        assert db.get(NotificationDelivery, notification_ids["legacy"]) is None
+        assert db.get(NotificationDelivery, notification_ids["sibling"]) is not None
+        assert db.get(NotificationDelivery, notification_ids["application"]) is not None
+        assert db.get(NotificationPreference, notification_ids["preference"]) is not None
+        assert db.get(NotificationDestination, notification_ids["destination"]) is not None
+        assert db.get(NotificationSubscription, notification_ids["subscription"]) is not None
+        assert (
+            db.scalar(
+                select(NotificationDeliveryChild).where(
+                    NotificationDeliveryChild.child_id == child["id"]
+                )
+            )
+            is None
+        )
         assert db.scalar(select(Subject).where(Subject.child_id == child["id"])) is None
         for model, item_id in owned_ids.items():
             assert db.get(model, item_id) is None, model.__name__
@@ -270,7 +374,8 @@ def test_child_deletion_is_idempotent_freezes_writes_and_purges_owned_rows(
 def test_family_deletion_requires_sole_manager_and_unbinds_actor(client: TestClient, app) -> None:
     manager = "delete-family-manager"
     created = _family(client, manager, "星星之家")
-    _child(client, manager, "星星")
+    child = _child(client, manager, "星星")
+    notification_ids = _seed_notification_rows(app, created["family"]["id"], child["id"])
     invite = client.post(
         "/api/v1/families/current/invites",
         headers=_actor(manager, "delete-family-invite"),
@@ -315,6 +420,18 @@ def test_family_deletion_requires_sole_manager_and_unbinds_actor(client: TestCli
     assert bootstrap.json()["children"] == []
     with app.state.database.session_factory() as db:
         assert db.get(Family, created["family"]["id"]) is None
+        for model, key in (
+            (NotificationPreference, "preference"),
+            (NotificationDestination, "destination"),
+            (NotificationSubscription, "subscription"),
+            (NotificationDelivery, "target"),
+            (NotificationDelivery, "mixed"),
+            (NotificationDelivery, "terminal"),
+            (NotificationDelivery, "legacy"),
+            (NotificationDelivery, "application"),
+        ):
+            assert db.get(model, notification_ids[key]) is None
+        assert db.scalar(select(NotificationDeliveryChild)) is None
 
 
 def test_deletion_status_is_private_to_the_verified_actor(client: TestClient) -> None:
@@ -372,3 +489,37 @@ def test_failed_cleanup_is_durable_and_can_be_retried(client: TestClient, app, m
         ]
         == "succeeded"
     )
+
+
+def test_notification_purge_failure_rolls_back_all_database_deletes(
+    client: TestClient, app, monkeypatch
+) -> None:
+    actor = "delete-notification-rollback"
+    _family(client, actor)
+    child = _child(client, actor, "小芽")
+    sibling = _child(client, actor, "小树")
+    family_id = client.get("/api/v1/me", headers=_actor(actor)).json()["family"]["id"]
+    notification_ids = _seed_notification_rows(app, family_id, child["id"], sibling["id"])
+    accepted = client.post(
+        f"/api/v1/children/{child['id']}/deletion-requests",
+        headers=_actor(actor, "delete-notification-rollback-request"),
+        json={"confirmation_name": "小芽"},
+    ).json()
+
+    original = NotificationsService.purge_data
+
+    def fail_after_notification_delete(db, target_family_id, target_child_id) -> None:
+        original(db, target_family_id, target_child_id)
+        raise SQLAlchemyError("forced notification purge failure")
+
+    monkeypatch.setattr(NotificationsService, "purge_data", fail_after_notification_delete)
+    with pytest.raises(SQLAlchemyError, match="forced notification purge failure"):
+        app.state.deletion_worker.process_one()
+
+    with app.state.database.session_factory() as db:
+        assert db.get(Child, child["id"]) is not None
+        assert db.get(NotificationDelivery, notification_ids["target"]) is not None
+        assert db.get(NotificationDelivery, notification_ids["mixed"]) is not None
+        request = db.get(DeletionRequest, accepted["id"])
+        assert request is not None
+        assert request.state == "queued"

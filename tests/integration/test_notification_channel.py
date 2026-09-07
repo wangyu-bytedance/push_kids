@@ -11,9 +11,17 @@ from datetime import UTC, datetime, time, timedelta
 
 import pytest
 from fastapi.testclient import TestClient
+from push_kids.notifications.domain import NotificationContent
+from push_kids.notifications.outbox import EnqueueOutcome, NotificationOutbox
 from push_kids.notifications.planner import NotificationPlanner
 from push_kids.notifications.service import NotificationsService
-from push_kids.platform.time import SHANGHAI, local_date
+from push_kids.persistence.models import (
+    FamilyMember,
+    NotificationDelivery,
+    NotificationDeliveryChild,
+)
+from push_kids.platform.time import SHANGHAI, local_date, utcnow
+from sqlalchemy import select
 
 from tests.conftest import NOTIFICATION_TRIGGER
 
@@ -43,6 +51,18 @@ def _dispatch(app, now: datetime | None = None) -> dict[str, int]:
 
 def _sent(app) -> list[dict]:
     return app.state.notification_channel.sender.sent
+
+
+def _delivery_child_ids(app, type_name: str) -> set[str]:
+    with app.state.database.session_factory() as db:
+        delivery_ids = select(NotificationDelivery.id).where(NotificationDelivery.type == type_name)
+        return set(
+            db.scalars(
+                select(NotificationDeliveryChild.child_id).where(
+                    NotificationDeliveryChild.delivery_id.in_(delivery_ids)
+                )
+            )
+        )
 
 
 def _grant(client: TestClient, actor: str, types: list[str]) -> dict:
@@ -113,6 +133,7 @@ def test_join_request_notifies_managers_only_after_a_grant(client: TestClient, a
 
     _grant(client, "parent-a", ["member_application"])
     assert _plan(app)["queued_member_applications"] == 1
+    assert _delivery_child_ids(app, "member_application") == set()
     report = _dispatch(app)
     assert report["sent"] == 1
     assert len(_sent(app)) == 1
@@ -207,6 +228,7 @@ def test_schedule_reminder_reaches_the_whole_family_one_hour_ahead(client: TestC
 
     two_hours_before = start_at - timedelta(hours=2)
     assert _plan(app, two_hours_before)["queued_schedule_reminders"] == 2
+    assert _delivery_child_ids(app, "schedule_reminder") == {child_id}
     # 还没到发送时间，队列必须安静。
     assert _dispatch(app, two_hours_before)["sent"] == 0
 
@@ -359,6 +381,7 @@ def test_evening_digest_only_reports_real_outstanding_review(client: TestClient,
     # 19:00 之前不发，避免变成第二个"今天待复习"入口。
     assert _plan(app, morning)["queued_review_digests"] == 0
     assert _plan(app, evening)["queued_review_digests"] == 1
+    assert _delivery_child_ids(app, "review_digest") == {child_id}
     # 同一天只提醒一次。
     assert _plan(app, evening)["queued_review_digests"] == 0
     assert _dispatch(app, evening)["sent"] == 1
@@ -384,3 +407,214 @@ def test_dispatch_entry_point_requires_the_deployment_token(client: TestClient) 
     )
     assert accepted.status_code == 200, accepted.text
     assert accepted.json()["sent"] == 0
+
+
+def test_refresh_replaces_delivery_child_scope_without_duplicates(client: TestClient, app) -> None:
+    family = _create_family(client)
+    family_id = family["family"]["id"]
+    first_child_id = family["children"][0]["id"]
+    second = client.post(
+        "/api/v1/children",
+        headers=_actor("parent-a"),
+        json={"name": "小树", "daily_budget_minutes": 15, "subject_names": ["语文"]},
+    )
+    assert second.status_code == 201, second.text
+    second_child_id = second.json()["id"]
+    _grant(client, "parent-a", ["schedule_reminder"])
+    content = NotificationContent(
+        headline="测试日程",
+        detail="测试孩子归属刷新",
+        full_text="测试孩子归属刷新",
+        deep_link="/pages/calendar/index",
+    )
+    with app.state.database.session_factory() as db:
+        member_id = db.scalar(select(FamilyMember.id).where(FamilyMember.family_id == family_id))
+        assert member_id is not None
+        first = NotificationOutbox.enqueue(
+            db,
+            family_id=family_id,
+            type_name="schedule_reminder",
+            member_id=str(member_id),
+            dedupe_key="scope-refresh-fixture",
+            content=content,
+            scheduled_at=utcnow(),
+            child_ids=(first_child_id,),
+        )
+        db.commit()
+        assert first is EnqueueOutcome.created
+        refreshed = NotificationOutbox.enqueue(
+            db,
+            family_id=family_id,
+            type_name="schedule_reminder",
+            member_id=str(member_id),
+            dedupe_key="scope-refresh-fixture",
+            content=content,
+            scheduled_at=utcnow(),
+            child_ids=(second_child_id,),
+        )
+        db.commit()
+        assert refreshed is EnqueueOutcome.refreshed
+        delivery_id = db.scalar(
+            select(NotificationDelivery.id).where(
+                NotificationDelivery.dedupe_key == "scope-refresh-fixture"
+            )
+        )
+        assert delivery_id is not None
+        assert set(
+            db.scalars(
+                select(NotificationDeliveryChild.child_id).where(
+                    NotificationDeliveryChild.delivery_id == delivery_id
+                )
+            )
+        ) == {second_child_id}
+
+
+def test_child_deletion_freeze_blocks_planning_enqueue_and_dispatch(
+    client: TestClient, app
+) -> None:
+    family = _create_family(client)
+    child_id = family["children"][0]["id"]
+    day = local_date()
+    start_at = datetime.combine(day, time(18, 0), tzinfo=SHANGHAI).astimezone(UTC)
+    created = client.post(
+        "/api/v1/calendar-events",
+        headers=_idempotent("parent-a", "freeze-child-event"),
+        json={
+            "child_id": child_id,
+            "name": "绘画课",
+            "event_date": day.isoformat(),
+            "start_time": "18:00:00",
+            "end_time": "19:00:00",
+            "kind": "class",
+        },
+    )
+    assert created.status_code == 201, created.text
+    _grant(client, "parent-a", ["schedule_reminder"])
+    planning_moment = start_at - timedelta(hours=2)
+    assert _plan(app, planning_moment)["queued_schedule_reminders"] == 1
+
+    accepted = client.post(
+        f"/api/v1/children/{child_id}/deletion-requests",
+        headers=_idempotent("parent-a", "freeze-child-delete"),
+        json={"confirmation_name": "小雨"},
+    )
+    assert accepted.status_code == 202, accepted.text
+    dispatched = _dispatch(app, start_at - timedelta(hours=1))
+    assert dispatched["dropped"] == 1
+    assert dispatched["sent"] == 0
+    assert _sent(app) == []
+    assert _plan(app, planning_moment)["queued_schedule_reminders"] == 0
+
+    with app.state.database.session_factory() as db:
+        member_id = db.scalar(
+            select(FamilyMember.id).where(FamilyMember.family_id == family["family"]["id"])
+        )
+        assert member_id is not None
+        outcome = NotificationOutbox.enqueue(
+            db,
+            family_id=family["family"]["id"],
+            type_name="schedule_reminder",
+            member_id=str(member_id),
+            dedupe_key="freeze-child-direct-enqueue",
+            content=NotificationContent(
+                headline="不应入队",
+                detail="孩子资料正在删除",
+                full_text="孩子资料正在删除",
+                deep_link="/pages/calendar/index",
+            ),
+            scheduled_at=utcnow(),
+            child_ids=(child_id,),
+        )
+        assert outcome is EnqueueOutcome.skipped
+
+
+def test_family_deletion_freeze_blocks_planning_and_dispatch(client: TestClient, app) -> None:
+    family = _create_family(client)
+    _join(client, "pending-relative", "奶奶")
+    _grant(client, "parent-a", ["member_application"])
+    assert _plan(app)["queued_member_applications"] == 1
+
+    accepted = client.post(
+        "/api/v1/families/current/deletion-requests",
+        headers=_idempotent("parent-a", "freeze-family-delete"),
+        json={"confirmation_name": family["family"]["display_name"]},
+    )
+    assert accepted.status_code == 202, accepted.text
+    dispatched = _dispatch(app)
+    assert dispatched["dropped"] == 1
+    assert dispatched["sent"] == 0
+    assert _sent(app) == []
+    assert _plan(app)["queued_member_applications"] == 0
+
+
+def test_claimed_child_notification_is_dropped_when_purge_wins_before_send(
+    client: TestClient, app, monkeypatch
+) -> None:
+    family = _create_family(client)
+    child_id = family["children"][0]["id"]
+    day = local_date()
+    start_at = datetime.combine(day, time(18, 0), tzinfo=SHANGHAI).astimezone(UTC)
+    created = client.post(
+        "/api/v1/calendar-events",
+        headers=_idempotent("parent-a", "purge-race-child-event"),
+        json={
+            "child_id": child_id,
+            "name": "绘画课",
+            "event_date": day.isoformat(),
+            "start_time": "18:00:00",
+            "end_time": "19:00:00",
+            "kind": "class",
+        },
+    )
+    assert created.status_code == 201, created.text
+    _grant(client, "parent-a", ["schedule_reminder"])
+    assert _plan(app, start_at - timedelta(hours=2))["queued_schedule_reminders"] == 1
+    accepted = client.post(
+        f"/api/v1/children/{child_id}/deletion-requests",
+        headers=_idempotent("parent-a", "purge-race-child-delete"),
+        json={"confirmation_name": "小雨"},
+    )
+    assert accepted.status_code == 202, accepted.text
+
+    original_claim = NotificationsService._claim
+
+    def claim_then_purge(db, now, limit):
+        rows = original_claim(db, now, limit)
+        assert rows
+        assert app.state.deletion_worker.process_one() is True
+        return rows
+
+    monkeypatch.setattr(NotificationsService, "_claim", staticmethod(claim_then_purge))
+    dispatched = _dispatch(app, start_at - timedelta(hours=1))
+    assert dispatched["dropped"] == 1
+    assert dispatched["sent"] == 0
+    assert _sent(app) == []
+
+
+def test_claimed_family_notification_is_dropped_when_purge_wins_before_send(
+    client: TestClient, app, monkeypatch
+) -> None:
+    family = _create_family(client)
+    _join(client, "pending-relative", "奶奶")
+    _grant(client, "parent-a", ["member_application"])
+    assert _plan(app)["queued_member_applications"] == 1
+    accepted = client.post(
+        "/api/v1/families/current/deletion-requests",
+        headers=_idempotent("parent-a", "purge-race-family-delete"),
+        json={"confirmation_name": family["family"]["display_name"]},
+    )
+    assert accepted.status_code == 202, accepted.text
+
+    original_claim = NotificationsService._claim
+
+    def claim_then_purge(db, now, limit):
+        rows = original_claim(db, now, limit)
+        assert rows
+        assert app.state.deletion_worker.process_one() is True
+        return rows
+
+    monkeypatch.setattr(NotificationsService, "_claim", staticmethod(claim_then_purge))
+    dispatched = _dispatch(app)
+    assert dispatched["dropped"] == 1
+    assert dispatched["sent"] == 0
+    assert _sent(app) == []

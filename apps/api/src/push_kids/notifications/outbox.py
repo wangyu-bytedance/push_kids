@@ -16,10 +16,13 @@ from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
+from push_kids.children.service import ChildrenService
+from push_kids.families.service import FamilyService
 from push_kids.notifications.domain import NotificationContent, kind_for
 from push_kids.persistence.models import (
     DeliveryState,
     NotificationDelivery,
+    NotificationDeliveryChild,
     NotificationPreference,
     NotificationSubscription,
     SubscriptionStatus,
@@ -47,6 +50,23 @@ class EnqueueOutcome(enum.StrEnum):
 
 
 class NotificationOutbox:
+    @staticmethod
+    def _sync_child_scope(db: Session, delivery_id: str, child_ids: tuple[str, ...]) -> None:
+        target = set(child_ids)
+        rows = list(
+            db.scalars(
+                select(NotificationDeliveryChild).where(
+                    NotificationDeliveryChild.delivery_id == delivery_id
+                )
+            )
+        )
+        existing = {str(row.child_id): row for row in rows}
+        for child_id, row in existing.items():
+            if child_id not in target:
+                db.delete(row)
+        for child_id in target - existing.keys():
+            db.add(NotificationDeliveryChild(delivery_id=delivery_id, child_id=child_id))
+
     @staticmethod
     def is_enabled(db: Session, member_id: str, type_name: str) -> bool:
         kind = kind_for(type_name)
@@ -95,6 +115,7 @@ class NotificationOutbox:
         dedupe_key: str,
         content: NotificationContent,
         scheduled_at: datetime,
+        child_ids: tuple[str, ...] = (),
     ) -> EnqueueOutcome:
         """Queue, refresh or re-arm exactly one message.
 
@@ -104,6 +125,12 @@ class NotificationOutbox:
         """
         # Validates the type early; audience filtering stays with the caller that owns membership.
         kind_for(type_name)
+        if not FamilyService.notification_member_is_active(db, family_id, member_id):
+            return EnqueueOutcome.skipped
+        if child_ids and not ChildrenService.notification_scope_is_active(
+            db, family_id, set(child_ids)
+        ):
+            return EnqueueOutcome.skipped
         if not cls.can_receive(db, member_id, type_name):
             return EnqueueOutcome.skipped
         existing = db.scalar(
@@ -115,6 +142,7 @@ class NotificationOutbox:
                 existing.scheduled_at = scheduled_at
                 existing.payload_json = payload
                 existing.available_at = scheduled_at
+                cls._sync_child_scope(db, str(existing.id), child_ids)
                 return EnqueueOutcome.refreshed
             if (
                 existing.state == DeliveryState.skipped.value
@@ -128,6 +156,7 @@ class NotificationOutbox:
                 existing.lease_until = None
                 existing.result_code = None
                 existing.updated_at = utcnow()
+                cls._sync_child_scope(db, str(existing.id), child_ids)
                 return EnqueueOutcome.rearmed
             return EnqueueOutcome.skipped
         row = NotificationDelivery(
@@ -147,6 +176,7 @@ class NotificationOutbox:
             # A concurrent tick queued the same message first; that row is authoritative.
             db.rollback()
             return EnqueueOutcome.skipped
+        cls._sync_child_scope(db, str(row.id), child_ids)
         return EnqueueOutcome.created
 
     @staticmethod

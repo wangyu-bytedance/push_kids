@@ -643,3 +643,23 @@ class NotificationDelivery(Base):
     sent_at = Column(UTCDateTime(), nullable=True)
     created_at = Column(UTCDateTime(), nullable=False, default=utcnow)
     updated_at = Column(UTCDateTime(), nullable=False, default=utcnow, onupdate=utcnow)
+
+
+class NotificationDeliveryChild(Base):
+    """Normalized child ownership for delivery payloads that can mention multiple children."""
+
+    __tablename__ = "notification_delivery_children"
+    __table_args__ = (
+        UniqueConstraint("delivery_id", "child_id", name="uq_notification_delivery_child_scope"),
+    )
+    id = Column(String(36), primary_key=True, default=new_id)
+    delivery_id = Column(
+        String(36),
+        ForeignKey("notification_deliveries.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    child_id = Column(
+        String(36), ForeignKey("children.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    created_at = Column(UTCDateTime(), nullable=False, default=utcnow)

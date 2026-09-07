@@ -416,7 +416,9 @@ class ActivitiesService:
         days = cls._local_days(window_start, window_end)
         children = {
             str(child.id): str(child.name)
-            for child in db.scalars(select(Child).where(Child.active.is_(True)))
+            for child in db.scalars(
+                select(Child).where(Child.active.is_(True), Child.deleting.is_(False))
+            )
         }
         occurrences: list[ScheduledOccurrence] = []
         events = list(

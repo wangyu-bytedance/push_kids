@@ -262,9 +262,14 @@ class FamilyService:
         reading `family_members` themselves. Removing a member immediately removes them from
         every future audience.
         """
-        statement = select(FamilyMember).where(
-            FamilyMember.family_id == family_id,
-            FamilyMember.status == MemberStatus.active.value,
+        statement = (
+            select(FamilyMember)
+            .join(Family, Family.id == FamilyMember.family_id)
+            .where(
+                FamilyMember.family_id == family_id,
+                FamilyMember.status == MemberStatus.active.value,
+                Family.status == FamilyStatus.active.value,
+            )
         )
         if managers_only:
             statement = statement.where(FamilyMember.role == MemberRole.manager.value)
@@ -289,12 +294,43 @@ class FamilyService:
         if not member_ids:
             return set()
         rows = db.scalars(
-            select(FamilyMember.id).where(
+            select(FamilyMember.id)
+            .join(Family, Family.id == FamilyMember.family_id)
+            .where(
                 FamilyMember.id.in_(member_ids),
                 FamilyMember.status == MemberStatus.active.value,
+                Family.status == FamilyStatus.active.value,
             )
         )
         return {str(item) for item in rows}
+
+    @classmethod
+    def notification_member_is_active(cls, db: Session, family_id: str, member_id: str) -> bool:
+        """Serialize notification delivery with family deletion acceptance."""
+        item = db.scalar(
+            select(FamilyMember.id)
+            .join(Family, Family.id == FamilyMember.family_id)
+            .where(
+                FamilyMember.id == member_id,
+                FamilyMember.family_id == family_id,
+                FamilyMember.status == MemberStatus.active.value,
+                Family.status == FamilyStatus.active.value,
+            )
+            .with_for_update()
+        )
+        return item is not None
+
+    @classmethod
+    def notification_family_is_active(cls, db: Session, family_id: str) -> bool:
+        return (
+            db.scalar(
+                select(Family.id).where(
+                    Family.id == family_id,
+                    Family.status == FamilyStatus.active.value,
+                )
+            )
+            is not None
+        )
 
     @classmethod
     def pending_applications(cls, db: Session, limit: int = 200) -> list[PendingApplication]:
