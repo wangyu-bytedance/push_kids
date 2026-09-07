@@ -41,7 +41,7 @@ Page({
     canWrite: true, subjects: [],
     baseLearning: [], addedLearning: [], addedActivities: [], togglingName: "", removingId: "",
     pendingRequests: 0, requestsLabel: "",
-    showCatalog: false, catalogType: "learning", catalogTitle: "", catalogSub: "", catalogWord: "科目",
+    showCatalog: false, catalogType: "learning", catalogTitle: "", catalogWord: "科目",
     catalogOptions: [], allCatalogOptions: [], catalogMode: "catalog", catalogQuery: "",
     selectedCatalogName: "", customCatalogName: "", addingCatalog: false, catalogError: "",
     showSchedule: false, scheduleSubject: null, scheduleId: "",
@@ -223,7 +223,6 @@ Page({
     this.setData({
       showCatalog: true, catalogType: type,
       catalogTitle: type === "activity" ? "添加课外活动" : "添加其他科目",
-      catalogSub: type === "activity" ? "只选择已经开始参与的内容" : "只选择已经开始学习的内容",
       catalogWord: type === "activity" ? "课外活动" : "科目",
       catalogMode: "catalog", catalogQuery: "", catalogError: "",
       catalogOptions: options, allCatalogOptions: options,

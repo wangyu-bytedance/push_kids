@@ -1,7 +1,7 @@
 <view class="page report-page">
-  <view class="pg-head">
+  <brand-head kicker="只统计已确认的学习"></brand-head>
+  <view class="pg-head under-brand">
     <view class="head-intro">
-      <text class="pg-kicker">只统计已确认的学习</text>
       <text class="pg-title">一点一滴，看得见</text>
     </view>
     <view class="child-chip {{multiChild ? '' : 'single'}}" wx:if="{{children.length}}" aria-role="button" aria-label="切换孩子" bindtap="openChildSheet">
@@ -72,8 +72,6 @@
           <text class="s-t">接下来的复习压力</text>
           <text class="s-r">{{rangeLabel}}</text>
         </view>
-        <text class="read-hint" wx:if="{{urgencyPages.length > 1}}">左右滑动查看，每屏最多 30 天。页面本身不会横向移动。</text>
-        <text class="read-hint" wx:else>数字表示当天待复习知识数，绿色勾表示当天已全部通过。</text>
         <view class="pk-card chart-card">
           <view class="pager" wx:if="{{urgencyPages.length > 1}}">
             <view class="pbtn {{urgencyPage === 0 ? 'off' : ''}}" aria-role="button" aria-label="上一屏" data-chart="urgency" data-offset="-1" bindtap="shiftReportPage"><view class="chev left"></view></view>
@@ -96,6 +94,12 @@
           <view class="pdots" wx:if="{{urgencyPages.length > 1}}">
             <view class="pd {{index === urgencyPage ? 'on' : ''}}" wx:for="{{urgencyPages}}" wx:key="id"></view>
           </view>
+          <view class="chart-foot">
+            <view class="legend">
+              <view class="udot l3 sw"></view><text>数字：当天待复习</text>
+              <view class="udot pass sw"></view><text>已全部通过</text>
+            </view>
+          </view>
         </view>
       </view>
 
@@ -104,7 +108,6 @@
           <text class="s-t">复习活跃度</text>
           <text class="s-r">{{rangeLabel}}</text>
         </view>
-        <text class="read-hint">每格一天，颜色越深表示当天记录的复习反馈越多。</text>
         <view class="pk-card chart-card">
           <view class="pager" wx:if="{{activityPages.length > 1}}">
             <view class="pbtn {{activityPage === 0 ? 'off' : ''}}" aria-role="button" aria-label="上一屏" data-chart="activity" data-offset="-1" bindtap="shiftReportPage"><view class="chev left"></view></view>
@@ -135,7 +138,7 @@
       <view class="sec" id="sec-subjects">
         <view class="sec-head">
           <text class="s-t">科目学习记录</text>
-          <text class="s-r">可下钻</text>
+          <text class="s-r">{{rangeLabel}}</text>
         </view>
         <view class="pk-card list-card" wx:if="{{subjects.length}}">
           <view class="bar-row" wx:for="{{subjects}}" wx:key="id" aria-role="button" aria-label="查看{{item.name}}的学习记录" data-id="{{item.id}}" bindtap="openSubjectHistory">
@@ -185,7 +188,6 @@
   <view class="sheet-head">
     <view class="grow">
       <text class="sheet-title">选择孩子</text>
-      <text class="sheet-sub">切换后所有页面同步</text>
     </view>
     <view class="icon-btn" aria-role="button" aria-label="关闭" bindtap="closeChildSheet"><view class="ico ico-close sm"></view></view>
   </view>

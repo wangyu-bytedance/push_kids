@@ -1,8 +1,8 @@
 <view class="page calendar-page">
-  <view class="pg-head">
+  <brand-head kicker="{{weekKicker}}"></brand-head>
+  <view class="pg-head under-brand">
     <view class="head-intro">
-      <text class="pg-kicker">{{weekKicker}}</text>
-      <text class="pg-title">日程</text>
+      <text class="pg-title">这一周，心里有数</text>
     </view>
     <view class="child-chip {{multiChild ? '' : 'single'}}" wx:if="{{children.length}}" aria-role="button" aria-label="切换孩子" bindtap="openChildSheet">
       <text class="ava">{{children[childIndex].avatar}}</text>
@@ -85,13 +85,13 @@
     <view class="pk-empty" wx:elif="{{weekEmpty}}">
       <view class="em"><view class="ico ico-calendar-pri lg"></view></view>
       <text class="et">这一周还没有安排</text>
-      <text class="ec">课外活动和出行的固定时间可以在设置里配置，之后每周都会自动出现在日程里；临时安排用下面的「加日程」。</text>
+      <text class="ec">在设置里配置固定时间后，每周都会自动出现在这里。</text>
       <view class="ea"><view class="btn secondary" aria-role="button" aria-label="去设置固定时间" bindtap="openSettings">去设置固定时间</view></view>
     </view>
 
     <view class="pk-empty inline" wx:else>
       <text class="et">这天还没有安排</text>
-      <text class="ec">固定的课外活动和出行会自动出现在这里，临时安排可以用右下角的「加日程」。</text>
+      <text class="ec">固定的课外活动和出行会自动出现在这里。</text>
     </view>
 
     <view class="pk-fab" aria-role="button" aria-label="加日程" bindtap="openCreate">
@@ -106,7 +106,6 @@
   <view class="sheet-head">
     <view class="grow">
       <text class="sheet-title">选择孩子</text>
-      <text class="sheet-sub">切换后所有页面同步</text>
     </view>
     <view class="icon-btn" aria-role="button" aria-label="关闭" bindtap="closeChildSheet"><view class="ico ico-close sm"></view></view>
   </view>
@@ -130,7 +129,7 @@
   <view class="sheet-head">
     <view class="grow">
       <text class="sheet-title">{{editingId ? '编辑日程' : '新建日程'}}</text>
-      <text class="sheet-sub">每周重复的安排，修改会作用于整个系列</text>
+      <text class="sheet-sub" wx:if="{{editingId && repeatWeekly}}">修改会作用于整个每周系列</text>
     </view>
     <view class="icon-btn" aria-role="button" aria-label="关闭" bindtap="closeEditor"><view class="ico ico-close sm"></view></view>
   </view>
@@ -170,7 +169,6 @@
       <view class="rowitem">
         <view class="grow">
           <text class="r-t">每周重复</text>
-          <text class="r-s">开启后，之后每周的同一时间都会出现这条安排</text>
         </view>
         <switch checked="{{repeatWeekly}}" color="#1F5B45" bindchange="toggleRepeat" />
       </view>

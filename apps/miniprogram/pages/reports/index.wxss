@@ -52,13 +52,6 @@
   line-height: 1.5;
   color: var(--pk-ink-3);
 }
-.read-hint {
-  display: block;
-  margin: 0 4rpx 16rpx;
-  font-size: 12px;
-  line-height: 1.6;
-  color: var(--pk-ink-3);
-}
 
 .chart-card { padding: 24rpx 20rpx; box-shadow: var(--pk-e1); }
 .chart-card .pager { margin-bottom: 8rpx; }

@@ -55,10 +55,7 @@
       <text class="lbl">学习总结<text class="opt">{{manual ? '必填' : '可修改'}}</text></text>
       <textarea class="pk-textarea" value="{{proposal.summary}}" data-field="summary" bindinput="setProposal"
         maxlength="500" adjust-position="{{true}}" placeholder="用一两句话写清这次实际学过什么" placeholder-class="pk-ph"></textarea>
-      <view class="flex between">
-        <text class="help">写清学过什么就够了，不用写评价。</text>
-        <text class="counter tnum">{{proposal.summary.length}} / 500</text>
-      </view>
+      <text class="counter tnum text-counter">{{proposal.summary.length}} / 500</text>
     </view>
 
     <view class="pk-field" wx:if="{{!manual}}">
@@ -105,7 +102,6 @@
           color="#1F5B45" aria-label="新增科目 {{item.subject_name}}" />
       </view>
     </view>
-    <text class="help">每个科目会分别生成一条学习记录，复习计划也按科目各自安排。</text>
   </view>
 
   <view class="sec">

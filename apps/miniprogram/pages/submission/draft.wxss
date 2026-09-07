@@ -4,6 +4,7 @@
 /* 卡片内小标签与元信息 */
 .c-lbl { font-size: 13px; line-height: 1.45; font-weight: 600; color: var(--pk-ink-2); }
 .c-meta { font-size: 13px; line-height: 1.45; color: var(--pk-ink-3); }
+.text-counter { display: block; margin-top: var(--pk-s1); text-align: right; }
 
 /* 人工录入时保留的家长原文，永不截断 */
 .orig-text { display: block; margin-top: 16rpx; padding: 20rpx 24rpx; border-radius: var(--pk-r-md); background: var(--pk-surface-sunken); font-size: 14px; line-height: 1.7; color: var(--pk-ink-2); white-space: pre-wrap; overflow-wrap: anywhere; }
