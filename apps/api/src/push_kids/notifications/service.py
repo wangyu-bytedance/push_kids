@@ -19,6 +19,7 @@ from sqlalchemy.orm import Session
 from push_kids.families.service import FamilyService
 from push_kids.notifications.destinations import DestinationCipher, DestinationCipherError
 from push_kids.notifications.domain import KINDS, kind_for, retry_delay_seconds
+from push_kids.notifications.inbound import CHANGE, SENT, InboundEvent, TemplateDecision
 from push_kids.notifications.outbox import NotificationOutbox
 from push_kids.notifications.providers import NotificationSender, build_sender
 from push_kids.notifications.schemas import (
@@ -85,6 +86,13 @@ class NotificationChannel:
 
     def binding(self, type_name: str) -> TemplateBinding | None:
         return self.bindings.get(type_name)
+
+    def type_for_template(self, template_id: str) -> str:
+        """Reverse lookup used by WeChat events, which identify a reminder by template id only."""
+        for type_name, binding in self.bindings.items():
+            if binding.template_id == template_id:
+                return type_name
+        return ""
 
 
 def build_channel(settings: Settings) -> NotificationChannel:
@@ -245,6 +253,10 @@ class NotificationsService:
             select(NotificationDestination).where(NotificationDestination.member_id == member_id)
         )
         ciphertext = channel.cipher.encrypt(receiver)
+        # Ciphertext is randomised per write, so an equality lookup needs a separate keyed digest.
+        # WeChat events arrive with an OpenID and no member id; this is how they are matched without
+        # ever storing the OpenID in clear text.
+        receiver_hmac = channel.cipher.fingerprint(receiver)
         if existing is None:
             db.add(
                 NotificationDestination(
@@ -254,11 +266,13 @@ class NotificationsService:
                     app_id=context.app_id or "unknown",
                     key_version=channel.cipher.version,
                     ciphertext=ciphertext,
+                    receiver_hmac=receiver_hmac,
                     status="active",
                 )
             )
         else:
             existing.ciphertext = ciphertext
+            existing.receiver_hmac = receiver_hmac
             existing.key_version = channel.cipher.version
             existing.actor_binding_id = context.actor_binding_id
             existing.app_id = context.app_id or existing.app_id
@@ -317,6 +331,147 @@ class NotificationsService:
             return False
         stored = int(row.remaining_quota or 0)
         return stored == UNLIMITED_QUOTA or stored > 0
+
+    @classmethod
+    def _destination_for_receiver(
+        cls, db: Session, channel: NotificationChannel, receiver: str
+    ) -> NotificationDestination | None:
+        """Find the active destination for a WeChat receiver without storing it in clear text."""
+        if channel.cipher is None or not receiver:
+            return None
+        digest = channel.cipher.fingerprint(receiver)
+        row = db.scalar(
+            select(NotificationDestination).where(
+                NotificationDestination.receiver_hmac == digest,
+                NotificationDestination.status == "active",
+            )
+        )
+        if row is not None:
+            return row
+        # Rows written before the index existed still have to be reachable, so they are matched by
+        # decrypting once and then backfilled in place.
+        for candidate in db.scalars(
+            select(NotificationDestination).where(
+                NotificationDestination.receiver_hmac.is_(None),
+                NotificationDestination.status == "active",
+            )
+        ):
+            try:
+                plaintext = channel.cipher.decrypt(str(candidate.ciphertext))
+            except DestinationCipherError:
+                continue
+            candidate.receiver_hmac = channel.cipher.fingerprint(plaintext)
+            if plaintext == receiver:
+                db.commit()
+                return candidate
+        db.commit()
+        return None
+
+    @classmethod
+    def _apply_decision(
+        cls,
+        db: Session,
+        channel: NotificationChannel,
+        destination: NotificationDestination,
+        decision: TemplateDecision,
+        *,
+        revokes_on_reject: bool,
+        now: datetime,
+    ) -> bool:
+        type_name = channel.type_for_template(decision.template_id)
+        if not type_name:
+            return False
+        member_id = str(destination.member_id)
+        row = db.scalar(
+            select(NotificationSubscription).where(
+                NotificationSubscription.member_id == member_id,
+                NotificationSubscription.type == type_name,
+            )
+        )
+        if row is None:
+            if decision.status != "accept":
+                # Nothing was ever granted, so there is nothing to revoke.
+                return False
+            row = NotificationSubscription(
+                family_id=str(destination.family_id),
+                member_id=member_id,
+                type=type_name,
+                status=SubscriptionStatus.accepted.value,
+                remaining_quota=0,
+                granted_at=now,
+            )
+            db.add(row)
+            return True
+        row.updated_at = now
+        if decision.status == "accept":
+            # The dialog result is already counted by the client call that raised it; counting it
+            # again here would hand out a reminder the parent never paid for.
+            row.status = SubscriptionStatus.accepted.value
+            row.granted_at = row.granted_at or now
+            return True
+        if not revokes_on_reject and cls._keeps_stored_quota(decision.status, row):
+            return False
+        row.status = SubscriptionStatus.rejected.value
+        row.remaining_quota = 0
+        return True
+
+    @classmethod
+    def _apply_sent_result(
+        cls, db: Session, event: InboundEvent, destination: NotificationDestination, now: datetime
+    ) -> bool:
+        """Correct an optimistic `sent` row once WeChat reports the real per-user result."""
+        if not event.msg_id or not event.error_code:
+            return False
+        row = db.scalar(
+            select(NotificationDelivery).where(
+                NotificationDelivery.provider_msg_id == event.msg_id,
+                NotificationDelivery.member_id == str(destination.member_id),
+            )
+        )
+        if row is None:
+            return False
+        row.state = DeliveryState.failed.value
+        row.result_code = f"wechat_{event.error_code}"
+        row.sent_at = None
+        row.updated_at = now
+        return True
+
+    @classmethod
+    def ingest_event(
+        cls, db: Session, channel: NotificationChannel, event: InboundEvent
+    ) -> dict[str, int]:
+        """Apply one verified WeChat subscription event to notification-owned state only.
+
+        The event carries a receiver and template ids, never a family or member id, so nothing is
+        trusted from it beyond what a stored active destination confirms.
+        """
+        counts = {"matched": 0, "updated": 0}
+        destination = cls._destination_for_receiver(db, channel, event.receiver)
+        if destination is None:
+            logger.info("notification_event_unmatched kind=%s", event.kind)
+            return counts
+        counts["matched"] = 1
+        now = utcnow()
+        changed = False
+        if event.kind == SENT:
+            changed = cls._apply_sent_result(db, event, destination, now)
+        else:
+            for decision in event.decisions:
+                # Turning the reminder off inside 服务通知 is a standing refusal, unlike declining a
+                # single dialog, so it clears grants the parent already stored.
+                changed |= cls._apply_decision(
+                    db,
+                    channel,
+                    destination,
+                    decision,
+                    revokes_on_reject=event.kind == CHANGE,
+                    now=now,
+                )
+        if changed:
+            db.commit()
+            counts["updated"] = 1
+        logger.info("notification_event_applied kind=%s updated=%s", event.kind, counts["updated"])
+        return counts
 
     @classmethod
     def recent_deliveries(
@@ -594,6 +749,10 @@ class NotificationsService:
                     if quota - 1 == 0:
                         # A spent one-off grant must be re-requested by the member.
                         subscription.status = SubscriptionStatus.expired.value
+                if outcome.msg_id:
+                    # WeChat accepted the request; the real per-user result may still arrive later
+                    # as a delivery event, which is matched back through this id.
+                    row.provider_msg_id = outcome.msg_id
                 cls._terminate(db, row, DeliveryState.sent, outcome.code)
                 counts["sent"] += 1
                 continue

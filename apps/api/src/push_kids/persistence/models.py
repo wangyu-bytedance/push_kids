@@ -594,6 +594,9 @@ class NotificationDestination(Base):
     app_id = Column(String(32), nullable=False)
     key_version = Column(String(10), nullable=False, default="v1")
     ciphertext = Column(Text, nullable=False)
+    # Keyed HMAC of the same receiver id. Equality-only lookup for inbound WeChat events, which
+    # arrive keyed by OpenID; it is one-way, so no plaintext receiver becomes searchable.
+    receiver_hmac = Column(String(64), nullable=True, index=True)
     status = Column(String(20), nullable=False, default="active", index=True)
     created_at = Column(UTCDateTime(), nullable=False, default=utcnow)
     updated_at = Column(UTCDateTime(), nullable=False, default=utcnow, onupdate=utcnow)
@@ -640,6 +643,9 @@ class NotificationDelivery(Base):
     lease_until = Column(UTCDateTime(), nullable=True)
     # Safe classification only: never the WeChat payload, template content or receiver identity.
     result_code = Column(String(50), nullable=True)
+    # WeChat's own message id for the accepted send. Only used to match the asynchronous delivery
+    # result event back to this row; it carries no personal data.
+    provider_msg_id = Column(String(64), nullable=True, index=True)
     sent_at = Column(UTCDateTime(), nullable=True)
     created_at = Column(UTCDateTime(), nullable=False, default=utcnow)
     updated_at = Column(UTCDateTime(), nullable=False, default=utcnow, onupdate=utcnow)

@@ -4,6 +4,7 @@
 
 const api = require("../../utils/api");
 const ui = require("../../utils/ui");
+const renew = require("../../utils/renew");
 
 /* 科目选择器最后一项：让家长自己写一个新科目名，仍需明确同意才会真的新增。 */
 const NEW_SUBJECT_OPTION = "＋ 写一个新科目";
@@ -227,6 +228,8 @@ module.exports = {
       const missing = kept.some((item) => !(item.subject_name || "").trim());
       if (missing) return wx.showToast({ title: "请为每个知识点选择科目", icon: "none" });
       this.setData({ saving: true, saveError: "" });
+      /* 确认入库会生成复习计划，也就意味着之后要发提醒；趁这次点击手势把额度续上。 */
+      renew.maybeTopUp();
       try {
         await this.postConfirm();
         wx.showToast({ title: "已确认入库", icon: "success" });

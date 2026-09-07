@@ -289,3 +289,17 @@ def test_time_is_never_read_from_the_client(client: TestClient, app) -> None:
     with app.state.database.session_factory() as db:
         before = datetime.combine(day, time(18, 59), tzinfo=SHANGHAI).astimezone(UTC)
         assert NotificationPlanner.plan_review_digests(db, before).queued == 0
+
+
+def test_provider_message_id_is_kept_so_a_late_failure_can_be_corrected(
+    client: TestClient, app
+) -> None:
+    """微信先回执 msgid、之后才推真实结果，所以发送时必须把 msgid 记下来。"""
+    due = _queued_reminder(client, app, datetime(2026, 1, 1, 17, 30))
+    channel = _channel_with(app, ScriptedSender([SendOutcome("sent", "ok", "1700000000000001")]))
+    with app.state.database.session_factory() as db:
+        assert NotificationsService.dispatch_due(db, channel, due)["sent"] == 1
+
+    row = _row(app)
+    assert row.state == DeliveryState.sent.value
+    assert row.provider_msg_id == "1700000000000001"

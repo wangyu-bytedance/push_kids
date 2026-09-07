@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import base64
 import hashlib
+import hmac
 
 from Crypto.Cipher import AES
 from Crypto.Random import get_random_bytes
@@ -28,7 +29,18 @@ class DestinationCipher:
         if len(secret) < 32:
             raise ValueError("通知加密密钥至少需要 32 个字符")
         self._key = hashlib.sha256(f"push-kids-destination:{secret}".encode()).digest()
+        self._index_key = hashlib.sha256(f"push-kids-destination-index:{secret}".encode()).digest()
         self.version = version
+
+    def fingerprint(self, plaintext: str) -> str:
+        """Keyed one-way lookup value for an external receiver id.
+
+        WeChat pushes subscription events keyed by the plaintext OpenID, and AES-GCM ciphertext is
+        randomised, so a row cannot be found by re-encrypting. This HMAC gives an equality-only
+        index derived from a separate key: it is not reversible and reveals nothing on its own,
+        which keeps the "no plaintext receiver in the database" rule intact.
+        """
+        return hmac.new(self._index_key, plaintext.encode(), hashlib.sha256).hexdigest()
 
     def encrypt(self, plaintext: str) -> str:
         cipher = AES.new(self._key, AES.MODE_GCM, nonce=get_random_bytes(NONCE_BYTES))

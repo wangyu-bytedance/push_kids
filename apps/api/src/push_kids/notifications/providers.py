@@ -37,6 +37,9 @@ SendStatus = Literal["sent", "retry", "permanent"]
 class SendOutcome:
     status: SendStatus
     code: str
+    # WeChat's message id for an accepted send. Kept so the asynchronous delivery-result event can
+    # be matched back to the outbox row; empty for every non-WeChat sender.
+    msg_id: str = ""
 
 
 class NotificationSender(Protocol):
@@ -144,7 +147,7 @@ class WeChatSubscribeSender:
             return SendOutcome("retry", "transport_error")
         code = int(decoded.get("errcode", 0) or 0)
         if code == 0:
-            return SendOutcome("sent", "ok")
+            return SendOutcome("sent", "ok", str(decoded.get("msgid", "") or "")[:64])
         if code in PERMANENT_ERRORS:
             return SendOutcome("permanent", PERMANENT_ERRORS[code])
         if code in RETRYABLE_ERRORS:

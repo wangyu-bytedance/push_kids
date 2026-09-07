@@ -1,6 +1,7 @@
 const api = require("../../utils/api");
 const ui = require("../../utils/ui");
 const childContext = require("../../utils/child-context");
+const renew = require("../../utils/renew");
 
 const WEEKDAYS = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
 const KIND_LABELS = { class: "课外活动", activity: "自主活动", other: "其他安排" };
@@ -69,6 +70,8 @@ Page({
   onShow() {
     const tabBar = this.getTabBar && this.getTabBar();
     if (tabBar) tabBar.setData({ selected: 0 });
+    /* 提醒额度快照在后台悄悄刷新：家长下一次点击才可能用到它，这里不阻塞今日页渲染。 */
+    renew.hydrate();
     this.load();
   },
   async onPullDownRefresh() {
@@ -220,6 +223,8 @@ Page({
     } catch (error) { wx.showToast({ title: error.message, icon: "none" }); }
   },
   async feedback(event) {
+    /* 必须是这次点击手势里的第一件事，否则微信会拒绝订阅调用。额度够用时它什么都不做。 */
+    renew.maybeTopUp();
     const { reviewId, action } = event.detail;
     this.feedbackRetryKeys = this.feedbackRetryKeys || {};
     const intent = `${reviewId}:${action}`;

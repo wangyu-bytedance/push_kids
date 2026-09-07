@@ -133,6 +133,59 @@ function reserveOf(preferences, channelAvailable) {
   return { total, unlimited, canTopUp, low: !unlimited && total < 3 };
 }
 
+/* 静默续订的判断规则。微信要求订阅弹窗必须在点击手势里发起，所以这里只做"能不能续、续哪几个"
+   的纯计算：输入是本地缓存的快照，输出是可以立刻带进 wx.requestSubscribeMessage 的目标。
+   门槛写得保守：家长没有在设置页授权过就不打扰；勾过"总是保持"时不会弹窗，才允许更勤快一点。 */
+const SNAPSHOT_MAX_AGE_MS = 6 * 60 * 60 * 1000;
+const COOLDOWN_MS = 12 * 60 * 60 * 1000;
+const SILENT_COOLDOWN_MS = 30 * 60 * 1000;
+
+function hasGrantedBefore(preferences) {
+  return (preferences || []).some(
+    (item) =>
+      item.subscription_status === "accepted" ||
+      item.subscription_status === "expired" ||
+      Number(item.remaining_quota) > 0
+  );
+}
+
+function silentTopUpPlan(snapshot, now) {
+  const state = snapshot || {};
+  const preferences = state.preferences || [];
+  const at = Number(now) || 0;
+  if (state.blocked === true) return { targets: [], reason: "blocked" };
+  if (state.channelAvailable !== true) return { targets: [], reason: "unavailable" };
+  /* 快照太旧就先不打扰：宁可少续一次，也不要按过期的额度去弹窗。 */
+  if (!state.checkedAt || at - Number(state.checkedAt) > SNAPSHOT_MAX_AGE_MS) {
+    return { targets: [], reason: "stale" };
+  }
+  const reserve = reserveOf(preferences, true);
+  if (reserve.unlimited) return { targets: [], reason: "long_term" };
+  if (!reserve.low) return { targets: [], reason: "enough" };
+  /* 第一次授权属于设置页的知情选择，不在日常点击里突然弹出来。 */
+  if (!hasGrantedBefore(preferences) && state.alwaysKeep !== true) {
+    return { targets: [], reason: "never_granted" };
+  }
+  const cooldown = state.alwaysKeep === true ? SILENT_COOLDOWN_MS : COOLDOWN_MS;
+  if (state.lastAttemptAt && at - Number(state.lastAttemptAt) < cooldown) {
+    return { targets: [], reason: "cooldown" };
+  }
+  const targets = topUpTargets(preferences, true);
+  if (!targets.length) return { targets: [], reason: "no_target" };
+  return { targets, reason: "ok" };
+}
+
+/* wx.getSetting({ withSubscriptions: true }) 只回传家长勾过"总是保持以上选择"的模板。
+   勾过就意味着后续调用不再弹窗，可以更频繁地续；主开关关掉则一次都不该试。 */
+function readSubscriptionSetting(setting, templateIds) {
+  const box = (setting || {}).subscriptionsSetting || {};
+  if (box.mainSwitch === false) return { blocked: true, alwaysKeep: false };
+  const items = box.itemSettings || {};
+  const ids = (templateIds || []).filter((id) => !!id);
+  const alwaysKeep = ids.length > 0 && ids.every((id) => items[id] === "accept");
+  return { blocked: false, alwaysKeep };
+}
+
 /* wx.requestSubscribeMessage 的返回是「模板 ID → accept/reject/ban/filter」，
    只有 accept 算授权；其余一律按未授权回传，绝不替用户乐观解释。
    原始结论一起回传：reject 只是这次不同意，ban/filter 才是真的收不到。 */
@@ -185,6 +238,8 @@ module.exports = {
   grantTargets,
   topUpTargets,
   reserveOf,
+  silentTopUpPlan,
+  readSubscriptionSetting,
   resultsFromWx,
   acceptedCount,
   describeDelivery,

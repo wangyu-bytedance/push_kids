@@ -52,6 +52,9 @@ class Settings(BaseSettings):
     notification_trigger_token: SecretStr | None = Field(
         None, alias="PUSH_KIDS_NOTIFICATION_TRIGGER_TOKEN"
     )
+    # Token configured in 微信后台「开发管理 → 消息推送」. Without it the inbound event route stays
+    # absent, so an unconfigured deployment cannot be fed forged subscription events.
+    wechat_message_token: SecretStr | None = Field(None, alias="PUSH_KIDS_WECHAT_MESSAGE_TOKEN")
     run_notification_scheduler: bool = Field(True, alias="PUSH_KIDS_RUN_NOTIFICATION_SCHEDULER")
     upload_max_bytes: int = 10 * 1024 * 1024
     worker_poll_seconds: float = 0.25
@@ -74,6 +77,13 @@ class Settings(BaseSettings):
         if not self.notification_trigger_token:
             return ""
         return self.notification_trigger_token.get_secret_value().strip()
+
+    @property
+    def wechat_message_token_value(self) -> str:
+        """Shared token for inbound WeChat message push. Empty means "route disabled"."""
+        if not self.wechat_message_token:
+            return ""
+        return self.wechat_message_token.get_secret_value().strip()
 
     @property
     def is_cloud(self) -> bool:

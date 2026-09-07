@@ -3,6 +3,7 @@
 - Status: `CURRENT_LOCAL / PREVIEW_ONLY / NATIVE_MATRIX_PENDING`
 - Related Feature: `FEAT-003`
 - Related Spec: `SPEC-20260906-CHANNEL-02` + `SPEC-20260907-CHANNEL-04`（一次性额度可数化与补授权）
+  + `SPEC-20260907-CHANNEL-05`（静默续订：额度补充不再只依赖本页）
 - Baseline: `FDB-20260906-02`（PKDS 2.0「纸 · 芽」，未新增视觉语言）
 - Engineering contract: `FEC-20260905-02`
 - Design revision: `DREV-20260906-PKDS-03`（屏 G9；仅复用既有 tokens/atoms/图标集）
@@ -41,6 +42,20 @@
 | 投递记录读取失败 | 只降级这一段为提示条，开关与授权照常可用 |
 | 偏好写入失败 | 开关拨回服务端真实状态并显示错误，不留下假的「已开启」 |
 
+## Silent renewal (`-05`)
+
+补额度不再只发生在本页。额度快用完时，家长在**今日页完成复习反馈**、**日历保存日程**、
+**草稿页确认入库**这三个动作里会顺手被请求一次授权；本页仍是唯一的知情首次授权与状态解释入口。
+
+| Condition | Visible behaviour |
+|---|---|
+| 余额 <3 条且此前授权过 | 点击这三个动作时弹一次微信授权（最多 3 个模板，缺额度最多者优先）；同意后延迟 1.2s 提示「已续存 N 条提醒」 |
+| 从未授权过 | 不弹；首次授权只发生在本页，避免家长在不知情时被弹窗打断 |
+| 余额充足 / 通道不可用 / 快照过期 / 冷却期内 / 微信主开关关闭 | 完全静默，不弹、不提示、不发请求 |
+| 家长拒绝弹窗 | 视为一次冷却（12 小时；已勾「总是保持以上选择」时 30 分钟），不连续追问 |
+| 老版本微信 | 静默降级，业务动作照常完成 |
+| 任意情况 | 续订绝不阻塞或改变家长真正点击的那个动作，失败只影响额度 |
+
 ## Interaction and safety contract
 
 - 授权必须在用户点击的同一次手势里第一时间调用 `wx.requestSubscribeMessage`，其前不得 `await`
@@ -65,13 +80,16 @@
 
 - 用户指令（2026-09-06）：「继续做，我需要一个完整的功能」——据此实现授权入口，`SPEC-20260906-CHANNEL-02` 待评审确认。
 - 用户反馈（2026-09-07）：微信后台没有长期模板可选——据此把一次性额度做成可数、可补的常态路径。
-- 已完成：`node --test tests/frontend/notifications.test.js`（13 项）、`npm test`、`npm run lint:miniapp`、
-  `tools/validate_miniprogram.py`（`pages=15`）、320/390/430 近似渲染走查。
+- 用户指令（2026-09-07）：「落地A和B」——据此把补额度挂到家长的自然点击路径（A），并接入微信订阅事件回调（B）。
+- 已完成：`node --test tests/frontend/notifications.test.js`（13 项）、
+  `node --test tests/frontend/notification-renewal.test.js`（11 项）、`npm test`（133 项）、
+  `npm run lint:miniapp`、`tools/validate_miniprogram.py`（`pages=15`）、320/390/430 近似渲染走查。
 - 待完成（发布门禁）：微信开发者工具编译与三视口原生节点几何证据、真机授权与真实送达、
+  真机静默续订弹窗时序（含勾选「总是保持以上选择」后的无弹窗路径）、
   Figma 节点补录或新的 waiver、快照 manifest。
 
 ## Change references
 
-- `specs/active/FEAT-003-NOTIFICATION-CHANNEL.md` revisions `SPEC-20260906-CHANNEL-02`、`SPEC-20260907-CHANNEL-04`
+- `specs/active/FEAT-003-NOTIFICATION-CHANNEL.md` revisions `SPEC-20260906-CHANNEL-02`、`SPEC-20260907-CHANNEL-04`、`SPEC-20260907-CHANNEL-05`
 - `docs/domain/features/FEAT-003-notification-channel.md`
-- `docs/domain/BEHAVIOR-CATALOG.md` `BHV-028`
+- `docs/domain/BEHAVIOR-CATALOG.md` `BHV-028`、`BHV-029`

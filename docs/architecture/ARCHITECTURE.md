@@ -37,7 +37,7 @@ media through the same bounded infrastructure ports.
 | `reporting` | read models for dashboard/report/calendar | reporting service |
 | `agent_processing` | provider contract, analysis jobs, retries, deterministic subject routing (`subject_routing.py`, pure) | analysis service and worker |
 | `media` | validated local/cloud files, cloud ownership claim and temporary materialization | media store port |
-| `notifications` | notification kinds and copy policy (`domain.py`, pure), member preferences, WeChat grants and quota, encrypted receiver, durable outbox with dedupe/lease/retry, planner and tick | notification service + HTTP routes + scheduler |
+| `notifications` | notification kinds and copy policy (`domain.py`, pure), member preferences, WeChat grants and quota, encrypted receiver, durable outbox with dedupe/lease/retry, inbound subscription event parsing/verification (`inbound.py`, pure), planner and tick | notification service + HTTP routes + scheduler |
 | `platform` | config, database, errors, request context | infrastructure only |
 
 Dependency direction is routers → services → pure policies. Infrastructure adapters implement contracts and may depend inward; pure policies do not depend outward.
@@ -65,7 +65,8 @@ Dependency direction is routers → services → pure policies. Infrastructure a
   removes rows or hides history. Archiving is not deletion and there is no physical child deletion path.
   FEAT-007 adds `travel_arrangements` and create-idempotency rows in migration `20260906_0006`.
   `Database.expected_cloud_revision` tracks the single Alembic head; durable deletion extends that chain to
-  `20260906_0007` and the notification channel to `20260906_0008`.
+  `20260906_0007`, the notification channel to `20260906_0008` and subscription event sync to
+  `20260907_0009`.
 - Travel arrangements are independent from activities and project only into the Calendar query. The query
   normalizes CalendarEvent, ActivitySchedule and TravelArrangement time spans, then applies one pure half-open
   interval policy. Conflict metadata is derived at read time and marks every participant; it is never persisted.
@@ -79,7 +80,12 @@ Dependency direction is routers → services → pure policies. Infrastructure a
   never logged. Business time (19:00 Asia/Shanghai, one hour before a schedule) is computed server-side and
   stored as a UTC instant. Membership is authoritative twice: when the audience is resolved and again
   immediately before sending, so a departed member cannot receive a family's child names. Introduced by
-  migration `20260906_0008`.
+  migration `20260906_0008`. Migration `20260907_0009` adds two nullable lookup columns used only by the
+  WeChat event callback: `notification_destinations.receiver_hmac` (keyed HMAC of the receiver, so an inbound
+  OpenID can be matched without ever storing or decrypting it for lookup) and
+  `notification_deliveries.provider_msg_id` (so an asynchronous send result can correct an optimistic `sent`
+  row). Inbound events are signature-verified transport only: they update grant and delivery state and never
+  create learning records or reschedule reviews.
 
 ## Async analysis sequence
 

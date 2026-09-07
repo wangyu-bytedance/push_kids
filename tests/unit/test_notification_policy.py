@@ -214,3 +214,17 @@ def test_receiver_identity_is_encrypted_and_authenticated() -> None:
         cipher.decrypt("c2hvcnQ=")
     with pytest.raises(ValueError):
         DestinationCipher("too-short")
+
+
+def test_receiver_index_is_keyed_and_separate_from_the_encryption_key() -> None:
+    """回调只带 OpenID，所以需要一个可等值查找、又不还原明文的索引。"""
+    cipher = DestinationCipher("a" * 32)
+    digest = cipher.fingerprint("oABC-openid-value")
+    # 同一个 OpenID 每次算出同一个索引，否则回调永远匹配不上。
+    assert digest == cipher.fingerprint("oABC-openid-value")
+    assert "oABC-openid-value" not in digest
+    assert len(digest) == 64
+    # 换 OpenID、换密钥都不能撞上；也不能等于任何加密结果。
+    assert digest != cipher.fingerprint("oXYZ-openid-value")
+    assert digest != DestinationCipher("b" * 32).fingerprint("oABC-openid-value")
+    assert digest != cipher.encrypt("oABC-openid-value")

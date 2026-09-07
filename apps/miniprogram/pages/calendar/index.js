@@ -2,6 +2,7 @@ const api = require("../../utils/api");
 const ui = require("../../utils/ui");
 const childContext = require("../../utils/child-context");
 const { localParts } = require("../../utils/date");
+const renew = require("../../utils/renew");
 
 const WEEK_LABELS = ["一", "二", "三", "四", "五", "六", "日"];
 const WEEKDAY_FULL = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
@@ -232,6 +233,8 @@ Page({
       return wx.showToast({ title: "结束时间需晚于开始时间", icon: "none" });
     }
     this.setData({ saving: true });
+    /* 家长刚安排了一件要提醒的事，这里顺手把提醒额度续上；发起必须仍在这次点击手势里。 */
+    renew.maybeTopUp();
     const payload = { name: this.data.eventName.trim(), event_date: this.data.eventDate || this.data.selectedDay, start_time: this.data.startTime, end_time: this.data.endTime, kind: this.data.eventKind, repeat_weekly: this.data.repeatWeekly };
     try {
       if (this.data.editingId) await api.request(`/calendar-events/${this.data.editingId}`, { method: "PATCH", data: payload });

@@ -4,8 +4,15 @@ import secrets
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, Header, Request
+from fastapi.responses import PlainTextResponse
 from sqlalchemy.orm import Session
 
+from push_kids.notifications.inbound import (
+    MAX_BODY_BYTES,
+    InboundEventError,
+    parse_event,
+    verify_signature,
+)
 from push_kids.notifications.planner import NotificationPlanner
 from push_kids.notifications.schemas import (
     DeliveryView,
@@ -17,7 +24,7 @@ from push_kids.notifications.schemas import (
 from push_kids.notifications.service import NotificationChannel, NotificationsService
 from push_kids.platform.context import RequestContext, request_context, self_service_context
 from push_kids.platform.dependencies import get_db
-from push_kids.platform.errors import ForbiddenError, NotFoundError
+from push_kids.platform.errors import AppError, ForbiddenError, NotFoundError
 
 router = APIRouter(tags=["notifications"])
 
@@ -80,3 +87,56 @@ def dispatch(
     planned = NotificationPlanner.plan_all(db)
     dispatched = NotificationsService.dispatch_due(db, channel)
     return DispatchReport(**swept, **planned, **dispatched)
+
+
+def _message_token(request: Request) -> str:
+    """The WeChat message-push token. Without it the callback must not exist at all."""
+    token = request.app.state.settings.wechat_message_token_value
+    if not token:
+        raise NotFoundError("当前部署未开启微信消息推送回调")
+    return token
+
+
+@router.get("/notifications/wechat/events", response_class=PlainTextResponse)
+def verify_event_url(
+    request: Request,
+    signature: str = "",
+    timestamp: str = "",
+    nonce: str = "",
+    echostr: str = "",
+):
+    """WeChat's one-off URL check: echo the challenge only when the signature matches."""
+    token = _message_token(request)
+    if not verify_signature(token, timestamp, nonce, signature):
+        raise ForbiddenError("消息推送签名无效")
+    return PlainTextResponse(echostr[:512])
+
+
+@router.post("/notifications/wechat/events", response_class=PlainTextResponse)
+async def receive_event(
+    request: Request,
+    db: DbDep,
+    channel: ChannelDep,
+    signature: str = "",
+    timestamp: str = "",
+    nonce: str = "",
+):
+    """Apply one subscription event pushed by WeChat.
+
+    This route carries no family scope and no member identity, so it trusts nothing but the signed
+    token plus a stored active destination. It always answers `success` for an accepted body: WeChat
+    retries otherwise, and a retry cannot make an unknown receiver known.
+    """
+    token = _message_token(request)
+    if not verify_signature(token, timestamp, nonce, signature):
+        raise ForbiddenError("消息推送签名无效")
+    declared = request.headers.get("content-length")
+    if declared and declared.isdigit() and int(declared) > MAX_BODY_BYTES:
+        raise AppError("消息推送内容过大")
+    try:
+        event = parse_event(await request.body())
+    except InboundEventError as exc:
+        raise AppError(str(exc)) from exc
+    if event is not None:
+        NotificationsService.ingest_event(db, channel, event)
+    return PlainTextResponse("success")

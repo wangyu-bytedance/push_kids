@@ -70,6 +70,8 @@ NOTIFICATION_TEMPLATES = json.dumps(
     ensure_ascii=False,
 )
 NOTIFICATION_TRIGGER = "notification-trigger-token-for-tests"
+# 微信后台「消息推送」里配置的 Token：入站订阅事件只认它签出来的请求。
+WECHAT_MESSAGE_TOKEN = "wechat-message-token-for-tests"
 
 
 @pytest.fixture
@@ -84,5 +86,23 @@ def notification_app(tmp_path: Path):
         PUSH_KIDS_NOTIFICATION_CHANNEL="recording",
         PUSH_KIDS_NOTIFICATION_TEMPLATES=NOTIFICATION_TEMPLATES,
         PUSH_KIDS_NOTIFICATION_TRIGGER_TOKEN=NOTIFICATION_TRIGGER,
+    )
+    return create_app(settings)
+
+
+@pytest.fixture
+def notification_event_app(tmp_path: Path):
+    """通知通道 + 微信消息推送回调都开着的部署形态。"""
+    settings = Settings(
+        PUSH_KIDS_ENV="test",
+        PUSH_KIDS_DATABASE_URL="sqlite:///:memory:",
+        PUSH_KIDS_MEDIA_ROOT=tmp_path / "uploads",
+        PUSH_KIDS_AI_PROVIDER="test",
+        PUSH_KIDS_RUN_WORKER=False,
+        PUSH_KIDS_RUN_NOTIFICATION_SCHEDULER=False,
+        PUSH_KIDS_NOTIFICATION_CHANNEL="recording",
+        PUSH_KIDS_NOTIFICATION_TEMPLATES=NOTIFICATION_TEMPLATES,
+        PUSH_KIDS_NOTIFICATION_TRIGGER_TOKEN=NOTIFICATION_TRIGGER,
+        PUSH_KIDS_WECHAT_MESSAGE_TOKEN=WECHAT_MESSAGE_TOKEN,
     )
     return create_app(settings)

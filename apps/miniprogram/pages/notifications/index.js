@@ -1,5 +1,6 @@
 const api = require("../../utils/api");
 const notifications = require("../../utils/notifications");
+const renew = require("../../utils/renew");
 
 /* 提醒设置：开关走服务端偏好，"能不能发到微信"由微信授权决定。
    这两件事必须分开显示，否则家长会把"开关是开的"误当成"一定会收到"。 */
@@ -86,6 +87,8 @@ Page({
       lastSentLabel: notifications.lastSentLabel(settings.last_sent_at)
     });
     this.pending = preferences;
+    /* 这一页刚从服务端拿到最新额度，直接喂给静默续订的缓存，省掉它自己再请求一次。 */
+    renew.remember(settings);
   },
   async toggle(event) {
     const type = event.currentTarget.dataset.type;
@@ -161,6 +164,8 @@ Page({
       this.render(settings);
       this.setData({ granting: false });
       const accepted = notifications.acceptedCount(results);
+      /* 手动授权也算一次续订：记下来，家长回到今日页时不会立刻又被弹一次。 */
+      renew.noteManualGrant(settings);
       /* 报数不报"已开启"：一次性模板下家长真正关心的是又攒了几条。 */
       if (accepted) {
         return wx.showToast({ title: `已存入 ${accepted} 条提醒`, icon: "success" });

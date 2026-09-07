@@ -34,6 +34,22 @@
   and that a long-term template never asks the parent to stockpile messages.
   `wx.requestSubscribeMessage` is stubbed; the grant call must be
   asserted to happen before any awaited request so the real client keeps its user gesture.
+- Silent renewal: the decision to top up is a pure function over a cached snapshot and must be tested for
+  every refusal reason (enough quota, long-term template, unavailable channel, stale snapshot, never
+  granted, cooldown, WeChat main switch off) as well as target ordering (emptiest first, three max). The
+  plumbing tests must prove that a natural tap both requests the grant and still completes its own
+  business request, that a declined dialog starts the cooldown, that a client without
+  `wx.requestSubscribeMessage` degrades to doing nothing, and that a failed snapshot refresh never breaks
+  the page that asked for it. Real-device dialog timing stays a manual gate.
+- Subscription event callback: no test may reach a real WeChat endpoint. Unit covers signature
+  verification (wrong token, tampered timestamp/nonce, missing token), JSON and XML parsing, single-object
+  and array `List`, unknown status values, ignored event types, oversized bodies and refused
+  doctype/entity declarations. Integration must cover URL verification echo, a forged signature (403), a
+  deployment without the push token (404), an unreadable or oversized body (400), a popup `reject` keeping
+  stored quota, a `change` refusal clearing it, a `ban` clearing it, an `accept` adding no quota, an
+  unknown receiver or template changing nothing, a non-zero delivery error code correcting an
+  optimistically `sent` row, and a legacy destination without the HMAC index still being matched and
+  backfilled. Real event push from the WeChat console stays a manual, staged gate.
 - Deployment configuration: `tools/notification_config.py check` must agree with the runtime template
   parser and the 32-character key rule, and must never print the key itself. `from-wechat` converts a
   WeChat `gettemplate` response offline; its output must parse with the runtime parser and it must

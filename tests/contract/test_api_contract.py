@@ -87,6 +87,10 @@ def test_notification_channel_is_part_of_the_contract(app) -> None:
     assert "/api/v1/notifications/subscriptions" in paths
     assert "/api/v1/notifications/deliveries" in paths
     assert "/api/v1/notifications/dispatch" in paths
+    # 微信消息推送回调是部署契约的一部分：控制台里填的就是这个路径。
+    assert "/api/v1/notifications/wechat/events" in paths
+    events = paths["/api/v1/notifications/wechat/events"]
+    assert set(events) == {"get", "post"}
     channel = document["components"]["schemas"]["ChannelView"]
     assert channel["properties"]["available"]["type"] == "boolean"
     assert channel["properties"]["template_ids"]["type"] == "array"

@@ -7,11 +7,12 @@
 - Reviewer: `PENDING（后端、隐私/安全、微信平台）——通过 MR 评审`
 - Verifier: `PENDING`
 - Created: 2026-09-06
-- Last updated: 2026-09-06
+- Last updated: 2026-09-07
 - Target release: `PENDING；生产发送还依赖微信订阅消息模板与运行时配置`
-- Spec revision: `SPEC-20260906-CHANNEL-02`（前端授权入口；`-01` 为服务端通道，已实现）
+- Spec revision: `SPEC-20260907-CHANNEL-05`（静默续订 + 订阅事件回调；`-01`…`-04` 已实现）
 - User confirmation: `-01: CONFIRMED 2026-09-06 —「按照这个spec 编写代码，并提交mr」；`
-  `-02: 依据 2026-09-06 用户指令「继续做，我需要一个完整的功能」实现，revision 文本待用户确认`
+  `-02: 依据 2026-09-06 用户指令「继续做，我需要一个完整的功能」实现，revision 文本待用户确认；`
+  `-05: CONFIRMED 2026-09-07 —「落地A和B」（A=静默续订引擎，B=订阅事件回调）`
 - Additional R2/R3 approval: `CONFIRMED 2026-09-06（与 Spec revision 同一次确认）`
 - Affected Feature IDs: `FEAT-003（新增，本 revision 只覆盖通道）；FEAT-002（成员生命周期读契约）`
 - Feature current-state documents: 新增 `docs/domain/features/FEAT-003-notification-channel.md`
@@ -330,6 +331,77 @@ Alembic `20260906_0008_notification_channel`，纯新增四张表与索引；
 - AC-303：设置页在全部已授权、额度有限时仍提供补授权入口，且补授权顺序为剩余额度最少者优先、最多 3 个模板。
 - AC-304：额度为 -1（长期模板）时不出现补授权入口与余额文案。
 
+## 8quinquies. `-05` 静默续订（A）+ 微信订阅事件回调（B）
+
+`-04` 之后额度可累积、可数、可补，但补额度这件事仍然只能靠家长自己想起来去设置页点一次；
+同时云端只知道自己发出去了什么，不知道家长在微信里做了什么。用户 2026-09-07 指令「落地A和B」，
+本 revision 落地两件互补的事：
+
+- **A 静默续订**：把 `wx.requestSubscribeMessage` 挂到家长本来就会做的动作上（完成复习反馈、
+  保存日程、确认学习记录），只在额度快用完时补一次，且必须在同一次点击手势里发起。
+- **B 订阅事件回调**：接入微信「消息推送」的三类订阅事件，把弹窗结果、服务通知里的拒收、
+  以及异步送达结果同步回云端状态。
+
+长期模板不在范围内：官方长期性订阅只向政务民生、医疗、交通、金融、教育等线下公共服务类目开放，
+本产品的「家庭内学习/复习管理工具」定位既拿不到、也不应为推送体验去虚报服务类目。
+
+### In scope（`-05`）
+
+A（小程序）：
+
+- 新增 `apps/miniprogram/utils/renew.js`：本地缓存服务端额度快照（`wx.setStorageSync`），
+  在 `onShow` 异步刷新，在点击手势里同步决策并发起授权，结果照常回传
+  `POST /notifications/subscriptions`。
+- 新增纯函数 `silentTopUpPlan()` / `readSubscriptionSetting()`（`utils/notifications.js`）：
+  决定「能不能续、续哪几个」，输出可直接带进 `tmplIds` 的目标（最多 3 个，缺额度最多者优先）。
+- 挂载点：今日页复习反馈、日历保存日程、草稿确认入库；今日页 `onShow` 负责刷新快照。
+- 触发门槛：通道可用、快照不超过 6 小时、余额 < 3 条、此前至少授权过一次；
+  未勾「总是保持以上选择」时冷却 12 小时，勾过（后续调用不再弹窗）时冷却 30 分钟。
+
+B（后端）：
+
+- 新增 `notifications/inbound.py`：消息推送验签（sha1 over sorted token/timestamp/nonce）、
+  JSON 与 XML 双格式解析、16KB 体积上限、拒绝 `DOCTYPE`/`ENTITY`/`xml-stylesheet`。
+- 新增 `GET|POST /api/v1/notifications/wechat/events`：GET 回 `echostr` 完成 URL 校验，
+  POST 应用事件并恒定返回 `success`；未配置 `PUSH_KIDS_WECHAT_MESSAGE_TOKEN` 时整条路由 404。
+- `NotificationsService.ingest_event()`：`popup` 同步弹窗结论（沿用 `-04` 的 `reject` 保额度语义，
+  `ban`/`filter` 清零）、`change` 视为长期拒收并清零、`sent` 按 `provider_msg_id` 把乐观的
+  `sent` 行纠正为 `failed / wechat_<errcode>`。
+- 数据：`notification_destinations.receiver_hmac`（keyed HMAC，可等值查找、不可还原）、
+  `notification_deliveries.provider_msg_id`；迁移 `20260907_0009`，两列均可空，旧行首次匹配时就地补齐。
+- `SendOutcome.msg_id` 承载微信 `msgid`，发送成功时落库以便事后纠正。
+
+### Out of scope（`-05`）
+
+- 不申请、不假设长期订阅模板，也不为此修改小程序服务类目。
+- 不在后台自动调用订阅接口（微信要求用户手势），不绕过 `wx.requestSubscribeMessage`。
+- 不在事件回调里创建学习记录、复习计划或家庭成员关系。
+- 不做系统日历订阅兜底（原方案 C）。
+
+### Invariants（`-05`）
+
+- 静默续订永不阻塞或改变家长真正点击的那个业务动作；它失败、被拒、被降级都只影响额度。
+- 家长从未授权过时不在日常点击里突然弹窗；首次授权仍属设置页的知情选择。
+- 事件回调不带家庭身份，除「已存在的 active destination + 已配置模板」外什么都不信；
+  匹配不到接收人或模板时不改任何状态。
+- 回调不写入 OpenID 明文：查找只用 keyed HMAC，日志只记录事件类型与是否更新。
+- 事件里的 `accept` 不增加额度，避免与小程序回传对同一次同意重复记账。
+- 微信事后说没送到时，界面必须改成失败并给出原因，不保留假的「已发送」。
+
+### Acceptance criteria（`-05`）
+
+- AC-401：额度低于阈值时，家长在今日页完成一次复习反馈会同时发起一次订阅续订，
+  且该复习反馈请求照常发出并生效。
+- AC-402：额度充足、快照过期、通道不可用、从未授权、冷却期内、主开关关闭时都不发起续订。
+- AC-403：续订一次最多带 3 个模板，顺序为剩余额度最少者优先；家长拒绝也进入冷却。
+- AC-404：老版本微信（无 `wx.requestSubscribeMessage`）静默降级，不报错、不发请求。
+- AC-405：`subscribe_msg_change_event` 的 `reject` 清零额度并置 `rejected`；
+  `subscribe_msg_popup_event` 的 `reject` 保留已攒额度；`ban` 清零。
+- AC-406：`subscribe_msg_sent_event` 带非 0 `ErrorCode` 时，对应 delivery 由 `sent` 纠正为
+  `failed / wechat_<code>` 且 `sent_at` 清空；`ErrorCode=0` 不改动。
+- AC-407：验签失败返回 403、未配置 token 返回 404、超长或不可解析的 body 返回 400，且都不改状态。
+- AC-408：未知接收人、未知模板 ID 不改任何状态；缺 `receiver_hmac` 的历史行仍能匹配并被就地补齐。
+
 ## 9. Expected file changes
 
 新增上述 `notifications` 包、迁移、四个测试文件；修改 `persistence/models.py`、`platform/config.py`、
@@ -513,6 +585,50 @@ Alembic `20260906_0008_notification_channel`，纯新增四张表与索引；
   已渲染并截图 320/390/430（`dist/ui-preview/notifications*-{320,390,430}.png`），人工检查无横向溢出
 - NOT RUN：微信开发者工具编译、三视口原生节点几何、真机 `wx.requestSubscribeMessage` 与真实送达
 
+### `-05` Files changed（静默续订与事件回调）
+
+- `apps/api/src/push_kids/notifications/inbound.py`（新增）：验签、JSON/XML 解析、体积与 XML 声明防护。
+- `apps/api/src/push_kids/notifications/router.py`：`GET|POST /notifications/wechat/events`。
+- `apps/api/src/push_kids/notifications/service.py`：`type_for_template`、`_destination_for_receiver`
+  （HMAC 查找 + 旧行回填）、`_apply_decision`、`_apply_sent_result`、`ingest_event`，发送成功记 `msgid`。
+- `apps/api/src/push_kids/notifications/providers.py`：`SendOutcome.msg_id`，解析微信返回的 `msgid`。
+- `apps/api/src/push_kids/notifications/destinations.py`：keyed HMAC `fingerprint()`。
+- `apps/api/src/push_kids/persistence/models.py`：`receiver_hmac`、`provider_msg_id`。
+- `apps/api/migrations/versions/20260907_0009_notification_event_sync.py`（新增）+
+  `platform/database.py` 云端期望 revision → `20260907_0009`。
+- `apps/api/src/push_kids/platform/config.py`：`PUSH_KIDS_WECHAT_MESSAGE_TOKEN`。
+- `apps/miniprogram/utils/renew.js`（新增）、`apps/miniprogram/utils/notifications.js`
+  （`silentTopUpPlan`、`readSubscriptionSetting`）。
+- `apps/miniprogram/pages/today/index.js`、`pages/calendar/index.js`、`pages/submission/draft.js`、
+  `pages/notifications/index.js`：挂载点与快照同步。
+- 测试：`tests/unit/test_notification_inbound.py`、`tests/integration/test_notification_events.py`、
+  `tests/frontend/notification-renewal.test.js`，并扩充
+  `tests/unit/test_notification_policy.py`、`tests/integration/test_notification_migration.py`、
+  `tests/integration/test_notification_resilience.py`、`tests/contract/test_api_contract.py`、`tests/conftest.py`。
+
+### `-05` Evidence（2026-09-07，本地）
+
+- `uv run ruff check .` PASS；`uv run ruff format --check .` PASS（251 files）
+- `uv run mypy apps/api/src` PASS（80 files）
+- `uv run python tools/check_architecture.py` PASS（`ARCHITECTURE_VALID checked=3`）
+- `uv run pytest tests/unit tests/integration tests/contract -q` → 275 passed, 2 skipped, 2 failed
+  （仍是 `tests/unit/test_reporting_trends.py` 与 `tests/contract/test_worker_readiness.py` 两个主干既有失败）
+- `npm test` → 133 pass；`npm run lint:miniapp` PASS；
+  `tools/validate_miniprogram.py` → `MINIPROGRAM_VALID pages=15`
+- AC-401 / AC-404：`tests/frontend/notification-renewal.test.js`
+  （`finishing a review still completes even while the top-up dialog is open`、
+  `an old WeChat build degrades to doing nothing`）
+- AC-402 / AC-403：同文件的 `silent top-up only fires when a stored grant is running out`、
+  `a parent who never granted anything is not ambushed by the dialog`、
+  `cooldown is longer when the dialog is still visible to the parent`、
+  `top-up asks for the emptiest reminders first and never more than three`
+- AC-405 / AC-406 / AC-407 / AC-408：`tests/integration/test_notification_events.py`
+  与 `tests/unit/test_notification_inbound.py`
+- 迁移可逆与纯新增：`tests/integration/test_notification_migration.py::
+  test_event_sync_migration_only_adds_nullable_lookup_columns`
+- NOT RUN：微信后台消息推送 URL 配置与真实事件回推、真机静默续订弹窗行为、
+  真实送达与 `subscribe_msg_sent_event`、云端 MySQL 迁移
+
 ### Deviations from approved Spec
 
 `-02` 同样是先实现后确认：用户指令「继续做，我需要一个完整的功能」明确要求补齐能力，但仓库契约要求
@@ -539,3 +655,4 @@ Alembic `20260906_0008_notification_channel`，纯新增四张表与索引；
 | `SPEC-20260906-CHANNEL-03` | 2026-09-06 | 对齐后台已选用的三个真实模板：新增 `applicant`/`applied_at`/`duration`/`countdown`/`notified_at` 语义、按字段类型逐字段裁剪、槽位缺内容时 `skipped / template_field_missing`（不烧额度、可 re-arm）、`tools/notification_config.py` 改为按模板标签推断映射；三个模板均为一次性订阅，已记入风险 |
 | `SPEC-20260907-CHANNEL-04` | 2026-09-07 | 后台无长期模板可选：把一次性额度定为正式运行模式——`decision` 回传区分「这次没订」与「不再接收」、`accept` 累积额度、提醒设置页显示可发条数并提供补授权入口；文档把 `long_term` 固定为 `false` |
 | `SPEC-20260906-CHANNEL-02` | 2026-09-06 | 补齐完整功能：小程序提醒设置页与 `wx.requestSubscribeMessage` 授权入口、设置页入口、部署配置助手 `tools/notification_config.py`；新增 `UI-011`；Figma waiver 处于请求状态，原生视口证据未跑 |
+| `SPEC-20260907-CHANNEL-05` | 2026-09-07 | 落地 A+B：静默续订引擎（自然点击路径补额度、本地快照与冷却、最多 3 模板）与微信订阅事件回调（验签入站端点、弹窗/拒收/送达结果同步、`receiver_hmac` 与 `provider_msg_id`、迁移 `20260907_0009`）；明确不追求长期模板、不修改服务类目 |

@@ -1,4 +1,4 @@
-"""FEAT-003 TP：`20260906_0008` 迁移必须是纯新增，并且可以回滚。
+"""FEAT-003 TP：`20260906_0008` 与 `20260907_0009` 迁移必须是纯新增，并且可以回滚。
 
 提醒能力上线时既有数据不能被改动，回滚时也只应丢掉提醒队列本身。
 """
@@ -15,6 +15,7 @@ from sqlalchemy import create_engine, inspect, text
 ROOT = Path(__file__).resolve().parents[2]
 BASE_REVISION = "20260906_0007"
 TARGET_REVISION = "20260906_0008"
+EVENT_REVISION = "20260907_0009"
 NOTIFICATION_TABLES = {
     "notification_preferences",
     "notification_destinations",
@@ -115,4 +116,86 @@ def test_notification_migration_is_additive_and_reversible(tmp_path: Path, monke
     with engine.connect() as connection:
         # 回滚只丢提醒队列，家庭与孩子数据必须保留。
         assert connection.execute(text("SELECT COUNT(*) FROM children")).scalar() == 1
+    engine.dispose()
+
+
+def test_event_sync_migration_only_adds_nullable_lookup_columns(
+    tmp_path: Path, monkeypatch
+) -> None:
+    """`20260907_0009` 给回调加两列索引；既有授权与队列行必须原样可用。"""
+    url = f"sqlite:///{tmp_path / 'notification-events.db'}"
+    monkeypatch.setenv("PUSH_KIDS_DATABASE_URL", url)
+    config = _config(url)
+    command.upgrade(config, TARGET_REVISION)
+    _seed(url)
+    now = datetime(2026, 9, 6, 1, 0, tzinfo=UTC).replace(tzinfo=None)
+    engine = create_engine(url)
+    with engine.begin() as connection:
+        connection.execute(
+            text(
+                "INSERT INTO notification_destinations (id, family_id, member_id, "
+                "actor_binding_id, app_id, key_version, ciphertext, status, created_at, "
+                "updated_at) VALUES ('dest-1', 'family-1', 'member-1', 'binding-1', 'wx-test', "
+                "1, 'cipher-1', 'active', :now, :now)"
+            ),
+            {"now": now},
+        )
+        connection.execute(
+            text(
+                "INSERT INTO notification_deliveries (id, family_id, member_id, type, "
+                "dedupe_key, payload_json, scheduled_at, state, attempts, max_attempts, "
+                "available_at, created_at, updated_at) VALUES ('delivery-1', 'family-1', "
+                "'member-1', 'review_digest', 'review_digest:2026-09-06', '{}', :now, 'sent', "
+                "1, 3, :now, :now, :now)"
+            ),
+            {"now": now},
+        )
+    engine.dispose()
+
+    command.upgrade(config, EVENT_REVISION)
+    engine = create_engine(url)
+    inspector = inspect(engine)
+    destinations = {
+        item["name"]: item for item in inspector.get_columns("notification_destinations")
+    }
+    deliveries = {item["name"]: item for item in inspector.get_columns("notification_deliveries")}
+    # 既有行没有索引值，所以两列必须可空，否则升级会直接失败。
+    assert destinations["receiver_hmac"]["nullable"] is True
+    assert deliveries["provider_msg_id"]["nullable"] is True
+    # 索引列只放 keyed HMAC，仍然不允许出现任何 openid 明文字段。
+    assert not any("openid" in name for name in destinations)
+    destination_indexes = {
+        item["name"] for item in inspector.get_indexes("notification_destinations")
+    }
+    delivery_indexes = {item["name"] for item in inspector.get_indexes("notification_deliveries")}
+    assert "ix_notification_destinations_receiver_hmac" in destination_indexes
+    assert "ix_notification_deliveries_provider_msg_id" in delivery_indexes
+    with engine.connect() as connection:
+        row = connection.execute(
+            text("SELECT ciphertext, receiver_hmac FROM notification_destinations")
+        ).one()
+        assert row.ciphertext == "cipher-1"
+        assert row.receiver_hmac is None
+        assert (
+            connection.execute(text("SELECT COUNT(*) FROM notification_deliveries")).scalar() == 1
+        )
+    engine.dispose()
+
+    command.downgrade(config, TARGET_REVISION)
+    engine = create_engine(url)
+    inspector = inspect(engine)
+    assert "receiver_hmac" not in {
+        item["name"] for item in inspector.get_columns("notification_destinations")
+    }
+    assert "provider_msg_id" not in {
+        item["name"] for item in inspector.get_columns("notification_deliveries")
+    }
+    with engine.connect() as connection:
+        # 回滚只去掉查找用的两列，授权与历史本身不能被清掉。
+        assert (
+            connection.execute(text("SELECT COUNT(*) FROM notification_destinations")).scalar() == 1
+        )
+        assert (
+            connection.execute(text("SELECT COUNT(*) FROM notification_deliveries")).scalar() == 1
+        )
     engine.dispose()
