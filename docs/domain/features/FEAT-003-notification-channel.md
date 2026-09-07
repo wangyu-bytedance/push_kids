@@ -2,15 +2,16 @@
 
 - Feature ID: `FEAT-003`
 - Status: `IMPLEMENTING`
-- Current-state revision: `FEAT-STATE-20260906-CHANNEL-03-LOCAL`
+- Current-state revision: `FEAT-STATE-20260907-CHANNEL-04-LOCAL`
 - Owner: 产品负责人（用户）
-- Last verified: 2026-09-06
+- Last verified: 2026-09-07
 - Authoritative implementation: `apps/api/src/push_kids/notifications/`、通知持久化模型、
   Alembic `20260906_0008_notification_channel`、`apps/miniprogram/pages/notifications/`、
   `apps/miniprogram/utils/notifications.js`、`tools/notification_config.py`
 - Active change Spec: `specs/active/FEAT-003-NOTIFICATION-CHANNEL.md` revisions
   `SPEC-20260906-CHANNEL-01`（服务端通道）+ `SPEC-20260906-CHANNEL-02`（授权入口）
   + `SPEC-20260906-CHANNEL-03`（对齐后台已选用模板的字段语义）
+  + `SPEC-20260907-CHANNEL-04`（后台无长期模板，一次性额度按可累积运行）
 - UI current state: `docs/design/frontend/ui/UI-011-reminder-settings.md`
 
 > 本文只描述当前事实。服务端通道与小程序授权入口都已实现并通过本地全量门禁；**尚未部署到微信
@@ -28,7 +29,10 @@
 
 - 成员级偏好：三类提醒各有独立开关，`member_application` 仅管理员可见可改；其余类型成员可自己改。
 - 微信授权：`POST /notifications/subscriptions` 记录 `wx.requestSubscribeMessage` 的结果；
-  长期模板额度为无限（`-1`），一次性模板每次授权只够发一条，发完置 `expired` 需重新授权。
+  长期模板额度为无限（`-1`），一次性模板每次同意换来一条额度且**可重复累积**，发一条扣一条，
+  扣到 0 置 `expired`。请求体同时回传微信原话 `decision`：`reject` 只表示这次弹窗没同意，
+  已攒下的额度与 `accepted` 状态保留；`ban` / `filter`（含未给出结论）则清零额度并置 `rejected`。
+- 后台该类目当前**没有长期模板可选**，三类提醒都按一次性模板运行，`long_term` 保持 `false`。
 - 通道不可用（未配置渠道、缺密钥、缺模板）时，设置接口如实回报 `available=false` 与原因，
   并拒绝收下授权（404），不制造「已开启但收不到」的假象。
 - 接收标识（OpenID）AES-GCM 加密存储，带密钥版本，无明文列、无索引；解密失败落
@@ -57,6 +61,9 @@
 - 授权动作在用户点击的同一次手势里第一时间调用 `wx.requestSubscribeMessage`，一次最多 3 个模板；
   只有 `accept` 回传 `accepted=true`；通道不可用或微信版本过低时不发起授权，也不显示授权入口；
   偏好写入失败时开关回滚到服务端状态，不留下假的「已开启」。
+- 一次性额度在界面上是可数的：Hero 报「提醒余额 N 条」，行内胶囊显示「已开启 · 还能发 N 条」
+  （仅剩 1 条时转为提醒色），并提供「再存几条提醒 / 再存一条」入口——补授权按剩余额度最少的类别
+  优先、一次最多 3 个模板；长期模板则不出现任何攒额度的说法。
 - 部署配置助手：`tools/notification_config.py secret | scaffold | from-wechat | check`——生成加密密钥、
   打印模板骨架、把微信 `/wxaapi/newtmpl/gettemplate` 的返回转成 `PUSH_KIDS_NOTIFICATION_TEMPLATES`、
   用与运行时相同的解析器校验模板并检查密钥长度；它从不打印既有密钥，也不联网访问微信。
@@ -70,7 +77,7 @@
 | 模板字段语义与逐字段裁剪 | implemented locally | `notifications/domain.py`、`notifications/templates.py`、`tests/unit/test_notification_policy.py` |
 | 槽位缺内容时跳过而非被微信拒发 | implemented locally | `notifications/service.py`、`tests/integration/test_notification_resilience.py` |
 | 成员级开关与自服务边界 | implemented locally | `notifications/router.py` + `platform/context.py` |
-| 微信授权与额度 | implemented locally | `notifications/service.py::register_subscription` |
+| 微信授权与可累积一次性额度 | implemented locally | `notifications/service.py::register_subscription`、`tests/integration/test_notification_channel.py` |
 | 加密接收标识 | implemented locally | `notifications/destinations.py`、`tests/unit/test_notification_policy.py` |
 | 去重/刷新/取消 | implemented locally | `notifications/outbox.py` |
 | 重试/租约/终态 | implemented locally | `tests/integration/test_notification_resilience.py` |
@@ -81,7 +88,7 @@
 | 部署配置生成与校验 | implemented locally | `tools/notification_config.py`、`tests/unit/test_notification_config_tool.py` |
 | 微信开发者工具 / 真机授权 | not verified | 需要微信开发者工具与真机；三视口原生几何未跑 |
 
-## Verification evidence（2026-09-06，本地）
+## Verification evidence（2026-09-07，本地）
 
 在 `origin/main`（`165c588`）之上 rebase 后重跑：
 
@@ -89,17 +96,19 @@
 - `uv run mypy apps/api/src` PASS（79 files）
 - `uv run python tools/check_architecture.py` PASS（`ARCHITECTURE_VALID checked=3`）
 - Alembic 单一 head：`20260906_0008`（迁移链 `…0006 → 0007 → 0008`）
-- `uv run pytest tests/unit tests/integration tests/contract -q` → 248 passed, 2 skipped, **2 failed**：
+- `uv run pytest tests/unit tests/integration tests/contract -q` → 252 passed, 2 skipped, **2 failed**：
   `tests/unit/test_reporting_trends.py`（等长分桶顺序）与 `tests/contract/test_worker_readiness.py`（就绪 503）
   在 `origin/main` 上以相同方式失败，与通知通道无关，未在本分支修复
-- `npm test` → 119 pass；`npm run lint:miniapp` PASS；`tools/validate_miniprogram.py` → `pages=15`
-- 设计走查：320/390/430 近似渲染两态截图人工检查
+- `npm test` → 122 pass；`npm run lint:miniapp` PASS；
+  `tools/validate_miniprogram.py` → `MINIPROGRAM_VALID pages=15 source_bytes=629122`
+- 设计走查：`tools/preview` 的 `notifications` / `notifications-grant` 两态在 320/390/430 渲染截图后人工检查
 - 微信开发者工具编译、原生节点几何、真机授权与真实发送验收：`NOT RUN`
 
 ## Known gaps
 
 1. 生产环境仍未真的发出过一条消息：云托管未配置、真机授权与真实送达未验证。
-2. 后台已选用的三个模板（新队员加入提醒 / 日程提醒 / 复习通知）都是**一次性订阅**：每条提醒消耗一次授权，
-   日程与复习提醒会退化成「每次都要家长再点一次」；若能选到同题材长期模板应替换并把 `long_term` 设为 `true`。
+2. 后台已选用的三个模板（新队员加入提醒 / 日程提醒 / 复习通知）都是**一次性订阅**，且后台没有长期模板
+   可选：额度可累积并在界面上可数，但家长仍需定期回小程序补授权；额度耗尽期间的提醒只会落
+   `skipped / not_authorized`，不会补发。
 3. 云端部署、MySQL 门禁、微信开发者工具三视口原生几何证据未做。
 4. `UI-011` 缺 Figma 节点级 URL，waiver 处于请求状态。

@@ -17,7 +17,9 @@
   conditions, in-place refresh, cancellation, member switches, grant quota, bounded retry, refusal, lease
   recovery, an undecryptable receiver, an unavailable channel, revocation on leaving the family,
   membership re-check at send time, a mapped template slot with no content (skipped as
-  `template_field_missing` without calling the provider or spending a grant, then re-armable), the 30-day
+  `template_field_missing` without calling the provider or spending a grant, then re-armable), stacked
+  one-off grants (repeat accepts accumulate quota, a per-dialog `reject` keeps quota already granted and
+  a `ban`/`filter` zeroes it), the 30-day
   retention window and the dispatch trigger token. Integration template fixtures must keep the field
   shape of the templates actually selected in the WeChat console, so a mapping mistake fails a test
   instead of a real send. Business
@@ -25,8 +27,12 @@
   `wx.requestSubscribeMessage` acceptance remain manual, staged gates.
 - Reminder settings screen: page tests must prove that the switch state and the WeChat grant state stay
   separate — a failed preference write rolls the switch back, only an `accept` decision is reported as
-  authorized, an unavailable channel or an old WeChat client requests nothing, and unreadable delivery
-  history degrades only that section. `wx.requestSubscribeMessage` is stubbed; the grant call must be
+  authorized (with WeChat's own `reject`/`ban`/`filter` wording passed through), an unavailable channel
+  or an old WeChat client requests nothing, and unreadable delivery
+  history degrades only that section. Because the console offers one-off templates only, tests must also
+  cover the remaining-quota wording, the top-up path (least remaining quota first, three templates max)
+  and that a long-term template never asks the parent to stockpile messages.
+  `wx.requestSubscribeMessage` is stubbed; the grant call must be
   asserted to happen before any awaited request so the real client keeps its user gesture.
 - Deployment configuration: `tools/notification_config.py check` must agree with the runtime template
   parser and the 32-character key rule, and must never print the key itself. `from-wechat` converts a

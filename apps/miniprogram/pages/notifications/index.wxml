@@ -23,16 +23,24 @@
     <view class="pk-hero notice-hero" wx:if="{{channelAvailable}}">
       <text class="hero-eyebrow">微信服务通知</text>
       <text class="hero-line" wx:if="{{grantCount}}">还有 <text class="hero-num">{{grantCount}}</text> 类提醒等你授权</text>
-      <text class="hero-line" wx:else>提醒已就绪，会发到你的微信</text>
+      <text class="hero-line" wx:elif="{{longTerm}}">提醒已就绪，会发到你的微信</text>
+      <text class="hero-line" wx:else>提醒余额 <text class="hero-num">{{reserveTotal}}</text> 条，可随时再存</text>
       <text class="hero-note" wx:if="{{lastSentLabel}}">最近一条提醒发出于 {{lastSentLabel}}。</text>
       <text class="hero-note" wx:else>提醒只写孩子的名字、时间和要做的事，不做评价。</text>
       <view class="btn mt3 {{granting ? 'is-disabled' : ''}}" wx:if="{{grantCount}}" aria-role="button" aria-label="在微信里开启提醒" aria-disabled="{{granting ? true : false}}" bindtap="requestGrant">
         <text>{{granting ? '正在等微信确认…' : '在微信里开启提醒'}}</text>
       </view>
-      <view class="hero-ok" wx:elif="{{!longTerm}}">
-        <view class="ico ico-info-pri sm"></view>
-        <text class="ok-txt">微信的一次授权只能发一条提醒，发出后这一页会提示你再开一次。</text>
-      </view>
+      <block wx:elif="{{!longTerm}}">
+        <!-- 微信只给一次性模板：发一条扣一条，所以"再存"是常态操作，不是异常修复 -->
+        <view class="btn mt3 {{granting ? 'is-disabled' : ''}} {{reserveLow ? '' : 'ghost'}}" wx:if="{{canTopUp}}" aria-role="button" aria-label="再存几条提醒" aria-disabled="{{granting ? true : false}}" data-mode="topup" bindtap="requestGrant">
+          <text>{{granting ? '正在等微信确认…' : '再存几条提醒'}}</text>
+        </view>
+        <view class="hero-ok">
+          <view class="ico ico-info-pri sm"></view>
+          <text class="ok-txt" wx:if="{{reserveLow}}">微信一次授权只够发一条。趁现在多存几条，之后的提醒才不会断。</text>
+          <text class="ok-txt" wx:else>一次授权换一条，你已存下 {{reserveTotal}} 条；用完会提示再存。</text>
+        </view>
+      </block>
     </view>
 
     <view class="pk-card off-hero" wx:else>
@@ -68,12 +76,13 @@
             <view class="noti-state">
               <text class="pill {{item.statusTone}}">{{item.statusText}}</text>
               <text class="grant-link" wx:if="{{item.needsGrant && item.enabled}}" aria-role="button" aria-label="为{{item.label}}授权" data-type="{{item.type}}" bindtap="requestGrant">去授权</text>
+              <text class="grant-link" wx:elif="{{item.canTopUp}}" aria-role="button" aria-label="为{{item.label}}再存一条" data-type="{{item.type}}" bindtap="requestGrant">再存一条</text>
             </view>
           </view>
           <switch class="noti-switch" checked="{{item.enabled}}" color="#2E6A56" disabled="{{togglingType === item.type}}" data-type="{{item.type}}" bindchange="toggle" />
         </view>
       </view>
-      <view class="help">开关记录的是「你想不想收」；能不能发到微信，取决于上面的授权状态。</view>
+      <view class="help">开关记录的是「你想不想收」；能不能发到微信，取决于上面的授权状态。微信只有一次性模板，所以每条提醒都要一次授权额度。</view>
     </view>
 
     <!-- 最近发送：提醒是尽力而为，所以每条结果都如实显示 -->

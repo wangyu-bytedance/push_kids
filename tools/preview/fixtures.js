@@ -352,6 +352,55 @@ const familyMembers = {
   roleIndex: 1, savingMember: false, sheetError: ""
 };
 
+/* ---------------- 提醒设置 ---------------- */
+/* 微信后台只有一次性模板，所以走查必须同时看到「有余额」与「待授权」两态。 */
+const notificationItems = [
+  {
+    type: "member_application", label: "家人加入申请", description: "有人申请加入家庭时通知管理员",
+    icon: "ico-family-pri", enabled: true, managersOnly: true, templateId: "tpl-apply",
+    statusText: "已开启 · 还能发 3 条", statusTone: "suc", needsGrant: false, canTopUp: true
+  },
+  {
+    type: "schedule_reminder", label: "课前一小时提醒", description: "日程开始前一小时提醒全家：哪个孩子、几点、做什么",
+    icon: "ico-clock-pri", enabled: true, managersOnly: false, templateId: "tpl-schedule",
+    statusText: "已开启 · 仅剩 1 条", statusTone: "att", needsGrant: false, canTopUp: true
+  },
+  {
+    type: "review_digest", label: "每天 19:00 复习提醒", description: "汇总当天还没复习完的内容",
+    icon: "ico-book-pri", enabled: true, managersOnly: false, templateId: "tpl-digest",
+    statusText: "已开启 · 还能发 2 条", statusTone: "suc", needsGrant: false, canTopUp: true
+  }
+];
+
+const notificationDeliveries = [
+  {
+    typeLabel: "课前一小时提醒", headline: "小满 17:30 钢琴课", detail: "出发前记得带琴谱",
+    stateText: "已发送", stateTone: "suc", timeLabel: "09-06 16:30", reason: ""
+  },
+  {
+    typeLabel: "每天 19:00 复习提醒", headline: "还有 2 项没复习", detail: "语文《秋天》、数学两位数加法",
+    stateText: "未发送", stateTone: "neutral", timeLabel: "09-05 19:00",
+    reason: "微信授权额度已用完，需要再存一次提醒"
+  }
+];
+
+const notifications = {
+  loading: false, error: "", supported: true, channelAvailable: true, channelReason: "", longTerm: false,
+  items: notificationItems, grantCount: 0, reserveTotal: 6, reserveLow: false, canTopUp: true,
+  granting: false, togglingType: "", lastSentLabel: "09-06 16:30",
+  deliveries: notificationDeliveries, deliveriesError: ""
+};
+
+const notificationsGrant = {
+  ...notifications,
+  items: [
+    { ...notificationItems[0], statusText: "待微信授权", statusTone: "att", needsGrant: true, canTopUp: false },
+    { ...notificationItems[1], statusText: "额度已用完", statusTone: "att", needsGrant: true, canTopUp: false },
+    { ...notificationItems[2], enabled: false, statusText: "已关闭", statusTone: "neutral", needsGrant: false, canTopUp: false }
+  ],
+  grantCount: 2, reserveTotal: 0, reserveLow: true, canTopUp: false, lastSentLabel: ""
+};
+
 module.exports = {
   today: { page: "pages/today", data: base, tabBar },
   "today-guide": { page: "pages/today", data: guide, tabBar },
@@ -368,5 +417,7 @@ module.exports = {
   "activity-edit": { page: "pages/activity", name: "edit", data: activityEdit, tabBar: null },
   onboarding: { page: "pages/family-onboarding", data: onboardingBase, tabBar: null },
   "onboarding-create": { page: "pages/family-onboarding", data: onboardingCreate, tabBar: null },
-  "family-members": { page: "pages/family-members", data: familyMembers, tabBar: null }
+  "family-members": { page: "pages/family-members", data: familyMembers, tabBar: null },
+  notifications: { page: "pages/notifications", data: notifications, tabBar: null },
+  "notifications-grant": { page: "pages/notifications", data: notificationsGrant, tabBar: null }
 };

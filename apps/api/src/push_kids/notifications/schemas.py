@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from datetime import datetime
+from typing import Literal
 
 from pydantic import BaseModel, Field
 
@@ -37,10 +38,15 @@ class PreferenceUpdate(BaseModel):
 
 
 class SubscriptionResult(BaseModel):
-    """One entry of the wx.requestSubscribeMessage result, mapped back to a reminder type."""
+    """One entry of the wx.requestSubscribeMessage result, mapped back to a reminder type.
+
+    `decision` carries WeChat's own word for what the parent did. It matters because a plain
+    `reject` only declines this dialog, while `ban`/`filter` mean nothing can arrive at all.
+    """
 
     type: str
     accepted: bool
+    decision: Literal["accept", "reject", "ban", "filter", ""] = ""
 
 
 class SubscriptionRegister(BaseModel):

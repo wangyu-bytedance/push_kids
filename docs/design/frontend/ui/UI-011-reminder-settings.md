@@ -2,7 +2,7 @@
 
 - Status: `CURRENT_LOCAL / PREVIEW_ONLY / NATIVE_MATRIX_PENDING`
 - Related Feature: `FEAT-003`
-- Related Spec: `SPEC-20260906-CHANNEL-02`
+- Related Spec: `SPEC-20260906-CHANNEL-02` + `SPEC-20260907-CHANNEL-04`（一次性额度可数化与补授权）
 - Baseline: `FDB-20260906-02`（PKDS 2.0「纸 · 芽」，未新增视觉语言）
 - Engineering contract: `FEC-20260905-02`
 - Design revision: `DREV-20260906-PKDS-03`（屏 G9；仅复用既有 tokens/atoms/图标集）
@@ -28,11 +28,14 @@
 | State | Visible contract |
 |---|---|
 | 通道可用 · 有待授权 | 绿色 Hero 报出待授权类别数与主操作「在微信里开启提醒」；对应行显示 `待微信授权` + 行内「去授权」 |
-| 通道可用 · 全部就绪 | Hero 改为「提醒已就绪」并显示最近一条发出时间；一次性模板额外说明一次授权只够一条 |
+| 通道可用 · 全部就绪（长期模板） | Hero 改为「提醒已就绪」并显示最近一条发出时间，不出现任何攒额度的说法 |
+| 通道可用 · 全部就绪（一次性模板） | Hero 改为「提醒余额 N 条，可随时再存」+ 次级按钮「再存几条提醒」；余额 <3 条时按钮升为主操作并改说「趁现在多存几条」 |
 | 通道不可用 | Hero 降级为中性卡片，说明服务端给出的原因，并明确「不影响记录和复习」；所有行显示 `暂不可用`，不出现授权按钮 |
 | 微信版本过低 | 追加中性提示条；点击授权只弹「更新微信」说明，不调用不存在的接口 |
 | 单类关闭 | 行显示 `已关闭` 且不催授权 |
-| 拒收 / 额度用完 / 授权被收回 | 分别显示 `微信里已拒收`（危险色）、`上一条已用完`、`需要重新开启`，都提供再授权入口 |
+| 已授权且额度充足 | 行显示 `已开启 · 还能发 N 条`（成功色）+ 行内「再存一条」 |
+| 已授权但仅剩一条 | 行显示 `已开启 · 仅剩 1 条`（提醒色）+ 行内「再存一条」，提前把「发完就断」说清楚 |
+| 拒收 / 额度用完 / 授权被收回 | 分别显示 `微信里已拒收`（危险色）、`额度已用完`、`需要重新开启`，都提供再授权入口 |
 | 最近的提醒 | 每条显示标题、内容、类别、时间、状态胶囊；非成功结果附一句可据此行动的原因 |
 | 模板配置有问题 | 该条显示 `未发送` + 「提醒模板缺少内容，已跳过；修好配置后会重新排队」——不指责家长，也不让家长去操作 |
 | 投递记录读取失败 | 只降级这一段为提示条，开关与授权照常可用 |
@@ -42,7 +45,10 @@
 
 - 授权必须在用户点击的同一次手势里第一时间调用 `wx.requestSubscribeMessage`，其前不得 `await`
   任何网络请求；一次最多带 3 个模板（微信上限）。
-- 只有 `accept` 计为授权；`reject / ban / filter` 一律按未授权回传服务端，界面不做乐观解释。
+- 只有 `accept` 计为授权；`reject / ban / filter` 一律按未授权回传服务端，界面不做乐观解释，
+  同时把微信原话 `decision` 一起回传：服务端据此区分「这次没订」（保留已攒额度）与「不再接收」（清零）。
+- 微信后台该类目没有长期模板，因此「攒额度」是常态操作而不是异常修复：补授权入口在已开启状态下
+  也必须存在，补授权按剩余额度最少的类别优先、一次最多 3 个模板，成功后 toast 报「已存入 N 条提醒」。
 - 通道不可用时不发起授权，也不显示授权入口——服务端会以 404 拒绝收下无法消费的授权。
 - `member_application` 行标注「仅管理员」；非管理员的可见性与可改性由服务端决定，前端不自行放行。
 - 页面文案不评价孩子、不预测该学什么，只复述「哪个孩子、几点、做什么」和「还有哪些没复习」。
@@ -58,13 +64,14 @@
 ## Approval status
 
 - 用户指令（2026-09-06）：「继续做，我需要一个完整的功能」——据此实现授权入口，`SPEC-20260906-CHANNEL-02` 待评审确认。
-- 已完成：`node --test tests/frontend/notifications.test.js`（11 项）、`npm test`、`npm run lint:miniapp`、
+- 用户反馈（2026-09-07）：微信后台没有长期模板可选——据此把一次性额度做成可数、可补的常态路径。
+- 已完成：`node --test tests/frontend/notifications.test.js`（13 项）、`npm test`、`npm run lint:miniapp`、
   `tools/validate_miniprogram.py`（`pages=15`）、320/390/430 近似渲染走查。
 - 待完成（发布门禁）：微信开发者工具编译与三视口原生节点几何证据、真机授权与真实送达、
   Figma 节点补录或新的 waiver、快照 manifest。
 
 ## Change references
 
-- `specs/active/FEAT-003-NOTIFICATION-CHANNEL.md` revision `SPEC-20260906-CHANNEL-02`
+- `specs/active/FEAT-003-NOTIFICATION-CHANNEL.md` revisions `SPEC-20260906-CHANNEL-02`、`SPEC-20260907-CHANNEL-04`
 - `docs/domain/features/FEAT-003-notification-channel.md`
 - `docs/domain/BEHAVIOR-CATALOG.md` `BHV-028`

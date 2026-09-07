@@ -82,15 +82,22 @@ test("settings load separates the on/off switch from the WeChat grant state", as
 
   const [apply, schedule, digest] = page.data.items;
   // 有额度的一次性授权：已开启，但如实说明只够一条
-  assert.equal(apply.statusText, "已开启 · 本次一条");
+  assert.equal(apply.statusText, "已开启 · 仅剩 1 条");
   assert.equal(apply.needsGrant, false);
+  // 一次性模板可以重复授权攒额度，所以已开启的类别也要有"再存"入口
+  assert.equal(apply.canTopUp, true);
   // 开着但没授权：必须提示需要授权，不能显示成已开启
   assert.equal(schedule.statusText, "待微信授权");
   assert.equal(schedule.needsGrant, true);
-  // 关着的类别不催授权
+  // 关着的类别不催授权，也不催攒额度
   assert.equal(digest.statusText, "已关闭");
   assert.equal(digest.needsGrant, false);
+  assert.equal(digest.canTopUp, false);
   assert.equal(page.data.grantCount, 1);
+  // 余额只统计真正能发出去的条数：申请提醒 1 条
+  assert.equal(page.data.reserveTotal, 1);
+  assert.equal(page.data.reserveLow, true);
+  assert.equal(page.data.canTopUp, true);
   assert.equal(page.data.lastSentLabel, "09-05 19:00");
 });
 
@@ -129,8 +136,58 @@ test("granting posts only WeChat's own decisions and refuses to invent an accept
 
   assert.deepEqual(plain(subscribeArgs.tmplIds), ["tpl-schedule"]);
   const post = calls.find((call) => call.url === "/notifications/subscriptions");
-  assert.deepEqual(plain(post.options.data), { results: [{ type: "schedule_reminder", accepted: false }] });
+  assert.deepEqual(plain(post.options.data), {
+    results: [{ type: "schedule_reminder", accepted: false, decision: "reject" }]
+  });
   assert.equal(page.data.granting, false);
+});
+
+test("topping up asks again for the types with the least remaining quota", async () => {
+  let subscribeArgs = null;
+  const toasts = [];
+  const { page, calls } = loadNotifications({
+    settings: settingsPayload({
+      preferences: [
+        { ...PREFERENCES[0], remaining_quota: 4 },
+        { ...PREFERENCES[1], subscription_status: "accepted", remaining_quota: 1 },
+        { ...PREFERENCES[2], enabled: true, subscription_status: "accepted", remaining_quota: 2 }
+      ]
+    }),
+    wx: {
+      showToast(options) { toasts.push(options); },
+      requestSubscribeMessage(options) {
+        subscribeArgs = options;
+        options.success({
+          errMsg: "ok",
+          "tpl-schedule": "accept",
+          "tpl-digest": "accept",
+          "tpl-apply": "reject"
+        });
+      }
+    }
+  });
+  page.onLoad();
+  await page.load();
+
+  // 全部已授权时不再显示"去授权"，但仍要能补额度
+  assert.equal(page.data.grantCount, 0);
+  assert.equal(page.data.canTopUp, true);
+  assert.equal(page.data.reserveTotal, 7);
+  assert.equal(page.data.reserveLow, false);
+
+  page.requestGrant({ currentTarget: { dataset: { mode: "topup" } } });
+  await new Promise((resolve) => setImmediate(resolve));
+
+  // 少的排前面：1 条 → 2 条 → 4 条，一次最多 3 个模板
+  assert.deepEqual(plain(subscribeArgs.tmplIds), ["tpl-schedule", "tpl-digest", "tpl-apply"]);
+  const post = calls.find((call) => call.url === "/notifications/subscriptions");
+  assert.deepEqual(plain(post.options.data.results), [
+    { type: "schedule_reminder", accepted: true, decision: "accept" },
+    { type: "review_digest", accepted: true, decision: "accept" },
+    { type: "member_application", accepted: false, decision: "reject" }
+  ]);
+  // 报的是"又攒了几条"，不是含糊的"已开启"
+  assert.match(toasts[toasts.length - 1].title, /已存入 2 条/);
 });
 
 test("a WeChat failure surfaces an actionable message and clears the pending flag", async () => {
@@ -238,11 +295,15 @@ test("only an explicit accept counts as authorized", () => {
   ];
   const results = notifications.resultsFromWx({ a: "accept", b: "ban", c: "filter" }, requested);
   assert.deepEqual(results, [
-    { type: "schedule_reminder", accepted: true },
-    { type: "review_digest", accepted: false },
-    { type: "member_application", accepted: false }
+    { type: "schedule_reminder", accepted: true, decision: "accept" },
+    { type: "review_digest", accepted: false, decision: "ban" },
+    { type: "member_application", accepted: false, decision: "filter" }
   ]);
   assert.equal(notifications.acceptedCount(results), 1);
+  // 微信没给结论时不编一个：decision 留空，服务端按最保守的方式处理
+  assert.deepEqual(notifications.resultsFromWx({}, [requested[0]]), [
+    { type: "schedule_reminder", accepted: false, decision: "" }
+  ]);
 });
 
 test("revoked and refused states each get their own recovery wording", () => {
@@ -271,4 +332,22 @@ test("grant batches stay within WeChat's three-template limit", () => {
   }));
   assert.equal(notifications.grantTargets(many, true).length, 3);
   assert.equal(notifications.grantTargets(many, false).length, 0);
+  assert.equal(notifications.topUpTargets(many, true).length, 3);
+  assert.equal(notifications.topUpTargets(many, false).length, 0);
+});
+
+test("a long-term template never asks the parent to stockpile messages", () => {
+  const longTerm = [{
+    type: "review_digest",
+    enabled: true,
+    template_id: "t",
+    subscription_status: "accepted",
+    remaining_quota: -1
+  }];
+  assert.equal(notifications.quotaLabel(longTerm[0]), "长期有效");
+  assert.deepEqual(notifications.topUpTargets(longTerm, true), []);
+  const reserve = notifications.reserveOf(longTerm, true);
+  assert.equal(reserve.unlimited, true);
+  assert.equal(reserve.low, false);
+  assert.equal(reserve.canTopUp, false);
 });
