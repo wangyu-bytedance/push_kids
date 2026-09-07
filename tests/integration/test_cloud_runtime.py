@@ -4,6 +4,8 @@ from datetime import UTC, datetime
 
 import pytest
 from push_kids.media.store import WeChatCloudMediaStore
+from push_kids.notifications.providers import WeChatSubscribeSender
+from push_kids.notifications.service import build_channel
 from push_kids.persistence.models import (
     Family,
     FamilyMember,
@@ -14,6 +16,8 @@ from push_kids.persistence.models import (
 from push_kids.platform.config import Settings
 from push_kids.platform.context import subject_hmac
 from pydantic import SecretStr
+
+from tests.conftest import NOTIFICATION_TEMPLATES
 
 
 class _Body:
@@ -116,6 +120,47 @@ def test_cloud_ark_accepts_masked_runtime_secret() -> None:
     settings.validate_cloud_runtime()
 
     assert sentinel not in repr(settings)
+
+
+def test_cloud_notification_channel_requires_key_templates_and_a_tick_owner() -> None:
+    """云环境不能只把开关打开：没有密钥、模板或调度所有者时必须拒绝启动。"""
+    settings = _cloud_settings()
+    settings.database_url = "mysql+pymysql://app:secret@mysql.internal/push_kids"
+    settings.notification_channel = "recording"
+    with pytest.raises(ValueError, match="recording"):
+        settings.validate_cloud_runtime()
+
+    settings.notification_channel = "wechat"
+    with pytest.raises(ValueError, match="NOTIFICATION_SECRET_KEY"):
+        settings.validate_cloud_runtime()
+
+    secret = "notification-secret-sentinel-value-32"
+    settings.notification_secret_key = SecretStr(secret)
+    with pytest.raises(ValueError, match="NOTIFICATION_TEMPLATES"):
+        settings.validate_cloud_runtime()
+
+    settings.notification_templates = NOTIFICATION_TEMPLATES
+    settings.validate_cloud_runtime()
+    # 关掉进程内调度就必须有外部触发凭据，否则提醒永远不会被执行。
+    settings.run_notification_scheduler = False
+    with pytest.raises(ValueError, match="NOTIFICATION_TRIGGER_TOKEN"):
+        settings.validate_cloud_runtime()
+    settings.notification_trigger_token = SecretStr("trigger-token-sentinel")
+    settings.validate_cloud_runtime()
+    assert secret not in repr(settings)
+
+
+def test_cloud_deployment_never_accepts_a_local_receiver() -> None:
+    """云上只能绑定微信返回的接收标识，不能退回到本地调试身份。"""
+    settings = _cloud_settings()
+    settings.database_url = "mysql+pymysql://app:secret@mysql.internal/push_kids"
+    settings.notification_channel = "wechat"
+    settings.notification_secret_key = SecretStr("notification-secret-sentinel-value-32")
+    settings.notification_templates = NOTIFICATION_TEMPLATES
+    channel = build_channel(settings)
+    assert channel.available is True
+    assert channel.local_receiver_allowed is False
+    assert isinstance(channel.sender, WeChatSubscribeSender)
 
 
 def _bind_family(db, family_id: str) -> None:

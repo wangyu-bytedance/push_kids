@@ -12,6 +12,7 @@ dependencies = [
   "cos-python-sdk-v5>=1.9,<2",
   "pydantic-settings>=2.10,<3",
   "python-multipart>=0.0.20,<1",
+  "pycryptodome>=3.20,<4",
   "openai>=1.99,<3",
 ]
 

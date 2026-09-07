@@ -21,6 +21,9 @@ from push_kids.families.router import router as families_router
 from push_kids.learning.router import router as learning_router
 from push_kids.media.preview_limit import MediaPreviewLimiter
 from push_kids.media.store import build_media_store
+from push_kids.notifications.router import router as notifications_router
+from push_kids.notifications.scheduler import NotificationScheduler
+from push_kids.notifications.service import build_channel
 from push_kids.planning.router import router as planning_router
 from push_kids.platform.config import Settings, get_settings
 from push_kids.platform.database import Database
@@ -59,12 +62,22 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     media_store = build_media_store(config)
     worker = AnalysisWorker(database, provider, media_store, config.worker_poll_seconds)
     deletion_worker = DataDeletionWorker(database, media_store, config.worker_poll_seconds)
+    notification_channel = build_channel(config)
+    notification_scheduler = NotificationScheduler(
+        database, notification_channel, config.notification_tick_seconds
+    )
 
     def worker_done(task: asyncio.Task) -> None:
         if not task.cancelled():
             error = task.exception()
             if error is not None:
                 logger.warning("worker_task_exited error_type=%s", type(error).__name__)
+
+    def scheduler_done(task: asyncio.Task) -> None:
+        if not task.cancelled():
+            error = task.exception()
+            if error is not None:
+                logger.warning("notification_scheduler_exited error_type=%s", type(error).__name__)
 
     @asynccontextmanager
     async def lifespan(app: FastAPI):
@@ -80,10 +93,24 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         for running_task in (task, deletion_task):
             if running_task:
                 running_task.add_done_callback(worker_done)
+        # Reminders are only scheduled where a channel exists, so an unconfigured deployment does
+        # not spend database work producing rows that could never be sent.
+        scheduler_task = (
+            asyncio.create_task(notification_scheduler.run())
+            if config.run_notification_scheduler and notification_channel.available
+            else None
+        )
+        app.state.notification_scheduler_task = scheduler_task
+        if scheduler_task:
+            scheduler_task.add_done_callback(scheduler_done)
         try:
             yield
         finally:
             try:
+                if scheduler_task:
+                    notification_scheduler.stop()
+                    with suppress(asyncio.CancelledError, Exception):
+                        await scheduler_task
                 if task:
                     worker.stop()
                     # The completion callback consumes and safely reports task failure.
@@ -115,6 +142,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.state.deletion_worker = deletion_worker
     app.state.deletion_worker_task = None
     app.state.invite_preview_limiter = InvitePreviewRateLimiter()
+    app.state.notification_channel = notification_channel
+    app.state.notification_scheduler = notification_scheduler
+    app.state.notification_scheduler_task = None
     if config.cors_origin_list:
         app.add_middleware(
             CORSMiddleware,
@@ -196,4 +226,5 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.include_router(activities_router, prefix=api_prefix)
     app.include_router(travel_router, prefix=api_prefix)
     app.include_router(reporting_router, prefix=api_prefix)
+    app.include_router(notifications_router, prefix=api_prefix)
     return app

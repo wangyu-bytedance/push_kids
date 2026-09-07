@@ -1,0 +1,112 @@
+<view class="page notifications-page">
+  <view class="pk-notice err" wx:if="{{error}}">
+    <view class="ico ico-cloud-off-dan sm"></view>
+    <text class="n-txt">{{error}}。已经读到的设置还能继续看。</text>
+    <view class="ico ico-refresh-dan sm" aria-role="button" aria-label="重新加载" bindtap="load"></view>
+  </view>
+
+  <view class="pg-head">
+    <view class="grow">
+      <text class="pg-kicker">该记得的事，不用你记</text>
+      <text class="pg-title">提醒设置</text>
+    </view>
+    <view class="icon-btn" aria-role="button" aria-label="关于提醒" bindtap="explain"><view class="ico ico-info sm"></view></view>
+  </view>
+
+  <block wx:if="{{loading && !items.length}}">
+    <view class="sk hero-sk"></view>
+    <view class="sk card-sk mt3"></view>
+  </block>
+
+  <block wx:else>
+    <!-- 通道状态：先说清楚"现在能不能收到"，再谈单条开关 -->
+    <view class="pk-hero notice-hero" wx:if="{{channelAvailable}}">
+      <text class="hero-eyebrow">微信服务通知</text>
+      <text class="hero-line" wx:if="{{grantCount}}">还有 <text class="hero-num">{{grantCount}}</text> 类提醒等你授权</text>
+      <text class="hero-line" wx:else>提醒已就绪，会发到你的微信</text>
+      <text class="hero-note" wx:if="{{lastSentLabel}}">最近一条提醒发出于 {{lastSentLabel}}。</text>
+      <text class="hero-note" wx:else>提醒只写孩子的名字、时间和要做的事，不做评价。</text>
+      <view class="btn mt3 {{granting ? 'is-disabled' : ''}}" wx:if="{{grantCount}}" aria-role="button" aria-label="在微信里开启提醒" aria-disabled="{{granting ? true : false}}" bindtap="requestGrant">
+        <text>{{granting ? '正在等微信确认…' : '在微信里开启提醒'}}</text>
+      </view>
+      <view class="hero-ok" wx:elif="{{!longTerm}}">
+        <view class="ico ico-info-pri sm"></view>
+        <text class="ok-txt">微信的一次授权只能发一条提醒，发出后这一页会提示你再开一次。</text>
+      </view>
+    </view>
+
+    <view class="pk-card off-hero" wx:else>
+      <view class="flex top">
+        <view class="off-mark"><view class="ico ico-cloud-off-mute sm"></view></view>
+        <view class="grow">
+          <text class="off-title">提醒服务暂不可用</text>
+          <text class="off-sub">{{channelReason || '当前版本还没有接通微信服务通知'}}</text>
+        </view>
+      </view>
+      <view class="help">这不影响记录和复习：打开小程序仍能看到今天要做的事和待复习内容。</view>
+    </view>
+
+    <view class="pk-notice quiet mt3" wx:if="{{!supported}}">
+      <view class="ico ico-warn-mute sm"></view>
+      <text class="n-txt">当前微信版本不支持订阅消息，更新微信后就能开启提醒。</text>
+    </view>
+
+    <!-- 三类提醒 -->
+    <view class="sec">
+      <view class="sec-bar"><text class="s-t">提醒内容</text><text class="s-m">关掉的类别不会再发</text></view>
+      <view class="sec-rule"></view>
+
+      <view class="rowlist">
+        <view class="rowitem noti-row" wx:for="{{items}}" wx:key="type">
+          <view class="noti-mark"><view class="ico {{item.icon}} sm"></view></view>
+          <view class="grow">
+            <view class="noti-line">
+              <text class="r-t trunc">{{item.label}}</text>
+              <text class="pill neutral" wx:if="{{item.managersOnly}}">仅管理员</text>
+            </view>
+            <text class="r-s">{{item.description}}</text>
+            <view class="noti-state">
+              <text class="pill {{item.statusTone}}">{{item.statusText}}</text>
+              <text class="grant-link" wx:if="{{item.needsGrant && item.enabled}}" aria-role="button" aria-label="为{{item.label}}授权" data-type="{{item.type}}" bindtap="requestGrant">去授权</text>
+            </view>
+          </view>
+          <switch class="noti-switch" checked="{{item.enabled}}" color="#2E6A56" disabled="{{togglingType === item.type}}" data-type="{{item.type}}" bindchange="toggle" />
+        </view>
+      </view>
+      <view class="help">开关记录的是「你想不想收」；能不能发到微信，取决于上面的授权状态。</view>
+    </view>
+
+    <!-- 最近发送：提醒是尽力而为，所以每条结果都如实显示 -->
+    <view class="sec">
+      <view class="sec-bar"><text class="s-t">最近的提醒</text><text class="s-m">保留 30 天</text></view>
+      <view class="sec-rule"></view>
+
+      <view class="pk-notice quiet" wx:if="{{deliveriesError}}">
+        <view class="ico ico-cloud-off-mute sm"></view>
+        <text class="n-txt">{{deliveriesError}}。这只影响记录展示，提醒本身照常。</text>
+      </view>
+
+      <view class="pk-empty inline" wx:elif="{{!deliveries.length}}">
+        <text class="et">还没有发出过提醒</text>
+      </view>
+
+      <view class="rowlist" wx:else>
+        <view class="rowitem log-row" wx:for="{{deliveries}}" wx:key="index">
+          <view class="grow">
+            <view class="noti-line">
+              <text class="r-t trunc">{{item.headline}}</text>
+              <text class="pill {{item.stateTone}}">{{item.stateText}}</text>
+            </view>
+            <text class="r-s" wx:if="{{item.detail}}">{{item.detail}}</text>
+            <text class="log-meta">{{item.typeLabel}} · {{item.timeLabel}}</text>
+            <text class="log-why" wx:if="{{item.reason}}">{{item.reason}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="help">提醒由微信送达，可能延迟或失败；重要安排请以小程序里的日程为准。</view>
+  </block>
+
+  <view class="safe-tail"></view>
+</view>

@@ -37,6 +37,7 @@ media through the same bounded infrastructure ports.
 | `reporting` | read models for dashboard/report/calendar | reporting service |
 | `agent_processing` | provider contract, analysis jobs, retries, deterministic subject routing (`subject_routing.py`, pure) | analysis service and worker |
 | `media` | validated local/cloud files, cloud ownership claim and temporary materialization | media store port |
+| `notifications` | notification kinds and copy policy (`domain.py`, pure), member preferences, WeChat grants and quota, encrypted receiver, durable outbox with dedupe/lease/retry, planner and tick | notification service + HTTP routes + scheduler |
 | `platform` | config, database, errors, request context | infrastructure only |
 
 Dependency direction is routers → services → pure policies. Infrastructure adapters implement contracts and may depend inward; pure policies do not depend outward.
@@ -63,14 +64,22 @@ Dependency direction is routers → services → pure policies. Infrastructure a
   learning/subject/activity write passes through. Read paths keep using `get_child`, so archiving never
   removes rows or hides history. Archiving is not deletion and there is no physical child deletion path.
   FEAT-007 adds `travel_arrangements` and create-idempotency rows in migration `20260906_0006`.
-  `Database.expected_cloud_revision` tracks the single Alembic head; the current working tree's separate
-  durable-deletion change extends that chain to `20260906_0007`.
+  `Database.expected_cloud_revision` tracks the single Alembic head; durable deletion extends that chain to
+  `20260906_0007` and the notification channel to `20260906_0008`.
 - Travel arrangements are independent from activities and project only into the Calendar query. The query
   normalizes CalendarEvent, ActivitySchedule and TravelArrangement time spans, then applies one pure half-open
   interval policy. Conflict metadata is derived at read time and marks every participant; it is never persisted.
 - `activities/capacity.py` owns the cross-source Calendar admission budget: a child row lock serializes creates,
   then active CalendarEvent, timed ActivitySchedule and TravelArrangement rows are counted together against the
   approved limit of 20. Existing over-limit rows remain readable and deletion releases capacity.
+- Notifications are best-effort and never claim a delivery they did not make. `notification_deliveries` is a
+  durable outbox: a dedupe key owns at most one row, a pending row is refreshed in place, a row that no
+  longer matches reality is cancelled, and every terminal row carries a result code. Receiver identity
+  (WeChat OpenID) is stored AES-GCM encrypted with a key version, never in plaintext, never indexed and
+  never logged. Business time (19:00 Asia/Shanghai, one hour before a schedule) is computed server-side and
+  stored as a UTC instant. Membership is authoritative twice: when the audience is resolved and again
+  immediately before sending, so a departed member cannot receive a family's child names. Introduced by
+  migration `20260906_0008`.
 
 ## Async analysis sequence
 
@@ -152,6 +161,7 @@ Routers and mini-program pages are interfaces, not owners of business rules.
 ```mermaid
 flowchart LR
   MINI[apps/miniprogram] -->|HTTP contract| API[apps/api interfaces]
+  TICK[notification scheduler / cron] --> APP
   API --> APP[application services]
   APP --> DOMAIN[domain policies]
   INFRA[infrastructure adapters] --> APP

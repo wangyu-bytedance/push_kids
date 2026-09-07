@@ -10,7 +10,7 @@ from push_kids.platform.config import Settings
 
 
 class Database:
-    expected_cloud_revision = "20260906_0007"
+    expected_cloud_revision = "20260906_0008"
 
     def __init__(self, settings: Settings) -> None:
         database_url = settings.resolved_database_url

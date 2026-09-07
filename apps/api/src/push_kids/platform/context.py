@@ -79,15 +79,17 @@ def trusted_actor_context(
     return _trusted_actor(request, x_wx_source, x_wx_openid, x_wx_appid, x_wx_env, x_debug_actor)
 
 
-def request_context(
+def _member_context(
     request: Request,
-    db: Annotated[Session, Depends(get_db)],
-    x_family_id: Annotated[str | None, Header(alias="X-Family-ID")] = None,
-    x_wx_source: Annotated[str | None, Header(alias="X-WX-SOURCE")] = None,
-    x_wx_openid: Annotated[str | None, Header(alias="X-WX-OPENID")] = None,
-    x_wx_appid: Annotated[str | None, Header(alias="X-WX-APPID")] = None,
-    x_wx_env: Annotated[str | None, Header(alias="X-WX-ENV")] = None,
-    x_debug_actor: Annotated[str | None, Header(alias="X-Debug-Actor")] = None,
+    db: Session,
+    x_family_id: str | None,
+    x_wx_source: str | None,
+    x_wx_openid: str | None,
+    x_wx_appid: str | None,
+    x_wx_env: str | None,
+    x_debug_actor: str | None,
+    *,
+    enforce_write_role: bool,
 ) -> RequestContext:
     settings = request.app.state.settings
     if not settings.is_cloud and x_family_id is not None:
@@ -131,10 +133,11 @@ def request_context(
     if member is None or family is None:
         raise ForbiddenError("当前微信用户尚未获得家庭权限")
     role = cast(str, member.role)
-    if request.method not in {"GET", "HEAD", "OPTIONS"} and role not in {
-        "editor",
-        "manager",
-    }:
+    if (
+        enforce_write_role
+        and request.method not in {"GET", "HEAD", "OPTIONS"}
+        and role not in {"editor", "manager"}
+    ):
         raise ForbiddenError("当前家庭角色只有查看权限")
     return RequestContext(
         binding.family_id,
@@ -144,6 +147,58 @@ def request_context(
         binding.id,
         member.id,
         role,
+    )
+
+
+def request_context(
+    request: Request,
+    db: Annotated[Session, Depends(get_db)],
+    x_family_id: Annotated[str | None, Header(alias="X-Family-ID")] = None,
+    x_wx_source: Annotated[str | None, Header(alias="X-WX-SOURCE")] = None,
+    x_wx_openid: Annotated[str | None, Header(alias="X-WX-OPENID")] = None,
+    x_wx_appid: Annotated[str | None, Header(alias="X-WX-APPID")] = None,
+    x_wx_env: Annotated[str | None, Header(alias="X-WX-ENV")] = None,
+    x_debug_actor: Annotated[str | None, Header(alias="X-Debug-Actor")] = None,
+) -> RequestContext:
+    return _member_context(
+        request,
+        db,
+        x_family_id,
+        x_wx_source,
+        x_wx_openid,
+        x_wx_appid,
+        x_wx_env,
+        x_debug_actor,
+        enforce_write_role=True,
+    )
+
+
+def self_service_context(
+    request: Request,
+    db: Annotated[Session, Depends(get_db)],
+    x_family_id: Annotated[str | None, Header(alias="X-Family-ID")] = None,
+    x_wx_source: Annotated[str | None, Header(alias="X-WX-SOURCE")] = None,
+    x_wx_openid: Annotated[str | None, Header(alias="X-WX-OPENID")] = None,
+    x_wx_appid: Annotated[str | None, Header(alias="X-WX-APPID")] = None,
+    x_wx_env: Annotated[str | None, Header(alias="X-WX-ENV")] = None,
+    x_debug_actor: Annotated[str | None, Header(alias="X-Debug-Actor")] = None,
+) -> RequestContext:
+    """Same identity as `request_context`, without the family write-role gate.
+
+    A viewer may not change what the family sees, but must still be able to switch their own
+    reminders on or off and hand over their own WeChat subscription grant. Callers using this
+    dependency may only write rows keyed by `context.member_id`.
+    """
+    return _member_context(
+        request,
+        db,
+        x_family_id,
+        x_wx_source,
+        x_wx_openid,
+        x_wx_appid,
+        x_wx_env,
+        x_debug_actor,
+        enforce_write_role=False,
     )
 
 

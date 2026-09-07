@@ -20,7 +20,11 @@ def imported_roots(path: Path) -> set[str]:
 
 
 def main() -> None:
-    policy_files = [SOURCE / "planning" / "domain.py", SOURCE / "knowledge" / "normalization.py"]
+    policy_files = [
+        SOURCE / "planning" / "domain.py",
+        SOURCE / "knowledge" / "normalization.py",
+        SOURCE / "notifications" / "domain.py",
+    ]
     violations = []
     for path in policy_files:
         forbidden = imported_roots(path) & FORBIDDEN_DOMAIN_IMPORTS

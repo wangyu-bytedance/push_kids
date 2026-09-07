@@ -40,13 +40,40 @@ class Settings(BaseSettings):
     ark_api_key: SecretStr | None = Field(None, alias="ARK_API_KEY")
     ark_base_url: str = Field("https://ark.cn-beijing.volces.com/api/v3", alias="ARK_BASE_URL")
     ark_model: str = Field("doubao-seed-2-1-pro-260628", alias="ARK_MODEL")
+    # Notifications stay off until a deployment supplies a real template map and key, so no
+    # environment can accidentally promise WeChat reminders it cannot deliver.
+    notification_channel: Literal["disabled", "recording", "wechat"] = Field(
+        "disabled", alias="PUSH_KIDS_NOTIFICATION_CHANNEL"
+    )
+    notification_secret_key: SecretStr | None = Field(
+        None, alias="PUSH_KIDS_NOTIFICATION_SECRET_KEY"
+    )
+    notification_templates: str = Field("", alias="PUSH_KIDS_NOTIFICATION_TEMPLATES")
+    notification_trigger_token: SecretStr | None = Field(
+        None, alias="PUSH_KIDS_NOTIFICATION_TRIGGER_TOKEN"
+    )
+    run_notification_scheduler: bool = Field(True, alias="PUSH_KIDS_RUN_NOTIFICATION_SCHEDULER")
     upload_max_bytes: int = 10 * 1024 * 1024
     worker_poll_seconds: float = 0.25
+    notification_tick_seconds: float = Field(30.0, ge=1.0, le=300.0)
     media_ticket_ttl_seconds: int = Field(900, ge=60, le=3600)
 
     @property
     def cors_origin_list(self) -> list[str]:
         return [item.strip() for item in self.cors_origins.split(",") if item.strip()]
+
+    @property
+    def notification_secret_value(self) -> str:
+        """Plain secret for the destination cipher. Empty means "no external channel"."""
+        if not self.notification_secret_key:
+            return ""
+        return self.notification_secret_key.get_secret_value().strip()
+
+    @property
+    def notification_trigger_value(self) -> str:
+        if not self.notification_trigger_token:
+            return ""
+        return self.notification_trigger_token.get_secret_value().strip()
 
     @property
     def is_cloud(self) -> bool:
@@ -98,6 +125,15 @@ class Settings(BaseSettings):
             not self.ark_api_key or not self.ark_api_key.get_secret_value().strip()
         ):
             raise ValueError("云环境使用 Ark 时必须配置 ARK_API_KEY")
+        if self.notification_channel == "recording":
+            raise ValueError("云环境不能使用 recording 通知通道")
+        if self.notification_channel == "wechat":
+            if len(self.notification_secret_value) < 32:
+                raise ValueError("开启微信提醒时 PUSH_KIDS_NOTIFICATION_SECRET_KEY 至少 32 个字符")
+            if not self.notification_templates.strip():
+                raise ValueError("开启微信提醒时必须配置 PUSH_KIDS_NOTIFICATION_TEMPLATES")
+            if not self.run_notification_scheduler and not self.notification_trigger_value:
+                raise ValueError("关闭进程内调度时必须配置 PUSH_KIDS_NOTIFICATION_TRIGGER_TOKEN")
         database_url = self.resolved_database_url
         if not database_url.startswith("mysql+pymysql://"):
             raise ValueError("云环境数据库必须使用 mysql+pymysql")
