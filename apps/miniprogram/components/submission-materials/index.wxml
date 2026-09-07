@@ -28,7 +28,7 @@
         <view class="cnote" wx:if="{{item.hint}}">{{item.hint}}</view>
       </view>
     </view>
-    <text class="help" wx:if="{{media.length}}">照片仅供你核对，不用于展示或分享。点击可查看原图。</text>
+    <text class="help" wx:if="{{media.length}}">照片仅供你核对，不用于展示或分享。</text>
 
     <view class="hairline mt3" wx:if="{{text && media.length}}"></view>
     <block wx:if="{{text}}">

@@ -1,9 +1,9 @@
 <import src="history.wxml" />
 <view class="page record-page {{recordView === 'new' && canWrite && children.length ? 'sticky-cta' : ''}}">
-  <view class="pg-head">
+  <brand-head></brand-head>
+  <view class="pg-head under-brand">
     <view class="grow">
-      <text class="pg-kicker">照片和文字，都是成长的线索</text>
-      <text class="pg-title">学习记录</text>
+      <text class="pg-title">一笔一画，都算数</text>
     </view>
     <picker wx:if="{{children.length}}" range="{{children}}" range-key="name" value="{{childIndex}}" bindchange="changeChild">
       <view class="child-chip {{children.length === 1 ? 'single' : ''}}">
@@ -90,7 +90,7 @@
       <block wx:if="{{mode === 'photo'}}">
         <view class="flex between field-head">
           <text class="t-sub-m">学习照片</text>
-          <text class="t-cap c-ink-3 tnum">{{photos.length}} / 9{{photos.length ? ' · 同一次学习' : ''}}</text>
+          <text class="t-cap c-ink-3 tnum">{{photos.length}} / 9</text>
         </view>
         <view class="upload-2" wx:if="{{!photos.length}}">
           <view class="up-tile" aria-role="button" aria-label="拍摄一张学习照片" bindtap="chooseCamera">
@@ -126,7 +126,6 @@
           <text class="lbl">补充内容<text class="opt">选填</text></text>
           <textarea class="pk-textarea" value="{{text}}" data-field="text" bindinput="setField" maxlength="4000"
             adjust-position="{{true}}" placeholder="例如：今天练习了乘法，重点是进位。" placeholder-class="pk-ph"></textarea>
-          <text class="help">照片会整理成可编辑的草稿，由你确认后才存为学习记录。</text>
         </view>
       </block>
 
@@ -135,12 +134,8 @@
           <text class="lbl">学习内容<text class="opt">必填</text></text>
           <textarea class="pk-textarea text-input" value="{{text}}" data-field="text" bindinput="setField" maxlength="4000"
             adjust-position="{{true}}" placeholder="写下今天实际学过的内容" placeholder-class="pk-ph"></textarea>
-          <view class="flex between">
-            <text class="help">写清楚学了什么就够了，不用写评价。</text>
-            <text class="counter tnum">{{text.length}} / 4000</text>
-          </view>
+          <text class="counter tnum text-counter">{{text.length}} / 4000</text>
         </view>
-        <text class="help">文字会整理成可编辑的草稿，由你确认后才存为学习记录。</text>
       </block>
 
       <view class="safe-tail"></view>

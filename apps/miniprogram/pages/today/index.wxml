@@ -1,7 +1,7 @@
 <view class="page today-page">
-  <view class="pg-head">
+  <brand-head kicker="{{dayLabel}}"></brand-head>
+  <view class="pg-head under-brand">
     <view class="head-intro">
-      <text class="pg-kicker">{{dayLabel}}</text>
       <text class="pg-title">今天，也慢慢来</text>
     </view>
     <view class="child-chip {{multiChild ? '' : 'single'}}" wx:if="{{children.length}}" aria-role="button" aria-label="切换孩子" bindtap="openChildSheet">
@@ -166,7 +166,6 @@
         </view>
         <view class="pk-empty inline" wx:else>
           <text class="et">今天没有活动安排</text>
-          <text class="ec">在日程里加一次安排，或在设置里配置固定时间。</text>
           <view class="ea"><view class="btn sm neutral" aria-role="button" aria-label="添加日程" bindtap="addSchedule">添加日程</view></view>
         </view>
       </view>
@@ -180,7 +179,6 @@
   <view class="sheet-head">
     <view class="grow">
       <text class="sheet-title">选择孩子</text>
-      <text class="sheet-sub">切换后所有页面同步，临时筛选会清空</text>
     </view>
     <view class="icon-btn" aria-role="button" aria-label="关闭" bindtap="closeChildSheet"><view class="ico ico-close sm"></view></view>
   </view>
@@ -195,6 +193,5 @@
     <view class="add-entry" wx:if="{{canAddChild}}" aria-role="button" aria-label="添加孩子" bindtap="addChild">
       <view class="ico ico-plus-pri sm"></view><text>添加孩子</text>
     </view>
-    <text class="sheet-tip">学习档案和家庭成员在设置里维护。</text>
   </view>
 </view>

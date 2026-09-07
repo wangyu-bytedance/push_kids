@@ -22,6 +22,7 @@
 
 /* 文字记录输入区 */
 .text-input { min-height: 320rpx; }
+.text-counter { display: block; margin-top: var(--pk-s1); text-align: right; }
 .help.center { display: block; margin-top: var(--pk-s2); text-align: center; }
 .submit-row { display: block; }
 .submit-row > .btn { width: 100%; }

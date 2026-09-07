@@ -26,12 +26,6 @@
   line-height: 1.5;
   color: var(--pk-ink-3);
 }
-.card-head .c-r {
-  flex: none;
-  padding-top: 6rpx;
-  font-size: 13px;
-  color: var(--pk-ink-3);
-}
 
 /* 在学科目：三列等宽，选中即在学 */
 .subj-grid {
@@ -133,16 +127,6 @@
   color: var(--pk-ink-3);
 }
 
-.travel-only-note {
-  margin-top: 12rpx;
-  padding: 20rpx 24rpx;
-  border-radius: var(--pk-r-lg);
-  background: var(--pk-primary-tint);
-  color: var(--pk-primary-strong);
-  font-size: 13px;
-  line-height: 1.5;
-}
-
 .travel-presets {
   display: flex;
   flex-wrap: wrap;
@@ -230,14 +214,6 @@
   background: var(--pk-surface-sunken);
   border-color: transparent;
   color: var(--pk-ink-4);
-}
-.sheet-foot .foot-note {
-  display: block;
-  margin-top: 16rpx;
-  text-align: center;
-  font-size: 13px;
-  line-height: 1.5;
-  color: var(--pk-ink-3);
 }
 .sheet-foot .err-text { margin: 0 0 16rpx; text-align: center; }
 

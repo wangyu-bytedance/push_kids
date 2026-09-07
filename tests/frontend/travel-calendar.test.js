@@ -10,8 +10,9 @@ const { loadPage } = require("./harness");
 
 test("travel is configured in settings and explicitly excluded from today", () => {
   assert.match(settingsWxml, />出行安排</);
-  assert.match(settingsWxml, /只显示在日程/);
-  assert.match(settingsWxml, /不会出现在「今日」或生成待办/);
+  assert.match(settingsWxml, /只显示在日程，不生成待办/);
+  /* 同一条边界只在卡片副标题上说明一次，弹层里不再重复。 */
+  assert.doesNotMatch(settingsWxml, /这项安排只会显示在日程，不会生成今日待办/);
   assert.match(settingsWxml, /bindtap="saveTravel"/);
   assert.match(settingsWxml, /bindtap="deleteTravel"/);
 });

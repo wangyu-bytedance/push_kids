@@ -1,5 +1,7 @@
 {
-  "navigationBarTitleText": "设置",
   "enablePullDownRefresh": true,
-  "backgroundColor": "#F4F3EC"
+  "backgroundColor": "#F4F3EC",
+  "usingComponents": {
+    "brand-head": "/components/brand-head/index"
+  }
 }

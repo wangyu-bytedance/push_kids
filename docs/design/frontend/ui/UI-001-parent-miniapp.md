@@ -4,11 +4,11 @@
 - Related Feature: `FEAT-001`
 - Baseline: `FDB-20260906-03`
 - Engineering contract: `FEC-20260906-04`
-- Design revision: `DREV-20260906-PKDS-03`（PKDS-2.0「纸 · 芽」；取代 `DREV-20260906-PKDS-02` 的视觉层与三处交互，信息架构与多科目/多孩子动线沿用）
-- Current-state revision: `UI-STATE-20260906-PKDS-03-LOCAL`
-- Related Spec: `specs/active/SPEC-20260906-PKDS-03-PAPER-SPROUT-UI.md` revision `SPEC-20260906-PKDS-03`
-  （前序：`SPEC-20260906-PKDS-01`、`specs/active/BUG-013-MULTI-SUBJECT-AND-PARENT-FLOW.md` revision `BUG-SPEC-20260906-16`）
-- Last verified: 2026-09-06（PKDS-2.0 合并 BUG-013 后全量自动化检查通过；320/390/430 原生几何与真机为 NOT_RUN）
+- Design revision: `DREV-20260907-PKDS-04`（在 `DREV-20260906-PKDS-03`「纸 · 芽」视觉基础上改页头与文案密度，视觉 token 不变）
+- Current-state revision: `UI-STATE-20260907-PKDS-04-LOCAL`
+- Related Spec: `specs/active/SPEC-20260907-PKDS-04-BRAND-HEADER-COPY-CLEANUP.md` revision `SPEC-20260907-PKDS-04`
+  （前序：`SPEC-20260906-PKDS-03`、`SPEC-20260906-PKDS-01`、`specs/active/BUG-013-MULTI-SUBJECT-AND-PARENT-FLOW.md` revision `BUG-SPEC-20260906-16`）
+- Last verified: 2026-09-07（品牌页头与提示清理后前端 127 passed、ESLint、静态校验、架构检查、三视口预览与溢出扫描通过；320/390/430 原生几何与真机为 NOT_RUN）
 - Screen-level spec: `docs/design/frontend/prototypes/DREV-20260906-PKDS-01/FRONTEND-SPEC.md`
 - Reference screens: `docs/design/frontend/prototypes/DREV-20260906-PKDS-01/screenshots/`（39 屏）
 - Intermediate artifact: `docs/design/frontend/prototypes/DREV-20260830-03/index.html`（设计历史）
@@ -16,16 +16,18 @@
 
 ## Current information architecture
 
-原生微信小程序面向家长，采用五个一级 Tab。所有页头只保留当前上下文与统一的紧凑孩子
-切换器，不重复显示 Tab 已表达的大标题。
+原生微信小程序面向家长，采用五个一级 Tab。五个一级页面不再覆盖 `navigationBarTitleText`，
+统一继承 `app.json` 的小程序名「知芽」，因此原生标题不与底部 Tab 重复；页内顶部是共享的
+`components/brand-head`（嫩芽图标 + 「知芽」 + 可选上下文 kicker），其下是一句非标签式的
+hero 标题与统一的紧凑孩子切换器。二级页面（确认、记录详情、家庭、提醒等）仍保留各自的原生标题。
 
-| Tab | Current responsibility |
-|---|---|
-| 今日 | 可折叠的今日复习、今日学习、今日活动；待确认/失败提示 |
-| 日程 | 周日期轨、当天时间线、出行投影、全部日程项冲突提示、过去日程灰显、FAB 新建、编辑/删除日程 |
-| 记录 | 同页新增/历史；照片/文字与实际时间；已确认/待处理/全部、搜索/半屏筛选/分页；列表进入独立的只读记录详情页 |
-| 报表 | 7/30/100 天只读概览与固定 7 点趋势微图、组件内30天分页的复习紧迫度与活跃度、可下钻科目记录 |
-| 设置 | 三项基础学科、手动添加的其他科目与课外活动、活动安排、出行安排、家庭成员入口 |
+| Tab | Hero 标题 | Current responsibility |
+|---|---|---|
+| 今日 | 今天，也慢慢来 | 可折叠的今日复习、今日学习、今日活动；待确认/失败提示 |
+| 日程 | 这一周，心里有数 | 周日期轨、当天时间线、出行投影、全部日程项冲突提示、过去日程灰显、FAB 新建、编辑/删除日程 |
+| 记录 | 一笔一画，都算数 | 同页新增/历史；照片/文字与实际时间；已确认/待处理/全部、搜索/半屏筛选/分页；列表进入独立的只读记录详情页 |
+| 报表 | 一点一滴，看得见 | 7/30/100 天只读概览与固定 7 点趋势微图、组件内30天分页的复习紧迫度与活跃度、可下钻科目记录 |
+| 设置 | 按你们的节奏来 | 三项基础学科、手动添加的其他科目与课外活动、活动安排、出行安排、家庭成员入口 |
 
 学习流程的深层页面分成两类责任：`pages/submission/confirm` 是**可编辑草稿**的独立入口（从新增流程
 或通知进入），`pages/record-detail` 承载**记录详情**——已入档为只读态，待确认态则在同页就地编辑并确认，
@@ -92,6 +94,15 @@
 - 今日页与记录页都会用最新的待处理数更新"记录" Tab 徽标，两者不会互相覆盖出不一致的数字。
 - 需要远程数据的页面统一开启原生下拉刷新；弱网失败时保留已加载内容并显示页内可重试错误条，不清空为空态。
 - 折叠分区、报表区间和历史筛选条件按 childId 持久化在本地偏好中，不进入请求 URL。
+- 界面文案只写**后果**与**边界**，不写操作说明。控件自身表达可用性：可点的行有 chevron 或按钮角色，
+  可多选的星期格有选中态，分页由 swiper 圆点表达。因此不再出现「点击切换」「可多选」
+  「左右滑动查看」「可下钻」「点击可查看原图」「打开可以修改资料或归档」这类提示。
+  必须保留的说明是：确认才入档、照片仅供核对不用于展示分享、出行只显示在日程不生成待办、
+  编辑重复日程会作用于整个每周系列。
+- 出行安排的边界只在设置页出行卡片副标题声明一次（「只显示在日程，不生成待办」），
+  新增/编辑半屏不再重复同一句话。
+- 报表紧迫度图用色块图例（「数字：当天待复习」「已全部通过」）替代原来的三行阅读说明，
+  颜色仍不是唯一信息载体。
 
 ## Visual system
 
@@ -117,6 +128,8 @@ PKDS-2.0 相对 PKDS-1.0 的可见变化：
 - 报表第一段标题是「接下来的复习压力」，只陈述待复习数量与是否已全部通过，不含能力评价词。
 - 原生自定义 TabBar 是独立图层，页面内 `fixed` 半屏无法遮住它，因此 `.pk-sheet` 默认预留
   TabBar 高度；非 Tab 页用 `.pk-sheet.plain` 收回这段预留。
+- 五个一级页面的页头是 `brand-head`（`.ico-sprout-pri` 图标 + 衬线「知芽」 + 可选 kicker）
+  加 `.pg-head.under-brand`；品牌标识复用生成图标体系，不引入位图 logo、emoji 或文字符号。
 
 实现分三层且方向单一：
 
@@ -180,6 +193,22 @@ guards for `callContainer`、`uploadFile` and `chooseMedia`; media permission fa
 classification and cancelable uploads are tracked by `BUG-SPEC-20260905-02` and remain unimplemented.
 
 ## Change references
+
+- 2026-09-07 — `SPEC-20260907-PKDS-04 / DREV-20260907-PKDS-04`：页头与文案密度整改。
+  (1) 五个一级页面删除 `navigationBarTitleText` 覆盖，原生标题统一继承「知芽」，消除与底部 Tab 的
+  逐字重复；新增共享组件 `components/brand-head`（生成图标 `.ico-sprout-pri` + 衬线「知芽」 +
+  可选 kicker），不引入位图 logo。(2) hero 标题改为句子式：今天，也慢慢来 / 这一周，心里有数 /
+  一笔一画，都算数 / 一点一滴，看得见 / 按你们的节奏来。(3) 按「操作说明删除、后果与边界保留」
+  的判定删除约 20 处提示（点击切换、可多选 ×2、左右滑动查看、可下钻、点击可查看原图、
+  打开可以修改资料或归档、按实际参与情况添加、切换后所有页面同步 ×3、打开或取消这个弹层都不会
+  写入数据、下拉刷新说明、草稿说明 ×3 等）；出行边界由三处收敛为出行卡片副标题一处，
+  每周系列提示改为仅在「编辑 + 重复」时出现。(4) 报表紧迫度图的三行阅读说明改为色块图例，
+  保持颜色不是唯一信息载体。(5) 删除随文案作废的 `.read-hint`、`.travel-only-note`、
+  `.card-head .c-r`、`.sheet-foot .foot-note`、`.sheet-tip` 与 `catalogSub` 视图字段。
+  自动化证据：前端 127 passed（新增 `tests/frontend/brand-header-and-copy.test.js`）、ESLint 通过、
+  `validate_miniprogram.py pages=15 source_bytes=625897`、图标生成器幂等（`icons.wxss` 无 diff）、
+  `ARCHITECTURE_VALID checked=3`、`tools/preview` 五页 × 320/390/430 截图走查与横向溢出扫描
+  （`OVERFLOW_FAILURES 0`）。真机/开发者工具原生几何仍为 `NOT_RUN`，未部署。
 
 - 2026-09-06 — `BUG-015 / BUG-SPEC-20260906-21 / DREV-20260906-REPORT-01`：报表概览卡改为只读，
   使用原生 WXML/WXSS 线段和点绘制四组固定 7 点微趋势，不引入 canvas 或图表依赖。前端校验 7 桶、

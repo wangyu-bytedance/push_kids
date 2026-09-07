@@ -64,8 +64,13 @@ test("report pagination is component-local and uses a six-by-five visual grid", 
 
   assert.match(template, /<swiper class="day-swiper /);
   assert.match(template, /bindchange="onUrgencyPageChange"/);
-  assert.match(template, /左右滑动查看，每屏最多 30 天/);
+  assert.match(template, /<view class="pdots" wx:if="\{\{urgencyPages\.length > 1\}\}">/);
   assert.doesNotMatch(template, /scroll-x/);
+  /* 翻页由 pager、圆点和 swiper 自身表达，不再写「左右滑动」这类操作说明；
+     取值含义改由图例承担，避免图表上方堆叠说明文字。 */
+  assert.doesNotMatch(template, /左右滑动|滑动查看/);
+  assert.match(template, /数字：当天待复习/);
+  assert.match(template, /已全部通过/);
   assert.match(styles, /grid-template-columns:repeat\(6,minmax\(0,1fr\)\)/);
   assert.match(styles, /grid-template-rows:repeat\(5,86rpx\)/);
 });

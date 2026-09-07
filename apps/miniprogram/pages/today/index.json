@@ -1,6 +1,8 @@
 {
-  "navigationBarTitleText": "今日",
   "enablePullDownRefresh": true,
   "backgroundColor": "#F4F3EC",
-  "usingComponents": { "todo-card": "/components/todo-card/index" }
+  "usingComponents": {
+    "todo-card": "/components/todo-card/index",
+    "brand-head": "/components/brand-head/index"
+  }
 }
