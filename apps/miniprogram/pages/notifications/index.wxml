@@ -38,7 +38,7 @@
         <view class="hero-ok">
           <view class="ico ico-info-pri sm"></view>
           <text class="ok-txt" wx:if="{{reserveLow}}">微信一次授权只够发一条。趁现在多存几条，之后的提醒才不会断。</text>
-          <text class="ok-txt" wx:else>微信一次授权只够发一条，你已经存了 {{reserveTotal}} 条；用完这里会提示再存。</text>
+          <text class="ok-txt" wx:else>一次授权换一条，你已存下 {{reserveTotal}} 条；用完会提示再存。</text>
         </view>
       </block>
     </view>
