@@ -1,8 +1,8 @@
 # FEAT-003 — 通知消息通道
 
 - Feature ID: `FEAT-003`
-- Status: `IMPLEMENTING`
-- Current-state revision: `FEAT-STATE-20260907-CHANNEL-04-LOCAL`
+- Status: `DEPLOYED_PENDING_LIVE_CHANNEL_ACCEPTANCE`
+- Current-state revision: `FEAT-STATE-20260907-CHANNEL-05-CLOUD`
 - Owner: 产品负责人（用户）
 - Last verified: 2026-09-07
 - Authoritative implementation: `apps/api/src/push_kids/notifications/`、通知持久化模型、
@@ -14,8 +14,8 @@
   `BUG-SPEC-20260907-22`（永久删除与冻结边界）
 - UI current state: `docs/design/frontend/ui/UI-011-reminder-settings.md`
 
-> 本文只描述当前事实。服务端通道与小程序授权入口都已实现并通过本地全量门禁；**尚未部署到微信
-> 云托管，微信开发者工具与真机授权/送达均未验证**，因此不能描述为「家长已经能收到微信提醒」。
+> 本文只描述当前事实。服务端通道已随云托管灰度版本 `flask-ik19-015` 部署，小程序授权入口已随
+> 开发版本 `0.1.4` 上传；微信真机授权、模板配置与真实送达仍未验证，因此不能描述为「家长已经能收到微信提醒」。
 > `-01` 已于 2026-09-06 获用户确认；`-02` 依据同日指令「继续做，我需要一个完整的功能」实现，
 > revision 文本待确认，代码评审通过 MR 进行。
 
@@ -81,10 +81,10 @@
 | 去重/刷新/取消 | implemented locally | `notifications/outbox.py` |
 | 重试/租约/终态 | implemented locally | `tests/integration/test_notification_resilience.py` |
 | 离开家庭收回通道 | implemented locally | `tests/integration/test_notification_channel_lifecycle.py` |
-| 永久删除通知清理与冻结并发边界 | implemented locally | `tests/integration/test_data_deletion.py`、`tests/integration/test_notification_channel.py` |
+| 永久删除通知清理与冻结并发边界 | deployed, live flow pending | `tests/integration/test_data_deletion.py`、`tests/integration/test_notification_channel.py`、`flask-ik19-015` |
 | 历史保留窗口 | implemented locally | `NotificationsService.prune_history` |
 | 微信真实发送 | not verified | 依赖模板申请与云托管配置 |
-| 小程序提醒设置与授权入口 | implemented locally | `apps/miniprogram/pages/notifications/`、`tests/frontend/notifications.test.js` |
+| 小程序提醒设置与授权入口 | development version uploaded | `apps/miniprogram/pages/notifications/`、`tests/frontend/notifications.test.js`、版本 `0.1.4` |
 | 部署配置生成与校验 | implemented locally | `tools/notification_config.py`、`tests/unit/test_notification_config_tool.py` |
 | 微信开发者工具 / 真机授权 | not verified | 需要微信开发者工具与真机；三视口原生几何未跑 |
 
@@ -96,7 +96,10 @@
 - `PYTHONPATH=. uv run pytest tests/unit tests/integration tests/contract -q` → 264 passed, 2 skipped。
 - `uv run ruff check .`、`uv run ruff format --check .`、`uv run mypy apps/api/src`、`uv run python tools/check_architecture.py` 均 PASS。
 - `npm test` → 124 passed；Mini Program lint PASS；validator → 15 pages / 628174 bytes。
-- fresh SQLite `upgrade head/current` PASS（`20260907_0009`）；`alembic check` 仍报告 `origin/main` 已存在的学习记录单列索引与通知 claim 复合索引 ORM drift，本次 `0009` 未新增 drift。
+- fresh SQLite `upgrade head/current` PASS（`20260907_0009`）；生产 MySQL 已从 `20260906_0007` 升级到
+  `20260907_0009 (head)`，`alembic check` PASS（`No new upgrade operations detected`）。
+- 云托管灰度版本 `flask-ik19-015` 于 2026-09-07 11:03:02 达到 `normal`；小程序开发版本 `0.1.4`
+  已通过开发者工具预览并上传（575557 bytes）。
 
 此前通知通道基线在 `origin/main`（`165c588`）之上的证据：
 
@@ -116,9 +119,10 @@
 1. 生产环境仍未真的发出过一条消息：云托管未配置、真机授权与真实送达未验证。
 2. 后台已选用的三个模板（新队员加入提醒 / 日程提醒 / 复习通知）都是**一次性订阅**：每条提醒消耗一次授权，
    日程与复习提醒会退化成「每次都要家长再点一次」；若能选到同题材长期模板应替换并把 `long_term` 设为 `true`。
-3. 云端部署、MySQL 门禁、微信开发者工具三视口原生几何证据未做。
+3. 云端版本与 MySQL migration 已发布，但真实 `wx.cloud.callContainer`、两账号删除/通知链路、
+   微信开发者工具三视口原生几何证据未做。
 4. `UI-011` 缺 Figma 节点级 URL，waiver 处于请求状态。
 
 ## Change References
 
-- 2026-09-07 — `BUG-016 / BUG-SPEC-20260907-22`：补齐 delivery-child ownership、family/child 通知 purge、legacy 隐私优先清理，以及删除冻结后的入队/发送锁定复核；云端迁移与真实发送仍待发布验收。
+- 2026-09-07 — `BUG-016 / BUG-SPEC-20260907-22 / d38065a / flask-ik19-015 / 小程序 0.1.4`：补齐 delivery-child ownership、family/child 通知 purge、legacy 隐私优先清理，以及删除冻结后的入队/发送锁定复核；生产 migration 与开发版本发布完成，真实授权/送达仍待体验验收。

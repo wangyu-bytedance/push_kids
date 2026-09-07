@@ -369,13 +369,15 @@ Dependency direction remains acyclic: `data_management → notifications`; notif
 
 - Changed behavior: 通知 delivery 具备结构化 child ownership；family/child 删除清理对应通知；删除冻结与通知入队/发送通过数据库行锁串行化，冻结后不再入队或发送。
 - Deleted workaround/logic: N/A — no workaround exists
-- Data repaired: pending; production is expected to have no `0008` rows because PR #6 has not been deployed
+- Data repaired: 生产 MySQL 已在用户确认备份后从 `20260906_0007` 顺序升级到 `20260907_0009`；
+  `0009` 新建 ownership 表，不主动改写既有 delivery，legacy child-bearing delivery 继续由删除时 fallback 清理
 - Monitoring added: reuse deletion worker terminal state/log and assert zero residual data in tests; no payload or receiver content in logs
 - Behavior catalog update: `BHV-029` 已记录通知 ownership、purge 与冻结/发送边界
 - Feature current-state document update and Change Reference: FEAT-003、FEAT-006 与 Architecture 已合并本轮最终事实
 - Architecture/test/process change preventing recurrence: add notification owner to deletion inventory and regression fixture; consider a follow-up invariant test requiring every family-owned persistence table to declare its purge owner
 - Independent Review: 首次复核 `BLOCK / CR-001`；发送前 delivery re-lock 与两个确定性交错用例修复后，第二次复核为 `PASS WITH NON-BLOCKS`。`CR-002` 的旧 Spec 并发描述已纠正；`CR-003` 的 terminal delivery 覆盖已补入删除 fixture。
 - Residual risk: 若发送事务先取得目标锁并已调用微信，删除请求会等待该事务结束后才被接受；远端已接受的消息不可撤回。合同保证的是删除请求被接受后不再新入队或调用发送，而不是撤回接受前已完成的外部副作用。
+- Release evidence: backend commit `d38065a` 已发布为灰度版本 `flask-ik19-015`（2026-09-07 11:03:02 `normal`）；小程序开发版本 `0.1.4` 已上传。真实 child/family 删除与通知授权/发送仍待体验版验证。
 - Follow-up owner/date: Codex / implementation after approval
 
 ## 10. Revision history

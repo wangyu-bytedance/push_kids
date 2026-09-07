@@ -1,15 +1,17 @@
 # FEAT-006 — 家庭资料清理与重新开始
 
 - Feature ID: `FEAT-006`
-- Status: `IMPLEMENTED_LOCALLY_PENDING_CLOUD_ACCEPTANCE`
-- Current-state revision: `FEAT-STATE-20260907-02-NOTIFICATION-PURGE`
+- Status: `DEPLOYED_PENDING_CLOUD_ACCEPTANCE`
+- Current-state revision: `FEAT-STATE-20260907-03-CLOUD`
 - Owner: 产品负责人（用户）
 - Last verified: 2026-09-07
 - Authoritative implementation: `apps/api/src/push_kids/data_management/`、各 domain 的 `purge_data` 合同、Alembic `20260906_0007_durable_data_deletion` + `20260907_0009_notification_deletion_scope`、`apps/miniprogram/pages/data-cleanup/`
 - Active change Specs: `SPEC-20260906-DATA-CLEANUP-01` + `BUG-SPEC-20260907-22`
 - UI current state: `UI-010-family-access`、`UI-015-child-profile`、`UI-016-data-cleanup`
 
-> 本文只描述当前本地事实。永久删除及无家庭重启流程已经实现并通过本地测试；通知数据集成修复正在完成独立复核。生产 MySQL 迁移、云端 worker、真实私有媒体与三视口真机证据尚未完成，因此不能把本 Feature 描述为已在生产可用。
+> 永久删除及无家庭重启流程已经实现并通过本地测试，通知数据集成修复已通过独立复核；生产 MySQL
+> 已升级到 `20260907_0009`，代码已部署为云托管灰度版本 `flask-ik19-015`，小程序开发版本 `0.1.4`
+> 已上传。真实云端删除 worker、私有媒体和真机证据尚未完成，因此不能把本 Feature 描述为已完成生产验收。
 
 ## Purpose and scope
 
@@ -60,12 +62,15 @@ queued --lease--> running --success--> succeeded --30d--> pruned
 
 - 通知删除专项：`PYTHONPATH=. uv run pytest tests/integration/test_data_deletion.py tests/integration/test_notification_channel.py tests/integration/test_notification_channel_lifecycle.py tests/integration/test_notification_migration.py -q` → 24 passed，包含 claim 后 purge 先提交的 child/family 确定性交错。
 - 完整后端：264 passed, 2 skipped；完整前端：124 passed；ruff、format、mypy（79 files）、architecture、Mini Program lint/validator 均 PASS。
-- fresh SQLite `upgrade head/current` PASS（`20260907_0009`）。`alembic check` 暴露的是 `origin/main` 已存在的索引 metadata drift，本次迁移未新增该漂移；isolated MySQL 与云端验收仍待完成。
+- fresh SQLite `upgrade head/current` PASS（`20260907_0009`）；生产 MySQL `upgrade/current/check` PASS，
+  当前为 `20260907_0009 (head)` 且无待生成操作。
+- 云托管灰度版本 `flask-ik19-015` 为 `normal`；小程序 `0.1.4` 已预览并上传。真实云端删除任务与
+  两账号隔离验收仍待体验版执行。
 
 ## Known gaps
 
-1. 生产数据库仍未执行 `0007..0009` 的最终发布迁移/校验，本轮发布前必须先确认可恢复备份。
-2. 真实云托管 worker、对象存储删除与两账号身份回归待部署验收。
+1. 生产 migration 已完成；恢复备份与 downgrade 未实操验证。
+2. 真实云托管 worker、对象存储删除与两账号身份回归待体验验收。
 3. `UI-016` 的正式 Figma node、320/390/430 原生节点几何和 iOS/Android 真机证据仍是公开发布门禁。
 4. 若微信发送事务先取得锁并完成远端调用，删除请求会等待其提交后才被接受；外部已接受消息不可撤回。
 
@@ -79,4 +84,4 @@ queued --lease--> running --success--> succeeded --30d--> pruned
 ## Change References
 
 - 2026-09-06 — `SPEC-20260906-DATA-CLEANUP-01` / PR #6：实现 durable child/family deletion、无家庭重启流程与删除配置 UI。
-- 2026-09-07 — `BUG-016 / BUG-SPEC-20260907-22`：补齐通知 owned-data inventory、delivery-child ownership、legacy 隐私清理，以及删除冻结后的入队/发送并发边界；最终 commit 与云端证据待发布后回填。
+- 2026-09-07 — `BUG-016 / BUG-SPEC-20260907-22 / d38065a / flask-ik19-015 / 小程序 0.1.4`：补齐通知 owned-data inventory、delivery-child ownership、legacy 隐私清理，以及删除冻结后的入队/发送并发边界；生产 migration 和开发版本发布完成，真实链路待体验验收。
