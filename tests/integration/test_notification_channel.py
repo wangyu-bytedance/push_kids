@@ -139,6 +139,43 @@ def test_join_request_notifies_managers_only_after_a_grant(client: TestClient, a
     assert deliveries.json()[0]["type"] == "member_application"
 
 
+def _subscription_state(client: TestClient, actor: str, type_name: str) -> dict:
+    body = client.get("/api/v1/notifications/settings", headers=_actor(actor)).json()
+    return next(item for item in body["preferences"] if item["type"] == type_name)
+
+
+def test_repeated_grants_stack_one_off_quota_and_a_decline_keeps_it(client: TestClient) -> None:
+    """微信只提供一次性模板，所以家长的多次同意必须能攒额度，而"这次不订"不能把已攒的清零。"""
+    _create_family(client)
+    _grant(client, "parent-a", ["member_application"])
+    _grant(client, "parent-a", ["member_application"])
+    stacked = _subscription_state(client, "parent-a", "member_application")
+    assert stacked["subscription_status"] == "accepted"
+    assert stacked["remaining_quota"] == 2
+
+    declined = client.post(
+        "/api/v1/notifications/subscriptions",
+        headers=_actor("parent-a"),
+        json={"results": [{"type": "member_application", "accepted": False, "decision": "reject"}]},
+    )
+    assert declined.status_code == 200, declined.text
+    kept = _subscription_state(client, "parent-a", "member_application")
+    # 只是这次弹窗没同意：之前买下的两条仍然能发。
+    assert kept["subscription_status"] == "accepted"
+    assert kept["remaining_quota"] == 2
+
+    banned = client.post(
+        "/api/v1/notifications/subscriptions",
+        headers=_actor("parent-a"),
+        json={"results": [{"type": "member_application", "accepted": False, "decision": "ban"}]},
+    )
+    assert banned.status_code == 200, banned.text
+    stopped = _subscription_state(client, "parent-a", "member_application")
+    # 家长在微信里选择了不再接收：额度立即清零，界面不能再显示"已开启"。
+    assert stopped["subscription_status"] == "rejected"
+    assert stopped["remaining_quota"] == 0
+
+
 def test_approved_request_stops_reminding_and_viewers_are_not_asked(
     client: TestClient, app
 ) -> None:

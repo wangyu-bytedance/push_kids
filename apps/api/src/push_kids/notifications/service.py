@@ -291,18 +291,32 @@ class NotificationsService:
                     )
                 )
                 continue
-            row.status = status
-            row.updated_at = now
             if result.accepted:
+                row.status = status
+                row.updated_at = now
                 row.granted_at = now
                 stored_quota = int(row.remaining_quota or 0)
                 row.remaining_quota = (
                     UNLIMITED_QUOTA if quota == UNLIMITED_QUOTA else max(0, stored_quota) + 1
                 )
-            else:
-                row.remaining_quota = 0
+                continue
+            row.updated_at = now
+            if cls._keeps_stored_quota(result.decision, row):
+                # WeChat only heard "not this time". Grants already paid for stay spendable,
+                # otherwise declining a top-up dialog would silently destroy them.
+                continue
+            row.status = status
+            row.remaining_quota = 0
         db.commit()
         return cls.settings_view(db, context, channel)
+
+    @staticmethod
+    def _keeps_stored_quota(decision: str, row: NotificationSubscription) -> bool:
+        """A plain per-dialog decline leaves earlier one-off grants intact; a ban does not."""
+        if decision != "reject":
+            return False
+        stored = int(row.remaining_quota or 0)
+        return stored == UNLIMITED_QUOTA or stored > 0
 
     @classmethod
     def recent_deliveries(

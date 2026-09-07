@@ -90,7 +90,8 @@ revision 并要求提交 MR，确认覆盖范围与已实现范围一致（服�
 
 ### Open questions
 
-- Q1：三类模板最终采用长期模板还是一次性模板？影响额度语义与用户被要求重新授权的频率。
+- Q1（2026-09-07 已回答）：后台该类目没有长期模板可选，三类都用一次性模板；额度按可累积语义运行，
+  家长需要定期补授权，见 `-04`。
 - Q2：`review_digest` 是否需要「今天已全部完成」的正向消息？当前实现选择静默。
 
 ## 2. Current behavior and evidence
@@ -133,7 +134,10 @@ sequenceDiagram
 | 微信瞬时错误 / 网络错误 | 有界退避重试 | `pending` + `available_at`，超次数落 `failed` |
 | 用户在微信里拒收 | 永久终态 | `failed / user_refused`，授权置 `rejected`、额度 0 |
 | 接收标识无法解密 | 永久终态 | `failed / destination_unreadable`，不打印密文 |
-| 一次性额度用尽 | 需要重新授权 | 授权置 `expired` |
+| 一次性额度用尽 | 需要重新授权 | 授权置 `expired`，设置页提示「再存」 |
+| 家长再同意一次 | 额度累积 | `remaining_quota += 1`，状态 `accepted` |
+| 家长这次弹窗没同意（`reject`） | 已攒额度保留 | 状态与额度不变 |
+| 家长在微信里选择不再接收（`ban`/`filter`） | 立即不可送达 | 授权置 `rejected`、额度 0 |
 | 当天没有到期复习 | 静默 | 不入队，不发「今天没有」 |
 
 ## 4. Scope
@@ -283,6 +287,48 @@ Alembic `20260906_0008_notification_channel`，纯新增四张表与索引；
 - AC-204：已映射槽位缺内容时不调用发送、不消耗额度，落 `skipped / template_field_missing`，
   修正映射后同一条提醒可重新排队发出。
 - AC-205：`from-wechat` 对后台这三个模板产出的映射与人工核对结果一致，且 `check` 判定为可用。
+
+## 8quater. `-04` 后台没有长期模板：把一次性额度做成可数、可补的常态
+
+用户在小程序后台确认「选用模板」里**没有长期订阅模板可选**（该类目当前只提供一次性模板）。
+这不是配置错误，而是能力边界：三类提醒只能按一次性订阅运行，每条消息都要消耗一次授权额度。
+因此本 revision 不再把「换长期模板」当作首选方案，而是把一次性额度做成产品的正常路径：
+额度可累积、可数、可补，并且家长的一次「这次不订」不能把之前攒下的额度清零。
+
+### In scope（`-04`）
+
+- `POST /notifications/subscriptions` 新增可选 `decision`（`accept|reject|ban|filter|""`），
+  回传 `wx.requestSubscribeMessage` 的原话；服务端据此区分「这次没同意」与「不再接收」。
+- 一次性额度语义明确为可累积：每次 `accept` 额度 +1；`reject` 且已有额度时保留额度与 `accepted` 状态；
+  `ban` / `filter` / 未给出结论时清零并置 `rejected`。
+- 提醒设置页把额度可数化：Hero 显示「提醒余额 N 条」，行内显示「已开启 · 还能发 N 条」，
+  仅剩 1 条时改为提醒色，余额 <3 条时把「再存几条提醒」升为主操作。
+- 新增补授权路径：已授权状态下也能再次发起授权，按剩余额度最少的类别优先、一次最多 3 个模板；
+  成功后报「已存入 N 条提醒」而不是含糊的「已开启」。
+- 文档把「一次性订阅」定为正式运行模式：`long_term` 保持 `false`，仅在后台真的出现长期模板时才改。
+
+### Out of scope（`-04`）
+
+- 不改数据库结构、模板字段语义、调度与去重语义。
+- 不自动替家长补授权，也不在其他页面弹授权（授权仍必须发生在家长自己的点击手势里）。
+- 不用其他渠道（服务号、短信、站内推送）绕过一次性额度限制。
+- 不因额度不足而补发历史提醒。
+
+### Invariants（`-04`）
+
+- 界面上的额度数字必须来自服务端的 `remaining_quota`，前端不预测、不乐观加一。
+- 家长在微信里选择「不再接收」时必须立即体现为不可送达，不得因为本地还存着数字而显示「已开启」。
+- 一次弹窗的拒绝不得销毁此前已经取得的额度。
+- 额度耗尽期间的提醒仍然如实落终态并给出原因，不静默、不补发。
+- 长期模板（若将来可用）下不得出现任何「攒额度」的说法与入口。
+
+### Acceptance criteria（`-04`）
+
+- AC-301：同一类提醒连续两次 `accept` 后 `remaining_quota == 2`，发出一条后为 1，状态仍是 `accepted`。
+- AC-302：`accepted=false, decision="reject"` 不改变已有额度与 `accepted` 状态；
+  `decision="ban"` 立即清零并置 `rejected`。
+- AC-303：设置页在全部已授权、额度有限时仍提供补授权入口，且补授权顺序为剩余额度最少者优先、最多 3 个模板。
+- AC-304：额度为 -1（长期模板）时不出现补授权入口与余额文案。
 
 ## 9. Expected file changes
 
@@ -435,6 +481,38 @@ Alembic `20260906_0008_notification_channel`，纯新增四张表与索引；
   另在本地对三个真实模板 ID 跑过 `from-wechat` + `check`，输出 `NOTIFICATION_TEMPLATES_VALID types=3`
 - NOT RUN：真实微信送达（仍需云托管环境变量与真机授权）
 
+### `-04` Files changed（一次性额度可累积与补授权）
+
+- `apps/api/src/push_kids/notifications/schemas.py`：`SubscriptionResult.decision`（受限字面量）。
+- `apps/api/src/push_kids/notifications/service.py`：`accept` 累积额度、`reject` 保留已攒额度、
+  `ban/filter/未知` 清零并置 `rejected`（`_keeps_stored_quota`）。
+- `apps/miniprogram/utils/notifications.js`：`quotaLabel`、`topUpTargets`、`reserveOf`，
+  `statusOf` 报出剩余条数，`resultsFromWx` 回传微信原话 `decision`。
+- `apps/miniprogram/pages/notifications/index.js|wxml`：余额 Hero、补授权主/次操作、行内「再存一条」、
+  「已存入 N 条提醒」toast、说明弹窗改写为一次性订阅的真实规则。
+- 文档：`docs/deploy/BACKEND-RELEASE.md`、`docs/domain/features/FEAT-003-notification-channel.md`、
+  `docs/domain/BEHAVIOR-CATALOG.md`（`BHV-026`/`BHV-028`）、`docs/quality/TEST-STRATEGY.md`、
+  `docs/design/frontend/ui/UI-011-reminder-settings.md`。
+- 测试：`tests/integration/test_notification_channel.py::test_repeated_grants_stack_one_off_quota_and_a_decline_keeps_it`、
+  `tests/frontend/notifications.test.js`（补授权顺序、余额文案、长期模板不攒额度、`decision` 回传）。
+
+### `-04` Evidence（2026-09-07，本地）
+
+- `uv run ruff check .` PASS；`uv run ruff format --check .` PASS（247 files）
+- `uv run mypy apps/api/src` PASS（79 files）
+- `uv run python tools/check_architecture.py` PASS（`ARCHITECTURE_VALID checked=3`）
+- `uv run pytest tests/unit tests/integration tests/contract -q` → 252 passed, 2 skipped, 2 failed
+  （仍是 `tests/unit/test_reporting_trends.py` 与 `tests/contract/test_worker_readiness.py` 两个主干既有失败）
+- `npm test` → 122 pass；`npm run lint:miniapp` PASS；
+  `tools/validate_miniprogram.py` → `MINIPROGRAM_VALID pages=15 source_bytes=629122`
+- AC-301 / AC-302：`tests/integration/test_notification_channel.py::test_repeated_grants_stack_one_off_quota_and_a_decline_keeps_it`
+- AC-303 / AC-304：`tests/frontend/notifications.test.js`
+  （`topping up asks again for the types with the least remaining quota`、
+  `a long-term template never asks the parent to stockpile messages`）
+- 设计走查：新增 `tools/preview/fixtures.js` 的 `notifications` / `notifications-grant` 两态，
+  已渲染并截图 320/390/430（`dist/ui-preview/notifications*-{320,390,430}.png`），人工检查无横向溢出
+- NOT RUN：微信开发者工具编译、三视口原生节点几何、真机 `wx.requestSubscribeMessage` 与真实送达
+
 ### Deviations from approved Spec
 
 `-02` 同样是先实现后确认：用户指令「继续做，我需要一个完整的功能」明确要求补齐能力，但仓库契约要求
@@ -447,9 +525,9 @@ Alembic `20260906_0008_notification_channel`，纯新增四张表与索引；
 
 1. 授权入口已实现，但微信开发者工具编译、三视口原生节点几何与真机授权/送达仍 `NOT RUN`，
    因此仍不能声称家长已经能收到微信提醒。
-2. 后台已选用的三个模板都是**一次性订阅**：每条提醒消耗一次授权，日程提醒与每日复习提醒会退化成
-   「每次都要家长再点一次」。页面已如实说明，但体验成本真实存在；能选到同题材长期模板时应替换并把
-   `long_term` 设为 `true`。
+2. 后台没有长期模板可选，三个模板都是**一次性订阅**：额度已做成可累积、可数、可补，但家长仍需定期回
+   小程序补授权；额度耗尽期间的提醒只会落 `skipped / not_authorized`，不补发。这是微信能力边界，
+   不是可以在代码里绕开的问题。
 3. 云端部署、MySQL 门禁未做，公开发布仍被阻断。
 4. Figma 节点级 URL 缺失，`-02` 的 waiver 属于请求状态，未获批准前不得进入生产可见发布。
 
@@ -459,4 +537,5 @@ Alembic `20260906_0008_notification_channel`，纯新增四张表与索引；
 |---|---|---|
 | `SPEC-20260906-CHANNEL-01` | 2026-09-06 | 首版：只覆盖服务端消息通道；记录实现先于确认的流程偏差；前端授权入口另开 revision |
 | `SPEC-20260906-CHANNEL-03` | 2026-09-06 | 对齐后台已选用的三个真实模板：新增 `applicant`/`applied_at`/`duration`/`countdown`/`notified_at` 语义、按字段类型逐字段裁剪、槽位缺内容时 `skipped / template_field_missing`（不烧额度、可 re-arm）、`tools/notification_config.py` 改为按模板标签推断映射；三个模板均为一次性订阅，已记入风险 |
+| `SPEC-20260907-CHANNEL-04` | 2026-09-07 | 后台无长期模板可选：把一次性额度定为正式运行模式——`decision` 回传区分「这次没订」与「不再接收」、`accept` 累积额度、提醒设置页显示可发条数并提供补授权入口；文档把 `long_term` 固定为 `false` |
 | `SPEC-20260906-CHANNEL-02` | 2026-09-06 | 补齐完整功能：小程序提醒设置页与 `wx.requestSubscribeMessage` 授权入口、设置页入口、部署配置助手 `tools/notification_config.py`；新增 `UI-011`；Figma waiver 处于请求状态，原生视口证据未跑 |

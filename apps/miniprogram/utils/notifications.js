@@ -21,7 +21,7 @@ const STATE_TONE = { sent: "suc", failed: "dan", skipped: "neutral", cancelled: 
 /* 服务端结果码 → 家长能据此行动的解释。缺失的码不编故事，只显示状态本身。 */
 const RESULT_TEXT = {
   ok: "微信已收到这条提醒",
-  not_authorized: "还没拿到微信授权，需要重新点一次开启",
+  not_authorized: "微信授权额度已用完，需要再存一次提醒",
   member_disabled: "这类提醒当时是关闭的",
   channel_unavailable: "当时提醒服务不可用，恢复后会重新排队",
   template_field_missing: "提醒模板缺少内容，已跳过；修好配置后会重新排队",
@@ -58,6 +58,15 @@ function isAuthorized(preference) {
   return quota === -1 || quota > 0;
 }
 
+/* 微信当前只给到一次性模板：一次授权买一条，多次授权可以攒。
+   这里把"还能发几条"说成家长能算的数，而不是抽象的"已开启"。 */
+function quotaLabel(preference) {
+  const quota = Number((preference || {}).remaining_quota);
+  if (quota === -1) return "长期有效";
+  if (quota <= 0) return "已用完";
+  return `还能发 ${quota} 条`;
+}
+
 /* 状态胶囊：先说最需要家长处理的事，其次才是"已开启"。 */
 function statusOf(preference, channelAvailable) {
   if (!channelAvailable) return { text: "暂不可用", tone: "neutral", needsGrant: false };
@@ -70,14 +79,17 @@ function statusOf(preference, channelAvailable) {
     return { text: "需要重新开启", tone: "att", needsGrant: true };
   }
   if (isAuthorized(preference)) {
+    const quota = Number(preference.remaining_quota);
+    if (quota === -1) return { text: "已开启", tone: "suc", needsGrant: false };
+    /* 只剩一条时说明"发完就要再授权"，避免家长以为一直会有。 */
     return {
-      text: Number(preference.remaining_quota) === -1 ? "已开启" : "已开启 · 本次一条",
-      tone: "suc",
+      text: quota > 1 ? `已开启 · ${quotaLabel(preference)}` : "已开启 · 仅剩 1 条",
+      tone: quota > 1 ? "suc" : "att",
       needsGrant: false
     };
   }
   if (preference.subscription_status === "expired") {
-    return { text: "上一条已用完", tone: "att", needsGrant: true };
+    return { text: "额度已用完", tone: "att", needsGrant: true };
   }
   return { text: "待微信授权", tone: "att", needsGrant: true };
 }
@@ -93,13 +105,47 @@ function grantTargets(preferences, channelAvailable) {
   return targets.slice(0, 3);
 }
 
+/* 攒额度：一次性模板可以重复授权累积，所以已开启的类别也允许再存。
+   缺额度最多的排前面，一次最多带 3 个模板。 */
+function topUpTargets(preferences, channelAvailable) {
+  if (!channelAvailable) return [];
+  const candidates = (preferences || []).filter(
+    (item) => item.enabled && item.template_id && Number(item.remaining_quota) !== -1
+  );
+  const ordered = candidates
+    .map((item, index) => ({ item, index, quota: Math.max(0, Number(item.remaining_quota) || 0) }))
+    .sort((a, b) => (a.quota === b.quota ? a.index - b.index : a.quota - b.quota));
+  return ordered.slice(0, 3).map((entry) => entry.item);
+}
+
+/* 提醒余额概览：总条数 + 是否已经少到需要提醒家长补一次。 */
+function reserveOf(preferences, channelAvailable) {
+  const items = (preferences || []).filter((item) => item.enabled && item.template_id);
+  let total = 0;
+  let unlimited = false;
+  items.forEach((item) => {
+    const quota = Number(item.remaining_quota);
+    if (quota === -1) unlimited = true;
+    else if (isAuthorized(item)) total += quota;
+  });
+  const canTopUp = channelAvailable && topUpTargets(items, channelAvailable).length > 0;
+  /* 每天最多一条复习提醒，所以 3 条大约够撑两三天，低于这个数就该提示补一次。 */
+  return { total, unlimited, canTopUp, low: !unlimited && total < 3 };
+}
+
 /* wx.requestSubscribeMessage 的返回是「模板 ID → accept/reject/ban/filter」，
-   只有 accept 算授权；其余一律按未授权回传，绝不替用户乐观解释。 */
+   只有 accept 算授权；其余一律按未授权回传，绝不替用户乐观解释。
+   原始结论一起回传：reject 只是这次不同意，ban/filter 才是真的收不到。 */
 function resultsFromWx(response, requested) {
   const results = [];
   (requested || []).forEach((item) => {
     const decision = String((response || {})[item.template_id] || "");
-    results.push({ type: item.type, accepted: decision === "accept" });
+    const known = ["accept", "reject", "ban", "filter"].indexOf(decision) >= 0;
+    results.push({
+      type: item.type,
+      accepted: decision === "accept",
+      decision: known ? decision : ""
+    });
   });
   return results;
 }
@@ -134,8 +180,11 @@ module.exports = {
   typeLabel,
   typeIcon,
   isAuthorized,
+  quotaLabel,
   statusOf,
   grantTargets,
+  topUpTargets,
+  reserveOf,
   resultsFromWx,
   acceptedCount,
   describeDelivery,
