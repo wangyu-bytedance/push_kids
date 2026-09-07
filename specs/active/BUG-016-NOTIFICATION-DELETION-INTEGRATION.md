@@ -350,7 +350,7 @@ Dependency direction remains acyclic: `data_management → notifications`; notif
 | `TP-008` | `PYTHONPATH=. uv run pytest tests/unit tests/integration tests/contract -q` | local | PASS — 264 passed, 2 skipped | 2026-09-07 local run |
 | `TP-008` | `npm test && npm run lint:miniapp && uv run python tools/validate_miniprogram.py` | local | PASS — 124 tests; lint; 15 pages / 628174 bytes | 2026-09-07 local run |
 | `TP-008` | `uv run python tools/check_architecture.py` | local | PASS — `ARCHITECTURE_VALID checked=3` | 2026-09-07 local run |
-| migration metadata drift | fresh SQLite `alembic check` | local | NOT CLEAN — detects four pre-existing `learning_records` single-column indexes and pre-existing `ix_notification_deliveries_claim` ORM mismatch | unchanged from `origin/main`; release residual risk, not caused by `0009` |
+| migration metadata consistency | production MySQL `alembic check` | controlled staging | PASS — `20260907_0009 (head)`；`No new upgrade operations detected` | 2026-09-07，补齐 ORM 对既有 `ix_notification_deliveries_claim` 的声明，不产生额外 DDL |
 
 ## 8. Review checklist
 

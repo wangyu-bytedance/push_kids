@@ -6,6 +6,7 @@ from sqlalchemy import (
     Column,
     Date,
     ForeignKey,
+    Index,
     Integer,
     String,
     Text,
@@ -623,7 +624,10 @@ class NotificationDelivery(Base):
     """Durable outbox row: one intended message to one member, claimed and retried at most once."""
 
     __tablename__ = "notification_deliveries"
-    __table_args__ = (UniqueConstraint("dedupe_key", name="uq_notification_delivery_dedupe"),)
+    __table_args__ = (
+        UniqueConstraint("dedupe_key", name="uq_notification_delivery_dedupe"),
+        Index("ix_notification_deliveries_claim", "state", "available_at", "scheduled_at"),
+    )
     id = Column(String(36), primary_key=True, default=new_id)
     family_id = Column(String(80), ForeignKey("families.id"), nullable=False, index=True)
     member_id = Column(String(36), ForeignKey("family_members.id"), nullable=False, index=True)
