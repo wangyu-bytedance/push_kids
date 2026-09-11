@@ -98,6 +98,8 @@ still remains on the previous revision until the controlled migration window.
 
 ## Limitations
 
+- 成员微信头像/昵称不是当前关键范围；产品负责人于 2026-09-11 将其降为低优先级后续任务。当前成员页
+  继续使用关系称谓和首字头像，不增加资料采集、数据库字段或头像对象存储。
 - Base two-account gateway trust and media-owner evidence passed staging on 2026-09-06; FEAT-002 collaboration
   lifecycle evidence is still pending.
 - FEAT-002 cloud migration/deployment evidence remains pending; this is distinct from the completed base actor test.
@@ -112,6 +114,9 @@ still remains on the previous revision until the controlled migration window.
 - Existing feature: `docs/domain/features/FEAT-001-push-kids-mvp.md`
 
 ## Change References
+
+- 2026-09-11 — 产品负责人确认成员微信头像/昵称不是关键 feature，降为低优先级后续任务；
+  `SPEC-20260911-MULTI-FAMILY-06` 将该能力移出当前多家庭实现与发布门禁，现有关系称谓和首字头像保持不变。
 
 - 2026-09-06 — 用户确认真实双账号 actor/owner 隔离、metaid 解码和公网拒绝 staging 测试通过。
   FEAT-002 的协作迁移、完整角色生命周期、共享限流和隐私/删除政策仍是独立未完成项。

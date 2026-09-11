@@ -4,10 +4,10 @@
 - Risk: `R3`
 - Spec owner: 产品负责人（用户）
 - Implementer / Reviewer / Verifier: `TBD`
-- Created / Last updated: 2026-09-05 / 2026-09-06
-- Spec revision: `SPEC-20260906-MULTI-FAMILY-05`
-- Supersedes: `SPEC-20260906-MULTI-FAMILY-04`（revision 01 的“一家庭仅一个孩子”错误假设已在此前修正）
-- User confirmation: `PENDING；本 revision 新增非管理员主动退出家庭、家庭内可选成员名字/头像及其隐私合同，等待产品负责人逐项批准；不得据此开始生产实现`
+- Created / Last updated: 2026-09-05 / 2026-09-11
+- Spec revision: `SPEC-20260911-MULTI-FAMILY-06`
+- Supersedes: `SPEC-20260906-MULTI-FAMILY-05`（revision 06 将非关键的成员微信头像/昵称移出当前范围并降为低优先级后续任务）
+- User confirmation: `PENDING；产品负责人于 2026-09-11 已确认成员微信头像/昵称不是关键 feature，降为低优先级后续任务；其余多家庭、隔离、建档和非管理员退出范围仍等待逐项批准，不得据此开始生产实现`
 - Affected Feature IDs: `FEAT-002（主）；FEAT-001、planned FEAT-003、FEAT-004（上下文/隔离合同）`
 - Current-state baseline: `FEAT-002=FEAT-STATE-20260905-06-BUG010-LOCAL；实现前重新读取其余最新 revision`
 
@@ -16,10 +16,10 @@
 - Frontend impact: `yes — 新增家庭选择；保留当前孩子选择`
 - Affected UI IDs: `UI-001、UI-009、UI-010、UI-015；新增 proposed UI-014-family-switcher`
 - Current behavior retained: 五个 Tab、现有孩子切换、家庭角色与关系、家庭成员/邀请流程
-- New interaction: 当前家庭选择、按家庭记忆当前孩子、非管理员退出、本人名字/头像、为当前家庭建立另一位孩子的学习档案、切换竞态与失权恢复
+- New interaction: 当前家庭选择、按家庭记忆当前孩子、非管理员退出、为当前家庭建立另一位孩子的学习档案、切换竞态与失权恢复
 - Required viewports: `320×568、390×844、430×932`
-- Required states: `单家庭、多家庭、切换中、家庭失权、非管理员退出/管理员交接提示、头像有/无/失败、长名字、新建档案表单/提交中/失败/成功、不同家庭不同角色`
-- Proposed Design Revision: `DREV-20260906-MULTI-FAMILY-02`
+- Required states: `单家庭、多家庭、切换中、家庭失权、非管理员退出/管理员交接提示、新建档案表单/提交中/失败/成功、不同家庭不同角色`
+- Proposed Design Revision: `DREV-20260906-MULTI-FAMILY-02` remains for UI-014；UI-009 的退出交互需单独更新，成员头像/昵称不进入 Design Revision
 - Figma node URL / approval snapshot: `PENDING`
 - Frontend engineering constraints: 实现前使用最新 approved FEC；家庭切换时不得短暂显示上一家庭数据
 - Figma waiver: `none；现有 waiver 不自动覆盖新交互`
@@ -94,12 +94,12 @@ WeChatActor 1 ── N FamilyMembership N ── 1 Family 1 ── N Child
 | `D-015` | 旧客户端兼容期内保留单家庭响应；多家庭 actor 在旧客户端只得到明确升级门禁，不回落到任意家庭 | 防止旧客户端静默进入错误租户 |
 | `D-016` | 复用已实现的 UI-015 孩子档案管理，不为多家庭重新创建第二套建档表单 | 降低重复交互与状态分叉 |
 | `D-017` | active editor/viewer 可通过独立 leave action 主动退出当前家庭；manager 不可直接退出 | 把“管理员移除成员”和“成员主动退出”分成两个清晰权限边界，保留管理权交接要求 |
-| `D-018` | 名字/头像是可选、本人维护、family membership scoped 的展示资料；不从 OpenID/metaid 推导，不允许管理员替他人修改 | 防止身份字段滥用与跨家庭资料扩散，同时允许成员列表更易辨认 |
-| `D-019` | 退出/被移除时立即停止返回名字/头像、清空展示资料并排队持久化删除头像对象；历史记录只保留 member attribution 与关系称谓 | 最小化离开后的个人资料保留，不影响学习历史或受对象存储暂时失败阻断 |
+| `D-018` | 当前 revision 不实现成员微信头像/昵称；继续使用 `relationship_label` 和首字头像，真实资料能力降为低优先级独立后续任务 | 保持关键多家庭与隔离范围聚焦，避免引入非必要的资料采集、对象存储和隐私生命周期 |
+| `D-019` | 后续若重新启动成员资料能力，必须由独立 Spec 定义主动选择、本人维护、家庭范围、更新/删除和退出清理；不得沿用旧草案直接实施 | 延迟功能不等于放弃隐私合同，未来实现前重新核对微信官方能力和产品优先级 |
 
 ### Approval decisions for this revision
 
-| ID | Decision requested | Proposed resolution in revision 05 | Blocking? |
+| ID | Decision requested | Proposed resolution in revision 06 | Blocking? |
 |---|---|---|---|
 | `Q-001` | 旧客户端未传家庭选择时如何兼容 | 仅恰有一个 active family 时自动选择；多家庭返回 `client_upgrade_required`，不选择任意家庭 | yes |
 | `Q-002` | 多家庭列表展示范围 | 家庭名、本人角色/关系、孩子档案名与年级；不预加载学习内容、统计、媒体或成员列表 | yes |
@@ -107,11 +107,11 @@ WeChatActor 1 ── N FamilyMembership N ── 1 Family 1 ── N Child
 | `Q-004` | “完全隔离”是否要求数据库约束而非仅应用层 | yes；S5 可独立实施，但它完成前不得公开启用或宣称“完全隔离” | yes |
 | `Q-005` | 建立孩子学习档案是否只允许 manager | yes；直接复用 UI-015 和现有 manager-only 合同 | yes |
 | `Q-006` | 客户端兼容期 | 首个多家庭正式版本起至少 30 天且覆盖至少 2 个正式小程序版本；结束前需有版本使用证据 | yes |
-| `Q-007` | 成员名字/头像的所有权和范围 | 可选、本人维护、按 FamilyMember 隔离；缺失时回落到关系称谓和首字，不自动获取微信资料 | yes |
+| `Q-007` | 成员名字/头像是否进入本次范围 | 不进入；2026-09-11 已由产品负责人确认为低优先级后续任务，当前保持关系称谓和首字头像 | no（已决） |
 | `Q-008` | 谁可以主动退出家庭 | 仅 editor/viewer；manager 必须先由其他管理员完成权限交接/降权 | yes |
-| `Q-009` | 退出/被移除后名字与头像如何保留 | 立即停止返回并清空展示资料；头像进入 durable deletion，历史只保留关系称谓与 member attribution | yes |
+| `Q-009` | 退出/被移除后的头像昵称清理 | 随成员资料能力一并移入未来独立 Spec；当前无此数据，不构成本 revision 门禁 | no（已决） |
 
-批准 `SPEC-20260906-MULTI-FAMILY-05` 即表示接受以上 proposed resolution；任何一项修改都会产生新 revision。Status 变为 `APPROVED` 时不得保留未决阻塞项。
+批准 `SPEC-20260911-MULTI-FAMILY-06` 即表示接受其余 proposed resolution；Q-007/Q-009 已按产品负责人决定移出当前范围。任何一项修改都会产生新 revision。Status 变为 `APPROVED` 时不得保留未决阻塞项。
 
 ## 2. Scope and invariants
 
@@ -123,7 +123,6 @@ WeChatActor 1 ── N FamilyMembership N ── 1 Family 1 ── N Child
 - 显式选择 current family；家庭内继续显式选择 current child。
 - 创建、申请、邀请、审批和移除从“全局唯一家庭”改为“目标家庭内去重”。
 - active editor/viewer 主动退出 selected family；manager 必须先完成管理权交接和降权。
-- active member 可选设置只在当前家庭可见的本人名字和头像；缺失时沿用关系称谓回落。
 - 在当前家庭的管理页为另一位孩子建立学习档案，并在成功后切换到该档案。
 - 业务 API、文件和异步任务验证 current family；孩子资源验证 child 属于 family。
 - family/child/parent 复合约束、迁移审计和跨租户测试。
@@ -134,7 +133,7 @@ WeChatActor 1 ── N FamilyMembership N ── 1 Family 1 ── N Child
 - 新角色、按孩子授权、按科目授权。
 - 跨家庭共享或汇总学习数据。
 - 孩子迁移、家庭合并、历史合并。
-- 自动读取微信昵称/头像、公开个人主页、通讯录同步或跨家庭共享个人资料。
+- 成员真实微信昵称/头像、展示资料编辑、头像上传/存储/清理、自动读取微信资料、公开个人主页、通讯录同步或跨家庭共享个人资料；统一降为低优先级后续任务。
 - 更改学习确认、Review 确定性策略、AI proposal 边界。
 
 ### Invariants
@@ -148,7 +147,6 @@ WeChatActor 1 ── N FamilyMembership N ── 1 Family 1 ── N Child
 - 创建孩子档案必须属于当前 verified family、由 manager 发起、幂等提交；失败不留下半成品或改变当前选择。
 - 退出只终止 selected family 的 membership，不删除或改写孩子、学习记录、Review、文件或审计历史。
 - manager 不能直接退出；即使家庭有多位 manager，也必须先由另一位 manager 明确降权，避免退出动作暗含权限变更。
-- 名字/头像只对同一 active family 的成员返回，由本人维护；relationship 和 role 仍由家庭权限合同拥有。
 
 ## 3. Flows, state and call graph
 
@@ -276,7 +274,7 @@ sequenceDiagram
 | Entity | Target contract |
 |---|---|
 | `WeChatActorBinding` | unique `(app_id, subject_hmac)`；不保存权威单一 family |
-| `FamilyMember` | active uniqueness per `(actor_binding_id, family_id)`；保留历史状态；nullable self-owned `display_name` 与 `avatar_storage_ref` 均为 family scoped |
+| `FamilyMember` | active uniqueness per `(actor_binding_id, family_id)`；保留历史状态；当前不增加头像/昵称字段 |
 | `Family` | tenant boundary；1:N children；家庭级 member role |
 | `Child` | FK family；unique `(family_id, id)`；不要求 family_id 单列唯一 |
 | child-owned direct row | composite FK `(family_id, child_id) -> children(family_id, id)` |
@@ -328,7 +326,6 @@ FamilyContext + child_id
 | child-owned 历史行 | S5 只补 scope/backfill/constraint，不改变业务内容和时间字段 | family/child/parent 链不一致即停止迁移，禁止猜测归属 |
 | 文件与后台 job | 从持久化 parent 链反查 family/child 后补 scope | 找不到唯一归属即进入异常清单，不自动删除或搬迁 |
 | 本地选择偏好 | 旧 `selectedChildId` 在唯一家庭下迁入 `selectedChildByFamily[familyId]` | child 已归档/失权时按 UI-015 规则回落，不复制业务数据 |
-| 现有 FamilyMember | `display_name/avatar_storage_ref = NULL`，无需猜测或回填微信资料 | UI 回落到 relationship label 与首字，历史行为不变 |
 
 兼容合同：
 
@@ -387,8 +384,6 @@ media/job/nested rows:
 | editor/viewer submits child create | 403；现有内容访问权限不变 | modify family child collection |
 | editor/viewer leaves B | 仅 B membership 终止；A 和历史记录不变 | 删除家庭或历史数据 |
 | manager tries to leave | 409，说明先交接并由其他 manager 降权 | 隐式降权或自动选择继任者 |
-| member profile missing | relationship label + first-character avatar fallback | 自动读取或暴露 actor identity |
-| member profile present | active same-family members see name/avatar | cross-family/public exposure |
 
 ## 6. Isolation and privacy
 
@@ -404,15 +399,12 @@ media/job/nested rows:
 | async | persist and restore family/child scope |
 | client | family-specific cache/generation；discard stale responses |
 
-Bootstrap只返回当前 actor 的家庭选择所需最小信息，不跨家庭预取学习内容、统计、媒体或成员列表。成员名字/头像
-只由 selected family 的成员列表端点按 active membership 返回；名字建议 1–40 字，头像为可选图片并经独立
-family/member 路径保存，不复用孩子学习图片语义。头像采集的微信基础库/API 支持矩阵在实现前按官方文档
-`NEEDS_VERIFICATION`，但产品合同不依赖自动获取：用户必须主动选择图片并明确保存。
+Bootstrap只返回当前 actor 的家庭选择所需最小信息，不跨家庭预取学习内容、统计、媒体或成员列表。
+当前成员列表继续只返回关系称谓与角色，并使用关系称谓首字作为头像；不采集、保存或返回微信头像/昵称。
 
-日志不记录家庭/孩子/成员名字、原始 OpenID、selector header、头像 storage ref、媒体 ID 或模型原始 payload。
-退出或被移除后，服务端立即停止返回头像/名字并清空 optional display profile，同时写入 durable、可重试的头像
-删除任务；对象存储暂时失败不能让资料重新可见。历史记录仍使用 member ID、关系称谓和动作归属，不依赖
-头像/名字继续存在。
+日志不记录家庭/孩子/成员称谓、原始 OpenID、selector header、媒体 ID 或模型原始 payload。未来若重新启动成员
+头像/昵称能力，必须另立 Spec，并在实现前重新核对微信官方采集能力、基础库矩阵、私有存储、更新/删除和成员
+退出后的清理合同。
 
 ## 7. Architecture and trade-offs
 
@@ -454,7 +446,8 @@ flowchart TB
 ## 8. Frontend interaction
 
 详细可见合同见 `docs/design/frontend/ui/UI-014-family-switcher.md` proposed
-`DREV-20260906-MULTI-FAMILY-02`。UI-014 增加家庭上下文层，UI-009 增加成员资料与退出交互；UI-015 继续拥有孩子档案的新建、编辑、归档和恢复。
+`DREV-20260906-MULTI-FAMILY-02`。UI-014 增加家庭上下文层，UI-009 只增加非管理员退出交互；成员头像/昵称保持
+现状并进入低优先级后续任务；UI-015 继续拥有孩子档案的新建、编辑、归档和恢复。
 
 ### Entry and information architecture
 
@@ -512,26 +505,9 @@ flowchart TB
 
 320/390/430 三视口必须同时覆盖 sheet 展开态、长名称、系统大字号和底部安全区；sheet 最大高度不超过可用视口 85%，内容区独立滚动，关闭入口保持可达。
 
-### Member identity and leave-family interaction
+### Leave-family interaction
 
-成员列表在有本人资料时用名字作为主标题，把关系称谓和权限放在副标题；没有资料时完全兼容当前显示：
-
-```text
-家庭成员                                                   2 人
-
-（头像） 张明                                      ›
-        爸爸 · 可共同记录 · 可记录与确认
-
-（妈）  妈妈  你                                  ›
-        管理员 · 可编辑与管理成员
-```
-
-- 头像是实际图片时保持正圆裁切；未设置、加载失败或已退出时使用关系称谓首字回落，不出现破图。
-- `display_name` 是家庭内可选名字，不替代 `relationship_label`；成员行与详情都必须同时表达关系和权限。
-- 本人详情增加“我的展示资料”，本人可修改名字、选择/移除头像；管理员也不能编辑其他成员的名字/头像。
-- 资料填写不阻断创建家庭、申请加入、审批或日常使用；空值继续沿用截图中的称谓和首字表现。
-
-非管理员本人详情底部新增独立危险区：
+成员列表继续显示关系称谓、权限和关系称谓首字头像，不增加微信头像/昵称。非管理员本人详情底部新增独立危险区：
 
 ```text
 退出家庭
@@ -577,13 +553,12 @@ FEAT-002 不把它搬到“家庭与成员”，只保证入口绑定 verified c
 | Area / likely path | Expected change |
 |---|---|
 | `persistence/models.py` + Alembic | actor-family active uniqueness；弃用单 family projection |
-| `families/domain.py`, `repository.py`, `service.py`, `schemas.py`, `router.py` | create/join per-family；多 membership bootstrap；self leave；family-scoped member profile |
+| `families/domain.py`, `repository.py`, `service.py`, `schemas.py`, `router.py` | create/join per-family；多 membership bootstrap；self leave |
 | `platform/context.py` | trusted actor + selected family -> FamilyContext |
 | `children/router.py`, `service.py` and audit/idempotency boundary | create Child manager-only、幂等、事务审计；保留现有 schema/path |
 | API client / `apps/miniprogram/app.js` | selected family；按家庭保存 child；隔离 request/cache |
-| profile avatar storage adapter | family/member-scoped upload/replace/delete/short-lived read capability；不得复用 child learning image owner |
-| 全局头部/五 Tab/家庭成员 UI | family switcher；复用 UI-015；成员行名字/头像回落；本人资料与非管理员退出危险区 |
-| tests | 多家庭、现有角色、失权、退出、资料隐私/回落、切换竞态、旧客户端兼容 |
+| 全局头部/五 Tab/家庭成员 UI | family switcher；复用 UI-015；非管理员退出危险区；成员头像/昵称保持现状 |
+| tests | 多家庭、现有角色、失权、退出、切换竞态、旧客户端兼容 |
 
 ### Additional for DB-enforced isolation
 
@@ -617,7 +592,6 @@ FEAT-002 不把它搬到“家庭与成员”，只保证入口绑定 verified c
 - `AC-005`：SQLite/MySQL 拒绝 Family A + Child B/foreign parent 写入，有效 A/A1/A2 均通过。
 - `AC-006`：Family A 的 manager 可幂等建立 A3，成功后选择 A3；editor/viewer 被拒绝，取消/失败零写入且保留原选择。
 - `AC-007`：editor/viewer 可幂等退出 selected family，历史数据不变且其他 family membership 不受影响；manager 被明确拒绝并要求先交接/降权。
-- `AC-008`：active same-family member 可看到本人主动设置的名字/头像；空值或图片失败安全回落；跨家庭、退出后和未授权请求得不到资料。
 
 | Test point | Level | Evidence |
 |---|---|---|
@@ -633,11 +607,10 @@ FEAT-002 不把它搬到“家庭与成员”，只保证入口绑定 verified c
 | `TP-010` | repo gates | pytest/ruff/format/mypy/npm/architecture/miniapp evidence |
 | `TP-011` | API/frontend | child profile manager/editor/viewer matrix；double tap/retry；cancel/failure/success state |
 | `TP-012` | domain/integration/frontend | editor/viewer leave success/retry；manager denied；A/B scope；last family onboarding；history retained |
-| `TP-013` | API/storage/frontend/privacy | self profile create/update/remove；other-member edit denied；avatar fallback/replace/delete；same-family only |
 
 ## 11. Rollout, rollback and estimate
 
-1. Approve `SPEC-20260906-MULTI-FAMILY-05`、proposed ADR-003 和 `DREV-20260906-MULTI-FAMILY-02`；补 Figma node/snapshot。
+1. Approve `SPEC-20260911-MULTI-FAMILY-06`、proposed ADR-003 和修订后不含成员头像/昵称的 Design Revision；补 Figma node/snapshot。
 2. Add characterization and cross-tenant tests。
 3. Ship membership schema expand + compatibility projection。
 4. Ship backend list bootstrap and selected-family resolver behind flag。
@@ -653,7 +626,7 @@ Before contract migration, rollback disables multi-family selection but preserve
 | `S2` | membership schema/service/bootstrap/context | medium |
 | `S3` | mini program family selector + per-family child state | medium |
 | `S3a` | 复用 UI-015，并补 manager-only idempotent/audit API hardening | small |
-| `S3b` | 非管理员退出 + family-scoped member name/avatar + durable avatar cleanup | medium |
+| `S3b` | 非管理员退出、管理员交接提示和家庭回落 | small-to-medium |
 | `S4` | cross-family API/file/job test matrix | medium |
 | `S5` | composite DB isolation across child-owned domains | medium-to-large |
 | `S6` | migration rehearsal, real cloud, current-state docs | medium |
@@ -668,7 +641,6 @@ Before contract migration, rollback disables multi-family selection but preserve
 - [ ] Multi-family membership/context/switch acceptance 通过。
 - [ ] Manager 建立第二个孩子档案的表单、幂等、权限和失败恢复验收通过。
 - [ ] 非管理员退出、manager 交接门禁、跨家庭回落和历史保留验收通过。
-- [ ] 成员名字/头像本人维护、缺省回落、存储隔离和退出清理验收通过。
 - [ ] API/file/job cross-tenant matrix 通过。
 - [ ] 若完全隔离含 DB enforcement，SQLite/MySQL composite constraints 通过。
 - [ ] Real-account test、rollback rehearsal 和 current-state 文档合并完成。
@@ -676,4 +648,4 @@ Before contract migration, rollback disables multi-family selection but preserve
 - Implementation: `NOT STARTED`，等待本 revision 明确批准。
 - Production files changed: `none`。
 - Full tests: `NOT RUN` for this documentation-only revision。
-- Residual blockers: 本 revision 的 Q-001/Q-002/Q-004/Q-005/Q-006/Q-007/Q-008/Q-009 决策批准、头像采集官方能力/基础库矩阵、S5 精确逐表 DDL inventory、ADR approval、Figma node/snapshot 和三视口/真实云人工证据。
+- Residual blockers: 本 revision 的 Q-001/Q-002/Q-004/Q-005/Q-006/Q-008 决策批准、S5 精确逐表 DDL inventory、ADR approval、修订后的 Figma node/snapshot 和三视口/真实云人工证据。成员微信头像/昵称已移出当前门禁。

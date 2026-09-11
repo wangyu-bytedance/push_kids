@@ -1,10 +1,10 @@
 # ADR-003: 多家庭上下文、兼容迁移与隔离门禁
 
 - Status: PROPOSED
-- Date: 2026-09-06
+- Date: 2026-09-11
 - Decision owners: 产品负责人（用户）
 - Technical area: identity / tenancy / persistence / Mini Program context
-- Related Spec: `specs/active/FEAT-002-MULTI-FAMILY-CHILD-TENANT-ISOLATION.md` revision `SPEC-20260906-MULTI-FAMILY-05`
+- Related Spec: `specs/active/FEAT-002-MULTI-FAMILY-CHILD-TENANT-ISOLATION.md` revision `SPEC-20260911-MULTI-FAMILY-06`
 - Related ADRs: `ADR-001-WECHAT-CLOUD-HOSTING-MYSQL.md`
 - Supersedes: N/A
 
@@ -14,8 +14,8 @@ We will model a trusted WeChat actor as having multiple family-scoped membership
 trusted actor plus an untrusted `X-Selected-Family-ID`, and keep child selection subordinate to the verified family.
 The existing single-family data remains in place. S1–S4 may run behind a staging-only feature flag, but public enablement
 and the phrase “database-enforced complete isolation” require S5 composite constraints and S6 migration/cloud evidence.
-An editor/viewer may explicitly leave one selected family; managers must first hand off and be demoted. Optional member
-name/avatar data is self-owned and family-membership scoped rather than derived from trusted actor identifiers.
+An editor/viewer may explicitly leave one selected family; managers must first hand off and be demoted. Member WeChat
+avatars/nicknames are deferred as a low-priority, separately specified feature; this decision adds no member profile data.
 
 ## 2. Context
 
@@ -115,10 +115,8 @@ the final isolation claim. Options B and C respectively under-enforce security o
 ### Security/privacy
 
 Only minimal family/child labels are returned by actor-only bootstrap. Logs exclude selector values, names, raw OpenID,
-media IDs and model payloads. Cache and idempotency namespaces include verified family scope.
-Optional member names/avatars are returned only to active members of the same selected family. The member controls their
-own profile; managers control relationship/role but not another person's profile. Leaving/removal stops profile disclosure
-immediately and queues durable avatar deletion without altering historical learning attribution.
+media IDs and model payloads. Cache and idempotency namespaces include verified family scope. Member rows retain the
+current relationship label and first-character avatar; this decision does not collect or store WeChat profile data.
 
 ### Compatibility/migration
 
@@ -133,8 +131,7 @@ formal Mini Program releases, and ends only with usage evidence.
 - Tests: endpoint × foreign family/child/resource matrix, SQLite/MySQL invalid insert, files/jobs, client race and migration rehearsal.
 - Metrics/alerts: safe aggregate counters only; no tenant or child names in telemetry.
 - Forbidden usage: authorizing from selector, `wechat_actor_bindings.family_id`, last UI selection, or an ID-only child lookup.
-- Forbidden usage: auto-demoting a manager during leave; deriving display data from OpenID/metaid; letting managers edit
-  another member's name/avatar; reusing child learning-image storage semantics for avatars.
+- Forbidden usage: auto-demoting a manager during leave or deriving display data from OpenID/metaid.
 
 ## 7. Rollout and rollback
 
@@ -148,8 +145,9 @@ formal Mini Program releases, and ends only with usage evidence.
 
 ## 8. Revisit conditions
 
-Revisit this decision when cross-family aggregation, child migration, child-specific grants, or physical tenant storage
-becomes an approved product requirement.
+Revisit this decision when cross-family aggregation, child migration, child-specific grants, physical tenant storage, or
+the deferred member avatar/nickname capability becomes an approved product requirement. The member profile capability
+requires its own privacy, storage and lifecycle Spec rather than an amendment during implementation.
 
 Owner for revisit: 产品负责人（用户）
 
@@ -162,7 +160,6 @@ Owner for revisit: 产品负责人（用户）
 | DB rejects mismatched chains | SQLite/MySQL constraint suite | all invalid inserts rejected | before public enablement | pending |
 | UI never renders stale family data | native race/state suite | zero stale frames/responses | before public enablement | pending |
 | Leaving affects one membership only | role/scope/history integration suite | editor/viewer allowed, manager denied, other families/history unchanged | before staging flag | pending |
-| Member profile stays family scoped | API/storage/privacy suite | no cross-family or post-exit disclosure; avatar deletion retries | before public enablement | pending |
 
 ## 10. Approval
 

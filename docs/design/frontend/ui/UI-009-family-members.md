@@ -49,12 +49,13 @@
 图像依赖。评审矩阵为 320×568、390×844、430×932。正文不小于 14px，主要触控目标不小于
 44px，权限不只依靠颜色表达。
 
-## Proposed FEAT-002 extension — not implemented
+## Proposed FEAT-002 extensions — not implemented
 
-`SPEC-20260906-MULTI-FAMILY-05 / DREV-20260906-MULTI-FAMILY-02` proposed 以下增量；它不改变上文
-CURRENT_LOCAL 事实，在 Spec + Figma node/snapshot 获批前不得实现。
+`SPEC-20260911-MULTI-FAMILY-06` 只保留非管理员退出交互。成员微信头像/昵称已由产品负责人于
+2026-09-11 确认为非关键 feature，降为低优先级独立后续任务；它不改变上文 CURRENT_LOCAL 事实，
+未来必须另立 Spec 和 Design Revision 并获得批准后才能实现。
 
-### Member row with optional identity
+### Deferred low-priority backlog — member row with optional identity
 
 ```text
 （头像） 张明  你                                  ›
@@ -68,6 +69,7 @@ CURRENT_LOCAL 事实，在 Spec + Figma node/snapshot 获批前不得实现。
 - 本人详情增加“我的展示资料”，可修改/清空名字和选择/移除头像；管理员不能编辑他人的名字/头像，
   仍只管理 relationship 与 role。
 - 不自动读取微信资料，不从 OpenID/metaid 推导；资料不阻断家庭创建、加入、审批或使用。
+- 当前不新增数据库/API/对象存储字段，不安排实现或验收；成员行继续显示关系称谓与首字头像。
 
 ### Leave-family danger zone
 
@@ -84,11 +86,10 @@ viewer/editor 打开本人详情时，在表单之后显示：
 - 点击后再次确认具体家庭名；确认按钮为“退出家庭”，pending 时 sheet 不可关闭且不可重复提交。
 - 成功后清当前家庭 cache/preference，刷新 `/me`：有其他家庭则进入已重新验证的选择，无家庭则 onboarding。
 - manager 不显示退出按钮，显示“管理员不能直接退出，请先完成管理权交接并由另一位管理员调整你的权限”。
-- 退出不是数据删除；学习历史不变。头像对象与 optional display profile 按隐私合同清理，历史归属回落到
-  member ID + 关系称谓。
+- 退出不是数据删除；学习历史不变，历史归属继续使用 member ID + 关系称谓。
 
-需补齐 320×568、390×844、430×932 的本人非管理员、本人管理员、头像/无头像、长名字、退出确认、
-pending/error/success 及多家庭回落状态。
+当前范围需补齐 320×568、390×844、430×932 的本人非管理员、本人管理员、退出确认、pending/error/success
+及多家庭回落状态；头像/昵称相关矩阵移入未来独立任务。
 
 ## Approval status
 

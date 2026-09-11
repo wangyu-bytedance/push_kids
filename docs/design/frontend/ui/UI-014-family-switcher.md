@@ -2,7 +2,7 @@
 
 - Status: `PROPOSED / NOT IMPLEMENTED`
 - Related Feature: `FEAT-002`
-- Related Spec: `SPEC-20260906-MULTI-FAMILY-05`
+- Related Spec: `SPEC-20260911-MULTI-FAMILY-06`
 - Baseline: `FDB-20260906-03`（PKDS-2.0「纸 · 芽」）
 - Engineering contract: 实现前读取最新 approved FEC
 - Design revision: `DREV-20260906-MULTI-FAMILY-02`（PROPOSED）
@@ -97,7 +97,7 @@ stateDiagram-v2
 
 ## Approval gate
 
-- [ ] `SPEC-20260906-MULTI-FAMILY-05` approved。
+- [ ] `SPEC-20260911-MULTI-FAMILY-06` approved。
 - [ ] node-specific Figma URL 和 `DREV-20260906-MULTI-FAMILY-02` approval snapshot approved。
 - [ ] 最新 FEC 的组件、状态、可访问性、性能、隐私与观测矩阵 approved。
 - [ ] 原生 320/390/430 和真实多账号多家庭验收计划锁定。
