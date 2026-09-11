@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="use-iframe" content="true">
+<meta name="html-box-height-mode" content="auto">
+<meta name="description" content="竞品定位散点图：横轴为家长录入负担与参与深度（越右家长越接近唯一操作者），纵轴为复习排期的科学性与自适应程度（越上越接近按个体与材料难度动态定间隔）。记忆软件与错题类（Anki FSRS、墨墨背单词、Quizlet、智因错题本 SM-2、记忆卡片 pro）聚在左上：排期自适应但家长零参与；K12 题库批改类（小猿AI、爱作业、作业帮家长版、一起学与小盒、Khan Academy 家长面板）与家校通知类（班级小管家、ClassDojo/Seesaw、Google Classroom 家长摘要）聚在左下：家长参与浅且无间隔复习；家庭协作与记录类（Cozi、S'moresUp、It's a Family Thing、Homeschool Moment）在右下：家长深度参与但记录之后没有排期。push_kids 位于右侧中低位——家长深度参与、有确定性排期但不自适应；右上角为本轮检索无人占据的空白区。">
+<title>竞品定位坐标：家长参与深度 × 复习排期自适应程度</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#fff;font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;padding:6px}
+  #c{width:100%;height:560px}
+</style>
+</head>
+<body>
+<div id="c"></div>
+
+<script src="https://unpkg.byted-static.com/echarts/5.5.1/dist/echarts.min.js" integrity="sha384-Mx5lkUEQPM1pOJCwFtUICyX45KNojXbkWdYhkKUKsbv391mavbfoAmONbzkgYPzR" crossorigin="anonymous"></script>
+<script>
+  var chart = echarts.init(document.getElementById('c'), null, { renderer: 'svg' });
+
+  var LB = { show:true, color:'#334155', fontSize:11, formatter:function(p){ return p.data[3]; } };
+
+  function mk(d, pos){ return { value:d, label:{ position: pos || 'right' } }; }
+
+  var S_MEM = [
+    mk([1.0, 9.5, 0, 'Anki（FSRS / DSR 模型）'], 'right'),
+    mk([1.3, 8.5, 0, '墨墨背单词（DHP + SSP-MMC）'], 'right'),
+    mk([3.1, 7.9, 0, '智因错题本（SM-2，微信小程序）'], 'right'),
+    mk([2.0, 6.3, 0, 'Quizlet（自评驱动，未披露算法）'], 'right'),
+    mk([4.7, 5.0, 0, '记忆卡片 pro（艾宾浩斯十节点，可编辑）'], 'top')
+  ];
+
+  var S_K12 = [
+    mk([5.0, 1.7, 0, '小猿AI（错题自动归集，无间隔排期）'], 'right'),
+    mk([4.3, 0.8, 0, '爱作业'], 'bottom'),
+    mk([2.9, 0.5, 0, '作业帮家长版'], 'right'),
+    mk([2.3, 1.8, 0, '一起学 / 小盒AI学（打卡式提醒）'], 'right'),
+    mk([3.3, 2.6, 0, 'Khan Academy 家长面板（家长可布置）'], 'right')
+  ];
+
+  var S_SCH = [
+    mk([1.5, 0.4, 0, '班级小管家'], 'right'),
+    mk([1.0, 1.2, 0, 'ClassDojo / Seesaw'], 'right'),
+    mk([0.5, 0.9, 0, 'Google Classroom 家长摘要'], 'top')
+  ];
+
+  var S_FAM = [
+    mk([6.2, 0.5, 0, 'Cozi（共享日历 + 清单）'], 'top'),
+    mk([7.1, 1.3, 0, "S'moresUp（家长派任务 + 照片审批）"], 'top'),
+    mk([7.7, 2.1, 0, "It's a Family Thing（AI 建议 + 每日 nudge）"], 'top'),
+    mk([8.5, 0.4, 0, 'Homeschool Moment（拍照 + AI 归类，不排期）'], 'left')
+  ];
+
+  var S_PK = [ mk([9.0, 4.0, 0, 'push_kids（固定阶梯 1/3/7/14/30/60）'], 'left') ];
+
+  function ser(name, data, color, size, bold){
+    return {
+      name:name, type:'scatter', data:data, symbolSize:size,
+      itemStyle:{ color:color, opacity:.85, borderColor:'#fff', borderWidth:1 },
+      label: bold ? { show:true, color:'#b42318', fontSize:12, fontWeight:'bold', formatter:function(p){ return p.data[3]; } } : LB
+    };
+  }
+
+  var sPk = ser('push_kids（本产品）', S_PK, '#b42318', 22, true);
+  sPk.markArea = {
+    silent:true,
+    itemStyle:{ color:'rgba(47,111,237,.06)', borderColor:'#60a5fa', borderWidth:1, borderType:'dashed' },
+    label:{ show:true, position:'inside', color:'#2f6fed', fontSize:12, fontWeight:'bold', lineHeight:18,
+            formatter:'空白区：家长深度参与 × 排期自适应\n本轮 16+ 款国内外产品无人占据' },
+    data:[[{ coord:[5.6, 6.2] }, { coord:[10, 10] }]]
+  };
+
+  chart.setOption({
+    title: {
+      text: '家长参与得越深的产品，排期越不自适应；两者兼顾的右上角空着',
+      subtext: 'X＝家长录入负担 / 参与深度，Y＝复习排期的科学性与自适应程度；坐标为按各产品公开事实所作的相对定位（0–10 判断刻度，非量表评分）',
+      left:'center', textStyle:{ fontSize:16, color:'#1f2d3d' }, subtextStyle:{ color:'#94a3b8', fontSize:11.5, width:820, overflow:'break' }
+    },
+    tooltip: { formatter:function(p){ var d=p.data.value||p.data; return d[3]+'<br/>家长参与深度: '+d[0]+'<br/>排期自适应程度: '+d[1]; } },
+    legend: { top: 78, itemGap: 14, textStyle:{ color:'#334155', fontSize:11.5 } },
+    grid: { left: 78, right: 56, top: 132, bottom: 62 },
+    xAxis: {
+      type:'value', min:0, max:10, interval:2,
+      name:'家长录入负担 / 参与深度 →（越右，家长越接近唯一操作者）', nameLocation:'middle', nameGap:34,
+      nameTextStyle:{ color:'#334155', fontSize:12 },
+      splitLine:{ lineStyle:{ color:'#f0f3f7' } }
+    },
+    yAxis: {
+      type:'value', min:0, max:10, interval:2,
+      name:'复习排期的科学性与自适应程度 ↑', nameGap:18,
+      nameTextStyle:{ color:'#334155', fontSize:12 },
+      splitLine:{ lineStyle:{ color:'#f0f3f7' } }
+    },
+    series: [
+      ser('记忆软件 / 间隔重复类', S_MEM, '#2f6fed', 15),
+      ser('K12 题库 · 批改类', S_K12, '#f59e0b', 15),
+      ser('家校通知类', S_SCH, '#94a3b8', 15),
+      ser('家庭协作 / 记录类', S_FAM, '#10b981', 15),
+      sPk
+    ]
+  });
+  window.addEventListener('resize', function(){ chart.resize(); });
+</script>
+</body>
+</html>

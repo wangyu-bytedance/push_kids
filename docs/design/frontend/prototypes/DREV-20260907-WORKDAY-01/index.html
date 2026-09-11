@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>DREV-20260907-WORKDAY-01 · 中国工作日日程</title>
+  <style>
+    :root {
+      --paper: #faf7f0; --card: #fffdf8; --inset: #f3efe4; --ink: #24342d;
+      --muted: #69776f; --line: #ded9cd; --pine: #1f5b45; --sprout: #7fa65c;
+      --warn: #a9762a; --danger: #a85742;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; color: var(--ink); background: #e8e4da; font: 14px/1.5 -apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif; }
+    .board { max-width: 1120px; margin: 0 auto; padding: 32px 20px 56px; }
+    h1 { margin: 0 0 8px; font: 700 28px/1.25 "Songti SC",serif; }
+    .lead { margin: 0 0 28px; color: var(--muted); }
+    .phones { display: grid; grid-template-columns: repeat(2,minmax(300px,390px)); justify-content: center; gap: 28px; }
+    .case h2 { margin: 0 0 10px; font: 700 17px/1.4 "Songti SC",serif; }
+    .phone { min-height: 760px; padding: 112px 12px 18px; border: 1px solid #cbc5b8; border-radius: 32px; background: var(--paper); box-shadow: 0 18px 45px rgba(45,55,49,.12); }
+    .sheet { min-height: 630px; border-radius: 24px 24px 16px 16px; background: var(--card); box-shadow: 0 -10px 32px rgba(45,55,49,.09); overflow: hidden; }
+    .handle { width: 42px; height: 4px; margin: 10px auto; border-radius: 999px; background: #c8c5bb; }
+    .head { padding: 4px 18px 14px; border-bottom: 1px solid var(--line); }
+    .head strong { display: block; font: 700 20px/1.4 "Songti SC",serif; }
+    .head small { color: var(--muted); }
+    .content { padding: 16px 18px 96px; }
+    .field { margin-bottom: 18px; }
+    label { display: block; margin-bottom: 7px; font-weight: 650; }
+    .input,.picker { min-height: 46px; padding: 12px 13px; border: 1px solid var(--line); border-radius: 12px; background: white; }
+    .seg { display: grid; grid-template-columns: repeat(3,1fr); gap: 4px; padding: 4px; border-radius: 12px; background: var(--inset); }
+    .seg button { min-height: 44px; border: 0; border-radius: 8px; color: var(--muted); background: transparent; font: inherit; }
+    .seg .on { color: white; background: var(--pine); font-weight: 650; box-shadow: 0 2px 7px rgba(31,91,69,.2); }
+    .times { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 9px; }
+    .notice { display: flex; gap: 9px; margin-top: 14px; padding: 12px; border-radius: 12px; color: #675222; background: #f8efd9; }
+    .notice b { flex: 0 0 auto; }
+    .summary { margin-top: 12px; color: var(--pine); font-weight: 650; }
+    .foot { position: absolute; left: 18px; right: 18px; bottom: 18px; }
+    .sheet { position: relative; }
+    .primary { width: 100%; min-height: 48px; border: 0; border-radius: 12px; color: white; background: var(--pine); font: 650 16px/1.2 inherit; }
+    .legend { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-top: 24px; }
+    .legend div { padding: 14px; border-radius: 12px; background: rgba(255,253,248,.74); }
+    .legend b { display: block; color: var(--pine); margin-bottom: 3px; }
+    @media (max-width: 760px) { .phones { grid-template-columns: minmax(300px,390px); } .legend { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <main class="board">
+    <h1>中国工作日日程 · 交互候选</h1>
+    <p class="lead">沿用 PKDS-2.0「纸 · 芽」。工作日是与“指定星期”并列的确定性安排，不藏在星期快捷选择里。</p>
+    <section class="phones">
+      <article class="case">
+        <h2>活动安排 · 工作日态</h2>
+        <div class="phone">
+          <div class="sheet">
+            <div class="handle"></div>
+            <header class="head"><strong>乒乓球 · 安排</strong><small>保存后同步到日程与今日活动</small></header>
+            <div class="content">
+              <div class="field">
+                <label>安排方式</label>
+                <div class="seg" role="radiogroup" aria-label="活动安排方式">
+                  <button role="radio" aria-checked="false">指定星期</button>
+                  <button class="on" role="radio" aria-checked="true">工作日</button>
+                  <button role="radio" aria-checked="false">时间不固定</button>
+                </div>
+              </div>
+              <div class="field">
+                <label>时间</label>
+                <div class="times"><div class="picker">18:00</div><span>至</span><div class="picker">19:00</div></div>
+              </div>
+              <div class="notice"><b>工作日</b><span>按中国大陆法定安排：法定假日跳过，周末调休上班日照常出现。</span></div>
+              <div class="summary">工作日 · 18:00–19:00</div>
+            </div>
+            <footer class="foot"><button class="primary">保存安排</button></footer>
+          </div>
+        </div>
+      </article>
+      <article class="case">
+        <h2>日程 · 工作日重复态</h2>
+        <div class="phone">
+          <div class="sheet">
+            <div class="handle"></div>
+            <header class="head"><strong>新建日程</strong><small>起始日期之后的工作日重复</small></header>
+            <div class="content">
+              <div class="field"><label>日程名称</label><div class="input">英语辅导班</div></div>
+              <div class="field"><label>起始日期</label><div class="picker">2026-09-07</div></div>
+              <div class="field"><label>时间</label><div class="times"><div class="picker">18:00</div><span>至</span><div class="picker">19:00</div></div></div>
+              <div class="field">
+                <label>重复</label>
+                <div class="seg" role="radiogroup" aria-label="日程重复方式">
+                  <button role="radio" aria-checked="false">不重复</button>
+                  <button role="radio" aria-checked="false">每周</button>
+                  <button class="on" role="radio" aria-checked="true">工作日</button>
+                </div>
+              </div>
+              <div class="notice"><b>工作日</b><span>按中国大陆法定安排：放假日不出现，调休上班日会出现。</span></div>
+            </div>
+            <footer class="foot"><button class="primary">创建日程</button></footer>
+          </div>
+        </div>
+      </article>
+    </section>
+    <section class="legend" aria-label="设计说明">
+      <div><b>互斥</b>三种方式只能选一种，避免“每周 + 工作日”产生冲突状态。</div>
+      <div><b>透明</b>直接说明放假与调休后果，不要求家长理解数据源或算法。</div>
+      <div><b>一致</b>卡片摘要使用“工作日”，日程、今日、冲突和提醒共享服务端结果。</div>
+    </section>
+  </main>
+</body>
+</html>

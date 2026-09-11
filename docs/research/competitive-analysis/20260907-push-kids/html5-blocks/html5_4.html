@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="use-iframe" content="true">
+<meta name="html-box-height-mode" content="auto">
+<meta name="description" content="折线对比图：同一份材料前 6 次复习的间隔天数。push_kids 固定阶梯为 1/3/7/14/30/60 天，不论材料难易走同一条曲线；FSRS-6 默认参数、目标留存 90% 下，难材料（每次评 Hard）前 6 次间隔为 1/3/7/12/18/25 天，易材料（每次评 Easy）为 8/66/397/1875/7265/23933 天，第 6 次相差约 957 倍。前 3 次固定阶梯与难材料曲线重合，第 4 次起分叉，说明固定阶梯近似「平均难度、全部答对」的特例，对材料难度不敏感。纵轴为对数刻度。">
+<title>固定阶梯与自适应算法的前 6 次复习间隔对比</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#fff;font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;padding:6px}
+  #c{width:100%;height:500px}
+</style>
+</head>
+<body>
+<div id="c"></div>
+
+<script src="https://unpkg.byted-static.com/echarts/5.5.1/dist/echarts.min.js" integrity="sha384-Mx5lkUEQPM1pOJCwFtUICyX45KNojXbkWdYhkKUKsbv391mavbfoAmONbzkgYPzR" crossorigin="anonymous"></script>
+<script>
+  var chart = echarts.init(document.getElementById('c'), null, { renderer: 'svg' });
+
+  chart.setOption({
+    title: {
+      text: '固定阶梯对材料难度不敏感：自适应算法在同一材料上按难易分叉',
+      subtext: 'X＝第 N 次复习，Y＝距上次复习的间隔天数（对数刻度）。前 3 次固定阶梯与难材料完全重合（1 / 3 / 7 天，故难材料不重复标数），第 4 次起分叉；FSRS-6 默认参数、目标留存 90%、关闭 fuzz、每次按时复习，py-fsrs 6.3.2 可复现计算，2026-09-07',
+      left:'center', textStyle:{ fontSize:16, color:'#1f2d3d' },
+      subtextStyle:{ color:'#94a3b8', fontSize:11.5, width:800, overflow:'break' }
+    },
+    tooltip: { trigger:'axis', valueFormatter:function(v){ return v + ' 天'; } },
+    legend: { top: 76, itemGap: 18, textStyle:{ color:'#334155', fontSize:12 } },
+    grid: { left: 74, right: 66, top: 132, bottom: 48 },
+    xAxis: {
+      type:'category',
+      data:['第 1 次','第 2 次','第 3 次','第 4 次','第 5 次','第 6 次'],
+      axisLabel:{ color:'#334155' },
+      axisLine:{ lineStyle:{ color:'#e8edf3' } }
+    },
+    yAxis: {
+      type:'log', min:1, max:100000, name:'间隔天数（对数刻度）',
+      nameTextStyle:{ color:'#334155', fontSize:12 },
+      axisLabel:{ color:'#94a3b8', formatter:'{value}' },
+      splitLine:{ lineStyle:{ color:'#f0f3f7' } }
+    },
+    series: [
+      { name:'push_kids 固定阶梯', type:'line', data:[1,3,7,14,30,60], smooth:false, symbol:'circle', symbolSize:8,
+        lineStyle:{ width:3.4, color:'#2f6fed' }, itemStyle:{ color:'#2f6fed' },
+        label:{ show:true, position:'bottom', distance:9, color:'#2f6fed', fontSize:11.5, fontWeight:'bold', formatter:'{c}' } },
+      { name:'FSRS 自适应 · 难材料（每次评 Hard）', type:'line', data:[1,3,7,12,18,25], smooth:false, symbol:'triangle', symbolSize:9,
+        lineStyle:{ width:2.4, color:'#ef4444', type:'dashed' }, itemStyle:{ color:'#ef4444' },
+        label:{ show:true, position:'top', distance:9, color:'#ef4444', fontSize:11,
+                formatter:function(p){ return p.dataIndex < 3 ? '' : p.value; } } },
+      { name:'FSRS 自适应 · 易材料（每次评 Easy）', type:'line', data:[8,66,397,1875,7265,23933], smooth:false, symbol:'diamond', symbolSize:9,
+        lineStyle:{ width:2.6, color:'#10b981' }, itemStyle:{ color:'#10b981' },
+        label:{ show:true, position:'top', color:'#10b981', fontSize:11, formatter:'{c}' },
+        markPoint:{ symbol:'pin', symbolSize:1, silent:true,
+          label:{ show:true, position:'left', color:'#b42318', fontSize:11.5, fontWeight:'bold',
+                  formatter:'第 6 次相差约 957 倍' },
+          data:[{ coord:['第 6 次', 23933] }] } }
+    ]
+  });
+  window.addEventListener('resize', function(){ chart.resize(); });
+</script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="use-iframe" content="true">
+<meta name="html-box-height-mode" content="auto">
+<meta name="description" content="归因图：知识点为自由文本、未挂教材与课标锚点这一件事，并列导致五类后果——复习粒度失控（同一知识点的不同写法各自成条、各自排期，无归并键）、家长报表不可聚合（课标以学段×主题×内容要求给维度，自由文本挂不上任一层级，覆盖度与超纲判断都算不出）、跨孩子跨学期不可比（无稳定标识符则无法累积学情资产、做不了薄弱点归因）、AI 增量去重只能靠字面相似（识别重复材料没有概念级键）、外部题库与资源取不到（菁优、学科网 API 均以章节与知识点为检索入参）。五者共同汇聚到结论：内容锚点是比功能数量更靠前的底座。">
+<title>内容锚点缺失的连锁后果归因</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --brand:#2f6fed;--brand-2:#60a5fa;--amber:#f59e0b;--green:#10b981;
+    --red:#ef4444;--hot:#b42318;--ink:#1f2d3d;--ink-2:#334155;--mute:#94a3b8;--line:#e8edf3;
+  }
+  body{background:#fff;font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink);padding:16px 12px}
+  .a-title{font-size:19px;font-weight:800;text-align:center;margin-bottom:2px}
+  .a-sub{font-size:12px;color:var(--mute);text-align:center;margin-bottom:18px}
+  .attr{display:grid;grid-template-columns:1.1fr auto .9fr;gap:14px;align-items:center;max-width:1000px;margin:0 auto}
+  .causes{display:flex;flex-direction:column;gap:9px}
+  .cause{border:1px solid var(--line);border-left:4px solid var(--brand-2);border-radius:10px;padding:10px 12px;background:linear-gradient(180deg,#fff,#fbfcfe)}
+  .cause b{display:block;font-size:13px;font-weight:800;margin-bottom:3px}
+  .cause span{font-size:11.5px;color:var(--ink-2);line-height:1.5}
+  .cause .w{font-size:10px;color:var(--brand);background:#eef3fe;border-radius:5px;padding:1px 6px;margin-left:6px;font-weight:700}
+  .converge{display:flex;align-items:center;justify-content:center;color:var(--brand);font-size:30px;font-weight:800}
+  .result{border:1.5px solid var(--hot);border-radius:12px;padding:16px 15px;background:#fdf4f3;text-align:center}
+  .result .rlabel{font-size:11px;color:var(--hot);font-weight:700;letter-spacing:.5px;margin-bottom:6px}
+  .result b{display:block;font-size:15.5px;font-weight:800;color:var(--hot);line-height:1.4;margin-bottom:6px}
+  .result span{font-size:12px;color:var(--ink-2);line-height:1.55}
+  @media(max-width:640px){
+    .attr{grid-template-columns:1fr}
+    .converge{transform:rotate(90deg);font-size:26px;padding:2px 0}
+  }
+</style>
+</head>
+<body>
+  <div class="a-title">一处底座缺失：知识点是自由文本，没有教材 / 课标锚点</div>
+  <div class="a-sub">五类后果并列由同一件事导致，彼此不互为因果 · 依据仓库数据模型（KnowledgeItem / Occurrence）与课标、题库 API、开源知识图谱的公开口径</div>
+
+  <div class="attr">
+    <div class="causes">
+      <div class="cause"><b>复习粒度失控<span class="w">最直接</span></b><span>自由文本没有稳定标识符，同一知识点的不同写法各自成条、各自排期，复习以「文本条目」而非概念计数；对照 K12-KGraph 用 Concept 节点 + aliases 承载别名（本条为推断）</span></div>
+      <div class="cause"><b>家长报表不可聚合</b><span>2022 版课标以「学段 × 主题 × 一条内容要求」给出天然可聚合维度，自由文本挂不上其中任一层级，「本学期覆盖了哪些领域、有没有超前超纲」都算不出</span></div>
+      <div class="cause"><b>跨孩子、跨学期不可比</b><span>没有稳定键就没有可累积的学情资产，薄弱点归因与针对性复习推荐都缺前提；同类产品的错因分析与知识图谱诊断均以结构化标签为起点</span></div>
+      <div class="cause"><b>AI 增量去重只能靠字面相似</b><span>「识别重复材料、避免污染 Todo 匹配」目前没有概念级归并键可依，只能比文本，改写或换说法即判成新知识点</span></div>
+      <div class="cause"><b>外部题库与资源取不到</b><span>菁优、学科网的开放接口都以「教材版本 / 章节 / 知识点」为检索入参，无锚点则复习题、变式练习、微课这类现成供给都调不出来</span></div>
+    </div>
+    <div class="converge">⇒</div>
+    <div class="result">
+      <div class="rlabel">结论</div>
+      <b>内容锚点是比功能数量更靠前的底座</b>
+      <span>产品停在「记录工具」而非「可累积的学情资产」，卡点不在少做了哪个功能：报表、推荐、去重、外部资源四类能力都要挂在同一个锚点上，锚点不补，后续功能只能各自另建一套临时结构（现有的科目清洗规则就是这种补丁）。可用锚点各有代价——课标 PDF 无文本层、智慧教育平台与开源图谱均带禁商用条款、商用题库须商务洽谈无公开报价。</span>
+    </div>
+  </div>
+</body>
+</html>
