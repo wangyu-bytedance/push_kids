@@ -39,7 +39,19 @@ def run_migrations_online() -> None:
         poolclass=pool.NullPool,
     )
     with connectable.connect() as connection:
-        context.configure(connection=connection, target_metadata=target_metadata, compare_type=True)
+        def include_object(object_, name, type_, reflected, compare_to):
+            return not (
+                type_ == "check_constraint"
+                and connection.dialect.name == "mysql"
+                and connection.dialect.server_version_info < (8, 0, 16)
+            )
+
+        context.configure(
+            connection=connection,
+            target_metadata=target_metadata,
+            compare_type=True,
+            include_object=include_object,
+        )
         with context.begin_transaction():
             context.run_migrations()
 
