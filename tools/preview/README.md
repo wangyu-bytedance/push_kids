@@ -23,7 +23,7 @@ python3 tools/preview/shoot.py today         # 只截指定页面
 
 ## 已知近似
 
-- 自定义组件只渲染在 `render.js` 的 `COMPONENTS` 里登记过的（当前：`todo-card`）。
+- 自定义组件只渲染在 `render.js` 的 `COMPONENTS` 里登记过的（当前：`todo-card`、`primary-nav`）。
 - `switch/slider/picker` 等原生表单件只渲染为静态近似。
 - 页面数据来自 fixture，不发请求；因此不能验证真实数据的空态与异常态。
 - fixture 里必须补齐页面/模板引用到的所有字段：缺字段会让整段 `wx:if` 判空而不报错。

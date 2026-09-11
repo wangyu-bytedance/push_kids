@@ -1,8 +1,9 @@
+<primary-nav></primary-nav>
 <view class="page today-page">
-  <brand-head kicker="{{dayLabel}}"></brand-head>
-  <view class="pg-head under-brand">
+  <view class="pg-head">
     <view class="head-intro">
       <text class="pg-title">今天，也慢慢来</text>
+      <text class="pg-context">{{dayLabel}}</text>
     </view>
     <view class="child-chip {{multiChild ? '' : 'single'}}" wx:if="{{children.length}}" aria-role="button" aria-label="切换孩子" bindtap="openChildSheet">
       <text class="ava">{{children[childIndex].avatar}}</text>
@@ -166,7 +167,6 @@
         </view>
         <view class="pk-empty inline" wx:else>
           <text class="et">今天没有活动安排</text>
-          <view class="ea"><view class="btn sm neutral" aria-role="button" aria-label="添加日程" bindtap="addSchedule">添加日程</view></view>
         </view>
       </view>
     </view>

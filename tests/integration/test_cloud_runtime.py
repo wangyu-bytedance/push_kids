@@ -75,6 +75,7 @@ class FakeWeChatCloudMediaStore(WeChatCloudMediaStore):
 
 def _cloud_settings() -> Settings:
     return Settings(
+        _env_file=None,
         PUSH_KIDS_ENV="cloud",
         PUSH_KIDS_DATABASE_URL="sqlite:///:memory:",
         PUSH_KIDS_MEDIA_BACKEND="wechat_cloud",

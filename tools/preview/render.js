@@ -236,7 +236,7 @@ function styleSheet(files, width) {
 
 /* ---------------- pages ---------------- */
 const FIXTURES = require("./fixtures.js");
-const COMPONENTS = { "todo-card": loadComponent("todo-card"), "brand-head": loadComponent("brand-head") };
+const COMPONENTS = { "todo-card": loadComponent("todo-card"), "primary-nav": loadComponent("primary-nav") };
 
 function renderPage(name, width) {
   const fixture = FIXTURES[name];
@@ -259,7 +259,7 @@ function renderPage(name, width) {
     path.join(APP, "app.wxss"),
     path.join(APP, "custom-tab-bar", "index.wxss"),
     path.join(APP, "components", "todo-card", "index.wxss"),
-    path.join(APP, "components", "brand-head", "index.wxss"),
+    path.join(APP, "components", "primary-nav", "index.wxss"),
     ...extra,
     path.join(pageDir, `${entry}.wxss`)
   ], width);

@@ -310,6 +310,72 @@ def test_moving_and_deleting_a_schedule_refreshes_instead_of_duplicating(
     assert _dispatch(app, later_start - timedelta(minutes=60))["sent"] == 0
 
 
+def test_mixed_activity_weekday_time_refreshes_the_same_reminder(client: TestClient, app) -> None:
+    family = _create_family(client)
+    child_id = family["children"][0]["id"]
+    day = local_date()
+    tomorrow = day + timedelta(days=1)
+    subject = client.post(
+        "/api/v1/subjects",
+        headers=_actor("parent-a"),
+        json={"child_id": child_id, "name": "线上英语", "kind": "activity"},
+    ).json()
+    slot_headers = {
+        **_actor("parent-a"),
+        "X-Client-Capabilities": "weekly-time-slots-v1",
+    }
+    created = client.post(
+        "/api/v1/activity-schedules",
+        headers=slot_headers,
+        json={
+            "child_id": child_id,
+            "subject_id": subject["id"],
+            "time_slots": [
+                {"weekday": day.weekday(), "start_time": "18:00:00", "end_time": "19:00:00"},
+                {
+                    "weekday": tomorrow.weekday(),
+                    "start_time": "19:00:00",
+                    "end_time": "20:00:00",
+                },
+            ],
+        },
+    )
+    assert created.status_code == 201, created.text
+    schedule_id = created.json()["id"]
+    _grant(client, "parent-a", ["schedule_reminder"])
+    original_start = datetime.combine(day, time(18), tzinfo=SHANGHAI).astimezone(UTC)
+    planning_moment = original_start - timedelta(hours=2)
+    assert _plan(app, planning_moment)["queued_schedule_reminders"] == 1
+
+    moved = client.patch(
+        f"/api/v1/activity-schedules/{schedule_id}",
+        headers=slot_headers,
+        json={
+            "time_slots": [
+                {
+                    "weekday": day.weekday(),
+                    "start_time": "18:30:00",
+                    "end_time": "19:30:00",
+                },
+                {
+                    "weekday": tomorrow.weekday(),
+                    "start_time": "19:00:00",
+                    "end_time": "20:00:00",
+                },
+            ]
+        },
+    )
+    assert moved.status_code == 200, moved.text
+    replanned = _plan(app, planning_moment)
+    assert replanned["queued_schedule_reminders"] == 0
+    assert replanned["refreshed"] == 1
+    moved_start = datetime.combine(day, time(18, 30), tzinfo=SHANGHAI).astimezone(UTC)
+    assert _dispatch(app, moved_start - timedelta(minutes=60))["sent"] == 1
+    assert _sent(app)[0]["data"]["time15"]["value"] == (
+        f"{day.year}年{day.month}月{day.day}日 18:30"
+    )
+
+
 def test_disabled_member_switch_keeps_the_queue_empty(client: TestClient, app) -> None:
     family = _create_family(client)
     child_id = family["children"][0]["id"]

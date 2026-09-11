@@ -1,5 +1,0 @@
-<view class="brand-head">
-  <view class="ico ico-sprout-pri sm"></view>
-  <text class="brand-word">知芽</text>
-  <text class="brand-kicker" wx:if="{{kicker}}">{{kicker}}</text>
-</view>

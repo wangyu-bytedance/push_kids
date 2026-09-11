@@ -41,6 +41,13 @@
   separate privacy/deletion, backup/restore, worker-topology, device, or production-release gates.
 - Container: build, non-root UID, unprivileged internal port 8000, deployment-config consistency,
   live/ready and graceful termination.
+- Bounded reads (`TEST-PERF-READ-001..005`): keep scale fixtures separate from the fast correctness
+  suite; record runtime, hardware and dialect. Query-count tests prove O(1) list projection, while
+  scale tests assert item/byte/memory bounds and aggregate conservation. SQLite `EXPLAIN QUERY PLAN`
+  and isolated MySQL `EXPLAIN` cover dominant History/Todo/Report/list paths. Middleware tests assert
+  route-template-only duration/size events and absence of concrete IDs, query/search/cursor values or
+  child content. Timing comparisons use identical fixtures/environments; skipped MySQL or staged
+  checks remain explicit release risks.
 
 ## Gates
 
@@ -54,6 +61,7 @@ npm run lint:miniapp
 uv run python tools/check_architecture.py
 uv run python tools/validate_miniprogram.py
 uv run python tools/audit_database.py data/push_kids.db --require-empty
+uv run pytest tests/performance/test_read_paths.py -q
 ```
 
 Optional isolated MySQL gate (required for cloud release):

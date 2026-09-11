@@ -1,13 +1,13 @@
+<primary-nav></primary-nav>
 <view class="page settings-page">
-  <brand-head></brand-head>
-  <view class="pg-head under-brand">
+  <view class="pg-head">
     <view class="head-intro">
       <text class="pg-title">按你们的节奏来</text>
     </view>
-    <view class="child-chip {{multiChild ? '' : 'single'}}" wx:if="{{children.length}}" aria-role="button" aria-label="切换孩子" bindtap="openChildSheet">
+    <view class="child-chip" wx:if="{{children.length}}" aria-role="button" aria-label="选择或管理学习档案" bindtap="openChildSheet">
       <text class="ava">{{children[childIndex].avatar}}</text>
       <text class="chip-nm trunc">{{children[childIndex].name}}</text>
-      <view class="chev" wx:if="{{multiChild}}"></view>
+      <view class="chev"></view>
     </view>
   </view>
 
@@ -60,35 +60,6 @@
   </view>
 
   <block wx:else>
-    <view class="sec">
-      <view class="sec-bar">
-        <text class="s-t">学习档案</text>
-      </view>
-      <view class="sec-rule"></view>
-      <view class="rowlist">
-        <view class="rowitem" wx:for="{{children}}" wx:key="id" aria-role="button" aria-label="编辑{{item.name}}的档案" data-id="{{item.id}}" bindtap="editChild">
-          <view class="act-mark"><text class="am-txt">{{item.avatar}}</text></view>
-          <view class="grow">
-            <text class="r-t">{{item.label}}</text>
-          </view>
-          <text class="pill" wx:if="{{item.id === childId}}">当前</text>
-          <view class="chev right"></view>
-        </view>
-        <view class="rowitem" wx:for="{{archivedChildren}}" wx:key="id" aria-role="button" aria-label="恢复{{item.name}}的档案" data-id="{{item.id}}" bindtap="editChild">
-          <view class="act-mark"><text class="am-txt">{{item.avatar}}</text></view>
-          <view class="grow">
-            <text class="r-t">{{item.label}}</text>
-          </view>
-          <text class="pill neutral">已归档</text>
-          <view class="chev right"></view>
-        </view>
-      </view>
-      <view class="add-entry" wx:if="{{canWrite && canAddChild}}" aria-role="button" aria-label="添加孩子" bindtap="addChild">
-        <view class="ico ico-plus-pri sm"></view><text>添加孩子</text>
-      </view>
-      <view class="help" wx:if="{{canWrite && !canAddChild}}">{{childLimitHint}}</view>
-    </view>
-
     <view class="pk-card set-card mt3">
       <view class="card-head">
         <view class="grow">
@@ -255,21 +226,43 @@
   <view class="handle"></view>
   <view class="sheet-head">
     <view class="grow">
-      <text class="sheet-title">选择孩子</text>
+      <text class="sheet-title">学习档案</text>
     </view>
     <view class="icon-btn" aria-role="button" aria-label="关闭" bindtap="closeChildSheet"><view class="ico ico-close sm"></view></view>
   </view>
   <view class="sheet-body">
-    <view class="rowlist">
-      <view class="rowitem" wx:for="{{children}}" wx:key="id" aria-role="button" aria-label="选择{{item.name}}" data-index="{{index}}" bindtap="chooseChild">
+    <view class="rowlist profile-list">
+      <view class="rowitem profile-row {{index === childIndex ? 'is-current' : ''}}" wx:for="{{children}}" wx:key="id" aria-role="button" aria-label="切换到{{item.name}}" data-index="{{index}}" bindtap="chooseChild">
         <view class="act-mark"><text class="am-txt">{{item.avatar}}</text></view>
-        <view class="grow"><text class="r-t">{{item.label}}</text></view>
-        <view class="ico ico-check-pri sm" wx:if="{{index === childIndex}}"></view>
+        <view class="grow profile-copy">
+          <text class="r-t trunc">{{item.name}}</text>
+          <view class="profile-meta-line" wx:if="{{item.grade || index === childIndex}}">
+            <text class="profile-grade trunc" wx:if="{{item.grade}}">{{item.grade}}</text>
+            <text class="profile-current" wx:if="{{index === childIndex}}">{{item.grade ? '· 当前使用' : '当前使用'}}</text>
+          </view>
+        </view>
+        <view class="profile-edit-hit" wx:if="{{canWrite}}" aria-role="button" aria-label="编辑{{item.name}}的档案" data-id="{{item.id}}" catchtap="editChild">
+          <view class="ico ico-pen-mute sm"></view>
+        </view>
+      </view>
+      <view class="rowitem profile-add-row" wx:if="{{canWrite && canAddChild}}" aria-role="button" aria-label="新建学习档案" bindtap="addChild">
+        <view class="act-mark"><view class="ico ico-plus-pri sm"></view></view>
+        <view class="grow"><text class="r-t">新建学习档案</text></view>
+        <view class="chev right"></view>
       </view>
     </view>
-    <view class="add-entry" wx:if="{{canWrite && canAddChild}}" aria-role="button" aria-label="添加孩子" bindtap="addChild">
-      <view class="ico ico-plus-pri sm"></view><text>添加孩子</text>
+    <view class="profile-sheet-section" wx:if="{{canWrite && archivedChildren.length}}">
+      <text class="profile-sheet-label">已归档</text>
+      <view class="rowlist">
+        <view class="rowitem" wx:for="{{archivedChildren}}" wx:key="id" aria-role="button" aria-label="恢复{{item.name}}的档案" data-id="{{item.id}}" bindtap="editChild">
+          <view class="act-mark"><text class="am-txt">{{item.avatar}}</text></view>
+          <view class="grow"><text class="r-t">{{item.label}}</text></view>
+          <text class="profile-restore">去恢复</text>
+          <view class="chev right"></view>
+        </view>
+      </view>
     </view>
+    <view class="help" wx:if="{{canWrite && !canAddChild}}">{{childLimitHint}}</view>
   </view>
 </view>
 

@@ -1,7 +1,8 @@
 {
   "enablePullDownRefresh": true,
   "backgroundColor": "#F4F3EC",
+  "navigationStyle": "custom",
   "usingComponents": {
-    "brand-head": "/components/brand-head/index"
+    "primary-nav": "/components/primary-nav/index"
   }
 }

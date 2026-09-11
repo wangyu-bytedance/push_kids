@@ -44,7 +44,7 @@ function rowView(item, view) {
 
 module.exports = {
   data: {
-    recordView: "new", historyView: "confirmed", historyItems: [], historyLoading: false,
+    historyExpanded: false, historyView: "confirmed", historyItems: [], historyLoading: false,
     historyError: "", historyFilters: emptyFilters(), filterDraft: emptyFilters(),
     filterOpen: false, searchText: "", filterSubjects: [], filterSubjectIndex: 0,
     historyNext: null, historyPage: 1, pendingCount: 0, pendingProcessing: false, hasFilters: false, submittedId: "",
@@ -58,14 +58,19 @@ module.exports = {
       delete app.globalData.recordIntent;
       if (intent.childId && intent.childId !== this.data.childId) return;
       this.recordScroll = 0;
-      if (intent.view === "new") { this.setData({ recordView: this.data.canWrite ? "new" : "history" }); return; }
+      if (intent.view === "new") {
+        this.setData({ historyExpanded: this.data.canWrite === false });
+        if (wx.pageScrollTo) wx.pageScrollTo({ scrollTop: 0, duration: 0 });
+        return;
+      }
       this.historyCursors = [null];
-      this.setData({ recordView: "history", historyView: intent.status || "confirmed",
+      this.setData({ historyExpanded: true, historyView: intent.status || "confirmed",
         historyFilters: { ...emptyFilters(), ...(intent.filters || {}) }, searchText: "", historyPage: 1 });
+      this.scrollHistoryIntoView();
     },
     async refreshHistory() {
       await this.consumeRecordIntent();
-      if (this.data.recordView === "history") return this.fetchHistory();
+      if (this.data.historyExpanded) return this.fetchHistory();
       const child = this.data.childId;
       try {
         const result = await api.request(`/children/${child}/history?view=pending&limit=1`);
@@ -82,7 +87,7 @@ module.exports = {
       this.historyRequest = (this.historyRequest || 0) + 1;
       this.historyCursors = [null];
       this.recordScroll = 0;
-      this.setData({ historyItems: [], historyFilters: emptyFilters(), searchText: "", filterOpen: false,
+      this.setData({ historyExpanded: false, historyItems: [], historyFilters: emptyFilters(), searchText: "", filterOpen: false,
         filterSubjects: [], historyNext: null, historyPage: 1, pendingCount: 0, pendingProcessing: false, submittedId: "" });
     },
     /* 筛选条件按孩子记忆，纯界面偏好，读写失败一律回落到「不筛选」。 */
@@ -95,13 +100,22 @@ module.exports = {
     rememberFilters() {
       ui.writePreference("recordFilters", this.data.childId, this.data.historyFilters);
     },
-    async changeRecordView(event) {
-      this.setData({ recordView: this.data.canWrite === false ? "history" : event.currentTarget.dataset.view });
-      if (this.data.recordView === "history") await this.fetchHistory();
+    scrollHistoryIntoView() {
+      if (!wx.pageScrollTo) return;
+      const scroll = () => wx.pageScrollTo({ selector: "#record-history", duration: 200 });
+      if (wx.nextTick) wx.nextTick(scroll); else scroll();
+    },
+    async toggleHistory() {
+      const historyExpanded = !this.data.historyExpanded;
+      this.setData({ historyExpanded });
+      if (!historyExpanded) return;
+      await this.fetchHistory();
+      this.scrollHistoryIntoView();
     },
     async openHistoryPending() {
-      this.setData({ recordView: "history", historyView: "pending", historyFilters: emptyFilters(), searchText: "" });
+      this.setData({ historyExpanded: true, historyView: "pending", historyFilters: emptyFilters(), searchText: "" });
       await this.fetchHistory(null, 1);
+      this.scrollHistoryIntoView();
     },
     async changeHistoryView(event) {
       const view = event.currentTarget.dataset.view;

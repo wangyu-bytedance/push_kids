@@ -30,7 +30,7 @@ dev = [
 package = false
 
 [tool.pytest.ini_options]
-pythonpath = ["apps/api/src"]
+pythonpath = [".", "apps/api/src"]
 testpaths = ["tests"]
 addopts = "--strict-markers"
 markers = ["live: requires external credentials and network"]

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from collections.abc import Iterable, Mapping
+from collections.abc import Mapping, Sequence
 from datetime import date, timedelta
 
 TREND_BUCKET_COUNT = 7
@@ -24,9 +24,9 @@ def equal_time_bucket_index(day_offset: int, range_days: int) -> int:
 def build_overview_trends(
     start_day: date,
     range_days: int,
-    event_days: Mapping[str, Iterable[date]],
+    daily_counts: Mapping[str, Sequence[int]],
 ) -> dict:
-    """Build the additive report trend contract from already authorized event days."""
+    """Build trends from bounded database aggregates, never raw historical events."""
     starts: list[date | None] = [None] * TREND_BUCKET_COUNT
     ends: list[date | None] = [None] * TREND_BUCKET_COUNT
     counts = [{key: 0 for key in TREND_METRIC_KEYS} for _ in range(TREND_BUCKET_COUNT)]
@@ -38,11 +38,14 @@ def build_overview_trends(
         ends[bucket_index] = current
 
     for key in TREND_METRIC_KEYS:
-        for event_day in event_days.get(key, ()):
-            offset = (event_day - start_day).days
-            if 0 <= offset < range_days:
-                bucket_index = equal_time_bucket_index(offset, range_days)
-                counts[bucket_index][key] += 1
+        values = daily_counts.get(key, ())
+        if len(values) != range_days:
+            raise ValueError("trend counts must cover the complete report range")
+        for offset, value in enumerate(values):
+            if not isinstance(value, int) or value < 0:
+                raise ValueError("trend counts must be non-negative integers")
+            bucket_index = equal_time_bucket_index(offset, range_days)
+            counts[bucket_index][key] += value
 
     buckets = []
     for index in range(TREND_BUCKET_COUNT):

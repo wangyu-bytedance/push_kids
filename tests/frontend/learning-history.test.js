@@ -85,6 +85,7 @@ test("filter cancellation is read-only, date semantics reset, navigation intent 
   assert.equal(page.data.historyFilters.from, "");
   app.globalData.recordIntent = { childId: "child", view: "history", status: "confirmed", filters: { subject_id: "math" } };
   await page.consumeRecordIntent();
+  assert.equal(page.data.historyExpanded, true);
   assert.equal(page.data.historyFilters.subject_id, "math");
   assert.equal(app.globalData.recordIntent, undefined);
   page.data.historyFilters.subject_id = "english";
@@ -147,7 +148,7 @@ test("pending polling covers off-page jobs and stops in confirmed history or on 
   page.schedulePoll(); assert.equal(timers.size, 0);
   page.data.pendingProcessing = true;
   page.schedulePoll(); assert.equal(timers.size, 1);
-  page.data.recordView = "history"; page.data.historyView = "confirmed";
+  page.data.historyExpanded = true; page.data.historyView = "confirmed";
   page.schedulePoll(); assert.equal(timers.size, 0);
   page.data.historyView = "pending"; page.schedulePoll();
   page.onHide(); assert.equal(timers.size, 0);
@@ -179,9 +180,162 @@ test("changing a child cannot move a dirty or uploading form to another child", 
   assert.equal(page.data.text, "未提交的内容");
   page.data.saving = true;
   await page.changeChild({ detail: { value: 1 } });
-  page.changeMode(event({ mode: "text" }));
   assert.equal(page.data.childId, "child");
-  assert.equal(page.data.mode, "photo");
+  assert.equal(page.data.text, "未提交的内容");
+});
+
+test("history is collapsed by default and loads only when expanded", async () => {
+  const calls = [];
+  const scrolls = [];
+  const { page } = harness("pages/records/index.js", async (url) => {
+    calls.push(url);
+    return { items: [], pending_count: 0, has_processing: false };
+  }, { pageScrollTo(options) { scrolls.push(options); } });
+  page.data.childId = "child";
+  assert.equal(page.data.historyExpanded, false);
+  await page.toggleHistory();
+  assert.equal(page.data.historyExpanded, true);
+  assert.equal(calls.length, 1);
+  assert.equal(scrolls.at(-1).selector, "#record-history");
+  await page.toggleHistory();
+  assert.equal(page.data.historyExpanded, false);
+  assert.equal(calls.length, 1);
+});
+
+test("explicit new-record intent collapses history and returns to the form", async () => {
+  const scrolls = [];
+  const { page, app } = harness("pages/records/index.js", async () => ({ items: [], pending_count: 0 }),
+    { pageScrollTo(options) { scrolls.push(options); } });
+  page.data.childId = "child";
+  page.data.historyExpanded = true;
+  app.globalData.recordIntent = { childId: "child", view: "new" };
+  await page.consumeRecordIntent();
+  assert.equal(page.data.historyExpanded, false);
+  assert.equal(scrolls.at(-1).scrollTop, 0);
+});
+
+test("viewer enters expanded read-only history", async () => {
+  const { page, app } = harness("pages/records/index.js", async (url) => {
+    if (url === "/children") return [{ id: "child", name: "A" }];
+    return { items: [], pending_count: 0, has_processing: false };
+  });
+  app.globalData.currentMember = { role: "viewer" };
+  page.hidden = false;
+  await page.load();
+  assert.equal(page.data.canWrite, false);
+  assert.equal(page.data.historyExpanded, true);
+});
+
+test("unified record form rejects empty material and routes text-only submissions without media", async () => {
+  const calls = [];
+  const toasts = [];
+  const { page } = harness("pages/records/index.js", async (url, options) => {
+    calls.push({ url, options });
+    return { id: "manual-submission" };
+  }, { showToast(options) { toasts.push(options); } });
+  page.data.childId = "child";
+  page.data.date = "2026-09-11";
+  page.data.time = "19:57";
+  page.load = async () => {};
+
+  await page.save();
+  assert.equal(calls.length, 0);
+  assert.equal(toasts[0].title, "请添加学习照片或填写学习内容");
+
+  page.data.text = "  今天练习了乘法  ";
+  page.data.hasText = true;
+  await page.save();
+  assert.equal(calls.length, 1);
+  assert.equal(calls[0].url, "/submissions");
+  assert.equal(calls[0].options.data.source, "manual");
+  assert.equal(calls[0].options.data.input_text, "今天练习了乘法");
+});
+
+test("unified record form keeps optional text on the existing photo upload path", async () => {
+  const calls = [];
+  let uploaded;
+  const { page } = harness("pages/records/index.js", async (url, options) => {
+    calls.push({ url, options });
+    return { id: "photo-submission" };
+  }, {}, {
+    uploadSubmission: async (path, data) => {
+      uploaded = { path, data };
+      return { id: "photo-submission", media_count: 1 };
+    },
+    appendSubmissionMedia: async () => { throw new Error("unexpected append"); }
+  });
+  page.data.childId = "child";
+  page.data.date = "2026-09-11";
+  page.data.time = "19:57";
+  page.data.photos = ["local-photo"];
+  page.data.text = "照片补充说明";
+  page.data.hasText = true;
+  page.load = async () => {};
+
+  await page.save();
+  assert.equal(uploaded.path, "local-photo");
+  assert.equal(uploaded.data.input_text, "照片补充说明");
+  assert.equal(calls[0].url, "/submissions/photo-submission/finalize");
+});
+
+test("every photo add entry offers camera and album and can append repeated captures", () => {
+  const mediaCalls = [];
+  const responses = [
+    [{ tempFilePath: "camera-1" }],
+    [{ tempFilePath: "camera-2" }],
+    Array.from({ length: 8 }, (_, index) => ({ tempFilePath: `album-${index + 1}` }))
+  ];
+  const { page } = harness("pages/records/index.js", async () => ({}), {
+    chooseMedia(options) {
+      mediaCalls.push(options);
+      options.success({ tempFiles: responses.shift() });
+    }
+  });
+
+  page.addPhotos();
+  page.addPhotos();
+  page.addPhotos();
+
+  assert.deepEqual(Array.from(page.data.photos), [
+    "camera-1", "camera-2", "album-1", "album-2", "album-3",
+    "album-4", "album-5", "album-6", "album-7"
+  ]);
+  assert.deepEqual(mediaCalls.map((call) => call.count), [9, 8, 7]);
+  mediaCalls.forEach((call) => assert.deepEqual(Array.from(call.sourceType), ["camera", "album"]));
+  page.addPhotos();
+  assert.equal(mediaCalls.length, 3);
+});
+
+test("photo picker cancellation, empty results and failures preserve the form", () => {
+  const toasts = [];
+  let mode = "cancel";
+  let calls = 0;
+  const { page } = harness("pages/records/index.js", async () => ({}), {
+    showToast(options) { toasts.push(options); },
+    chooseMedia(options) {
+      calls += 1;
+      if (mode === "empty") options.success({ tempFiles: [] });
+      else options.fail({ errMsg: mode === "cancel" ? "chooseMedia:fail cancel" : "chooseMedia:fail auth deny" });
+    }
+  });
+  page.data.photos = ["existing"];
+  page.data.text = "保留学习内容";
+  page.data.submissionKey = "original-key";
+
+  page.addPhotos();
+  mode = "empty";
+  page.addPhotos();
+  mode = "failure";
+  page.addPhotos();
+
+  assert.deepEqual(Array.from(page.data.photos), ["existing"]);
+  assert.equal(page.data.text, "保留学习内容");
+  assert.equal(page.data.submissionKey, "original-key");
+  assert.equal(toasts.length, 1);
+  assert.equal(toasts[0].title, "暂时无法选择照片，可继续填写学习内容");
+  page.data.saving = true;
+  page.addPhotos();
+  assert.equal(calls, 3);
 });
 
 test("search text travels outside the URL and stays family scoped", async () => {

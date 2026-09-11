@@ -1,0 +1,20 @@
+/* 五个一级 Tab 共用的品牌导航。胶囊和状态栏几何由组件运行时测量，页面不复制平台常量。 */
+:host { display: block; }
+.primary-nav-spacer { width: 100%; }
+.primary-nav {
+  position: fixed; z-index: 30; left: 0; top: 0; right: 0;
+  box-sizing: border-box; background: var(--pk-canvas);
+}
+.primary-nav-row {
+  width: 100%; box-sizing: border-box;
+  display: flex; align-items: center; justify-content: center;
+}
+.primary-nav-brand {
+  min-width: 0; max-width: 100%; display: inline-flex; align-items: center; justify-content: center;
+  gap: 12rpx; white-space: nowrap; color: var(--pk-ink);
+}
+.primary-nav-mark { flex: none; }
+.primary-nav-title {
+  min-width: 0; overflow: hidden; text-overflow: ellipsis;
+  font-family: var(--pk-sans); font-size: 16px; line-height: 1.4; font-weight: 600; letter-spacing: 1rpx;
+}

@@ -26,9 +26,9 @@
 
 /* ---------------- 页内头部 ---------------- */
 .pg-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 24rpx; padding: 28rpx 0 24rpx; }
-.pg-head.under-brand { padding-top: 10rpx; }
 .pg-kicker { display: block; font-size: 12px; line-height: 1.4; font-weight: 500; letter-spacing: 2rpx; color: var(--pk-primary-mid); }
 .pg-title { display: block; margin-top: 8rpx; font-family: var(--pk-serif); font-size: 24px; line-height: 1.28; font-weight: 600; letter-spacing: .4px; color: var(--pk-ink); }
+.pg-context { display: block; margin-top: 8rpx; font-size: 12px; line-height: 1.5; color: var(--pk-ink-3); font-variant-numeric: tabular-nums; }
 
 .child-chip {
   flex: 0 0 auto; height: 72rpx; box-sizing: border-box;

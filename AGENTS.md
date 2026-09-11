@@ -64,6 +64,9 @@ Never claim a check passed unless it ran. Record skipped checks and the reason.
 - `agent_processing/providers` implement the provider contract; domain modules never call Ark directly.
 - Cross-domain access goes through services/contracts. Avoid generic `utils`, `common`, or direct cross-module table writes.
 - External inputs and model outputs are untrusted and validated.
+- Collection and embedded-list reads must be bounded end to end: stable cursor pagination or a documented
+  domain cap, database-side aggregates, O(1) page query count, tenant-leading indexes, response budgets and
+  scale/query-plan tests. A router `limit` does not excuse an unbounded service query.
 - Background jobs are idempotent and have explicit terminal states, retries, cancellation, and observable errors.
 - Use `apply_patch` for handwritten file edits. Preserve unrelated user changes.
 

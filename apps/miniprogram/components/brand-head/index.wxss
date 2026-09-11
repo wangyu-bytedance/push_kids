@@ -1,6 +1,0 @@
-/* PKDS-2.0 · BrandHead：一级 Tab 页共用的品牌行。
-   原生标题栏只显示小程序名，页内用「芽」图标 + 字号更小的上下文，避免与 Tab 文案重复。 */
-:host { display: block; }
-.brand-head { display: flex; align-items: center; gap: 10rpx; padding: 24rpx 0 0; }
-.brand-word { flex: none; font-family: var(--pk-serif); font-size: 14px; line-height: 1.4; font-weight: 600; letter-spacing: 2rpx; color: var(--pk-primary-strong); }
-.brand-kicker { flex: 1; min-width: 0; text-align: right; font-size: 12px; line-height: 1.4; color: var(--pk-ink-3); overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-variant-numeric: tabular-nums; }

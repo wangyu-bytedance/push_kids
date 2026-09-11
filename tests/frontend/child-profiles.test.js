@@ -102,7 +102,7 @@ test("the profile ceiling matches the server and ignores archived profiles", () 
   assert.equal(childContext.canAddChild([...active.slice(1), profile("old", "旧档案", { active: false })]), true);
 });
 
-test("settings lists profiles in use, archived profiles and an add entry", async () => {
+test("settings loads active and archived profiles for the top-right manager", async () => {
   const profiles = [profile("a", "小雨"), profile("b", "小星"), profile("c", "毕业了", { active: false })];
   const { page, app, calls } = loadPage("pages/settings/index.js", async (requestPath) => {
     if (requestPath.startsWith("/children?include_archived")) return profiles;
@@ -124,6 +124,39 @@ test("settings lists profiles in use, archived profiles and an add entry", async
   assert.equal(page.data.canWrite, true);
   assert.ok(calls.some((call) => call.path === "/children?include_archived=true"));
   assert.ok(calls.every((call) => !call.path.startsWith("/children/c/")), "不该为归档档案发起详情请求");
+});
+
+test("settings opens the top-right profile manager for one child and closes it before editing", () => {
+  const { page, navigations } = loadPage("pages/settings/index.js", async () => []);
+  page.data.children = [profile("a", "小雨")];
+  page.data.multiChild = false;
+  page.data.canWrite = true;
+
+  page.openChildSheet();
+  assert.equal(page.data.showChildSheet, true, "单孩子也要能从右上角管理档案");
+
+  page.editChild({ currentTarget: { dataset: { id: "a" } } });
+  assert.equal(page.data.showChildSheet, false, "进入编辑页前必须先关闭面板");
+  assert.deepEqual(navigations, ["/pages/child-edit/index?mode=edit&child_id=a"]);
+});
+
+test("settings profile management lives in the sheet instead of the main page", () => {
+  const template = fs.readFileSync(path.resolve(__dirname, "../../apps/miniprogram/pages/settings/index.wxml"), "utf8");
+
+  assert.equal((template.match(/<text class="sheet-title">学习档案<\/text>/g) || []).length, 1);
+  assert.doesNotMatch(template, /<view class="sec">\s*<view class="sec-bar">\s*<text class="s-t">学习档案<\/text>/);
+  assert.equal((template.match(/bindtap="addChild"/g) || []).length, 2, "只保留无孩子空态和右上角面板的创建入口");
+  assert.match(template, /class="profile-edit-hit"[^>]+catchtap="editChild">\s*<view class="ico ico-pen-mute sm"><\/view>/);
+  assert.doesNotMatch(template, /class="profile-manage-btn"/);
+  assert.doesNotMatch(template, />编辑<\/view>/);
+  assert.match(template, /class="profile-meta-line"/);
+  assert.match(template, />\{\{item\.grade\}\}<\/text>/);
+  assert.match(template, /当前使用/);
+  assert.match(template, /class="rowitem profile-add-row"[^>]+bindtap="addChild"/);
+  assert.match(template, />新建学习档案<\/text>/);
+  assert.match(template, /wx:if="\{\{canWrite && archivedChildren\.length\}\}"/);
+  assert.match(template, /wx:if="\{\{canWrite && !canAddChild\}\}">\{\{childLimitHint\}\}<\/view>/);
+  assert.match(template, /<view class="chev"><\/view>/, "单孩子也应显示面板入口提示");
 });
 
 test("settings drops a stale response when the parent switched child mid-flight", async () => {

@@ -48,13 +48,34 @@ function normalizeSections(value) {
 function todoView(must, optional, expanded) {
   const all = (must || []).concat(optional || []);
   const shown = expanded ? all : all.slice(0, TODO_PREVIEW);
+  const loadedCount = all.reduce((sum, group) => sum + (group.items || []).length, 0);
+  const shownCount = shown.reduce((sum, group) => sum + (group.items || []).length, 0);
   return {
     cards: shown.map((group, index) => ({
       ...group,
       first_optional: !!group.optional && (index === 0 || !shown[index - 1].optional)
     })),
-    hidden: expanded ? 0 : Math.max(0, all.length - TODO_PREVIEW)
+    hidden: Math.max(0, loadedCount - shownCount)
   };
+}
+
+function mergeTodoGroups(current, incoming) {
+  const result = (current || []).map((group) => ({ ...group, items: [...(group.items || [])] }));
+  const byId = Object.fromEntries(result.map((group) => [group.id, group]));
+  (incoming || []).forEach((group) => {
+    const existing = byId[group.id];
+    if (!existing) {
+      const added = { ...group, items: [...(group.items || [])] };
+      byId[group.id] = added;
+      result.push(added);
+      return;
+    }
+    const ids = new Set(existing.items.map((item) => item.review_id));
+    const additions = (group.items || []).filter((item) => !ids.has(item.review_id));
+    existing.items.push(...additions);
+    existing.estimated_minutes += additions.length ? Number(group.estimated_minutes) || 0 : 0;
+  });
+  return result;
 }
 
 Page({
@@ -63,7 +84,8 @@ Page({
     sections: { ...DEFAULT_SECTIONS }, reviewReturn: null, reviewGroupId: "",
     reviewFocusText: "", dayLabel: "",
     hero: { required: 0, optional: 0, total: 0, minutes: 0, note: "", ticks: [] },
-    todoCards: [], hiddenTodoCount: 0, todosExpanded: false, showChildSheet: false, multiChild: false, canAddChild: true,
+    todoCards: [], hiddenTodoCount: 0, todosExpanded: false, loadingMoreTodos: false,
+    showChildSheet: false, multiChild: false, canAddChild: true,
     sectionMeta: { review: "", learning: "", activity: "" }
   },
   onShow() {
@@ -78,7 +100,7 @@ Page({
   async load() {
     const generation = (this.loadGeneration || 0) + 1;
     this.loadGeneration = generation;
-    this.setData({ loading: true, error: "" });
+    this.setData({ loading: true, error: "", loadingMoreTodos: false });
     try {
       const profiles = await api.request("/children");
       if (generation !== this.loadGeneration) return;
@@ -112,6 +134,7 @@ Page({
       dashboard.show_guide = !dashboard.todo_groups.length && !dashboard.daily_summary.record_count;
       dashboard.activity_count = dashboard.schedule_items.length + dashboard.optional_activity_suggestions.length;
       const view = todoView(dashboard.must_todo_groups, dashboard.optional_todo_groups, this.data.todosExpanded);
+      const remoteTodoCount = Number(dashboard.todo_remaining_count) || 0;
       this.setData({ loading: false, children, childIndex, childId, dashboard,
         multiChild: selection.multiChild, canAddChild,
         dayLabel: dayLabel(dashboard.day),
@@ -131,7 +154,8 @@ Page({
           learning: `已确认 ${dashboard.daily_summary.record_count} 条`,
           activity: `${dashboard.activity_count} 项`
         },
-        todoCards: view.cards, hiddenTodoCount: view.hidden });
+        todoCards: view.cards, hiddenTodoCount: view.hidden + remoteTodoCount,
+        loadingMoreTodos: false });
       if (app.setTabBadge) app.setTabBadge("records", dashboard.pending_confirmation_count);
       const back = app.globalData.reviewReturn;
       if (back && back.childId === childId) {
@@ -165,11 +189,41 @@ Page({
     this.setData({ sections });
     ui.writePreference("todaySections", this.data.childId, sections);
   },
-  expandTodos() {
+  async expandTodos() {
     const dashboard = this.data.dashboard;
-    if (!dashboard) return;
+    if (!dashboard || this.data.loadingMoreTodos) return;
     const view = todoView(dashboard.must_todo_groups, dashboard.optional_todo_groups, true);
-    this.setData({ todosExpanded: true, todoCards: view.cards, hiddenTodoCount: view.hidden });
+    this.setData({ todosExpanded: true, todoCards: view.cards,
+      hiddenTodoCount: view.hidden + (Number(dashboard.todo_remaining_count) || 0) });
+    if (!dashboard.todo_next_cursor) return;
+    const generation = this.loadGeneration;
+    const childId = this.data.childId;
+    const cursor = dashboard.todo_next_cursor;
+    this.setData({ loadingMoreTodos: true });
+    try {
+      const day = encodeURIComponent(dashboard.day || "");
+      const page = await api.request(`/children/${childId}/todos?day=${day}&limit=50&cursor=${encodeURIComponent(cursor)}`);
+      if (generation !== this.loadGeneration || childId !== this.data.childId
+          || !this.data.dashboard || this.data.dashboard.todo_next_cursor !== cursor) return;
+      const groups = mergeTodoGroups(this.data.dashboard.todo_groups, page.groups);
+      const must = groups.filter((item) => !item.optional);
+      const optional = groups.filter((item) => item.optional);
+      const nextView = todoView(must, optional, true);
+      this.setData({
+        "dashboard.todo_groups": groups,
+        "dashboard.must_todo_groups": must,
+        "dashboard.optional_todo_groups": optional,
+        "dashboard.todo_next_cursor": page.next_cursor || null,
+        "dashboard.todo_remaining_count": Number(page.remaining_count) || 0,
+        todoCards: nextView.cards,
+        hiddenTodoCount: nextView.hidden + (Number(page.remaining_count) || 0),
+        loadingMoreTodos: false
+      });
+    } catch (error) {
+      if (generation === this.loadGeneration && childId === this.data.childId) {
+        this.setData({ loadingMoreTodos: false, error: error.message });
+      }
+    }
   },
   openChildSheet() { if (this.data.children.length) this.setData({ showChildSheet: true }); },
   closeChildSheet() { this.setData({ showChildSheet: false }); },
@@ -236,7 +290,7 @@ Page({
       "dashboard.must_todo_groups": must,
       "dashboard.optional_todo_groups": optional,
       todoCards: view.cards,
-      hiddenTodoCount: view.hidden
+      hiddenTodoCount: view.hidden + (Number(previous.todo_remaining_count) || 0)
     });
     try {
       await api.request(`/reviews/${reviewId}/feedback`, { method: "POST", data: { action }, idempotencyKey });
@@ -246,7 +300,8 @@ Page({
     } catch (error) {
       this.feedbackRetryKeys[intent] = idempotencyKey;
       const rollback = todoView(previous.must_todo_groups, previous.optional_todo_groups, this.data.todosExpanded);
-      this.setData({ dashboard: previous, todoCards: rollback.cards, hiddenTodoCount: rollback.hidden });
+      this.setData({ dashboard: previous, todoCards: rollback.cards,
+        hiddenTodoCount: rollback.hidden + (Number(previous.todo_remaining_count) || 0) });
       wx.showToast({ title: `${error.message}·刚才那条没保存成功`, icon: "none" });
     }
   }

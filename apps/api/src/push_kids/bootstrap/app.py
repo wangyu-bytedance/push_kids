@@ -4,6 +4,7 @@ import asyncio
 import logging
 import sys
 from contextlib import asynccontextmanager, suppress
+from time import perf_counter
 from typing import TextIO
 
 from fastapi import FastAPI, Request
@@ -155,10 +156,11 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     @app.middleware("http")
     async def enforce_cloud_request_limit(request: Request, call_next):
+        started = perf_counter()
         if config.is_cloud:
             content_length = request.headers.get("content-length")
             if content_length and content_length.isdigit() and int(content_length) > 100 * 1024:
-                return JSONResponse(
+                response = JSONResponse(
                     status_code=413,
                     content={
                         "error": {
@@ -167,7 +169,33 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                         }
                     },
                 )
-        return await call_next(request)
+            else:
+                response = await call_next(request)
+        else:
+            response = await call_next(request)
+        duration_ms = round((perf_counter() - started) * 1000, 2)
+        response_length = response.headers.get("content-length")
+        response_bytes = (
+            int(response_length) if response_length and response_length.isdigit() else None
+        )
+        route = request.scope.get("route")
+        route_template = getattr(route, "path", "unmatched")
+        event_name = (
+            "api_read_budget_exceeded"
+            if duration_ms >= 500 or (response_bytes is not None and response_bytes >= 128 * 1024)
+            else "api_request_completed"
+        )
+        logger.log(
+            logging.WARNING if event_name == "api_read_budget_exceeded" else logging.INFO,
+            "%s method=%s route=%s status=%s duration_ms=%.2f response_bytes=%s",
+            event_name,
+            request.method,
+            route_template,
+            response.status_code,
+            duration_ms,
+            response_bytes if response_bytes is not None else "unknown",
+        )
+        return response
 
     @app.exception_handler(AppError)
     async def handle_app_error(_request: Request, exc: AppError) -> JSONResponse:

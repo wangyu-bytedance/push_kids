@@ -1,6 +1,6 @@
 """Deployment-owned analysis rules; no dependency on a developer's personal Skill directory."""
 
-PROMPT_REVISION = "subject-grouped-incremental-20260906-03"
+PROMPT_REVISION = "subject-grouped-incremental-20260911-04"
 
 ANALYSIS_RULES = """
 你是小学学习内容整理助手。只整理本次材料中有直接证据的内容。
@@ -25,7 +25,8 @@ new_learning的review_id必须为null；review不得同时作为new_learning输�
 每个知识点必须有direct_evidence：来自本次照片或家长文字、具体可定位；照片编号按输入标注。
 context_used只能复制提供的record_id，历史不能作为direct_evidence。
 复习step只是计划进度，不代表掌握程度；复习候选和知识目录也不是要求本次必须学习的内容。
-summary只写可选补充说明，最多120个字符，不重复罗列所有知识点，不写成长段评价。
+summary只用一句简短、肯定的事实描述本次实际学习或练习了什么，最多60个字符；去掉“本次完成”等套话。
+summary不得枚举没有出现的科目、任务、知识或内容，不写“没有识别到”“不包含”“未涉及”“无某科内容”等排除说明。
 每个条目只写一个可独立确认和复习的原子内容，name使用短词或短语，不写解释段落。
 display_kind必须从hanzi、word、poem、arithmetic、concept、activity、other中选择；
 汉字用hanzi，英文单词/词组用word，古诗词篇目用poem，算式与运算能力用arithmetic，

@@ -1,8 +1,8 @@
 # Push Kids current architecture
 
 - Status: `IMPLEMENTED_LOCALLY_PENDING_CLOUD_ACCEPTANCE`
-- Revision: `ARCH-20260907-NOTIFICATION-DELETION-01`
-- Confirmed by: user approval of `SPEC-20260906-TRAVEL-02`, 2026-09-06
+- Revision: `ARCH-20260911-READ-PERF-01`
+- Confirmed by: user approval of `BUG-SPEC-20260911-PERF-01`, 2026-09-11
 - Scope: local adapters plus WeChat Cloud Hosting controlled staging
 
 ## Runtime context
@@ -39,7 +39,7 @@ media through the same bounded infrastructure ports.
 | `media` | validated local/cloud files, cloud ownership claim and temporary materialization | media store port |
 | `notifications` | notification kinds and copy policy (`domain.py`, pure), member preferences, WeChat grants and quota, encrypted receiver, durable outbox with dedupe/lease/retry, planner and tick | notification service + HTTP routes + scheduler |
 | `data_management` | durable child/family deletion requests, freeze/retry/tombstone lifecycle and cross-domain purge orchestration | deletion service + worker; each domain retains its own purge contract |
-| `platform` | config, database, errors, request context | infrastructure only |
+| `platform` | config, database, errors, request context, opaque scope-bound pagination cursors | infrastructure only |
 
 Dependency direction is routers → services → pure policies. Infrastructure adapters implement contracts and may depend inward; pure policies do not depend outward.
 
@@ -68,7 +68,8 @@ Dependency direction is routers → services → pure policies. Infrastructure a
   FEAT-007 adds `travel_arrangements` and create-idempotency rows in migration `20260906_0006`.
   `Database.expected_cloud_revision` tracks the single Alembic head; durable deletion extends that chain to
   `20260906_0007`, the notification channel to `20260906_0008`, and notification deletion ownership to
-  `20260907_0009`.
+  `20260907_0009`; weekday-specific activity/travel time slots and bounded-read indexes extend it to
+  `20260911_0010` and `20260911_0011`.
 - Travel arrangements are independent from activities and project only into the Calendar query. The query
   normalizes CalendarEvent, ActivitySchedule and TravelArrangement time spans, then applies one pure half-open
   interval policy. Conflict metadata is derived at read time and marks every participant; it is never persisted.
@@ -206,10 +207,28 @@ tests; indirect and test-only cycles are forbidden.
 | Child profile lifecycle | `children` | learning, activities, families, routers | `require_active_child` / `list_children(include_archived)`; archived profiles resolve for reads only |
 | Travel calendar projection | `travel` | activities calendar query | normalized active arrangements for one family/child/day; no Today, Todo, report or practice consumer |
 | Mini Program child context | `apps/miniprogram/utils/child-context.js` | today / calendar / records / reports / settings / activity edit | decorate, resolve-with-fallback, global selection sync, profile-limit hint; presentation only, no business rules |
+| Bounded read cursor | `platform.pagination` | planning, learning, activities | opaque versioned payload, signed against route scope/filter/snapshot; authorization is re-evaluated on every page |
 
 No global `common`, `utils`, or service locator may own business semantics. A new
 shared abstraction requires at least a stable semantic contract, an owner,
 compatible consumers, acyclic dependencies, and contract tests.
+
+## Bounded read architecture
+
+`BUG-SPEC-20260911-PERF-01` implements `ARC-014`. Every growing collection has a stable server order, a hard
+maximum page/range bound and explicit continuation or omission metadata. Todo uses a scope- and day-bound snapshot
+cursor so concurrent inserts or updates cannot duplicate or leak into an older traversal. Activity and submission
+compatibility arrays expose continuation headers while preserving their top-level JSON shape. Report, calendar and
+daily-summary counts are computed by bounded SQL aggregation; report activity subjects come from the same range as
+headline totals, eliminating the raw-record request waterfall. Submission pages bulk-load their related facts in a
+constant query budget.
+
+Migration `20260911_0011` adds family/child/filter/order composite indexes for Review, learning history,
+submissions, knowledge occurrences and activities. SQLite 50k-history plans/timings and fresh MySQL 8 `EXPLAIN`
+checks are blocking automated evidence. Leading-wildcard substring search intentionally remains scan-based within
+its explicit 50k-row budget and 200k-row/p95 revisit trigger. Request middleware emits only route-template slow or
+large-response metadata; concrete IDs, query text, cursors and child content are excluded. Production index-build
+lock duration and staged slow/large-route signals remain deployment gates, not local implementation claims.
 
 ## Architecture rationale and trade-offs
 

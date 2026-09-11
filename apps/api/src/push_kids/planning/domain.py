@@ -64,11 +64,19 @@ def review_interval_days(
     return (due_date - anchor).days
 
 
-def group_daily_todos(items: list[DueKnowledge], budget_minutes: int) -> list[dict]:
+def group_daily_todos(
+    items: list[DueKnowledge], budget_minutes: int, *, starting_minutes: int = 0
+) -> list[dict]:
     groups: dict[tuple[str, str, str, bool], dict] = {}
-    used = 0
+    used = max(0, starting_minutes)
     for item in sorted(
-        items, key=lambda value: (value.due_date, value.subject_name, value.review_method)
+        items,
+        key=lambda value: (
+            value.due_date,
+            value.subject_name,
+            value.review_method,
+            value.review_id,
+        ),
     ):
         minutes = max(1, item.estimated_minutes)
         optional = used + minutes > budget_minutes

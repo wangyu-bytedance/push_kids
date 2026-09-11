@@ -8,6 +8,23 @@ def test_openapi_contains_core_contracts(app) -> None:
     assert submission["properties"]["display_groups"]["type"] == "array"
 
 
+def test_weekday_specific_time_slots_are_part_of_the_contract(app) -> None:
+    document = app.openapi()
+    paths = document["paths"]
+    schemas = document["components"]["schemas"]
+    assert schemas["ActivityScheduleView"]["properties"]["time_slots"]["type"] == "array"
+    assert schemas["TravelArrangementView"]["properties"]["time_slots"]["type"] == "array"
+    for path, method in (
+        ("/api/v1/activity-schedules", "post"),
+        ("/api/v1/children/{child_id}/activity-schedules", "get"),
+        ("/api/v1/travel-arrangements", "post"),
+        ("/api/v1/children/{child_id}/travel-arrangements", "get"),
+    ):
+        operation = paths[path][method]
+        parameter_names = {parameter["name"] for parameter in operation.get("parameters", [])}
+        assert "X-Client-Capabilities" in parameter_names
+
+
 def test_child_profile_lifecycle_is_part_of_the_contract(app) -> None:
     """多孩子切换依赖档案生命周期与 active 标记，客户端要能据此渲染切换列表。"""
     document = app.openapi()

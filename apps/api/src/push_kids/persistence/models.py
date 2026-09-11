@@ -3,6 +3,7 @@ import uuid
 
 from sqlalchemy import (
     Boolean,
+    CheckConstraint,
     Column,
     Date,
     ForeignKey,
@@ -307,6 +308,24 @@ class Subject(Base):
 
 class LearningSubmission(Base):
     __tablename__ = "learning_submissions"
+    __table_args__ = (
+        Index(
+            "ix_learning_submissions_family_child_state_created_id",
+            "family_id",
+            "child_id",
+            "state",
+            "created_at",
+            "id",
+        ),
+        Index(
+            "ix_learning_submissions_family_child_state_occurred_id",
+            "family_id",
+            "child_id",
+            "state",
+            "occurred_at",
+            "id",
+        ),
+    )
     id = Column(String(36), primary_key=True, default=new_id)
     family_id = Column(String(80), nullable=False, index=True)
     child_id = Column(String(36), ForeignKey("children.id"), nullable=False, index=True)
@@ -373,6 +392,16 @@ class SubmissionRequest(Base):
 
 class LearningRecord(Base):
     __tablename__ = "learning_records"
+    __table_args__ = (
+        Index(
+            "ix_learning_records_family_child_occurred_submission",
+            "family_id",
+            "child_id",
+            "occurred_at",
+            "submission_id",
+            "id",
+        ),
+    )
     id = Column(String(36), primary_key=True, default=new_id)
     family_id = Column(String(80), nullable=False, index=True)
     child_id = Column(String(36), ForeignKey("children.id"), nullable=False, index=True)
@@ -398,6 +427,13 @@ class KnowledgeItem(Base):
             "category",
             name="uq_knowledge_identity",
         ),
+        Index(
+            "ix_knowledge_items_family_child_created_id",
+            "family_id",
+            "child_id",
+            "created_at",
+            "id",
+        ),
     )
     id = Column(String(36), primary_key=True, default=new_id)
     family_id = Column(String(80), nullable=False, index=True)
@@ -417,6 +453,14 @@ class KnowledgeItem(Base):
 
 class KnowledgeOccurrence(Base):
     __tablename__ = "knowledge_occurrences"
+    __table_args__ = (
+        Index(
+            "ix_knowledge_occurrences_family_occurred_knowledge",
+            "family_id",
+            "occurred_at",
+            "knowledge_item_id",
+        ),
+    )
     id = Column(String(36), primary_key=True, default=new_id)
     family_id = Column(String(80), nullable=False, index=True)
     knowledge_item_id = Column(
@@ -431,7 +475,17 @@ class KnowledgeOccurrence(Base):
 
 class ReviewItem(Base):
     __tablename__ = "review_items"
-    __table_args__ = (UniqueConstraint("knowledge_item_id", name="uq_review_knowledge"),)
+    __table_args__ = (
+        UniqueConstraint("knowledge_item_id", name="uq_review_knowledge"),
+        Index(
+            "ix_review_items_family_child_active_due_id",
+            "family_id",
+            "child_id",
+            "active",
+            "due_date",
+            "id",
+        ),
+    )
     id = Column(String(36), primary_key=True, default=new_id)
     family_id = Column(String(80), nullable=False, index=True)
     child_id = Column(String(36), ForeignKey("children.id"), nullable=False, index=True)
@@ -449,6 +503,14 @@ class ReviewItem(Base):
 
 class ReviewFeedback(Base):
     __tablename__ = "review_feedback"
+    __table_args__ = (
+        Index(
+            "ix_review_feedback_family_review_occurred",
+            "family_id",
+            "review_item_id",
+            "occurred_at",
+        ),
+    )
     id = Column(String(36), primary_key=True, default=new_id)
     family_id = Column(String(80), nullable=False, index=True)
     review_item_id = Column(String(36), ForeignKey("review_items.id"), nullable=False, index=True)
@@ -491,6 +553,29 @@ class ActivitySchedule(Base):
     updated_at = Column(UTCDateTime(), nullable=False, default=utcnow, onupdate=utcnow)
 
 
+class ActivityScheduleSlot(Base):
+    __tablename__ = "activity_schedule_slots"
+    __table_args__ = (
+        UniqueConstraint("schedule_id", "weekday", name="uq_activity_schedule_slot_weekday"),
+        CheckConstraint("weekday >= 0 AND weekday <= 6", name="ck_activity_slot_weekday"),
+        CheckConstraint("end_time > start_time", name="ck_activity_slot_time_range"),
+    )
+    id = Column(String(36), primary_key=True, default=new_id)
+    family_id = Column(String(80), nullable=False, index=True)
+    child_id = Column(
+        String(36), ForeignKey("children.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    schedule_id = Column(
+        String(36),
+        ForeignKey("activity_schedules.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    weekday = Column(Integer, nullable=False, index=True)
+    start_time = Column(Time, nullable=False)
+    end_time = Column(Time, nullable=False)
+
+
 class CalendarEvent(Base):
     __tablename__ = "calendar_events"
     id = Column(String(36), primary_key=True, default=new_id)
@@ -527,11 +612,36 @@ class TravelArrangement(Base):
     child_id = Column(String(36), ForeignKey("children.id"), nullable=False, index=True)
     name = Column(String(30), nullable=False)
     weekdays = Column(String(30), nullable=False)
+    # Transitional compatibility mirror. New runtime reads only travel_arrangement_slots;
+    # mixed schedules keep the first canonical slot here solely for the old NOT NULL schema.
     start_time = Column(Time, nullable=False)
     end_time = Column(Time, nullable=False)
     active = Column(Boolean, nullable=False, default=True)
     created_at = Column(UTCDateTime(), nullable=False, default=utcnow)
     updated_at = Column(UTCDateTime(), nullable=False, default=utcnow, onupdate=utcnow)
+
+
+class TravelArrangementSlot(Base):
+    __tablename__ = "travel_arrangement_slots"
+    __table_args__ = (
+        UniqueConstraint("arrangement_id", "weekday", name="uq_travel_arrangement_slot_weekday"),
+        CheckConstraint("weekday >= 0 AND weekday <= 6", name="ck_travel_slot_weekday"),
+        CheckConstraint("end_time > start_time", name="ck_travel_slot_time_range"),
+    )
+    id = Column(String(36), primary_key=True, default=new_id)
+    family_id = Column(String(80), nullable=False, index=True)
+    child_id = Column(
+        String(36), ForeignKey("children.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    arrangement_id = Column(
+        String(36),
+        ForeignKey("travel_arrangements.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    weekday = Column(Integer, nullable=False, index=True)
+    start_time = Column(Time, nullable=False)
+    end_time = Column(Time, nullable=False)
 
 
 class TravelArrangementRequest(Base):
@@ -551,6 +661,15 @@ class TravelArrangementRequest(Base):
 
 class ActivityRecord(Base):
     __tablename__ = "activity_records"
+    __table_args__ = (
+        Index(
+            "ix_activity_records_family_child_occurred_id",
+            "family_id",
+            "child_id",
+            "occurred_at",
+            "id",
+        ),
+    )
     id = Column(String(36), primary_key=True, default=new_id)
     family_id = Column(String(80), nullable=False, index=True)
     child_id = Column(String(36), ForeignKey("children.id"), nullable=False, index=True)

@@ -8,6 +8,7 @@ from push_kids.planning.schemas import FeedbackRequest, FeedbackResult
 from push_kids.planning.service import PlanningService
 from push_kids.platform.context import family_id
 from push_kids.platform.dependencies import get_db
+from push_kids.platform.time import local_date
 
 router = APIRouter(tags=["planning"])
 
@@ -18,10 +19,19 @@ def daily_todos(
     family: Annotated[str, Depends(family_id)],
     db: Annotated[Session, Depends(get_db)],
     day: Annotated[date | None, Query()] = None,
+    cursor: Annotated[str | None, Query(max_length=1500)] = None,
+    limit: Annotated[int, Query(ge=1, le=50)] = 50,
 ):
+    page = PlanningService.daily_todo_page(db, family, child_id, day, cursor=cursor, limit=limit)
     return {
-        "day": (day or date.today()).isoformat(),
-        "groups": PlanningService.daily_todos(db, family, child_id, day),
+        "day": (day or local_date()).isoformat(),
+        "groups": page["groups"],
+        "total_count": page["total_count"],
+        "required_count": page["required_count"],
+        "estimated_minutes": page["estimated_minutes"],
+        "returned_count": page["returned_count"],
+        "remaining_count": page["remaining_count"],
+        "next_cursor": page["next_cursor"],
     }
 
 

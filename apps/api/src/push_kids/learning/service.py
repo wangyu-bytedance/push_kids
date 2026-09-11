@@ -71,6 +71,7 @@ from push_kids.platform.errors import (
     NotFoundError,
     ReviewStateChangedError,
 )
+from push_kids.platform.pagination import decode_cursor, encode_cursor
 from push_kids.platform.time import local_date, utcnow
 
 
@@ -611,7 +612,11 @@ class LearningService:
 
     @classmethod
     def _subject_groups(
-        cls, db: Session, submission: LearningSubmission, proposal: AnalysisProposal | None
+        cls,
+        db: Session,
+        submission: LearningSubmission,
+        proposal: AnalysisProposal | None,
+        subjects: list[Subject] | None = None,
     ) -> tuple[list[SubjectGroupView], bool]:
         """Split the draft across the child's configured subjects without writing anything.
 
@@ -620,7 +625,7 @@ class LearningService:
         """
         if proposal is None or proposal.subject_kind != "learning":
             return [], False
-        subjects = cls._learning_subjects(db, submission)
+        subjects = subjects if subjects is not None else cls._learning_subjects(db, submission)
         by_name = {str(subject.name): subject for subject in subjects}
         routing = route_subjects([str(item.name) for item in subjects if item.active], proposal)
         # Write the routed subject back onto each point so the client edits exactly one field.
@@ -715,8 +720,46 @@ class LearningService:
         pending_only: bool = False,
         offset: int = 0,
     ) -> list[SubmissionView]:
+        return cls.list_page(
+            db,
+            family_id,
+            child_id,
+            state=state,
+            pending_only=pending_only,
+            offset=offset,
+        )["items"]
+
+    @classmethod
+    def list_page(
+        cls,
+        db: Session,
+        family_id: str,
+        child_id: str,
+        *,
+        state: str | None = None,
+        pending_only: bool = False,
+        offset: int = 0,
+        limit: int = 100,
+        cursor: str | None = None,
+    ) -> dict:
         ChildrenService.get_child(db, family_id, child_id)
-        query = select(LearningSubmission.id).where(
+        if cursor and offset:
+            raise ValueError("cursor 和 offset 不能同时使用")
+        scope = ("submissions-v1", family_id, child_id, state, pending_only)
+        anchor = None
+        as_of = utcnow()
+        if cursor:
+            payload = decode_cursor(cursor, scope)
+            try:
+                as_of = datetime.fromisoformat(str(payload["as_of"]))
+                anchor_at = datetime.fromisoformat(str(payload["created_at"]))
+                anchor_id = str(payload["id"])
+                if not as_of.tzinfo or not anchor_at.tzinfo or not anchor_id:
+                    raise ValueError
+                anchor = (anchor_at, anchor_id)
+            except (KeyError, TypeError, ValueError) as exc:
+                raise ValueError("分页已失效，请刷新列表") from exc
+        query = select(LearningSubmission).where(
             LearningSubmission.family_id == family_id, LearningSubmission.child_id == child_id
         )
         if state:
@@ -732,12 +775,130 @@ class LearningService:
                     ]
                 )
             )
-        ids = db.scalars(
-            query.order_by(LearningSubmission.created_at.desc(), LearningSubmission.id.desc())
-            .offset(offset)
-            .limit(100)
+        query = query.where(LearningSubmission.created_at <= as_of)
+        if anchor:
+            query = query.where(
+                (LearningSubmission.created_at < anchor[0])
+                | (
+                    (LearningSubmission.created_at == anchor[0])
+                    & (LearningSubmission.id < anchor[1])
+                )
+            )
+        submissions = list(
+            db.scalars(
+                query.order_by(LearningSubmission.created_at.desc(), LearningSubmission.id.desc())
+                .offset(offset if not cursor else 0)
+                .limit(limit + 1)
+            )
         )
-        return [cls.get_view(db, family_id, item_id) for item_id in ids if item_id is not None]
+        more = len(submissions) > limit
+        submissions = submissions[:limit]
+        ids = [str(item.id) for item in submissions]
+        if not ids:
+            return {"items": [], "next_cursor": None}
+
+        media_counts: dict[str, int] = {
+            str(submission_id): int(count)
+            for submission_id, count in db.execute(
+                select(SubmissionMedia.submission_id, func.count(SubmissionMedia.id))
+                .where(SubmissionMedia.submission_id.in_(ids))
+                .group_by(SubmissionMedia.submission_id)
+            ).tuples()
+            if submission_id is not None
+        }
+        job_counts: dict[str, int] = {
+            str(submission_id): int(count)
+            for submission_id, count in db.execute(
+                select(AgentJob.submission_id, func.count(AgentJob.id))
+                .where(AgentJob.submission_id.in_(ids))
+                .group_by(AgentJob.submission_id)
+            ).tuples()
+            if submission_id is not None
+        }
+        request_keys: dict[str, str] = {
+            str(submission_id): str(idempotency_key)
+            for submission_id, idempotency_key in db.execute(
+                select(SubmissionRequest.submission_id, SubmissionRequest.idempotency_key).where(
+                    SubmissionRequest.family_id == family_id,
+                    SubmissionRequest.submission_id.in_(ids),
+                )
+            ).tuples()
+            if submission_id is not None and idempotency_key is not None
+        }
+        subjects = list(
+            db.scalars(
+                select(Subject)
+                .where(
+                    Subject.family_id == family_id,
+                    Subject.child_id == child_id,
+                    Subject.kind == "learning",
+                )
+                .order_by(Subject.created_at, Subject.id)
+            )
+        )
+        views = []
+        for submission in submissions:
+            if submission.id is None:
+                raise RuntimeError("学习记录缺少 ID")
+            submission_id = str(submission.id)
+            proposal = (
+                AnalysisProposal.model_validate(json.loads(submission.proposal_json))
+                if submission.proposal_json
+                else None
+            )
+            subject_groups, subject_review_needed = cls._subject_groups(
+                db, submission, proposal, subjects
+            )
+            media_count = int(media_counts.get(submission_id, 0))
+            job_count = int(job_counts.get(submission_id, 0))
+            awaiting_upload = bool(
+                submission.source == "photo"
+                and submission.state == SubmissionState.queued.value
+                and not job_count
+            )
+            views.append(
+                SubmissionView(
+                    id=submission.id,
+                    child_id=submission.child_id,
+                    occurred_at=submission.occurred_at,
+                    input_text=submission.input_text,
+                    source=submission.source,
+                    state=submission.state,
+                    proposal=proposal,
+                    display_groups=(
+                        project_display_groups(proposal.knowledge_points) if proposal else []
+                    ),
+                    subject_groups=subject_groups,
+                    subject_review_needed=subject_review_needed,
+                    error_code=submission.error_code,
+                    error_message=submission.error_message,
+                    media_count=media_count,
+                    awaiting_upload=awaiting_upload,
+                    upload_batch_key=request_keys.get(submission_id) if awaiting_upload else None,
+                    can_finalize_upload=bool(
+                        submission.source == "photo"
+                        and submission.state == SubmissionState.queued.value
+                        and media_count
+                        and not job_count
+                    ),
+                    created_at=submission.created_at,
+                    updated_at=submission.updated_at,
+                )
+            )
+        next_cursor = None
+        if more:
+            last = submissions[-1]
+            if last.created_at is None:
+                raise RuntimeError("学习记录缺少创建时间")
+            next_cursor = encode_cursor(
+                scope,
+                {
+                    "as_of": as_of.isoformat(),
+                    "created_at": last.created_at.isoformat(),
+                    "id": last.id,
+                },
+            )
+        return {"items": views, "next_cursor": next_cursor}
 
     @classmethod
     def cancel(

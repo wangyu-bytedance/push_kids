@@ -27,6 +27,10 @@ class ConflictError(AppError):
     code = "conflict"
 
 
+class ClientUpgradeRequiredError(ConflictError):
+    code = "client_upgrade_required"
+
+
 class ReviewStateChangedError(ConflictError):
     code = "review_state_changed"
 

@@ -1,8 +1,9 @@
 {
   "enablePullDownRefresh": true,
   "backgroundColor": "#F4F3EC",
+  "navigationStyle": "custom",
   "usingComponents": {
     "todo-card": "/components/todo-card/index",
-    "brand-head": "/components/brand-head/index"
+    "primary-nav": "/components/primary-nav/index"
   }
 }

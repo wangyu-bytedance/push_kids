@@ -1,6 +1,12 @@
 /* 记录（D1~D6）：只写本页特有几何，其余全部复用 tokens / atoms / icons。 */
 .record-page { padding-bottom: var(--pk-s6); }
-.record-page.sticky-cta { padding-bottom: 260rpx; }
+.record-page.sticky-cta { padding-bottom: calc(376rpx + env(safe-area-inset-bottom)); }
+
+/* 记录页是原生 Tab 页：固定主操作需同时避开 TabBar 和中央凸起按钮。 */
+.record-cta {
+  bottom: calc(var(--pk-tabbar-h) + var(--pk-s4) + env(safe-area-inset-bottom));
+  padding-bottom: var(--pk-s3);
+}
 
 .pg-head .child-chip .chip-nm { max-width: 200rpx; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .child-chip.single { padding-right: 28rpx; }
@@ -9,16 +15,13 @@
 .pk-notice .n-txt .n-t { display: block; font-size: 14px; font-weight: 600; line-height: 1.45; }
 .pk-notice .n-txt .n-c { display: block; margin-top: 4rpx; font-size: 13px; font-weight: 400; line-height: 1.5; opacity: .82; }
 
-/* 新增记录 / 历史记录切换 */
-.view-seg { margin-top: var(--pk-s4); }
-.mode-seg > view { display: flex; align-items: center; justify-content: center; gap: 10rpx; }
-
 /* 实际学习时间卡 */
 .time-card .time-val { display: block; margin-top: 4rpx; font-size: 15px; font-weight: 600; color: var(--pk-ink); }
 .time-card .btn.sm { flex: none; }
 
 /* 字段标题行 */
 .field-head { margin: var(--pk-s4) 0 var(--pk-s2); }
+.add-photo-tile { width: 100%; }
 
 /* 文字记录输入区 */
 .text-input { min-height: 320rpx; }
@@ -26,6 +29,12 @@
 .help.center { display: block; margin-top: var(--pk-s2); text-align: center; }
 .submit-row { display: block; }
 .submit-row > .btn { width: 100%; }
+
+/* 新增表单后的历史折叠区；完整列表仍复用 history.wxml。 */
+.history-section { margin-top: var(--pk-s4); }
+.history-toggle { min-height: var(--pk-touch-min); }
+.history-toggle .flex { width: 100%; min-height: var(--pk-touch-min); gap: var(--pk-s2); }
+.history-section.expanded .history-toggle { margin-bottom: var(--pk-s3); }
 
 /* ── 历史记录列表（D4 / D5） ───────────────────────────── */
 .h-search { display: flex; align-items: center; gap: var(--pk-s2); }

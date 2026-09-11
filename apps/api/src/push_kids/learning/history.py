@@ -96,12 +96,12 @@ class LearningHistory:
             )
             if subject is None:
                 raise NotFoundError("没有找到所选科目")
-        # "r2" marks the row identity used by the cursor: one row per learning record, because a
+        # "r3" marks the row identity used by the cursor: one row per learning record, because a
         # submission that spans subjects now holds several records. Older cursors stop matching and
         # the client is told to refresh instead of silently skipping rows.
         scope = hashlib.sha256(
             json.dumps(
-                ["r2", family, child, view, q, subject_id, source, str(start), str(end), cancelled],
+                ["r3", family, child, view, q, subject_id, source, str(start), str(end), cancelled],
                 ensure_ascii=False,
             ).encode()
         ).hexdigest()
@@ -125,22 +125,46 @@ class LearningHistory:
             except (ValueError, KeyError, TypeError, UnicodeError) as exc:
                 raise ValueError("分页已失效，请刷新列表") from exc
         s, r = LearningSubmission, LearningRecord
-        timestamp = s.occurred_at if view == "confirmed" else s.created_at
-        query = (
-            select(s, r, Subject)
-            .outerjoin(
-                r,
-                and_(
-                    r.submission_id == s.id,
-                    r.family_id == family,
-                    r.child_id == child,
-                ),
+        if view == "confirmed":
+            # Confirmed rows have the same occurrence time as their source submission. Starting
+            # from the record lets the tenant/time/submission index satisfy keyset ordering without
+            # sorting the complete history table.
+            timestamp = r.occurred_at
+            query = (
+                select(s, r, Subject)
+                .select_from(r)
+                .join(
+                    s,
+                    and_(
+                        s.id == r.submission_id,
+                        s.family_id == family,
+                        s.child_id == child,
+                    ),
+                )
+                .join(Subject, and_(Subject.id == r.subject_id, Subject.family_id == family))
             )
-            .outerjoin(Subject, and_(Subject.id == r.subject_id, Subject.family_id == family))
-        )
+        else:
+            timestamp = s.created_at
+            query = (
+                select(s, r, Subject)
+                .outerjoin(
+                    r,
+                    and_(
+                        r.submission_id == s.id,
+                        r.family_id == family,
+                        r.child_id == child,
+                    ),
+                )
+                .outerjoin(Subject, and_(Subject.id == r.subject_id, Subject.family_id == family))
+            )
         query = query.where(s.family_id == family, s.child_id == child, s.created_at <= upper)
         if view == "confirmed":
-            query = query.where(s.state == "confirmed", r.id.is_not(None), r.created_at <= upper)
+            query = query.where(
+                s.state == "confirmed",
+                r.family_id == family,
+                r.child_id == child,
+                r.created_at <= upper,
+            )
         elif view == "pending":
             query = query.where(s.state.in_(PENDING))
         if cancelled:
@@ -178,21 +202,24 @@ class LearningHistory:
                     and_(s.state != "confirmed", draft_summary.contains(q, autoescape=True)),
                 )
             )
-        record_key = func.coalesce(r.id, "")
+        submission_key = r.submission_id if view == "confirmed" else s.id
+        record_key = r.id if view == "confirmed" else func.coalesce(r.id, "")
         if anchor:
             query = query.where(
                 or_(
                     timestamp < anchor[0],
-                    and_(timestamp == anchor[0], s.id < anchor[1]),
+                    and_(timestamp == anchor[0], submission_key < anchor[1]),
                     and_(
                         timestamp == anchor[0],
-                        s.id == anchor[1],
+                        submission_key == anchor[1],
                         record_key < anchor[2],
                     ),
                 )
             )
         rows = db.execute(
-            query.order_by(timestamp.desc(), s.id.desc(), record_key.desc()).limit(limit + 1)
+            query.order_by(timestamp.desc(), submission_key.desc(), record_key.desc()).limit(
+                limit + 1
+            )
         ).all()
         more = len(rows) > limit
         rows = rows[:limit]
@@ -253,7 +280,12 @@ class LearningHistory:
         next_cursor = None
         if more and rows:
             last, last_record, _ = rows[-1]
-            at = last.occurred_at if view == "confirmed" else last.created_at
+            if view == "confirmed":
+                if last_record is None:
+                    raise RuntimeError("确认记录缺少学习记录")
+                at = last_record.occurred_at
+            else:
+                at = last.created_at
             next_cursor = base64.urlsafe_b64encode(
                 json.dumps(
                     {

@@ -3,7 +3,52 @@
 .settings-page { padding-top: 0; }
 .settings-page .head-intro { flex: 1; min-width: 0; }
 .settings-page .child-chip .chip-nm { max-width: 190rpx; }
-.settings-page .child-chip.single { padding-right: 28rpx; }
+
+.profile-row {
+  gap: 20rpx;
+  min-height: 120rpx;
+  padding: 16rpx 16rpx 16rpx 28rpx;
+}
+.profile-copy { min-width: 0; }
+.profile-row .r-t { font-size: 16px; font-weight: 600; }
+.profile-meta-line {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  min-width: 0;
+  margin-top: 4rpx;
+  font-size: 12px;
+  line-height: 1.5;
+}
+.profile-grade { min-width: 0; color: var(--pk-ink-3); }
+.profile-current {
+  flex: none;
+  color: var(--pk-primary-strong);
+  font-weight: 500;
+}
+.profile-edit-hit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  box-sizing: border-box;
+  width: 88rpx;
+  height: 88rpx;
+  border-radius: 50%;
+  background: transparent;
+}
+.profile-edit-hit:active { background: var(--pk-primary-wash); }
+.profile-add-row { min-height: 112rpx; color: var(--pk-primary-strong); }
+.profile-add-row .r-t { color: var(--pk-primary-strong); font-weight: 600; }
+.profile-sheet-section { margin-top: 28rpx; }
+.profile-sheet-label {
+  display: block;
+  padding: 0 8rpx 12rpx;
+  color: var(--pk-ink-3);
+  font-size: 13px;
+  line-height: 1.45;
+}
+.profile-restore { flex: none; color: var(--pk-primary-strong); font-size: 14px; }
 
 .set-card { padding: 32rpx 28rpx 24rpx; }
 .card-head {

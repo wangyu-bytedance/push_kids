@@ -80,7 +80,7 @@ class DeterministicTestProvider:
             not in reviewed_names | same_day_names
         ]
         return AnalysisProposal(
-            summary=summary[:120],
+            summary=summary[:60],
             subject_name=subject,
             source="手动记录" if text else "图片记录",
             knowledge_points=points,

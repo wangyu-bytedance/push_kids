@@ -2,11 +2,26 @@ const test = require("node:test");
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
+const vm = require("node:vm");
 
 const appRoot = path.resolve(__dirname, "../../apps/miniprogram");
 
 function read(relativePath) {
   return fs.readFileSync(path.join(appRoot, relativePath), "utf8");
+}
+
+function measurePrimaryNavigation(wxMock) {
+  let definition;
+  vm.runInNewContext(read("components/primary-nav/index.js"), {
+    Component(value) { definition = value; },
+    console: { warn() {} },
+    Math,
+    Number,
+    wx: wxMock
+  });
+  const data = { ...definition.data };
+  definition.lifetimes.attached.call({ data, setData(value) { Object.assign(data, value); } });
+  return data;
 }
 
 const TAB_PAGES = ["today", "calendar", "records", "reports", "settings"];
@@ -18,38 +33,94 @@ const TAB_TITLES = {
   settings: "按你们的节奏来"
 };
 
-test("primary tabs show the app name in the native bar instead of repeating the tab label", () => {
+test("primary tabs use one custom brand navigation and do not repeat the brand in page content", () => {
   const app = JSON.parse(read("app.json"));
 
+  /* 深页仍继承这个原生标题；只有五个一级页逐页切换到 custom。 */
   assert.equal(app.window.navigationBarTitleText, "知芽");
   for (const page of TAB_PAGES) {
     const config = JSON.parse(read(`pages/${page}/index.json`));
-    /* 页面不再覆盖标题：原生标题栏统一继承「知芽」，Tab 文案只出现在 TabBar 上。 */
     assert.equal(config.navigationBarTitleText, undefined, page);
-    assert.equal(config.usingComponents["brand-head"], "/components/brand-head/index", page);
+    assert.equal(config.navigationStyle, "custom", page);
+    assert.equal(config.usingComponents["primary-nav"], "/components/primary-nav/index", page);
+    assert.equal(config.usingComponents["brand-head"], undefined, page);
   }
 
   const tabLabels = app.tabBar.list.map((item) => item.text);
   for (const page of TAB_PAGES) {
     const template = read(`pages/${page}/index.wxml`);
-    assert.match(template, /<brand-head/, page);
-    assert.match(template, /<view class="pg-head under-brand">/, page);
+    assert.equal((template.match(/<primary-nav><\/primary-nav>/g) || []).length, 1, page);
+    assert.doesNotMatch(template, /<brand-head/, page);
+    assert.doesNotMatch(template, /under-brand/, page);
+    assert.match(template, /<view class="pg-head">/, page);
     assert.match(template, new RegExp(`<text class="pg-title">${TAB_TITLES[page]}</text>`), page);
     for (const label of tabLabels) {
       assert.doesNotMatch(template, new RegExp(`<text class="pg-title">${label}</text>`), `${page}/${label}`);
     }
   }
+
+  assert.equal(fs.existsSync(path.join(appRoot, "components/brand-head/index.wxml")), false);
+  assert.equal(fs.existsSync(path.join(appRoot, "components/brand-head/index.js")), false);
 });
 
-test("brand head uses the generated line icon and the product name, never an emoji or bitmap", () => {
-  const template = read("components/brand-head/index.wxml");
-  const script = read("components/brand-head/index.js");
+test("primary navigation uses the generated icon and has safe platform geometry fallbacks", () => {
+  const template = read("components/primary-nav/index.wxml");
+  const script = read("components/primary-nav/index.js");
+  const style = read("components/primary-nav/index.wxss");
 
-  assert.match(template, /class="ico ico-sprout-pri sm"/);
-  assert.match(template, /<text class="brand-word">知芽<\/text>/);
+  assert.match(template, /class="ico ico-sprout-pri sm primary-nav-mark"/);
+  assert.match(template, /<text class="primary-nav-title">知芽<\/text>/);
+  assert.match(template, /aria-label="知芽"/);
   assert.doesNotMatch(template, /<image/);
   assert.match(script, /addGlobalClass: true/);
-  assert.match(script, /kicker/);
+  assert.match(script, /wx\.getWindowInfo/);
+  assert.match(script, /wx\.getSystemInfoSync/);
+  assert.match(script, /wx\.getMenuButtonBoundingClientRect/);
+  assert.match(script, /FALLBACK_NAVIGATION_HEIGHT = 44/);
+  assert.match(script, /pageLifetimes/);
+  assert.match(style, /position: fixed/);
+  assert.match(style, /var\(--pk-canvas\)/);
+});
+
+test("primary navigation derives safe geometry and falls back when platform APIs fail", () => {
+  const measured = measurePrimaryNavigation({
+    getWindowInfo() { return { statusBarHeight: 47, windowWidth: 390 }; },
+    getMenuButtonBoundingClientRect() { return { top: 54, left: 296, height: 32 }; }
+  });
+  assert.deepEqual(
+    { statusBarHeight: measured.statusBarHeight, navigationHeight: measured.navigationHeight, totalHeight: measured.totalHeight, sideInset: measured.sideInset },
+    { statusBarHeight: 47, navigationHeight: 46, totalHeight: 93, sideInset: 102 }
+  );
+
+  const narrow = measurePrimaryNavigation({
+    getWindowInfo() { return { statusBarHeight: 20, windowWidth: 320 }; },
+    getMenuButtonBoundingClientRect() { return { top: 24, left: 223, height: 32 }; }
+  });
+  assert.equal(narrow.sideInset, 100);
+
+  const fallback = measurePrimaryNavigation({
+    getWindowInfo() { throw new Error("unavailable"); },
+    getMenuButtonBoundingClientRect() { throw new Error("unavailable"); }
+  });
+  assert.deepEqual(
+    { statusBarHeight: fallback.statusBarHeight, navigationHeight: fallback.navigationHeight, totalHeight: fallback.totalHeight, sideInset: fallback.sideInset },
+    { statusBarHeight: 20, navigationHeight: 44, totalHeight: 64, sideInset: 88 }
+  );
+});
+
+test("deep pages keep native navigation and primary-page context survives brand-row removal", () => {
+  const app = JSON.parse(read("app.json"));
+  const primaryPaths = new Set(TAB_PAGES.map((page) => `pages/${page}/index`));
+
+  for (const pagePath of app.pages) {
+    if (primaryPaths.has(pagePath)) continue;
+    const config = JSON.parse(read(`${pagePath}.json`));
+    assert.notEqual(config.navigationStyle, "custom", pagePath);
+  }
+
+  assert.match(read("pages/today/index.wxml"), /<text class="pg-context">\{\{dayLabel\}\}<\/text>/);
+  assert.match(read("pages/calendar/index.wxml"), /<text class="pg-context">\{\{weekKicker\}\}<\/text>/);
+  assert.match(read("pages/reports/index.wxml"), /<text class="pg-context">只统计已确认的学习<\/text>/);
 });
 
 test("primary surfaces do not explain affordances that the control already shows", () => {

@@ -157,7 +157,7 @@ Page({
       this.setData({ loading: false, error: error.message });
     }
   },
-  openChildSheet() { if (this.data.multiChild) this.setData({ showChildSheet: true }); },
+  openChildSheet() { if (this.data.children.length) this.setData({ showChildSheet: true }); },
   closeChildSheet() { this.setData({ showChildSheet: false }); },
   chooseChild(event) {
     const childIndex = Number(event.currentTarget.dataset.index);
@@ -176,6 +176,7 @@ Page({
     if (!this.guardWrite()) return;
     const childId = event.currentTarget.dataset.id || this.data.childId;
     if (!childId) return;
+    this.setData({ showChildSheet: false });
     wx.navigateTo({ url: `/pages/child-edit/index?mode=edit&child_id=${childId}` });
   },
   guardWrite() {

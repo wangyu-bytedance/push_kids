@@ -4,12 +4,13 @@
 
 - Frontend engineering scope: PRESENT
 - Constraint status: APPROVED
-- Constraint revision: FEC-20260906-04
+- Constraint revision: FEC-20260911-READ-PERF-01
 - Owner: 产品负责人（用户）
 - Approved by: 产品负责人（用户）
-- Approved at: 2026-09-06
-- Approval evidence: 用户批准 `SPEC-20260906-PKDS-01` 与 `DREV-20260906-PKDS-01`
-- Superseded revision: FEC-20260905-03（视口与横向手势条款不变，新增样式分层与图标生成条款）
+- Approved at: 2026-09-11
+- Approval evidence: 用户批准 `BUG-SPEC-20260911-PERF-01`、`ARCH-20260911-READ-PERF-01`
+  与 `FEC-20260911-READ-PERF-01`；视觉基线继续沿用已批准 PKDS revision
+- Superseded revision: FEC-20260906-04（视觉、视口、样式分层与图标条款不变；新增有界读取合同）
 - Related frontend design baseline: FDB-20260906-02
 - Applies to: `apps/miniprogram`
 
@@ -90,6 +91,14 @@
 - Initial tab package budget is 1.5 MiB; no chart framework in MVP.
 - List pages paginate or cap rendered history; uploads use bounded count/size and show real byte progress only when available.
 - Avoid request waterfalls, duplicate polling, unbounded timers, base64 media persistence and large child images in page state.
+- `FEC-PERF-READ-001`: a page never downloads complete history to build an aggregate or first screen;
+  it consumes a server aggregate or a hard-bounded cursor page.
+- `FEC-PERF-READ-002`: cursor state is remote state keyed by family/child/filter/range/load generation;
+  context changes invalidate it and stale or duplicate responses cannot append.
+- `FEC-PERF-READ-003`: page data and native node count remain bounded. More rows load only after the
+  approved user action; a failure retains already loaded rows and uses an existing recoverable error path.
+- `FEC-PERF-READ-004`: counts, units, range and truncation metadata shown together come from one server
+  contract. Partial or inconsistent aggregates degrade explicitly and are never silently presented as complete.
 
 ## Client security, privacy, and trust
 

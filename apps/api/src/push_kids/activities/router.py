@@ -1,67 +1,76 @@
 from datetime import date
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, Header
+from fastapi import APIRouter, Depends, Header, Query, Response
 from sqlalchemy.orm import Session
 
 from push_kids.activities.schemas import (
     ActivityRecordCreate,
     ActivityRecordView,
     ActivityScheduleCreate,
+    ActivityScheduleList,
     ActivityScheduleUpdate,
+    ActivityScheduleView,
     CalendarEventPatch,
     CalendarEventView,
     CalendarEventWrite,
 )
 from push_kids.activities.service import ActivitiesService
+from push_kids.activities.weekly_slots import has_weekly_time_slots_capability
 from push_kids.platform.context import family_id
 from push_kids.platform.dependencies import get_db
 
 router = APIRouter(tags=["activities"])
 
 
-def schedule_view(item):
-    return {
-        "id": item.id,
-        "child_id": item.child_id,
-        "subject_id": item.subject_id,
-        "weekdays": [int(value) for value in (item.weekdays or "").split(",") if value],
-        "start_time": item.start_time,
-        "end_time": item.end_time,
-        "target_per_week": item.target_per_week,
-        "note": item.note,
-        "active": item.active,
-    }
-
-
-@router.post("/activity-schedules", status_code=201)
+@router.post("/activity-schedules", response_model=ActivityScheduleView, status_code=201)
 def create_schedule(
     body: ActivityScheduleCreate,
     family: Annotated[str, Depends(family_id)],
     db: Annotated[Session, Depends(get_db)],
+    client_capabilities: Annotated[str | None, Header(alias="X-Client-Capabilities")] = None,
 ):
-    item = ActivitiesService.create_schedule(db, family, body)
-    return schedule_view(item)
+    supports_slots = has_weekly_time_slots_capability(client_capabilities)
+    item = ActivitiesService.create_schedule(db, family, body, client_supports_slots=supports_slots)
+    return ActivitiesService.view(db, item, client_supports_slots=supports_slots)
 
 
-@router.get("/children/{child_id}/activity-schedules")
+@router.get(
+    "/children/{child_id}/activity-schedules",
+    response_model=ActivityScheduleList,
+)
 def list_schedules(
     child_id: str,
     family: Annotated[str, Depends(family_id)],
     db: Annotated[Session, Depends(get_db)],
+    client_capabilities: Annotated[str | None, Header(alias="X-Client-Capabilities")] = None,
 ):
+    supports_slots = has_weekly_time_slots_capability(client_capabilities)
     items = ActivitiesService.list_schedules(db, family, child_id)
-    return {"items": [schedule_view(item) for item in items]}
+    return {
+        "items": [
+            ActivitiesService.view(db, item, client_supports_slots=supports_slots) for item in items
+        ]
+    }
 
 
-@router.patch("/activity-schedules/{schedule_id}")
+@router.patch("/activity-schedules/{schedule_id}", response_model=ActivityScheduleView)
 def update_schedule(
     schedule_id: str,
     body: ActivityScheduleUpdate,
     family: Annotated[str, Depends(family_id)],
     db: Annotated[Session, Depends(get_db)],
+    client_capabilities: Annotated[str | None, Header(alias="X-Client-Capabilities")] = None,
 ):
-    return schedule_view(ActivitiesService.update_schedule(db, family, schedule_id, body))
+    supports_slots = has_weekly_time_slots_capability(client_capabilities)
+    item = ActivitiesService.update_schedule(
+        db,
+        family,
+        schedule_id,
+        body,
+        client_supports_slots=supports_slots,
+    )
+    return ActivitiesService.view(db, item, client_supports_slots=supports_slots)
 
 
 @router.delete("/activity-schedules/{schedule_id}", status_code=204)
@@ -132,8 +141,15 @@ def list_records(
     child_id: str,
     family: Annotated[str, Depends(family_id)],
     db: Annotated[Session, Depends(get_db)],
+    response: Response,
+    cursor: Annotated[str | None, Query(max_length=1500)] = None,
+    limit: Annotated[int, Query(ge=1, le=100)] = 100,
 ):
-    return ActivitiesService.list_records(db, family, child_id)
+    page = ActivitiesService.record_page(db, family, child_id, cursor=cursor, limit=limit)
+    response.headers["X-Result-Limit"] = str(limit)
+    if page["next_cursor"]:
+        response.headers["X-Next-Cursor"] = page["next_cursor"]
+    return page["items"]
 
 
 @router.get("/children/{child_id}/activity-suggestions")

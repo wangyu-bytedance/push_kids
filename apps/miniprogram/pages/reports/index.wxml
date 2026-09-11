@@ -1,8 +1,9 @@
+<primary-nav></primary-nav>
 <view class="page report-page">
-  <brand-head kicker="只统计已确认的学习"></brand-head>
-  <view class="pg-head under-brand">
+  <view class="pg-head">
     <view class="head-intro">
       <text class="pg-title">一点一滴，看得见</text>
+      <text class="pg-context">只统计已确认的学习</text>
     </view>
     <view class="child-chip {{multiChild ? '' : 'single'}}" wx:if="{{children.length}}" aria-role="button" aria-label="切换孩子" bindtap="openChildSheet">
       <text class="ava">{{children[childIndex].avatar}}</text>

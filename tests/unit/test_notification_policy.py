@@ -186,17 +186,27 @@ def test_template_map_is_validated_before_it_can_be_used() -> None:
 
 
 def test_unconfigured_deployment_reports_itself_unavailable() -> None:
-    sender = build_sender(Settings(PUSH_KIDS_ENV="test"))
+    sender = build_sender(Settings(_env_file=None, PUSH_KIDS_ENV="test"))
     assert isinstance(sender, UnavailableSender)
     assert sender.available is False
     assert sender.unavailable_reason
     # 没有加密密钥时也不能开微信通道。
     wechat_without_key = build_sender(
-        Settings(PUSH_KIDS_ENV="test", PUSH_KIDS_NOTIFICATION_CHANNEL="wechat")
+        Settings(
+            _env_file=None,
+            PUSH_KIDS_ENV="test",
+            PUSH_KIDS_NOTIFICATION_CHANNEL="wechat",
+        )
     )
     assert wechat_without_key.available is False
     with pytest.raises(ValueError):
-        build_sender(Settings(PUSH_KIDS_ENV="cloud", PUSH_KIDS_NOTIFICATION_CHANNEL="recording"))
+        build_sender(
+            Settings(
+                _env_file=None,
+                PUSH_KIDS_ENV="cloud",
+                PUSH_KIDS_NOTIFICATION_CHANNEL="recording",
+            )
+        )
 
 
 def test_receiver_identity_is_encrypted_and_authenticated() -> None:

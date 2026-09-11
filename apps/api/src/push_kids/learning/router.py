@@ -3,7 +3,7 @@ from __future__ import annotations
 from datetime import datetime
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, File, Form, Header, Query, Request, UploadFile
+from fastapi import APIRouter, Depends, File, Form, Header, Query, Request, Response, UploadFile
 from sqlalchemy.orm import Session
 
 from push_kids.learning.media_router import router as media_router
@@ -173,11 +173,27 @@ def list_submissions(
     child_id: str,
     family: Annotated[str, Depends(family_id)],
     db: Annotated[Session, Depends(get_db)],
+    response: Response,
     state: str | None = None,
     pending_only: bool = False,
     offset: Annotated[int, Query(ge=0)] = 0,
+    cursor: Annotated[str | None, Query(max_length=1500)] = None,
+    limit: Annotated[int, Query(ge=1, le=100)] = 100,
 ):
-    return LearningService.list_views(db, family, child_id, state, pending_only, offset)
+    page = LearningService.list_page(
+        db,
+        family,
+        child_id,
+        state=state,
+        pending_only=pending_only,
+        offset=offset,
+        cursor=cursor,
+        limit=limit,
+    )
+    response.headers["X-Result-Limit"] = str(limit)
+    if page["next_cursor"]:
+        response.headers["X-Next-Cursor"] = page["next_cursor"]
+    return page["items"]
 
 
 @router.get("/submissions/{submission_id}", response_model=SubmissionView)

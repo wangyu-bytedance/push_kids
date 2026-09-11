@@ -110,17 +110,27 @@ guide.todoCards = [];
 guide.sectionMeta = { review: "0 项", learning: "还没有记录", activity: "0 项" };
 guide.hero = { required: 0, optional: 0, total: 0, minutes: 0, ticks: ringTicks(0, 0), note: "" };
 
+const todayActivityEmpty = JSON.parse(JSON.stringify(base));
+todayActivityEmpty.dashboard.schedule_items = [];
+todayActivityEmpty.dashboard.optional_activity_suggestions = [];
+todayActivityEmpty.dashboard.activity_count = 0;
+todayActivityEmpty.sectionMeta.activity = "0 项";
+
 const sheet = JSON.parse(JSON.stringify(base));
 sheet.showChildSheet = true;
 
-/* ---------------- 记录页（新增记录 · 拍照模式空态） ---------------- */
+/* ---------------- 记录页（统一新增表单 · 历史默认折叠） ---------------- */
 const records = {
   loading: false, error: "", children, childIndex: 0, childId: "c1", canWrite: true,
-  recordView: "new", mode: "photo", photos: [], saving: false, uploadProgress: 0,
-  text: "", date: "2026-09-06", dateLabel: "09月06日", time: "19:20", today: "2026-09-06",
+  historyExpanded: false, photos: [], saving: false, uploadProgress: 0,
+  text: "", hasText: false, date: "2026-09-06", dateLabel: "09月06日", time: "19:20", today: "2026-09-06",
   timeOpen: false, backfill: false, pendingCount: 2, submittedId: "", history: [],
   historyView: "confirmed", historyLoading: false, filterDraft: {}, filterSubjects: []
 };
+const previewPhoto = "/assets/icon-photo.png";
+const recordsPhotoOne = { ...records, photos: [previewPhoto] };
+const recordsPhotoEight = { ...records, photos: Array.from({ length: 8 }, () => previewPhoto) };
+const recordsPhotoNine = { ...records, photos: Array.from({ length: 9 }, () => previewPhoto) };
 
 
 /* ---------------- 历史记录（D4/D5：待处理 + 已确认混排） ---------------- */
@@ -143,7 +153,7 @@ const historyItems = [
 ];
 
 const recordsHistory = {
-  ...records, recordView: "history", searchText: "", hasFilters: false, historyView: "confirmed",
+  ...records, historyExpanded: true, searchText: "", hasFilters: false, historyView: "confirmed",
   historyItems, historyLoading: false, historyPage: 1, historyNext: true, historyError: "",
   pendingProcessing: true, pendingCount: 2, filterOpen: false,
   historyFilters: { q: "", from: "", to: "", subject_id: "", source: "", cancelled: false },
@@ -273,7 +283,8 @@ const calendarEditor = { ...calendar, showEditor: true, editingId: "", eventName
 /* ---------------- 学习设置（Tab 5） ---------------- */
 const settings = {
   loading: false, error: "", children, childIndex: 0, childId: "c1", multiChild: true, showChildSheet: false,
-  canWrite: true, togglingName: "", removingId: "", requestsLabel: "1 条待处理",
+  archivedChildren: [{ id: "c3", name: "小雪", grade: "小学六年级", avatar: "小", label: "小雪 · 小学六年级" }],
+  canWrite: true, canAddChild: true, childLimitHint: "最多同时保留 5 个学习档案，可以先归档不再使用的档案。", togglingName: "", removingId: "", requestsLabel: "1 条待处理",
   baseLearning: [
     { name: "语文", selected: true }, { name: "数学", selected: true }, { name: "英语", selected: true },
     { name: "科学", selected: false }, { name: "道德与法治", selected: false }, { name: "音乐", selected: false }
@@ -285,6 +296,15 @@ const settings = {
   ],
   showCatalog: false, showSchedule: false
 };
+
+const settingsSheet = JSON.parse(JSON.stringify(settings));
+settingsSheet.showChildSheet = true;
+
+const settingsSheetViewer = JSON.parse(JSON.stringify(settingsSheet));
+settingsSheetViewer.canWrite = false;
+
+const settingsSheetLimit = JSON.parse(JSON.stringify(settingsSheet));
+settingsSheetLimit.canAddChild = false;
 
 
 /* ---------------- 记录详情（D7：已确认的正式记录） ---------------- */
@@ -354,14 +374,21 @@ const familyMembers = {
 
 module.exports = {
   today: { page: "pages/today", data: base, tabBar },
+  "today-activity-empty": { page: "pages/today", data: todayActivityEmpty, tabBar },
   "today-guide": { page: "pages/today", data: guide, tabBar },
   "today-sheet": { page: "pages/today", data: sheet, tabBar },
   records: { page: "pages/records", data: records, tabBar: { ...tabBar, selected: 2 } },
+  "records-photo-1": { page: "pages/records", data: recordsPhotoOne, tabBar: { ...tabBar, selected: 2 } },
+  "records-photo-8": { page: "pages/records", data: recordsPhotoEight, tabBar: { ...tabBar, selected: 2 } },
+  "records-photo-9": { page: "pages/records", data: recordsPhotoNine, tabBar: { ...tabBar, selected: 2 } },
   confirm: { page: "pages/submission", name: "confirm", data: confirmDraft, tabBar: null, styles: ["components/submission-materials/index.wxss"] },
   reports: { page: "pages/reports", data: reports, tabBar: { ...tabBar, selected: 3 } },
   calendar: { page: "pages/calendar", data: calendar, tabBar: { ...tabBar, selected: 1 } },
   "calendar-editor": { page: "pages/calendar", data: calendarEditor, tabBar: { ...tabBar, selected: 1 } },
   settings: { page: "pages/settings", data: settings, tabBar: { ...tabBar, selected: 4 } },
+  "settings-sheet": { page: "pages/settings", data: settingsSheet, tabBar: { ...tabBar, selected: 4 } },
+  "settings-sheet-viewer": { page: "pages/settings", data: settingsSheetViewer, tabBar: { ...tabBar, selected: 4 } },
+  "settings-sheet-limit": { page: "pages/settings", data: settingsSheetLimit, tabBar: { ...tabBar, selected: 4 } },
   "records-history": { page: "pages/records", data: recordsHistory, tabBar: { ...tabBar, selected: 2 } },
   "record-detail": { page: "pages/record-detail", data: recordDetail, tabBar: null,
     styles: ["components/submission-materials/index.wxss", "pages/submission/detail.wxss"] },

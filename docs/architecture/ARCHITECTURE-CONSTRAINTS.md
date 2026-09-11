@@ -1,4 +1,4 @@
-# Architecture constraints — aligned with `ARCH-20260906-TRAVEL-01`
+# Architecture constraints — aligned with `ARCH-20260911-READ-PERF-01`
 
 These constraints originated in `ARCH-20260830-01`; the enforceable rules below remain active under the current
 architecture revision. Historical `FDB`/`FEC`/`DREV-20260830-*` references are frontend design revisions, not
@@ -20,6 +20,13 @@ architecture-revision pointers.
   gate (b) remains open, so public production is still blocked.
 - `ARC-012`: no new global `common`, `utils`, `helpers` or service-locator module without an owned semantic contract.
 - `ARC-013`: schema and public API changes require a Spec compatibility note and forward-safe migration plan.
+- `ARC-014 — Bounded read paths`: every collection or embedded-list API MUST declare a stable total
+  order, default/max page size, continuation/end semantics, snapshot behavior and compatibility. A
+  router limit is insufficient when service work is still unbounded. Counts and reports aggregate at
+  the database-owner boundary and materialize only O(page-size/bucket-count) rows; list projections
+  use O(1) queries in page size. Growing tenant queries require tenant-leading composite indexes,
+  SQLite/MySQL plan evidence, comparable latency/memory/response budgets and safe route-template
+  observability. Exceptions require an approved measured Spec with an owner and expiry.
 
 ## AI Native maintainability constraints
 

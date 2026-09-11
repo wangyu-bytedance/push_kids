@@ -1,7 +1,7 @@
 <import src="history.wxml" />
-<view class="page record-page {{recordView === 'new' && canWrite && children.length ? 'sticky-cta' : ''}}">
-  <brand-head></brand-head>
-  <view class="pg-head under-brand">
+<primary-nav></primary-nav>
+<view class="page record-page {{canWrite && children.length ? 'sticky-cta' : ''}}">
+  <view class="pg-head">
     <view class="grow">
       <text class="pg-title">一笔一画，都算数</text>
     </view>
@@ -33,12 +33,7 @@
   </view>
 
   <block wx:if="{{children.length}}">
-    <view class="seg n2 view-seg">
-      <view class="{{recordView === 'new' ? 'on' : ''}}" aria-role="button" aria-label="新增记录" data-view="new" bindtap="changeRecordView">新增记录</view>
-      <view class="{{recordView === 'history' ? 'on' : ''}}" aria-role="button" aria-label="历史记录" data-view="history" bindtap="changeRecordView">历史记录</view>
-    </view>
-
-    <block wx:if="{{recordView === 'new' && canWrite}}">
+    <block wx:if="{{canWrite}}">
       <view class="pk-notice mt3" wx:if="{{pendingCount}}" aria-role="button" aria-label="查看待处理记录" bindtap="openHistoryPending">
         <view class="ico ico-sparkle-att sm"></view>
         <text class="n-txt">有 {{pendingCount}} 条待处理 · 查看</text>
@@ -74,83 +69,67 @@
         <text class="n-txt">历史补录只安排今天起的复习检查，不会补出过去的待办。</text>
       </view>
 
-      <view class="seg n2 mode-seg mt3">
-        <view class="{{mode === 'photo' ? 'on' : ''}}" aria-role="button" aria-label="拍照记录" data-mode="photo" bindtap="changeMode">
-          <view class="ico ico-camera-pri xs" wx:if="{{mode === 'photo'}}"></view>
-          <view class="ico ico-camera-mute xs" wx:else></view>
-          <text>拍照记录</text>
+      <view class="flex between field-head">
+        <text class="t-sub-m">学习照片</text>
+        <text class="t-cap c-ink-3 tnum">{{photos.length}} / 9</text>
+      </view>
+      <view class="up-tile add-photo-tile" wx:if="{{!photos.length}}" aria-role="button"
+        aria-label="添加学习照片，可拍摄或从相册选择" bindtap="addPhotos">
+        <view class="ico ico-camera-pri lg"></view>
+        <text>添加学习照片</text>
+        <text class="us">拍摄或从相册选择</text>
+      </view>
+      <block wx:else>
+        <view class="pgrid">
+          <view class="pcell" wx:for="{{photos}}" wx:key="*this">
+            <image class="pimg" src="{{item}}" mode="aspectFill"></image>
+            <view class="idx tnum">照片 {{index + 1}}</view>
+            <view class="rm" wx:if="{{!saving}}" aria-role="button" aria-label="移除第 {{index + 1}} 张照片" data-index="{{index}}" bindtap="removePhoto">
+              <view class="ico ico-close-inv xs"></view>
+            </view>
+          </view>
+          <view class="pcell add" wx:if="{{photos.length < 9 && !saving}}" aria-role="button"
+            aria-label="继续添加照片，可拍摄或从相册选择" bindtap="addPhotos">
+            <view class="ph-center"><view class="ico ico-plus"></view></view>
+          </view>
         </view>
-        <view class="{{mode === 'text' ? 'on' : ''}}" aria-role="button" aria-label="文字记录" data-mode="text" bindtap="changeMode">
-          <view class="ico ico-pen-pri xs" wx:if="{{mode === 'text'}}"></view>
-          <view class="ico ico-pen-mute xs" wx:else></view>
-          <text>文字记录</text>
+        <view class="mt3" wx:if="{{saving}}">
+          <view class="prog-line"><view class="pf" style="width: {{uploadProgress}}%"></view></view>
+          <view class="flex between mt1">
+            <text class="t-cap c-ink-3">正在上传照片，别关掉这个页面</text>
+            <text class="t-cap c-ink-3 tnum">{{uploadProgress}}%</text>
+          </view>
         </view>
+      </block>
+
+      <view class="pk-field mt4">
+        <text class="lbl">学习内容</text>
+        <textarea class="pk-textarea text-input" value="{{text}}" data-field="text" bindinput="setField" maxlength="4000"
+          adjust-position="{{true}}" placeholder="可补充照片里不明显的内容，也可以直接写下今天学了什么。" placeholder-class="pk-ph"></textarea>
+        <text class="counter tnum text-counter">{{text.length}} / 4000</text>
       </view>
 
-      <block wx:if="{{mode === 'photo'}}">
-        <view class="flex between field-head">
-          <text class="t-sub-m">学习照片</text>
-          <text class="t-cap c-ink-3 tnum">{{photos.length}} / 9</text>
-        </view>
-        <view class="upload-2" wx:if="{{!photos.length}}">
-          <view class="up-tile" aria-role="button" aria-label="拍摄一张学习照片" bindtap="chooseCamera">
-            <view class="ico ico-camera-pri lg"></view><text>拍摄一张</text>
-          </view>
-          <view class="up-tile alt" aria-role="button" aria-label="从相册选择照片" bindtap="chooseAlbum">
-            <view class="ico ico-image lg"></view><text>从相册选择</text>
-          </view>
-        </view>
-        <block wx:else>
-          <view class="pgrid">
-            <view class="pcell" wx:for="{{photos}}" wx:key="*this">
-              <image class="pimg" src="{{item}}" mode="aspectFill"></image>
-              <view class="idx tnum">照片 {{index + 1}}</view>
-              <view class="rm" wx:if="{{!saving}}" aria-role="button" aria-label="移除第 {{index + 1}} 张照片" data-index="{{index}}" bindtap="removePhoto">
-                <view class="ico ico-close-inv xs"></view>
-              </view>
-            </view>
-            <view class="pcell add" wx:if="{{photos.length < 9 && !saving}}" aria-role="button" aria-label="继续添加照片" bindtap="chooseAlbum">
-              <view class="ph-center"><view class="ico ico-plus"></view></view>
-            </view>
-          </view>
-          <view class="mt3" wx:if="{{saving}}">
-            <view class="prog-line"><view class="pf" style="width: {{uploadProgress}}%"></view></view>
-            <view class="flex between mt1">
-              <text class="t-cap c-ink-3">正在上传照片，别关掉这个页面</text>
-              <text class="t-cap c-ink-3 tnum">{{uploadProgress}}%</text>
-            </view>
-          </view>
-        </block>
-
-        <view class="pk-field mt4">
-          <text class="lbl">补充内容<text class="opt">选填</text></text>
-          <textarea class="pk-textarea" value="{{text}}" data-field="text" bindinput="setField" maxlength="4000"
-            adjust-position="{{true}}" placeholder="例如：今天练习了乘法，重点是进位。" placeholder-class="pk-ph"></textarea>
-        </view>
-      </block>
-
-      <block wx:else>
-        <view class="pk-field">
-          <text class="lbl">学习内容<text class="opt">必填</text></text>
-          <textarea class="pk-textarea text-input" value="{{text}}" data-field="text" bindinput="setField" maxlength="4000"
-            adjust-position="{{true}}" placeholder="写下今天实际学过的内容" placeholder-class="pk-ph"></textarea>
-          <text class="counter tnum text-counter">{{text.length}} / 4000</text>
-        </view>
-      </block>
-
-      <view class="safe-tail"></view>
     </block>
 
-    <template wx:else is="history" data="{{historyView,historyItems,historyLoading,historyError,historyPage,historyNext,historyFilters,hasFilters,pendingCount,pendingProcessing,searchText,filterOpen,filterDraft,filterSubjects,filterSubjectIndex,filterError,sourceOptions,canWrite}}" />
+    <view id="record-history" class="history-section {{historyExpanded ? 'expanded' : ''}}">
+      <view class="pk-card tight history-toggle" aria-role="button" aria-label="{{historyExpanded ? '收起历史记录' : '展开历史记录'}}" aria-expanded="{{historyExpanded}}" bindtap="toggleHistory">
+        <view class="flex">
+          <view class="ico ico-clock sm"></view>
+          <text class="t-sub-m grow">历史记录</text>
+          <text class="t-cap c-ink-3" wx:if="{{pendingCount}}">{{pendingCount}} 条待处理</text>
+          <view class="chev {{historyExpanded ? 'up' : ''}}"></view>
+        </view>
+      </view>
+      <template wx:if="{{historyExpanded}}" is="history" data="{{historyView,historyItems,historyLoading,historyError,historyPage,historyNext,historyFilters,hasFilters,pendingCount,pendingProcessing,searchText,filterOpen,filterDraft,filterSubjects,filterSubjectIndex,filterError,sourceOptions,canWrite}}" />
+    </view>
   </block>
 </view>
 
-<view class="pk-cta-bar" wx:if="{{children.length && recordView === 'new' && canWrite}}">
+<view class="pk-cta-bar record-cta" wx:if="{{children.length && canWrite}}">
   <view class="action-row submit-row">
-    <view class="btn {{saving ? 'is-disabled' : ''}}" aria-role="button" aria-label="{{mode === 'photo' ? '上传并整理' : '提交整理'}}" bindtap="save">
+    <view class="btn {{saving ? 'is-disabled' : ''}}" aria-role="button" aria-label="{{saving ? (photos.length ? '正在上传照片' : '正在提交文字记录') : (photos.length ? '上传并整理' : (hasText ? '提交整理' : '添加照片或文字后继续'))}}" bindtap="save">
       <view class="ico ico-sparkle-inv sm" wx:if="{{!saving}}"></view>
-      <text wx:if="{{mode === 'photo'}}">{{saving ? '上传中 ' + uploadProgress + '%' : (photos.length ? '上传并整理' : '选择照片后继续')}}</text>
-      <text wx:else>{{saving ? '正在提交…' : '提交整理'}}</text>
+      <text>{{saving ? (photos.length ? '上传中 ' + uploadProgress + '%' : '正在提交…') : (photos.length ? '上传并整理' : (hasText ? '提交整理' : '添加照片或文字后继续'))}}</text>
     </view>
   </view>
   <text class="help center">提交后会先生成待确认的草稿，确认后才进入学习档案。</text>

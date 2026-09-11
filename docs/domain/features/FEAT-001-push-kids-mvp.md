@@ -1,12 +1,12 @@
 # FEAT-001 — 家庭学习持续跟进系统 MVP
 
 - Status: `CURRENT`
-- Revision: `FEAT-STATE-20260906-PKDS-04-AI-INCREMENT`
-- Last verified: 2026-09-06（AI 增量后端本地 212 passed / 2 MySQL skipped，前端 109 passed，架构与小程序校验通过；Ark strict JSON Schema live smoke 因本机未配置 Key 为 NOT_RUN；确认页新分区仍受设计门禁阻塞）
+- Revision: `FEAT-STATE-20260911-READ-PERF-01-LOCAL`
+- Last verified: 2026-09-11（BUG-018 有界读取已完成：fresh MySQL 8.0.45 base-to-head/current/check/downgrade/re-upgrade 与 4 项 MySQL 测试通过；后端 unit/integration/contract 298 passed，性能 2 passed，前端 144 passed；Ruff、format、Mypy 81 source files、ESLint、架构、小程序静态 15 pages/632049 bytes、空库审计与 diff check 通过。SQLite 10k dashboard/report 与 50k history 均在批准预算内。可选 TabBar 生成器因环境缺少 cairosvg 未运行；生产备份/迁移、云端阶段信号、体验版与真机矩阵尚未执行）
 - Source Spec: `specs/completed/FEAT-001-PUSH-KIDS-FINAL-SPEC.md` revision `SPEC-20260831-08`
-- Latest applied Spec: `specs/active/FEAT-001-SUBJECT-GROUPED-INCREMENTAL-AI.md` revision `SPEC-AI-INCREMENT-20260906-03`（backend only）
-- Previous applied Spec: `specs/active/BUG-013-MULTI-SUBJECT-AND-PARENT-FLOW.md` revision `BUG-SPEC-20260906-16`
-- Current visible contract: `docs/design/frontend/prototypes/DREV-20260906-PKDS-01/FRONTEND-SPEC.md`
+- Latest applied Spec: `specs/active/BUG-018-BOUNDED-READ-API-PERFORMANCE.md` revision `BUG-SPEC-20260911-PERF-01`
+- Previous applied Spec: `specs/active/SPEC-20260911-SETTINGS-PROFILE-MANAGER-POLISH.md` revision `SPEC-20260911-SETTINGS-PROFILE-MANAGER-POLISH-01`（frontend only）
+- Current visible contract: `docs/design/frontend/prototypes/DREV-20260911-SETTINGS-PROFILE-MANAGER-02/FRONTEND-SPEC.md`
 - Intermediate design artifact: `docs/design/frontend/prototypes/DREV-20260830-03/index.html`
 
 ## Purpose and current behavior
@@ -15,9 +15,12 @@
 家长确认后才写入学习记录、知识点出现历史和复习计划。系统只安排已经学过的知识，不预测
 下一课，不自动批改或判断掌握。活动只进入日程、练习记录和温和提醒，不进入记忆曲线。
 
-原生微信小程序有五个 Tab：今日、日程、记录、报表、设置，共 12 个已注册页面。视觉与交互合同
-是 PKDS-1.0（`DREV-20260906-PKDS-01`）。HTML DREV-03 与 UX-03/UX-04 保留为评审过程的阶段性
-产物，不参与运行。
+原生微信小程序有五个 Tab：今日、日程、记录、报表、设置，共 15 个已注册页面。五个一级页使用
+共享 `components/primary-nav`，按状态栏和右上胶囊几何在导航中央显示唯一“芽图标 + 知芽”，内容区
+直接从各页句子式 hero 开始；确认、记录详情、家庭与设置子页继续使用微信原生标题和返回行为。
+视觉与交互基线是 PKDS-2.0（`FDB-20260906-03`），当前增量合同为
+`DREV-20260911-SETTINGS-PROFILE-MANAGER-02`。HTML DREV-03 与 UX-03/UX-04 保留为评审过程的阶段性产物，
+不参与运行。
 
 ## Current invariants
 
@@ -28,13 +31,22 @@
   正式知识点保存机器识别的 `confidence` 与 `evidence`（仅识别可靠度与出处，不表示掌握程度），
   首次确认写入后不被后续确认覆盖；本次修订之前的历史数据没有这两个字段。科目区分系统预设
   （`语文/数学/英语` 且 `kind=learning`，`is_custom=false`）与家长自建（`is_custom=true`）。
-- 历史回看已在本地实现：记录页同页切换新增/历史，已确认/待处理/全部共用分页入口；
+- 历史回看已在本地实现：记录页默认展示统一照片+文字新增表单，历史位于表单末尾并默认折叠；
+  普通可写用户折叠时只读取待处理数量，展开、待处理入口或今日/报表显式意图才读取完整列表，
+  viewer 直接展开只读历史。已确认/待处理/全部共用分页入口；
   详情由独立的只读页面 `pages/record-detail/` 承载（已入档只读态与待处理态），确认页只承载
   可编辑草稿；两者共用同一份只读 mixin 与模板，展示正式总结、本次知识、原始材料和关联知识
   截至现在的复习反馈。今日和报表科目行可带日期/科目跳入；到期项回到今日反馈。浏览不写学习、
   知识、Review 或 Feedback。
+- 记录详情的复习反馈读取先取最多 20 个关联 Review，再对每项执行 family-scoped、按
+  `(occurred_at desc, id desc)` 稳定排序且 `LIMIT 4` 的查询；对外仍是每页 3 条与既有
+  `next_before` 合同。零反馈返回空数组，失效或越界游标拒绝，不把后端错误伪装为空成功态。
 - 历史列表每页 20 条、最多 50 条，稳定游标排序；已确认按学习日期，其他按提交日期。
   无 view 参数的旧 history 接口保留兼容；新 UI 不再依赖 100 条待处理草稿接口。
+- 所有随历史增长的读取都有稳定顺序和服务端硬上限。Todo/dashboard 首屏最多 20 项，后续通过与
+  家庭、孩子、日期和快照绑定的游标继续，精确总数与 required/optional 分组覆盖整个快照；并发新增或
+  更新不会混入旧遍历。活动记录与提交兼容数组最多 100 项并通过响应头续页；报表最多 100 天，其
+  总览、趋势和 `activity_subjects` 由同一范围的 SQL 聚合产生，科目明细最多 50 项且显式报告省略量。
 - 原图每次经家庭/孩子/提交/媒体关联验证；viewer 允许读取，被移除成员拒绝新读取。
   云端签发最长 60 秒 GET 链接，本地下载每次带身份；临时文件退出清理。真实云端双账号 owner
   隔离与 metaid 解码已于 2026-09-06 由用户确认验收通过；合法域名和设备矩阵仍按各自发布门禁记录。
@@ -68,10 +80,13 @@
   每科学习历史先取最近20条、按家长文字词面相关性排序后最多10条；知识先取最近30个，再按
   词面相关性排序，最终跨科目轮流取样。照片相关性由模型阅读，未声称语义检索。
   历史/知识出现必须不晚于本次学习；不推断教材、单元、掌握程度或下一课。
-- 部署规则在 `agent_processing/prompt.py` 以 `subject-grouped-incremental-20260906-03` 版本化，不读取
+- 部署规则在 `agent_processing/prompt.py` 以 `subject-grouped-incremental-20260911-04` 版本化，不读取
   个人SKILL目录。Ark 必须按当前 active learning subjects 返回固定键的 strict JSON Schema，条目明确
   为 `new_learning` 或 `review`；Markdown fence、额外科目/字段和非法引用不再由正则修补。Provider
   失败后只携带脱敏校验代码最多重生成两次；最终非法输出终态为 `analysis_output_invalid`，不保存原文。
+  模型 summary 必须是一句不超过 60 字、只描述本次实际学习/练习内容的简短事实；“没有识别到”
+  “不包含”“未涉及”“无某科内容”等缺失项说明会以脱敏 `summary.exclusion_clause` 拒绝并进入同一
+  有限重试。该限制不替代家长编辑和历史记录的 500 字合同，也不误伤“不规则图形”等真实概念。
   服务端再校验证据、历史/知识/Review引用并精确过滤同发生日重复项；语义正确性仍须家长核对。
 - 批内相同图片字节只传一次，证据保持原照片编号；最近100个同家庭同孩子的待确认/已确认
   提交内，相同文字+图片字节摘要触发重复材料提示并清空自动Todo匹配。摘要保存在草稿JSON的
@@ -90,9 +105,18 @@
 - `daily_budget_minutes` 只把全部到期内容分为“建议完成/有余力再做”，不改变到期日；家长端不展示或编辑该内部默认值。
 - 固定活动提醒的星期、开始和结束时间是设置、日程和今日的同一事实源。
 - 设置只固定展示数学、语文、英语；其他学习科目与课外活动必须由家长从目录或自定义名称显式添加。课外活动默认空，取消添加或提醒编辑不产生补偿写入。
-- 今日在成功且全部为空时提供记录学习和添加日程入口；单栏空文案居中。日程七天、报表三档、基础科目和活动七星期不依赖横向滚动。
+- 设置页有在用孩子时不再在主内容重复展示学习档案列表；右上角孩子胶囊在单孩子时也可打开统一
+  档案面板。档案行以姓名/年级两级信息为主，“当前使用”并入次级文字；可写成员通过透明 88rpx 铅笔
+  点击区编辑，新增使用列表末尾动作行，归档恢复和上限说明保持独立；viewer 只可切换。无在用孩子时
+  仍由页面空态提供首次建档和归档恢复路径。服务端档案权限、上限和生命周期合同未改。
+- 今日在成功且全部为空时通过上方引导提供记录学习和添加日程入口；普通态由上方主卡提供添加日程。
+  课外活动单栏为空时只显示居中空文案，不在下方重复显示添加按钮。日程七天、报表三档、基础科目和活动七星期不依赖横向滚动。
 - 报表四个概览指标是只读摘要，不承担跳转；7/30/100 天均由服务端按 `Asia/Shanghai` 当前日窗口返回 7 个连续等时间桶，桶内计数求和且与概览总量守恒。新版完整全零数据画零基线，旧后端缺字段或无效趋势只显示“暂无趋势”。
-- 单次照片学习记录支持 1–9 张：相机单张、相册多选或反复追加；全部图片只创建一个 Job。
+- 单次照片学习记录支持 1–9 张：空态与已有照片后的“+”共用一个添加入口，每次由微信原生界面
+  选择拍摄或相册；拍摄返回后可再次添加，相册可多选，所有轮次共享 9 张上限；全部图片只创建一个 Job。
+- 新增记录不再要求选择“拍照/文字”模式：照片和学习内容始终同屏；有照片时沿用照片批次并携带
+  可选文字，无照片但有文字时沿用 manual submission；两者皆空时客户端不发请求。历史中的
+  照片/文字来源标签与筛选继续表示既有材料事实，不因入口合并而删除。
 - 云环境图片使用后端 ticket + `wx.cloud.uploadFile` + uploader metadata claim；不经过
   `callContainer` 请求体或容器持久化磁盘。取消记录会同步尝试删除已 claim 文件；失败清理目前依赖
   当前 Worker 拓扑；相关决策只引用 `ADR-001 / TD-001`。
@@ -107,7 +131,8 @@
   revision 15 已在 claim 后重载持久化 lease，并将达到最大次数的过期任务终态化；
   `flask-ik19-009` 已达到 `normal`，真实新图片已完成 Ark 与写回并进入待家长确认。
 - `SPEC-AI-OUTPUT-20260906-01` 的后端已实现并以 `flask-ik19-011` 灰度部署：新 AI 提案使用
-  `hanzi/word/poem/arithmetic/concept/activity/other` 受控展示类别，AI summary 上限为 120 字，
+  `hanzi/word/poem/arithmetic/concept/activity/other` 受控展示类别；其当时的 AI summary 120 字
+  合同已由本地 BUG-017 收紧为上述 60 字正向事实合同，
   Submission read API 从原子知识点确定性派生有序 `display_groups`；旧提案按 category/name 兼容。
   该投影不参与授权、确认或正式知识写入。新列表前端仍受 `DREV-20260906-AI-02` 设计门禁阻塞。
 - 启用 Worker 时，尚未启动、异常退避、停止或后台 Task 已结束均使 `/health/ready` 返回
@@ -136,7 +161,8 @@
 | provider/jobs | `agent_processing`; Ark + test-only deterministic adapter |
 | deterministic review | pure `planning/domain.py` |
 | schedule/activity | `activities`; CalendarEvent CRUD + ActivitySchedule projection, plus read-only TravelArrangement calendar projection and cross-source conflict metadata |
-| dashboard/report | `reporting`; today aggregation and 7/30/100-day ranges |
+| dashboard/report | `reporting`; bounded Today snapshot pages and SQL-owned 7/30/100-day aggregates, including exact activity subject totals |
+| collection pagination | `platform.pagination`; opaque versioned scope/filter/snapshot cursors, per-page authorization and hard maximums |
 | persistence/media | SQLAlchemy + Alembic；MySQL/cloud storage in cloud, SQLite/local media in dev/test |
 | native UI | `apps/miniprogram`; callContainer + cloud upload transport, UI-001 DREV-20260830-03 |
 
@@ -186,6 +212,9 @@ BUG-010 本地实现已通过微信开发者工具 registered AppID preview 编�
   `ADR-001 / TD-001`.
 - Database credential rotation, least-privilege account and cloud Alembic execution are complete. Backup/restore
   remains a release gate; the previously shared password is revoked and must not be reused.
+- Bounded-read migration `20260911_0011` is verified on fresh local MySQL 8.0.45, but production backup,
+  index-build lock observation, cloud schema upgrade and staged slow/large-route signals remain mandatory before
+  traffic promotion. Leading-wildcard history substring search remains scan-based within the approved 50k-row budget.
 - Registered AppID, HTTPS legal domains, privacy declaration, iOS/Android real-device verification and
   preview/upload remain mandatory before an experience or public build.
 - 小程序尚未留存最低基础库设置证据，也未对 `callContainer`、`uploadFile`、`chooseMedia` 做能力门禁；
@@ -198,6 +227,68 @@ BUG-010 本地实现已通过微信开发者工具 registered AppID preview 编�
 - BUG-010 的受控 Figma waiver 同样在公开生产前失效；三视口、字体放大、键盘和 iOS/Android 实机证据仍待补齐。
 
 ## Change references
+
+- 2026-09-11 — `BUG-SPEC-20260911-PERF-01 / ARCH-20260911-READ-PERF-01 / FEC-20260911-READ-PERF-01`：
+  Todo/dashboard 改为有界快照游标与精确总数，报表改为同范围 SQL 聚合并直接返回活动科目统计，活动记录
+  和提交兼容数组增加有界续页，历史/Review/提交/知识/活动增长路径增加复合索引；请求边界新增脱敏的
+  慢请求/大响应信号。SQLite 10k/50k 性能、查询预算、游标并发边界与 fresh MySQL 8.0.45 migration/
+  `EXPLAIN` 已通过；生产备份、索引锁时长、云端阶段信号和体验版验收仍是发布门禁。
+
+- 2026-09-11 — `SPEC-20260911-SETTINGS-PROFILE-MANAGER-POLISH-01 / DREV-20260911-SETTINGS-PROFILE-MANAGER-02`：
+  学习档案面板改为姓名/年级两级信息，当前状态收为次级文字；块状“编辑”替换为透明 88rpx 铅笔点击区，
+  新增入口并入列表。既有切换、编辑、归档恢复、viewer、limit、路由、权限和后端合同不变。验证为
+  focused frontend 32 passed、全量 frontend 140 passed，ESLint、架构、小程序静态（630368 bytes）、
+  图标幂等与 diff check 通过，真实 AppID preview 575988 bytes。三状态三视口 HTML fixture 已生成；
+  PNG 与修改后原生三视口/iOS/Android 为 `NOT_RUN`。未上传/部署；后端 API、Schema 未修改。
+
+- 2026-09-11 — `SPEC-20260911-SETTINGS-PROFILE-MANAGER-01 / DREV-20260911-SETTINGS-PROFILE-MANAGER-01`：
+  设置页主内容删除重复学习档案区块，档案切换、编辑、归档恢复、添加和上限说明收敛到右上角面板；
+  单孩子可打开，viewer 只可切换，无孩子空态保留，后端权限与生命周期合同不变。验证为 focused frontend
+  32 passed、全量 frontend 140 passed，ESLint、架构、小程序静态（629228 bytes）和图标幂等通过，真实
+  AppID preview 574991 bytes。三档 HTML fixture 已生成；PNG 与本修订原生三视口/iOS/Android 为
+  `NOT_RUN`。未上传/部署；后端 API、Schema 未修改。
+
+- 2026-09-11 — `SPEC-20260911-PRIMARY-NAV-BRAND-01 / DREV-20260911-PRIMARY-NAV-BRAND-01`：
+  五个一级 Tab 逐页启用 custom navigation，共享 `components/primary-nav` 根据窗口与右上胶囊尺寸
+  居中显示生成嫩芽图标 + “知芽”，平台 API 失败时回退为 20px 状态栏、44px 导航行和保守标题边距；
+  尺寸变化时重新测量。内容区 `brand-head/.under-brand` 已删除，today/calendar/reports 的上下文信息
+  移入 hero，详情与子流程页仍用原生导航。前端 138 passed，ESLint、架构、小程序静态（629240 bytes）
+  与图标幂等通过；五页 320/390/430 近似 PNG 横向溢出 0，真实 AppID preview 574832 bytes，开发者工具
+  iPhone 15 Pro Max 记录/设置页标题/胶囊无重叠且调试器 0 errors。完整原生三视口、字体放大及代表性 iOS/Android 真机
+  为 `NOT_RUN`；未上传/部署，后端/API/Schema/业务状态未变。
+
+- 2026-09-11 — `SPEC-20260911-TODAY-ACTIVITY-EMPTY-CTA-01 / DREV-20260911-TODAY-ACTIVITY-EMPTY-CTA-01`：
+  今日页课外活动为 0 项时只显示“今天没有活动安排”，删除其下方重复的“添加日程”；普通主卡和
+  首次引导态保留互斥入口，日程意图与活动数据合同不变。当前工作树前端 138 passed，ESLint、架构、
+  小程序静态与图标幂等通过，真实 AppID preview 574832 bytes；三档 HTML fixture 已生成，PNG/原生
+  三视口/iOS/Android 为 `NOT_RUN`。未上传/部署；后端 API、Schema 未修改。
+
+- 2026-09-11 — `SPEC-20260911-RECORD-PHOTO-ADD-SOURCE-02 / DREV-20260911-RECORD-PHOTO-ADD-SOURCE-02`：
+  首张和后续“+”统一调用微信原生媒体选择并同时开放拍摄/相册，解决首张拍摄后只能从相册追加的问题；
+  支持连续多轮拍摄、相册多选、剩余额度与 9 张硬上限，取消/失败保留表单，上传中不重复打开。
+  验证为前端 135 passed、ESLint、架构、小程序静态校验与图标幂等通过，真实 AppID preview
+  573065 bytes；0/1/8/9 图三视口近似 fixture 已生成，原生来源面板、连续拍摄与 iOS/Android
+  真机为 `NOT_RUN`。未上传/部署；后端 API、Schema 与既有照片提交流程未修改。
+
+- 2026-09-11 — `SPEC-20260911-RECORD-SIMPLIFICATION-01 / DREV-20260911-RECORD-SIMPLIFICATION-01`：
+  记录页删除“新增/历史”和“拍照/文字”切换，统一照片+学习内容表单并按是否含照片自动复用既有
+  photo/manual 提交通路；空材料不请求，失败保留表单。历史移到页底默认折叠，viewer 与显式历史
+  意图自动展开，既有筛选、分页、详情和来源语义不变。验证为前端 133 passed、ESLint、架构、
+  小程序静态校验与图标生成幂等通过，真实 AppID preview 编译 572,709 bytes。320/390/430 近似截图
+  已走查；开发者工具模拟器重载超时导致原生矩阵、键盘、字体放大与真机仍为 NOT_RUN；未上传/部署。
+  后续用户原生截图发现提交栏与 TabBar/历史入口发生触控遮挡；记录页现用专属偏移避开 TabBar、安全区和
+  中央凸起键，并用页面尾部占位保证历史入口能滚动到固定栏上方。全量前端仍为 133 passed，修复后
+  preview 572,880 bytes；修复后的原生点击复验为 NOT_RUN，未上传/部署。
+
+- 2026-09-11 — `BUG-017 / BUG-SPEC-20260911-01 / DREV-20260911-AI-SUMMARY-01`：模型生成的
+  学习总结收紧为一句、最多 60 字且只描述本次实际内容；缺失科目/任务的排除说明由服务端语义校验
+  拒绝，并通过既有脱敏代码有限重试，家长 500 字编辑合同与历史数据保持不变。记录详情删除部署运行时
+  不可靠的 window/rank 反馈读取，改为最多 20 个 Review × 每项 `LIMIT 4` 的 family-scoped 稳定查询，
+  保持每页 3 条 DTO、复习算法和客户端状态不变。验证：修复前新增摘要反例 5 failed / 正例 1 passed；
+  修复后定向 unit/provider 24 passed、SQLite history 6 passed、隔离 MySQL 8 history 1 passed；全量后端
+  271 passed / 3 optional skipped，当前工作树前端 132 passed，Ruff/format/Mypy、架构与小程序校验通过。
+  默认全量命令受仓库 `.env` 提醒配置与 `tests` 导入路径污染，隔离配置后全绿。未执行真实 Ark、
+  修复后云端请求或部署，因此当前线上 500 不得视为已消失。
 
 - 2026-09-06 — `BUG-015 / BUG-SPEC-20260906-21 / DREV-20260906-REPORT-01`：删除报表四张概览卡
   不一致的跨 Tab、页内滚动和空值 Toast 路径，保留科目列表的明确下钻；API additive 增加四项共用的

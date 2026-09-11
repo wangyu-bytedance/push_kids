@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from datetime import date
+from datetime import date, datetime
 
-from sqlalchemy import and_, delete, func, or_, select
+from sqlalchemy import and_, case, delete, func, or_, select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
@@ -26,7 +26,8 @@ from push_kids.planning.domain import (
     review_interval_days,
 )
 from push_kids.platform.errors import ConflictError, NotFoundError
-from push_kids.platform.time import local_date
+from push_kids.platform.pagination import decode_cursor, encode_cursor
+from push_kids.platform.time import local_date, utcnow
 
 
 @dataclass(frozen=True)
@@ -114,18 +115,7 @@ class PlanningService:
         if review_id and not rows:
             raise NotFoundError("没有找到这条记录关联的复习")
         ids = [r.id for r, _ in rows]
-        feedback_query = select(
-            ReviewFeedback.id,
-            ReviewFeedback.review_item_id,
-            ReviewFeedback.action,
-            ReviewFeedback.occurred_at,
-            func.row_number()
-            .over(
-                partition_by=ReviewFeedback.review_item_id,
-                order_by=(ReviewFeedback.occurred_at.desc(), ReviewFeedback.id.desc()),
-            )
-            .label("rank"),
-        ).where(ReviewFeedback.family_id == family_id, ReviewFeedback.review_item_id.in_(ids))
+        anchor = None
         if before:
             anchor = (
                 db.scalar(
@@ -140,30 +130,42 @@ class PlanningService:
             )
             if anchor is None:
                 raise ValueError("反馈分页已失效，请重新展开")
-            feedback_query = feedback_query.where(
-                or_(
-                    ReviewFeedback.occurred_at < anchor.occurred_at,
-                    and_(
-                        ReviewFeedback.occurred_at == anchor.occurred_at,
-                        ReviewFeedback.id < anchor.id,
-                    ),
-                )
-            )
-        ranked = feedback_query.subquery()
-        feedbacks = (
-            db.execute(select(ranked).where(ranked.c.rank <= 4).order_by(ranked.c.rank))
-            .mappings()
-            .all()
-        )
         grouped: dict[str, list] = {}
-        for f in feedbacks:
-            grouped.setdefault(f["review_item_id"], []).append(
-                {
-                    "id": f["id"],
-                    "action": f["action"],
-                    "occurred_at": f["occurred_at"].isoformat(),
-                }
+        # A confirmed proposal contains at most 20 knowledge points. Reading four feedback
+        # rows per review keeps this path bounded while avoiding a window/rank query that fails
+        # in the cloud runtime despite compiling and passing against an isolated MySQL 8 image.
+        for item_id in ids:
+            feedback_query = select(ReviewFeedback).where(
+                ReviewFeedback.family_id == family_id,
+                ReviewFeedback.review_item_id == item_id,
             )
+            if anchor is not None:
+                feedback_query = feedback_query.where(
+                    or_(
+                        ReviewFeedback.occurred_at < anchor.occurred_at,
+                        and_(
+                            ReviewFeedback.occurred_at == anchor.occurred_at,
+                            ReviewFeedback.id < anchor.id,
+                        ),
+                    )
+                )
+            feedbacks = db.scalars(
+                feedback_query.order_by(
+                    ReviewFeedback.occurred_at.desc(), ReviewFeedback.id.desc()
+                ).limit(4)
+            ).all()
+            grouped[item_id] = []
+            for feedback in feedbacks:
+                occurred_at = feedback.occurred_at
+                if occurred_at is None:  # Defensive guard for legacy/corrupt rows.
+                    raise ValueError("复习反馈缺少发生时间")
+                grouped[item_id].append(
+                    {
+                        "id": feedback.id,
+                        "action": feedback.action,
+                        "occurred_at": occurred_at.isoformat(),
+                    }
+                )
         return {
             "items": [
                 {
@@ -186,10 +188,64 @@ class PlanningService:
     def daily_todos(
         cls, db: Session, family_id: str, child_id: str, day: date | None = None
     ) -> list[dict]:
-        child = ChildrenService.get_child(db, family_id, child_id)
+        return cls.daily_todo_page(db, family_id, child_id, day, limit=50)["groups"]
+
+    @classmethod
+    def daily_todo_page(
+        cls,
+        db: Session,
+        family_id: str,
+        child_id: str,
+        day: date | None = None,
+        *,
+        limit: int = 20,
+        cursor: str | None = None,
+        known_child: Child | None = None,
+    ) -> dict:
+        child = known_child or ChildrenService.get_child(db, family_id, child_id)
+        if child.family_id != family_id or child.id != child_id:
+            raise NotFoundError("没有找到这个孩子")
         target = day or local_date()
-        rows = db.execute(
-            select(ReviewItem, KnowledgeItem, Subject, LearningSubmission.occurred_at)
+        scope = ("todos-v1", family_id, child_id, target.isoformat())
+        anchor: dict[str, object] | None = None
+        as_of = utcnow()
+        if cursor:
+            anchor = decode_cursor(cursor, scope)
+            try:
+                as_of = datetime.fromisoformat(str(anchor["as_of"]))
+                anchor_due = date.fromisoformat(str(anchor["due_date"]))
+                anchor_subject = str(anchor["subject_name"])
+                anchor_method = str(anchor["review_method"])
+                anchor_id = str(anchor["review_id"])
+                if not as_of.tzinfo or not anchor_subject or not anchor_method or not anchor_id:
+                    raise ValueError
+            except (KeyError, TypeError, ValueError) as exc:
+                raise ValueError("分页已失效，请刷新列表") from exc
+
+        minutes = case(
+            (KnowledgeItem.estimated_minutes < 1, 1), else_=KnowledgeItem.estimated_minutes
+        )
+        ordering = (
+            ReviewItem.due_date.asc(),
+            Subject.name.asc(),
+            KnowledgeItem.review_method.asc(),
+            ReviewItem.id.asc(),
+        )
+        ordered = (
+            select(
+                ReviewItem.id.label("review_id"),
+                ReviewItem.due_date.label("due_date"),
+                ReviewItem.source_submission_id.label("source_submission_id"),
+                ReviewItem.step.label("step"),
+                KnowledgeItem.name.label("knowledge_name"),
+                KnowledgeItem.review_method.label("review_method"),
+                minutes.label("minutes"),
+                Subject.id.label("subject_id"),
+                Subject.name.label("subject_name"),
+                LearningSubmission.occurred_at.label("source_occurred_at"),
+                func.sum(minutes).over(order_by=ordering).label("cumulative_minutes"),
+                func.row_number().over(order_by=ordering).label("position"),
+            )
             .join(KnowledgeItem, ReviewItem.knowledge_item_id == KnowledgeItem.id)
             .join(Subject, KnowledgeItem.subject_id == Subject.id)
             .outerjoin(
@@ -205,10 +261,74 @@ class PlanningService:
                 ReviewItem.child_id == child_id,
                 ReviewItem.active.is_(True),
                 ReviewItem.due_date <= target,
+                ReviewItem.updated_at <= as_of,
                 Subject.kind == "learning",
             )
-        ).all()
-        review_ids = [review.id for review, _, _, _ in rows]
+            .subquery()
+        )
+        enriched = (
+            select(
+                ordered,
+                func.count().over().label("total_count"),
+                func.coalesce(
+                    func.sum(
+                        case(
+                            (ordered.c.cumulative_minutes <= child.daily_budget_minutes, 1), else_=0
+                        )
+                    ).over(),
+                    0,
+                ).label("required_count"),
+                func.coalesce(
+                    func.max(
+                        case(
+                            (
+                                ordered.c.cumulative_minutes <= child.daily_budget_minutes,
+                                ordered.c.cumulative_minutes,
+                            ),
+                            else_=0,
+                        )
+                    ).over(),
+                    0,
+                ).label("estimated_minutes"),
+            )
+            .select_from(ordered)
+            .subquery()
+        )
+        page_query = select(enriched)
+        if anchor is not None:
+            page_query = page_query.where(
+                or_(
+                    enriched.c.due_date > anchor_due,
+                    and_(
+                        enriched.c.due_date == anchor_due,
+                        enriched.c.subject_name > anchor_subject,
+                    ),
+                    and_(
+                        enriched.c.due_date == anchor_due,
+                        enriched.c.subject_name == anchor_subject,
+                        enriched.c.review_method > anchor_method,
+                    ),
+                    and_(
+                        enriched.c.due_date == anchor_due,
+                        enriched.c.subject_name == anchor_subject,
+                        enriched.c.review_method == anchor_method,
+                        enriched.c.review_id > anchor_id,
+                    ),
+                )
+            )
+        rows = list(
+            db.execute(
+                page_query.order_by(
+                    enriched.c.due_date,
+                    enriched.c.subject_name,
+                    enriched.c.review_method,
+                    enriched.c.review_id,
+                ).limit(limit + 1)
+            ).mappings()
+        )
+        more = len(rows) > limit
+        rows = rows[:limit]
+        review_ids = [str(row["review_id"]) for row in rows]
         last_reviewed: dict[str, date] = {}
         if review_ids:
             for item_id, occurred_at in (
@@ -229,28 +349,99 @@ class PlanningService:
                 if item_id is not None and occurred_at is not None:
                     last_reviewed[item_id] = local_date(occurred_at)
         items = []
-        for review, knowledge, subject, source_occurred_at in rows:
+        for row in rows:
+            source_occurred_at = row["source_occurred_at"]
             source_occurred_on = (
                 local_date(source_occurred_at) if source_occurred_at is not None else None
             )
             items.append(
                 DueKnowledge(
-                    review_id=review.id,
-                    subject_id=subject.id,
-                    subject_name=subject.name,
-                    knowledge_name=knowledge.name,
-                    review_method=knowledge.review_method,
-                    estimated_minutes=knowledge.estimated_minutes,
-                    due_date=review.due_date,
-                    source_submission_id=review.source_submission_id,
+                    review_id=str(row["review_id"]),
+                    subject_id=str(row["subject_id"]),
+                    subject_name=str(row["subject_name"]),
+                    knowledge_name=str(row["knowledge_name"]),
+                    review_method=str(row["review_method"]),
+                    estimated_minutes=int(row["minutes"]),
+                    due_date=row["due_date"],
+                    source_submission_id=row["source_submission_id"],
                     source_occurred_on=source_occurred_on,
-                    review_round=(review.step or 0) + 1,
+                    review_round=(int(row["step"] or 0)) + 1,
                     interval_days=review_interval_days(
-                        review.due_date, last_reviewed.get(review.id), source_occurred_on
+                        row["due_date"],
+                        last_reviewed.get(str(row["review_id"])),
+                        source_occurred_on,
                     ),
                 )
             )
-        return group_daily_todos(items, child.daily_budget_minutes or 15)
+        starting_minutes = (
+            int(rows[0]["cumulative_minutes"]) - int(rows[0]["minutes"]) if rows else 0
+        )
+        next_cursor = None
+        if more and rows:
+            last = rows[-1]
+            next_cursor = encode_cursor(
+                scope,
+                {
+                    "as_of": as_of.isoformat(),
+                    "due_date": last["due_date"].isoformat(),
+                    "subject_name": last["subject_name"],
+                    "review_method": last["review_method"],
+                    "review_id": last["review_id"],
+                },
+            )
+        if rows:
+            total_count = int(rows[0]["total_count"] or 0)
+            required_count = int(rows[0]["required_count"] or 0)
+            estimated_minutes = int(rows[0]["estimated_minutes"] or 0)
+        elif cursor:
+            totals = db.execute(
+                select(
+                    func.count().label("total_count"),
+                    func.coalesce(
+                        func.sum(
+                            case(
+                                (
+                                    ordered.c.cumulative_minutes <= child.daily_budget_minutes,
+                                    1,
+                                ),
+                                else_=0,
+                            )
+                        ),
+                        0,
+                    ).label("required_count"),
+                    func.coalesce(
+                        func.max(
+                            case(
+                                (
+                                    ordered.c.cumulative_minutes <= child.daily_budget_minutes,
+                                    ordered.c.cumulative_minutes,
+                                ),
+                                else_=0,
+                            )
+                        ),
+                        0,
+                    ).label("estimated_minutes"),
+                ).select_from(ordered)
+            ).one()
+            total_count = int(totals.total_count or 0)
+            required_count = int(totals.required_count or 0)
+            estimated_minutes = int(totals.estimated_minutes or 0)
+        else:
+            total_count = required_count = estimated_minutes = 0
+        last_position = int(rows[-1]["position"]) if rows else total_count
+        return {
+            "groups": group_daily_todos(
+                items,
+                child.daily_budget_minutes or 15,
+                starting_minutes=starting_minutes,
+            ),
+            "total_count": total_count,
+            "required_count": required_count,
+            "estimated_minutes": estimated_minutes,
+            "returned_count": len(rows),
+            "remaining_count": max(0, total_count - last_position),
+            "next_cursor": next_cursor,
+        }
 
     @classmethod
     def pending_review_loads(cls, db: Session, target: date) -> list[PendingReviewLoad]:

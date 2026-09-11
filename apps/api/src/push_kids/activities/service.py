@@ -18,16 +18,19 @@ from push_kids.activities.schemas import (
     CalendarEventPatch,
     CalendarEventWrite,
 )
+from push_kids.activities.weekly_slots import WeeklySlotValue, slots_from_legacy, uniform_range
 from push_kids.children.service import ChildrenService
 from push_kids.persistence.models import (
     ActivityRecord,
     ActivitySchedule,
+    ActivityScheduleSlot,
     CalendarEvent,
     CalendarEventRequest,
     Child,
     Subject,
 )
-from push_kids.platform.errors import ConflictError, NotFoundError
+from push_kids.platform.errors import ClientUpgradeRequiredError, ConflictError, NotFoundError
+from push_kids.platform.pagination import decode_cursor, encode_cursor
 from push_kids.platform.time import SHANGHAI, local_date, utcnow
 from push_kids.travel.service import TravelService
 
@@ -63,6 +66,7 @@ class ActivitiesService:
             event_query = event_query.where(CalendarEvent.child_id == child_id)
             activity_scope.append(ActivityRecord.child_id == child_id)
             schedule_scope.append(ActivitySchedule.child_id == child_id)
+        schedule_ids = list(db.scalars(select(ActivitySchedule.id).where(*schedule_scope)))
         event_ids = list(db.scalars(event_query))
         db.execute(
             delete(CalendarEventRequest).where(
@@ -72,7 +76,92 @@ class ActivitiesService:
         )
         db.execute(delete(CalendarEvent).where(CalendarEvent.id.in_(event_ids)))
         db.execute(delete(ActivityRecord).where(*activity_scope))
+        db.execute(
+            delete(ActivityScheduleSlot).where(
+                ActivityScheduleSlot.family_id == family_id,
+                ActivityScheduleSlot.schedule_id.in_(schedule_ids),
+            )
+        )
         db.execute(delete(ActivitySchedule).where(*schedule_scope))
+
+    @staticmethod
+    def _slot_values(db: Session, schedule_id: str) -> tuple[WeeklySlotValue, ...]:
+        rows = db.scalars(
+            select(ActivityScheduleSlot)
+            .where(ActivityScheduleSlot.schedule_id == schedule_id)
+            .order_by(ActivityScheduleSlot.weekday)
+        )
+        values = []
+        for row in rows:
+            if row.weekday is None or row.start_time is None or row.end_time is None:
+                raise RuntimeError("activity schedule slot is incomplete")
+            values.append(WeeklySlotValue(row.weekday, row.start_time, row.end_time))
+        return tuple(values)
+
+    @staticmethod
+    def _ensure_client_supports_slots(
+        slots: tuple[WeeklySlotValue, ...], client_supports_slots: bool
+    ) -> None:
+        if slots and uniform_range(slots) is None and not client_supports_slots:
+            raise ClientUpgradeRequiredError("请重新打开或更新小程序后查看不同日期时间")
+
+    @classmethod
+    def view(
+        cls,
+        db: Session,
+        item: ActivitySchedule,
+        *,
+        client_supports_slots: bool,
+    ) -> dict:
+        slots = cls._slot_values(db, str(item.id))
+        cls._ensure_client_supports_slots(slots, client_supports_slots)
+        common = uniform_range(slots)
+        return {
+            "id": item.id,
+            "child_id": item.child_id,
+            "subject_id": item.subject_id,
+            "weekdays": [slot.weekday for slot in slots],
+            "start_time": common[0] if common else None,
+            "end_time": common[1] if common else None,
+            "time_slots": [
+                {
+                    "weekday": slot.weekday,
+                    "start_time": slot.start_time,
+                    "end_time": slot.end_time,
+                }
+                for slot in slots
+            ],
+            "target_per_week": item.target_per_week,
+            "note": item.note,
+            "active": item.active,
+        }
+
+    @staticmethod
+    def _replace_slots(
+        db: Session, schedule: ActivitySchedule, slots: tuple[WeeklySlotValue, ...]
+    ) -> None:
+        db.execute(
+            delete(ActivityScheduleSlot).where(
+                ActivityScheduleSlot.schedule_id == schedule.id,
+                ActivityScheduleSlot.family_id == schedule.family_id,
+            )
+        )
+        for slot in slots:
+            db.add(
+                ActivityScheduleSlot(
+                    family_id=schedule.family_id,
+                    child_id=schedule.child_id,
+                    schedule_id=schedule.id,
+                    weekday=slot.weekday,
+                    start_time=slot.start_time,
+                    end_time=slot.end_time,
+                )
+            )
+        common = uniform_range(slots)
+        schedule.weekdays = ",".join(str(slot.weekday) for slot in slots)
+        mirror = common or ((slots[0].start_time, slots[0].end_time) if slots else None)
+        schedule.start_time = mirror[0] if mirror else None
+        schedule.end_time = mirror[1] if mirror else None
 
     @staticmethod
     def _activity_subject(db: Session, family_id: str, child_id: str, subject_id: str) -> Subject:
@@ -91,8 +180,15 @@ class ActivitiesService:
 
     @classmethod
     def create_schedule(
-        cls, db: Session, family_id: str, data: ActivityScheduleCreate
+        cls,
+        db: Session,
+        family_id: str,
+        data: ActivityScheduleCreate,
+        *,
+        client_supports_slots: bool = False,
     ) -> ActivitySchedule:
+        slots = data.slot_values()
+        cls._ensure_client_supports_slots(slots, client_supports_slots)
         ChildrenService.require_active_child(db, family_id, data.child_id)
         cls._activity_subject(db, family_id, data.child_id, data.subject_id)
         existing = db.scalar(
@@ -104,12 +200,10 @@ class ActivitiesService:
             )
         )
         if existing is not None:
-            existing.weekdays = ",".join(str(item) for item in data.weekdays)
             existing.time_text = data.time_text
-            existing.start_time = data.start_time
-            existing.end_time = data.end_time
             existing.target_per_week = data.target_per_week
             existing.note = data.note
+            cls._replace_slots(db, existing, slots)
             db.commit()
             return existing
         ensure_timed_item_capacity(db, family_id, data.child_id)
@@ -117,14 +211,16 @@ class ActivitiesService:
             family_id=family_id,
             child_id=data.child_id,
             subject_id=data.subject_id,
-            weekdays=",".join(str(item) for item in data.weekdays),
+            weekdays="",
             time_text=data.time_text,
-            start_time=data.start_time,
-            end_time=data.end_time,
+            start_time=None,
+            end_time=None,
             target_per_week=data.target_per_week,
             note=data.note,
         )
         db.add(schedule)
+        db.flush()
+        cls._replace_slots(db, schedule, slots)
         db.commit()
         return schedule
 
@@ -150,6 +246,8 @@ class ActivitiesService:
         family_id: str,
         schedule_id: str,
         data: ActivityScheduleUpdate,
+        *,
+        client_supports_slots: bool = False,
     ) -> ActivitySchedule:
         schedule = db.scalar(
             select(ActivitySchedule).where(
@@ -159,18 +257,38 @@ class ActivitiesService:
         if schedule is None:
             raise NotFoundError("没有找到这个活动提醒")
         ChildrenService.require_active_child(db, family_id, schedule.child_id)
-        values = data.model_dump(exclude_unset=True, exclude={"child_id", "subject_id"})
-        if "weekdays" in values:
-            values["weekdays"] = ",".join(str(item) for item in (values["weekdays"] or []))
+        current_slots = cls._slot_values(db, schedule_id)
+        cls._ensure_client_supports_slots(current_slots, client_supports_slots)
+        slot_values = data.slot_values()
+        legacy_fields = {"weekdays", "start_time", "end_time"}
+        if slot_values is None and legacy_fields & data.model_fields_set:
+            current_common = uniform_range(current_slots)
+            weekdays = (
+                data.weekdays
+                if "weekdays" in data.model_fields_set
+                else [slot.weekday for slot in current_slots]
+            )
+            start = (
+                data.start_time
+                if "start_time" in data.model_fields_set
+                else (current_common[0] if current_common else None)
+            )
+            end = (
+                data.end_time
+                if "end_time" in data.model_fields_set
+                else (current_common[1] if current_common else None)
+            )
+            slot_values = slots_from_legacy(weekdays or [], start, end)
+        if slot_values is not None:
+            cls._ensure_client_supports_slots(slot_values, client_supports_slots)
+        values = data.model_dump(
+            exclude_unset=True,
+            exclude={"child_id", "subject_id", "weekdays", "start_time", "end_time", "time_slots"},
+        )
         for key, value in values.items():
             setattr(schedule, key, value)
-        has_weekdays = bool(schedule.weekdays)
-        if has_weekdays and (schedule.start_time is None or schedule.end_time is None):
-            raise ValueError("固定提醒必须包含开始和结束时间")
-        if not has_weekdays and (schedule.start_time is not None or schedule.end_time is not None):
-            raise ValueError("时间不固定时不能设置开始或结束时间")
-        if schedule.start_time and schedule.end_time and schedule.end_time <= schedule.start_time:
-            raise ValueError("结束时间必须晚于开始时间")
+        if slot_values is not None:
+            cls._replace_slots(db, schedule, slot_values)
         db.commit()
         return schedule
 
@@ -342,26 +460,27 @@ class ActivitiesService:
                 )
             )
         schedule_rows = db.execute(
-            select(ActivitySchedule, Subject)
+            select(ActivitySchedule, Subject, ActivityScheduleSlot)
             .join(Subject, ActivitySchedule.subject_id == Subject.id)
+            .join(ActivityScheduleSlot, ActivityScheduleSlot.schedule_id == ActivitySchedule.id)
             .where(
                 ActivitySchedule.family_id == family_id,
                 ActivitySchedule.child_id == child_id,
                 ActivitySchedule.active.is_(True),
                 Subject.active.is_(True),
+                ActivityScheduleSlot.family_id == family_id,
+                ActivityScheduleSlot.child_id == child_id,
+                ActivityScheduleSlot.weekday == target.weekday(),
             )
         ).all()
-        for schedule, subject in schedule_rows:
-            weekdays = [int(item) for item in schedule.weekdays.split(",") if item]
-            if target.weekday() not in weekdays or not schedule.start_time or not schedule.end_time:
-                continue
+        for schedule, subject, slot in schedule_rows:
             result.append(
                 cls._event_view(
                     schedule.id,
                     subject.name,
                     target,
-                    schedule.start_time,
-                    schedule.end_time,
+                    slot.start_time,
+                    slot.end_time,
                     "activity",
                     True,
                     "activity_schedule",
@@ -459,16 +578,21 @@ class ActivitiesService:
                 if window_start <= candidate.start_at <= window_end:
                     occurrences.append(candidate)
         rows = db.execute(
-            select(ActivitySchedule, Subject)
+            select(ActivitySchedule, Subject, ActivityScheduleSlot)
             .join(Subject, ActivitySchedule.subject_id == Subject.id)
-            .where(ActivitySchedule.active.is_(True), Subject.active.is_(True))
+            .join(ActivityScheduleSlot, ActivityScheduleSlot.schedule_id == ActivitySchedule.id)
+            .where(
+                ActivitySchedule.active.is_(True),
+                Subject.active.is_(True),
+                ActivityScheduleSlot.family_id == ActivitySchedule.family_id,
+                ActivityScheduleSlot.child_id == ActivitySchedule.child_id,
+            )
         ).all()
-        for schedule, subject in rows:
-            if str(schedule.child_id) not in children or not schedule.start_time:
+        for schedule, subject, slot in rows:
+            if str(schedule.child_id) not in children:
                 continue
-            weekdays = [int(item) for item in (schedule.weekdays or "").split(",") if item]
             for day in days:
-                if day.weekday() not in weekdays:
+                if day.weekday() != slot.weekday:
                     continue
                 candidate = cls._occurrence(
                     str(schedule.family_id),
@@ -477,9 +601,9 @@ class ActivitiesService:
                     str(schedule.id),
                     str(subject.name),
                     day,
-                    schedule.start_time,
+                    slot.start_time,
                     "activity",
-                    schedule.end_time,
+                    slot.end_time,
                 )
                 if window_start <= candidate.start_at <= window_end:
                     occurrences.append(candidate)
@@ -569,15 +693,66 @@ class ActivitiesService:
 
     @classmethod
     def list_records(cls, db: Session, family_id: str, child_id: str) -> list[ActivityRecord]:
+        return cls.record_page(db, family_id, child_id)["items"]
+
+    @classmethod
+    def record_page(
+        cls,
+        db: Session,
+        family_id: str,
+        child_id: str,
+        *,
+        limit: int = 100,
+        cursor: str | None = None,
+    ) -> dict:
         ChildrenService.get_child(db, family_id, child_id)
-        return list(
+        scope = ("activity-records-v1", family_id, child_id)
+        anchor = None
+        as_of = utcnow()
+        if cursor:
+            payload = decode_cursor(cursor, scope)
+            try:
+                as_of = datetime.fromisoformat(str(payload["as_of"]))
+                anchor_at = datetime.fromisoformat(str(payload["occurred_at"]))
+                anchor_id = str(payload["id"])
+                if not as_of.tzinfo or not anchor_at.tzinfo or not anchor_id:
+                    raise ValueError
+                anchor = (anchor_at, anchor_id)
+            except (KeyError, TypeError, ValueError) as exc:
+                raise ValueError("分页已失效，请刷新列表") from exc
+        query = select(ActivityRecord).where(
+            ActivityRecord.family_id == family_id,
+            ActivityRecord.child_id == child_id,
+            ActivityRecord.created_at <= as_of,
+        )
+        if anchor:
+            query = query.where(
+                (ActivityRecord.occurred_at < anchor[0])
+                | ((ActivityRecord.occurred_at == anchor[0]) & (ActivityRecord.id < anchor[1]))
+            )
+        items = list(
             db.scalars(
-                select(ActivityRecord)
-                .where(ActivityRecord.family_id == family_id, ActivityRecord.child_id == child_id)
-                .order_by(ActivityRecord.occurred_at.desc())
-                .limit(100)
+                query.order_by(ActivityRecord.occurred_at.desc(), ActivityRecord.id.desc()).limit(
+                    limit + 1
+                )
             )
         )
+        more = len(items) > limit
+        items = items[:limit]
+        next_cursor = None
+        if more and items:
+            last = items[-1]
+            if last.occurred_at is None:
+                raise RuntimeError("活动记录缺少发生时间")
+            next_cursor = encode_cursor(
+                scope,
+                {
+                    "as_of": as_of.isoformat(),
+                    "occurred_at": last.occurred_at.isoformat(),
+                    "id": last.id,
+                },
+            )
+        return {"items": items, "next_cursor": next_cursor}
 
     @classmethod
     def suggestions(
@@ -597,7 +772,10 @@ class ActivitiesService:
         ).all()
         result = []
         for schedule, subject in schedules:
-            weekdays = [int(item) for item in schedule.weekdays.split(",") if item]
+            slot_values = cls._slot_values(db, str(schedule.id))
+            today_slot = next(
+                (slot for slot in slot_values if slot.weekday == target.weekday()), None
+            )
             target_end = datetime.combine(
                 target + timedelta(days=1), time.min, tzinfo=SHANGHAI
             ).astimezone(UTC)
@@ -627,11 +805,11 @@ class ActivitiesService:
                 )
                 or 0
             )
-            scheduled_today = target.weekday() in weekdays
+            scheduled_today = today_slot is not None
             frequency_due = (
                 completed_week < schedule.target_per_week
                 if schedule.target_per_week is not None
-                else not weekdays and (days_since is None or days_since >= 7)
+                else not slot_values and (days_since is None or days_since >= 7)
             )
             result.append(
                 {
@@ -642,10 +820,8 @@ class ActivitiesService:
                     "suggested": scheduled_today or frequency_due,
                     "optional": True,
                     "time_text": schedule.time_text,
-                    "start_time": (
-                        schedule.start_time.strftime("%H:%M") if schedule.start_time else None
-                    ),
-                    "end_time": schedule.end_time.strftime("%H:%M") if schedule.end_time else None,
+                    "start_time": today_slot.start_time.strftime("%H:%M") if today_slot else None,
+                    "end_time": today_slot.end_time.strftime("%H:%M") if today_slot else None,
                     "last_practice_days_ago": days_since,
                     "completed_this_week": completed_week,
                     "target_per_week": schedule.target_per_week,

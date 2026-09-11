@@ -39,11 +39,12 @@ test("API base URL is build configuration and cannot be overridden from storage"
 test("parent-facing actions guide an unconfigured family without pretending the app failed", () => {
   const uiSource = userInterfaceSource();
 
-  /* FEAT-005 起「添加孩子」是正式入口文案；这里只继续拦截会误导家长的旧说法。 */
+  /* DREV-02 将档案面板动作收敛为「新建学习档案」；空态继续使用「建立学习档案」。 */
   assert.doesNotMatch(uiSource, /保存孩子|孩子昵称|先添加一个孩子/);
   assert.match(uiSource, /学习档案/);
   assert.match(source("pages/settings/index.wxml"), /还没有学习档案/);
-  assert.match(source("pages/settings/index.wxml"), /添加孩子/);
+  assert.match(source("pages/settings/index.wxml"), /建立学习档案/);
+  assert.match(source("pages/settings/index.wxml"), /新建学习档案/);
   assert.match(source("pages/today/index.wxml"), /记下今天学到的/);
   assert.match(source("pages/today/index.wxml"), /记录学习/);
   assert.match(source("pages/today/index.wxml"), /添加日程/);
@@ -58,6 +59,16 @@ test("today review section starts collapsed even when there are no due reviews",
   assert.match(script, /if \(!counts\[section\] && section !== "review"\) return/);
   assert.match(template, /<view class="sec-body" wx:if="\{\{sections\.review\}\}">/);
   assert.doesNotMatch(template, /sections\.review \|\| !dashboard\.todo_count/);
+});
+
+test("today activity empty state does not repeat the schedule action", () => {
+  const template = source("pages/today/index.wxml");
+
+  assert.match(template, /<text class="et">今天没有活动安排<\/text>/);
+  assert.doesNotMatch(template, /今天没有活动安排<\/text>\s*<view class="ea">/);
+  assert.equal((template.match(/bindtap="addSchedule"/g) || []).length, 2);
+  assert.match(template, /aria-label="添加日程" bindtap="addSchedule"/);
+  assert.match(template, /aria-label="也可以先添加日程" bindtap="addSchedule"/);
 });
 
 test("mini program JavaScript parses before static copy assertions run", () => {
@@ -91,6 +102,24 @@ test("key native controls fit their own grid cells without page-level horizontal
   assert.match(reports, /repeat\(3,minmax\(0,1fr\)\)/);
   assert.match(globalStyles, /\.action-row \{ display: grid; grid-template-columns: minmax\(0, 1fr\); width: 100%/);
   assert.match(records, /class="action-row submit-row"/);
+});
+
+test("record entry is unified and history is disclosed at the bottom", () => {
+  const records = source("pages/records/index.wxml");
+  const styles = source("pages/records/index.wxss");
+  assert.doesNotMatch(records, /data-view="new"|data-mode="photo"|data-mode="text"/);
+  assert.doesNotMatch(records, />拍照记录<|>文字记录</);
+  assert.match(records, /id="record-history"/);
+  assert.match(records, /aria-expanded="\{\{historyExpanded\}\}"/);
+  assert.match(records, /可补充照片里不明显的内容，也可以直接写下今天学了什么。/);
+  assert.match(records, /添加照片或文字后继续/);
+  assert.match(records, />添加学习照片</);
+  assert.match(records, />拍摄或从相册选择</);
+  assert.equal((records.match(/bindtap="addPhotos"/g) || []).length, 2);
+  assert.doesNotMatch(records, /bindtap="chooseCamera"|bindtap="chooseAlbum"/);
+  assert.match(records, /class="pk-cta-bar record-cta"/);
+  assert.match(styles, /\.record-cta\s*\{[^}]*bottom:\s*calc\(var\(--pk-tabbar-h\) \+ var\(--pk-s4\) \+ env\(safe-area-inset-bottom\)\)/s);
+  assert.match(styles, /\.record-page\.sticky-cta\s*\{[^}]*padding-bottom:\s*calc\(376rpx \+ env\(safe-area-inset-bottom\)\)/s);
 });
 
 test("custom tab bar keeps icon geometry and restores the active tab after direct page entry", () => {

@@ -1,0 +1,9 @@
+<view class="primary-nav-spacer" style="height: {{totalHeight}}px;"></view>
+<view class="primary-nav" style="height: {{totalHeight}}px; padding-top: {{statusBarHeight}}px;">
+  <view class="primary-nav-row" style="height: {{navigationHeight}}px; padding-left: {{sideInset}}px; padding-right: {{sideInset}}px;">
+    <view class="primary-nav-brand" aria-role="heading" aria-level="1" aria-label="知芽">
+      <view class="ico ico-sprout-pri sm primary-nav-mark" aria-hidden="true"></view>
+      <text class="primary-nav-title">知芽</text>
+    </view>
+  </view>
+</view>

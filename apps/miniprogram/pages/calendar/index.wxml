@@ -1,8 +1,9 @@
+<primary-nav></primary-nav>
 <view class="page calendar-page">
-  <brand-head kicker="{{weekKicker}}"></brand-head>
-  <view class="pg-head under-brand">
+  <view class="pg-head">
     <view class="head-intro">
       <text class="pg-title">这一周，心里有数</text>
+      <text class="pg-context">{{weekKicker}}</text>
     </view>
     <view class="child-chip {{multiChild ? '' : 'single'}}" wx:if="{{children.length}}" aria-role="button" aria-label="切换孩子" bindtap="openChildSheet">
       <text class="ava">{{children[childIndex].avatar}}</text>

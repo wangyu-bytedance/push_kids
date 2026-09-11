@@ -155,32 +155,19 @@ function reportPages(items, kind) {
   return result;
 }
 
-/* 活动练习按活动聚合成「n 次 · 上次 mm-dd」，只统计选中区间内的记录。 */
-function activityRows(detail, startDay) {
-  if (!detail || detail.failed) return [];
-  const index = {};
-  const rows = [];
-  detail.records.forEach((record) => {
-    const day = String(record.occurred_at || "").slice(0, 10);
-    const name = detail.names[record.subject_id];
-    if (!day || !name || (startDay && day < startDay)) return;
-    let row = index[record.subject_id];
-    if (!row) {
-      row = { id: record.subject_id, name, count: 0, lastDay: day, minutes: 0 };
-      index[record.subject_id] = row;
-      rows.push(row);
-    }
-    row.count += 1;
-    row.minutes += Number(record.duration_minutes) || 0;
-    if (day > row.lastDay) row.lastDay = day;
-  });
-  rows.sort((left, right) => right.count - left.count);
-  return rows.map((row) => ({
-    ...row,
-    iconClass: ui.activityIcon(row.name, "pri"),
-    meta: row.minutes
-      ? `${row.count} 次 · 共 ${row.minutes} 分钟 · 上次 ${row.lastDay.slice(5)}`
-      : `${row.count} 次 · 上次 ${row.lastDay.slice(5)}`
+/* 活动练习聚合由报表服务端统一计算，避免客户端用截断的历史明细重算。 */
+function activityRows(report) {
+  if (!report || !Array.isArray(report.activity_subjects)) return [];
+  return report.activity_subjects.map((row) => ({
+    id: row.subject_id,
+    name: row.subject_name,
+    count: Number(row.records) || 0,
+    minutes: Number(row.minutes) || 0,
+    lastDay: row.last_occurred_on,
+    iconClass: ui.activityIcon(row.subject_name, "pri"),
+    meta: Number(row.minutes)
+      ? `${row.records} 次 · 共 ${row.minutes} 分钟 · 上次 ${row.last_occurred_on.slice(5)}`
+      : `${row.records} 次 · 上次 ${row.last_occurred_on.slice(5)}`
   }));
 }
 
@@ -208,20 +195,6 @@ Page({
     const stored = Number(ui.readPreference("reportRange", childId, 7));
     return RANGES.indexOf(stored) >= 0 ? stored : 7;
   },
-  /* 活动明细是补充信息，读不到时报表主体照常展示。 */
-  async loadActivityDetail(childId) {
-    try {
-      const [subjects, records] = await Promise.all([
-        api.request(`/children/${childId}/subjects`),
-        api.request(`/children/${childId}/activity-records`)
-      ]);
-      const names = {};
-      subjects.forEach((item) => { if (item.kind === "activity") names[item.id] = item.name; });
-      return { names, records, failed: false };
-    } catch {
-      return { names: {}, records: [], failed: true };
-    }
-  },
   async load() {
     const generation = (this.loadGeneration || 0) + 1;
     this.loadGeneration = generation;
@@ -240,10 +213,7 @@ Page({
       const childIndex = selection.childIndex;
       const childId = selection.childId;
       const days = this.data.days;
-      const [report, detail] = await Promise.all([
-        api.request(`/children/${childId}/report?days=${days}`),
-        this.loadActivityDetail(childId)
-      ]);
+      const report = await api.request(`/children/${childId}/report?days=${days}`);
       if (generation !== this.loadGeneration) return;
       const maxSubject = Math.max(1, ...report.subjects.map((item) => item.occurrences));
       const subjects = report.subjects.map((item) => ({
@@ -253,7 +223,6 @@ Page({
       }));
       const urgencyPages = reportPages(report.review_urgency, "urgency");
       const activityPages = reportPages(report.review_activity, "activity");
-      const startDay = report.review_activity.length ? report.review_activity[0].day : "";
       const overview = report.overview;
       const trendBuckets = normalizeTrendBuckets(report, overview, days);
       this.setData({
@@ -269,8 +238,8 @@ Page({
           metricCell(overview.activity_records, "活动练习", "activity_records", trendBuckets, days)
         ],
         feedbackTotal: Number(overview.review_feedback_count) || 0,
-        activityRows: activityRows(detail, startDay),
-        activityDetailFailed: detail.failed,
+        activityRows: activityRows(report),
+        activityDetailFailed: !Array.isArray(report.activity_subjects),
         isEmpty: !overview.learning_records && !overview.new_knowledge_items
           && !overview.review_feedback_count && !overview.activity_records
       });

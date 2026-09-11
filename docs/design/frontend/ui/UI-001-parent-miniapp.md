@@ -1,31 +1,31 @@
 # UI-001 — 家长端微信小程序
 
-- Status: `CURRENT_LOCAL / AUTOMATION_PASSED / VIEWPORT_MATRIX_NOT_RUN`
+- Status: `CURRENT_LOCAL / AUTOMATION_PASSED / NATIVE_VIEWPORT_MATRIX_NOT_RUN`
 - Related Feature: `FEAT-001`
 - Baseline: `FDB-20260906-03`
-- Engineering contract: `FEC-20260906-04`
-- Design revision: `DREV-20260907-PKDS-04`（在 `DREV-20260906-PKDS-03`「纸 · 芽」视觉基础上改页头与文案密度，视觉 token 不变）
-- Current-state revision: `UI-STATE-20260907-PKDS-04-LOCAL`
-- Related Spec: `specs/active/SPEC-20260907-PKDS-04-BRAND-HEADER-COPY-CLEANUP.md` revision `SPEC-20260907-PKDS-04`
-  （前序：`SPEC-20260906-PKDS-03`、`SPEC-20260906-PKDS-01`、`specs/active/BUG-013-MULTI-SUBJECT-AND-PARENT-FLOW.md` revision `BUG-SPEC-20260906-16`）
-- Last verified: 2026-09-07（品牌页头与提示清理后前端 127 passed、ESLint、静态校验、架构检查、三视口预览与溢出扫描通过；320/390/430 原生几何与真机为 NOT_RUN）
-- Screen-level spec: `docs/design/frontend/prototypes/DREV-20260906-PKDS-01/FRONTEND-SPEC.md`
+- Engineering contract: `FEC-20260911-READ-PERF-01`
+- Design revision: `DREV-20260911-SETTINGS-PROFILE-MANAGER-02`（学习档案面板视觉降噪）
+- Current-state revision: `UI-STATE-20260911-READ-PERF-01-LOCAL`
+- Related Spec: `specs/active/BUG-018-BOUNDED-READ-API-PERFORMANCE.md` revision `BUG-SPEC-20260911-PERF-01`
+  （前序：`SPEC-20260911-SETTINGS-PROFILE-MANAGER-01`、`SPEC-20260911-PRIMARY-NAV-BRAND-01`、`SPEC-20260911-TODAY-ACTIVITY-EMPTY-CTA-01`、`SPEC-20260911-RECORD-PHOTO-ADD-SOURCE-02`、`SPEC-20260911-RECORD-SIMPLIFICATION-01`、`BUG-SPEC-20260911-01`）
+- Last verified: 2026-09-11（Today 有界续页与 Report 服务端聚合已完成；前端 144 passed，ESLint、架构 checked=3、小程序静态 15 pages/632049 bytes 通过。后端与 fresh MySQL 证据见 FEAT-001/BUG-018。可选 TabBar 生成器因当前环境缺少 cairosvg 未运行；本次尚未上传，云端弱网/阶段信号、原生三视口、字体放大及代表性 iOS/Android 真机仍为 NOT_RUN）
+- Screen-level spec: `docs/design/frontend/prototypes/DREV-20260911-SETTINGS-PROFILE-MANAGER-02/FRONTEND-SPEC.md`
 - Reference screens: `docs/design/frontend/prototypes/DREV-20260906-PKDS-01/screenshots/`（39 屏）
 - Intermediate artifact: `docs/design/frontend/prototypes/DREV-20260830-03/index.html`（设计历史）
 - Figma waiver anchor: https://www.figma.com/design/FAyfmjNrA3btWztwyxI6Zj?node-id=0-1
 
 ## Current information architecture
 
-原生微信小程序面向家长，采用五个一级 Tab。五个一级页面不再覆盖 `navigationBarTitleText`，
-统一继承 `app.json` 的小程序名「知芽」，因此原生标题不与底部 Tab 重复；页内顶部是共享的
-`components/brand-head`（嫩芽图标 + 「知芽」 + 可选上下文 kicker），其下是一句非标签式的
-hero 标题与统一的紧凑孩子切换器。二级页面（确认、记录详情、家庭、提醒等）仍保留各自的原生标题。
+原生微信小程序面向家长，采用五个一级 Tab。五个一级页面逐页使用 `navigationStyle: custom`，由共享
+`components/primary-nav` 按状态栏与右上胶囊几何渲染居中的“嫩芽图标 + 知芽”；内容区不再重复产品名，
+直接从句子式 hero 与紧凑孩子切换器开始。今日日期、日程周范围和报表统计边界作为 hero 次级文本保留。
+二级页面（确认、记录详情、家庭、提醒等）不使用该组件，继续保留微信原生标题、返回按钮与返回手势。
 
 | Tab | Hero 标题 | Current responsibility |
 |---|---|---|
 | 今日 | 今天，也慢慢来 | 可折叠的今日复习、今日学习、今日活动；待确认/失败提示 |
 | 日程 | 这一周，心里有数 | 周日期轨、当天时间线、出行投影、全部日程项冲突提示、过去日程灰显、FAB 新建、编辑/删除日程 |
-| 记录 | 一笔一画，都算数 | 同页新增/历史；照片/文字与实际时间；已确认/待处理/全部、搜索/半屏筛选/分页；列表进入独立的只读记录详情页 |
+| 记录 | 一笔一画，都算数 | 默认展示统一照片+文字新增表单；历史在表单末尾默认折叠；展开后保留已确认/待处理/全部、搜索/半屏筛选/分页，列表进入独立记录详情页 |
 | 报表 | 一点一滴，看得见 | 7/30/100 天只读概览与固定 7 点趋势微图、组件内30天分页的复习紧迫度与活跃度、可下钻科目记录 |
 | 设置 | 按你们的节奏来 | 三项基础学科、手动添加的其他科目与课外活动、活动安排、出行安排、家庭成员入口 |
 
@@ -43,10 +43,20 @@ hero 标题与统一的紧凑孩子切换器。二级页面（确认、记录详
 - 图片可单张拍摄、相册一次多选和多次追加，统一 9 张上限；一次提交只创建一个分析任务。
 - Job 创建前中断的多图批次显示“补传照片/取消”；零照片显示“等待上传照片”且不轮询。
   已有照片还可“继续分析”。补传沿用原草稿及批次票标识；失败后可重试，按钮有 loading/禁用态。
-- 新增页只显示待处理数量；历史按服务端筛选、每页 20 条，前后分页保持有界渲染。
+- 记录页不再显示“新增/历史”和“拍照/文字”两组切换。照片入口与学习内容输入始终同屏；有照片走
+  既有照片批次，无照片但有文字走既有 manual submission，两者皆空时只做本地校验且不发请求。
+- 空照片状态和已有照片后的“+”使用同一个添加入口；每次均由微信原生媒体选择开放拍摄与相册。
+  拍摄返回后可再次点“+”继续拍摄，相册可按剩余额度多选，所有轮次共享 9 张上限；取消、空返回或
+  失败保留已有照片、学习内容、时间与提交状态，上传中不重复打开选择器。
+- 历史位于统一表单末尾，普通可写用户首次进入默认折叠，只读取待处理数量；展开、待处理入口或
+  今日/报表显式历史意图才读取完整列表。viewer 无新增权限，进入后直接展开只读历史。
+- 历史按服务端筛选、每页 20 条，前后分页保持有界渲染。
   待处理/全部可见时轮询；服务器返回全量范围的分析标志，不因分析项在后页而停止轮询；已确认历史不轮询。
 - 历史详情先显示正式总结和本次知识，原始材料与复习反馈按需展开；已确认/取消不出现编辑确认按钮。
   待处理详情可补传、继续分析、人工录入、重试或确认后取消；人工表单和既有确认逻辑保留。
+- AI 自动生成的学习总结只显示一句、不超过 60 字且只描述本次实际学习/练习内容；不展示“没有某任务”
+  “不包含某科”“未涉及某内容”等缺失项说明。该限制只约束模型草稿，家长仍可按既有 500 字合同编辑，
+  已确认历史不自动重写。
 - 原始材料展开后最多并发下载两张照片，缩略图点击重新鉴权取得原图；临时引用/文件在退出时清理，
   无图、图片删除、权限失效和网络失败分别呈现；搜索文字不进入 URL。真实云端预览仍待验证。
 - 云环境的照片预览直接使用服务端签发的短期 HTTPS 地址（`<image>` / `previewImage` 不受 request
@@ -69,9 +79,17 @@ hero 标题与统一的紧凑孩子切换器。二级页面（确认、记录详
 - 重复材料提示放入“需要核对”；Todo匹配显示证据，已更新的任务不会再次推进。
 - 今日从同一个 Dashboard 读取复习、已确认学习和日程。三栏独立折叠，不使用只计算复习的
   “今日总体进度”卡。默认复习与学习折叠、日程展开；本地偏好里的非布尔脏值回落到该默认。
+- Dashboard 只取得最多 20 条 Todo 和全量精确计数；用户沿用现有“还有 N 项 · 展开”动作时只追加
+  一个服务端游标页，不自动下载完整积压。孩子、日期或加载代次变化会废弃迟到响应；续页失败保留
+  已加载内容并允许重试，重复游标项不会重复渲染。
 - 设置页不展示或编辑每日复习预算；当前服务端默认值继续用于 required/optional 分组。
+- 设置页有在用孩子时不在主内容重复展示学习档案列表；右上角孩子胶囊始终可打开统一档案面板，
+  档案行以姓名/年级两级信息为主，“当前使用”为次级文字；可写成员通过透明 88rpx 铅笔点击区编辑，
+  新增是列表末尾动作行，归档恢复与上限说明保持独立。viewer 只显示切换；无在用孩子时继续由页面
+  空态提供首次建档和归档恢复入口。
 - 设置主页固定展示数学、语文、英语及真实已添加项；其他科目和课外活动从候选目录或自定义名称显式添加。打开或取消添加/提醒弹层不写数据。
-- 三栏成功空结果显示居中空文案；全部为空且没有待处理记录时显示“记录学习/添加日程”引导，添加日程意图只消费一次。
+- 三栏成功空结果显示居中空文案；课外活动单栏为空时只显示“今天没有活动安排”，不再重复显示
+  下方“添加日程”按钮。普通主卡和首次引导态各自保留一个互斥日程入口；添加日程意图只消费一次。
 - ActivitySchedule 是设置、今日和日程的统一来源；固定安排必须有开始/结束时间。
 - 今日还消费不与固定日程重复的柔性活动建议；活动提醒可直接移除。
 - Todo 的“带练提示”只提交当前所选且已确认的 Review IDs。
@@ -81,6 +99,8 @@ hero 标题与统一的紧凑孩子切换器。二级页面（确认、记录详
 - 设置页是出行安排的唯一写入口；日程点击出行会回到设置并定位该项。出行不进入今日。
   日程中任意明确时段相交时，冲突双方以危险色、文字原因、冲突对象和重叠分钟数共同提示；端点相接不冲突。
 - 报表范围切换会重新请求 7/30/100 天数据并回到第1屏；100天在组件内部按30/30/30/10左右分页，页面根容器不横向移动。
+- 报表活动科目行直接消费 `report.activity_subjects`，不再额外下载原始活动记录和完整科目目录后在
+  客户端重算。字段缺失的旧服务端显示“明细暂不可用”，不拿截断样本伪造完整统计。
 - 报表四个概览指标是 2×2 独立描边的只读卡片，不带按钮角色、箭头、按压态或点击路径。数字右侧
   固定显示 7 点趋势：7 天逐日，30/100 天按 7 个连续近等宽时间桶求和；完整零序列显示水平线，
   缺失或无效字段显示“暂无趋势”。科目列表行仍是带当前区间筛选的明确下钻入口。
@@ -128,8 +148,9 @@ PKDS-2.0 相对 PKDS-1.0 的可见变化：
 - 报表第一段标题是「接下来的复习压力」，只陈述待复习数量与是否已全部通过，不含能力评价词。
 - 原生自定义 TabBar 是独立图层，页面内 `fixed` 半屏无法遮住它，因此 `.pk-sheet` 默认预留
   TabBar 高度；非 Tab 页用 `.pk-sheet.plain` 收回这段预留。
-- 五个一级页面的页头是 `brand-head`（`.ico-sprout-pri` 图标 + 衬线「知芽」 + 可选 kicker）
-  加 `.pg-head.under-brand`；品牌标识复用生成图标体系，不引入位图 logo、emoji 或文字符号。
+- 五个一级页面由 `primary-nav` 在导航中央显示 `.ico-sprout-pri + 知芽`，状态栏、胶囊与尺寸变化均由
+  同一组件测量并提供保守回退；内容区旧 `brand-head/.under-brand` 已删除。品牌继续复用生成图标体系，
+  不引入位图 logo、emoji 或文字符号；深页仍由原生导航负责返回语义。
 
 实现分三层且方向单一：
 
@@ -159,14 +180,16 @@ PKDS-2.0 相对 PKDS-1.0 的可见变化：
 | Contract | Path/evidence | Result |
 |---|---|---|
 | shell/tokens | `apps/miniprogram/app.*`, `apps/miniprogram/styles/*` | five exact tabs; PKDS-2.0 三层样式 |
-| pages | `apps/miniprogram/pages` | 12 pages validated（新增 `pages/record-detail/index`） |
+| pages | `apps/miniprogram/pages` | 15 pages validated；五个一级页 custom brand nav，深页 native nav |
 | display helpers | `apps/miniprogram/utils/ui.js` | 纯函数，无网络与业务状态 |
 | icons | `tools/gen_icon_styles.py` | 重跑产物 diff 为空（幂等） |
 | API/config | `utils/api.js`, `utils/cloud-media.js`, `config.js` | cloud env/service + callContainer + server-issued upload path；local fallback retained |
-| JS behavior | `tests/frontend` | 78 passed |
-| static package | `tools/validate_miniprogram.py` | `MINIPROGRAM_VALID pages=12 source_bytes=533311`; no WXML method calls |
+| JS behavior | `tests/frontend` | 144 passed；包含有界读取、设置页档案管理及既有页面状态回归 |
+| bounded remote reads | `tests/frontend/bounded-read-pagination.test.js` | Todo first/next/stale/dedup/error state and Report no-raw-waterfall contract passed |
+| static package | `tools/validate_miniprogram.py` | `MINIPROGRAM_VALID pages=15 source_bytes=632049`; no WXML method calls |
 | lint | ESLint | passed |
-| WeChat DevTools | registered AppID preview | compiled; final 175,099-byte preview package |
+| WeChat DevTools | registered AppID preview | 575988-byte local preview package；调试器 0 errors；本修订面板原生几何未取得；未上传 |
+| changed-sheet approximate viewports | `dist/ui-preview/settings-sheet*-vp*.html` | sheet/viewer/limit 的 320/390/430 共 9 个 HTML fixture 已生成；PNG 因缺少 Playwright Chromium executable 未运行，不替代原生几何 |
 | WeChat platform API audit | `WECHAT-MINIPROGRAM-API-BASELINE.md` | compatibility/error-recovery changes proposed; not implemented |
 
 The accepted HTML version remains a design-history artifact. It is not loaded by the Mini Program and does
@@ -193,6 +216,64 @@ guards for `callContainer`、`uploadFile` and `chooseMedia`; media permission fa
 classification and cancelable uploads are tracked by `BUG-SPEC-20260905-02` and remain unimplemented.
 
 ## Change references
+
+- 2026-09-11 — `BUG-SPEC-20260911-PERF-01 / FEC-20260911-READ-PERF-01`：Today 延续既有展开控件，
+  但只逐次追加有界服务端 Todo 页并拒绝迟到/重复数据；Report 直接消费同范围的服务端活动科目聚合，
+  删除 raw activity/subject 请求瀑布。没有新增控件、文案或布局；自动化已覆盖 first/next/stale/error
+  和旧服务端降级，云端体验版弱网/阶段信号仍待发布验收。
+
+- 2026-09-11 — `SPEC-20260911-SETTINGS-PROFILE-MANAGER-POLISH-01 / DREV-20260911-SETTINGS-PROFILE-MANAGER-02`：
+  学习档案面板改为姓名/年级两级信息，当前状态收为次级文字；连续米色“编辑”块替换为透明 88rpx
+  铅笔点击区，新增入口并入在用档案列表末尾。切换、编辑、归档恢复、viewer、limit、路由和权限合同
+  未改。focused frontend 32 passed、全量 frontend 140 passed，ESLint、架构、小程序静态（630368 bytes）、
+  图标幂等和 diff check 通过；真实 AppID preview 575988 bytes。三状态三视口 HTML fixture 已生成；PNG
+  与修改后原生三视口/iOS/Android 为 `NOT_RUN`。未上传/部署；后端/API/Schema 未改。
+
+- 2026-09-11 — `SPEC-20260911-SETTINGS-PROFILE-MANAGER-01 / DREV-20260911-SETTINGS-PROFILE-MANAGER-01`：
+  设置页普通态删除重复的学习档案列表、页面内添加与上限提示；右上角孩子胶囊在单孩子时也可打开，
+  面板统一承载切换、独立编辑、归档恢复、添加与达到上限说明。viewer 只保留切换，无孩子首次建档空态
+  保留，编辑/恢复/添加导航前关闭面板。focused frontend 32 passed、全量 frontend 140 passed，ESLint、
+  架构、小程序静态（629228 bytes）、图标幂等和 diff check 通过；三档 HTML fixture 已生成，真实 AppID
+  preview 574991 bytes。PNG 与本修订原生三视口/iOS/Android 为 `NOT_RUN`；未上传/部署，后端/API/Schema 未变。
+
+- 2026-09-11 — `SPEC-20260911-PRIMARY-NAV-BRAND-01 / DREV-20260911-PRIMARY-NAV-BRAND-01`：
+  五个一级 Tab 由原生纯文字标题切换为共享 `primary-nav`，导航中央只显示一处生成嫩芽图标 + “知芽”；
+  内容区旧 `brand-head` 与 `.under-brand` 已删除，today/calendar/reports 的日期、周范围和统计边界作为
+  hero 次级信息保留。组件优先读取窗口/胶囊几何并带 20px + 44px 保守回退，尺寸变化时重新测量；
+  详情页继续原生导航。前端 138 passed，ESLint、架构、小程序静态（629240 bytes）与图标幂等通过；
+  五页三档近似 PNG 和 0 横向溢出已走查，真实 AppID preview 574832 bytes，开发者工具 iPhone 15 Pro Max
+  记录/设置页标题与胶囊无重叠，调试器 0 errors。完整原生三视口、字体放大与代表性 iOS/Android
+  真机为 `NOT_RUN`；未上传/部署。
+
+- 2026-09-11 — `SPEC-20260911-TODAY-ACTIVITY-EMPTY-CTA-01 / DREV-20260911-TODAY-ACTIVITY-EMPTY-CTA-01`：
+  删除今日页课外活动空态下方重复的“添加日程”按钮，保留空态文字、普通主卡与首次引导态的互斥入口；
+  `addSchedule`、日程意图、活动列表和折叠状态未改。当前工作树前端 138 passed，ESLint、小程序静态
+  （629154 bytes）、架构、图标幂等与 diff check 通过；真实 AppID preview 574832 bytes，未上传。
+  三档 HTML fixture 已生成，PNG 因缺少 Playwright 未运行；原生三视口与 iOS/Android 为 `NOT_RUN`。
+
+- 2026-09-11 — `SPEC-20260911-RECORD-PHOTO-ADD-SOURCE-02 / DREV-20260911-RECORD-PHOTO-ADD-SOURCE-02`：
+  空照片状态和照片网格“+”统一绑定 `addPhotos`，每次用 `wx.chooseMedia` 同时开放 camera/album；
+  支持返回后反复拍摄、相册多选和跨轮次 9 张硬上限，取消/空返回/失败与上传中保护保留表单。
+  全量前端 135 passed，ESLint、小程序静态（626018 bytes）、架构、图标幂等与 diff check 通过；
+  真实 AppID preview 573065 bytes。0/1/8/9 图三视口近似 fixture 已生成，原生来源面板、连续拍摄、
+  权限失败及 iOS/Android 真机仍为 `NOT_RUN`；未上传、未部署，后端/API/Schema 未变。
+
+- 2026-09-11 — `SPEC-20260911-RECORD-SIMPLIFICATION-01 / DREV-20260911-RECORD-SIMPLIFICATION-01`：
+  删除记录页“新增/历史”和“拍照/文字”两组分段选择，统一为照片与学习内容同屏表单；有照片沿用照片
+  批次上传，无照片但有文字沿用 manual submission，空材料不发请求。历史移到表单末尾默认折叠，
+  viewer 和显式历史意图自动展开，原有搜索/筛选/分页/详情及文字来源语义保留。前端 133 passed，
+  ESLint、静态校验、架构检查和图标生成幂等通过；真实 AppID preview 编译 572,709 bytes，未上传。
+  320/390/430 近似截图已走查；开发者工具模拟器 `reLaunch:fail timeout` 后停留旧缓存，故原生矩阵、
+  键盘、字体放大和 iOS/Android 真机仍为 `NOT_RUN`，本轮未部署。
+  用户后续原生截图暴露固定提交栏以 `bottom: 0` 落入自定义 TabBar 图层，遮住历史入口且被中央记录键反向遮挡；
+  已为记录页增加专用 `record-cta`，以 TabBar 高度 + 32rpx 间距 + safe area 抬升，并将页面尾部占位改为
+  376rpx + safe area。布局结构回归、全量前端、ESLint、静态和架构检查通过；修复后 preview 为
+  572,880 bytes，未上传，修复后的原生点击复验仍为 `NOT_RUN`。
+
+- 2026-09-11 — `BUG-017 / BUG-SPEC-20260911-01 / DREV-20260911-AI-SUMMARY-01`：不修改 WXML、
+  WXSS、页面状态机或请求协议，只把后端提供的 AI 动态总结限定为一句、最多 60 字的实际学习事实，
+  并恢复既有复习区成功数据路径。当前工作树前端 132 passed，小程序静态与架构校验通过；无新增几何可验，
+  修复后云端请求和真机均为 NOT_RUN，本轮未部署。
 
 - 2026-09-07 — `SPEC-20260907-PKDS-04 / DREV-20260907-PKDS-04`：页头与文案密度整改。
   (1) 五个一级页面删除 `navigationBarTitleText` 覆盖，原生标题统一继承「知芽」，消除与底部 Tab 的

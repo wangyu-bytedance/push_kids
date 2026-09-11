@@ -21,7 +21,11 @@ def test_overview_trends_use_seven_contiguous_near_equal_buckets(
 ) -> None:
     start = date(2026, 1, 1)
 
-    result = build_overview_trends(start, range_days, {})
+    result = build_overview_trends(
+        start,
+        range_days,
+        {key: [0] * range_days for key in TREND_METRIC_KEYS},
+    )
 
     buckets = result["buckets"]
     assert result["timezone"] == "Asia/Shanghai"
@@ -40,17 +44,16 @@ def test_overview_trends_use_seven_contiguous_near_equal_buckets(
     assert all(item[key] == 0 for item in buckets for key in TREND_METRIC_KEYS)
 
 
-def test_overview_trends_preserve_metric_totals_and_ignore_out_of_range_days() -> None:
+def test_overview_trends_preserve_database_aggregate_totals() -> None:
     start = date(2026, 4, 1)
-    in_range = [start + timedelta(days=offset) for offset in range(30)]
-    event_days = {
-        "learning_records": [*in_range, start - timedelta(days=1), start + timedelta(days=30)],
-        "new_knowledge_items": in_range[::2],
-        "review_feedback_count": [start + timedelta(days=29)] * 3,
-        "activity_records": [],
+    daily_counts = {
+        "learning_records": [1] * 30,
+        "new_knowledge_items": [1 if offset % 2 == 0 else 0 for offset in range(30)],
+        "review_feedback_count": [0] * 29 + [3],
+        "activity_records": [0] * 30,
     }
 
-    result = build_overview_trends(start, 30, event_days)
+    result = build_overview_trends(start, 30, daily_counts)
 
     expected = {
         "learning_records": 30,
@@ -60,6 +63,15 @@ def test_overview_trends_preserve_metric_totals_and_ignore_out_of_range_days() -
     }
     for key, total in expected.items():
         assert sum(item[key] for item in result["buckets"]) == total
+
+
+def test_overview_trends_reject_incomplete_or_negative_aggregates() -> None:
+    start = date(2026, 4, 1)
+    complete = {key: [0] * 7 for key in TREND_METRIC_KEYS}
+    with pytest.raises(ValueError, match="complete report range"):
+        build_overview_trends(start, 7, {**complete, "learning_records": [0] * 6})
+    with pytest.raises(ValueError, match="non-negative"):
+        build_overview_trends(start, 7, {**complete, "learning_records": [0] * 6 + [-1]})
 
 
 def test_equal_time_bucket_index_rejects_invalid_ranges_and_offsets() -> None:

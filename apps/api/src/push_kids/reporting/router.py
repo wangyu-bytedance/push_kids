@@ -18,8 +18,17 @@ def dashboard(
     family: Annotated[str, Depends(family_id)],
     db: Annotated[Session, Depends(get_db)],
     day: date | None = None,
+    todo_cursor: Annotated[str | None, Query(max_length=1500)] = None,
+    todo_limit: Annotated[int, Query(ge=1, le=50)] = 20,
 ):
-    return ReportingService.dashboard(db, family, child_id, day)
+    return ReportingService.dashboard(
+        db,
+        family,
+        child_id,
+        day,
+        todo_cursor=todo_cursor,
+        todo_limit=todo_limit,
+    )
 
 
 @router.get("/children/{child_id}/daily-summary")
@@ -28,8 +37,9 @@ def daily_summary(
     day: date,
     family: Annotated[str, Depends(family_id)],
     db: Annotated[Session, Depends(get_db)],
+    limit: Annotated[int, Query(ge=1, le=50)] = 20,
 ):
-    return ReportingService.daily_summary(db, family, child_id, day)
+    return ReportingService.daily_summary(db, family, child_id, day, limit=limit)
 
 
 @router.get("/children/{child_id}/history")

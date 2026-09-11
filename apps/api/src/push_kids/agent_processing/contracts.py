@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 from pathlib import Path
 from typing import Literal, Protocol
 
@@ -8,6 +9,14 @@ from pydantic import BaseModel, ConfigDict, Field
 from push_kids.knowledge.normalization import normalize_knowledge_name
 
 MATERIAL_FINGERPRINT_KEY = "_analysis_material_fingerprint"
+MODEL_SUMMARY_MAX_LENGTH = 60
+MODEL_SUMMARY_FALLBACK = "请确认识别出的学习与复习条目"
+_SUMMARY_EXCLUSION_PATTERNS = (
+    re.compile(r"(?:不|未)(?:包含|涉及)"),
+    re.compile(r"(?:没有|未)(?:识别到|发现|提取到)"),
+    re.compile(r"没有[^。！？!?]{0,40}(?:任务|内容|知识)"),
+    re.compile(r"无(?:语文|数学|英语|其他学科|相关)[^。！？!?]{0,30}(?:任务|内容|知识|学习)"),
+)
 
 DisplayKind = Literal[
     "hanzi",
@@ -127,7 +136,7 @@ class ModelAnalysisResult(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
-    summary: str = Field(max_length=120)
+    summary: str = Field(max_length=MODEL_SUMMARY_MAX_LENGTH)
     source: str = Field(min_length=1, max_length=30)
     subjects: dict[str, list[ModelLearningItem]]
     uncertainties: list[str] = Field(max_length=20)
@@ -209,7 +218,7 @@ class AnalysisInput(BaseModel):
         }
         points: list[KnowledgeProposal] = []
         matches: list[TodoCandidate] = []
-        errors: list[str] = []
+        errors = _model_summary_errors(result.summary)
         uncertainties = list(result.uncertainties)
         new_keys: set[tuple[str, str]] = set()
         if not result.source.strip():
@@ -312,7 +321,7 @@ class AnalysisInput(BaseModel):
             )
         )
         return AnalysisProposal(
-            summary=result.summary.strip() or "请确认识别出的学习与复习条目",
+            summary=result.summary.strip() or MODEL_SUMMARY_FALLBACK,
             subject_name=primary_subject or self.existing_subjects[0],
             source=result.source.strip(),
             knowledge_points=points,
@@ -322,8 +331,11 @@ class AnalysisInput(BaseModel):
 
     def validate_proposal(self, proposal: AnalysisProposal) -> AnalysisProposal:
         """Validate model references against this input, not parent-edited proposals."""
-        if len(proposal.summary) > 120:
+        summary_errors = _model_summary_errors(proposal.summary)
+        if "summary.too_long" in summary_errors:
             raise ValueError("model summary is too long for parent confirmation")
+        if summary_errors:
+            raise ValueError("model summary contains excluded absence metadata")
         context_ids = {item.record_id for item in self.recent_learning}
         candidates = {item.review_id: item for item in self.todo_candidates}
         knowledge = {item.knowledge_id: item for item in self.existing_knowledge}
@@ -364,6 +376,17 @@ class AnalysisInput(BaseModel):
             {item.review_id: item for item in proposal.todo_matches}.values()
         )
         return proposal
+
+
+def _model_summary_errors(summary: str) -> list[str]:
+    """Return safe provider-facing codes without retaining or echoing untrusted text."""
+    value = summary.strip()
+    errors: list[str] = []
+    if len(value) > MODEL_SUMMARY_MAX_LENGTH:
+        errors.append("summary.too_long")
+    if any(pattern.search(value) for pattern in _SUMMARY_EXCLUSION_PATTERNS):
+        errors.append("summary.exclusion_clause")
+    return errors
 
 
 def unique_knowledge_points(points: list[KnowledgeProposal]) -> list[KnowledgeProposal]:
