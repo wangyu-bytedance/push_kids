@@ -68,6 +68,7 @@ function request(path, options = {}) {
   else header["X-Family-ID"] = context.familyId;
   if (options.idempotencyKey) header["Idempotency-Key"] = options.idempotencyKey;
   if (options.historyQuery) header["X-History-Query"] = encodeURIComponent(options.historyQuery);
+  if (options.capabilities) header["X-Client-Capabilities"] = options.capabilities;
   return new Promise((resolve, reject) => {
     wx.request({
       url: `${context.apiBaseUrl}${path}`,
@@ -90,6 +91,7 @@ function cloudRequest(path, options, context) {
   };
   if (options.idempotencyKey) header["Idempotency-Key"] = options.idempotencyKey;
   if (options.historyQuery) header["X-History-Query"] = encodeURIComponent(options.historyQuery);
+  if (options.capabilities) header["X-Client-Capabilities"] = options.capabilities;
   return new Promise((resolve, reject) => {
     wx.cloud.callContainer({
       config: { env: context.cloudEnv },

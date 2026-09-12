@@ -1,13 +1,13 @@
 # FEAT-009 — 每周不同日期使用不同时间
 
-- Status: `IMPLEMENTING — backend/data locally verified; visible frontend blocked by Design Revision approval / Figma availability`
+- Status: `IMPLEMENTING — backend/data locally verified; frontend code implemented with passing state/form tests; native视口验收与 Design Revision approval / Figma 仍未满足`
 - Risk: `R2`（跨 activity / travel / calendar / notifications，包含 schema、API 与可见表单变更）
 - Spec owner: 产品负责人（用户）
 - Implementer: Codex（批准后）
 - Reviewer: 独立只读 Reviewer（批准后）
 - Verifier: Codex + 产品负责人（原生视口/真机门禁）
 - Created: 2026-09-11
-- Last updated: 2026-09-11
+- Last updated: 2026-09-12
 - Target release: `PENDING`
 - Spec revision: `SPEC-20260911-WEEKDAY-TIMES-01`
 - Architecture revision proposed: `ARCH-20260911-WEEKDAY-TIMES-01`
@@ -46,8 +46,8 @@
 - Snapshot manifest path: `docs/design/frontend/snapshots/UI-001/DREV-20260911-WEEKDAY-TIME-SLOTS-01/APPROVAL.md`（同时索引 UI-017）
 - Permitted implementation deviations: `none`
 - UI current-state merge owner/evidence: `Codex / pending verification`
-- Frontend visual/a11y/resolution verification: `NOT RUN；尚未实现`
-- Frontend engineering verification evidence: `NOT RUN；尚未实现`
+- Frontend visual/a11y/resolution verification: `NOT RUN；纯状态/表单代码与单测已完成，原生三视口/字体放大/真机 picker 仍未执行`
+- Frontend engineering verification evidence: `PARTIAL；FEAT-009 状态/表单/校验/合并确认/失败保留的纯逻辑单测已通过（settings-state.test.js，全套 152 passed），lint:miniapp 与 validate_miniprogram 通过；原生视口几何与真机交互证据 NOT RUN`
 - Figma waiver: `none；既有 FEAT-001/FEAT-007 waiver 不自动覆盖 FEAT-009`
 
 ## 0. Executive summary
@@ -518,7 +518,7 @@ new frontend route, new dependency, generic scheduler module, CalendarEvent sche
 | `T-003` | AC-002/009 | integration | activity/travel target-day projection and cross-source conflicts | `test_activities_and_reports.py`, `test_travel_arrangements.py` |
 | `T-004` | AC-010 | integration | occurrence time and outbox refresh/dedupe | notification channel tests |
 | `T-005` | AC-011/012 | integration/MySQL | capacity, scope, delete freeze/purge, concurrent replace | SQLite + isolated MySQL |
-| `T-006` | AC-003/004/005/015 | frontend state | disclosure, inherit, remove, merge confirm/cancel, error preservation | focused Node tests |
+| `T-006` | AC-003/004/005/015 | frontend state | disclosure, inherit, remove, merge confirm/cancel, error preservation | focused Node tests — `PASS`（settings-state.test.js） |
 | `T-007` | AC-013 | contract/release | old-client capability/minimum version fail-closed | contract fixture + staged old build |
 | `T-008` | AC-014 | native visual/a11y | three viewports, 7 rows, keyboard/picker, font scaling, viewer | retained DevTools/iOS/Android evidence |
 | `T-009` | architecture | static/review | no cycle, router policy, owner-specific tables, no generic utils | architecture checker + independent review |
@@ -583,8 +583,9 @@ representative iOS/Android interaction.
 - Full backend regression — `PASS with isolated notification env`；`283 passed, 3 skipped`。首次运行因本地 `.env` 已配置真实通知通道导致 2 个“未配置环境”测试失败；显式将四个通知测试变量设为空/disabled 后两项及全套通过，未修改 `.env` 或任何秘密。
 - API contract regression — `PASS`；新增 `time_slots` schema 与 `X-Client-Capabilities` OpenAPI 断言，focused `12 passed`。
 - Python quality gates — `PASS`；`ruff check .`、`ruff format --check .`、`mypy apps/api/src`、`tools/check_architecture.py` 全部通过。
-- Existing frontend repository gates — `PASS`；`npm test` (`140 passed`)、`npm run lint:miniapp`、`tools/validate_miniprogram.py`。这些结果仅证明未破坏当前前端，不构成 FEAT-009 UI 实现/视觉验收。
+- Existing frontend repository gates — `PASS`；`npm test` (`152 passed`)、`npm run lint:miniapp`、`tools/validate_miniprogram.py`（`pages=15`）。
+- FEAT-009 frontend implementation — `PASS (code + state tests)`；`pages/settings/index.{js,wxml,wxss}` 与 `utils/api.js` 实现统一/逐日草稿、继承、自动分组摘要、行级校验、合并二次确认与保存失败保留，并携带 `X-Client-Capabilities: weekly-time-slots-v1`；`tests/frontend/settings-state.test.js` 覆盖 T-006 对应的披露/继承/增删/合并确认/校验/失败保留场景。该结果仅证明纯状态/表单逻辑正确，不构成原生视口/真机视觉验收。
 - Isolated MySQL migration/concurrency — `NOT RUN`；当前没有授权的隔离 MySQL 目标。
-- Native FEAT-009 frontend/visual/a11y tests — `NOT RUN`；Design Revision/Figma gate 未满足。
+- Native FEAT-009 frontend/visual/a11y tests — `NOT RUN`；Design Revision/Figma gate 与三视口原生几何证据未满足。
 
-Final status: `IMPLEMENTING — backend/data locally verified; visible frontend blocked by Design Revision approval / Figma availability`.
+Final status: `IMPLEMENTING — backend/data locally verified; frontend code implemented with passing state/form tests; 原生视口验收与 Design Revision approval / Figma 仍未满足`.

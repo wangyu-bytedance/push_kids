@@ -312,6 +312,33 @@
 }
 .sum-note { margin-top: 28rpx; align-items: flex-start; }
 
+/* 分别设置：逐星期一行，标签 + 起止时间选择器；三视口下纵向排列不横向滚动 */
+.perday-list { display: flex; flex-direction: column; gap: 16rpx; }
+.perday-row {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+.perday-row .perday-day {
+  flex: none;
+  width: 72rpx;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--pk-ink);
+}
+.perday-row .perday-picker { flex: 1; min-width: 0; }
+.perday-row .perday-picker .pk-picker { min-height: 88rpx; }
+.perday-row .time-dash { flex: none; padding: 0; color: var(--pk-ink-3); }
+.perday-toggle {
+  display: flex;
+  align-items: center;
+  min-height: 88rpx;
+  margin-top: 8rpx;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--pk-primary);
+}
+
 .flex-note { padding: 48rpx 24rpx; text-align: center; }
 .flex-note .fn-t {
   display: block;

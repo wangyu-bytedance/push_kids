@@ -195,20 +195,37 @@
     <view class="wk-grid">
       <view class="wk {{travelWeekdaySelected[index] ? 'on' : ''}}" wx:for="{{weekdayLabels}}" wx:key="*this" aria-role="button" aria-label="星期{{item}}" data-value="{{index}}" bindtap="toggleTravelWeekday">{{item}}</view>
     </view>
-    <view class="time-row">
-      <view class="pk-field grow">
-        <text class="lbl">开始时间</text>
-        <picker mode="time" value="{{travelStartTime}}" data-field="travelStartTime" bindchange="setField">
-          <view class="pk-picker"><text class="tnum">{{travelStartTime}}</text><view class="chev"></view></view>
+    <block wx:if="{{!travelPerDay}}">
+      <view class="time-row">
+        <view class="pk-field grow">
+          <text class="lbl">开始时间</text>
+          <picker mode="time" value="{{travelStartTime}}" data-field="travelStartTime" bindchange="setField">
+            <view class="pk-picker"><text class="tnum">{{travelStartTime}}</text><view class="chev"></view></view>
+          </picker>
+        </view>
+        <text class="time-dash">—</text>
+        <view class="pk-field grow">
+          <text class="lbl">结束时间</text>
+          <picker mode="time" value="{{travelEndTime}}" data-field="travelEndTime" bindchange="setField">
+            <view class="pk-picker {{travelEndError ? 'is-error' : ''}}"><text class="tnum">{{travelEndTime}}</text><view class="chev"></view></view>
+          </picker>
+        </view>
+      </view>
+    </block>
+    <view class="perday-list" wx:else>
+      <view class="perday-row" wx:for="{{travelDayRows}}" wx:key="weekday">
+        <text class="perday-day">{{item.label}}</text>
+        <picker class="perday-picker" mode="time" value="{{item.start}}" data-index="{{index}}" data-field="start" bindchange="setTravelDayTime">
+          <view class="pk-picker"><text class="tnum">{{item.start}}</text><view class="chev"></view></view>
+        </picker>
+        <text class="time-dash">—</text>
+        <picker class="perday-picker" mode="time" value="{{item.end}}" data-index="{{index}}" data-field="end" bindchange="setTravelDayTime">
+          <view class="pk-picker {{item.end <= item.start ? 'is-error' : ''}}"><text class="tnum">{{item.end}}</text><view class="chev"></view></view>
         </picker>
       </view>
-      <text class="time-dash">—</text>
-      <view class="pk-field grow">
-        <text class="lbl">结束时间</text>
-        <picker mode="time" value="{{travelEndTime}}" data-field="travelEndTime" bindchange="setField">
-          <view class="pk-picker {{travelEndError ? 'is-error' : ''}}"><text class="tnum">{{travelEndTime}}</text><view class="chev"></view></view>
-        </picker>
-      </view>
+    </view>
+    <view class="perday-toggle" wx:if="{{travelWeekdays.length}}" aria-role="button" aria-label="{{travelPerDay ? '所有日期使用同一时间' : '不同日期时间不同'}}" bindtap="toggleTravelPerDay">
+      <text>{{travelPerDay ? '所有日期使用同一时间' : '不同日期时间不同？'}}</text>
     </view>
   </view>
   <view class="sheet-foot">
@@ -329,20 +346,37 @@
       <view class="wk-grid">
         <view class="wk {{weekdaySelected[index] ? 'on' : ''}}" wx:for="{{weekdayLabels}}" wx:key="*this" aria-role="button" aria-label="星期{{item}}" data-value="{{index}}" bindtap="toggleWeekday">{{item}}</view>
       </view>
-      <view class="time-row">
-        <view class="pk-field grow">
-          <text class="lbl">开始时间</text>
-          <picker mode="time" value="{{startTime}}" data-field="startTime" bindchange="setField">
-            <view class="pk-picker"><text>{{startTime}}</text><view class="chev"></view></view>
+      <block wx:if="{{!perDay}}">
+        <view class="time-row">
+          <view class="pk-field grow">
+            <text class="lbl">开始时间</text>
+            <picker mode="time" value="{{startTime}}" data-field="startTime" bindchange="setField">
+              <view class="pk-picker"><text>{{startTime}}</text><view class="chev"></view></view>
+            </picker>
+          </view>
+          <text class="time-dash">—</text>
+          <view class="pk-field grow">
+            <text class="lbl">结束时间</text>
+            <picker mode="time" value="{{endTime}}" data-field="endTime" bindchange="setField">
+              <view class="pk-picker"><text>{{endTime}}</text><view class="chev"></view></view>
+            </picker>
+          </view>
+        </view>
+      </block>
+      <view class="perday-list" wx:else>
+        <view class="perday-row" wx:for="{{dayRows}}" wx:key="weekday">
+          <text class="perday-day">{{item.label}}</text>
+          <picker class="perday-picker" mode="time" value="{{item.start}}" data-index="{{index}}" data-field="start" bindchange="setDayTime">
+            <view class="pk-picker"><text>{{item.start}}</text><view class="chev"></view></view>
+          </picker>
+          <text class="time-dash">—</text>
+          <picker class="perday-picker" mode="time" value="{{item.end}}" data-index="{{index}}" data-field="end" bindchange="setDayTime">
+            <view class="pk-picker {{item.end <= item.start ? 'is-error' : ''}}"><text>{{item.end}}</text><view class="chev"></view></view>
           </picker>
         </view>
-        <text class="time-dash">—</text>
-        <view class="pk-field grow">
-          <text class="lbl">结束时间</text>
-          <picker mode="time" value="{{endTime}}" data-field="endTime" bindchange="setField">
-            <view class="pk-picker"><text>{{endTime}}</text><view class="chev"></view></view>
-          </picker>
-        </view>
+      </view>
+      <view class="perday-toggle" wx:if="{{weekdays.length}}" aria-role="button" aria-label="{{perDay ? '所有日期使用同一时间' : '不同日期时间不同'}}" bindtap="toggleSchedulePerDay">
+        <text>{{perDay ? '所有日期使用同一时间' : '不同日期时间不同？'}}</text>
       </view>
       <view class="pk-notice quiet sum-note">
         <text class="n-txt">{{scheduleSummary}}</text>

@@ -228,6 +228,13 @@ BUG-010 本地实现已通过微信开发者工具 registered AppID preview 编�
 
 ## Change references
 
+- 2026-09-12 — `BUG-SPEC-20260912-MYSQL57-01 / ARCH-20260912-MYSQL57-01`：生产运行的托管数据库确认为腾讯
+  CynosDB MySQL `5.7.18-cynos-2.1.14-log`，不支持窗口函数/CTE。Today/Todo/报表读路径的 `OVER()`
+  投影改写为等价的“精确 COUNT + 预算前缀（<=121 行）+ 有界明细页”与“分组子查询聚合 + LIMIT 50 明细”，
+  在 MySQL 5.7 与本地 SQLite 上均兼容，响应字段、稳定排序、分页、精确总数与必做/可选语义不变。已随后端
+  发布上线并在生产 MySQL 5.7 正常服务；`ARC-015` 固化 5.7 能力下限，`TEST-STRATEGY.md` 将隔离 5.7
+  受影响路径套件作为后续含 SQL 变更发布的阻断门禁（本次因未配置 `PUSH_KIDS_TEST_MYSQL_URL` 未在本地运行）。
+
 - 2026-09-11 — `BUG-SPEC-20260911-PERF-01 / ARCH-20260911-READ-PERF-01 / FEC-20260911-READ-PERF-01`：
   Todo/dashboard 改为有界快照游标与精确总数，报表改为同范围 SQL 聚合并直接返回活动科目统计，活动记录
   和提交兼容数组增加有界续页，历史/Review/提交/知识/活动增长路径增加复合索引；请求边界新增脱敏的

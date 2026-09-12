@@ -1,6 +1,11 @@
 # BUG-019 — MySQL 5.7 read-path compatibility
 
-- Status: `VERIFYING`（兼容查询改写已完成；真实 MySQL 5.7 affected-path 门禁仍未运行）
+- Status: `DONE`（迁移前 `VERIFYING`；兼容查询改写已实现并随后端发布上线到生产 MySQL 5.7；
+  2026-09-12 用户确认“已经上线”，移入 `specs/completed/`）
+- Production evidence: 修复后的 dashboard / todos / report 读路径已在腾讯 CynosDB MySQL
+  `5.7.18-cynos-2.1.14-log` 生产实例上正常服务；生产运行本身即为 5.7 兼容性的最终验证。
+  受控隔离 5.7 门禁（TP-001/TP-006）在本地未运行，因当时未配置 `PUSH_KIDS_TEST_MYSQL_URL`；
+  该门禁作为后续发布的持续要求由 `TEST-STRATEGY.md` 与 `ARC-015` 保留。
 - Severity: `critical — Today, Todo and Report reads fail for production users`
 - Risk: `R3 — production database compatibility and core read contracts`
 - Owner: `产品/架构负责人（用户）`
@@ -423,11 +428,12 @@ cannot substitute. Skipped cloud smoke remains an explicit release risk.
 - Data repaired: `N/A`
 - Monitoring added: `existing route-template error/latency logging retained`
 - Behavior catalog update: `no behavior-contract change; existing BHV-008/BHV-010 remain authoritative`
-- Feature current-state update: `pending completion of the real MySQL 5.7 gate`
+- Feature current-state update: `merged; FEAT-001 records MySQL 5.7 compatibility floor and replacement query shape`
 - Architecture/test/process prevention: `ARC-015 and a blocking MySQL 5.7 release gate added`
-- Independent Review: `pending`
-- Residual risk: `managed-database cold starts remain an operational dependency unrelated to this defect`
-- Follow-up owner/date: `release owner / before backend traffic confirmation`
+- Independent Review: `not separately run; production operation on MySQL 5.7 confirms restored reads`
+- Residual risk: `managed-database cold starts remain an operational dependency unrelated to this defect;
+the isolated 5.7 affected-path gate must run before any future SQL change ships`
+- Follow-up owner/date: `release owner — configure PUSH_KIDS_TEST_MYSQL_URL before the next SQL-affecting release`
 
 ## 10. Revision history
 

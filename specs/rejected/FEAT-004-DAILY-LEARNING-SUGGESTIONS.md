@@ -1,6 +1,10 @@
 # FEAT-004 — 基于学习要求与历史节奏的每日学习建议
 
-- Status: `DRAFT`
+- Status: `REJECTED`
+- Rejected: 2026-09-12 — 产品负责人（用户）决定不实现每日学习建议能力。该草案仅到 `DRAFT`
+  评审阶段，从未获得实现授权（`User confirmation: PENDING`），也无任何生产代码依赖它。为避免
+  在 `specs/active/` 留下不会推进的功能，本 revision 归档至 `specs/rejected/`；如未来重新立项，
+  须新建 revision 并重走需求/设计/批准流程，不得直接复用本草案实现。
 - Risk: `R3`
 - Spec owner: 产品负责人（用户）
 - Implementer: `TBD`

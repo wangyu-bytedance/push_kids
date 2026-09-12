@@ -7,6 +7,8 @@ const LEARNING_CATALOG = ["科学", "道德与法治", "物理", "化学", "生�
 const ACTIVITY_CATALOG = ["游泳", "乒乓球", "篮球", "羽毛球", "足球", "网球", "围棋", "国际象棋", "钢琴", "小提琴", "舞蹈", "武术", "跆拳道", "书法", "绘画", "编程", "机器人"];
 const WEEKDAY_LABELS = ["一", "二", "三", "四", "五", "六", "日"];
 const TRAVEL_PRESETS = ["上学", "放学", "接送", "自定义"];
+/* 携带能力标识后服务端才会对本客户端返回 mixed-time 数据，否则遇到多组时间会 fail-closed 返回 409。 */
+const WEEKLY_SLOTS_CAPABILITY = "weekly-time-slots-v1";
 
 /* 只有 is_custom 的科目/活动允许移出或改安排，预置的三科只切换在学状态。 */
 function isCustom(subject) {
@@ -19,19 +21,71 @@ function weekdayText(weekdays) {
   return names.join("、");
 }
 
+function hhmm(value) {
+  return value ? value.slice(0, 5) : value;
+}
+
+/* 把 canonical time_slots 按相同起止时间自动分组，展示层紧凑但编辑层仍逐星期展开。 */
+function groupSlots(slots) {
+  const groups = [];
+  (slots || []).slice().sort((a, b) => a.weekday - b.weekday).forEach((slot) => {
+    const start = hhmm(slot.start_time);
+    const end = hhmm(slot.end_time);
+    const last = groups[groups.length - 1];
+    if (last && last.start === start && last.end === end) last.weekdays.push(slot.weekday);
+    else groups.push({ start, end, weekdays: [slot.weekday] });
+  });
+  return groups;
+}
+
+/* 相同时间合并成「周一、二、五 18:00–19:00；周三 19:00–20:00」这样的一行摘要。 */
+function slotsSummary(slots) {
+  const groups = groupSlots(slots);
+  if (!groups.length) return "";
+  return groups.map((group) => `${weekdayText(group.weekdays)} ${group.start}–${group.end}`).join("；");
+}
+
+/* 编辑草稿：每个已选星期恰好一行，保留各自时间；派生 slots 用于校验与提交。 */
+function rowsFromSlots(slots) {
+  return (slots || []).slice().sort((a, b) => a.weekday - b.weekday).map((slot) => ({
+    weekday: slot.weekday, label: `周${WEEKDAY_LABELS[slot.weekday]}`,
+    start: hhmm(slot.start_time), end: hhmm(slot.end_time)
+  }));
+}
+
+/* 从当前草稿派生 canonical slots：统一时间用同一对起止，分别设置用逐星期各自的时间。 */
+function stateSlots(weekdays, perDay, dayRows, startTime, endTime) {
+  if (perDay) {
+    return dayRows.slice().sort((a, b) => a.weekday - b.weekday)
+      .map((row) => ({ weekday: row.weekday, start_time: row.start, end_time: row.end }));
+  }
+  return weekdays.slice().sort((a, b) => a - b)
+    .map((weekday) => ({ weekday, start_time: startTime, end_time: endTime }));
+}
+
+/* 保留已有星期的时间，新增星期继承传入的统一时间上下文。 */
+function buildDayRows(weekdays, prevRows, inheritStart, inheritEnd) {
+  const prev = {};
+  (prevRows || []).forEach((row) => { prev[row.weekday] = row; });
+  return weekdays.slice().sort((a, b) => a - b).map((weekday) => {
+    const existing = prev[weekday];
+    return {
+      weekday, label: `周${WEEKDAY_LABELS[weekday]}`,
+      start: existing ? existing.start : inheritStart,
+      end: existing ? existing.end : inheritEnd
+    };
+  });
+}
+
 function scheduleLabel(schedule) {
   if (!schedule) return "尚未设置时间";
-  if (!schedule.weekdays.length) return "时间不固定";
-  const days = weekdayText(schedule.weekdays);
-  if (schedule.start_time && schedule.end_time) {
-    return `每周${days} · ${schedule.start_time.slice(0, 5)}–${schedule.end_time.slice(0, 5)}`;
-  }
-  return `每周${days}`;
+  const slots = schedule.time_slots || [];
+  if (!slots.length) return "时间不固定";
+  return `每周${slotsSummary(slots)}`;
 }
 
 function travelLabel(item) {
-  const days = weekdayText(item.weekdays || []);
-  return `每周${days} · ${item.start_time.slice(0, 5)}–${item.end_time.slice(0, 5)}`;
+  return `每周${slotsSummary(item.time_slots || [])}`;
 }
 
 Page({
@@ -48,11 +102,13 @@ Page({
     weekdayLabels: WEEKDAY_LABELS,
     weekdays: [], weekdaySelected: [false, false, false, false, false, false, false],
     startTime: "18:00", endTime: "19:00", flexible: false, scheduleSummary: "请选择至少一天",
+    perDay: false, dayRows: [], scheduleGroups: [],
     savingSchedule: false, scheduleError: "", removingActivity: false,
     travelArrangements: [], travelPresets: TRAVEL_PRESETS, showTravelEditor: false,
     editingTravelId: "", travelName: "", travelPreset: "", travelWeekdays: [],
     travelWeekdaySelected: [false, false, false, false, false, false, false],
     travelStartTime: "07:30", travelEndTime: "08:10", travelError: "", travelEndError: false,
+    travelPerDay: false, travelDayRows: [], travelGroups: [],
     savingTravel: false, deletingTravel: false, travelKey: ""
   },
   async onShow() {
@@ -115,8 +171,8 @@ Page({
       const childId = selection.childId;
       const [subjects, scheduleData, travelData, pendingRequests] = await Promise.all([
         api.request(`/children/${childId}/subjects`),
-        api.request(`/children/${childId}/activity-schedules`),
-        api.request(`/children/${childId}/travel-arrangements`),
+        api.request(`/children/${childId}/activity-schedules`, { capabilities: WEEKLY_SLOTS_CAPABILITY }),
+        api.request(`/children/${childId}/travel-arrangements`, { capabilities: WEEKLY_SLOTS_CAPABILITY }),
         this.loadPendingRequests(member)
       ]);
       if (this.loadGeneration !== generation) return;
@@ -252,6 +308,7 @@ Page({
       const start = field === "travelStartTime" ? event.detail.value : this.data.travelStartTime;
       const end = field === "travelEndTime" ? event.detail.value : this.data.travelEndTime;
       this.setData({ travelError: "", travelEndError: end <= start });
+      if (field !== "travelName") this.updateTravelSummary();
     }
   },
   async addCatalog() {
@@ -279,46 +336,93 @@ Page({
   openActivitySchedule(event) {
     const item = this.data.addedActivities[Number(event.currentTarget.dataset.index)];
     const schedule = item.schedule;
-    const weekdays = schedule ? schedule.weekdays : [];
-    const startTime = schedule && schedule.start_time ? schedule.start_time.slice(0, 5) : "18:00";
-    const endTime = schedule && schedule.end_time ? schedule.end_time.slice(0, 5) : "19:00";
+    const slots = (schedule && schedule.time_slots) || [];
+    const weekdays = slots.map((slot) => slot.weekday).sort((a, b) => a - b);
+    const groups = groupSlots(slots);
+    const perDay = groups.length > 1;
+    const startTime = groups.length ? groups[0].start : "18:00";
+    const endTime = groups.length ? groups[0].end : "19:00";
     this.setData({
       showSchedule: true, scheduleSubject: item, scheduleId: schedule ? schedule.id : "", weekdays,
       weekdaySelected: Array.from({ length: 7 }, (_, index) => weekdays.includes(index)),
-      startTime, endTime,
-      flexible: Boolean(schedule && !schedule.weekdays.length),
-      scheduleError: "", savingSchedule: false, removingActivity: false,
-      scheduleSummary: weekdays.length
-        ? `每周${weekdayText(weekdays)} ${startTime}–${endTime}，会自动出现在日程与今日活动。`
-        : "请选择至少一天"
+      startTime, endTime, perDay, dayRows: rowsFromSlots(slots),
+      flexible: Boolean(schedule && !slots.length),
+      scheduleError: "", savingSchedule: false, removingActivity: false
     });
+    this.updateScheduleSummary();
   },
   closeSchedule() { if (!this.data.savingSchedule) this.setData({ showSchedule: false }); },
   chooseScheduleMode(event) { this.setData({ flexible: event.currentTarget.dataset.mode === "flexible", scheduleError: "" }); },
+  /* 派生分组摘要与提示文案，编辑层始终按星期展开，只有摘要按相同时间合并。 */
   updateScheduleSummary() {
-    const days = weekdayText(this.data.weekdays);
-    this.setData({ scheduleSummary: days
-      ? `每周${days} ${this.data.startTime}–${this.data.endTime}，会自动出现在日程与今日活动。`
-      : "请选择至少一天" });
+    const slots = stateSlots(this.data.weekdays, this.data.perDay, this.data.dayRows, this.data.startTime, this.data.endTime);
+    this.setData({
+      scheduleGroups: groupSlots(slots),
+      scheduleSummary: slots.length
+        ? `每周${slotsSummary(slots)}，会自动出现在日程与今日活动。`
+        : "请选择至少一天"
+    });
   },
   toggleWeekday(event) {
     const value = Number(event.currentTarget.dataset.value);
     const weekdays = this.data.weekdays.slice();
     const index = weekdays.indexOf(value);
     if (index >= 0) weekdays.splice(index, 1); else weekdays.push(value);
-    weekdays.sort();
-    this.setData({ weekdays, weekdaySelected: Array.from({ length: 7 }, (_, day) => weekdays.includes(day)), scheduleError: "" });
+    weekdays.sort((a, b) => a - b);
+    const update = { weekdays, weekdaySelected: Array.from({ length: 7 }, (_, day) => weekdays.includes(day)), scheduleError: "" };
+    if (this.data.perDay) {
+      /* 新星期继承统一时间上下文；分别设置无上下文时用排序最前一行的时间。 */
+      const source = this.data.dayRows[0] || {};
+      update.dayRows = buildDayRows(weekdays, this.data.dayRows, source.start || this.data.startTime, source.end || this.data.endTime);
+    }
+    this.setData(update);
+    this.updateScheduleSummary();
+  },
+  /* 「某些日期时间不同」开关：展开=逐星期各设一行，收起=合并回统一时间。 */
+  toggleSchedulePerDay() {
+    if (!this.data.perDay) {
+      const dayRows = buildDayRows(this.data.weekdays, this.data.dayRows, this.data.startTime, this.data.endTime);
+      this.setData({ perDay: true, dayRows, scheduleError: "" });
+      return this.updateScheduleSummary();
+    }
+    const groups = groupSlots(stateSlots(this.data.weekdays, true, this.data.dayRows, "", ""));
+    const first = this.data.dayRows[0];
+    if (groups.length > 1 && first) {
+      return wx.showModal({
+        title: "合并为同一时间？",
+        content: `各天时间不同，合并后所有已选日期都将使用周${WEEKDAY_LABELS[first.weekday]}的 ${first.start}–${first.end}。`,
+        confirmText: "合并", confirmColor: "#A85742",
+        success: (result) => {
+          if (!result.confirm) return;
+          this.setData({ perDay: false, startTime: first.start, endTime: first.end, scheduleError: "" });
+          this.updateScheduleSummary();
+        }
+      });
+    }
+    const update = { perDay: false, scheduleError: "" };
+    if (first) { update.startTime = first.start; update.endTime = first.end; }
+    this.setData(update);
+    this.updateScheduleSummary();
+  },
+  setDayTime(event) {
+    const { index, field } = event.currentTarget.dataset;
+    const dayRows = this.data.dayRows.slice();
+    dayRows[Number(index)] = { ...dayRows[Number(index)], [field]: event.detail.value };
+    this.setData({ dayRows, scheduleError: "" });
     this.updateScheduleSummary();
   },
   async saveSchedule() {
     if (!this.guardWrite()) return;
-    if (!this.data.flexible && !this.data.weekdays.length) return this.setData({ scheduleError: "请选择至少一天。" });
-    if (!this.data.flexible && this.data.endTime <= this.data.startTime) return this.setData({ scheduleError: "结束时间要晚于开始时间。" });
+    const flexible = this.data.flexible;
+    if (!flexible && !this.data.weekdays.length) return this.setData({ scheduleError: "请选择至少一天。" });
+    const slots = flexible ? [] : stateSlots(this.data.weekdays, this.data.perDay, this.data.dayRows, this.data.startTime, this.data.endTime);
+    const bad = slots.find((slot) => slot.end_time <= slot.start_time);
+    if (bad) return this.setData({ scheduleError: `周${WEEKDAY_LABELS[bad.weekday]}的结束时间要晚于开始时间。` });
     this.setData({ savingSchedule: true, scheduleError: "" });
-    const payload = { child_id: this.data.childId, subject_id: this.data.scheduleSubject.id, weekdays: this.data.flexible ? [] : this.data.weekdays, start_time: this.data.flexible ? null : this.data.startTime, end_time: this.data.flexible ? null : this.data.endTime, target_per_week: null };
+    const payload = { child_id: this.data.childId, subject_id: this.data.scheduleSubject.id, time_slots: slots, target_per_week: null };
     try {
-      if (this.data.scheduleId) await api.request(`/activity-schedules/${this.data.scheduleId}`, { method: "PATCH", data: payload });
-      else await api.request("/activity-schedules", { method: "POST", data: payload });
+      if (this.data.scheduleId) await api.request(`/activity-schedules/${this.data.scheduleId}`, { method: "PATCH", data: payload, capabilities: WEEKLY_SLOTS_CAPABILITY });
+      else await api.request("/activity-schedules", { method: "POST", data: payload, capabilities: WEEKLY_SLOTS_CAPABILITY });
       this.setData({ showSchedule: false, savingSchedule: false });
       wx.showToast({ title: "已保存安排", icon: "success" });
       await this.load();
@@ -348,9 +452,11 @@ Page({
       travelWeekdays: [0, 1, 2, 3, 4],
       travelWeekdaySelected: [true, true, true, true, true, false, false],
       travelStartTime: "07:30", travelEndTime: "08:10", travelError: "", travelEndError: false,
+      travelPerDay: false, travelDayRows: [], travelGroups: [],
       savingTravel: false, deletingTravel: false,
       travelKey: api.newIdempotencyKey("travel")
     });
+    this.updateTravelSummary();
   },
   openTravel(event) {
     if (!this.guardWrite()) return;
@@ -359,15 +465,21 @@ Page({
   openTravelById(travelId) {
     const item = this.data.travelArrangements.find((row) => row.id === travelId);
     if (!item) return;
-    const weekdays = item.weekdays || [];
+    const slots = item.time_slots || [];
+    const weekdays = slots.map((slot) => slot.weekday).sort((a, b) => a - b);
+    const groups = groupSlots(slots);
+    const perDay = groups.length > 1;
     this.setData({
       showTravelEditor: true, editingTravelId: item.id, travelName: item.name,
       travelPreset: TRAVEL_PRESETS.includes(item.name) ? item.name : "自定义",
       travelWeekdays: weekdays,
       travelWeekdaySelected: Array.from({ length: 7 }, (_, day) => weekdays.includes(day)),
-      travelStartTime: item.start_time.slice(0, 5), travelEndTime: item.end_time.slice(0, 5),
+      travelStartTime: groups.length ? groups[0].start : "07:30",
+      travelEndTime: groups.length ? groups[0].end : "08:10",
+      travelPerDay: perDay, travelDayRows: rowsFromSlots(slots),
       travelError: "", travelEndError: false, savingTravel: false, deletingTravel: false, travelKey: ""
     });
+    this.updateTravelSummary();
   },
   closeTravelEditor() {
     if (!this.data.savingTravel && !this.data.deletingTravel) this.setData({ showTravelEditor: false });
@@ -379,36 +491,81 @@ Page({
     else if (TRAVEL_PRESETS.includes(this.data.travelName)) update.travelName = "";
     this.setData(update);
   },
+  /* 出行摘要同样按相同时间自动合并展示。 */
+  updateTravelSummary() {
+    const slots = stateSlots(this.data.travelWeekdays, this.data.travelPerDay, this.data.travelDayRows, this.data.travelStartTime, this.data.travelEndTime);
+    this.setData({ travelGroups: groupSlots(slots) });
+  },
   toggleTravelWeekday(event) {
     const value = Number(event.currentTarget.dataset.value);
     const weekdays = this.data.travelWeekdays.slice();
     const index = weekdays.indexOf(value);
     if (index >= 0) weekdays.splice(index, 1); else weekdays.push(value);
-    weekdays.sort();
-    this.setData({
+    weekdays.sort((a, b) => a - b);
+    const update = {
       travelWeekdays: weekdays,
       travelWeekdaySelected: Array.from({ length: 7 }, (_, day) => weekdays.includes(day)),
       travelError: ""
-    });
+    };
+    if (this.data.travelPerDay) {
+      const source = this.data.travelDayRows[0] || {};
+      update.travelDayRows = buildDayRows(weekdays, this.data.travelDayRows, source.start || this.data.travelStartTime, source.end || this.data.travelEndTime);
+    }
+    this.setData(update);
+    this.updateTravelSummary();
+  },
+  toggleTravelPerDay() {
+    if (!this.data.travelPerDay) {
+      const travelDayRows = buildDayRows(this.data.travelWeekdays, this.data.travelDayRows, this.data.travelStartTime, this.data.travelEndTime);
+      this.setData({ travelPerDay: true, travelDayRows, travelError: "" });
+      return this.updateTravelSummary();
+    }
+    const groups = groupSlots(stateSlots(this.data.travelWeekdays, true, this.data.travelDayRows, "", ""));
+    const first = this.data.travelDayRows[0];
+    if (groups.length > 1 && first) {
+      return wx.showModal({
+        title: "合并为同一时间？",
+        content: `各天时间不同，合并后所有已选日期都将使用周${WEEKDAY_LABELS[first.weekday]}的 ${first.start}–${first.end}。`,
+        confirmText: "合并", confirmColor: "#A85742",
+        success: (result) => {
+          if (!result.confirm) return;
+          this.setData({ travelPerDay: false, travelStartTime: first.start, travelEndTime: first.end, travelError: "", travelEndError: false });
+          this.updateTravelSummary();
+        }
+      });
+    }
+    const update = { travelPerDay: false, travelError: "" };
+    if (first) { update.travelStartTime = first.start; update.travelEndTime = first.end; }
+    this.setData(update);
+    this.updateTravelSummary();
+  },
+  setTravelDayTime(event) {
+    const { index, field } = event.currentTarget.dataset;
+    const travelDayRows = this.data.travelDayRows.slice();
+    travelDayRows[Number(index)] = { ...travelDayRows[Number(index)], [field]: event.detail.value };
+    this.setData({ travelDayRows, travelError: "" });
+    this.updateTravelSummary();
   },
   async saveTravel() {
     if (!this.guardWrite() || this.data.savingTravel) return;
     const name = this.data.travelName.trim();
     if (!name) return this.setData({ travelError: "请填写出行安排名称。" });
     if (!this.data.travelWeekdays.length) return this.setData({ travelError: "请至少选择一天。" });
-    if (this.data.travelEndTime <= this.data.travelStartTime) {
-      return this.setData({ travelError: "结束时间要晚于开始时间。", travelEndError: true });
+    const slots = stateSlots(this.data.travelWeekdays, this.data.travelPerDay, this.data.travelDayRows, this.data.travelStartTime, this.data.travelEndTime);
+    const bad = slots.find((slot) => slot.end_time <= slot.start_time);
+    if (bad) {
+      return this.setData({
+        travelError: this.data.travelPerDay ? `周${WEEKDAY_LABELS[bad.weekday]}的结束时间要晚于开始时间。` : "结束时间要晚于开始时间。",
+        travelEndError: !this.data.travelPerDay
+      });
     }
-    const payload = {
-      name, weekdays: this.data.travelWeekdays,
-      start_time: this.data.travelStartTime, end_time: this.data.travelEndTime
-    };
+    const payload = { name, time_slots: slots };
     this.setData({ savingTravel: true, travelError: "" });
     try {
       if (this.data.editingTravelId) {
-        await api.request(`/travel-arrangements/${this.data.editingTravelId}`, { method: "PATCH", data: payload });
+        await api.request(`/travel-arrangements/${this.data.editingTravelId}`, { method: "PATCH", data: payload, capabilities: WEEKLY_SLOTS_CAPABILITY });
       } else {
-        await api.request("/travel-arrangements", { method: "POST", data: { ...payload, child_id: this.data.childId }, idempotencyKey: this.data.travelKey });
+        await api.request("/travel-arrangements", { method: "POST", data: { ...payload, child_id: this.data.childId }, idempotencyKey: this.data.travelKey, capabilities: WEEKLY_SLOTS_CAPABILITY });
       }
       this.setData({ showTravelEditor: false, savingTravel: false });
       wx.showToast({ title: "已保存出行安排", icon: "success" });
