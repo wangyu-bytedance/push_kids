@@ -569,6 +569,13 @@ def test_mysql_bounded_read_paths_have_indexed_query_plans() -> None:
     try:
         with app.state.database.session_factory() as db:
             PlanningService.daily_todo_page(db, family_id, child_id, local_date(now), limit=20)
+            PlanningService.upcoming_review_page(
+                db,
+                family_id,
+                child_id,
+                local_date(now) - timedelta(days=1),
+                limit=20,
+            )
             ReportingService.report(db, family_id, child_id, 7)
             LearningService.list_page(db, family_id, child_id, pending_only=True, limit=100)
             ActivitiesService.record_page(db, family_id, child_id, limit=100)

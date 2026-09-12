@@ -65,23 +65,17 @@ def cmd_bump() -> str:
     data = json.loads(STATE_PATH.read_text(encoding="utf-8"))
     new_version = _next(data["released"])
     data["released"] = new_version
-    STATE_PATH.write_text(
-        json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
-    )
+    STATE_PATH.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return new_version
 
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument(
-        "command", choices=["current", "next", "bump"], help="要执行的操作"
-    )
+    parser.add_argument("command", choices=["current", "next", "bump"], help="要执行的操作")
     args = parser.parse_args(argv)
 
     try:
-        result = {"current": cmd_current, "next": cmd_next, "bump": cmd_bump}[
-            args.command
-        ]()
+        result = {"current": cmd_current, "next": cmd_next, "bump": cmd_bump}[args.command]()
     except (ValueError, FileNotFoundError) as exc:
         print(f"错误：{exc}", file=sys.stderr)
         return 1

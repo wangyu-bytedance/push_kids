@@ -51,6 +51,7 @@ async def test_readiness_tracks_running_backoff_and_recovery(app, monkeypatch):
                 await asyncio.wait_for(waiting.wait(), 2)
                 assert (await client.get("/health/ready")).json() == {"status": "ready"}
         finally:
+            worker.stop()
             resume.set()
 
 

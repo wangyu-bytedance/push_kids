@@ -238,7 +238,9 @@ def test_dashboard_and_report_stay_bounded_at_10k_rows(app, client, family_heade
     assert dashboard_body["daily_summary"]["returned_record_count"] == 20
     assert dashboard_body["daily_summary"]["remaining_record_count"] == 9_980
     assert len(dashboard["response"].content) < 96 * 1024
-    assert dashboard["query_count"] <= 14
+    # The nearest-future review preview adds at most three constant-count planning reads
+    # (nearest day, exact aggregate and five-row preview) to the prior 14-query budget.
+    assert dashboard["query_count"] <= 17
     assert dashboard["median_ms"] <= 250
     assert dashboard["peak_bytes"] <= 8 * 1024 * 1024
     print(
@@ -258,6 +260,25 @@ def test_dashboard_and_report_stay_bounded_at_10k_rows(app, client, family_heade
     )
     assert "ix_review_items_family_child_active_due_id" in dashboard_plans
     assert "ix_learning_records_family_child_occurred_submission" in dashboard_plans
+
+    future_path = (
+        f"/api/v1/children/{child['id']}/upcoming-reviews"
+        f"?after={(local_date() - timedelta(days=1)).isoformat()}&limit=20"
+    )
+    upcoming = _measure(client, engine, future_path, family_headers)
+    upcoming_body = upcoming["response"].json()
+    returned_upcoming = sum(len(group["items"]) for group in upcoming_body["groups"])
+    assert upcoming["response"].status_code == 200
+    assert upcoming_body["total_count"] == 10_000
+    assert returned_upcoming == 20
+    assert upcoming_body["remaining_count"] == 9_980
+    assert upcoming_body["next_cursor"]
+    assert upcoming["query_count"] <= 4
+    assert upcoming["median_ms"] <= 250
+    assert upcoming["peak_bytes"] <= 8 * 1024 * 1024
+    assert len(upcoming["response"].content) < 96 * 1024
+    upcoming_plans = " ".join(_sqlite_plan_texts(client, engine, future_path, family_headers))
+    assert "ix_review_items_family_child_active_due_id" in upcoming_plans
 
     for days in (7, 30, 100):
         report = _measure(

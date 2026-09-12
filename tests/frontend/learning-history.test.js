@@ -110,18 +110,77 @@ test("confirmed and cancelled submissions open read-only and cannot be reconfirm
   }
 });
 
-test("viewer sees submitted material without write affordances; conflicts preserve edits", async () => {
+test("viewer sees submitted material without write affordances", async () => {
   const { page, app } = harness("pages/submission/confirm.js", async (url) => url.includes("/history/") ? { record: null, knowledge: [] } : { state: "pending_confirmation", child_id: "child", occurred_at: "2026-09-05" });
   app.globalData.currentMember = { role: "viewer" };
   await page.load();
   assert.equal(page.data.canWrite, false);
   assert.equal(page.data.readOnly, true);
-  const conflict = harness("pages/submission/confirm.js", async () => { const err = new Error("已被确认"); err.statusCode = 409; throw err; }).page;
-  conflict.data.subjects = [{ id: "math", name: "数学" }];
-  conflict.data.proposal = { subject_name: "数学", summary: "我的编辑", knowledge_points: [{ name: "加法", subject_name: "数学" }] };
-  await conflict.confirmDraft();
-  assert.equal(conflict.data.conflict, true);
-  assert.equal(conflict.data.proposal.summary, "我的编辑");
+});
+
+test("a terminal confirmation conflict automatically renders the latest read-only result", async () => {
+  let posts = 0;
+  const calls = [];
+  const { page } = harness("pages/submission/confirm.js", async (url, options) => {
+    calls.push({ url, options });
+    if (options && options.method === "POST") {
+      posts += 1;
+      const error = new Error("只有待确认的草稿可以确认");
+      error.statusCode = 409;
+      error.code = "conflict";
+      throw error;
+    }
+    if (url.includes("/history/")) {
+      return { state: "confirmed", record: { summary: "服务端最新记录" }, records: [], knowledge: [], media: [] };
+    }
+    return { id: "sid", state: "confirmed", child_id: "child", occurred_at: "2026-09-05", created_at: "2026-09-05" };
+  });
+  page.data.id = "sid";
+  page.data.editing = true;
+  page.data.subjects = [{ id: "math", name: "数学" }];
+  page.data.proposal = { subject_name: "数学", summary: "我的编辑", knowledge_points: [{ name: "加法", subject_name: "数学" }] };
+
+  await page.confirmDraft();
+
+  assert.equal(posts, 1);
+  assert.equal(page.data.submission.state, "confirmed");
+  assert.equal(page.data.readOnly, true);
+  assert.equal(page.data.editing, false);
+  assert.equal(page.data.proposal, null);
+  assert.equal(page.data.saveError, "");
+  assert.ok(calls.some((call) => !call.options && call.url === "/submissions/sid"));
+});
+
+test("a conflict that does not resolve to a terminal result keeps the edited draft and visible error", async () => {
+  const serverDraft = {
+    id: "sid", state: "pending_confirmation", child_id: "child", occurred_at: "2026-09-05", created_at: "2026-09-05",
+    proposal: { subject_name: "数学", summary: "服务端旧草稿", source: "照片", uncertainties: [], todo_matches: [], knowledge_points: [{ name: "加法", subject_name: "数学" }] }
+  };
+  const { page } = harness("pages/submission/confirm.js", async (url, options) => {
+    if (options && options.method === "POST") {
+      const error = new Error("复习事项状态已变化");
+      error.statusCode = 409;
+      error.code = "review_state_changed";
+      throw error;
+    }
+    if (url.includes("/subjects")) return [{ id: "math", name: "数学", kind: "learning" }];
+    return serverDraft;
+  });
+  page.data.id = "sid";
+  page.data.editing = true;
+  page.data.subjects = [{ id: "math", name: "数学" }];
+  page.data.proposal = { subject_name: "数学", summary: "我的编辑", source: "照片", uncertainties: [], todo_matches: [], knowledge_points: [{ name: "加法", subject_name: "数学" }] };
+
+  await page.confirmDraft();
+
+  assert.equal(page.data.editing, true);
+  assert.equal(page.data.proposal.summary, "我的编辑");
+  assert.equal(page.data.saveError, "复习事项状态已变化");
+});
+
+test("the shared draft no longer renders a manual refresh-conflict prompt", () => {
+  const template = fs.readFileSync(path.resolve("apps/miniprogram/pages/submission/draft.wxml"), "utf8");
+  assert.doesNotMatch(template, /刷新会离开当前编辑的草稿|查看最新记录/);
 });
 
 test("record-to-today review intent contains only existing due IDs and does not feedback", () => {

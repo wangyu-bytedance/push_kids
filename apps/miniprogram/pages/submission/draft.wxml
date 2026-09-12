@@ -196,11 +196,6 @@
     </view>
   </view>
 
-  <view class="pk-notice mt3" wx:if="{{conflict}}">
-    <view class="ico ico-warn-att sm"></view>
-    <text class="n-txt">这条记录已经被处理过了。刷新会离开当前编辑的草稿。</text>
-    <view class="link-btn" aria-role="button" aria-label="查看最新记录" bindtap="load"><text>查看最新</text><view class="chev right pri"></view></view>
-  </view>
 </template>
 
 <template name="draft-cta">

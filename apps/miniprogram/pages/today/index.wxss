@@ -41,6 +41,41 @@
 .sec-body .todo-slot.history-focus { position: relative; border-radius: var(--pk-r-xl); box-shadow: 0 0 0 3rpx var(--pk-primary-hairline); }
 .more-todo { display: flex; align-items: center; justify-content: center; gap: 12rpx; min-height: 88rpx; margin-top: 20rpx; border: 1rpx dashed var(--pk-line-strong); border-radius: var(--pk-r-lg); background: var(--pk-surface-warm); color: var(--pk-ink-2); font-size: 13px; font-weight: 500; box-sizing: border-box; }
 
+/* 最近一次复习安排：只展示服务端选定的最近日期，未来项只读。 */
+.review-today-clear { display: flex; align-items: center; gap: 14rpx; min-height: 72rpx; color: var(--pk-primary); font-size: 13px; font-weight: 500; }
+.review-clear-mark { flex: none; width: 36rpx; height: 36rpx; border-radius: 50%; background: var(--pk-primary-tint); font-size: 12px; line-height: 36rpx; text-align: center; }
+.next-review-toggle { display: flex; align-items: center; gap: 20rpx; min-height: 108rpx; margin-top: 12rpx; padding: 0 24rpx; border: var(--pk-border-line); border-radius: var(--pk-r-lg); background: var(--pk-surface-warm); box-sizing: border-box; }
+.next-toggle-k { display: block; color: var(--pk-ink-3); font-size: 11px; line-height: 1.4; }
+.next-toggle-v { display: block; margin-top: 6rpx; color: var(--pk-ink); font-size: 14px; line-height: 1.5; font-weight: 500; }
+.next-review { margin-top: 8rpx; }
+.next-review-head { display: flex; align-items: flex-end; gap: 20rpx; padding: 20rpx 4rpx 18rpx; }
+.next-review-k { display: block; color: var(--pk-ink-3); font-size: 11px; line-height: 1.4; letter-spacing: .5px; }
+.next-review-date { display: inline; margin-top: 6rpx; color: var(--pk-ink); font-family: var(--pk-serif); font-size: 18px; line-height: 1.5; font-weight: 600; }
+.next-review-summary { display: inline; margin-left: 16rpx; color: var(--pk-ink-3); font-size: 12px; line-height: 1.5; }
+.next-collapse { flex: none; min-height: 88rpx; padding: 0 12rpx; color: var(--pk-primary); font-size: 12px; line-height: 88rpx; }
+.next-card { position: relative; overflow: hidden; margin-top: 14rpx; padding: 28rpx 28rpx 20rpx 32rpx; border: var(--pk-border); border-radius: var(--pk-r-xl); background: var(--pk-surface); box-shadow: var(--pk-e0); box-sizing: border-box; }
+.next-rail { position: absolute; top: 0; bottom: 0; left: 0; width: 7rpx; background: var(--pk-sprout); }
+.next-card-head { display: flex; align-items: center; gap: 18rpx; }
+.next-card-head .grow { flex: 1; min-width: 0; }
+.next-card-head .pill { flex: none; }
+.next-subject { display: block; color: var(--pk-ink); font-size: 16px; line-height: 1.4; font-weight: 600; }
+.next-method { display: block; margin-top: 4rpx; color: var(--pk-ink-3); font-size: 12px; line-height: 1.4; }
+.next-points { margin-top: 18rpx; border-top: var(--pk-border-soft); }
+.next-point { display: flex; align-items: flex-start; gap: 14rpx; min-height: 88rpx; padding: 18rpx 0; box-sizing: border-box; }
+.next-point + .next-point { border-top: var(--pk-border-soft); }
+.next-dot { flex: none; width: 12rpx; height: 12rpx; margin-top: 13rpx; border-radius: 50%; background: var(--pk-sprout); }
+.next-name { flex: 1; min-width: 0; color: var(--pk-ink-2); font-size: 14px; line-height: 1.6; overflow-wrap: anywhere; }
+.next-point.can-open .next-name { color: var(--pk-ink); }
+.next-point .chev { flex: none; margin-top: 8rpx; }
+.next-foot { min-height: 56rpx; padding-top: 14rpx; border-top: var(--pk-border-soft); color: var(--pk-ink-3); font-size: 11px; line-height: 1.5; }
+.next-inline-error { display: flex; align-items: center; justify-content: center; gap: 20rpx; min-height: 72rpx; color: var(--pk-danger); font-size: 12px; }
+.next-retry { min-height: 88rpx; padding: 0 12rpx; color: var(--pk-primary); font-weight: 500; line-height: 88rpx; }
+
+@media (max-width: 350px) {
+  .next-card { padding-right: 22rpx; padding-left: 28rpx; }
+  .next-review-date, .next-review-summary { display: block; margin-left: 0; }
+}
+
 .sec-body .tl-card .link-btn { min-height: 72rpx; }
 .pk-empty.inline .ea { margin-top: 24rpx; display: flex; justify-content: center; }
 

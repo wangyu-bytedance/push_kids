@@ -35,6 +35,34 @@ def daily_todos(
     }
 
 
+@router.get("/children/{child_id}/upcoming-reviews")
+def upcoming_reviews(
+    child_id: str,
+    family: Annotated[str, Depends(family_id)],
+    db: Annotated[Session, Depends(get_db)],
+    after: Annotated[date | None, Query(alias="after")] = None,
+    cursor: Annotated[str | None, Query(max_length=1500)] = None,
+    limit: Annotated[int, Query(ge=1, le=20)] = 20,
+):
+    page = PlanningService.upcoming_review_page(
+        db,
+        family,
+        child_id,
+        after,
+        cursor=cursor,
+        limit=limit,
+    )
+    return page or {
+        "day": None,
+        "groups": [],
+        "total_count": 0,
+        "estimated_minutes": 0,
+        "returned_count": 0,
+        "remaining_count": 0,
+        "next_cursor": None,
+    }
+
+
 @router.post("/reviews/{review_id}/feedback", response_model=FeedbackResult)
 def feedback(
     review_id: str,

@@ -21,7 +21,7 @@
 .todo-pt + .todo-pt { border-top: var(--pk-border-soft); }
 .pt-dot { flex: none; width: 36rpx; height: 36rpx; border-radius: 50%; border: 2rpx solid var(--pk-line-strong); background: var(--pk-surface-raised); box-sizing: border-box; display: flex; align-items: center; justify-content: center; }
 .pt-dot.on { background: var(--pk-primary); border-color: var(--pk-primary); }
-.pt-n { flex: 1; min-width: 0; font-size: 15px; line-height: 1.45; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pt-n { flex: 1; min-width: 0; font-size: 15px; line-height: 1.45; overflow-wrap: anywhere; }
 .pt-n.is-done { color: var(--pk-ink-3); }
 .pt-done { flex: none; display: inline-flex; align-items: center; gap: 10rpx; font-size: 12px; font-weight: 500; color: var(--pk-primary); }
 .act-done { flex: none; width: auto; }

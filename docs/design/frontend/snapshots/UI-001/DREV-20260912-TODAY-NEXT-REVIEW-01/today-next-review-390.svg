@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="390" height="720" viewBox="0 0 390 720" role="img" aria-labelledby="title desc">
+  <title id="title">今日页最近复习安排设计候选</title>
+  <desc id="desc">今天没有到期内容时，展示明天的英语复习日期、数量、预计分钟和三个完整知识点。</desc>
+  <rect width="390" height="720" fill="#FAF7F0"/>
+  <rect x="0" y="0" width="390" height="26" fill="#1F5B45" opacity="0.08"/>
+  <text x="20" y="18" fill="#6D7569" font-size="10" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif">设计候选 · 390 × 844 主视口局部</text>
+
+  <text x="24" y="76" fill="#252A24" font-size="26" font-family="Songti SC, STSong, serif" font-weight="600">复习安排</text>
+  <text x="152" y="75" fill="#788071" font-size="14" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif">今天 0 项 · 明天 3 项</text>
+  <path d="M350 72 L358 64 L366 72" fill="none" stroke="#9AA58F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <line x1="24" y1="98" x2="366" y2="98" stroke="#DED8C8" stroke-width="1"/>
+
+  <circle cx="35" cy="132" r="10" fill="#E7F0E8"/>
+  <path d="M30 132 L34 136 L41 127" fill="none" stroke="#1F5B45" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="54" y="138" fill="#4E5A4F" font-size="14" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif">今天没有到期内容</text>
+
+  <text x="24" y="184" fill="#788071" font-size="12" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif" letter-spacing="1">下一次复习</text>
+  <text x="24" y="218" fill="#252A24" font-size="20" font-family="Songti SC, STSong, serif" font-weight="600">明天 · 9 月 13 日</text>
+  <text x="366" y="216" fill="#788071" font-size="13" text-anchor="end" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif">3 项 · 约 6 分钟</text>
+
+  <rect x="24" y="242" width="342" height="344" rx="24" fill="#FFFDF8" stroke="#E8E2D5"/>
+  <rect x="24" y="242" width="6" height="344" rx="3" fill="#7FA65C"/>
+  <rect x="48" y="270" width="48" height="48" rx="16" fill="#EFEEF8"/>
+  <text x="72" y="303" fill="#625C9A" font-size="23" text-anchor="middle" font-family="Songti SC, STSong, serif">英</text>
+  <text x="112" y="289" fill="#252A24" font-size="16" font-weight="600" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif">英语 · 朗读</text>
+  <text x="112" y="312" fill="#788071" font-size="12" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif">完整内容，明天到期</text>
+  <rect x="298" y="277" width="48" height="27" rx="13.5" fill="#EDF3E8"/>
+  <text x="322" y="295" fill="#567346" font-size="11" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif">已排期</text>
+
+  <line x1="48" y1="340" x2="342" y2="340" stroke="#EEE9DF"/>
+  <circle cx="58" cy="371" r="4" fill="#7FA65C"/>
+  <text x="74" y="369" fill="#30352F" font-size="14" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif">动作词汇：run、jump、swim、</text>
+  <text x="74" y="392" fill="#30352F" font-size="14" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif">dance、sing</text>
+  <line x1="48" y1="414" x2="342" y2="414" stroke="#EEE9DF"/>
+  <circle cx="58" cy="447" r="4" fill="#7FA65C"/>
+  <text x="74" y="452" fill="#30352F" font-size="14" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif">can’t + 动词的用法</text>
+  <line x1="48" y1="478" x2="342" y2="478" stroke="#EEE9DF"/>
+  <circle cx="58" cy="511" r="4" fill="#7FA65C"/>
+  <text x="74" y="516" fill="#30352F" font-size="14" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif">配套朗读与练习</text>
+  <line x1="48" y1="542" x2="342" y2="542" stroke="#EEE9DF"/>
+  <path d="M55 559 a8 8 0 1 0 0.1 0 M55 563 v5 l4 3" fill="none" stroke="#788071" stroke-width="1.5" stroke-linecap="round"/>
+  <text x="74" y="570" fill="#788071" font-size="12" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif">明天到期后会出现完成和调整操作</text>
+
+  <rect x="24" y="616" width="342" height="64" rx="16" fill="#F3EFE4"/>
+  <text x="44" y="644" fill="#596257" font-size="12" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif">内容较多时：先显示 5 项和精确总数</text>
+  <text x="44" y="663" fill="#1F5B45" font-size="13" font-weight="600" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif">还有 N 项 · 展开</text>
+  <path d="M342 648 L348 654 L354 648" fill="none" stroke="#1F5B45" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

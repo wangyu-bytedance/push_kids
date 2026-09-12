@@ -104,6 +104,14 @@ class ReportingService:
             limit=todo_limit,
             known_child=child,
         )
+        next_review = PlanningService.upcoming_review_page(
+            db,
+            family_id,
+            child_id,
+            target,
+            limit=5,
+            known_child=child,
+        )
         pending = (
             db.scalar(
                 select(func.count(LearningSubmission.id)).where(
@@ -153,6 +161,7 @@ class ReportingService:
             "todo_returned_count": todo_page["returned_count"],
             "todo_remaining_count": todo_page["remaining_count"],
             "todo_next_cursor": todo_page["next_cursor"],
+            "next_review": next_review,
             "pending_confirmation_count": pending,
             "analyzing_count": analyzing,
             "failed_count": failed,

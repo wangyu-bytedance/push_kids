@@ -101,7 +101,7 @@ module.exports = {
   subjectPicks,
   confirmPayload,
   data: {
-    manual: false, saving: false, saveError: "", conflict: false, editing: false,
+    manual: false, saving: false, saveError: "", editing: false,
     proposal: null, subjects: [], subjectPicks: [], groups: [], subjectReview: false,
     consent: {}
   },
@@ -124,7 +124,7 @@ module.exports = {
         subjectPicks: subjectPicks(subjects, points),
         groups: buildGroups(points, subjects, {}),
         subjectReview: !manual && !!submission.subject_review_needed,
-        saveError: "", conflict: false
+        saveError: ""
       });
     },
     /* 每次改动知识点或科目后重算分组，界面上「科目归类」始终是提交时的真实分组。 */
@@ -233,8 +233,34 @@ module.exports = {
         this.setData({ saving: false, editing: false });
         if (this.afterConfirm) return this.afterConfirm();
       } catch (error) {
-        this.setData({ saving: false, saveError: error.message, conflict: error.statusCode === 409 && error.code !== "consent_required" });
-        if (!(error.code === "consent_required")) wx.showToast({ title: error.message, icon: "none" });
+        const shouldLoadLatest = error.statusCode === 409 && error.code !== "consent_required" && typeof this.load === "function";
+        if (shouldLoadLatest) {
+          /* A lost success response or another device may already have moved this submission to a
+             terminal state. Read the server truth immediately instead of asking the parent to
+             refresh. If it is still editable (for example an older backend returned a stale-review
+             conflict), restore every local edit and keep an actionable error. */
+          const edited = {
+            manual: this.data.manual,
+            editing: this.data.editing,
+            proposal: this.data.proposal,
+            subjects: this.data.subjects,
+            subjectPicks: this.data.subjectPicks,
+            groups: this.data.groups,
+            subjectReview: this.data.subjectReview,
+            consent: this.data.consent
+          };
+          this.setData({ saving: false });
+          await this.load();
+          const latestState = this.data.submission && this.data.submission.state;
+          if (!this.data.error && ["confirmed", "cancelled"].includes(latestState)) {
+            this.setData({ saving: false, saveError: "" });
+            return;
+          }
+          this.setData({ ...edited, saving: false, saveError: error.message, error: "" });
+          return;
+        }
+        this.setData({ saving: false, saveError: error.message });
+        if (error.code !== "consent_required") wx.showToast({ title: error.message, icon: "none" });
       }
     },
     /* 后端只在家长明确同意后才新增科目；没勾开关就走这一步补问一次。 */

@@ -64,7 +64,7 @@ function buildDetailView(detail, submission) {
 }
 
 module.exports = {
-  data: { readOnly: false, detail: null, detailView: null, reviewsOpen: false, reviews: [], reviewsLoading: false, reviewsError: "", hasDue: false, statusLabel: "", actionError: "", conflict: false },
+  data: { readOnly: false, detail: null, detailView: null, reviewsOpen: false, reviews: [], reviewsLoading: false, reviewsError: "", hasDue: false, statusLabel: "", actionError: "" },
   methods: {
     async loadDetail() {
       const generation = this.loadRequest;

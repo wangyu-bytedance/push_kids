@@ -39,6 +39,7 @@ def run_migrations_online() -> None:
         poolclass=pool.NullPool,
     )
     with connectable.connect() as connection:
+
         def include_object(object_, name, type_, reflected, compare_to):
             return not (
                 type_ == "check_constraint"

@@ -436,6 +436,189 @@ class PlanningService:
         }
 
     @classmethod
+    def upcoming_review_page(
+        cls,
+        db: Session,
+        family_id: str,
+        child_id: str,
+        after: date | None = None,
+        *,
+        limit: int = 20,
+        cursor: str | None = None,
+        known_child: Child | None = None,
+    ) -> dict | None:
+        """Return one bounded page from the child's nearest future learning-review day."""
+        child = known_child or ChildrenService.get_child(db, family_id, child_id)
+        if child.family_id != family_id or child.id != child_id:
+            raise NotFoundError("没有找到这个孩子")
+
+        target = after or local_date()
+        scope = ("upcoming-reviews-v1", family_id, child_id, target.isoformat())
+        as_of = utcnow()
+        anchor_subject = ""
+        anchor_method = ""
+        anchor_id = ""
+        position = 0
+        next_day: date | None = None
+        if cursor:
+            anchor = decode_cursor(cursor, scope)
+            try:
+                as_of = datetime.fromisoformat(str(anchor["as_of"]))
+                next_day = date.fromisoformat(str(anchor["day"]))
+                anchor_subject = str(anchor["subject_name"])
+                anchor_method = str(anchor["review_method"])
+                anchor_id = str(anchor["review_id"])
+                raw_position = anchor["position"]
+                if isinstance(raw_position, bool) or not isinstance(raw_position, (int, str)):
+                    raise ValueError
+                position = int(raw_position)
+                if (
+                    not as_of.tzinfo
+                    or next_day <= target
+                    or not anchor_subject
+                    or not anchor_method
+                    or not anchor_id
+                    or position < 0
+                ):
+                    raise ValueError
+            except (KeyError, TypeError, ValueError) as exc:
+                raise ValueError("分页已失效，请重新展开") from exc
+
+        future_scope = (
+            ReviewItem.family_id == family_id,
+            ReviewItem.child_id == child_id,
+            ReviewItem.active.is_(True),
+            ReviewItem.due_date > target,
+            ReviewItem.updated_at <= as_of,
+            Subject.kind == "learning",
+        )
+
+        def review_select(*columns):
+            return (
+                select(*columns)
+                .select_from(ReviewItem)
+                .join(KnowledgeItem, ReviewItem.knowledge_item_id == KnowledgeItem.id)
+                .join(Subject, KnowledgeItem.subject_id == Subject.id)
+            )
+
+        if next_day is None:
+            next_day = db.scalar(
+                review_select(ReviewItem.due_date)
+                .where(*future_scope)
+                .order_by(ReviewItem.due_date.asc())
+                .limit(1)
+            )
+            if next_day is None:
+                return None
+
+        day_scope = (
+            ReviewItem.family_id == family_id,
+            ReviewItem.child_id == child_id,
+            ReviewItem.active.is_(True),
+            ReviewItem.due_date == next_day,
+            ReviewItem.updated_at <= as_of,
+            Subject.kind == "learning",
+        )
+        minutes = case(
+            (KnowledgeItem.estimated_minutes < 1, 1), else_=KnowledgeItem.estimated_minutes
+        )
+        ordering = (
+            Subject.name.asc(),
+            KnowledgeItem.review_method.asc(),
+            ReviewItem.id.asc(),
+        )
+        aggregate = db.execute(
+            review_select(
+                func.count().label("total_count"),
+                func.coalesce(func.sum(minutes), 0).label("estimated_minutes"),
+            ).where(*day_scope)
+        ).one()
+        total_count = int(aggregate.total_count or 0)
+        estimated_minutes = int(aggregate.estimated_minutes or 0)
+
+        details = review_select(
+            ReviewItem.id.label("review_id"),
+            ReviewItem.due_date.label("due_date"),
+            ReviewItem.source_submission_id.label("source_submission_id"),
+            KnowledgeItem.name.label("knowledge_name"),
+            KnowledgeItem.review_method.label("review_method"),
+            minutes.label("minutes"),
+            Subject.id.label("subject_id"),
+            Subject.name.label("subject_name"),
+        ).where(*day_scope)
+        if cursor:
+            details = details.where(
+                or_(
+                    Subject.name > anchor_subject,
+                    and_(
+                        Subject.name == anchor_subject,
+                        KnowledgeItem.review_method > anchor_method,
+                    ),
+                    and_(
+                        Subject.name == anchor_subject,
+                        KnowledgeItem.review_method == anchor_method,
+                        ReviewItem.id > anchor_id,
+                    ),
+                )
+            )
+        fetched = list(db.execute(details.order_by(*ordering).limit(limit + 1)).mappings())
+        more = len(fetched) > limit
+        rows = fetched[:limit]
+
+        groups: list[dict] = []
+        grouped: dict[tuple[str, str], dict] = {}
+        for row in rows:
+            group_key = (str(row["subject_id"]), str(row["review_method"]))
+            group = grouped.get(group_key)
+            if group is None:
+                group = {
+                    "id": f"{group_key[0]}:{group_key[1]}:scheduled:{next_day.isoformat()}",
+                    "subject_id": group_key[0],
+                    "subject_name": str(row["subject_name"]),
+                    "review_method": group_key[1],
+                    "estimated_minutes": 0,
+                    "items": [],
+                }
+                grouped[group_key] = group
+                groups.append(group)
+            item_minutes = int(row["minutes"])
+            group["estimated_minutes"] += item_minutes
+            group["items"].append(
+                {
+                    "review_id": str(row["review_id"]),
+                    "knowledge_name": str(row["knowledge_name"]),
+                    "estimated_minutes": item_minutes,
+                    "due_date": row["due_date"].isoformat(),
+                    "source_submission_id": row["source_submission_id"],
+                }
+            )
+
+        next_cursor = None
+        if more and rows:
+            last = rows[-1]
+            next_cursor = encode_cursor(
+                scope,
+                {
+                    "as_of": as_of.isoformat(),
+                    "day": next_day.isoformat(),
+                    "subject_name": last["subject_name"],
+                    "review_method": last["review_method"],
+                    "review_id": last["review_id"],
+                    "position": position + len(rows),
+                },
+            )
+        returned_position = position + len(rows)
+        return {
+            "day": next_day.isoformat(),
+            "groups": groups,
+            "total_count": total_count,
+            "estimated_minutes": estimated_minutes,
+            "returned_count": len(rows),
+            "remaining_count": max(0, total_count - returned_position),
+            "next_cursor": next_cursor,
+        }
+
+    @classmethod
     def pending_review_loads(cls, db: Session, target: date) -> list[PendingReviewLoad]:
         """Outstanding review per active child across families, for the evening digest.
 

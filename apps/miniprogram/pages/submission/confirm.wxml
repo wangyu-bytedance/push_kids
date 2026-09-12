@@ -77,7 +77,7 @@
 
     <!-- 可编辑草稿：AI 整理草稿（E1 / E2）、人工录入（E3）、保存失败（E4） -->
     <block wx:else>
-      <template is="draft-form" data="{{manual, saving, saveError, conflict, proposal, groups, subjectPicks, subjectReview, submission}}" />
+      <template is="draft-form" data="{{manual, saving, saveError, proposal, groups, subjectPicks, subjectReview, submission}}" />
 
       <view class="mt4">
         <submission-materials child-id="{{submission.child_id}}" submission-id="{{id}}"

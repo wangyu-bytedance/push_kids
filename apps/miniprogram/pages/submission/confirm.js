@@ -18,7 +18,7 @@ Page({
   async load() {
     const generation = (this.loadRequest || 0) + 1;
     this.loadRequest = generation;
-    this.setData({ error: "", conflict: false });
+    this.setData({ error: "" });
     try {
       const submission = await api.request(`/submissions/${this.data.id}`);
       if (generation !== this.loadRequest) return;

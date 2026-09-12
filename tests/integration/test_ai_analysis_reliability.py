@@ -108,7 +108,7 @@ def test_repeat_learning_preserves_review_and_deduplicates_occurrence(
         assert db.scalar(select(func.count(LearningRecord.id))) == 2
 
 
-def test_duplicate_matches_advance_once_and_stale_proposal_cannot_advance_again(
+def test_duplicate_matches_advance_once_and_all_stale_draft_closes_without_advancing_again(
     client,
     app,
     child,
@@ -136,14 +136,123 @@ def test_duplicate_matches_advance_once_and_stale_proposal_cannot_advance_again(
     assert first_result.json()["records"] == []
     assert len(first_result.json()["updated_reviews"]) == 1
     stale = confirm(client, family_headers, keys[1], body)
-    assert stale.status_code == 409
-    assert stale.json()["error"]["code"] == "review_state_changed"
+    assert stale.status_code == 200
+    assert stale.json()["records"] == []
+    assert stale.json()["updated_reviews"] == []
     with app.state.database.session_factory() as db:
         review = db.get(ReviewItem, review_id)
         assert review.step == 1 and review.active
         assert db.scalar(select(func.count(ReviewFeedback.id))) == 1
         assert db.scalar(select(func.count(LearningRecord.id))) == 1
-        assert db.get(LearningSubmission, keys[1]).state == "pending_confirmation"
+        assert db.get(LearningSubmission, keys[1]).state == "confirmed"
+
+
+def test_stale_review_is_skipped_while_current_review_and_new_learning_are_confirmed(
+    client,
+    app,
+    child,
+    family_headers,
+):
+    initial = proposal("进位加法")
+    initial["knowledge_points"].append(
+        {
+            "name": "退位减法",
+            "category": "计算",
+            "direct_evidence": [{"source": "parent_text", "detail": "家长记录退位减法"}],
+        }
+    )
+    first = draft(client, app, family_headers, child["id"], body=initial)
+    review_ids = confirm(client, family_headers, first, initial).json()["review_item_ids"]
+    with app.state.database.session_factory() as db:
+        reviews = [db.get(ReviewItem, review_id) for review_id in review_ids]
+        knowledge = {
+            review.id: db.get(KnowledgeItem, review.knowledge_item_id) for review in reviews
+        }
+        for review in reviews:
+            review.due_date = local_date()
+        db.commit()
+        matches = [
+            {
+                "review_id": review.id,
+                "knowledge_name": knowledge[review.id].name,
+                "subject_name": "数学",
+                "step": review.step,
+                "due_date": review.due_date.isoformat(),
+                "eligible_on": local_date().isoformat(),
+                "evidence": "本次练习",
+            }
+            for review in reviews
+        ]
+
+    body = proposal("分数初步认识")
+    body["todo_matches"] = matches
+    key = draft(client, app, family_headers, child["id"], body=body)
+    stale_id, current_id = review_ids
+    with app.state.database.session_factory() as db:
+        stale_review = db.get(ReviewItem, stale_id)
+        stale_review.step = 1
+        stale_review.due_date = local_date() + timedelta(days=3)
+        db.commit()
+
+    result = confirm(client, family_headers, key, body)
+
+    assert result.status_code == 200
+    assert len(result.json()["records"]) == 1
+    assert [item["review_id"] for item in result.json()["updated_reviews"]] == [current_id]
+    with app.state.database.session_factory() as db:
+        assert (
+            db.scalar(
+                select(func.count(ReviewFeedback.id)).where(
+                    ReviewFeedback.review_item_id == stale_id
+                )
+            )
+            == 0
+        )
+        assert (
+            db.scalar(
+                select(func.count(ReviewFeedback.id)).where(
+                    ReviewFeedback.review_item_id == current_id
+                )
+            )
+            == 1
+        )
+        assert db.get(ReviewItem, stale_id).step == 1
+        assert db.get(ReviewItem, current_id).step == 1
+        assert db.get(LearningSubmission, key).state == "confirmed"
+        assert db.scalar(select(func.count(LearningRecord.id))) == 2
+
+
+def test_tampered_todo_match_is_rejected_instead_of_being_treated_as_stale(
+    client,
+    app,
+    child,
+    family_headers,
+):
+    first = draft(client, app, family_headers, child["id"])
+    review_id = confirm(client, family_headers, first).json()["review_item_ids"][0]
+    with app.state.database.session_factory() as db:
+        review = db.get(ReviewItem, review_id)
+        review.due_date = local_date()
+        db.commit()
+        match = {
+            "review_id": review_id,
+            "knowledge_name": "两位数进位加法",
+            "step": review.step,
+            "due_date": review.due_date.isoformat(),
+        }
+    body = proposal()
+    body["knowledge_points"] = []
+    body["todo_matches"] = [match]
+    key = draft(client, app, family_headers, child["id"], body=body)
+    tampered = json.loads(json.dumps(body))
+    tampered["todo_matches"][0]["knowledge_name"] = "被篡改的知识点"
+
+    result = confirm(client, family_headers, key, tampered)
+
+    assert result.status_code == 400
+    with app.state.database.session_factory() as db:
+        assert db.scalar(select(func.count(ReviewFeedback.id))) == 0
+        assert db.get(LearningSubmission, key).state == "pending_confirmation"
 
 
 @pytest.mark.parametrize("state", ["queued", "analyzing", "failed", "pending_confirmation"])

@@ -117,8 +117,6 @@ test("declining the new subject writes nothing and keeps the draft editable", as
   assert.equal(page.data.editing, true);
   assert.equal(page.data.saving, false);
   assert.match(page.data.saveError, /英语/);
-  /* 冲突提示只给「已被处理过」用，这里不能误报。 */
-  assert.equal(page.data.conflict, false);
 });
 
 test("moving a whole group onto an existing subject drops the unlisted one", async () => {

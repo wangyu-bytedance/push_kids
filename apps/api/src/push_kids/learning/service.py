@@ -69,7 +69,6 @@ from push_kids.platform.errors import (
     ConflictError,
     ConsentRequiredError,
     NotFoundError,
-    ReviewStateChangedError,
 )
 from push_kids.platform.pagination import decode_cursor, encode_cursor
 from push_kids.platform.time import local_date, utcnow
@@ -1014,6 +1013,10 @@ class LearningService:
             snapshot = original_matches.get(match.review_id)
             if snapshot is None:
                 raise ValueError("不能添加 AI 草稿中没有识别出的复习项")
+            if normalize_knowledge_name(match.knowledge_name) != normalize_knowledge_name(
+                snapshot.get("knowledge_name", "")
+            ):
+                raise ValueError("复习事项与原始草稿不一致，请核对后重试")
             row = db.execute(
                 select(ReviewItem, KnowledgeItem, Subject)
                 .join(KnowledgeItem, ReviewItem.knowledge_item_id == KnowledgeItem.id)
@@ -1028,7 +1031,10 @@ class LearningService:
                 .execution_options(populate_existing=True)
             ).one_or_none()
             if row is None:
-                raise ReviewStateChangedError("复习事项状态已变化，请刷新草稿后重新确认")
+                # The match came from the server-owned proposal, but the current Review fact no
+                # longer exists in this family/child/learning scope. Treat it as already changed:
+                # confirmation may still persist the remaining learning without replaying feedback.
+                continue
             matched_review, matched_knowledge, matched_subject = row
             stale = (
                 not matched_review.active
@@ -1039,12 +1045,13 @@ class LearningService:
                 or snapshot.get("due_date") != matched_review.due_date.isoformat()
                 or normalize_knowledge_name(snapshot.get("knowledge_name", ""))
                 != normalize_knowledge_name(matched_knowledge.name)
-                or normalize_knowledge_name(match.knowledge_name)
-                != normalize_knowledge_name(snapshot.get("knowledge_name", ""))
                 or snapshot.get("subject_name") not in (None, matched_subject.name)
             )
             if stale:
-                raise ReviewStateChangedError("复习事项状态已变化，请刷新草稿后重新确认")
+                # Proposal snapshots are historical evidence; Review rows are the current fact.
+                # A Review completed or rescheduled since analysis must not block the parent's
+                # confirmation and must never be advanced twice.
+                continue
             transition = apply_feedback(matched_review.step or 0, "complete", today)
             review_transitions.append((match, matched_review, transition))
 

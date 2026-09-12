@@ -1,12 +1,12 @@
 # FEAT-001 — 家庭学习持续跟进系统 MVP
 
 - Status: `CURRENT`
-- Revision: `FEAT-STATE-20260911-READ-PERF-01-LOCAL`
-- Last verified: 2026-09-11（BUG-018 有界读取已完成：fresh MySQL 8.0.45 base-to-head/current/check/downgrade/re-upgrade 与 4 项 MySQL 测试通过；后端 unit/integration/contract 298 passed，性能 2 passed，前端 144 passed；Ruff、format、Mypy 81 source files、ESLint、架构、小程序静态 15 pages/632049 bytes、空库审计与 diff check 通过。SQLite 10k dashboard/report 与 50k history 均在批准预算内。可选 TabBar 生成器因环境缺少 cairosvg 未运行；生产备份/迁移、云端阶段信号、体验版与真机矩阵尚未执行）
+- Revision: `FEAT-STATE-20260912-TODAY-NEXT-REVIEW-01-LOCAL`
+- Last verified: 2026-09-12（BUG-021 本地修复完成：今日页在无到期项时直接展示服务端最近一个未来复习日、精确总量/分钟和完整换行知识点；首屏 5 项、续页每次最多 20 项，未来项只读。unit/integration 281 passed、4 个 MySQL 环境用例 skipped；其余 contract 10 passed，worker-readiness 8 项因既有 lifespan 退出等待未完成；前端 161 passed，10k 未来读路径、Ruff check、改动文件 format、Mypy 81 files、ESLint、架构 checked=3、小程序静态 15 pages/656671 bytes 通过。全仓 format 仍只被两个未修改既有文件阻断；Schema/Alembic 未变；原生三视口、iOS/Android、真实 MySQL 5.7 与部署未执行）
 - Source Spec: `specs/completed/FEAT-001-PUSH-KIDS-FINAL-SPEC.md` revision `SPEC-20260831-08`
-- Latest applied Spec: `specs/completed/BUG-018-BOUNDED-READ-API-PERFORMANCE.md` revision `BUG-SPEC-20260911-PERF-01`
+- Latest applied Spec: `specs/completed/BUG-021-TODAY-REVIEW-PLAN-VISIBILITY.md` revision `BUG-SPEC-20260912-REVIEW-VISIBILITY-01`
 - Previous applied Spec: `specs/completed/SPEC-20260911-SETTINGS-PROFILE-MANAGER-POLISH.md` revision `SPEC-20260911-SETTINGS-PROFILE-MANAGER-POLISH-01`（frontend only）
-- Current visible contract: `docs/design/frontend/prototypes/DREV-20260911-SETTINGS-PROFILE-MANAGER-02/FRONTEND-SPEC.md`
+- Current visible contract: `docs/design/frontend/prototypes/DREV-20260912-TODAY-NEXT-REVIEW-01/FRONTEND-SPEC.md`
 - Intermediate design artifact: `docs/design/frontend/prototypes/DREV-20260830-03/index.html`
 
 ## Purpose and current behavior
@@ -47,6 +47,9 @@
   家庭、孩子、日期和快照绑定的游标继续，精确总数与 required/optional 分组覆盖整个快照；并发新增或
   更新不会混入旧遍历。活动记录与提交兼容数组最多 100 项并通过响应头续页；报表最多 100 天，其
   总览、趋势和 `activity_subjects` 由同一范围的 SQL 聚合产生，科目明细最多 50 项且显式报告省略量。
+- Dashboard 还嵌入最近一个未来 learning Review 日期的前 5 项、该日精确总量和分钟；续页接口每次
+  最多 20 项，游标绑定家庭、孩子、查询日与快照。今日页把它作为只读计划透明度展示，不提供反馈或
+  带练；有到期项时仍以今日 Todo 为主。缺少该新增字段的旧服务端只显示今日到期事实，不声称未来为空。
 - 原图每次经家庭/孩子/提交/媒体关联验证；viewer 允许读取，被移除成员拒绝新读取。
   云端签发最长 60 秒 GET 链接，本地下载每次带身份；临时文件退出清理。真实云端双账号 owner
   隔离与 metaid 解码已于 2026-09-06 由用户确认验收通过；合法域名和设备矩阵仍按各自发布门禁记录。
@@ -93,11 +96,12 @@
   服务端元数据，不进模型/日志。无摘要旧记录、重新压缩/裁剪图片不保证识别；新学习事件仍可确认。
 - AI可关联候选已有知识ID，服务端校验并统一名称/类别，确认页可取消关联；确认再次检查身份
   与科目/名称/类别。同份记录重复知识只产生一次出现；多次学习仍保留各次发生时间和记录。
-- 上传材料中的复习内容必须引用同科目的当日到期/逾期 Todo，不能同时作为新学习条目。家长确认后
-  只写一条 `ReviewFeedback(complete)` 并按确定性策略推进已有 Review，不创建 LearningRecord、
-  KnowledgeOccurrence 或新 Review；纯复习确认返回空 `records[]` 和 `updated_reviews[]`。混合确认同一
-  事务处理新学与复习。step/due/active/确认日变化时返回 `409 review_state_changed` 并保持草稿，
-  不再静默忽略；未来或已结束 Review 不会提前推进。
+- 上传材料中的复习内容必须引用服务端原始提案里同科目的当日到期/逾期 Todo，不能同时作为新学习条目。
+  家长确认时，快照仍有效的 Review 只写一条 `ReviewFeedback(complete)` 并按确定性策略推进，不创建
+  LearningRecord、KnowledgeOccurrence 或新 Review；已结束、已推进、改期到未来、删除或身份事实已变化
+  的原始匹配安全跳过，不阻断同一事务里的其余复习和新学习，也不会重复推进。全部匹配均已变化的纯复习
+  草稿仍确认成终态并返回空 `records[]` 和 `updated_reviews[]`。客户端注入或篡改的复习引用继续拒绝且
+  零写入。
 - AI排队、分析中、失败或待确认均可人工确认，人工表单不自动匹配Todo；保存时才取消未完成Job，
   复用同一正式记录事务，来源标记人工录入。Worker成功/失败回写均校验状态、attempt和lease，
   丢弃人工确认、取消或新租约后的迟到结果；不把取消结果复活用于旧任务。
@@ -227,6 +231,20 @@ BUG-010 本地实现已通过微信开发者工具 registered AppID preview 编�
 - BUG-010 的受控 Figma waiver 同样在公开生产前失效；三视口、字体放大、键盘和 iOS/Android 实机证据仍待补齐。
 
 ## Change references
+
+- 2026-09-12 — `BUG-SPEC-20260912-REVIEW-VISIBILITY-01 / DREV-20260912-TODAY-NEXT-REVIEW-01`：今日页
+  “待复习”改为“复习安排”；无今日到期项时自动展开最近一个未来复习日，显示完整知识点、精确项数/分钟，
+  有今日到期项时仅以低强调 disclosure 提示下一次安排。Planning 新增 family/child/day/snapshot 绑定的
+  最近日只读分页合同，Dashboard 预览 5 项，续页硬上限 20；未来项没有反馈/带练。10k 规模与联合索引、
+  混合版本三态、分页去重/迟到响应/失败保留和 44px 热区均有自动化覆盖；独立 R2 复核 PASS。真实
+  MySQL 5.7、原生 320/390/430、iOS/Android、上传与部署仍为 release gate，本轮未执行。
+
+- 2026-09-12 — `BUG-SPEC-20260912-STALE-CONFIRM-01 / DREV-20260912-STALE-CONFIRM-01`：确认事务先校验
+  客户端 Review 匹配来自服务端原始提案，再跳过确认前已结束、推进、改期、删除或身份变化的项；仍有效项
+  恰好推进一次，新学习继续原子入档。共享草稿删除手动“刷新/查看最新”冲突提示，非 consent 的 409 自动
+  读取服务端最新状态；仅在 confirmed/cancelled 时进入最新只读详情，否则恢复本地编辑并显示错误。
+  后端 297 passed/4 skipped、前端 155 passed，质量、架构、静态与空库检查证据见本页 Last verified；
+  Schema/API 响应形状未变，未上传或部署，原生视口/真机仍为 `NOT_RUN`。
 
 - 2026-09-12 — `BUG-SPEC-20260912-MYSQL57-01 / ARCH-20260912-MYSQL57-01`：生产运行的托管数据库确认为腾讯
   CynosDB MySQL `5.7.18-cynos-2.1.14-log`，不支持窗口函数/CTE。Today/Todo/报表读路径的 `OVER()`

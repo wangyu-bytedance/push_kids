@@ -235,6 +235,21 @@ def test_dashboard_and_report_emit_no_window_or_cte_sql(app, client, family_head
             headers=family_headers,
             params={"day": target.isoformat(), "limit": 20, "cursor": cursor},
         )
+        upcoming = client.get(
+            f"/api/v1/children/{child['id']}/upcoming-reviews",
+            headers=family_headers,
+            params={"after": (target - timedelta(days=1)).isoformat(), "limit": 20},
+        )
+        upcoming_cursor = upcoming.json()["next_cursor"]
+        client.get(
+            f"/api/v1/children/{child['id']}/upcoming-reviews",
+            headers=family_headers,
+            params={
+                "after": (target - timedelta(days=1)).isoformat(),
+                "limit": 20,
+                "cursor": upcoming_cursor,
+            },
+        )
         report = client.get(
             f"/api/v1/children/{child['id']}/report",
             headers=family_headers,
@@ -245,6 +260,7 @@ def test_dashboard_and_report_emit_no_window_or_cte_sql(app, client, family_head
 
     assert dashboard.status_code == 200
     assert first_todo.status_code == 200
+    assert upcoming.status_code == 200
     assert report.status_code == 200
     assert captured
     upper = [statement.upper() for statement in captured]
@@ -497,6 +513,196 @@ def test_todo_totals_remain_exact_while_payload_is_paged(
         "groups": [],
         "total_count": 0,
         "required_count": 0,
+        "estimated_minutes": 0,
+        "returned_count": 0,
+        "remaining_count": 0,
+        "next_cursor": None,
+    }
+
+
+def test_upcoming_reviews_expose_only_the_nearest_day_with_exact_bounded_pages(
+    app, client, family_headers, child
+) -> None:
+    family_id = family_headers["X-Family-ID"]
+    target = local_date()
+    next_day = target + timedelta(days=1)
+    later_day = target + timedelta(days=3)
+    learning_subject_id = new_id()
+    activity_subject_id = new_id()
+    with _database_session(app) as db:
+        db.add_all(
+            [
+                Subject(
+                    id=learning_subject_id,
+                    family_id=family_id,
+                    child_id=child["id"],
+                    name="英语",
+                    kind=SubjectKind.learning.value,
+                ),
+                Subject(
+                    id=activity_subject_id,
+                    family_id=family_id,
+                    child_id=child["id"],
+                    name="游泳",
+                    kind=SubjectKind.activity.value,
+                ),
+            ]
+        )
+        db.flush()
+        reviews = []
+        for index in range(27):
+            knowledge_id = new_id()
+            db.add(
+                KnowledgeItem(
+                    id=knowledge_id,
+                    family_id=family_id,
+                    child_id=child["id"],
+                    subject_id=learning_subject_id,
+                    name=f"完整展示的英语知识点 {index + 1}",
+                    normalized_name=f"完整展示的英语知识点-{index + 1}",
+                    category="词汇",
+                    review_method="朗读",
+                    estimated_minutes=2,
+                )
+            )
+            reviews.append(
+                ReviewItem(
+                    id=new_id(),
+                    family_id=family_id,
+                    child_id=child["id"],
+                    knowledge_item_id=knowledge_id,
+                    due_date=next_day,
+                    active=True,
+                )
+            )
+        for subject_id, due_date in (
+            (learning_subject_id, later_day),
+            (activity_subject_id, next_day),
+        ):
+            knowledge_id = new_id()
+            db.add(
+                KnowledgeItem(
+                    id=knowledge_id,
+                    family_id=family_id,
+                    child_id=child["id"],
+                    subject_id=subject_id,
+                    name="不应进入最近学习复习",
+                    normalized_name=f"不应进入最近学习复习-{subject_id}",
+                    category="边界",
+                    review_method="回顾",
+                    estimated_minutes=9,
+                )
+            )
+            reviews.append(
+                ReviewItem(
+                    id=new_id(),
+                    family_id=family_id,
+                    child_id=child["id"],
+                    knowledge_item_id=knowledge_id,
+                    due_date=due_date,
+                    active=True,
+                )
+            )
+        db.flush()
+        db.add_all(reviews)
+        db.commit()
+
+    dashboard = client.get(
+        f"/api/v1/children/{child['id']}/dashboard",
+        headers=family_headers,
+        params={"day": target.isoformat()},
+    )
+    assert dashboard.status_code == 200
+    preview = dashboard.json()["next_review"]
+    assert preview["day"] == next_day.isoformat()
+    assert preview["total_count"] == 27
+    assert preview["estimated_minutes"] == 54
+    assert preview["returned_count"] == 5
+    assert preview["remaining_count"] == 22
+    assert preview["next_cursor"]
+    assert sum(len(group["items"]) for group in preview["groups"]) == 5
+    assert all(group["subject_name"] == "英语" for group in preview["groups"])
+
+    first = client.get(
+        f"/api/v1/children/{child['id']}/upcoming-reviews",
+        headers=family_headers,
+        params={"after": target.isoformat(), "limit": 20},
+    )
+    assert first.status_code == 200
+    first_body = first.json()
+    first_ids = {item["review_id"] for group in first_body["groups"] for item in group["items"]}
+    assert len(first_ids) == 20
+    assert first_body["total_count"] == 27
+    assert first_body["remaining_count"] == 7
+    assert first_body["next_cursor"]
+
+    second = client.get(
+        f"/api/v1/children/{child['id']}/upcoming-reviews",
+        headers=family_headers,
+        params={
+            "after": target.isoformat(),
+            "limit": 20,
+            "cursor": first_body["next_cursor"],
+        },
+    )
+    assert second.status_code == 200
+    second_body = second.json()
+    second_ids = {item["review_id"] for group in second_body["groups"] for item in group["items"]}
+    assert len(second_ids) == 7
+    assert first_ids.isdisjoint(second_ids)
+    assert second_body["remaining_count"] == 0
+    assert second_body["next_cursor"] is None
+    assert (
+        client.get(
+            f"/api/v1/children/{child['id']}/upcoming-reviews",
+            headers=family_headers,
+            params={
+                "after": (target + timedelta(days=1)).isoformat(),
+                "cursor": first_body["next_cursor"],
+            },
+        ).status_code
+        == 400
+    )
+    assert (
+        client.get(
+            f"/api/v1/children/{child['id']}/upcoming-reviews",
+            headers={"X-Family-ID": "family-other"},
+            params={"after": target.isoformat()},
+        ).status_code
+        == 404
+    )
+    assert (
+        client.get(
+            f"/api/v1/children/{child['id']}/upcoming-reviews",
+            headers=family_headers,
+            params={"after": target.isoformat(), "limit": 21},
+        ).status_code
+        == 422
+    )
+
+
+def test_upcoming_reviews_are_null_when_no_active_future_learning_review(
+    client, family_headers, child
+) -> None:
+    target = local_date()
+    dashboard = client.get(
+        f"/api/v1/children/{child['id']}/dashboard",
+        headers=family_headers,
+        params={"day": target.isoformat()},
+    )
+    assert dashboard.status_code == 200
+    assert dashboard.json()["next_review"] is None
+
+    upcoming = client.get(
+        f"/api/v1/children/{child['id']}/upcoming-reviews",
+        headers=family_headers,
+        params={"after": target.isoformat()},
+    )
+    assert upcoming.status_code == 200
+    assert upcoming.json() == {
+        "day": None,
+        "groups": [],
+        "total_count": 0,
         "estimated_minutes": 0,
         "returned_count": 0,
         "remaining_count": 0,

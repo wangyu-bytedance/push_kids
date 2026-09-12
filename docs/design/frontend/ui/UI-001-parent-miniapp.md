@@ -4,12 +4,12 @@
 - Related Feature: `FEAT-001`
 - Baseline: `FDB-20260906-03`
 - Engineering contract: `FEC-20260911-READ-PERF-01`
-- Design revision: `DREV-20260911-SETTINGS-PROFILE-MANAGER-02`（学习档案面板视觉降噪）
-- Current-state revision: `UI-STATE-20260911-READ-PERF-01-LOCAL`
-- Related Spec: `specs/completed/BUG-018-BOUNDED-READ-API-PERFORMANCE.md` revision `BUG-SPEC-20260911-PERF-01`
+- Design revision: `DREV-20260912-TODAY-NEXT-REVIEW-01`（今日最近复习安排可见）
+- Current-state revision: `UI-STATE-20260912-TODAY-NEXT-REVIEW-01-LOCAL`
+- Related Spec: `specs/completed/BUG-021-TODAY-REVIEW-PLAN-VISIBILITY.md` revision `BUG-SPEC-20260912-REVIEW-VISIBILITY-01`
   （前序：`SPEC-20260911-SETTINGS-PROFILE-MANAGER-01`、`SPEC-20260911-PRIMARY-NAV-BRAND-01`、`SPEC-20260911-TODAY-ACTIVITY-EMPTY-CTA-01`、`SPEC-20260911-RECORD-PHOTO-ADD-SOURCE-02`、`SPEC-20260911-RECORD-SIMPLIFICATION-01`、`BUG-SPEC-20260911-01`）
-- Last verified: 2026-09-11（Today 有界续页与 Report 服务端聚合已完成；前端 144 passed，ESLint、架构 checked=3、小程序静态 15 pages/632049 bytes 通过。后端与 fresh MySQL 证据见 FEAT-001/BUG-018。可选 TabBar 生成器因当前环境缺少 cairosvg 未运行；本次尚未上传，云端弱网/阶段信号、原生三视口、字体放大及代表性 iOS/Android 真机仍为 NOT_RUN）
-- Screen-level spec: `docs/design/frontend/prototypes/DREV-20260911-SETTINGS-PROFILE-MANAGER-02/FRONTEND-SPEC.md`
+- Last verified: 2026-09-12（“复习安排”在今天无到期项时自动展开最近一个未来日期，显示完整换行知识点与精确项数/分钟；有到期项时未来安排为低强调 disclosure，未来项只读。前端 161 passed，ESLint、架构 checked=3、小程序静态 15 pages/656671 bytes、独立 R2 复核通过；源码热区均 >=88rpx。原生 320×568/390×844/430×932、字体放大、iOS/Android、真实 MySQL 5.7、上传与部署均为 NOT_RUN）
+- Screen-level spec: `docs/design/frontend/prototypes/DREV-20260912-TODAY-NEXT-REVIEW-01/FRONTEND-SPEC.md`
 - Reference screens: `docs/design/frontend/prototypes/DREV-20260906-PKDS-01/screenshots/`（39 屏）
 - Intermediate artifact: `docs/design/frontend/prototypes/DREV-20260830-03/index.html`（设计历史）
 - Figma waiver anchor: https://www.figma.com/design/FAyfmjNrA3btWztwyxI6Zj?node-id=0-1
@@ -23,7 +23,7 @@
 
 | Tab | Hero 标题 | Current responsibility |
 |---|---|---|
-| 今日 | 今天，也慢慢来 | 可折叠的今日复习、今日学习、今日活动；待确认/失败提示 |
+| 今日 | 今天，也慢慢来 | 今日到期复习、最近一次只读复习安排、今日学习、今日活动；待确认/失败提示 |
 | 日程 | 这一周，心里有数 | 周日期轨、当天时间线、出行投影、全部日程项冲突提示、过去日程灰显、FAB 新建、编辑/删除日程 |
 | 记录 | 一笔一画，都算数 | 默认展示统一照片+文字新增表单；历史在表单末尾默认折叠；展开后保留已确认/待处理/全部、搜索/半屏筛选/分页，列表进入独立记录详情页 |
 | 报表 | 一点一滴，看得见 | 7/30/100 天只读概览与固定 7 点趋势微图、组件内30天分页的复习紧迫度与活跃度、可下钻科目记录 |
@@ -76,12 +76,19 @@
   全部关联和Todo匹配。科目选择只提供有效learning项，并允许输入新学习科目。
 - 人工表单保留完整原文与实际发生时间；原文超过500字时要求另写总结，不静默截断；不显示
   AI置信度或证据，不自动匹配Todo。保存失败保留输入和可见错误，保存中防重复操作。
-- 重复材料提示放入“需要核对”；Todo匹配显示证据，已更新的任务不会再次推进。
+- 重复材料提示放入“需要核对”；Todo匹配显示证据。确认前已经完成、推进、改期、删除或身份事实变化的
+  原始匹配由服务端安全跳过，不会再次推进，也不阻断其余学习保存。确认遇到终态冲突时页面立即自动读取
+  并展示最新只读详情，不再显示“刷新会离开当前编辑的草稿/查看最新”；仍未进入终态或读取失败时保留编辑
+  和页内错误，不假成功。
 - 今日从同一个 Dashboard 读取复习、已确认学习和日程。三栏独立折叠，不使用只计算复习的
-  “今日总体进度”卡。默认复习与学习折叠、日程展开；本地偏好里的非布尔脏值回落到该默认。
+  “今日总体进度”卡。默认复习与学习折叠、日程展开；但今天没有到期项且服务端返回最近安排时，
+  “复习安排”自动展开以直接显示日期与内容。本地偏好里的非布尔脏值回落到默认。
 - Dashboard 只取得最多 20 条 Todo 和全量精确计数；用户沿用现有“还有 N 项 · 展开”动作时只追加
   一个服务端游标页，不自动下载完整积压。孩子、日期或加载代次变化会废弃迟到响应；续页失败保留
   已加载内容并允许重试，重复游标项不会重复渲染。
+- Dashboard 同时只嵌入最近未来日期的 5 个 learning Review，准确显示该日总项数和预计分钟；“还有
+  N 项”每次最多追加 20 项。未来卡只有可选的来源记录跳转，没有完成、反馈或带练操作；长知识名称
+  完整折行。字段明确为 `null` 才显示“暂无后续安排”，旧服务端缺字段时只陈述今天没有到期内容。
 - 设置页不展示或编辑每日复习预算；当前服务端默认值继续用于 required/optional 分组。
 - 设置页有在用孩子时不在主内容重复展示学习档案列表；右上角孩子胶囊始终可打开统一档案面板，
   档案行以姓名/年级两级信息为主，“当前使用”为次级文字；可写成员通过透明 88rpx 铅笔点击区编辑，
@@ -184,9 +191,9 @@ PKDS-2.0 相对 PKDS-1.0 的可见变化：
 | display helpers | `apps/miniprogram/utils/ui.js` | 纯函数，无网络与业务状态 |
 | icons | `tools/gen_icon_styles.py` | 重跑产物 diff 为空（幂等） |
 | API/config | `utils/api.js`, `utils/cloud-media.js`, `config.js` | cloud env/service + callContainer + server-issued upload path；local fallback retained |
-| JS behavior | `tests/frontend` | 144 passed；包含有界读取、设置页档案管理及既有页面状态回归 |
-| bounded remote reads | `tests/frontend/bounded-read-pagination.test.js` | Todo first/next/stale/dedup/error state and Report no-raw-waterfall contract passed |
-| static package | `tools/validate_miniprogram.py` | `MINIPROGRAM_VALID pages=15 source_bytes=632049`; no WXML method calls |
+| JS behavior | `tests/frontend` | 161 passed；包含最近复习展示、旧后端/明确空三态、首次引导边界、续页去重/错误保留/孩子切换迟到响应及既有回归 |
+| bounded remote reads | `tests/frontend/bounded-read-pagination.test.js` | Todo 与 upcoming first/next/stale/dedup/error state、Report no-raw-waterfall contract passed |
+| static package | `tools/validate_miniprogram.py` | `MINIPROGRAM_VALID pages=15 source_bytes=656671`; no WXML method calls |
 | lint | ESLint | passed |
 | WeChat DevTools | registered AppID preview | 575988-byte local preview package；调试器 0 errors；本修订面板原生几何未取得；未上传 |
 | changed-sheet approximate viewports | `dist/ui-preview/settings-sheet*-vp*.html` | sheet/viewer/limit 的 320/390/430 共 9 个 HTML fixture 已生成；PNG 因缺少 Playwright Chromium executable 未运行，不替代原生几何 |
@@ -216,6 +223,18 @@ guards for `callContainer`、`uploadFile` and `chooseMedia`; media permission fa
 classification and cancelable uploads are tracked by `BUG-SPEC-20260905-02` and remain unimplemented.
 
 ## Change references
+
+- 2026-09-12 — `BUG-SPEC-20260912-REVIEW-VISIBILITY-01 / DREV-20260912-TODAY-NEXT-REVIEW-01`：今日页
+  分区更名为“复习安排”。今天为 0 且未来已有 Review 时，直接展开服务端最近日期、精确总数/分钟和
+  完整换行知识点；今天有 Todo 时，后续计划收为低强调 disclosure。Dashboard 预览 5 项，续页最多
+  20 项并保留去重、迟到响应丢弃和局部重试；未来项只读。所有新增热区源码下限 88rpx，前端 161 passed、
+  ESLint/架构/静态检查与独立 R2 复核通过；原生三视口、字体放大、iOS/Android 与部署未运行。
+
+- 2026-09-12 — `BUG-SPEC-20260912-STALE-CONFIRM-01 / DREV-20260912-STALE-CONFIRM-01`：确认页与待确认
+  记录详情的共享草稿逻辑删除 `conflict` 状态及手动“刷新/查看最新”提示；非 consent 的 409 自动调用既有
+  `load()`，服务端已进入 confirmed/cancelled 时直接切为最新只读详情，否则完整恢复本地编辑并显示原错误。
+  focused frontend 28 passed、全量 frontend 155 passed，ESLint、架构与 15 页静态检查通过；未改布局、token
+  或组件，原生三视口/字体放大/代表性 iOS 与 Android 为 `NOT_RUN`，未上传或部署。
 
 - 2026-09-11 — `BUG-SPEC-20260911-PERF-01 / FEC-20260911-READ-PERF-01`：Today 延续既有展开控件，
   但只逐次追加有界服务端 Todo 页并拒绝迟到/重复数据；Report 直接消费同范围的服务端活动科目聚合，

@@ -89,8 +89,8 @@
     </view>
 
     <view class="sec">
-      <view class="sec-bar" aria-role="button" aria-label="展开或收起待复习" data-section="review" bindtap="toggleSection">
-        <text class="s-t">待复习</text><text class="s-m">{{sectionMeta.review}}</text>
+      <view class="sec-bar" aria-role="button" aria-label="展开或收起复习安排" data-section="review" bindtap="toggleSection">
+        <text class="s-t">复习安排</text><text class="s-m">{{sectionMeta.review}}</text>
         <view class="chev {{sections.review ? 'up' : ''}}"></view>
       </view>
       <view class="sec-rule"></view>
@@ -102,9 +102,60 @@
         <view class="more-todo" wx:if="{{hiddenTodoCount}}" aria-role="button" aria-label="展开其余复习" bindtap="expandTodos">
           <text>还有 {{hiddenTodoCount}} 项 · 展开</text><view class="chev"></view>
         </view>
-        <view class="pk-empty inline" wx:if="{{!dashboard.todo_count}}">
-          <text class="et">今天没有到期的复习</text>
-          <text class="ec">确认一条学习记录后，复习日期会自动排到这里。</text>
+        <view class="review-today-clear" wx:if="{{!dashboard.todo_count}}">
+          <view class="review-clear-mark">✓</view>
+          <text>今天没有到期内容</text>
+        </view>
+
+        <view class="next-review-toggle" wx:if="{{dashboard.todo_count && nextReview && !upcomingExpanded}}" aria-role="button" aria-label="展开下一次复习安排" bindtap="toggleUpcoming">
+          <view class="grow">
+            <text class="next-toggle-k">下一次复习</text>
+            <text class="next-toggle-v">{{nextReview.dayLabel}} · {{nextReview.summary}}</text>
+          </view>
+          <view class="chev"></view>
+        </view>
+
+        <view class="next-review" wx:if="{{nextReview && (!dashboard.todo_count || upcomingExpanded)}}">
+          <view class="next-review-head">
+            <view class="grow">
+              <text class="next-review-k">下一次复习</text>
+              <text class="next-review-date">{{nextReview.dayLabel}}</text>
+              <text class="next-review-summary">{{nextReview.summary}}</text>
+            </view>
+            <view class="next-collapse" wx:if="{{dashboard.todo_count}}" aria-role="button" aria-label="收起下一次复习安排" bindtap="toggleUpcoming">收起</view>
+          </view>
+          <view class="next-card" wx:for="{{nextReview.groups}}" wx:key="id" wx:for-item="group">
+            <view class="next-rail"></view>
+            <view class="next-card-head">
+              <view class="sub-mark {{group.subjectClass}}">{{group.subjectMark}}</view>
+              <view class="grow">
+                <text class="next-subject">{{group.subjectName}}</text>
+                <text class="next-method">{{group.reviewMethod}}</text>
+              </view>
+              <view class="pill neutral">已排期</view>
+            </view>
+            <view class="next-points">
+              <view class="next-point {{point.canOpenSource ? 'can-open' : ''}}" wx:for="{{group.items}}" wx:key="reviewId" wx:for-item="point" data-submission-id="{{point.sourceSubmissionId}}" aria-role="{{point.canOpenSource ? 'button' : 'text'}}" aria-label="{{point.canOpenSource ? '查看原学习记录' : point.name}}" bindtap="openReviewSource">
+                <view class="next-dot"></view>
+                <text class="next-name">{{point.name}}</text>
+                <view class="chev right" wx:if="{{point.canOpenSource}}"></view>
+              </view>
+            </view>
+            <view class="next-foot"><text>{{group.reviewMethod}} · 约 {{group.estimatedMinutes}} 分钟</text></view>
+          </view>
+          <view class="more-todo" wx:if="{{nextReview.nextCursor}}" aria-role="button" aria-label="展开其余已排期复习" bindtap="expandUpcoming">
+            <text wx:if="{{!loadingMoreUpcoming}}">还有 {{nextReview.remainingCount}} 项 · 展开</text>
+            <text wx:else>正在加载后续安排…</text>
+            <view class="chev"></view>
+          </view>
+          <view class="next-inline-error" wx:if="{{upcomingError}}">
+            <text>{{upcomingError}}</text>
+            <text class="next-retry" wx:if="{{nextReview.nextCursor}}" aria-role="button" bindtap="expandUpcoming">重试</text>
+          </view>
+        </view>
+
+        <view class="pk-empty inline" wx:if="{{!dashboard.todo_count && nextReviewKnown && !nextReview}}">
+          <text class="et">暂时没有后续复习安排</text>
         </view>
       </view>
     </view>

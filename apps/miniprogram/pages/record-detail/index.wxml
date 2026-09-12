@@ -24,7 +24,7 @@
 
     <!-- 待确认草稿：就地编辑、就地确认，不再跳「查看并确认」 -->
     <block wx:if="{{editing}}">
-      <template is="draft-form" data="{{manual, saving, saveError, conflict, proposal, groups, subjectPicks, subjectReview, submission}}" />
+      <template is="draft-form" data="{{manual, saving, saveError, proposal, groups, subjectPicks, subjectReview, submission}}" />
 
       <view class="mt4">
         <submission-materials child-id="{{submission.child_id}}" submission-id="{{id}}"
