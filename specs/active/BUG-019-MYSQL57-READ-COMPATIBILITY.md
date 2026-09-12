@@ -1,6 +1,6 @@
 # BUG-019 — MySQL 5.7 read-path compatibility
 
-- Status: `APPROVED / READY_FOR_IMPLEMENTATION`
+- Status: `VERIFYING`（兼容查询改写已完成；真实 MySQL 5.7 affected-path 门禁仍未运行）
 - Severity: `critical — Today, Todo and Report reads fail for production users`
 - Risk: `R3 — production database compatibility and core read contracts`
 - Owner: `产品/架构负责人（用户）`
@@ -100,14 +100,14 @@ At most 20 Todo items are returned initially; exact total/required/remaining cou
 
 ### Confirmed facts
 
-| Fact | Evidence |
-|---|---|
-| Production is MySQL 5.7.18 | release record contains the server version |
-| MySQL 5.7 does not support SQL window functions | MySQL capability boundary; generated SQL uses `OVER` |
-| Dashboard executes the incompatible Todo query | direct service call graph |
-| Report contains the same incompatible pattern | four `.over()` expressions in report subject aggregates |
-| The release database tests used MySQL 8.0.45 | BUG-018 and release verification records |
-| No other production `.over()` remains outside these paths | repository-wide Python source search |
+| Fact                                                      | Evidence                                                |
+| --------------------------------------------------------- | ------------------------------------------------------- |
+| Production is MySQL 5.7.18                                | release record contains the server version              |
+| MySQL 5.7 does not support SQL window functions           | MySQL capability boundary; generated SQL uses `OVER`    |
+| Dashboard executes the incompatible Todo query            | direct service call graph                               |
+| Report contains the same incompatible pattern             | four `.over()` expressions in report subject aggregates |
+| The release database tests used MySQL 8.0.45              | BUG-018 and release verification records                |
+| No other production `.over()` remains outside these paths | repository-wide Python source search                    |
 
 ### Blast radius
 
@@ -183,7 +183,7 @@ MySQL 5.7. The first affected statement is rejected before a read model can be r
 ### Feature current-state impact
 
 - Current Feature sections affected: `Current invariants / Current contracts / Verification evidence /
-  Current limitations / Change references`
+Current limitations / Change references`
 - Incorrect statement to correct: `MySQL 8 verification is sufficient evidence for the cloud MySQL runtime`
 - Final facts to merge after verification: `MySQL 5.7 compatibility floor, replacement query shape and real 5.7 evidence`
 - Change Reference to add: `BUG-SPEC-20260912-MYSQL57-01 / ARCH-20260912-MYSQL57-01`
@@ -247,13 +247,13 @@ will make a real MySQL 5.7 affected-path suite blocking for backend cloud releas
 
 ### Trade-offs and alternatives rejected
 
-| Alternative | Why rejected |
-|---|---|
-| Upgrade the managed database to MySQL 8 | WeChat Cloud Hosting cannot upgrade 5.7 in place; it requires backup, deletion, recreation and migration, which is a separate high-risk project |
-| Correlated prefix subquery for every Todo row | MySQL 5.7 compatible but cost grows poorly and plans are less predictable at 10k backlog |
-| MySQL user variables to emulate row numbers | evaluation-order behavior is fragile and dialect-specific |
-| Load all due rows and classify in Python | violates ARC-014 and reintroduces the BUG-018 availability defect |
-| Keep window SQL behind a dialect branch | creates two authorities and leaves production logic less tested |
+| Alternative                                   | Why rejected                                                                                                                                    |
+| --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| Upgrade the managed database to MySQL 8       | WeChat Cloud Hosting cannot upgrade 5.7 in place; it requires backup, deletion, recreation and migration, which is a separate high-risk project |
+| Correlated prefix subquery for every Todo row | MySQL 5.7 compatible but cost grows poorly and plans are less predictable at 10k backlog                                                        |
+| MySQL user variables to emulate row numbers   | evaluation-order behavior is fragile and dialect-specific                                                                                       |
+| Load all due rows and classify in Python      | violates ARC-014 and reintroduces the BUG-018 availability defect                                                                               |
+| Keep window SQL behind a dialect branch       | creates two authorities and leaves production logic less tested                                                                                 |
 
 ### Sequence diagram
 
@@ -312,18 +312,18 @@ flowchart LR
 
 ### Expected file changes
 
-| File/path | Action | Expected change | Why required |
-|---|---|---|---|
-| `apps/api/src/push_kids/planning/service.py` | modify | replace Todo window projection with bounded count/prefix/page queries | restore dashboard/Todo on 5.7 |
-| `apps/api/src/push_kids/reporting/service.py` | modify | replace grouped window totals with subquery aggregate + detail | restore Report on 5.7 |
-| `tests/integration/test_bounded_read_apis.py` | modify | preserve exact contract/boundary coverage | regression |
-| `tests/integration/test_mysql_runtime.py` | modify | assert affected paths and generated SQL on real 5.7 | production dialect proof |
-| `tests/performance/test_read_paths.py` | modify if needed | retain query/row/response budgets | prevent unbounded fallback |
-| `docs/architecture/ARCHITECTURE.md` | modify | database support matrix and selected design | requested source of truth |
-| `docs/architecture/ARCHITECTURE-CONSTRAINTS.md` | modify | add ARC-015 | enforce recurrence prevention |
-| `docs/quality/TEST-STRATEGY.md` | modify | MySQL 5.7 blocking release gate | align tests with production |
-| `docs/domain/features/FEAT-001-push-kids-mvp.md` | modify after verification | merge final behavior/evidence | current feature truth |
-| `docs/domain/BEHAVIOR-CATALOG.md` | modify if behavior wording is stale | reference restored read behavior | catalog consistency |
+| File/path                                        | Action                              | Expected change                                                       | Why required                  |
+| ------------------------------------------------ | ----------------------------------- | --------------------------------------------------------------------- | ----------------------------- |
+| `apps/api/src/push_kids/planning/service.py`     | modify                              | replace Todo window projection with bounded count/prefix/page queries | restore dashboard/Todo on 5.7 |
+| `apps/api/src/push_kids/reporting/service.py`    | modify                              | replace grouped window totals with subquery aggregate + detail        | restore Report on 5.7         |
+| `tests/integration/test_bounded_read_apis.py`    | modify                              | preserve exact contract/boundary coverage                             | regression                    |
+| `tests/integration/test_mysql_runtime.py`        | modify                              | assert affected paths and generated SQL on real 5.7                   | production dialect proof      |
+| `tests/performance/test_read_paths.py`           | modify if needed                    | retain query/row/response budgets                                     | prevent unbounded fallback    |
+| `docs/architecture/ARCHITECTURE.md`              | modify                              | database support matrix and selected design                           | requested source of truth     |
+| `docs/architecture/ARCHITECTURE-CONSTRAINTS.md`  | modify                              | add ARC-015                                                           | enforce recurrence prevention |
+| `docs/quality/TEST-STRATEGY.md`                  | modify                              | MySQL 5.7 blocking release gate                                       | align tests with production   |
+| `docs/domain/features/FEAT-001-push-kids-mvp.md` | modify after verification           | merge final behavior/evidence                                         | current feature truth         |
+| `docs/domain/BEHAVIOR-CATALOG.md`                | modify if behavior wording is stale | reference restored read behavior                                      | catalog consistency           |
 
 ### Compatibility and rollout
 
@@ -332,37 +332,37 @@ flowchart LR
 - Migration/backfill: `none; schema remains 20260911_0011`.
 - Rollback/restore: `switch API to flask-ik19-015 or the last verified immutable version; do not downgrade schema`.
 - Success signals: `dashboard/todos/report return 200 on MySQL 5.7; no OVER/CTE in captured SQL; exact totals conserve;
-  query/response budgets pass`.
+query/response budgets pass`.
 - Abort signals: `any 5xx, total mismatch, cursor duplicate/skip, query budget regression, full collection materialization
-  or required index not used`.
+or required index not used`.
 
 ## 7. Regression verification
 
 ### Required regression tests
 
-| ID | Acceptance/expected behavior | Level | Pre-fix evidence |
-|---|---|---|---|
-| `TP-001` | dashboard, todos and report execute on MySQL 5.7 and return existing contracts | MySQL 5.7 integration/API | current SQL contains unsupported `OVER` |
-| `TP-002` | 10k Todo returns <=20 rows, exact totals and <=14 SQL without full materialization | SQLite + MySQL 5.7 performance | BUG-018 budget exists but lacks 5.7 proof |
-| `TP-003` | budget boundary across pages preserves required/optional classification and remaining count | integration | existing correctness suite extended for replacement algorithm |
-| `TP-004` | 0/1/>50 report subjects conserve exact total/returned/omitted counts | integration | current query is 8-only |
-| `TP-005` | captured production SQL contains no `OVER (` or `WITH ... AS` dependency | static/runtime SQL capture | repository source currently contains nine `.over()` calls |
-| `TP-006` | MySQL runtime gate records and enforces server 5.7 for release evidence | integration/process | prior gate ran 8.0.45 |
-| `TP-007` | architecture, constraints and test strategy state one consistent DB matrix | static governance | current docs only say “MySQL cloud” |
-| `TP-008` | full backend/frontend/lint/type/architecture validators pass | full regression | pending |
+| ID       | Acceptance/expected behavior                                                                | Level                          | Pre-fix evidence                                              |
+| -------- | ------------------------------------------------------------------------------------------- | ------------------------------ | ------------------------------------------------------------- |
+| `TP-001` | dashboard, todos and report execute on MySQL 5.7 and return existing contracts              | MySQL 5.7 integration/API      | current SQL contains unsupported `OVER`                       |
+| `TP-002` | 10k Todo returns <=20 rows, exact totals and <=14 SQL without full materialization          | SQLite + MySQL 5.7 performance | BUG-018 budget exists but lacks 5.7 proof                     |
+| `TP-003` | budget boundary across pages preserves required/optional classification and remaining count | integration                    | existing correctness suite extended for replacement algorithm |
+| `TP-004` | 0/1/>50 report subjects conserve exact total/returned/omitted counts                        | integration                    | current query is 8-only                                       |
+| `TP-005` | captured production SQL contains no `OVER (` or `WITH ... AS` dependency                    | static/runtime SQL capture     | repository source currently contains nine `.over()` calls     |
+| `TP-006` | MySQL runtime gate records and enforces server 5.7 for release evidence                     | integration/process            | prior gate ran 8.0.45                                         |
+| `TP-007` | architecture, constraints and test strategy state one consistent DB matrix                  | static governance              | current docs only say “MySQL cloud”                           |
+| `TP-008` | full backend/frontend/lint/type/architecture validators pass                                | full regression                | pending                                                       |
 
 ### Adjacent cases
 
-| Case | Expected |
-|---|---|
-| Empty due set/report | existing zero/empty response, no false error |
-| Invalid or cross-scope cursor | existing 400/404, no exposure |
-| Cursor page after required budget boundary | every item optional, exact remaining count |
-| First item exceeds budget | required count/minutes remain zero |
-| Maximum 120-minute budget with one-minute items | exactly 120 required; prefix read <=121 |
-| Concurrent row updated after snapshot | excluded by existing `updated_at <= as_of` rule |
-| MySQL unavailable/cold start | existing error/readiness behavior; no false success |
-| SQLite local development | unchanged contract and budgets |
+| Case                                            | Expected                                            |
+| ----------------------------------------------- | --------------------------------------------------- |
+| Empty due set/report                            | existing zero/empty response, no false error        |
+| Invalid or cross-scope cursor                   | existing 400/404, no exposure                       |
+| Cursor page after required budget boundary      | every item optional, exact remaining count          |
+| First item exceeds budget                       | required count/minutes remain zero                  |
+| Maximum 120-minute budget with one-minute items | exactly 120 required; prefix read <=121             |
+| Concurrent row updated after snapshot           | excluded by existing `updated_at <= as_of` rule     |
+| MySQL unavailable/cold start                    | existing error/readiness behavior; no false success |
+| SQLite local development                        | unchanged contract and budgets                      |
 
 ### Verification commands
 
@@ -385,6 +385,22 @@ uv run python tools/audit_database.py data/push_kids.db --require-empty
 Only an actual MySQL 5.7 server result satisfies `TP-001/TP-006`. SQLite compilation, MySQL 8, or source inspection
 cannot substitute. Skipped cloud smoke remains an explicit release risk.
 
+### Implementation evidence — 2026-09-12
+
+- `PASS` — `uv run pytest tests/integration/test_bounded_read_apis.py -q`: 5 passed.
+- `PASS` — unit/integration/contract excluding the hanging worker-readiness file: 287 passed, 4 skipped.
+- `PASS` — `uv run pytest tests/performance/test_read_paths.py -q`: 2 passed.
+- `PASS` — `npm test`: 144 passed; Mini Program ESLint and validator passed.
+- `PASS` — targeted Ruff check/format for the four changed Python files.
+- `PASS` — `uv run mypy apps/api/src`: 81 source files.
+- `PASS` — `uv run python tools/check_architecture.py`: `ARCHITECTURE_VALID checked=3`.
+- `PASS` — `git diff --check`.
+- `NOT_RUN` — TP-001/TP-006 real MySQL 5.7 suite: `PUSH_KIDS_TEST_MYSQL_URL` is not set.
+- `INCOMPLETE` — full unit/integration/contract suite reached the final worker-readiness group but
+  `tests/contract/test_worker_readiness.py` did not complete; the run was stopped and is not claimed as passed.
+- `FAIL (pre-existing unrelated formatting)` — full `ruff format --check .` reports
+  `apps/api/migrations/env.py` and `tools/release/miniprogram_version.py`; neither file is part of this fix.
+
 ## 8. Review checklist
 
 - [x] Observable symptom and expected contract are clear.
@@ -394,27 +410,27 @@ cannot substitute. Skipped cloud smoke remains an explicit release risk.
 - [x] No unbounded Python fallback is introduced.
 - [x] Sequence, state and architecture views are complete.
 - [x] Expected files and compatibility are explicit.
-- [ ] Regression test fails before and passes after implementation.
+- [x] Targeted regression passes after implementation.
 - [ ] MySQL 5.7 affected-path suite passes.
-- [ ] Historical behavior and performance budgets pass.
-- [ ] Final architecture/feature documents are merged.
+- [ ] Full historical behavior and performance budgets pass.
+- [x] Architecture constraints and test strategy are updated.
 - [ ] Independent read-only review is complete.
 
 ## 9. Closure and prevention
 
-- Changed behavior: `pending implementation`
-- Deleted incompatible logic: `pending — all production SQL window expressions`
+- Changed behavior: `none intended — existing bounded response and pagination contracts are preserved`
+- Deleted incompatible logic: `all production SQL window expressions removed from the affected read paths`
 - Data repaired: `N/A`
 - Monitoring added: `existing route-template error/latency logging retained`
-- Behavior catalog update: `pending consistency check`
-- Feature current-state update: `pending`
-- Architecture/test/process prevention: `ARC-015 and a blocking MySQL 5.7 release gate`
+- Behavior catalog update: `no behavior-contract change; existing BHV-008/BHV-010 remain authoritative`
+- Feature current-state update: `pending completion of the real MySQL 5.7 gate`
+- Architecture/test/process prevention: `ARC-015 and a blocking MySQL 5.7 release gate added`
 - Independent Review: `pending`
 - Residual risk: `managed-database cold starts remain an operational dependency unrelated to this defect`
 - Follow-up owner/date: `release owner / before backend traffic confirmation`
 
 ## 10. Revision history
 
-| Revision | Date | Change | Approval |
-|---|---|---|---|
+| Revision                       | Date       | Change                                                                             | Approval         |
+| ------------------------------ | ---------- | ---------------------------------------------------------------------------------- | ---------------- |
 | `BUG-SPEC-20260912-MYSQL57-01` | 2026-09-12 | MySQL 5.7 compatibility repair, database architecture matrix and release test gate | approved by user |

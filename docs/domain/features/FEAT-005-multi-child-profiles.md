@@ -7,8 +7,8 @@
 - Last verified: 2026-09-06
 - Authoritative implementation: `apps/api/src/push_kids/children/`、`apps/api/migrations/versions/20260906_0005_child_profile_lifecycle.py`、
   `apps/miniprogram/utils/child-context.js`、`apps/miniprogram/pages/child-edit/`
-- Active change Spec: `specs/active/FEAT-005-MULTI-CHILD-PROFILE-MANAGEMENT.md` revision `SPEC-20260906-MULTI-CHILD-01`；
-  归档写入边界见 `specs/active/BUG-014-ARCHIVED-CHILD-WRITE-BOUNDARY.md` revision `BUG-SPEC-20260906-17`
+- Applied Spec: `specs/completed/FEAT-005-MULTI-CHILD-PROFILE-MANAGEMENT.md` revision `SPEC-20260906-MULTI-CHILD-01`；
+  归档写入边界见 `specs/completed/BUG-014-ARCHIVED-CHILD-WRITE-BOUNDARY.md` revision `BUG-SPEC-20260906-17`
 
 > 本文只描述当前事实。多档案管理已在工作区实现并通过本地 SQLite 自动化验证，尚未执行云端迁移、
 > 尚未发布小程序，也没有三视口原生视觉证据；因此不能描述为线上可用。
@@ -149,7 +149,7 @@ archived --restore--> active（受上限与在用重名校验约束）
 
 ## Source index
 
-- Active Spec: `specs/active/FEAT-005-MULTI-CHILD-PROFILE-MANAGEMENT.md`
+- Applied Spec: `specs/completed/FEAT-005-MULTI-CHILD-PROFILE-MANAGEMENT.md`
 - Behavior catalog: `docs/domain/BEHAVIOR-CATALOG.md`（`BHV-022`、`BHV-023`）
 - Current architecture: `docs/architecture/ARCHITECTURE.md`
 - UI current state: `docs/design/frontend/ui/UI-015-child-profile.md`

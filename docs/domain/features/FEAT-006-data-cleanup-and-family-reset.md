@@ -76,7 +76,7 @@ queued --lease--> running --success--> succeeded --30d--> pruned
 
 ## Source index
 
-- Active Specs: `specs/active/FEAT-006-DATA-CLEANUP-AND-FAMILY-RESET.md`、`specs/active/BUG-016-NOTIFICATION-DELETION-INTEGRATION.md`
+- Applied Specs: `specs/completed/FEAT-006-DATA-CLEANUP-AND-FAMILY-RESET.md`、`specs/completed/BUG-016-NOTIFICATION-DELETION-INTEGRATION.md`
 - Decisions: `docs/decisions/ADR-002-DURABLE-DATA-DELETION.md`
 - Architecture/behavior: `docs/architecture/ARCHITECTURE.md`、`docs/domain/BEHAVIOR-CATALOG.md`
 - Tests: `tests/integration/test_data_deletion.py`、`tests/integration/test_notification_channel.py`、`tests/integration/test_notification_migration.py`、`tests/frontend/data-cleanup.test.js`

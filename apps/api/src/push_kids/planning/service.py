@@ -222,6 +222,10 @@ class PlanningService:
             except (KeyError, TypeError, ValueError) as exc:
                 raise ValueError("分页已失效，请刷新列表") from exc
 
+        # MySQL 5.7 rejects window functions, so BUG-018's single OVER() projection is split into
+        # bounded statements (BUG-SPEC-20260912-MYSQL57-01): an exact total COUNT, a budget-capped
+        # ordering prefix, the anchored detail page, and — for cursor pages — one aggregate through
+        # the anchor. Each read stays O(1) in page size and never materializes the whole due set.
         minutes = case(
             (KnowledgeItem.estimated_minutes < 1, 1), else_=KnowledgeItem.estimated_minutes
         )
@@ -231,8 +235,27 @@ class PlanningService:
             KnowledgeItem.review_method.asc(),
             ReviewItem.id.asc(),
         )
-        ordered = (
-            select(
+        budget = child.daily_budget_minutes or 15
+        base_scope = (
+            ReviewItem.family_id == family_id,
+            ReviewItem.child_id == child_id,
+            ReviewItem.active.is_(True),
+            ReviewItem.due_date <= target,
+            ReviewItem.updated_at <= as_of,
+            Subject.kind == "learning",
+        )
+
+        def due_select(*columns):
+            return (
+                select(*columns)
+                .select_from(ReviewItem)
+                .join(KnowledgeItem, ReviewItem.knowledge_item_id == KnowledgeItem.id)
+                .join(Subject, KnowledgeItem.subject_id == Subject.id)
+                .where(*base_scope)
+            )
+
+        def detail_select():
+            return due_select(
                 ReviewItem.id.label("review_id"),
                 ReviewItem.due_date.label("due_date"),
                 ReviewItem.source_submission_id.label("source_submission_id"),
@@ -243,12 +266,7 @@ class PlanningService:
                 Subject.id.label("subject_id"),
                 Subject.name.label("subject_name"),
                 LearningSubmission.occurred_at.label("source_occurred_at"),
-                func.sum(minutes).over(order_by=ordering).label("cumulative_minutes"),
-                func.row_number().over(order_by=ordering).label("position"),
-            )
-            .join(KnowledgeItem, ReviewItem.knowledge_item_id == KnowledgeItem.id)
-            .join(Subject, KnowledgeItem.subject_id == Subject.id)
-            .outerjoin(
+            ).outerjoin(
                 LearningSubmission,
                 and_(
                     LearningSubmission.id == ReviewItem.source_submission_id,
@@ -256,78 +274,94 @@ class PlanningService:
                     LearningSubmission.child_id == child_id,
                 ),
             )
-            .where(
-                ReviewItem.family_id == family_id,
-                ReviewItem.child_id == child_id,
-                ReviewItem.active.is_(True),
-                ReviewItem.due_date <= target,
-                ReviewItem.updated_at <= as_of,
-                Subject.kind == "learning",
+
+        def required_prefix(prefix_minutes) -> tuple[int, int]:
+            # The required set is the total-order prefix whose running minutes stay within budget.
+            # Budget is capped at 120 and every item costs >=1 minute, so <=121 rows decide it.
+            running = 0
+            required = 0
+            estimated = 0
+            for value in prefix_minutes:
+                running += int(value)
+                if running <= budget:
+                    required += 1
+                    estimated = running
+                else:
+                    break
+            return required, estimated
+
+        total_count = int(db.scalar(due_select(func.count())) or 0)
+
+        if anchor is None:
+            # First page: the detail page and the budget prefix are both leading prefixes of the
+            # same order, so one bounded fetch (<=max(limit, budget)+1 rows) serves both.
+            fetch_size = max(limit, budget) + 1
+            leading = list(
+                db.execute(detail_select().order_by(*ordering).limit(fetch_size)).mappings()
             )
-            .subquery()
-        )
-        enriched = (
-            select(
-                ordered,
-                func.count().over().label("total_count"),
-                func.coalesce(
-                    func.sum(
-                        case(
-                            (ordered.c.cumulative_minutes <= child.daily_budget_minutes, 1), else_=0
-                        )
-                    ).over(),
-                    0,
-                ).label("required_count"),
-                func.coalesce(
-                    func.max(
-                        case(
-                            (
-                                ordered.c.cumulative_minutes <= child.daily_budget_minutes,
-                                ordered.c.cumulative_minutes,
-                            ),
-                            else_=0,
-                        )
-                    ).over(),
-                    0,
-                ).label("estimated_minutes"),
+            page_slice = leading[: limit + 1]
+            more = len(page_slice) > limit
+            rows = page_slice[:limit]
+            required_count, estimated_minutes = required_prefix(
+                row["minutes"] for row in leading[: budget + 1]
             )
-            .select_from(ordered)
-            .subquery()
-        )
-        page_query = select(enriched)
-        if anchor is not None:
-            page_query = page_query.where(
-                or_(
-                    enriched.c.due_date > anchor_due,
-                    and_(
-                        enriched.c.due_date == anchor_due,
-                        enriched.c.subject_name > anchor_subject,
-                    ),
-                    and_(
-                        enriched.c.due_date == anchor_due,
-                        enriched.c.subject_name == anchor_subject,
-                        enriched.c.review_method > anchor_method,
-                    ),
-                    and_(
-                        enriched.c.due_date == anchor_due,
-                        enriched.c.subject_name == anchor_subject,
-                        enriched.c.review_method == anchor_method,
-                        enriched.c.review_id > anchor_id,
-                    ),
+            starting_minutes = 0
+            preceding_count = 0
+        else:
+            prefix_minutes = db.scalars(
+                due_select(minutes).order_by(*ordering).limit(budget + 1)
+            ).all()
+            required_count, estimated_minutes = required_prefix(prefix_minutes)
+            preceding = db.execute(
+                due_select(
+                    func.count().label("preceding_count"),
+                    func.coalesce(func.sum(minutes), 0).label("starting_minutes"),
+                ).where(
+                    or_(
+                        ReviewItem.due_date < anchor_due,
+                        and_(ReviewItem.due_date == anchor_due, Subject.name < anchor_subject),
+                        and_(
+                            ReviewItem.due_date == anchor_due,
+                            Subject.name == anchor_subject,
+                            KnowledgeItem.review_method < anchor_method,
+                        ),
+                        and_(
+                            ReviewItem.due_date == anchor_due,
+                            Subject.name == anchor_subject,
+                            KnowledgeItem.review_method == anchor_method,
+                            ReviewItem.id <= anchor_id,
+                        ),
+                    )
                 )
+            ).one()
+            preceding_count = int(preceding.preceding_count or 0)
+            starting_minutes = int(preceding.starting_minutes or 0)
+            rows = list(
+                db.execute(
+                    detail_select()
+                    .where(
+                        or_(
+                            ReviewItem.due_date > anchor_due,
+                            and_(ReviewItem.due_date == anchor_due, Subject.name > anchor_subject),
+                            and_(
+                                ReviewItem.due_date == anchor_due,
+                                Subject.name == anchor_subject,
+                                KnowledgeItem.review_method > anchor_method,
+                            ),
+                            and_(
+                                ReviewItem.due_date == anchor_due,
+                                Subject.name == anchor_subject,
+                                KnowledgeItem.review_method == anchor_method,
+                                ReviewItem.id > anchor_id,
+                            ),
+                        )
+                    )
+                    .order_by(*ordering)
+                    .limit(limit + 1)
+                ).mappings()
             )
-        rows = list(
-            db.execute(
-                page_query.order_by(
-                    enriched.c.due_date,
-                    enriched.c.subject_name,
-                    enriched.c.review_method,
-                    enriched.c.review_id,
-                ).limit(limit + 1)
-            ).mappings()
-        )
-        more = len(rows) > limit
-        rows = rows[:limit]
+            more = len(rows) > limit
+            rows = rows[:limit]
         review_ids = [str(row["review_id"]) for row in rows]
         last_reviewed: dict[str, date] = {}
         if review_ids:
@@ -373,9 +407,6 @@ class PlanningService:
                     ),
                 )
             )
-        starting_minutes = (
-            int(rows[0]["cumulative_minutes"]) - int(rows[0]["minutes"]) if rows else 0
-        )
         next_cursor = None
         if more and rows:
             last = rows[-1]
@@ -389,50 +420,11 @@ class PlanningService:
                     "review_id": last["review_id"],
                 },
             )
-        if rows:
-            total_count = int(rows[0]["total_count"] or 0)
-            required_count = int(rows[0]["required_count"] or 0)
-            estimated_minutes = int(rows[0]["estimated_minutes"] or 0)
-        elif cursor:
-            totals = db.execute(
-                select(
-                    func.count().label("total_count"),
-                    func.coalesce(
-                        func.sum(
-                            case(
-                                (
-                                    ordered.c.cumulative_minutes <= child.daily_budget_minutes,
-                                    1,
-                                ),
-                                else_=0,
-                            )
-                        ),
-                        0,
-                    ).label("required_count"),
-                    func.coalesce(
-                        func.max(
-                            case(
-                                (
-                                    ordered.c.cumulative_minutes <= child.daily_budget_minutes,
-                                    ordered.c.cumulative_minutes,
-                                ),
-                                else_=0,
-                            )
-                        ),
-                        0,
-                    ).label("estimated_minutes"),
-                ).select_from(ordered)
-            ).one()
-            total_count = int(totals.total_count or 0)
-            required_count = int(totals.required_count or 0)
-            estimated_minutes = int(totals.estimated_minutes or 0)
-        else:
-            total_count = required_count = estimated_minutes = 0
-        last_position = int(rows[-1]["position"]) if rows else total_count
+        last_position = preceding_count + len(rows)
         return {
             "groups": group_daily_todos(
                 items,
-                child.daily_budget_minutes or 15,
+                budget,
                 starting_minutes=starting_minutes,
             ),
             "total_count": total_count,

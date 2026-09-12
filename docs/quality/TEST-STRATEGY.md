@@ -35,6 +35,12 @@
   must be asserted against the console template bodies, including that `开始时间` wins over a generic
   `时间` slot.
 - MySQL: fresh Alembic migration, schema drift check, identity/family isolation, idempotency, Worker lease and confirmation transaction using `PUSH_KIDS_TEST_MYSQL_URL`.
+- MySQL 5.7 read-path compatibility (`ARC-015`, `BUG-SPEC-20260912-MYSQL57-01`): the production engine is
+  WeChat Cloud Hosting CynosDB MySQL `5.7.18`, which has no window functions. Any release that changes SQL
+  MUST run the affected Today/Todo/Report/history/list paths against a **real MySQL 5.7 server** via
+  `PUSH_KIDS_TEST_MYSQL_URL` and confirm they return the existing contracts with indexed plans. This gate is
+  **blocking for backend cloud release**; SQLite compilation and MySQL 8 `EXPLAIN` evidence cannot substitute.
+  Captured runtime SQL must contain no `OVER (` window projection or `WITH ... AS` dependency.
 - Cloud storage/identity: local fakes cover contract branches, but real two-account owner rules, metaid decode and public-ingress rejection are mandatory staging tests.
   Staging status: **PASS (2026-09-06, operator-confirmed)** — two real accounts exercised owner isolation,
   metaid decoding, and public-ingress rejection. This closes this test-strategy gate but does not close the
@@ -64,7 +70,7 @@ uv run python tools/audit_database.py data/push_kids.db --require-empty
 uv run pytest tests/performance/test_read_paths.py -q
 ```
 
-Optional isolated MySQL gate (required for cloud release):
+Isolated MySQL gate (blocking for backend cloud release — must be a real MySQL 5.7 server per `ARC-015`):
 
 ```bash
 PUSH_KIDS_DATABASE_URL='mysql+pymysql://<migration-user>:<password>@<host>/<db>' uv run alembic upgrade head

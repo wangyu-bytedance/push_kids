@@ -80,9 +80,10 @@ For every request that changes behavior, APIs, data, architecture, tests, or doc
 
 1. Resolve affected Feature IDs and read their current state under `docs/domain/features/`.
 2. Create or update the matching template from `specs/_templates/`; include link/call graph, sequence diagram, state machine, architecture diagram, trade-offs, expected file changes, and required test points, or mark a view `N/A` with a reason.
-3. Wait for explicit user confirmation of the specific Spec revision before production implementation.
+3. Wait for explicit user confirmation of the specific Spec revision before production implementation. A user instruction to build, implement, fix, or proceed **according to a named Spec** is approval of that Spec's current revision: record it in the approval block (approver, date, message reference) and set the Spec `Status` to `APPROVED` before coding. A bare "可以/继续/OK" counts only when it maps unambiguously to one Spec revision.
 4. Implement only approved scope, run every required test point, and record pass/fail/not-run evidence.
 5. Merge verified final facts into Feature/UI current-state documents and check architecture cleanliness before completion.
+6. On finishing, evaluate the Spec's lifecycle status and relocate it — do not leave finished work in `specs/active/`. When the completion gate passes, set `Status: DONE` and move the file to `specs/completed/`; if the task was cancelled or rejected, record the reason and move it to `specs/rejected/`. A Spec stays in `active/` only while it is genuinely `DRAFT`/`READY_FOR_REVIEW`/`APPROVED`/`IMPLEMENTING`/`VERIFYING`/`BLOCKED`.
 
 Before initial production coding, or before changing module boundaries, shared abstractions, dependency direction, or extension points, present the recommended design, alternatives, and trade-offs and obtain confirmation of the architecture/Spec revision.
 

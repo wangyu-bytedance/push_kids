@@ -14,12 +14,12 @@
 - Approval evidence: 用户 2026-09-06 指令「最终需要的效果是 ui=你现在的设计，并功能是完整的」；同日指令「完全重新设计. 我只要最好的效果」→「按照这个方案 实现代码」（FDB-20260906-03）
 - Last verified: 2026-09-06（PKDS-2.0 本地实现，自动化检查通过 + 三视口近似渲染走查通过；三视口原生几何证据仍为 NOT_RUN）
 - Applies to: 家长使用的微信小程序；未来手机 Web 应保持相同信息架构
-- Related current implementation Spec: `specs/active/SPEC-20260906-PKDS-03-PAPER-SPROUT-UI.md` revision `SPEC-20260906-PKDS-03`（前序：`SPEC-20260906-PKDS-01`）
+- Related current implementation Spec: `specs/completed/SPEC-20260906-PKDS-03-PAPER-SPROUT-UI.md` revision `SPEC-20260906-PKDS-03`（前序：`SPEC-20260906-PKDS-01`）
 - Superseded baseline revision: `FDB-20260830-01`、`FDB-20260906-02`（信息架构与产品立场沿用，视觉 token 与组件层被 PKDS-2.0「纸 · 芽」取代）
 - Frontend engineering constraints: approved `FEC-20260906-04`
 
 本 baseline 的可见合同由 `DREV-20260906-PKDS-03`（PKDS-2.0「纸 · 芽」）定义，
-落地记录见 `specs/active/SPEC-20260906-PKDS-03-PAPER-SPROUT-UI.md`，三视口走查产物由
+落地记录见 `specs/completed/SPEC-20260906-PKDS-03-PAPER-SPROUT-UI.md`，三视口走查产物由
 `node tools/preview/render.js` + `python3 tools/preview/shoot.py` 重放到 `dist/ui-preview/`。
 `DREV-20260906-PKDS-01` 的信息架构、状态四件套与产品立场继续有效，其色彩/圆角/阴影/图标层
 降级为设计历史；`DREV-20260830-03`、`DREV-20260905-UX-03`、`DREV-20260905-UX-04` 同为设计历史。

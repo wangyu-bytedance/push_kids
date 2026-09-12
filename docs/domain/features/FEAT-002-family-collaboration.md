@@ -7,8 +7,8 @@
 - Last verified: 2026-09-06
 - Authoritative implementation: `apps/api/src/push_kids/families/`, family persistence models,
   `apps/miniprogram/pages/family-*`
-- Active change Specs: `specs/active/FEAT-002-USER-FAMILY-BINDING.md` revision `SPEC-20260905-12`;
-  `specs/active/BUG-014-NEW-USER-FAMILY-ENTRY.md` revision `BUG-SPEC-20260906-18`
+- Applied Specs: `specs/completed/FEAT-002-USER-FAMILY-BINDING.md` revision `SPEC-20260905-12`;
+  `specs/completed/BUG-014-NEW-USER-FAMILY-ENTRY.md` revision `BUG-SPEC-20260906-18`
 
 > 本文只说明当前事实与已批准边界。家庭创建、邀请、申请、审批和成员角色已经在工作区实现并
 > 完成本地 SQLite/MySQL 验证，但尚未迁移或部署到微信云托管；因此不能描述为线上可用。
@@ -108,7 +108,7 @@ still remains on the previous revision until the controlled migration window.
 
 ## Source index
 
-- Active Spec: `specs/active/FEAT-002-USER-FAMILY-BINDING.md`
+- Applied Spec: `specs/completed/FEAT-002-USER-FAMILY-BINDING.md`
 - Current architecture: `docs/architecture/ARCHITECTURE.md`
 - Deployment runbook: `docs/DEPLOYMENT.md`
 - Existing feature: `docs/domain/features/FEAT-001-push-kids-mvp.md`

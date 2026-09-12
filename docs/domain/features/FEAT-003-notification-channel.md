@@ -8,7 +8,7 @@
 - Authoritative implementation: `apps/api/src/push_kids/notifications/`、通知持久化模型、
   Alembic `20260906_0008_notification_channel` + `20260907_0009_notification_deletion_scope`、`apps/miniprogram/pages/notifications/`、
   `apps/miniprogram/utils/notifications.js`、`tools/notification_config.py`
-- Active change Spec: `specs/active/FEAT-003-NOTIFICATION-CHANNEL.md` revisions
+- Applied Spec: `specs/completed/FEAT-003-NOTIFICATION-CHANNEL.md` revisions
   `SPEC-20260906-CHANNEL-01`（服务端通道）+ `SPEC-20260906-CHANNEL-02`（授权入口）
   + `SPEC-20260906-CHANNEL-03`（对齐后台已选用模板的字段语义）+
   `BUG-SPEC-20260907-22`（永久删除与冻结边界）

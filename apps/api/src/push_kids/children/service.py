@@ -80,7 +80,7 @@ class ChildrenService:
         Scope is deliberately limited to intake (new submission, subject, activity, schedule).
         Finishing an in-flight draft/upload or answering an existing review keeps using
         `get_child`, so archiving on one device never destroys work another parent is mid-way
-        through. See `specs/active/BUG-014-ARCHIVED-CHILD-WRITE-BOUNDARY.md`.
+        through. See `specs/completed/BUG-014-ARCHIVED-CHILD-WRITE-BOUNDARY.md`.
         """
         if not child_id:
             raise NotFoundError("没有找到这个孩子")

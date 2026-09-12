@@ -6,7 +6,7 @@
 - Owner/approver: 用户，2026-09-05
 - Approval: “按照这个方案落地”（紧接本会话完整设计交付）
 - Scope: 记录页新增/历史切换；复用确认页回看；材料预览；今日/报表互通；无新增页面路由
-- Design artifact: specs/active/FEAT-001-HISTORY-AND-SOURCE-REVIEW.md 第 2 节
+- Design artifact: specs/completed/FEAT-001-HISTORY-AND-SOURCE-REVIEW.md 第 2 节
 - Baseline: FDB-20260830-01；FEC-20260905-02
 - Figma: https://www.figma.com/design/FAyfmjNrA3btWztwyxI6Zj?node-id=0-1 （既有锚点，非本次新增节点）
 - Evidence exception: 沿用 ARCHITECTURE.md 中 FEAT-001 scoped waiver，公开生产前到期；不覆盖 FEAT-002 新 UI

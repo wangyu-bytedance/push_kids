@@ -354,14 +354,15 @@ class ReportingService:
         }
         overview = {key: sum(daily_counts[key]) for key in TREND_METRIC_KEYS}
 
+        # MySQL 5.7 has no window functions, so the exact subject/occurrence totals come from a
+        # separate aggregate over the grouped subquery rather than COUNT()/SUM() OVER(). The 50-row
+        # cap limits only which subjects are listed; the aggregate still spans the full grouped set.
         occurrence_count = func.count(KnowledgeOccurrence.id)
-        subject_rows = db.execute(
+        subject_grouped = (
             select(
-                Subject.id,
-                Subject.name,
+                Subject.id.label("id"),
+                Subject.name.label("name"),
                 occurrence_count.label("occurrences"),
-                func.count().over().label("total_subjects"),
-                func.sum(occurrence_count).over().label("total_occurrences"),
             )
             .join(KnowledgeItem, KnowledgeItem.subject_id == Subject.id)
             .join(KnowledgeOccurrence, KnowledgeOccurrence.knowledge_item_id == KnowledgeItem.id)
@@ -372,23 +373,37 @@ class ReportingService:
                 KnowledgeOccurrence.occurred_at < end,
             )
             .group_by(Subject.id, Subject.name)
-            .order_by(occurrence_count.desc(), Subject.name, Subject.id)
+            .subquery()
+        )
+        subject_totals = db.execute(
+            select(
+                func.count().label("total_subjects"),
+                func.coalesce(func.sum(subject_grouped.c.occurrences), 0).label(
+                    "total_occurrences"
+                ),
+            ).select_from(subject_grouped)
+        ).one()
+        subject_total = int(subject_totals.total_subjects or 0)
+        total_occurrences = int(subject_totals.total_occurrences or 0)
+        subject_rows = db.execute(
+            select(subject_grouped)
+            .order_by(
+                subject_grouped.c.occurrences.desc(),
+                subject_grouped.c.name,
+                subject_grouped.c.id,
+            )
             .limit(50)
         ).all()
-        subject_total = int(subject_rows[0].total_subjects) if subject_rows else 0
-        total_occurrences = int(subject_rows[0].total_occurrences) if subject_rows else 0
         returned_occurrences = sum(int(row.occurrences) for row in subject_rows)
 
         activity_count = func.count(ActivityRecord.id)
-        activity_subject_rows = db.execute(
+        activity_grouped = (
             select(
-                Subject.id,
-                Subject.name,
+                Subject.id.label("id"),
+                Subject.name.label("name"),
                 activity_count.label("records"),
                 func.coalesce(func.sum(ActivityRecord.duration_minutes), 0).label("minutes"),
                 func.max(ActivityRecord.occurred_at).label("last_occurred_at"),
-                func.count().over().label("total_subjects"),
-                func.sum(activity_count).over().label("total_records"),
             )
             .join(ActivityRecord, ActivityRecord.subject_id == Subject.id)
             .where(
@@ -401,15 +416,25 @@ class ReportingService:
                 ActivityRecord.occurred_at < end,
             )
             .group_by(Subject.id, Subject.name)
-            .order_by(activity_count.desc(), Subject.name, Subject.id)
+            .subquery()
+        )
+        activity_totals = db.execute(
+            select(
+                func.count().label("total_subjects"),
+                func.coalesce(func.sum(activity_grouped.c.records), 0).label("total_records"),
+            ).select_from(activity_grouped)
+        ).one()
+        activity_subject_total = int(activity_totals.total_subjects or 0)
+        activity_record_total = int(activity_totals.total_records or 0)
+        activity_subject_rows = db.execute(
+            select(activity_grouped)
+            .order_by(
+                activity_grouped.c.records.desc(),
+                activity_grouped.c.name,
+                activity_grouped.c.id,
+            )
             .limit(50)
         ).all()
-        activity_subject_total = (
-            int(activity_subject_rows[0].total_subjects) if activity_subject_rows else 0
-        )
-        activity_record_total = (
-            int(activity_subject_rows[0].total_records) if activity_subject_rows else 0
-        )
         returned_activity_records = sum(int(row.records) for row in activity_subject_rows)
 
         occurrence_day = _local_day_expression(db, KnowledgeOccurrence.occurred_at)

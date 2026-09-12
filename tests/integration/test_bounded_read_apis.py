@@ -144,6 +144,115 @@ def test_activity_records_use_stable_cursor_and_report_uses_complete_aggregate(
     ]
 
 
+def test_dashboard_and_report_emit_no_window_or_cte_sql(app, client, family_headers, child) -> None:
+    """TP-005: the affected read paths must stay MySQL-5.7 compatible (ARC-015).
+
+    MySQL 5.7 rejects window functions and CTEs, so no captured statement for the Today
+    dashboard or the Report may contain an ``OVER (`` projection or a ``WITH ... AS`` prelude.
+    """
+    family_id = family_headers["X-Family-ID"]
+    subject_id = new_id()
+    activity_subject_id = new_id()
+    target = local_date()
+    now = datetime.now(UTC)
+    with _database_session(app) as db:
+        db.add(
+            Subject(
+                id=subject_id,
+                family_id=family_id,
+                child_id=child["id"],
+                name="数学",
+                kind=SubjectKind.learning.value,
+            )
+        )
+        db.add(
+            Subject(
+                id=activity_subject_id,
+                family_id=family_id,
+                child_id=child["id"],
+                name="游泳",
+                kind=SubjectKind.activity.value,
+            )
+        )
+        db.flush()
+        for index in range(30):
+            knowledge_id = new_id()
+            db.add(
+                KnowledgeItem(
+                    id=knowledge_id,
+                    family_id=family_id,
+                    child_id=child["id"],
+                    subject_id=subject_id,
+                    name=f"知识点 {index + 1}",
+                    normalized_name=f"知识点-{index + 1}",
+                    category="知识点",
+                    review_method="口头回顾",
+                    estimated_minutes=1,
+                )
+            )
+            db.flush()
+            db.add(
+                ReviewItem(
+                    id=new_id(),
+                    family_id=family_id,
+                    child_id=child["id"],
+                    knowledge_item_id=knowledge_id,
+                    due_date=target,
+                    active=True,
+                )
+            )
+        db.add(
+            ActivityRecord(
+                id=new_id(),
+                family_id=family_id,
+                child_id=child["id"],
+                subject_id=activity_subject_id,
+                occurred_at=now,
+                duration_minutes=30,
+            )
+        )
+        db.commit()
+
+    captured: list[str] = []
+
+    def capture_select(_conn, _cursor, statement, _parameters, *_args) -> None:
+        if statement.lstrip().upper().startswith("SELECT"):
+            captured.append(statement)
+
+    engine = app.state.database.engine
+    event.listen(engine, "before_cursor_execute", capture_select)
+    try:
+        dashboard = client.get(f"/api/v1/children/{child['id']}/dashboard", headers=family_headers)
+        # Exercise both the first Todo page and a cursor page so the anchored branch is covered.
+        first_todo = client.get(
+            f"/api/v1/children/{child['id']}/todos",
+            headers=family_headers,
+            params={"day": target.isoformat(), "limit": 20},
+        )
+        cursor = first_todo.json()["next_cursor"]
+        client.get(
+            f"/api/v1/children/{child['id']}/todos",
+            headers=family_headers,
+            params={"day": target.isoformat(), "limit": 20, "cursor": cursor},
+        )
+        report = client.get(
+            f"/api/v1/children/{child['id']}/report",
+            headers=family_headers,
+            params={"days": 100},
+        )
+    finally:
+        event.remove(engine, "before_cursor_execute", capture_select)
+
+    assert dashboard.status_code == 200
+    assert first_todo.status_code == 200
+    assert report.status_code == 200
+    assert captured
+    upper = [statement.upper() for statement in captured]
+    assert not any("OVER (" in statement for statement in upper)
+    assert not any("OVER(" in statement for statement in upper)
+    assert not any(statement.lstrip().startswith("WITH ") for statement in upper)
+
+
 def test_submission_list_has_constant_query_count_and_cursor_compatibility(
     app, client, family_headers, child
 ) -> None:

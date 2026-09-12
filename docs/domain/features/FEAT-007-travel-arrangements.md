@@ -6,7 +6,7 @@
 - Owner: 产品负责人（用户）
 - Last verified: 2026-09-06
 - Authoritative implementation: `apps/api/src/push_kids/travel/`、`apps/api/src/push_kids/activities/conflicts.py`、`apps/miniprogram/pages/{settings,calendar}/`
-- Active change Spec: `specs/active/FEAT-007-TRAVEL-ARRANGEMENTS.md` revision `SPEC-20260906-TRAVEL-02`
+- Applied Spec: `specs/completed/FEAT-007-TRAVEL-ARRANGEMENTS.md` revision `SPEC-20260906-TRAVEL-02`
 
 > 本 Feature 已在当前本地工作树实现并通过自动化验证；尚未上传微信小程序、部署后端或完成
 > 320/390/430 原生视口与 iOS/Android 真机验收。

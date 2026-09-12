@@ -6,7 +6,7 @@
 - Engineering contract: `FEC-20260911-READ-PERF-01`
 - Design revision: `DREV-20260911-SETTINGS-PROFILE-MANAGER-02`（学习档案面板视觉降噪）
 - Current-state revision: `UI-STATE-20260911-READ-PERF-01-LOCAL`
-- Related Spec: `specs/active/BUG-018-BOUNDED-READ-API-PERFORMANCE.md` revision `BUG-SPEC-20260911-PERF-01`
+- Related Spec: `specs/completed/BUG-018-BOUNDED-READ-API-PERFORMANCE.md` revision `BUG-SPEC-20260911-PERF-01`
   （前序：`SPEC-20260911-SETTINGS-PROFILE-MANAGER-01`、`SPEC-20260911-PRIMARY-NAV-BRAND-01`、`SPEC-20260911-TODAY-ACTIVITY-EMPTY-CTA-01`、`SPEC-20260911-RECORD-PHOTO-ADD-SOURCE-02`、`SPEC-20260911-RECORD-SIMPLIFICATION-01`、`BUG-SPEC-20260911-01`）
 - Last verified: 2026-09-11（Today 有界续页与 Report 服务端聚合已完成；前端 144 passed，ESLint、架构 checked=3、小程序静态 15 pages/632049 bytes 通过。后端与 fresh MySQL 证据见 FEAT-001/BUG-018。可选 TabBar 生成器因当前环境缺少 cairosvg 未运行；本次尚未上传，云端弱网/阶段信号、原生三视口、字体放大及代表性 iOS/Android 真机仍为 NOT_RUN）
 - Screen-level spec: `docs/design/frontend/prototypes/DREV-20260911-SETTINGS-PROFILE-MANAGER-02/FRONTEND-SPEC.md`

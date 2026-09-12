@@ -7,7 +7,7 @@
 - [科目、活动与安排的二级交互](secondary-board.html)
 - [二级交互总览截图](screenshots/secondary-overview.png)
 - [二级交互三视口测量](screenshots/secondary-geometry.json)
-- [设计合同](../../../../../specs/active/BUG-010-INTERACTION-DESIGN-V4-DRAFT.md)
+- [设计合同](../../../../../specs/completed/BUG-010-INTERACTION-DESIGN-V4-DRAFT.md)
 - [浏览器总览截图](screenshots/overview.png)
 - [历史记录示例](screenshots/history-demo-390.png)
 - [家庭邀请成功态](screenshots/family-share-390.png)

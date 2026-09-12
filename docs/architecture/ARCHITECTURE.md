@@ -1,8 +1,9 @@
 # Push Kids current architecture
 
 - Status: `IMPLEMENTED_LOCALLY_PENDING_CLOUD_ACCEPTANCE`
-- Revision: `ARCH-20260911-READ-PERF-01`
-- Confirmed by: user approval of `BUG-SPEC-20260911-PERF-01`, 2026-09-11
+- Revision: `ARCH-20260912-MYSQL57-01`
+- Confirmed by: user approval of `BUG-SPEC-20260912-MYSQL57-01`, 2026-09-12
+  (supersedes `ARCH-20260911-READ-PERF-01`, confirmed by `BUG-SPEC-20260911-PERF-01`, 2026-09-11)
 - Scope: local adapters plus WeChat Cloud Hosting controlled staging
 
 ## Runtime context
@@ -138,7 +139,7 @@ shared abstraction, dependency direction, schema migration or historical deletio
 
 | Decision | Choice | Trade-off / revisit trigger |
 |---|---|---|
-| Database | MySQL/InnoDB cloud; SQLite local/test; Alembic owns cloud schema | Keep both dialects in the test matrix. |
+| Database | WeChat Cloud Hosting CynosDB MySQL 5.7 (InnoDB/`utf8mb4`); SQLite local/test; Alembic owns cloud schema | Shared SQL must run on MySQL 5.7; keep both dialects in the test matrix. See Database support matrix. |
 | Job execution | durable rows + locked lease + in-process worker at one instance | Decision: `ADR-001 / TD-001`. |
 | AI provider | Ark-compatible provider port plus test-only deterministic adapter | Add a provider only through contract tests; no provider logic in domain code. |
 | Authentication | Cloud gateway actor → HMAC binding → family; `X-Family-ID` local only | Public ingress stays disabled; FEAT-002 owns collaboration/revocation UX. |
@@ -229,6 +230,29 @@ checks are blocking automated evidence. Leading-wildcard substring search intent
 its explicit 50k-row budget and 200k-row/p95 revisit trigger. Request middleware emits only route-template slow or
 large-response metadata; concrete IDs, query text, cursors and child content are excluded. Production index-build
 lock duration and staged slow/large-route signals remain deployment gates, not local implementation claims.
+
+## Database support matrix
+
+`BUG-SPEC-20260912-MYSQL57-01 / ARCH-20260912-MYSQL57-01` pins the supported database runtimes after a
+production read outage: BUG-018 combined bounded page rows and full-set aggregates with SQL window functions
+(`OVER (...)`), which SQLite and MySQL 8 accept but the production engine — MySQL 5.7 — rejects, so Today,
+Todo and Report failed for real families. `ARC-015` now enforces this matrix.
+
+| Environment | Engine | Version floor | Storage / encoding | Schema authority |
+|---|---|---|---|---|
+| Production / staging | WeChat Cloud Hosting CynosDB MySQL | `5.7.18-cynos-2.1.14-log`, within the 5.7 series | InnoDB, `utf8mb4` connection/schema semantics | one Alembic head; cloud startup verifies it and never auto-creates production tables |
+| Local / test | SQLite | file-backed dev database | n/a | local bootstrap self-heals dev schema; tests seed fixtures |
+
+- **Capability floor.** Shared SQL owned by services must execute on MySQL 5.7.18. Window functions, CTEs
+  (`WITH ... AS`), functional indexes, enforced `CHECK` constraints and other MySQL-8-only behavior are
+  forbidden in runtime queries until an independently approved migration Spec raises the production baseline.
+- **Bounded read shape on 5.7.** Todo/dashboard exact totals come from a `COUNT`, required/optional split from
+  a budget-capped ordering prefix (`daily_budget_minutes` ≤ 120 ⇒ at most 121 rows), the page from an anchored
+  `LIMIT limit+1`, and cursor-page position from one aggregate through the anchor — no window projection. Report
+  subject/activity totals come from an aggregate over a grouped subquery plus one ordered detail `LIMIT 50`,
+  replacing `COUNT() OVER()` / `SUM() OVER()` without materializing raw history.
+- **Evidence rule.** Every release that changes SQL must execute the affected paths on a real MySQL 5.7 server
+  (`tests/integration/test_mysql_runtime.py`); SQLite compilation and MySQL 8 `EXPLAIN` cannot substitute.
 
 ## Architecture rationale and trade-offs
 

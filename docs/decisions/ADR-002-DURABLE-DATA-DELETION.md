@@ -4,7 +4,7 @@
 - Date: 2026-09-06
 - Decision owners: 产品负责人（用户）
 - Technical area: data lifecycle, privacy, modular boundaries, background work
-- Related Spec: `specs/active/FEAT-006-DATA-CLEANUP-AND-FAMILY-RESET.md` revision `SPEC-20260906-DATA-CLEANUP-01`
+- Related Spec: `specs/completed/FEAT-006-DATA-CLEANUP-AND-FAMILY-RESET.md` revision `SPEC-20260906-DATA-CLEANUP-01`
 - Related ADRs: `ADR-001-WECHAT-CLOUD-HOSTING-MYSQL.md`
 - Supersedes: N/A
 

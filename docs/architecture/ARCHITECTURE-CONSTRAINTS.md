@@ -1,4 +1,4 @@
-# Architecture constraints — aligned with `ARCH-20260911-READ-PERF-01`
+# Architecture constraints — aligned with `ARCH-20260912-MYSQL57-01`
 
 These constraints originated in `ARCH-20260830-01`; the enforceable rules below remain active under the current
 architecture revision. Historical `FDB`/`FEC`/`DREV-20260830-*` references are frontend design revisions, not
@@ -27,6 +27,13 @@ architecture-revision pointers.
   use O(1) queries in page size. Growing tenant queries require tenant-leading composite indexes,
   SQLite/MySQL plan evidence, comparable latency/memory/response budgets and safe route-template
   observability. Exceptions require an approved measured Spec with an owner and expiry.
+- `ARC-015 — Database dialect and version compatibility`: runtime SQL owned by services MUST execute on the
+  production engine, WeChat Cloud Hosting CynosDB MySQL `5.7.18` (InnoDB, `utf8mb4`), and on local/test SQLite.
+  Window functions (`OVER (...)`), CTEs (`WITH ... AS`), functional indexes, enforced `CHECK` constraints and
+  other MySQL-8-only features are forbidden until an independently approved migration Spec raises the baseline.
+  Every release that changes SQL MUST prove the affected paths on a real MySQL 5.7 server; SQLite compilation or
+  MySQL 8 evidence cannot substitute. Enforced by `tests/integration/test_mysql_runtime.py`, the read-path
+  performance/plan tests, and the Database support matrix in `ARCHITECTURE.md`.
 
 ## AI Native maintainability constraints
 

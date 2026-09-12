@@ -4,8 +4,8 @@
 - Revision: `FEAT-STATE-20260911-READ-PERF-01-LOCAL`
 - Last verified: 2026-09-11（BUG-018 有界读取已完成：fresh MySQL 8.0.45 base-to-head/current/check/downgrade/re-upgrade 与 4 项 MySQL 测试通过；后端 unit/integration/contract 298 passed，性能 2 passed，前端 144 passed；Ruff、format、Mypy 81 source files、ESLint、架构、小程序静态 15 pages/632049 bytes、空库审计与 diff check 通过。SQLite 10k dashboard/report 与 50k history 均在批准预算内。可选 TabBar 生成器因环境缺少 cairosvg 未运行；生产备份/迁移、云端阶段信号、体验版与真机矩阵尚未执行）
 - Source Spec: `specs/completed/FEAT-001-PUSH-KIDS-FINAL-SPEC.md` revision `SPEC-20260831-08`
-- Latest applied Spec: `specs/active/BUG-018-BOUNDED-READ-API-PERFORMANCE.md` revision `BUG-SPEC-20260911-PERF-01`
-- Previous applied Spec: `specs/active/SPEC-20260911-SETTINGS-PROFILE-MANAGER-POLISH.md` revision `SPEC-20260911-SETTINGS-PROFILE-MANAGER-POLISH-01`（frontend only）
+- Latest applied Spec: `specs/completed/BUG-018-BOUNDED-READ-API-PERFORMANCE.md` revision `BUG-SPEC-20260911-PERF-01`
+- Previous applied Spec: `specs/completed/SPEC-20260911-SETTINGS-PROFILE-MANAGER-POLISH.md` revision `SPEC-20260911-SETTINGS-PROFILE-MANAGER-POLISH-01`（frontend only）
 - Current visible contract: `docs/design/frontend/prototypes/DREV-20260911-SETTINGS-PROFILE-MANAGER-02/FRONTEND-SPEC.md`
 - Intermediate design artifact: `docs/design/frontend/prototypes/DREV-20260830-03/index.html`
 

@@ -65,6 +65,6 @@
 
 ## Change references
 
-- `specs/active/FEAT-003-NOTIFICATION-CHANNEL.md` revision `SPEC-20260906-CHANNEL-02`
+- `specs/completed/FEAT-003-NOTIFICATION-CHANNEL.md` revision `SPEC-20260906-CHANNEL-02`
 - `docs/domain/features/FEAT-003-notification-channel.md`
 - `docs/domain/BEHAVIOR-CATALOG.md` `BHV-028`
