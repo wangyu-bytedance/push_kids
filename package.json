@@ -5,7 +5,10 @@
   "scripts": {
     "test": "node --test tests/frontend/*.test.js",
     "lint:miniapp": "eslint apps/miniprogram tests/frontend --ext .js",
-    "check:miniapp": "python3 tools/validate_miniprogram.py"
+    "check:miniapp": "python3 tools/validate_miniprogram.py",
+    "release:version": "python3 tools/release/miniprogram_version.py current",
+    "release:version:next": "python3 tools/release/miniprogram_version.py next",
+    "release:version:bump": "python3 tools/release/miniprogram_version.py bump"
   },
   "devDependencies": {
     "eslint": "^9.35.0"

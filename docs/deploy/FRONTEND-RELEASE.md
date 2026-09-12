@@ -50,10 +50,15 @@ MINIPROGRAM_PATH=/Users/bytedance/Documents/push_kids/apps/miniprogram
 "$WECHAT_DEVTOOLS_CLI" preview --project "$MINIPROGRAM_PATH" --qr-format terminal --lang zh
 ```
 
-登录状态、预览编译和包体均正常后，使用本次批准的版本号上传：
+登录状态、预览编译和包体均正常后，用版本工具计算本次上传版本号（禁止手工复用旧号）。
+版本基准记录在 `tools/release/miniprogram_version.json`，`next` 恒为“已上传给微信的最新
+版本号（体验版基准）”的第三位（patch）+1：
 
 ```bash
-RELEASE_VERSION=0.1.1
+npm run release:version        # 打印当前基准（即微信后台体验版版本号）
+npm run release:version:next   # 打印本次上传版本号（patch+1）
+
+RELEASE_VERSION=$(npm run --silent release:version:next)
 RELEASE_DESCRIPTION='修复说明或功能摘要'
 
 "$WECHAT_DEVTOOLS_CLI" upload \
@@ -63,9 +68,17 @@ RELEASE_DESCRIPTION='修复说明或功能摘要'
   --lang zh
 ```
 
+上传成功后，把基准推进到刚上传的版本号，供下次发布继续 +1：
+
+```bash
+npm run release:version:bump   # 将 tools/release/miniprogram_version.json 的 released 推进到本次版本
+```
+
 要求：
 
-- 版本号不可复用；下一次发布递增 patch，例如 `0.1.0` → `0.1.1`。
+- 版本号不可复用；`next` 由工具在体验版基准上递增 patch，例如 `0.1.5` → `0.1.6`。
+  微信开发者工具 CLI 无法读取后台版本号，`tools/release/miniprogram_version.json` 是唯一基准，
+  必须与微信后台的体验版版本号保持一致；如后台被人工改动，先据实修正该文件再计算 `next`。
 - 说明必须描述用户可见变化或修复，不得写成“测试”“随便改改”。
 - 上传报告记录版本、说明、包体、AppID、配置环境和检查结果。
 - CLI 登录需要开发者本人扫码时，按本目录的“需要人工操作”格式输出。
