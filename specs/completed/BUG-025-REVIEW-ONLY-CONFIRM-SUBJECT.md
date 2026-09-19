@@ -1,6 +1,6 @@
 # BUG-025 — 纯复习草稿确认丢失科目
 
-- Status: `VERIFYING`
+- Status: `DONE`
 - Severity: `用户阻断：纯复习草稿无法确认`
 - Risk: `R1`
 - Owner: `产品负责人（用户）`
@@ -43,7 +43,7 @@
 - UI current-state merge owner: `Codex`
 - UI current-state merge evidence: `pending verification`
 - Frontend visual/a11y/resolution verification: `N/A for changed behavior; existing release-level native/device gates remain NOT_RUN unless exercised during release`
-- Frontend engineering verification evidence: `targeted 10 passed; frontend 170 passed; ESLint, Mini Program validation, architecture and design-policy checks PASS`
+- Frontend engineering verification evidence: `targeted 10 passed; frontend 170 passed; ESLint, Mini Program validation, architecture and design-policy checks PASS; real AppID preview and 0.1.12 upload PASS`
 - External design dependency: `none`
 
 ## 1. Symptom and impact
@@ -295,8 +295,8 @@ No module boundary, dependency direction, shared abstraction, extension point, d
 | Required backend regression | `uv run pytest tests/unit tests/integration tests/contract -q` | local SQLite | PASS | 362 passed, 4 skipped, 57 warnings |
 | Python quality | `uv run ruff check . && uv run ruff format --check . && uv run mypy apps/api/src` | local | PASS | Ruff PASS; 343 files formatted; Mypy 86 files PASS |
 | Architecture/design | `uv run python tools/check_architecture.py && uv run python tools/validate_design_evidence.py --check-current-policy` | local | PASS | `ARCHITECTURE_VALID checked=3`; `DESIGN_EVIDENCE_VALID` |
-| Preview | DevTools CLI `islogin` + `preview` | real AppID | not run | pending after all checks pass |
-| Upload | DevTools CLI upload version `0.1.12` | WeChat platform | not run | pending after preview |
+| Preview | DevTools CLI `islogin` + `preview` | real AppID | PASS | login=true; AppID `wx5d2e0014690bf285`; 603182 bytes / 589.0 KB |
+| Upload | DevTools CLI upload version `0.1.12` | WeChat platform | PASS | description “修复纯复习草稿确认时的科目校验问题”; 603182 bytes / 589.0 KB |
 | Native/device matrix | review-only confirm on iOS/Android and required viewports | experience devices | NOT_RUN unless operator performs after upload | manual release gate |
 
 ## 8. Review checklist
@@ -310,9 +310,9 @@ No module boundary, dependency direction, shared abstraction, extension point, d
 - [x] User approved this exact Spec revision.
 - [x] Regression test fails pre-fix and passes post-fix.
 - [x] Required automated checks pass or have explicit risk.
-- [x] Feature/UI/behavior current-state facts are merged for local verification.
-- [ ] Development version 0.1.12 is uploaded and release evidence recorded.
-- [ ] Spec is DONE and moved to `specs/completed/`.
+- [x] Feature/UI/behavior current-state facts are merged with upload evidence.
+- [x] Development version 0.1.12 is uploaded and release evidence recorded.
+- [x] Spec is DONE and moved to `specs/completed/`.
 
 ## 9. Closure and prevention
 
@@ -321,11 +321,11 @@ No module boundary, dependency direction, shared abstraction, extension point, d
 - Data repaired: `not required`
 - Monitoring added: `none; regression contract prevents recurrence without logging child content`
 - Behavior catalog update: `BHV-005 now states the review-only payload invariant and frontend regression evidence`
-- Feature current-state document update and Change Reference: `FEAT-001 and UI-001 updated to local verified state`
+- Feature current-state document update and Change Reference: `FEAT-001 and UI-001 updated to 0.1.12 development-version-uploaded state`
 - Architecture/test/process change preventing recurrence: `full payload invariant asserted in the existing review-only test`
-- Independent Review: `pending`
+- Independent Review: `NOT_RUN — no independent reviewer was requested; the bounded mapper change was self-reviewed and covered by pre/post regression plus full gates`
 - Residual risk: `native experience verification requires an operator-owned review-only fixture`
-- Follow-up owner/date: `product/release owner after upload`
+- Follow-up owner/date: `product/release owner for experience validation on 2026-09-19`
 
 ## 10. Approval requested
 

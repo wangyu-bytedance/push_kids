@@ -1,19 +1,18 @@
 # FEAT-001 — 家庭学习持续跟进系统 MVP
 
 - Status: `CURRENT`
-- Revision: `FEAT-STATE-20260919-REVIEW-ONLY-CONFIRM-01-LOCAL`
+- Revision: `FEAT-STATE-20260919-REVIEW-ONLY-CONFIRM-02-UPLOADED`
 - Last verified: 2026-09-19（`BUG-SPEC-20260919-REVIEW-ONLY-CONFIRM-01` 已本地实现并验证：纯复习草稿
   在 `groups=[]` 时保留服务端原 `proposal.subject_name`，不再制造空字符串；修复前专项 9 passed / 1 failed，
   修复后专项 10 passed、前端全量 170 passed、后端 362 passed / 4 skipped，Ruff check/format、
   Mypy 86 files、ESLint、架构 checked=3、设计策略与小程序静态 15 pages/667593 bytes均通过。
-  Schema 仍为 `20260913_0014`，无后端/API/数据库/视觉变更。当前已上传版本仍为 `0.1.11`；
-  `0.1.12` preview/upload 尚未执行，体验版/提审/正式发布及原生三视口、字体放大、iOS/Android 为 NOT_RUN）
+  Schema 仍为 `20260913_0014`，无后端/API/数据库/视觉变更。真实 AppID preview PASS，包体
+  603182 bytes / 589.0 KB；小程序 `0.1.12` 开发版本已上传。体验版/提审/正式发布及原生三视口、
+  字体放大、iOS/Android 为 NOT_RUN）
 - Source Spec: `specs/completed/FEAT-001-PUSH-KIDS-FINAL-SPEC.md` revision `SPEC-20260831-08`
-- Latest implemented Spec: `specs/completed/BUG-023-TODAY-REVIEW-SOURCE-MATERIAL.md`
-  revision `BUG-SPEC-20260919-REVIEW-SOURCE-01`（实现与自动化验证完成；无数据库变更、无新模型调用；
-  后端 `flask-ik19-023` 灰度版本 normal，小程序 `0.1.11` 开发版本已上传）
-- Current verifying Spec: `specs/active/BUG-025-REVIEW-ONLY-CONFIRM-SUBJECT.md` revision
-  `BUG-SPEC-20260919-REVIEW-ONLY-CONFIRM-01`（前端请求映射修复与自动化验证完成；待 0.1.12 preview/upload）
+- Latest implemented Spec: `specs/completed/BUG-025-REVIEW-ONLY-CONFIRM-SUBJECT.md`
+  revision `BUG-SPEC-20260919-REVIEW-ONLY-CONFIRM-01`（前端请求映射修复与自动化验证完成；
+  小程序 `0.1.12` 开发版本已上传；无后端/API/Schema/视觉变更）
 - Pending completion Spec: `specs/active/FEAT-001-ARK-CONTEXT-REUSE-FLAG.md` revision
   `SPEC-20260919-ARK-CONTEXT-REUSE-01`（默认开启的 attempt-local Ark Responses 会话续接；未部署）
 - Previous applied Spec: `specs/completed/BUG-021-TODAY-REVIEW-PLAN-VISIBILITY.md` revision `BUG-SPEC-20260912-REVIEW-VISIBILITY-01`
@@ -284,7 +283,8 @@ BUG-010 本地实现已通过微信开发者工具 registered AppID preview 编�
   新知识点分组、但存在合法复习匹配时，保留服务端原提案科目，不再把 `proposal.subject_name`
   覆盖为空字符串。后端非空合同、Review 引用复核、事务、科目分组及页面视觉交互均未改变。
   修复前专项 1 个回归断言失败，修复后专项 10 passed、全量前端 170 passed、后端
-  362 passed / 4 skipped，静态、类型、架构与设计策略门禁通过；0.1.12 尚未上传。
+  362 passed / 4 skipped，静态、类型、架构与设计策略门禁通过；真实 AppID preview PASS，
+  小程序 0.1.12 开发版本已上传（603182 bytes / 589.0 KB），未设体验版、未提审、未正式发布。
 
 - 2026-09-19 — `BUG-023 / BUG-SPEC-20260919-REVIEW-SOURCE-01 / DREV-20260919-TODAY-SOURCE-MATERIAL-01`：
   Prompt 将知识名称收紧为可执行学习动作，并要求一句不编造的家长可读原题摘要；Planning 在稳定日
