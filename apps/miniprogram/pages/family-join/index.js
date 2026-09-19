@@ -10,15 +10,15 @@ Page({
     requestCode: "", submitHint: "选择你与孩子的关系后就可以提交", canSubmit: false, tokenMissing: false
   },
   onLoad(options) {
-    this.token = decodeURIComponent(options.token || "");
+    this.credential = decodeURIComponent(options.code || options.token || "");
     this.joinRequestKey = api.newIdempotencyKey("join");
     this.load();
   },
   async load() {
-    if (!this.token) return this.setData({ loading: false, tokenMissing: true, error: "邀请口令缺失" });
+    if (!this.credential) return this.setData({ loading: false, tokenMissing: true, error: "邀请码缺失" });
     this.setData({ loading: true, error: "" });
     try {
-      const preview = await api.request("/family-invites/preview", { method: "POST", actorOnly: true, data: { token: this.token } });
+      const preview = await api.request("/family-invites/preview", { method: "POST", actorOnly: true, data: { token: this.credential } });
       this.setData({
         loading: false,
         preview: {
@@ -55,14 +55,14 @@ Page({
     if (!this.data.relationship.trim()) return this.setData({ error: "请先选择你与孩子的关系" });
     this.setData({ submitting: true, error: "" });
     try {
-      const request = await api.request("/family-requests", { method: "POST", actorOnly: true, idempotencyKey: this.joinRequestKey, data: { token: this.token, relationship_label: this.data.relationship.trim() } });
+      const request = await api.request("/family-requests", { method: "POST", actorOnly: true, idempotencyKey: this.joinRequestKey, data: { token: this.credential, relationship_label: this.data.relationship.trim() } });
       this.setData({ submitting: false, applied: true, requestCode: request.request_code });
       wx.showToast({ title: "申请已发送", icon: "success" });
     } catch (error) { this.setData({ submitting: false, error: error.message }); }
   },
   copyRequestCode() {
     if (!this.data.requestCode) return;
-    wx.setClipboardData({ data: this.data.requestCode, success: () => wx.showToast({ title: "申请码已复制", icon: "success" }) });
+    wx.setClipboardData({ data: this.data.requestCode, success: () => wx.showToast({ title: "核验码已复制", icon: "success" }) });
   },
   goPending() { wx.reLaunch({ url: "/pages/family-onboarding/index" }); },
   goBack() { wx.navigateBack({ fail: () => wx.reLaunch({ url: "/pages/family-onboarding/index" }) }); }

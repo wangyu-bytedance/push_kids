@@ -1,6 +1,15 @@
 from __future__ import annotations
 
+import re
+import sqlite3
+from pathlib import Path
+
 from fastapi.testclient import TestClient
+from push_kids.families import service as family_service
+from push_kids.persistence.models import FamilyInvite
+from push_kids.platform.config import Settings
+from push_kids.platform.database import Database
+from sqlalchemy import inspect, select
 
 
 def _actor(name: str) -> dict[str, str]:
@@ -11,7 +20,7 @@ def _idempotent(actor: str, key: str) -> dict[str, str]:
     return {**_actor(actor), "Idempotency-Key": key}
 
 
-def test_create_join_approve_and_role_boundaries(client: TestClient) -> None:
+def test_create_join_approve_and_role_boundaries(client: TestClient, app) -> None:
     assert client.get("/api/v1/me").status_code == 401
     assert client.get("/api/v1/me", headers=_actor("parent-a")).json() == {
         "state": "unbound",
@@ -58,11 +67,29 @@ def test_create_join_approve_and_role_boundaries(client: TestClient) -> None:
     )
     assert invite.status_code == 201
     token = invite.json()["token"]
+    invite_code = invite.json()["invite_code"]
+    assert re.fullmatch(r"\d{6}", invite_code)
     assert token not in str(invite.json()["id"])
+    invite_replay = client.post(
+        "/api/v1/families/current/invites",
+        headers=_idempotent("parent-a", "invite-create-001"),
+        json={"expires_in_hours": 24},
+    )
+    assert invite_replay.status_code == 201
+    assert invite_replay.json()["id"] == invite.json()["id"]
+    assert invite_replay.json()["invite_code"] == invite_code
+    with app.state.database.session_factory() as db:
+        stored_invite = db.scalar(
+            select(FamilyInvite).where(FamilyInvite.id == invite.json()["id"])
+        )
+        assert stored_invite is not None
+        assert stored_invite.active_code_hash
+        assert stored_invite.active_code_hash != invite_code
+        assert stored_invite.token_hash != token
     preview = client.post(
         "/api/v1/family-invites/preview",
         headers=_actor("grandparent-b"),
-        json={"token": token},
+        json={"token": invite_code},
     )
     assert preview.status_code == 200
     assert preview.json()["family_name"] == "小雨的家"
@@ -71,14 +98,14 @@ def test_create_join_approve_and_role_boundaries(client: TestClient) -> None:
     application = client.post(
         "/api/v1/family-requests",
         headers=_idempotent("grandparent-b", "join-request-001"),
-        json={"token": token, "relationship_label": "奶奶"},
+        json={"token": invite_code, "relationship_label": "奶奶"},
     )
     assert application.status_code == 201
     assert application.json()["status"] == "pending"
     repeated = client.post(
         "/api/v1/family-requests",
         headers=_idempotent("grandparent-b", "join-request-002"),
-        json={"token": token, "relationship_label": "奶奶"},
+        json={"token": invite_code, "relationship_label": "奶奶"},
     )
     assert repeated.status_code == 201
     assert repeated.json()["id"] == application.json()["id"]
@@ -94,6 +121,12 @@ def test_create_join_approve_and_role_boundaries(client: TestClient) -> None:
     )
     assert approved.status_code == 200
     assert approved.json()["role"] == "viewer"
+    with app.state.database.session_factory() as db:
+        stored_invite = db.scalar(
+            select(FamilyInvite).where(FamilyInvite.id == invite.json()["id"])
+        )
+        assert stored_invite is not None
+        assert stored_invite.active_code_hash is None
     approval_replay = client.post(
         f"/api/v1/family-requests/{application.json()['id']}/approve",
         headers=_idempotent("parent-a", "join-approve-001"),
@@ -296,15 +329,15 @@ def test_invite_is_single_use_and_self_removal_is_forbidden(client: TestClient) 
     first = client.post(
         "/api/v1/family-requests",
         headers=_idempotent("single-use-first", "request-single-use-first"),
-        json={"token": invite["token"], "relationship_label": "爸爸"},
+        json={"token": invite["invite_code"], "relationship_label": "爸爸"},
     ).json()
     second = client.post(
         "/api/v1/family-requests",
         headers=_idempotent("single-use-second", "request-single-use-second"),
         json={"token": invite["token"], "relationship_label": "奶奶"},
     ).json()
-    assert len(first["request_code"]) == 6
-    assert len(second["request_code"]) == 6
+    assert re.fullmatch(r"\d{6}", first["request_code"])
+    assert re.fullmatch(r"\d{6}", second["request_code"])
 
     approved = client.post(
         f"/api/v1/family-requests/{first['id']}/approve",
@@ -373,6 +406,42 @@ def test_revoking_invite_unbinds_pending_applicant(client: TestClient) -> None:
     assert client.get("/api/v1/me", headers=_actor("revoke-applicant")).json()["state"] == "unbound"
 
 
+def test_active_invite_code_collision_retries_with_a_new_nonce(
+    client: TestClient, monkeypatch
+) -> None:
+    client.post(
+        "/api/v1/families",
+        headers=_idempotent("collision-manager", "family-collision"),
+        json={
+            "display_name": "邀请码碰撞家庭",
+            "relationship_label": "妈妈",
+            "child": {"name": "小舟", "daily_budget_minutes": 15},
+        },
+    )
+    monkeypatch.setattr(
+        family_service,
+        "_invite_code",
+        lambda _secret, _token, nonce: "123456" if nonce == 0 else "654321",
+    )
+
+    first = client.post(
+        "/api/v1/families/current/invites",
+        headers=_idempotent("collision-manager", "invite-collision-first"),
+        json={},
+    )
+    second = client.post(
+        "/api/v1/families/current/invites",
+        headers=_idempotent("collision-manager", "invite-collision-second"),
+        json={},
+    )
+
+    assert first.status_code == 201
+    assert second.status_code == 201
+    assert first.json()["invite_code"] == "123456"
+    assert second.json()["invite_code"] == "654321"
+    assert first.json()["id"] != second.json()["id"]
+
+
 def test_invite_preview_rate_limit_and_sqlite_foreign_keys(client: TestClient, app) -> None:
     with app.state.database.engine.connect() as connection:
         assert connection.exec_driver_sql("PRAGMA foreign_keys").scalar() == 1
@@ -390,3 +459,60 @@ def test_invite_preview_rate_limit_and_sqlite_foreign_keys(client: TestClient, a
     )
     assert limited.status_code == 429
     assert limited.json()["error"]["code"] == "rate_limited"
+
+    assert (
+        client.post(
+            "/api/v1/family-invites/preview",
+            headers=_actor("preview-code-validation"),
+            json={"token": "ABC123"},
+        ).status_code
+        == 422
+    )
+    assert (
+        client.post(
+            "/api/v1/family-invites/preview",
+            headers=_actor("preview-zero-code"),
+            json={"token": "000000"},
+        ).status_code
+        == 404
+    )
+    for _ in range(5):
+        response = client.post(
+            "/api/v1/family-invites/preview",
+            headers=_actor("preview-code-rate-limit"),
+            json={"token": "123456"},
+        )
+        assert response.status_code == 404
+    code_limited = client.post(
+        "/api/v1/family-invites/preview",
+        headers=_actor("preview-code-rate-limit"),
+        json={"token": "123456"},
+    )
+    assert code_limited.status_code == 429
+    assert code_limited.json()["error"]["code"] == "rate_limited"
+
+
+def test_existing_local_sqlite_gains_family_invite_code_columns(tmp_path: Path) -> None:
+    database_path = tmp_path / "legacy-local.db"
+    with sqlite3.connect(database_path) as connection:
+        connection.execute("CREATE TABLE family_invites (id VARCHAR(36) PRIMARY KEY)")
+
+    database = Database(
+        Settings(
+            PUSH_KIDS_ENV="test",
+            PUSH_KIDS_DATABASE_URL=f"sqlite:///{database_path}",
+            PUSH_KIDS_MEDIA_ROOT=tmp_path / "uploads",
+            PUSH_KIDS_AI_PROVIDER="test",
+            PUSH_KIDS_RUN_WORKER=False,
+        )
+    )
+    database.create_schema()
+    try:
+        inspector = inspect(database.engine)
+        columns = {item["name"] for item in inspector.get_columns("family_invites")}
+        indexes = {item["name"] for item in inspector.get_indexes("family_invites")}
+    finally:
+        database.engine.dispose()
+
+    assert {"active_code_hash", "code_nonce"}.issubset(columns)
+    assert "ux_family_invites_active_code_hash" in indexes

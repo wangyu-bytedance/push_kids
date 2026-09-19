@@ -1,6 +1,6 @@
 # FEAT-001 — AI 按科目识别当日新增与复习条目
 
-- Status: `APPROVED`（backend implementation；frontend implementation remains design-gated）
+- Status: `CANCELLED`
 - Risk: `R2`（模型输出合同、分析上下文和异步写回行为同时变化）
 - Spec owner: 产品负责人
 - Implementer: Codex
@@ -16,6 +16,9 @@
 - Feature current-state documents: `docs/domain/features/FEAT-001-push-kids-mvp.md`
 - Feature baseline revision: `FEAT-STATE-20260906-PKDS-03-STAGING`
 - Feature merge owner: 实现验证者
+
+- Superseded on 2026-09-13 by approved `SPEC-UNIFIED-REVIEW-20260913-02`. The verified grouped-schema
+  and confirmation safeguards remain current; the old two-kind/one-shot design is no longer authoritative.
 
 ## Frontend Design Impact and Figma Approval
 
@@ -775,3 +778,5 @@ Temporary coexistence: 新 Provider 输出只走 grouped DTO；旧 flat `proposa
 - [ ] 独立只读 Review 完成且无 Blocker/Major
 - [x] FEAT-001、Behavior Catalog 已合并最终事实；Architecture 无边界变化为 N/A
 - [ ] 若部署，遵循 release playbook 并在人工 gate 停止
+
+Final status: `CANCELLED — superseded by SPEC-UNIFIED-REVIEW-20260913-02`

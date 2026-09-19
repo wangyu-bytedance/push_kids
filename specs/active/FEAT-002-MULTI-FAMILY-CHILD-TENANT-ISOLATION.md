@@ -11,7 +11,7 @@
 - Affected Feature IDs: `FEAT-002（主）；FEAT-001、planned FEAT-003、FEAT-004（上下文/隔离合同）`
 - Current-state baseline: `FEAT-002=FEAT-STATE-20260905-06-BUG010-LOCAL；实现前重新读取其余最新 revision`
 
-## Frontend Design Impact and Figma Approval
+## Frontend Design Impact and Repository-native Approval
 
 - Frontend impact: `yes — 新增家庭选择；保留当前孩子选择`
 - Affected UI IDs: `UI-001、UI-009、UI-010、UI-015；新增 proposed UI-014-family-switcher`
@@ -20,9 +20,9 @@
 - Required viewports: `320×568、390×844、430×932`
 - Required states: `单家庭、多家庭、切换中、家庭失权、非管理员退出/管理员交接提示、新建档案表单/提交中/失败/成功、不同家庭不同角色`
 - Proposed Design Revision: `DREV-20260906-MULTI-FAMILY-02` remains for UI-014；UI-009 的退出交互需单独更新，成员头像/昵称不进入 Design Revision
-- Figma node URL / approval snapshot: `PENDING`
+- Editable design source / approval snapshot: `PENDING`
 - Frontend engineering constraints: 实现前使用最新 approved FEC；家庭切换时不得短暂显示上一家庭数据
-- Figma waiver: `none；现有 waiver 不自动覆盖新交互`
+- External design dependency: `none；新交互仍需 repository-native DREV 明确批准`
 
 ## 0. Executive summary
 
@@ -610,7 +610,7 @@ FEAT-002 不把它搬到“家庭与成员”，只保证入口绑定 verified c
 
 ## 11. Rollout, rollback and estimate
 
-1. Approve `SPEC-20260911-MULTI-FAMILY-06`、proposed ADR-003 和修订后不含成员头像/昵称的 Design Revision；补 Figma node/snapshot。
+1. Approve `SPEC-20260911-MULTI-FAMILY-06`、proposed ADR-003 和修订后不含成员头像/昵称的 Design Revision；补 editable source/snapshot manifest。
 2. Add characterization and cross-tenant tests。
 3. Ship membership schema expand + compatibility projection。
 4. Ship backend list bootstrap and selected-family resolver behind flag。
@@ -636,7 +636,7 @@ Before contract migration, rollback disables multi-family selection but preserve
 ## 12. Completion gate and record
 
 - [ ] 本 Spec revision 及 R3 架构评审获批。
-- [ ] Frontend DREV、Figma node 与 approval snapshot 获批。
+- [ ] Frontend DREV、editable source 与 approval snapshot 获批。
 - [ ] 现有 multi-child/role regression 通过。
 - [ ] Multi-family membership/context/switch acceptance 通过。
 - [ ] Manager 建立第二个孩子档案的表单、幂等、权限和失败恢复验收通过。
@@ -648,4 +648,4 @@ Before contract migration, rollback disables multi-family selection but preserve
 - Implementation: `NOT STARTED`，等待本 revision 明确批准。
 - Production files changed: `none`。
 - Full tests: `NOT RUN` for this documentation-only revision。
-- Residual blockers: 本 revision 的 Q-001/Q-002/Q-004/Q-005/Q-006/Q-008 决策批准、S5 精确逐表 DDL inventory、ADR approval、修订后的 Figma node/snapshot 和三视口/真实云人工证据。成员微信头像/昵称已移出当前门禁。
+- Residual blockers: 本 revision 的 Q-001/Q-002/Q-004/Q-005/Q-006/Q-008 决策批准、S5 精确逐表 DDL inventory、ADR approval、修订后的 repository-native source/snapshot 和三视口/真实云人工证据。成员微信头像/昵称已移出当前门禁。

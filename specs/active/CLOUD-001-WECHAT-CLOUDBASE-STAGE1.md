@@ -20,7 +20,7 @@
 - Feature baseline revision: `FEAT-STATE-20260831-05`, `FEAT-STATE-20260831-02-PLANNED`
 - Feature merge owner: Codex（仅在实现、验证、Review 和 staging 发布完成后合并当前事实）
 
-## Frontend Design Impact and Figma Approval
+## Frontend Design Impact and Repository-native Approval
 
 - Frontend impact: no
 - Frontend impact reason: 只替换网络、身份和图片上传基础设施；沿用现有 loading/error/upload progress/AI 状态语义
@@ -35,8 +35,8 @@
 - Frontend quality verification plan: `npm test`, `npm run lint:miniapp`, `tools/validate_miniprogram.py`；DevTools/真机验证 callContainer、单/多图、失败恢复和冷启动
 - Approved frontend engineering deviations: none
 - Current Design Revision(s): `UI-001 = DREV-20260830-03`
-- Figma project/file URL: `https://www.figma.com/design/FAyfmjNrA3btWztwyxI6Zj`
-- Figma node URL(s): N/A；无可见设计变化
+- Editable design source path(s): N/A；无可见设计变化
+- Design source SHA-256: N/A；无可见设计变化
 - Proposed Design Revision: N/A；实现不得引入可见偏差
 - Required viewport/state exports: N/A；沿用已批准 UI，真实设备执行状态回归
 - Prototype status: N/A
@@ -48,7 +48,7 @@
 - UI current-state merge owner/evidence: Codex / pending
 - Frontend visual/a11y/resolution verification: pending real-device regression
 - Frontend engineering verification evidence: pending
-- Figma waiver: 不新增；如出现可见变化，必须返回 Design gate
+- External design dependency: none；如出现可见变化，必须返回 repository-native Design gate
 
 ## 0. Executive summary
 

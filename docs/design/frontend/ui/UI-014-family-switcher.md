@@ -7,11 +7,11 @@
 - Engineering contract: 实现前读取最新 approved FEC
 - Design revision: `DREV-20260906-MULTI-FAMILY-02`（PROPOSED）
 - Last reviewed artifact date: 2026-09-06
-- Figma node / approval snapshot: `PENDING`
+- Editable design source / approval snapshot: `PENDING`
 - Waiver: `none`
 
 > 本文是审批草案，不是当前实现。当前小程序只支持单 active family，家庭内孩子档案管理由
-> UI-015 提供。没有 node-specific Figma URL、approval snapshot 和 Spec 明确批准前不得实现。
+> UI-015 提供。没有 repository-native editable source、approval snapshot 和 Spec 明确批准前不得实现。
 
 ## Design intent
 
@@ -98,6 +98,6 @@ stateDiagram-v2
 ## Approval gate
 
 - [ ] `SPEC-20260911-MULTI-FAMILY-06` approved。
-- [ ] node-specific Figma URL 和 `DREV-20260906-MULTI-FAMILY-02` approval snapshot approved。
+- [ ] repository-native source 和 `DREV-20260906-MULTI-FAMILY-02` approval snapshot approved。
 - [ ] 最新 FEC 的组件、状态、可访问性、性能、隐私与观测矩阵 approved。
 - [ ] 原生 320/390/430 和真实多账号多家庭验收计划锁定。

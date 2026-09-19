@@ -4,6 +4,8 @@ from dataclasses import dataclass
 from datetime import date, timedelta
 from typing import Literal
 
+from push_kids.planning.policies import initial_review_state
+
 REVIEW_INTERVALS = (1, 3, 7, 14, 30, 60)
 FeedbackAction = Literal["complete", "reinforce", "partial", "defer"]
 
@@ -16,11 +18,11 @@ class ReviewTransition:
 
 
 def initial_review_date(learned_on: date, today: date) -> date:
-    proposed = learned_on + timedelta(days=REVIEW_INTERVALS[0])
-    return max(proposed, today)
+    return initial_review_state(learned_on, today).due_date
 
 
 def apply_feedback(step: int, action: FeedbackAction, today: date) -> ReviewTransition:
+    """Compatibility wrapper; persisted ReviewItem transitions use policies.apply_review_event."""
     if action == "complete":
         next_step = min(step + 1, len(REVIEW_INTERVALS))
         if next_step >= len(REVIEW_INTERVALS):

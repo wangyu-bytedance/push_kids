@@ -13,7 +13,7 @@
 - Feature baseline revision: `FEAT-STATE-20260905-11`
 - Feature merge owner: Codex
 
-## Frontend Design Impact and Figma Approval
+## Frontend Design Impact and Repository-native Approval
 
 - Frontend impact: no — 仅整理现有后端状态与架构事实，不改变用户界面或交互
 - Frontend impact reason: 文档链接到已生成的架构 HTML，不修改小程序
@@ -28,8 +28,8 @@
 - Frontend quality verification plan: N/A
 - Approved frontend engineering deviations: none
 - Current Design Revision(s): N/A
-- Figma project/file URL: N/A
-- Figma node URL(s): N/A
+- Editable design source path(s): N/A
+- Design source SHA-256: N/A
 - Proposed Design Revision: N/A
 - Required viewport/state exports: N/A
 - Prototype status: N/A
@@ -42,7 +42,7 @@
 - UI current-state merge evidence: N/A
 - Frontend visual/a11y/resolution verification: N/A
 - Frontend engineering verification evidence: N/A
-- Figma waiver: none
+- External design dependency: none
 
 ## 1. Problem and outcome
 

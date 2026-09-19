@@ -18,7 +18,7 @@
 - Feature baseline revisions: `FEAT-001=FEAT-STATE-20260911-RECORD-PHOTO-ADD-SOURCE-02-LOCAL`；`FEAT-003=FEAT-STATE-20260907-CHANNEL-05-CLOUD`；`FEAT-005=FEAT-STATE-20260906-02-MULTI-CHILD`；`FEAT-006=FEAT-STATE-20260907-03-CLOUD`
 - Feature merge owner: 产品负责人（用户）确认事实，Codex 执行语义合并
 
-## Frontend Design Impact and Figma Approval
+## Frontend Design Impact and Repository-native Approval
 
 - Frontend impact: `yes`
 - Frontend impact reason: 提醒设置新增第 4 类提醒；家长需看到开关、模板授权状态、投递结果与可行动失败原因
@@ -33,8 +33,8 @@
 - Frontend quality verification plan: `notifications page/state tests；微信 API mock；4 类待授权/分两次授权/单类授权；三视口原生节点几何；DevTools + iOS/Android 真机授权与送达`
 - Approved frontend engineering deviations: `none`
 - Current Design Revision: `DREV-20260906-PKDS-03 / UI-011 G9 基线`
-- Figma project/file URL: `https://www.figma.com/design/FAyfmjNrA3btWztwyxI6Zj`
-- Figma node URL: `PENDING；必须是 UI-011 节点级 URL`
+- Editable design source path(s): `PENDING；必须覆盖 UI-011 的仓库原生 SVG/HTML`
+- Design source SHA-256: `PENDING`
 - Proposed Design Revision: `DREV-20260911-DAILY-LEARNING-GAP-01`
 - Required viewport/state exports: `320×568、390×844、430×932；4 类全待授权、首批 3 类授权后仍余 1 类、单类已关闭、投递已取消(source_completed/window_expired)`
 - Prototype status: `AWAITING_DESIGN`
@@ -46,7 +46,7 @@
 - UI current-state merge owner/evidence: `Codex / pending verification`
 - Frontend visual/a11y/resolution verification: `NOT RUN；尚未实现`
 - Frontend engineering verification evidence: `NOT RUN；尚未实现`
-- Figma waiver: `none；现有 FEAT-001 waiver 不覆盖本 Feature`
+- External design dependency: `none`
 
 ## 0. Executive summary
 
@@ -499,7 +499,7 @@ time and a recording/scripted sender; automated suites must never call the real 
 
 - [ ] Product accepts Q-001～Q-004 recommended answers.
 - [ ] User explicitly approves `SPEC-20260911-LEARNING-GAP-01` and `ARCH-20260911-LEARNING-GAP-01`.
-- [ ] `DREV-20260911-DAILY-LEARNING-GAP-01` has a node-specific Figma URL, snapshots and explicit approval.
+- [ ] `DREV-20260911-DAILY-LEARNING-GAP-01` has editable local sources, hash-verified snapshots and explicit approval.
 - [ ] Real WeChat template ID/field mapping/type is verified without exposing credentials.
 - [ ] Only approved scope is implemented; no migration/new scheduler/provider is introduced.
 - [ ] Every AC has recorded pass/fail/not-run evidence.

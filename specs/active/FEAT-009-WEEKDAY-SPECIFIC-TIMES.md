@@ -1,6 +1,6 @@
 # FEAT-009 — 每周不同日期使用不同时间
 
-- Status: `IMPLEMENTING — backend/data locally verified; frontend code implemented with passing state/form tests; native视口验收与 Design Revision approval / Figma 仍未满足`
+- Status: `IMPLEMENTING — backend/data locally verified; frontend code implemented with passing state/form tests; native视口验收与 repository Design Revision approval 仍未满足`
 - Risk: `R2`（跨 activity / travel / calendar / notifications，包含 schema、API 与可见表单变更）
 - Spec owner: 产品负责人（用户）
 - Implementer: Codex（批准后）
@@ -18,7 +18,7 @@
 - Feature baseline revisions: `FEAT-001=FEAT-STATE-20260911-PRIMARY-NAV-BRAND-01-LOCAL`；`FEAT-003=FEAT-STATE-20260907-CHANNEL-05-CLOUD`；`FEAT-006=FEAT-STATE-20260907-03-CLOUD`；`FEAT-007=FEAT-STATE-20260906-03-LOCAL`
 - Feature merge owner: 产品负责人确认事实，Codex 执行语义合并
 
-## Frontend Design Impact and Figma Approval
+## Frontend Design Impact and Repository-native Approval
 
 - Frontend impact: `yes`
 - Frontend impact reason: 课外活动与出行编辑 Sheet 的星期/时间关系从“一组星期共用一个时间”扩展为“默认共用、按需逐星期设置”；列表摘要也需表达多组时间
@@ -35,11 +35,11 @@
 - Frontend quality verification plan: `纯状态/表单单测；新增/编辑/切换/校验/失败保留；三视口原生几何；字体放大；DevTools + iOS/Android 真机 picker/键盘`
 - Approved frontend engineering deviations: `none`
 - Current Design Revisions: `DREV-20260911-PRIMARY-NAV-BRAND-01`、`DREV-20260906-TRAVEL-01`
-- Figma project/file URL: `https://www.figma.com/design/FAyfmjNrA3btWztwyxI6Zj`
-- Figma node URLs: `PENDING；必须覆盖 activity editor 与 travel editor 的节点级 URL`
+- Editable design source path(s): `PENDING；必须覆盖 activity editor 与 travel editor 的仓库原生 SVG/HTML`
+- Design source SHA-256: `PENDING`
 - Proposed Design Revision: `DREV-20260911-WEEKDAY-TIME-SLOTS-01`
 - Required viewport/state exports: `320×568、390×844、430×932 × {统一时间、分别设置、星期增删、行级错误、合并确认、保存失败、viewer read-only、长摘要}`
-- Prototype status: `BLOCKED_FIGMA_MCP_STARTER_LIMIT；2026-09-11 已完成文件/字体/现有节点与本地设计资产检查，设计系统搜索时触发套餐调用上限`
+- Prototype status: `AWAITING_REPOSITORY_DREV；旧外部工具阻塞已由 GOV-SPEC-LOCAL-DESIGN-EVIDENCE-20260913-01 移除`
 - Approved Task Spec revision: `SPEC-20260911-WEEKDAY-TIMES-01`
 - Approved Design Revision: `PENDING`
 - Design approval evidence: `PENDING`
@@ -48,7 +48,7 @@
 - UI current-state merge owner/evidence: `Codex / pending verification`
 - Frontend visual/a11y/resolution verification: `NOT RUN；纯状态/表单代码与单测已完成，原生三视口/字体放大/真机 picker 仍未执行`
 - Frontend engineering verification evidence: `PARTIAL；FEAT-009 状态/表单/校验/合并确认/失败保留的纯逻辑单测已通过（settings-state.test.js，全套 152 passed），lint:miniapp 与 validate_miniprogram 通过；原生视口几何与真机交互证据 NOT RUN`
-- Figma waiver: `none；既有 FEAT-001/FEAT-007 waiver 不自动覆盖 FEAT-009`
+- External design dependency: `none`
 
 ## 0. Executive summary
 
@@ -565,7 +565,7 @@ representative iOS/Android interaction.
 
 - [x] Q-001～Q-005 recommended answers explicitly accepted（2026-09-11，“按照这个方案落地”）.
 - [x] User approves `SPEC-20260911-WEEKDAY-TIMES-01` and `ARCH-20260911-WEEKDAY-TIMES-01`（2026-09-11）.
-- [ ] `DREV-20260911-WEEKDAY-TIME-SLOTS-01` has node-specific Figma URLs, snapshots and explicit approval.
+- [ ] `DREV-20260911-WEEKDAY-TIME-SLOTS-01` has editable local sources, hash-verified snapshots and explicit approval.
 - [ ] Migration/backfill and compatibility strategy are verified on SQLite and isolated MySQL（SQLite PASS；MySQL NOT RUN）.
 - [ ] All acceptance criteria have pass/fail/not-run evidence.
 - [ ] Independent read-only review covers functionality, design rationale, change necessity, placement and redundancy.
@@ -577,7 +577,7 @@ representative iOS/Android interaction.
 - Project inventory audit — PASS; repository is AI Native and worktree is dirty with pre-existing unrelated changes.
 - Discovery via `rg`/`sed` — PASS; activity, travel, calendar, notification, persistence, UI, current-state and test contracts inspected.
 - `git diff --no-index --check /dev/null specs/active/FEAT-009-WEEKDAY-SPECIFIC-TIMES.md` — no whitespace errors（exit 1 only because the new file differs from `/dev/null`）；必需视图与测试点结构检查通过。
-- Figma design-system discovery — `BLOCKED`; existing file/page/font inspection completed, then Figma MCP returned the Starter-plan tool-call limit while searching linked components/variables/styles.
+- Historical external-tool discovery — `NOT APPLICABLE` under current repository-native evidence governance; retained here only as prior execution evidence.
 - Production backend/data implementation — `PASS (local)`；新增 owner-specific slot 表、canonical API、旧合同适配、mixed-client fail-closed、目标日投影、冲突与通知 occurrence 消费者。
 - Focused backend regression — `PASS`；`36 passed`，覆盖 slot 规则、SQLite Alembic/backfill、本地 schema 幂等回填、activity/travel、冲突和 notification refresh。
 - Full backend regression — `PASS with isolated notification env`；`283 passed, 3 skipped`。首次运行因本地 `.env` 已配置真实通知通道导致 2 个“未配置环境”测试失败；显式将四个通知测试变量设为空/disabled 后两项及全套通过，未修改 `.env` 或任何秘密。
@@ -586,6 +586,6 @@ representative iOS/Android interaction.
 - Existing frontend repository gates — `PASS`；`npm test` (`152 passed`)、`npm run lint:miniapp`、`tools/validate_miniprogram.py`（`pages=15`）。
 - FEAT-009 frontend implementation — `PASS (code + state tests)`；`pages/settings/index.{js,wxml,wxss}` 与 `utils/api.js` 实现统一/逐日草稿、继承、自动分组摘要、行级校验、合并二次确认与保存失败保留，并携带 `X-Client-Capabilities: weekly-time-slots-v1`；`tests/frontend/settings-state.test.js` 覆盖 T-006 对应的披露/继承/增删/合并确认/校验/失败保留场景。该结果仅证明纯状态/表单逻辑正确，不构成原生视口/真机视觉验收。
 - Isolated MySQL migration/concurrency — `NOT RUN`；当前没有授权的隔离 MySQL 目标。
-- Native FEAT-009 frontend/visual/a11y tests — `NOT RUN`；Design Revision/Figma gate 与三视口原生几何证据未满足。
+- Native FEAT-009 frontend/visual/a11y tests — `NOT RUN`；repository Design Revision gate 与三视口原生几何证据未满足。
 
-Final status: `IMPLEMENTING — backend/data locally verified; frontend code implemented with passing state/form tests; 原生视口验收与 Design Revision approval / Figma 仍未满足`.
+Final status: `IMPLEMENTING — backend/data locally verified; frontend code implemented with passing state/form tests; 原生视口验收与 repository Design Revision approval 仍未满足`.

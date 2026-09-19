@@ -1,9 +1,9 @@
 # Push Kids current architecture
 
 - Status: `IMPLEMENTED_LOCALLY_PENDING_CLOUD_ACCEPTANCE`
-- Revision: `ARCH-20260912-MYSQL57-01`
-- Confirmed by: user approval of `BUG-SPEC-20260912-MYSQL57-01`, 2026-09-12
-  (supersedes `ARCH-20260911-READ-PERF-01`, confirmed by `BUG-SPEC-20260911-PERF-01`, 2026-09-11)
+- Revision: `ARCH-UNIFIED-REVIEW-20260913-02`
+- Confirmed by: user approval of `SPEC-UNIFIED-REVIEW-20260913-02`, 2026-09-13
+  (preserves `ARCH-20260912-MYSQL57-01` and its MySQL 5.7 constraints)
 - Scope: local adapters plus WeChat Cloud Hosting controlled staging
 
 ## Runtime context
@@ -32,7 +32,7 @@ media through the same bounded infrastructure ports.
 | `children` | children and subjects, child profile lifecycle | child/subject services and HTTP routes; `require_active_child` write gate |
 | `learning` | submissions and confirmed learning records | submission lifecycle service |
 | `knowledge` | normalized knowledge identity and occurrences | normalization policy |
-| `planning` | memory-curve review state and Todo grouping | pure scheduler + application service |
+| `planning` | versioned Review event projection, minute-bounded daily plans and Todo grouping | pure curve/heat policy + pure selection policy + application service |
 | `activities` | schedules and practice records | activity service |
 | `travel` | child-scoped recurring travel arrangements | travel service and HTTP routes; calendar projection contract |
 | `reporting` | read models for dashboard/report/calendar | reporting service |
@@ -56,7 +56,14 @@ Dependency direction is routers → services → pure policies. Infrastructure a
   index since `20260906_0004`. Subject identity always resolves against the child's configured catalogue
   through pure routing; model text never becomes a subject, and an unlisted name needs explicit parent consent.
 - `KnowledgeItem` is unique per family, child, subject, normalized name and category. Repeated learning creates one `KnowledgeOccurrence` per knowledge per confirmation, preserving existing Review state.
-- `ReviewItem` owns current review step and due date. Feedback advances, reinforces, partially advances, or defers it deterministically.
+- `ReviewFeedback` owns immutable confirmed events. `ReviewItem` is the O(1) current projection of step, next
+  due date, last reviewed day, count, interval, heat, lapse, policy revision and state version. The pure
+  `curve_heat_v1` policy updates both in one transaction; `defer` changes only an existing daily plan item.
+- `DailyReviewPlan` is materialized once per family/child/local day from at most 120 indexed candidates and the
+  child's minute budget. Selection is due date, then never/oldest reviewed, then ID; completing a plan item does
+  not refill the day. Unselected backlog rows keep their original due dates and receive no writes.
+- `KnowledgeSearchTerm` is a deterministic, at-most-32-term index per knowledge item. The analysis Agent can call
+  only the family/child-scoped history tool, at most 20 times/100 unique candidates/8 turns.
 - Cloud media is server-ticketed and claimed only after verifying uploader metadata, exact bucket/path,
   magic bytes, size and hash. Expired tickets and cancelled submissions are cleanup candidates.
 - Public account-wide export/deletion remains deferred to FEAT-002; cancellation deletes its scoped media.
@@ -70,7 +77,8 @@ Dependency direction is routers → services → pure policies. Infrastructure a
   `Database.expected_cloud_revision` tracks the single Alembic head; durable deletion extends that chain to
   `20260906_0007`, the notification channel to `20260906_0008`, and notification deletion ownership to
   `20260907_0009`; weekday-specific activity/travel time slots and bounded-read indexes extend it to
-  `20260911_0010` and `20260911_0011`.
+  `20260911_0010` and `20260911_0011`; durable batch-feedback replay and the unified Review projection,
+  history-search index and daily-plan snapshot extend the head to `20260913_0012` and `20260913_0013`.
 - Travel arrangements are independent from activities and project only into the Calendar query. The query
   normalizes CalendarEvent, ActivitySchedule and TravelArrangement time spans, then applies one pure half-open
   interval policy. Conflict metadata is derived at read time and marks every participant; it is never persisted.
@@ -92,10 +100,13 @@ Dependency direction is routers → services → pure policies. Infrastructure a
 
 ## Async analysis sequence
 
-BUG-009 keeps the existing module topology. `agent_processing/context.py` owns bounded read-only input
-assembly and material fingerprints; `prompt.py` owns deployment-versioned extraction rules. The personal
-Skill filesystem is not a runtime dependency. Model references are validated in contracts; learning owns
-final identity validation, occurrence deduplication and current Todo settlement in one transaction.
+`agent_processing/context.py` owns bounded initial input assembly and material fingerprints; `prompt.py` owns
+deployment-versioned extraction rules. The personal Skill filesystem is not a runtime dependency. The initial
+input contains the child profile, this material, same-day confirmed knowledge and the full materialized plan,
+but no historical knowledge list. `runner.py` owns the bounded tool loop; `history_search.py` owns deterministic
+terms and scoped retrieval. Model references are validated in contracts; learning owns final identity validation,
+occurrence deduplication and Review settlement in one transaction. Planning never depends on agent processing,
+so the graph remains acyclic.
 Confirmation locks Job → Submission → Child, then affected Reviews; Worker writes lock Job → Submission
 and verify state/attempt/lease after ending the provider-input read transaction. Manual confirmation cancels
 unfinished jobs; both late success and late failure are discarded. No new provider extension or migration.
@@ -118,7 +129,8 @@ sequenceDiagram
   W->>D: pending_confirmation or failed
   M->>A: poll/list pending item
   M->>A: confirm edited proposal
-  A->>D: record + knowledge + occurrence + review
+  A->>D: new learning => record + knowledge + occurrence + review
+  A->>D: confirmed review => feedback + deterministic Review transition
 ```
 
 ## Decisions and trade-offs
@@ -142,6 +154,8 @@ shared abstraction, dependency direction, schema migration or historical deletio
 | Database | WeChat Cloud Hosting CynosDB MySQL 5.7 (InnoDB/`utf8mb4`); SQLite local/test; Alembic owns cloud schema | Shared SQL must run on MySQL 5.7; keep both dialects in the test matrix. See Database support matrix. |
 | Job execution | durable rows + locked lease + in-process worker at one instance | Decision: `ADR-001 / TD-001`. |
 | AI provider | Ark-compatible provider port plus test-only deterministic adapter | Add a provider only through contract tests; no provider logic in domain code. |
+| Review event projection and daily plan | immutable event + rebuildable projection; one minute-bounded plan snapshot/day | See `decisions/ADR-REVIEW-EVENT-PROJECTION-AND-DAILY-PLAN.md`; changing ordering or policy needs a Spec revision. |
+| Historical AI matching | deterministic term index + bounded scoped tool loop | No full-history Prompt, arbitrary SQL, model-controlled tenant or unbounded search. |
 | Authentication | Cloud gateway actor → HMAC binding → family; `X-Family-ID` local only | Public ingress stays disabled; FEAT-002 owns collaboration/revocation UX. |
 | Media | `wx.cloud.uploadFile` + ticket/claim cloud; local adapter for dev | Owner-only rules and orphan cleanup are operational requirements. |
 | Mini program | native WXML/WXSS/JS | Revisit only if cross-platform delivery becomes an approved requirement. |
@@ -153,7 +167,9 @@ shared abstraction, dependency direction, schema migration or historical deletio
 |---|---|---|---|
 | AI provider | open | `AnalysisProvider` contract | test adapter + provider contract tests |
 | Media store | open | `MediaStore` contract | validation and path isolation tests |
-| Review policy | closed in MVP | versioned pure function | policy revision and migration Spec |
+| Review date policy | closed in MVP | `curve_heat_v1` pure function | version vectors, event/projection and migration tests |
+| Daily selection ordering | open, bounded | `daily-plan-v1` pure selection function | deterministic/budget/oldest-first and 10k SQL evidence |
+| History search provider | closed | indexed `search_history_items` contract | tenant, subject, term/result/tool-budget contract tests |
 | Auth provider | closed for staging | Cloud Hosting gateway + HMAC binding | real two-account and forged/public-entry tests |
 | Notification channel | deferred | none | explicit product requirement |
 
@@ -204,7 +220,9 @@ tests; indirect and test-only cycles are forbidden.
 | API schemas | owning capability / `packages/contracts` when cross-runtime | API and mini program | versioned request/response fixtures and contract tests |
 | Analysis provider | `agent_processing` | worker | `AnalysisProvider` plus provider contract tests |
 | Media store | `media` | learning submission flow | `MediaStore` plus validation/path-isolation tests |
-| Review scheduling | `planning` | learning confirmation and Todo feedback | pure versioned policy; not a generic helper |
+| Review scheduling | `planning/policies.py` | learning confirmation and feedback | pure deterministic curve/heat policy; model never writes dates |
+| Daily review selection | `planning/selection.py` | planning service → analysis context/reporting | pure versioned minute-budget ordering; no SQL, FastAPI or AI |
+| Analysis history search | `agent_processing/history_search.py` | bounded Agent runner only | indexed family/child/subject query; no model-controlled tenant/SQL/limit |
 | Child profile lifecycle | `children` | learning, activities, families, routers | `require_active_child` / `list_children(include_archived)`; archived profiles resolve for reads only |
 | Travel calendar projection | `travel` | activities calendar query | normalized active arrangements for one family/child/day; no Today, Todo, report or practice consumer |
 | Mini Program child context | `apps/miniprogram/utils/child-context.js` | today / calendar / records / reports / settings / activity edit | decorate, resolve-with-fallback, global selection sync, profile-limit hint; presentation only, no business rules |
@@ -230,6 +248,13 @@ checks are blocking automated evidence. Leading-wildcard substring search intent
 its explicit 50k-row budget and 200k-row/p95 revisit trigger. Request middleware emits only route-template slow or
 large-response metadata; concrete IDs, query text, cursors and child content are excluded. Production index-build
 lock duration and staged slow/large-route signals remain deployment gates, not local implementation claims.
+
+`SPEC-UNIFIED-REVIEW-20260913-02` adds one exact due aggregate, one `(due_date,
+last_reviewed_on,id)` ordered candidate read capped at 120 and finite writes only for the minute-bounded plan.
+Subsequent reads use the plan/item indexes; unselected backlog receives zero writes. Historical matching queries
+the deterministic term index with a per-call 20-row limit. The legacy paginated full-due contract remains
+available during the UI compatibility window. SQLite 10k evidence keeps the dashboard at 16 queries and under
+existing response/time/memory budgets; MySQL 5.7 mutation and EXPLAIN evidence remains a deployment gate.
 
 ## Database support matrix
 
@@ -320,6 +345,11 @@ is therefore left unattributed instead of logged against a fabricated actor. The
 development database. The Mini Program keeps its business rules on the server: `utils/child-context.js`
 owns only child decoration, selection resolution with fallback and the global selection sync.
 
-## Frontend evidence exception
+## Frontend design evidence architecture
 
-Figma file `FAyfmjNrA3btWztwyxI6Zj` was created, but the Starter plan reached its MCP call limit before node production. The user explicitly instructed uninterrupted best-judgment implementation. Therefore FEAT-001 uses the approved textual baseline `FDB-20260830-01` plus local WeChat DevTools screenshots as scoped evidence. Owner: repository owner. Expiry: before public production release.
+`GOV-SPEC-LOCAL-DESIGN-EVIDENCE-20260913-01` replaces the former Figma-dependent gate. A Design Revision now
+uses a repository-local editable SVG or self-contained HTML source, exact viewport/state PNG exports, and an
+immutable SHA-256 approval manifest bound to the approved Task Spec revision. Figma files and waiver records
+created before this revision remain historical evidence only and are not current implementation or release
+dependencies. Repository previews prove the approved visible contract; WeChat DevTools and representative
+iOS/Android runs remain authoritative for native geometry, interaction and device behavior.

@@ -78,6 +78,31 @@ function mergeTodoGroups(current, incoming) {
   return result;
 }
 
+/* 新后端把“今天真正要做的集合”固定在 review_selection；这里仅做字段适配，
+   不从全量到期 Todo 补入内容，也不在客户端重新排期。 */
+function stableReviewPlan(dashboard) {
+  const selection = dashboard && dashboard.review_selection;
+  if (!selection || !Array.isArray(selection.sessions)) return null;
+  const groups = selection.sessions.map((session) => {
+    const methods = Array.from(new Set((session.items || []).map((item) => item.review_method).filter(Boolean)));
+    return {
+      ...session,
+      optional: false,
+      review_method: methods.length === 1 ? methods[0] : "按提示复习",
+      estimated_minutes: Number(session.estimated_minutes) || 0,
+      items: session.items || []
+    };
+  });
+  return {
+    groups,
+    selectedCount: Number(selection.selected_count) || 0,
+    selectedMinutes: Number(selection.selected_minutes) || 0,
+    plannedCount: Number(selection.planned_count) || 0,
+    backlogCount: Number(selection.backlog_count) || 0,
+    completedCount: Number(selection.today_feedback_count) || 0
+  };
+}
+
 function monthDay(iso) {
   const parts = String(iso || "").split("-");
   if (parts.length !== 3) return "";
@@ -159,6 +184,7 @@ Page({
     sections: { ...DEFAULT_SECTIONS }, reviewReturn: null, reviewGroupId: "",
     reviewFocusText: "", dayLabel: "",
     hero: { required: 0, optional: 0, total: 0, minutes: 0, note: "", ticks: [] },
+    stablePlan: false, planCompleted: false,
     todoCards: [], hiddenTodoCount: 0, todosExpanded: false, loadingMoreTodos: false,
     nextReview: null, nextReviewKnown: false, upcomingExpanded: false,
     loadingMoreUpcoming: false, upcomingError: "",
@@ -205,12 +231,22 @@ Page({
         action_text: item.past ? "补记这次练习" : "记录这次练习" }));
       dashboard.daily_summary.subjects = dashboard.daily_summary.subjects.map((item) => ({ ...item, summary_text: item.summaries.join("；"),
         subject_class: ui.subjectClass(item.subject_name), subject_mark: ui.subjectMark(item.subject_name) }));
+      const plan = stableReviewPlan(dashboard);
+      if (plan) {
+        dashboard.todo_groups = plan.groups;
+        dashboard.todo_count = plan.selectedCount;
+        dashboard.required_todo_count = plan.selectedCount;
+        dashboard.estimated_minutes = plan.selectedMinutes;
+        dashboard.todo_next_cursor = null;
+        dashboard.todo_remaining_count = 0;
+      }
       dashboard.must_todo_groups = dashboard.todo_groups.filter((item) => !item.optional);
       dashboard.optional_todo_groups = dashboard.todo_groups.filter((item) => item.optional);
       const scheduledSubjects = new Set(dashboard.schedule_items.map((item) => item.subject_id).filter(Boolean));
       dashboard.optional_activity_suggestions = dashboard.activity_suggestions.filter((item) => item.suggested && !scheduledSubjects.has(item.subject_id));
       dashboard.is_empty = !dashboard.todo_groups.length && !dashboard.daily_summary.record_count && !dashboard.schedule_items.length && !dashboard.optional_activity_suggestions.length;
-      dashboard.show_guide = !dashboard.todo_groups.length && !dashboard.daily_summary.record_count
+      dashboard.show_guide = !dashboard.todo_groups.length && !(plan && plan.plannedCount)
+        && !dashboard.daily_summary.record_count
         && !dashboard.next_review;
       dashboard.activity_count = dashboard.schedule_items.length + dashboard.optional_activity_suggestions.length;
       const view = todoView(dashboard.must_todo_groups, dashboard.optional_todo_groups, this.data.todosExpanded);
@@ -219,6 +255,17 @@ Page({
       const nextReview = buildNextReview(dashboard.next_review, dashboard.day);
       const sections = normalizeSections(ui.readPreference("todaySections", childId, DEFAULT_SECTIONS));
       if (!dashboard.todo_count && nextReview) sections.review = true;
+      const planCompleted = !!(plan && plan.plannedCount > 0 && plan.selectedCount === 0);
+      const planNote = planCompleted
+        ? `今天安排的 ${plan.plannedCount} 项已完成，今天不会再补入新内容。`
+        : (plan && plan.backlogCount > 0
+          ? `今天先做 ${plan.selectedCount} 项，其余 ${plan.backlogCount} 项会按最早到期顺序安排到后续复习。`
+          : "今天的安排生成后保持不变，完成后不会临时补入新内容。");
+      const reviewMeta = dashboard.todo_count
+        ? `${plan ? "今天安排" : "今天"} ${dashboard.todo_count} 项 · 约 ${dashboard.estimated_minutes} 分钟`
+        : (planCompleted
+          ? `今天 ${plan.completedCount} 项已完成`
+          : (nextReview ? `今天 0 项 · ${nextReview.shortLabel} ${nextReview.totalCount} 项` : "今天 0 项"));
       this.setData({ loading: false, children, childIndex, childId, dashboard,
         multiChild: selection.multiChild, canAddChild,
         dayLabel: dayLabel(dashboard.day),
@@ -228,15 +275,14 @@ Page({
           total: dashboard.todo_count || 0,
           ticks: ringTicks(dashboard.required_todo_count, dashboard.todo_count),
           minutes: dashboard.estimated_minutes || 0,
-          note: dashboard.todo_count > dashboard.required_todo_count
+          note: plan ? planNote : (dashboard.todo_count > dashboard.required_todo_count
             ? `其中 ${dashboard.todo_count - dashboard.required_todo_count} 项是可选的 · 都是之前确认过的学习内容`
-            : "都是之前确认过的学习内容"
+            : "都是之前确认过的学习内容")
         },
+        stablePlan: !!plan, planCompleted,
         sections,
         sectionMeta: {
-          review: dashboard.todo_count
-            ? `今天 ${dashboard.todo_count} 项 · 约 ${dashboard.estimated_minutes} 分钟`
-            : (nextReview ? `今天 0 项 · ${nextReview.shortLabel} ${nextReview.totalCount} 项` : "今天 0 项"),
+          review: reviewMeta,
           learning: `已确认 ${dashboard.daily_summary.record_count} 条`,
           activity: `${dashboard.activity_count} 项`
         },

@@ -12,14 +12,31 @@ function emptyPoint() {
   return { name: "", category: "知识点", review_method: "口头回顾", estimated_minutes: 3 };
 }
 
+const ITEM_KIND_VIEW = {
+  new: { label: "新知识", tone: "new", effect: "新增知识，并按规则安排下次复习" },
+  today_review: { label: "今日复习", tone: "today", effect: "完成今天对应的复习，并更新下次复习时间" },
+  history_item: { label: "历史复习", tone: "history", effect: "沿用以前的知识，记录这次复习并更新下次复习时间" }
+};
+
+function itemKindView(kind) {
+  if (kind === "today_review") return ITEM_KIND_VIEW.today_review;
+  if (kind === "history_item" || kind === "review") return ITEM_KIND_VIEW.history_item;
+  return ITEM_KIND_VIEW.new;
+}
+
 /* WXML 不支持方法调用，草稿里的展示字段都在这里算好。 */
 function pointView(point) {
   const conf = ui.confidence(point.confidence);
+  const kind = itemKindView(point.kind);
   const evidenceLabels = (point.direct_evidence || []).map(
     (evidence) => `${evidence.source === "image" ? "照片 " + evidence.image_index : "家长文字"}：${evidence.detail}`
   );
   return {
     ...point,
+    kind: "new",
+    kind_label: kind.label,
+    kind_tone: kind.tone,
+    kind_effect: kind.effect,
     subject_name: point.subject_name || "",
     confidence_label: conf ? conf.label : "请核对",
     confidence_tone: conf ? conf.tone : "",
@@ -27,6 +44,17 @@ function pointView(point) {
     evidence_labels: evidenceLabels,
     evidence_text: evidenceLabels.join("　·　"),
     context_count: (point.context_used || []).length
+  };
+}
+
+function reviewMatchView(match) {
+  const kind = itemKindView(match.match_kind);
+  return {
+    ...match,
+    kind_label: kind.label,
+    kind_tone: kind.tone,
+    kind_effect: kind.effect,
+    classified: match.match_kind === "today_review" || match.match_kind === "history_item"
   };
 }
 
@@ -118,7 +146,8 @@ module.exports = {
       /* 后端已按孩子的科目表把每个知识点路由好；旧草稿没有分点科目时回落到整批科目名。 */
       const points = (initial.knowledge_points.length ? initial.knowledge_points : [emptyPoint()])
         .map((point) => pointView({ ...point, subject_name: point.subject_name || initial.subject_name || "" }));
-      const proposal = { ...initial, uncertainties: initial.uncertainties || [], todo_matches: initial.todo_matches || [], knowledge_points: points };
+      const matches = (initial.todo_matches || []).map(reviewMatchView);
+      const proposal = { ...initial, uncertainties: initial.uncertainties || [], todo_matches: matches, knowledge_points: points };
       this.setData({
         manual: !!manual, editing: true, proposal, subjects, consent: {},
         subjectPicks: subjectPicks(subjects, points),
@@ -139,16 +168,29 @@ module.exports = {
       this.setData({ [`proposal.${event.currentTarget.dataset.field}`]: event.detail.value });
     },
     clearAssociations(points) {
-      return points.map((point) => ({ ...point, existing_knowledge_id: null }));
+      return points.map((point) => pointView({ ...point, kind: "new", existing_knowledge_id: null }));
     },
     unlinkPoint(event) {
-      this.setData({ [`proposal.knowledge_points[${Number(event.currentTarget.dataset.index)}].existing_knowledge_id`]: null });
+      const index = Number(event.currentTarget.dataset.index);
+      this.setData({
+        [`proposal.knowledge_points[${index}].existing_knowledge_id`]: null,
+        [`proposal.knowledge_points[${index}].kind`]: "new",
+        [`proposal.knowledge_points[${index}].kind_label`]: ITEM_KIND_VIEW.new.label,
+        [`proposal.knowledge_points[${index}].kind_tone`]: ITEM_KIND_VIEW.new.tone,
+        [`proposal.knowledge_points[${index}].kind_effect`]: ITEM_KIND_VIEW.new.effect
+      });
     },
     setPoint(event) {
       const { index, field } = event.currentTarget.dataset;
       this.setData({ [`proposal.knowledge_points[${index}].${field}`]: field === "estimated_minutes" ? Number(event.detail.value) : event.detail.value });
       if (field === "name" || field === "category") {
-        this.setData({ [`proposal.knowledge_points[${index}].existing_knowledge_id`]: null });
+        this.setData({
+          [`proposal.knowledge_points[${index}].existing_knowledge_id`]: null,
+          [`proposal.knowledge_points[${index}].kind`]: "new",
+          [`proposal.knowledge_points[${index}].kind_label`]: ITEM_KIND_VIEW.new.label,
+          [`proposal.knowledge_points[${index}].kind_tone`]: ITEM_KIND_VIEW.new.tone,
+          [`proposal.knowledge_points[${index}].kind_effect`]: ITEM_KIND_VIEW.new.effect
+        });
       }
       if (field === "name") this.refreshGroups();
     },
@@ -158,7 +200,7 @@ module.exports = {
       const name = await this.pickedSubjectName(Number(event.detail.value));
       if (!name) return;
       const points = this.data.proposal.knowledge_points.map((point, position) => (
-        position === index ? { ...point, subject_name: name, existing_knowledge_id: null } : point
+        position === index ? pointView({ ...point, kind: "new", subject_name: name, existing_knowledge_id: null }) : point
       ));
       this.setData({ "proposal.knowledge_points": points });
       this.refreshGroups();
@@ -169,7 +211,7 @@ module.exports = {
       const name = await this.pickedSubjectName(Number(event.detail.value));
       if (!name || !group) return;
       const points = this.data.proposal.knowledge_points.map((point, position) => (
-        group.indexes.includes(position) ? { ...point, subject_name: name, existing_knowledge_id: null } : point
+        group.indexes.includes(position) ? pointView({ ...point, kind: "new", subject_name: name, existing_knowledge_id: null }) : point
       ));
       this.setData({ "proposal.knowledge_points": points });
       this.refreshGroups();
@@ -218,12 +260,41 @@ module.exports = {
       matches.splice(Number(event.currentTarget.dataset.index), 1);
       this.setData({ "proposal.todo_matches": matches });
     },
+    /* 取消复习关联后保留本次识别内容，改为新知识交给家长继续编辑；
+       下次复习日期仍只由服务端在确认事务中计算。 */
+    unlinkReviewMatch(event) {
+      const index = Number(event.currentTarget.dataset.index);
+      const matches = this.data.proposal.todo_matches.slice();
+      const match = matches[index];
+      if (!match) return;
+      if (this.data.proposal.knowledge_points.length >= 20) {
+        wx.showToast({ title: "知识点已达到 20 个，请先移除一项", icon: "none" });
+        return;
+      }
+      matches.splice(index, 1);
+      const points = this.data.proposal.knowledge_points.concat([pointView({
+        name: match.knowledge_name,
+        subject_name: match.subject_name || this.data.proposal.subject_name || "",
+        category: "知识点",
+        review_method: "口头回顾",
+        estimated_minutes: 3,
+        existing_knowledge_id: null,
+        kind: "new",
+        confidence: "medium",
+        direct_evidence: [],
+        context_used: []
+      })]);
+      this.setData({ "proposal.todo_matches": matches, "proposal.knowledge_points": points });
+      this.refreshGroups();
+    },
     async confirmDraft() {
       if (this.data.saving || !this.data.proposal) return;
       const proposal = this.data.proposal;
       if (!String(proposal.summary || "").trim()) return wx.showToast({ title: "请补全学习总结", icon: "none" });
       const kept = proposal.knowledge_points.filter((item) => (item.name || "").trim());
-      if (!kept.length) return wx.showToast({ title: "至少保留一个知识点", icon: "none" });
+      if (!kept.length && !proposal.todo_matches.length) {
+        return wx.showToast({ title: "至少保留一个知识点或复习项", icon: "none" });
+      }
       const missing = kept.some((item) => !(item.subject_name || "").trim());
       if (missing) return wx.showToast({ title: "请为每个知识点选择科目", icon: "none" });
       this.setData({ saving: true, saveError: "" });

@@ -53,6 +53,65 @@ test("a mixed photo batch splits into one group per configured subject", async (
   assert.equal(page.data.subjectPicks.at(-1), "＋ 写一个新科目");
 });
 
+test("the confirmation draft presents new, today-review and history-review effects", async () => {
+  const submission = pendingSubmission([
+    { name: "两位数加法", subject_name: "数学", category: "运算", review_method: "口头回顾", estimated_minutes: 3 }
+  ]);
+  submission.proposal.todo_matches = [
+    { review_id: "today", knowledge_id: "k-today", knowledge_name: "乘法口诀", subject_name: "数学", match_kind: "today_review", evidence: "练习纸" },
+    { review_id: "history", knowledge_id: "k-history", knowledge_name: "除法竖式", subject_name: "数学", match_kind: "history_item", evidence: "家长文字" }
+  ];
+  const { page } = draftPage("pages/submission/confirm.js", submission);
+  page.data.id = "sid";
+
+  await page.load();
+
+  assert.equal(page.data.proposal.knowledge_points[0].kind_label, "新知识");
+  assert.equal(page.data.proposal.todo_matches[0].kind_label, "今日复习");
+  assert.equal(page.data.proposal.todo_matches[1].kind_label, "历史复习");
+  assert.match(page.data.proposal.todo_matches[0].kind_effect, /更新下次复习时间/);
+});
+
+test("unlinking a detected review keeps it as an editable new knowledge item", async () => {
+  const submission = pendingSubmission([{ name: "占位", subject_name: "数学" }]);
+  submission.proposal.subject_name = "数学";
+  submission.proposal.knowledge_points = [];
+  submission.proposal.todo_matches = [
+    { review_id: "today", knowledge_id: "known", knowledge_name: "乘法口诀", subject_name: "数学", match_kind: "today_review", evidence: "练习纸" }
+  ];
+  const { page } = draftPage("pages/submission/confirm.js", submission);
+  page.data.id = "sid";
+  await page.load();
+
+  page.unlinkReviewMatch({ currentTarget: { dataset: { index: 0 } } });
+
+  assert.equal(page.data.proposal.todo_matches.length, 0);
+  assert.equal(page.data.proposal.knowledge_points.at(-1).name, "乘法口诀");
+  assert.equal(page.data.proposal.knowledge_points.at(-1).existing_knowledge_id, null);
+  assert.equal(page.data.proposal.knowledge_points.at(-1).kind_label, "新知识");
+});
+
+test("a review-only draft can be confirmed without inventing a new knowledge item", async () => {
+  let payload;
+  const submission = pendingSubmission([{ name: "占位", subject_name: "数学" }]);
+  submission.proposal.knowledge_points = [];
+  submission.proposal.todo_matches = [
+    { review_id: "today", knowledge_id: "known", knowledge_name: "乘法口诀", subject_name: "数学", match_kind: "today_review", evidence: "练习纸" }
+  ];
+  const { page } = draftPage("pages/submission/confirm.js", submission, (options) => {
+    payload = options.data;
+    return { updated_reviews: [{ review_id: "today" }] };
+  });
+  page.data.id = "sid";
+  await page.load();
+
+  await page.confirmDraft();
+
+  assert.equal(payload.proposal.knowledge_points.length, 0);
+  assert.equal(payload.proposal.todo_matches.length, 1);
+  assert.equal(payload.groups.length, 0);
+});
+
 test("confirmation sends one group per subject with positions that match the kept points", async () => {
   let payload;
   const { page } = draftPage("pages/submission/confirm.js", pendingSubmission([

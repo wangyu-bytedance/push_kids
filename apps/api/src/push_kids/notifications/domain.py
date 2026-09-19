@@ -164,10 +164,10 @@ def member_application_content(
     relationship_label: str, request_code: str, applied_at_text: str = ""
 ) -> NotificationContent:
     relationship = relationship_label.strip() or "家人"
-    full_text = f"{relationship} 申请加入家庭，申请码 {request_code}，请在小程序里审批"
+    full_text = f"{relationship} 申请加入家庭，申请核验码 {request_code}，请在小程序里审批"
     fields = {
         "headline": "有家人申请加入家庭",
-        "detail": f"申请码 {request_code}，请审批",
+        "detail": f"申请核验码 {request_code}，请审批",
         "code": request_code,
         "applicant": relationship,
     }

@@ -4,25 +4,28 @@ This directory separates current UI facts from per-change design history.
 
 ```text
 docs/design/frontend/
-├── FRONTEND-DESIGN.md                 # project-wide approved product/design baseline and Figma index
+├── FRONTEND-DESIGN.md                 # project-wide approved product/design baseline and design evidence index
 ├── FRONTEND-ENGINEERING-CONSTRAINTS.md # approved code/quality/budget/evidence policy
 ├── UI-CURRENT-STATE-TEMPLATE.md       # template; do not edit as a real UI record
 ├── ui/UI-xxx-<surface-or-flow>.md     # current effective state per stable UI surface/flow
+├── prototypes/DREV-*/
+│   ├── FRONTEND-SPEC.md               # interaction, state, copy and data mapping
+│   └── *.svg or *.html                # editable repository-native design source
 └── snapshots/UI-xxx/DREV-*/
-    ├── APPROVAL.md                    # immutable approval manifest
-    └── *.png                          # approved viewport/state exports
+    ├── APPROVAL.md                    # immutable approval and SHA-256 manifest
+    └── *.png                          # approved exact viewport/state exports
 ```
 
 ## Information model
 
-- **Frontend Design Baseline**: approved project-wide style, interaction conventions, resolution support, Figma file, and implementation constraints.
+- **Frontend Design Baseline**: approved project-wide style, interaction conventions, resolution support, design-source rules, and implementation constraints.
 - **Frontend Engineering Constraints**: approved component/state/form,
   accessibility, localization, browser, performance, security/privacy,
   data-visualization, observability, and verification policy.
 
 - **UI Current-State**: the final effective design and implementation mapping for one stable `UI-ID`.
 - **Task Spec**: one change's intent, proposed Design Revision, approval, scope, and verification.
-- **Approval Snapshot**: immutable local evidence of what was approved when a live Figma file can later change.
+- **Approval Snapshot**: immutable local evidence of the exact repository design revision that was approved.
 
 Do not concatenate old Specs to infer the current UI. Read
 `FRONTEND-DESIGN.md`, then the affected `ui/UI-*.md`; follow Change References
@@ -30,7 +33,7 @@ only for rationale or history.
 
 ## Baseline gate
 
-Before the first Figma prototype or frontend implementation, instantiate
+Before the first frontend design revision or implementation, instantiate
 `FRONTEND-DESIGN.md` and set exactly one state:
 
 - `Frontend scope: PRESENT`, `Baseline status: APPROVED`, plus
@@ -60,7 +63,7 @@ cross-page flow. Feature IDs and UI IDs may be many-to-many. Use a separate
 Design Revision such as `DREV-YYYYMMDD-N`; do not reuse a Task Spec revision as
 a Design Revision.
 
-## Figma and approval workflow
+## Repository-native design and approval workflow
 
 A user-visible frontend change follows:
 
@@ -69,11 +72,11 @@ resolve Feature ID and UI-ID
 → read approved baseline and UI current state
 → read approved frontend engineering constraints and quality budgets
 
-→ create/update the Figma prototype
-→ record file URL and node-specific URL(s)
+→ create/update FRONTEND-SPEC.md and editable SVG/self-contained HTML
 → export the required viewport/state snapshots
-→ record snapshot hashes and approval manifest
-→ obtain approval for Task Spec revision + Design Revision + nodes
+→ record source/export hashes and approval manifest
+→ validate paths, dimensions, hashes and approval state offline
+→ obtain approval for the exact Task Spec revision + Design Revision
 → implement only the approved design
 → verify behavior, visual state, responsive support, and accessibility
 → verify affected component/state/form, localization/browser/performance,
@@ -82,30 +85,31 @@ resolve Feature ID and UI-ID
 → semantically merge final facts into the UI current-state document
 ```
 
-A generic file URL is not enough when a node-specific URL can be produced.
-Figma is the editable design source; the local snapshot is the immutable
-approval evidence. A branch/version URL should also be recorded when available.
+The editable SVG or self-contained HTML under the DREV directory is the design
+source; local PNG exports and their SHA-256 values are the immutable approval
+evidence. Figma, external design URLs, node IDs and tool-availability waivers
+are not required and must not be introduced as a current gate.
 
 ## When no new prototype is required
 
-A new Figma revision is not required only when:
+A new Design Revision is not required only when:
 
 - a pure internal refactor changes no user-visible design or interaction;
 - build/test/type work changes no UI contract; or
 - code is being restored to an existing, unambiguous, still-approved Design Revision.
 
 The Task Spec still records `Frontend impact: no` or `Design change: no` and the
-reason. Restoring a prior design cites its `UI-ID`, Design Revision, node URL,
-and approval snapshot. If the target cannot be determined uniquely, re-enter
-the Figma gate.
+reason. Restoring a prior design cites its `UI-ID`, Design Revision, editable
+source and approval snapshot. If the target cannot be determined uniquely,
+re-enter the repository-native design gate.
 
 ## Change control
 
 Any implementation discovery that changes approved layout, flow, state,
 responsive behavior, accessibility semantics, or copy meaning requires a new
-Design Revision and approval before continuing. A one-time waiver is valid only
-when the user explicitly approves its scope, risk, Owner, and expiry; no Agent
-may silently bypass unavailable Figma access.
+Design Revision and approval before continuing. Missing editable sources,
+viewport/state exports, hashes or approval are blockers; external tool
+availability is not part of the decision.
 
 At closure, replace superseded body text in the UI current-state document. Add
 a Change Reference to the Task Spec, approval snapshot, commit/release, and

@@ -1,10 +1,11 @@
 # FEAT-001 — 家庭学习持续跟进系统 MVP
 
 - Status: `CURRENT`
-- Revision: `FEAT-STATE-20260912-TODAY-NEXT-REVIEW-01-LOCAL`
-- Last verified: 2026-09-12（BUG-021 本地修复完成：今日页在无到期项时直接展示服务端最近一个未来复习日、精确总量/分钟和完整换行知识点；首屏 5 项、续页每次最多 20 项，未来项只读。unit/integration 281 passed、4 个 MySQL 环境用例 skipped；其余 contract 10 passed，worker-readiness 8 项因既有 lifespan 退出等待未完成；前端 161 passed，10k 未来读路径、Ruff check、改动文件 format、Mypy 81 files、ESLint、架构 checked=3、小程序静态 15 pages/656671 bytes 通过。全仓 format 仍只被两个未修改既有文件阻断；Schema/Alembic 未变；原生三视口、iOS/Android、真实 MySQL 5.7 与部署未执行）
+- Revision: `FEAT-STATE-20260913-UNIFIED-REVIEW-BACKEND-02-LOCAL`
+- Last verified: 2026-09-13（`SPEC-UNIFIED-REVIEW-20260913-02` 后端与数据切片完成：初始 Prompt 包含档案、本次材料、同日已确认和完整当日计划；历史知识改为受控 Agent 索引检索；确认后按 new/today_review/history_item 新建或更新；Review 事件、最近复习日/次数投影、`curve_heat_v1` 和每天一个分钟预算计划已落地。unit/integration/contract 324 passed、4 个 MySQL 环境用例 skipped；performance+E2E 3 passed；前端 161 passed；Ruff check/format、Mypy 85 files、架构 checked=3、小程序静态 15 pages/656671 bytes 通过。可见 Today 仍使用既有 UI，等待 `DREV-20260913-UNIFIED-REVIEW-01` Figma 批准；受控 Ark 原图 A/B、真实 MySQL 5.7、三视口与部署未执行）
 - Source Spec: `specs/completed/FEAT-001-PUSH-KIDS-FINAL-SPEC.md` revision `SPEC-20260831-08`
-- Latest applied Spec: `specs/completed/BUG-021-TODAY-REVIEW-PLAN-VISIBILITY.md` revision `BUG-SPEC-20260912-REVIEW-VISIBILITY-01`
+- Latest implemented Spec: `specs/active/FEAT-001-UNIFIED-ITEM-REVIEW-STRATEGY.md` revision `SPEC-UNIFIED-REVIEW-20260913-02`（后端/迁移已验证，前端/受控云验证未完成）
+- Previous applied Spec: `specs/completed/BUG-021-TODAY-REVIEW-PLAN-VISIBILITY.md` revision `BUG-SPEC-20260912-REVIEW-VISIBILITY-01`
 - Previous applied Spec: `specs/completed/SPEC-20260911-SETTINGS-PROFILE-MANAGER-POLISH.md` revision `SPEC-20260911-SETTINGS-PROFILE-MANAGER-POLISH-01`（frontend only）
 - Current visible contract: `docs/design/frontend/prototypes/DREV-20260912-TODAY-NEXT-REVIEW-01/FRONTEND-SPEC.md`
 - Intermediate design artifact: `docs/design/frontend/prototypes/DREV-20260830-03/index.html`
@@ -50,6 +51,11 @@
 - Dashboard 还嵌入最近一个未来 learning Review 日期的前 5 项、该日精确总量和分钟；续页接口每次
   最多 20 项，游标绑定家庭、孩子、查询日与快照。今日页把它作为只读计划透明度展示，不提供反馈或
   带练；有到期项时仍以今日 Todo 为主。缺少该新增字段的旧服务端只显示今日到期事实，不声称未来为空。
+- Dashboard 的 `review_selection` 来自每天一个幂等物化的 `DailyReviewPlan`。候选为
+  `active=true AND due_date<=today`，最多读取120项，按 due_date、从未复习/last_reviewed_on、ID 排序，
+  再按孩子分钟预算装入；不固定限制6条。完成/部分/巩固/稍后只改变原计划项，当天不补题；未入选
+  积压不改 due_date、不写 Feedback。返回精确 `total_due/backlog_count/earliest_due`、计划/待复习数量
+  和分钟、policy revision。旧 `todo_groups` 分页合同继续保留，现有小程序尚未切换新字段。
 - 原图每次经家庭/孩子/提交/媒体关联验证；viewer 允许读取，被移除成员拒绝新读取。
   云端签发最长 60 秒 GET 链接，本地下载每次带身份；临时文件退出清理。真实云端双账号 owner
   隔离与 metaid 解码已于 2026-09-06 由用户确认验收通过；合法域名和设备矩阵仍按各自发布门禁记录。
@@ -76,37 +82,43 @@
   仍走单科目路径；`ConfirmationResult` 保留 `record_id`/`subject_id` 并新增 `records[]`。
 - 活动从既有活动记录入口保存。历史 activity Review 保留但退出 Todo、带练、AI Todo 候选、
   手动/匹配反馈和复习统计；原有活动记录、日程、练习频次与建议不变，历史学习记录不重写。
-- AI 输入包含本次图片/完整文字、实际发生时间、已填写年级、最多30个学习科目、分科目均衡
-  选取的最多30条已确认历史、最多100个已有知识身份/计划状态、目标上海自然日内最多200个已确认
-  条目，以及确认当天最多50个 active 且已到期/逾期的 learning Review 候选；历史发生日提交不带
-  今日 Review 候选，未来未到期 Review 也不作为可完成候选。
-  每科学习历史先取最近20条、按家长文字词面相关性排序后最多10条；知识先取最近30个，再按
-  词面相关性排序，最终跨科目轮流取样。照片相关性由模型阅读，未声称语义检索。
-  历史/知识出现必须不晚于本次学习；不推断教材、单元、掌握程度或下一课。
-- 部署规则在 `agent_processing/prompt.py` 以 `subject-grouped-incremental-20260911-04` 版本化，不读取
+- AI 首轮输入包含本次图片/完整文字、实际发生时间、已填写年级、最多30个已配置学习科目、目标上海
+  自然日内最多200个已确认条目，以及发生日为今天时的完整 `today_review_plan`；不一次性加载历史
+  LearningRecord 或 KnowledgeItem。今日计划和历史候选都只是匹配上下文，不是本次已复习的证据。
+- 未由同日/今日计划匹配的每个候选，模型先生成关键词调用 `search_history_items`。工具由服务端注入
+  family/child，只允许指定已配置科目，使用每 Item 最多32个确定性 exact/token/n-gram 索引词；单次
+  最多20项、总共最多20次/100个唯一候选/8轮。工具耗尽或语义不确定时不能猜成新知识。
+- 部署规则在 `agent_processing/prompt.py` 以 `child-aware-history-agent-20260913-04` 版本化，不读取
   个人SKILL目录。Ark 必须按当前 active learning subjects 返回固定键的 strict JSON Schema，条目明确
-  为 `new_learning` 或 `review`；Markdown fence、额外科目/字段和非法引用不再由正则修补。Provider
+  为 `new`、`today_review` 或 `history_item`；模型总输出最多20项、每项1–5分钟，`review_method`
+  只能是主动回忆/变式练习/解释应用。条目按同科目、同目标和同动作聚合为家长可确认的短复习单元；
+  Markdown fence、额外科目/字段和非法引用不再由正则修补。Provider
   失败后只携带脱敏校验代码最多重生成两次；最终非法输出终态为 `analysis_output_invalid`，不保存原文。
   模型 summary 必须是一句不超过 60 字、只描述本次实际学习/练习内容的简短事实；“没有识别到”
   “不包含”“未涉及”“无某科内容”等缺失项说明会以脱敏 `summary.exclusion_clause` 拒绝并进入同一
   有限重试。该限制不替代家长编辑和历史记录的 500 字合同，也不误伤“不规则图形”等真实概念。
   服务端再校验证据、历史/知识/Review引用并精确过滤同发生日重复项；语义正确性仍须家长核对。
-- 批内相同图片字节只传一次，证据保持原照片编号；最近100个同家庭同孩子的待确认/已确认
+- 批内相同图片字节只传一次，证据保持原照片编号；同家庭同孩子同一上海自然日的待确认/已确认
   提交内，相同文字+图片字节摘要触发重复材料提示并清空自动Todo匹配。摘要保存在草稿JSON的
   服务端元数据，不进模型/日志。无摘要旧记录、重新压缩/裁剪图片不保证识别；新学习事件仍可确认。
 - AI可关联候选已有知识ID，服务端校验并统一名称/类别，确认页可取消关联；确认再次检查身份
   与科目/名称/类别。同份记录重复知识只产生一次出现；多次学习仍保留各次发生时间和记录。
-- 上传材料中的复习内容必须引用服务端原始提案里同科目的当日到期/逾期 Todo，不能同时作为新学习条目。
-  家长确认时，快照仍有效的 Review 只写一条 `ReviewFeedback(complete)` 并按确定性策略推进，不创建
-  LearningRecord、KnowledgeOccurrence 或新 Review；已结束、已推进、改期到未来、删除或身份事实已变化
+- 上传材料中的复习内容必须引用服务端原始提案里的今日计划或工具返回的历史 Knowledge，不能同时
+  作为新学习条目。两个来源都必须有本次材料直接证据且只是可编辑候选；家长确认前零正式写入。
+  家长确认时，`new` 创建 LearningRecord/KnowledgeOccurrence/必要的 Knowledge/Review；
+  `today_review` 与 `history_item` 只写 ReviewFeedback 并更新原 Review 的最近复习日、次数、间隔、热度、
+  策略版本、状态版本和下次日期。历史 Review 可以提前推进、从 inactive 重启，或在缺失时重建；
+  已推进、删除或身份事实已变化
   的原始匹配安全跳过，不阻断同一事务里的其余复习和新学习，也不会重复推进。全部匹配均已变化的纯复习
   草稿仍确认成终态并返回空 `records[]` 和 `updated_reviews[]`。客户端注入或篡改的复习引用继续拒绝且
   零写入。
 - AI排队、分析中、失败或待确认均可人工确认，人工表单不自动匹配Todo；保存时才取消未完成Job，
   复用同一正式记录事务，来源标记人工录入。Worker成功/失败回写均校验状态、attempt和lease，
   丢弃人工确认、取消或新租约后的迟到结果；不把取消结果复活用于旧任务。
-- Review 日期只来自 1/3/7/14/30/60 天确定性策略；历史补录只安排当前检查。
-- `daily_budget_minutes` 只把全部到期内容分为“建议完成/有余力再做”，不改变到期日；家长端不展示或编辑该内部默认值。
+- Review 日期只来自确定性 `curve_heat_v1`：基础间隔1/3/7/14/30/60/90天，叠加有界热度衰减和实际
+  间隔修正；同日重复事件不重复推进曲线，历史补录不回退当前投影。`defer` 不更新复习事实。
+- `daily_budget_minutes` 不改变到期事实；新 `review_selection` 只以分钟为计划上限。任一 action 改变对应
+  计划项状态，刷新不会补出新一批；到期但未入选项第二天自然重新参与选择，不执行批量改期。
 - 固定活动提醒的星期、开始和结束时间是设置、日程和今日的同一事实源。
 - 设置只固定展示数学、语文、英语；其他学习科目与课外活动必须由家长从目录或自定义名称显式添加。课外活动默认空，取消添加或提醒编辑不产生补偿写入。
 - 设置页有在用孩子时不再在主内容重复展示学习档案列表；右上角孩子胶囊在单孩子时也可打开统一
@@ -143,6 +155,9 @@
   `503 worker_unavailable`；健康轮询恢复后为 200，正常分析不按耗时判死。明确禁用 Worker
   的开发/测试配置保留原 readiness；`/health/live` 保持进程存活语义。退避可被 stop 唤醒。
 - ReviewFeedback 与 CalendarEvent 创建都使用 family-scoped 幂等请求记录，网络重试不双推进或双建。
+  `POST /review-feedback-batches` 每批最多120项，先锁定并校验同家庭/孩子、active 且当前到期的全部 Review，
+  再全量写入或回滚；`review_feedback_batch_requests` 按 family + idempotency key 保存请求指纹和结果，
+  相同请求稳定重放，键复用到不同请求返回409。单项反馈接口保持兼容。
 - 活动建议按请求的历史目标日和目标周计算，不使用“当前周”污染历史结果。
 - `occurred_at` 与 `created_at` 分开保存；日历显示按 Asia/Shanghai 展开。
 - 数据库时间列统一先转 UTC 再保存，读取后带 UTC 时区；历史无时区值遵循既有 UTC 约定。
@@ -163,7 +178,7 @@
 | learning profiles/subjects | `children` module; profile creation is backend-only in the product UI |
 | submission lifecycle | `learning` module with local multipart or cloud ticket/claim multi-media finalize |
 | provider/jobs | `agent_processing`; Ark + test-only deterministic adapter |
-| deterministic review | pure `planning/domain.py` |
+| deterministic review | pure curve/heat event policy in `planning/policies.py`; pure minute-budget selection in `planning/selection.py`; materialized plans in planning service |
 | schedule/activity | `activities`; CalendarEvent CRUD + ActivitySchedule projection, plus read-only TravelArrangement calendar projection and cross-source conflict metadata |
 | dashboard/report | `reporting`; bounded Today snapshot pages and SQL-owned 7/30/100-day aggregates, including exact activity subject totals |
 | collection pagination | `platform.pagination`; opaque versioned scope/filter/snapshot cursors, per-page authorization and hard maximums |

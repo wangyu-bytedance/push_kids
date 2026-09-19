@@ -259,6 +259,12 @@ def test_dashboard_and_report_emit_no_window_or_cte_sql(app, client, family_head
         event.remove(engine, "before_cursor_execute", capture_select)
 
     assert dashboard.status_code == 200
+    selection = dashboard.json()["review_selection"]
+    assert selection["total_due"] == 30
+    assert selection["selected_count"] == 15
+    assert selection["backlog_count"] == 15
+    assert len(selection["sessions"]) == 1
+    assert len(selection["sessions"][0]["items"]) == 15
     assert first_todo.status_code == 200
     assert upcoming.status_code == 200
     assert report.status_code == 200

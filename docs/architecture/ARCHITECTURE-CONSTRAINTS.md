@@ -1,4 +1,4 @@
-# Architecture constraints — aligned with `ARCH-20260912-MYSQL57-01`
+# Architecture constraints — aligned with `ARCH-LOCAL-DESIGN-EVIDENCE-20260913-01`
 
 These constraints originated in `ARCH-20260830-01`; the enforceable rules below remain active under the current
 architecture revision. Historical `FDB`/`FEC`/`DREV-20260830-*` references are frontend design revisions, not
@@ -34,6 +34,11 @@ architecture-revision pointers.
   Every release that changes SQL MUST prove the affected paths on a real MySQL 5.7 server; SQLite compilation or
   MySQL 8 evidence cannot substitute. Enforced by `tests/integration/test_mysql_runtime.py`, the read-path
   performance/plan tests, and the Database support matrix in `ARCHITECTURE.md`.
+- `ARC-016 — Repository-native frontend design evidence`: user-visible frontend work MUST use an approved
+  Task Spec revision and Design Revision backed by a repository-local editable SVG or self-contained HTML
+  source, required viewport/state exports and a matching SHA-256 approval manifest. Figma, external design
+  URLs, node IDs and tool-availability waivers are not required. Repository previews do not replace native
+  Mini Program geometry, interaction, accessibility or three-viewport evidence.
 
 ## AI Native maintainability constraints
 
@@ -45,4 +50,4 @@ architecture-revision pointers.
 - `ARC-009 — Extensibility is explicit and bounded`: every variation axis MUST be classified open/closed/deferred; open points define registration, compatibility, isolation, resource, security, observability, test, deprecation, and removal rules.
 - `ARC-013 — Architecture confirmation before coding`: before initial production coding or a change to modules, shared abstractions, dependency direction, deployment topology, or extension points, the owner MUST approve the exact architecture/Spec revision.
 
-Exceptions require an approved Spec/ADR with owner, reason and expiry. The only active exception is the FEAT-001 Figma evidence waiver documented in `ARCHITECTURE.md`.
+Exceptions require an approved Spec/ADR with owner, reason and expiry. There is no active external-design-tool evidence exception.

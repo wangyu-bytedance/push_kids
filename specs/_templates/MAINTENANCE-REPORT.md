@@ -104,7 +104,7 @@ Repeat per finding.
 
 ## Frontend design governance health
 
-| UI ID/task | Baseline/Design Revision | Figma node valid? | Approval snapshot + hashes | UI current-state merged? | Code/design verification | Action |
+| UI ID/task | Baseline/Design Revision | Editable source valid? | Approval snapshot + hashes | UI current-state merged? | Code/design verification | Action |
 |---|---|---|---|---|---|---|
 | `[UI-xxx]` | `[FDB/DREV]` | yes/no/unknown | complete/gap | yes/no | current/drift/unknown | `[TODO]` |
 
@@ -115,8 +115,8 @@ performance budgets without comparable reports, expired security/privacy or
 quality deviations, duplicate UI toolchains, stale analytics schemas, and
 charts/tables without current data-integrity/accessibility evidence.
 
-Figma links without node IDs, missing approval manifests or hashes, unsupported
-claimed resolutions, stale style/interaction baselines, and code that diverges
+Missing editable sources, approval manifests or hashes, unsupported claimed
+resolutions, stale style/interaction baselines, and code that diverges
 from the current Design Revision. Keep approved evidence required for audit;
 remove unnecessary draft exports rather than accumulating every iteration.
 

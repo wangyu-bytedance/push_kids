@@ -55,6 +55,15 @@ class FamilyRepository:
         return db.scalar(statement)
 
     @staticmethod
+    def invite_by_active_code_hash(db: Session, code_hash: str, *, lock: bool = False):
+        statement: Select[tuple[FamilyInvite]] = select(FamilyInvite).where(
+            FamilyInvite.active_code_hash == code_hash
+        )
+        if lock:
+            statement = statement.with_for_update()
+        return db.scalar(statement)
+
+    @staticmethod
     def active_invites(db: Session, family_id: str) -> list[FamilyInvite]:
         return list(
             db.scalars(

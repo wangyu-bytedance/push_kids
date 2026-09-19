@@ -6,24 +6,25 @@
 
 - Frontend scope: PRESENT
 - Baseline status: APPROVED
-- Baseline revision: FDB-20260906-03
+- Baseline revision: FDB-20260913-04
 - Owner: 产品负责人（用户）
 - Proposed by: Codex（FDB-20260830-01）、Aime（FDB-20260906-02、FDB-20260906-03）
 - Approved by: 产品负责人（用户）
-- Approved at: 2026-09-06
-- Approval evidence: 用户 2026-09-06 指令「最终需要的效果是 ui=你现在的设计，并功能是完整的」；同日指令「完全重新设计. 我只要最好的效果」→「按照这个方案 实现代码」（FDB-20260906-03）
-- Last verified: 2026-09-06（PKDS-2.0 本地实现，自动化检查通过 + 三视口近似渲染走查通过；三视口原生几何证据仍为 NOT_RUN）
+- Approved at: 2026-09-13
+- Approval evidence: FDB-20260906-03 的视觉/交互批准继续有效；用户 2026-09-13 批准
+  `GOV-SPEC-LOCAL-DESIGN-EVIDENCE-20260913-01`，将证据源迁移为仓库原生文件
+- Last verified: 2026-09-13（仓库原生设计证据治理、模板和离线校验器通过；PKDS-2.0 视觉/交互未改变，三视口原生几何证据仍为 NOT_RUN）
 - Applies to: 家长使用的微信小程序；未来手机 Web 应保持相同信息架构
 - Related current implementation Spec: `specs/completed/SPEC-20260906-PKDS-03-PAPER-SPROUT-UI.md` revision `SPEC-20260906-PKDS-03`（前序：`SPEC-20260906-PKDS-01`）
-- Superseded baseline revision: `FDB-20260830-01`、`FDB-20260906-02`（信息架构与产品立场沿用，视觉 token 与组件层被 PKDS-2.0「纸 · 芽」取代）
-- Frontend engineering constraints: approved `FEC-20260906-04`
+- Superseded baseline revision: `FDB-20260830-01`、`FDB-20260906-02`、`FDB-20260906-03`（本 revision 不改变 PKDS-2.0 视觉/交互，只替换设计证据方式）
+- Frontend engineering constraints: approved `FEC-20260913-LOCAL-DESIGN-EVIDENCE-01`
 
 本 baseline 的可见合同由 `DREV-20260906-PKDS-03`（PKDS-2.0「纸 · 芽」）定义，
 落地记录见 `specs/completed/SPEC-20260906-PKDS-03-PAPER-SPROUT-UI.md`，三视口走查产物由
 `node tools/preview/render.js` + `python3 tools/preview/shoot.py` 重放到 `dist/ui-preview/`。
 `DREV-20260906-PKDS-01` 的信息架构、状态四件套与产品立场继续有效，其色彩/圆角/阴影/图标层
 降级为设计历史；`DREV-20260830-03`、`DREV-20260905-UX-03`、`DREV-20260905-UX-04` 同为设计历史。
-Figma Starter 限额 waiver 见架构文档和 BUG-010 Spec，仍在公开发布前到期。
+旧 Figma 和 waiver 记录仅作为当时流程的历史证据；当前设计与发布不依赖外部设计工具。
 
 ### PKDS-2.0「纸 · 芽」视觉基线要点
 
@@ -48,11 +49,11 @@ Figma Starter 限额 waiver 见架构文档和 BUG-010 Spec，仍在公开发布
 - 科目归类由服务端确定性分组给出、家长可改：一次拍到多个科目分别成档，新增科目必须家长显式同意
   （沿用 `BUG-013`，PKDS-2.0 只负责它的视觉呈现）。
 
-## Figma sources and ownership
+## Repository-native design sources and ownership
 
-Figma product file、设计 token、批准证据及其 Owner 见下文“Figma sources”表。
-FEAT-001 的 waiver 只覆盖既有 MVP；家庭协作新增界面必须建立新的 UI-ID、
-node-specific Figma URL、Design Revision 和 approval snapshot 后才能实现。
+可编辑设计源、设计 token、批准证据及其 Owner 见下文“Repository-native sources”表。
+任何新增界面必须建立 UI-ID、仓库内 Design Revision、精确 viewport/state exports 和
+approval snapshot，获得 Task Spec revision + DREV 的明确批准后才能实现。
 
 ## Style consistency baseline
 
@@ -76,7 +77,7 @@ MVP 支持手机竖屏 320×568、390×844、430×932 三个逻辑视口，安�
 
 ## Frontend implementation and quality baseline
 
-实现必须同时遵循批准的 `FEC-20260905-02`。Figma/批准交互稿决定可见合同，FEC 决定组件、
+实现必须同时遵循批准的 `FEC-20260913-LOCAL-DESIGN-EVIDENCE-01`。仓库内获批 DREV 决定可见合同，FEC 决定组件、
 状态、表单、可访问性、性能、安全隐私、AI 内容和证据要求；两者互不替代。
 
 ## 2. 设计立场
@@ -114,16 +115,17 @@ MVP 支持手机竖屏 320×568、390×844、430×932 三个逻辑视口，安�
   知识标签和报表建立独立语义组件。
 - 不为了视觉差异重写微信用户已经熟悉的确认、取消、返回和授权方式。
 
-### Figma sources
+### Repository-native sources
 
-| Purpose | Figma source | Owner | Notes |
+| Purpose | Repository source | Owner | Notes |
 |---|---|---|---|
-| Product UI | [Figma file](https://www.figma.com/design/FAyfmjNrA3btWztwyxI6Zj) | 产品负责人 | Starter 限额导致节点未完成，使用 scoped waiver |
+| Product UI | `prototypes/<DREV>/FRONTEND-SPEC.md` + editable SVG/self-contained HTML | 产品负责人 | 当前可编辑、版本化设计源 |
 | Design tokens | `apps/miniprogram/styles/tokens.wxss` | 产品负责人 | PKDS-2.0 语义值唯一来源；PKDS-1.0 原件 `prototypes/DREV-20260906-PKDS-01/tokens.reference.wxss` 降级为设计历史 |
 | Design components | `apps/miniprogram/styles/atoms.wxss` | 产品负责人 | 组件类唯一来源；页面 wxss 只写本页几何 |
 | Design icons | `apps/miniprogram/styles/icons.wxss` | 产品负责人 | 由 `tools/gen_icon_styles.py` 生成，禁止手工编辑；TabBar 位图由 `tools/gen_tabbar_icons.py` 生成 |
 | 三视口走查 | `tools/preview/` → `dist/ui-preview/` | 产品负责人 | WXML→HTML 近似渲染 + 320/390/430 截图；不能替代原生节点几何验收 |
-| Screen-level spec | `prototypes/DREV-20260906-PKDS-01/FRONTEND-SPEC.md` | 产品负责人 | 39 屏逐屏规格与参考屏，Figma 受限期间的可见合同 |
+| Approval evidence | `snapshots/<UI-ID>/<DREV>/APPROVAL.md` + PNG exports | 产品负责人 | Task Spec/DREV identity、尺寸和 SHA-256 不可变清单 |
+| Screen-level spec | `prototypes/DREV-20260906-PKDS-01/FRONTEND-SPEC.md` | 产品负责人 | 39 屏逐屏规格与参考屏；旧 Figma 说明只作历史记录 |
 | WeUI reference | 微信官方 WeUI / weui-wxss | 微信设计团队 | 参考平台行为，不直接决定业务视觉 |
 
 ### 参考来源
@@ -351,9 +353,9 @@ Todo 卡片必须包含：
 
 | ID | Device/use | Logical viewport | Orientation | Required states | Evidence after approval |
 |---|---|---|---|---|---|
-| VP-MIN | 小屏边界 | 320×568 | portrait | happy、long-content、keyboard、error | Figma + device/E2E |
-| VP-PRIMARY | 主设计基线 | 390×844 | portrait | 全部核心状态 | Figma + visual/E2E |
-| VP-WIDE | 大屏手机 | 430×932 | portrait | happy、report、bottom-sheet | Figma + visual/E2E |
+| VP-MIN | 小屏边界 | 320×568 | portrait | happy、long-content、keyboard、error | local DREV export + device/E2E |
+| VP-PRIMARY | 主设计基线 | 390×844 | portrait | 全部核心状态 | local DREV export + visual/E2E |
+| VP-WIDE | 大屏手机 | 430×932 | portrait | happy、report、bottom-sheet | local DREV export + visual/E2E |
 
 ### 响应规则
 
@@ -389,7 +391,7 @@ Todo 卡片必须包含：
 | UI-008 | 活动日程与练习记录 | FEAT-001 | proposed DREV-20260830-01 | not prototyped |
 | UI-009 | 家庭与成员 | FEAT-002 | current DREV-20260906-PKDS-01；proposed DREV-20260906-MULTI-FAMILY-02 | current local；成员资料/退出扩展 pending |
 | UI-011 | 提醒设置与微信授权入口 | FEAT-003 | DREV-20260906-PKDS-03 | implemented locally, native matrix pending |
-| UI-014 | 家庭与孩子上下文切换 | FEAT-002 | proposed DREV-20260906-MULTI-FAMILY-02 | proposed, Figma/approval pending |
+| UI-014 | 家庭与孩子上下文切换 | FEAT-002 | proposed DREV-20260906-MULTI-FAMILY-02 | proposed, repository design approval pending |
 | UI-015 | 学习档案管理与切换入口 | FEAT-005 | DREV-20260906-CHILD-01 | implemented locally, matrix pending |
 
 ## 12. Review decisions requested

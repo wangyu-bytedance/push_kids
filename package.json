@@ -6,6 +6,7 @@
     "test": "node --test tests/frontend/*.test.js",
     "lint:miniapp": "eslint apps/miniprogram tests/frontend --ext .js",
     "check:miniapp": "python3 tools/validate_miniprogram.py",
+    "check:design-evidence": "python3 tools/validate_design_evidence.py --check-current-policy",
     "release:version": "python3 tools/release/miniprogram_version.py current",
     "release:version:next": "python3 tools/release/miniprogram_version.py next",
     "release:version:bump": "python3 tools/release/miniprogram_version.py bump"

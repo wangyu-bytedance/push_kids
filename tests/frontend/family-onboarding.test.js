@@ -29,6 +29,7 @@ function loadOnboarding(request, refreshBootstrap = async () => ({ state: "unbou
   let definition;
   const calls = [];
   const relaunches = [];
+  const navigations = [];
   const app = {
     globalData: {},
     refreshBootstrap,
@@ -48,7 +49,7 @@ function loadOnboarding(request, refreshBootstrap = async () => ({ state: "unbou
     Page(value) { definition = value; },
     getApp: () => app,
     wx: {
-      showToast() {}, reLaunch({ url }) { relaunches.push(url); }, navigateTo() {},
+      showToast() {}, reLaunch({ url }) { relaunches.push(url); }, navigateTo({ url }) { navigations.push(url); },
       setClipboardData() {}, showModal() {}, stopPullDownRefresh() {}
     }
   }, { filename });
@@ -60,7 +61,7 @@ function loadOnboarding(request, refreshBootstrap = async () => ({ state: "unbou
       if (callback) callback();
     }
   };
-  return { page, calls, relaunches };
+  return { page, calls, relaunches, navigations };
 }
 
 test("ordinary launch enters the family bootstrap gate before business tabs", async () => {
@@ -134,8 +135,21 @@ test("join preview explains approval and does not expose family records", () => 
   assert.match(onboarding, /申请已发送/);
   const joinLogic = source("pages/family-join/index.js");
   assert.match(joinLogic, /request\("\/family-invites\/preview"/);
-  assert.match(joinLogic, /data: \{ token: this\.token \}/);
+  assert.match(joinLogic, /data: \{ token: this\.credential \}/);
   assert.doesNotMatch(joinLogic, /family-invites\/\$\{this\.token\}/);
+});
+
+test("manual family join accepts only six digits and carries the code to preview", () => {
+  const { page, navigations } = loadOnboarding(async () => ({}));
+  page.setField({ currentTarget: { dataset: { field: "inviteCode" } }, detail: { value: "12a34-5678" } });
+  assert.equal(page.data.inviteCode, "123456");
+  page.openCode();
+  assert.deepEqual(navigations, ["/pages/family-join/index?code=123456"]);
+
+  const onboarding = source("pages/family-onboarding/index.wxml");
+  assert.match(onboarding, /type="number"/);
+  assert.match(onboarding, /maxlength="6"/);
+  assert.match(onboarding, /输入 6 位家庭邀请码/);
 });
 
 test("manager pages expose explicit role choices and last-manager errors stay server-owned", () => {
@@ -160,12 +174,16 @@ test("member management uses a detail sheet and never offers self removal", () =
   assert.match(members, /<view class="member-row"/);
 });
 
-test("invite and approval UI uses request codes without displaying raw tokens", () => {
+test("manager UI exposes family invite codes and labels post-application codes as verification codes", () => {
   const members = source("pages/family-members/index.wxml");
   const requests = source("pages/family-requests/index.wxml");
+  const memberLogic = source("pages/family-members/index.js");
   const requestLogic = source("pages/family-requests/index.js");
   assert.doesNotMatch(members, /shareToken|邀请口令/);
-  assert.match(requests, /申请码 \{\{item\.request_code\}\}/);
+  assert.match(members, /6 位家庭邀请码/);
+  assert.match(members, /\{\{inviteCodeDisplay\}\}/);
+  assert.match(memberLogic, /invite\.invite_code/);
+  assert.match(requests, /申请核验码/);
   assert.match(requestLogic, /确认同意申请/);
   assert.match(requestLogic, /if \(this\.data\.actingId\) return/);
 });

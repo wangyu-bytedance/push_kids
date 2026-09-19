@@ -32,16 +32,21 @@
   <block wx:else>
     <view class="pk-card share-card mt3" wx:if="{{shareReady}}">
       <text class="share-title">邀请已准备好</text>
-      <text class="share-sub">24 小时内有效。对方提交申请后，还需要你确认。</text>
+      <block wx:if="{{inviteCode}}">
+        <text class="share-sub">6 位家庭邀请码</text>
+        <text class="invite-code tnum">{{inviteCodeDisplay}}</text>
+        <text class="share-sub">24 小时内有效。对方提交申请后，还需要你确认。</text>
+      </block>
+      <text class="share-sub" wx:else>当前服务暂不支持手动邀请码，可以先使用微信邀请。</text>
       <view class="btn-row mt3">
-        <view class="btn md secondary" aria-role="button" aria-label="复制邀请" bindtap="copyInvite">
-          <view class="ico ico-note-pri sm"></view><text>复制邀请</text>
+        <view class="btn md secondary" wx:if="{{inviteCode}}" aria-role="button" aria-label="复制家庭邀请码" bindtap="copyInviteCode">
+          <view class="ico ico-note-pri sm"></view><text>复制邀请码</text>
         </view>
         <button class="btn md" open-type="share">
           <view class="ico ico-share-inv sm"></view><text>微信邀请</text>
         </button>
       </view>
-      <view class="help">复制后发给家人，对方在「申请加入家庭」里粘贴就能找到这个家庭。</view>
+      <view class="help">家人可以输入邀请码，或直接打开微信邀请；提交后仍需你确认。</view>
     </view>
 
     <view class="request-entry" wx:if="{{isManager}}" aria-role="button" aria-label="查看加入申请" bindtap="openRequests">

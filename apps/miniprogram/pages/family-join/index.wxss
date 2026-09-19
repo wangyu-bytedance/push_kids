@@ -11,7 +11,7 @@
 .family-card .fam-sub { display: block; margin-top: 4rpx; font-size: 13px; line-height: 1.45; color: var(--pk-ink-2); }
 .family-card .fam-note { display: block; margin-top: 24rpx; font-size: 13px; line-height: 1.5; color: var(--pk-ink-2); }
 
-/* 申请码卡与吸底条 */
+/* 申请核验码卡与吸底条 */
 .applied-empty { padding: 64rpx 48rpx 32rpx; }
 .pk-empty .em.att { background: var(--pk-attention-bg); }
 .code-card { text-align: center; }

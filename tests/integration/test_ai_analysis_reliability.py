@@ -147,6 +147,45 @@ def test_duplicate_matches_advance_once_and_all_stale_draft_closes_without_advan
         assert db.get(LearningSubmission, keys[1]).state == "confirmed"
 
 
+def test_parent_confirmation_advances_an_active_review_before_its_due_date(
+    client,
+    app,
+    child,
+    family_headers,
+):
+    first = draft(client, app, family_headers, child["id"])
+    review_id = confirm(client, family_headers, first).json()["review_item_ids"][0]
+    future_due = local_date() + timedelta(days=10)
+    with app.state.database.session_factory() as db:
+        review = db.get(ReviewItem, review_id)
+        review.due_date = future_due
+        db.commit()
+        match = {
+            "review_id": review_id,
+            "knowledge_name": "两位数进位加法",
+            "subject_name": "数学",
+            "step": review.step,
+            "due_date": future_due.isoformat(),
+            "evidence": "家长确认今天提前复习",
+        }
+    body = proposal()
+    body["knowledge_points"] = []
+    body["todo_matches"] = [match]
+    key = draft(client, app, family_headers, child["id"], body=body)
+
+    with app.state.database.session_factory() as db:
+        assert db.scalar(select(func.count(ReviewFeedback.id))) == 0
+    result = confirm(client, family_headers, key, body)
+
+    assert result.status_code == 200
+    assert [item["review_id"] for item in result.json()["updated_reviews"]] == [review_id]
+    with app.state.database.session_factory() as db:
+        review = db.get(ReviewItem, review_id)
+        assert review.step == 1
+        assert review.due_date == local_date() + timedelta(days=3)
+        assert db.scalar(select(func.count(ReviewFeedback.id))) == 1
+
+
 def test_stale_review_is_skipped_while_current_review_and_new_learning_are_confirmed(
     client,
     app,
@@ -400,7 +439,7 @@ def test_existing_knowledge_reference_is_scoped_and_consistent(client, app, chil
     assert confirm(client, family_headers, key, body).status_code == 400
 
 
-def test_context_balances_subjects_and_excludes_future_foreign_and_unconfirmed(
+def test_initial_context_excludes_historical_records_from_the_prompt(
     client,
     app,
     child,
@@ -467,9 +506,7 @@ def test_context_balances_subjects_and_excludes_future_foreign_and_unconfirmed(
         db.flush()
         result = build_analysis_input(db, current, [])
         assert result.grade == "小学二年级" and result.occurred_at == now.isoformat()
-        assert {item.subject_name for item in result.recent_learning} == {"数学", "语文"}
-        assert len(result.recent_learning) == 11
-        assert all(
-            item.summary not in {"future", "other", "未确认输入"} for item in result.recent_learning
-        )
+        assert set(result.existing_subjects) == {"数学", "语文"}
+        assert result.recent_learning == []
+        assert result.existing_knowledge == []
         db.rollback()

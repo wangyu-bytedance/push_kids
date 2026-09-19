@@ -1,6 +1,6 @@
 # FEAT-001 — 确定性自适应复习策略 V2
 
-- Status: `READY_FOR_REVIEW`
+- Status: `CANCELLED`
 - Risk: `R3`
 - Spec owner: 产品负责人（用户）
 - Implementer: `TBD`
@@ -10,8 +10,8 @@
 - Last updated: 2026-09-07
 - Target release: `TBD`
 - Spec revision: `SPEC-REVIEW-V2-20260907-01`
-- User confirmation: `PENDING；用户已要求设计，但尚未确认本具体 revision，不授权生产实现`
-- Additional R2/R3 approval: `PENDING`
+- User confirmation: `CANCELLED；2026-09-13 用户要求把 Item 生成、每日复习和复习策略统一整理，本草案由 SPEC-UNIFIED-REVIEW-20260913-01 取代`
+- Additional R2/R3 approval: `N/A — 未进入实现审批`
 - Affected Feature IDs: `existing FEAT-001`
 - Feature current-state documents: `docs/domain/features/FEAT-001-push-kids-mvp.md`
 - Feature baseline revision: `FEAT-STATE-20260906-PKDS-04-AI-INCREMENT`
@@ -687,13 +687,14 @@ flowchart TB
 - [ ] Production implementation and all required verification complete.
 - [ ] FEAT/UI current-state documents contain verified final facts.
 
-Final status: `READY_FOR_REVIEW — implementation blocked by explicit Spec and frontend design approval gates`
+Final status: `CANCELLED — superseded before approval by SPEC-UNIFIED-REVIEW-20260913-01`
 
 ## 18. Revision history
 
 | Date | Change | Reason | Approved by |
 |---|---|---|---|
 | 2026-09-07 | Initial complete V2 design | User requested a more complete review curve and competitor documentation | N/A |
+| 2026-09-13 | Cancelled and moved to `specs/rejected/` | User requested one unified Item generation, daily review and scheduling Spec without parent pace choices | `SPEC-UNIFIED-REVIEW-20260913-01` supersedes this draft |
 
 ## 19. Scientific and product references
 

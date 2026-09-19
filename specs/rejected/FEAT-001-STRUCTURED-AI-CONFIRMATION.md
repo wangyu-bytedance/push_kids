@@ -1,6 +1,6 @@
 # FEAT-001 — AI 学习内容结构化确认
 
-- Status: `IMPLEMENTING_BACKEND_FRONTEND_BLOCKED`
+- Status: `CANCELLED`
 - Risk: `R2`
 - Spec owner: 产品负责人（用户）
 - Implementer: 批准后分配
@@ -16,6 +16,9 @@
 - Feature current-state documents: `docs/domain/features/FEAT-001-push-kids-mvp.md`
 - Feature baseline revision: `FEAT-STATE-20260905-HISTORY-01-LOCAL`
 - Feature merge owner: 实现验证者
+
+- Superseded on 2026-09-13 by approved `SPEC-UNIFIED-REVIEW-20260913-02`. The verified backend
+  confirmation invariants remain in current state; the unimplemented historical frontend proposal is cancelled.
 
 ## Frontend Design Impact and Figma Approval
 
@@ -700,3 +703,4 @@ Final status: `BACKEND_GRAY_RELEASED_FRONTEND_DESIGN_BLOCKED`
 | Date | Change | Reason | Approved by |
 |---|---|---|---|
 | 2026-09-06 | 新增 `SPEC-AI-OUTPUT-20260906-01` | 将 AI 长文字提案改为短列表优先，同时保留原子知识与人工确认语义 | N/A |
+| 2026-09-13 | 标记为 `CANCELLED` 并归档 | 结构化确认目标已并入统一 Item/Review Agent Spec；旧独立前端方案不再实施 | 产品负责人（统一 Spec 批准） |

@@ -27,6 +27,17 @@
 .kn-card .link-btn.dan { color: var(--pk-danger); min-height: 72rpx; }
 .kn-card .pk-input { background: var(--pk-surface); }
 
+/* 三类条目只读说明：文字与色调共同表达，不增加分类选择器。 */
+.kind-heading { min-width: 0; flex-wrap: wrap; }
+.item-kind { flex: none; padding: 4rpx 12rpx; border: 1rpx solid var(--pk-line); border-radius: 999rpx; background: var(--pk-surface-sunken); color: var(--pk-ink-2); font-size: 12px; line-height: 1.5; font-weight: 600; }
+.item-kind.new { border-color: var(--pk-primary-hairline); background: var(--pk-primary-tint); color: var(--pk-primary); }
+.item-kind.today { border-color: var(--pk-attention-line); background: var(--pk-attention-bg); color: var(--pk-attention); }
+.item-kind.history { border-color: var(--pk-line); background: var(--pk-surface-sunken); color: var(--pk-ink-2); }
+.kind-effect { margin-top: 16rpx; padding: 16rpx 20rpx; border-radius: var(--pk-r-sm); background: var(--pk-primary-wash); color: var(--pk-ink-2); font-size: 13px; line-height: 1.55; }
+.kind-effect.today { background: var(--pk-attention-bg); }
+.kind-effect.history { background: var(--pk-surface-sunken); }
+.kind-copy { margin-top: 8rpx; color: var(--pk-ink-2); }
+
 /* 知识点所属科目：一行一个触控目标，点开就是科目选择器 */
 .kn-sub { display: flex; align-items: center; gap: 16rpx; min-height: 88rpx; margin-top: 16rpx; padding: 0 24rpx; box-sizing: border-box; border: var(--pk-border); border-radius: var(--pk-r-md); background: var(--pk-surface); }
 .kn-sub .ks-l { flex: none; font-size: 13px; font-weight: 600; color: var(--pk-ink-3); }

@@ -5,11 +5,14 @@ from datetime import UTC, datetime, timedelta
 from fastapi.testclient import TestClient
 from push_kids.persistence.models import (
     AgentJob,
+    DailyReviewPlanItem,
     KnowledgeItem,
     KnowledgeOccurrence,
+    KnowledgeSearchTerm,
     LearningRecord,
     LearningSubmission,
     ReviewFeedback,
+    ReviewFeedbackBatchRequest,
     ReviewFeedbackRequest,
     ReviewItem,
 )
@@ -90,6 +93,93 @@ def test_ai_generation_omits_same_day_duplicate_knowledge(
     assert occurrence_count == 1
 
 
+def test_today_review_classification_updates_review_and_plan_after_confirmation(
+    client, app, family_headers, child
+) -> None:
+    first = _submit_and_process(
+        client, app, family_headers, child["id"], "数学，进位加法", days_ago=4
+    )
+    confirmed = _confirm(client, family_headers, first)
+    dashboard = client.get(
+        f"/api/v1/children/{child['id']}/dashboard", headers=family_headers
+    ).json()
+    planned = [
+        item
+        for session in dashboard["review_selection"]["sessions"]
+        for item in session["items"]
+        if item["knowledge_name"] == "进位加法"
+    ]
+    assert len(planned) == 1
+
+    second = _submit_and_process(
+        client, app, family_headers, child["id"], "今天复习进位加法", days_ago=0
+    )
+    assert second["proposal"]["todo_matches"][0]["match_kind"] == "today_review"
+    review_id = planned[0]["review_id"]
+    with app.state.database.session_factory() as db:
+        before = db.get(ReviewItem, review_id)
+        assert before.review_count == 0 and before.last_reviewed_on is None
+    _confirm(client, family_headers, second)
+    with app.state.database.session_factory() as db:
+        review = db.get(ReviewItem, review_id)
+        plan_item = db.scalar(
+            select(DailyReviewPlanItem).where(DailyReviewPlanItem.review_item_id == review_id)
+        )
+        assert review.review_count == 1
+        assert review.last_reviewed_on == local_date()
+        assert review.due_date > local_date()
+        assert review.policy_revision == "curve_heat_v1"
+        assert plan_item.state == "complete"
+        assert db.scalar(select(func.count(KnowledgeItem.id))) == len(
+            confirmed["knowledge_item_ids"]
+        )
+
+
+def test_plan_outside_history_review_uses_search_tool_and_does_not_duplicate_knowledge(
+    client, app, family_headers, child
+) -> None:
+    first = _submit_and_process(
+        client, app, family_headers, child["id"], "英语单词 animal", days_ago=0
+    )
+    confirmed = _confirm(client, family_headers, first)
+    knowledge_id = next(
+        item_id
+        for item_id in confirmed["knowledge_item_ids"]
+        if _knowledge_name(app, item_id) == "英语单词 animal"
+    )
+    with app.state.database.session_factory() as db:
+        before_count = int(db.scalar(select(func.count(KnowledgeItem.id))) or 0)
+        assert db.scalar(
+            select(func.count(KnowledgeSearchTerm.id)).where(
+                KnowledgeSearchTerm.knowledge_item_id == knowledge_id
+            )
+        )
+
+    second = _submit_and_process(
+        client,
+        app,
+        family_headers,
+        child["id"],
+        "今天复习英语单词 animal",
+        days_ago=0,
+    )
+    match = next(
+        item for item in second["proposal"]["todo_matches"] if item["knowledge_id"] == knowledge_id
+    )
+    assert match["match_kind"] == "history_item"
+    _confirm(client, family_headers, second)
+    with app.state.database.session_factory() as db:
+        review = db.scalar(select(ReviewItem).where(ReviewItem.knowledge_item_id == knowledge_id))
+        assert int(db.scalar(select(func.count(KnowledgeItem.id))) or 0) == before_count
+        assert review.review_count == 1
+        assert review.last_reviewed_on == local_date()
+
+
+def _knowledge_name(app, knowledge_id: str) -> str:
+    with app.state.database.session_factory() as db:
+        return str(db.get(KnowledgeItem, knowledge_id).name)
+
+
 def test_review_feedback_updates_dashboard(client, app, family_headers, child) -> None:
     submission = _submit_and_process(client, app, family_headers, child["id"], "语文，古诗静夜思")
     confirmed = _confirm(client, family_headers, submission)
@@ -124,6 +214,99 @@ def test_review_feedback_retry_is_idempotent(client, app, family_headers, child)
     assert mismatch.status_code == 409
 
 
+def test_daily_selection_is_bounded_stable_and_batch_feedback_does_not_refill(
+    client, app, family_headers, child
+) -> None:
+    submission = _submit_and_process(
+        client,
+        app,
+        family_headers,
+        child["id"],
+        "数学，知识一，知识二，知识三，知识四，知识五",
+    )
+    _confirm(client, family_headers, submission)
+
+    first = client.get(f"/api/v1/children/{child['id']}/dashboard", headers=family_headers)
+    repeated = client.get(f"/api/v1/children/{child['id']}/dashboard", headers=family_headers)
+    selection = first.json()["review_selection"]
+    assert selection == repeated.json()["review_selection"]
+    assert selection["selected_count"] == 5
+    assert selection["selected_minutes"] <= child["daily_budget_minutes"]
+    assert len(selection["sessions"]) == 1
+    selected_ids = [item["review_id"] for item in selection["sessions"][0]["items"]]
+
+    batch_headers = {**family_headers, "Idempotency-Key": "daily-batch-20260913-001"}
+    payload = {
+        "child_id": child["id"],
+        "items": [{"review_id": review_id, "action": "complete"} for review_id in selected_ids[:2]],
+    }
+    batch = client.post("/api/v1/review-feedback-batches", headers=batch_headers, json=payload)
+    replay = client.post("/api/v1/review-feedback-batches", headers=batch_headers, json=payload)
+    assert batch.status_code == replay.status_code == 200
+    assert batch.json()["replayed"] is False
+    assert replay.json()["replayed"] is True
+    assert replay.json()["items"] == batch.json()["items"]
+
+    refreshed = client.get(
+        f"/api/v1/children/{child['id']}/dashboard", headers=family_headers
+    ).json()["review_selection"]
+    remaining_ids = [
+        item["review_id"] for session in refreshed["sessions"] for item in session["items"]
+    ]
+    assert refreshed["today_feedback_count"] == 2
+    assert remaining_ids == selected_ids[2:]
+    with app.state.database.session_factory() as db:
+        assert db.scalar(select(func.count(ReviewFeedback.id))) == 2
+        assert db.scalar(select(func.count(ReviewFeedbackBatchRequest.id))) == 1
+
+    mismatch = client.post(
+        "/api/v1/review-feedback-batches",
+        headers=batch_headers,
+        json={
+            "child_id": child["id"],
+            "items": [{"review_id": selected_ids[0], "action": "reinforce"}],
+        },
+    )
+    assert mismatch.status_code == 409
+
+
+def test_batch_feedback_is_family_scoped_and_rolls_back_all_items_on_conflict(
+    client, app, family_headers, child
+) -> None:
+    submission = _submit_and_process(
+        client,
+        app,
+        family_headers,
+        child["id"],
+        "数学，知识甲，知识乙",
+    )
+    review_ids = _confirm(client, family_headers, submission)["review_item_ids"]
+    with app.state.database.session_factory() as db:
+        db.get(ReviewItem, review_ids[1]).due_date = local_date() + timedelta(days=1)
+        db.commit()
+    payload = {
+        "child_id": child["id"],
+        "items": [
+            {"review_id": review_ids[0], "action": "complete"},
+            {"review_id": review_ids[1], "action": "complete"},
+        ],
+    }
+    headers = {**family_headers, "Idempotency-Key": "atomic-conflict-batch-001"}
+
+    conflict = client.post("/api/v1/review-feedback-batches", headers=headers, json=payload)
+    denied = client.post(
+        "/api/v1/review-feedback-batches",
+        headers={"X-Family-ID": "family-other", "Idempotency-Key": "foreign-batch-001"},
+        json=payload,
+    )
+
+    assert conflict.status_code == 409
+    assert denied.status_code == 404
+    with app.state.database.session_factory() as db:
+        assert db.scalar(select(func.count(ReviewFeedback.id))) == 0
+        assert db.get(ReviewItem, review_ids[0]).step == 0
+
+
 def test_ai_todo_match_only_completes_after_parent_confirmation(
     client, app, family_headers, child
 ) -> None:
@@ -138,7 +321,9 @@ def test_ai_todo_match_only_completes_after_parent_confirmation(
             if knowledge.name == "进位加法":
                 review.due_date = local_date()
         db.commit()
-    second = _submit_and_process(client, app, family_headers, child["id"], "进位加法", days_ago=0)
+    second = _submit_and_process(
+        client, app, family_headers, child["id"], "今天复习进位加法", days_ago=0
+    )
     matches = second["proposal"]["todo_matches"]
     assert [item["knowledge_name"] for item in matches] == ["进位加法"]
     before = client.get(f"/api/v1/children/{child['id']}/dashboard", headers=family_headers)

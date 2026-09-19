@@ -16,8 +16,11 @@ from push_kids.agent_processing.contracts import (
     MATERIAL_FINGERPRINT_KEY,
     AnalysisProposal,
     KnowledgeProposal,
+    TodoCandidate,
+    review_candidate_key,
     unique_knowledge_points,
 )
+from push_kids.agent_processing.history_search import add_search_terms
 from push_kids.agent_processing.presentation import project_display_groups
 from push_kids.agent_processing.subject_routing import (
     is_merged_subject_label,
@@ -56,14 +59,14 @@ from push_kids.persistence.models import (
     LearningSubmission,
     MediaObject,
     MediaState,
-    ReviewFeedback,
     ReviewItem,
     Subject,
     SubmissionMedia,
     SubmissionRequest,
     SubmissionState,
 )
-from push_kids.planning.domain import apply_feedback, initial_review_date
+from push_kids.planning.policies import initial_review_state
+from push_kids.planning.service import PlanningService
 from push_kids.platform.context import RequestContext
 from push_kids.platform.errors import (
     ConflictError,
@@ -1000,31 +1003,37 @@ class LearningService:
         )
         stored_proposal = json.loads(submission.proposal_json or "{}")
         original_matches = {
-            item["review_id"]: item for item in stored_proposal.get("todo_matches", [])
+            review_candidate_key(TodoCandidate.model_validate(item)): item
+            for item in stored_proposal.get("todo_matches", [])
         }
         # Deduplication happens per subject inside `_confirmation_plans`; doing it here as well
         # would shift the positions the client sent in `groups.knowledge_indexes`.
         catalogue = cls._learning_subjects(db, submission)
         plans = cls._confirmation_plans(db, family_id, submission, catalogue, data)
-        review_transitions = []
-        unique_matches = {item.review_id: item for item in data.proposal.todo_matches}
-        today = local_date()
+        review_transitions: list[tuple[TodoCandidate, ReviewItem, bool]] = []
+        unique_matches = {review_candidate_key(item): item for item in data.proposal.todo_matches}
+        reviewed_on = local_date(submission.occurred_at)
         for match in unique_matches.values():
-            snapshot = original_matches.get(match.review_id)
+            snapshot = original_matches.get(review_candidate_key(match))
             if snapshot is None:
                 raise ValueError("不能添加 AI 草稿中没有识别出的复习项")
             if normalize_knowledge_name(match.knowledge_name) != normalize_knowledge_name(
                 snapshot.get("knowledge_name", "")
             ):
                 raise ValueError("复习事项与原始草稿不一致，请核对后重试")
+            match_scope = (
+                ReviewItem.id == match.review_id
+                if match.review_id
+                else KnowledgeItem.id == match.knowledge_id
+            )
             row = db.execute(
-                select(ReviewItem, KnowledgeItem, Subject)
-                .join(KnowledgeItem, ReviewItem.knowledge_item_id == KnowledgeItem.id)
+                select(KnowledgeItem, Subject, ReviewItem)
                 .join(Subject, KnowledgeItem.subject_id == Subject.id)
+                .outerjoin(ReviewItem, ReviewItem.knowledge_item_id == KnowledgeItem.id)
                 .where(
-                    ReviewItem.id == match.review_id,
-                    ReviewItem.family_id == family_id,
-                    ReviewItem.child_id == submission.child_id,
+                    match_scope,
+                    KnowledgeItem.family_id == family_id,
+                    KnowledgeItem.child_id == submission.child_id,
                     Subject.kind == "learning",
                 )
                 .with_for_update()
@@ -1035,14 +1044,39 @@ class LearningService:
                 # longer exists in this family/child/learning scope. Treat it as already changed:
                 # confirmation may still persist the remaining learning without replaying feedback.
                 continue
-            matched_review, matched_knowledge, matched_subject = row
+            matched_knowledge, matched_subject, matched_review = row
+            match.knowledge_id = matched_knowledge.id
+            if match.review_id and (matched_review is None or matched_review.id != match.review_id):
+                continue
+            match_kind = snapshot.get("match_kind", "today_review")
+            if matched_review is None:
+                if match_kind != "history_item":
+                    continue
+                initial = initial_review_state(reviewed_on, local_date())
+                matched_review = ReviewItem(
+                    family_id=family_id,
+                    child_id=submission.child_id,
+                    knowledge_item_id=matched_knowledge.id,
+                    source_submission_id=submission.id,
+                    due_date=initial.due_date,
+                    interval_days=initial.interval_days,
+                    policy_revision="curve_heat_v1",
+                )
+                db.add(matched_review)
+                db.flush()
             stale = (
-                not matched_review.active
-                or matched_review.due_date is None
-                or matched_review.due_date > today
-                or snapshot.get("eligible_on") not in (None, today.isoformat())
-                or snapshot.get("step") != matched_review.step
-                or snapshot.get("due_date") != matched_review.due_date.isoformat()
+                matched_review.due_date is None
+                or (
+                    snapshot.get("step") is not None and snapshot.get("step") != matched_review.step
+                )
+                or (
+                    snapshot.get("due_date") is not None
+                    and snapshot.get("due_date") != matched_review.due_date.isoformat()
+                )
+                or (
+                    snapshot.get("state_version") is not None
+                    and snapshot.get("state_version") != matched_review.state_version
+                )
                 or normalize_knowledge_name(snapshot.get("knowledge_name", ""))
                 != normalize_knowledge_name(matched_knowledge.name)
                 or snapshot.get("subject_name") not in (None, matched_subject.name)
@@ -1052,8 +1086,9 @@ class LearningService:
                 # A Review completed or rescheduled since analysis must not block the parent's
                 # confirmation and must never be advanced twice.
                 continue
-            transition = apply_feedback(matched_review.step or 0, "complete", today)
-            review_transitions.append((match, matched_review, transition))
+            if not matched_review.active and match_kind != "history_item":
+                continue
+            review_transitions.append((match, matched_review, bool(not matched_review.active)))
 
         records: list[ConfirmedRecord] = []
         kept_points: list[KnowledgeProposal] = []
@@ -1083,17 +1118,15 @@ class LearningService:
             data.proposal.subject_name = records[0].subject_name
         data.proposal.todo_matches = []
         updated_reviews: list[UpdatedReview] = []
-        for match, matched_review, transition in review_transitions:
-            matched_review.step = transition.step
-            matched_review.due_date = transition.due_date
-            matched_review.active = transition.active
-            matched_review.last_feedback = "complete"
-            db.add(
-                ReviewFeedback(
-                    family_id=family_id,
-                    review_item_id=matched_review.id,
-                    action="complete",
-                )
+        for match, matched_review, reactivate in review_transitions:
+            transition = PlanningService.record_review_event(
+                db,
+                family_id=family_id,
+                review=matched_review,
+                action="observed",
+                reviewed_on=reviewed_on,
+                source="upload",
+                reactivate=reactivate,
             )
             data.proposal.todo_matches.append(match)
             updated_reviews.append(
@@ -1330,6 +1363,7 @@ class LearningService:
                     knowledge.evidence_json = json.dumps(
                         [item.model_dump() for item in point.direct_evidence], ensure_ascii=False
                     )
+            add_search_terms(db, knowledge)
             db.add(
                 KnowledgeOccurrence(
                     family_id=family_id,
@@ -1338,7 +1372,7 @@ class LearningService:
                     occurred_at=submission.occurred_at,
                 )
             )
-            due = initial_review_date(local_date(submission.occurred_at), local_date())
+            initial = initial_review_state(local_date(submission.occurred_at), local_date())
             review = db.scalar(
                 select(ReviewItem)
                 .where(ReviewItem.knowledge_item_id == knowledge.id)
@@ -1351,7 +1385,14 @@ class LearningService:
                     child_id=submission.child_id,
                     knowledge_item_id=knowledge.id,
                     source_submission_id=submission.id,
-                    due_date=due,
+                    step=initial.step,
+                    due_date=initial.due_date,
+                    interval_days=initial.interval_days,
+                    review_count=initial.review_count,
+                    heat_milli=initial.heat_milli,
+                    lapse_count=initial.lapse_count,
+                    policy_revision="curve_heat_v1",
+                    state_version=initial.state_version,
                 )
                 db.add(review)
                 db.flush()

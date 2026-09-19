@@ -168,10 +168,13 @@ class FamilyInvite(Base):
     __table_args__ = (
         UniqueConstraint("token_hash", name="uq_family_invite_token"),
         UniqueConstraint("family_id", "idempotency_key", name="uq_family_invite_request"),
+        Index("ux_family_invites_active_code_hash", "active_code_hash", unique=True),
     )
     id = Column(String(36), primary_key=True, default=new_id)
     family_id = Column(String(80), ForeignKey("families.id"), nullable=False, index=True)
     token_hash = Column(String(64), nullable=False)
+    active_code_hash = Column(String(64), nullable=True)
+    code_nonce = Column(Integer, nullable=False, default=0)
     idempotency_key = Column(String(100), nullable=False)
     status = Column(String(20), nullable=False, default=InviteStatus.active.value, index=True)
     expires_at = Column(UTCDateTime(), nullable=False, index=True)
@@ -451,6 +454,41 @@ class KnowledgeItem(Base):
     created_at = Column(UTCDateTime(), nullable=False, default=utcnow)
 
 
+class KnowledgeSearchTerm(Base):
+    """Deterministic, bounded recall index for the analysis history-search tool."""
+
+    __tablename__ = "knowledge_search_terms"
+    __table_args__ = (
+        UniqueConstraint(
+            "family_id",
+            "child_id",
+            "subject_id",
+            "knowledge_item_id",
+            "term",
+            "term_kind",
+            name="uq_knowledge_search_term",
+        ),
+        Index(
+            "ix_knowledge_search_terms_scope_term_item",
+            "family_id",
+            "child_id",
+            "subject_id",
+            "term",
+            "knowledge_item_id",
+        ),
+    )
+    id = Column(String(36), primary_key=True, default=new_id)
+    family_id = Column(String(80), nullable=False, index=True)
+    child_id = Column(String(36), ForeignKey("children.id"), nullable=False, index=True)
+    subject_id = Column(String(36), ForeignKey("subjects.id"), nullable=False, index=True)
+    knowledge_item_id = Column(
+        String(36), ForeignKey("knowledge_items.id"), nullable=False, index=True
+    )
+    term = Column(String(40), nullable=False)
+    term_kind = Column(String(12), nullable=False)
+    created_at = Column(UTCDateTime(), nullable=False, default=utcnow)
+
+
 class KnowledgeOccurrence(Base):
     __tablename__ = "knowledge_occurrences"
     __table_args__ = (
@@ -478,11 +516,12 @@ class ReviewItem(Base):
     __table_args__ = (
         UniqueConstraint("knowledge_item_id", name="uq_review_knowledge"),
         Index(
-            "ix_review_items_family_child_active_due_id",
+            "ix_review_items_family_child_active_due_last_id",
             "family_id",
             "child_id",
             "active",
             "due_date",
+            "last_reviewed_on",
             "id",
         ),
     )
@@ -496,6 +535,13 @@ class ReviewItem(Base):
     )
     step = Column(Integer, nullable=False, default=0)
     due_date = Column(Date, nullable=False, index=True)
+    last_reviewed_on = Column(Date, nullable=True)
+    review_count = Column(Integer, nullable=False, default=0)
+    interval_days = Column(Integer, nullable=False, default=1)
+    heat_milli = Column(Integer, nullable=False, default=0)
+    lapse_count = Column(Integer, nullable=False, default=0)
+    policy_revision = Column(String(40), nullable=False, default="curve_heat_v1")
+    state_version = Column(Integer, nullable=False, default=0)
     last_feedback = Column(String(30), nullable=True)
     active = Column(Boolean, nullable=False, default=True)
     updated_at = Column(UTCDateTime(), nullable=False, default=utcnow, onupdate=utcnow)
@@ -515,7 +561,60 @@ class ReviewFeedback(Base):
     family_id = Column(String(80), nullable=False, index=True)
     review_item_id = Column(String(36), ForeignKey("review_items.id"), nullable=False, index=True)
     action = Column(String(30), nullable=False)
+    reviewed_on = Column(Date, nullable=True, index=True)
+    source = Column(String(20), nullable=False, default="manual")
+    policy_revision = Column(String(40), nullable=False, default="curve_heat_v1")
+    before_step = Column(Integer, nullable=True)
+    after_step = Column(Integer, nullable=True)
+    before_interval_days = Column(Integer, nullable=True)
+    after_interval_days = Column(Integer, nullable=True)
+    before_due_date = Column(Date, nullable=True)
+    after_due_date = Column(Date, nullable=True)
     occurred_at = Column(UTCDateTime(), nullable=False, default=utcnow)
+
+
+class DailyReviewPlan(Base):
+    __tablename__ = "daily_review_plans"
+    __table_args__ = (
+        UniqueConstraint("family_id", "child_id", "plan_date", name="uq_daily_review_plan_day"),
+        Index(
+            "ix_daily_review_plans_family_child_date",
+            "family_id",
+            "child_id",
+            "plan_date",
+        ),
+    )
+    id = Column(String(36), primary_key=True, default=new_id)
+    family_id = Column(String(80), nullable=False, index=True)
+    child_id = Column(String(36), ForeignKey("children.id"), nullable=False, index=True)
+    plan_date = Column(Date, nullable=False)
+    budget_minutes = Column(Integer, nullable=False)
+    total_minutes = Column(Integer, nullable=False, default=0)
+    due_count = Column(Integer, nullable=False, default=0)
+    earliest_due = Column(Date, nullable=True)
+    policy_revision = Column(String(40), nullable=False, default="daily-plan-v1")
+    state = Column(String(20), nullable=False, default="active")
+    created_at = Column(UTCDateTime(), nullable=False, default=utcnow)
+    updated_at = Column(UTCDateTime(), nullable=False, default=utcnow, onupdate=utcnow)
+
+
+class DailyReviewPlanItem(Base):
+    __tablename__ = "daily_review_plan_items"
+    __table_args__ = (
+        UniqueConstraint("plan_id", "review_item_id", name="uq_daily_plan_review"),
+        Index("ix_daily_plan_items_plan_ordinal", "plan_id", "ordinal", "id"),
+        Index("ix_daily_plan_items_review_plan", "review_item_id", "plan_id"),
+    )
+    id = Column(String(36), primary_key=True, default=new_id)
+    family_id = Column(String(80), nullable=False, index=True)
+    child_id = Column(String(36), ForeignKey("children.id"), nullable=False, index=True)
+    plan_id = Column(String(36), ForeignKey("daily_review_plans.id"), nullable=False)
+    review_item_id = Column(String(36), ForeignKey("review_items.id"), nullable=False)
+    ordinal = Column(Integer, nullable=False)
+    estimated_minutes = Column(Integer, nullable=False)
+    state = Column(String(20), nullable=False, default="pending")
+    created_at = Column(UTCDateTime(), nullable=False, default=utcnow)
+    updated_at = Column(UTCDateTime(), nullable=False, default=utcnow, onupdate=utcnow)
 
 
 class ReviewFeedbackRequest(Base):
@@ -533,6 +632,22 @@ class ReviewFeedbackRequest(Base):
     result_step = Column(Integer, nullable=False)
     result_due_date = Column(Date, nullable=False)
     result_active = Column(Boolean, nullable=False)
+    created_at = Column(UTCDateTime(), nullable=False, default=utcnow)
+
+
+class ReviewFeedbackBatchRequest(Base):
+    """Durable replay record for one all-or-nothing multi-review feedback request."""
+
+    __tablename__ = "review_feedback_batch_requests"
+    __table_args__ = (
+        UniqueConstraint("family_id", "idempotency_key", name="uq_review_feedback_batch_key"),
+    )
+    id = Column(String(36), primary_key=True, default=new_id)
+    family_id = Column(String(80), nullable=False, index=True)
+    child_id = Column(String(36), ForeignKey("children.id"), nullable=False, index=True)
+    idempotency_key = Column(String(100), nullable=False)
+    request_fingerprint = Column(String(64), nullable=False)
+    result_json = Column(Text, nullable=False)
     created_at = Column(UTCDateTime(), nullable=False, default=utcnow)
 
 

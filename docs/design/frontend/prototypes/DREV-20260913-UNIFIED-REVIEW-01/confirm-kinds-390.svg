@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="390" height="844" viewBox="0 0 390 844">
+  <rect width="390" height="844" fill="#FAF7F0"/>
+  <style>
+    .serif{font-family:"Noto Serif SC","Songti SC",serif}.sans{font-family:"Noto Sans SC","PingFang SC",sans-serif}
+    .ink{fill:#22261F}.muted{fill:#79826F}.primary{fill:#1F5B45}.white{fill:#FFFDF8}.info{fill:#4A6A7C}
+    .h1{font-size:24px;font-weight:600}.h2{font-size:17px;font-weight:600}.body{font-size:14px}.small{font-size:12px}.tiny{font-size:11px}
+  </style>
+  <text x="18" y="42" class="serif ink h1">确认学习内容</text>
+  <text x="18" y="66" class="sans muted small">核对后一次保存，不需要逐项选择分类</text>
+  <rect x="18" y="86" width="354" height="70" rx="16" fill="#F0F5F0" stroke="#C3D8CA"/>
+  <circle cx="43" cy="116" r="12" fill="#E4EDE6"/><text x="39" y="121" class="sans primary body">✦</text>
+  <text x="64" y="112" class="sans ink body" font-weight="600">这是 AI 整理的草稿，可以直接改</text>
+  <text x="64" y="136" class="sans muted small">点确认后才会新增知识或更新复习记录。</text>
+
+  <text x="18" y="190" class="serif ink h2">知识点</text><text x="327" y="190" class="sans muted small">3 个</text>
+  <line x1="18" y1="204" x2="372" y2="204" stroke="#DDD6C4"/>
+
+  <rect x="18" y="222" width="354" height="150" rx="20" fill="#FFFDF8" stroke="#EBE5D7"/>
+  <text x="38" y="251" class="sans muted small">知识点 1</text>
+  <rect x="282" y="232" width="70" height="26" rx="13" fill="#E4EDE6"/><text x="298" y="250" class="sans primary tiny">新知识</text>
+  <text x="38" y="286" class="sans ink" font-size="16" font-weight="600">认识平行四边形的高</text>
+  <text x="38" y="314" class="sans muted small">确认后新增这个知识，并安排下次复习。</text>
+  <line x1="38" y1="334" x2="352" y2="334" stroke="#F1ECE0"/>
+  <text x="38" y="357" class="sans primary small">可编辑名称、科目和复习方式</text><text x="310" y="357" class="sans" font-size="12" fill="#A85742">移除</text>
+
+  <rect x="18" y="388" width="354" height="166" rx="20" fill="#FFFDF8" stroke="#EBE5D7"/>
+  <text x="38" y="417" class="sans muted small">知识点 2</text>
+  <rect x="274" y="398" width="78" height="26" rx="13" fill="#E7EEF2"/><text x="287" y="416" class="sans info tiny">今日复习</text>
+  <text x="38" y="452" class="sans ink" font-size="16" font-weight="600">三位数连续退位减法</text>
+  <text x="38" y="480" class="sans muted small">确认后完成今天对应的复习，并更新下次时间。</text>
+  <rect x="38" y="500" width="314" height="34" rx="12" fill="#F3EFE4"/>
+  <text x="50" y="522" class="sans muted small">已关联：三位数连续退位减法</text><text x="295" y="522" class="sans primary small">取消关联</text>
+
+  <rect x="18" y="570" width="354" height="166" rx="20" fill="#FFFDF8" stroke="#EBE5D7"/>
+  <text x="38" y="599" class="sans muted small">知识点 3</text>
+  <rect x="274" y="580" width="78" height="26" rx="13" fill="#F8EFDC"/><text x="287" y="598" class="sans" font-size="11" fill="#A9762A">历史复习</text>
+  <text x="38" y="634" class="sans ink" font-size="16" font-weight="600">can’t + 动词的用法</text>
+  <text x="38" y="662" class="sans muted small">确认后沿用以前的知识，记录本次复习并更新下次时间。</text>
+  <rect x="38" y="682" width="314" height="34" rx="12" fill="#F3EFE4"/>
+  <text x="50" y="704" class="sans muted small">已关联：can’t + 动词的用法</text><text x="295" y="704" class="sans primary small">取消关联</text>
+
+  <rect x="18" y="758" width="354" height="48" rx="24" fill="#1F5B45"/>
+  <text x="111" y="789" class="sans white body" font-weight="600">确认并保存学习记录</text>
+  <text x="79" y="827" class="sans muted tiny">确认后由服务端更新下次复习日期，不在本机计算</text>
+</svg>

@@ -20,7 +20,7 @@ def item(name: str, *, kind: str = "new_learning", review_id: str | None = None)
         "existing_knowledge_id": None,
         "category": "计算",
         "display_kind": "arithmetic",
-        "review_method": "口算与讲解",
+        "review_method": "变式练习",
         "estimated_minutes": 3,
         "direct_evidence": [{"source": "parent_text", "image_index": None, "detail": name}],
         "context_used": [],
@@ -112,6 +112,67 @@ def test_provider_stops_after_three_invalid_structured_results():
     with pytest.raises(AnalysisOutputExhaustedError):
         provider.analyze(AnalysisInput(text="分数", existing_subjects=["数学"]))
     assert len(calls) == 3
+
+
+def test_provider_history_tool_loop_returns_structured_result_without_provider_storage():
+    calls = []
+    tool_requests = []
+    responses = [
+        SimpleNamespace(
+            output_text="",
+            output=[
+                {
+                    "type": "function_call",
+                    "name": "search_history_items",
+                    "call_id": "call-1",
+                    "arguments": json.dumps(
+                        {
+                            "candidate_key": "两位数进位加法",
+                            "subject_name": "数学",
+                            "keywords": ["进位加法"],
+                        },
+                        ensure_ascii=False,
+                    ),
+                }
+            ],
+        ),
+        SimpleNamespace(
+            output_text=json.dumps(result(item("两位数进位加法", kind="new")), ensure_ascii=False),
+            output=[],
+        ),
+    ]
+
+    def respond(**kwargs):
+        calls.append(kwargs)
+        return responses.pop(0)
+
+    provider = object.__new__(ArkAnalysisProvider)
+    provider.model = "synthetic"
+    provider.client = SimpleNamespace(responses=SimpleNamespace(create=respond))
+
+    proposal = provider.analyze_with_history(
+        AnalysisInput(text="两位数进位加法", existing_subjects=["数学", "语文"]),
+        lambda request: tool_requests.append(request) or [],
+        max_turns=8,
+    )
+
+    assert [point.name for point in proposal.knowledge_points] == ["两位数进位加法"]
+    assert len(tool_requests) == 1
+    assert tool_requests[0].candidate_key == "两位数进位加法"
+    assert len(calls) == 2
+    assert all(call["store"] is False for call in calls)
+    tool_outputs = [
+        item
+        for item in calls[1]["input"]
+        if isinstance(item, dict) and item.get("type") == "function_call_output"
+    ]
+    assert tool_outputs == [
+        {
+            "type": "function_call_output",
+            "call_id": "call-1",
+            "output": '{"items":[]}',
+        }
+    ]
 
 
 def test_incomplete_provider_response_uses_worker_transport_retry():
@@ -230,3 +291,82 @@ def test_validation_outputs_only_increment_and_maps_due_review():
     assert [point.name for point in proposal.knowledge_points] == ["退位减法"]
     assert [match.review_id for match in proposal.todo_matches] == ["review-1"]
     assert proposal.todo_matches[0].eligible_on == "2026-09-06"
+
+
+def test_model_output_is_limited_to_twenty_without_a_per_subject_cap():
+    data = AnalysisInput(text="练习", existing_subjects=["数学", "语文"])
+    allowed = result(*[item(f"数学知识{index}") for index in range(12)])
+    allowed["subjects"]["语文"] = [item(f"语文知识{index}") for index in range(8)]
+    proposal = data.validate_model_result(ModelAnalysisResult.model_validate(allowed))
+    assert len(proposal.knowledge_points) == 20
+
+    seven = result(*[item(f"数学知识{index}") for index in range(12)])
+    seven["subjects"]["语文"] = [item(f"语文知识{index}") for index in range(9)]
+    with pytest.raises(AnalysisOutputValidationError) as total_error:
+        data.validate_model_result(ModelAnalysisResult.model_validate(seven))
+    assert total_error.value.codes == ["subjects.max_items"]
+
+
+def test_active_future_review_is_a_valid_review_reference():
+    data = AnalysisInput(
+        text="今天提前复习了分数",
+        existing_subjects=["数学", "语文"],
+        existing_knowledge=[
+            {
+                "knowledge_id": "knowledge-1",
+                "review_id": "review-1",
+                "subject_name": "数学",
+                "name": "分数初步认识",
+                "category": "概念",
+                "review_step": 2,
+                "review_due_date": "2026-09-20",
+                "review_active": True,
+            }
+        ],
+    )
+    review = item("分数初步认识", kind="review", review_id="review-1")
+    review["existing_knowledge_id"] = "knowledge-1"
+
+    proposal = data.validate_model_result(ModelAnalysisResult.model_validate(result(review)))
+
+    assert proposal.knowledge_points == []
+    assert proposal.todo_matches[0].review_id == "review-1"
+    assert proposal.todo_matches[0].due_date == "2026-09-20"
+
+
+def test_same_day_review_requires_an_explicit_parent_note():
+    data = AnalysisInput(
+        text="又做了一页分数题",
+        existing_subjects=["数学", "语文"],
+        same_day_learning=[
+            {
+                "knowledge_id": "knowledge-1",
+                "subject_name": "数学",
+                "name": "分数初步认识",
+                "category": "概念",
+            }
+        ],
+        existing_knowledge=[
+            {
+                "knowledge_id": "knowledge-1",
+                "review_id": "review-1",
+                "subject_name": "数学",
+                "name": "分数初步认识",
+                "category": "概念",
+                "review_step": 0,
+                "review_due_date": "2026-09-20",
+                "review_active": True,
+            }
+        ],
+    )
+    review = item("分数初步认识", kind="review", review_id="review-1")
+    review["existing_knowledge_id"] = "knowledge-1"
+
+    omitted = data.validate_model_result(ModelAnalysisResult.model_validate(result(review)))
+    allowed = data.model_copy(update={"text": "今天单独复习了分数"}).validate_model_result(
+        ModelAnalysisResult.model_validate(result(review))
+    )
+
+    assert omitted.todo_matches == []
+    assert any("当天已确认" in message for message in omitted.uncertainties)
+    assert [match.review_id for match in allowed.todo_matches] == ["review-1"]

@@ -41,6 +41,11 @@ IdempotencyKey = Annotated[
 ]
 
 
+def _invite_secret(request: Request) -> str:
+    configured = request.app.state.settings.actor_hmac_key
+    return configured.get_secret_value() if configured else "local-family-invite-development-only"
+
+
 @router.get("/me", response_model=BootstrapView)
 def bootstrap(
     actor: Annotated[TrustedActorContext, Depends(trusted_actor_context)],
@@ -95,9 +100,7 @@ def create_invite(
     db: Annotated[Session, Depends(get_db)],
     idempotency_key: IdempotencyKey,
 ):
-    configured = request.app.state.settings.actor_hmac_key
-    secret = configured.get_secret_value() if configured else "local-family-invite-development-only"
-    return FamilyService.create_invite(db, context, body, idempotency_key, secret)
+    return FamilyService.create_invite(db, context, body, idempotency_key, _invite_secret(request))
 
 
 @router.get("/families/current/invites", response_model=list[InviteListItem])
@@ -125,18 +128,22 @@ def preview_invite(
     db: Annotated[Session, Depends(get_db)],
     request: Request,
 ):
-    request.app.state.invite_preview_limiter.check(actor.subject_hmac)
-    return FamilyService.preview_invite(db, body.token)
+    request.app.state.invite_preview_limiter.check(actor.subject_hmac, body.token)
+    return FamilyService.preview_invite(db, body.token, _invite_secret(request))
 
 
 @router.post("/family-requests", response_model=JoinRequestView, status_code=201)
 def apply_to_family(
     body: JoinRequestCreate,
+    request: Request,
     actor: Annotated[TrustedActorContext, Depends(trusted_actor_context)],
     db: Annotated[Session, Depends(get_db)],
     idempotency_key: IdempotencyKey,
 ):
-    return FamilyService.apply(db, actor, body.token, body, idempotency_key)
+    request.app.state.invite_preview_limiter.check(actor.subject_hmac, body.token)
+    return FamilyService.apply(
+        db, actor, body.token, body, idempotency_key, _invite_secret(request)
+    )
 
 
 @router.delete("/family-requests/current", status_code=204)

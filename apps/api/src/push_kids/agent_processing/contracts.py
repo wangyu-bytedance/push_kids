@@ -27,6 +27,7 @@ DisplayKind = Literal[
     "activity",
     "other",
 ]
+ReviewMethod = Literal["主动回忆", "变式练习", "解释应用"]
 
 
 def infer_display_kind(name: str, category: str) -> DisplayKind:
@@ -71,7 +72,7 @@ class EvidenceReference(BaseModel):
 
 
 class TodoCandidate(BaseModel):
-    review_id: str
+    review_id: str | None = None
     knowledge_name: str
     knowledge_id: str | None = None
     subject_name: str | None = None
@@ -79,16 +80,26 @@ class TodoCandidate(BaseModel):
     step: int | None = None
     due_date: str | None = None
     eligible_on: str | None = None
+    match_kind: Literal["today_review", "history_item"] = "today_review"
+    state_version: int | None = None
+    last_reviewed_on: str | None = None
+    review_count: int | None = None
+    plan_state: str | None = None
 
 
 class ExistingKnowledgeContext(BaseModel):
     knowledge_id: str
+    review_id: str | None = None
     subject_name: str
     name: str
     category: str
     review_step: int | None = None
     review_due_date: str | None = None
     review_active: bool | None = None
+    last_reviewed_on: str | None = None
+    review_count: int | None = None
+    state_version: int | None = None
+    match_signals: list[str] = Field(default_factory=list, max_length=8)
 
 
 class RecentLearningContext(BaseModel):
@@ -118,14 +129,14 @@ class ModelLearningItem(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
-    kind: Literal["new_learning", "review"]
+    kind: Literal["new", "today_review", "history_item", "new_learning", "review"]
     name: str = Field(min_length=1, max_length=120)
     review_id: str | None
     existing_knowledge_id: str | None
     category: str = Field(min_length=1, max_length=50)
     display_kind: DisplayKind
-    review_method: str = Field(min_length=1, max_length=60)
-    estimated_minutes: int = Field(ge=1, le=20)
+    review_method: ReviewMethod
+    estimated_minutes: int = Field(ge=1, le=5)
     direct_evidence: list[ModelEvidenceReference] = Field(min_length=1, max_length=20)
     context_used: list[str] = Field(max_length=20)
     confidence: Literal["high", "medium", "low"]
@@ -180,7 +191,7 @@ class AnalysisInput(BaseModel):
     image_paths: list[Path] = Field(default_factory=list)
     todo_candidates: list[TodoCandidate] = Field(default_factory=list)
     existing_subjects: list[str] = Field(default_factory=list, max_length=30)
-    recent_learning: list[RecentLearningContext] = Field(default_factory=list, max_length=30)
+    recent_learning: list[RecentLearningContext] = Field(default_factory=list, max_length=6)
     existing_knowledge: list[ExistingKnowledgeContext] = Field(default_factory=list, max_length=100)
     same_day_learning: list[SameDayKnowledgeContext] = Field(default_factory=list, max_length=200)
 
@@ -189,7 +200,11 @@ class AnalysisInput(BaseModel):
         if not self.existing_subjects:
             raise AnalysisOutputValidationError(["subjects.input_empty"])
         schema = ModelAnalysisResult.model_json_schema()
-        item_schema = {"type": "array", "items": {"$ref": "#/$defs/ModelLearningItem"}}
+        item_schema = {
+            "type": "array",
+            "items": {"$ref": "#/$defs/ModelLearningItem"},
+            "maxItems": 20,
+        }
         schema["properties"]["subjects"] = {
             "type": "object",
             "properties": {name: item_schema for name in self.existing_subjects},
@@ -206,7 +221,7 @@ class AnalysisInput(BaseModel):
             raise AnalysisOutputValidationError(["subjects.max_items"])
 
         context_ids = {item.record_id for item in self.recent_learning}
-        candidates = {item.review_id: item for item in self.todo_candidates}
+        candidates = self.review_candidates()
         knowledge = {item.knowledge_id: item for item in self.existing_knowledge}
         same_day = {
             (item.subject_name, normalize_knowledge_name(item.name))
@@ -246,8 +261,16 @@ class AnalysisInput(BaseModel):
                     ):
                         errors.append("evidence.parent_text")
                 key = (subject_name, normalize_knowledge_name(item.name))
-                if item.kind == "review":
-                    candidate = candidates.get(item.review_id or "")
+                if item.kind in {"today_review", "history_item", "review"}:
+                    if key in same_day and not explicit_same_day_review(self.text):
+                        if len(uncertainties) < 20:
+                            uncertainties.append(
+                                f"{subject_name}“{item.name}”当天已确认；未发现独立复习说明，已省略。"
+                            )
+                        continue
+                    candidate = candidates.get(
+                        item.review_id or f"knowledge:{item.existing_knowledge_id or ''}"
+                    )
                     if (
                         candidate is None
                         or candidate.subject_name != subject_name
@@ -256,6 +279,12 @@ class AnalysisInput(BaseModel):
                         or item.existing_knowledge_id not in (None, candidate.knowledge_id)
                     ):
                         errors.append("review.reference")
+                        continue
+                    if item.kind == "today_review" and candidate.match_kind != "today_review":
+                        errors.append("today_review.reference")
+                        continue
+                    if item.kind == "history_item" and candidate.match_kind != "history_item":
+                        errors.append("history_item.reference")
                         continue
                     matches.append(
                         candidate.model_copy(
@@ -268,7 +297,7 @@ class AnalysisInput(BaseModel):
                     )
                     continue
                 if item.review_id is not None:
-                    errors.append("new_learning.review_id")
+                    errors.append("new.review_id")
                 if key in same_day:
                     continue
                 existing = knowledge.get(item.existing_knowledge_id or "")
@@ -311,7 +340,7 @@ class AnalysisInput(BaseModel):
         if errors:
             raise AnalysisOutputValidationError(errors)
         points = unique_knowledge_points(points)
-        matches = list({item.review_id: item for item in matches}.values())
+        matches = list({review_candidate_key(item): item for item in matches}.values())
         primary_subject = (
             points[0].subject_name
             if points
@@ -337,8 +366,12 @@ class AnalysisInput(BaseModel):
         if summary_errors:
             raise ValueError("model summary contains excluded absence metadata")
         context_ids = {item.record_id for item in self.recent_learning}
-        candidates = {item.review_id: item for item in self.todo_candidates}
+        candidates = self.review_candidates()
         knowledge = {item.knowledge_id: item for item in self.existing_knowledge}
+        same_day = {
+            (item.subject_name, normalize_knowledge_name(item.name))
+            for item in self.same_day_learning
+        }
         for point in proposal.knowledge_points:
             if point.existing_knowledge_id:
                 existing = knowledge.get(point.existing_knowledge_id)
@@ -365,17 +398,52 @@ class AnalysisInput(BaseModel):
                 elif not (self.text or "").strip() or evidence.image_index is not None:
                     raise ValueError("model text reference is outside the input")
         for match in proposal.todo_matches:
-            candidate = candidates.get(match.review_id)
+            candidate = candidates.get(review_candidate_key(match))
             if candidate is None or candidate.knowledge_name != match.knowledge_name:
                 raise ValueError("model Todo reference is outside the input")
+            candidate_key = (
+                candidate.subject_name or proposal.subject_name,
+                normalize_knowledge_name(candidate.knowledge_name),
+            )
+            if candidate_key in same_day and not explicit_same_day_review(self.text):
+                raise ValueError("same-day review requires an explicit parent note")
             if not (match.evidence or "").strip():
                 raise ValueError("model Todo match has no evidence")
+            match.review_id = candidate.review_id
+            match.knowledge_id = candidate.knowledge_id
+            match.subject_name = candidate.subject_name
+            match.knowledge_name = candidate.knowledge_name
             match.step, match.due_date = candidate.step, candidate.due_date
+            match.match_kind = candidate.match_kind
+            match.state_version = candidate.state_version
+            match.last_reviewed_on = candidate.last_reviewed_on
+            match.review_count = candidate.review_count
+            match.plan_state = candidate.plan_state
         proposal.knowledge_points = unique_knowledge_points(proposal.knowledge_points)
         proposal.todo_matches = list(
-            {item.review_id: item for item in proposal.todo_matches}.values()
+            {review_candidate_key(item): item for item in proposal.todo_matches}.values()
         )
         return proposal
+
+    def review_candidates(self) -> dict[str, TodoCandidate]:
+        """Return today's plan plus bounded active-history reviews, preferring plan snapshots."""
+        historical = {
+            item.review_id or f"knowledge:{item.knowledge_id}": TodoCandidate(
+                review_id=item.review_id,
+                knowledge_id=item.knowledge_id,
+                knowledge_name=item.name,
+                subject_name=item.subject_name,
+                step=item.review_step,
+                due_date=item.review_due_date,
+                match_kind="history_item",
+                state_version=item.state_version,
+                last_reviewed_on=item.last_reviewed_on,
+                review_count=item.review_count,
+            )
+            for item in self.existing_knowledge
+        }
+        historical.update({review_candidate_key(item): item for item in self.todo_candidates})
+        return historical
 
 
 def _model_summary_errors(summary: str) -> list[str]:
@@ -387,6 +455,11 @@ def _model_summary_errors(summary: str) -> list[str]:
     if any(pattern.search(value) for pattern in _SUMMARY_EXCLUSION_PATTERNS):
         errors.append("summary.exclusion_clause")
     return errors
+
+
+def explicit_same_day_review(text: str | None) -> bool:
+    value = (text or "").strip()
+    return any(marker in value for marker in ("复习", "再次练习", "重新练习", "又练了"))
 
 
 def unique_knowledge_points(points: list[KnowledgeProposal]) -> list[KnowledgeProposal]:
@@ -416,6 +489,14 @@ def unique_knowledge_points(points: list[KnowledgeProposal]) -> list[KnowledgePr
         if point.confidence == "low":
             kept.confidence = "low"
     return list(result.values())
+
+
+def review_candidate_key(item: TodoCandidate) -> str:
+    if item.review_id:
+        return item.review_id
+    if item.knowledge_id:
+        return f"knowledge:{item.knowledge_id}"
+    raise ValueError("review candidate has no stable reference")
 
 
 class AnalysisProvider(Protocol):

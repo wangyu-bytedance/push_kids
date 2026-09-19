@@ -12,5 +12,5 @@ def test_normalization_removes_cosmetic_variation() -> None:
 def test_test_provider_is_deterministic_and_subject_aware() -> None:
     result = DeterministicTestProvider().analyze(AnalysisInput(text="数学：两位数进位加法，口算"))
     assert result.subject_name == "数学"
-    assert result.knowledge_points[0].review_method == "口算与讲解"
+    assert result.knowledge_points[0].review_method == "变式练习"
     assert "数学" in result.summary

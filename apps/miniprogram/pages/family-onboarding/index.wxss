@@ -26,7 +26,7 @@
 .pk-cta-bar .cta-hint { display: block; margin-top: 12rpx; text-align: center; font-size: 13px; line-height: 1.45; color: var(--pk-ink-3); }
 .center-row { display: flex; align-items: center; justify-content: center; }
 
-/* A4 等待确认：琥珀色空态图 + 申请码卡 */
+/* A4 等待确认：琥珀色空态图 + 申请核验码卡 */
 .pending-empty { padding: 72rpx 48rpx 32rpx; }
 .pk-empty .em.att { background: var(--pk-attention-bg); }
 .code-card { text-align: center; }

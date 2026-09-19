@@ -6,11 +6,11 @@
 - UI ID: `[UI-xxx]`
 - Design Revision: `[DREV-YYYYMMDD-N]`
 - Frontend baseline revision: `[FDB-YYYYMMDD-N]`
+- Frontend engineering revision: `[FEC-YYYYMMDD-N]`
 - Task Spec path and revision: `[path#revision]`
-- Figma project/file URL: `[URL]`
-- Figma file key: `[key]`
-- Figma node URL(s): `[node-specific URLs]`
-- Figma branch/version URL: `[URL/N/A]`
+- Frontend spec path: `[docs/design/frontend/prototypes/<DREV>/FRONTEND-SPEC.md]`
+- Editable design source path(s): `[repository SVG/self-contained HTML paths]`
+- Editable source SHA-256: `[path=sha256; ...]`
 - Prototype generated/updated at: `[timestamp]`
 - Approved by: `[user/design owner]`
 - Approved at: `[timestamp]`
@@ -31,17 +31,17 @@
 
 | File | Viewport/state | CSS viewport | Scale/DPR | SHA-256 | Notes |
 |---|---|---|---|---|---|
-| `[desktop.png]` | `[VP-DESKTOP/default]` | `[1440×900]` | `[1x]` | `[sha256]` | `[notes]` |
+| `[desktop.png]` | `[VP-DESKTOP/default]` | `[1440×900]` | `[1x]` | `[sha256]` | `[source path/notes]` |
 
 ## Gaps and follow-up
 
 - States not represented:
 - Manual assumptions:
-- Waiver: `[none or approved scope/Owner/expiry]`
+- Native runtime evidence: `[pending before implementation, or retained evidence paths]`
 
 ## Integrity checklist
 
-- [ ] URLs point to the approved file and exact nodes.
+- [ ] Every editable source exists, is repository-local, and its SHA-256 matches.
 - [ ] Every listed export exists and its SHA-256 matches.
 - [ ] Required baseline viewports/states are represented or explicitly excluded.
 - [ ] Approval names the Task Spec revision and Design Revision.

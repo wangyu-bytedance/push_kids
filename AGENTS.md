@@ -10,7 +10,7 @@
   - Enforced architecture: `docs/architecture/ARCHITECTURE-CONSTRAINTS.md`
   - Current feature state: `docs/domain/features/`
   - Current behavior: `docs/domain/BEHAVIOR-CATALOG.md`
-  - Approved frontend baseline and Figma index: `docs/design/frontend/FRONTEND-DESIGN.md`
+  - Approved frontend baseline and repository-native design evidence index: `docs/design/frontend/FRONTEND-DESIGN.md`
   - Enforced frontend engineering rules and budgets: `docs/design/frontend/FRONTEND-ENGINEERING-CONSTRAINTS.md`
   - Current frontend UI state: `docs/design/frontend/ui/`
   - Test policy: `docs/quality/TEST-STRATEGY.md`
@@ -27,6 +27,7 @@ uv run ruff check . && uv run ruff format --check .
 uv run mypy apps/api/src
 npm test
 uv run python tools/check_architecture.py
+uv run python tools/validate_design_evidence.py --check-current-policy
 uv run python tools/validate_miniprogram.py
 uv run uvicorn push_kids.bootstrap.app:create_app --factory --app-dir apps/api/src --reload
 ```
@@ -72,7 +73,7 @@ Never claim a check passed unless it ran. Record skipped checks and the reason.
 
 ## Feature workflow
 
-Visible or behavioral changes require an approved Spec revision and relevant current-state update. FEAT-001 is approved for implementation by the user on 2026-08-30. Its Figma Starter-limit waiver is scoped to this feature and expires before public production release.
+Visible or behavioral changes require an approved Spec revision and relevant current-state update. FEAT-001 is approved for implementation by the user on 2026-08-30. Repository-native design evidence replaces the former Figma requirement under `GOV-SPEC-LOCAL-DESIGN-EVIDENCE-20260913-01`.
 
 ## 3. Requirement workflow
 
@@ -87,8 +88,8 @@ For every request that changes behavior, APIs, data, architecture, tests, or doc
 
 Before initial production coding, or before changing module boundaries, shared abstractions, dependency direction, or extension points, present the recommended design, alternatives, and trade-offs and obtain confirmation of the architecture/Spec revision.
 
-### Frontend Figma design gate
+### Frontend repository-native design gate
 
-User-visible frontend work requires an approved baseline covering style consistency, user interaction conventions, and an exact resolution/viewport matrix; affected UI current state; a Figma node-specific URL; and explicit approval of the Task Spec revision + Design Revision plus approval snapshot. Frontend engineering impact independently requires the approved FEC revision and affected component/state/form, accessibility, browser/device, performance/resource, security/privacy, and observability evidence. The existing FEAT-001 waiver does not authorize new FEAT-002 visible implementation.
+User-visible frontend work requires an approved baseline covering style consistency, user interaction conventions, and an exact resolution/viewport matrix; affected UI current state; a repository-local editable SVG or self-contained HTML design source; required viewport/state exports with matching SHA-256 manifest; and explicit approval of the Task Spec revision + Design Revision. Figma, external design URLs, node IDs, and tool-availability waivers are not required. Frontend engineering impact independently requires the approved FEC revision and affected component/state/form, accessibility, browser/device, performance/resource, security/privacy, and observability evidence.
 
-Native Mini Program viewport acceptance follows `docs/design/frontend/FRONTEND-ENGINEERING-CONSTRAINTS.md` FEC-20260905-02 and `docs/quality/TEST-STRATEGY.md`; hidden overflow or HTML rendering cannot replace native node geometry and three-viewport evidence.
+Native Mini Program viewport acceptance follows `docs/design/frontend/FRONTEND-ENGINEERING-CONSTRAINTS.md` and `docs/quality/TEST-STRATEGY.md`; repository previews, hidden overflow, or HTML rendering cannot replace native node geometry and three-viewport evidence. Approved manifests are immutable except for a `Superseded by` pointer; visible divergence requires a new Design Revision and approval.

@@ -7,12 +7,11 @@
 - Engineering contract: `FEC-20260906-04`
 - Proposed design revision: `DREV-20260906-TRAVEL-01`
 - Candidate prototype: `docs/design/frontend/prototypes/DREV-20260906-TRAVEL-01/index.html`
-- Figma file: https://www.figma.com/design/FAyfmjNrA3btWztwyxI6Zj
-- Figma node: `PENDING — Starter tool-call limit and View seat`
-- Snapshot manifest: `local candidate render SHA-256 ed3d1348245f1c08730626600f8b9533847fd83aaec47ca23d2c6fc0e9fdd6ac；Figma snapshot pending under approved scoped waiver`
+- Editable design source: `docs/design/frontend/prototypes/DREV-20260906-TRAVEL-01/index.html`
+- Snapshot manifest: `local candidate render SHA-256 ed3d1348245f1c08730626600f8b9533847fd83aaec47ca23d2c6fc0e9fdd6ac；repository approval manifest still pending`
 
-> 本 UI 于 2026-09-06 获用户批准，并已在当前本地工作树实现；Figma node 仍受已批准的 FEAT-007
-> scoped waiver 约束。尚未完成原生三视口、字体放大、键盘态与 iOS/Android 真机验收。
+> 本 UI 于 2026-09-06 获用户批准，并已在当前本地工作树实现；旧 Figma waiver 仅作为当时历史。
+> 尚未完成原生三视口、字体放大、键盘态与 iOS/Android 真机验收。
 
 ## Current local information architecture
 
@@ -69,8 +68,8 @@
 ## Design and evidence status
 
 - HTML review artifact: created and visually reviewable.
-- Figma: blocked on 2026-09-06 by Starter MCP limit; authenticated seat is View.
-- Approval: `2026-09-06 用户明确批准 SPEC-20260906-TRAVEL-01 + DREV-20260906-TRAVEL-01 + 全部日程项冲突范围 + FEAT-007 scoped Figma waiver`.
+- Historical external-tool evidence: 2026-09-06 blocked by tool limits; no longer a current dependency.
+- Approval history: `2026-09-06 用户明确批准 SPEC-20260906-TRAVEL-01 + DREV-20260906-TRAVEL-01 + 全部日程项冲突范围`；当时 waiver 只保留为审计事实。
 - Production implementation: current local working tree.
 - Automated evidence: backend full suite 200 passed / 2 skipped；frontend full suite 107 passed；full Ruff check、format check、Mypy、ESLint、Mini Program validator (`pages=14`, `source_bytes=576887`) and architecture validator passed.
 - WeChat DevTools: registered-AppID preview compiled; package `530964 bytes`. This is compile evidence only, not upload/deployment or viewport acceptance.

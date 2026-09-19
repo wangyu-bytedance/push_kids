@@ -2,17 +2,19 @@
 
 - Status: `CURRENT_LOCAL / 390_NATIVE_CAPTURED / MATRIX_PENDING`
 - Related Feature: `FEAT-002`
-- Related Spec: `SPEC-20260831-09`
+- Related Specs: `SPEC-20260831-09`; `BUG-SPEC-20260913-19`
 - Baseline: `FDB-20260906-02`
 - Engineering contract: `FEC-20260906-04`
-- Design revision: `DREV-20260906-PKDS-01`（屏 G4；取代 `DREV-20260905-UX-04` 的视觉部分）
-- Last reviewed artifact date: 2026-08-31
-- Interactive artifact: `docs/design/frontend/prototypes/DREV-20260831-07/index.html`
-- Snapshot manifest: `docs/design/frontend/snapshots/UI-009/DREV-20260831-07/APPROVAL.md`
-- Figma file: https://www.figma.com/design/FAyfmjNrA3btWztwyxI6Zj
-- Figma node: `N/A` — 当前账号为 Starter/View，MCP 写入限额已触发
+- Design revisions: `DREV-20260906-PKDS-01`（屏 G4）；`DREV-20260913-FAMILY-INVITE-CODE-01`（邀请就绪态）
+- Last reviewed artifact date: 2026-09-13
+- Interactive artifacts: `docs/design/frontend/prototypes/DREV-20260831-07/index.html`;
+  `docs/design/frontend/prototypes/DREV-20260913-FAMILY-INVITE-CODE-01/family-invite-flow.html`
+- Current change snapshot manifest: `docs/design/frontend/snapshots/UI-009/DREV-20260913-FAMILY-INVITE-CODE-01/APPROVAL.md`
+- Current change editable design source: `docs/design/frontend/prototypes/DREV-20260913-FAMILY-INVITE-CODE-01/family-invite-flow.html`
+- Design evidence governance: `GOV-SPEC-LOCAL-DESIGN-EVIDENCE-20260913-01`
 
-> BUG-010 revision 11 已获产品负责人批准并在本地实现；390视口成员主页及本人详情已由CUA验证，未部署，其他视口、双账号与真机证据仍待补齐。
+> BUG-015 revision 19 与邀请就绪态 DREV 已获产品负责人批准并在本地实现；三视口仓库快照已通过
+> manifest 校验。原生三视口、双账号与真机证据仍待补齐，未部署。
 
 ## Information architecture
 
@@ -36,6 +38,8 @@
 
 - 成员列表对所有 active guardian 可见。
 - 待审批数量、邀请、关系和权限调整只对 manager 可见。
+- manager 创建邀请成功后在内存态显示六位纯数字“家庭邀请码”，支持复制或微信邀请；明确说明
+  申请提交后仍需 manager 确认。页面不把长 token 显示或写入本地存储。
 - 本人详情不提供移除、退出或角色修改；服务端无条件拒绝成员管理接口自移除。
 - 最后一位 manager 的移除或降权必须阻止并说明先转交管理权。
 - 其他成员的降权和移除属于破坏性操作，展示影响并二次确认。
@@ -95,10 +99,14 @@ viewer/editor 打开本人详情时，在表单之后显示：
 
 本地页面已改为整行进入成员详情；本人标记为“我”，只可在现有授权下编辑称谓，其他成员的权限保存先确认，
 移除位于独立危险区。390×844当前账号截图证明成员主页、自身标记、卡片边界和正圆刷新按钮；线上旧后端缺少
-有效邀请GET时静默降级并继续展示成员，不制造类似整页错误的警告。实施使用 `FIGMA-WAIVER-BUG010-20260905-01`；
+有效邀请GET时静默降级并继续展示成员，不制造类似整页错误的警告。旧 Figma waiver 仅保留为当时批准历史；
 320/430、成员详情真实点击和双账号验证仍是发布门禁。
 
 ## Change references
+
+- 2026-09-13 — `BUG-SPEC-20260913-19 / DREV-20260913-FAMILY-INVITE-CODE-01`：邀请就绪卡新增
+  六位家庭邀请码和复制入口，同时保留微信分享；候选 320×568、390×844、430×932 快照及 SHA-256
+  manifest 已批准并通过校验。原生矩阵和双账号仍为 `NOT_RUN`。
 
 - 2026-09-06 — `SPEC-20260906-PKDS-01 / DREV-20260906-PKDS-01`（屏 G4）：成员页按 PKDS-1.0 重做。
   Hero 承载"邀请家人"；邀请口令只保留在内存中用于一次分享，不上屏持久化、不写入日志；

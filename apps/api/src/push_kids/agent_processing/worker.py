@@ -20,6 +20,7 @@ from push_kids.agent_processing.contracts import (
     AnalysisProvider,
     AnalysisTerminalError,
 )
+from push_kids.agent_processing.runner import AnalysisAgentRunner
 from push_kids.media.store import MediaStore, WeChatCloudMediaStore
 from push_kids.persistence.models import (
     AgentJob,
@@ -241,7 +242,13 @@ class AnalysisWorker:
                         job_id,
                         attempt,
                     )
-                    proposal = data.validate_proposal(self.provider.analyze(data))
+                    if not submission.family_id or not submission.child_id:
+                        raise ValueError("submission analysis scope is incomplete")
+                    proposal = AnalysisAgentRunner(self.database, self.provider).run(
+                        data,
+                        family_id=submission.family_id,
+                        child_id=submission.child_id,
+                    )
                     logger.info(
                         "analysis_provider_completed job_id=%s attempt=%s duration_ms=%s",
                         job_id,

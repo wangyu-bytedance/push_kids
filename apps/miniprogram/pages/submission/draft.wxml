@@ -117,7 +117,10 @@
 
     <view class="pk-card kn-card {{item.confidence === 'low' ? 'warn' : ''}}" wx:for="{{proposal.knowledge_points}}" wx:key="index">
       <view class="flex between">
-        <text class="kn-n">知识点 {{index + 1}}</text>
+        <view class="flex kind-heading">
+          <text class="kn-n">知识点 {{index + 1}}</text>
+          <view class="item-kind {{item.kind_tone}}">{{item.kind_label}}</view>
+        </view>
         <view class="flex">
           <view class="confidence {{item.confidence_tone}}" wx:if="{{!manual && item.confidence_tone}}">
             <text>{{item.confidence_label}}</text>
@@ -141,6 +144,10 @@
           <view class="chev"></view>
         </view>
       </picker>
+
+      <view class="kind-effect {{item.kind_tone}}">
+        <text>{{item.kind_effect}}</text>
+      </view>
 
       <view class="kn-ev" wx:if="{{!manual}}">
         <text class="ev-line" wx:if="{{item.evidence_text}}">证据：{{item.evidence_text}}</text>
@@ -177,21 +184,26 @@
 
   <view class="sec" wx:if="{{!manual && proposal.todo_matches.length}}">
     <view class="sec-bar">
-      <text class="s-t">可能已完成的复习</text>
+      <text class="s-t">已识别的复习</text>
       <text class="s-m tnum">{{proposal.todo_matches.length}} 项</text>
     </view>
     <view class="sec-rule"></view>
     <view class="pk-notice quiet">
       <view class="ico ico-info sm"></view>
-      <text class="n-txt">AI 猜的，保留前请核对。保留的项目会在这次确认时一并标记为完成，已更新的任务不会重复推进。</text>
+      <text class="n-txt">请核对是否为同一知识。确认后会记录本次复习并由服务端更新下次时间，不会重复新增知识。</text>
     </view>
     <view class="rowlist mt2">
       <view class="rowitem" wx:for="{{proposal.todo_matches}}" wx:key="review_id">
         <view class="grow">
-          <text class="r-t">{{item.knowledge_name}}</text>
+          <view class="flex kind-heading">
+            <text class="r-t">{{item.knowledge_name}}</text>
+            <view class="item-kind {{item.kind_tone}}">{{item.kind_label}}</view>
+          </view>
+          <text class="r-s kind-copy">{{item.kind_effect}}</text>
+          <text class="r-s">已关联：{{item.knowledge_name}}</text>
           <text class="r-s" wx:if="{{item.evidence}}">证据：{{item.evidence}}</text>
         </view>
-        <view class="link-btn dan" aria-role="button" aria-label="不标记这一项" data-index="{{index}}" bindtap="removeTodoMatch">不标记</view>
+        <view class="link-btn" aria-role="button" aria-label="取消关联并作为新知识" data-index="{{index}}" bindtap="unlinkReviewMatch">取消关联</view>
       </view>
     </view>
   </view>
@@ -204,7 +216,7 @@
       <view class="ico ico-check-inv sm" wx:if="{{!saving}}"></view>
       <text>{{saving ? '正在保存…' : (saveError ? '重试确认' : '确认并保存学习记录')}}</text>
     </view>
-    <text class="help center">确认后会创建正式记录、知识点和复习计划。</text>
+    <text class="help center">确认后才会保存；新知识会进入复习计划，已有知识会更新复习时间。</text>
     <view class="cta-links">
       <view class="link-btn" aria-role="button" aria-label="先保留草稿稍后再来" bindtap="keepDraft">先保留草稿，稍后再来</view>
       <view class="link-btn dan" aria-role="button" aria-label="删除这份草稿" bindtap="cancelDraft">删除这份草稿</view>

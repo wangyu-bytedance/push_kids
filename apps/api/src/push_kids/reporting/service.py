@@ -104,6 +104,13 @@ class ReportingService:
             limit=todo_limit,
             known_child=child,
         )
+        review_selection = PlanningService.daily_review_selection(
+            db,
+            family_id,
+            child_id,
+            target,
+            known_child=child,
+        )
         next_review = PlanningService.upcoming_review_page(
             db,
             family_id,
@@ -161,6 +168,7 @@ class ReportingService:
             "todo_returned_count": todo_page["returned_count"],
             "todo_remaining_count": todo_page["remaining_count"],
             "todo_next_cursor": todo_page["next_cursor"],
+            "review_selection": review_selection,
             "next_review": next_review,
             "pending_confirmation_count": pending,
             "analyzing_count": analyzing,

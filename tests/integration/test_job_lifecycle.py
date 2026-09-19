@@ -156,8 +156,8 @@ def test_worker_supplies_only_confirmed_recent_context_and_active_subjects(
     assert provider.received is not None
     assert "英语" in provider.received.existing_subjects
     assert "科学" not in provider.received.existing_subjects
-    assert len(provider.received.recent_learning) == 1
-    assert provider.received.recent_learning[0].record_id
-    assert "school" in provider.received.recent_learning[0].summary
+    assert provider.received.recent_learning == []
+    assert len(provider.received.same_day_learning) == 1
+    assert "school" in provider.received.same_day_learning[0].name
     detail = client.get(f"/api/v1/submissions/{second['id']}", headers=family_headers)
     assert detail.json()["state"] == "pending_confirmation"

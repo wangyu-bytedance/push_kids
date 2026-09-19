@@ -1,18 +1,18 @@
 # UI-001 — 家长端微信小程序
 
-- Status: `CURRENT_LOCAL / AUTOMATION_PASSED / NATIVE_VIEWPORT_MATRIX_NOT_RUN`
+- Status: `CURRENT / DEVELOPMENT_VERSION_0.1.9_UPLOADED / NATIVE_VIEWPORT_MATRIX_NOT_RUN`
 - Related Feature: `FEAT-001`
-- Baseline: `FDB-20260906-03`
-- Engineering contract: `FEC-20260911-READ-PERF-01`
-- Design revision: `DREV-20260912-TODAY-NEXT-REVIEW-01`（今日最近复习安排可见）
-- Current-state revision: `UI-STATE-20260912-TODAY-NEXT-REVIEW-01-LOCAL`
-- Related Spec: `specs/completed/BUG-021-TODAY-REVIEW-PLAN-VISIBILITY.md` revision `BUG-SPEC-20260912-REVIEW-VISIBILITY-01`
+- Baseline: `FDB-20260913-04`
+- Engineering contract: `FEC-20260913-LOCAL-DESIGN-EVIDENCE-01`
+- Design revision: `DREV-20260913-UNIFIED-REVIEW-01`（稳定日计划与确认分类）
+- Current-state revision: `UI-STATE-20260913-UNIFIED-REVIEW-01-UPLOADED`
+- Related Spec: `specs/active/FEAT-001-UNIFIED-ITEM-REVIEW-STRATEGY.md` revision `SPEC-UNIFIED-REVIEW-20260913-04`
   （前序：`SPEC-20260911-SETTINGS-PROFILE-MANAGER-01`、`SPEC-20260911-PRIMARY-NAV-BRAND-01`、`SPEC-20260911-TODAY-ACTIVITY-EMPTY-CTA-01`、`SPEC-20260911-RECORD-PHOTO-ADD-SOURCE-02`、`SPEC-20260911-RECORD-SIMPLIFICATION-01`、`BUG-SPEC-20260911-01`）
-- Last verified: 2026-09-12（“复习安排”在今天无到期项时自动展开最近一个未来日期，显示完整换行知识点与精确项数/分钟；有到期项时未来安排为低强调 disclosure，未来项只读。前端 161 passed，ESLint、架构 checked=3、小程序静态 15 pages/656671 bytes、独立 R2 复核通过；源码热区均 >=88rpx。原生 320×568/390×844/430×932、字体放大、iOS/Android、真实 MySQL 5.7、上传与部署均为 NOT_RUN）
-- Screen-level spec: `docs/design/frontend/prototypes/DREV-20260912-TODAY-NEXT-REVIEW-01/FRONTEND-SPEC.md`
+- Last verified: 2026-09-13（Today 以 `review_selection` 固定日计划为准，完成不补题；确认页显示新知识/今日复习/历史复习及确认后果，纯复习草稿无需伪造新知识即可确认。冻结发布包 166 passed，ESLint、小程序静态 15 pages/664345 bytes、设计证据与真实 AppID 预览通过；开发版本 0.1.9 上传成功。原生 320×568/390×844/430×932 真机节点几何、字体放大、iOS/Android 仍为 NOT_RUN）
+- Screen-level spec: `docs/design/frontend/prototypes/DREV-20260913-UNIFIED-REVIEW-01/FRONTEND-SPEC.md`
 - Reference screens: `docs/design/frontend/prototypes/DREV-20260906-PKDS-01/screenshots/`（39 屏）
 - Intermediate artifact: `docs/design/frontend/prototypes/DREV-20260830-03/index.html`（设计历史）
-- Figma waiver anchor: https://www.figma.com/design/FAyfmjNrA3btWztwyxI6Zj?node-id=0-1
+- Design evidence governance: `GOV-SPEC-LOCAL-DESIGN-EVIDENCE-20260913-01`; former Figma anchor is historical only
 
 ## Current information architecture
 
@@ -66,6 +66,9 @@
   详情可查看每个知识的当前计划与每页 3 条反馈，到期时跳回今日；浏览材料不记为完成复习。
 - AI 草稿可编辑；“确认”是创建正式记录、知识和复习项的唯一入口。待确认记录在记录详情页直接编辑确认，
   确认页与详情页共用同一份草稿实现，不存在两套编辑逻辑。
+- 新草稿把识别结果明确呈现为“新知识 / 今日复习 / 历史复习”：标签只读，不要求家长选择分类；
+  每项同时写明确认后是新增知识还是推进既有复习。取消复习关联时，本次内容保留为可编辑的新知识，
+  后续复习日期仍由服务端确认事务计算。
 - 一次提交跨多个科目时，草稿按服务端 `subject_groups` 分组展示“科目归类”：每组可整体换科目，
   单个知识点也可单独换科目；确认后每个科目各生成一条学习记录，不会出现“数学、语文”这类合成科目。
 - 科目名不在孩子的科目列表里时该组显示提醒，并要求家长明确回答“新增这个科目吗”；未回答时确认
@@ -80,7 +83,10 @@
   原始匹配由服务端安全跳过，不会再次推进，也不阻断其余学习保存。确认遇到终态冲突时页面立即自动读取
   并展示最新只读详情，不再显示“刷新会离开当前编辑的草稿/查看最新”；仍未进入终态或读取失败时保留编辑
   和页内错误，不假成功。
-- 今日从同一个 Dashboard 读取复习、已确认学习和日程。三栏独立折叠，不使用只计算复习的
+- 今日从同一个 Dashboard 读取复习、已确认学习和日程。新后端存在 `review_selection` 时，复习数量、
+  分钟和卡片只取首次物化的稳定日计划；完成后只减少，不从全量到期列表补题。未选到当日计划的到期项
+  只显示低压力的后续安排数量。旧后端缺少该字段时继续使用原 Todo 兼容路径，不承诺稳定计划。
+  三栏独立折叠，不使用只计算复习的
   “今日总体进度”卡。默认复习与学习折叠、日程展开；但今天没有到期项且服务端返回最近安排时，
   “复习安排”自动展开以直接显示日期与内容。本地偏好里的非布尔脏值回落到默认。
 - Dashboard 只取得最多 20 条 Todo 和全量精确计数；用户沿用现有“还有 N 项 · 展开”动作时只追加

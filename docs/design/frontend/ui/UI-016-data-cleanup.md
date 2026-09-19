@@ -1,16 +1,16 @@
 # UI-016 — 删除配置
 
-- Status: `IMPLEMENTING / FIGMA_WAIVED`
+- Status: `IMPLEMENTING / REPOSITORY_DESIGN_EVIDENCE`
 - Related Feature: `FEAT-006`
 - Related Spec: `SPEC-20260906-DATA-CLEANUP-01`
 - Baseline: `FDB-20260906-02`
 - Engineering contract: `FEC-20260906-04`
 - Proposed design revision: `DREV-20260906-DATA-01`
-- Figma file: https://www.figma.com/design/FAyfmjNrA3btWztwyxI6Zj
-- Figma node: `N/A — FIGMA-WAIVER-FEAT006-20260906-01`
+- Editable design source: `PENDING — DREV-20260906-DATA-01 must be migrated before further visible implementation`
+- Design evidence governance: `GOV-SPEC-LOCAL-DESIGN-EVIDENCE-20260913-01`
 - Snapshot manifest: `docs/design/frontend/snapshots/UI-016/DREV-20260906-DATA-01/APPROVAL.md`
 
-> 用户于 2026-09-06 批准本 Spec、DREV 与一次性 Figma waiver；本文仍在实现中，尚不能描述为已验证 current state。
+> 用户于 2026-09-06 批准本 Spec 与 DREV；当时的一次性 Figma waiver 只作为历史记录。本文仍在实现中，尚不能描述为已验证 current state。
 
 ## Proposed information architecture
 
@@ -65,6 +65,6 @@
 ## Approval and evidence status
 
 - Task Spec approval: `SPEC-20260906-DATA-CLEANUP-01` approved 2026-09-06.
-- DREV/Figma nodes/snapshot: `DREV-20260906-DATA-01` 通过 `FIGMA-WAIVER-FEAT006-20260906-01` 批准；公开生产前补齐 node 与三视口证据。
+- DREV/evidence: `DREV-20260906-DATA-01` 的旧 waiver 是历史批准证据；继续可见实现前补齐 editable source、hash manifest 与三视口证据。
 - Frontend code/tests/native viewport/device evidence: not started/not run.
-- Waiver 只覆盖本 Feature 本地实现，不扩展到其他 Feature。
+- 当前不再使用外部设计工具 waiver；其他 Feature 各自按 repository-native DREV 审批。

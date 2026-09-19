@@ -4,14 +4,14 @@
 
 - Frontend engineering scope: PRESENT
 - Constraint status: APPROVED
-- Constraint revision: FEC-20260911-READ-PERF-01
+- Constraint revision: FEC-20260913-LOCAL-DESIGN-EVIDENCE-01
 - Owner: 产品负责人（用户）
 - Approved by: 产品负责人（用户）
-- Approved at: 2026-09-11
-- Approval evidence: 用户批准 `BUG-SPEC-20260911-PERF-01`、`ARCH-20260911-READ-PERF-01`
-  与 `FEC-20260911-READ-PERF-01`；视觉基线继续沿用已批准 PKDS revision
-- Superseded revision: FEC-20260906-04（视觉、视口、样式分层与图标条款不变；新增有界读取合同）
-- Related frontend design baseline: FDB-20260906-02
+- Approved at: 2026-09-13
+- Approval evidence: 用户批准 `GOV-SPEC-LOCAL-DESIGN-EVIDENCE-20260913-01` 与
+  `ARCH-LOCAL-DESIGN-EVIDENCE-20260913-01`；所有既有质量预算继续有效，仅替换设计证据工具链
+- Superseded revision: FEC-20260911-READ-PERF-01（有界读取、视觉、视口、样式分层与图标条款不变）
+- Related frontend design baseline: FDB-20260913-04
 - Applies to: `apps/miniprogram`
 
 ## Engineering priorities and stack boundary
@@ -131,18 +131,22 @@
 | unit/state/contract | `npm test` |
 | static mini-program rules | `npm run lint:miniapp` |
 | repository validator | `uv run python tools/validate_miniprogram.py` |
+| design evidence integrity | `uv run python tools/validate_design_evidence.py --manifest <APPROVAL.md>` |
 | icon asset reproducibility | `uv run python tools/gen_icon_styles.py` then confirm an empty diff |
 | architecture boundaries | `uv run python tools/check_architecture.py` |
 | device/visual | WeChat DevTools compile/preview plus representative iOS and Android smoke |
 | viewport/state | 320×568, 390×844, 430×932 captures for changed states |
 | privacy/authorization | contract/integration tests plus manual bundle/log inspection |
 
-## Exceptions, enforcement, and review
+## Design evidence, exceptions, enforcement, and review
 
-- FEAT-001 has a scoped Figma Starter-plan evidence waiver in `ARCHITECTURE.md`; it expires before public production release and does not cover FEAT-002.
-- Visible FEAT-002 work requires a new approved Figma Design Revision and snapshot unless the user explicitly approves another scoped, owned, expiring waiver.
-- BUG-010 uses approved waiver `FIGMA-WAIVER-BUG010-20260905-01`, limited to its named repair surfaces and expiring before public production release.
-- Exceptions require an approved Spec with owner, risk, expiry and remediation. Review checks design alignment, complete states, security/privacy, budgets and evidence.
+- A visible change requires a repository-local editable SVG or self-contained HTML source, exact required
+  viewport/state PNG exports, matching SHA-256 values and explicit approval of the Task Spec revision + DREV.
+- Figma, external design URLs, node IDs and tool-availability waivers are not required. Historical Figma and
+  waiver records remain audit evidence but do not constrain new implementation or release work.
+- Repository previews do not replace WeChat native geometry, interaction, accessibility or device checks.
+- Other engineering deviations still require an approved Spec with owner, risk, expiry and remediation.
+  Review checks design alignment, complete states, security/privacy, budgets and evidence.
 
 ## Constraint verification checklist
 
@@ -153,3 +157,4 @@
 - [ ] Logs, local storage, share payloads and analytics contain no prohibited data.
 - [ ] AI output remains labelled and editable until parent confirmation.
 - [ ] Deviations are approved, owned and time-bounded.
+- [ ] Editable design sources and approval exports exist and their SHA-256 values match the manifest.

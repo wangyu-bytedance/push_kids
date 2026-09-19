@@ -8,7 +8,7 @@ Page({
     familyName: "", relationship: RELATIONS[0],
     relations: RELATIONS, relationIndex: 0, customRelation: false,
     canSubmit: false, submitHint: "填写家庭名称后就可以创建",
-    inviteToken: "", tokenError: "", request: null, refreshing: false, canceling: false
+    inviteCode: "", tokenError: "", request: null, refreshing: false, canceling: false
   },
   onLoad() { this.familyRequestKey = api.newIdempotencyKey("family"); this.load(); },
   onPullDownRefresh() { this.load().finally(() => wx.stopPullDownRefresh()); },
@@ -25,9 +25,10 @@ Page({
   setField(event) {
     this.familyRequestKey = api.newIdempotencyKey("family");
     const field = event.currentTarget.dataset.field;
-    const value = event.detail.value;
+    const rawValue = event.detail.value;
+    const value = field === "inviteCode" ? String(rawValue || "").replace(/\D/g, "").slice(0, 6) : rawValue;
     const patch = { [field]: value, error: "" };
-    if (field === "inviteToken") patch.tokenError = "";
+    if (field === "inviteCode") patch.tokenError = "";
     this.setData(patch, () => this.syncSubmitState());
   },
   /* 主按钮的可用性与缺什么的说明都在 js 里算好，WXML 只做渲染。 */
@@ -51,11 +52,10 @@ Page({
     }, () => this.syncSubmitState());
   },
   openJoin() { this.setData({ mode: "join", error: "", tokenError: "" }); },
-  openToken() {
-    /* 口令区分大小写，不做任何大小写转换；页面与日志都不回显口令内容。 */
-    const token = (this.data.inviteToken || "").trim();
-    if (!token) return this.setData({ tokenError: "请粘贴家人发来的邀请口令，口令区分大小写" });
-    wx.navigateTo({ url: `/pages/family-join/index?token=${encodeURIComponent(token)}` });
+  openCode() {
+    const code = String(this.data.inviteCode || "").trim();
+    if (!/^\d{6}$/.test(code)) return this.setData({ tokenError: "请输入管理员发来的 6 位家庭邀请码" });
+    wx.navigateTo({ url: `/pages/family-join/index?code=${encodeURIComponent(code)}` });
   },
   async submitFamily() {
     /* 按钮在未满足条件时是 disabled 样式，这里再兜一层，避免误触发写请求。 */
@@ -81,16 +81,16 @@ Page({
     this.setData({ refreshing: false });
     if (this.data.state === "pending" && !this.data.error) wx.showToast({ title: "还在等待确认", icon: "none" });
   },
-  copyRequestCode() {
+  copyVerificationCode() {
     const code = this.data.request ? this.data.request.request_code : "";
     if (!code) return;
-    wx.setClipboardData({ data: code, success: () => wx.showToast({ title: "申请码已复制", icon: "success" }) });
+    wx.setClipboardData({ data: code, success: () => wx.showToast({ title: "核验码已复制", icon: "success" }) });
   },
   cancelRequest() {
     if (this.data.canceling) return;
     wx.showModal({
       title: "撤回这次申请？",
-      content: "撤回后管理员就看不到这条申请了，你可以重新用邀请口令再申请一次。",
+      content: "撤回后管理员就看不到这条申请了，你可以重新用家庭邀请码或微信邀请再申请一次。",
       confirmText: "撤回申请", confirmColor: "#A85742",
       success: async (result) => {
         if (!result.confirm) return;

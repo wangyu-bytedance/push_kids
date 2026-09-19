@@ -3,9 +3,12 @@ def test_openapi_contains_core_contracts(app) -> None:
     assert "/api/v1/submissions/{submission_id}/confirm" in paths
     assert "/api/v1/children/{child_id}/dashboard" in paths
     assert "/api/v1/reviews/{review_id}/feedback" in paths
+    assert "/api/v1/review-feedback-batches" in paths
     assert "/api/v1/activity-records" in paths
     submission = app.openapi()["components"]["schemas"]["SubmissionView"]
     assert submission["properties"]["display_groups"]["type"] == "array"
+    batch = app.openapi()["components"]["schemas"]["BatchFeedbackRequest"]
+    assert batch["properties"]["items"]["maxItems"] == 120
 
 
 def test_weekday_specific_time_slots_are_part_of_the_contract(app) -> None:

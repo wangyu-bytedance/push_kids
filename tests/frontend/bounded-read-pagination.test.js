@@ -104,6 +104,63 @@ test("Today loads the next Todo page for the same day and keeps prior rows", asy
   assert.equal(page.data.loadingMoreTodos, false);
 });
 
+test("Today uses the stable daily selection instead of the full due Todo list", async () => {
+  const fullDue = [{ id: "legacy", subject_name: "数学", optional: false, estimated_minutes: 20,
+    items: [{ review_id: "legacy-review", knowledge_name: "不应展示" }] }];
+  async function request(requestPath) {
+    if (requestPath === "/children") return [{ id: "child", name: "小雨", active: true }];
+    if (requestPath === "/children/child/subjects") return [];
+    if (requestPath === "/children/child/dashboard") return todayDashboard({
+      todo_groups: fullDue, todo_count: 12, required_todo_count: 12, estimated_minutes: 20,
+      todo_next_cursor: "legacy-next", todo_remaining_count: 11,
+      review_selection: {
+        plan_id: "plan", selected_count: 2, planned_count: 2, selected_minutes: 4,
+        backlog_count: 10, today_feedback_count: 0,
+        sessions: [{ id: "plan:math", subject_id: "math", subject_name: "数学", estimated_minutes: 4,
+          items: [
+            { review_id: "r1", knowledge_name: "乘法", review_method: "口头回顾", estimated_minutes: 2 },
+            { review_id: "r2", knowledge_name: "除法", review_method: "口头回顾", estimated_minutes: 2 }
+          ] }]
+      }
+    });
+    throw new Error(`unexpected path: ${requestPath}`);
+  }
+  const { page } = loadPage("pages/today/index.js", request);
+
+  await page.load();
+
+  assert.equal(page.data.stablePlan, true);
+  assert.equal(page.data.dashboard.todo_count, 2);
+  assert.equal(page.data.dashboard.todo_next_cursor, null);
+  assert.deepEqual(Array.from(page.data.todoCards[0].items, (item) => item.review_id), ["r1", "r2"]);
+  assert.equal(page.data.hero.note, "今天先做 2 项，其余 10 项会按最早到期顺序安排到后续复习。");
+  assert.equal(page.data.sectionMeta.review, "今天安排 2 项 · 约 4 分钟");
+});
+
+test("Today reports a completed fixed plan without refilling it", async () => {
+  async function request(requestPath) {
+    if (requestPath === "/children") return [{ id: "child", name: "小雨", active: true }];
+    if (requestPath === "/children/child/subjects") return [];
+    if (requestPath === "/children/child/dashboard") return todayDashboard({
+      todo_groups: [{ id: "refill", items: [{ review_id: "should-not-refill" }] }], todo_count: 1,
+      review_selection: {
+        plan_id: "plan", selected_count: 0, planned_count: 3, selected_minutes: 0,
+        backlog_count: 4, today_feedback_count: 3, sessions: []
+      }
+    });
+    throw new Error(`unexpected path: ${requestPath}`);
+  }
+  const { page } = loadPage("pages/today/index.js", request);
+
+  await page.load();
+
+  assert.equal(page.data.planCompleted, true);
+  assert.equal(page.data.dashboard.todo_count, 0);
+  assert.deepEqual(plain(page.data.todoCards), []);
+  assert.equal(page.data.hero.note, "今天安排的 3 项已完成，今天不会再补入新内容。");
+  assert.equal(page.data.sectionMeta.review, "今天 3 项已完成");
+});
+
 test("Today retains loaded Todos when the next page fails", async () => {
   const { page } = loadPage("pages/today/index.js", async () => {
     throw new Error("网络暂不可用");

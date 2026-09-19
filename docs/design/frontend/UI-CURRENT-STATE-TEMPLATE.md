@@ -27,12 +27,11 @@
 - Excluded adjacent UI:
 - Current limitations:
 
-## 3. Figma and approval source
+## 3. Repository-native design and approval source
 
-- Figma project/file URL:
-- Figma file key:
-- Node-specific URL(s):
-- Branch/version URL: `[URL/N/A]`
+- Frontend spec path:
+- Editable design source path(s):
+- Editable source SHA-256:
 - Approval snapshot manifest:
 - Approved by/at:
 - Approval evidence:
@@ -79,7 +78,7 @@ sequenceDiagram
 
 ## 6. Responsive and resolution behavior
 
-| Viewport ID | Supported range | Layout/navigation behavior | State coverage | Figma export | Runtime/visual evidence |
+| Viewport ID | Supported range | Layout/navigation behavior | State coverage | DREV export | Runtime/visual evidence |
 |---|---|---|---|---|---|
 | `[VP-*]` | `[range]` | `[current behavior]` | `[states]` | `[snapshot path]` | `[test/evidence]` |
 
@@ -103,7 +102,7 @@ sequenceDiagram
 
 ## 8. Implementation mapping
 
-| Responsibility | Code path/component | Figma component/node | Public contract/props | Owner | Must not be duplicated in |
+| Responsibility | Code path/component | DREV source/region | Public contract/props | Owner | Must not be duplicated in |
 |---|---|---|---|---|---|
 | `[TODO]` | `[path]` | `[node]` | `[contract]` | `[owner]` | `[path/module]` |
 
@@ -112,7 +111,7 @@ sequenceDiagram
 - State ownership:
 - Shared component rationale:
 - Design token mapping:
-- Code Connect mapping: `[link/N/A]`
+- Design-to-code mapping: `[source region/path or N/A]`
 - Old path/flag removal status:
 
 ## 9. Current frontend engineering quality
@@ -148,13 +147,13 @@ sequenceDiagram
 - Feature documents:
 - Task Specs:
 - Approval snapshots:
-- Figma nodes:
+- Editable design sources:
 - Implementation:
 - Tests/visual evidence:
 
 ## 13. Change References
 
-| Date | Current-state change | Task Spec | Design Revision | Figma node | Approval snapshot | Release/commit | Verification |
+| Date | Current-state change | Task Spec | Design Revision | Editable source | Approval snapshot | Release/commit | Verification |
 |---|---|---|---|---|---|---|---|
 | `YYYY-MM-DD` | `[final fact, not implementation diary]` | `[path]` | `[DREV-*]` | `[URL]` | `[path]` | `[SHA/release]` | `[evidence]` |
 
@@ -162,7 +161,7 @@ sequenceDiagram
 
 - [ ] Body contains only current effective UI facts.
 - [ ] Superseded design statements were replaced, not appended as conflicts.
-- [ ] Figma node, current Design Revision, approval snapshot, and code agree.
+- [ ] Editable source, current Design Revision, approval snapshot, and code agree.
 - [ ] Style follows the approved baseline or lists an approved deviation.
 - [ ] Interaction follows target-user/platform habits.
 - [ ] Every claimed viewport and critical state has design and test evidence.

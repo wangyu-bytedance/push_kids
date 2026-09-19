@@ -78,12 +78,12 @@ Specs.
 - Affected quality dimensions/budget IDs: `[list or N/A]`
 
 - Approved Task Spec / Design Revision: `[revisions or N/A]`
-- Figma node URL(s): `[URLs or N/A]`
+- Editable design source path(s) and hash result: `[paths + verification or N/A]`
 - Approval snapshot manifest verified: `[path + hash result or N/A]`
 
 | Audit | Evidence | Status/finding |
 |---|---|---|
-| Implementation stays within approved Figma/Spec scope | `[code vs node/snapshot]` | pass/finding/N/A |
+| Implementation stays within approved DREV/Spec scope | `[code vs source/snapshot]` | pass/finding/N/A |
 | Style consistency and token/component reuse | `[paths/nodes]` | pass/finding/N/A |
 | Target-user/platform interaction conventions | `[flow/evidence]` | pass/finding/N/A |
 | Required states and viewport matrix | `[exports/tests]` | pass/finding/N/A |

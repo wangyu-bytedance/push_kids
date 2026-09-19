@@ -4,7 +4,12 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, Header, Query
 from sqlalchemy.orm import Session
 
-from push_kids.planning.schemas import FeedbackRequest, FeedbackResult
+from push_kids.planning.schemas import (
+    BatchFeedbackRequest,
+    BatchFeedbackResult,
+    FeedbackRequest,
+    FeedbackResult,
+)
 from push_kids.planning.service import PlanningService
 from push_kids.platform.context import family_id
 from push_kids.platform.dependencies import get_db
@@ -77,6 +82,27 @@ def feedback(
     ] = None,
 ):
     return PlanningService.feedback(db, family, review_id, body.action, idempotency_key)
+
+
+@router.post("/review-feedback-batches", response_model=BatchFeedbackResult)
+def feedback_batch(
+    body: BatchFeedbackRequest,
+    family: Annotated[str, Depends(family_id)],
+    db: Annotated[Session, Depends(get_db)],
+    idempotency_key: Annotated[
+        str,
+        Header(
+            alias="Idempotency-Key", min_length=8, max_length=100, pattern=r"^[A-Za-z0-9._:-]+$"
+        ),
+    ],
+):
+    return PlanningService.feedback_batch(
+        db,
+        family,
+        body.child_id,
+        [item.model_dump() for item in body.items],
+        idempotency_key,
+    )
 
 
 @router.get("/children/{child_id}/practice-materials")

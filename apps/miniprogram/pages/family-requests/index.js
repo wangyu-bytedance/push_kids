@@ -59,11 +59,11 @@ Page({
       [`requests[${index}].rowError`]: ""
     });
   },
-  copyCode(event) {
+  copyVerificationCode(event) {
     const code = event.currentTarget.dataset.code;
     wx.setClipboardData({
       data: String(code || ""),
-      success: () => wx.showToast({ title: "申请码已复制", icon: "success" }),
+      success: () => wx.showToast({ title: "核验码已复制", icon: "success" }),
       fail: () => wx.showToast({ title: "复制失败，可手动核对", icon: "none" })
     });
   },
@@ -75,7 +75,7 @@ Page({
     const role = item.roleValue;
     const confirmed = await new Promise((resolve) => wx.showModal({
       title: "确认同意申请",
-      content: `申请码 ${item.request_code}\n关系称谓：${item.relationship_label}\n授权为：${ROLE_LABELS[role]}\n同意后，对方可以看到这个家庭所有孩子的学习记录和照片。`,
+      content: `申请核验码 ${item.request_code}\n关系称谓：${item.relationship_label}\n授权为：${ROLE_LABELS[role]}\n同意后，对方可以看到这个家庭所有孩子的学习记录和照片。`,
       confirmText: "确认同意",
       success: (result) => resolve(result.confirm)
     }));

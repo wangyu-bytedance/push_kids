@@ -2,13 +2,14 @@
 
 - Feature ID: `FEAT-002`
 - Status: `IMPLEMENTING`
-- Current-state revision: `FEAT-STATE-20260906-BUG014-STAGING-EVIDENCE`
+- Current-state revision: `FEAT-STATE-20260913-BUG015-SIX-DIGIT-INVITE`
 - Owner: 产品负责人（用户）
-- Last verified: 2026-09-06
+- Last verified: 2026-09-13
 - Authoritative implementation: `apps/api/src/push_kids/families/`, family persistence models,
   `apps/miniprogram/pages/family-*`
 - Applied Specs: `specs/completed/FEAT-002-USER-FAMILY-BINDING.md` revision `SPEC-20260905-12`;
-  `specs/completed/BUG-014-NEW-USER-FAMILY-ENTRY.md` revision `BUG-SPEC-20260906-18`
+  `specs/completed/BUG-014-NEW-USER-FAMILY-ENTRY.md` revision `BUG-SPEC-20260906-18`;
+  `specs/completed/BUG-015-SIX-DIGIT-FAMILY-INVITE-CODE.md` revision `BUG-SPEC-20260913-19`
 
 > 本文只说明当前事实与已批准边界。家庭创建、邀请、申请、审批和成员角色已经在工作区实现并
 > 完成本地 SQLite/MySQL 验证，但尚未迁移或部署到微信云托管；因此不能描述为线上可用。
@@ -30,9 +31,12 @@
 - active member 角色为 manager/editor/viewer；被移除成员保留历史记录，但 active 唯一投影被释放，
   因而可以再次加入原家庭或创建新家庭。
 - 创建家庭、邀请、申请、审批和拒绝具有服务端幂等语义；小程序在失败重试时复用同一幂等键。
+- manager 创建邀请时同时获得可见的六位纯数字“家庭邀请码”和微信分享路径；申请人可以手输六位码，
+  也可以继续通过原有长 token 分享路径完成最小预览与申请。六位码查询按可信 actor 执行更严格限流。
 - `/api/v1/me` 与邀请预览的 `child_names` 只列在用学习档案，已归档档案不会出现在受邀家人面前（FEAT-005）。
 - 邀请是单次批准凭据：首个批准将邀请置为 exhausted，并使同邀请的其他 pending 申请失效；撤销邀请也同步释放 pending actor。
-- 成员管理接口无条件拒绝自移除；客户端本人详情不提供移除或角色修改。有效邀请列表不返回 token，申请双方通过六位申请码核对。
+- 成员管理接口无条件拒绝自移除；客户端本人详情不提供移除或角色修改。有效邀请列表不返回 token
+  或邀请码。申请提交后另行生成六位纯数字“申请核验码”，只供申请双方核对，不作为加入凭证。
 - 当前学习/活动记录没有可信的上传人、监督人、确认人和编辑版本归属。
 - FEAT-001 云身份链路的真实双 actor、owner/metaid 与公网拒绝验收已完成；FEAT-002 家庭协作迁移、
   完整角色生命周期与共享多实例限流验收尚未完成，公开发布仍被阻断。
@@ -45,7 +49,7 @@
 | controlled cloud actor binding | implemented locally | `platform/context.py` + active membership；cloud rollout pending |
 | verified collaboration identity/roles | implemented locally | family models/service + role integration tests |
 | family member list | implemented locally | members API + Mini Program page |
-| share/apply/approve | implemented locally | invite/request APIs + Mini Program pages |
+| six-digit code/share/apply/approve | implemented locally | dual-credential invite/request APIs + Mini Program pages |
 | manager/editor/viewer enforcement | implemented locally | server boundary role checks |
 | actor/supervisor attribution | not implemented | current persistence schema |
 | child profile archive/restore audit | implemented locally | `FamilyAuditEvent` `child.archived`/`child.restored`（FEAT-005，云身份路径） |
@@ -64,8 +68,9 @@ current state because the migration and service release have not been deployed.
 ## Data and permissions
 
 The local target schema contains families, members, invites, join requests and audit events. A nullable unique
-`active_actor_binding_id` enforces one active family without preventing removed actors from rejoining. Cloud MySQL
-still remains on the previous revision until the controlled migration window.
+`active_actor_binding_id` enforces one active family without preventing removed actors from rejoining. Active
+six-digit invite codes use a nullable unique HMAC digest plus a deterministic nonce; neither invite codes nor share
+tokens are stored in plaintext. Cloud MySQL still remains on the previous revision until the controlled migration window.
 
 ## Architecture mapping
 
@@ -94,6 +99,9 @@ still remains on the previous revision until the controlled migration window.
 - BUG-014 启动生命周期回归（10 passed）、完整前端测试（107 passed）、Mini Program lint/validator、
   架构检查及家庭 onboarding integration tests（6 passed）已在本地通过；WeChat DevTools/真机普通启动与
   邀请启动 smoke 尚未执行。
+- BUG-015 的六位家庭邀请码创建、幂等重放、手输预览/申请、旧分享 token 兼容、数字申请核验码、
+  单次批准、摘要释放、输入边界和独立限流已通过 SQLite 集成测试；小程序入口与术语回归已通过 Node。
+  新迁移从空 SQLite 升级至 `20260913_0014` 成功；真实 MySQL 5.7、原生三视口和双账号仍待发布前验证。
 - Public production remains blocked by `ARC-011`.
 
 ## Limitations
@@ -114,6 +122,12 @@ still remains on the previous revision until the controlled migration window.
 - Existing feature: `docs/domain/features/FEAT-001-push-kids-mvp.md`
 
 ## Change References
+
+- 2026-09-13 — `BUG-SPEC-20260913-19 / DREV-20260913-FAMILY-INVITE-CODE-01`（BUG-015）：
+  manager 创建邀请后可显示/复制六位家庭邀请码，申请人可手输该码预览并提交；微信分享长 token 保持兼容。
+  申请产生后的六位数字统一命名为“申请核验码”。服务端只保存 active code HMAC 摘要，批准、撤销、
+  到期时释放摘要，并对手输码使用每可信 actor 15 分钟 5 次的独立限流。实现与候选三视口设计证据已完成；
+  云迁移/部署、原生三视口和双账号验收尚未执行。
 
 - 2026-09-11 — 产品负责人确认成员微信头像/昵称不是关键 feature，降为低优先级后续任务；
   `SPEC-20260911-MULTI-FAMILY-06` 将该能力移出当前多家庭实现与发布门禁，现有关系称谓和首字头像保持不变。

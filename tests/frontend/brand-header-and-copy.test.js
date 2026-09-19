@@ -154,7 +154,7 @@ test("primary surfaces do not explain affordances that the control already shows
 
   /* 与之相对，改变数据或产生正式记录的后果必须留下来。 */
   assert.match(read("pages/records/index.wxml"), /提交后会先生成待确认的草稿，确认后才进入学习档案。/);
-  assert.match(read("pages/submission/draft.wxml"), /确认后会创建正式记录、知识点和复习计划。/);
+  assert.match(read("pages/submission/draft.wxml"), /确认后才会保存；新知识会进入复习计划，已有知识会更新复习时间。/);
   assert.match(read("pages/settings/index.wxml"), /只显示在日程，不生成待办/);
   assert.match(read("components/submission-materials/index.wxml"), /照片仅供你核对，不用于展示或分享。/);
 });

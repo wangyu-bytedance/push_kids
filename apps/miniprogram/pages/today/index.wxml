@@ -52,7 +52,10 @@
       <view class="hero-main">
         <view class="grow">
           <text class="hero-eyebrow">今天的复习安排</text>
-          <text class="hero-line" wx:if="{{hero.required}}">建议复习 <text class="hero-num">{{hero.required}}</text> 项，约 <text class="hero-num">{{hero.minutes}}</text> 分钟</text>
+          <text class="hero-line" wx:if="{{stablePlan && hero.total}}">今天安排 <text class="hero-num">{{hero.total}}</text> 项，约 <text class="hero-num">{{hero.minutes}}</text> 分钟</text>
+          <text class="hero-line" wx:elif="{{stablePlan && planCompleted}}">今天的复习已经完成</text>
+          <text class="hero-line" wx:elif="{{stablePlan}}">今天没有安排复习</text>
+          <text class="hero-line" wx:elif="{{hero.required}}">建议复习 <text class="hero-num">{{hero.required}}</text> 项，约 <text class="hero-num">{{hero.minutes}}</text> 分钟</text>
           <text class="hero-line" wx:else>今天没有必须做的复习</text>
         </view>
         <view class="ring" wx:if="{{hero.total}}">
@@ -60,11 +63,11 @@
           <view class="ring-plate"></view>
           <view class="ring-mid">
             <text class="rv">{{hero.total}}<text class="ru">项</text></text>
-            <text class="rl">今天到期</text>
+            <text class="rl">{{stablePlan ? '今天安排' : '今天到期'}}</text>
           </view>
         </view>
       </view>
-      <view class="ring-legend" wx:if="{{hero.total}}">
+      <view class="ring-legend" wx:if="{{hero.total && !stablePlan}}">
         <view class="rg"><view class="rgd"></view><text>必做 {{hero.required}}</text></view>
         <view class="rg opt" wx:if="{{hero.optional}}"><view class="rgd"></view><text>有余力 {{hero.optional}}</text></view>
       </view>
@@ -104,7 +107,9 @@
         </view>
         <view class="review-today-clear" wx:if="{{!dashboard.todo_count}}">
           <view class="review-clear-mark">✓</view>
-          <text>今天没有到期内容</text>
+          <text wx:if="{{planCompleted}}">今天安排的内容已完成，不会再补入新内容</text>
+          <text wx:elif="{{stablePlan}}">今天没有安排复习</text>
+          <text wx:else>今天没有到期内容</text>
         </view>
 
         <view class="next-review-toggle" wx:if="{{dashboard.todo_count && nextReview && !upcomingExpanded}}" aria-role="button" aria-label="展开下一次复习安排" bindtap="toggleUpcoming">

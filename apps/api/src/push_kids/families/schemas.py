@@ -56,6 +56,7 @@ class InviteCreate(BaseModel):
 class InviteView(BaseModel):
     id: str
     token: str | None = None
+    invite_code: str | None = Field(default=None, pattern=r"^\d{6}$")
     share_path: str | None = None
     status: str
     expires_at: datetime
@@ -74,11 +75,19 @@ class InvitePreview(BaseModel):
 
 
 class InviteTokenRequest(BaseModel):
-    token: str = Field(min_length=32, max_length=120)
+    token: str = Field(
+        min_length=6,
+        max_length=120,
+        pattern=r"^(?:\d{6}|[A-Za-z0-9_-]{32,120})$",
+    )
 
 
 class JoinRequestCreate(BaseModel):
-    token: str = Field(min_length=32, max_length=120)
+    token: str = Field(
+        min_length=6,
+        max_length=120,
+        pattern=r"^(?:\d{6}|[A-Za-z0-9_-]{32,120})$",
+    )
     relationship_label: str = Field(min_length=1, max_length=30)
 
 

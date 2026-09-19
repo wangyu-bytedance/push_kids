@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="390" height="844" viewBox="0 0 390 844">
+  <rect width="390" height="844" fill="#FAF7F0"/>
+  <style>
+    .serif{font-family:"Noto Serif SC","Songti SC",serif}.sans{font-family:"Noto Sans SC","PingFang SC",sans-serif}
+    .ink{fill:#22261F}.muted{fill:#79826F}.primary{fill:#1F5B45}.white{fill:#FFFDF8}
+    .h1{font-size:24px;font-weight:600}.h2{font-size:17px;font-weight:600}.body{font-size:14px}.small{font-size:12px}.tiny{font-size:11px}
+  </style>
+  <text x="18" y="41" class="serif ink h1">今天，也慢慢来</text>
+  <text x="18" y="65" class="sans muted small">9 月 13 日 星期日</text>
+  <rect x="296" y="20" width="76" height="40" rx="20" fill="#FFFDF8" stroke="#EBE5D7"/>
+  <circle cx="318" cy="40" r="13" fill="#E4EDE6"/><text x="313" y="45" class="serif primary body">宇</text>
+  <text x="339" y="45" class="sans ink small">小宇</text>
+
+  <rect x="18" y="86" width="354" height="160" rx="20" fill="#FFFDF8" stroke="#EBE5D7"/>
+  <text x="38" y="116" class="sans muted tiny">今天的复习安排</text>
+  <text x="38" y="152" class="serif ink h2">建议复习</text><text x="119" y="152" class="serif primary h1">5</text><text x="140" y="152" class="serif ink h2">项，约</text><text x="205" y="152" class="serif primary h1">15</text><text x="239" y="152" class="serif ink h2">分钟</text>
+  <text x="38" y="181" class="sans muted small">按今天的时间安排生成，完成后不会再补入新内容。</text>
+  <rect x="38" y="199" width="136" height="36" rx="18" fill="#1F5B45"/><text x="70" y="222" class="sans white body">记录学习</text>
+  <rect x="184" y="199" width="112" height="36" rx="18" fill="#F3EFE4"/><text x="214" y="222" class="sans ink body">添加日程</text>
+
+  <text x="18" y="286" class="serif ink h2">复习安排</text>
+  <text x="184" y="286" class="sans muted small">今天剩余 5 项 · 约 15 分钟</text>
+  <line x1="18" y1="302" x2="372" y2="302" stroke="#DDD6C4"/>
+
+  <rect x="18" y="320" width="354" height="202" rx="20" fill="#FFFDF8" stroke="#EBE5D7"/>
+  <rect x="18" y="320" width="6" height="202" rx="3" fill="#1F5B45"/>
+  <rect x="38" y="340" width="34" height="34" rx="11" fill="#E6EDF3"/><text x="48" y="363" class="serif" font-size="15" fill="#3F6379">数</text>
+  <text x="86" y="354" class="sans ink" font-size="16" font-weight="600">数学复习</text>
+  <text x="86" y="376" class="sans muted small">口头讲解 · 2 项 · 约 6 分钟</text>
+  <rect x="292" y="340" width="60" height="26" rx="13" fill="#E4EDE6"/><text x="304" y="358" class="sans primary tiny">今日计划</text>
+  <circle cx="48" cy="411" r="4" fill="#1F5B45"/><text x="62" y="416" class="sans ink body">三位数连续退位减法</text>
+  <circle cx="48" cy="447" r="4" fill="#1F5B45"/><text x="62" y="452" class="sans ink body">用线段图解释倍数关系</text>
+  <line x1="38" y1="470" x2="352" y2="470" stroke="#F1ECE0"/>
+  <rect x="38" y="480" width="150" height="30" rx="15" fill="#1F5B45"/><text x="82" y="500" class="sans white small">完成本组</text>
+  <text x="245" y="501" class="sans primary small">其他反馈</text>
+
+  <rect x="18" y="538" width="354" height="164" rx="20" fill="#FFFDF8" stroke="#EBE5D7"/>
+  <rect x="18" y="538" width="6" height="164" rx="3" fill="#7FA65C"/>
+  <rect x="38" y="558" width="34" height="34" rx="11" fill="#EDECF5"/><text x="48" y="581" class="serif" font-size="15" fill="#565383">英</text>
+  <text x="86" y="572" class="sans ink" font-size="16" font-weight="600">英语复习</text>
+  <text x="86" y="594" class="sans muted small">朗读与造句 · 3 项 · 约 9 分钟</text>
+  <rect x="292" y="558" width="60" height="26" rx="13" fill="#E4EDE6"/><text x="304" y="576" class="sans primary tiny">今日计划</text>
+  <circle cx="48" cy="629" r="4" fill="#7FA65C"/><text x="62" y="634" class="sans ink body">can’t + 动词的用法</text>
+  <circle cx="48" cy="665" r="4" fill="#7FA65C"/><text x="62" y="670" class="sans ink body">动作词汇朗读与变式造句（共 2 项）</text>
+
+  <rect x="18" y="718" width="354" height="68" rx="16" fill="#F0F5F0" stroke="#C3D8CA"/>
+  <text x="38" y="746" class="sans primary small">今天先做 5 项</text>
+  <text x="38" y="769" class="sans muted small">其余 20 项会按最早到期顺序安排到后续复习。</text>
+  <rect x="0" y="806" width="390" height="38" fill="#FFFDF8"/>
+  <text x="40" y="830" class="sans primary tiny">今日</text><text x="116" y="830" class="sans muted tiny">日程</text><text x="192" y="830" class="sans muted tiny">记录</text><text x="268" y="830" class="sans muted tiny">报表</text><text x="344" y="830" class="sans muted tiny">设置</text>
+</svg>

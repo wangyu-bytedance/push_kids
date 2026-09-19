@@ -17,7 +17,7 @@ function timeLabel(value) {
 Page({
   data: {
     loading: true, error: "", family: null, members: [], requests: [], invites: [], inviteListUnavailable: false,
-    isManager: false, sharing: false, shareReady: false, sharePath: "", requestCount: 0,
+    isManager: false, sharing: false, shareReady: false, sharePath: "", inviteCode: "", inviteCodeDisplay: "", requestCount: 0,
     showMember: false, selectedMember: null, relationshipDraft: "", roleOptions: ROLE_OPTIONS,
     roleIndex: 0, savingMember: false, sheetError: "", requestText: "", roleNote: "", copying: false
   },
@@ -60,18 +60,23 @@ Page({
     try {
       const invite = await api.request("/families/current/invites", { method: "POST", idempotencyKey: this.inviteRequestKey, data: { expires_in_hours: 24 } });
       this.inviteRequestKey = api.newIdempotencyKey("invite");
-      /* 口令只留在内存里供复制使用：不写入 data、不上屏、不打日志。 */
-      this.inviteSecret = invite.token || "";
-      this.setData({ sharing: false, shareReady: true, sharePath: invite.share_path });
+      const inviteCode = String(invite.invite_code || "");
+      this.setData({
+        sharing: false,
+        shareReady: true,
+        sharePath: invite.share_path,
+        inviteCode,
+        inviteCodeDisplay: inviteCode ? `${inviteCode.slice(0, 3)} ${inviteCode.slice(3)}` : ""
+      });
       await this.load();
       wx.showToast({ title: "邀请已准备好", icon: "success" });
     } catch (error) { this.setData({ sharing: false, error: error.message }); }
   },
-  copyInvite() {
-    if (!this.inviteSecret) return wx.showToast({ title: "请先重新生成邀请", icon: "none" });
+  copyInviteCode() {
+    if (!this.data.inviteCode) return wx.showToast({ title: "请重新生成邀请码", icon: "none" });
     wx.setClipboardData({
-      data: this.inviteSecret,
-      success: () => wx.showToast({ title: "邀请已复制", icon: "success" }),
+      data: this.data.inviteCode,
+      success: () => wx.showToast({ title: "邀请码已复制", icon: "success" }),
       fail: () => wx.showToast({ title: "复制失败，可以改用微信邀请", icon: "none" })
     });
   },

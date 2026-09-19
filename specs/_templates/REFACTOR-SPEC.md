@@ -14,7 +14,7 @@
 - Feature merge owner: `[TODO or N/A]`
 
 
-## Frontend Design Impact and Figma Approval
+## Frontend Design Impact and Repository-native Approval
 
 - Frontend impact: `[yes/no — visible design or interaction]`
 - Frontend impact reason: `[what visible contract changes, or why no visible contract changes]`
@@ -30,8 +30,8 @@
 - Approved frontend engineering deviations: `[none or rule/scope/risk/Owner/expiry/approval]`
 
 - Current Design Revision(s): `[DREV-* or N/A]`
-- Figma project/file URL: `[URL or N/A]`
-- Figma node URL(s): `[node-specific URL(s) or N/A]`
+- Editable design source path(s): `[repository SVG/self-contained HTML path(s) or N/A]`
+- Design source SHA-256: `[hash(es) or N/A]`
 - Proposed Design Revision: `[DREV-YYYYMMDD-N or N/A]`
 - Required viewport/state exports: `[viewport IDs + states or N/A]`
 - Prototype status: `[N/A/DRAFT/AWAITING_APPROVAL/APPROVED]`
@@ -45,20 +45,19 @@
 - Frontend visual/a11y/resolution verification: `[evidence paths/commands or pending/N/A]`
 - Frontend engineering verification evidence: `[state/form/a11y/i18n/browser/performance/security/privacy/data-viz/observability evidence or pending/N/A]`
 
-- Figma waiver: `[none, or user-approved scope/reason/risk/owner/expiry]`
+- External design dependency: `none`
 
 When `Frontend impact: yes`, the project frontend design baseline and frontend
-engineering constraints MUST both be `APPROVED`. Generate or update the Figma
-prototype and obtain explicit user confirmation of the Task Spec revision +
-Design Revision + Figma node(s) before frontend implementation. A live Figma
-URL alone is not approval; store node-specific URLs and an approval snapshot
-manifest. If implementation requires a visible divergence, stop, create a new
-Design Revision, and obtain approval again. `N/A` requires a reason; Figma
-unavailability is a blocker unless the user explicitly approves the recorded waiver.
+engineering constraints MUST both be `APPROVED`. Generate or update a
+repository-local editable SVG or self-contained HTML source, export the required
+viewport/states, record matching SHA-256 values, and obtain explicit user
+confirmation of the Task Spec revision + Design Revision before frontend
+implementation. If implementation requires a visible divergence, stop, create a
+new Design Revision, and obtain approval again. `N/A` requires a reason.
 
 When `Frontend engineering impact: yes`, cite the approved FEC revision and
 select affected quality dimensions plus relevant rule/budget IDs even when
-`Frontend impact: no` and no new Figma revision is needed. Do not run every
+`Frontend impact: no` and no new Design Revision is needed. Do not run every
 possible check blindly, but do not omit a changed or risk-relevant dimension
 silently.
 

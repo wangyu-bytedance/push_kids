@@ -24,11 +24,11 @@
     </view>
 
     <view class="pk-card code-card" wx:if="{{requestCode}}">
-      <text class="code-cap">申请码</text>
+      <text class="code-cap">申请核验码</text>
       <text class="code-val tnum">{{requestCode}}</text>
-      <text class="code-help">把申请码告诉管理员用于核对</text>
+      <text class="code-help">把核验码告诉管理员用于核对</text>
       <view class="code-copy">
-        <view class="btn sm neutral" aria-role="button" aria-label="复制申请码" bindtap="copyRequestCode">复制申请码</view>
+        <view class="btn sm neutral" aria-role="button" aria-label="复制申请核验码" bindtap="copyRequestCode">复制核验码</view>
       </view>
     </view>
 
@@ -52,7 +52,7 @@
         </view>
       </view>
       <view class="hairline mt3"></view>
-      <text class="fam-note">申请后需要管理员确认。你会看到一个申请码，可以直接告诉家人核对。</text>
+      <text class="fam-note">申请后需要管理员确认。你会看到一个申请核验码，可以直接告诉家人核对。</text>
     </view>
 
     <view class="pk-card mt3">
@@ -83,11 +83,11 @@
     </view>
   </block>
 
-  <!-- 口令缺失或失效 -->
+  <!-- 邀请凭证缺失或失效 -->
   <view class="pk-empty" wx:else>
     <view class="em"><view class="ico ico-family-pri lg"></view></view>
     <text class="et">这条邀请用不了</text>
-    <text class="ec">邀请口令可能已过期或被撤销。请向家人重新获取一条邀请，再回到这里申请加入。</text>
+    <text class="ec">家庭邀请码或微信邀请可能已过期、被撤销。请向家人重新获取邀请后再试。</text>
     <view class="ea"><view class="btn secondary" aria-role="button" aria-label="返回" bindtap="goBack">返回上一步</view></view>
   </view>
 </view>

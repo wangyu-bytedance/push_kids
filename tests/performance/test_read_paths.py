@@ -237,10 +237,14 @@ def test_dashboard_and_report_stay_bounded_at_10k_rows(app, client, family_heade
     assert dashboard_body["daily_summary"]["record_count"] == 10_000
     assert dashboard_body["daily_summary"]["returned_record_count"] == 20
     assert dashboard_body["daily_summary"]["remaining_record_count"] == 9_980
+    assert dashboard_body["review_selection"]["selected_count"] == 15
+    assert dashboard_body["review_selection"]["selected_minutes"] == 15
+    assert len(dashboard_body["review_selection"]["sessions"]) <= 3
+    assert dashboard_body["review_selection"]["total_due"] == 10_000
     assert len(dashboard["response"].content) < 96 * 1024
-    # The nearest-future review preview adds at most three constant-count planning reads
-    # (nearest day, exact aggregate and five-row preview) to the prior 14-query budget.
-    assert dashboard["query_count"] <= 17
+    # The first read materializes only the minute-bounded plan from at most 120 candidates;
+    # later reads reuse that stable plan without materializing the 10k-row due pool.
+    assert dashboard["query_count"] <= 18
     assert dashboard["median_ms"] <= 250
     assert dashboard["peak_bytes"] <= 8 * 1024 * 1024
     print(
@@ -258,7 +262,7 @@ def test_dashboard_and_report_stay_bounded_at_10k_rows(app, client, family_heade
             family_headers,
         )
     )
-    assert "ix_review_items_family_child_active_due_id" in dashboard_plans
+    assert "ix_review_items_family_child_active_due_last_id" in dashboard_plans
     assert "ix_learning_records_family_child_occurred_submission" in dashboard_plans
 
     future_path = (
@@ -278,7 +282,7 @@ def test_dashboard_and_report_stay_bounded_at_10k_rows(app, client, family_heade
     assert upcoming["peak_bytes"] <= 8 * 1024 * 1024
     assert len(upcoming["response"].content) < 96 * 1024
     upcoming_plans = " ".join(_sqlite_plan_texts(client, engine, future_path, family_headers))
-    assert "ix_review_items_family_child_active_due_id" in upcoming_plans
+    assert "ix_review_items_family_child_active_due_last_id" in upcoming_plans
 
     for days in (7, 30, 100):
         report = _measure(

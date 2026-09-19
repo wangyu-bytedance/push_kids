@@ -12,7 +12,7 @@ from push_kids.platform.config import Settings
 
 
 class Database:
-    expected_cloud_revision = "20260911_0011"
+    expected_cloud_revision = "20260913_0014"
 
     _local_read_indexes = {
         "ix_learning_submissions_family_child_state_created_id",
@@ -20,8 +20,12 @@ class Database:
         "ix_learning_records_family_child_occurred_submission",
         "ix_knowledge_items_family_child_created_id",
         "ix_knowledge_occurrences_family_occurred_knowledge",
-        "ix_review_items_family_child_active_due_id",
+        "ix_review_items_family_child_active_due_last_id",
         "ix_review_feedback_family_review_occurred",
+        "ix_knowledge_search_terms_scope_term_item",
+        "ix_daily_review_plans_family_child_date",
+        "ix_daily_plan_items_plan_ordinal",
+        "ix_daily_plan_items_review_plan",
         "ix_activity_records_family_child_occurred_id",
     }
 
@@ -110,11 +114,105 @@ class Database:
                 connection.execute(
                     text("ALTER TABLE children ADD COLUMN deleting BOOLEAN DEFAULT 0 NOT NULL")
                 )
+        self._upgrade_local_family_invite_codes()
+        self._upgrade_local_review_projection()
         self._backfill_local_weekday_slots()
         for table in Base.metadata.tables.values():
             for index in table.indexes:
                 if index.name in self._local_read_indexes:
                     index.create(bind=self.engine, checkfirst=True)
+
+    def _upgrade_local_family_invite_codes(self) -> None:
+        columns = {item["name"] for item in inspect(self.engine).get_columns("family_invites")}
+        with self.engine.begin() as connection:
+            if "active_code_hash" not in columns:
+                connection.execute(
+                    text("ALTER TABLE family_invites ADD COLUMN active_code_hash VARCHAR(64)")
+                )
+            if "code_nonce" not in columns:
+                connection.execute(
+                    text(
+                        "ALTER TABLE family_invites ADD COLUMN code_nonce "
+                        "INTEGER DEFAULT 0 NOT NULL"
+                    )
+                )
+            connection.execute(
+                text(
+                    "CREATE UNIQUE INDEX IF NOT EXISTS ux_family_invites_active_code_hash "
+                    "ON family_invites (active_code_hash)"
+                )
+            )
+
+    def _upgrade_local_review_projection(self) -> None:
+        review_columns = {item["name"] for item in inspect(self.engine).get_columns("review_items")}
+        review_statements = {
+            "last_reviewed_on": "ALTER TABLE review_items ADD COLUMN last_reviewed_on DATE",
+            "review_count": (
+                "ALTER TABLE review_items ADD COLUMN review_count INTEGER DEFAULT 0 NOT NULL"
+            ),
+            "interval_days": (
+                "ALTER TABLE review_items ADD COLUMN interval_days INTEGER DEFAULT 1 NOT NULL"
+            ),
+            "heat_milli": (
+                "ALTER TABLE review_items ADD COLUMN heat_milli INTEGER DEFAULT 0 NOT NULL"
+            ),
+            "lapse_count": (
+                "ALTER TABLE review_items ADD COLUMN lapse_count INTEGER DEFAULT 0 NOT NULL"
+            ),
+            "policy_revision": (
+                "ALTER TABLE review_items ADD COLUMN policy_revision VARCHAR(40) "
+                "DEFAULT 'fixed_v1' NOT NULL"
+            ),
+            "state_version": (
+                "ALTER TABLE review_items ADD COLUMN state_version INTEGER DEFAULT 0 NOT NULL"
+            ),
+        }
+        feedback_columns = {
+            item["name"] for item in inspect(self.engine).get_columns("review_feedback")
+        }
+        feedback_statements = {
+            "reviewed_on": "ALTER TABLE review_feedback ADD COLUMN reviewed_on DATE",
+            "source": (
+                "ALTER TABLE review_feedback ADD COLUMN source VARCHAR(20) "
+                "DEFAULT 'manual' NOT NULL"
+            ),
+            "policy_revision": (
+                "ALTER TABLE review_feedback ADD COLUMN policy_revision VARCHAR(40) "
+                "DEFAULT 'fixed_v1' NOT NULL"
+            ),
+            "before_step": "ALTER TABLE review_feedback ADD COLUMN before_step INTEGER",
+            "after_step": "ALTER TABLE review_feedback ADD COLUMN after_step INTEGER",
+            "before_interval_days": (
+                "ALTER TABLE review_feedback ADD COLUMN before_interval_days INTEGER"
+            ),
+            "after_interval_days": (
+                "ALTER TABLE review_feedback ADD COLUMN after_interval_days INTEGER"
+            ),
+            "before_due_date": "ALTER TABLE review_feedback ADD COLUMN before_due_date DATE",
+            "after_due_date": "ALTER TABLE review_feedback ADD COLUMN after_due_date DATE",
+        }
+        with self.engine.begin() as connection:
+            for name, statement in review_statements.items():
+                if name not in review_columns:
+                    connection.execute(text(statement))
+            for name, statement in feedback_statements.items():
+                if name not in feedback_columns:
+                    connection.execute(text(statement))
+            connection.execute(
+                text(
+                    "UPDATE review_feedback SET reviewed_on = CASE "
+                    "WHEN action = 'defer' THEN NULL ELSE DATE(occurred_at) END"
+                )
+            )
+            connection.execute(
+                text(
+                    "UPDATE review_items SET review_count = (SELECT COUNT(*) "
+                    "FROM review_feedback WHERE review_feedback.review_item_id = review_items.id "
+                    "AND review_feedback.reviewed_on IS NOT NULL), "
+                    "last_reviewed_on = (SELECT MAX(reviewed_on) FROM review_feedback "
+                    "WHERE review_feedback.review_item_id = review_items.id)"
+                )
+            )
 
     @staticmethod
     def _legacy_days(raw: str | None, parent_id: str) -> list[int]:

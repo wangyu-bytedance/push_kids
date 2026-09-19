@@ -8,8 +8,8 @@
 - Design revision: `DREV-20260906-PKDS-03`（屏 G9；仅复用既有 tokens/atoms/图标集）
 - Interactive artifact: `N/A` — 本轮未产出独立原型，走查用 `tools/preview` 近似渲染
 - Snapshot manifest: `PENDING`
-- Figma file: https://www.figma.com/design/FAyfmjNrA3btWztwyxI6Zj
-- Figma node: `N/A` — 当前账号为 Starter/View，MCP 写入限额已触发；节点补录仍是发布门禁
+- Editable design source: `PENDING — UI-011 visible work requires a repository-native SVG/HTML DREV`
+- Design evidence governance: `GOV-SPEC-LOCAL-DESIGN-EVIDENCE-20260913-01`
 
 > 本文只描述当前本地事实。页面已实现并通过前端单测与结构校验，**微信开发者工具编译、三视口原生
 > 节点几何、真机 `wx.requestSubscribeMessage` 授权与真实送达均为 `NOT RUN`**，因此不能描述为已验收。
@@ -61,7 +61,7 @@
 - 已完成：`node --test tests/frontend/notifications.test.js`（11 项）、`npm test`、`npm run lint:miniapp`、
   `tools/validate_miniprogram.py`（`pages=15`）、320/390/430 近似渲染走查。
 - 待完成（发布门禁）：微信开发者工具编译与三视口原生节点几何证据、真机授权与真实送达、
-  Figma 节点补录或新的 waiver、快照 manifest。
+  repository-native editable source、快照 manifest 与明确批准。
 
 ## Change references
 

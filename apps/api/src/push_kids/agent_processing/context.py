@@ -2,7 +2,6 @@
 
 import json
 from hashlib import sha256
-from itertools import zip_longest
 from pathlib import Path
 
 from sqlalchemy import select
@@ -11,8 +10,6 @@ from sqlalchemy.orm import Session
 from push_kids.agent_processing.contracts import (
     MATERIAL_FINGERPRINT_KEY,
     AnalysisInput,
-    ExistingKnowledgeContext,
-    RecentLearningContext,
     SameDayKnowledgeContext,
     TodoCandidate,
 )
@@ -20,11 +17,10 @@ from push_kids.children.service import ChildrenService
 from push_kids.persistence.models import (
     KnowledgeItem,
     KnowledgeOccurrence,
-    LearningRecord,
     LearningSubmission,
-    ReviewItem,
     Subject,
 )
+from push_kids.planning.service import PlanningService
 from push_kids.platform.time import local_date, local_day_bounds
 
 
@@ -35,6 +31,9 @@ def material_fingerprint(text: str | None, paths: list[Path]) -> str:
 
 
 def repeated_material(db: Session, submission: LearningSubmission, fingerprint: str) -> bool:
+    if submission.occurred_at is None:
+        return False
+    day_start, day_end = local_day_bounds(local_date(submission.occurred_at))
     previous = db.scalars(
         select(LearningSubmission.proposal_json)
         .where(
@@ -42,6 +41,8 @@ def repeated_material(db: Session, submission: LearningSubmission, fingerprint: 
             LearningSubmission.child_id == submission.child_id,
             LearningSubmission.id != submission.id,
             LearningSubmission.state.in_(["confirmed", "pending_confirmation"]),
+            LearningSubmission.occurred_at >= day_start,
+            LearningSubmission.occurred_at <= day_end,
         )
         .order_by(LearningSubmission.created_at.desc(), LearningSubmission.id)
         .limit(100)
@@ -71,76 +72,6 @@ def build_analysis_input(
             .limit(30)
         )
     )
-    history_groups: list[list[RecentLearningContext]] = []
-    knowledge_groups: list[list[ExistingKnowledgeContext]] = []
-    for subject in subjects:
-        records = list(
-            db.scalars(
-                select(LearningRecord)
-                .where(
-                    LearningRecord.family_id == submission.family_id,
-                    LearningRecord.child_id == submission.child_id,
-                    LearningRecord.subject_id == subject.id,
-                    LearningRecord.occurred_at <= submission.occurred_at,
-                )
-                .order_by(LearningRecord.occurred_at.desc(), LearningRecord.id)
-                .limit(20)
-            )
-        )
-        # Parent-supplied subject/focus raises relevant records within each bounded subject pool.
-        text = submission.input_text or ""
-        records.sort(key=lambda row: relevance(text, row.summary or ""), reverse=True)
-        history_groups.append(
-            [
-                RecentLearningContext(
-                    record_id=row.id,
-                    subject_name=subject.name,
-                    summary=row.summary,
-                    occurred_at=row.occurred_at.isoformat(),
-                )
-                for row in records[:10]
-                if row.occurred_at is not None
-            ]
-        )
-        rows = db.execute(
-            select(KnowledgeItem, ReviewItem)
-            .outerjoin(ReviewItem, ReviewItem.knowledge_item_id == KnowledgeItem.id)
-            .where(
-                KnowledgeItem.family_id == submission.family_id,
-                KnowledgeItem.child_id == submission.child_id,
-                KnowledgeItem.subject_id == subject.id,
-                select(KnowledgeOccurrence.id)
-                .where(
-                    KnowledgeOccurrence.knowledge_item_id == KnowledgeItem.id,
-                    KnowledgeOccurrence.family_id == submission.family_id,
-                    KnowledgeOccurrence.occurred_at <= submission.occurred_at,
-                )
-                .exists(),
-            )
-            .order_by(KnowledgeItem.created_at.desc(), KnowledgeItem.id)
-            .limit(30)
-        ).all()
-        rows = sorted(rows, key=lambda row: relevance(text, row[0].name), reverse=True)
-        knowledge_groups.append(
-            [
-                ExistingKnowledgeContext(
-                    knowledge_id=knowledge.id,
-                    subject_name=subject.name,
-                    name=knowledge.name,
-                    category=knowledge.category,
-                    review_step=review.step if review else None,
-                    review_due_date=review.due_date.isoformat() if review else None,
-                    review_active=review.active if review else None,
-                )
-                for knowledge, review in rows
-            ]
-        )
-    histories = [row for group in zip_longest(*history_groups) for row in group if row is not None][
-        :30
-    ]
-    knowledge = [
-        row for group in zip_longest(*knowledge_groups) for row in group if row is not None
-    ][:100]
     occurrence_day = local_date(submission.occurred_at)
     day_start, day_end = local_day_bounds(occurrence_day)
     same_day_rows = db.execute(
@@ -166,41 +97,24 @@ def build_analysis_input(
         raise ValueError("too many same-day learning items for bounded analysis")
 
     today = local_date()
-    reviews: list[tuple[ReviewItem, KnowledgeItem, Subject]] = []
+    today_plan: list[dict] = []
     if occurrence_day == today:
-        review_rows = db.execute(
-            select(ReviewItem, KnowledgeItem, Subject)
-            .join(KnowledgeItem, ReviewItem.knowledge_item_id == KnowledgeItem.id)
-            .join(Subject, KnowledgeItem.subject_id == Subject.id)
-            .where(
-                ReviewItem.family_id == submission.family_id,
-                ReviewItem.child_id == submission.child_id,
-                ReviewItem.active.is_(True),
-                ReviewItem.due_date <= today,
-                Subject.kind == "learning",
-                Subject.active.is_(True),
-                select(KnowledgeOccurrence.id)
-                .where(
-                    KnowledgeOccurrence.knowledge_item_id == KnowledgeItem.id,
-                    KnowledgeOccurrence.family_id == submission.family_id,
-                    KnowledgeOccurrence.occurred_at <= submission.occurred_at,
-                )
-                .exists(),
-            )
-            .order_by(ReviewItem.due_date, ReviewItem.id)
-            .limit(51)
-        ).all()
-        reviews = [(review, item, subject) for review, item, subject in review_rows]
-        if len(reviews) > 50:
-            raise ValueError("too many due review candidates for bounded analysis")
+        selection = PlanningService.daily_review_selection(
+            db,
+            submission.family_id,
+            submission.child_id,
+            today,
+            known_child=child,
+        )
+        today_plan = selection["all_items"]
     return AnalysisInput(
         text=submission.input_text,
         occurred_at=submission.occurred_at.isoformat(),
         grade=child.grade,
         image_paths=paths,
         existing_subjects=[subject.name for subject in subjects],
-        recent_learning=histories,
-        existing_knowledge=knowledge,
+        recent_learning=[],
+        existing_knowledge=[],
         same_day_learning=[
             SameDayKnowledgeContext(
                 knowledge_id=item.id,
@@ -212,19 +126,19 @@ def build_analysis_input(
         ],
         todo_candidates=[
             TodoCandidate(
-                review_id=review.id,
-                knowledge_name=item.name,
-                knowledge_id=item.id,
-                subject_name=subject.name,
-                step=review.step,
-                due_date=review.due_date.isoformat() if review.due_date else None,
+                review_id=item["review_id"],
+                knowledge_name=item["knowledge_name"],
+                knowledge_id=item["knowledge_id"],
+                subject_name=item["subject_name"],
+                step=item["step"],
+                due_date=item["due_date"],
                 eligible_on=today.isoformat(),
+                match_kind="today_review",
+                state_version=item.get("state_version"),
+                last_reviewed_on=item.get("last_reviewed_on"),
+                review_count=item.get("review_count"),
+                plan_state=item.get("state"),
             )
-            for review, item, subject in reviews
+            for item in today_plan
         ],
     )
-
-
-def relevance(text: str, value: str) -> int:
-    """Lexical tie-break only; images are interpreted later by the provider."""
-    return sum(text[index : index + 2] in value for index in range(max(0, len(text) - 1)))

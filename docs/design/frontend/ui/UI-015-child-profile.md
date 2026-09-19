@@ -1,6 +1,6 @@
 # UI-015 — 学习档案管理与切换入口
 
-- Status: `CURRENT_LOCAL / MATRIX_PENDING / FIGMA_WAIVED`
+- Status: `CURRENT_LOCAL / MATRIX_PENDING / HISTORICAL_DESIGN_EVIDENCE`
 - Related Feature: `FEAT-005`
 - Related Spec: `SPEC-20260906-MULTI-CHILD-01`
 - Baseline: `FDB-20260906-02`（PKDS-1.0）
@@ -10,8 +10,8 @@
 - Last reviewed artifact date: 2026-09-06
 - Interactive artifact: `N/A` — 未产出原型
 - Snapshot manifest: `pending — docs/design/frontend/snapshots/UI-015/DREV-20260906-CHILD-01/APPROVAL.md`
-- Figma file: https://www.figma.com/design/FAyfmjNrA3btWztwyxI6Zj
-- Figma node: `N/A` — 本环境无 Figma 访问能力，适用 `SPEC-20260906-MULTI-CHILD-01` 的 waiver
+- Editable design source: `docs/design/frontend/prototypes/DREV-20260906-PKDS-01/FRONTEND-SPEC.md`
+- Design evidence governance: `GOV-SPEC-LOCAL-DESIGN-EVIDENCE-20260913-01`；旧 waiver 仅为历史批准记录
 
 > 本文描述已在工作区实现并通过 `npm test` / `npm run lint:miniapp` / `tools/validate_miniprogram.py` 的当前状态。
 > 320×568 / 390×844 / 430×932 三视口原生节点几何证据未采集（本环境无微信开发者工具），公开生产发布前必须补齐。
@@ -77,14 +77,14 @@
 （其中 `tests/frontend/child-profiles.test.js` 16 例覆盖回落、上限、只读成员、创建/归档/恢复流程、
 迟到响应丢弃，以及归档前未完成提醒的数量汇总、看板失败降级与归档档案不请求）、`npm run lint:miniapp`
 通过、`MINIPROGRAM_VALID pages=13 source_bytes=554513`。
-待补齐：Figma 节点与审批快照、三视口原生节点几何、真机与双账号验证。
+待补齐：repository-native 审批快照、三视口原生节点几何、真机与双账号验证。
 
 ## Change references
 
 - 2026-09-06 — `SPEC-20260906-MULTI-CHILD-01 / DREV-20260906-CHILD-01`：新增 `pages/child-edit` 与设置页
   「学习档案」区，四个选择孩子弹层新增「添加孩子」，修复无档案空态死路；新增共享
   `utils/child-context.js` 统一孩子装饰、选中解析与失效回落，并为设置页补齐请求代际保护。
-  三视口与 Figma 证据为 `NOT_RUN`，沿用本 Spec 的 waiver。
+  三视口证据为 `NOT_RUN`；旧外部工具 waiver 仅保留为当时历史。
 - 2026-09-06 — `BUG-SPEC-20260906-17 / DREV-20260906-CHILD-02`：归档危险区新增未完成记录提醒条，
   归档二次确认弹窗与归档说明补齐「收尾仍可完成」的事实；仅一条几何样式（长句提醒左对齐），
-  无新配色、字号、圆角或图标。三视口与 Figma 证据仍为 `NOT_RUN`。
+  无新配色、字号、圆角或图标。三视口证据仍为 `NOT_RUN`。

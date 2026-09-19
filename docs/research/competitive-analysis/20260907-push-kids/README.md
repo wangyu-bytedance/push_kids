@@ -8,7 +8,7 @@
 - 可检索原文快照：[Markdown](push-kids-competitive-research-rev4.md)
 - 版式快照：[PDF](push-kids-competitive-research-rev4.pdf)
 - 飞书 HTML 图表块：[导出资源目录](html5-blocks/)
-- 关联方案：[`SPEC-REVIEW-V2-20260907-01`](../../../../specs/active/FEAT-001-ADAPTIVE-REVIEW-POLICY-V2.md)
+- 关联方案（已由统一方案替代）：[`SPEC-REVIEW-V2-20260907-01`](../../../../specs/rejected/FEAT-001-ADAPTIVE-REVIEW-POLICY-V2.md)
 
 ## 归档口径
 

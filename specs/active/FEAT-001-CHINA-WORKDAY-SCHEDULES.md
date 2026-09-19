@@ -21,7 +21,7 @@
   - `FEAT-STATE-20260907-CHANNEL-05-CLOUD`
 - Feature merge owner: Codex（仅在实现、验证与 Review 完成后语义合并）
 
-## Frontend Design Impact and Figma Approval
+## Frontend Design Impact and Repository-native Approval
 
 - Frontend impact: `yes` — 活动安排与日程编辑器新增“工作日”选择及其结果文案。
 - Frontend engineering impact: `yes` — 表单状态、校验、恢复、响应式和可访问名称发生变化。
@@ -37,8 +37,8 @@
   DevTools 编译和代表性 iOS/Android smoke。
 - Approved frontend engineering deviations: `none`
 - Current Design Revision: `DREV-20260907-PKDS-04`
-- Figma project/file URL: `https://www.figma.com/design/FAyfmjNrA3btWztwyxI6Zj?node-id=0-1`
-- Figma node URL: 受现有 FEAT-001 Figma Starter 限额 waiver 约束，无新增节点；以本地可审阅原型为候选证据。
+- Editable design source path(s): `docs/design/frontend/prototypes/DREV-20260907-WORKDAY-01/`
+- Design source SHA-256: `待该 DREV 进入批准时由本地 evidence manifest 记录`
 - Proposed Design Revision: `DREV-20260907-WORKDAY-01`
 - Candidate prototype: `docs/design/frontend/prototypes/DREV-20260907-WORKDAY-01/index.html`
 - Required viewport/state exports: 活动“指定星期/工作日/时间不固定”、日程“不重复/每周/工作日”、
@@ -51,8 +51,7 @@
 - Permitted implementation deviations: `none`
 - UI current-state merge owner/evidence: Codex / `pending`
 - Frontend visual/a11y/resolution verification: `pending`
-- Figma waiver: 复用仓库已批准的 FEAT-001 scoped waiver；仅覆盖 FEAT-001 既有活动/日程表单，
-  风险是没有新增可编辑 Figma 节点，Owner 为产品负责人，公开生产发布前必须补齐 Figma 节点与批准快照。
+- External design dependency: `none；实现前仍需仓库原生 DREV、导出、hash manifest 与明确批准`
 
 ## 0. Executive summary
 
@@ -81,7 +80,7 @@
 | `F-003` | 日程提醒消费 `ActivitiesService.occurrences_in_window`；若只改日程页会造成展示与通知不一致。 | `notifications/planner.py`、`activities/service.py` |
 | `F-004` | 2026 年国务院通知明确列出法定放假区间和周末调休上班日。 | 中国政府网 `国办发明电〔2025〕7号` |
 | `F-005` | `chinesecalendar` 1.10.0 离线支持 2004–2026 的法定节假日/工作日判定，无运行时网络请求。 | 项目 README 与 PyPI release，实施时以 lockfile 和合同测试复核 |
-| `F-006` | 现有 FEAT-001 前端 baseline、FEC 和 scoped Figma waiver 已批准。 | `FRONTEND-DESIGN.md`、`FRONTEND-ENGINEERING-CONSTRAINTS.md`、`ARCHITECTURE.md` |
+| `F-006` | 现有 FEAT-001 前端 baseline、FEC 和仓库原生设计证据规则已批准。 | `FRONTEND-DESIGN.md`、`FRONTEND-ENGINEERING-CONSTRAINTS.md`、`ARCHITECTURE.md` |
 
 ### Decisions proposed for approval
 
@@ -456,7 +455,7 @@ if unavailable it must remain `NOT_RUN` and blocks claiming viewport/device comp
 
 - `workday_calendar_coverage_missing` count must be zero for current-year production windows before release.
 - Any disagreement between day projection and reminder occurrence is an abort condition.
-- Public production remains subject to all existing Figma/native/privacy/channel gates.
+- Public production remains subject to all existing repository design/native/privacy/channel gates.
 
 ### Rollback / restore
 

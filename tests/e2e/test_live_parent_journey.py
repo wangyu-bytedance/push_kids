@@ -118,7 +118,7 @@ def _replace_points(proposal: dict, names: list[str], subject_name: str) -> dict
         {
             "name": name,
             "category": "计算与概念" if subject_name == "数学" else "字词与阅读",
-            "review_method": "口算与讲解" if subject_name == "数学" else "认读与听写",
+            "review_method": "变式练习" if subject_name == "数学" else "主动回忆",
             "estimated_minutes": 3,
         }
         for name in names
@@ -316,7 +316,10 @@ def test_complete_parent_journey_over_live_http(tmp_path: Path) -> None:
                 200,
             )
             assert result["action"] == action
-            assert result["due_date"] > todo_payload["day"]
+            if action == "defer":
+                assert result["due_date"] == todo_payload["day"]
+            else:
+                assert result["due_date"] > todo_payload["day"]
         assert (
             client.post(
                 f"/api/v1/reviews/{todos[0]['review_id']}/feedback",
@@ -345,7 +348,7 @@ def test_complete_parent_journey_over_live_http(tmp_path: Path) -> None:
             client.post(
                 f"/api/v1/submissions/{backfill['id']}/confirm",
                 headers=family,
-                json={"proposal": backfill_proposal},
+                json={"proposal": backfill_proposal, "create_subject": True},
             ),
             200,
         )
@@ -420,7 +423,7 @@ def test_complete_parent_journey_over_live_http(tmp_path: Path) -> None:
             {
                 "name": "animal",
                 "category": "词汇与表达",
-                "review_method": "听说与拼写",
+                "review_method": "主动回忆",
                 "estimated_minutes": 3,
             }
         ]
@@ -429,7 +432,7 @@ def test_complete_parent_journey_over_live_http(tmp_path: Path) -> None:
             client.post(
                 f"/api/v1/submissions/{photo['id']}/confirm",
                 headers=family,
-                json={"proposal": photo_proposal},
+                json={"proposal": photo_proposal, "create_subject": True},
             ),
             200,
         )
@@ -462,7 +465,9 @@ def test_complete_parent_journey_over_live_http(tmp_path: Path) -> None:
         assert dashboard["pending_confirmation_count"] == 0
         assert dashboard["analyzing_count"] == 0
         assert dashboard["failed_count"] == 0
-        assert dashboard["todo_count"] == 1
+        # Explicit defer changes only today's plan-item state. It does not fabricate a review
+        # fact or rewrite due_date, so the deferred item and the historical backfill remain due.
+        assert dashboard["todo_count"] == 2
         assert dashboard["activity_suggestions"][0]["optional"] is True
 
         history = _json(client.get(f"/api/v1/children/{child_id}/history", headers=family), 200)[

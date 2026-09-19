@@ -15,7 +15,7 @@
 
   <view class="pk-notice quiet" wx:if="{{isManager}}">
     <view class="ico ico-info-mute sm"></view>
-    <text class="n-txt">同意后，对方就能看到这个家庭所有孩子的学习记录和照片。请先与申请人核对申请码。</text>
+    <text class="n-txt">同意后，对方就能看到这个家庭所有孩子的学习记录和照片。请先与申请人核对申请核验码。</text>
   </view>
 
   <block wx:if="{{loading && !requests.length}}">
@@ -47,8 +47,8 @@
         </view>
       </view>
 
-      <view class="req-row" aria-role="button" aria-label="申请码 {{item.request_code}}，点击复制" data-code="{{item.request_code}}" bindtap="copyCode">
-        <text class="r-lbl">申请码</text>
+      <view class="req-row" aria-role="button" aria-label="申请核验码 {{item.request_code}}，点击复制" data-code="{{item.request_code}}" bindtap="copyVerificationCode">
+        <text class="r-lbl">申请核验码</text>
         <text class="r-code grow">{{item.request_code}}</text>
         <view class="ico ico-note-pri sm"></view>
       </view>

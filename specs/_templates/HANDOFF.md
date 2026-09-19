@@ -21,7 +21,7 @@
 - Frontend engineering constraint revision: `[FEC-* or N/A]`
 - Affected frontend quality dimensions/budgets: `[IDs/list or N/A]`
 
-- Figma project/file URL and node URL(s): `[URLs or N/A]`
+- Editable design source path(s) and SHA-256: `[repository paths/hashes or N/A]`
 - Current/approved Design Revision: `[DREV-* or N/A]`
 - Prototype status and approval evidence: `[status + evidence]`
 - Approval snapshot manifest: `[path or N/A]`

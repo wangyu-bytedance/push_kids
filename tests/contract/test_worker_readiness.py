@@ -108,14 +108,14 @@ async def test_first_claimed_task_is_ready_during_analysis(
     analyzing = asyncio.Event()
     release = Event()
     loop = asyncio.get_running_loop()
-    original = worker.provider.analyze
+    original = worker.provider.analyze_with_history
     failed = False
 
-    def analyze(data):
+    def analyze(data, search_history, *, max_turns):
         loop.call_soon_threadsafe(analyzing.set)
         if not release.wait(timeout=5):
             raise TimeoutError("test analysis was not released")
-        return original(data)
+        return original(data, search_history, max_turns=max_turns)
 
     def inject(conn, cursor, statement, parameters, context, executemany):
         nonlocal failed
@@ -126,7 +126,7 @@ async def test_first_claimed_task_is_ready_during_analysis(
     async def fast_wait(delay):
         await asyncio.sleep(0)
 
-    monkeypatch.setattr(worker.provider, "analyze", analyze)
+    monkeypatch.setattr(worker.provider, "analyze_with_history", analyze)
     monkeypatch.setattr(worker, "_wait", fast_wait)
     event.listen(app.state.database.engine, "before_cursor_execute", inject)
     try:

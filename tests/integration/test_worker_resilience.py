@@ -67,10 +67,11 @@ def test_failed_stage_log_contains_only_safe_diagnostics(
     ids = add_jobs(app, child, family_headers, texts=("private-child-content",))
     caplog.set_level(logging.INFO, logger="push_kids.worker")
 
-    def fail_provider(_data):
+    def fail_provider(_data, _search_history, *, max_turns):
+        del max_turns
         raise RuntimeError("private-provider-response")
 
-    monkeypatch.setattr(app.state.worker.provider, "analyze", fail_provider)
+    monkeypatch.setattr(app.state.worker.provider, "analyze_with_history", fail_provider)
     assert app.state.worker.process_one()
 
     assert "analysis_provider_started" in caplog.text
@@ -213,10 +214,11 @@ def test_invalid_structured_output_is_terminal_without_worker_retry(
 ):
     ids = add_jobs(app, child, family_headers, texts=("private-invalid-output",))
 
-    def fail_validation(_data):
+    def fail_validation(_data, _search_history, *, max_turns):
+        del max_turns
         raise AnalysisOutputExhaustedError()
 
-    monkeypatch.setattr(app.state.worker.provider, "analyze", fail_validation)
+    monkeypatch.setattr(app.state.worker.provider, "analyze_with_history", fail_validation)
     assert app.state.worker.process_one()
     assert not app.state.worker.process_one()
 
@@ -288,10 +290,11 @@ def test_expired_job_at_attempt_limit_becomes_terminal_without_provider_call(
         submission.state = "analyzing"
         db.commit()
 
-    def unexpected_provider_call(_data):
+    def unexpected_provider_call(_data, _search_history, *, max_turns):
+        del max_turns
         raise AssertionError("provider must not run for an exhausted job")
 
-    monkeypatch.setattr(app.state.worker.provider, "analyze", unexpected_provider_call)
+    monkeypatch.setattr(app.state.worker.provider, "analyze_with_history", unexpected_provider_call)
     caplog.set_level(logging.WARNING, logger="push_kids.worker")
 
     assert app.state.worker.process_one()

@@ -21,11 +21,11 @@
     </view>
 
     <view class="pk-card code-card" wx:if="{{request.request_code}}">
-      <text class="code-cap">申请码</text>
+      <text class="code-cap">申请核验码</text>
       <text class="code-val tnum">{{request.request_code}}</text>
-      <text class="code-help">把申请码告诉管理员用于核对</text>
+      <text class="code-help">把核验码告诉管理员用于核对</text>
       <view class="code-copy">
-        <view class="btn sm neutral" aria-role="button" aria-label="复制申请码" bindtap="copyRequestCode">复制申请码</view>
+        <view class="btn sm neutral" aria-role="button" aria-label="复制申请核验码" bindtap="copyVerificationCode">复制核验码</view>
       </view>
     </view>
 
@@ -77,27 +77,27 @@
     </view>
   </block>
 
-  <!-- A3 使用邀请口令 -->
+  <!-- A3 使用家庭邀请码 -->
   <block wx:elif="{{mode === 'join'}}">
     <view class="step-head">
-      <text class="pg-kicker">从微信卡片进入时无需手动填写</text>
-      <text class="pg-title">使用邀请口令</text>
+      <text class="pg-kicker">从微信邀请进入时无需手动填写</text>
+      <text class="pg-title">输入 6 位家庭邀请码</text>
     </view>
     <view class="pk-card">
       <view class="pk-field">
-        <text class="lbl">邀请口令</text>
-        <input class="pk-input token-input {{tokenError ? 'is-error' : ''}}" value="{{inviteToken}}" data-field="inviteToken" bindinput="setField" placeholder="粘贴家人发来的口令" placeholder-class="pk-ph" maxlength="120" />
+        <text class="lbl">家庭邀请码</text>
+        <input class="pk-input token-input tnum {{tokenError ? 'is-error' : ''}}" type="number" value="{{inviteCode}}" data-field="inviteCode" bindinput="setField" placeholder="请输入 6 位数字" placeholder-class="pk-ph" maxlength="6" />
         <text class="err-text" wx:if="{{tokenError}}">{{tokenError}}</text>
-        <view class="help" wx:else>口令由家庭管理员在「家庭与成员」里生成，24 小时内有效，区分大小写。</view>
+        <view class="help" wx:else>邀请码由家庭管理员在「家庭与成员」里生成，24 小时内有效。</view>
       </view>
     </view>
     <view class="pk-notice quiet mt3">
       <view class="ico ico-shield sm"></view>
-      <text class="n-txt">口令只用来找到这个家庭。管理员确认前，你看不到孩子的学习记录或照片。</text>
+      <text class="n-txt">邀请码只用来找到这个家庭。管理员确认前，你看不到孩子的学习记录或照片。</text>
     </view>
 
     <view class="pk-cta-bar">
-      <view class="btn" aria-role="button" aria-label="查看邀请信息" bindtap="openToken"><text>查看邀请信息</text></view>
+      <view class="btn {{inviteCode.length === 6 ? '' : 'is-disabled'}}" aria-role="button" aria-label="查看家庭" aria-disabled="{{inviteCode.length !== 6}}" bindtap="openCode"><text>查看家庭</text></view>
       <view class="center-row">
         <view class="link-btn" aria-role="button" aria-label="返回" bindtap="backToChoice"><text>返回</text></view>
       </view>
@@ -129,7 +129,7 @@
       <view class="choice-mark plain"><view class="ico ico-family sm"></view></view>
       <view class="grow">
         <text class="choice-t">申请加入家庭</text>
-        <text class="choice-s">使用家人发来的微信邀请或邀请口令</text>
+        <text class="choice-s">使用家人发来的微信邀请或 6 位邀请码</text>
       </view>
       <view class="chev right"></view>
     </view>

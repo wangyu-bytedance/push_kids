@@ -351,15 +351,17 @@ const onboardingBase = {
   grades: ["一年级", "二年级", "三年级"], relations: ["妈妈", "爸爸", "其他"], gradeIndex: 2, relationIndex: 0,
   customRelation: false, familyPlaceholder: "不填时使用「孩子称呼」的家",
   canSubmit: false, submitHint: "填写孩子称呼后就可以创建",
-  inviteToken: "", tokenError: "", request: null, refreshing: false, canceling: false
+  inviteCode: "", tokenError: "", request: null, refreshing: false, canceling: false
 };
 
 const onboardingCreate = { ...onboardingBase, mode: "create", childName: "小满", canSubmit: true, submitHint: "" };
+const onboardingJoin = { ...onboardingBase, mode: "join", inviteCode: "428615" };
 
 
 /* ---------------- 家庭与成员 ---------------- */
 const familyMembers = {
   loading: false, error: "", isManager: true, sharing: false, shareReady: true, sharePath: "", copying: false,
+  inviteCode: "428615", inviteCodeDisplay: "428 615",
   family: { display_name: "小满的家" }, roleNote: "", requestCount: 1, requestText: "1 条申请等你确认",
   invites: [{ id: "i1", expiryLabel: "明天 19:20" }],
   members: [
@@ -395,5 +397,6 @@ module.exports = {
   "activity-edit": { page: "pages/activity", name: "edit", data: activityEdit, tabBar: null },
   onboarding: { page: "pages/family-onboarding", data: onboardingBase, tabBar: null },
   "onboarding-create": { page: "pages/family-onboarding", data: onboardingCreate, tabBar: null },
+  "onboarding-join": { page: "pages/family-onboarding", data: onboardingJoin, tabBar: null },
   "family-members": { page: "pages/family-members", data: familyMembers, tabBar: null }
 };

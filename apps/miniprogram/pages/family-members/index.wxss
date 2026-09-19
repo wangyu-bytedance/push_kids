@@ -13,6 +13,7 @@
 /* 邀请已准备好 */
 .share-card .share-title { display: block; font-size: 17px; line-height: 1.45; font-weight: 600; }
 .share-card .share-sub { display: block; margin-top: 8rpx; font-size: 13px; line-height: 1.5; color: var(--pk-ink-3); }
+.share-card .invite-code { display: block; margin: 12rpx 0 4rpx; color: var(--pk-primary); font-size: 36px; font-weight: 700; letter-spacing: .12em; }
 .share-card .btn-row > .btn { width: 100%; min-width: 0; }
 
 /* 加入申请入口：整行可点，右侧 chevron */

@@ -60,6 +60,23 @@ def _invite_token(secret: str, family_id: str, idempotency_key: str) -> str:
     return base64.urlsafe_b64encode(digest).decode().rstrip("=")
 
 
+def _invite_code(secret: str, token: str, nonce: int) -> str:
+    digest = hmac.new(
+        secret.encode(), f"invite-code:v1:{token}:{nonce}".encode(), hashlib.sha256
+    ).digest()
+    return f"{int.from_bytes(digest[:8], 'big') % 1_000_000:06d}"
+
+
+def _invite_code_hash(secret: str, code: str) -> str:
+    return hmac.new(
+        secret.encode(), f"invite-code-hash:v1:{code}".encode(), hashlib.sha256
+    ).hexdigest()
+
+
+def _is_manual_invite_code(credential: str) -> bool:
+    return len(credential) == 6 and credential.isascii() and credential.isdigit()
+
+
 def _expired(value: datetime) -> bool:
     now = utcnow()
     if value.tzinfo is None:
@@ -68,7 +85,8 @@ def _expired(value: datetime) -> bool:
 
 
 def _request_code(request_id: str) -> str:
-    return request_id.replace("-", "").upper()[:6]
+    digest = hashlib.sha256(f"request-code:v1:{request_id}".encode()).digest()
+    return f"{int.from_bytes(digest[:8], 'big') % 1_000_000:06d}"
 
 
 @dataclass(frozen=True)
@@ -93,6 +111,8 @@ class PendingApplication:
 
 
 class FamilyService:
+    _MAX_INVITE_CODE_CANDIDATES = 32
+
     @staticmethod
     def purge_data(db: Session, family_id: str) -> None:
         db.execute(
@@ -458,10 +478,41 @@ class FamilyService:
                 FamilyInvite.idempotency_key == idempotency_key,
             )
         )
-        if invite is None:
+        if invite is not None:
+            code = _invite_code(secret, token, int(invite.code_nonce or 0))
+            visible_code = (
+                code
+                if invite.active_code_hash
+                and hmac.compare_digest(invite.active_code_hash, _invite_code_hash(secret, code))
+                else None
+            )
+            return InviteView(
+                id=invite.id,
+                token=token,
+                invite_code=visible_code,
+                share_path=f"/pages/family-join/index?token={token}",
+                status=invite.status,
+                expires_at=invite.expires_at,
+            )
+
+        invite_code: str | None = None
+        for nonce in range(cls._MAX_INVITE_CODE_CANDIDATES):
+            candidate = _invite_code(secret, token, nonce)
+            candidate_hash = _invite_code_hash(secret, candidate)
+            conflict = FamilyRepository.invite_by_active_code_hash(db, candidate_hash)
+            if conflict is not None:
+                if conflict.status == InviteStatus.active.value and _expired(conflict.expires_at):
+                    conflict.status = InviteStatus.expired.value
+                    conflict.active_code_hash = None
+                    cls._expire_pending_requests_for_invite(db, conflict.id)
+                    db.commit()
+                else:
+                    continue
             invite = FamilyInvite(
                 family_id=context.family_id,
                 token_hash=token_hash,
+                active_code_hash=candidate_hash,
+                code_nonce=nonce,
                 idempotency_key=idempotency_key,
                 expires_at=utcnow() + timedelta(hours=body.expires_in_hours),
                 created_by_member_id=context.member_id,
@@ -477,28 +528,45 @@ class FamilyService:
                         FamilyInvite.idempotency_key == idempotency_key,
                     )
                 )
-                if invite is None:
-                    raise ConflictError("邀请创建请求发生冲突，请重试") from None
-                return InviteView(
-                    id=invite.id,
-                    token=token,
-                    share_path=f"/pages/family-join/index?token={token}",
-                    status=invite.status,
-                    expires_at=invite.expires_at,
-                )
-            assert context.actor_binding_id
-            cls._audit(
-                db,
-                context.family_id,
-                context.actor_binding_id,
-                "invite.created",
-                "invite",
-                invite.id,
-            )
-            db.commit()
+                if invite is not None:
+                    replay_code = _invite_code(secret, token, int(invite.code_nonce or 0))
+                    visible_replay_code = (
+                        replay_code
+                        if invite.active_code_hash
+                        and hmac.compare_digest(
+                            invite.active_code_hash,
+                            _invite_code_hash(secret, replay_code),
+                        )
+                        else None
+                    )
+                    return InviteView(
+                        id=invite.id,
+                        token=token,
+                        invite_code=visible_replay_code,
+                        share_path=f"/pages/family-join/index?token={token}",
+                        status=invite.status,
+                        expires_at=invite.expires_at,
+                    )
+                continue
+            invite_code = candidate
+            break
+        else:
+            raise ConflictError("邀请码暂时无法生成，请稍后重试")
+
+        assert context.actor_binding_id
+        cls._audit(
+            db,
+            context.family_id,
+            context.actor_binding_id,
+            "invite.created",
+            "invite",
+            invite.id,
+        )
+        db.commit()
         return InviteView(
             id=invite.id,
             token=token,
+            invite_code=invite_code,
             share_path=f"/pages/family-join/index?token={token}",
             status=invite.status,
             expires_at=invite.expires_at,
@@ -537,6 +605,7 @@ class FamilyService:
             assert item.expires_at
             if _expired(item.expires_at):
                 item.status = InviteStatus.expired.value
+                item.active_code_hash = None
                 cls._expire_pending_requests_for_invite(db, item.id)
                 changed = True
                 continue
@@ -548,22 +617,35 @@ class FamilyService:
         return active
 
     @classmethod
-    def _active_invite(cls, db: Session, token: str, *, lock: bool = False) -> FamilyInvite:
-        invite = FamilyRepository.invite_by_hash(db, _token_hash(token), lock=lock)
+    def _active_invite(
+        cls,
+        db: Session,
+        credential: str,
+        secret: str,
+        *,
+        lock: bool = False,
+    ) -> FamilyInvite:
+        if _is_manual_invite_code(credential):
+            invite = FamilyRepository.invite_by_active_code_hash(
+                db, _invite_code_hash(secret, credential), lock=lock
+            )
+        else:
+            invite = FamilyRepository.invite_by_hash(db, _token_hash(credential), lock=lock)
         if invite is None:
             raise NotFoundError("邀请不存在")
         if invite.status != InviteStatus.active.value:
             raise GoneError("邀请已失效")
         if _expired(invite.expires_at):
             invite.status = InviteStatus.expired.value
+            invite.active_code_hash = None
             cls._expire_pending_requests_for_invite(db, invite.id)
             db.commit()
             raise GoneError("邀请已过期")
         return invite
 
     @classmethod
-    def preview_invite(cls, db: Session, token: str) -> InvitePreview:
-        invite = cls._active_invite(db, token)
+    def preview_invite(cls, db: Session, credential: str, secret: str) -> InvitePreview:
+        invite = cls._active_invite(db, credential, secret)
         family = db.get(Family, invite.family_id)
         if family is None or family.status != FamilyStatus.active.value:
             raise GoneError("邀请已失效")
@@ -588,8 +670,9 @@ class FamilyService:
         token: str,
         body: JoinRequestCreate,
         idempotency_key: str,
+        secret: str,
     ) -> JoinRequestView:
-        invite = cls._active_invite(db, token, lock=True)
+        invite = cls._active_invite(db, token, secret, lock=True)
         assert invite.family_id
         binding = FamilyRepository.actor_binding(db, actor.app_id, actor.subject_hmac, lock=True)
         if binding and binding.status == "active":
@@ -721,6 +804,7 @@ class FamilyService:
             if invite is not None:
                 if invite.status == InviteStatus.active.value:
                     invite.status = InviteStatus.expired.value
+                    invite.active_code_hash = None
                 assert invite.id
                 cls._expire_pending_requests_for_invite(db, invite.id)
             else:
@@ -751,6 +835,7 @@ class FamilyService:
         item.decided_by_member_id = context.member_id
         item.decided_at = utcnow()
         invite.status = InviteStatus.exhausted.value
+        invite.active_code_hash = None
         assert invite.id
         assert item.id
         cls._expire_pending_requests_for_invite(db, invite.id, exclude_request_id=item.id)
@@ -830,6 +915,7 @@ class FamilyService:
         if invite.status != InviteStatus.active.value:
             return
         invite.status = InviteStatus.revoked.value
+        invite.active_code_hash = None
         assert invite.id
         cls._expire_pending_requests_for_invite(db, invite.id)
         assert context.actor_binding_id

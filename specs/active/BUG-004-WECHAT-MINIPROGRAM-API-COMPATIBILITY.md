@@ -16,7 +16,7 @@
 - Feature merge owner: implementer after verification
 - Feature current-state impact: `FEAT-001` 的小程序兼容性、媒体失败恢复和云发布限制；当前仅记录缺口，实施验证后再合并最终行为
 
-## Frontend Design Impact and Figma Approval
+## Frontend Design Impact and Repository-native Approval
 
 - Frontend impact: yes
 - Frontend impact reason: 现有主流程布局不变，但异常与恢复交互对用户可见
@@ -31,8 +31,8 @@
 - Frontend quality verification plan: `TP-API-001`–`TP-API-008`
 - Approved frontend engineering deviations: none
 - Current Design Revision(s): `DREV-20260830-03`
-- Figma project/file URL: https://www.figma.com/design/FAyfmjNrA3btWztwyxI6Zj?node-id=0-1
-- Figma node URL(s): https://www.figma.com/design/FAyfmjNrA3btWztwyxI6Zj?node-id=0-1 — existing UI context only; new visible states still require design-impact approval
+- Editable design source path(s): existing UI current-state/DREV sources; new visible states require a new repository-local source
+- Design source SHA-256: N/A for this non-visible compatibility repair
 - Proposed Design Revision: pending design-impact review
 - Required viewport/state exports: 320×568、390×844、430×932 的 unsupported/permission/error/uploading
 - Prototype status: `AWAITING_APPROVAL`
@@ -44,7 +44,7 @@
 - UI current-state merge owner/evidence: implementer / pending
 - Frontend visual/a11y/resolution verification: pending
 - Frontend engineering verification evidence: pending
-- Figma waiver: existing FEAT-001 waiver does not automatically approve new visible states
+- External design dependency: none；new visible states still require repository-native DREV approval
 
 ## 1. Symptom and impact
 

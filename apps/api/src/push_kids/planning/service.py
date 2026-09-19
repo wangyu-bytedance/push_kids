@@ -1,7 +1,9 @@
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass
 from datetime import date, datetime
+from hashlib import sha256
 
 from sqlalchemy import and_, case, delete, func, or_, select
 from sqlalchemy.exc import IntegrityError
@@ -10,24 +12,39 @@ from sqlalchemy.orm import Session
 from push_kids.children.service import ChildrenService
 from push_kids.persistence.models import (
     Child,
+    DailyReviewPlan,
+    DailyReviewPlanItem,
     KnowledgeItem,
     KnowledgeOccurrence,
+    KnowledgeSearchTerm,
     LearningRecord,
     LearningSubmission,
     ReviewFeedback,
+    ReviewFeedbackBatchRequest,
     ReviewFeedbackRequest,
     ReviewItem,
     Subject,
 )
 from push_kids.planning.domain import (
     DueKnowledge,
-    apply_feedback,
     group_daily_todos,
     review_interval_days,
 )
+from push_kids.planning.policies import (
+    CURVE_HEAT_POLICY_REVISION,
+    ReviewPolicyTransition,
+    ReviewState,
+    apply_review_event,
+)
+from push_kids.planning.selection import (
+    DAILY_REVIEW_CANDIDATE_LIMIT,
+    DAILY_REVIEW_POLICY_REVISION,
+    ReviewSelectionCandidate,
+    select_daily_reviews,
+)
 from push_kids.platform.errors import ConflictError, NotFoundError
 from push_kids.platform.pagination import decode_cursor, encode_cursor
-from push_kids.platform.time import local_date, utcnow
+from push_kids.platform.time import local_date, local_day_bounds, utcnow
 
 
 @dataclass(frozen=True)
@@ -60,6 +77,23 @@ class PlanningService:
         if child_id is not None:
             record_query = record_query.where(LearningRecord.child_id == child_id)
         record_ids = list(db.scalars(record_query))
+        batch_query = delete(ReviewFeedbackBatchRequest).where(
+            ReviewFeedbackBatchRequest.family_id == family_id
+        )
+        if child_id is not None:
+            batch_query = batch_query.where(ReviewFeedbackBatchRequest.child_id == child_id)
+        db.execute(batch_query)
+        plan_query = select(DailyReviewPlan.id).where(DailyReviewPlan.family_id == family_id)
+        if child_id is not None:
+            plan_query = plan_query.where(DailyReviewPlan.child_id == child_id)
+        plan_ids = list(db.scalars(plan_query))
+        db.execute(
+            delete(DailyReviewPlanItem).where(
+                DailyReviewPlanItem.family_id == family_id,
+                DailyReviewPlanItem.plan_id.in_(plan_ids),
+            )
+        )
+        db.execute(delete(DailyReviewPlan).where(DailyReviewPlan.id.in_(plan_ids)))
         db.execute(
             delete(ReviewFeedbackRequest).where(
                 ReviewFeedbackRequest.family_id == family_id,
@@ -79,6 +113,12 @@ class PlanningService:
                     KnowledgeOccurrence.knowledge_item_id.in_(knowledge_ids),
                     KnowledgeOccurrence.learning_record_id.in_(record_ids),
                 ),
+            )
+        )
+        db.execute(
+            delete(KnowledgeSearchTerm).where(
+                KnowledgeSearchTerm.family_id == family_id,
+                KnowledgeSearchTerm.knowledge_item_id.in_(knowledge_ids),
             )
         )
         db.execute(delete(ReviewItem).where(ReviewItem.id.in_(review_ids)))
@@ -191,6 +231,381 @@ class PlanningService:
         return cls.daily_todo_page(db, family_id, child_id, day, limit=50)["groups"]
 
     @classmethod
+    def _legacy_daily_review_selection(
+        cls,
+        db: Session,
+        family_id: str,
+        child_id: str,
+        day: date | None = None,
+        *,
+        known_child: Child | None = None,
+    ) -> dict:
+        """Return the bounded, stable Today projection without changing Review state."""
+        child = known_child or ChildrenService.get_child(db, family_id, child_id)
+        if child.family_id != family_id or child.id != child_id:
+            raise NotFoundError("没有找到这个孩子")
+        target = day or local_date()
+        due_scope = (
+            ReviewItem.family_id == family_id,
+            ReviewItem.child_id == child_id,
+            ReviewItem.active.is_(True),
+            ReviewItem.due_date <= target,
+            Subject.kind == "learning",
+            Subject.active.is_(True),
+        )
+
+        def review_select(*columns):
+            return (
+                select(*columns)
+                .select_from(ReviewItem)
+                .join(KnowledgeItem, ReviewItem.knowledge_item_id == KnowledgeItem.id)
+                .join(Subject, KnowledgeItem.subject_id == Subject.id)
+            )
+
+        aggregate = db.execute(
+            review_select(
+                func.count().label("total_due"),
+                func.min(ReviewItem.due_date).label("earliest_due"),
+            ).where(*due_scope)
+        ).one()
+        total_due = int(aggregate.total_due or 0)
+
+        bounded_minutes = case(
+            (KnowledgeItem.estimated_minutes < 1, 1),
+            (KnowledgeItem.estimated_minutes > 5, 5),
+            else_=KnowledgeItem.estimated_minutes,
+        )
+        day_start, day_end = local_day_bounds(target)
+        usage_rows = db.execute(
+            review_select(
+                Subject.id.label("subject_id"),
+                func.count(ReviewFeedback.id).label("used_count"),
+                func.coalesce(func.sum(bounded_minutes), 0).label("used_minutes"),
+            )
+            .join(ReviewFeedback, ReviewFeedback.review_item_id == ReviewItem.id)
+            .where(
+                ReviewFeedback.family_id == family_id,
+                ReviewItem.family_id == family_id,
+                ReviewItem.child_id == child_id,
+                Subject.kind == "learning",
+                ReviewFeedback.occurred_at >= day_start,
+                ReviewFeedback.occurred_at <= day_end,
+            )
+            .group_by(Subject.id)
+        ).all()
+        used_count = sum(int(row.used_count or 0) for row in usage_rows)
+        used_minutes = sum(int(row.used_minutes or 0) for row in usage_rows)
+
+        rows = list(
+            db.execute(
+                review_select(
+                    ReviewItem.id.label("review_id"),
+                    ReviewItem.due_date.label("due_date"),
+                    ReviewItem.last_feedback.label("last_feedback"),
+                    ReviewItem.step.label("step"),
+                    ReviewItem.source_submission_id.label("source_submission_id"),
+                    KnowledgeItem.id.label("knowledge_id"),
+                    KnowledgeItem.name.label("knowledge_name"),
+                    KnowledgeItem.review_method.label("review_method"),
+                    bounded_minutes.label("minutes"),
+                    Subject.id.label("subject_id"),
+                    Subject.name.label("subject_name"),
+                    LearningSubmission.occurred_at.label("source_occurred_at"),
+                )
+                .outerjoin(
+                    LearningSubmission,
+                    and_(
+                        LearningSubmission.id == ReviewItem.source_submission_id,
+                        LearningSubmission.family_id == family_id,
+                        LearningSubmission.child_id == child_id,
+                    ),
+                )
+                .where(*due_scope)
+                .order_by(ReviewItem.due_date.asc(), ReviewItem.id.asc())
+                .limit(DAILY_REVIEW_CANDIDATE_LIMIT)
+            ).mappings()
+        )
+        candidates = [
+            ReviewSelectionCandidate(
+                review_id=str(row["review_id"]),
+                knowledge_id=str(row["knowledge_id"]),
+                subject_id=str(row["subject_id"]),
+                subject_name=str(row["subject_name"]),
+                knowledge_name=str(row["knowledge_name"]),
+                review_method=str(row["review_method"]),
+                estimated_minutes=int(row["minutes"]),
+                due_date=row["due_date"],
+                review_step=int(row["step"] or 0),
+                last_feedback=row["last_feedback"],
+                source_submission_id=row["source_submission_id"],
+                source_occurred_on=(
+                    local_date(row["source_occurred_at"])
+                    if row["source_occurred_at"] is not None
+                    else None
+                ),
+                review_round=int(row["step"] or 0) + 1,
+            )
+            for row in rows
+        ]
+        selected = select_daily_reviews(
+            candidates,
+            budget_minutes=child.daily_budget_minutes or 15,
+        )
+        sessions: list[dict] = []
+        by_subject: dict[str, dict] = {}
+        for item in selected:
+            session = by_subject.get(item.subject_id)
+            if session is None:
+                session = {
+                    "id": f"{target.isoformat()}:{item.subject_id}",
+                    "subject_id": item.subject_id,
+                    "subject_name": item.subject_name,
+                    "title": f"{item.subject_name}复习",
+                    "estimated_minutes": 0,
+                    "items": [],
+                }
+                by_subject[item.subject_id] = session
+                sessions.append(session)
+            session["estimated_minutes"] += item.bounded_minutes
+            session["items"].append(
+                {
+                    "review_id": item.review_id,
+                    "knowledge_id": item.knowledge_id,
+                    "knowledge_name": item.knowledge_name,
+                    "review_method": item.review_method,
+                    "estimated_minutes": item.bounded_minutes,
+                    "due_date": item.due_date.isoformat(),
+                    "step": item.review_step,
+                    "source_submission_id": item.source_submission_id,
+                    "source_occurred_on": (
+                        item.source_occurred_on.isoformat() if item.source_occurred_on else None
+                    ),
+                    "review_round": item.review_round,
+                }
+            )
+        selected_minutes = sum(item.bounded_minutes for item in selected)
+        return {
+            "day": target.isoformat(),
+            "sessions": sessions,
+            "selected_count": len(selected),
+            "selected_minutes": selected_minutes,
+            "total_due": total_due,
+            "backlog_count": max(0, total_due - len(selected)),
+            "earliest_due": aggregate.earliest_due.isoformat() if aggregate.earliest_due else None,
+            "today_feedback_count": used_count,
+            "today_feedback_minutes": used_minutes,
+            "policy_revision": DAILY_REVIEW_POLICY_REVISION,
+        }
+
+    @classmethod
+    def daily_review_selection(
+        cls,
+        db: Session,
+        family_id: str,
+        child_id: str,
+        day: date | None = None,
+        *,
+        known_child: Child | None = None,
+    ) -> dict:
+        """Materialize once and return the day's stable, minute-bounded review plan."""
+        child = known_child or ChildrenService.get_child(db, family_id, child_id)
+        if child.family_id != family_id or child.id != child_id:
+            raise NotFoundError("没有找到这个孩子")
+        target = day or local_date()
+        plan = db.scalar(
+            select(DailyReviewPlan).where(
+                DailyReviewPlan.family_id == family_id,
+                DailyReviewPlan.child_id == child_id,
+                DailyReviewPlan.plan_date == target,
+            )
+        )
+        if plan is None:
+            plan = cls._create_daily_review_plan(db, family_id, child, target)
+        rows = list(
+            db.execute(
+                select(DailyReviewPlanItem, ReviewItem, KnowledgeItem, Subject)
+                .join(ReviewItem, ReviewItem.id == DailyReviewPlanItem.review_item_id)
+                .join(KnowledgeItem, KnowledgeItem.id == ReviewItem.knowledge_item_id)
+                .join(Subject, Subject.id == KnowledgeItem.subject_id)
+                .where(
+                    DailyReviewPlanItem.plan_id == plan.id,
+                    DailyReviewPlanItem.family_id == family_id,
+                    DailyReviewPlanItem.child_id == child_id,
+                    KnowledgeItem.family_id == family_id,
+                    Subject.kind == "learning",
+                )
+                .order_by(DailyReviewPlanItem.ordinal, DailyReviewPlanItem.id)
+                .limit(120)
+            ).all()
+        )
+        sessions: list[dict] = []
+        by_subject: dict[str, dict] = {}
+        completed_count = 0
+        completed_minutes = 0
+        pending_count = 0
+        pending_minutes = 0
+        all_items: list[dict] = []
+        for plan_item, review, knowledge, subject in rows:
+            snapshot = {
+                "plan_item_id": plan_item.id,
+                "review_id": review.id,
+                "knowledge_id": knowledge.id,
+                "knowledge_name": knowledge.name,
+                "subject_name": subject.name,
+                "review_method": knowledge.review_method,
+                "estimated_minutes": int(plan_item.estimated_minutes),
+                "due_date": review.due_date.isoformat(),
+                "step": int(review.step or 0),
+                "state": plan_item.state,
+                "state_version": int(review.state_version or 0),
+                "last_reviewed_on": (
+                    review.last_reviewed_on.isoformat() if review.last_reviewed_on else None
+                ),
+                "review_count": int(review.review_count or 0),
+                "source_submission_id": review.source_submission_id,
+                "review_round": int(review.step or 0) + 1,
+            }
+            all_items.append(snapshot)
+            if plan_item.state != "pending":
+                completed_count += 1
+                completed_minutes += int(plan_item.estimated_minutes)
+                continue
+            pending_count += 1
+            pending_minutes += int(plan_item.estimated_minutes)
+            session = by_subject.get(subject.id)
+            if session is None:
+                session = {
+                    "id": f"{plan.id}:{subject.id}",
+                    "subject_id": subject.id,
+                    "subject_name": subject.name,
+                    "title": f"{subject.name}复习",
+                    "estimated_minutes": 0,
+                    "items": [],
+                }
+                by_subject[subject.id] = session
+                sessions.append(session)
+            session["estimated_minutes"] += int(plan_item.estimated_minutes)
+            session["items"].append(
+                {key: value for key, value in snapshot.items() if key != "subject_name"}
+            )
+        return {
+            "plan_id": plan.id,
+            "day": target.isoformat(),
+            "sessions": sessions,
+            "all_items": all_items,
+            "selected_count": pending_count,
+            "planned_count": len(rows),
+            "selected_minutes": pending_minutes,
+            "planned_minutes": int(plan.total_minutes or 0),
+            "total_due": int(plan.due_count or 0),
+            "backlog_count": max(0, int(plan.due_count or 0) - len(rows)),
+            "earliest_due": plan.earliest_due.isoformat() if plan.earliest_due else None,
+            "today_feedback_count": completed_count,
+            "today_feedback_minutes": completed_minutes,
+            "policy_revision": plan.policy_revision,
+        }
+
+    @staticmethod
+    def _create_daily_review_plan(
+        db: Session,
+        family_id: str,
+        child: Child,
+        target: date,
+    ) -> DailyReviewPlan:
+        due_scope = (
+            ReviewItem.family_id == family_id,
+            ReviewItem.child_id == child.id,
+            ReviewItem.active.is_(True),
+            ReviewItem.due_date <= target,
+            Subject.kind == "learning",
+            Subject.active.is_(True),
+        )
+        aggregate = db.execute(
+            select(func.count(ReviewItem.id), func.min(ReviewItem.due_date))
+            .select_from(ReviewItem)
+            .join(KnowledgeItem, ReviewItem.knowledge_item_id == KnowledgeItem.id)
+            .join(Subject, KnowledgeItem.subject_id == Subject.id)
+            .where(*due_scope)
+        ).one()
+        bounded_minutes = case(
+            (KnowledgeItem.estimated_minutes < 1, 1),
+            (KnowledgeItem.estimated_minutes > 5, 5),
+            else_=KnowledgeItem.estimated_minutes,
+        )
+        rows = db.execute(
+            select(ReviewItem, KnowledgeItem, Subject, bounded_minutes.label("minutes"))
+            .join(KnowledgeItem, ReviewItem.knowledge_item_id == KnowledgeItem.id)
+            .join(Subject, KnowledgeItem.subject_id == Subject.id)
+            .where(*due_scope)
+            .order_by(
+                ReviewItem.due_date.asc(),
+                ReviewItem.last_reviewed_on.is_not(None).asc(),
+                ReviewItem.last_reviewed_on.asc(),
+                ReviewItem.id.asc(),
+            )
+            .limit(DAILY_REVIEW_CANDIDATE_LIMIT)
+        ).all()
+        candidates = [
+            ReviewSelectionCandidate(
+                review_id=review.id,
+                knowledge_id=knowledge.id,
+                subject_id=subject.id,
+                subject_name=subject.name,
+                knowledge_name=knowledge.name,
+                review_method=knowledge.review_method,
+                estimated_minutes=int(minutes),
+                due_date=review.due_date,
+                last_reviewed_on=review.last_reviewed_on,
+                review_step=int(review.step or 0),
+                last_feedback=review.last_feedback,
+                source_submission_id=review.source_submission_id,
+            )
+            for review, knowledge, subject, minutes in rows
+        ]
+        selected = select_daily_reviews(
+            candidates,
+            budget_minutes=min(120, max(5, int(child.daily_budget_minutes or 15))),
+        )
+        plan = DailyReviewPlan(
+            family_id=family_id,
+            child_id=child.id,
+            plan_date=target,
+            budget_minutes=int(child.daily_budget_minutes or 15),
+            total_minutes=sum(item.bounded_minutes for item in selected),
+            due_count=int(aggregate[0] or 0),
+            earliest_due=aggregate[1],
+            policy_revision=DAILY_REVIEW_POLICY_REVISION,
+        )
+        db.add(plan)
+        db.flush()
+        for ordinal, item in enumerate(selected):
+            db.add(
+                DailyReviewPlanItem(
+                    family_id=family_id,
+                    child_id=child.id,
+                    plan_id=plan.id,
+                    review_item_id=item.review_id,
+                    ordinal=ordinal,
+                    estimated_minutes=item.bounded_minutes,
+                )
+            )
+        try:
+            db.commit()
+        except IntegrityError:
+            db.rollback()
+            existing = db.scalar(
+                select(DailyReviewPlan).where(
+                    DailyReviewPlan.family_id == family_id,
+                    DailyReviewPlan.child_id == child.id,
+                    DailyReviewPlan.plan_date == target,
+                )
+            )
+            if existing is None:
+                raise
+            return existing
+        return plan
+
+    @classmethod
     def daily_todo_page(
         cls,
         db: Session,
@@ -260,6 +675,7 @@ class PlanningService:
                 ReviewItem.due_date.label("due_date"),
                 ReviewItem.source_submission_id.label("source_submission_id"),
                 ReviewItem.step.label("step"),
+                ReviewItem.last_reviewed_on.label("last_reviewed_on"),
                 KnowledgeItem.name.label("knowledge_name"),
                 KnowledgeItem.review_method.label("review_method"),
                 minutes.label("minutes"),
@@ -362,26 +778,6 @@ class PlanningService:
             )
             more = len(rows) > limit
             rows = rows[:limit]
-        review_ids = [str(row["review_id"]) for row in rows]
-        last_reviewed: dict[str, date] = {}
-        if review_ids:
-            for item_id, occurred_at in (
-                db.execute(
-                    select(
-                        ReviewFeedback.review_item_id,
-                        func.max(ReviewFeedback.occurred_at),
-                    )
-                    .where(
-                        ReviewFeedback.family_id == family_id,
-                        ReviewFeedback.review_item_id.in_(review_ids),
-                    )
-                    .group_by(ReviewFeedback.review_item_id)
-                )
-                .tuples()
-                .all()
-            ):
-                if item_id is not None and occurred_at is not None:
-                    last_reviewed[item_id] = local_date(occurred_at)
         items = []
         for row in rows:
             source_occurred_at = row["source_occurred_at"]
@@ -402,7 +798,7 @@ class PlanningService:
                     review_round=(int(row["step"] or 0)) + 1,
                     interval_days=review_interval_days(
                         row["due_date"],
-                        last_reviewed.get(str(row["review_id"])),
+                        row["last_reviewed_on"],
                         source_occurred_on,
                     ),
                 )
@@ -668,6 +1064,83 @@ class PlanningService:
         return list(totals.values())
 
     @staticmethod
+    def record_review_event(
+        db: Session,
+        *,
+        family_id: str,
+        review: ReviewItem,
+        action: str,
+        reviewed_on: date,
+        source: str,
+        reactivate: bool = False,
+    ) -> ReviewPolicyTransition:
+        """Atomically stage one audit event, projection update, and same-day plan status."""
+        if review.family_id != family_id:
+            raise NotFoundError("没有找到这条复习任务")
+        if not review.active and not reactivate:
+            raise ConflictError("这条复习已结束，请刷新列表后再操作")
+        if review.due_date is None:
+            raise ValueError("复习任务缺少计划日期")
+        state = ReviewState(
+            step=0 if reactivate and not review.active else int(review.step or 0),
+            due_date=review.due_date,
+            active=True if reactivate else bool(review.active),
+            last_reviewed_on=review.last_reviewed_on,
+            review_count=int(review.review_count or 0),
+            interval_days=max(1, int(review.interval_days or 1)),
+            heat_milli=max(0, int(review.heat_milli or 0)),
+            lapse_count=max(0, int(review.lapse_count or 0)),
+            state_version=max(0, int(review.state_version or 0)),
+        )
+        transition = apply_review_event(state, action, reviewed_on)  # type: ignore[arg-type]
+        review.step = transition.step
+        review.due_date = transition.due_date
+        review.active = transition.active
+        review.last_reviewed_on = transition.last_reviewed_on
+        review.review_count = transition.review_count
+        review.interval_days = transition.interval_days
+        review.heat_milli = transition.heat_milli
+        review.lapse_count = transition.lapse_count
+        review.policy_revision = CURVE_HEAT_POLICY_REVISION
+        review.state_version = transition.state_version
+        review.last_feedback = action
+        db.add(
+            ReviewFeedback(
+                family_id=family_id,
+                review_item_id=review.id,
+                action=action,
+                reviewed_on=reviewed_on if action != "defer" else None,
+                source=source,
+                policy_revision=CURVE_HEAT_POLICY_REVISION,
+                before_step=state.step,
+                after_step=transition.step,
+                before_interval_days=state.interval_days,
+                after_interval_days=transition.interval_days,
+                before_due_date=state.due_date,
+                after_due_date=transition.due_date,
+            )
+        )
+        plan_item = db.scalar(
+            select(DailyReviewPlanItem)
+            .join(DailyReviewPlan, DailyReviewPlan.id == DailyReviewPlanItem.plan_id)
+            .where(
+                DailyReviewPlanItem.family_id == family_id,
+                DailyReviewPlanItem.review_item_id == review.id,
+                DailyReviewPlan.plan_date == reviewed_on,
+            )
+            .with_for_update()
+        )
+        if plan_item is not None and plan_item.state == "pending":
+            plan_item.state = {
+                "complete": "complete",
+                "observed": "complete",
+                "partial": "partial",
+                "reinforce": "reinforce",
+                "defer": "deferred",
+            }[action]
+        return transition
+
+    @staticmethod
     def feedback(
         db: Session,
         family_id: str,
@@ -702,14 +1175,14 @@ class PlanningService:
                 if existing.review_item_id != review_id or existing.action != action:
                     raise ConflictError("此反馈标识已用于不同操作，请重新操作")
                 return PlanningService._feedback_result(existing)
-        if not review.active:
-            raise ConflictError("这条复习已结束，请刷新列表后再操作")
-        transition = apply_feedback(review.step, action, local_date())  # type: ignore[arg-type]
-        review.step = transition.step
-        review.due_date = transition.due_date
-        review.active = transition.active
-        review.last_feedback = action
-        db.add(ReviewFeedback(family_id=family_id, review_item_id=review.id, action=action))
+        transition = PlanningService.record_review_event(
+            db,
+            family_id=family_id,
+            review=review,
+            action=action,
+            reviewed_on=local_date(),
+            source="manual",
+        )
         if idempotency_key:
             db.add(
                 ReviewFeedbackRequest(
@@ -743,9 +1216,117 @@ class PlanningService:
             "review_id": review.id,
             "action": action,
             "step": review.step,
-            "due_date": review.due_date.isoformat(),
+            "due_date": transition.due_date.isoformat(),
             "active": review.active,
         }
+
+    @staticmethod
+    def feedback_batch(
+        db: Session,
+        family_id: str,
+        child_id: str,
+        items: list[dict[str, str]],
+        idempotency_key: str,
+    ) -> dict:
+        """Apply all selected feedback in one transaction, with byte-stable replay."""
+        ChildrenService.get_child(db, family_id, child_id)
+        review_ids = [item["review_id"] for item in items]
+        if len(review_ids) != len(set(review_ids)):
+            raise ValueError("批量反馈不能包含重复复习项")
+        canonical = json.dumps(items, ensure_ascii=False, separators=(",", ":"))
+        fingerprint = sha256(canonical.encode()).hexdigest()
+        existing_batch = db.scalar(
+            select(ReviewFeedbackBatchRequest).where(
+                ReviewFeedbackBatchRequest.family_id == family_id,
+                ReviewFeedbackBatchRequest.idempotency_key == idempotency_key,
+            )
+        )
+        if existing_batch is not None:
+            if (
+                existing_batch.child_id != child_id
+                or existing_batch.request_fingerprint != fingerprint
+            ):
+                raise ConflictError("此批量反馈标识已用于不同操作，请重新操作")
+            if existing_batch.result_json is None:
+                raise RuntimeError("batch feedback replay has no stored result")
+            result = json.loads(existing_batch.result_json)
+            result["replayed"] = True
+            return result
+
+        rows = list(
+            db.scalars(
+                select(ReviewItem)
+                .join(KnowledgeItem, ReviewItem.knowledge_item_id == KnowledgeItem.id)
+                .join(Subject, KnowledgeItem.subject_id == Subject.id)
+                .where(
+                    ReviewItem.id.in_(review_ids),
+                    ReviewItem.family_id == family_id,
+                    ReviewItem.child_id == child_id,
+                    Subject.kind == "learning",
+                )
+                .order_by(ReviewItem.id)
+                .with_for_update()
+                .execution_options(populate_existing=True)
+            )
+        )
+        by_id = {row.id: row for row in rows}
+        if len(by_id) != len(review_ids):
+            raise NotFoundError("批量反馈中有无法访问的复习项")
+        today = local_date()
+        if any(not row.active or row.due_date is None or row.due_date > today for row in rows):
+            raise ConflictError("批量复习状态已变化，请刷新后重试")
+
+        results: list[dict] = []
+        for item in items:
+            review = by_id[item["review_id"]]
+            action = item["action"]
+            transition = PlanningService.record_review_event(
+                db,
+                family_id=family_id,
+                review=review,
+                action=action,
+                reviewed_on=today,
+                source="manual",
+            )
+            results.append(
+                {
+                    "review_id": review.id,
+                    "action": action,
+                    "step": transition.step,
+                    "due_date": transition.due_date.isoformat(),
+                    "active": transition.active,
+                }
+            )
+        response = {"items": results, "replayed": False}
+        db.add(
+            ReviewFeedbackBatchRequest(
+                family_id=family_id,
+                child_id=child_id,
+                idempotency_key=idempotency_key,
+                request_fingerprint=fingerprint,
+                result_json=json.dumps(response, ensure_ascii=False, separators=(",", ":")),
+            )
+        )
+        try:
+            db.commit()
+        except IntegrityError:
+            db.rollback()
+            replay = db.scalar(
+                select(ReviewFeedbackBatchRequest).where(
+                    ReviewFeedbackBatchRequest.family_id == family_id,
+                    ReviewFeedbackBatchRequest.idempotency_key == idempotency_key,
+                )
+            )
+            if replay is None:
+                raise
+            if replay.child_id != child_id or replay.request_fingerprint != fingerprint:
+                raise ConflictError("此批量反馈标识已用于不同操作，请重新操作") from None
+            if replay.result_json is None:
+                raise RuntimeError("batch feedback replay has no stored result") from None
+            response = json.loads(replay.result_json)
+            response["replayed"] = True
+            return response
+        return response
 
     @staticmethod
     def _feedback_result(request: ReviewFeedbackRequest) -> dict:
