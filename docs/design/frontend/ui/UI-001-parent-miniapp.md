@@ -1,14 +1,14 @@
 # UI-001 — 家长端微信小程序
 
-- Status: `CURRENT / LOCAL_IMPLEMENTATION_NOT_UPLOADED / NATIVE_VIEWPORT_MATRIX_NOT_RUN`
+- Status: `CURRENT / DEVELOPMENT_VERSION_0.1.11_UPLOADED / NATIVE_VIEWPORT_MATRIX_NOT_RUN`
 - Related Feature: `FEAT-001`
 - Baseline: `FDB-20260913-04`
 - Engineering contract: `FEC-20260913-LOCAL-DESIGN-EVIDENCE-01`
 - Design revision: `DREV-20260919-TODAY-SOURCE-MATERIAL-01`（当前复习原题提示与原始材料弹层）
-- Current-state revision: `UI-STATE-20260919-TODAY-SOURCE-MATERIAL-02-LOCAL`
+- Current-state revision: `UI-STATE-20260919-TODAY-SOURCE-MATERIAL-03-UPLOADED`
 - Related Spec: `specs/completed/BUG-023-TODAY-REVIEW-SOURCE-MATERIAL.md` revision `BUG-SPEC-20260919-REVIEW-SOURCE-01`
   （前序：`SPEC-20260911-SETTINGS-PROFILE-MANAGER-01`、`SPEC-20260911-PRIMARY-NAV-BRAND-01`、`SPEC-20260911-TODAY-ACTIVITY-EMPTY-CTA-01`、`SPEC-20260911-RECORD-PHOTO-ADD-SOURCE-02`、`SPEC-20260911-RECORD-SIMPLIFICATION-01`、`BUG-SPEC-20260911-01`）
-- Last verified: 2026-09-19（Today 当前复习卡已以“原题提示 + 查看原始内容”替代“出现原因 + 带练提示”，并在当前页弹层复用私有材料预览。前端170 passed、ESLint、小程序静态15 pages/667541 bytes、设计证据通过；真实 AppID DevTools preview 编译通过，包体603151 bytes。未上传；原生320×568/390×844/430×932节点几何、字体放大、iOS/Android仍为NOT_RUN）
+- Last verified: 2026-09-19（Today 当前复习卡已以“原题提示 + 查看原始内容”替代“出现原因 + 带练提示”，并在当前页弹层复用私有材料预览。前端170 passed、ESLint、小程序静态15 pages/667541 bytes、设计证据通过；真实 AppID DevTools preview 与只读业务链路通过，包体603151 bytes，开发版本0.1.11已上传。尚未设体验版、提审或正式发布；原生320×568/390×844/430×932节点几何、字体放大、iOS/Android仍为NOT_RUN）
 - Screen-level spec: `docs/design/frontend/prototypes/DREV-20260919-TODAY-SOURCE-MATERIAL-01/FRONTEND-SPEC.md`
 - Reference screens: `docs/design/frontend/prototypes/DREV-20260906-PKDS-01/screenshots/`（39 屏）
 - Intermediate artifact: `docs/design/frontend/prototypes/DREV-20260830-03/index.html`（设计历史）

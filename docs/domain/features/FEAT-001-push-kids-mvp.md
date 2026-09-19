@@ -1,16 +1,19 @@
 # FEAT-001 — 家庭学习持续跟进系统 MVP
 
 - Status: `CURRENT`
-- Revision: `FEAT-STATE-20260919-MYSQL57-WORKER-06-LOCAL`
+- Revision: `FEAT-STATE-20260919-REVIEW-SOURCE-07-UPLOADED`
 - Last verified: 2026-09-19（`BUG-SPEC-20260919-REVIEW-SOURCE-01` 与
   `BUG-SPEC-20260919-MYSQL57-WORKER-01` 本地实现与自动化验证完成：
   后端 362 passed/4 个环境用例在普通套件 skipped，隔离 MySQL 5.7.44 专项 4 passed，前端 170 passed，performance 2 passed，
   Ruff check/format、Mypy 86 files、ESLint、架构 checked=3、设计策略与小程序静态
   15 pages/667541 bytes、数据库空态审计通过；冻结容器 manifest 90 files/1066837 bytes，
-  UID 10001、live/ready 与 SIGTERM 通过。三视口原生节点/字体放大/iOS/Android 为 NOT_RUN，尚未部署）
+  UID 10001、live/ready 与 SIGTERM 通过。后端灰度不可变版本 `flask-ik19-023` 为 `normal`、PUBLIC
+  关闭，小程序 `0.1.11` 开发版本已上传；真实 AppID 业务只读链路通过。后端尚未人工全量切流，
+  小程序尚未设体验版/提审/正式发布；三视口原生节点、字体放大、iOS/Android 为 NOT_RUN）
 - Source Spec: `specs/completed/FEAT-001-PUSH-KIDS-FINAL-SPEC.md` revision `SPEC-20260831-08`
 - Latest implemented Spec: `specs/completed/BUG-023-TODAY-REVIEW-SOURCE-MATERIAL.md`
-  revision `BUG-SPEC-20260919-REVIEW-SOURCE-01`（本地实现与验证完成；无数据库变更、无新模型调用、未部署）
+  revision `BUG-SPEC-20260919-REVIEW-SOURCE-01`（实现与自动化验证完成；无数据库变更、无新模型调用；
+  后端 `flask-ik19-023` 灰度版本 normal，小程序 `0.1.11` 开发版本已上传）
 - Pending completion Spec: `specs/active/FEAT-001-ARK-CONTEXT-REUSE-FLAG.md` revision
   `SPEC-20260919-ARK-CONTEXT-REUSE-01`（默认开启的 attempt-local Ark Responses 会话续接；未部署）
 - Previous applied Spec: `specs/completed/BUG-021-TODAY-REVIEW-PLAN-VISIBILITY.md` revision `BUG-SPEC-20260912-REVIEW-VISIBILITY-01`
