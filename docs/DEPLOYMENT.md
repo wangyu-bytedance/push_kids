@@ -62,17 +62,21 @@ PUSH_KIDS_AI_PROVIDER=ark
 ARK_API_KEY=在火山方舟控制台新建的密钥
 ARK_BASE_URL=https://ark.cn-beijing.volces.com/api/v3
 ARK_MODEL=doubao-seed-2-1-pro-260628
+ARK_CONTEXT_CACHE_ENABLED=true
 ```
 
 `ARK_API_KEY` 必须由云托管在容器启动时注入，不能使用 Docker `ARG`、Dockerfile `ENV` 或
 `COPY .env`。云环境选择 `ark` 时，应用会在接收流量前校验 Key；缺失、空字符串或纯空格都会
 拒绝启动。配置对象使用秘密类型，日志和异常只允许出现变量名，不能出现变量值。
+`ARK_CONTEXT_CACHE_ENABLED=true`（默认）只启用单次 Job attempt 内的 Responses 会话续接；设为
+`false` 会回退到 `store=false` 完整重发，但不能关闭 Ark 自动启用的隐式前缀缓存。
 
 安全烟测：
 
 ```bash
 PYTHONPATH=apps/api/src uv run python tools/smoke_ark.py --text "英语学习了 animal 和 rabbit"
 PYTHONPATH=apps/api/src uv run python tools/smoke_ark.py --image /absolute/path/to/sample.jpg
+PYTHONPATH=apps/api/src uv run python tools/benchmark_ark_context_reuse.py --runs 3
 ```
 
 脚本只输出科目和数量，不打印密钥、原图、完整提示词或模型原文。没有密钥时 API 仍可读取

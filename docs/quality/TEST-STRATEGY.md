@@ -6,6 +6,11 @@
 - Integration: SQLite transactions, family isolation, submission confirmation, activity records and reports.
 - Contract: HTTP request/response shape, job lifecycle, upload validation and stable errors.
 - Provider: deterministic adapter restricted to test/e2e plus Ark response-shape parser fixtures; live Ark smoke is secret-gated.
+- Ark context transport: unit fixtures must cover default-on session reuse, explicit stateless rollback,
+  ten-minute expiry, reverse best-effort cleanup, strict Schema in both modes, no explicit `caching`, safe
+  cached-token telemetry and zero response-ID reuse/logging. A real latency comparison uses paired samples with
+  alternating mode order and reports only duration, turn count and cached-token aggregate; compare samples with
+  the same turn count and do not treat a single run as conclusive.
 - Analysis Agent resilience/privacy: fixtures must prove that 20 unmatched candidates fit in one batch tool round
   plus a final round under the eight-turn cap; the last turn rejects tools and a deadline derived from the persisted
   five-minute lease minus the writeback reserve does not call the provider after expiry. SDK retries must be zero.
@@ -93,3 +98,12 @@ PUSH_KIDS_TEST_MYSQL_URL='mysql+pymysql://<test-user>:<password>@<host>/<isolate
 ```
 
 No live provider call is required for deterministic CI. If `ARK_API_KEY` is present, a separately marked smoke test may run and must not print requests, images, responses or the key.
+
+For a controlled latency A/B, run at least two paired samples (three or more for a release decision):
+
+```bash
+PYTHONPATH=apps/api/src uv run python tools/benchmark_ark_context_reuse.py --runs 3
+```
+
+The benchmark alternates mode order and prints only mode, duration, generation count and cached-token aggregate.
+It does not prove a speedup when the two modes take different generation counts.

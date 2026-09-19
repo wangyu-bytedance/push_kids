@@ -2,6 +2,7 @@ import json
 import logging
 from types import SimpleNamespace
 
+import push_kids.agent_processing.providers as providers_module
 import pytest
 from push_kids.agent_processing.contracts import (
     AnalysisDeadlineExceededError,
@@ -155,6 +156,7 @@ def test_provider_history_tool_loop_returns_structured_result_without_provider_s
 
     provider = object.__new__(ArkAnalysisProvider)
     provider.model = "synthetic"
+    provider.context_cache_enabled = False
     provider.client = SimpleNamespace(responses=SimpleNamespace(create=respond))
 
     proposal = provider.analyze_with_history(
@@ -180,6 +182,219 @@ def test_provider_history_tool_loop_returns_structured_result_without_provider_s
             "output": '{"queries":[{"candidate_key":"两位数进位加法","items":[]}]}',
         }
     ]
+
+
+def test_provider_session_reuse_sends_only_new_input_and_cleans_up(monkeypatch, caplog):
+    calls = []
+    deleted = []
+    responses = [
+        SimpleNamespace(
+            id="resp-private-first",
+            output_text="",
+            output=[
+                {
+                    "type": "function_call",
+                    "name": "search_history_items",
+                    "call_id": "call-1",
+                    "arguments": json.dumps(
+                        {
+                            "queries": [
+                                {
+                                    "candidate_key": "分数",
+                                    "subject_name": "数学",
+                                    "keywords": ["分数"],
+                                }
+                            ]
+                        },
+                        ensure_ascii=False,
+                    ),
+                }
+            ],
+            usage={"input_tokens_details": {"cached_tokens": 0}},
+        ),
+        SimpleNamespace(
+            id="resp-private-second",
+            output_text=json.dumps(result(item("分数", kind="new")), ensure_ascii=False),
+            output=[],
+            usage={"prompt_tokens_details": {"cached_tokens": 123}},
+        ),
+    ]
+
+    def respond(**kwargs):
+        calls.append(kwargs)
+        return responses.pop(0)
+
+    provider = object.__new__(ArkAnalysisProvider)
+    provider.model = "synthetic"
+    provider.context_cache_enabled = True
+    provider.client = SimpleNamespace(
+        responses=SimpleNamespace(
+            create=respond,
+            delete=lambda response_id, **kwargs: deleted.append((response_id, kwargs)),
+        )
+    )
+    monkeypatch.setattr(providers_module, "time", lambda: 1000)
+    caplog.set_level(logging.INFO, logger="push_kids.analysis")
+
+    proposal = provider.analyze_with_history(
+        AnalysisInput(text="private-child-content", existing_subjects=["数学", "语文"]),
+        lambda _request: [],
+        max_turns=8,
+        trace=AnalysisTrace(job_id="job-safe", attempt=1),
+    )
+
+    assert [point.name for point in proposal.knowledge_points] == ["分数"]
+    assert calls[0]["store"] is True
+    assert calls[0]["extra_body"] == {"expire_at": 1600}
+    assert "previous_response_id" not in calls[0]
+    assert "tools" in calls[0]
+    assert calls[1]["store"] is True
+    assert calls[1]["previous_response_id"] == "resp-private-first"
+    assert calls[1]["tools"] == calls[0]["tools"]
+    assert calls[1]["input"] == [
+        {
+            "type": "function_call_output",
+            "call_id": "call-1",
+            "output": '{"queries":[{"candidate_key":"分数","items":[]}]}',
+        }
+    ]
+    assert all(call["text"]["format"]["strict"] is True for call in calls)
+    assert [item[0] for item in deleted] == ["resp-private-second", "resp-private-first"]
+    assert all(item[1]["timeout"] == 0.5 for item in deleted)
+    assert "cached_tokens=123" in caplog.text
+    assert "context_mode=session" in caplog.text
+    assert "resp-private" not in caplog.text
+    assert "private-child-content" not in caplog.text
+
+
+def test_provider_session_cleanup_failure_does_not_replace_valid_result(caplog):
+    provider = object.__new__(ArkAnalysisProvider)
+    provider.model = "synthetic"
+    provider.context_cache_enabled = True
+    provider.client = SimpleNamespace(
+        responses=SimpleNamespace(
+            create=lambda **_kwargs: SimpleNamespace(
+                id="resp-private",
+                output_text=json.dumps(result(), ensure_ascii=False),
+                output=[],
+            ),
+            delete=lambda *_args, **_kwargs: (_ for _ in ()).throw(
+                RuntimeError("private-cleanup-detail")
+            ),
+        )
+    )
+    caplog.set_level(logging.INFO, logger="push_kids.analysis")
+
+    proposal = provider.analyze_with_history(
+        AnalysisInput(text="private-child-content", existing_subjects=["数学", "语文"]),
+        lambda _request: [],
+        max_turns=8,
+        trace=AnalysisTrace(job_id="job-safe", attempt=1),
+    )
+
+    assert proposal.knowledge_points == []
+    assert "analysis_context_session_cleanup_failed" in caplog.text
+    assert "private-cleanup-detail" not in caplog.text
+    assert "resp-private" not in caplog.text
+
+
+def test_provider_session_retries_invalid_tool_arguments_without_querying():
+    calls = []
+    searched = []
+    responses = [
+        SimpleNamespace(
+            id="resp-1",
+            output_text="",
+            output=[
+                {
+                    "type": "function_call",
+                    "name": "search_history_items",
+                    "call_id": "invalid-call",
+                    "arguments": '{"queries":"invalid"}',
+                }
+            ],
+        ),
+        SimpleNamespace(
+            id="resp-2",
+            output_text="",
+            output=[
+                {
+                    "type": "function_call",
+                    "name": "search_history_items",
+                    "call_id": "valid-call",
+                    "arguments": json.dumps(
+                        {
+                            "queries": [
+                                {
+                                    "candidate_key": "分数",
+                                    "subject_name": "数学",
+                                    "keywords": ["分数"],
+                                }
+                            ]
+                        },
+                        ensure_ascii=False,
+                    ),
+                }
+            ],
+        ),
+        SimpleNamespace(
+            id="resp-3",
+            output_text=json.dumps(result(item("分数", kind="new")), ensure_ascii=False),
+            output=[],
+        ),
+    ]
+
+    def respond(**kwargs):
+        calls.append(kwargs)
+        return responses.pop(0)
+
+    provider = object.__new__(ArkAnalysisProvider)
+    provider.model = "synthetic"
+    provider.context_cache_enabled = True
+    provider.client = SimpleNamespace(
+        responses=SimpleNamespace(create=respond, delete=lambda *_args, **_kwargs: None)
+    )
+
+    provider.analyze_with_history(
+        AnalysisInput(text="分数", existing_subjects=["数学", "语文"]),
+        lambda request: searched.append(request) or [],
+        max_turns=8,
+    )
+
+    assert [request.candidate_key for request in searched] == ["分数"]
+    assert calls[1]["previous_response_id"] == "resp-1"
+    assert calls[2]["previous_response_id"] == "resp-2"
+    assert json.loads(calls[1]["input"][0]["output"]) == {"error": "tool.arguments"}
+    assert "tool.arguments" in json.dumps(calls[1]["input"][1], ensure_ascii=False)
+    assert calls[2]["input"][0]["call_id"] == "valid-call"
+    assert all("caching" not in call.get("extra_body", {}) for call in calls)
+
+
+def test_provider_session_chain_is_never_reused_across_invocations():
+    calls = []
+    response_ids = iter(("resp-first-job", "resp-second-job"))
+
+    def respond(**kwargs):
+        calls.append(kwargs)
+        return SimpleNamespace(
+            id=next(response_ids),
+            output_text=json.dumps(result(), ensure_ascii=False),
+            output=[],
+        )
+
+    provider = object.__new__(ArkAnalysisProvider)
+    provider.model = "synthetic"
+    provider.context_cache_enabled = True
+    provider.client = SimpleNamespace(
+        responses=SimpleNamespace(create=respond, delete=lambda *_args, **_kwargs: None)
+    )
+    data = AnalysisInput(text="练习", existing_subjects=["数学", "语文"])
+
+    provider.analyze_with_history(data, lambda _request: [], max_turns=8)
+    provider.analyze_with_history(data, lambda _request: [], max_turns=8)
+
+    assert len(calls) == 2
+    assert all("previous_response_id" not in call for call in calls)
 
 
 def test_provider_batches_twenty_candidates_in_one_turn_and_logs_only_safe_counters(caplog):

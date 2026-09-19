@@ -1,7 +1,7 @@
 # Push Kids current architecture
 
 - Status: `IMPLEMENTED_LOCALLY_PENDING_CLOUD_ACCEPTANCE`
-- Revision: `ARCH-ANALYSIS-RETRY-20260919-01`
+- Revision: `ARCH-ARK-CONTEXT-REUSE-20260919-01`
 - Confirmed by: user approval of `BUG-SPEC-20260919-AGENT-RETRY-02`, 2026-09-19
   (preserves `ARCH-UNIFIED-REVIEW-20260913-02`, `ARCH-20260912-MYSQL57-01` and the MySQL 5.7 constraints)
 - Scope: local adapters plus WeChat Cloud Hosting controlled staging
@@ -106,7 +106,12 @@ input contains the child profile, this material, same-day confirmed knowledge an
 but no historical knowledge list. `runner.py` owns the eight-turn loop, 20-logical-query/100-unique-result budgets
 and one deadline supplied from the durable Job lease; the eighth turn is final-only. `worker.py` derives that
 deadline after media/context work from `lease_until - now - 30 seconds`, while `providers.py` disables SDK retries
-and exposes one strict
+and owns the default-on, attempt-local Ark Responses session chain. The first response is stored for at most ten
+minutes; later turns send only new tool/correction input with `previous_response_id`, and terminal cleanup is
+best-effort. `ARK_CONTEXT_CACHE_ENABLED=false` restores the stateless `store=false` full-resend path. This switch
+does not control Ark's automatic implicit prefix cache, never enables the explicit `caching` field, and therefore
+keeps strict JSON Schema on every generation. Response IDs stay only in the Provider invocation and never enter
+the database or logs. The Provider also exposes one strict
 `queries[1..20]` batch tool call while `history_search.py` owns each deterministic, scoped logical retrieval.
 `telemetry.py` accepts only Job/attempt, bounded counters, safe statuses and normalized static validation categories;
 it cannot log child content, subjects, keywords, media paths or provider payloads. Model references are validated in contracts; learning owns final identity validation,
@@ -166,6 +171,12 @@ the remaining Agent loop. Failure disposition is explicit: output/reference/budg
 transient dependency failures may requeue until attempt three, while schema capability and deterministic input or
 configuration invariants stop immediately. SQL commit uncertainty still waits for lease recovery. Safe per-turn
 telemetry is a narrow `agent_processing` contract rather than a second persistence or retry subsystem.
+
+`SPEC-20260919-ARK-CONTEXT-REUSE-01` adds only a bounded transport policy inside the existing Ark Provider.
+The Provider, rather than Worker/Runner/domain code, owns `store`, `previous_response_id`, expiry and deletion.
+The default session mode minimizes repeated multi-turn input; the configuration rollback mode retains the prior
+stateless protocol. Explicit Ark caching remains deferred because its current contract conflicts with strict
+`json_schema`; cross-Job or cross-family response chains remain closed.
 
 `BUG-SPEC-20260905-04` keeps subject classification in existing service boundaries: learning confirmation
 requires server-resolved `Subject.kind=learning`; planning, Worker Todo candidates and review reporting

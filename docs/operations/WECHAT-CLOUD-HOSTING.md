@@ -230,6 +230,7 @@ PUSH_KIDS_ACTOR_HMAC_KEY=<随机且至少 32 字符>
 ARK_API_KEY=<当前有效 Ark 密钥>
 ARK_BASE_URL=https://ark.cn-beijing.volces.com/api/v3
 ARK_MODEL=doubao-seed-2-1-pro-260628
+ARK_CONTEXT_CACHE_ENABLED=true
 ```
 
 `CBR_ENV_ID` 是云托管部署时自动注入的保留变量，控制台不允许手工创建 `CBR_*` 变量；应用只校验
@@ -237,6 +238,11 @@ ARK_MODEL=doubao-seed-2-1-pro-260628
 bucket、region 或 COS 凭据。Python 服务端因需校验上传归属、读取图片供模型分析并清理孤儿对象，
 直接读取云托管提供的 `COS_BUCKET`、`COS_REGION`，对象路径从 `fileID` 解析，不再配置独立的
 `WECHAT_STORAGE_CLOUD_PREFIX`。
+
+`ARK_CONTEXT_CACHE_ENABLED=true` 是默认值，表示只在一个 Job attempt 内用 `store=true`、最长10分钟
+`expire_at` 和 `previous_response_id` 续接 Ark Responses；终态 best-effort 删除。设为 `false` 会恢复
+`store=false` 完整输入重发，但不会也无法关闭 Ark 对当前模型自动提供的隐式前缀缓存。不得开启显式
+`caching` 来替代本配置，因为当前 strict JSON Schema 合同必须保留。
 
 敏感值只写云托管环境变量/密钥能力。不要写 `.env.example`、Dockerfile、发布包、日志、截图或
 Issue。版本配置变更与代码变更一起评审；回滚前要比较旧版的资源、实例数和环境变量。

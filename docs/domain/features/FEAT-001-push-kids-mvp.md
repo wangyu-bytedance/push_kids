@@ -1,15 +1,17 @@
 # FEAT-001 — 家庭学习持续跟进系统 MVP
 
 - Status: `CURRENT`
-- Revision: `FEAT-STATE-20260919-ANALYSIS-RETRY-03-LOCAL`
-- Last verified: 2026-09-19（`BUG-SPEC-20260919-AGENT-RETRY-02` 本地完成：unit/integration/contract
-  349 passed、4 个 MySQL 环境用例 skipped；Agent/Worker 定向 63 passed；performance+E2E 3 passed；
-  前端 167 passed；Ruff check/format、Mypy 86 files、架构 checked=3、设计策略和小程序静态
-  15 pages/665198 bytes 通过。受控 Ark 原图、真实 MySQL 5.7、部署和生产失败任务重跑未执行）
+- Revision: `FEAT-STATE-20260919-CONTEXT-REUSE-04-LOCAL`
+- Last verified: 2026-09-19（`SPEC-20260919-ARK-CONTEXT-REUSE-01` 本地协议与回归验证完成：
+  后端 354 passed/4 个 MySQL 环境用例 skipped，Provider 定向 38 passed，前端 167 passed，
+  performance+E2E 3 passed，Ruff check/format、Mypy 87 files、架构 checked=3、设计策略与小程序静态
+  15 pages/665198 bytes 通过。真实 Ark 成对延迟 A/B 因本机未配置 Key 且云控制台需人工进入而待验收）
 - Source Spec: `specs/completed/FEAT-001-PUSH-KIDS-FINAL-SPEC.md` revision `SPEC-20260831-08`
 - Latest implemented Spec: `specs/completed/BUG-022-ANALYSIS-AGENT-OBSERVABILITY-AND-RETRY.md`
   revision `BUG-SPEC-20260919-AGENT-RETRY-02`（本地实现与自动化已验证；受控 Ark、真实 MySQL 5.7
   和部署未执行）
+- Pending completion Spec: `specs/active/FEAT-001-ARK-CONTEXT-REUSE-FLAG.md` revision
+  `SPEC-20260919-ARK-CONTEXT-REUSE-01`（默认开启的 attempt-local Ark Responses 会话续接；未部署）
 - Previous applied Spec: `specs/completed/BUG-021-TODAY-REVIEW-PLAN-VISIBILITY.md` revision `BUG-SPEC-20260912-REVIEW-VISIBILITY-01`
 - Previous applied Spec: `specs/completed/SPEC-20260911-SETTINGS-PROFILE-MANAGER-POLISH.md` revision `SPEC-20260911-SETTINGS-PROFILE-MANAGER-POLISH-01`（frontend only）
 - Current visible contract: `docs/design/frontend/prototypes/DREV-20260912-TODAY-NEXT-REVIEW-01/FRONTEND-SPEC.md`
@@ -98,6 +100,11 @@
   剩余时间传给每次 Provider 调用。SDK 内部网络重试关闭，持久化 Job attempts 是唯一重试所有者。
   tool 参数 JSON/shape/type/range/subject 非法时不执行查询，只回传静态 `tool.arguments`，让模型在
   同一 loop 的剩余轮次内修正。工具/时间/轮次耗尽或语义不确定时不能猜成新知识。
+- Ark 多轮传输默认启用 attempt-local Responses 会话续接：首轮 `store=true` 且 `expire_at` 最多10分钟，
+  后续轮只通过 `previous_response_id` 发送新增工具结果或校验修正，终态 best-effort 删除本次 response。
+  `ARK_CONTEXT_CACHE_ENABLED=false` 回退到 `store=false` 完整累计输入重发；它不能关闭 Ark 对当前模型
+  自动启用的隐式前缀缓存。两种模式每轮都保留 strict JSON Schema，不发送显式 `caching`，response ID
+  只存在于单次 Provider 调用内，不跨 Job/retry/家庭/孩子，也不写数据库或日志。
 - 部署规则在 `agent_processing/prompt.py` 以 `child-aware-history-agent-20260919-05` 版本化，不读取
   个人SKILL目录。Ark 必须按当前 active learning subjects 返回固定键的 strict JSON Schema，条目明确
   为 `new`、`today_review` 或 `history_item`；模型总输出最多20项、每项1–5分钟，`review_method`
@@ -260,6 +267,10 @@ BUG-010 本地实现已通过微信开发者工具 registered AppID preview 编�
 - BUG-010 的受控 Figma waiver 同样在公开生产前失效；三视口、字体放大、键盘和 iOS/Android 实机证据仍待补齐。
 
 ## Change references
+
+- 2026-09-19 — `SPEC-20260919-ARK-CONTEXT-REUSE-01`：新增默认开启、可回退的 Ark attempt-local
+  Responses 会话续接，保留 strict Schema、8轮和 Job retry 边界，并提供不输出内容、ID或密钥的真实
+  延迟 A/B 工具。协议与回归在本地验证；真实 Ark A/B 和部署待独立门禁。
 
 - 2026-09-19 — `BUG-022 / BUG-SPEC-20260919-AGENT-RETRY-02`：修复合法图片分析在 8 轮 Agent loop
   耗尽后于 attempt 1/3 提前终态的问题。历史搜索工具改为每轮批量 1–20 个逻辑查询，保留 8 turns、

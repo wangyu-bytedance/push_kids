@@ -111,7 +111,7 @@ def test_prompt_keeps_all_accepted_text():
 
 def test_ark_provider_unwraps_secret_only_for_sdk(monkeypatch):
     sentinel = "ark-test-secret-sentinel"
-    captured: dict[str, str | int] = {}
+    captured: dict[str, str | int | bool] = {}
 
     def fake_openai(*, base_url: str, api_key: str, max_retries: int):
         captured.update(base_url=base_url, api_key=api_key, max_retries=max_retries)
@@ -120,8 +120,21 @@ def test_ark_provider_unwraps_secret_only_for_sdk(monkeypatch):
     monkeypatch.setattr(providers, "OpenAI", fake_openai)
     settings = Settings(PUSH_KIDS_ENV="development", ARK_API_KEY=sentinel)
 
-    ArkAnalysisProvider(settings)
+    provider = ArkAnalysisProvider(settings)
 
     assert captured["api_key"] == sentinel
     assert captured["max_retries"] == 0
+    assert provider.context_cache_enabled is True
     assert sentinel not in repr(settings)
+
+
+def test_ark_context_cache_switch_can_disable_session_reuse(monkeypatch):
+    monkeypatch.setattr(providers, "OpenAI", lambda **_kwargs: SimpleNamespace())
+
+    settings = Settings(
+        PUSH_KIDS_ENV="development",
+        ARK_API_KEY="synthetic",
+        ARK_CONTEXT_CACHE_ENABLED="false",
+    )
+
+    assert ArkAnalysisProvider(settings).context_cache_enabled is False

@@ -7,7 +7,7 @@ import re
 from collections.abc import Callable
 from hashlib import sha256
 from pathlib import Path
-from time import monotonic
+from time import monotonic, time
 from typing import Annotated, Any
 
 from openai import BadRequestError, OpenAI
@@ -233,7 +233,32 @@ def _parse_history_tool_calls(
     return parsed
 
 
+def _response_cached_tokens(response: object) -> int | None:
+    usage = getattr(response, "usage", None)
+    if usage is None:
+        return None
+    usage_model_dump = getattr(usage, "model_dump", None)
+    if callable(usage_model_dump):
+        usage = usage_model_dump(exclude_none=True)
+    if not isinstance(usage, dict):
+        return None
+    for key in ("input_tokens_details", "prompt_tokens_details"):
+        details = usage.get(key)
+        details_model_dump = getattr(details, "model_dump", None)
+        if callable(details_model_dump):
+            details = details_model_dump(exclude_none=True)
+        if not isinstance(details, dict):
+            continue
+        value = details.get("cached_tokens")
+        if isinstance(value, int) and not isinstance(value, bool) and value >= 0:
+            return value
+    return None
+
+
 class ArkAnalysisProvider:
+    _CONTEXT_TTL_SECONDS = 600
+    _CLEANUP_TIMEOUT_SECONDS = 0.5
+
     def __init__(self, settings: Settings) -> None:
         self.client = (
             OpenAI(
@@ -245,6 +270,39 @@ class ArkAnalysisProvider:
             else None
         )
         self.model = settings.ark_model
+        self.context_cache_enabled = settings.ark_context_cache_enabled
+
+    def _cleanup_context_session(
+        self,
+        response_ids: list[str],
+        trace: AnalysisTrace,
+    ) -> None:
+        if self.client is None or not response_ids:
+            return
+        deleted = 0
+        failed = False
+        for response_id in reversed(response_ids):
+            try:
+                self.client.responses.delete(
+                    response_id,
+                    timeout=self._CLEANUP_TIMEOUT_SECONDS,
+                )
+                deleted += 1
+            except Exception:
+                failed = True
+        event = (
+            "analysis_context_session_cleanup_failed"
+            if failed
+            else "analysis_context_session_cleanup_completed"
+        )
+        emit = trace.warning if failed else trace.info
+        emit(
+            event,
+            context_mode="session",
+            request_count=len(response_ids),
+            cleanup_count=deleted,
+            reason="provider_delete" if failed else "completed",
+        )
 
     def analyze(self, data: AnalysisInput) -> AnalysisProposal:
         if self.client is None:
@@ -327,10 +385,14 @@ class ArkAnalysisProvider:
         trace: AnalysisTrace | None = None,
         deadline: float | None = None,
     ) -> AnalysisProposal:
-        """Run a bounded Responses tool loop without storing provider-side conversation state."""
+        """Run a bounded Responses tool loop with optional attempt-local session reuse."""
         if self.client is None:
             raise AnalysisInputError("学习内容分析尚未配置，请设置 ARK_API_KEY 后重试")
         trace = trace or AnalysisTrace.disabled()
+        session_enabled = bool(getattr(self, "context_cache_enabled", False))
+        context_mode = "session" if session_enabled else "stateless"
+        response_ids: list[str] = []
+        previous_response_id: str | None = None
         content: list[dict[str, str]] = []
         seen_images: dict[str, int] = {}
         for index, path in enumerate(data.image_paths, start=1):
@@ -417,6 +479,7 @@ class ArkAnalysisProvider:
                         max_turns=max_turns,
                         remaining_turns=max_turns - turn,
                         remaining_time_ms=0,
+                        context_mode=context_mode,
                         reason="time_budget",
                     )
                     raise AnalysisDeadlineExceededError()
@@ -426,6 +489,7 @@ class ArkAnalysisProvider:
                     max_turns=max_turns,
                     remaining_turns=max_turns - turn + 1,
                     remaining_time_ms=remaining_ms,
+                    context_mode=context_mode,
                     total_logical_calls=total_logical_calls,
                     total_results=total_results,
                     validation_codes=validation_codes,
@@ -434,7 +498,7 @@ class ArkAnalysisProvider:
                 request_kwargs: Any = {
                     "model": self.model,
                     "input": provider_input,
-                    "store": False,
+                    "store": session_enabled,
                     "tools": tools,
                     "text": {
                         "format": {
@@ -445,6 +509,12 @@ class ArkAnalysisProvider:
                         }
                     },
                 }
+                if session_enabled:
+                    request_kwargs["extra_body"] = {
+                        "expire_at": int(time()) + self._CONTEXT_TTL_SECONDS
+                    }
+                    if previous_response_id is not None:
+                        request_kwargs["previous_response_id"] = previous_response_id
                 if turn == max_turns:
                     request_kwargs["tool_choice"] = "none"
                 if deadline is not None:
@@ -464,9 +534,17 @@ class ArkAnalysisProvider:
                         if deadline is not None
                         else 0,
                         duration_ms=int((monotonic() - started) * 1000),
+                        context_mode=context_mode,
                         reason="provider_call",
                     )
                     raise
+                cached_tokens = _response_cached_tokens(response)
+                if session_enabled:
+                    response_id = getattr(response, "id", None)
+                    if not isinstance(response_id, str) or not response_id:
+                        raise DependencyError("学习内容分析会话未返回有效标识，请稍后重试")
+                    response_ids.append(response_id)
+                    previous_response_id = response_id
                 output_items = [
                     item.model_dump(exclude_none=True)
                     if hasattr(item, "model_dump")
@@ -491,6 +569,7 @@ class ArkAnalysisProvider:
                         )
                         if deadline is not None
                         else 0,
+                        context_mode=context_mode,
                         reason="incomplete",
                     )
                     raise DependencyError("学习内容分析未完整返回，请稍后重试")
@@ -508,13 +587,17 @@ class ArkAnalysisProvider:
                             if deadline is not None
                             else 0,
                             duration_ms=int((monotonic() - started) * 1000),
+                            context_mode=context_mode,
                             reason="final_turn_tool_call",
                         )
                         raise AnalysisOutputExhaustedError(
                             reason="final_turn_tool_call",
                             codes=["tool.final_turn"],
                         )
-                    provider_input.extend(output_items)
+                    if session_enabled:
+                        provider_input = []
+                    else:
+                        provider_input.extend(output_items)
                     try:
                         parsed_calls = _parse_history_tool_calls(calls, data.existing_subjects)
                     except AnalysisOutputValidationError as exc:
@@ -543,6 +626,8 @@ class ArkAnalysisProvider:
                             if deadline is not None
                             else 0,
                             duration_ms=int((monotonic() - started) * 1000),
+                            context_mode=context_mode,
+                            cached_tokens=cached_tokens,
                             status=status,
                             response_kind="tool",
                             output_items=len(output_items),
@@ -647,6 +732,8 @@ class ArkAnalysisProvider:
                         if deadline is not None
                         else 0,
                         duration_ms=int((monotonic() - started) * 1000),
+                        context_mode=context_mode,
+                        cached_tokens=cached_tokens,
                         status=status,
                         response_kind="tool",
                         output_items=len(output_items),
@@ -667,6 +754,8 @@ class ArkAnalysisProvider:
                     if deadline is not None
                     else 0,
                     duration_ms=int((monotonic() - started) * 1000),
+                    context_mode=context_mode,
+                    cached_tokens=cached_tokens,
                     status=status,
                     response_kind="final",
                     output_items=len(output_items),
@@ -693,7 +782,10 @@ class ArkAnalysisProvider:
                     validation_codes=validation_codes,
                     reason="output_validation",
                 )
-                provider_input.extend(output_items)
+                if session_enabled:
+                    provider_input = []
+                else:
+                    provider_input.extend(output_items)
                 provider_input.append(
                     {
                         "role": "user",
@@ -720,6 +812,9 @@ class ArkAnalysisProvider:
             raise
         except Exception as exc:
             raise DependencyError("学习内容分析暂时失败，请稍后重试") from exc
+        finally:
+            if session_enabled:
+                self._cleanup_context_session(response_ids, trace)
         raise AnalysisOutputExhaustedError(
             reason="output_validation" if validation_codes else "turn_budget",
             codes=validation_codes,
