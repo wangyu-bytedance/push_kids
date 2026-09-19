@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import re
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Literal, Protocol
 
@@ -162,10 +163,81 @@ class AnalysisOutputExhaustedError(AnalysisTerminalError):
     code = "analysis_output_invalid"
     public_message = "图片内容暂时无法整理成有效条目，请修改补充说明后重试"
 
+    def __init__(
+        self,
+        reason: str = "turn_budget",
+        codes: list[str] | None = None,
+    ) -> None:
+        self.reason = reason
+        self.codes = list(dict.fromkeys(codes or []))[:20]
+        super().__init__(reason)
+
 
 class AnalysisCapabilityError(AnalysisTerminalError):
     code = "analysis_schema_unsupported"
     public_message = "当前 AI 模型不支持所需的结构化输出，请联系管理员检查模型配置"
+
+
+class AnalysisInputError(AnalysisTerminalError):
+    """A deterministic input or runtime configuration invariant cannot recover on retry."""
+
+
+class AnalysisDeadlineExceededError(Exception):
+    """One Agent attempt exhausted its wall-clock budget."""
+
+
+@dataclass(frozen=True)
+class AnalysisFailureDisposition:
+    retryable: bool
+    code: str
+    public_message: str
+    reason: str
+
+
+def analysis_failure_disposition(exc: Exception) -> AnalysisFailureDisposition:
+    """Classify failures without inspecting provider text or coupling policy to inheritance."""
+    if isinstance(exc, AnalysisCapabilityError):
+        return AnalysisFailureDisposition(
+            retryable=False,
+            code=exc.code,
+            public_message=exc.public_message,
+            reason="capability",
+        )
+    if isinstance(exc, AnalysisInputError):
+        return AnalysisFailureDisposition(
+            retryable=False,
+            code=exc.code,
+            public_message=exc.public_message,
+            reason="input_invariant",
+        )
+    if isinstance(exc, (AnalysisOutputExhaustedError, AnalysisOutputValidationError)):
+        reason = getattr(exc, "reason", "output_validation")
+        return AnalysisFailureDisposition(
+            retryable=True,
+            code="analysis_output_invalid",
+            public_message=AnalysisOutputExhaustedError.public_message,
+            reason=reason,
+        )
+    if isinstance(exc, AnalysisDeadlineExceededError):
+        return AnalysisFailureDisposition(
+            retryable=True,
+            code="analysis_failed",
+            public_message=AnalysisTerminalError.public_message,
+            reason="time_budget",
+        )
+    if isinstance(exc, AnalysisTerminalError):
+        return AnalysisFailureDisposition(
+            retryable=False,
+            code=exc.code,
+            public_message=exc.public_message,
+            reason="terminal",
+        )
+    return AnalysisFailureDisposition(
+        retryable=True,
+        code="analysis_failed",
+        public_message=AnalysisTerminalError.public_message,
+        reason="dependency",
+    )
 
 
 class AnalysisOutputValidationError(ValueError):

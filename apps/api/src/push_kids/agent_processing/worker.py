@@ -17,10 +17,12 @@ from push_kids.agent_processing.context import (
 )
 from push_kids.agent_processing.contracts import (
     MATERIAL_FINGERPRINT_KEY,
+    AnalysisInputError,
     AnalysisProvider,
-    AnalysisTerminalError,
+    analysis_failure_disposition,
 )
 from push_kids.agent_processing.runner import AnalysisAgentRunner
+from push_kids.agent_processing.telemetry import AnalysisTrace
 from push_kids.media.store import MediaStore, WeChatCloudMediaStore
 from push_kids.persistence.models import (
     AgentJob,
@@ -35,6 +37,9 @@ from push_kids.platform.database import Database
 from push_kids.platform.time import utcnow
 
 logger = logging.getLogger("push_kids.worker")
+
+JOB_LEASE_DURATION = timedelta(minutes=5)
+JOB_LEASE_WRITEBACK_RESERVE_SECONDS = 30
 
 
 class AnalysisWorker:
@@ -149,7 +154,7 @@ class AnalysisWorker:
             lease_recovery = job.state == JobState.running.value
             job.state = JobState.running.value
             job.attempts = (job.attempts or 0) + 1
-            job.lease_until = now + timedelta(minutes=5)
+            job.lease_until = now + JOB_LEASE_DURATION
             submission.state = SubmissionState.analyzing.value
             db.commit()
             # MySQL DATETIME can persist less precision than the Python value. Reload the
@@ -159,6 +164,7 @@ class AnalysisWorker:
             self._healthy = True
             job_id, submission_id = job.id, submission.id
             attempt, lease = job.attempts, job.lease_until
+            trace = AnalysisTrace(job_id=str(job_id or "unknown"), attempt=attempt)
             logger.info(
                 "analysis_attempt_started job_id=%s attempt=%s max_attempts=%s lease_recovery=%s",
                 job_id,
@@ -243,11 +249,22 @@ class AnalysisWorker:
                         attempt,
                     )
                     if not submission.family_id or not submission.child_id:
-                        raise ValueError("submission analysis scope is incomplete")
+                        raise AnalysisInputError("submission analysis scope is incomplete")
+                    provider_time_budget_seconds = (
+                        max(
+                            0.0,
+                            (lease - utcnow()).total_seconds()
+                            - JOB_LEASE_WRITEBACK_RESERVE_SECONDS,
+                        )
+                        if lease is not None
+                        else 0.0
+                    )
                     proposal = AnalysisAgentRunner(self.database, self.provider).run(
                         data,
                         family_id=submission.family_id,
                         child_id=submission.child_id,
+                        trace=trace,
+                        time_budget_seconds=provider_time_budget_seconds,
                     )
                     logger.info(
                         "analysis_provider_completed job_id=%s attempt=%s duration_ms=%s",
@@ -368,15 +385,11 @@ class AnalysisWorker:
                     stage,
                     type(exc).__name__,
                 )
-                terminal = isinstance(exc, AnalysisTerminalError)
-                if isinstance(exc, AnalysisTerminalError):
-                    message = exc.public_message
-                    terminal_code = exc.code
-                else:
-                    message = "分析暂时失败，请重试"
-                    terminal_code = "analysis_failed"
+                disposition = analysis_failure_disposition(exc)
+                message = disposition.public_message
+                terminal_code = disposition.code
                 job.error_message = message
-                if not terminal and (job.attempts or 0) < (job.max_attempts or 3):
+                if disposition.retryable and (job.attempts or 0) < (job.max_attempts or 3):
                     job.state = JobState.queued.value
                     job.available_at = utcnow() + timedelta(seconds=job.attempts or 1)
                     submission.state = SubmissionState.queued.value
@@ -393,12 +406,16 @@ class AnalysisWorker:
                     else "analysis_job_terminal_failed"
                 )
                 logger.warning(
-                    "%s job_id=%s attempt=%s max_attempts=%s stage=%s",
+                    "%s job_id=%s attempt=%s max_attempts=%s stage=%s "
+                    "retryable=%s reason=%s error_code=%s",
                     event,
                     job_id,
                     attempt,
                     max_attempts,
                     stage,
+                    int(disposition.retryable),
+                    disposition.reason,
+                    disposition.code,
                 )
             return True
 

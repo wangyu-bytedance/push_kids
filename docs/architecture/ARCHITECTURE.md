@@ -1,9 +1,9 @@
 # Push Kids current architecture
 
 - Status: `IMPLEMENTED_LOCALLY_PENDING_CLOUD_ACCEPTANCE`
-- Revision: `ARCH-UNIFIED-REVIEW-20260913-02`
-- Confirmed by: user approval of `SPEC-UNIFIED-REVIEW-20260913-02`, 2026-09-13
-  (preserves `ARCH-20260912-MYSQL57-01` and its MySQL 5.7 constraints)
+- Revision: `ARCH-ANALYSIS-RETRY-20260919-01`
+- Confirmed by: user approval of `BUG-SPEC-20260919-AGENT-RETRY-02`, 2026-09-19
+  (preserves `ARCH-UNIFIED-REVIEW-20260913-02`, `ARCH-20260912-MYSQL57-01` and the MySQL 5.7 constraints)
 - Scope: local adapters plus WeChat Cloud Hosting controlled staging
 
 ## Runtime context
@@ -103,8 +103,13 @@ Dependency direction is routers → services → pure policies. Infrastructure a
 `agent_processing/context.py` owns bounded initial input assembly and material fingerprints; `prompt.py` owns
 deployment-versioned extraction rules. The personal Skill filesystem is not a runtime dependency. The initial
 input contains the child profile, this material, same-day confirmed knowledge and the full materialized plan,
-but no historical knowledge list. `runner.py` owns the bounded tool loop; `history_search.py` owns deterministic
-terms and scoped retrieval. Model references are validated in contracts; learning owns final identity validation,
+but no historical knowledge list. `runner.py` owns the eight-turn loop, 20-logical-query/100-unique-result budgets
+and one deadline supplied from the durable Job lease; the eighth turn is final-only. `worker.py` derives that
+deadline after media/context work from `lease_until - now - 30 seconds`, while `providers.py` disables SDK retries
+and exposes one strict
+`queries[1..20]` batch tool call while `history_search.py` owns each deterministic, scoped logical retrieval.
+`telemetry.py` accepts only Job/attempt, bounded counters, safe statuses and normalized static validation categories;
+it cannot log child content, subjects, keywords, media paths or provider payloads. Model references are validated in contracts; learning owns final identity validation,
 occurrence deduplication and Review settlement in one transaction. Planning never depends on agent processing,
 so the graph remains acyclic.
 Confirmation locks Job → Submission → Child, then affected Reviews; Worker writes lock Job → Submission
@@ -124,9 +129,18 @@ sequenceDiagram
   A->>D: submission + media metadata + queued job
   A-->>M: 202 queued
   W->>D: lease job
-  W->>K: image/text analysis
+  W->>K: generation (remaining lease minus 30s reserve)
+  K-->>W: history queries[1..20]
+  W->>D: scoped indexed history reads
+  W->>K: bounded tool results
   K-->>W: structured proposal
-  W->>D: pending_confirmation or failed
+  alt valid proposal
+    W->>D: pending_confirmation
+  else retryable and attempt < 3
+    W->>D: queued + bounded backoff
+  else non-retryable or attempt = 3
+    W->>D: failed + stable public code
+  end
   M->>A: poll/list pending item
   M->>A: confirm edited proposal
   A->>D: new learning => record + knowledge + occurrence + review
@@ -143,6 +157,15 @@ job retries; database failures close the session and preserve durable state for 
 lease recovery. Stop wakes idle/backoff waits; an already running synchronous provider thread cannot be
 forcibly stopped. Logs contain event/type/count/IDs only. This local fault-tolerance change does not
 change the Worker decision in `ADR-001 / TD-001`.
+
+`BUG-SPEC-20260919-AGENT-RETRY-02` keeps the same durable Job state machine and five-minute lease. It aligns the
+8-turn loop with the existing 20-candidate contract through batched logical history queries, reserves the final
+turn, and derives the full Agent deadline from the current persisted lease with a 30-second guarded-writeback reserve.
+Provider SDK retries are disabled; invalid tool arguments are schema-checked before any query and corrected inside
+the remaining Agent loop. Failure disposition is explicit: output/reference/budget and
+transient dependency failures may requeue until attempt three, while schema capability and deterministic input or
+configuration invariants stop immediately. SQL commit uncertainty still waits for lease recovery. Safe per-turn
+telemetry is a narrow `agent_processing` contract rather than a second persistence or retry subsystem.
 
 `BUG-SPEC-20260905-04` keeps subject classification in existing service boundaries: learning confirmation
 requires server-resolved `Subject.kind=learning`; planning, Worker Todo candidates and review reporting

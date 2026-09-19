@@ -1,6 +1,6 @@
 """Deployment-owned analysis rules; no dependency on a developer's personal Skill directory."""
 
-PROMPT_REVISION = "child-aware-history-agent-20260913-04"
+PROMPT_REVISION = "child-aware-history-agent-20260919-05"
 
 ANALYSIS_RULES = """
 你正在根据孩子的学习档案和本次材料，生成一份由家长编辑确认的学习/复习提案。
@@ -35,7 +35,8 @@ review_method只能是：主动回忆、变式练习、解释应用。
 2. 命中today_review_plan且本次材料有直接证据时，kind必须为today_review，并复制existing_knowledge_id
 和review_id；未在材料出现的计划项不得输出。
 3. 对未命中今日上下文的每个候选，必须先以candidate_key=候选name、正确subject_name和1–8个关键词
-调用search_history_items。可根据结果改写关键词再次调用，但总轮次和调用次数由系统限制。
+调用search_history_items。一次调用必须用queries批量提交当前所有未匹配候选（最多20个），不能逐候选
+消耗生成轮次；可根据结果改写关键词再次批量调用，但总轮次和逻辑查询次数由系统限制。
 4. 工具候选中存在同科目、同范围、语义等价的历史知识时，kind必须为history_item，复制其
 existing_knowledge_id和review_id；review_id允许为null，表示确认后重建该知识的Review。
 5. 至少一次成功检索且没有等价历史知识时才允许kind=new；review_id和existing_knowledge_id必须为null。

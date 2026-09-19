@@ -6,6 +6,14 @@
 - Integration: SQLite transactions, family isolation, submission confirmation, activity records and reports.
 - Contract: HTTP request/response shape, job lifecycle, upload validation and stable errors.
 - Provider: deterministic adapter restricted to test/e2e plus Ark response-shape parser fixtures; live Ark smoke is secret-gated.
+- Analysis Agent resilience/privacy: fixtures must prove that 20 unmatched candidates fit in one batch tool round
+  plus a final round under the eight-turn cap; the last turn rejects tools and a deadline derived from the persisted
+  five-minute lease minus the writeback reserve does not call the provider after expiry. SDK retries must be zero.
+  Invalid tool JSON/shape/type/range/subject must execute no query and receive a safe same-loop correction. Log
+  capture must assert generation/batch counters while excluding child text, subject, keywords, raw output and
+  dynamic schema paths. Integration must drive retryable output/transport/budget failures
+  to exactly three durable Job attempts, capability/input failures to one, and retain SQL uncertainty, cancellation,
+  late-result and readiness behavior.
 - Mini program: request client, formatters, state reducers and structural validator.
 - Design evidence: repository-local editable SVG/self-contained HTML, required viewport/state PNGs,
   dimensions, SHA-256 values and approval identity are checked offline; historical external-tool records

@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from collections.abc import Callable
 from dataclasses import dataclass, field
+from inspect import signature
+from time import monotonic
 
 from push_kids.agent_processing.contracts import (
     AnalysisInput,
@@ -12,6 +14,7 @@ from push_kids.agent_processing.history_search import (
     HistorySearchRequest,
     search_history_items,
 )
+from push_kids.agent_processing.telemetry import AnalysisTrace
 from push_kids.knowledge.normalization import normalize_knowledge_name
 from push_kids.platform.database import Database
 
@@ -36,7 +39,16 @@ class AnalysisAgentRunner:
         self.database = database
         self.provider = provider
 
-    def run(self, data: AnalysisInput, *, family_id: str, child_id: str) -> AnalysisProposal:
+    def run(
+        self,
+        data: AnalysisInput,
+        *,
+        family_id: str,
+        child_id: str,
+        trace: AnalysisTrace | None = None,
+        time_budget_seconds: float | None = None,
+    ) -> AnalysisProposal:
+        trace = trace or AnalysisTrace.disabled()
         tool_aware = getattr(self.provider, "analyze_with_history", None)
         if tool_aware is None:
             # Compatibility for test doubles and a controlled rollback to the old provider.
@@ -67,7 +79,13 @@ class AnalysisAgentRunner:
             data.existing_knowledge.extend(row for row in rows if row.knowledge_id not in known)
             return [row.model_dump() for row in rows]
 
-        proposal = tool_aware(data, execute, max_turns=MAX_AGENT_TURNS)
+        kwargs: dict[str, object] = {"max_turns": MAX_AGENT_TURNS}
+        parameters = signature(tool_aware).parameters
+        if "trace" in parameters:
+            kwargs["trace"] = trace
+        if "deadline" in parameters and time_budget_seconds is not None:
+            kwargs["deadline"] = monotonic() + max(0.0, time_budget_seconds)
+        proposal = tool_aware(data, execute, **kwargs)
         proposal = data.validate_proposal(proposal)
         missing = [
             point

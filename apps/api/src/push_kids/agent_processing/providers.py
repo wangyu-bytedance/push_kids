@@ -7,14 +7,17 @@ import re
 from collections.abc import Callable
 from hashlib import sha256
 from pathlib import Path
-from typing import Any
+from time import monotonic
+from typing import Annotated, Any
 
 from openai import BadRequestError, OpenAI
-from pydantic import ValidationError
+from pydantic import BaseModel, ConfigDict, Field, ValidationError
 
 from push_kids.agent_processing.contracts import (
     AnalysisCapabilityError,
+    AnalysisDeadlineExceededError,
     AnalysisInput,
+    AnalysisInputError,
     AnalysisOutputExhaustedError,
     AnalysisOutputValidationError,
     AnalysisProposal,
@@ -27,6 +30,7 @@ from push_kids.agent_processing.contracts import (
 )
 from push_kids.agent_processing.history_search import HistorySearchRequest
 from push_kids.agent_processing.prompt import ANALYSIS_RULES, PROMPT_REVISION
+from push_kids.agent_processing.telemetry import AnalysisTrace
 from push_kids.knowledge.normalization import normalize_knowledge_name
 from push_kids.platform.config import Settings
 from push_kids.platform.errors import DependencyError
@@ -45,8 +49,10 @@ class DeterministicTestProvider:
         search_history: Callable[[HistorySearchRequest], list[dict[str, object]]],
         *,
         max_turns: int,
+        trace: AnalysisTrace | None = None,
+        deadline: float | None = None,
     ) -> AnalysisProposal:
-        del max_turns
+        del max_turns, trace, deadline
         return self._analyze(data, search_history)
 
     def _analyze(
@@ -191,12 +197,49 @@ def _search_keywords(name: str) -> list[str]:
     return list(dict.fromkeys(values))[:8]
 
 
+class _HistorySearchToolQuery(BaseModel):
+    model_config = ConfigDict(extra="forbid", strict=True)
+
+    candidate_key: str = Field(min_length=1, max_length=120, pattern=r".*\S.*")
+    subject_name: str = Field(min_length=1, max_length=40, pattern=r".*\S.*")
+    keywords: list[Annotated[str, Field(min_length=1, max_length=40, pattern=r".*\S.*")]] = Field(
+        min_length=1, max_length=8
+    )
+
+
+class _HistorySearchToolArguments(BaseModel):
+    model_config = ConfigDict(extra="forbid", strict=True)
+
+    queries: list[_HistorySearchToolQuery] = Field(min_length=1, max_length=20)
+
+
+def _parse_history_tool_calls(
+    calls: list[dict[str, object]],
+    existing_subjects: list[str],
+) -> list[tuple[dict[str, object], _HistorySearchToolArguments]]:
+    parsed: list[tuple[dict[str, object], _HistorySearchToolArguments]] = []
+    for call in calls:
+        if call.get("name") != "search_history_items":
+            raise AnalysisOutputValidationError(["tool.name"])
+        try:
+            arguments = _HistorySearchToolArguments.model_validate_json(
+                str(call.get("arguments") or "{}")
+            )
+        except ValidationError as exc:
+            raise AnalysisOutputValidationError(["tool.arguments"]) from exc
+        if any(query.subject_name not in existing_subjects for query in arguments.queries):
+            raise AnalysisOutputValidationError(["tool.arguments"])
+        parsed.append((call, arguments))
+    return parsed
+
+
 class ArkAnalysisProvider:
     def __init__(self, settings: Settings) -> None:
         self.client = (
             OpenAI(
                 base_url=settings.ark_base_url,
                 api_key=settings.ark_api_key.get_secret_value(),
+                max_retries=0,
             )
             if settings.ark_api_key
             else None
@@ -205,7 +248,7 @@ class ArkAnalysisProvider:
 
     def analyze(self, data: AnalysisInput) -> AnalysisProposal:
         if self.client is None:
-            raise DependencyError("学习内容分析尚未配置，请设置 ARK_API_KEY 后重试")
+            raise AnalysisInputError("学习内容分析尚未配置，请设置 ARK_API_KEY 后重试")
         content: list[dict[str, str]] = []
         seen_images: dict[str, int] = {}
         for index, path in enumerate(data.image_paths, start=1):
@@ -281,10 +324,13 @@ class ArkAnalysisProvider:
         search_history: Callable[[HistorySearchRequest], list[dict[str, object]]],
         *,
         max_turns: int,
+        trace: AnalysisTrace | None = None,
+        deadline: float | None = None,
     ) -> AnalysisProposal:
         """Run a bounded Responses tool loop without storing provider-side conversation state."""
         if self.client is None:
-            raise DependencyError("学习内容分析尚未配置，请设置 ARK_API_KEY 后重试")
+            raise AnalysisInputError("学习内容分析尚未配置，请设置 ARK_API_KEY 后重试")
+        trace = trace or AnalysisTrace.disabled()
         content: list[dict[str, str]] = []
         seen_images: dict[str, int] = {}
         for index, path in enumerate(data.image_paths, start=1):
@@ -319,32 +365,78 @@ class ArkAnalysisProvider:
                 "parameters": {
                     "type": "object",
                     "properties": {
-                        "candidate_key": {"type": "string", "minLength": 1, "maxLength": 120},
-                        "subject_name": {
-                            "type": "string",
-                            "enum": list(data.existing_subjects),
-                        },
-                        "keywords": {
+                        "queries": {
                             "type": "array",
-                            "items": {"type": "string", "minLength": 1, "maxLength": 40},
                             "minItems": 1,
-                            "maxItems": 8,
+                            "maxItems": 20,
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "candidate_key": {
+                                        "type": "string",
+                                        "minLength": 1,
+                                        "maxLength": 120,
+                                    },
+                                    "subject_name": {
+                                        "type": "string",
+                                        "enum": list(data.existing_subjects),
+                                    },
+                                    "keywords": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "minLength": 1,
+                                            "maxLength": 40,
+                                        },
+                                        "minItems": 1,
+                                        "maxItems": 8,
+                                    },
+                                },
+                                "required": ["candidate_key", "subject_name", "keywords"],
+                                "additionalProperties": False,
+                            },
                         },
                     },
-                    "required": ["candidate_key", "subject_name", "keywords"],
+                    "required": ["queries"],
                     "additionalProperties": False,
                 },
             }
         ]
         validation_codes: list[str] = []
+        total_logical_calls = 0
+        total_results = 0
         try:
-            for _turn in range(max_turns):
-                response = self.client.responses.create(
-                    model=self.model,
-                    input=provider_input,
-                    store=False,
-                    tools=tools,
-                    text={
+            for turn in range(1, max_turns + 1):
+                remaining_ms = (
+                    max(0, int((deadline - monotonic()) * 1000)) if deadline is not None else 0
+                )
+                if deadline is not None and remaining_ms <= 0:
+                    trace.warning(
+                        "analysis_generation_failed",
+                        turn=turn,
+                        max_turns=max_turns,
+                        remaining_turns=max_turns - turn,
+                        remaining_time_ms=0,
+                        reason="time_budget",
+                    )
+                    raise AnalysisDeadlineExceededError()
+                trace.info(
+                    "analysis_generation_started",
+                    turn=turn,
+                    max_turns=max_turns,
+                    remaining_turns=max_turns - turn + 1,
+                    remaining_time_ms=remaining_ms,
+                    total_logical_calls=total_logical_calls,
+                    total_results=total_results,
+                    validation_codes=validation_codes,
+                )
+                started = monotonic()
+                request_kwargs: Any = {
+                    "model": self.model,
+                    "input": provider_input,
+                    "store": False,
+                    "tools": tools,
+                    "text": {
                         "format": {
                             "type": "json_schema",
                             "name": "subject_grouped_learning_analysis",
@@ -352,9 +444,29 @@ class ArkAnalysisProvider:
                             "schema": data.structured_output_schema(),
                         }
                     },
-                )
-                if getattr(response, "status", "completed") != "completed":
-                    raise DependencyError("学习内容分析未完整返回，请稍后重试")
+                }
+                if turn == max_turns:
+                    request_kwargs["tool_choice"] = "none"
+                if deadline is not None:
+                    request_kwargs["timeout"] = max(0.001, remaining_ms / 1000)
+                try:
+                    response = self.client.responses.create(**request_kwargs)
+                except Exception:
+                    trace.warning(
+                        "analysis_generation_failed",
+                        turn=turn,
+                        max_turns=max_turns,
+                        remaining_turns=max_turns - turn,
+                        remaining_time_ms=max(
+                            0,
+                            int((deadline - monotonic()) * 1000),
+                        )
+                        if deadline is not None
+                        else 0,
+                        duration_ms=int((monotonic() - started) * 1000),
+                        reason="provider_call",
+                    )
+                    raise
                 output_items = [
                     item.model_dump(exclude_none=True)
                     if hasattr(item, "model_dump")
@@ -362,30 +474,206 @@ class ArkAnalysisProvider:
                     for item in getattr(response, "output", [])
                 ]
                 calls = [item for item in output_items if item.get("type") == "function_call"]
-                if calls:
-                    provider_input.extend(output_items)
-                    for call in calls:
-                        if call.get("name") != "search_history_items":
-                            raise AnalysisOutputValidationError(["tool.name"])
-                        arguments = json.loads(str(call.get("arguments") or "{}"))
-                        request = HistorySearchRequest(
-                            candidate_key=str(arguments.get("candidate_key") or ""),
-                            subject_name=str(arguments.get("subject_name") or ""),
-                            keywords=tuple(arguments.get("keywords") or ()),
+                status = (
+                    "completed"
+                    if getattr(response, "status", "completed") == "completed"
+                    else "incomplete"
+                )
+                if status != "completed":
+                    trace.warning(
+                        "analysis_generation_failed",
+                        turn=turn,
+                        max_turns=max_turns,
+                        remaining_turns=max_turns - turn,
+                        remaining_time_ms=max(
+                            0,
+                            int((deadline - monotonic()) * 1000),
                         )
-                        tool_result = search_history(request)
+                        if deadline is not None
+                        else 0,
+                        reason="incomplete",
+                    )
+                    raise DependencyError("学习内容分析未完整返回，请稍后重试")
+                if calls:
+                    if turn == max_turns:
+                        trace.warning(
+                            "analysis_generation_failed",
+                            turn=turn,
+                            max_turns=max_turns,
+                            remaining_turns=0,
+                            remaining_time_ms=max(
+                                0,
+                                int((deadline - monotonic()) * 1000),
+                            )
+                            if deadline is not None
+                            else 0,
+                            duration_ms=int((monotonic() - started) * 1000),
+                            reason="final_turn_tool_call",
+                        )
+                        raise AnalysisOutputExhaustedError(
+                            reason="final_turn_tool_call",
+                            codes=["tool.final_turn"],
+                        )
+                    provider_input.extend(output_items)
+                    try:
+                        parsed_calls = _parse_history_tool_calls(calls, data.existing_subjects)
+                    except AnalysisOutputValidationError as exc:
+                        validation_codes = exc.codes
+                        for call in calls:
+                            provider_input.append(
+                                {
+                                    "type": "function_call_output",
+                                    "call_id": str(call.get("call_id") or ""),
+                                    "output": json.dumps(
+                                        {"error": validation_codes[0]},
+                                        ensure_ascii=False,
+                                        separators=(",", ":"),
+                                    ),
+                                }
+                            )
+                        trace.info(
+                            "analysis_generation_completed",
+                            turn=turn,
+                            max_turns=max_turns,
+                            remaining_turns=max_turns - turn,
+                            remaining_time_ms=max(
+                                0,
+                                int((deadline - monotonic()) * 1000),
+                            )
+                            if deadline is not None
+                            else 0,
+                            duration_ms=int((monotonic() - started) * 1000),
+                            status=status,
+                            response_kind="tool",
+                            output_items=len(output_items),
+                            logical_calls=0,
+                            total_logical_calls=total_logical_calls,
+                            total_results=total_results,
+                        )
+                        trace.warning(
+                            "analysis_validation_failed",
+                            turn=turn,
+                            validation_codes=validation_codes,
+                            reason="tool_arguments",
+                        )
+                        provider_input.append(
+                            {
+                                "role": "user",
+                                "content": [
+                                    {
+                                        "type": "input_text",
+                                        "text": (
+                                            "工具参数未通过校验，仅修正规则代码："
+                                            + json.dumps(validation_codes, ensure_ascii=False)
+                                        ),
+                                    }
+                                ],
+                            }
+                        )
+                        continue
+                    turn_logical_calls = 0
+                    for call, arguments in parsed_calls:
+                        queries = arguments.queries
+                        trace.info(
+                            "analysis_history_batch_started",
+                            turn=turn,
+                            request_count=len(queries),
+                            total_logical_calls=total_logical_calls,
+                            total_results=total_results,
+                        )
+                        batch_results: list[dict[str, object]] = []
+                        batch_result_count = 0
+                        try:
+                            for query in queries:
+                                request = HistorySearchRequest(
+                                    candidate_key=query.candidate_key,
+                                    subject_name=query.subject_name,
+                                    keywords=tuple(query.keywords),
+                                )
+                                tool_result = search_history(request)
+                                total_logical_calls += 1
+                                batch_result_count += len(tool_result)
+                                total_results += len(tool_result)
+                                batch_results.append(
+                                    {
+                                        "candidate_key": request.candidate_key,
+                                        "items": tool_result,
+                                    }
+                                )
+                        except Exception:
+                            trace.warning(
+                                "analysis_history_batch_failed",
+                                turn=turn,
+                                request_count=len(queries),
+                                total_logical_calls=total_logical_calls,
+                                total_results=total_results,
+                                reason="validation",
+                            )
+                            trace.warning(
+                                "analysis_generation_failed",
+                                turn=turn,
+                                reason="tool_execution",
+                            )
+                            raise
+                        trace.info(
+                            "analysis_history_batch_completed",
+                            turn=turn,
+                            request_count=len(queries),
+                            result_count=batch_result_count,
+                            total_logical_calls=total_logical_calls,
+                            total_results=total_results,
+                        )
+                        turn_logical_calls += len(queries)
                         provider_input.append(
                             {
                                 "type": "function_call_output",
                                 "call_id": str(call.get("call_id") or ""),
                                 "output": json.dumps(
-                                    {"items": tool_result},
+                                    {"queries": batch_results},
                                     ensure_ascii=False,
                                     separators=(",", ":"),
                                 ),
                             }
                         )
+                    trace.info(
+                        "analysis_generation_completed",
+                        turn=turn,
+                        max_turns=max_turns,
+                        remaining_turns=max_turns - turn,
+                        remaining_time_ms=max(
+                            0,
+                            int((deadline - monotonic()) * 1000),
+                        )
+                        if deadline is not None
+                        else 0,
+                        duration_ms=int((monotonic() - started) * 1000),
+                        status=status,
+                        response_kind="tool",
+                        output_items=len(output_items),
+                        logical_calls=turn_logical_calls,
+                        total_logical_calls=total_logical_calls,
+                        total_results=total_results,
+                    )
                     continue
+                trace.info(
+                    "analysis_generation_completed",
+                    turn=turn,
+                    max_turns=max_turns,
+                    remaining_turns=max_turns - turn,
+                    remaining_time_ms=max(
+                        0,
+                        int((deadline - monotonic()) * 1000),
+                    )
+                    if deadline is not None
+                    else 0,
+                    duration_ms=int((monotonic() - started) * 1000),
+                    status=status,
+                    response_kind="final",
+                    output_items=len(output_items),
+                    logical_calls=0,
+                    total_logical_calls=total_logical_calls,
+                    total_results=total_results,
+                )
                 raw = response.output_text.strip()
                 try:
                     model_result = ModelAnalysisResult.model_validate(json.loads(raw))
@@ -399,6 +687,12 @@ class ArkAnalysisProvider:
                     ]
                 except AnalysisOutputValidationError as exc:
                     validation_codes = exc.codes
+                trace.warning(
+                    "analysis_validation_failed",
+                    turn=turn,
+                    validation_codes=validation_codes,
+                    reason="output_validation",
+                )
                 provider_input.extend(output_items)
                 provider_input.append(
                     {
@@ -416,13 +710,20 @@ class ArkAnalysisProvider:
                 )
         except BadRequestError as exc:
             raise AnalysisCapabilityError() from exc
-        except (AnalysisCapabilityError, AnalysisOutputExhaustedError):
+        except (
+            AnalysisCapabilityError,
+            AnalysisDeadlineExceededError,
+            AnalysisOutputExhaustedError,
+        ):
             raise
         except AnalysisOutputValidationError:
             raise
         except Exception as exc:
             raise DependencyError("学习内容分析暂时失败，请稍后重试") from exc
-        raise AnalysisOutputExhaustedError()
+        raise AnalysisOutputExhaustedError(
+            reason="output_validation" if validation_codes else "turn_budget",
+            codes=validation_codes,
+        )
 
     @staticmethod
     def _data_url(path: Path) -> str:

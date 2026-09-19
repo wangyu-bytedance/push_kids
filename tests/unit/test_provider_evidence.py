@@ -111,10 +111,10 @@ def test_prompt_keeps_all_accepted_text():
 
 def test_ark_provider_unwraps_secret_only_for_sdk(monkeypatch):
     sentinel = "ark-test-secret-sentinel"
-    captured: dict[str, str] = {}
+    captured: dict[str, str | int] = {}
 
-    def fake_openai(*, base_url: str, api_key: str):
-        captured.update(base_url=base_url, api_key=api_key)
+    def fake_openai(*, base_url: str, api_key: str, max_retries: int):
+        captured.update(base_url=base_url, api_key=api_key, max_retries=max_retries)
         return SimpleNamespace()
 
     monkeypatch.setattr(providers, "OpenAI", fake_openai)
@@ -123,4 +123,5 @@ def test_ark_provider_unwraps_secret_only_for_sdk(monkeypatch):
     ArkAnalysisProvider(settings)
 
     assert captured["api_key"] == sentinel
+    assert captured["max_retries"] == 0
     assert sentinel not in repr(settings)

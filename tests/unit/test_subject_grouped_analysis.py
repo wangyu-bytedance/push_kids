@@ -1,14 +1,17 @@
 import json
+import logging
 from types import SimpleNamespace
 
 import pytest
 from push_kids.agent_processing.contracts import (
+    AnalysisDeadlineExceededError,
     AnalysisInput,
     AnalysisOutputExhaustedError,
     AnalysisOutputValidationError,
     ModelAnalysisResult,
 )
 from push_kids.agent_processing.providers import ArkAnalysisProvider
+from push_kids.agent_processing.telemetry import AnalysisTrace
 from push_kids.platform.errors import DependencyError
 
 
@@ -127,9 +130,13 @@ def test_provider_history_tool_loop_returns_structured_result_without_provider_s
                     "call_id": "call-1",
                     "arguments": json.dumps(
                         {
-                            "candidate_key": "两位数进位加法",
-                            "subject_name": "数学",
-                            "keywords": ["进位加法"],
+                            "queries": [
+                                {
+                                    "candidate_key": "两位数进位加法",
+                                    "subject_name": "数学",
+                                    "keywords": ["进位加法"],
+                                }
+                            ]
                         },
                         ensure_ascii=False,
                     ),
@@ -170,9 +177,251 @@ def test_provider_history_tool_loop_returns_structured_result_without_provider_s
         {
             "type": "function_call_output",
             "call_id": "call-1",
-            "output": '{"items":[]}',
+            "output": '{"queries":[{"candidate_key":"两位数进位加法","items":[]}]}',
         }
     ]
+
+
+def test_provider_batches_twenty_candidates_in_one_turn_and_logs_only_safe_counters(caplog):
+    secret = "SECRET_CHILD_KEYWORD"
+    candidates = [
+        {
+            "candidate_key": f"{secret}-{index}",
+            "subject_name": "数学",
+            "keywords": [f"{secret}-{index}"],
+        }
+        for index in range(20)
+    ]
+    responses = [
+        SimpleNamespace(
+            output_text="",
+            output=[
+                {
+                    "type": "function_call",
+                    "name": "search_history_items",
+                    "call_id": "batch-call",
+                    "arguments": json.dumps({"queries": candidates}, ensure_ascii=False),
+                }
+            ],
+        ),
+        SimpleNamespace(output_text=json.dumps(result()), output=[]),
+    ]
+    calls = []
+
+    def respond(**kwargs):
+        calls.append(kwargs)
+        return responses.pop(0)
+
+    provider = object.__new__(ArkAnalysisProvider)
+    provider.model = "synthetic"
+    provider.client = SimpleNamespace(responses=SimpleNamespace(create=respond))
+    searched = []
+    caplog.set_level(logging.INFO, logger="push_kids.analysis")
+
+    provider.analyze_with_history(
+        AnalysisInput(text="private-child-content", existing_subjects=["数学", "语文"]),
+        lambda request: searched.append(request) or [],
+        max_turns=8,
+        trace=AnalysisTrace(job_id="job-safe", attempt=2),
+    )
+
+    assert len(calls) == 2
+    assert len(searched) == 20
+    assert "request_count=20" in caplog.text
+    assert "logical_calls=20" in caplog.text
+    assert "total_logical_calls=20" in caplog.text
+    assert "job_id=job-safe" in caplog.text
+    assert secret not in caplog.text
+    assert "private-child-content" not in caplog.text
+    assert "数学" not in caplog.text
+
+
+def test_provider_reserves_the_last_turn_for_final_output():
+    tool_response = SimpleNamespace(
+        output_text="",
+        output=[
+            {
+                "type": "function_call",
+                "name": "search_history_items",
+                "call_id": "call",
+                "arguments": json.dumps(
+                    {
+                        "queries": [
+                            {
+                                "candidate_key": "分数",
+                                "subject_name": "数学",
+                                "keywords": ["分数"],
+                            }
+                        ]
+                    },
+                    ensure_ascii=False,
+                ),
+            }
+        ],
+    )
+    calls = []
+    provider = object.__new__(ArkAnalysisProvider)
+    provider.model = "synthetic"
+    provider.client = SimpleNamespace(
+        responses=SimpleNamespace(create=lambda **kwargs: calls.append(kwargs) or tool_response)
+    )
+
+    with pytest.raises(AnalysisOutputExhaustedError) as error:
+        provider.analyze_with_history(
+            AnalysisInput(text="分数", existing_subjects=["数学"]),
+            lambda _request: [],
+            max_turns=2,
+        )
+
+    assert error.value.reason == "final_turn_tool_call"
+    assert calls[1]["tool_choice"] == "none"
+
+
+@pytest.mark.parametrize(
+    "invalid_arguments",
+    [
+        "[]",
+        json.dumps(
+            {
+                "queries": [
+                    {
+                        "candidate_key": "SECRET_CANDIDATE",
+                        "subject_name": "数学",
+                        "keywords": "SECRET_KEYWORD",
+                    }
+                ]
+            }
+        ),
+        json.dumps(
+            {
+                "queries": [
+                    {
+                        "candidate_key": "SECRET_CANDIDATE",
+                        "subject_name": "未配置科目",
+                        "keywords": ["SECRET_KEYWORD"],
+                    }
+                ]
+            },
+            ensure_ascii=False,
+        ),
+        json.dumps(
+            {
+                "queries": [
+                    {
+                        "candidate_key": " ",
+                        "subject_name": "数学",
+                        "keywords": [""],
+                    }
+                ]
+            },
+            ensure_ascii=False,
+        ),
+    ],
+)
+def test_provider_asks_model_to_fix_invalid_tool_arguments_in_same_loop(invalid_arguments, caplog):
+    valid_arguments = json.dumps(
+        {
+            "queries": [
+                {
+                    "candidate_key": "分数",
+                    "subject_name": "数学",
+                    "keywords": ["分数"],
+                }
+            ]
+        },
+        ensure_ascii=False,
+    )
+    responses = [
+        SimpleNamespace(
+            output_text="",
+            output=[
+                {
+                    "type": "function_call",
+                    "name": "search_history_items",
+                    "call_id": "invalid-call",
+                    "arguments": invalid_arguments,
+                }
+            ],
+        ),
+        SimpleNamespace(
+            output_text="",
+            output=[
+                {
+                    "type": "function_call",
+                    "name": "search_history_items",
+                    "call_id": "valid-call",
+                    "arguments": valid_arguments,
+                }
+            ],
+        ),
+        SimpleNamespace(
+            output_text=json.dumps(result(item("分数", kind="new")), ensure_ascii=False),
+            output=[],
+        ),
+    ]
+    inputs = []
+
+    def respond(**kwargs):
+        inputs.append(json.loads(json.dumps(kwargs["input"], ensure_ascii=False)))
+        return responses.pop(0)
+
+    provider = object.__new__(ArkAnalysisProvider)
+    provider.model = "synthetic"
+    provider.client = SimpleNamespace(responses=SimpleNamespace(create=respond))
+    searched = []
+    caplog.set_level(logging.INFO, logger="push_kids.analysis")
+
+    proposal = provider.analyze_with_history(
+        AnalysisInput(text="分数", existing_subjects=["数学", "语文"]),
+        lambda request: searched.append(request) or [],
+        max_turns=8,
+        trace=AnalysisTrace(job_id="job-safe", attempt=1),
+    )
+
+    assert [point.name for point in proposal.knowledge_points] == ["分数"]
+    assert len(inputs) == 3
+    assert [request.candidate_key for request in searched] == ["分数"]
+    correction = json.dumps(inputs[1], ensure_ascii=False)
+    assert "tool.arguments" in correction
+    tool_outputs = [
+        value
+        for value in inputs[1]
+        if isinstance(value, dict) and value.get("type") == "function_call_output"
+    ]
+    assert json.loads(tool_outputs[0]["output"]) == {"error": "tool.arguments"}
+    assert "SECRET" not in caplog.text
+
+
+def test_provider_refuses_to_start_after_attempt_deadline():
+    provider = object.__new__(ArkAnalysisProvider)
+    provider.model = "synthetic"
+    provider.client = SimpleNamespace(
+        responses=SimpleNamespace(create=lambda **_kwargs: pytest.fail("must not call provider"))
+    )
+
+    with pytest.raises(AnalysisDeadlineExceededError):
+        provider.analyze_with_history(
+            AnalysisInput(text="分数", existing_subjects=["数学"]),
+            lambda _request: [],
+            max_turns=8,
+            deadline=0,
+        )
+
+
+def test_trace_normalizes_dynamic_validation_paths(caplog):
+    caplog.set_level(logging.INFO, logger="push_kids.analysis")
+    trace = AnalysisTrace(job_id="job-safe", attempt=1)
+
+    trace.info(
+        "analysis_validation_failed",
+        turn=1,
+        validation_codes=["schema.subjects.数学.SECRET_FIELD", "SECRET_RAW_CODE"],
+        reason="output_validation",
+    )
+
+    assert "validation_codes=schema.fields,validation.other" in caplog.text
+    assert "数学" not in caplog.text
+    assert "SECRET" not in caplog.text
 
 
 def test_incomplete_provider_response_uses_worker_transport_retry():

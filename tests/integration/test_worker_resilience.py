@@ -3,8 +3,19 @@ import logging
 from datetime import timedelta
 
 import pytest
-from push_kids.agent_processing.contracts import AnalysisOutputExhaustedError
+from push_kids.agent_processing.contracts import (
+    AnalysisCapabilityError,
+    AnalysisDeadlineExceededError,
+    AnalysisInputError,
+    AnalysisOutputExhaustedError,
+)
+from push_kids.agent_processing.runner import AnalysisAgentRunner
+from push_kids.agent_processing.worker import (
+    JOB_LEASE_DURATION,
+    JOB_LEASE_WRITEBACK_RESERVE_SECONDS,
+)
 from push_kids.persistence.models import AgentJob, LearningRecord, LearningSubmission
+from push_kids.platform.errors import DependencyError
 from push_kids.platform.time import utcnow
 from sqlalchemy import event, func, select, update
 from sqlalchemy.exc import OperationalError
@@ -59,6 +70,25 @@ def test_analysis_stage_logs_are_complete_and_safe(client, app, child, family_he
     assert "duration_ms=" in caplog.text
     assert ids[0] in caplog.text
     assert "private-child-content" not in caplog.text
+
+
+def test_worker_derives_provider_budget_from_remaining_job_lease(
+    client, app, child, family_headers, monkeypatch
+):
+    add_jobs(app, child, family_headers, texts=("lease budget",))
+    original_run = AnalysisAgentRunner.run
+    captured: dict[str, float] = {}
+
+    def capture_budget(self, data, **kwargs):
+        captured["seconds"] = kwargs["time_budget_seconds"]
+        return original_run(self, data, **kwargs)
+
+    monkeypatch.setattr(AnalysisAgentRunner, "run", capture_budget)
+
+    assert app.state.worker.process_one()
+
+    full_budget = JOB_LEASE_DURATION.total_seconds() - JOB_LEASE_WRITEBACK_RESERVE_SECONDS
+    assert full_budget - 5 <= captured["seconds"] <= full_budget
 
 
 def test_failed_stage_log_contains_only_safe_diagnostics(
@@ -209,7 +239,7 @@ def test_preparation_error_is_bounded_and_next_job_runs(client, app, child, fami
         assert db.get(AgentJob, ids[1]).state == "succeeded"
 
 
-def test_invalid_structured_output_is_terminal_without_worker_retry(
+def test_invalid_structured_output_retries_three_times_before_terminal_failure(
     client, app, child, family_headers, monkeypatch
 ):
     ids = add_jobs(app, child, family_headers, texts=("private-invalid-output",))
@@ -219,6 +249,46 @@ def test_invalid_structured_output_is_terminal_without_worker_retry(
         raise AnalysisOutputExhaustedError()
 
     monkeypatch.setattr(app.state.worker.provider, "analyze_with_history", fail_validation)
+    for attempt in range(1, 4):
+        assert app.state.worker.process_one()
+        with app.state.database.session_factory() as db:
+            job = db.get(AgentJob, ids[0])
+            assert job.attempts == attempt
+            if attempt < 3:
+                assert job.state == "queued"
+                db.execute(
+                    update(AgentJob).where(AgentJob.id == job.id).values(available_at=utcnow())
+                )
+                db.commit()
+    assert not app.state.worker.process_one()
+
+    with app.state.database.session_factory() as db:
+        job = db.get(AgentJob, ids[0])
+        submission = db.get(LearningSubmission, job.submission_id)
+        assert job.state == "failed"
+        assert job.attempts == 3
+        assert submission.state == "failed"
+        assert submission.error_code == "analysis_output_invalid"
+        assert submission.proposal_json is None
+
+
+@pytest.mark.parametrize(
+    ("failure", "error_code"),
+    [
+        (AnalysisCapabilityError(), "analysis_schema_unsupported"),
+        (AnalysisInputError("deterministic"), "analysis_failed"),
+    ],
+)
+def test_non_retryable_analysis_failure_stops_after_first_attempt(
+    client, app, child, family_headers, monkeypatch, failure, error_code
+):
+    ids = add_jobs(app, child, family_headers, texts=("private-invalid-input",))
+
+    def fail_provider(_data, _search_history, *, max_turns):
+        del max_turns
+        raise failure
+
+    monkeypatch.setattr(app.state.worker.provider, "analyze_with_history", fail_provider)
     assert app.state.worker.process_one()
     assert not app.state.worker.process_one()
 
@@ -228,8 +298,42 @@ def test_invalid_structured_output_is_terminal_without_worker_retry(
         assert job.state == "failed"
         assert job.attempts == 1
         assert submission.state == "failed"
-        assert submission.error_code == "analysis_output_invalid"
-        assert submission.proposal_json is None
+        assert submission.error_code == error_code
+
+
+@pytest.mark.parametrize(
+    "failure",
+    [AnalysisDeadlineExceededError(), DependencyError("private-provider-detail")],
+)
+def test_timeout_and_transport_failures_retry_three_times_with_generic_final_code(
+    client, app, child, family_headers, monkeypatch, failure
+):
+    ids = add_jobs(app, child, family_headers, texts=("private-retryable-input",))
+
+    def fail_provider(_data, _search_history, *, max_turns):
+        del max_turns
+        raise failure
+
+    monkeypatch.setattr(app.state.worker.provider, "analyze_with_history", fail_provider)
+    for attempt in range(1, 4):
+        assert app.state.worker.process_one()
+        with app.state.database.session_factory() as db:
+            job = db.get(AgentJob, ids[0])
+            assert job.attempts == attempt
+            if attempt < 3:
+                assert job.state == "queued"
+                db.execute(
+                    update(AgentJob).where(AgentJob.id == job.id).values(available_at=utcnow())
+                )
+                db.commit()
+
+    with app.state.database.session_factory() as db:
+        job = db.get(AgentJob, ids[0])
+        submission = db.get(LearningSubmission, job.submission_id)
+        assert job.state == "failed"
+        assert submission.state == "failed"
+        assert submission.error_code == "analysis_failed"
+        assert "private" not in (submission.error_message or "")
 
 
 def test_persisted_second_precision_lease_is_used_for_writeback(

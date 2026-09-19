@@ -10,6 +10,7 @@ from sqlalchemy.orm import Session
 from push_kids.agent_processing.contracts import (
     MATERIAL_FINGERPRINT_KEY,
     AnalysisInput,
+    AnalysisInputError,
     SameDayKnowledgeContext,
     TodoCandidate,
 )
@@ -57,7 +58,7 @@ def build_analysis_input(
     db: Session, submission: LearningSubmission, paths: list[Path]
 ) -> AnalysisInput:
     if not submission.family_id or not submission.child_id or not submission.occurred_at:
-        raise ValueError("submission context is incomplete")
+        raise AnalysisInputError("submission context is incomplete")
     child = ChildrenService.get_child(db, submission.family_id, submission.child_id)
     subjects = list(
         db.scalars(
@@ -94,7 +95,7 @@ def build_analysis_input(
         .limit(201)
     ).all()
     if len(same_day_rows) > 200:
-        raise ValueError("too many same-day learning items for bounded analysis")
+        raise AnalysisInputError("too many same-day learning items for bounded analysis")
 
     today = local_date()
     today_plan: list[dict] = []

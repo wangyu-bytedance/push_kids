@@ -1,10 +1,15 @@
 # FEAT-001 — 家庭学习持续跟进系统 MVP
 
 - Status: `CURRENT`
-- Revision: `FEAT-STATE-20260913-UNIFIED-REVIEW-BACKEND-02-LOCAL`
-- Last verified: 2026-09-13（`SPEC-UNIFIED-REVIEW-20260913-02` 后端与数据切片完成：初始 Prompt 包含档案、本次材料、同日已确认和完整当日计划；历史知识改为受控 Agent 索引检索；确认后按 new/today_review/history_item 新建或更新；Review 事件、最近复习日/次数投影、`curve_heat_v1` 和每天一个分钟预算计划已落地。unit/integration/contract 324 passed、4 个 MySQL 环境用例 skipped；performance+E2E 3 passed；前端 161 passed；Ruff check/format、Mypy 85 files、架构 checked=3、小程序静态 15 pages/656671 bytes 通过。可见 Today 仍使用既有 UI，等待 `DREV-20260913-UNIFIED-REVIEW-01` Figma 批准；受控 Ark 原图 A/B、真实 MySQL 5.7、三视口与部署未执行）
+- Revision: `FEAT-STATE-20260919-ANALYSIS-RETRY-03-LOCAL`
+- Last verified: 2026-09-19（`BUG-SPEC-20260919-AGENT-RETRY-02` 本地完成：unit/integration/contract
+  349 passed、4 个 MySQL 环境用例 skipped；Agent/Worker 定向 63 passed；performance+E2E 3 passed；
+  前端 167 passed；Ruff check/format、Mypy 86 files、架构 checked=3、设计策略和小程序静态
+  15 pages/665198 bytes 通过。受控 Ark 原图、真实 MySQL 5.7、部署和生产失败任务重跑未执行）
 - Source Spec: `specs/completed/FEAT-001-PUSH-KIDS-FINAL-SPEC.md` revision `SPEC-20260831-08`
-- Latest implemented Spec: `specs/active/FEAT-001-UNIFIED-ITEM-REVIEW-STRATEGY.md` revision `SPEC-UNIFIED-REVIEW-20260913-02`（后端/迁移已验证，前端/受控云验证未完成）
+- Latest implemented Spec: `specs/completed/BUG-022-ANALYSIS-AGENT-OBSERVABILITY-AND-RETRY.md`
+  revision `BUG-SPEC-20260919-AGENT-RETRY-02`（本地实现与自动化已验证；受控 Ark、真实 MySQL 5.7
+  和部署未执行）
 - Previous applied Spec: `specs/completed/BUG-021-TODAY-REVIEW-PLAN-VISIBILITY.md` revision `BUG-SPEC-20260912-REVIEW-VISIBILITY-01`
 - Previous applied Spec: `specs/completed/SPEC-20260911-SETTINGS-PROFILE-MANAGER-POLISH.md` revision `SPEC-20260911-SETTINGS-PROFILE-MANAGER-POLISH-01`（frontend only）
 - Current visible contract: `docs/design/frontend/prototypes/DREV-20260912-TODAY-NEXT-REVIEW-01/FRONTEND-SPEC.md`
@@ -87,13 +92,21 @@
   LearningRecord 或 KnowledgeItem。今日计划和历史候选都只是匹配上下文，不是本次已复习的证据。
 - 未由同日/今日计划匹配的每个候选，模型先生成关键词调用 `search_history_items`。工具由服务端注入
   family/child，只允许指定已配置科目，使用每 Item 最多32个确定性 exact/token/n-gram 索引词；单次
-  最多20项、总共最多20次/100个唯一候选/8轮。工具耗尽或语义不确定时不能猜成新知识。
-- 部署规则在 `agent_processing/prompt.py` 以 `child-aware-history-agent-20260913-04` 版本化，不读取
+  最多20项；一次工具调用以 `queries[1..20]` 批量提交当前全部未匹配候选，每个 query 仍计一次逻辑调用，
+  总共最多20次/100个唯一候选/8轮。第8轮只允许 final；进入 Provider 前按持久化5分钟 Job lease
+  的剩余时间扣除30秒写回余量，得到整个 Agent attempt 的动态截止时间（满额最多约270秒），并把
+  剩余时间传给每次 Provider 调用。SDK 内部网络重试关闭，持久化 Job attempts 是唯一重试所有者。
+  tool 参数 JSON/shape/type/range/subject 非法时不执行查询，只回传静态 `tool.arguments`，让模型在
+  同一 loop 的剩余轮次内修正。工具/时间/轮次耗尽或语义不确定时不能猜成新知识。
+- 部署规则在 `agent_processing/prompt.py` 以 `child-aware-history-agent-20260919-05` 版本化，不读取
   个人SKILL目录。Ark 必须按当前 active learning subjects 返回固定键的 strict JSON Schema，条目明确
   为 `new`、`today_review` 或 `history_item`；模型总输出最多20项、每项1–5分钟，`review_method`
   只能是主动回忆/变式练习/解释应用。条目按同科目、同目标和同动作聚合为家长可确认的短复习单元；
   Markdown fence、额外科目/字段和非法引用不再由正则修补。Provider
-  失败后只携带脱敏校验代码最多重生成两次；最终非法输出终态为 `analysis_output_invalid`，不保存原文。
+  校验失败后只把校验代码带入下一轮，不保存原文。输出/引用校验、Agent预算和临时 Provider/存储故障
+  由显式 disposition 判为可重试，最多执行3个持久化 Job attempts；schema capability 和确定性输入/配置
+  不变量首个 attempt 即终止。第3次非法输出终态为 `analysis_output_invalid`，传输/超时最终为
+  `analysis_failed`，能力不支持为 `analysis_schema_unsupported`。
   模型 summary 必须是一句不超过 60 字、只描述本次实际学习/练习内容的简短事实；“没有识别到”
   “不包含”“未涉及”“无某科内容”等缺失项说明会以脱敏 `summary.exclusion_clause` 拒绝并进入同一
   有限重试。该限制不替代家长编辑和历史记录的 500 字合同，也不误伤“不规则图形”等真实概念。
@@ -140,9 +153,10 @@
 - Worker 普通循环异常以 1/2/4/8/16/30 秒退避自动继续，健康轮询后重置；清理故障单独隔离，
   最多每 60 秒尝试一次，不阻塞分析。任务准备/Provider 普通失败沿用最多三次尝试；数据库写回
   故障保留持久化状态，通过新 Session 和原 5 分钟过期租约恢复，避免伪造任务结果。
-- Worker attempt 现记录媒体查询、对象存储 materialize、上下文构建、Provider 和写回的脱敏阶段边界
-  与耗时；只记录 Job ID、attempt、对象数、stage 和异常类型，不记录儿童内容、对象路径、模型输入输出
-  或异常原文。云端 INFO 路由与 Ark Key 启动门禁已随 `flask-ik19-008` 灰度部署；真实日志确认
+- Worker attempt 记录媒体查询、对象存储 materialize、上下文构建、Provider 和写回的脱敏阶段边界
+  与耗时；Provider 每次 generation 和 history batch 额外记录 turn、状态、结果种类、输出项数、逻辑查询/
+  结果累计量、剩余轮次/时间和归一化静态校验码。日志只允许 Job ID、attempt、计数和安全类别，不记录
+  儿童内容、科目、关键词、对象路径、模型输入输出或异常原文。云端 INFO 路由与 Ark Key 启动门禁已随 `flask-ik19-008` 灰度部署；真实日志确认
   图片读取、Ark 调用和 proposal 校验成功，但 MySQL 秒级 lease 与内存微秒值比较误判导致写回跳过。
   revision 15 已在 claim 后重载持久化 lease，并将达到最大次数的过期任务终态化；
   `flask-ik19-009` 已达到 `normal`，真实新图片已完成 Ark 与写回并进入待家长确认。
@@ -246,6 +260,14 @@ BUG-010 本地实现已通过微信开发者工具 registered AppID preview 编�
 - BUG-010 的受控 Figma waiver 同样在公开生产前失效；三视口、字体放大、键盘和 iOS/Android 实机证据仍待补齐。
 
 ## Change references
+
+- 2026-09-19 — `BUG-022 / BUG-SPEC-20260919-AGENT-RETRY-02`：修复合法图片分析在 8 轮 Agent loop
+  耗尽后于 attempt 1/3 提前终态的问题。历史搜索工具改为每轮批量 1–20 个逻辑查询，保留 8 turns、
+  20 calls、100 unique results 边界并把最终轮留给结构化结果；单 attempt 截止时间按5分钟 lease
+  剩余量扣除30秒写回余量动态产生，SDK 内部重试关闭。非法 tool 参数不执行查询并在同 loop 修正。新增仅含
+  Job/attempt/计数/安全状态码的逐轮日志和显式 failure disposition：输出/引用/预算及临时依赖错误最多
+  3 attempts，能力/输入不变量立即终止；SQL 不确定性、lease/迟到结果和家长确认边界不变。无 Schema、
+  API、前端或正式数据语义变化；本地自动化证据见已完成 Spec，未部署、未自动重跑生产失败任务。
 
 - 2026-09-12 — `BUG-SPEC-20260912-REVIEW-VISIBILITY-01 / DREV-20260912-TODAY-NEXT-REVIEW-01`：今日页
   “待复习”改为“复习安排”；无今日到期项时自动展开最近一个未来复习日，显示完整知识点、精确项数/分钟，

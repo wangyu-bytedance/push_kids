@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import push_kids.agent_processing.runner as runner_module
 import pytest
 from push_kids.agent_processing.contracts import (
     AnalysisInput,
@@ -69,6 +70,22 @@ class _ToolBudgetProvider:
         return _new_proposal()
 
 
+class _DeadlineProvider:
+    deadline: float | None = None
+
+    def analyze_with_history(self, data, search_history, *, max_turns, deadline):
+        del data, max_turns
+        self.deadline = deadline
+        search_history(
+            HistorySearchRequest(
+                candidate_key="进位加法",
+                subject_name="数学",
+                keywords=("进位加法",),
+            )
+        )
+        return _new_proposal()
+
+
 def test_runner_refuses_to_label_new_without_a_completed_history_search(app, client) -> None:
     del client
     runner = AnalysisAgentRunner(app.state.database, _NoSearchProvider())
@@ -108,3 +125,20 @@ def test_runner_enforces_the_global_history_tool_call_budget(app, client) -> Non
         )
 
     assert error.value.codes == ["history_search.tool_budget"]
+
+
+def test_runner_derives_provider_deadline_from_worker_supplied_lease_budget(
+    app, client, monkeypatch
+) -> None:
+    del client
+    provider = _DeadlineProvider()
+    monkeypatch.setattr(runner_module, "monotonic", lambda: 1000.0)
+
+    AnalysisAgentRunner(app.state.database, provider).run(
+        AnalysisInput(text="进位加法", existing_subjects=["数学"]),
+        family_id="family-a",
+        child_id="child-a",
+        time_budget_seconds=42.0,
+    )
+
+    assert provider.deadline == 1042.0
