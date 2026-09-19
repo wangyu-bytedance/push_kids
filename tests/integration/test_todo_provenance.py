@@ -7,9 +7,15 @@ from datetime import UTC, datetime, timedelta
 
 from fastapi.testclient import TestClient
 from push_kids.learning.history import LearningHistory
-from push_kids.persistence.models import KnowledgeItem, ReviewItem, SubmissionMedia
+from push_kids.persistence.models import (
+    KnowledgeItem,
+    LearningRecord,
+    ReviewFeedback,
+    ReviewItem,
+    SubmissionMedia,
+)
 from push_kids.platform.time import local_date
-from sqlalchemy import select
+from sqlalchemy import func, select
 
 PNG = b"\x89PNG\r\n\x1a\nvalid-image-content"
 
@@ -52,14 +58,47 @@ def test_todos_expose_source_submission_round_and_interval(
 ) -> None:
     confirmed = _confirmed(client, app, family_headers, child["id"], "数学，两位数进位加法")
     learned_on = local_date(confirmed["occurred_at"])
+    with app.state.database.session_factory() as db:
+        before_reads = (
+            db.scalar(select(func.count(LearningRecord.id))),
+            db.scalar(select(func.count(KnowledgeItem.id))),
+            db.scalar(select(func.count(ReviewItem.id))),
+            db.scalar(select(func.count(ReviewFeedback.id))),
+        )
     items = _todo_items(client, family_headers, child["id"])
     assert items
     for item in items:
         assert item["source_submission_id"] == confirmed["submission_id"]
         assert item["source_occurred_on"] == learned_on.isoformat()
+        assert item["source_summary"]
+        assert item["source_image_index"] is None
         assert item["review_round"] == 1
         # First review is due today because the material is four days old.
         assert item["interval_days"] == (local_date() - learned_on).days
+
+    dashboard = client.get(f"/api/v1/children/{child['id']}/dashboard", headers=family_headers)
+    assert dashboard.status_code == 200, dashboard.text
+    selected = [
+        item
+        for session in dashboard.json()["review_selection"]["sessions"]
+        for item in session["items"]
+    ]
+    assert selected
+    assert all(item["source_summary"] for item in selected)
+    assert all(item["source_occurred_on"] == learned_on.isoformat() for item in selected)
+    source = client.get(
+        f"/api/v1/children/{child['id']}/history/{confirmed['submission_id']}",
+        headers=family_headers,
+    )
+    assert source.status_code == 200, source.text
+    with app.state.database.session_factory() as db:
+        after_reads = (
+            db.scalar(select(func.count(LearningRecord.id))),
+            db.scalar(select(func.count(KnowledgeItem.id))),
+            db.scalar(select(func.count(ReviewItem.id))),
+            db.scalar(select(func.count(ReviewFeedback.id))),
+        )
+    assert after_reads == before_reads
 
     review_id = confirmed["review_item_ids"][0]
     feedback = client.post(
@@ -95,6 +134,8 @@ def test_todos_keep_history_without_source_submission(client, app, family_header
     assert len(items) == 1
     assert items[0]["source_submission_id"] is None
     assert items[0]["source_occurred_on"] is None
+    assert items[0]["source_summary"]
+    assert items[0]["source_image_index"] is None
     assert items[0]["review_round"] == 1
     assert items[0]["interval_days"] is None
 
@@ -159,6 +200,10 @@ def test_detail_returns_recognition_confidence_and_evidence(
         broken = LearningHistory.detail(db, family, child["id"], confirmed["submission_id"])
     # Historical rows are untrusted input: unreadable evidence degrades, never raises.
     assert all(entry["evidence"] == [] for entry in broken["knowledge"])
+
+    todos = _todo_items(client, family_headers, child["id"])
+    assert all(item["source_summary"] is None for item in todos)
+    assert all(item["source_image_index"] is None for item in todos)
 
 
 def test_confirmation_keeps_first_recognition_provenance(

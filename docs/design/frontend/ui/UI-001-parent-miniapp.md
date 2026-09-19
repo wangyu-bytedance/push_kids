@@ -1,15 +1,15 @@
 # UI-001 — 家长端微信小程序
 
-- Status: `CURRENT / DEVELOPMENT_VERSION_0.1.9_UPLOADED / NATIVE_VIEWPORT_MATRIX_NOT_RUN`
+- Status: `CURRENT / LOCAL_IMPLEMENTATION_NOT_UPLOADED / NATIVE_VIEWPORT_MATRIX_NOT_RUN`
 - Related Feature: `FEAT-001`
 - Baseline: `FDB-20260913-04`
 - Engineering contract: `FEC-20260913-LOCAL-DESIGN-EVIDENCE-01`
-- Design revision: `DREV-20260913-UNIFIED-REVIEW-01`（稳定日计划与确认分类）
-- Current-state revision: `UI-STATE-20260913-UNIFIED-REVIEW-01-UPLOADED`
-- Related Spec: `specs/active/FEAT-001-UNIFIED-ITEM-REVIEW-STRATEGY.md` revision `SPEC-UNIFIED-REVIEW-20260913-04`
+- Design revision: `DREV-20260919-TODAY-SOURCE-MATERIAL-01`（当前复习原题提示与原始材料弹层）
+- Current-state revision: `UI-STATE-20260919-TODAY-SOURCE-MATERIAL-02-LOCAL`
+- Related Spec: `specs/completed/BUG-023-TODAY-REVIEW-SOURCE-MATERIAL.md` revision `BUG-SPEC-20260919-REVIEW-SOURCE-01`
   （前序：`SPEC-20260911-SETTINGS-PROFILE-MANAGER-01`、`SPEC-20260911-PRIMARY-NAV-BRAND-01`、`SPEC-20260911-TODAY-ACTIVITY-EMPTY-CTA-01`、`SPEC-20260911-RECORD-PHOTO-ADD-SOURCE-02`、`SPEC-20260911-RECORD-SIMPLIFICATION-01`、`BUG-SPEC-20260911-01`）
-- Last verified: 2026-09-13（Today 以 `review_selection` 固定日计划为准，完成不补题；确认页显示新知识/今日复习/历史复习及确认后果，纯复习草稿无需伪造新知识即可确认。冻结发布包 166 passed，ESLint、小程序静态 15 pages/664345 bytes、设计证据与真实 AppID 预览通过；开发版本 0.1.9 上传成功。原生 320×568/390×844/430×932 真机节点几何、字体放大、iOS/Android 仍为 NOT_RUN）
-- Screen-level spec: `docs/design/frontend/prototypes/DREV-20260913-UNIFIED-REVIEW-01/FRONTEND-SPEC.md`
+- Last verified: 2026-09-19（Today 当前复习卡已以“原题提示 + 查看原始内容”替代“出现原因 + 带练提示”，并在当前页弹层复用私有材料预览。前端170 passed、ESLint、小程序静态15 pages/667541 bytes、设计证据通过；真实 AppID DevTools preview 编译通过，包体603151 bytes。未上传；原生320×568/390×844/430×932节点几何、字体放大、iOS/Android仍为NOT_RUN）
+- Screen-level spec: `docs/design/frontend/prototypes/DREV-20260919-TODAY-SOURCE-MATERIAL-01/FRONTEND-SPEC.md`
 - Reference screens: `docs/design/frontend/prototypes/DREV-20260906-PKDS-01/screenshots/`（39 屏）
 - Intermediate artifact: `docs/design/frontend/prototypes/DREV-20260830-03/index.html`（设计历史）
 - Design evidence governance: `GOV-SPEC-LOCAL-DESIGN-EVIDENCE-20260913-01`; former Figma anchor is historical only
@@ -105,7 +105,13 @@
   下方“添加日程”按钮。普通主卡和首次引导态各自保留一个互斥日程入口；添加日程意图只消费一次。
 - ActivitySchedule 是设置、今日和日程的统一来源；固定安排必须有开始/结束时间。
 - 今日还消费不与固定日程重复的柔性活动建议；活动提醒可直接移除。
-- Todo 的“带练提示”只提交当前所选且已确认的 Review IDs。
+- 当前 Todo 不再请求通用“带练提示”，也不显示“出现原因”。每个知识点可显示最多两行的已确认
+  evidence 摘要；存在 `source_submission_id` 时显示“查看原始内容”，在 Today 当前页底部弹层读取
+  当次照片和/或家长原文，不跳历史页、不生成新的 review 文案。
+- 原始材料弹层复用 `submission-materials` 的 family/child-scoped 读取、最多两张缩略图并发、410/权限/
+  网络恢复与临时文件清理；证据图片序号存在时同时以文字“相关图片”和描边标记，不能只靠颜色。
+- Todo“完成”胶囊视觉高64rpx，包装层有效热区至少88rpx；pending、disabled、更多反馈和失败回滚
+  行为不变。
 - Todo 的主观反馈在卡片内展开，选项旁写明对复习安排的影响；文案与服务端确定性策略一一对应
   （reinforce = 退一步、明天再出现；partial = 下一轮间隔取一半；defer = 同一步、明天再出现）。
 - 日程卡点击编辑；重复日程 MVP 修改整个系列。结束时间早于当前时刻后统一灰显。
@@ -119,8 +125,9 @@
   缺失或无效字段显示“暂无趋势”。科目列表行仍是带当前区间筛选的明确下钻入口。
 - 紧迫度同时显示数字/勾与颜色，活跃度同时保留次数语义，颜色不是唯一信息。
 - 孩子切换器和折叠箭头都使用 CSS 矢量 chevron，不使用字体字形 `⌄`。
-- Todo 卡片的"为什么出现"由服务端结构化字段拼装：来源提交、来源学习日期、复习轮次和间隔天数。
-  历史数据缺这些字段时只隐藏该行，Todo 本体与操作保持可用。
+- Todo 仍兼容服务端来源提交、日期、轮次和间隔字段，但不再渲染“为什么出现”。Planning 从首次确认
+  evidence 安全投影可空 `source_summary/source_image_index`；坏 JSON、空摘要或无来源时只隐藏对应
+  摘要/入口，Todo 本体与反馈操作保持可用。
 - 知识点的置信度一律表述为"AI 识别把握程度"，并附"仅供核对、不代表模型判定掌握"的说明。
 - 原始材料按服务端 `sort_order` 升序渲染，照片编号稳定，重复进入顺序不变。
 - 设置页区分内置三科与家长自定义科目；只有自定义项可以移出。
@@ -229,6 +236,11 @@ guards for `callContainer`、`uploadFile` and `chooseMedia`; media permission fa
 classification and cancelable uploads are tracked by `BUG-SPEC-20260905-02` and remain unimplemented.
 
 ## Change references
+
+- 2026-09-19 — `BUG-SPEC-20260919-REVIEW-SOURCE-01 / DREV-20260919-TODAY-SOURCE-MATERIAL-01`：
+  当前 Todo 以知识点级“原题提示 + 查看原始内容”替代“出现原因 + 带练提示”；原地底部弹层复用
+  私有材料读取与预览清理，标记 evidence 对应照片。完成按钮视觉降至64rpx并保留88rpx热区。
+  六张批准候选覆盖 photo/text × 320/390/430；原生节点几何与 iOS/Android 仍是发布前 NOT_RUN。
 
 - 2026-09-12 — `BUG-SPEC-20260912-REVIEW-VISIBILITY-01 / DREV-20260912-TODAY-NEXT-REVIEW-01`：今日页
   分区更名为“复习安排”。今天为 0 且未来已有 Review 时，直接展开服务端最近日期、精确总数/分钟和

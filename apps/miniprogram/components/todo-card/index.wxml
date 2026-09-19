@@ -8,22 +8,24 @@
     </view>
     <view class="pill {{view.optional ? 'neutral' : ''}}">{{view.status}}</view>
   </view>
-  <view class="todo-why" wx:if="{{view.reason}}">
-    <view class="ico ico-info-mute xs"></view>
-    <text class="why-txt">{{view.reason}}</text>
-  </view>
   <view class="todo-points">
     <view class="todo-pt" wx:for="{{view.items}}" wx:key="reviewId">
       <view class="pt-row">
         <view class="pt-dot {{item.done ? 'on' : ''}}">
           <view class="ico ico-check-inv xs" wx:if="{{item.done}}"></view>
         </view>
-        <text class="pt-n {{item.done ? 'is-done' : ''}}">{{item.name}}</text>
+        <view class="pt-main">
+          <text class="pt-n {{item.done ? 'is-done' : ''}}">{{item.name}}</text>
+          <text class="pt-summary" wx:if="{{item.sourceSummary}}">原题提示：{{item.sourceSummary}}</text>
+          <view class="source-link" wx:if="{{item.canOpenSource}}" aria-role="button" aria-label="查看 {{item.name}} 的原始内容" data-review-id="{{item.reviewId}}" catchtap="openSource">
+            <view class="ico ico-image-pri xs"></view><text>查看原始内容</text><view class="chev right pri"></view>
+          </view>
+        </view>
         <view class="pt-done" wx:if="{{item.done}}">
           <text>已完成</text>
         </view>
         <block wx:else>
-          <button class="btn sm act-done" disabled="{{busyId === item.reviewId}}" data-review-id="{{item.reviewId}}" data-action="complete" bindtap="feedback">{{busyId === item.reviewId ? '记录中' : '完成'}}</button>
+          <view class="act-done-hit"><button class="btn sm act-done" disabled="{{busyId === item.reviewId}}" data-review-id="{{item.reviewId}}" data-action="complete" bindtap="feedback">{{busyId === item.reviewId ? '记录中' : '完成'}}</button></view>
           <view class="act-more {{panelId === item.reviewId ? 'on' : ''}}" aria-role="button" aria-label="其他反馈" data-review-id="{{item.reviewId}}" bindtap="openMore">
             <view class="ico ico-more sm"></view>
           </view>
@@ -42,10 +44,5 @@
         <view class="fb-cancel" aria-role="button" bindtap="closePanel">收起</view>
       </view>
     </view>
-  </view>
-  <view class="todo-foot" aria-role="button" aria-label="查看带练提示" bindtap="practice">
-    <view class="ico ico-clock-mute xs"></view>
-    <text class="foot-txt">{{view.hint}}</text>
-    <view class="chev right"></view>
   </view>
 </view>

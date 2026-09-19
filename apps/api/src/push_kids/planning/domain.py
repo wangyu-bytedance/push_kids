@@ -52,6 +52,8 @@ class DueKnowledge:
     # Provenance of the Todo, supplied by the service layer; the client renders the wording.
     source_submission_id: str | None = None
     source_occurred_on: date | None = None
+    source_summary: str | None = None
+    source_image_index: int | None = None
     review_round: int = 1
     interval_days: int | None = None
 
@@ -107,6 +109,8 @@ def group_daily_todos(
                 "source_occurred_on": item.source_occurred_on.isoformat()
                 if item.source_occurred_on
                 else None,
+                "source_summary": item.source_summary,
+                "source_image_index": item.source_image_index,
                 "review_round": item.review_round,
                 "interval_days": item.interval_days,
             }

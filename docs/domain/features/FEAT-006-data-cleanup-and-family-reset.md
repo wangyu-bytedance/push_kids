@@ -2,9 +2,9 @@
 
 - Feature ID: `FEAT-006`
 - Status: `DEPLOYED_PENDING_CLOUD_ACCEPTANCE`
-- Current-state revision: `FEAT-STATE-20260907-03-CLOUD`
+- Current-state revision: `FEAT-STATE-20260919-MYSQL57-WORKER-04-LOCAL`
 - Owner: 产品负责人（用户）
-- Last verified: 2026-09-07
+- Last verified: 2026-09-19
 - Authoritative implementation: `apps/api/src/push_kids/data_management/`、各 domain 的 `purge_data` 合同、Alembic `20260906_0007_durable_data_deletion` + `20260907_0009_notification_deletion_scope`、`apps/miniprogram/pages/data-cleanup/`
 - Active change Specs: `SPEC-20260906-DATA-CLEANUP-01` + `BUG-SPEC-20260907-22`
 - UI current state: `UI-010-family-access`、`UI-015-child-profile`、`UI-016-data-cleanup`
@@ -49,7 +49,10 @@ queued --lease--> running --success--> succeeded --30d--> pruned
 - `data_management` 只拥有删除请求状态机、冻结与编排；learning/planning/activities/travel/media/children/families/notifications 各自拥有清理语义，避免 orchestration 直接写其他领域表。
 - 所有查询和清理同时以 `family_id` 限定；客户端传入 ID、页面可见性或确认文本都不承担授权。
 - notification delivery 的 child link 是 ownership 元数据，不从展示 payload 或孩子姓名反向解析。
-- 当前单一 Alembic head 为 `20260907_0009`，`Database.expected_cloud_revision` 与其一致。
+- 当前单一 Alembic head 为 `20260913_0014`，`Database.expected_cloud_revision` 与其一致；后续 additive
+  migrations 未改变删除请求或 purge 合同。
+- 删除 Worker 在当前单实例 MySQL 5.7 拓扑中以有界、排序的普通 `FOR UPDATE` 事务领取一个请求；
+  不使用 MySQL 8 才支持的 `SKIP LOCKED`。领取后的租约、重试、终态、审计与跨领域 purge 合同不变。
 
 ## Frontend UI mapping
 
@@ -83,5 +86,9 @@ queued --lease--> running --success--> succeeded --30d--> pruned
 
 ## Change References
 
+- 2026-09-19 — `BUG-024 / BUG-SPEC-20260919-MYSQL57-WORKER-01 /
+  ARCH-20260919-MYSQL57-WORKER-01`：删除请求领取改为 MySQL 5.7 兼容的普通事务行锁；无 Schema 或
+  删除语义变化。隔离 5.7 专项 4 passed，冻结容器 live/ready、非 root 与 SIGTERM 通过；云端发布状态
+  见 release 021。
 - 2026-09-06 — `SPEC-20260906-DATA-CLEANUP-01` / PR #6：实现 durable child/family deletion、无家庭重启流程与删除配置 UI。
 - 2026-09-07 — `BUG-016 / BUG-SPEC-20260907-22 / d38065a / flask-ik19-015 / 小程序 0.1.4`：补齐通知 owned-data inventory、delivery-child ownership、legacy 隐私清理，以及删除冻结后的入队/发送并发边界；生产 migration 和开发版本发布完成，真实链路待体验验收。

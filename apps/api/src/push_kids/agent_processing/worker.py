@@ -119,7 +119,7 @@ class AnalysisWorker:
                 )
                 .order_by(AgentJob.created_at)
                 .limit(1)
-                .with_for_update(skip_locked=True)
+                .with_for_update()
             )
             if job is None:
                 return False
@@ -441,7 +441,7 @@ class AnalysisWorker:
                     )
                     .order_by(MediaObject.expires_at)
                     .limit(20)
-                    .with_for_update(skip_locked=True)
+                    .with_for_update()
                 )
             )
             for item in cleanup_candidates:

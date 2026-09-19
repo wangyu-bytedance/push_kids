@@ -1,5 +1,5 @@
-<view class="materials pk-card">
-  <view class="mat-head" aria-role="button" aria-label="展开或收起原始材料" bindtap="toggle">
+<view class="materials {{embedded ? 'embedded' : 'pk-card'}}">
+  <view class="mat-head" wx:if="{{!embedded}}" aria-role="button" aria-label="展开或收起原始材料" bindtap="toggle">
     <view class="ico ico-image sm"></view>
     <text class="mat-t">原始材料</text>
     <text class="mat-c">{{countLabel}}</text>
@@ -19,20 +19,21 @@
     </view>
 
     <view class="pgrid" wx:if="{{media.length}}">
-      <view class="pcell {{item.unavailable ? 'gone' : ''}}" wx:for="{{media}}" wx:key="id"
-        aria-role="button" aria-label="第 {{item.index}} 张学习照片" data-id="{{item.id}}" bindtap="preview">
+      <view class="pcell {{item.unavailable ? 'gone' : ''}} {{highlightIndex === item.index ? 'related' : ''}}" wx:for="{{media}}" wx:key="id"
+        aria-role="button" aria-label="第 {{item.index}} 张学习照片{{highlightIndex === item.index ? '，相关图片' : ''}}" data-id="{{item.id}}" bindtap="preview">
         <image class="pimg" wx:if="{{item.thumbnail}}" src="{{item.thumbnail}}" mode="aspectFill"
           data-id="{{item.id}}" binderror="thumbnailFailed" bindload="thumbnailLoaded" />
         <view class="ph-center" wx:else><view class="ico ico-image-mute sm"></view></view>
         <view class="idx">照片 {{item.index}}</view>
+        <view class="related-label" wx:if="{{highlightIndex === item.index}}">相关图片</view>
         <view class="cnote" wx:if="{{item.hint}}">{{item.hint}}</view>
       </view>
     </view>
-    <text class="help" wx:if="{{media.length}}">照片仅供你核对，不用于展示或分享。</text>
+    <text class="help" wx:if="{{media.length}}">照片仅用于核对原始学习内容。</text>
 
     <view class="hairline mt3" wx:if="{{text && media.length}}"></view>
     <block wx:if="{{text}}">
-      <text class="mat-lbl">家长补充文字</text>
+      <text class="mat-lbl">{{embedded ? '家长当时填写' : '家长补充文字'}}</text>
       <text class="orig" selectable="{{true}}">{{text}}</text>
     </block>
 

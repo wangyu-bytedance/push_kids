@@ -69,6 +69,8 @@ def test_group_daily_todos_passes_through_todo_provenance() -> None:
             date(2026, 9, 5),
             source_submission_id="sub-1",
             source_occurred_on=date(2026, 9, 2),
+            source_summary="用28+17练习两位数进位加法。",
+            source_image_index=2,
             review_round=2,
             interval_days=3,
         )
@@ -76,6 +78,8 @@ def test_group_daily_todos_passes_through_todo_provenance() -> None:
     item = group_daily_todos(items, budget_minutes=15)[0]["items"][0]
     assert item["source_submission_id"] == "sub-1"
     assert item["source_occurred_on"] == "2026-09-02"
+    assert item["source_summary"] == "用28+17练习两位数进位加法。"
+    assert item["source_image_index"] == 2
     assert item["review_round"] == 2
     assert item["interval_days"] == 3
 
@@ -85,6 +89,8 @@ def test_group_daily_todos_keeps_history_without_provenance() -> None:
     item = group_daily_todos(items, budget_minutes=15)[0]["items"][0]
     assert item["source_submission_id"] is None
     assert item["source_occurred_on"] is None
+    assert item["source_summary"] is None
+    assert item["source_image_index"] is None
     assert item["review_round"] == 1
     assert item["interval_days"] is None
 

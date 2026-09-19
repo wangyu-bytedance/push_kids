@@ -1,4 +1,4 @@
-/* PKDS-1.0 视图辅助：科目色、复习出现原因、置信度文案、折叠与区间偏好持久化。
+/* PKDS-1.0 视图辅助：科目色、置信度文案、折叠与区间偏好持久化。
    这里只做纯展示映射，不做任何业务判断。 */
 
 const SUBJECT_CLASSES = ["s-chinese", "s-math", "s-english", "s-activity", "s-other"];
@@ -45,21 +45,6 @@ function monthDay(iso) {
   const parts = String(iso || "").slice(0, 10).split("-");
   if (parts.length !== 3) return "";
   return `${Number(parts[1])} 月 ${Number(parts[2])} 日`;
-}
-
-/* 复习待办的「出现原因」。后端只给结构化字段，中文由这里拼装；
-   来源缺失时返回空串，调用方不渲染该块（历史数据可能补不上来源）。 */
-function reviewReason(item) {
-  if (!item) return "";
-  const round = Number(item.review_round) > 0 ? Number(item.review_round) : 0;
-  const day = monthDay(item.source_occurred_on);
-  const interval = Number(item.interval_days);
-  if (!day && !round) return "";
-  const pieces = [];
-  if (day) pieces.push(`${day}确认的学习记录`);
-  if (round) pieces.push(`今天第 ${round} 次复习`);
-  if (interval > 0) pieces.push(`距上次 ${interval} 天`);
-  return pieces.length ? `${pieces.join("，")}。` : "";
 }
 
 /* 折叠、区间等纯界面偏好按孩子维度记忆，读写失败一律回落到默认值。 */
@@ -124,7 +109,6 @@ module.exports = {
   confidence,
   feedbackLabel,
   monthDay,
-  reviewReason,
   readPreference,
   writePreference
 };

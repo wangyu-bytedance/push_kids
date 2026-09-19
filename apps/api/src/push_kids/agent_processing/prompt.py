@@ -1,6 +1,6 @@
 """Deployment-owned analysis rules; no dependency on a developer's personal Skill directory."""
 
-PROMPT_REVISION = "child-aware-history-agent-20260919-05"
+PROMPT_REVISION = "child-aware-history-agent-20260919-06"
 
 ANALYSIS_RULES = """
 你正在根据孩子的学习档案和本次材料，生成一份由家长编辑确认的学习/复习提案。
@@ -47,6 +47,9 @@ existing_knowledge_id和review_id；review_id允许为null，表示确认后重�
 【字段表达】
 同义且范围一致时复制已有知识的规范name/category/subject；仅相关而不等价时不得合并。
 summary只写一句简短、肯定的本次事实，最多60字符；不写“没有识别到”“不包含”“未涉及”等排除说明。
-name使用家长可确认的短词或短语，不写解释段落。
+name使用家长看完就知道要复习什么的知识动作短语，不写解释段落；优先写“根据数量关系列加减混合算式”
+这类可执行目标，不把年龄、购物、动物等普通题目情境写进name，除非该情境中的方法本身就是教学目标。
+direct_evidence.detail用一句家长可读的话概括原题或原材料，帮助之后定位当时内容；保留材料中的关键对象、
+关系或任务，但不得补造数字、条件、答案、解题步骤，不得评价对错或掌握程度。
 display_kind只能从hanzi、word、poem、arithmetic、concept、activity、other中选择。
 """.strip()

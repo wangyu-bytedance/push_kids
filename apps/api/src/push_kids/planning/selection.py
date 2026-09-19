@@ -24,6 +24,8 @@ class ReviewSelectionCandidate:
     last_feedback: str | None = None
     source_submission_id: str | None = None
     source_occurred_on: date | None = None
+    source_summary: str | None = None
+    source_image_index: int | None = None
     review_round: int = 1
     interval_days: int | None = None
 

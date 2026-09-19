@@ -1,14 +1,18 @@
 /* PKDS-1.0 · 原始材料（D7 / D8 / E1 §6）：只读展示照片与家长原文，几何量 rpx，字号 px，发丝线 1rpx。 */
 .materials { padding: 0; }
+.materials.embedded { background: transparent; }
 .mat-head { display: flex; align-items: center; gap: 16rpx; min-height: 96rpx; padding: 0 28rpx; }
 .mat-head .mat-t { font-size: 17px; line-height: 1.45; font-weight: 600; }
 .mat-head .mat-c { flex: 1; min-width: 0; font-size: 13px; color: var(--pk-ink-3); font-variant-numeric: tabular-nums; }
 .mat-body { padding: 4rpx 28rpx 28rpx; }
 
 .pcell.gone { opacity: .55; }
+.pcell.related { border-color: var(--pk-primary); box-shadow: 0 0 0 2rpx var(--pk-primary-hairline); }
+.pcell .related-label { position: absolute; top: 8rpx; right: 8rpx; padding: 7rpx 10rpx; border-radius: 10rpx; background: var(--pk-primary); color: var(--pk-ink-inv); font-size: 10px; font-weight: 600; }
 .mat-body .pcell .ph-center { position: absolute; left: 0; top: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center; background: var(--pk-surface-sunken); color: var(--pk-ink-3); }
 .pcell .cnote { position: absolute; left: 0; right: 0; bottom: 0; padding: 8rpx 10rpx; background: rgba(24, 28, 20, .62); color: var(--pk-ink-inv); font-size: 11px; line-height: 1.3; }
 .mat-body .help { display: block; }
 .mat-body .mat-lbl { display: block; margin-top: 24rpx; font-size: 13px; font-weight: 600; color: var(--pk-ink-2); }
 .mat-body .orig { display: block; margin-top: 12rpx; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 14px; line-height: 1.7; color: var(--pk-ink); }
 .mat-body .pk-notice { margin-bottom: 20rpx; }
+.embedded .mat-body { padding: 0 0 28rpx; }

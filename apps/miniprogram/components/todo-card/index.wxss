@@ -11,20 +11,20 @@
 .todo-title { display: block; font-size: 16px; line-height: 1.4; font-weight: 600; letter-spacing: .2px; }
 .todo-meta { display: block; margin-top: 6rpx; font-size: 12px; line-height: 1.5; color: var(--pk-ink-3); font-variant-numeric: tabular-nums; }
 
-/* 「出现原因」：中文句由 utils/ui.reviewReason 拼装，来源缺失时整块不渲染。 */
-.todo-why { display: flex; align-items: flex-start; gap: 12rpx; margin-top: 20rpx; padding: 16rpx 20rpx; border-radius: var(--pk-r-sm); background: var(--pk-surface-warm); border-left: 4rpx solid var(--pk-line-strong); }
-.todo-why .why-txt { flex: 1; min-width: 0; font-size: 12px; line-height: 1.6; color: var(--pk-ink-3); }
-.todo.opt .todo-why { background: rgba(243, 239, 228, .8); }
-
 .todo-points { margin-top: 12rpx; }
-.pt-row { display: flex; align-items: center; gap: 16rpx; min-height: 96rpx; }
+.pt-row { display: flex; align-items: center; gap: 16rpx; min-height: 112rpx; padding: 12rpx 0; box-sizing: border-box; }
 .todo-pt + .todo-pt { border-top: var(--pk-border-soft); }
 .pt-dot { flex: none; width: 36rpx; height: 36rpx; border-radius: 50%; border: 2rpx solid var(--pk-line-strong); background: var(--pk-surface-raised); box-sizing: border-box; display: flex; align-items: center; justify-content: center; }
 .pt-dot.on { background: var(--pk-primary); border-color: var(--pk-primary); }
-.pt-n { flex: 1; min-width: 0; font-size: 15px; line-height: 1.45; overflow-wrap: anywhere; }
+.pt-main { flex: 1; min-width: 0; }
+.pt-n { display: block; font-size: 15px; line-height: 1.45; overflow-wrap: anywhere; }
 .pt-n.is-done { color: var(--pk-ink-3); }
+.pt-summary { display: -webkit-box; margin-top: 8rpx; overflow: hidden; color: var(--pk-ink-3); font-size: 12px; line-height: 1.55; overflow-wrap: anywhere; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+.source-link { display: inline-flex; position: relative; align-items: center; gap: 8rpx; min-height: 64rpx; margin-top: 4rpx; color: var(--pk-primary); font-size: 12px; font-weight: 500; }
+.source-link::after { content: ""; position: absolute; left: -12rpx; right: -12rpx; top: -12rpx; bottom: -12rpx; }
 .pt-done { flex: none; display: inline-flex; align-items: center; gap: 10rpx; font-size: 12px; font-weight: 500; color: var(--pk-primary); }
-.act-done { flex: none; width: auto; }
+.act-done-hit { flex: none; min-height: 88rpx; display: flex; align-items: center; }
+.btn.sm.act-done { width: auto; height: 64rpx; min-height: 64rpx; padding-top: 0; padding-bottom: 0; line-height: 64rpx; }
 /* 视觉 32×32，热区用伪元素撑到 88rpx，兼顾规格与触控下限。 */
 .act-more { position: relative; flex: none; box-sizing: border-box; width: 64rpx; height: 64rpx; border: var(--pk-border-line); border-radius: var(--pk-r-sm); background: var(--pk-surface); display: flex; align-items: center; justify-content: center; transition: background var(--pk-dur-fast) var(--pk-ease); }
 .act-more::after { content: ""; position: absolute; left: -12rpx; right: -12rpx; top: -12rpx; bottom: -12rpx; }
@@ -40,6 +40,3 @@
 .fb .fb-t { display: block; font-size: 14px; line-height: 1.4; font-weight: 500; }
 .fb .fb-s { display: block; margin-top: 4rpx; font-size: 11px; line-height: 1.5; color: var(--pk-ink-3); }
 .fb-cancel { min-height: 88rpx; display: flex; align-items: center; justify-content: center; border-top: var(--pk-border-soft); font-size: 13px; color: var(--pk-ink-3); }
-
-.todo-foot { display: flex; align-items: center; gap: 12rpx; min-height: 88rpx; margin-top: 4rpx; padding-top: 16rpx; border-top: var(--pk-border-soft); }
-.todo-foot .foot-txt { flex: 1; min-width: 0; font-size: 12px; line-height: 1.5; color: var(--pk-ink-3); }

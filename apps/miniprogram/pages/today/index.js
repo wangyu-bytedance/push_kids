@@ -189,12 +189,16 @@ Page({
     nextReview: null, nextReviewKnown: false, upcomingExpanded: false,
     loadingMoreUpcoming: false, upcomingError: "",
     showChildSheet: false, multiChild: false, canAddChild: true,
+    showSourceSheet: false, sourceSheet: null,
     sectionMeta: { review: "", learning: "", activity: "" }
   },
   onShow() {
     const tabBar = this.getTabBar && this.getTabBar();
     if (tabBar) tabBar.setData({ selected: 0 });
     this.load();
+  },
+  onHide() {
+    this.closeSourceSheet();
   },
   async onPullDownRefresh() {
     await this.load();
@@ -397,6 +401,26 @@ Page({
     const submissionId = event.currentTarget.dataset.submissionId;
     if (submissionId) wx.navigateTo({ url: `/pages/record-detail/index?id=${submissionId}` });
   },
+  openSourceSheet(event) {
+    const item = event.detail || {};
+    if (!item.sourceSubmissionId) return;
+    this.setData({
+      showChildSheet: false,
+      showSourceSheet: true,
+      sourceSheet: {
+        reviewId: item.reviewId,
+        knowledgeName: item.name,
+        summary: item.sourceSummary,
+        submissionId: item.sourceSubmissionId,
+        imageIndex: item.sourceImageIndex,
+        dateLabel: item.sourceDateLabel
+      }
+    });
+  },
+  closeSourceSheet() {
+    if (!this.data.showSourceSheet && !this.data.sourceSheet) return;
+    this.setData({ showSourceSheet: false, sourceSheet: null });
+  },
   openChildSheet() { if (this.data.children.length) this.setData({ showChildSheet: true }); },
   closeChildSheet() { this.setData({ showChildSheet: false }); },
   addChild() {
@@ -407,7 +431,8 @@ Page({
     const childIndex = Number(event.currentTarget.dataset.index);
     const childId = this.data.children[childIndex].id;
     getApp().selectChild(childId);
-    this.setData({ childIndex, childId, showChildSheet: false, todosExpanded: false,
+    this.setData({ childIndex, childId, showChildSheet: false, showSourceSheet: false,
+      sourceSheet: null, todosExpanded: false,
       nextReview: null, nextReviewKnown: false, upcomingExpanded: false, upcomingError: "" });
     await this.load();
   },
@@ -415,7 +440,8 @@ Page({
     const childIndex = Number(event.detail.value);
     const childId = this.data.children[childIndex].id;
     getApp().selectChild(childId);
-    this.setData({ childIndex, childId, nextReview: null, nextReviewKnown: false, upcomingExpanded: false,
+    this.setData({ childIndex, childId, showSourceSheet: false, sourceSheet: null,
+      nextReview: null, nextReviewKnown: false, upcomingExpanded: false,
       upcomingError: "" });
     await this.load();
   },
@@ -436,17 +462,6 @@ Page({
   },
   openSettings() { wx.switchTab({ url: "/pages/settings/index" }); },
   openActivity(event) { wx.navigateTo({ url: `/pages/activity/edit?subjectId=${event.currentTarget.dataset.subjectId}` }); },
-  async practice(event) {
-    try {
-      const reviewIds = event.detail.reviewIds.join(",");
-      const result = await api.request(`/children/${this.data.childId}/practice-materials?review_ids=${reviewIds}`);
-      wx.showModal({
-        title: "带练提示",
-        content: result.items.map((item, index) => `${index + 1}. ${item.prompt}`).join("\n") || "没有可用提示",
-        showCancel: false
-      });
-    } catch (error) { wx.showToast({ title: error.message, icon: "none" }); }
-  },
   async feedback(event) {
     const { reviewId, action } = event.detail;
     this.feedbackRetryKeys = this.feedbackRetryKeys || {};

@@ -597,7 +597,7 @@ def test_mysql_bounded_read_paths_have_indexed_query_plans() -> None:
         "ix_learning_records_family_child_occurred_submission",
         "ix_knowledge_items_family_child_created_id",
         "ix_knowledge_occurrences_family_occurred_knowledge",
-        "ix_review_items_family_child_active_due_id",
+        "ix_review_items_family_child_active_due_last_id",
         "ix_review_feedback_family_review_occurred",
         "ix_activity_records_family_child_occurred_id",
     ):

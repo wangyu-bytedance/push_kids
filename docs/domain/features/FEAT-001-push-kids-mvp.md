@@ -1,20 +1,21 @@
 # FEAT-001 — 家庭学习持续跟进系统 MVP
 
 - Status: `CURRENT`
-- Revision: `FEAT-STATE-20260919-CONTEXT-REUSE-04-LOCAL`
-- Last verified: 2026-09-19（`SPEC-20260919-ARK-CONTEXT-REUSE-01` 本地协议与回归验证完成：
-  后端 354 passed/4 个 MySQL 环境用例 skipped，Provider 定向 38 passed，前端 167 passed，
-  performance+E2E 3 passed，Ruff check/format、Mypy 87 files、架构 checked=3、设计策略与小程序静态
-  15 pages/665198 bytes 通过。真实 Ark 成对延迟 A/B 因本机未配置 Key 且云控制台需人工进入而待验收）
+- Revision: `FEAT-STATE-20260919-MYSQL57-WORKER-06-LOCAL`
+- Last verified: 2026-09-19（`BUG-SPEC-20260919-REVIEW-SOURCE-01` 与
+  `BUG-SPEC-20260919-MYSQL57-WORKER-01` 本地实现与自动化验证完成：
+  后端 362 passed/4 个环境用例在普通套件 skipped，隔离 MySQL 5.7.44 专项 4 passed，前端 170 passed，performance 2 passed，
+  Ruff check/format、Mypy 86 files、ESLint、架构 checked=3、设计策略与小程序静态
+  15 pages/667541 bytes、数据库空态审计通过；冻结容器 manifest 90 files/1066837 bytes，
+  UID 10001、live/ready 与 SIGTERM 通过。三视口原生节点/字体放大/iOS/Android 为 NOT_RUN，尚未部署）
 - Source Spec: `specs/completed/FEAT-001-PUSH-KIDS-FINAL-SPEC.md` revision `SPEC-20260831-08`
-- Latest implemented Spec: `specs/completed/BUG-022-ANALYSIS-AGENT-OBSERVABILITY-AND-RETRY.md`
-  revision `BUG-SPEC-20260919-AGENT-RETRY-02`（本地实现与自动化已验证；受控 Ark、真实 MySQL 5.7
-  和部署未执行）
+- Latest implemented Spec: `specs/completed/BUG-023-TODAY-REVIEW-SOURCE-MATERIAL.md`
+  revision `BUG-SPEC-20260919-REVIEW-SOURCE-01`（本地实现与验证完成；无数据库变更、无新模型调用、未部署）
 - Pending completion Spec: `specs/active/FEAT-001-ARK-CONTEXT-REUSE-FLAG.md` revision
   `SPEC-20260919-ARK-CONTEXT-REUSE-01`（默认开启的 attempt-local Ark Responses 会话续接；未部署）
 - Previous applied Spec: `specs/completed/BUG-021-TODAY-REVIEW-PLAN-VISIBILITY.md` revision `BUG-SPEC-20260912-REVIEW-VISIBILITY-01`
 - Previous applied Spec: `specs/completed/SPEC-20260911-SETTINGS-PROFILE-MANAGER-POLISH.md` revision `SPEC-20260911-SETTINGS-PROFILE-MANAGER-POLISH-01`（frontend only）
-- Current visible contract: `docs/design/frontend/prototypes/DREV-20260912-TODAY-NEXT-REVIEW-01/FRONTEND-SPEC.md`
+- Current visible contract: `docs/design/frontend/prototypes/DREV-20260919-TODAY-SOURCE-MATERIAL-01/FRONTEND-SPEC.md`
 - Intermediate design artifact: `docs/design/frontend/prototypes/DREV-20260830-03/index.html`
 
 ## Purpose and current behavior
@@ -26,16 +27,18 @@
 原生微信小程序有五个 Tab：今日、日程、记录、报表、设置，共 15 个已注册页面。五个一级页使用
 共享 `components/primary-nav`，按状态栏和右上胶囊几何在导航中央显示唯一“芽图标 + 知芽”，内容区
 直接从各页句子式 hero 开始；确认、记录详情、家庭与设置子页继续使用微信原生标题和返回行为。
-视觉与交互基线是 PKDS-2.0（`FDB-20260906-03`），当前增量合同为
-`DREV-20260911-SETTINGS-PROFILE-MANAGER-02`。HTML DREV-03 与 UX-03/UX-04 保留为评审过程的阶段性产物，
+视觉与交互基线是 PKDS-2.0（`FDB-20260913-04`），当前增量合同为
+`DREV-20260919-TODAY-SOURCE-MATERIAL-01`。HTML DREV-03 与 UX-03/UX-04 保留为评审过程的阶段性产物，
 不参与运行。
 
 ## Current invariants
 
 - 复习待办每项返回结构化来源：`source_submission_id`、`source_occurred_on`、`review_round`
   （= `step + 1`）、`interval_days`（= 到期日减去最近一次复习反馈日期，无反馈则减去首次学习
-  日期，两者都缺为 `null`）。中文文案由前端拼装，后端不返回渲染句子；缺来源的历史数据返回
-  `null` 且仍出现在待办中。照片按写入时分配的 `sort_order` 稳定排序（详情、分析取图一致）。
+  日期，两者都缺为 `null`），以及从首次确认 evidence 安全投影的可空 `source_summary`、
+  `source_image_index`。坏 JSON、空证据和越界图片序号只降级可空展示字段，不隐藏 Todo。
+  当前复习卡不再显示“出现原因”，而是按知识点显示最多两行原题提示，并仅在存在来源提交时提供
+  当前页原始照片/文字弹层。照片按写入时分配的 `sort_order` 稳定排序（详情、分析取图一致）。
   正式知识点保存机器识别的 `confidence` 与 `evidence`（仅识别可靠度与出处，不表示掌握程度），
   首次确认写入后不被后续确认覆盖；本次修订之前的历史数据没有这两个字段。科目区分系统预设
   （`语文/数学/英语` 且 `kind=learning`，`is_custom=false`）与家长自建（`is_custom=true`）。
@@ -62,7 +65,8 @@
   `active=true AND due_date<=today`，最多读取120项，按 due_date、从未复习/last_reviewed_on、ID 排序，
   再按孩子分钟预算装入；不固定限制6条。完成/部分/巩固/稍后只改变原计划项，当天不补题；未入选
   积压不改 due_date、不写 Feedback。返回精确 `total_due/backlog_count/earliest_due`、计划/待复习数量
-  和分钟、policy revision。旧 `todo_groups` 分页合同继续保留，现有小程序尚未切换新字段。
+  和分钟、policy revision。旧 `todo_groups` 分页合同继续保留；小程序优先消费稳定计划，并在两条
+  投影中使用同一 source summary/index 合同。
 - 原图每次经家庭/孩子/提交/媒体关联验证；viewer 允许读取，被移除成员拒绝新读取。
   云端签发最长 60 秒 GET 链接，本地下载每次带身份；临时文件退出清理。真实云端双账号 owner
   隔离与 metaid 解码已于 2026-09-06 由用户确认验收通过；合法域名和设备矩阵仍按各自发布门禁记录。
@@ -105,7 +109,7 @@
   `ARK_CONTEXT_CACHE_ENABLED=false` 回退到 `store=false` 完整累计输入重发；它不能关闭 Ark 对当前模型
   自动启用的隐式前缀缓存。两种模式每轮都保留 strict JSON Schema，不发送显式 `caching`，response ID
   只存在于单次 Provider 调用内，不跨 Job/retry/家庭/孩子，也不写数据库或日志。
-- 部署规则在 `agent_processing/prompt.py` 以 `child-aware-history-agent-20260919-05` 版本化，不读取
+- 部署规则在 `agent_processing/prompt.py` 以 `child-aware-history-agent-20260919-06` 版本化，不读取
   个人SKILL目录。Ark 必须按当前 active learning subjects 返回固定键的 strict JSON Schema，条目明确
   为 `new`、`today_review` 或 `history_item`；模型总输出最多20项、每项1–5分钟，`review_method`
   只能是主动回忆/变式练习/解释应用。条目按同科目、同目标和同动作聚合为家长可确认的短复习单元；
@@ -114,7 +118,9 @@
   由显式 disposition 判为可重试，最多执行3个持久化 Job attempts；schema capability 和确定性输入/配置
   不变量首个 attempt 即终止。第3次非法输出终态为 `analysis_output_invalid`，传输/超时最终为
   `analysis_failed`，能力不支持为 `analysis_schema_unsupported`。
-  模型 summary 必须是一句不超过 60 字、只描述本次实际学习/练习内容的简短事实；“没有识别到”
+  `name` 必须表达家长可执行的知识动作，年龄、购物、动物等普通题目情境不能代替学习目标；
+  `direct_evidence.detail` 用一句不编造条件、答案或步骤的家长可读原题摘要。模型 summary 必须是
+  一句不超过 60 字、只描述本次实际学习/练习内容的简短事实；“没有识别到”
   “不包含”“未涉及”“无某科内容”等缺失项说明会以脱敏 `summary.exclusion_clause` 拒绝并进入同一
   有限重试。该限制不替代家长编辑和历史记录的 500 字合同，也不误伤“不规则图形”等真实概念。
   服务端再校验证据、历史/知识/Review引用并精确过滤同发生日重复项；语义正确性仍须家长核对。
@@ -160,6 +166,9 @@
 - Worker 普通循环异常以 1/2/4/8/16/30 秒退避自动继续，健康轮询后重置；清理故障单独隔离，
   最多每 60 秒尝试一次，不阻塞分析。任务准备/Provider 普通失败沿用最多三次尝试；数据库写回
   故障保留持久化状态，通过新 Session 和原 5 分钟过期租约恢复，避免伪造任务结果。
+- 受支持的云端数据库下限是 MySQL 5.7，单实例 Worker 的分析任务与过期媒体清理使用有界、排序的
+  `SELECT ... FOR UPDATE` 事务领取；MySQL 8 才支持的 `SKIP LOCKED` 不进入运行时 SQL。多实例
+  非阻塞领取仍是独立拓扑演进，不由当前单实例实现预留不兼容语法。
 - Worker attempt 记录媒体查询、对象存储 materialize、上下文构建、Provider 和写回的脱敏阶段边界
   与耗时；Provider 每次 generation 和 history batch 额外记录 turn、状态、结果种类、输出项数、逻辑查询/
   结果累计量、剩余轮次/时间和归一化静态校验码。日志只允许 Job ID、attempt、计数和安全类别，不记录
@@ -268,9 +277,20 @@ BUG-010 本地实现已通过微信开发者工具 registered AppID preview 编�
 
 ## Change references
 
+- 2026-09-19 — `BUG-023 / BUG-SPEC-20260919-REVIEW-SOURCE-01 / DREV-20260919-TODAY-SOURCE-MATERIAL-01`：
+  Prompt 将知识名称收紧为可执行学习动作，并要求一句不编造的家长可读原题摘要；Planning 在稳定日
+  计划和旧 Todo 兼容投影中读取首次确认 evidence。Today 删除“出现原因”和通用“带练提示”，改为
+  知识点级原题提示与当前页原始照片/文字弹层；无新模型调用、数据库迁移、路由或 Review 写入。
+
 - 2026-09-19 — `SPEC-20260919-ARK-CONTEXT-REUSE-01`：新增默认开启、可回退的 Ark attempt-local
   Responses 会话续接，保留 strict Schema、8轮和 Job retry 边界，并提供不输出内容、ID或密钥的真实
   延迟 A/B 工具。协议与回归在本地验证；真实 Ark A/B 和部署待独立门禁。
+
+- 2026-09-19 — `BUG-024 / BUG-SPEC-20260919-MYSQL57-WORKER-01 /
+  ARCH-20260919-MYSQL57-WORKER-01`：隔离 MySQL 5.7.44 发布门禁确认 `SKIP LOCKED` 会稳定触发
+  SQL 1064；分析任务、过期媒体、通知投递与删除请求改为普通事务行锁领取，保持现有单实例、租约、
+  重试、幂等与终态语义。空库迁移/current/check 与 MySQL 专项 4 passed，冻结容器非 root、live/ready、
+  SIGTERM 通过；无 Schema、API 或前端变化，云端发布状态见 release 021。
 
 - 2026-09-19 — `BUG-022 / BUG-SPEC-20260919-AGENT-RETRY-02`：修复合法图片分析在 8 轮 Agent loop
   耗尽后于 attempt 1/3 提前终态的问题。历史搜索工具改为每轮批量 1–20 个逻辑查询，保留 8 turns、

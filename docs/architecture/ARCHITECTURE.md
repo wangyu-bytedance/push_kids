@@ -1,9 +1,10 @@
 # Push Kids current architecture
 
 - Status: `IMPLEMENTED_LOCALLY_PENDING_CLOUD_ACCEPTANCE`
-- Revision: `ARCH-ARK-CONTEXT-REUSE-20260919-01`
-- Confirmed by: user approval of `BUG-SPEC-20260919-AGENT-RETRY-02`, 2026-09-19
-  (preserves `ARCH-UNIFIED-REVIEW-20260913-02`, `ARCH-20260912-MYSQL57-01` and the MySQL 5.7 constraints)
+- Revision: `ARCH-20260919-MYSQL57-WORKER-01`
+- Confirmed by: user instruction “修复bug” approving `BUG-SPEC-20260919-MYSQL57-WORKER-01`, 2026-09-19
+  (preserves `ARCH-ARK-CONTEXT-REUSE-20260919-01`, `ARCH-UNIFIED-REVIEW-20260913-02`,
+  `ARCH-20260912-MYSQL57-01` and the MySQL 5.7 constraints)
 - Scope: local adapters plus WeChat Cloud Hosting controlled staging
 
 ## Runtime context
@@ -312,6 +313,10 @@ Todo and Report failed for real families. `ARC-015` now enforces this matrix.
   replacing `COUNT() OVER()` / `SUM() OVER()` without materializing raw history.
 - **Evidence rule.** Every release that changes SQL must execute the affected paths on a real MySQL 5.7 server
   (`tests/integration/test_mysql_runtime.py`); SQLite compilation and MySQL 8 `EXPLAIN` cannot substitute.
+- **Worker claim shape on 5.7.** The controlled cloud topology remains one service instance. Analysis jobs,
+  expired-media cleanup, notification delivery and durable deletion use ordered, bounded `SELECT ... FOR UPDATE`
+  claims in their owning transactions. MySQL-8-only `SKIP LOCKED` is forbidden on the 5.7 floor; non-blocking
+  multi-instance claim throughput remains deferred until a separately approved queue/topology revision.
 
 ## Architecture rationale and trade-offs
 

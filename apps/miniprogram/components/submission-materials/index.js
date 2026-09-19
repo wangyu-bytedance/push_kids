@@ -3,7 +3,14 @@ const api = require("../../utils/api");
 /* 展示层只做「可核对的原始材料」：不判断内容、不生成结论，缩略图按后端 sort_order 顺序渲染。 */
 Component({
   options: { addGlobalClass: true },
-  properties: { childId: String, submissionId: String, submissionState: String, defaultOpen: Boolean },
+  properties: {
+    childId: String,
+    submissionId: String,
+    submissionState: String,
+    defaultOpen: Boolean,
+    embedded: Boolean,
+    highlightIndex: Number
+  },
   data: { open: false, loading: false, error: "", text: "", media: [], previewBusy: false, countLabel: "" },
   lifetimes: { detached() { this.clear(); } },
   pageLifetimes: {
@@ -11,11 +18,12 @@ Component({
     show() { this.visible = true; if (this.data.open) { this.clear(); this.load(); } }
   },
   observers: {
-    "submissionId, defaultOpen, submissionState": function(sid, open) {
+    "submissionId, defaultOpen, submissionState, embedded": function(sid, open, _state, embedded) {
       this.visible = true;
       this.clear();
-      this.setData({ open: !!open });
-      if (sid && open) this.load();
+      const shouldOpen = !!(open || embedded);
+      this.setData({ open: shouldOpen });
+      if (sid && shouldOpen) this.load();
     }
   },
   methods: {

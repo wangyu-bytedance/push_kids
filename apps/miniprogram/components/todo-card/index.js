@@ -24,11 +24,6 @@ Component({
     buildView(group) {
       const source = group || {};
       const items = source.items || [];
-      const reasonSource = items.find((item) => ui.reviewReason(item));
-      const reason = reasonSource ? ui.reviewReason(reasonSource) : "";
-      if (items.length && !reason) {
-        console.warn("todo-card: 这条复习没有可展示的来源信息，已省略「出现原因」", source.id || "");
-      }
       this.setData({
         busyId: "",
         panelId: "",
@@ -39,8 +34,6 @@ Component({
           title: `${source.subject_name || "学习"} · ${source.review_method || "复习一遍"}`,
           meta: `${items.length} 个知识点 · 约 ${source.estimated_minutes || 0} 分钟`,
           status: source.optional ? "可选" : "建议完成",
-          reason: reason ? `出现原因：${reason}` : "",
-          hint: "带练提示：可以先看一遍提示，再陪孩子过一遍",
           actions: MORE_ACTIONS.map((entry) => ({
             action: entry.action,
             icon: entry.icon,
@@ -50,15 +43,22 @@ Component({
           items: items.map((item) => ({
             reviewId: item.review_id,
             name: item.knowledge_name,
+            sourceSummary: String(item.source_summary || "").trim(),
+            sourceSubmissionId: item.source_submission_id || "",
+            sourceImageIndex: Number(item.source_image_index) || 0,
+            sourceOccurredOn: item.source_occurred_on || "",
+            sourceDateLabel: ui.monthDay(item.source_occurred_on),
+            canOpenSource: !!item.source_submission_id,
             done: !!(item.done || item.completed_at)
           }))
         }
       });
     },
-    practice() {
-      this.triggerEvent("practice", {
-        reviewIds: (this.data.group.items || []).map((item) => item.review_id)
-      });
+    openSource(event) {
+      const reviewId = event.currentTarget.dataset.reviewId;
+      const item = this.data.view.items.find((entry) => entry.reviewId === reviewId);
+      if (!item || !item.canOpenSource) return;
+      this.triggerEvent("source", item);
     },
     /* 卡面只留「完成」，其余三种主观反馈就地展开，选项旁写明它会怎么改复习安排。 */
     openMore(event) {

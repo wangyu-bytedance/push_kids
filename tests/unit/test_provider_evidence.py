@@ -9,6 +9,7 @@ from push_kids.agent_processing.contracts import (
     AnalysisOutputExhaustedError,
     AnalysisProposal,
 )
+from push_kids.agent_processing.prompt import ANALYSIS_RULES, PROMPT_REVISION
 from push_kids.agent_processing.providers import ArkAnalysisProvider
 from push_kids.platform.config import Settings
 
@@ -107,6 +108,14 @@ def test_prompt_keeps_all_accepted_text():
     tail = "末尾内容必须保留"
     content = "学" * (4000 - len(tail)) + tail
     assert ArkAnalysisProvider._prompt(AnalysisInput(text=content)).endswith(content)
+
+
+def test_prompt_requires_actionable_names_and_parent_readable_source_summary():
+    assert PROMPT_REVISION == "child-aware-history-agent-20260919-06"
+    assert "家长看完就知道要复习什么" in ANALYSIS_RULES
+    assert "不把年龄、购物、动物等普通题目情境写进name" in ANALYSIS_RULES
+    assert "direct_evidence.detail用一句家长可读的话概括原题或原材料" in ANALYSIS_RULES
+    assert "不得补造数字、条件、答案、解题步骤" in ANALYSIS_RULES
 
 
 def test_ark_provider_unwraps_secret_only_for_sdk(monkeypatch):

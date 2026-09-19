@@ -444,7 +444,7 @@ class NotificationsService:
             .limit(limit)
         )
         if db.bind is not None and db.bind.dialect.name == "mysql":
-            statement = statement.with_for_update(skip_locked=True)
+            statement = statement.with_for_update()
         rows = list(db.scalars(statement))
         for row in rows:
             row.state = DeliveryState.sending.value

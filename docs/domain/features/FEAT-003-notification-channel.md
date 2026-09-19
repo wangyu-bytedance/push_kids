@@ -2,9 +2,9 @@
 
 - Feature ID: `FEAT-003`
 - Status: `DEPLOYED_PENDING_LIVE_CHANNEL_ACCEPTANCE`
-- Current-state revision: `FEAT-STATE-20260907-CHANNEL-05-CLOUD`
+- Current-state revision: `FEAT-STATE-20260919-MYSQL57-WORKER-06-LOCAL`
 - Owner: 产品负责人（用户）
-- Last verified: 2026-09-07
+- Last verified: 2026-09-19
 - Authoritative implementation: `apps/api/src/push_kids/notifications/`、通知持久化模型、
   Alembic `20260906_0008_notification_channel` + `20260907_0009_notification_deletion_scope`、`apps/miniprogram/pages/notifications/`、
   `apps/miniprogram/utils/notifications.js`、`tools/notification_config.py`
@@ -43,7 +43,8 @@
   每个值按所属微信字段类型的上限裁剪（`thing` 20 字、`short_thing` 5 字，时间类不裁剪）。
 - 模板配错时不烧额度：若某个已映射槽位当次没有内容，dispatch 在调用微信之前就落
   `skipped / template_field_missing` 并只记录字段名（不记内容），修正映射后同一条提醒可重新排队。
-- 投递：租约 claim（MySQL 用 `FOR UPDATE SKIP LOCKED`）、有界退避重试、崩溃租约回收，
+- 投递：租约 claim（单实例 MySQL 5.7 使用有界、排序的普通 `FOR UPDATE`，不使用 8.0 才支持的
+  `SKIP LOCKED`）、有界退避重试、崩溃租约回收，
   终态为 `sent / skipped / failed / cancelled`，每条都有结果码。
 - 时间语义：19:00 与「开始前 60 分钟」按 Asia/Shanghai 计算，落库为 UTC；时间永不取自客户端；
   距开始不足一小时的日程仍发一条（发送时间钳到当前）。
@@ -101,6 +102,15 @@
 - 云托管灰度版本 `flask-ik19-015` 于 2026-09-07 11:03:02 达到 `normal`；小程序开发版本 `0.1.4`
   已通过开发者工具预览并上传（575557 bytes）。
 
+## Verification evidence（2026-09-19，MySQL 5.7 兼容修复）
+
+- 隔离 MySQL 5.7.44 从空库升级到 `20260913_0014`，`current/check` PASS；完整 MySQL 专项 4 passed。
+- 修复前两个 Worker 用例因 `SKIP LOCKED` SQL 1064 失败，修复后分析、通知与删除 Worker 均能完成领取；
+  生产源码中无 `skip_locked`。
+- 完整后端 362 passed / 4 skipped，完整前端 170 passed；Ruff、format、Mypy、ESLint、架构、设计证据、
+  小程序静态与性能读路径均 PASS。
+- 冻结白名单容器使用 CRUD-only MySQL 账号，DDL 被拒绝；UID 10001，live/ready 200，SIGTERM exit 0。
+
 此前通知通道基线在 `origin/main`（`165c588`）之上的证据：
 
 - `uv run ruff check .` PASS；`uv run ruff format --check .` PASS（247 files）
@@ -125,4 +135,8 @@
 
 ## Change References
 
+- 2026-09-19 — `BUG-024 / BUG-SPEC-20260919-MYSQL57-WORKER-01 /
+  ARCH-20260919-MYSQL57-WORKER-01`：将通知租约领取从 MySQL 8 专属 `SKIP LOCKED` 收敛为生产 5.7
+  与当前单实例兼容的普通事务行锁；状态、去重、退避、授权与发送合同不变。MySQL 5.7 专项 4 passed；
+  云端发布状态见 release 021。
 - 2026-09-07 — `BUG-016 / BUG-SPEC-20260907-22 / d38065a / flask-ik19-015 / 小程序 0.1.4`：补齐 delivery-child ownership、family/child 通知 purge、legacy 隐私优先清理，以及删除冻结后的入队/发送锁定复核；生产 migration 与开发版本发布完成，真实授权/送达仍待体验验收。

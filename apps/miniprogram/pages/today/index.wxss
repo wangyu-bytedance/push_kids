@@ -82,3 +82,10 @@
 /* 孩子切换半屏（B4） */
 .child-sheet .rowitem.on { background: var(--pk-primary-wash); }
 .child-sheet .ava-lg { flex: none; width: 80rpx; height: 80rpx; border-radius: 50%; background: linear-gradient(150deg, var(--pk-primary-mid), var(--pk-primary-strong)); color: var(--pk-ink-inv); font-family: var(--pk-serif); font-size: 15px; font-weight: 600; line-height: 80rpx; text-align: center; }
+
+/* 当前页只读原始材料弹层：不跳历史页，不产生复习写入。 */
+.source-sheet .sheet-head .grow { flex: 1; min-width: 0; }
+.source-sheet-body { padding-bottom: 4rpx; }
+.source-context { margin-bottom: 24rpx; padding: 20rpx 22rpx; border-left: 4rpx solid var(--pk-primary); border-radius: var(--pk-r-sm); background: var(--pk-surface-warm); }
+.source-name { display: block; color: var(--pk-ink); font-size: 14px; line-height: 1.55; font-weight: 600; overflow-wrap: anywhere; }
+.source-summary { display: block; margin-top: 8rpx; color: var(--pk-ink-3); font-size: 13px; line-height: 1.65; overflow-wrap: anywhere; }

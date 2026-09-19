@@ -128,7 +128,7 @@ class DataDeletionWorker:
                 )
                 .order_by(DeletionRequest.created_at)
                 .limit(1)
-                .with_for_update(skip_locked=True)
+                .with_for_update()
             )
             if item is None:
                 return None

@@ -47,6 +47,35 @@ from push_kids.platform.pagination import decode_cursor, encode_cursor
 from push_kids.platform.time import local_date, local_day_bounds, utcnow
 
 
+def _source_evidence(payload: str | None) -> tuple[str | None, int | None]:
+    """Read the first usable confirmed evidence without trusting historical JSON."""
+    if not payload:
+        return None, None
+    try:
+        entries = json.loads(payload)
+    except (TypeError, ValueError):
+        return None, None
+    if not isinstance(entries, list):
+        return None, None
+    for entry in entries:
+        if not isinstance(entry, dict) or entry.get("source") not in {"image", "parent_text"}:
+            continue
+        detail = entry.get("detail")
+        if not isinstance(detail, str) or not detail.strip():
+            continue
+        image_index = entry.get("image_index")
+        valid_image_index = (
+            image_index
+            if entry.get("source") == "image"
+            and isinstance(image_index, int)
+            and not isinstance(image_index, bool)
+            and 1 <= image_index <= 9
+            else None
+        )
+        return detail.strip()[:200], valid_image_index
+    return None, None
+
+
 @dataclass(frozen=True)
 class PendingReviewLoad:
     """How much review one child still owes as of a local day.
@@ -306,6 +335,7 @@ class PlanningService:
                     ReviewItem.source_submission_id.label("source_submission_id"),
                     KnowledgeItem.id.label("knowledge_id"),
                     KnowledgeItem.name.label("knowledge_name"),
+                    KnowledgeItem.evidence_json.label("evidence_json"),
                     KnowledgeItem.review_method.label("review_method"),
                     bounded_minutes.label("minutes"),
                     Subject.id.label("subject_id"),
@@ -325,28 +355,32 @@ class PlanningService:
                 .limit(DAILY_REVIEW_CANDIDATE_LIMIT)
             ).mappings()
         )
-        candidates = [
-            ReviewSelectionCandidate(
-                review_id=str(row["review_id"]),
-                knowledge_id=str(row["knowledge_id"]),
-                subject_id=str(row["subject_id"]),
-                subject_name=str(row["subject_name"]),
-                knowledge_name=str(row["knowledge_name"]),
-                review_method=str(row["review_method"]),
-                estimated_minutes=int(row["minutes"]),
-                due_date=row["due_date"],
-                review_step=int(row["step"] or 0),
-                last_feedback=row["last_feedback"],
-                source_submission_id=row["source_submission_id"],
-                source_occurred_on=(
-                    local_date(row["source_occurred_at"])
-                    if row["source_occurred_at"] is not None
-                    else None
-                ),
-                review_round=int(row["step"] or 0) + 1,
+        candidates: list[ReviewSelectionCandidate] = []
+        for row in rows:
+            source_summary, source_image_index = _source_evidence(row["evidence_json"])
+            candidates.append(
+                ReviewSelectionCandidate(
+                    review_id=str(row["review_id"]),
+                    knowledge_id=str(row["knowledge_id"]),
+                    subject_id=str(row["subject_id"]),
+                    subject_name=str(row["subject_name"]),
+                    knowledge_name=str(row["knowledge_name"]),
+                    review_method=str(row["review_method"]),
+                    estimated_minutes=int(row["minutes"]),
+                    due_date=row["due_date"],
+                    review_step=int(row["step"] or 0),
+                    last_feedback=row["last_feedback"],
+                    source_submission_id=row["source_submission_id"],
+                    source_occurred_on=(
+                        local_date(row["source_occurred_at"])
+                        if row["source_occurred_at"] is not None
+                        else None
+                    ),
+                    source_summary=source_summary,
+                    source_image_index=source_image_index,
+                    review_round=int(row["step"] or 0) + 1,
+                )
             )
-            for row in rows
-        ]
         selected = select_daily_reviews(
             candidates,
             budget_minutes=child.daily_budget_minutes or 15,
@@ -380,6 +414,8 @@ class PlanningService:
                     "source_occurred_on": (
                         item.source_occurred_on.isoformat() if item.source_occurred_on else None
                     ),
+                    "source_summary": item.source_summary,
+                    "source_image_index": item.source_image_index,
                     "review_round": item.review_round,
                 }
             )
@@ -423,10 +459,24 @@ class PlanningService:
             plan = cls._create_daily_review_plan(db, family_id, child, target)
         rows = list(
             db.execute(
-                select(DailyReviewPlanItem, ReviewItem, KnowledgeItem, Subject)
+                select(
+                    DailyReviewPlanItem,
+                    ReviewItem,
+                    KnowledgeItem,
+                    Subject,
+                    LearningSubmission.occurred_at.label("source_occurred_at"),
+                )
                 .join(ReviewItem, ReviewItem.id == DailyReviewPlanItem.review_item_id)
                 .join(KnowledgeItem, KnowledgeItem.id == ReviewItem.knowledge_item_id)
                 .join(Subject, Subject.id == KnowledgeItem.subject_id)
+                .outerjoin(
+                    LearningSubmission,
+                    and_(
+                        LearningSubmission.id == ReviewItem.source_submission_id,
+                        LearningSubmission.family_id == family_id,
+                        LearningSubmission.child_id == child_id,
+                    ),
+                )
                 .where(
                     DailyReviewPlanItem.plan_id == plan.id,
                     DailyReviewPlanItem.family_id == family_id,
@@ -445,7 +495,8 @@ class PlanningService:
         pending_count = 0
         pending_minutes = 0
         all_items: list[dict] = []
-        for plan_item, review, knowledge, subject in rows:
+        for plan_item, review, knowledge, subject, source_occurred_at in rows:
+            source_summary, source_image_index = _source_evidence(knowledge.evidence_json)
             snapshot = {
                 "plan_item_id": plan_item.id,
                 "review_id": review.id,
@@ -463,6 +514,13 @@ class PlanningService:
                 ),
                 "review_count": int(review.review_count or 0),
                 "source_submission_id": review.source_submission_id,
+                "source_occurred_on": (
+                    local_date(source_occurred_at).isoformat()
+                    if source_occurred_at is not None
+                    else None
+                ),
+                "source_summary": source_summary,
+                "source_image_index": source_image_index,
                 "review_round": int(review.step or 0) + 1,
             }
             all_items.append(snapshot)
@@ -677,6 +735,7 @@ class PlanningService:
                 ReviewItem.step.label("step"),
                 ReviewItem.last_reviewed_on.label("last_reviewed_on"),
                 KnowledgeItem.name.label("knowledge_name"),
+                KnowledgeItem.evidence_json.label("evidence_json"),
                 KnowledgeItem.review_method.label("review_method"),
                 minutes.label("minutes"),
                 Subject.id.label("subject_id"),
@@ -780,6 +839,7 @@ class PlanningService:
             rows = rows[:limit]
         items = []
         for row in rows:
+            source_summary, source_image_index = _source_evidence(row["evidence_json"])
             source_occurred_at = row["source_occurred_at"]
             source_occurred_on = (
                 local_date(source_occurred_at) if source_occurred_at is not None else None
@@ -795,6 +855,8 @@ class PlanningService:
                     due_date=row["due_date"],
                     source_submission_id=row["source_submission_id"],
                     source_occurred_on=source_occurred_on,
+                    source_summary=source_summary,
+                    source_image_index=source_image_index,
                     review_round=(int(row["step"] or 0)) + 1,
                     interval_days=review_interval_days(
                         row["due_date"],

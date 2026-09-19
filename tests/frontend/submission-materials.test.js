@@ -72,3 +72,16 @@ test("permission loss clears original material and preview URLs", async () => {
   assert.equal(instance.data.error, "权限已失效");
   assert.deepEqual(removed, ["old-private-file"]);
 });
+
+test("embedded materials open and load immediately while keeping ordinary cards lazy", () => {
+  const { instance, definition } = material({ removePreview() {} });
+  let loads = 0;
+  instance.load = () => { loads += 1; };
+
+  definition.observers["submissionId, defaultOpen, submissionState, embedded"].call(
+    instance, "sid", false, "confirmed", true
+  );
+
+  assert.equal(instance.data.open, true);
+  assert.equal(loads, 1);
+});
