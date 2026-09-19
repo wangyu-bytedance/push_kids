@@ -109,6 +109,7 @@ test("a review-only draft can be confirmed without inventing a new knowledge ite
 
   assert.equal(payload.proposal.knowledge_points.length, 0);
   assert.equal(payload.proposal.todo_matches.length, 1);
+  assert.equal(payload.proposal.subject_name, "数学");
   assert.equal(payload.groups.length, 0);
 });
 

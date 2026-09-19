@@ -117,7 +117,9 @@ function confirmPayload(proposal, subjects, consent, options) {
     manual_entry: !!(options || {}).manual,
     subject_id: groups.length === 1 ? groups[0].subject_id : null,
     create_subject: groups.length === 1 ? groups[0].create_subject : false,
-    proposal: { ...proposal, subject_name: groups.length ? groups[0].subject_name : "", knowledge_points: points },
+    proposal: { ...proposal,
+      subject_name: groups.length ? groups[0].subject_name : String(proposal.subject_name || "").trim(),
+      knowledge_points: points },
     groups
   };
 }
