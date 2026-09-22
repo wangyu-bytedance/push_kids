@@ -22,7 +22,7 @@ from push_kids.agent_processing.contracts import (
     analysis_failure_disposition,
 )
 from push_kids.agent_processing.runner import AnalysisAgentRunner
-from push_kids.agent_processing.telemetry import AnalysisTrace
+from push_kids.agent_processing.telemetry import AnalysisTrace, safe_validation_codes
 from push_kids.media.store import MediaStore, WeChatCloudMediaStore
 from push_kids.persistence.models import (
     AgentJob,
@@ -40,6 +40,14 @@ logger = logging.getLogger("push_kids.worker")
 
 JOB_LEASE_DURATION = timedelta(minutes=5)
 JOB_LEASE_WRITEBACK_RESERVE_SECONDS = 30
+
+
+def _safe_job_diagnostic(exc: Exception, *, code: str, reason: str) -> str:
+    """Persist only bounded static categories; never provider or child content."""
+    raw_codes = getattr(exc, "codes", ())
+    codes = safe_validation_codes(tuple(str(item) for item in raw_codes))
+    rendered_codes = ",".join(codes) or "none"
+    return f"code={code};reason={reason};validation={rendered_codes}"[:300]
 
 
 class AnalysisWorker:
@@ -117,7 +125,7 @@ class AnalysisWorker:
                     ),
                     AgentJob.available_at <= now,
                 )
-                .order_by(AgentJob.created_at)
+                .order_by(AgentJob.available_at, AgentJob.created_at, AgentJob.id)
                 .limit(1)
                 .with_for_update()
             )
@@ -138,7 +146,9 @@ class AnalysisWorker:
             max_attempts = job.max_attempts or 3
             if (job.attempts or 0) >= max_attempts:
                 job.state = JobState.failed.value
-                job.error_message = "分析暂时失败，请重试"
+                job.error_message = (
+                    "code=analysis_failed;reason=lease_recovery_exhausted;validation=none"
+                )
                 submission.state = SubmissionState.failed.value
                 submission.error_code = "analysis_failed"
                 submission.error_message = "分析暂时失败，请重试"
@@ -388,7 +398,11 @@ class AnalysisWorker:
                 disposition = analysis_failure_disposition(exc)
                 message = disposition.public_message
                 terminal_code = disposition.code
-                job.error_message = message
+                job.error_message = _safe_job_diagnostic(
+                    exc,
+                    code=disposition.code,
+                    reason=disposition.reason,
+                )
                 if disposition.retryable and (job.attempts or 0) < (job.max_attempts or 3):
                     job.state = JobState.queued.value
                     job.available_at = utcnow() + timedelta(seconds=job.attempts or 1)

@@ -113,15 +113,22 @@ best-effort. `ARK_CONTEXT_CACHE_ENABLED=false` restores the stateless `store=fal
 does not control Ark's automatic implicit prefix cache, never enables the explicit `caching` field, and therefore
 keeps strict JSON Schema on every generation. Response IDs stay only in the Provider invocation and never enter
 the database or logs. The Provider also exposes one strict
-`queries[1..20]` batch tool call while `history_search.py` owns each deterministic, scoped logical retrieval.
+`queries[1..20]` batch tool call while `history_search.py` owns each deterministic, scoped logical retrieval. The
+tool contract freezes each final candidate name and subject before search. Runner owns the trusted completion ledger
+and passes a final-validator callback into the Provider loop; `history_search.incomplete` therefore receives static
+same-loop correction and can trigger an exact-name re-query before the Job attempt fails. Runner repeats the check
+after Provider return as a compatibility/security fallback.
 `telemetry.py` accepts only Job/attempt, bounded counters, safe statuses and normalized static validation categories;
 it cannot log child content, subjects, keywords, media paths or provider payloads. Model references are validated in contracts; learning owns final identity validation,
 occurrence deduplication and Review settlement in one transaction. Planning never depends on agent processing,
 so the graph remains acyclic.
-Confirmation locks Job → Submission → Child, then affected Reviews; Worker writes lock Job → Submission
+Confirmation locks Job → Submission → Child, then affected Reviews; Worker claims ready jobs in
+`available_at, created_at, id` order, and writes lock Job → Submission
 and verify state/attempt/lease after ending the provider-input read transaction. Manual confirmation cancels
 unfinished jobs; both late success and late failure are discarded. No new provider extension or migration.
-Material fingerprints are server-owned proposal JSON metadata, preserved at confirmation and never logged.
+Material fingerprints are server-owned proposal JSON metadata, preserved at confirmation and never logged. Job-only
+diagnostics persist a bounded public code/static reason/normalized validation-code tuple; Submission/API retain the
+generic parent-facing message.
 
 ```mermaid
 sequenceDiagram
@@ -172,6 +179,13 @@ the remaining Agent loop. Failure disposition is explicit: output/reference/budg
 transient dependency failures may requeue until attempt three, while schema capability and deterministic input or
 configuration invariants stop immediately. SQL commit uncertainty still waits for lease recovery. Safe per-turn
 telemetry is a narrow `agent_processing` contract rather than a second persistence or retry subsystem.
+
+`BUG-SPEC-20260922-ANALYSIS-CORRECTION-02` keeps the same state machine and budgets but moves final history-ledger
+validation to its correct owner boundary: Runner supplies the trusted validator, while Provider owns the remaining
+generation/tool turns and static correction message. Prompt and tool description define the exact candidate-name
+protocol; Runner's post-return validation remains the closed safety fallback. Worker ready-time ordering prevents an
+older requeued Job from winning solely by creation age, and bounded Job diagnostics no longer depend on cloud log
+retention. No API, Schema, family boundary, confirmation transaction or model grading authority changes.
 
 `SPEC-20260919-ARK-CONTEXT-REUSE-01` adds only a bounded transport policy inside the existing Ark Provider.
 The Provider, rather than Worker/Runner/domain code, owns `store`, `previous_response_id`, expiry and deletion.

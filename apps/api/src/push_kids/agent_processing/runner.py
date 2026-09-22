@@ -79,23 +79,30 @@ class AnalysisAgentRunner:
             data.existing_knowledge.extend(row for row in rows if row.knowledge_id not in known)
             return [row.model_dump() for row in rows]
 
+        def validate_final(proposal: AnalysisProposal) -> AnalysisProposal:
+            proposal = data.validate_proposal(proposal)
+            missing = [
+                point
+                for point in proposal.knowledge_points
+                if (
+                    point.subject_name or proposal.subject_name,
+                    normalize_knowledge_name(point.name),
+                )
+                not in ledger.searched_candidates
+            ]
+            if missing:
+                raise AnalysisOutputValidationError(["history_search.incomplete"])
+            return proposal
+
         kwargs: dict[str, object] = {"max_turns": MAX_AGENT_TURNS}
         parameters = signature(tool_aware).parameters
+        if "validate_final" in parameters:
+            kwargs["validate_final"] = validate_final
         if "trace" in parameters:
             kwargs["trace"] = trace
         if "deadline" in parameters and time_budget_seconds is not None:
             kwargs["deadline"] = monotonic() + max(0.0, time_budget_seconds)
         proposal = tool_aware(data, execute, **kwargs)
-        proposal = data.validate_proposal(proposal)
-        missing = [
-            point
-            for point in proposal.knowledge_points
-            if (
-                point.subject_name or proposal.subject_name,
-                normalize_knowledge_name(point.name),
-            )
-            not in ledger.searched_candidates
-        ]
-        if missing:
-            raise AnalysisOutputValidationError(["history_search.incomplete"])
-        return proposal
+        # Compatibility and security fallback for providers that do not accept the callback,
+        # and a final defense if a provider forgets to invoke it.
+        return validate_final(proposal)

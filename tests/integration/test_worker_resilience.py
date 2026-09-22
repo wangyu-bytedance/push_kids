@@ -270,6 +270,58 @@ def test_invalid_structured_output_retries_three_times_before_terminal_failure(
         assert submission.state == "failed"
         assert submission.error_code == "analysis_output_invalid"
         assert submission.proposal_json is None
+        assert job.error_message == (
+            "code=analysis_output_invalid;reason=turn_budget;validation=none"
+        )
+
+
+def test_worker_persists_only_safe_internal_validation_diagnostic(
+    client, app, child, family_headers, monkeypatch
+):
+    ids = add_jobs(app, child, family_headers, texts=("private-invalid-output",))
+
+    def fail_validation(_data, _search_history, *, max_turns):
+        del max_turns
+        raise AnalysisOutputExhaustedError(
+            reason="output_validation",
+            codes=["history_search.incomplete", "SECRET_PRIVATE_CODE"],
+        )
+
+    monkeypatch.setattr(app.state.worker.provider, "analyze_with_history", fail_validation)
+    assert app.state.worker.process_one()
+
+    with app.state.database.session_factory() as db:
+        job = db.get(AgentJob, ids[0])
+        submission = db.get(LearningSubmission, job.submission_id)
+        assert job.error_message == (
+            "code=analysis_output_invalid;reason=output_validation;"
+            "validation=history_search.incomplete,validation.other"
+        )
+        assert "SECRET" not in job.error_message
+        assert submission.error_message is None
+
+
+def test_fresh_ready_job_precedes_an_older_requeued_job(client, app, child, family_headers):
+    old_job_id, fresh_job_id = add_jobs(
+        app,
+        child,
+        family_headers,
+        texts=("old retry", "fresh ready"),
+    )
+    now = utcnow()
+    with app.state.database.session_factory() as db:
+        old_job = db.get(AgentJob, old_job_id)
+        fresh_job = db.get(AgentJob, fresh_job_id)
+        old_job.attempts = 1
+        old_job.available_at = now - timedelta(seconds=1)
+        fresh_job.available_at = now - timedelta(seconds=2)
+        db.commit()
+
+    assert app.state.worker.process_one()
+
+    with app.state.database.session_factory() as db:
+        assert db.get(AgentJob, fresh_job_id).state == "succeeded"
+        assert db.get(AgentJob, old_job_id).state == "queued"
 
 
 @pytest.mark.parametrize(

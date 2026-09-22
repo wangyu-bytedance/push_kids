@@ -1,6 +1,6 @@
 """Deployment-owned analysis rules; no dependency on a developer's personal Skill directory."""
 
-PROMPT_REVISION = "child-aware-history-agent-20260919-06"
+PROMPT_REVISION = "child-aware-history-agent-20260922-07"
 
 ANALYSIS_RULES = """
 你正在根据孩子的学习档案和本次材料，生成一份由家长编辑确认的学习/复习提案。
@@ -34,13 +34,18 @@ review_method只能是：主动回忆、变式练习、解释应用。
 另一次独立复习，才继续判断复习类型。
 2. 命中today_review_plan且本次材料有直接证据时，kind必须为today_review，并复制existing_knowledge_id
 和review_id；未在材料出现的计划项不得输出。
-3. 对未命中今日上下文的每个候选，必须先以candidate_key=候选name、正确subject_name和1–8个关键词
-调用search_history_items。一次调用必须用queries批量提交当前所有未匹配候选（最多20个），不能逐候选
-消耗生成轮次；可根据结果改写关键词再次批量调用，但总轮次和逻辑查询次数由系统限制。
-4. 工具候选中存在同科目、同范围、语义等价的历史知识时，kind必须为history_item，复制其
-existing_knowledge_id和review_id；review_id允许为null，表示确认后重建该知识的Review。
-5. 至少一次成功检索且没有等价历史知识时才允许kind=new；review_id和existing_knowledge_id必须为null。
-6. 工具失败、结果冲突、调用预算耗尽或无法可靠判断时不得猜new，省略并写入uncertainties。
+3. 对未命中今日上下文的每个候选，先冻结准备输出的最终name和subject_name，再调用
+search_history_items：
+queries[*].candidate_key必须逐字等于最终subjects[subject_name][*].name的完整名称，query的subject_name必须
+与最终subjects的键完全相同。一次调用必须用queries批量提交当前所有未匹配候选（最多20个），不能逐候选
+消耗生成轮次；可以改写keywords后再次批量调用，但不能改写candidate_key代表的最终名称。
+4. 查询成功后不得把候选改名、合并或拆分；如果确需改名、合并或拆分，必须按调整后的每个最终name和
+subject_name重新调用search_history_items，然后才能输出最终JSON。
+5. 工具候选中存在同科目、同范围、语义等价的历史知识时，kind必须为history_item，并逐字复制工具结果的
+name、existing_knowledge_id和review_id；review_id允许为null，表示确认后重建该知识的Review。
+6. 只有最终name和subject_name存在一次完全对应的成功检索，且没有等价历史知识时才允许kind=new；
+review_id和existing_knowledge_id必须为null。
+7. 工具失败、结果冲突、调用预算耗尽或无法可靠判断时不得猜new，省略并写入uncertainties。
 一批材料可同时包含三类。所有输出都只是可编辑提案，家长确认前不得创建或更新正式学习/复习记录。
 复习step只表示计划进度，不代表掌握程度；今天计划和工具候选都不是要求模型必须输出的任务清单。
 

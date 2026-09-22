@@ -182,6 +182,96 @@ def test_provider_history_tool_loop_returns_structured_result_without_provider_s
             "output": '{"queries":[{"candidate_key":"两位数进位加法","items":[]}]}',
         }
     ]
+    description = calls[0]["tools"][0]["description"]
+    assert "candidate_key必须逐字等于" in description
+    assert "查询成功后不得改名、合并或拆分" in description
+
+
+def test_provider_corrects_final_history_mismatch_inside_same_agent_loop():
+    calls = []
+    searched = []
+    responses = [
+        SimpleNamespace(
+            output_text="",
+            output=[
+                {
+                    "type": "function_call",
+                    "name": "search_history_items",
+                    "call_id": "broad-search",
+                    "arguments": json.dumps(
+                        {
+                            "queries": [
+                                {
+                                    "candidate_key": "加法",
+                                    "subject_name": "数学",
+                                    "keywords": ["加法"],
+                                }
+                            ]
+                        },
+                        ensure_ascii=False,
+                    ),
+                }
+            ],
+        ),
+        SimpleNamespace(
+            output_text=json.dumps(result(item("两位数进位加法", kind="new")), ensure_ascii=False),
+            output=[],
+        ),
+        SimpleNamespace(
+            output_text="",
+            output=[
+                {
+                    "type": "function_call",
+                    "name": "search_history_items",
+                    "call_id": "exact-search",
+                    "arguments": json.dumps(
+                        {
+                            "queries": [
+                                {
+                                    "candidate_key": "两位数进位加法",
+                                    "subject_name": "数学",
+                                    "keywords": ["进位加法"],
+                                }
+                            ]
+                        },
+                        ensure_ascii=False,
+                    ),
+                }
+            ],
+        ),
+        SimpleNamespace(
+            output_text=json.dumps(result(item("两位数进位加法", kind="new")), ensure_ascii=False),
+            output=[],
+        ),
+    ]
+
+    def respond(**kwargs):
+        calls.append(kwargs)
+        return responses.pop(0)
+
+    def validate_final(proposal):
+        if "两位数进位加法" not in searched:
+            raise AnalysisOutputValidationError(["history_search.incomplete"])
+        return proposal
+
+    provider = object.__new__(ArkAnalysisProvider)
+    provider.model = "synthetic"
+    provider.context_cache_enabled = False
+    provider.client = SimpleNamespace(responses=SimpleNamespace(create=respond))
+
+    proposal = provider.analyze_with_history(
+        AnalysisInput(text="两位数进位加法", existing_subjects=["数学", "语文"]),
+        lambda request: searched.append(request.candidate_key) or [],
+        max_turns=8,
+        validate_final=validate_final,
+    )
+
+    assert [point.name for point in proposal.knowledge_points] == ["两位数进位加法"]
+    assert searched == ["加法", "两位数进位加法"]
+    assert len(calls) == 4
+    correction = json.dumps(calls[2]["input"], ensure_ascii=False)
+    assert "candidate_key必须逐字等于准备输出的最终name" in correction
+    assert "history_search.incomplete" not in correction
 
 
 def test_provider_session_reuse_sends_only_new_input_and_cleans_up(monkeypatch, caplog):

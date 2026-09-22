@@ -105,13 +105,18 @@
   的剩余时间扣除30秒写回余量，得到整个 Agent attempt 的动态截止时间（满额最多约270秒），并把
   剩余时间传给每次 Provider 调用。SDK 内部网络重试关闭，持久化 Job attempts 是唯一重试所有者。
   tool 参数 JSON/shape/type/range/subject 非法时不执行查询，只回传静态 `tool.arguments`，让模型在
-  同一 loop 的剩余轮次内修正。工具/时间/轮次耗尽或语义不确定时不能猜成新知识。
+  同一 loop 的剩余轮次内修正。每个 query 的 `candidate_key` 必须逐字等于准备输出的最终 `name`，
+  `subject_name` 必须与最终科目键相同；成功查询后不得改名、合并或拆分，确需调整时按每个最终名称
+  重新批量查询。Runner 持有可信 ledger 并把 final validator 回调交给 Provider；最终输出若仍出现
+  未完成同名查询的 new 候选，Provider 在当前 Agent loop 内返回静态纠错说明，允许补查后重出完整 JSON，
+  而不是立即升级为完整 Job attempt。Provider 不支持/遗漏回调时 Runner 仍保留最终拒绝防线。
+  工具/时间/轮次耗尽或语义不确定时不能猜成新知识。
 - Ark 多轮传输默认启用 attempt-local Responses 会话续接：首轮 `store=true` 且 `expire_at` 最多10分钟，
   后续轮只通过 `previous_response_id` 发送新增工具结果或校验修正，终态 best-effort 删除本次 response。
   `ARK_CONTEXT_CACHE_ENABLED=false` 回退到 `store=false` 完整累计输入重发；它不能关闭 Ark 对当前模型
   自动启用的隐式前缀缓存。两种模式每轮都保留 strict JSON Schema，不发送显式 `caching`，response ID
   只存在于单次 Provider 调用内，不跨 Job/retry/家庭/孩子，也不写数据库或日志。
-- 部署规则在 `agent_processing/prompt.py` 以 `child-aware-history-agent-20260919-06` 版本化，不读取
+- 部署规则在 `agent_processing/prompt.py` 以 `child-aware-history-agent-20260922-07` 版本化，不读取
   个人SKILL目录。Ark 必须按当前 active learning subjects 返回固定键的 strict JSON Schema，条目明确
   为 `new`、`today_review` 或 `history_item`；模型总输出最多20项、每项1–5分钟，`review_method`
   只能是主动回忆/变式练习/解释应用。条目按同科目、同目标和同动作聚合为家长可确认的短复习单元；
@@ -167,17 +172,29 @@
 - 照片批次在创建 Job 前中断时仍可从服务端状态继续分析或取消；待确认草稿也可删除。
 - Worker 普通循环异常以 1/2/4/8/16/30 秒退避自动继续，健康轮询后重置；清理故障单独隔离，
   最多每 60 秒尝试一次，不阻塞分析。任务准备/Provider 普通失败沿用最多三次尝试；数据库写回
-  故障保留持久化状态，通过新 Session 和原 5 分钟过期租约恢复，避免伪造任务结果。
+  故障保留持久化状态，通过新 Session 和原 5 分钟过期租约恢复，避免伪造任务结果。任务领取按
+  `available_at, created_at, id` 稳定排序，刚进入 backoff 的旧任务不再仅凭更早创建时间抢占已就绪任务。
 - 受支持的云端数据库下限是 MySQL 5.7，单实例 Worker 的分析任务与过期媒体清理使用有界、排序的
   `SELECT ... FOR UPDATE` 事务领取；MySQL 8 才支持的 `SKIP LOCKED` 不进入运行时 SQL。多实例
   非阻塞领取仍是独立拓扑演进，不由当前单实例实现预留不兼容语法。
 - Worker attempt 记录媒体查询、对象存储 materialize、上下文构建、Provider 和写回的脱敏阶段边界
   与耗时；Provider 每次 generation 和 history batch 额外记录 turn、状态、结果种类、输出项数、逻辑查询/
   结果累计量、剩余轮次/时间和归一化静态校验码。日志只允许 Job ID、attempt、计数和安全类别，不记录
-  儿童内容、科目、关键词、对象路径、模型输入输出或异常原文。云端 INFO 路由与 Ark Key 启动门禁已随 `flask-ik19-008` 灰度部署；真实日志确认
+  儿童内容、科目、关键词、对象路径、模型输入输出或异常原文。Job 内部错误字段只持久化公共错误码、
+  静态 reason 和最多20个归一化 validation code；Submission/API 仍只暴露既有家长文案。云端 INFO
+  路由与 Ark Key 启动门禁已随 `flask-ik19-008` 灰度部署；真实日志确认
   图片读取、Ark 调用和 proposal 校验成功，但 MySQL 秒级 lease 与内存微秒值比较误判导致写回跳过。
   revision 15 已在 claim 后重载持久化 lease，并将达到最大次数的过期任务终态化；
   `flask-ik19-009` 已达到 `normal`，真实新图片已完成 Ark 与写回并进入待家长确认。
+
+- 2026-09-22 — `BUG-026 / BUG-SPEC-20260922-ANALYSIS-CORRECTION-02`：把 Runner 的历史检索
+  completion ledger 作为 final validator 注入 Ark Provider loop；精确名称协议同时写入 Prompt 和工具描述，
+  `history_search.incomplete` 在当前 attempt 内得到静态纠错并可补查，不再必然升级为完整 Job retry。
+  Worker 改为 ready-time 稳定排序，并只在 Job 内保存有界安全诊断，家长可见文案、API、Schema、正式
+  学习确认语义和最多3次 Job attempt 均不变。本地专项65 passed、全量后端366 passed/4 skipped、前端
+  170 passed，静态/类型/架构/设计/小程序门禁通过；隔离 MySQL 5.7 空库 migration/current/check 与
+  runtime 4 passed，冻结容器 UID 10001、live/ready、SIGTERM 均通过；云端灰度与真实 Ark smoke 仍是
+  独立发布门禁。
 - `SPEC-AI-OUTPUT-20260906-01` 的后端已实现并以 `flask-ik19-011` 灰度部署：新 AI 提案使用
   `hanzi/word/poem/arithmetic/concept/activity/other` 受控展示类别；其当时的 AI summary 120 字
   合同已由本地 BUG-017 收紧为上述 60 字正向事实合同，

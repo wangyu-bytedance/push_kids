@@ -86,6 +86,40 @@ class _DeadlineProvider:
         return _new_proposal()
 
 
+class _CorrectableFinalProvider:
+    validation_codes: list[str] = []
+
+    def analyze_with_history(
+        self,
+        data,
+        search_history,
+        *,
+        max_turns,
+        validate_final,
+    ):
+        del data
+        assert max_turns == 8
+        search_history(
+            HistorySearchRequest(
+                candidate_key="加法",
+                subject_name="数学",
+                keywords=("加法",),
+            )
+        )
+        try:
+            validate_final(_new_proposal("两位数进位加法"))
+        except AnalysisOutputValidationError as exc:
+            self.validation_codes = exc.codes
+        search_history(
+            HistorySearchRequest(
+                candidate_key="两位数进位加法",
+                subject_name="数学",
+                keywords=("进位加法",),
+            )
+        )
+        return validate_final(_new_proposal("两位数进位加法"))
+
+
 def test_runner_refuses_to_label_new_without_a_completed_history_search(app, client) -> None:
     del client
     runner = AnalysisAgentRunner(app.state.database, _NoSearchProvider())
@@ -111,6 +145,21 @@ def test_runner_allows_new_after_scoped_search_returns_no_history(app, client) -
     )
 
     assert [point.name for point in proposal.knowledge_points] == ["进位加法"]
+
+
+def test_runner_exposes_final_ledger_validation_inside_provider_loop(app, client) -> None:
+    del client
+    provider = _CorrectableFinalProvider()
+    runner = AnalysisAgentRunner(app.state.database, provider)
+
+    proposal = runner.run(
+        AnalysisInput(text="两位数进位加法", existing_subjects=["数学"]),
+        family_id="family-a",
+        child_id="child-a",
+    )
+
+    assert provider.validation_codes == ["history_search.incomplete"]
+    assert [point.name for point in proposal.knowledge_points] == ["两位数进位加法"]
 
 
 def test_runner_enforces_the_global_history_tool_call_budget(app, client) -> None:

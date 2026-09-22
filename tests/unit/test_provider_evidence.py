@@ -111,7 +111,9 @@ def test_prompt_keeps_all_accepted_text():
 
 
 def test_prompt_requires_actionable_names_and_parent_readable_source_summary():
-    assert PROMPT_REVISION == "child-aware-history-agent-20260919-06"
+    assert PROMPT_REVISION == "child-aware-history-agent-20260922-07"
+    assert "candidate_key必须逐字等于最终subjects[subject_name][*].name" in ANALYSIS_RULES
+    assert "查询成功后不得把候选改名、合并或拆分" in ANALYSIS_RULES
     assert "家长看完就知道要复习什么" in ANALYSIS_RULES
     assert "不把年龄、购物、动物等普通题目情境写进name" in ANALYSIS_RULES
     assert "direct_evidence.detail用一句家长可读的话概括原题或原材料" in ANALYSIS_RULES

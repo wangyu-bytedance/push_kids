@@ -382,6 +382,7 @@ class ArkAnalysisProvider:
         search_history: Callable[[HistorySearchRequest], list[dict[str, object]]],
         *,
         max_turns: int,
+        validate_final: Callable[[AnalysisProposal], AnalysisProposal] | None = None,
         trace: AnalysisTrace | None = None,
         deadline: float | None = None,
     ) -> AnalysisProposal:
@@ -422,7 +423,12 @@ class ArkAnalysisProvider:
             {
                 "type": "function",
                 "name": "search_history_items",
-                "description": "按科目和关键词检索该孩子的历史知识候选；只用于判断是否为历史复习。",
+                "description": (
+                    "按科目和关键词检索该孩子的历史知识候选。每个query的candidate_key必须逐字等于"
+                    "准备写入最终subjects[subject_name][*].name的完整名称，subject_name也必须与最终"
+                    "subjects键完全相同。查询成功后不得改名、合并或拆分；如需调整，必须按调整后的"
+                    "每个最终名称重新查询。一次调用用queries批量提交当前全部候选。"
+                ),
                 "strict": True,
                 "parameters": {
                     "type": "object",
@@ -766,7 +772,10 @@ class ArkAnalysisProvider:
                 raw = response.output_text.strip()
                 try:
                     model_result = ModelAnalysisResult.model_validate(json.loads(raw))
-                    return data.validate_model_result(model_result)
+                    proposal = data.validate_model_result(model_result)
+                    if validate_final is not None:
+                        proposal = validate_final(proposal)
+                    return proposal
                 except json.JSONDecodeError:
                     validation_codes = ["json.parse"]
                 except ValidationError as exc:
@@ -786,16 +795,22 @@ class ArkAnalysisProvider:
                     provider_input = []
                 else:
                     provider_input.extend(output_items)
+                correction = (
+                    "最终输出中的new候选没有完成同名历史检索。重新调用search_history_items："
+                    "每个candidate_key必须逐字等于准备输出的最终name，subject_name必须与最终"
+                    "subjects键完全相同；查询后不得改名、合并或拆分，如需调整名称则按每个最终名称"
+                    "重新查询。完成检索后重新输出完整JSON。"
+                    if "history_search.incomplete" in validation_codes
+                    else "上次输出未通过校验，仅修正规则代码："
+                    + json.dumps(validation_codes, ensure_ascii=False)
+                )
                 provider_input.append(
                     {
                         "role": "user",
                         "content": [
                             {
                                 "type": "input_text",
-                                "text": (
-                                    "上次输出未通过校验，仅修正规则代码："
-                                    + json.dumps(validation_codes, ensure_ascii=False)
-                                ),
+                                "text": correction,
                             }
                         ],
                     }
