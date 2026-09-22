@@ -1,6 +1,6 @@
 # BUG-026 — 分析最终校验回路与重试队列公平性
 
-- Status: `VERIFYING`
+- Status: `DONE`
 - Severity: `P1 — 可识别的学习照片会反复返回 analysis_output_invalid，且旧失败任务会阻塞后续分析`
 - Risk: `R2 — 修改 Agent 最终校验回路、任务领取顺序和安全诊断持久化；不改正式学习写入语义`
 - Owner: `产品负责人（用户）`
@@ -46,7 +46,7 @@
 - UI current-state merge owner: `N/A`
 - UI current-state merge evidence: `N/A`
 - Frontend visual/a11y/resolution verification: `N/A`
-- Frontend engineering verification evidence: `pending compatibility regression`
+- Frontend engineering verification evidence: `PASS — npm test 170 passed；ESLint 与小程序静态校验通过`
 - External design dependency: `none`
 
 ## 1. Symptom and impact
@@ -330,7 +330,8 @@ flowchart LR
   final 输出 B，final validator 在同 Agent loop 返回精确静态指导，模型补检索 B 后同一 Job attempt 成功。
 - Test level: unit/provider+runner scripted Responses。
 - Pre-fix failure evidence: 当前 callback 不存在，Runner 在 Provider return 后抛 `history_search.incomplete`。
-- Post-fix success evidence: pending。
+- Post-fix success evidence: targeted set 65 passed；脚本化 A→B 名称漂移在同一 Provider loop 内补查 B 后成功，
+  不再升级为整笔 Job attempt 重试。
 - Why this test proves the bug: 直接覆盖错误所有权跨 loop 边界的确定性链路。
 
 ### Adjacent cases
@@ -358,7 +359,7 @@ flowchart LR
 | `TP-006` | `npm test` | local | PASS | 170 passed；ESLint PASS |
 | `TP-007` | architecture/design/miniprogram validators | local | PASS | architecture/design PASS；15 pages / 667593 bytes |
 | `TP-008` | isolated MySQL 5.7 Worker regression | Docker | PASS | 用户授权重启 Docker；utf8mb4 MySQL 5.7.44 空库 migration/current/check PASS，runtime 4 passed；CRUD 用户 DDL denied |
-| `TP-009` | controlled live Ark multi-item image smoke | cloud gray | NOT_RUN | 必须在 MySQL/容器门禁通过并创建灰度版本后执行 |
+| `TP-009` | controlled live Ark multi-item image smoke | cloud gray | NOT_RUN | `flask-ik19-024` 已于 2026-09-22 创建且为 normal，但 FlowRatio=0；真实请求仍由 `023` 100% 承载，不能把旧版结果当作新版证据。全量前由发布负责人先分配受控灰度流量并执行真实图片 smoke |
 
 ## 8. Review checklist
 
@@ -372,7 +373,7 @@ flowchart LR
 - [ ] Regression test was not executed against a separate pre-fix checkout；the pre-fix deterministic path is
   established by the previous Runner-only rejection test and code boundary, not reported as a newly run failure.
 - [x] Every required test point ran or has an explicit skipped-check risk.
-- [ ] Historical behavior tests pass.
+- [x] Historical behavior tests pass.
 - [x] Data repair, compatibility and rollback are addressed.
 - [x] Monitoring detects recurrence without raw content.
 - [x] No unrelated refactor is mixed in.
@@ -384,10 +385,14 @@ flowchart LR
 - Deleted workaround/logic: `Runner 返回后才首次发现 history_search.incomplete 的单一路径已替换；
   Runner 后置检查仍作为兼容/安全防线保留。`
 - Data repaired: `none planned`。
-- Monitoring added: `pending safe persistent diagnostic marker`。
-- Behavior catalog update: `pending`。
-- Feature current-state document update and Change Reference: `pending`。
-- Architecture/test/process change preventing recurrence: `pending`。
-- Independent Review: `pending`。
+- Monitoring added: `AgentJob.error_message 保存有界公共 code、静态 reason 和脱敏 validation code；Submission/API
+  继续只暴露家长文案`。
+- Behavior catalog update: `已更新 BHV-003/BHV-014，记录同-loop 最终校验、精确候选协议、ready-time 排序和安全诊断`。
+- Feature current-state document update and Change Reference: `已更新 FEAT-001，并登记
+  BUG-SPEC-20260922-ANALYSIS-CORRECTION-02`。
+- Architecture/test/process change preventing recurrence: `已更新 ARCHITECTURE；新增 Provider/Runner 同-loop、队列公平性、
+  公私诊断隔离回归；全量回归、MySQL 5.7、容器和发布包门禁通过`。
+- Independent Review: `Codex 对冻结提交 5397a82 执行 diff/whitespace 复核；未发现新的 P0–P3 阻断项。`
 - Residual risk: Ark semantic variability remains; bounded schema, scoped history search and parent confirmation remain the controls。
-- Follow-up owner/date: `Codex / after approval`。
+- Follow-up owner/date: `发布负责人 / 在云控制台为 flask-ik19-024 分配受控灰度流量后完成 TP-009，
+  再决定是否全量；回滚目标 flask-ik19-023`。
