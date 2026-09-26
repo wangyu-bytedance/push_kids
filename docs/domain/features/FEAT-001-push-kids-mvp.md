@@ -1,17 +1,19 @@
 # FEAT-001 — 家庭学习持续跟进系统 MVP
 
 - Status: `CURRENT`
-- Revision: `FEAT-STATE-20260926-EMPTY-PROPOSAL-QUALITY-04-LOCAL`
+- Revision: `FEAT-STATE-20260926-EMPTY-PROPOSAL-QUALITY-04-GRAY-025`
 - Last verified: 2026-09-26（`BUG-SPEC-20260926-EMPTY-PROPOSAL-QUALITY-02` 已本地实现：后端
   389 passed / 5 optional skipped、前端 170 passed、性能/E2E 3 passed，Ruff check/format、Mypy 86 files、
   ESLint、架构 checked=3、设计策略与小程序静态 15 pages/667593 bytes均通过；隔离 MySQL 5.7.44
   已从空库重跑 migration/current/check 与 5 个运行时专项。全新固定交错 40-case live Ark 完整运行
   40/40，端到端与语文/数学/英语语义率均 100%，empty/remaining pending 与 formal writes 均为 0；
-  发布与生产修复 apply 尚未执行）
+  后端不可变灰度版本 `flask-ik19-025` 已创建并为 `normal`，服务 `normal`、PUBLIC 关闭；尚未切换/核验
+  灰度流量、执行真实 AppID smoke 或生产修复 apply）
 - Source Spec: `specs/completed/FEAT-001-PUSH-KIDS-FINAL-SPEC.md` revision `SPEC-20260831-08`
 - Latest implemented Spec: `specs/completed/BUG-027-EMPTY-ANALYSIS-PROPOSAL-QUALITY.md`
   revision `BUG-SPEC-20260926-EMPTY-PROPOSAL-QUALITY-02`（固定跨科目轮转与双分母门禁已实现并完成
-  40/40 live Ark 验证及终态独立只读审查；发布和生产数据 apply 尚未执行）
+  40/40 live Ark 验证及终态独立只读审查；后端 `flask-ik19-025` 灰度不可变版本已创建，生产数据
+  apply 尚未执行）
 - Pending completion Spec: `specs/active/FEAT-001-ARK-CONTEXT-REUSE-FLAG.md` revision
   `SPEC-20260919-ARK-CONTEXT-REUSE-01`（默认开启的 attempt-local Ark Responses 会话续接；未部署）
 - Previous applied Spec: `specs/completed/BUG-021-TODAY-REVIEW-PLAN-VISIBILITY.md` revision `BUG-SPEC-20260912-REVIEW-VISIBILITY-01`
