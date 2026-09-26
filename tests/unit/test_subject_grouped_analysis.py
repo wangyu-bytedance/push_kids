@@ -102,6 +102,28 @@ def test_provider_regenerates_when_summary_describes_absent_content():
     assert "无语文、英语相关学习内容" not in retry_prompt
 
 
+def test_provider_regenerates_when_final_proposal_has_no_actionable_items():
+    calls = []
+    outputs = [
+        json.dumps(result(), ensure_ascii=False),
+        json.dumps(result(item("两位数进位加法")), ensure_ascii=False),
+    ]
+
+    def respond(**kwargs):
+        calls.append(kwargs)
+        return SimpleNamespace(output_text=outputs.pop(0))
+
+    provider = object.__new__(ArkAnalysisProvider)
+    provider.model = "synthetic"
+    provider.client = SimpleNamespace(responses=SimpleNamespace(create=respond))
+
+    proposal = provider.analyze(AnalysisInput(text="28+17", existing_subjects=["数学", "语文"]))
+
+    assert [point.name for point in proposal.knowledge_points] == ["两位数进位加法"]
+    assert len(calls) == 2
+    assert "proposal.actionable_items" in calls[1]["input"][0]["content"][-1]["text"]
+
+
 def test_provider_stops_after_three_invalid_structured_results():
     calls = []
 
@@ -365,7 +387,7 @@ def test_provider_session_cleanup_failure_does_not_replace_valid_result(caplog):
         responses=SimpleNamespace(
             create=lambda **_kwargs: SimpleNamespace(
                 id="resp-private",
-                output_text=json.dumps(result(), ensure_ascii=False),
+                output_text=json.dumps(result(item("分数")), ensure_ascii=False),
                 output=[],
             ),
             delete=lambda *_args, **_kwargs: (_ for _ in ()).throw(
@@ -382,10 +404,39 @@ def test_provider_session_cleanup_failure_does_not_replace_valid_result(caplog):
         trace=AnalysisTrace(job_id="job-safe", attempt=1),
     )
 
-    assert proposal.knowledge_points == []
+    assert [point.name for point in proposal.knowledge_points] == ["分数"]
     assert "analysis_context_session_cleanup_failed" in caplog.text
     assert "private-cleanup-detail" not in caplog.text
     assert "resp-private" not in caplog.text
+
+
+def test_provider_history_loop_corrects_empty_final_output_in_same_attempt():
+    calls = []
+    responses = [
+        SimpleNamespace(output_text=json.dumps(result(), ensure_ascii=False), output=[]),
+        SimpleNamespace(
+            output_text=json.dumps(result(item("分数")), ensure_ascii=False), output=[]
+        ),
+    ]
+
+    def respond(**kwargs):
+        calls.append(kwargs)
+        return responses.pop(0)
+
+    provider = object.__new__(ArkAnalysisProvider)
+    provider.model = "synthetic"
+    provider.context_cache_enabled = False
+    provider.client = SimpleNamespace(responses=SimpleNamespace(create=respond))
+
+    proposal = provider.analyze_with_history(
+        AnalysisInput(text="分数", existing_subjects=["数学", "语文"]),
+        lambda _request: [],
+        max_turns=8,
+    )
+
+    assert [point.name for point in proposal.knowledge_points] == ["分数"]
+    assert len(calls) == 2
+    assert "proposal.actionable_items" in json.dumps(calls[1]["input"], ensure_ascii=False)
 
 
 def test_provider_session_retries_invalid_tool_arguments_without_querying():
@@ -468,7 +519,7 @@ def test_provider_session_chain_is_never_reused_across_invocations():
         calls.append(kwargs)
         return SimpleNamespace(
             id=next(response_ids),
-            output_text=json.dumps(result(), ensure_ascii=False),
+            output_text=json.dumps(result(item("练习")), ensure_ascii=False),
             output=[],
         )
 
@@ -509,7 +560,7 @@ def test_provider_batches_twenty_candidates_in_one_turn_and_logs_only_safe_count
                 }
             ],
         ),
-        SimpleNamespace(output_text=json.dumps(result()), output=[]),
+        SimpleNamespace(output_text=json.dumps(result(item("批量练习"))), output=[]),
     ]
     calls = []
 
@@ -742,14 +793,62 @@ def test_incomplete_provider_response_uses_worker_transport_retry():
         provider.analyze(AnalysisInput(text="分数", existing_subjects=["数学"]))
 
 
-def test_all_empty_subject_buckets_are_a_valid_incremental_proposal():
+def test_all_empty_subject_buckets_are_a_correctable_output_error():
     data = AnalysisInput(text="重复材料", existing_subjects=["数学", "语文"])
 
-    proposal = data.validate_model_result(ModelAnalysisResult.model_validate(result()))
+    with pytest.raises(AnalysisOutputValidationError) as error:
+        data.validate_model_result(ModelAnalysisResult.model_validate(result()))
 
-    assert proposal.knowledge_points == []
-    assert proposal.todo_matches == []
-    assert proposal.subject_name == "数学"
+    assert error.value.codes == ["proposal.actionable_items"]
+
+
+def test_analysis_subjects_extend_configured_subjects_in_schema_and_validation():
+    data = AnalysisInput(
+        text="抄写 school",
+        existing_subjects=["数学", "语文"],
+        analysis_subjects=["数学", "语文", "英语"],
+    )
+    raw = result()
+    raw["subjects"]["英语"] = [item("school")]
+
+    proposal = data.validate_model_result(ModelAnalysisResult.model_validate(raw))
+
+    schema = data.structured_output_schema()["properties"]["subjects"]
+    assert schema["required"] == ["数学", "语文", "英语"]
+    assert proposal.subject_name == "英语"
+    assert proposal.knowledge_points[0].subject_name == "英语"
+
+
+@pytest.mark.parametrize(
+    "runtime_uncertainty",
+    [
+        "因历史知识检索调用失败，无法判断是否已有记录。",
+        "数据库连接出现异常。",
+        "系统发生异常，建议稍后再试。",
+        "历史知识检索未成功。",
+        "无法连接数据库。",
+        "工具无法调用。",
+        "接口无法访问。",
+        "历史知识检索未能完成。",
+    ],
+)
+def test_model_cannot_report_runtime_failures_as_uncertainty(runtime_uncertainty: str):
+    data = AnalysisInput(text="分数", existing_subjects=["数学", "语文"])
+    raw = result(item("分数"))
+    raw["uncertainties"] = [runtime_uncertainty]
+
+    with pytest.raises(AnalysisOutputValidationError) as error:
+        data.validate_model_result(ModelAnalysisResult.model_validate(raw))
+
+    assert error.value.codes == ["uncertainty.runtime_claim"]
+
+    with pytest.raises(AnalysisOutputValidationError) as proposal_error:
+        data.validate_proposal(
+            data.validate_model_result(
+                ModelAnalysisResult.model_validate(result(item("分数")))
+            ).model_copy(update={"uncertainties": raw["uncertainties"]})
+        )
+    assert proposal_error.value.codes == ["uncertainty.runtime_claim"]
 
 
 @pytest.mark.parametrize(
@@ -916,11 +1015,11 @@ def test_same_day_review_requires_an_explicit_parent_note():
     review = item("分数初步认识", kind="review", review_id="review-1")
     review["existing_knowledge_id"] = "knowledge-1"
 
-    omitted = data.validate_model_result(ModelAnalysisResult.model_validate(result(review)))
+    with pytest.raises(AnalysisOutputValidationError) as error:
+        data.validate_model_result(ModelAnalysisResult.model_validate(result(review)))
     allowed = data.model_copy(update={"text": "今天单独复习了分数"}).validate_model_result(
         ModelAnalysisResult.model_validate(result(review))
     )
 
-    assert omitted.todo_matches == []
-    assert any("当天已确认" in message for message in omitted.uncertainties)
+    assert error.value.codes == ["proposal.actionable_items"]
     assert [match.review_id for match in allowed.todo_matches] == ["review-1"]

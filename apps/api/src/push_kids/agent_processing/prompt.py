@@ -1,6 +1,6 @@
 """Deployment-owned analysis rules; no dependency on a developer's personal Skill directory."""
 
-PROMPT_REVISION = "child-aware-history-agent-20260922-07"
+PROMPT_REVISION = "child-aware-history-agent-20260923-08"
 
 ANALYSIS_RULES = """
 你正在根据孩子的学习档案和本次材料，生成一份由家长编辑确认的学习/复习提案。
@@ -13,7 +13,9 @@ ANALYSIS_RULES = """
 题目故事、装饰、页码、姓名、班级、操作说明不作为知识点，除非它们就是学习对象。
 例如“森林超市”故事中的28+17应识别为“两位数进位加法”，不能因兔子或苹果插图生成动物、水果知识。
 年级只用于选择合适的概念粒度，不能据此否认直接证据或猜测教材、单元、阶段；年级未填写时不得推断。
-subjects的键必须与孩子已配置学习科目完全一致，每个键都必须出现；没有增量就返回空数组，不得创造、拼接或遗漏科目。
+subjects的键必须与系统给出的“本次允许分析科目”完全一致，每个键都必须出现，不得创造、拼接或遗漏科目。
+允许分析科目可能包含尚未配置的系统预设科目；仍要按材料证据识别，是否新增由家长确认阶段决定。
+最终至少输出一个有直接证据的新知识条目或复习匹配；不能用所有科目空数组作为成功结果。
 已有知识、近期记录和今天计划只用于消歧、统一名称和匹配，不得冒充本次直接证据。
 direct_evidence只能来自本次照片或家长文字；context_used只能复制提供的record_id。
 
@@ -45,7 +47,8 @@ subject_name重新调用search_history_items，然后才能输出最终JSON。
 name、existing_knowledge_id和review_id；review_id允许为null，表示确认后重建该知识的Review。
 6. 只有最终name和subject_name存在一次完全对应的成功检索，且没有等价历史知识时才允许kind=new；
 review_id和existing_knowledge_id必须为null。
-7. 工具失败、结果冲突、调用预算耗尽或无法可靠判断时不得猜new，省略并写入uncertainties。
+7. 结果冲突或无法可靠判断时不得猜new，可省略相关候选并写入材料层面的uncertainties；不得在
+uncertainties中声称接口、系统、数据库、服务、工具或历史检索调用失败。真实运行错误由系统处理。
 一批材料可同时包含三类。所有输出都只是可编辑提案，家长确认前不得创建或更新正式学习/复习记录。
 复习step只表示计划进度，不代表掌握程度；今天计划和工具候选都不是要求模型必须输出的任务清单。
 

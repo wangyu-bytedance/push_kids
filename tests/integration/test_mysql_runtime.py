@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import logging
 import os
 import time
@@ -21,6 +22,7 @@ from push_kids.persistence.models import (
     Child,
     Family,
     FamilyMember,
+    JobState,
     KnowledgeItem,
     KnowledgeOccurrence,
     LearningRecord,
@@ -30,6 +32,7 @@ from push_kids.persistence.models import (
     Subject,
     SubmissionMedia,
     SubmissionRequest,
+    SubmissionState,
     WeChatActorBinding,
 )
 from push_kids.planning.service import PlanningService
@@ -151,6 +154,106 @@ def test_mysql_cloud_identity_job_idempotency_and_confirmation() -> None:
         )
         assert confirmed.status_code == 200
         assert len(confirmed.json()["knowledge_item_ids"]) >= 1
+
+
+def test_mysql_empty_pending_repair_is_scoped_locked_and_retryable() -> None:
+    assert MYSQL_URL
+    token = uuid4().hex[:12]
+    family_id = f"mysql-empty-repair-{token}"
+    foreign_family_id = f"mysql-empty-repair-foreign-{token}"
+    submission_id = f"empty-repair-{token}"
+    proposal = {
+        "summary": "请确认",
+        "subject_name": "数学",
+        "knowledge_points": [],
+        "todo_matches": [],
+        "uncertainties": [],
+    }
+    app = create_app(
+        Settings(
+            PUSH_KIDS_ENV="cloud",
+            PUSH_KIDS_DATABASE_URL=MYSQL_URL,
+            PUSH_KIDS_MEDIA_BACKEND="wechat_cloud",
+            CBR_ENV_ID="mysql-test",
+            WECHAT_APP_ID="wx-mysql-test",
+            COS_BUCKET="bucket-test",
+            PUSH_KIDS_ACTOR_HMAC_KEY="mysql-test-hmac-key-that-is-long-enough",
+            PUSH_KIDS_RUN_WORKER=True,
+            ARK_API_KEY="synthetic-mysql-test-key",
+        )
+    )
+    with app.state.database.session_factory() as db:
+        db.add_all(
+            [
+                Family(id=family_id, display_name="MySQL empty repair family"),
+                Family(id=foreign_family_id, display_name="MySQL foreign repair family"),
+            ]
+        )
+        child = Child(family_id=family_id, name="MySQL repair child")
+        db.add(child)
+        db.flush()
+        submission = LearningSubmission(
+            id=submission_id,
+            family_id=family_id,
+            child_id=child.id,
+            state=SubmissionState.pending_confirmation.value,
+            occurred_at=utcnow(),
+            source="manual",
+            proposal_json=json.dumps(proposal, ensure_ascii=False),
+        )
+        db.add(submission)
+        db.flush()
+        db.add(
+            AgentJob(
+                family_id=family_id,
+                submission_id=submission_id,
+                state=JobState.succeeded.value,
+            )
+        )
+        db.commit()
+
+    with app.state.database.session_factory() as db:
+        assert LearningService.repair_empty_pending_analysis(db, family_id=family_id) == [
+            submission_id
+        ]
+        assert db.get(LearningSubmission, submission_id).state == (
+            SubmissionState.pending_confirmation.value
+        )
+        assert (
+            LearningService.repair_empty_pending_analysis(
+                db,
+                family_id=foreign_family_id,
+                submission_ids=[submission_id],
+                apply=True,
+            )
+            == []
+        )
+
+    with app.state.database.session_factory() as db:
+        assert LearningService.repair_empty_pending_analysis(
+            db,
+            family_id=family_id,
+            submission_ids=[submission_id],
+            apply=True,
+        ) == [submission_id]
+        submission = db.get(LearningSubmission, submission_id)
+        job = db.scalar(select(AgentJob).where(AgentJob.submission_id == submission_id))
+        assert submission.state == SubmissionState.failed.value
+        assert submission.error_code == "analysis_output_invalid"
+        assert json.loads(submission.proposal_json) == proposal
+        assert job.state == JobState.failed.value
+        assert (
+            LearningService.repair_empty_pending_analysis(
+                db,
+                family_id=family_id,
+                submission_ids=[submission_id],
+                apply=True,
+            )
+            == []
+        )
+        assert LearningService.retry(db, family_id, submission_id).state == (
+            SubmissionState.queued.value
+        )
 
 
 def test_mysql_family_onboarding_invite_and_approval() -> None:

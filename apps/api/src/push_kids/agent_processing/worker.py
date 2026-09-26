@@ -322,6 +322,9 @@ class AnalysisWorker:
                         "这份材料与近期提交完全相同，请核对是否为新的学习记录；本次不自动标记Todo完成。"
                     ] + proposal.uncertainties[:19]
                     proposal.todo_matches = []
+                # A post-provider mutation (for example repeated-material protection) must
+                # not turn an otherwise valid result into an empty confirmable proposal.
+                data.validate_proposal(proposal)
                 if not data.grade or not data.recent_learning:
                     proposal.uncertainties = (
                         proposal.uncertainties

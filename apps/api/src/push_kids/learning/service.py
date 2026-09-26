@@ -14,6 +14,7 @@ from sqlalchemy.orm import Session
 
 from push_kids.agent_processing.contracts import (
     MATERIAL_FINGERPRINT_KEY,
+    AnalysisOutputExhaustedError,
     AnalysisProposal,
     KnowledgeProposal,
     TodoCandidate,
@@ -964,6 +965,89 @@ class LearningService:
         submission.error_message = None
         db.commit()
         return cls.get_view(db, family_id, submission_id)
+
+    @staticmethod
+    def repair_empty_pending_analysis(
+        db: Session,
+        *,
+        family_id: str | None = None,
+        submission_ids: list[str] | None = None,
+        apply: bool = False,
+    ) -> list[str]:
+        """Find or fail legacy empty proposals without discarding their diagnostic payload.
+
+        Dry-run is the default. Applying requires explicit submission IDs so an operator cannot
+        accidentally mutate every tenant while investigating a production incident.
+        """
+        requested = list(dict.fromkeys(submission_ids or []))
+        if apply and (not family_id or not requested):
+            raise ValueError("apply requires family id and explicit submission ids")
+        if len(requested) > 100:
+            raise ValueError("at most 100 submission ids may be repaired at once")
+
+        # Match the worker/confirm lock hierarchy: AgentJob -> LearningSubmission.
+        # Lock every explicitly requested family-scoped job before inspecting the
+        # corresponding submission so repair cannot deadlock with normal writeback.
+        jobs: dict[str, AgentJob] = {}
+        if apply:
+            jobs = {
+                str(job.submission_id): job
+                for job in db.scalars(
+                    select(AgentJob)
+                    .where(
+                        AgentJob.family_id == family_id,
+                        AgentJob.submission_id.in_(requested),
+                    )
+                    .order_by(AgentJob.id)
+                    .with_for_update()
+                    .execution_options(populate_existing=True)
+                )
+            }
+
+        query = select(LearningSubmission).where(
+            LearningSubmission.state == SubmissionState.pending_confirmation.value
+        )
+        if family_id is not None:
+            query = query.where(LearningSubmission.family_id == family_id)
+        if requested:
+            query = query.where(LearningSubmission.id.in_(requested))
+        if apply:
+            query = query.with_for_update().execution_options(populate_existing=True)
+        rows = list(db.scalars(query.order_by(LearningSubmission.id).limit(501)))
+        if len(rows) > 500:
+            raise RuntimeError("empty proposal scan exceeded the 500-row safety limit")
+
+        matches: list[LearningSubmission] = []
+        for submission in rows:
+            try:
+                proposal = json.loads(submission.proposal_json or "null")
+            except (TypeError, json.JSONDecodeError):
+                continue
+            if not isinstance(proposal, dict):
+                continue
+            knowledge_points = proposal.get("knowledge_points")
+            todo_matches = proposal.get("todo_matches")
+            if knowledge_points in (None, []) and todo_matches in (None, []):
+                matches.append(submission)
+
+        if not apply:
+            return [str(submission.id) for submission in matches]
+
+        matched_ids = [str(submission.id) for submission in matches]
+        for submission in matches:
+            submission.state = SubmissionState.failed.value
+            submission.error_code = AnalysisOutputExhaustedError.code
+            submission.error_message = AnalysisOutputExhaustedError.public_message
+            job = jobs.get(str(submission.id))
+            if job is not None:
+                job.state = JobState.failed.value
+                job.lease_until = None
+                job.error_message = (
+                    "code=analysis_output_invalid;reason=empty_pending_repair;"
+                    "validation=proposal.actionable_items"
+                )
+        db.commit()
+        return matched_ids
 
     @classmethod
     def confirm(

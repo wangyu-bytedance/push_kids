@@ -18,6 +18,12 @@ _SUMMARY_EXCLUSION_PATTERNS = (
     re.compile(r"没有[^。！？!?]{0,40}(?:任务|内容|知识)"),
     re.compile(r"无(?:语文|数学|英语|其他学科|相关)[^。！？!?]{0,30}(?:任务|内容|知识|学习)"),
 )
+_RUNTIME_UNCERTAINTY_ENTITY = re.compile(
+    r"(?:历史知识检索|工具|接口|API|数据库|系统|服务)", re.IGNORECASE
+)
+_RUNTIME_UNCERTAINTY_FAILURE = re.compile(
+    r"(?:失败|异常|不可用|超时|未成功|没有成功|无法|不能|未能)", re.IGNORECASE
+)
 
 DisplayKind = Literal[
     "hanzi",
@@ -262,14 +268,24 @@ class AnalysisInput(BaseModel):
     text: str | None = None
     image_paths: list[Path] = Field(default_factory=list)
     todo_candidates: list[TodoCandidate] = Field(default_factory=list)
+    # Subjects already persisted for this child. Confirmation may use these without
+    # additional consent; keep the legacy field name for provider/test compatibility.
     existing_subjects: list[str] = Field(default_factory=list, max_length=30)
+    # Subjects the model is allowed to analyse. This may include system presets which
+    # are not configured yet; confirmation still applies the configured-subject policy.
+    analysis_subjects: list[str] = Field(default_factory=list, max_length=33)
     recent_learning: list[RecentLearningContext] = Field(default_factory=list, max_length=6)
     existing_knowledge: list[ExistingKnowledgeContext] = Field(default_factory=list, max_length=100)
     same_day_learning: list[SameDayKnowledgeContext] = Field(default_factory=list, max_length=200)
 
+    def allowed_analysis_subjects(self) -> list[str]:
+        values = self.analysis_subjects or self.existing_subjects
+        return list(dict.fromkeys(name.strip() for name in values if name.strip()))
+
     def structured_output_schema(self) -> dict:
         """Return an exact-key schema so the model cannot invent or omit subjects."""
-        if not self.existing_subjects:
+        allowed_subjects = self.allowed_analysis_subjects()
+        if not allowed_subjects:
             raise AnalysisOutputValidationError(["subjects.input_empty"])
         schema = ModelAnalysisResult.model_json_schema()
         item_schema = {
@@ -279,15 +295,16 @@ class AnalysisInput(BaseModel):
         }
         schema["properties"]["subjects"] = {
             "type": "object",
-            "properties": {name: item_schema for name in self.existing_subjects},
-            "required": list(self.existing_subjects),
+            "properties": {name: item_schema for name in allowed_subjects},
+            "required": allowed_subjects,
             "additionalProperties": False,
         }
         return schema
 
     def validate_model_result(self, result: ModelAnalysisResult) -> AnalysisProposal:
         """Validate references/invariants, then expose the compatible editable proposal."""
-        if set(result.subjects) != set(self.existing_subjects):
+        allowed_subjects = self.allowed_analysis_subjects()
+        if set(result.subjects) != set(allowed_subjects):
             raise AnalysisOutputValidationError(["subjects.keys"])
         if sum(len(items) for items in result.subjects.values()) > 20:
             raise AnalysisOutputValidationError(["subjects.max_items"])
@@ -307,6 +324,8 @@ class AnalysisInput(BaseModel):
         matches: list[TodoCandidate] = []
         errors = _model_summary_errors(result.summary)
         uncertainties = list(result.uncertainties)
+        if _has_runtime_uncertainty(uncertainties):
+            errors.append("uncertainty.runtime_claim")
         new_keys: set[tuple[str, str]] = set()
         if not result.source.strip():
             errors.append("source.blank")
@@ -413,17 +432,18 @@ class AnalysisInput(BaseModel):
             raise AnalysisOutputValidationError(errors)
         points = unique_knowledge_points(points)
         matches = list({review_candidate_key(item): item for item in matches}.values())
+        require_actionable_proposal(points, matches)
         primary_subject = (
             points[0].subject_name
             if points
             else next(
                 (item.subject_name for item in matches if item.subject_name),
-                self.existing_subjects[0] if self.existing_subjects else "",
+                allowed_subjects[0] if allowed_subjects else "",
             )
         )
         return AnalysisProposal(
             summary=result.summary.strip() or MODEL_SUMMARY_FALLBACK,
-            subject_name=primary_subject or self.existing_subjects[0],
+            subject_name=primary_subject,
             source=result.source.strip(),
             knowledge_points=points,
             todo_matches=matches,
@@ -432,6 +452,8 @@ class AnalysisInput(BaseModel):
 
     def validate_proposal(self, proposal: AnalysisProposal) -> AnalysisProposal:
         """Validate model references against this input, not parent-edited proposals."""
+        if _has_runtime_uncertainty(proposal.uncertainties):
+            raise AnalysisOutputValidationError(["uncertainty.runtime_claim"])
         summary_errors = _model_summary_errors(proposal.summary)
         if "summary.too_long" in summary_errors:
             raise ValueError("model summary is too long for parent confirmation")
@@ -495,6 +517,7 @@ class AnalysisInput(BaseModel):
         proposal.todo_matches = list(
             {review_candidate_key(item): item for item in proposal.todo_matches}.values()
         )
+        require_actionable_proposal(proposal.knowledge_points, proposal.todo_matches)
         return proposal
 
     def review_candidates(self) -> dict[str, TodoCandidate]:
@@ -527,6 +550,23 @@ def _model_summary_errors(summary: str) -> list[str]:
     if any(pattern.search(value) for pattern in _SUMMARY_EXCLUSION_PATTERNS):
         errors.append("summary.exclusion_clause")
     return errors
+
+
+def _has_runtime_uncertainty(messages: list[str]) -> bool:
+    return any(
+        _RUNTIME_UNCERTAINTY_ENTITY.search(sentence)
+        and _RUNTIME_UNCERTAINTY_FAILURE.search(sentence)
+        for message in messages
+        for sentence in re.split(r"[。！？!?\n]", message)
+    )
+
+
+def require_actionable_proposal(
+    knowledge_points: list[KnowledgeProposal], todo_matches: list[TodoCandidate]
+) -> None:
+    """Reject an empty final proposal so the provider can correct it or retry durably."""
+    if not knowledge_points and not todo_matches:
+        raise AnalysisOutputValidationError(["proposal.actionable_items"])
 
 
 def explicit_same_day_review(text: str | None) -> bool:

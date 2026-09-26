@@ -1,18 +1,17 @@
 # FEAT-001 — 家庭学习持续跟进系统 MVP
 
 - Status: `CURRENT`
-- Revision: `FEAT-STATE-20260919-REVIEW-ONLY-CONFIRM-02-UPLOADED`
-- Last verified: 2026-09-19（`BUG-SPEC-20260919-REVIEW-ONLY-CONFIRM-01` 已本地实现并验证：纯复习草稿
-  在 `groups=[]` 时保留服务端原 `proposal.subject_name`，不再制造空字符串；修复前专项 9 passed / 1 failed，
-  修复后专项 10 passed、前端全量 170 passed、后端 362 passed / 4 skipped，Ruff check/format、
-  Mypy 86 files、ESLint、架构 checked=3、设计策略与小程序静态 15 pages/667593 bytes均通过。
-  Schema 仍为 `20260913_0014`，无后端/API/数据库/视觉变更。真实 AppID preview PASS，包体
-  603182 bytes / 589.0 KB；小程序 `0.1.12` 开发版本已上传。体验版/提审/正式发布及原生三视口、
-  字体放大、iOS/Android 为 NOT_RUN）
+- Revision: `FEAT-STATE-20260926-EMPTY-PROPOSAL-QUALITY-04-LOCAL`
+- Last verified: 2026-09-26（`BUG-SPEC-20260926-EMPTY-PROPOSAL-QUALITY-02` 已本地实现：后端
+  389 passed / 5 optional skipped、前端 170 passed、性能/E2E 3 passed，Ruff check/format、Mypy 86 files、
+  ESLint、架构 checked=3、设计策略与小程序静态 15 pages/667593 bytes均通过；隔离 MySQL 5.7.44
+  已从空库重跑 migration/current/check 与 5 个运行时专项。全新固定交错 40-case live Ark 完整运行
+  40/40，端到端与语文/数学/英语语义率均 100%，empty/remaining pending 与 formal writes 均为 0；
+  发布与生产修复 apply 尚未执行）
 - Source Spec: `specs/completed/FEAT-001-PUSH-KIDS-FINAL-SPEC.md` revision `SPEC-20260831-08`
-- Latest implemented Spec: `specs/completed/BUG-025-REVIEW-ONLY-CONFIRM-SUBJECT.md`
-  revision `BUG-SPEC-20260919-REVIEW-ONLY-CONFIRM-01`（前端请求映射修复与自动化验证完成；
-  小程序 `0.1.12` 开发版本已上传；无后端/API/Schema/视觉变更）
+- Latest implemented Spec: `specs/completed/BUG-027-EMPTY-ANALYSIS-PROPOSAL-QUALITY.md`
+  revision `BUG-SPEC-20260926-EMPTY-PROPOSAL-QUALITY-02`（固定跨科目轮转与双分母门禁已实现并完成
+  40/40 live Ark 验证及终态独立只读审查；发布和生产数据 apply 尚未执行）
 - Pending completion Spec: `specs/active/FEAT-001-ARK-CONTEXT-REUSE-FLAG.md` revision
   `SPEC-20260919-ARK-CONTEXT-REUSE-01`（默认开启的 attempt-local Ark Responses 会话续接；未部署）
 - Previous applied Spec: `specs/completed/BUG-021-TODAY-REVIEW-PLAN-VISIBILITY.md` revision `BUG-SPEC-20260912-REVIEW-VISIBILITY-01`
@@ -95,11 +94,15 @@
   仍走单科目路径；`ConfirmationResult` 保留 `record_id`/`subject_id` 并新增 `records[]`。
 - 活动从既有活动记录入口保存。历史 activity Review 保留但退出 Todo、带练、AI Todo 候选、
   手动/匹配反馈和复习统计；原有活动记录、日程、练习频次与建议不变，历史学习记录不重写。
-- AI 首轮输入包含本次图片/完整文字、实际发生时间、已填写年级、最多30个已配置学习科目、目标上海
+- AI 首轮输入包含本次图片/完整文字、实际发生时间、已填写年级、最多30个已配置学习科目，以及由这些
+  科目加缺失系统预设 `语文/数学/英语` 组成的稳定去重分析科目集合（最多33个）。严格输出 Schema 与
+  history tool 科目 enum 使用分析科目；确认仍只信任服务端科目目录，未配置预设科目仍需家长明确同意。
+  输入还包含目标上海
   自然日内最多200个已确认条目，以及发生日为今天时的完整 `today_review_plan`；不一次性加载历史
   LearningRecord 或 KnowledgeItem。今日计划和历史候选都只是匹配上下文，不是本次已复习的证据。
 - 未由同日/今日计划匹配的每个候选，模型先生成关键词调用 `search_history_items`。工具由服务端注入
-  family/child，只允许指定已配置科目，使用每 Item 最多32个确定性 exact/token/n-gram 索引词；单次
+  family/child，只允许指定分析科目；未配置预设科目安全返回空历史，使用每 Item 最多32个确定性
+  exact/token/n-gram 索引词；单次
   最多20项；一次工具调用以 `queries[1..20]` 批量提交当前全部未匹配候选，每个 query 仍计一次逻辑调用，
   总共最多20次/100个唯一候选/8轮。第8轮只允许 final；进入 Provider 前按持久化5分钟 Job lease
   的剩余时间扣除30秒写回余量，得到整个 Agent attempt 的动态截止时间（满额最多约270秒），并把
@@ -116,8 +119,8 @@
   `ARK_CONTEXT_CACHE_ENABLED=false` 回退到 `store=false` 完整累计输入重发；它不能关闭 Ark 对当前模型
   自动启用的隐式前缀缓存。两种模式每轮都保留 strict JSON Schema，不发送显式 `caching`，response ID
   只存在于单次 Provider 调用内，不跨 Job/retry/家庭/孩子，也不写数据库或日志。
-- 部署规则在 `agent_processing/prompt.py` 以 `child-aware-history-agent-20260922-07` 版本化，不读取
-  个人SKILL目录。Ark 必须按当前 active learning subjects 返回固定键的 strict JSON Schema，条目明确
+- 部署规则在 `agent_processing/prompt.py` 以 `child-aware-history-agent-20260923-08` 版本化，不读取
+  个人SKILL目录。Ark 必须按本次 analysis subjects 返回固定键的 strict JSON Schema，条目明确
   为 `new`、`today_review` 或 `history_item`；模型总输出最多20项、每项1–5分钟，`review_method`
   只能是主动回忆/变式练习/解释应用。条目按同科目、同目标和同动作聚合为家长可确认的短复习单元；
   Markdown fence、额外科目/字段和非法引用不再由正则修补。Provider
@@ -130,7 +133,10 @@
   一句不超过 60 字、只描述本次实际学习/练习内容的简短事实；“没有识别到”
   “不包含”“未涉及”“无某科内容”等缺失项说明会以脱敏 `summary.exclusion_clause` 拒绝并进入同一
   有限重试。该限制不替代家长编辑和历史记录的 500 字合同，也不误伤“不规则图形”等真实概念。
-  服务端再校验证据、历史/知识/Review引用并精确过滤同发生日重复项；语义正确性仍须家长核对。
+  服务端再校验证据、历史/知识/Review引用并精确过滤同发生日重复项；最终知识点和 Todo 匹配同时为空
+  时以 `proposal.actionable_items` 在同一 Agent loop 内纠正，持续为空才进入既有最多3次 Job retry，绝不
+  写入 `pending_confirmation`。模型 uncertainty 声称 history/tool/API/database/system/service 调用失败时
+  以 `uncertainty.runtime_claim` 拒绝；可信运行诊断只来自服务端静态码。语义正确性仍须家长核对。
 - 批内相同图片字节只传一次，证据保持原照片编号；同家庭同孩子同一上海自然日的待确认/已确认
   提交内，相同文字+图片字节摘要触发重复材料提示并清空自动Todo匹配。摘要保存在草稿JSON的
   服务端元数据，不进模型/日志。无摘要旧记录、重新压缩/裁剪图片不保证识别；新学习事件仍可确认。
@@ -195,6 +201,18 @@
   170 passed，静态/类型/架构/设计/小程序门禁通过；隔离 MySQL 5.7 空库 migration/current/check 与
   runtime 4 passed，冻结容器 UID 10001、live/ready、SIGTERM 均通过；云端灰度与真实 Ark smoke 仍是
   独立发布门禁。
+- 2026-09-25 — `BUG-027 / BUG-SPEC-20260923-EMPTY-PROPOSAL-QUALITY-01`：分离 configured 与 analysis
+  subjects，恢复未配置系统预设科目的合法识别；把零 actionable proposal 和模型伪运行时诊断变成
+  same-loop 静态纠错，并在 Worker 写回前保留非空终检。新增默认 dry-run、显式 family/Submission ID
+  才可 apply 的幂等 legacy empty-pending 修复工具，以及 12语文/12数学/12英语/4多科目的 40-case live
+  Ark 门禁（30张合成图片）。本地全量、性能/E2E、前端、静态/架构与隔离 MySQL 5.7 门禁均通过；
+  2026-09-25 live gate 完整执行为 38/40、总体 95%、数学/英语 100%，但语文 86.67%（两条样本各 3 次
+  Ark timeout）低于单科 90%，因此门禁 FAIL，未发布或执行生产修复。
+- 2026-09-26 — `BUG-027 / BUG-SPEC-20260926-EMPTY-PROPOSAL-QUALITY-02`：保持所有失败都进入
+  40-case 端到端分母，仅把精确终态 `analysis_failed` 排除出单科语义分母；将分组 fixture 转换为固定
+  语文/数学/英语轮转并每三轮插入一个多科目样本。新增 9 项纯调度/聚合合同测试。全新完整 live run
+  为 40/40，各科语义均 15/15，operational terminal failure、empty/remaining pending 与 formal writes
+  均为 0；运行中的 Provider retry 最终恢复，best-effort session cleanup 仍有告警并保留为残余风险。
 - `SPEC-AI-OUTPUT-20260906-01` 的后端已实现并以 `flask-ik19-011` 灰度部署：新 AI 提案使用
   `hanzi/word/poem/arithmetic/concept/activity/other` 受控展示类别；其当时的 AI summary 120 字
   合同已由本地 BUG-017 收紧为上述 60 字正向事实合同，

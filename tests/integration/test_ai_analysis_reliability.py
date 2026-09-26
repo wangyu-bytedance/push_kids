@@ -375,19 +375,111 @@ def test_worker_discards_late_results(client, app, child, family_headers, outcom
 def test_repeated_material_warns_and_never_auto_completes(client, app, child, family_headers):
     for index in range(2):
         key = draft(client, app, family_headers, child["id"], "queued", text="进位加法")
-        assert app.state.worker.process_one()
-        body = client.get(f"/api/v1/submissions/{key}", headers=family_headers).json()["proposal"]
         if index:
-            assert any("完全相同" in message for message in body["uncertainties"])
-            assert not body["todo_matches"]
-            assert not body["knowledge_points"]
-            assert confirm(client, family_headers, key, body).status_code == 400
+            for _ in range(3):
+                assert app.state.worker.process_one()
+                with app.state.database.session_factory() as db:
+                    job = db.scalar(select(AgentJob).where(AgentJob.submission_id == key))
+                    job.available_at = utcnow()
+                    db.commit()
+            detail = client.get(f"/api/v1/submissions/{key}", headers=family_headers).json()
+            assert detail["state"] == "failed"
+            assert detail["proposal"] is None
         else:
+            assert app.state.worker.process_one()
+            body = client.get(f"/api/v1/submissions/{key}", headers=family_headers).json()[
+                "proposal"
+            ]
             assert confirm(client, family_headers, key, body).status_code == 200
     with app.state.database.session_factory() as db:
         assert db.scalar(select(func.count(KnowledgeItem.id))) == 1
         assert db.scalar(select(func.count(LearningRecord.id))) == 1
         assert db.scalar(select(func.count(ReviewFeedback.id))) == 0
+
+
+def test_empty_pending_repair_is_dry_run_by_default_and_idempotent(
+    client, app, child, family_headers
+):
+    empty = {
+        "summary": "请确认",
+        "subject_name": "数学",
+        "knowledge_points": [],
+        "todo_matches": [],
+        "uncertainties": [],
+    }
+    key = draft(client, app, family_headers, child["id"], body=empty)
+    nonempty_key = draft(client, app, family_headers, child["id"], body=proposal())
+
+    with app.state.database.session_factory() as db:
+        assert LearningService.repair_empty_pending_analysis(
+            db, family_id=family_headers["X-Family-ID"]
+        ) == [key]
+        assert db.get(LearningSubmission, key).state == "pending_confirmation"
+        assert (
+            LearningService.repair_empty_pending_analysis(
+                db,
+                family_id="another-family",
+                submission_ids=[key],
+                apply=True,
+            )
+            == []
+        )
+        assert LearningService.repair_empty_pending_analysis(
+            db,
+            family_id=family_headers["X-Family-ID"],
+            submission_ids=[key, nonempty_key],
+            apply=True,
+        ) == [key]
+        submission = db.get(LearningSubmission, key)
+        job = db.scalar(select(AgentJob).where(AgentJob.submission_id == key))
+        assert submission.state == "failed"
+        assert submission.error_code == "analysis_output_invalid"
+        assert json.loads(submission.proposal_json) == empty
+        assert job.state == "failed"
+        assert (
+            LearningService.repair_empty_pending_analysis(
+                db,
+                family_id=family_headers["X-Family-ID"],
+                submission_ids=[key],
+                apply=True,
+            )
+            == []
+        )
+        assert db.get(LearningSubmission, nonempty_key).state == "pending_confirmation"
+
+        retried = LearningService.retry(db, family_headers["X-Family-ID"], key)
+        assert retried.state == "queued"
+
+
+def test_empty_pending_repair_rechecks_state_under_apply_lock(client, app, child, family_headers):
+    empty = {
+        "summary": "请确认",
+        "subject_name": "数学",
+        "knowledge_points": [],
+        "todo_matches": [],
+        "uncertainties": [],
+    }
+    key = draft(client, app, family_headers, child["id"], body=empty)
+
+    with app.state.database.session_factory() as db:
+        assert LearningService.repair_empty_pending_analysis(
+            db, family_id=family_headers["X-Family-ID"]
+        ) == [key]
+        submission = db.get(LearningSubmission, key)
+        submission.state = "cancelled"
+        db.commit()
+
+    with app.state.database.session_factory() as db:
+        assert (
+            LearningService.repair_empty_pending_analysis(
+                db,
+                family_id=family_headers["X-Family-ID"],
+                submission_ids=[key],
+                apply=True,
+            )
+            == []
+        )
+        assert db.get(LearningSubmission, key).state == "cancelled"
 
 
 def test_submission_view_adds_structured_groups_without_changing_confirm_payload(

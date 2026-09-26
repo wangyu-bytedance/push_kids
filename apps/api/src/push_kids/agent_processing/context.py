@@ -14,7 +14,7 @@ from push_kids.agent_processing.contracts import (
     SameDayKnowledgeContext,
     TodoCandidate,
 )
-from push_kids.children.service import ChildrenService
+from push_kids.children.service import PRESET_LEARNING_SUBJECTS, ChildrenService
 from push_kids.persistence.models import (
     KnowledgeItem,
     KnowledgeOccurrence,
@@ -108,12 +108,15 @@ def build_analysis_input(
             known_child=child,
         )
         today_plan = selection["all_items"]
+    configured_subjects = [subject.name for subject in subjects]
+    analysis_subjects = list(dict.fromkeys([*configured_subjects, *PRESET_LEARNING_SUBJECTS]))
     return AnalysisInput(
         text=submission.input_text,
         occurred_at=submission.occurred_at.isoformat(),
         grade=child.grade,
         image_paths=paths,
-        existing_subjects=[subject.name for subject in subjects],
+        existing_subjects=configured_subjects,
+        analysis_subjects=analysis_subjects,
         recent_learning=[],
         existing_knowledge=[],
         same_day_learning=[

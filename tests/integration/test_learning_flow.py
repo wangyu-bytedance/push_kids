@@ -16,7 +16,7 @@ from push_kids.persistence.models import (
     ReviewFeedbackRequest,
     ReviewItem,
 )
-from push_kids.platform.time import local_date
+from push_kids.platform.time import local_date, utcnow
 from sqlalchemy import func, select
 
 
@@ -78,14 +78,25 @@ def test_ai_generation_omits_same_day_duplicate_knowledge(
     with app.state.database.session_factory() as db:
         assert db.scalar(select(func.count(LearningRecord.id))) == 0
     _confirm(client, family_headers, first)
-    second = _submit_and_process(client, app, family_headers, child["id"], "英语单词 animal")
-    assert second["proposal"]["knowledge_points"] == []
     response = client.post(
-        f"/api/v1/submissions/{second['id']}/confirm",
+        "/api/v1/submissions",
         headers=family_headers,
-        json={"proposal": second["proposal"]},
+        json={
+            "child_id": child["id"],
+            "occurred_at": (datetime.now(UTC) - timedelta(days=4)).isoformat(),
+            "input_text": "英语单词 animal",
+        },
     )
-    assert response.status_code == 400
+    second_id = response.json()["id"]
+    for _ in range(3):
+        assert app.state.worker.process_one() is True
+        with app.state.database.session_factory() as db:
+            job = db.scalar(select(AgentJob).where(AgentJob.submission_id == second_id))
+            job.available_at = utcnow()
+            db.commit()
+    second = client.get(f"/api/v1/submissions/{second_id}", headers=family_headers).json()
+    assert second["state"] == "failed"
+    assert second["proposal"] is None
     with app.state.database.session_factory() as db:
         knowledge_count = db.scalar(select(func.count(KnowledgeItem.id)))
         occurrence_count = db.scalar(select(func.count(KnowledgeOccurrence.id)))

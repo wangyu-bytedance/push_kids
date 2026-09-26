@@ -215,7 +215,7 @@ class _HistorySearchToolArguments(BaseModel):
 
 def _parse_history_tool_calls(
     calls: list[dict[str, object]],
-    existing_subjects: list[str],
+    analysis_subjects: list[str],
 ) -> list[tuple[dict[str, object], _HistorySearchToolArguments]]:
     parsed: list[tuple[dict[str, object], _HistorySearchToolArguments]] = []
     for call in calls:
@@ -227,7 +227,7 @@ def _parse_history_tool_calls(
             )
         except ValidationError as exc:
             raise AnalysisOutputValidationError(["tool.arguments"]) from exc
-        if any(query.subject_name not in existing_subjects for query in arguments.queries):
+        if any(query.subject_name not in analysis_subjects for query in arguments.queries):
             raise AnalysisOutputValidationError(["tool.arguments"])
         parsed.append((call, arguments))
     return parsed
@@ -447,7 +447,7 @@ class ArkAnalysisProvider:
                                     },
                                     "subject_name": {
                                         "type": "string",
-                                        "enum": list(data.existing_subjects),
+                                        "enum": data.allowed_analysis_subjects(),
                                     },
                                     "keywords": {
                                         "type": "array",
@@ -605,7 +605,9 @@ class ArkAnalysisProvider:
                     else:
                         provider_input.extend(output_items)
                     try:
-                        parsed_calls = _parse_history_tool_calls(calls, data.existing_subjects)
+                        parsed_calls = _parse_history_tool_calls(
+                            calls, data.allowed_analysis_subjects()
+                        )
                     except AnalysisOutputValidationError as exc:
                         validation_codes = exc.codes
                         for call in calls:
@@ -859,6 +861,9 @@ class ArkAnalysisProvider:
             f"规则版本：{PROMPT_REVISION}。{ANALYSIS_RULES}\n"
             f"孩子学习档案：年级={data.grade or '未填写，不推断'}；"
             f"已配置学习科目={compact_json(data.existing_subjects)}。"
+            f"本次允许分析科目={compact_json(data.allowed_analysis_subjects())}；"
+            "subjects必须逐项包含这些科目且不得增加其他键；未配置科目也要识别，"
+            "是否新建科目由家长确认阶段决定。"
             f"本次实际发生时间：{data.occurred_at or '未提供'}。"
             f"today_review_plan（今日完整计划，最多120项，只是匹配上下文）：{candidates_json}。"
             f"same_day_knowledge_refs（本次发生日已确认，必须去重）：{same_day_json}。"

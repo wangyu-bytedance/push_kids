@@ -23,6 +23,7 @@ dev = [
   "pytest>=8.4,<9",
   "pytest-asyncio>=1.1,<2",
   "pytest-cov>=6.2,<7",
+  "pillow>=11,<12",
   "ruff>=0.12,<1",
 ]
 

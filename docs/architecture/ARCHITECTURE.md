@@ -65,6 +65,12 @@ Dependency direction is routers → services → pure policies. Infrastructure a
   not refill the day. Unselected backlog rows keep their original due dates and receive no writes.
 - `KnowledgeSearchTerm` is a deterministic, at-most-32-term index per knowledge item. The analysis Agent can call
   only the family/child-scoped history tool, at most 20 times/100 unique candidates/8 turns.
+- Analysis input keeps two subject facts: configured subjects are active persisted learning subjects, while analysis
+  subjects add the bounded system preset catalogue (`语文/数学/英语`). Schema and history-tool enums use the latter;
+  learning confirmation remains the sole owner of consent and Subject creation.
+- A model result is not successful unless its projected proposal contains a knowledge point or Todo match. Contracts
+  return only static correction codes for empty output or model-authored runtime claims; Worker revalidates after its
+  own proposal mutations before writing `pending_confirmation`.
 - Cloud media is server-ticketed and claimed only after verifying uploader metadata, exact bucket/path,
   magic bytes, size and hash. Expired tickets and cancelled submissions are cleanup candidates.
 - Public account-wide export/deletion remains deferred to FEAT-002; cancellation deletes its scoped media.
@@ -118,6 +124,8 @@ tool contract freezes each final candidate name and subject before search. Runne
 and passes a final-validator callback into the Provider loop; `history_search.incomplete` therefore receives static
 same-loop correction and can trigger an exact-name re-query before the Job attempt fails. Runner repeats the check
 after Provider return as a compatibility/security fallback.
+The same Provider loop owns correction for `proposal.actionable_items` and `uncertainty.runtime_claim`; exhaustion
+then follows the existing retryable `analysis_output_invalid` Job policy rather than persisting an empty draft.
 `telemetry.py` accepts only Job/attempt, bounded counters, safe statuses and normalized static validation categories;
 it cannot log child content, subjects, keywords, media paths or provider payloads. Model references are validated in contracts; learning owns final identity validation,
 occurrence deduplication and Review settlement in one transaction. Planning never depends on agent processing,
@@ -186,6 +194,12 @@ generation/tool turns and static correction message. Prompt and tool description
 protocol; Runner's post-return validation remains the closed safety fallback. Worker ready-time ordering prevents an
 older requeued Job from winning solely by creation age, and bounded Job diagnostics no longer depend on cloud log
 retention. No API, Schema, family boundary, confirmation transaction or model grading authority changes.
+
+`BUG-SPEC-20260923-EMPTY-PROPOSAL-QUALITY-01` separates the persisted subject catalogue from the bounded model
+analysis catalogue, adds a projected-proposal non-empty invariant and prevents model prose from impersonating
+runtime diagnostics. A learning-owned, row-locked repair transition can move only explicitly targeted legacy empty
+pending proposals to the existing failed/retry state while retaining proposal/media. It defaults to dry-run and
+requires family plus Submission IDs for apply; no schema, public API, UI state or confirmation transaction changes.
 
 `SPEC-20260919-ARK-CONTEXT-REUSE-01` adds only a bounded transport policy inside the existing Ark Provider.
 The Provider, rather than Worker/Runner/domain code, owns `store`, `previous_response_id`, expiry and deletion.

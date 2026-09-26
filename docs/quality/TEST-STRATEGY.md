@@ -19,6 +19,17 @@
   dynamic schema paths. Integration must drive retryable output/transport/budget failures
   to exactly three durable Job attempts, capability/input failures to one, and retain SQL uncertainty, cancellation,
   late-result and readiness behavior.
+- Analysis proposal quality: deterministic tests must prove configured/analysis subject separation, unconfigured
+  preset recognition, same-loop correction for empty proposals and model-authored runtime claims, three-attempt
+  durable exhaustion, non-empty guarded writeback, and dry-run/idempotent/tenant-scoped legacy repair. Release also
+  requires the fixed deidentified 40-case live Ark gate: 12 Chinese, 12 mathematics, 12 English and 4 multi-subject
+  cases, at least 30 rendered images, scheduled in a deterministic Chinese/mathematics/English round-robin with one
+  multi-subject case after every three rounds. Every failure remains in the end-to-end denominator and at least 38/40
+  must pass. Subject-semantic rates exclude only the exact infrastructure terminal code `analysis_failed`; output,
+  schema, subject, evidence, empty-proposal and all other failures stay in each affected subject denominator. Every
+  subject denominator must be non-zero and at least 90%, with zero empty/remaining pending and zero formal writes.
+  Reports may contain only case IDs, static codes, attempt counts and aggregates. Missing `ARK_API_KEY` is NOT_RUN
+  and cannot be represented as 95% success.
 - Mini program: request client, formatters, state reducers and structural validator.
 - Design evidence: repository-local editable SVG/self-contained HTML, required viewport/state PNGs,
   dimensions, SHA-256 values and approval identity are checked offline; historical external-tool records
@@ -98,6 +109,14 @@ PUSH_KIDS_TEST_MYSQL_URL='mysql+pymysql://<test-user>:<password>@<host>/<isolate
 ```
 
 No live provider call is required for deterministic CI. If `ARK_API_KEY` is present, a separately marked smoke test may run and must not print requests, images, responses or the key.
+
+The BUG-027 release quality gate is stricter than ordinary CI and is run explicitly in a controlled secret-bearing
+environment. It is blocking for release even though ordinary deterministic CI remains secret-free:
+
+```bash
+PYTHONPATH=apps/api/src uv run python tools/evaluate_analysis_quality.py \
+  --cases tests/fixtures/analysis_quality/cases.json --report <private-temp-report>
+```
 
 For a controlled latency A/B, run at least two paired samples (three or more for a release decision):
 

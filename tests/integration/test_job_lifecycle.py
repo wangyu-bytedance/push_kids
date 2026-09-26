@@ -16,6 +16,11 @@ class FailingProvider:
         raise RuntimeError("provider unavailable")
 
 
+class EmptyProvider:
+    def analyze(self, _data):
+        return AnalysisProposal(summary="请确认", subject_name="数学")
+
+
 class CapturingProvider:
     def __init__(self) -> None:
         self.received = None
@@ -107,6 +112,33 @@ def test_failed_job_retries_three_times_without_exposing_provider_error(
     assert recovered.json()["error_message"] is None
 
 
+def test_empty_proposal_retries_durably_and_never_becomes_pending(
+    client, app, family_headers, child
+) -> None:
+    created = client.post(
+        "/api/v1/submissions",
+        headers=family_headers,
+        json={
+            "child_id": child["id"],
+            "occurred_at": datetime.now(UTC).isoformat(),
+            "input_text": "数学练习",
+        },
+    ).json()
+    app.state.worker.provider = EmptyProvider()
+
+    for attempt in range(1, 4):
+        assert app.state.worker.process_one() is True
+        detail = client.get(f"/api/v1/submissions/{created['id']}", headers=family_headers).json()
+        assert detail["state"] == ("failed" if attempt == 3 else "queued")
+        assert detail["state"] != "pending_confirmation"
+        with app.state.database.session_factory() as db:
+            job = db.scalar(select(AgentJob).where(AgentJob.submission_id == created["id"]))
+            job.available_at = utcnow()
+            db.commit()
+
+    assert detail["error_code"] == "analysis_output_invalid"
+
+
 def test_worker_supplies_only_confirmed_recent_context_and_active_subjects(
     client, app, family_headers, child
 ) -> None:
@@ -156,6 +188,7 @@ def test_worker_supplies_only_confirmed_recent_context_and_active_subjects(
     assert provider.received is not None
     assert "英语" in provider.received.existing_subjects
     assert "科学" not in provider.received.existing_subjects
+    assert provider.received.analysis_subjects == ["英语", "语文", "数学"]
     assert provider.received.recent_learning == []
     assert len(provider.received.same_day_learning) == 1
     assert "school" in provider.received.same_day_learning[0].name
