@@ -104,9 +104,33 @@
 
       <view class="pk-field mt4">
         <text class="lbl">学习内容</text>
-        <textarea class="pk-textarea text-input" value="{{text}}" data-field="text" bindinput="setField" maxlength="4000"
-          adjust-position="{{true}}" placeholder="可补充照片里不明显的内容，也可以直接写下今天学了什么。" placeholder-class="pk-ph"></textarea>
-        <text class="counter tnum text-counter">{{text.length}} / 4000</text>
+        <view class="voice-input-shell state-{{voiceState}}">
+          <textarea class="pk-textarea text-input" value="{{text}}" data-field="text" bindinput="setField" maxlength="4000"
+            disabled="{{voiceBusy}}" adjust-position="{{true}}" placeholder="写下今天学了什么…" placeholder-class="pk-ph"></textarea>
+          <text class="counter tnum text-counter">{{text.length}} / 4000</text>
+          <view class="voice-status" wx:if="{{voiceState !== 'idle'}}">
+            <text wx:if="{{voiceState === 'requesting_permission'}}">正在准备麦克风…</text>
+            <text wx:elif="{{voiceState === 'holding'}}">松开，转成文字</text>
+            <text wx:elif="{{voiceState === 'cancel_armed'}}">松开，取消本次</text>
+            <text wx:elif="{{voiceState === 'recognizing'}}">正在转成文字…</text>
+          </view>
+          <view class="voice-touch {{voiceBusy && voiceState !== 'holding' && voiceState !== 'cancel_armed' ? 'is-disabled' : ''}}"
+            aria-role="button" aria-label="按住录音，松开转成文字，上滑取消"
+            catchtouchstart="voiceTouchStart" catchtouchmove="voiceTouchMove"
+            catchtouchend="voiceTouchEnd" catchtouchcancel="voiceTouchCancel">
+            <view class="voice-face"><view class="ico ico-mic-pri"></view></view>
+          </view>
+        </view>
+        <view class="voice-overflow" wx:if="{{voiceOverflowOpen}}">
+          <text class="t-sub-m">待加入的语音文字</text>
+          <text class="t-cap c-ink-3 overflow-help">原内容未改变，请精简后再加入。</text>
+          <textarea class="pk-textarea overflow-input" value="{{voiceOverflowText}}" bindinput="setVoiceOverflow" maxlength="4000"
+            adjust-position="{{true}}" placeholder="编辑待加入文字" placeholder-class="pk-ph"></textarea>
+          <view class="btn-row mt2">
+            <view class="btn sm neutral" aria-role="button" aria-label="放弃待加入的语音文字" bindtap="discardVoiceOverflow">放弃</view>
+            <view class="btn sm" aria-role="button" aria-label="加入精简后的语音文字" bindtap="applyVoiceOverflow">加入文字</view>
+          </view>
+        </view>
       </view>
 
     </block>

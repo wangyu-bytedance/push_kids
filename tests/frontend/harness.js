@@ -29,6 +29,7 @@ function loadPage(entry, request, options = {}) {
       Page(value) { page = value; },
       Component(value) { component = value; },
       wx, getApp: () => app,
+      requirePlugin: options.requirePlugin || (() => { throw new Error("Plugin not configured in test"); }),
       setTimeout(fn) { timers.add(fn); return fn; },
       clearTimeout(fn) { timers.delete(fn); }
     }, { filename: file });

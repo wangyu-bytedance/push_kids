@@ -36,6 +36,12 @@ test("API base URL is build configuration and cannot be overridden from storage"
   assert.doesNotMatch(settingsSource, /apiBaseUrl|saveApiUrl|开发环境服务地址|保存地址/);
 });
 
+test("voice input avoids unsupported app.json microphone permission declarations", () => {
+  const app = JSON.parse(source("app.json"));
+
+  assert.equal(app.permission && app.permission["scope.record"], undefined);
+});
+
 test("parent-facing actions guide an unconfigured family without pretending the app failed", () => {
   const uiSource = userInterfaceSource();
 
@@ -124,7 +130,7 @@ test("record entry is unified and history is disclosed at the bottom", () => {
   assert.doesNotMatch(records, />拍照记录<|>文字记录</);
   assert.match(records, /id="record-history"/);
   assert.match(records, /aria-expanded="\{\{historyExpanded\}\}"/);
-  assert.match(records, /可补充照片里不明显的内容，也可以直接写下今天学了什么。/);
+  assert.match(records, /写下今天学了什么…/);
   assert.match(records, /添加照片或文字后继续/);
   assert.match(records, />添加学习照片</);
   assert.match(records, />拍摄或从相册选择</);

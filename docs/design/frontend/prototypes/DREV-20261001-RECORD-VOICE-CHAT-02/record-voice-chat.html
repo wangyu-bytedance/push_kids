@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>微信聊天式语音输入</title>
+  <style>
+    :root{--canvas:#faf7f0;--surface:#fffdf8;--sunken:#f3efe4;--ink:#202a25;--ink2:#4f5853;--ink3:#777d79;--line:#ebe5d7;--pine:#1f5b45;--pine-soft:#dce9e1;--sprout:#7fa65c;--cancel:#a85742;--serif:"Songti SC","Noto Serif SC",STSong,serif;--sans:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif}
+    *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;background:var(--canvas);color:var(--ink);font-family:var(--sans)}button{font:inherit}.app{position:relative;width:100vw;height:100vh;min-height:568px;overflow:hidden}.page{width:min(480px,100%);height:100%;margin:auto;padding:18px 16px 146px;overflow-y:auto}.brand{height:40px;display:flex;align-items:center;justify-content:center;gap:8px;color:var(--pine);font-family:var(--serif);font-size:18px;font-weight:700}.leaf{width:18px;height:18px;border-radius:12px 2px 12px 2px;background:var(--sprout);transform:rotate(-35deg)}.head{margin-top:14px;display:flex;align-items:center;justify-content:space-between;gap:12px}.title{font-family:var(--serif);font-size:27px;font-weight:700}.child{height:44px;padding:0 14px;border:0;border-radius:999px;background:var(--pine-soft);color:var(--pine);font-weight:700}.time-card{margin-top:18px;padding:15px;border:1px solid var(--line);border-radius:16px;background:var(--surface)}.row{display:flex;align-items:center;gap:10px}.grow{flex:1;min-width:0}.cap{color:var(--ink3);font-size:12px}.time{margin-top:3px;font-size:15px;font-weight:650}.small{height:44px;padding:0 14px;border:0;border-radius:12px;background:var(--sunken);color:var(--ink2);font-size:13px;font-weight:700}.section-label{margin-top:22px;font-size:15px;font-weight:700}.photo{margin-top:10px;height:82px;border:1px dashed #cfc7b8;border-radius:16px;background:rgba(255,253,248,.72);display:grid;place-items:center;color:var(--ink3);font-size:13px}.composer-label{margin-top:22px;font-size:15px;font-weight:700}.composer{margin-top:10px;display:grid;grid-template-columns:48px minmax(0,1fr);align-items:stretch;gap:9px}.mode{width:48px;min-height:48px;border:1px solid #c9d9ce;border-radius:14px;background:var(--surface);color:var(--pine);display:grid;place-items:center}.mic{position:relative;width:16px;height:20px}.mic:before{content:"";position:absolute;left:4px;top:0;width:8px;height:13px;border:2px solid currentColor;border-radius:8px}.mic:after{content:"";position:absolute;left:2px;top:8px;width:12px;height:8px;border:2px solid currentColor;border-top:0;border-radius:0 0 9px 9px}.keyboard{width:21px;height:16px;border:2px solid currentColor;border-radius:3px;background:repeating-linear-gradient(90deg,transparent 0 3px,currentColor 3px 4px);position:relative}.keyboard:after{content:"";position:absolute;left:3px;right:3px;bottom:2px;height:2px;background:var(--pine)}.input-shell{position:relative;min-height:132px;border:1px solid var(--line);border-radius:16px;background:var(--surface);overflow:hidden}.text{padding:14px 14px 34px;font-size:15px;line-height:1.65}.placeholder{color:#969c98}.counter{position:absolute;right:13px;bottom:10px;color:var(--ink3);font-size:12px}.hold-button{position:absolute;inset:0;border:0;background:var(--surface);color:var(--ink);font-size:16px;font-weight:750}.hold-button:active{background:#e8eee9}.voice-tip{display:block;margin-top:8px;color:var(--ink3);font-size:12px;text-align:center}.toast{position:fixed;left:50%;top:46%;transform:translate(-50%,-50%);min-width:210px;padding:18px 20px;border-radius:16px;background:rgba(31,42,37,.9);color:white;text-align:center;box-shadow:0 14px 34px rgba(20,30,25,.18);z-index:8}.toast .big{font-size:16px;font-weight:750}.toast .sub{margin-top:7px;font-size:13px;color:#e2e9e5}.toast.holding:before{content:"";display:block;width:24px;height:30px;margin:0 auto 12px;border:3px solid white;border-radius:14px}.success-toast{position:fixed;left:50%;bottom:112px;transform:translateX(-50%);padding:10px 15px;border-radius:999px;background:rgba(31,91,69,.94);color:#fff;font-size:13px;font-weight:700;z-index:8;white-space:nowrap}.history{margin-top:22px;height:56px;padding:0 15px;border:1px solid var(--line);border-radius:16px;background:var(--surface);display:flex;align-items:center;font-weight:700}.history span{margin-left:auto;color:var(--ink3)}.cta{position:fixed;left:0;right:0;bottom:0;padding:12px 16px calc(17px + env(safe-area-inset-bottom));background:linear-gradient(180deg,rgba(250,247,240,0),var(--canvas) 18%,var(--canvas));z-index:4}.cta-in{width:min(480px,100%);margin:auto}.primary{width:100%;height:48px;border:0;border-radius:16px;background:var(--pine);color:white;font-size:16px;font-weight:750}.help{margin-top:6px;color:var(--ink3);font-size:11px;text-align:center}
+    [data-state="text"] .keyboard,[data-state="text"] .hold-button,[data-state="text"] .voice-tip,[data-state="text"] .toast,[data-state="text"] .success-toast,[data-state="text"] .typed{display:none}[data-state="text"] .primary{background:#aeb8b2}[data-state="voice"] .mic,[data-state="voice"] .text,[data-state="voice"] .toast,[data-state="voice"] .success-toast{display:none}[data-state="holding"] .mic,[data-state="holding"] .text,[data-state="holding"] .success-toast{display:none}[data-state="holding"] .hold-button{background:#e8eee9;color:var(--pine)}[data-state="holding"] .voice-tip{font-weight:700;color:var(--pine)}[data-state="holding"] .primary{background:#aeb8b2}[data-state="appended"] .keyboard,[data-state="appended"] .hold-button,[data-state="appended"] .voice-tip,[data-state="appended"] .toast,[data-state="appended"] .placeholder{display:none}
+    .composer{align-items:initial}.mode{height:48px;min-height:0;align-self:end}[data-state="voice"] .primary{background:#aeb8b2}
+    @media(max-width:350px){.page{padding:12px 12px 140px}.brand{height:32px}.head{margin-top:8px}.title{font-size:24px}.time-card{margin-top:13px;padding:12px}.section-label,.composer-label,.history{margin-top:15px}.photo{height:62px}.input-shell{min-height:112px}.text{padding:12px 12px 30px}.toast{top:49%}.cta{padding-left:12px;padding-right:12px}}
+  </style>
+</head>
+<body>
+  <main class="app" data-state="text">
+    <section class="page">
+      <div class="brand"><span class="leaf"></span>知芽</div>
+      <header class="head"><div class="title">一笔一画，都算数</div><button class="child">芽芽⌄</button></header>
+      <section class="time-card"><div class="row"><div class="grow"><div class="cap">实际学习时间</div><div class="time">2026-10-01 · 20:18</div></div><button class="small">修改</button></div></section>
+      <div class="section-label">学习照片</div><div class="photo">添加学习照片 · 拍摄或从相册选择</div>
+      <div class="composer-label">学习内容</div>
+      <section class="composer">
+        <button class="mode" aria-label="切换输入方式"><span class="mic"></span><span class="keyboard"></span></button>
+        <div class="input-shell">
+          <div class="text"><span class="placeholder">写下或说出今天学了什么。</span><span class="typed">今天练习了乘法分配律。<br>还复习了用分配律进行简便计算。</span></div>
+          <span class="counter"><span class="count-zero">0</span><span class="count-typed">31</span> / 4000</span>
+          <button class="hold-button">按住说话</button>
+        </div>
+      </section>
+      <span class="voice-tip">松开转成文字 · 上滑取消</span>
+      <div class="history">历史记录 <span>⌄</span></div>
+    </section>
+    <section class="toast holding"><div class="big">松开，转成文字</div><div class="sub">上滑取消本次</div></section>
+    <div class="success-toast">✓ 已转成文字，请检查</div>
+    <footer class="cta"><div class="cta-in"><button class="primary">添加照片或文字后继续</button><div class="help">提交后会先生成待确认的草稿</div></div></footer>
+  </main>
+  <script>
+    const states = new Set(["text", "voice", "holding", "appended"]);
+    const state = new URLSearchParams(location.search).get("state") || "text";
+    const app = document.querySelector(".app");
+    app.dataset.state = states.has(state) ? state : "text";
+    if (state !== "text") document.querySelector(".count-zero").style.display = "none";
+    if (state !== "appended") document.querySelector(".count-typed").style.display = "none";
+    if (state === "appended") document.querySelector(".primary").textContent = "提交整理";
+  </script>
+</body>
+</html>

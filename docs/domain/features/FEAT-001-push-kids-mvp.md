@@ -1,8 +1,13 @@
 # FEAT-001 — 家庭学习持续跟进系统 MVP
 
 - Status: `CURRENT`
-- Revision: `FEAT-STATE-20260926-EMPTY-PROPOSAL-QUALITY-04-GRAY-025`
-- Last verified: 2026-09-26（`BUG-SPEC-20260926-EMPTY-PROPOSAL-QUALITY-02` 已本地实现：后端
+- Revision: `FEAT-STATE-20261002-VOICE-INPUT-02-LOCAL`
+- Last verified: 2026-10-02（`SPEC-20261001-VOICE-INPUT-03` 已本地实现：前端 184 passed、后端
+  389 passed / 5 optional skipped，ESLint、小程序静态 15 pages/685412 bytes、Ruff check/format、Mypy、
+  架构与设计策略均通过；真实 AppID preview 650045 bytes 通过且未上传。开发者工具麦克风授权返回
+  `errno 112`；管理员补充麦克风信息并清除 compile/network 缓存后复测仍未生效，原生三视口与
+  iOS/Android 继续等待隐私指引审核/生效。
+  此前 `BUG-SPEC-20260926-EMPTY-PROPOSAL-QUALITY-02`：后端
   389 passed / 5 optional skipped、前端 170 passed、性能/E2E 3 passed，Ruff check/format、Mypy 86 files、
   ESLint、架构 checked=3、设计策略与小程序静态 15 pages/667593 bytes均通过；隔离 MySQL 5.7.44
   已从空库重跑 migration/current/check 与 5 个运行时专项。全新固定交错 40-case live Ark 完整运行
@@ -16,6 +21,8 @@
   apply 尚未执行）
 - Pending completion Spec: `specs/active/FEAT-001-ARK-CONTEXT-REUSE-FLAG.md` revision
   `SPEC-20260919-ARK-CONTEXT-REUSE-01`（默认开启的 attempt-local Ark Responses 会话续接；未部署）
+- Pending verification Spec: `specs/active/FEAT-001-VOICE-INPUT.md` revision
+  `SPEC-20261001-VOICE-INPUT-03`（本地实现和自动化已完成；平台后台、隐私与原生真机门禁未完成）
 - Previous applied Spec: `specs/completed/BUG-021-TODAY-REVIEW-PLAN-VISIBILITY.md` revision `BUG-SPEC-20260912-REVIEW-VISIBILITY-01`
 - Previous applied Spec: `specs/completed/SPEC-20260911-SETTINGS-PROFILE-MANAGER-POLISH.md` revision `SPEC-20260911-SETTINGS-PROFILE-MANAGER-POLISH-01`（frontend only）
 - Current visible contract: `docs/design/frontend/prototypes/DREV-20260919-TODAY-SOURCE-MATERIAL-01/FRONTEND-SPEC.md`
@@ -23,7 +30,7 @@
 
 ## Purpose and current behavior
 
-家长记录小学阶段孩子真实学过的内容。照片或文字创建异步分析任务；AI 只生成可编辑草稿，
+家长记录小学阶段孩子真实学过的内容。照片、手动文字或语音转成的可编辑文字创建异步分析任务；AI 只生成可编辑草稿，
 家长确认后才写入学习记录、知识点出现历史和复习计划。系统只安排已经学过的知识，不预测
 下一课，不自动批改或判断掌握。活动只进入日程、练习记录和温和提醒，不进入记忆曲线。
 
@@ -31,7 +38,7 @@
 共享 `components/primary-nav`，按状态栏和右上胶囊几何在导航中央显示唯一“芽图标 + 知芽”，内容区
 直接从各页句子式 hero 开始；确认、记录详情、家庭与设置子页继续使用微信原生标题和返回行为。
 视觉与交互基线是 PKDS-2.0（`FDB-20260913-04`），当前增量合同为
-`DREV-20260919-TODAY-SOURCE-MATERIAL-01`。HTML DREV-03 与 UX-03/UX-04 保留为评审过程的阶段性产物，
+`DREV-20261001-RECORD-VOICE-INLINE-03` 与 `DREV-20260919-TODAY-SOURCE-MATERIAL-01`。HTML DREV-03 与 UX-03/UX-04 保留为评审过程的阶段性产物，
 不参与运行。
 
 ## Current invariants
@@ -52,6 +59,12 @@
   可编辑草稿；两者共用同一份只读 mixin 与模板，展示正式总结、本次知识、原始材料和关联知识
   截至现在的复习反馈。今日和报表科目行可带日期/科目跳入；到期项回到今日反馈。浏览不写学习、
   知识、Review 或 Feedback。
+- 记录页的学习内容输入框本地实现内嵌 44px 麦克风热区：已授权时按住调用 WechatSI 单次最多
+  60 秒普通话识别，松开后只把最终结果以一个换行追加到既有 `text` 草稿。首次隐私/麦克风授权
+  完成后必须重新按住；上滑 80rpx、`touchcancel`、切孩子、离页和卸载均取消并丢弃迟到回调。
+  合并超过 4000 字时原文不变，待加入文字可编辑或放弃。音频、临时路径和插件 payload
+  不进入业务后端、存储或日志；转写文字仅在家长主动提交后作为既有 `input_text` 进入草稿流程，
+  不写客户端日志或本地存储。Submission source、API、数据库、AI 确认和复习策略均未改变。
 - 记录详情的复习反馈读取先取最多 20 个关联 Review，再对每项执行 family-scoped、按
   `(occurred_at desc, id desc)` 稳定排序且 `LIMIT 4` 的查询；对外仍是每页 3 条与既有
   `next_before` 合同。零反馈返回空数组，失效或越界游标拒绝，不把后端错误伪装为空成功态。
@@ -315,6 +328,13 @@ BUG-010 本地实现已通过微信开发者工具 registered AppID preview 编�
 - BUG-010 的受控 Figma waiver 同样在公开生产前失效；三视口、字体放大、键盘和 iOS/Android 实机证据仍待补齐。
 
 ## Change references
+
+- 2026-10-01 — `SPEC-20261001-VOICE-INPUT-03 / DREV-20261001-RECORD-VOICE-INLINE-03`：记录页
+  新增输入框内嵌 WechatSI 语音转文字，单次最多 60 秒；结果只进入既有可编辑 `text` 草稿，不新增
+  source、API、表或音频存储。首次授权不自动续录，上滑/离页/切孩子/权限丢失取消，迟到回调按孩子
+  上下文丢弃，4000 字超限保留原文。专项 13 passed、全量前端 184 passed、后端 389 passed / 5
+  optional skipped，静态包 685412 bytes；真实 AppID preview 650045 bytes 通过、未上传。开发者工具
+  授权因目标 AppID 隐私协议未声明麦克风 scope 返回 `errno 112`；iOS/Android 真机仍为 NOT_RUN。
 
 - 2026-09-19 — `BUG-025 / BUG-SPEC-20260919-REVIEW-ONLY-CONFIRM-01`：共享草稿确认映射在没有
   新知识点分组、但存在合法复习匹配时，保留服务端原提案科目，不再把 `proposal.subject_name`

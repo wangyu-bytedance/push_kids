@@ -24,8 +24,18 @@
 .add-photo-tile { width: 100%; }
 
 /* 文字记录输入区 */
-.text-input { min-height: 320rpx; }
-.text-counter { display: block; margin-top: var(--pk-s1); text-align: right; }
+.voice-input-shell { position: relative; min-height: 184rpx; }
+.text-input { height: 184rpx; min-height: 184rpx; padding: 22rpx 112rpx 58rpx 24rpx; }
+.text-counter { position: absolute; left: 24rpx; bottom: 18rpx; z-index: 2; }
+.voice-touch { position: absolute; right: 8rpx; bottom: 4rpx; z-index: 4; display: flex; align-items: center; justify-content: center; width: 88rpx; height: 88rpx; }
+.voice-touch.is-disabled { opacity: .48; }
+.voice-face { display: flex; align-items: center; justify-content: center; width: 72rpx; height: 72rpx; border-radius: 50%; background: var(--pk-primary-tint); border: var(--pk-border-primary); }
+.voice-status { position: absolute; top: 1rpx; right: 1rpx; bottom: 1rpx; left: 1rpx; z-index: 3; display: flex; align-items: center; justify-content: center; box-sizing: border-box; padding: 24rpx 104rpx 24rpx 24rpx; border-radius: var(--pk-r-md); background: rgba(228, 237, 230, .96); color: var(--pk-primary-strong); font-size: 15px; font-weight: 500; pointer-events: none; }
+.state-cancel_armed .voice-status { background: rgba(247, 232, 226, .97); color: var(--pk-danger); }
+.state-recognizing .voice-status, .state-requesting_permission .voice-status { background: rgba(253, 251, 245, .97); color: var(--pk-ink-2); }
+.voice-overflow { margin-top: var(--pk-s2); padding: var(--pk-s3); border: 1rpx solid var(--pk-attention-line); border-radius: var(--pk-r-md); background: var(--pk-attention-bg); }
+.overflow-help { display: block; margin-top: 4rpx; }
+.overflow-input { height: 180rpx; min-height: 180rpx; margin-top: var(--pk-s2); background: var(--pk-surface); }
 .help.center { display: block; margin-top: var(--pk-s2); text-align: center; }
 .submit-row { display: block; }
 .submit-row > .btn { width: 100%; }

@@ -1,15 +1,20 @@
 # UI-001 — 家长端微信小程序
 
-- Status: `CURRENT / DEVELOPMENT_VERSION_0.1.12_UPLOADED / NATIVE_VIEWPORT_MATRIX_NOT_RUN`
+- Status: `CURRENT / VOICE_INPUT_LOCAL_VERIFIED / MICROPHONE_PRIVACY_DECLARATION_BLOCKED / DEVELOPMENT_VERSION_0.1.12_UPLOADED / NATIVE_VIEWPORT_MATRIX_NOT_RUN`
 - Related Feature: `FEAT-001`
 - Baseline: `FDB-20260913-04`
 - Engineering contract: `FEC-20260913-LOCAL-DESIGN-EVIDENCE-01`
-- Design revision: `DREV-20260919-TODAY-SOURCE-MATERIAL-01`（当前复习原题提示与原始材料弹层）
-- Current-state revision: `UI-STATE-20260919-REVIEW-ONLY-CONFIRM-02-UPLOADED`
+- Design revision: `DREV-20261001-RECORD-VOICE-INLINE-03`（记录页紧凑输入框内嵌麦克风；仅本地验证）
+- Current-state revision: `UI-STATE-20261002-VOICE-INPUT-02-LOCAL`
 - Related Spec: `specs/completed/BUG-025-REVIEW-ONLY-CONFIRM-SUBJECT.md` revision `BUG-SPEC-20260919-REVIEW-ONLY-CONFIRM-01`
   （前序：`specs/completed/BUG-023-TODAY-REVIEW-SOURCE-MATERIAL.md` revision `BUG-SPEC-20260919-REVIEW-SOURCE-01`；
   `SPEC-20260911-SETTINGS-PROFILE-MANAGER-01`、`SPEC-20260911-PRIMARY-NAV-BRAND-01`、`SPEC-20260911-TODAY-ACTIVITY-EMPTY-CTA-01`、`SPEC-20260911-RECORD-PHOTO-ADD-SOURCE-02`、`SPEC-20260911-RECORD-SIMPLIFICATION-01`、`BUG-SPEC-20260911-01`）
-- Last verified: 2026-09-19（共享确认映射已修复纯复习草稿的空科目请求：修复前专项 9 passed / 1 failed，
+- Last verified: 2026-10-02（语音输入专项 13 passed、全量前端 184 passed、后端 389 passed / 5 optional skipped，
+  ESLint、小程序静态 15 pages/685412 bytes、Ruff check/format、Mypy、架构与设计证据均通过；真实 AppID
+  preview 634.8 KB / 650045 bytes 通过且未上传。开发者工具本地调用麦克风授权返回 `errno 112`：目标
+  AppID 的隐私保护指引尚未对运行态生效；管理员补充麦克风信息后清除 compile/network 缓存复测仍返回
+  `errno 112`，因此授权与 iOS/Android 真机矩阵继续等待指引审核/生效。此前共享确认映射：
+  修复前专项 9 passed / 1 failed，
   修复后专项 10 passed、全量前端 170 passed、ESLint、小程序静态 15 pages/667593 bytes、架构与设计策略
   均通过；没有布局、文案、控件或视觉变化。真实 AppID preview PASS，包体 603182 bytes / 589.0 KB，
   `0.1.12` 开发版本已上传；原生320×568/390×844/430×932节点几何、字体放大、iOS/Android仍为NOT_RUN）
@@ -29,7 +34,7 @@
 |---|---|---|
 | 今日 | 今天，也慢慢来 | 今日到期复习、最近一次只读复习安排、今日学习、今日活动；待确认/失败提示 |
 | 日程 | 这一周，心里有数 | 周日期轨、当天时间线、出行投影、全部日程项冲突提示、过去日程灰显、FAB 新建、编辑/删除日程 |
-| 记录 | 一笔一画，都算数 | 默认展示统一照片+文字新增表单；历史在表单末尾默认折叠；展开后保留已确认/待处理/全部、搜索/半屏筛选/分页，列表进入独立记录详情页 |
+| 记录 | 一笔一画，都算数 | 默认展示照片、紧凑文字框与框内语音入口的统一新增表单；历史在表单末尾默认折叠；展开后保留已确认/待处理/全部、搜索/半屏筛选/分页，列表进入独立记录详情页 |
 | 报表 | 一点一滴，看得见 | 7/30/100 天只读概览与固定 7 点趋势微图、组件内30天分页的复习紧迫度与活跃度、可下钻科目记录 |
 | 设置 | 按你们的节奏来 | 三项基础学科、手动添加的其他科目与课外活动、活动安排、出行安排、家庭成员入口 |
 
@@ -49,6 +54,10 @@
   已有照片还可“继续分析”。补传沿用原草稿及批次票标识；失败后可重试，按钮有 loading/禁用态。
 - 记录页不再显示“新增/历史”和“拍照/文字”两组切换。照片入口与学习内容输入始终同屏；有照片走
   既有照片批次，无照片但有文字走既有 manual submission，两者皆空时只做本地校验且不发请求。
+- 学习内容框高度为 184rpx，右下角内嵌 88rpx（44px）麦克风热区。按住录音、松开转写、上滑
+  80rpx 取消；首次授权后提示重新按住，不在旧手势上自动开录。识别结果追加到同一可编辑文字框，
+  超过 4000 字时保留原文并进入独立可编辑的待加入态。录音/转写期间阻止重复录音和提交；失败、
+  无语音、拒绝权限、离页、切孩子和迟到回调均保留现有表单，手动文字始终可用。
 - 空照片状态和已有照片后的“+”使用同一个添加入口；每次均由微信原生媒体选择开放拍摄与相册。
   拍摄返回后可再次点“+”继续拍摄，相册可按剩余额度多选，所有轮次共享 9 张上限；取消、空返回或
   失败保留已有照片、学习内容、时间与提交状态，上传中不重复打开选择器。
@@ -182,7 +191,7 @@ PKDS-2.0 相对 PKDS-1.0 的可见变化：
 |---|---|---|
 | token | `apps/miniprogram/styles/tokens.wxss` | 语义色、科目色、圆角、间距、高度、动效、触控尺寸的唯一来源；含旧变量名兼容别名 |
 | 原子/组件 | `apps/miniprogram/styles/atoms.wxss` | Card / Hero / Section / Button / Pill / SubMark / Confidence / Notice / Segmented / Chips / 表单 / RowList / Timeline / WeekStrip / FAB / Metrics / PhotoUploader / 浮层四件套 / 空态 / 骨架 |
-| 图标 | `apps/miniprogram/styles/icons.wxss` | 42 个线性图标 × 6 个语义色变体（24×24 viewBox，stroke 1.8），由 `tools/gen_icon_styles.py` 生成，禁止手工编辑；TabBar 位图由 `tools/gen_tabbar_icons.py` 用同一图标语法生成 |
+| 图标 | `apps/miniprogram/styles/icons.wxss` | 43 个线性图标 × 6 个语义色变体（24×24 viewBox，stroke 1.8），由 `tools/gen_icon_styles.py` 生成，禁止手工编辑；TabBar 位图由 `tools/gen_tabbar_icons.py` 用同一图标语法生成 |
 | 页面 | `pages/*/**.wxss` | 只写本页特有几何，不重复定义 token |
 
 `apps/miniprogram/utils/ui.js` 承担纯展示派生（科目色/首字标记、活动图标映射、置信度档位、反馈文案、
@@ -208,11 +217,11 @@ PKDS-2.0 相对 PKDS-1.0 的可见变化：
 | display helpers | `apps/miniprogram/utils/ui.js` | 纯函数，无网络与业务状态 |
 | icons | `tools/gen_icon_styles.py` | 重跑产物 diff 为空（幂等） |
 | API/config | `utils/api.js`, `utils/cloud-media.js`, `config.js` | cloud env/service + callContainer + server-issued upload path；local fallback retained |
-| JS behavior | `tests/frontend` | 161 passed；包含最近复习展示、旧后端/明确空三态、首次引导边界、续页去重/错误保留/孩子切换迟到响应及既有回归 |
+| JS behavior | `tests/frontend` | 184 passed；新增语音权限、长按/上滑/松开、取消、迟到回调、错误脱敏、跨孩子隔离、4000 字边界及既有回归；拒绝无效的 `app.json permission["scope.record"]` 声明 |
 | bounded remote reads | `tests/frontend/bounded-read-pagination.test.js` | Todo 与 upcoming first/next/stale/dedup/error state、Report no-raw-waterfall contract passed |
-| static package | `tools/validate_miniprogram.py` | `MINIPROGRAM_VALID pages=15 source_bytes=656671`; no WXML method calls |
+| static package | `tools/validate_miniprogram.py` | `MINIPROGRAM_VALID pages=15 source_bytes=685412`; no WXML method calls |
 | lint | ESLint | passed |
-| WeChat DevTools | registered AppID preview | 575988-byte local preview package；调试器 0 errors；本修订面板原生几何未取得；未上传 |
+| WeChat DevTools | registered AppID preview + local authorization | 语音修订 preview 634.8 KB / 650045 bytes 通过、未上传；记录页与框内麦克风已渲染；授权返回 `errno 112 / api scope is not declared in the privacy agreement`，等待管理员补充隐私声明 |
 | changed-sheet approximate viewports | `dist/ui-preview/settings-sheet*-vp*.html` | sheet/viewer/limit 的 320/390/430 共 9 个 HTML fixture 已生成；PNG 因缺少 Playwright Chromium executable 未运行，不替代原生几何 |
 | WeChat platform API audit | `WECHAT-MINIPROGRAM-API-BASELINE.md` | compatibility/error-recovery changes proposed; not implemented |
 
@@ -240,6 +249,14 @@ guards for `callContainer`、`uploadFile` and `chooseMedia`; media permission fa
 classification and cancelable uploads are tracked by `BUG-SPEC-20260905-02` and remain unimplemented.
 
 ## Change references
+
+- 2026-10-01 — `SPEC-20261001-VOICE-INPUT-03 / DREV-20261001-RECORD-VOICE-INLINE-03`：记录页学习
+  内容框缩至 184rpx，并把 44px 麦克风热区直接嵌入右下角；WechatSI 单次 60 秒普通话识别结果只追加
+  到既有可编辑 `text` 草稿。首次授权不自动续录，上滑取消、离页/切孩子和迟到回调均不污染表单；
+  超过 4000 字时保留原文并允许精简待加入文字。音频、临时路径与插件 payload 不上传、不持久化、
+  不记录。专项 13 passed、全量前端 184 passed、后端 389 passed / 5 skipped，静态包 685412 bytes；
+  真实 AppID preview 650045 bytes 通过、未上传。开发者工具麦克风授权因隐私协议未声明该 scope 返回
+  `errno 112`，三视口与 iOS/Android 仍为 NOT_RUN。
 
 - 2026-09-19 — `BUG-SPEC-20260919-REVIEW-ONLY-CONFIRM-01`：确认页与待确认记录详情共用的
   `confirmPayload` 在纯复习草稿 `groups=[]` 时保留原 `proposal.subject_name`，使请求满足既有 API

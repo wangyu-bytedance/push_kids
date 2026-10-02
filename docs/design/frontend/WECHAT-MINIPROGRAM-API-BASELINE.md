@@ -1,12 +1,12 @@
 # 微信小程序平台 API 基线与改造清单
 
-- Status: `CURRENT_AUDIT / IMPLEMENTATION_PENDING_APPROVAL`
-- Revision: `WX-API-BASELINE-20260905-01`
+- Status: `CURRENT_AUDIT / PARTIAL_IMPLEMENTATION`
+- Revision: `WX-API-BASELINE-20261001-02`
 - Applies to: `apps/miniprogram`
 - Related Feature/UI: `FEAT-001` / `UI-001`
 - Related engineering contract: `FEC-20260830-01`
 - Proposed implementation Spec: `BUG-SPEC-20260905-02`
-- Last audited: 2026-09-05（静态代码与官方 API 文档；真机兼容矩阵未执行）
+- Last audited: 2026-10-01（新增 WechatSI、隐私和麦克风权限的本地实现审计；真机兼容矩阵未执行）
 
 本文只收录当前产品实际使用或近期改造需要使用的微信小程序 API。官方
 [小程序 API 总索引](https://developers.weixin.qq.com/miniprogram/dev/api/) 是参数、最低基础库、
@@ -40,9 +40,16 @@
 | `wx.getStorageSync` / `wx.setStorageSync` | `app.js` | 当前孩子选择 | 只能保存非敏感偏好；不得保存身份、fileID、图片或正文 |
 | `wx.navigateTo` / `wx.navigateBack` / `wx.switchTab` | 页面代码 | 页面与 Tab 路由 | 参数来自受控 ID；失败不得造成重复写入 |
 | `wx.showToast` / `wx.showModal` | 页面代码 | 轻提示与确认 | Toast 只作补充；关键失败需持久错误和重试入口 |
+| `wx.getPrivacySetting` / `wx.requirePrivacyAuthorize` | `pages/records/voice-input.js` | 首次语音输入前处理隐私授权 | 只在用户按住时调用；授权后等待新手势，不自动开录 |
+| `wx.getSetting` / `wx.authorize(scope.record)` / `wx.openSetting` | `pages/records/*` | 麦克风权限检查、申请与恢复 | 拒绝或不支持时保留手动文字；不透传平台原始错误 |
+| WechatSI `recordRecoManager` | `pages/records/voice-input.js` | 最多 60 秒普通话转写 | 全局唯一 manager；取消/离页/切孩子丢弃迟到结果；不使用临时音频路径 |
 
 暂不需要引入定位、通讯录、蓝牙、剪贴板、支付、分享、广告、扫码或本地持久文件 API。新增这些能力
 必须先有已批准的 Feature/Design/Privacy 范围，不能因为总索引提供了 API 就直接接入。
+
+WechatSI 当前按官方示例声明 `version=0.3.1`、`provider=wx069ba97219f66d99`。公开文档没有给出
+价格、SLA 或音频留存承诺，因此本地代码完成不等于平台可用或永久免费；目标 AppID 必须在 preview
+前核验插件准入、当前版本/条款和隐私指引。业务后端不接收原始音频、临时路径或插件响应。
 
 ## 3. 当前需要改造的代码
 
@@ -109,6 +116,7 @@
 | `TP-API-006` | Storage、日志、错误、埋点不含 OpenID、fileID、图片和儿童正文 |
 | `TP-API-007` | `npm test`、`npm run lint:miniapp`、`tools/validate_miniprogram.py` |
 | `TP-API-008` | iOS、Android、DevTools 在 320×568、390×844、430×932 的相关状态证据 |
+| `TP-API-009` | 首次隐私/麦克风授权后不自动开录；拒绝、上滑取消、touchcancel、60 秒、通话/后台/弱网可恢复 |
 
 以上改造会影响兼容提示、权限失败、表单错误和上传取消等可见状态。开始编码前必须批准
 `BUG-SPEC-20260905-02`；如新增可见布局或交互超出现有设计契约，还需批准对应 Design Revision。
