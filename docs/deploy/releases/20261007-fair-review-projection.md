@@ -58,3 +58,30 @@ CLI实时日志反复出现`TopicNotExist`；在独立确认normal后结束CLI�
 
 后端488通过、MySQL24通过、前端200通过、四组规模/迁移/静态检查结果与限制见
 `docs/quality/evidence/FAIR-REVIEW-PROJECTION-20261007.md`。
+
+## 生产备份后继续执行（2026-10-07）
+
+管理员通过控制台截图确认`flask-ik19-026`为线上版本、服务正常，并在本会话确认
+“数据库已经备份好了”。备份ID与隔离恢复演练记录未进入聊天或仓库；此处仅记录管理员确认。
+迁移前再次只读确认生产为`20260913_0014`、111条Review、2个家庭，026为`normal`。
+
+使用现有受控迁移账号执行Alembic`0014→0015→0016→0017→0018`；`alembic current`
+为`20261007_0018 (head)`，`alembic check`为`No new upgrade operations detected`。
+迁移后只读校验111条Review对应111条队列投影，逐字段差异0、孤儿0，8个预期同步触发器全部存在。
+未执行降级或历史事实改写。旧兼容版本在迁移后继续承载线上流量。
+
+冻结新策略包`dist/fair-feature-20261007`的103个文件逐项SHA-256核验通过，manifest摘要
+`44c451bdbccbc567fe901af0e9987208256ecc2cdcf915466261a8dc07b4e5b3`。
+当前源码重新运行unit/integration/contract为488 passed、19 skipped；Ruff、format、Mypy、
+架构及设计证据检查PASS。直接运行`uv`因沙盒拒绝读取其全局cache而未执行，改用同一项目
+`.venv`内的工具完成上述检查；未把`uv`失败记录成测试失败。
+
+从冻结包执行`wxcloud run:deploy`，确认表逐项核对AppID、环境、服务、GRAY、Dockerfile、
+目标目录`.`、端口8000与备注`push-kids-20261007-fair02-projection-0018`，输入yes。
+平台创建`flask-ik19-027`（17:47:40），独立`version:list`显示17:50:21达到`normal`；
+`service:list`显示服务`normal`、PUBLIC关闭。`--detach`上传没有返回逐文件解压日志，
+实际上传清单观察仍为NOT_RUN，需在控制台核对后才能分配灰度流量。
+
+本地微信开发者工具中现有前端重试复习条目仍显示404对应的旧提示，证明不能把027的
+`normal`直接等同于真实小程序请求已命中027。真实AppID的live/ready、复习条目业务smoke、
+灰度指标、全量切流和原生三视口验收均为NOT_RUN；回退目标是仍正常的026。
