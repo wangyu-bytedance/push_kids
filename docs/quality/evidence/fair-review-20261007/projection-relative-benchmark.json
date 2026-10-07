@@ -1,0 +1,65 @@
+{
+  "assumptions": "30-minute selected_candidates; five samples; SQLite ANALYZE for both algorithms; no production data",
+  "runs": [
+    {
+      "dialect": "sqlite",
+      "size": 10000,
+      "timings": {
+        "old8214557": [
+          6.44,
+          2.73,
+          2.56,
+          2.66,
+          2.63
+        ],
+        "projection": [
+          12.51,
+          6.43,
+          5.59,
+          5.96,
+          5.33
+        ]
+      }
+    },
+    {
+      "dialect": "sqlite",
+      "size": 50000,
+      "timings": {
+        "old8214557": [
+          5.07,
+          2.89,
+          13.89,
+          3.38,
+          3.2
+        ],
+        "projection": [
+          16.73,
+          10.13,
+          9.04,
+          8.81,
+          8.69
+        ]
+      }
+    },
+    {
+      "dialect": "mysql",
+      "size": 10000,
+      "timings": {
+        "old8214557": [
+          141.97,
+          126.4,
+          175.54,
+          132.54,
+          121.62
+        ],
+        "projection": [
+          123.73,
+          143.84,
+          128.57,
+          139.53,
+          122.71
+        ]
+      }
+    }
+  ]
+}

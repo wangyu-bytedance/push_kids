@@ -103,7 +103,10 @@ MySQL RR交错、迁移回填/重建、1万/5万条及130科目固定SQL/1268候
 MySQL5.7相关查询显式使用科目索引，并把等值关联列包含在排序前缀，避免filesort扫描整个科目。
 所有派生表内层的Subject/Queue读取都在物化路径使用FOR UPDATE，验证旧RR快照也可发现新增科目。
 
-后端488通过，独立MySQL24通过；四组10k/50k规模均通过500ms门槛，5万MySQL最大296ms。
+后端488通过，独立MySQL24通过；四组10k/50k规模均通过500ms门槛，首轮5万MySQL最大296ms。
+最终候选字段/实际预算优化后后端+SQLite规模490通过，MySQL公平性/RR再跑13通过，最终5万MySQL最大163ms。
+剩余池按实际分钟预算限制top-K（默认120），科目覆盖与预约仍保留原上限；随机全事实对照40组通过。
 旧业务兼容包在0014/0018均通过schema校验、拒绝unknown；两种本地容器健康/非root/SIGTERM通过。
 完整证据与尚未完成的生产/原生门禁见 `docs/quality/evidence/FAIR-REVIEW-PROJECTION-20261007.md`。
 本Spec保留active/VERIFYING，不能把兼容过渡版本当作新策略已上线。
+当前云托管返回ResourceInUse，本次没有新不可变版本；等待管理员处理已有发布任务后继续灰度、备份和迁移。

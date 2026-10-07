@@ -1,0 +1,91 @@
+{
+  "assumptions": "Authorized current child snapshot, read-only transaction; no new intake, 28 generated days, hypothetical all/half/no feedback; not historical replay. IDs and content never persisted.",
+  "items": 78,
+  "budget_minutes": 30,
+  "results": [
+    {
+      "subjects": 3,
+      "completion": "all",
+      "policy": "old-v1",
+      "days": 28,
+      "missing_subject_days": 3,
+      "initial_first_never_offered": 0,
+      "initial_first_never_reviewed": 0,
+      "max_wait_plan_days": 3,
+      "p95_wait_plan_days": 2,
+      "selected_minutes": 546,
+      "duplicates": 0,
+      "over_budget_days": 0
+    },
+    {
+      "subjects": 3,
+      "completion": "all",
+      "policy": "fair-v2",
+      "days": 28,
+      "missing_subject_days": 0,
+      "initial_first_never_offered": 0,
+      "initial_first_never_reviewed": 0,
+      "max_wait_plan_days": 3,
+      "p95_wait_plan_days": 2,
+      "selected_minutes": 546,
+      "duplicates": 0,
+      "over_budget_days": 0
+    },
+    {
+      "subjects": 3,
+      "completion": "half",
+      "policy": "old-v1",
+      "days": 28,
+      "missing_subject_days": 9,
+      "initial_first_never_offered": 0,
+      "initial_first_never_reviewed": 0,
+      "max_wait_plan_days": 7,
+      "p95_wait_plan_days": 5,
+      "selected_minutes": 803,
+      "duplicates": 0,
+      "over_budget_days": 0
+    },
+    {
+      "subjects": 3,
+      "completion": "half",
+      "policy": "fair-v2",
+      "days": 28,
+      "missing_subject_days": 0,
+      "initial_first_never_offered": 0,
+      "initial_first_never_reviewed": 0,
+      "max_wait_plan_days": 5,
+      "p95_wait_plan_days": 4,
+      "selected_minutes": 812,
+      "duplicates": 0,
+      "over_budget_days": 0
+    },
+    {
+      "subjects": 3,
+      "completion": "none",
+      "policy": "old-v1",
+      "days": 28,
+      "missing_subject_days": 13,
+      "initial_first_never_offered": 8,
+      "initial_first_never_reviewed": 13,
+      "max_wait_plan_days": 27,
+      "p95_wait_plan_days": 24,
+      "selected_minutes": 827,
+      "duplicates": 0,
+      "over_budget_days": 0
+    },
+    {
+      "subjects": 3,
+      "completion": "none",
+      "policy": "fair-v2",
+      "days": 28,
+      "missing_subject_days": 0,
+      "initial_first_never_offered": 0,
+      "initial_first_never_reviewed": 13,
+      "max_wait_plan_days": 15,
+      "p95_wait_plan_days": 11,
+      "selected_minutes": 832,
+      "duplicates": 0,
+      "over_budget_days": 0
+    }
+  ]
+}
