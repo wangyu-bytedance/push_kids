@@ -19,6 +19,7 @@ from push_kids.persistence.models import (
 )
 from push_kids.planning.inventory import inventory_page, preview_reviews
 from push_kids.planning.plan_candidates import load_candidates
+from push_kids.planning.selection import select_daily_reviews
 from push_kids.planning.service import PlanningService
 from push_kids.platform.config import Settings
 from push_kids.platform.database import Database
@@ -111,6 +112,11 @@ def test_real_candidates_cover_subjects_beyond_global_120_and_are_stable(scope):
         ids = seed(db, family, cid)
         candidates = load_candidates(db, family, cid, local_date())
         assert len(candidates) <= 1268
+        for budget in (1, 5, 30, 120):
+            bounded = load_candidates(db, family, cid, local_date(), candidate_budget=budget)
+            assert select_daily_reviews(bounded, budget_minutes=budget) == select_daily_reviews(
+                candidates, budget_minutes=budget
+            )
         first = PlanningService.daily_review_selection(db, family, cid)
         assert len(first["sessions"]) == 3
         assert first["planned_minutes"] == 30
