@@ -12,7 +12,7 @@ from push_kids.platform.config import Settings
 
 
 class Database:
-    expected_cloud_revision = "20260913_0014"
+    expected_cloud_revision = "20261006_0015"
 
     _local_read_indexes = {
         "ix_learning_submissions_family_child_state_created_id",

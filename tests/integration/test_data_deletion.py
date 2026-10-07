@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import json
-from datetime import date, time
+from datetime import date, time, timedelta
 
 import pytest
 from fastapi.testclient import TestClient
@@ -10,6 +10,7 @@ from push_kids.persistence.models import (
     ActivityRecord,
     ActivitySchedule,
     AgentJob,
+    AnalysisStageResult,
     CalendarEvent,
     CalendarEventRequest,
     Child,
@@ -130,6 +131,18 @@ def _seed_child_owned_rows(app, family_id: str, child_id: str) -> tuple[dict, ob
         )
         db.add_all([submission_media, job, submission_request, record, knowledge])
         db.flush()
+        checkpoint = AnalysisStageResult(
+            family_id=family_id,
+            child_id=child_id,
+            submission_id=submission.id,
+            job_id=job.id,
+            unit_key="t",
+            revision="synthetic",
+            fingerprint="a" * 64,
+            payload="{}",
+            expires_at=utcnow() + timedelta(hours=24),
+        )
+        db.add(checkpoint)
         occurrence = KnowledgeOccurrence(
             family_id=family_id,
             knowledge_item_id=knowledge.id,
@@ -201,6 +214,7 @@ def _seed_child_owned_rows(app, family_id: str, child_id: str) -> tuple[dict, ob
                 media,
                 submission_media,
                 job,
+                checkpoint,
                 submission_request,
                 record,
                 knowledge,

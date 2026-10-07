@@ -359,6 +359,26 @@ class SubmissionMedia(Base):
     created_at = Column(UTCDateTime(), nullable=False, default=utcnow)
 
 
+class AnalysisStageResult(Base):
+    __tablename__ = "analysis_stage_results"
+    __table_args__ = (
+        UniqueConstraint("family_id", "job_id", "unit_key", name="uq_analysis_stage_unit"),
+        Index("ix_analysis_stage_scope", "family_id", "child_id", "submission_id"),
+        Index("ix_analysis_stage_expiry", "expires_at", "id"),
+    )
+    id = Column(String(36), primary_key=True, default=new_id)
+    family_id = Column(String(80), nullable=False)
+    child_id = Column(String(36), ForeignKey("children.id"), nullable=False)
+    submission_id = Column(String(36), ForeignKey("learning_submissions.id"), nullable=False)
+    job_id = Column(String(36), ForeignKey("agent_jobs.id"), nullable=False)
+    unit_key = Column(String(40), nullable=False)
+    revision = Column(String(40), nullable=False)
+    fingerprint = Column(String(64), nullable=False)
+    payload = Column(Text, nullable=False)
+    created_at = Column(UTCDateTime(), nullable=False, default=utcnow)
+    expires_at = Column(UTCDateTime(), nullable=False)
+
+
 class AgentJob(Base):
     __tablename__ = "agent_jobs"
     __table_args__ = (UniqueConstraint("submission_id", name="uq_job_submission"),)

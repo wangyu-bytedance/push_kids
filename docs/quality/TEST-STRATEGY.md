@@ -30,6 +30,15 @@
   subject denominator must be non-zero and at least 90%, with zero empty/remaining pending and zero formal writes.
   Reports may contain only case IDs, static codes, attempt counts and aggregates. Missing `ARK_API_KEY` is NOT_RUN
   and cannot be represented as 95% success.
+- Staged analysis (`BUG-028`): provider tests cover transport/HTTP/auth/incomplete/schema categories, absolute
+  deadlines and process concurrency. Durable tests cover validated cache reuse, poison-cache rejection,
+  full candidate/source coverage, manual confirmation/cancel/TTL/deletion, and late-result guards. MySQL 5.7
+  specifically overlaps checkpoint save with manual confirmation and checks recovery/indexes. Live tools default
+  to the staged factory; the original 40-case gate is supplemented by 24 reproducible multi-photo cases repeated
+  three times. Source/subject checks are automated; neither these nor historical name overlap constitute independent
+  human semantic truth. Historical replay reads one authorized family in a read-only transaction, excludes
+  knowledge created after the submission, omits unversioned present-day Todo state, cleans temporary images and
+  reports only case aliases/metrics. Interrupted/failed runs remain in evidence and cannot be silently replaced.
 - Mini program: request client, formatters, state reducers and structural validator.
 - Design evidence: repository-local editable SVG/self-contained HTML, required viewport/state PNGs,
   dimensions, SHA-256 values and approval identity are checked offline; historical external-tool records

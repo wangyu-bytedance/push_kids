@@ -764,6 +764,69 @@ def test_provider_refuses_to_start_after_attempt_deadline():
         )
 
 
+def test_legacy_incident_budget_and_reference_failure_restart_all_work(monkeypatch, caplog):
+    clock = [1000.0]
+    calls = []
+    searches = []
+    monkeypatch.setattr(providers_module, "monotonic", lambda: clock[0])
+    caplog.set_level(logging.INFO, logger="push_kids.analysis")
+    invalid = item("分数")
+    invalid["context_used"] = ["unavailable-record"]
+
+    def respond(**kwargs):
+        turn = len(calls) % 3
+        calls.append(kwargs["timeout"])
+        clock[0] += (110.677, 81.092, 77.793)[turn]
+        if turn == 0:
+            return SimpleNamespace(
+                output_text="",
+                output=[
+                    {
+                        "type": "function_call",
+                        "name": "search_history_items",
+                        "call_id": "synthetic-call",
+                        "arguments": json.dumps(
+                            {
+                                "queries": [
+                                    {
+                                        "candidate_key": "分数",
+                                        "subject_name": "数学",
+                                        "keywords": ["分数"],
+                                    }
+                                ]
+                            },
+                            ensure_ascii=False,
+                        ),
+                    }
+                ],
+            )
+        if turn == 1:
+            return SimpleNamespace(output_text=json.dumps(result(invalid)), output=[])
+        raise TimeoutError("synthetic provider timeout")
+
+    def search(request):
+        searches.append(request)
+        clock[0] += 0.438  # Account for the rest of the attempt outside model calls.
+        return []
+
+    provider = object.__new__(ArkAnalysisProvider)
+    provider.model = "synthetic"
+    provider.client = SimpleNamespace(responses=SimpleNamespace(create=respond))
+    for attempt in (1, 2):
+        with pytest.raises(DependencyError):
+            provider.analyze_with_history(
+                AnalysisInput(text="分数", existing_subjects=["数学", "语文"]),
+                search,
+                max_turns=8,
+                deadline=clock[0] + 270,
+                trace=AnalysisTrace(job_id="synthetic-incident", attempt=attempt),
+            )
+    assert calls == pytest.approx([270, 158.885, 77.793] * 2, abs=0.002)
+    assert len(searches) == 2  # Both attempts repeat the already successful history step.
+    assert "validation_codes=context.reference" in caplog.text
+    assert "remaining_time_ms=0" in caplog.text
+
+
 def test_trace_normalizes_dynamic_validation_paths(caplog):
     caplog.set_level(logging.INFO, logger="push_kids.analysis")
     trace = AnalysisTrace(job_id="job-safe", attempt=1)

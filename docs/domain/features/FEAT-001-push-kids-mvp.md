@@ -1,6 +1,11 @@
 # FEAT-001 — 家庭学习持续跟进系统 MVP
 
 - Status: `CURRENT`
+- Local analysis change under verification: `BUG-SPEC-20261006-STAGED-ANALYSIS-01` — default provider
+  changed to bounded per-material extraction, consolidation, server-owned history lookup and alias matching.
+  Successful stage DTOs resume across retries; cancellation/manual confirmation/delete clean temporary data.
+  This does not describe a deployed release. Evidence and remaining quality gates are in
+  `specs/active/BUG-028-STAGED-ANALYSIS-RELIABILITY.md`.
 - Revision: `FEAT-STATE-20261002-VOICE-INPUT-02-LOCAL`
 - Last verified: 2026-10-02（`SPEC-20261001-VOICE-INPUT-03` 已本地实现：前端 184 passed、后端
   389 passed / 5 optional skipped，ESLint、小程序静态 15 pages/685412 bytes、Ruff check/format、Mypy、
@@ -109,13 +114,20 @@
   仍走单科目路径；`ConfirmationResult` 保留 `record_id`/`subject_id` 并新增 `records[]`。
 - 活动从既有活动记录入口保存。历史 activity Review 保留但退出 Todo、带练、AI Todo 候选、
   手动/匹配反馈和复习统计；原有活动记录、日程、练习频次与建议不变，历史学习记录不重写。
-- AI 首轮输入包含本次图片/完整文字、实际发生时间、已填写年级、最多30个已配置学习科目，以及由这些
+- 旧Agent对照路径首轮输入包含本次图片/完整文字、实际发生时间、已填写年级、最多30个已配置学习科目，以及由这些
   科目加缺失系统预设 `语文/数学/英语` 组成的稳定去重分析科目集合（最多33个）。严格输出 Schema 与
   history tool 科目 enum 使用分析科目；确认仍只信任服务端科目目录，未配置预设科目仍需家长明确同意。
   输入还包含目标上海
   自然日内最多200个已确认条目，以及发生日为今天时的完整 `today_review_plan`；不一次性加载历史
   LearningRecord 或 KnowledgeItem。今日计划和历史候选都只是匹配上下文，不是本次已复习的证据。
-- 未由同日/今日计划匹配的每个候选，模型先生成关键词调用 `search_history_items`。工具由服务端注入
+- 当前本地默认：逐材料最多并发2，精确重复图片保留首图编号；必要时最多两组相邻页联合补充。
+  合并必须完整覆盖每个提取候选，最多20项，不允许漏材料后成功。服务端对合并后的每个名称执行
+  family/child/subject限定历史查询，再让模型只返回短别名；规范名称、数据库ID和证据由服务端装配。
+  所有新阶段使用 `store=false`、显式关闭思考、45秒提取/30秒合并匹配上限，并服从整个租约预算。
+  仅已验证阶段DTO进入24小时临时表，成功、取消、人工确认及家庭/孩子清理即删除；失败阶段不产生
+  部分可确认草稿。原公开proposal、家长确认、计划策略和手动路径保持原合同。
+- 以下旧Agent传输流程仅保留作对照工具和回归测试消费者，不是当前默认工厂行为：
+  未由同日/今日计划匹配的每个候选，模型先生成关键词调用 `search_history_items`。工具由服务端注入
   family/child，只允许指定分析科目；未配置预设科目安全返回空历史，使用每 Item 最多32个确定性
   exact/token/n-gram 索引词；单次
   最多20项；一次工具调用以 `queries[1..20]` 批量提交当前全部未匹配候选，每个 query 仍计一次逻辑调用，
@@ -129,12 +141,13 @@
   未完成同名查询的 new 候选，Provider 在当前 Agent loop 内返回静态纠错说明，允许补查后重出完整 JSON，
   而不是立即升级为完整 Job attempt。Provider 不支持/遗漏回调时 Runner 仍保留最终拒绝防线。
   工具/时间/轮次耗尽或语义不确定时不能猜成新知识。
-- Ark 多轮传输默认启用 attempt-local Responses 会话续接：首轮 `store=true` 且 `expire_at` 最多10分钟，
+- 旧Ark对照Provider多轮传输启用 attempt-local Responses 会话续接：首轮 `store=true` 且 `expire_at` 最多10分钟，
   后续轮只通过 `previous_response_id` 发送新增工具结果或校验修正，终态 best-effort 删除本次 response。
   `ARK_CONTEXT_CACHE_ENABLED=false` 回退到 `store=false` 完整累计输入重发；它不能关闭 Ark 对当前模型
   自动启用的隐式前缀缓存。两种模式每轮都保留 strict JSON Schema，不发送显式 `caching`，response ID
   只存在于单次 Provider 调用内，不跨 Job/retry/家庭/孩子，也不写数据库或日志。
-- 部署规则在 `agent_processing/prompt.py` 以 `child-aware-history-agent-20260923-08` 版本化，不读取
+- 旧Provider规则在 `agent_processing/prompt.py` 以 `child-aware-history-agent-20260923-08` 版本化；新规则在
+  `stage_contracts.py` 版本化，均不读取
   个人SKILL目录。Ark 必须按本次 analysis subjects 返回固定键的 strict JSON Schema，条目明确
   为 `new`、`today_review` 或 `history_item`；模型总输出最多20项、每项1–5分钟，`review_method`
   只能是主动回忆/变式练习/解释应用。条目按同科目、同目标和同动作聚合为家长可确认的短复习单元；

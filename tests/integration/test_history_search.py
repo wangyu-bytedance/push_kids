@@ -102,6 +102,31 @@ def test_history_search_is_scoped_bounded_and_includes_inactive_or_missing_revie
         assert {item.knowledge_id for item in broad}.issubset({item.id for item in knowledge_a})
         assert foreign.id not in {item.knowledge_id for item in broad}
 
+        scoped_id = search_history_items(
+            db,
+            family_id="family-a",
+            child_id=child_a["id"],
+            request=HistorySearchRequest(
+                candidate_key="不同表达",
+                subject_name="数学",
+                keywords=("完全不同",),
+                knowledge_id=knowledge_a[0].id,
+            ),
+        )
+        assert len(scoped_id) == 1 and scoped_id[0].knowledge_id == knowledge_a[0].id
+        foreign_id = search_history_items(
+            db,
+            family_id="family-a",
+            child_id=child_a["id"],
+            request=HistorySearchRequest(
+                candidate_key="不同表达",
+                subject_name="数学",
+                keywords=("完全不同",),
+                knowledge_id=foreign.id,
+            ),
+        )
+        assert foreign_id == []
+
         inactive_result = search_history_items(
             db,
             family_id="family-a",

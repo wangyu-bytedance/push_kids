@@ -7,6 +7,7 @@ from typing import Literal, Protocol
 
 from pydantic import BaseModel, ConfigDict, Field
 
+from push_kids.agent_processing.failures import StageFailure
 from push_kids.knowledge.normalization import normalize_knowledge_name
 
 MATERIAL_FINGERPRINT_KEY = "_analysis_material_fingerprint"
@@ -202,6 +203,18 @@ class AnalysisFailureDisposition:
 
 def analysis_failure_disposition(exc: Exception) -> AnalysisFailureDisposition:
     """Classify failures without inspecting provider text or coupling policy to inheritance."""
+    if isinstance(exc, StageFailure):
+        output_failure = exc.reason in {"validation", "coverage", "unreadable", "capacity"}
+        return AnalysisFailureDisposition(
+            retryable=exc.retryable,
+            code="analysis_output_invalid" if output_failure else "analysis_failed",
+            public_message=(
+                AnalysisOutputExhaustedError.public_message
+                if output_failure
+                else AnalysisTerminalError.public_message
+            ),
+            reason=exc.reason,
+        )
     if isinstance(exc, AnalysisCapabilityError):
         return AnalysisFailureDisposition(
             retryable=False,

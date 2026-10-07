@@ -1,0 +1,730 @@
+{
+  "scope": "synthetic; source and subject checks; semantic review pending",
+  "model": "doubao-seed-2-1-pro-260628",
+  "results": [
+    {
+      "case": "multi-2-distinct",
+      "repeat": 1,
+      "images": 2,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 8.05,
+      "empty": false
+    },
+    {
+      "case": "multi-2-mixed",
+      "repeat": 1,
+      "images": 2,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 8.62,
+      "empty": false
+    },
+    {
+      "case": "multi-2-duplicates",
+      "repeat": 1,
+      "images": 2,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 5.86,
+      "empty": false
+    },
+    {
+      "case": "multi-2-with_text",
+      "repeat": 1,
+      "images": 2,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 10.43,
+      "empty": false
+    },
+    {
+      "case": "multi-2-cross_page",
+      "repeat": 1,
+      "images": 2,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 13.65,
+      "empty": false
+    },
+    {
+      "case": "multi-2-dense",
+      "repeat": 1,
+      "images": 2,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 8.89,
+      "empty": false
+    },
+    {
+      "case": "multi-3-distinct",
+      "repeat": 1,
+      "images": 3,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 10.39,
+      "empty": false
+    },
+    {
+      "case": "multi-3-mixed",
+      "repeat": 1,
+      "images": 3,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 10.41,
+      "empty": false
+    },
+    {
+      "case": "multi-3-duplicates",
+      "repeat": 1,
+      "images": 3,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 7.31,
+      "empty": false
+    },
+    {
+      "case": "multi-3-with_text",
+      "repeat": 1,
+      "images": 3,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 12.51,
+      "empty": false
+    },
+    {
+      "case": "multi-3-cross_page",
+      "repeat": 1,
+      "images": 3,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 15.64,
+      "empty": false
+    },
+    {
+      "case": "multi-3-dense",
+      "repeat": 1,
+      "images": 3,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 12.52,
+      "empty": false
+    },
+    {
+      "case": "multi-6-distinct",
+      "repeat": 1,
+      "images": 6,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 17.24,
+      "empty": false
+    },
+    {
+      "case": "multi-6-mixed",
+      "repeat": 1,
+      "images": 6,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 17.23,
+      "empty": false
+    },
+    {
+      "case": "multi-6-duplicates",
+      "repeat": 1,
+      "images": 6,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 5.49,
+      "empty": false
+    },
+    {
+      "case": "multi-6-with_text",
+      "repeat": 1,
+      "images": 6,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 21.55,
+      "empty": false
+    },
+    {
+      "case": "multi-6-cross_page",
+      "repeat": 1,
+      "images": 6,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 16.71,
+      "empty": false
+    },
+    {
+      "case": "multi-6-dense",
+      "repeat": 1,
+      "images": 6,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 18.03,
+      "empty": false
+    },
+    {
+      "case": "multi-9-distinct",
+      "repeat": 1,
+      "images": 9,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 22.86,
+      "empty": false
+    },
+    {
+      "case": "multi-9-mixed",
+      "repeat": 1,
+      "images": 9,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 20.29,
+      "empty": false
+    },
+    {
+      "case": "multi-9-duplicates",
+      "repeat": 1,
+      "images": 9,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 6.42,
+      "empty": false
+    },
+    {
+      "case": "multi-9-with_text",
+      "repeat": 1,
+      "images": 9,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 26.83,
+      "empty": false
+    },
+    {
+      "case": "multi-9-cross_page",
+      "repeat": 1,
+      "images": 9,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 24.33,
+      "empty": false
+    },
+    {
+      "case": "multi-9-dense",
+      "repeat": 1,
+      "images": 9,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 26.39,
+      "empty": false
+    },
+    {
+      "case": "multi-2-distinct",
+      "repeat": 2,
+      "images": 2,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 8.06,
+      "empty": false
+    },
+    {
+      "case": "multi-2-mixed",
+      "repeat": 2,
+      "images": 2,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 6.41,
+      "empty": false
+    },
+    {
+      "case": "multi-2-duplicates",
+      "repeat": 2,
+      "images": 2,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 6.12,
+      "empty": false
+    },
+    {
+      "case": "multi-2-with_text",
+      "repeat": 2,
+      "images": 2,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 10.56,
+      "empty": false
+    },
+    {
+      "case": "multi-2-cross_page",
+      "repeat": 2,
+      "images": 2,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 9.48,
+      "empty": false
+    },
+    {
+      "case": "multi-2-dense",
+      "repeat": 2,
+      "images": 2,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 8.13,
+      "empty": false
+    },
+    {
+      "case": "multi-3-distinct",
+      "repeat": 2,
+      "images": 3,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 10.23,
+      "empty": false
+    },
+    {
+      "case": "multi-3-mixed",
+      "repeat": 2,
+      "images": 3,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 10.92,
+      "empty": false
+    },
+    {
+      "case": "multi-3-duplicates",
+      "repeat": 2,
+      "images": 3,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 5.09,
+      "empty": false
+    },
+    {
+      "case": "multi-3-with_text",
+      "repeat": 2,
+      "images": 3,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 14.76,
+      "empty": false
+    },
+    {
+      "case": "multi-3-cross_page",
+      "repeat": 2,
+      "images": 3,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 11.27,
+      "empty": false
+    },
+    {
+      "case": "multi-3-dense",
+      "repeat": 2,
+      "images": 3,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 11.81,
+      "empty": false
+    },
+    {
+      "case": "multi-6-distinct",
+      "repeat": 2,
+      "images": 6,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 16.06,
+      "empty": false
+    },
+    {
+      "case": "multi-6-mixed",
+      "repeat": 2,
+      "images": 6,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 16.29,
+      "empty": false
+    },
+    {
+      "case": "multi-6-duplicates",
+      "repeat": 2,
+      "images": 6,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 5.01,
+      "empty": false
+    },
+    {
+      "case": "multi-6-with_text",
+      "repeat": 2,
+      "images": 6,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 20.48,
+      "empty": false
+    },
+    {
+      "case": "multi-6-cross_page",
+      "repeat": 2,
+      "images": 6,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 19.79,
+      "empty": false
+    },
+    {
+      "case": "multi-6-dense",
+      "repeat": 2,
+      "images": 6,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 17.13,
+      "empty": false
+    },
+    {
+      "case": "multi-9-distinct",
+      "repeat": 2,
+      "images": 9,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 20.46,
+      "empty": false
+    },
+    {
+      "case": "multi-9-mixed",
+      "repeat": 2,
+      "images": 9,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 17.6,
+      "empty": false
+    },
+    {
+      "case": "multi-9-duplicates",
+      "repeat": 2,
+      "images": 9,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 6.46,
+      "empty": false
+    },
+    {
+      "case": "multi-9-with_text",
+      "repeat": 2,
+      "images": 9,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 29.15,
+      "empty": false
+    },
+    {
+      "case": "multi-9-cross_page",
+      "repeat": 2,
+      "images": 9,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 22.15,
+      "empty": false
+    },
+    {
+      "case": "multi-9-dense",
+      "repeat": 2,
+      "images": 9,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 30.41,
+      "empty": false
+    },
+    {
+      "case": "multi-2-distinct",
+      "repeat": 3,
+      "images": 2,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 6.72,
+      "empty": false
+    },
+    {
+      "case": "multi-2-mixed",
+      "repeat": 3,
+      "images": 2,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 8.75,
+      "empty": false
+    },
+    {
+      "case": "multi-2-duplicates",
+      "repeat": 3,
+      "images": 2,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 5.82,
+      "empty": false
+    },
+    {
+      "case": "multi-2-with_text",
+      "repeat": 3,
+      "images": 2,
+      "success": false,
+      "code": "analysis_output_invalid",
+      "attempts": 3,
+      "seconds": 9.86,
+      "empty": false
+    },
+    {
+      "case": "multi-2-cross_page",
+      "repeat": 3,
+      "images": 2,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 9.17,
+      "empty": false
+    },
+    {
+      "case": "multi-2-dense",
+      "repeat": 3,
+      "images": 2,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 8.65,
+      "empty": false
+    },
+    {
+      "case": "multi-3-distinct",
+      "repeat": 3,
+      "images": 3,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 9.76,
+      "empty": false
+    },
+    {
+      "case": "multi-3-mixed",
+      "repeat": 3,
+      "images": 3,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 11.51,
+      "empty": false
+    },
+    {
+      "case": "multi-3-duplicates",
+      "repeat": 3,
+      "images": 3,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 6.47,
+      "empty": false
+    },
+    {
+      "case": "multi-3-with_text",
+      "repeat": 3,
+      "images": 3,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 14.85,
+      "empty": false
+    },
+    {
+      "case": "multi-3-cross_page",
+      "repeat": 3,
+      "images": 3,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 13.18,
+      "empty": false
+    },
+    {
+      "case": "multi-3-dense",
+      "repeat": 3,
+      "images": 3,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 11.39,
+      "empty": false
+    },
+    {
+      "case": "multi-6-distinct",
+      "repeat": 3,
+      "images": 6,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 18.55,
+      "empty": false
+    },
+    {
+      "case": "multi-6-mixed",
+      "repeat": 3,
+      "images": 6,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 12.73,
+      "empty": false
+    },
+    {
+      "case": "multi-6-duplicates",
+      "repeat": 3,
+      "images": 6,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 6.02,
+      "empty": false
+    },
+    {
+      "case": "multi-6-with_text",
+      "repeat": 3,
+      "images": 6,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 19.12,
+      "empty": false
+    },
+    {
+      "case": "multi-6-cross_page",
+      "repeat": 3,
+      "images": 6,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 17.99,
+      "empty": false
+    },
+    {
+      "case": "multi-6-dense",
+      "repeat": 3,
+      "images": 6,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 16.73,
+      "empty": false
+    },
+    {
+      "case": "multi-9-distinct",
+      "repeat": 3,
+      "images": 9,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 23.86,
+      "empty": false
+    },
+    {
+      "case": "multi-9-mixed",
+      "repeat": 3,
+      "images": 9,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 25.0,
+      "empty": false
+    },
+    {
+      "case": "multi-9-duplicates",
+      "repeat": 3,
+      "images": 9,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 6.07,
+      "empty": false
+    },
+    {
+      "case": "multi-9-with_text",
+      "repeat": 3,
+      "images": 9,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 28.08,
+      "empty": false
+    },
+    {
+      "case": "multi-9-cross_page",
+      "repeat": 3,
+      "images": 9,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 25.71,
+      "empty": false
+    },
+    {
+      "case": "multi-9-dense",
+      "repeat": 3,
+      "images": 9,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 26.53,
+      "empty": false
+    }
+  ],
+  "formal_writes": 0,
+  "failures": {
+    "analysis_output_invalid": 1
+  }
+}

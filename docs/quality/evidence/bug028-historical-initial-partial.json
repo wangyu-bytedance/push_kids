@@ -1,0 +1,40 @@
+{
+  "model": "doubao-seed-2-1-pro-260628",
+  "scope": "read-only; no production writes; no current Todo state; lexical references only",
+  "results": [
+    {
+      "case": "case01",
+      "arm": "A",
+      "images": 3,
+      "original_failed": true,
+      "seconds": 164.55,
+      "requests": 2,
+      "input_tokens": 19067,
+      "output_tokens": 7672,
+      "queries": 3,
+      "success": true,
+      "points": 3,
+      "reference_points": 0,
+      "lexical_overlap": 0,
+      "evidence_count": 2,
+      "repeat": 1
+    },
+    {
+      "case": "case01",
+      "arm": "B",
+      "images": 3,
+      "original_failed": true,
+      "seconds": 15.83,
+      "requests": 2,
+      "input_tokens": 15897,
+      "output_tokens": 815,
+      "queries": 3,
+      "success": true,
+      "points": 3,
+      "reference_points": 0,
+      "lexical_overlap": 0,
+      "evidence_count": 2,
+      "repeat": 1
+    }
+  ]
+}

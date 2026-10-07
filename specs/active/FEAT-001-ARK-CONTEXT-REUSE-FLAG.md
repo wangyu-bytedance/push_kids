@@ -1,6 +1,9 @@
 # FEAT-001 — Ark 会话上下文复用开关
 
 - Status: `VERIFYING`
+- 2026-10-06 scope update: 已批准 `BUG-SPEC-20261006-STAGED-ANALYSIS-01` 的本地默认工厂使用
+  stateless 分阶段Provider；本开关仅影响仍被对照工具/回归测试消费的旧Provider，不影响新流程。
+  BUG-028 尚在VERIFYING，待其门禁关闭后再评价本Spec被取代的生命周期；当前无生产切换。
 - Risk: `R2 — 改变 Provider 对儿童图片/文字的远端临时存储方式、Agent 多轮请求协议和成本归属`
 - Spec owner: `产品负责人（用户）`
 - Implementer: `Codex`

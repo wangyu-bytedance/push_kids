@@ -879,4 +879,6 @@ def build_provider(settings: Settings):
         if settings.env not in {"test", "e2e"}:
             raise DependencyError("test Provider 只能在 PUSH_KIDS_ENV=test/e2e 使用")
         return DeterministicTestProvider()
-    return ArkAnalysisProvider(settings)
+    from push_kids.agent_processing.stage_provider import StagedArkProvider
+
+    return StagedArkProvider(settings)

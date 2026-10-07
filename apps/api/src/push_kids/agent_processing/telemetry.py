@@ -10,6 +10,16 @@ logger = logging.getLogger("push_kids.analysis")
 _SAFE_FIELD_NAMES: Final = frozenset(
     {
         "attempt",
+        "stage",
+        "unit",
+        "queue_ms",
+        "input_tokens",
+        "output_tokens",
+        "reasoning_tokens",
+        "http_status",
+        "checkpoint_hit",
+        "revision",
+        "request_id",
         "cached_tokens",
         "cleanup_count",
         "context_mode",

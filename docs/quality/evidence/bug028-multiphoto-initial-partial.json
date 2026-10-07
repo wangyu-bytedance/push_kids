@@ -1,0 +1,98 @@
+{
+  "scope": "synthetic; source and subject checks; semantic review pending",
+  "model": "doubao-seed-2-1-pro-260628",
+  "results": [
+    {
+      "case": "multi-2-distinct",
+      "repeat": 1,
+      "images": 2,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 8.82,
+      "empty": false
+    },
+    {
+      "case": "multi-2-mixed",
+      "repeat": 1,
+      "images": 2,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 8.42,
+      "empty": false
+    },
+    {
+      "case": "multi-2-duplicates",
+      "repeat": 1,
+      "images": 2,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 7.57,
+      "empty": false
+    },
+    {
+      "case": "multi-2-with_text",
+      "repeat": 1,
+      "images": 2,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 20.32,
+      "empty": false
+    },
+    {
+      "case": "multi-2-cross_page",
+      "repeat": 1,
+      "images": 2,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 15.56,
+      "empty": false
+    },
+    {
+      "case": "multi-2-dense",
+      "repeat": 1,
+      "images": 2,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 9.95,
+      "empty": false
+    },
+    {
+      "case": "multi-3-distinct",
+      "repeat": 1,
+      "images": 3,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 10.55,
+      "empty": false
+    },
+    {
+      "case": "multi-3-mixed",
+      "repeat": 1,
+      "images": 3,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 12.27,
+      "empty": false
+    },
+    {
+      "case": "multi-3-duplicates",
+      "repeat": 1,
+      "images": 3,
+      "success": true,
+      "code": null,
+      "attempts": 1,
+      "seconds": 6.46,
+      "empty": false
+    }
+  ],
+  "formal_writes": 0,
+  "failures": {}
+}

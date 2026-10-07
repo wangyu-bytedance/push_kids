@@ -49,8 +49,10 @@ queued --lease--> running --success--> succeeded --30d--> pruned
 - `data_management` 只拥有删除请求状态机、冻结与编排；learning/planning/activities/travel/media/children/families/notifications 各自拥有清理语义，避免 orchestration 直接写其他领域表。
 - 所有查询和清理同时以 `family_id` 限定；客户端传入 ID、页面可见性或确认文本都不承担授权。
 - notification delivery 的 child link 是 ownership 元数据，不从展示 payload 或孩子姓名反向解析。
-- 当前单一 Alembic head 为 `20260913_0014`，`Database.expected_cloud_revision` 与其一致；后续 additive
-  migrations 未改变删除请求或 purge 合同。
+- 原有删除链已验证到 `20260913_0014`；当前单一 Alembic head 以迁移目录和
+  `Database.expected_cloud_revision` 为准。BUG-028 本地新增 `20261006_0015_analysis_stages`，
+  `learning.purge_data` 调用 agent_processing checkpoint owner 清除目标家庭/孩子临时DTO，之后才删除
+  job/submission；阶段保存与最终写回验证删除冻结。该本地变更尚未部署。
 - 删除 Worker 在当前单实例 MySQL 5.7 拓扑中以有界、排序的普通 `FOR UPDATE` 事务领取一个请求；
   不使用 MySQL 8 才支持的 `SKIP LOCKED`。领取后的租约、重试、终态、审计与跨领域 purge 合同不变。
 

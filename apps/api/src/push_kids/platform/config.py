@@ -41,6 +41,7 @@ class Settings(BaseSettings):
     ark_base_url: str = Field("https://ark.cn-beijing.volces.com/api/v3", alias="ARK_BASE_URL")
     ark_model: str = Field("doubao-seed-2-1-pro-260628", alias="ARK_MODEL")
     ark_context_cache_enabled: bool = Field(True, alias="ARK_CONTEXT_CACHE_ENABLED")
+    analysis_concurrency: int = Field(2, ge=1, le=2, alias="PUSH_KIDS_ANALYSIS_CONCURRENCY")
     # Notifications stay off until a deployment supplies a real template map and key, so no
     # environment can accidentally promise WeChat reminders it cannot deliver.
     notification_channel: Literal["disabled", "recording", "wechat"] = Field(

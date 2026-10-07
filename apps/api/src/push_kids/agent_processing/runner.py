@@ -1,10 +1,12 @@
 from __future__ import annotations
 
+import asyncio
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from inspect import signature
 from time import monotonic
 
+from push_kids.agent_processing.checkpoints import StageCheckpoints
 from push_kids.agent_processing.contracts import (
     AnalysisInput,
     AnalysisOutputValidationError,
@@ -14,6 +16,7 @@ from push_kids.agent_processing.history_search import (
     HistorySearchRequest,
     search_history_items,
 )
+from push_kids.agent_processing.pipeline import StagedPipeline
 from push_kids.agent_processing.telemetry import AnalysisTrace
 from push_kids.knowledge.normalization import normalize_knowledge_name
 from push_kids.platform.database import Database
@@ -47,10 +50,12 @@ class AnalysisAgentRunner:
         child_id: str,
         trace: AnalysisTrace | None = None,
         time_budget_seconds: float | None = None,
+        checkpoints: StageCheckpoints | None = None,
     ) -> AnalysisProposal:
         trace = trace or AnalysisTrace.disabled()
         tool_aware = getattr(self.provider, "analyze_with_history", None)
-        if tool_aware is None:
+        staged = callable(getattr(self.provider, "generate_stage", None))
+        if tool_aware is None and not staged:
             # Compatibility for test doubles and a controlled rollback to the old provider.
             return data.validate_proposal(self.provider.analyze(data))
 
@@ -94,6 +99,25 @@ class AnalysisAgentRunner:
                 raise AnalysisOutputValidationError(["history_search.incomplete"])
             return proposal
 
+        if staged:
+            deadline = monotonic() + max(
+                0.0, time_budget_seconds if time_budget_seconds is not None else 270
+            )
+
+            async def run_stages():
+                async with asyncio.timeout(max(0.001, deadline - monotonic())):
+                    return await StagedPipeline(self.provider, trace, checkpoints).run(
+                        data, execute, deadline
+                    )
+
+            try:
+                return validate_final(asyncio.run(run_stages()))
+            except TimeoutError:
+                from push_kids.agent_processing.failures import StageFailure
+
+                raise StageFailure("local_deadline") from None
+
+        assert tool_aware is not None
         kwargs: dict[str, object] = {"max_turns": MAX_AGENT_TURNS}
         parameters = signature(tool_aware).parameters
         if "validate_final" in parameters:

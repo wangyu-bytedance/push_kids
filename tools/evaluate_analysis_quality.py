@@ -18,6 +18,8 @@ sys.path.insert(0, str(ROOT / "apps" / "api" / "src"))
 from PIL import Image, ImageDraw, ImageFont  # noqa: E402
 from push_kids.agent_processing.contracts import AnalysisProposal  # noqa: E402
 from push_kids.agent_processing.providers import ArkAnalysisProvider  # noqa: E402
+from push_kids.agent_processing.stage_contracts import PIPELINE_REVISION  # noqa: E402
+from push_kids.agent_processing.stage_provider import StagedArkProvider  # noqa: E402
 from push_kids.agent_processing.worker import AnalysisWorker  # noqa: E402
 from push_kids.learning.service import LearningService  # noqa: E402
 from push_kids.media.store import LocalMediaStore  # noqa: E402
@@ -356,6 +358,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--cases", type=Path, required=True)
     parser.add_argument("--report", type=Path)
+    parser.add_argument("--provider", choices=("staged", "legacy"), default="staged")
     args = parser.parse_args()
     cases = json.loads(args.cases.read_text(encoding="utf-8"))
     _validate_cases(cases)
@@ -366,7 +369,9 @@ def main() -> int:
         print(json.dumps(result, separators=(",", ":")))
         return 2
 
-    provider = ArkAnalysisProvider(settings)
+    provider = (
+        StagedArkProvider(settings) if args.provider == "staged" else ArkAnalysisProvider(settings)
+    )
     results: list[CaseResult] = []
     empty_pending_count = 0
     with tempfile.TemporaryDirectory(prefix="push-kids-quality-") as temporary:
@@ -417,6 +422,8 @@ def main() -> int:
         remaining_pending_count=remaining_pending_count,
         formal_write_count=formal_write_count,
     )
+    report["pipeline_revision"] = PIPELINE_REVISION if args.provider == "staged" else "legacy"
+    report["model"] = settings.ark_model
     encoded = json.dumps(report, ensure_ascii=False, separators=(",", ":"))
     if args.report:
         args.report.parent.mkdir(parents=True, exist_ok=True)

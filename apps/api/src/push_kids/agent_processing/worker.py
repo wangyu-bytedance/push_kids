@@ -3,6 +3,7 @@ from __future__ import annotations
 import asyncio
 import json
 import logging
+import re
 from contextlib import ExitStack, suppress
 from datetime import timedelta
 from time import monotonic
@@ -10,6 +11,7 @@ from time import monotonic
 from sqlalchemy import or_, select
 from sqlalchemy.exc import SQLAlchemyError
 
+from push_kids.agent_processing.checkpoints import StageCheckpoints, expire_stages, purge_stages
 from push_kids.agent_processing.context import (
     build_analysis_input,
     material_fingerprint,
@@ -21,11 +23,14 @@ from push_kids.agent_processing.contracts import (
     AnalysisProvider,
     analysis_failure_disposition,
 )
+from push_kids.agent_processing.failures import StageFailure
 from push_kids.agent_processing.runner import AnalysisAgentRunner
 from push_kids.agent_processing.telemetry import AnalysisTrace, safe_validation_codes
 from push_kids.media.store import MediaStore, WeChatCloudMediaStore
 from push_kids.persistence.models import (
     AgentJob,
+    Child,
+    Family,
     JobState,
     LearningSubmission,
     MediaObject,
@@ -42,12 +47,39 @@ JOB_LEASE_DURATION = timedelta(minutes=5)
 JOB_LEASE_WRITEBACK_RESERVE_SECONDS = 30
 
 
+def _lock_active_scope(db, family_id: str, child_id: str) -> bool:
+    family = db.scalar(
+        select(Family)
+        .where(Family.id == family_id)
+        .with_for_update()
+        .execution_options(populate_existing=True)
+    )
+    child = db.scalar(
+        select(Child)
+        .where(Child.id == child_id, Child.family_id == family_id)
+        .with_for_update()
+        .execution_options(populate_existing=True)
+    )
+    return (
+        (family is None or family.status == "active") and child is not None and not child.deleting
+    )
+
+
 def _safe_job_diagnostic(exc: Exception, *, code: str, reason: str) -> str:
     """Persist only bounded static categories; never provider or child content."""
     raw_codes = getattr(exc, "codes", ())
     codes = safe_validation_codes(tuple(str(item) for item in raw_codes))
     rendered_codes = ",".join(codes) or "none"
-    return f"code={code};reason={reason};validation={rendered_codes}"[:300]
+    diagnostic = f"code={code};reason={reason};validation={rendered_codes}"
+    if isinstance(exc, StageFailure):
+        safe_stage = (
+            exc.stage if exc.stage in {"extract", "group", "merge", "match"} else "pipeline"
+        )
+        safe_unit = (
+            exc.unit if re.fullmatch(r"m[1-9]|t|group[01]|merge|match", exc.unit) else "none"
+        )
+        diagnostic += f";stage={safe_stage};unit={safe_unit}"
+    return diagnostic[:300]
 
 
 class AnalysisWorker:
@@ -111,6 +143,9 @@ class AnalysisWorker:
         if monotonic() - self._last_cleanup >= 60:
             self._last_cleanup = monotonic()
             try:
+                expired_count = expire_stages(self.database)
+                if expired_count:
+                    logger.info("analysis_stage_expiry_cleanup count=%s", expired_count)
                 self._cleanup_expired_media()
             except Exception as exc:
                 logger.warning("media_cleanup_iteration_failed error_type=%s", type(exc).__name__)
@@ -173,6 +208,7 @@ class AnalysisWorker:
             # The queue round trip succeeded; provider latency is not worker failure.
             self._healthy = True
             job_id, submission_id = job.id, submission.id
+            family_id, child_id = str(submission.family_id), str(submission.child_id)
             attempt, lease = job.attempts, job.lease_until
             trace = AnalysisTrace(job_id=str(job_id or "unknown"), attempt=attempt)
             logger.info(
@@ -260,6 +296,19 @@ class AnalysisWorker:
                     )
                     if not submission.family_id or not submission.child_id:
                         raise AnalysisInputError("submission analysis scope is incomplete")
+                    checkpoints = (
+                        StageCheckpoints(
+                            self.database,
+                            submission.family_id,
+                            submission.child_id,
+                            str(submission.id),
+                            str(job_id),
+                            attempt,
+                            lease,
+                        )
+                        if callable(getattr(self.provider, "generate_stage", None))
+                        else None
+                    )
                     provider_time_budget_seconds = (
                         max(
                             0.0,
@@ -275,6 +324,7 @@ class AnalysisWorker:
                         child_id=submission.child_id,
                         trace=trace,
                         time_budget_seconds=provider_time_budget_seconds,
+                        checkpoints=checkpoints,
                     )
                     logger.info(
                         "analysis_provider_completed job_id=%s attempt=%s duration_ms=%s",
@@ -284,6 +334,7 @@ class AnalysisWorker:
                     )
 
                 stage = "writeback"
+                scope_active = _lock_active_scope(db, family_id, child_id)
                 stage_started = monotonic()
                 logger.info(
                     "analysis_writeback_started job_id=%s attempt=%s",
@@ -304,6 +355,9 @@ class AnalysisWorker:
                 )
                 if (
                     job is None
+                    or not scope_active
+                    or lease is None
+                    or lease <= utcnow()
                     or submission is None
                     or job.state != JobState.running.value
                     or job.attempts != attempt
@@ -337,6 +391,7 @@ class AnalysisWorker:
                 submission.error_code = None
                 submission.error_message = None
                 job.state = JobState.succeeded.value
+                purge_stages(db, str(submission.family_id), submission_id=submission.id)
                 db.commit()
                 logger.info(
                     "analysis_writeback_completed job_id=%s attempt=%s duration_ms=%s",
@@ -360,6 +415,7 @@ class AnalysisWorker:
                 raise
             except Exception as exc:
                 db.rollback()
+                scope_active = _lock_active_scope(db, family_id, child_id)
                 job = db.scalar(
                     select(AgentJob)
                     .where(AgentJob.id == job_id)
@@ -374,6 +430,9 @@ class AnalysisWorker:
                 )
                 if (
                     job is None
+                    or not scope_active
+                    or lease is None
+                    or lease <= utcnow()
                     or submission is None
                     or job.state != JobState.running.value
                     or job.attempts != attempt
@@ -408,7 +467,12 @@ class AnalysisWorker:
                 )
                 if disposition.retryable and (job.attempts or 0) < (job.max_attempts or 3):
                     job.state = JobState.queued.value
-                    job.available_at = utcnow() + timedelta(seconds=job.attempts or 1)
+                    delay = job.attempts or 1
+                    if isinstance(exc, StageFailure):
+                        from random import uniform
+
+                        delay = max(exc.retry_after, min(60, 2**delay) + uniform(0, 1))
+                    job.available_at = utcnow() + timedelta(seconds=delay)
                     submission.state = SubmissionState.queued.value
                 else:
                     job.state = JobState.failed.value

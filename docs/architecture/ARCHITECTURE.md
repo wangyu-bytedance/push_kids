@@ -107,6 +107,39 @@ Dependency direction is routers → services → pure policies. Infrastructure a
 
 ## Async analysis sequence
 
+### Current local staged pipeline (BUG-028; release gate still open)
+
+The production provider factory now selects `StagedArkProvider`; the cloud deployment has not been
+changed. `pipeline.py` owns fixed extraction → consolidation → scoped history search → alias matching
+stages. Each original image is extracted independently with at most two concurrent requests per job
+and process; exact duplicate image bytes retain the first original index. At most two adjacent-page
+groups (up to three images each) resolve incomplete context, with explicit source coverage. Every
+extracted candidate must occur exactly once in consolidation; the final output is capped at 20 items.
+The server resolves model aliases to canonical identities and assembles evidence. Models never copy
+database IDs or select tenant scope. Uncertain matching and missing material cannot publish partial drafts.
+
+`stage_contracts.py` owns bounded strict DTOs and instructions; `stage_provider.py` owns stateless
+`store=false`, explicit disabled thinking, stage output budgets, safe errors and whole-request async
+deadlines. Extraction requests have 45 seconds, consolidation/matching 30 seconds, within the persisted
+five-minute lease minus the 30-second writeback reserve. Successful independent extraction stages survive
+another stage's failure. `runner.py` retains the 20-query/100-result scope and completion ledger.
+
+`checkpoints.py` owns validated temporary DTOs in additive migration `20261006_0015_analysis_stages`:
+14 rows/job, 64 KiB/row, 512 KiB/job, 24-hour TTL, revision/input/model/history fingerprints. Only successful
+stage DTOs are stored; job state and safe telemetry represent failures/in-flight work. Images, raw provider
+responses and secrets are never checkpointed. Success, cancellation, manual confirmation and child/family
+purge delete the rows. Indexed expiry cleanup deletes at most 100 rows per sweep. `stage_io.py` keeps
+blocking DB work outside the event loop with four process slots and deadline-aware completion; a timed-out
+thread cannot make the caller wait during executor shutdown. Checkpoint commits recheck scope/lease/deadline.
+
+Confirmation, checkpoints and final writeback lock Family → Child → Job → Submission, then Reviews;
+writeback checks unexpired lease, attempt, state and deletion freeze. Claim order remains
+`available_at, created_at, id`. The legacy provider below is retained only for controlled evaluation and
+existing regression tests; its context-cache switch does not configure the new provider. Rollout must
+drain old consumers before enabling new workers. No production migration or deployment is authorized here.
+
+### Legacy provider used by comparison tests
+
 `agent_processing/context.py` owns bounded initial input assembly and material fingerprints; `prompt.py` owns
 deployment-versioned extraction rules. The personal Skill filesystem is not a runtime dependency. The initial
 input contains the child profile, this material, same-day confirmed knowledge and the full materialized plan,
@@ -130,10 +163,8 @@ then follows the existing retryable `analysis_output_invalid` Job policy rather 
 it cannot log child content, subjects, keywords, media paths or provider payloads. Model references are validated in contracts; learning owns final identity validation,
 occurrence deduplication and Review settlement in one transaction. Planning never depends on agent processing,
 so the graph remains acyclic.
-Confirmation locks Job → Submission → Child, then affected Reviews; Worker claims ready jobs in
-`available_at, created_at, id` order, and writes lock Job → Submission
-and verify state/attempt/lease after ending the provider-input read transaction. Manual confirmation cancels
-unfinished jobs; both late success and late failure are discarded. No new provider extension or migration.
+The legacy provider is invoked inside the same current lifecycle guards described above. Manual confirmation
+cancels unfinished jobs; both late success and late failure are discarded.
 Material fingerprints are server-owned proposal JSON metadata, preserved at confirmation and never logged. Job-only
 diagnostics persist a bounded public code/static reason/normalized validation-code tuple; Submission/API retain the
 generic parent-facing message.

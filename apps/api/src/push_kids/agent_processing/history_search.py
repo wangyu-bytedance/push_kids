@@ -27,6 +27,9 @@ class HistorySearchRequest:
     candidate_key: str
     subject_name: str
     keywords: tuple[str, ...]
+    # Server-only fallback for a same-day identity already in scoped input. The
+    # provider tool parser never accepts or supplies this field.
+    knowledge_id: str | None = None
 
 
 def knowledge_search_terms(name: str) -> list[tuple[str, str]]:
@@ -116,6 +119,31 @@ def search_history_items(
         # existing explicit subject-creation consent rule.
         return []
 
+    if request.knowledge_id is not None:
+        scoped_rows = db.execute(
+            select(KnowledgeItem, ReviewItem)
+            .outerjoin(
+                ReviewItem,
+                and_(
+                    ReviewItem.knowledge_item_id == KnowledgeItem.id,
+                    ReviewItem.family_id == family_id,
+                    ReviewItem.child_id == child_id,
+                ),
+            )
+            .where(
+                KnowledgeItem.id == request.knowledge_id,
+                KnowledgeItem.family_id == family_id,
+                KnowledgeItem.child_id == child_id,
+                KnowledgeItem.subject_id == subject.id,
+            )
+            .limit(1)
+        ).all()
+        return _contexts(
+            [(knowledge, review, 0, 1) for knowledge, review in scoped_rows],
+            subject,
+            identity_lookup=True,
+        )
+
     lookup_terms = list(
         dict.fromkeys(
             term for keyword in request.keywords for term, _kind in knowledge_search_terms(keyword)
@@ -202,6 +230,15 @@ def search_history_items(
             ).all()
         ]
 
+    return _contexts(rows, subject)
+
+
+def _contexts(
+    rows: list[tuple[KnowledgeItem, ReviewItem | None, int, int]],
+    subject: Subject,
+    *,
+    identity_lookup: bool = False,
+) -> list[ExistingKnowledgeContext]:
     return [
         ExistingKnowledgeContext(
             knowledge_id=knowledge.id,
@@ -217,7 +254,9 @@ def search_history_items(
             ),
             review_count=review.review_count if review else 0,
             state_version=review.state_version if review else None,
-            match_signals=[
+            match_signals=["scoped_identity"]
+            if identity_lookup
+            else [
                 "exact_name" if int(exact or 0) else "indexed_terms",
                 f"matched_terms:{int(count or 0)}",
             ],

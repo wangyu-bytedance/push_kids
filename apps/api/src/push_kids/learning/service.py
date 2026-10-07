@@ -12,6 +12,7 @@ from sqlalchemy import delete, func, select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
+from push_kids.agent_processing.checkpoints import purge_stages
 from push_kids.agent_processing.contracts import (
     MATERIAL_FINGERPRINT_KEY,
     AnalysisOutputExhaustedError,
@@ -53,6 +54,7 @@ from push_kids.media.store import (
 from push_kids.persistence.models import (
     AgentJob,
     Child,
+    Family,
     JobState,
     KnowledgeItem,
     KnowledgeOccurrence,
@@ -88,6 +90,7 @@ class LearningService:
 
     @classmethod
     def purge_data(cls, db: Session, family_id: str, child_id: str | None) -> None:
+        purge_stages(db, family_id, child_id)
         submission_ids = cls.deletion_submission_ids(db, family_id, child_id)
         record_query = select(LearningRecord.id).where(LearningRecord.family_id == family_id)
         if child_id is not None:
@@ -923,6 +926,7 @@ class LearningService:
         submission.error_message = None
         if job:
             job.state = JobState.cancelled.value
+        purge_stages(db, family_id, submission_id=submission.id)
         db.commit()
         media_objects = list(
             db.scalars(
@@ -1053,6 +1057,23 @@ class LearningService:
     def confirm(
         cls, db: Session, family_id: str, submission_id: str, data: ConfirmSubmission
     ) -> ConfirmationResult:
+        # Match checkpoint/deletion lock order, including conversion of a running job
+        # to manual input. Read scope first, then re-read the submission under its lock.
+        scope = cls._submission(db, family_id, submission_id)
+        family = db.scalar(
+            select(Family)
+            .where(Family.id == family_id)
+            .with_for_update()
+            .execution_options(populate_existing=True)
+        )
+        child = db.scalar(
+            select(Child)
+            .where(Child.id == scope.child_id, Child.family_id == family_id)
+            .with_for_update()
+            .execution_options(populate_existing=True)
+        )
+        if (family is not None and family.status != "active") or child is None or child.deleting:
+            raise ConflictError("家庭或孩子正在删除，不能确认记录")
         job = db.scalar(
             select(AgentJob)
             .where(
@@ -1080,11 +1101,6 @@ class LearningService:
         # The lock intentionally reads the profile without an `active` check: a draft that already
         # exists may be finished even if the profile was archived meanwhile (`BHV-025`). New intake
         # is blocked earlier, in `create_manual` / `create_photo_draft` / `create_with_photos`.
-        db.scalar(
-            select(Child)
-            .where(Child.id == submission.child_id, Child.family_id == family_id)
-            .with_for_update()
-        )
         stored_proposal = json.loads(submission.proposal_json or "{}")
         original_matches = {
             review_candidate_key(TodoCandidate.model_validate(item)): item
@@ -1237,6 +1253,7 @@ class LearningService:
         submission.error_code = None
         submission.error_message = None
         submission.confirmed_at = utcnow()
+        purge_stages(db, family_id, submission_id=submission_id)
         db.commit()
         # The flat fields describe the first record so clients built before multi-subject
         # confirmation keep working; `records` is the complete result.
