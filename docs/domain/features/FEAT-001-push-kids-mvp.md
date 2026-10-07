@@ -6,8 +6,11 @@
   Successful stage DTOs resume across retries; cancellation/manual confirmation/delete clean temporary data.
   This does not describe a deployed release. Evidence and remaining quality gates are in
   `specs/active/BUG-028-STAGED-ANALYSIS-RELIABILITY.md`.
-- Revision: `FEAT-STATE-20261002-VOICE-INPUT-02-LOCAL`
-- Last verified: 2026-10-02（`SPEC-20261001-VOICE-INPUT-03` 已本地实现：前端 184 passed、后端
+- Revision: `FEAT-STATE-20261006-SOURCE-DELETE-01-LOCAL`
+- Last verified: 2026-10-06，`SPEC-20261006-SOURCE-DELETE-02` 精确原图与单知识点删除已本地实现；
+  自动化、隔离 MySQL 5.7 与微信 preview 结果见该 Spec 的 verification record；未部署后端或发布前端。
+  原生三视口、iOS/Android 与独立人员审查仍待完成。
+- Previous verification: 2026-10-02（`SPEC-20261001-VOICE-INPUT-03` 已本地实现：前端 184 passed、后端
   389 passed / 5 optional skipped，ESLint、小程序静态 15 pages/685412 bytes、Ruff check/format、Mypy、
   架构与设计策略均通过；真实 AppID preview 650045 bytes 通过且未上传。开发者工具麦克风授权返回
   `errno 112`；管理员补充麦克风信息并清除 compile/network 缓存后复测仍未生效，原生三视口与
@@ -30,7 +33,9 @@
   `SPEC-20261001-VOICE-INPUT-03`（本地实现和自动化已完成；平台后台、隐私与原生真机门禁未完成）
 - Previous applied Spec: `specs/completed/BUG-021-TODAY-REVIEW-PLAN-VISIBILITY.md` revision `BUG-SPEC-20260912-REVIEW-VISIBILITY-01`
 - Previous applied Spec: `specs/completed/SPEC-20260911-SETTINGS-PROFILE-MANAGER-POLISH.md` revision `SPEC-20260911-SETTINGS-PROFILE-MANAGER-POLISH-01`（frontend only）
-- Current visible contract: `docs/design/frontend/prototypes/DREV-20260919-TODAY-SOURCE-MATERIAL-01/FRONTEND-SPEC.md`
+- Pending verification Spec: `specs/active/FEAT-001-PRECISE-SOURCE-AND-KNOWLEDGE-DELETION.md`
+  revision `SPEC-20261006-SOURCE-DELETE-02`（本地代码已实现；尚未满足全部原生验收与独立审查门禁）
+- Current visible contract: `docs/design/frontend/prototypes/DREV-20261006-SOURCE-DELETE-01/FRONTEND-SPEC.md`
 - Intermediate design artifact: `docs/design/frontend/prototypes/DREV-20260830-03/index.html`
 
 ## Purpose and current behavior
@@ -43,7 +48,7 @@
 共享 `components/primary-nav`，按状态栏和右上胶囊几何在导航中央显示唯一“芽图标 + 知芽”，内容区
 直接从各页句子式 hero 开始；确认、记录详情、家庭与设置子页继续使用微信原生标题和返回行为。
 视觉与交互基线是 PKDS-2.0（`FDB-20260913-04`），当前增量合同为
-`DREV-20261001-RECORD-VOICE-INLINE-03` 与 `DREV-20260919-TODAY-SOURCE-MATERIAL-01`。HTML DREV-03 与 UX-03/UX-04 保留为评审过程的阶段性产物，
+`DREV-20261001-RECORD-VOICE-INLINE-03` 与 `DREV-20261006-SOURCE-DELETE-01`。HTML DREV-03 与 UX-03/UX-04 保留为评审过程的阶段性产物，
 不参与运行。
 
 ## Current invariants
@@ -54,9 +59,19 @@
   `source_image_index`。坏 JSON、空证据和越界图片序号只降级可空展示字段，不隐藏 Todo。
   当前复习卡不再显示“出现原因”，而是按知识点显示最多两行原题提示，并仅在存在来源提交时提供
   当前页原始照片/文字弹层。照片按写入时分配的 `sort_order` 稳定排序（详情、分析取图一致）。
+  Today 精确模式在请求预览之前，仅选择 `source_submission_id + media.index` 对应照片，保留原编号，
+  隐藏混合批次的其他原文；历史详情仍展示整次提交。图片 index 必须为 1..9 的严格整数；
+  主图取首条有效图片证据，摘要取同条描述。旧 evidence 必须能在来源提交确认提案中证明归属；
+  不能证明时清空关联，不猜第一张，不回退全批。缺少来源 ID 的旧文字摘要保留但不提供原图入口。
+  后续同知识确认不再为首次来源补入其他提交的 evidence。
   正式知识点保存机器识别的 `confidence` 与 `evidence`（仅识别可靠度与出处，不表示掌握程度），
   首次确认写入后不被后续确认覆盖；本次修订之前的历史数据没有这两个字段。科目区分系统预设
   （`语文/数学/英语` 且 `kind=learning`，`is_custom=false`）与家长自建（`is_custom=true`）。
+- Today 更多菜单在“今天先跳过”下提供“删除记录”，manager/editor 经二次确认调用
+  `DELETE /children/{child_id}/knowledge/{knowledge_id}`；viewer 不显示入口且服务端拒绝写入。
+  单事务删除当前知识身份、全部出现关联、复习、反馈、搜索词和日计划关联，保留原提交、
+  原总结、共享媒体和同批其他知识。重复请求为204；错误整体回滚。日计划不补入额外项目，
+  删除物化计划之后新增的知识不减少旧计划计数；待发送复习通知在投递前按存活知识重算。
 - 历史回看已在本地实现：记录页默认展示统一照片+文字新增表单，历史位于表单末尾并默认折叠；
   普通可写用户折叠时只读取待处理数量，展开、待处理入口或今日/报表显式意图才读取完整列表，
   viewer 直接展开只读历史。已确认/待处理/全部共用分页入口；
@@ -341,6 +356,9 @@ BUG-010 本地实现已通过微信开发者工具 registered AppID preview 编�
 - BUG-010 的受控 Figma waiver 同样在公开生产前失效；三视口、字体放大、键盘和 iOS/Android 实机证据仍待补齐。
 
 ## Change references
+
+- 2026-10-06 — `SPEC-20261006-SOURCE-DELETE-02 / DREV-20261006-SOURCE-DELETE-01`：本地实现Today精确原图、
+  单知识删除、关联/计划/通知一致性；验证与未完成门禁见 `docs/quality/evidence/SOURCE-DELETE-20261006.md`。
 
 - 2026-10-01 — `SPEC-20261001-VOICE-INPUT-03 / DREV-20261001-RECORD-VOICE-INLINE-03`：记录页
   新增输入框内嵌 WechatSI 语音转文字，单次最多 60 秒；结果只进入既有可编辑 `text` 草稿，不新增

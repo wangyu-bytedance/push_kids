@@ -41,6 +41,11 @@
           </view>
           <view class="chev right"></view>
         </view>
+        <view class="fb fb-delete" wx:if="{{canWrite && item.knowledgeId}}" aria-role="button" aria-label="删除这个知识点的记录" data-review-id="{{item.reviewId}}" bindtap="deleteRecord">
+          <view class="ico ico-trash sm"></view>
+          <view class="grow"><text class="fb-t">删除记录</text><text class="fb-s">删除这个知识点及其复习安排</text></view>
+          <view class="chev right"></view>
+        </view>
         <view class="fb-cancel" aria-role="button" bindtap="closePanel">收起</view>
       </view>
     </view>

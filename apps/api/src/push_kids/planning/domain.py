@@ -50,6 +50,7 @@ class DueKnowledge:
     estimated_minutes: int
     due_date: date
     # Provenance of the Todo, supplied by the service layer; the client renders the wording.
+    knowledge_id: str | None = None
     source_submission_id: str | None = None
     source_occurred_on: date | None = None
     source_summary: str | None = None
@@ -111,6 +112,7 @@ def group_daily_todos(
                 else None,
                 "source_summary": item.source_summary,
                 "source_image_index": item.source_image_index,
+                "knowledge_id": item.knowledge_id,
                 "review_round": item.review_round,
                 "interval_days": item.interval_days,
             }

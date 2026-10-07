@@ -38,12 +38,123 @@ from push_kids.persistence.models import (
 from push_kids.planning.service import PlanningService
 from push_kids.platform.config import Settings
 from push_kids.platform.context import RequestContext, subject_hmac
+from push_kids.platform.database import Database
 from push_kids.platform.time import local_date, utcnow
 from push_kids.reporting.service import ReportingService
 from sqlalchemy import event, select
 
 MYSQL_URL = os.getenv("PUSH_KIDS_TEST_MYSQL_URL")
 pytestmark = pytest.mark.skipif(not MYSQL_URL, reason="PUSH_KIDS_TEST_MYSQL_URL is not configured")
+
+
+@pytest.mark.parametrize("materialized", [False, True])
+def test_mysql_delete_with_stale_plan_reader_and_large_history(materialized):
+    """Overlap a repeatable-read snapshot with deletion, then materialize/read the plan."""
+    assert MYSQL_URL
+    database = Database(Settings(PUSH_KIDS_ENV="test", PUSH_KIDS_DATABASE_URL=MYSQL_URL))
+    fid, cid, sid = (str(uuid4()) for _ in range(3))
+    kids = [str(uuid4()), str(uuid4())]
+    rids = [str(uuid4()), str(uuid4())]
+    now = utcnow()
+    with database.session_factory() as db:
+        db.add(Family(id=fid, display_name="isolated delete fixture"))
+        db.flush()
+        db.add(Child(id=cid, family_id=fid, name="合成孩子", daily_budget_minutes=15))
+        db.flush()
+        db.add(Subject(id=sid, family_id=fid, child_id=cid, name="数学", kind="learning"))
+        db.flush()
+        for kid in kids:
+            db.add(
+                KnowledgeItem(
+                    id=kid,
+                    family_id=fid,
+                    child_id=cid,
+                    subject_id=sid,
+                    name=kid,
+                    normalized_name=kid,
+                    category="知识点",
+                    review_method="口头回顾",
+                    estimated_minutes=1,
+                )
+            )
+        db.flush()
+        for kid, rid in zip(kids, rids, strict=True):
+            db.add(
+                ReviewItem(
+                    id=rid,
+                    family_id=fid,
+                    child_id=cid,
+                    knowledge_item_id=kid,
+                    due_date=local_date(now),
+                    active=True,
+                )
+            )
+        submission = LearningSubmission(
+            family_id=fid,
+            child_id=cid,
+            occurred_at=now,
+            source="manual",
+            input_text="合成原文",
+            state="confirmed",
+        )
+        db.add(submission)
+        db.flush()
+        record = LearningRecord(
+            family_id=fid,
+            child_id=cid,
+            subject_id=sid,
+            submission_id=submission.id,
+            occurred_at=now,
+            summary="保留总结",
+            source="manual",
+        )
+        db.add(record)
+        db.flush()
+        record_id = record.id
+        db.execute(
+            KnowledgeOccurrence.__table__.insert(),
+            [
+                {
+                    "family_id": fid,
+                    "knowledge_item_id": kids[0],
+                    "learning_record_id": record_id,
+                    "occurred_at": now,
+                }
+                for _ in range(10_000)
+            ],
+        )
+        db.commit()
+        if materialized:
+            assert PlanningService.daily_review_selection(db, fid, cid)["planned_count"] == 2
+
+    with database.session_factory() as reader:
+        stale_child = reader.get(Child, cid)
+        assert reader.get(ReviewItem, rids[0]) is not None
+        with database.session_factory() as writer:
+            PlanningService.delete_knowledge(writer, fid, cid, kids[0])
+            PlanningService.delete_knowledge(writer, fid, cid, kids[0])
+        if not materialized:
+            # This session's first ordinary SELECT preceded the deletion commit.
+            plan = PlanningService._create_daily_review_plan(
+                reader, fid, stale_child, local_date(now)
+            )
+            assert plan.due_count == 1
+        else:
+            reader.rollback()
+        actual = PlanningService.daily_review_selection(reader, fid, cid)
+        assert actual["planned_count"] == 1
+        assert actual["total_due"] == 1
+        assert actual["planned_minutes"] == 1
+        assert reader.get(LearningRecord, record_id).summary == "保留总结"
+        assert (
+            reader.scalar(
+                select(KnowledgeOccurrence.id).where(
+                    KnowledgeOccurrence.knowledge_item_id == kids[0]
+                )
+            )
+            is None
+        )
+    database.engine.dispose()
 
 
 @pytest.fixture(autouse=True)

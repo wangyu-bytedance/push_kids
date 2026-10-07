@@ -9,6 +9,12 @@ const DEFAULT_SECTIONS = { review: false, learning: false, activity: true };
 const TODO_PREVIEW = 3;
 const RING_TICKS = 12;
 
+function canWriteToday() {
+  const context = getApp().globalData;
+  const member = context.currentMember;
+  return member ? ["manager", "editor"].includes(member.role) : !context.useCloud;
+}
+
 function dayLabel(iso) {
   const parts = String(iso || "").split("-");
   if (parts.length !== 3) return "";
@@ -190,16 +196,20 @@ Page({
     loadingMoreUpcoming: false, upcomingError: "",
     showChildSheet: false, multiChild: false, canAddChild: true,
     showSourceSheet: false, sourceSheet: null,
+    canWrite: false, deleteTarget: null, deleting: false, deleteError: "",
     sectionMeta: { review: "", learning: "", activity: "" }
   },
   onShow() {
+    this.setData({ canWrite: canWriteToday() });
     const tabBar = this.getTabBar && this.getTabBar();
     if (tabBar) tabBar.setData({ selected: 0 });
     this.load();
   },
   onHide() {
     this.closeSourceSheet();
+    this.resetDelete();
   },
+  onUnload() { this.closeSourceSheet(); this.resetDelete(); },
   async onPullDownRefresh() {
     await this.load();
     if (wx.stopPullDownRefresh) wx.stopPullDownRefresh();
@@ -210,9 +220,12 @@ Page({
     this.setData({ loading: true, error: "", loadingMoreTodos: false,
       loadingMoreUpcoming: false, upcomingError: "" });
     try {
+      const app = getApp();
+      if (app.globalData.useCloud && !app.globalData.currentMember) await app.refreshBootstrap();
+      if (generation !== this.loadGeneration) return;
+      this.setData({ canWrite: canWriteToday() });
       const profiles = await api.request("/children");
       if (generation !== this.loadGeneration) return;
-      const app = getApp();
       const selection = childContext.syncSelection(app, profiles);
       const children = selection.children;
       const canAddChild = childContext.canAddChild(profiles);
@@ -402,6 +415,8 @@ Page({
     if (submissionId) wx.navigateTo({ url: `/pages/record-detail/index?id=${submissionId}` });
   },
   openSourceSheet(event) {
+    if (this.data.deleting) return;
+    this.resetDelete();
     const item = event.detail || {};
     if (!item.sourceSubmissionId) return;
     this.setData({
@@ -421,6 +436,34 @@ Page({
     if (!this.data.showSourceSheet && !this.data.sourceSheet) return;
     this.setData({ showSourceSheet: false, sourceSheet: null });
   },
+  resetDelete() {
+    this.deleteGeneration = (this.deleteGeneration || 0) + 1;
+    this.setData({ deleteTarget: null, deleting: false, deleteError: "" });
+  },
+  openDelete(event) {
+    const item = event.detail || {};
+    if (!this.data.canWrite || !item.knowledgeId || this.data.deleting) return;
+    this.closeSourceSheet();
+    this.resetDelete();
+    this.setData({ deleteTarget: { knowledgeId: item.knowledgeId, name: item.name, childId: this.data.childId } });
+  },
+  cancelDelete() { if (!this.data.deleting) this.resetDelete(); },
+  async confirmDelete() {
+    const target = this.data.deleteTarget;
+    if (!this.data.canWrite || !target || this.data.deleting || target.childId !== this.data.childId) return;
+    const generation = this.deleteGeneration;
+    this.setData({ deleting: true, deleteError: "" });
+    try {
+      await api.request(`/children/${encodeURIComponent(target.childId)}/knowledge/${encodeURIComponent(target.knowledgeId)}`, { method: "DELETE" });
+      if (generation !== this.deleteGeneration || target.childId !== this.data.childId) return;
+      this.resetDelete();
+      wx.showToast({ title: "已删除", icon: "success" });
+      await this.load();
+    } catch (error) {
+      if (generation !== this.deleteGeneration || target.childId !== this.data.childId) return;
+      this.setData({ deleting: false, deleteError: error.message || "删除失败，请重试" });
+    }
+  },
   openChildSheet() { if (this.data.children.length) this.setData({ showChildSheet: true }); },
   closeChildSheet() { this.setData({ showChildSheet: false }); },
   addChild() {
@@ -428,6 +471,7 @@ Page({
     wx.navigateTo({ url: "/pages/child-edit/index?mode=create" });
   },
   async chooseChild(event) {
+    this.resetDelete();
     const childIndex = Number(event.currentTarget.dataset.index);
     const childId = this.data.children[childIndex].id;
     getApp().selectChild(childId);
@@ -437,6 +481,7 @@ Page({
     await this.load();
   },
   async changeChild(event) {
+    this.resetDelete();
     const childIndex = Number(event.detail.value);
     const childId = this.data.children[childIndex].id;
     getApp().selectChild(childId);

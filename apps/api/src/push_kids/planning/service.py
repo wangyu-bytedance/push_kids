@@ -25,6 +25,7 @@ from push_kids.persistence.models import (
     ReviewItem,
     Subject,
 )
+from push_kids.planning.deletion import delete_knowledge
 from push_kids.planning.domain import (
     DueKnowledge,
     group_daily_todos,
@@ -57,6 +58,7 @@ def _source_evidence(payload: str | None) -> tuple[str | None, int | None]:
         return None, None
     if not isinstance(entries, list):
         return None, None
+    fallback: tuple[str | None, int | None] = (None, None)
     for entry in entries:
         if not isinstance(entry, dict) or entry.get("source") not in {"image", "parent_text"}:
             continue
@@ -72,7 +74,44 @@ def _source_evidence(payload: str | None) -> tuple[str | None, int | None]:
             and 1 <= image_index <= 9
             else None
         )
-        return detail.strip()[:200], valid_image_index
+        if valid_image_index is not None:
+            return detail.strip()[:200], valid_image_index
+        if fallback[0] is None:
+            fallback = (detail.strip()[:200], None)
+    return fallback
+
+
+def _confirmed_source_evidence(
+    payload: str | None, source_id: str | None, name: str, proposal_json: str | None
+) -> tuple[str | None, int | None]:
+    """Resolve legacy evidence only when the original confirmed proposal proves its origin.
+
+    Older confirmation could fill empty evidence from a later submission without changing the
+    review's original submission id. A valid index alone cannot establish provenance.
+    """
+    summary, index = _source_evidence(payload)
+    if not source_id:
+        return (summary, None) if index is None else (None, None)
+    if summary is None:
+        return None, None
+    try:
+        proposal = json.loads(proposal_json or "null")
+    except (TypeError, ValueError):
+        return None, None
+    points = proposal.get("knowledge_points") if isinstance(proposal, dict) else None
+    if not isinstance(points, list):
+        return None, None
+    for point in points:
+        if not isinstance(point, dict) or point.get("name") != name:
+            continue
+        evidence = point.get("direct_evidence")
+        if not isinstance(evidence, list):
+            continue
+        if any(
+            isinstance(entry, dict) and _source_evidence(json.dumps([entry])) == (summary, index)
+            for entry in evidence
+        ):
+            return summary, index
     return None, None
 
 
@@ -93,6 +132,8 @@ class PendingReviewLoad:
 
 
 class PlanningService:
+    delete_knowledge = staticmethod(delete_knowledge)
+
     @staticmethod
     def purge_data(db: Session, family_id: str, child_id: str | None) -> None:
         review_query = select(ReviewItem.id).where(ReviewItem.family_id == family_id)
@@ -341,6 +382,7 @@ class PlanningService:
                     Subject.id.label("subject_id"),
                     Subject.name.label("subject_name"),
                     LearningSubmission.occurred_at.label("source_occurred_at"),
+                    LearningSubmission.proposal_json.label("source_proposal"),
                 )
                 .outerjoin(
                     LearningSubmission,
@@ -357,7 +399,12 @@ class PlanningService:
         )
         candidates: list[ReviewSelectionCandidate] = []
         for row in rows:
-            source_summary, source_image_index = _source_evidence(row["evidence_json"])
+            source_summary, source_image_index = _confirmed_source_evidence(
+                row["evidence_json"],
+                row["source_submission_id"],
+                row["knowledge_name"],
+                row["source_proposal"],
+            )
             candidates.append(
                 ReviewSelectionCandidate(
                     review_id=str(row["review_id"]),
@@ -465,6 +512,7 @@ class PlanningService:
                     KnowledgeItem,
                     Subject,
                     LearningSubmission.occurred_at.label("source_occurred_at"),
+                    LearningSubmission.proposal_json.label("source_proposal"),
                 )
                 .join(ReviewItem, ReviewItem.id == DailyReviewPlanItem.review_item_id)
                 .join(KnowledgeItem, KnowledgeItem.id == ReviewItem.knowledge_item_id)
@@ -495,8 +543,13 @@ class PlanningService:
         pending_count = 0
         pending_minutes = 0
         all_items: list[dict] = []
-        for plan_item, review, knowledge, subject, source_occurred_at in rows:
-            source_summary, source_image_index = _source_evidence(knowledge.evidence_json)
+        for plan_item, review, knowledge, subject, source_occurred_at, source_proposal in rows:
+            source_summary, source_image_index = _confirmed_source_evidence(
+                knowledge.evidence_json,
+                review.source_submission_id,
+                knowledge.name,
+                source_proposal,
+            )
             snapshot = {
                 "plan_item_id": plan_item.id,
                 "review_id": review.id,
@@ -570,6 +623,25 @@ class PlanningService:
         child: Child,
         target: date,
     ) -> DailyReviewPlan:
+        # Serialize plan materialization with confirmation and knowledge deletion. Recheck the
+        # unique daily plan after waiting for another creator under MySQL REPEATABLE READ.
+        db.scalar(
+            select(Child)
+            .where(Child.id == child.id, Child.family_id == family_id)
+            .with_for_update()
+        )
+        existing = db.scalar(
+            select(DailyReviewPlan)
+            .where(
+                DailyReviewPlan.family_id == family_id,
+                DailyReviewPlan.child_id == child.id,
+                DailyReviewPlan.plan_date == target,
+            )
+            .with_for_update()
+        )
+        if existing is not None:
+            db.commit()
+            return existing
         due_scope = (
             ReviewItem.family_id == family_id,
             ReviewItem.child_id == child.id,
@@ -584,6 +656,7 @@ class PlanningService:
             .join(KnowledgeItem, ReviewItem.knowledge_item_id == KnowledgeItem.id)
             .join(Subject, KnowledgeItem.subject_id == Subject.id)
             .where(*due_scope)
+            .with_for_update()
         ).one()
         bounded_minutes = case(
             (KnowledgeItem.estimated_minutes < 1, 1),
@@ -602,6 +675,7 @@ class PlanningService:
                 ReviewItem.id.asc(),
             )
             .limit(DAILY_REVIEW_CANDIDATE_LIMIT)
+            .with_for_update()
         ).all()
         candidates = [
             ReviewSelectionCandidate(
@@ -735,12 +809,14 @@ class PlanningService:
                 ReviewItem.step.label("step"),
                 ReviewItem.last_reviewed_on.label("last_reviewed_on"),
                 KnowledgeItem.name.label("knowledge_name"),
+                KnowledgeItem.id.label("knowledge_id"),
                 KnowledgeItem.evidence_json.label("evidence_json"),
                 KnowledgeItem.review_method.label("review_method"),
                 minutes.label("minutes"),
                 Subject.id.label("subject_id"),
                 Subject.name.label("subject_name"),
                 LearningSubmission.occurred_at.label("source_occurred_at"),
+                LearningSubmission.proposal_json.label("source_proposal"),
             ).outerjoin(
                 LearningSubmission,
                 and_(
@@ -839,7 +915,12 @@ class PlanningService:
             rows = rows[:limit]
         items = []
         for row in rows:
-            source_summary, source_image_index = _source_evidence(row["evidence_json"])
+            source_summary, source_image_index = _confirmed_source_evidence(
+                row["evidence_json"],
+                row["source_submission_id"],
+                row["knowledge_name"],
+                row["source_proposal"],
+            )
             source_occurred_at = row["source_occurred_at"]
             source_occurred_on = (
                 local_date(source_occurred_at) if source_occurred_at is not None else None
@@ -847,6 +928,7 @@ class PlanningService:
             items.append(
                 DueKnowledge(
                     review_id=str(row["review_id"]),
+                    knowledge_id=str(row["knowledge_id"]),
                     subject_id=str(row["subject_id"]),
                     subject_name=str(row["subject_name"]),
                     knowledge_name=str(row["knowledge_name"]),
@@ -1077,7 +1159,14 @@ class PlanningService:
         }
 
     @classmethod
-    def pending_review_loads(cls, db: Session, target: date) -> list[PendingReviewLoad]:
+    def pending_review_loads(
+        cls,
+        db: Session,
+        target: date,
+        *,
+        family_id: str | None = None,
+        child_ids: set[str] | None = None,
+    ) -> list[PendingReviewLoad]:
         """Outstanding review per active child across families, for the evening digest.
 
         Only learning subjects count, matching `daily_todos`; activities never create review debt.
@@ -1099,6 +1188,8 @@ class PlanningService:
                 Subject.kind == "learning",
                 Child.active.is_(True),
                 Child.deleting.is_(False),
+                *([ReviewItem.family_id == family_id] if family_id is not None else []),
+                *([ReviewItem.child_id.in_(child_ids)] if child_ids is not None else []),
             )
             .group_by(ReviewItem.family_id, ReviewItem.child_id, Child.name, Subject.name)
             .order_by(func.count(ReviewItem.id).desc(), Subject.name)

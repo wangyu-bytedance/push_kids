@@ -1,7 +1,7 @@
 from datetime import date
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, Header, Query
+from fastapi import APIRouter, Depends, Header, Query, Response
 from sqlalchemy.orm import Session
 
 from push_kids.planning.schemas import (
@@ -16,6 +16,17 @@ from push_kids.platform.dependencies import get_db
 from push_kids.platform.time import local_date
 
 router = APIRouter(tags=["planning"])
+
+
+@router.delete("/children/{child_id}/knowledge/{knowledge_id}", status_code=204)
+def delete_knowledge(
+    child_id: str,
+    knowledge_id: str,
+    family: Annotated[str, Depends(family_id)],
+    db: Annotated[Session, Depends(get_db)],
+) -> Response:
+    PlanningService.delete_knowledge(db, family, child_id, knowledge_id)
+    return Response(status_code=204)
 
 
 @router.get("/children/{child_id}/todos")

@@ -5,7 +5,10 @@
 - Baseline: `FDB-20260913-04`
 - Engineering contract: `FEC-20260913-LOCAL-DESIGN-EVIDENCE-01`
 - Design revision: `DREV-20261001-RECORD-VOICE-INLINE-03`（记录页紧凑输入框内嵌麦克风；仅本地验证）
-- Current-state revision: `UI-STATE-20261002-VOICE-INPUT-02-LOCAL`
+- Current-state revision: `UI-STATE-20261006-SOURCE-DELETE-01-LOCAL`
+- Today design revision: `DREV-20261006-SOURCE-DELETE-01`，用户于2026-10-06批准；本地实现，未发布。
+- Today Spec: `specs/active/FEAT-001-PRECISE-SOURCE-AND-KNOWLEDGE-DELETION.md`
+  revision `SPEC-20261006-SOURCE-DELETE-02`；原生三视口及iOS/Android验收尚未完成。
 - Related Spec: `specs/completed/BUG-025-REVIEW-ONLY-CONFIRM-SUBJECT.md` revision `BUG-SPEC-20260919-REVIEW-ONLY-CONFIRM-01`
   （前序：`specs/completed/BUG-023-TODAY-REVIEW-SOURCE-MATERIAL.md` revision `BUG-SPEC-20260919-REVIEW-SOURCE-01`；
   `SPEC-20260911-SETTINGS-PROFILE-MANAGER-01`、`SPEC-20260911-PRIMARY-NAV-BRAND-01`、`SPEC-20260911-TODAY-ACTIVITY-EMPTY-CTA-01`、`SPEC-20260911-RECORD-PHOTO-ADD-SOURCE-02`、`SPEC-20260911-RECORD-SIMPLIFICATION-01`、`BUG-SPEC-20260911-01`）
@@ -120,9 +123,14 @@
 - 今日还消费不与固定日程重复的柔性活动建议；活动提醒可直接移除。
 - 当前 Todo 不再请求通用“带练提示”，也不显示“出现原因”。每个知识点可显示最多两行的已确认
   evidence 摘要；存在 `source_submission_id` 时显示“查看原始内容”，在 Today 当前页底部弹层读取
-  当次照片和/或家长原文，不跳历史页、不生成新的 review 文案。
-- 原始材料弹层复用 `submission-materials` 的 family/child-scoped 读取、最多两张缩略图并发、410/权限/
-  网络恢复与临时文件清理；证据图片序号存在时同时以文字“相关图片”和描边标记，不能只靠颜色。
+  对应提交和图片index的唯一照片，不跳历史页、不生成新的 review 文案。纯文字来源保留原文；
+  混合照片来源不展示整批文字。照片标注“照片 N · 对应照片”，不把筛选后的下标当原编号。
+- Today 原始材料弹层启用 `submission-materials.exactSource`，只鉴权/下载匹配照片；未知、非法或
+  无匹配索引显示“未关联具体照片”。同提交切换index会重新加载，离页清除临时引用并丢弃迟到回调。
+  410/权限/网络失败有错误与重试状态。历史详情保留默认的整批、最多两张缩略图并发模式。
+- 更多菜单在“今天先跳过”下新增“删除记录”，只对可写成员和带knowledge_id的当前知识显示。
+  确认弹层说明删除知识关联、复习与反馈，保留原图、原总结和同批其他知识；取消零请求、提交防重，
+  失败保留卡片与错误，成功刷新计数；切孩子或离页不接收旧删除回调。无乐观删除。
 - Todo“完成”胶囊视觉高64rpx，包装层有效热区至少88rpx；pending、disabled、更多反馈和失败回滚
   行为不变。
 - Todo 的主观反馈在卡片内展开，选项旁写明对复习安排的影响；文案与服务端确定性策略一一对应
@@ -249,6 +257,10 @@ guards for `callContainer`、`uploadFile` and `chooseMedia`; media permission fa
 classification and cancelable uploads are tracked by `BUG-SPEC-20260905-02` and remain unimplemented.
 
 ## Change references
+
+- 2026-10-06 — `SPEC-20261006-SOURCE-DELETE-02 / DREV-20261006-SOURCE-DELETE-01`：Today单图来源与删除
+  确认已实现；195项frontend tests与656208-byte微信preview通过。原生隔离副本遇插件41002，
+  三视口和真机未验收；详细证据见 `docs/quality/evidence/SOURCE-DELETE-20261006.md`。
 
 - 2026-10-01 — `SPEC-20261001-VOICE-INPUT-03 / DREV-20261001-RECORD-VOICE-INLINE-03`：记录页学习
   内容框缩至 184rpx，并把 44px 麦克风热区直接嵌入右下角；WechatSI 单次 60 秒普通话识别结果只追加

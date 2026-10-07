@@ -19,7 +19,13 @@ from sqlalchemy.orm import Session
 from push_kids.children.service import ChildrenService
 from push_kids.families.service import FamilyService
 from push_kids.notifications.destinations import DestinationCipher, DestinationCipherError
-from push_kids.notifications.domain import KINDS, kind_for, retry_delay_seconds
+from push_kids.notifications.domain import (
+    KINDS,
+    ChildReviewLoad,
+    kind_for,
+    retry_delay_seconds,
+    review_digest_content,
+)
 from push_kids.notifications.outbox import NotificationOutbox
 from push_kids.notifications.providers import NotificationSender, build_sender
 from push_kids.notifications.schemas import (
@@ -41,10 +47,11 @@ from push_kids.persistence.models import (
     NotificationType,
     SubscriptionStatus,
 )
+from push_kids.planning.service import PlanningService
 from push_kids.platform.config import Settings
 from push_kids.platform.context import RequestContext
 from push_kids.platform.errors import ForbiddenError, NotFoundError
-from push_kids.platform.time import utcnow
+from push_kids.platform.time import local_date, utcnow
 
 logger = logging.getLogger("push_kids")
 
@@ -615,6 +622,39 @@ class NotificationsService:
                 cls._terminate(db, row, DeliveryState.cancelled, result_code)
                 counts["dropped"] += 1
                 continue
+            if row.type == NotificationType.review_digest.value:
+                # Child locks above serialize this refresh/send with knowledge deletion. A queued
+                # payload is a snapshot, not authority for whether any review still exists.
+                child_ids = {
+                    str(child_id)
+                    for child_id in db.scalars(
+                        select(NotificationDeliveryChild.child_id).where(
+                            NotificationDeliveryChild.delivery_id == row.id,
+                        )
+                    )
+                    if child_id is not None
+                }
+                loads = PlanningService.pending_review_loads(
+                    db,
+                    local_date(current),
+                    family_id=str(row.family_id),
+                    child_ids=child_ids,
+                )
+                content = review_digest_content(
+                    [
+                        ChildReviewLoad(
+                            child_name=load.child_name,
+                            pending_count=load.pending_count,
+                            subject_names=load.subject_names,
+                        )
+                        for load in loads
+                    ]
+                )
+                if content is None:
+                    cls._terminate(db, row, DeliveryState.cancelled, "review_no_longer_due")
+                    counts["dropped"] += 1
+                    continue
+                row.payload_json = json.dumps(content.as_payload(), ensure_ascii=False)
             binding = channel.binding(type_name)
             if not channel.available or binding is None:
                 cls._terminate(db, row, DeliveryState.skipped, "channel_unavailable")

@@ -40,3 +40,5 @@
 .fb .fb-t { display: block; font-size: 14px; line-height: 1.4; font-weight: 500; }
 .fb .fb-s { display: block; margin-top: 4rpx; font-size: 11px; line-height: 1.5; color: var(--pk-ink-3); }
 .fb-cancel { min-height: 88rpx; display: flex; align-items: center; justify-content: center; border-top: var(--pk-border-soft); font-size: 13px; color: var(--pk-ink-3); }
+.fb-delete { border-top: var(--pk-border-line); margin-top: 8rpx; min-height: 44px; }
+.fb-delete .fb-s { font-size: 13px; }

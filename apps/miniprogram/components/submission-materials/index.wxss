@@ -16,3 +16,8 @@
 .mat-body .orig { display: block; margin-top: 12rpx; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 14px; line-height: 1.7; color: var(--pk-ink); }
 .mat-body .pk-notice { margin-bottom: 20rpx; }
 .embedded .mat-body { padding: 0 0 28rpx; }
+.exact-source { grid-template-columns: minmax(0, 1fr); }
+.exact-source .pcell { height: auto; min-height: 240rpx; aspect-ratio: auto; padding-top: 64rpx; }
+.exact-source .pcell .pimg { position: relative; width: 100%; height: auto; display: block; }
+.exact-source .pcell .idx { top: 0; bottom: auto; padding: 16rpx; font-size: 13px; color: var(--pk-primary); background: var(--pk-surface); }
+.exact-source .pcell .cnote { font-size: 14px; }

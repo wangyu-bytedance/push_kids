@@ -230,3 +230,18 @@ def test_confirmation_keeps_first_recognition_provenance(
             for item in db.scalars(select(ReviewItem))
         } == reviews
     assert all(value == first["submission_id"] for value in reviews.values())
+
+
+def test_later_confirmation_does_not_fill_evidence_from_a_different_submission(
+    client, app, family_headers, child
+):
+    _confirmed(client, app, family_headers, child["id"], "英语单词 animal")
+    with app.state.database.session_factory() as db:
+        originals = list(db.scalars(select(KnowledgeItem)))
+        ids = [row.id for row in originals]
+        for row in originals:
+            row.evidence_json = None
+        db.commit()
+    _confirmed(client, app, family_headers, child["id"], "英语单词 animal", days_ago=3)
+    with app.state.database.session_factory() as db:
+        assert all(db.get(KnowledgeItem, kid).evidence_json is None for kid in ids)

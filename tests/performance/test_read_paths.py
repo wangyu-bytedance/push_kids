@@ -6,6 +6,7 @@ from datetime import UTC, datetime, timedelta
 from time import perf_counter
 from urllib.parse import quote
 
+import pytest
 from push_kids.persistence.models import (
     ActivityRecord,
     KnowledgeItem,
@@ -18,6 +19,75 @@ from push_kids.persistence.models import (
 )
 from push_kids.platform.time import local_date
 from sqlalchemy import event, inspect
+
+
+@pytest.mark.parametrize("occurrence_count", [1, 10_000])
+def test_single_knowledge_deletion_is_bounded_and_keeps_other_records(
+    client, app, family_headers, child, occurrence_count
+):
+    from sqlalchemy import func, select
+
+    from tests.integration.test_todo_provenance import _confirmed
+
+    confirmed = _confirmed(client, app, family_headers, child["id"], "数学，加法")
+    with app.state.database.session_factory() as db:
+        kid = db.get(ReviewItem, confirmed["review_item_ids"][0]).knowledge_item_id
+        record_id = db.scalar(
+            select(KnowledgeOccurrence.learning_record_id).where(
+                KnowledgeOccurrence.knowledge_item_id == kid
+            )
+        )
+        now = datetime.now(UTC)
+        db.execute(
+            KnowledgeOccurrence.__table__.insert(),
+            [
+                {
+                    "family_id": family_headers["X-Family-ID"],
+                    "knowledge_item_id": kid,
+                    "learning_record_id": record_id,
+                    "occurred_at": now,
+                    "created_at": now,
+                }
+                for _ in range(occurrence_count)
+            ],
+        )
+        db.commit()
+    engine = app.state.database.engine
+    statements = []
+
+    def capture(_conn, _cursor, statement, parameters, *_args):
+        statements.append((statement, parameters))
+
+    event.listen(engine, "before_cursor_execute", capture)
+    tracemalloc.start()
+    try:
+        response = client.delete(
+            f"/api/v1/children/{child['id']}/knowledge/{kid}", headers=family_headers
+        )
+        _, peak = tracemalloc.get_traced_memory()
+    finally:
+        tracemalloc.stop()
+        event.remove(engine, "before_cursor_execute", capture)
+    assert response.status_code == 204, response.text
+    assert len(statements) <= 20
+    assert peak < 5_000_000
+    assert response.content == b""
+    with engine.connect() as conn:
+        for statement, parameters in statements:
+            if statement.startswith("DELETE FROM knowledge_occurrences"):
+                plan = conn.exec_driver_sql("EXPLAIN QUERY PLAN " + statement, parameters).all()
+                assert any("INDEX" in str(row) for row in plan)
+    with app.state.database.session_factory() as db:
+        assert db.get(KnowledgeItem, kid) is None
+        assert db.get(LearningRecord, record_id) is not None
+        assert (
+            db.scalar(
+                select(func.count(KnowledgeOccurrence.id)).where(
+                    KnowledgeOccurrence.knowledge_item_id == kid
+                )
+            )
+            == 0
+        )
 
 
 def _insert_chunks(connection, table, rows, chunk_size: int = 2_000) -> None:

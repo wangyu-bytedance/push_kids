@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>知芽 · 精确原图与删除记录 · 待审批设计</title>
+<style>
+:root{--canvas:#FAF7F0;--surface:#FFFDF8;--ink:#22261F;--muted:#464E43;--line:#EBE5D7;--pine:#1F5B45;--tint:#E4EDE6;--danger:#A85742;--sunken:#F3EFE4;--serif:"Songti SC",STSong,serif}
+*{box-sizing:border-box}body{margin:0;background:var(--canvas);color:var(--ink);font:14px/1.6 -apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif}button{font:inherit;cursor:pointer;color:inherit;min-height:44px;border:0;background:transparent;padding:8px 12px}button:focus-visible{outline:2px solid var(--pine);outline-offset:2px}button:disabled{cursor:wait;opacity:.65}[hidden]{display:none!important}h1,h2,p{margin:0}h1{font:26px/1.3 var(--serif)}h2{font:23px/1.4 var(--serif)}svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}.page{max-width:480px;margin:auto;padding:20px 16px 32px}.top{display:flex;gap:12px;align-items:center;justify-content:space-between}.muted{color:var(--muted)}.meta{font-size:13px;color:var(--muted)}.child{background:var(--tint);color:var(--pine);border-radius:999px}.card{margin-top:20px;padding:16px;border:1px solid var(--line);border-left:3px solid var(--pine);border-radius:16px;background:var(--surface)}.head{display:flex;align-items:center;gap:12px}.mark{width:36px;height:36px;display:grid;place-items:center;background:#E6EDF3;color:#3F6379;border-radius:50%;font-family:var(--serif);font-size:18px}.grow{flex:1;min-width:0}.name{font-weight:600;font-size:16px;margin-top:16px;line-height:1.5}.summary{margin-top:8px;color:var(--muted)}.actions{display:flex;align-items:center;gap:4px;margin-top:8px;flex-wrap:wrap}.source{color:var(--pine);padding-left:0;display:flex;align-items:center;gap:6px}.spacer{flex:1}.done{color:white;background:var(--pine);border-radius:999px;min-width:60px}.more{width:44px;display:grid;place-items:center}.panel{border:1px solid var(--line);border-radius:12px;margin-top:12px;padding:8px 12px;background:var(--sunken)}.panel-title{font-size:13px;padding:4px 0;color:var(--muted)}.row{width:100%;text-align:left;display:flex;gap:12px;align-items:center;padding:10px 0;line-height:1.4}.row strong{font-weight:500;display:block}.row small{display:block;font-size:13px;color:var(--muted);margin-top:3px}.remove{border-top:1px solid var(--line);margin-top:4px}.cancel-row{width:100%;color:var(--muted);padding-bottom:0}.mask{position:fixed;inset:0;background:#181c147a}.sheet{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(480px,100%);max-height:85vh;background:var(--surface);border-radius:20px 20px 0 0;padding:12px 20px max(20px,env(safe-area-inset-bottom));display:flex;flex-direction:column}.handle{width:36px;height:4px;background:var(--line);border-radius:4px;margin:0 auto 12px}.sheet-head{display:flex;gap:8px;align-items:center}.close{width:44px;flex:none;display:grid;place-items:center}.sheet-body{overflow-y:auto;min-height:0;padding-top:12px}.photo{display:block;width:100%;text-align:left;border:1px solid var(--line);border-radius:12px;padding:16px;background:white}.photo-label{display:block;font-size:13px;color:var(--pine);margin-bottom:12px}.paper{display:block;border:1px solid var(--line);background:#FDFBF5;padding:18px 16px;min-height:150px;font:16px/1.8 var(--serif)}.paper strong{display:block;margin-bottom:8px}.equation{display:block;margin-top:16px;font-size:20px;letter-spacing:2px}.note{margin-top:16px;color:var(--muted)}.privacy{margin:16px 0 0;font-size:13px;color:var(--muted)}.unknown{padding:24px 16px;border:1px solid var(--line);border-radius:12px;background:var(--sunken)}.unknown strong{display:block;margin-bottom:8px}.confirmation .name{padding:12px;background:var(--sunken);border-radius:8px;margin:0 0 12px}.confirm-actions{display:flex;gap:12px;margin-top:20px}.confirm-actions button{flex:1;border-radius:999px;background:var(--sunken)}.confirm-actions .danger{background:var(--danger);color:white}.message{margin-top:16px;padding:12px;border-radius:8px;background:var(--tint)}.design-note{font-size:13px;color:var(--muted);margin-top:20px}dialog{width:calc(100% - 32px);max-width:448px;padding:20px;border:1px solid var(--line);border-radius:16px;background:var(--surface)}dialog::backdrop{background:#181c147a}.full-paper{font:20px/2 var(--serif);padding:20px 0}@media(max-width:350px){.page{padding:16px 12px}.card{padding:12px;margin-top:16px}.panel{padding:6px 10px}.sheet{padding-left:16px;padding-right:16px}h1{font-size:24px}.row{padding:8px 0}.paper{padding:12px;min-height:130px}.name{font-size:15px}}
+</style>
+</head>
+<body>
+<svg style="display:none" aria-hidden="true"><defs>
+<symbol id="more" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></symbol>
+<symbol id="image" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8" cy="8" r="1"/><path d="m3 17 5-5 4 4 4-6 5 7"/></symbol>
+<symbol id="refresh" viewBox="0 0 24 24"><path d="M20 10a8 8 0 1 0-1 8M20 4v6h-6"/></symbol>
+<symbol id="list" viewBox="0 0 24 24"><path d="M8 6h12M8 12h12M8 18h12M3 6h1M3 12h1M3 18h1"/></symbol>
+<symbol id="clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l4 2"/></symbol>
+<symbol id="trash" viewBox="0 0 24 24"><path d="M3 6h18M9 6V3h6v3M5 6l1 15h12l1-15M10 10v7M14 10v7"/></symbol>
+<symbol id="close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+</defs></svg>
+<main class="page" id="page">
+ <header class="top"><div><h1>今天，也慢慢来</h1><p class="meta">10 月 6 日 · 星期二</p></div><button class="child" aria-label="当前学习档案">六六</button></header>
+ <article class="card" id="card">
+  <header class="head"><span class="mark">数</span><div class="grow"><strong>数学 · 变式练习</strong><p class="meta">1 个知识点 · 约 1 分钟</p></div></header>
+  <p class="name">根据年龄关系列加减混合算式</p><p class="summary">原题提示：根据年龄差，求妈妈今年的年龄。</p>
+  <div class="actions"><button class="source" id="source"><svg><use href="#image"/></svg>查看原始内容</button><span class="spacer"></span><button class="done" id="done">完成</button><button class="more" id="more-button" aria-label="其他操作" aria-expanded="true"><svg><use href="#more"/></svg></button></div>
+  <section class="panel" id="panel"><p class="panel-title">刚才的实际情况是：</p>
+   <button class="row feedback"><svg><use href="#refresh"/></svg><span><strong>需要加强</strong><small>明天再出现一次</small></span></button>
+   <button class="row feedback"><svg><use href="#list"/></svg><span><strong>只做了一部分</strong><small>间隔取一半，会更早再出现</small></span></button>
+   <button class="row feedback"><svg><use href="#clock"/></svg><span><strong>今天先跳过</strong><small>今天不再提醒，明天再来</small></span></button>
+   <button class="row remove" id="delete-button"><svg><use href="#trash"/></svg><span><strong>删除记录</strong><small>删除这个知识点及其复习安排</small></span></button>
+   <button class="cancel-row" id="collapse">收起</button>
+  </section>
+ </article>
+ <p id="message" class="message" role="status" hidden></p>
+ <p class="design-note">交互设计预览 · 使用合成示例内容</p>
+</main>
+<div class="mask" id="mask" hidden></div>
+<section class="sheet" id="source-sheet" role="dialog" aria-modal="true" aria-labelledby="source-title" hidden>
+ <div class="handle"></div><header class="sheet-head"><div class="grow"><h2 id="source-title">原始学习内容</h2><p class="meta">9 月 7 日记录</p></div><button class="close" aria-label="关闭原始内容" data-close><svg><use href="#close"/></svg></button></header>
+ <div class="sheet-body">
+  <button class="photo" id="photo" aria-label="全屏查看原提交第2张照片"><span class="photo-label">照片 2 · 对应照片</span><span class="paper"><strong>3. 解决问题</strong>小明今年 8 岁，妈妈比小明大 26 岁。<br>妈妈今年多少岁？<span class="equation">□ ○ □ = □（岁）</span></span></button>
+  <div id="unknown" class="unknown" hidden><strong>未关联具体照片</strong><p>这条记录没有可靠的照片关联，可前往记录详情查看原始材料。</p></div>
+  <p class="note">原题提示：根据年龄差，求妈妈今年的年龄。</p><p class="privacy">照片仅用于核对原始学习内容。</p>
+ </div>
+</section>
+<section class="sheet confirmation" id="confirm-sheet" role="dialog" aria-modal="true" aria-labelledby="confirm-title" hidden>
+ <div class="handle"></div><header class="sheet-head"><h2 class="grow" id="confirm-title">删除这个知识点？</h2><button class="close" aria-label="取消删除" data-close><svg><use href="#close"/></svg></button></header>
+ <div class="sheet-body"><p class="name">根据年龄关系列加减混合算式</p><p>将删除这个知识点的学习关联、复习安排和反馈。原始照片、原记录总结及同次上传的其他知识点会保留。</p><p class="note">此操作无法撤销。</p></div>
+ <div class="confirm-actions"><button data-close>取消</button><button class="danger" id="confirm-delete">确认删除</button></div>
+</section>
+<dialog id="full-image"><button class="close" id="close-image" aria-label="关闭照片预览"><svg><use href="#close"/></svg></button><p class="meta">照片 2 · 合成排版占位</p><div class="full-paper">3. 解决问题<br><br>小明今年 8 岁，妈妈比小明大 26 岁。<br>妈妈今年多少岁？<br><br>□ ○ □ = □（岁）</div></dialog>
+<script>
+const $=id=>document.getElementById(id);let previousFocus=null;
+function show(state){previousFocus=document.activeElement;$('source-sheet').hidden=!['photo','unknown'].includes(state);$('confirm-sheet').hidden=state!=='confirm';$('mask').hidden=state==='menu';$('page').inert=state!=='menu';$('photo').hidden=state==='unknown';$('unknown').hidden=state!=='unknown';document.body.dataset.state=state;const active=document.querySelector('.sheet:not([hidden])');if(active)active.querySelector('button').focus();}
+function closeSheet(){show('menu');if(previousFocus&&previousFocus.focus)previousFocus.focus();}
+$('source').onclick=()=>show('photo');$('delete-button').onclick=()=>show('confirm');$('mask').onclick=closeSheet;document.querySelectorAll('[data-close]').forEach(b=>b.onclick=closeSheet);
+function toggle(){const p=$('panel');p.hidden=!p.hidden;$('more-button').setAttribute('aria-expanded',String(!p.hidden));}
+$('more-button').onclick=toggle;$('collapse').onclick=toggle;$('photo').onclick=()=>$('full-image').showModal();$('close-image').onclick=()=>$('full-image').close();
+$('confirm-delete').onclick=()=>{closeSheet();$('card').hidden=true;$('message').hidden=false;$('message').textContent='已删除 · 设计预览，无真实数据变更';};
+document.querySelectorAll('.feedback').forEach(b=>b.onclick=()=>{$('message').hidden=false;$('message').textContent='设计预览：'+b.querySelector('strong').textContent;toggle();});$('done').onclick=()=>{$('message').hidden=false;$('message').textContent='设计预览：已记录完成';};
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeSheet();if(e.key==='Tab'){const s=document.querySelector('.sheet:not([hidden])');if(!s)return;const b=[...s.querySelectorAll('button')].filter(n=>!n.hidden);const first=b[0],last=b[b.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}});
+const initial=new URLSearchParams(location.search).get('state');show(['photo','confirm','unknown'].includes(initial)?initial:'menu');
+</script>
+</body></html>

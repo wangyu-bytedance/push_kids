@@ -9,16 +9,17 @@ Component({
     submissionState: String,
     defaultOpen: Boolean,
     embedded: Boolean,
-    highlightIndex: Number
+    highlightIndex: Number,
+    exactSource: Boolean
   },
-  data: { open: false, loading: false, error: "", text: "", media: [], previewBusy: false, countLabel: "" },
+  data: { open: false, loading: false, error: "", text: "", media: [], previewBusy: false, countLabel: "", unknownSource: false },
   lifetimes: { detached() { this.clear(); } },
   pageLifetimes: {
-    hide() { this.visible = false; this.generation = (this.generation || 0) + 1; },
+    hide() { this.visible = false; this.clear(); },
     show() { this.visible = true; if (this.data.open) { this.clear(); this.load(); } }
   },
   observers: {
-    "submissionId, defaultOpen, submissionState, embedded": function(sid, open, _state, embedded) {
+    "submissionId, defaultOpen, submissionState, embedded, childId, exactSource, highlightIndex": function(sid, open, _state, embedded) {
       this.visible = true;
       this.clear();
       const shouldOpen = !!(open || embedded);
@@ -31,22 +32,32 @@ Component({
       this.generation = (this.generation || 0) + 1;
       (this.paths || []).forEach(api.removePreview);
       this.paths = [];
-      this.setData({ media: [], text: "", error: "", loading: false, previewBusy: false, countLabel: "" });
+      this.setData({ media: [], text: "", error: "", loading: false, previewBusy: false, countLabel: "", unknownSource: false });
     },
     toggle() {
       this.setData({ open: !this.data.open });
       if (this.data.open) this.load(); else this.clear();
     },
     async load() {
+      this.clear();
       const generation = (this.generation || 0) + 1;
       this.generation = generation;
       this.setData({ loading: true, error: "" });
       try {
         const result = await api.request(`/children/${this.data.childId}/history/${this.data.submissionId}`);
         if (generation !== this.generation || this.visible === false) return;
-        const media = result.media || [];
-        this.setData({ text: result.input_text || "", media, loading: false,
-          countLabel: media.length ? `${media.length} 张照片` : (result.input_text ? "仅文字" : "") });
+        const original = Array.isArray(result.media) ? result.media : [];
+        const selected = this.data.highlightIndex;
+        const validIndex = Number.isInteger(selected) && selected >= 1 && selected <= 9;
+        const media = (this.data.exactSource
+          ? original.filter((item) => validIndex && item.index === selected).slice(0, 1)
+          : original).map((item) => ({ ...item,
+          hint: item.available ? "" : "原图已删除或不可用" }));
+        const photoSource = original.length > 0 || result.source === "photo" || validIndex;
+        const text = this.data.exactSource && photoSource ? "" : (result.input_text || "");
+        this.setData({ text, media, loading: false,
+          unknownSource: !!(this.data.exactSource && photoSource && !media.length),
+          countLabel: media.length ? `${media.length} 张照片` : (text ? "仅文字" : "") });
         await this.loadThumbnails(generation);
       } catch (error) {
         if (generation === this.generation) {
@@ -115,7 +126,9 @@ Component({
         if (previous) api.removePreview(previous);
         this.paths = (this.paths || []).filter((saved) => saved !== previous).concat(path);
         this.setData({ [`media[${index}].thumbnail`]: path });
-        wx.previewImage({ current: path, urls: [path], fail: () => this.setData({ error: "当前设备无法预览图片，请重试" }) });
+        wx.previewImage({ current: path, urls: [path], fail: () => {
+          if (generation === this.generation && this.visible !== false) this.setData({ error: "当前设备无法预览图片，请重试" });
+        } });
       } catch (error) {
         if (generation !== this.generation) return;
         if ([401, 403, 404].includes(error.statusCode)) this.clear();

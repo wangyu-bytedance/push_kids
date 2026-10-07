@@ -459,6 +459,35 @@ def test_evening_digest_only_reports_real_outstanding_review(client: TestClient,
     assert message["deep_link"] == "/pages/today/index"
 
 
+@pytest.mark.parametrize("delete_all", [False, True])
+def test_queued_digest_rechecks_deleted_knowledge(client, app, delete_all):
+    from push_kids.persistence.models import ReviewItem
+
+    from tests.integration.test_todo_provenance import _confirmed
+
+    family = _create_family(client)
+    child_id = family["children"][0]["id"]
+    confirmed = _confirmed(client, app, _actor("parent-a"), child_id, "数学，加法，减法")
+    evening = datetime.combine(local_date(), time(19, 0), tzinfo=SHANGHAI).astimezone(UTC)
+    _grant(client, "parent-a", ["review_digest"])
+    assert _plan(app, evening)["queued_review_digests"] == 1
+    with app.state.database.session_factory() as db:
+        kids = [db.get(ReviewItem, rid).knowledge_item_id for rid in confirmed["review_item_ids"]]
+    for kid in kids if delete_all else kids[:1]:
+        response = client.delete(
+            f"/api/v1/children/{child_id}/knowledge/{kid}", headers=_actor("parent-a")
+        )
+        assert response.status_code == 204
+    result = _dispatch(app, evening)
+    if delete_all:
+        assert result["sent"] == 0
+        assert result["dropped"] == 1
+        assert _sent(app) == []
+    else:
+        assert result["sent"] == 1
+        assert str(len(kids) - 1) in _sent(app)[0]["data"]["thing4"]["value"]
+
+
 def test_dispatch_entry_point_requires_the_deployment_token(client: TestClient) -> None:
     _create_family(client)
     assert client.post("/api/v1/notifications/dispatch").status_code == 403

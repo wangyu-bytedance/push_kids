@@ -89,3 +89,11 @@
 .source-context { margin-bottom: 24rpx; padding: 20rpx 22rpx; border-left: 4rpx solid var(--pk-primary); border-radius: var(--pk-r-sm); background: var(--pk-surface-warm); }
 .source-name { display: block; color: var(--pk-ink); font-size: 14px; line-height: 1.55; font-weight: 600; overflow-wrap: anywhere; }
 .source-summary { display: block; margin-top: 8rpx; color: var(--pk-ink-3); font-size: 13px; line-height: 1.65; overflow-wrap: anywhere; }
+/* 单知识点删除沿用底部弹层；长中文滚动区与底部操作区分离。 */
+.delete-sheet { max-height: 85vh; display: flex; flex-direction: column; }
+.delete-sheet .sheet-body { min-height: 0; overflow-y: auto; }
+.delete-name { display: block; padding: 24rpx; margin-bottom: 24rpx; border-radius: var(--pk-r-sm); background: var(--pk-surface-sunken); font-size: 15px; line-height: 1.6; overflow-wrap: anywhere; }
+.delete-copy { display: block; margin-bottom: 24rpx; font-size: 14px; line-height: 1.7; }
+.delete-actions { display: flex; gap: 24rpx; padding-top: 24rpx; flex: none; }
+.delete-actions .btn { flex: 1; width: 0; min-width: 0; margin: 0; min-height: 44px; box-sizing: border-box; }
+.delete-actions .delete-confirm { background: var(--pk-danger); color: var(--pk-ink-inv); }

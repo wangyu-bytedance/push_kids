@@ -1460,10 +1460,8 @@ class LearningService:
                 # Keep the first recognition provenance; only fill gaps left by older records.
                 if knowledge.confidence is None:
                     knowledge.confidence = point.confidence
-                if knowledge.evidence_json is None:
-                    knowledge.evidence_json = json.dumps(
-                        [item.model_dump() for item in point.direct_evidence], ensure_ascii=False
-                    )
+                # Never fill source evidence from a later submission: its image indices belong
+                # to a different media batch than the review's first source_submission_id.
             add_search_terms(db, knowledge)
             db.add(
                 KnowledgeOccurrence(

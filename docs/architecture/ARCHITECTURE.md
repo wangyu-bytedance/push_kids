@@ -1,7 +1,9 @@
 # Push Kids current architecture
 
 - Status: `IMPLEMENTED_LOCALLY_PENDING_CLOUD_ACCEPTANCE`
-- Revision: `ARCH-20260919-MYSQL57-WORKER-01`
+- Revision: `ARCH-20261006-SOURCE-DELETE-01`
+- Latest approval: user instruction “落地这两个spec”, 2026-10-06，批准 `SPEC-20261006-SOURCE-DELETE-02`；
+  规划域拥有单知识点删除，通知域通过 PlanningService 读取存活复习；无 schema migration。
 - Confirmed by: user instruction “修复bug” approving `BUG-SPEC-20260919-MYSQL57-WORKER-01`, 2026-09-19
   (preserves `ARCH-ARK-CONTEXT-REUSE-20260919-01`, `ARCH-UNIFIED-REVIEW-20260913-02`,
   `ARCH-20260912-MYSQL57-01` and the MySQL 5.7 constraints)
@@ -33,7 +35,7 @@ media through the same bounded infrastructure ports.
 | `children` | children and subjects, child profile lifecycle | child/subject services and HTTP routes; `require_active_child` write gate |
 | `learning` | submissions and confirmed learning records | submission lifecycle service |
 | `knowledge` | normalized knowledge identity and occurrences | normalization policy |
-| `planning` | versioned Review event projection, minute-bounded daily plans and Todo grouping | pure curve/heat policy + pure selection policy + application service |
+| `planning` | versioned Review event projection, minute-bounded daily plans, Todo grouping and single-knowledge deletion | pure curve/heat policy + pure selection policy + application service; deletion.py owns atomic association cleanup |
 | `activities` | schedules and practice records | activity service |
 | `travel` | child-scoped recurring travel arrangements | travel service and HTTP routes; calendar projection contract |
 | `reporting` | read models for dashboard/report/calendar | reporting service |
@@ -44,6 +46,16 @@ media through the same bounded infrastructure ports.
 | `platform` | config, database, errors, request context, opaque scope-bound pagination cursors | infrastructure only |
 
 Dependency direction is routers → services → pure policies. Infrastructure adapters implement contracts and may depend inward; pure policies do not depend outward.
+
+Single-knowledge deletion enters through PlanningService and a narrow `planning/deletion.py` transaction.
+It locks Child then scoped Review/Knowledge, removes associations with database-side set operations and
+updates affected plan aggregates without filling empty slots. It retains shared Submission/Record/media.
+Daily plan creation uses current locking reads after the child lock to avoid MySQL REPEATABLE READ
+snapshots reinserting a concurrently deleted review. Notifications dispatch calls the family/child-bounded
+PlanningService pending-load contract under the existing child locks before rendering/sending a digest.
+Source projections validate stored evidence against the original submission's confirmed proposal;
+learning never replaces old source evidence with an unrelated later submission's index. No migration,
+generic deletion framework or planning → learning/agent dependency is introduced.
 
 ## Data and invariants
 

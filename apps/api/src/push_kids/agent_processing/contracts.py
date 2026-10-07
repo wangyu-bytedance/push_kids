@@ -75,7 +75,7 @@ class KnowledgeProposal(BaseModel):
 
 class EvidenceReference(BaseModel):
     source: str = Field(pattern="^(image|parent_text)$")
-    image_index: int | None = Field(default=None, ge=1, le=9)
+    image_index: int | None = Field(default=None, ge=1, le=9, strict=True)
     detail: str = Field(min_length=1, max_length=200)
 
 
@@ -128,7 +128,7 @@ class ModelEvidenceReference(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     source: Literal["image", "parent_text"]
-    image_index: int | None = Field(ge=1, le=9)
+    image_index: int | None = Field(ge=1, le=9, strict=True)
     detail: str = Field(min_length=1, max_length=200)
 
 

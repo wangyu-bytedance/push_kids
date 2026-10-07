@@ -100,7 +100,7 @@
       <view class="sec-body" wx:if="{{sections.review}}">
         <block wx:for="{{todoCards}}" wx:key="id">
           <view class="opt-head" wx:if="{{item.first_optional}}"><text class="opt-head-t">有余力再做</text><view class="opt-head-line"></view></view>
-          <todo-card class="todo-slot {{reviewGroupId === item.id ? 'history-focus' : ''}}" id="todo-group-{{item.id}}" group="{{item}}" bindfeedback="feedback" bindsource="openSourceSheet"></todo-card>
+          <todo-card class="todo-slot {{reviewGroupId === item.id ? 'history-focus' : ''}}" id="todo-group-{{item.id}}" group="{{item}}" can-write="{{canWrite}}" bindfeedback="feedback" bindsource="openSourceSheet" binddelete="openDelete"></todo-card>
         </block>
         <view class="more-todo" wx:if="{{hiddenTodoCount}}" aria-role="button" aria-label="展开其余复习" bindtap="expandTodos">
           <text>还有 {{hiddenTodoCount}} 项 · 展开</text><view class="chev"></view>
@@ -244,8 +244,21 @@
       <text class="source-name">{{sourceSheet.knowledgeName}}</text>
       <text class="source-summary" wx:if="{{sourceSheet.summary}}">原题提示：{{sourceSheet.summary}}</text>
     </view>
-    <submission-materials child-id="{{childId}}" submission-id="{{sourceSheet.submissionId}}" embedded="{{true}}" highlight-index="{{sourceSheet.imageIndex}}"></submission-materials>
+    <submission-materials child-id="{{childId}}" submission-id="{{sourceSheet.submissionId}}" embedded="{{true}}" exact-source="{{true}}" highlight-index="{{sourceSheet.imageIndex}}"></submission-materials>
   </view>
+</view>
+
+<view class="pk-mask" wx:if="{{deleteTarget}}" bindtap="cancelDelete"></view>
+<view class="pk-sheet delete-sheet" wx:if="{{deleteTarget}}">
+  <view class="handle"></view>
+  <view class="sheet-head"><text class="sheet-title grow">删除这个知识点？</text><button class="icon-btn" disabled="{{deleting}}" aria-label="取消删除" bindtap="cancelDelete"><view class="ico ico-close sm"></view></button></view>
+  <view class="sheet-body">
+    <text class="delete-name">{{deleteTarget.name}}</text>
+    <text class="delete-copy">将删除这个知识点的学习关联、复习安排和反馈。原始照片、原记录总结及同次上传的其他知识点会保留。</text>
+    <text class="delete-copy">此操作无法撤销。</text>
+    <view class="pk-notice err" wx:if="{{deleteError}}"><text>{{deleteError}}</text></view>
+  </view>
+  <view class="delete-actions"><button class="btn secondary" disabled="{{deleting}}" bindtap="cancelDelete">取消</button><button class="btn delete-confirm" disabled="{{deleting}}" loading="{{deleting}}" bindtap="confirmDelete">{{deleting ? '删除中…' : '确认删除'}}</button></view>
 </view>
 
 <view class="pk-mask" wx:if="{{showChildSheet}}" bindtap="closeChildSheet"></view>

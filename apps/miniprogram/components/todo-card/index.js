@@ -11,6 +11,7 @@ const MORE_ACTIONS = [
 Component({
   options: { addGlobalClass: true },
   properties: {
+    canWrite: { type: Boolean, value: true },
     group: {
       type: Object,
       value: {},
@@ -42,10 +43,11 @@ Component({
           })),
           items: items.map((item) => ({
             reviewId: item.review_id,
+            knowledgeId: item.knowledge_id || "",
             name: item.knowledge_name,
             sourceSummary: String(item.source_summary || "").trim(),
             sourceSubmissionId: item.source_submission_id || "",
-            sourceImageIndex: Number(item.source_image_index) || 0,
+            sourceImageIndex: Number.isInteger(item.source_image_index) && item.source_image_index >= 1 && item.source_image_index <= 9 ? item.source_image_index : 0,
             sourceOccurredOn: item.source_occurred_on || "",
             sourceDateLabel: ui.monthDay(item.source_occurred_on),
             canOpenSource: !!item.source_submission_id,
@@ -67,6 +69,12 @@ Component({
     },
     closePanel() {
       this.setData({ panelId: "" });
+    },
+    deleteRecord(event) {
+      const item = this.data.view.items.find((entry) => entry.reviewId === event.currentTarget.dataset.reviewId);
+      if (!this.data.canWrite || !item || !item.knowledgeId || this.data.busyId === item.reviewId) return;
+      this.setData({ panelId: "" });
+      this.triggerEvent("delete", item);
     },
     feedback(event) {
       this.sendFeedback(event.currentTarget.dataset.reviewId, event.currentTarget.dataset.action);
