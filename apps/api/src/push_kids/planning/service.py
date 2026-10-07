@@ -23,6 +23,7 @@ from push_kids.persistence.models import (
     ReviewFeedbackBatchRequest,
     ReviewFeedbackRequest,
     ReviewItem,
+    ReviewQueueEntry,
     ReviewScheduleChange,
     ReviewScheduleOverride,
     Subject,
@@ -41,6 +42,7 @@ from push_kids.planning.policies import (
     ReviewState,
     apply_review_event,
 )
+from push_kids.planning.queue_projection import projection_drift, rebuild_projection
 from push_kids.planning.queue_state import initialize_queue, record_offered, reset_queue
 from push_kids.planning.scheduling import consume_arrangement, schedule_review
 from push_kids.planning.selection import (
@@ -139,6 +141,8 @@ class PendingReviewLoad:
 
 class PlanningService:
     initialize_queue = staticmethod(initialize_queue)
+    review_queue_drift = staticmethod(projection_drift)
+    rebuild_review_queue = staticmethod(rebuild_projection)
     delete_knowledge = staticmethod(delete_knowledge)
     inventory_page = staticmethod(inventory_page)
     inventory_subjects = staticmethod(subjects_page)
@@ -204,6 +208,13 @@ class PlanningService:
             delete(KnowledgeSearchTerm).where(
                 KnowledgeSearchTerm.family_id == family_id,
                 KnowledgeSearchTerm.knowledge_item_id.in_(knowledge_ids),
+            )
+        )
+        # Set-based deletion avoids one cascading projection delete per historical review.
+        db.execute(
+            delete(ReviewQueueEntry).where(
+                ReviewQueueEntry.family_id == family_id,
+                ReviewQueueEntry.review_item_id.in_(review_ids),
             )
         )
         db.execute(delete(ReviewItem).where(ReviewItem.id.in_(review_ids)))

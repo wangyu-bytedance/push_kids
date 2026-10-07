@@ -5,8 +5,9 @@
 - Fair-review local revision: `DREV-20261007-FAIR-REVIEW-01 / SPEC-20261007-FAIR-REVIEW-01` 已获批准。
   今日移除策略说明和等待总数；条目分别显示建议复习日/家长安排日期和今日已安排/等待安排等状态。
   旧API显示“计划日期/安排状态待更新”；200项前端测试及静态检查通过，39张设计导出及hash通过。
-  尚未上传/部署，原生三视口及iOS/Android未验收；后端性能与迁移兼容门禁BLOCK。证据：
-  `docs/quality/evidence/FAIR-REVIEW-20261007.md`。下文旧“到期”条目日期展示由本地本修订替代。
+  本地微信preview通过，669664字节，未上传开发/体验/正式版；原生三视口及iOS/Android待用户验收。
+  后端性能修复通过，生产迁移尚未执行。证据：`docs/quality/evidence/FAIR-REVIEW-PROJECTION-20261007.md`。
+  下文旧“到期”条目日期展示由本地本修订替代。
 - Baseline: `FDB-20260913-04`
 - Engineering contract: `FEC-20260913-LOCAL-DESIGN-EVIDENCE-01`
 - Design revision: `DREV-20261001-RECORD-VOICE-INLINE-03`（记录页紧凑输入框内嵌麦克风；仅本地验证）

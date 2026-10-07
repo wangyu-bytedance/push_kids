@@ -2,8 +2,9 @@
 
 - Status: `CURRENT`
 - Local fair-review implementation: `SPEC-20261007-FAIR-REVIEW-01` 已批准并实现科目覆盖、首次/再次机会和实际计划日等待优先。
-  预约优先、真实反馈计数与当日快照保持原合同；日期与安排状态分开。未发布：5万条性能门禁失败、
-  schema兼容过渡尚未落实，独立审查BLOCK；补充修订02待批准。证据见`docs/quality/evidence/FAIR-REVIEW-20261007.md`。
+  预约优先、真实反馈计数与当日快照保持原合同；日期与安排状态分开。补充修订02已批准并实现事务性索引投影，
+  5万条MySQL查询最大296ms；独立审查未发现剩余代码阻断项。旧业务兼容包已验证0014/0018启动校验。
+  新策略未部署；生产迁移与原生验收待完成。证据见`docs/quality/evidence/FAIR-REVIEW-PROJECTION-20261007.md`。
 - Local analysis change under verification: `BUG-SPEC-20261006-STAGED-ANALYSIS-01` — default provider
   changed to bounded per-material extraction, consolidation, server-owned history lookup and alias matching.
   Successful stage DTOs resume across retries; cancellation/manual confirmation/delete clean temporary data.

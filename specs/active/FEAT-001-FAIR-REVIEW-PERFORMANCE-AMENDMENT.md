@@ -1,6 +1,6 @@
 # FEAT-001 — 公平复习索引投影与迁移兼容补充方案
 
-- Status: READY_FOR_REVIEW
+- Status: VERIFYING
 - Risk: R3
 - Created: 2026-10-07
 - Spec revision: SPEC-20261007-FAIR-REVIEW-02
@@ -8,7 +8,7 @@
 - Parent approved scope: [SPEC-20261007-FAIR-REVIEW-01](FEAT-001-FAIR-DAILY-REVIEW.md)
 - Affected feature: FEAT-001
 - Current state: docs/domain/features/FEAT-001-push-kids-mvp.md
-- User confirmation: PENDING；尚未按本补充方案改写生产代码
+- User confirmation: 用户，2026-10-07，本会话“批准，然后部署云端的服务端+本地的客户端 我来进行验证”；明确批准修订02及其架构，授权云端后端和本地客户端验证准备
 - Frontend impact: none；不改变DREV-20261007-FAIR-REVIEW-01的界面和排期产品规则
 
 ## 已验证的问题
@@ -83,4 +83,27 @@ MySQL RR交错、迁移回填/重建、1万/5万条及130科目固定SQL/1268候
 
 ## 审批
 
-待用户明确批准本Spec/Architecture修订后实施新增投影；首版代码保留供复核，禁止部署。
+本Spec/Architecture已获明确批准；完成技术门禁后推进云端后端和本地客户端，生产备份及全量切流仍遵循发布手册。
+
+## 已批准范围内的实现细化
+
+投影同步采用planning拥有的数据库事务触发器合同（SQLite/MySQL5.7），由迁移安装、测试校验，
+覆盖ORM、批量写入和兼容旧版本的事实写入；ChildrenService不反向导入PlanningService，避免依赖环。
+内部重建/一致性校验通过PlanningService合同暴露；不新增对外写API。更新触发器只在排队相关字段
+变化时执行，普通inventory revision变化不触发全孩子重建。代价是两种数据库DDL需共同测试；
+优势是投影与事实在同一数据库事务中提交/回滚，且无漏掉批量写入或旧镜像写入的窗口。
+
+排序键采用等待起点、due_date、last_reviewed_on空值优先、review_id。
+对于固定的最近3个计划日，等待次数是起点的单调函数，所以按起点升序与原(-饱和次数,起点)排序
+严格等价；不需要每天批量更新所有等待计数。候选返回时仍计算原0..3等待语义。
+
+## 验证进度（2026-10-07）
+
+索引查询改为一个SQL内最多120科目×5分钟桶的top-1探测，SQL仍固定6次，没有逐科目的网络N+1。
+MySQL5.7相关查询显式使用科目索引，并把等值关联列包含在排序前缀，避免filesort扫描整个科目。
+所有派生表内层的Subject/Queue读取都在物化路径使用FOR UPDATE，验证旧RR快照也可发现新增科目。
+
+后端488通过，独立MySQL24通过；四组10k/50k规模均通过500ms门槛，5万MySQL最大296ms。
+旧业务兼容包在0014/0018均通过schema校验、拒绝unknown；两种本地容器健康/非root/SIGTERM通过。
+完整证据与尚未完成的生产/原生门禁见 `docs/quality/evidence/FAIR-REVIEW-PROJECTION-20261007.md`。
+本Spec保留active/VERIFYING，不能把兼容过渡版本当作新策略已上线。

@@ -1,6 +1,6 @@
 # FEAT-001 — 每日复习科目覆盖与等待优先
 
-- Status: BLOCKED
+- Status: VERIFYING
 - Risk: R3（排期行为、数据库投影、前端说明；不改变记忆曲线）
 - Spec owner: 产品负责人（用户）
 - Implementer: Codex
@@ -375,7 +375,9 @@ SQL复杂度：候选池/分钟桶规模与查询计划为阻断验收，不能�
 代码实现完成；功能、迁移、MySQL回归和本地镜像证据见
 `docs/quality/evidence/FAIR-REVIEW-20261007.md`。性能门禁失败，独立审查BLOCK，未部署。
 补充索引投影与schema过渡方案为`SPEC-20261007-FAIR-REVIEW-02`，待明确批准；不得预先实现新增投影。
-当前Spec保留active/BLOCKED，原生三视口/iOS/Android及真实家庭快照28天仿真仍NOT_RUN。
+后续修订02已于2026-10-07获用户明确批准；索引投影修复了性能门槛，兼容过渡包已完成本地迁移前后验证。
+当前Spec保留active/VERIFYING，生产备份/迁移/新策略切流和原生验收仍未完成。
+后续证据见 `docs/quality/evidence/FAIR-REVIEW-PROJECTION-20261007.md`；上方失败数据保留为首轮历史。
 
 ## 17. Completion gate
 

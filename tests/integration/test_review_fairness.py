@@ -13,6 +13,8 @@ from push_kids.persistence.models import (
     KnowledgeItem,
     ReviewFeedback,
     ReviewItem,
+    ReviewQueueEntry,
+    ReviewScheduleOverride,
     Subject,
 )
 from push_kids.planning.inventory import inventory_page, preview_reviews
@@ -21,7 +23,7 @@ from push_kids.planning.service import PlanningService
 from push_kids.platform.config import Settings
 from push_kids.platform.database import Database
 from push_kids.platform.time import local_date
-from sqlalchemy import delete, func, insert, select
+from sqlalchemy import delete, func, insert, select, update
 
 
 @pytest.fixture(params=["sqlite", "mysql"])
@@ -48,6 +50,8 @@ def scope(request):
             DailyReviewPlanItem,
             DailyReviewPlan,
             ReviewFeedback,
+            ReviewScheduleOverride,
+            ReviewQueueEntry,
             ReviewItem,
             KnowledgeItem,
             Subject,
@@ -59,11 +63,11 @@ def scope(request):
     database.engine.dispose()
 
 
-def seed(db, family, cid, counts=(140, 3, 3)):
+def seed(db, family, cid, counts=(140, 3, 3), *, prefix="subject"):
     ids = []
     for n, count in enumerate(counts):
         sid = str(uuid4())
-        db.add(Subject(id=sid, family_id=family, child_id=cid, name=f"subject-{n}"))
+        db.add(Subject(id=sid, family_id=family, child_id=cid, name=f"{prefix}-{n}"))
         db.flush()
         keys = [str(uuid4()) for _ in range(count)]
         db.execute(
@@ -225,3 +229,113 @@ def test_second_preview_simulates_scarce_subject_rotation(scope):
         )
         actual = preview_reviews(db, family, child, 2)
         assert second == actual
+
+
+def test_projection_syncs_core_writes_lifecycle_and_transaction_rollback(scope):
+    database, family, cid = scope
+    with database.session_factory() as db:
+        rid = seed(db, family, cid, (2,))[0]
+        sid = db.get(KnowledgeItem, rid).subject_id
+
+        def projection():
+            assert PlanningService.review_queue_drift(db, family, cid) == 0
+            return (
+                db.execute(
+                    select(ReviewQueueEntry.__table__).where(ReviewQueueEntry.review_item_id == rid)
+                )
+                .mappings()
+                .one()
+            )
+
+        assert projection()["minutes"] == 3
+        db.execute(update(KnowledgeItem).where(KnowledgeItem.id == rid).values(estimated_minutes=9))
+        assert projection()["minutes"] == 5
+        db.rollback()
+        assert projection()["minutes"] == 3
+        db.execute(update(Subject).where(Subject.id == sid).values(active=False))
+        assert not projection()["available"]
+        db.execute(
+            update(Subject)
+            .where(Subject.id == sid)
+            .values(active=True, review_queue_resumed_on=local_date())
+        )
+        assert projection()["available"] and projection()["anchor_on"] == local_date()
+        db.execute(update(Child).where(Child.id == cid).values(active=False))
+        assert not projection()["available"]
+        db.execute(
+            update(Child)
+            .where(Child.id == cid)
+            .values(active=True, review_queue_resumed_on=local_date())
+        )
+        assert projection()["available"]
+        db.add(
+            ReviewScheduleOverride(
+                review_item_id=rid,
+                family_id=family,
+                child_id=cid,
+                scheduled_on=local_date(),
+                requested_on=local_date(),
+            )
+        )
+        db.flush()
+        assert projection()["manual"]
+        db.execute(
+            delete(ReviewScheduleOverride).where(ReviewScheduleOverride.review_item_id == rid)
+        )
+        assert not projection()["manual"]
+        db.execute(
+            update(ReviewItem)
+            .where(ReviewItem.id == rid)
+            .values(review_count=2, due_date=local_date() + timedelta(days=3))
+        )
+        assert projection()["repeated"] and projection()["anchor_on"] == local_date() + timedelta(
+            days=3
+        )
+        db.execute(delete(ReviewQueueEntry).where(ReviewQueueEntry.review_item_id == rid))
+        assert PlanningService.review_queue_drift(db, family, cid) == 1
+        PlanningService.rebuild_review_queue(db, family, cid)
+        assert projection()["repeated"]
+        db.execute(delete(ReviewItem).where(ReviewItem.id == rid))
+        assert (
+            db.scalar(
+                select(ReviewQueueEntry.review_item_id).where(
+                    ReviewQueueEntry.review_item_id == rid
+                )
+            )
+            is None
+        )
+        db.rollback()
+        assert projection()["available"]
+
+
+def test_current_read_discovers_subject_created_after_reader_snapshot(scope):
+    database, family, cid = scope
+    if database.engine.dialect.name != "mysql":
+        pytest.skip("requires MySQL repeatable-read isolation")
+    with database.session_factory() as writer:
+        seed(writer, family, cid, (300,))
+        writer.execute(
+            update(ReviewItem).where(ReviewItem.family_id == family).values(review_count=0)
+        )
+        writer.execute(
+            update(KnowledgeItem)
+            .where(KnowledgeItem.family_id == family)
+            .values(estimated_minutes=1)
+        )
+        writer.commit()
+    with database.session_factory() as reader, database.session_factory() as writer:
+        reader.scalar(select(Child).where(Child.id == cid))
+        new_review = seed(writer, family, cid, (1,), prefix="new-subject")[0]
+        writer.execute(
+            update(ReviewItem)
+            .where(ReviewItem.id == new_review)
+            .values(due_date=local_date(), queue_eligible_on=local_date())
+        )
+        writer.execute(
+            update(KnowledgeItem).where(KnowledgeItem.id == new_review).values(estimated_minutes=1)
+        )
+        writer.commit()
+        reader.scalar(select(Child).where(Child.id == cid).with_for_update())
+        candidates = load_candidates(reader, family, cid, local_date(), lock=True)
+        assert new_review in {candidate.review_id for candidate in candidates}
+        reader.rollback()

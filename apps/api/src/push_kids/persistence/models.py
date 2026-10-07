@@ -587,6 +587,70 @@ class ReviewItem(Base):
     updated_at = Column(UTCDateTime(), nullable=False, default=utcnow, onupdate=utcnow)
 
 
+class ReviewQueueEntry(Base):
+    """Planning-owned, transactionally maintained index projection; never review history."""
+
+    __tablename__ = "review_queue_entries"
+    __table_args__ = (
+        Index(
+            "ix_review_queue_pool",
+            "family_id",
+            "child_id",
+            "available",
+            "manual",
+            "repeated",
+            "minutes",
+            "priority_key",
+            "due_on",
+        ),
+        Index(
+            "ix_review_queue_subject",
+            "family_id",
+            "child_id",
+            "available",
+            "manual",
+            "subject_id",
+            "minutes",
+            "priority_key",
+            "due_on",
+        ),
+        Index(
+            "ix_review_queue_subject_first",
+            "family_id",
+            "child_id",
+            "available",
+            "manual",
+            "subject_id",
+            "priority_key",
+            "due_on",
+        ),
+        Index("ix_review_queue_offer", "family_id", "child_id", "subject_id", "last_offered_on"),
+        Index(
+            "ix_review_queue_manual",
+            "family_id",
+            "child_id",
+            "available",
+            "manual",
+            "due_on",
+            "review_item_id",
+        ),
+    )
+    review_item_id = Column(
+        String(36), ForeignKey("review_items.id", ondelete="CASCADE"), primary_key=True
+    )
+    family_id = Column(String(80), nullable=False)
+    child_id = Column(String(36), nullable=False)
+    subject_id = Column(String(36), nullable=False)
+    minutes = Column(Integer, nullable=False)
+    repeated = Column(Boolean, nullable=False)
+    available = Column(Boolean, nullable=False)
+    manual = Column(Boolean, nullable=False)
+    due_on = Column(Date, nullable=False)
+    anchor_on = Column(Date, nullable=False)
+    priority_key = Column(String(66), nullable=False)
+    last_offered_on = Column(Date, nullable=True)
+
+
 class ReviewScheduleOverride(Base):
     """One pending parent reservation per review; scheduling is not a review event."""
 

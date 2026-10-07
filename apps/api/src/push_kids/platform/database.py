@@ -8,11 +8,12 @@ from sqlalchemy.orm import Session, sessionmaker
 from sqlalchemy.pool import StaticPool
 
 from push_kids.persistence.models import Base
+from push_kids.persistence.review_queue_v1 import install as install_review_queue
 from push_kids.platform.config import Settings
 
 
 class Database:
-    expected_cloud_revision = "20261007_0017"
+    expected_cloud_revision = "20261007_0018"
 
     _local_read_indexes = {
         "ix_learning_submissions_family_child_state_created_id",
@@ -105,6 +106,14 @@ class Database:
             for index in Base.metadata.tables["knowledge_items"].indexes:
                 if index.name == "ix_knowledge_scope_minutes_id":
                     index.create(self.engine, checkfirst=True)
+            with self.engine.begin() as connection:
+                if not connection.scalar(
+                    text(
+                        "SELECT name FROM sqlite_master WHERE type='trigger' "
+                        "AND name='rq_v1_review_items_insert'"
+                    )
+                ):
+                    install_review_queue(connection)
 
     def verify_cloud_schema(self) -> None:
         if self.engine.dialect.name != "mysql":

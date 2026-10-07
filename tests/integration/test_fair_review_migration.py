@@ -73,6 +73,23 @@ def test_queue_upgrade_and_guarded_downgrade(tmp_path, monkeypatch):
         assert row["last_offered_on"] is None
         assert db.scalar(text("SELECT policy_revision FROM daily_review_plans")) == "daily-plan-v1"
     with engine.begin() as db:
+        db.execute(text("UPDATE review_items SET last_offered_on=:day"), {"day": local_date()})
+    command.upgrade(config, "20261007_0018")
+    with engine.connect() as db:
+        projection = db.execute(text("SELECT * FROM review_queue_entries")).mappings().one()
+        assert projection["review_item_id"] == "r" and projection["repeated"]
+        assert projection["last_offered_on"] == local_date().isoformat()
+        assert len(inspect(db).get_indexes("review_queue_entries")) == 5
+    with engine.begin() as db:
+        db.execute(text("UPDATE knowledge_items SET estimated_minutes=2"))
+        assert db.scalar(text("SELECT minutes FROM review_queue_entries")) == 2
+    command.downgrade(config, "20261007_0017")
+    with engine.connect() as db:
+        assert db.scalar(text("SELECT review_count FROM review_items")) == 7
+        assert (
+            db.scalar(text("SELECT last_offered_on FROM review_items")) == local_date().isoformat()
+        )
+    with engine.begin() as db:
         db.execute(text("UPDATE daily_review_plans SET policy_revision='daily-plan-fair-v2'"))
     with pytest.raises(RuntimeError, match="Retain fair-review"):
         command.downgrade(config, "20261006_0016")

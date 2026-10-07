@@ -6,12 +6,19 @@ from time import perf_counter
 from uuid import uuid4
 
 import pytest
-from push_kids.persistence.models import Child, Family, KnowledgeItem, ReviewItem, Subject
+from push_kids.persistence.models import (
+    Child,
+    Family,
+    KnowledgeItem,
+    ReviewItem,
+    ReviewQueueEntry,
+    Subject,
+)
 from push_kids.planning.plan_candidates import load_candidates
 from push_kids.platform.config import Settings
 from push_kids.platform.database import Database
 from push_kids.platform.time import local_date
-from sqlalchemy import delete, event, insert, text
+from sqlalchemy import delete, event, insert, select, text
 
 
 @pytest.mark.parametrize("dialect", ["sqlite", "mysql"])
@@ -128,8 +135,13 @@ def test_bounded_fair_candidate_scale(dialect, size, subjects):
         if event.contains(database.engine, "before_cursor_execute", capture):
             event.remove(database.engine, "before_cursor_execute", capture)
         with database.session_factory() as db:
-            for model in (ReviewItem, KnowledgeItem, Subject, Child):
-                db.execute(delete(model).where(model.family_id == family))
+            for model in (ReviewQueueEntry, ReviewItem, KnowledgeItem, Subject, Child):
+                key = model.review_item_id if model is ReviewQueueEntry else model.id
+                while ids := list(
+                    db.scalars(select(key).where(model.family_id == family).limit(1000))
+                ):
+                    db.execute(delete(model).where(key.in_(ids)))
+                    db.commit()
             db.execute(delete(Family).where(Family.id == family))
             db.commit()
         database.engine.dispose()

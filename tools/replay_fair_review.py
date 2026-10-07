@@ -31,6 +31,12 @@ def replay(subjects: int, completion: str, fair: bool) -> dict:
             states[rid] = ReviewState(
                 step=0, due_date=row.due_date, active=True, review_count=row.review_count
             )
+    return simulate(candidates, states, today=today, budget=30, completion=completion, fair=fair)
+
+
+def simulate(candidates, states, *, today, budget, completion, fair):
+    """Simulate supplied in-memory facts; return only aggregate, non-identifying results."""
+    states = dict(states)
     offered = {}
     subject_offered = {}
     initial_first = {r.review_id for r in candidates if not r.review_count}
@@ -65,7 +71,7 @@ def replay(subjects: int, completion: str, fair: bool) -> dict:
                 )
             )
         if fair:
-            chosen = select_daily_reviews(eligible, budget_minutes=30)
+            chosen = select_daily_reviews(eligible, budget_minutes=budget)
         else:
             ordered = sorted(
                 eligible, key=lambda r: (r.due_date, r.last_reviewed_on or date.min, r.review_id)
@@ -73,13 +79,13 @@ def replay(subjects: int, completion: str, fair: bool) -> dict:
             chosen = []
             used = 0
             for row in ordered:
-                if used + row.bounded_minutes <= 30:
+                if used + row.bounded_minutes <= budget:
                     chosen.append(row)
                     used += row.bounded_minutes
         missing += len({r.subject_id for r in eligible} - {r.subject_id for r in chosen})
         minutes = sum(r.bounded_minutes for r in chosen)
         total_minutes += minutes
-        exceeded_count += int(minutes > 30)
+        exceeded_count += int(minutes > budget)
         duplicate_count += len(chosen) - len({r.review_id for r in chosen})
         for index, row in enumerate(chosen):
             offered[row.review_id] = day
@@ -91,7 +97,7 @@ def replay(subjects: int, completion: str, fair: bool) -> dict:
                 states[row.review_id] = ReviewState(**values)
     waits.sort()
     return dict(
-        subjects=subjects,
+        subjects=len({r.subject_id for r in candidates}),
         completion=completion,
         policy="fair-v2" if fair else "old-v1",
         days=28,
