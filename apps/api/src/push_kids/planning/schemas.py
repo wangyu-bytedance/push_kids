@@ -1,6 +1,13 @@
+from datetime import date
 from typing import Literal
 
 from pydantic import BaseModel, Field
+
+
+class ScheduleReviewRequest(BaseModel):
+    action: Literal["tomorrow", "day_after"]
+    base_day: date
+    expected_version: int = Field(ge=0, strict=True)
 
 
 class FeedbackRequest(BaseModel):

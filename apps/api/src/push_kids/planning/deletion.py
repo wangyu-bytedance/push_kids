@@ -14,6 +14,8 @@ from push_kids.persistence.models import (
     ReviewFeedback,
     ReviewFeedbackRequest,
     ReviewItem,
+    ReviewScheduleChange,
+    ReviewScheduleOverride,
     Subject,
 )
 from push_kids.platform.time import local_date
@@ -52,6 +54,7 @@ def delete_knowledge(db: Session, family_id: str, child_id: str, knowledge_id: s
                 DailyReviewPlanItem.child_id == child_id,
                 DailyReviewPlanItem.review_item_id == review.id,
                 DailyReviewPlanItem.plan_id == DailyReviewPlan.id,
+                DailyReviewPlanItem.state != "rescheduled",
             )
             .correlate(DailyReviewPlan)
         )
@@ -61,6 +64,7 @@ def delete_knowledge(db: Session, family_id: str, child_id: str, knowledge_id: s
                 DailyReviewPlanItem.family_id == family_id,
                 DailyReviewPlanItem.review_item_id == review.id,
                 DailyReviewPlanItem.plan_id == DailyReviewPlan.id,
+                DailyReviewPlanItem.state != "rescheduled",
             )
             .correlate(DailyReviewPlan)
             .scalar_subquery()
@@ -110,7 +114,13 @@ def delete_knowledge(db: Session, family_id: str, child_id: str, knowledge_id: s
             )
             .execution_options(synchronize_session=False)
         )
-        for model in (DailyReviewPlanItem, ReviewFeedbackRequest, ReviewFeedback):
+        for model in (
+            ReviewScheduleOverride,
+            ReviewScheduleChange,
+            DailyReviewPlanItem,
+            ReviewFeedbackRequest,
+            ReviewFeedback,
+        ):
             db.execute(
                 delete(model).where(model.family_id == family_id, model.review_item_id == review.id)
             )
@@ -123,4 +133,5 @@ def delete_knowledge(db: Session, family_id: str, child_id: str, knowledge_id: s
             )
         )
     db.delete(knowledge)
+    ChildrenService.invalidate_review_inventory(db, family_id, child_id)
     db.commit()

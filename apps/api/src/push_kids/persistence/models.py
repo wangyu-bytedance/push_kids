@@ -286,6 +286,7 @@ class Child(Base):
     name = Column(String(40), nullable=False)
     grade = Column(String(20), nullable=True)
     daily_budget_minutes = Column(Integer, nullable=False, default=15)
+    review_inventory_revision = Column(Integer, nullable=False, default=0, server_default="0")
     # False archives the profile: it leaves the switcher and refuses new writes, while every
     # existing record, review item and report stays readable. There is no physical delete.
     active = Column(Boolean, nullable=False, default=True, index=True)
@@ -536,6 +537,13 @@ class ReviewItem(Base):
     __table_args__ = (
         UniqueConstraint("knowledge_item_id", name="uq_review_knowledge"),
         Index(
+            "ix_review_scope_count_knowledge",
+            "family_id",
+            "child_id",
+            "review_count",
+            "knowledge_item_id",
+        ),
+        Index(
             "ix_review_items_family_child_active_due_last_id",
             "family_id",
             "child_id",
@@ -565,6 +573,51 @@ class ReviewItem(Base):
     last_feedback = Column(String(30), nullable=True)
     active = Column(Boolean, nullable=False, default=True)
     updated_at = Column(UTCDateTime(), nullable=False, default=utcnow, onupdate=utcnow)
+
+
+class ReviewScheduleOverride(Base):
+    """One pending parent reservation per review; scheduling is not a review event."""
+
+    __tablename__ = "review_schedule_overrides"
+    __table_args__ = (
+        Index(
+            "ix_review_override_scope_day",
+            "family_id",
+            "child_id",
+            "scheduled_on",
+            "review_item_id",
+        ),
+    )
+    review_item_id = Column(String(36), ForeignKey("review_items.id"), primary_key=True)
+    family_id = Column(String(80), nullable=False)
+    child_id = Column(String(36), ForeignKey("children.id"), nullable=False)
+    scheduled_on = Column(Date, nullable=False)
+    requested_on = Column(Date, nullable=False)
+    created_at = Column(UTCDateTime(), nullable=False, default=utcnow)
+    updated_at = Column(UTCDateTime(), nullable=False, default=utcnow, onupdate=utcnow)
+
+
+class ReviewScheduleChange(Base):
+    """Durable idempotent result and before/after scheduling audit, without child content."""
+
+    __tablename__ = "review_schedule_changes"
+    __table_args__ = (
+        UniqueConstraint("family_id", "idempotency_key", name="uq_review_schedule_key"),
+        Index("ix_review_schedule_scope_review", "family_id", "child_id", "review_item_id"),
+    )
+    id = Column(String(36), primary_key=True, default=new_id)
+    family_id = Column(String(80), nullable=False)
+    child_id = Column(String(36), ForeignKey("children.id"), nullable=False)
+    review_item_id = Column(String(36), ForeignKey("review_items.id"), nullable=False)
+    idempotency_key = Column(String(100), nullable=False)
+    request_fingerprint = Column(String(64), nullable=False)
+    action = Column(String(20), nullable=False)
+    before_due_date = Column(Date, nullable=False)
+    after_due_date = Column(Date, nullable=False)
+    before_version = Column(Integer, nullable=False)
+    after_version = Column(Integer, nullable=False)
+    result_json = Column(Text, nullable=False)
+    created_at = Column(UTCDateTime(), nullable=False, default=utcnow)
 
 
 class ReviewFeedback(Base):

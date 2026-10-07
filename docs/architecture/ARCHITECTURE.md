@@ -1,8 +1,13 @@
 # Push Kids current architecture
 
 - Status: `IMPLEMENTED_LOCALLY_PENDING_CLOUD_ACCEPTANCE`
-- Revision: `ARCH-20261006-SOURCE-DELETE-01`
-- Latest approval: user instruction “落地这两个spec”, 2026-10-06，批准 `SPEC-20261006-SOURCE-DELETE-02`；
+- Revision: `ARCH-20261006-REVIEW-MANAGEMENT-01`
+- Latest approval: user instruction “落地并实现”, 2026-10-06，批准 `SPEC-20261006-REVIEW-MANAGEMENT-03`。
+  Planning拥有inventory只读分页、scheduling事务和plan_candidates有界候选；ReviewScheduleOverride为单次预约，
+  ReviewScheduleChange为幂等审计；ChildrenService拥有清单revision失效。迁移head=`20261006_0016`。
+  未来预览与今日物化共用选择规则；写事务按Child→Review锁序，资格/容量/计划刷新使用MySQL当前读。
+  本地实现及隔离MySQL验证完成；未部署，原生界面验收待补。
+- Previous approval: user instruction “落地这两个spec”, 2026-10-06，批准 `SPEC-20261006-SOURCE-DELETE-02`；
   规划域拥有单知识点删除，通知域通过 PlanningService 读取存活复习；无 schema migration。
 - Confirmed by: user instruction “修复bug” approving `BUG-SPEC-20260919-MYSQL57-WORKER-01`, 2026-09-19
   (preserves `ARCH-ARK-CONTEXT-REUSE-20260919-01`, `ARCH-UNIFIED-REVIEW-20260913-02`,

@@ -160,3 +160,6 @@
 /* 与真实 2×2 指标卡等高：168rpx × 2 行 + 16rpx 间距 */
 .sk.metrics-sk { height: 352rpx; }
 .sk.chart-sk { height: 420rpx; }
+.inventory-entry { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 64px; padding: 16px; margin: 20px 0; }
+.inventory-title { display: block; color: var(--pk-primary); font-size: 18px; font-weight: 600; }
+.inventory-description { display: block; margin-top: 6px; color: var(--pk-ink-2); font-size: 14px; }

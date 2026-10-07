@@ -5,7 +5,14 @@
 - Baseline: `FDB-20260913-04`
 - Engineering contract: `FEC-20260913-LOCAL-DESIGN-EVIDENCE-01`
 - Design revision: `DREV-20261001-RECORD-VOICE-INLINE-03`（记录页紧凑输入框内嵌麦克风；仅本地验证）
-- Current-state revision: `UI-STATE-20261006-SOURCE-DELETE-01-LOCAL`
+- Current-state revision: `UI-STATE-20261006-REVIEW-MANAGEMENT-03-LOCAL`
+- Review management design/spec: `DREV-20261006-REVIEW-MANAGEMENT-03 / SPEC-20261006-REVIEW-MANAGEMENT-03`，
+  用户于2026-10-06“落地并实现”批准；原生页面已本地实现，未发布。DREV03导出/原生三视口/真机尚未验收。
+  新页`pages/review-inventory/index`从报表区间前进入；单科目录无“全部”，与日期一致的下划线选择。
+  次数全部/0/1/2/3直接选择；指定次数数字弹层确定才应用、取消保留，非法值留在表单内。
+  条目显示实际次数/最近复习/到期，调整菜单提高/降低优先级，红色删除需确认；viewer/归档只读。
+  翻页替换至多50行；科目目录后页刷新或调整后保留当前科目。
+  云bootstrap后确定权限，家庭/孩子切换清除旧行并丢弃迟到响应。验证见`docs/quality/evidence/REVIEW-MANAGEMENT-20261006.md`。
 - Today design revision: `DREV-20261006-SOURCE-DELETE-01`，用户于2026-10-06批准；本地实现，未发布。
 - Today Spec: `specs/active/FEAT-001-PRECISE-SOURCE-AND-KNOWLEDGE-DELETION.md`
   revision `SPEC-20261006-SOURCE-DELETE-02`；原生三视口及iOS/Android验收尚未完成。
@@ -35,10 +42,10 @@
 
 | Tab | Hero 标题 | Current responsibility |
 |---|---|---|
-| 今日 | 今天，也慢慢来 | 今日到期复习、最近一次只读复习安排、今日学习、今日活动；待确认/失败提示 |
+| 今日 | 今天，也慢慢来 | 今日到期复习、今日学习、今日活动；待确认/失败提示；未来安排改由报表复习条目页查看 |
 | 日程 | 这一周，心里有数 | 周日期轨、当天时间线、出行投影、全部日程项冲突提示、过去日程灰显、FAB 新建、编辑/删除日程 |
 | 记录 | 一笔一画，都算数 | 默认展示照片、紧凑文字框与框内语音入口的统一新增表单；历史在表单末尾默认折叠；展开后保留已确认/待处理/全部、搜索/半屏筛选/分页，列表进入独立记录详情页 |
-| 报表 | 一点一滴，看得见 | 7/30/100 天只读概览与固定 7 点趋势微图、组件内30天分页的复习紧迫度与活跃度、可下钻科目记录 |
+| 报表 | 一点一滴，看得见 | 独立复习条目入口；7/30/100 天只读概览与固定 7 点趋势微图、组件内30天分页的复习紧迫度与活跃度、可下钻科目记录 |
 | 设置 | 按你们的节奏来 | 三项基础学科、手动添加的其他科目与课外活动、活动安排、出行安排、家庭成员入口 |
 
 学习流程的深层页面分成两类责任：`pages/submission/confirm` 是**可编辑草稿**的独立入口（从新增流程

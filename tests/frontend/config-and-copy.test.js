@@ -67,14 +67,13 @@ test("today review section starts collapsed even when there are no due reviews",
   assert.doesNotMatch(template, /sections\.review \|\| !dashboard\.todo_count/);
 });
 
-test("today review plan exposes the nearest schedule without truncating knowledge names", () => {
+test("today removes the future preview without truncating current knowledge names", () => {
   const template = source("pages/today/index.wxml");
   const todoStyles = source("components/todo-card/index.wxss");
 
   assert.match(template, />复习安排</);
   assert.match(template, /今天没有到期内容/);
-  assert.match(template, /下一次复习/);
-  assert.match(template, /还有 \{\{nextReview\.remainingCount\}\} 项/);
+  assert.doesNotMatch(template, /下一次复习|nextReview/);
   assert.doesNotMatch(template, /确认一条学习记录后，复习日期会自动排到这里/);
   assert.doesNotMatch(todoStyles, /\.pt-n\s*\{[^}]*text-overflow:\s*ellipsis/s);
   assert.doesNotMatch(todoStyles, /\.pt-n\s*\{[^}]*white-space:\s*nowrap/s);

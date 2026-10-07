@@ -28,6 +28,7 @@ class ReviewSelectionCandidate:
     source_image_index: int | None = None
     review_round: int = 1
     interval_days: int | None = None
+    manually_scheduled: bool = False
 
     @property
     def bounded_minutes(self) -> int:
@@ -45,6 +46,7 @@ def select_daily_reviews(
     ordered = sorted(
         candidates,
         key=lambda row: (
+            not row.manually_scheduled,
             row.due_date,
             row.last_reviewed_on is not None,
             row.last_reviewed_on or date.min,
@@ -52,10 +54,10 @@ def select_daily_reviews(
         ),
     )
     for row in ordered:
-        if used + row.bounded_minutes > max(0, budget_minutes):
+        if not row.manually_scheduled and used + row.bounded_minutes > max(0, budget_minutes):
             continue
         selected.append(row)
         used += row.bounded_minutes
-        if used >= budget_minutes or len(selected) >= DAILY_REVIEW_CANDIDATE_LIMIT:
+        if len(selected) >= DAILY_REVIEW_CANDIDATE_LIMIT:
             break
     return selected

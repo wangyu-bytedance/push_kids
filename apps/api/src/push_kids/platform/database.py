@@ -12,7 +12,7 @@ from push_kids.platform.config import Settings
 
 
 class Database:
-    expected_cloud_revision = "20261006_0015"
+    expected_cloud_revision = "20261006_0016"
 
     _local_read_indexes = {
         "ix_learning_submissions_family_child_state_created_id",
@@ -62,6 +62,19 @@ class Database:
     def create_schema(self) -> None:
         Base.metadata.create_all(self.engine)
         self._upgrade_local_sqlite()
+        if self.engine.dialect.name == "sqlite":
+            columns = {item["name"] for item in inspect(self.engine).get_columns("children")}
+            if "review_inventory_revision" not in columns:
+                with self.engine.begin() as connection:
+                    connection.execute(
+                        text(
+                            "ALTER TABLE children ADD COLUMN review_inventory_revision "
+                            "INTEGER DEFAULT 0 NOT NULL"
+                        )
+                    )
+            for index in Base.metadata.tables["review_items"].indexes:
+                if index.name == "ix_review_scope_count_knowledge":
+                    index.create(self.engine, checkfirst=True)
 
     def verify_cloud_schema(self) -> None:
         if self.engine.dialect.name != "mysql":

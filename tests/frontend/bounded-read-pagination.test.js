@@ -213,59 +213,19 @@ test("Today discards a late Todo page after the child generation changes", async
   assert.equal(page.data.loadingMoreTodos, false);
 });
 
-test("Today shows the nearest scheduled review when nothing is due today", async () => {
-  const nextReview = {
-    day: "2026-09-13", total_count: 3, estimated_minutes: 6,
-    returned_count: 3, remaining_count: 0, next_cursor: null,
-    groups: [{
-      id: "english-read-scheduled", subject_id: "english", subject_name: "英语",
-      review_method: "朗读", estimated_minutes: 6,
-      items: [
-        { review_id: "r1", knowledge_name: "动作词汇：run、jump、swim、dance、sing", due_date: "2026-09-13" },
-        { review_id: "r2", knowledge_name: "can't + 动词的用法", due_date: "2026-09-13" },
-        { review_id: "r3", knowledge_name: "配套朗读与练习", due_date: "2026-09-13" }
-      ]
-    }]
-  };
-  async function request(requestPath) {
-    if (requestPath === "/children") return [{ id: "child", name: "小雨", avatar: "雨", active: true }];
-    if (requestPath === "/children/child/dashboard") return todayDashboard({ next_review: nextReview });
-    if (requestPath === "/children/child/subjects") return [{ id: "english", name: "英语", kind: "learning", active: true }];
-    throw new Error(`unexpected path: ${requestPath}`);
-  }
-  const { page } = loadPage("pages/today/index.js", request);
-
-  await page.load();
-
-  assert.equal(page.data.sectionMeta.review, "今天 0 项 · 明天 3 项");
-  assert.equal(page.data.sections.review, true);
-  assert.equal(page.data.nextReview.dayLabel, "明天 · 9 月 13 日");
-  assert.equal(page.data.nextReview.summary, "3 项 · 约 6 分钟");
-  assert.equal(page.data.nextReview.groups[0].subjectMark, "英");
-  assert.equal(page.data.nextReview.groups[0].items[0].name, "动作词汇：run、jump、swim、dance、sing");
-  assert.equal(page.data.upcomingError, "");
-});
-
-test("Today distinguishes an old dashboard from an explicitly empty future plan", async () => {
-  let dashboard = todayDashboard({ next_review: null });
-  async function request(requestPath) {
+test("Today ignores future preview data and keeps the review section preference", async () => {
+  const calls = [];
+  const { page } = loadPage("pages/today/index.js", async requestPath => {
+    calls.push(requestPath);
     if (requestPath === "/children") return [{ id: "child", name: "小雨", active: true }];
-    if (requestPath === "/children/child/dashboard") return dashboard;
-    if (requestPath === "/children/child/subjects") return [];
-    throw new Error(`unexpected path: ${requestPath}`);
-  }
-  const { page } = loadPage("pages/today/index.js", request);
-
+    if (requestPath.endsWith("/dashboard")) return todayDashboard({ next_review: { day: "2026-09-13", total_count: 3 } });
+    if (requestPath.endsWith("/subjects")) return [];
+    throw new Error("unexpected request");
+  });
   await page.load();
-  assert.equal(page.data.nextReviewKnown, true);
-  assert.equal(page.data.nextReview, null);
-
-  dashboard = todayDashboard();
-  delete dashboard.next_review;
-  await page.load();
-  assert.equal(page.data.nextReviewKnown, false);
-  assert.equal(page.data.nextReview, null);
   assert.equal(page.data.sectionMeta.review, "今天 0 项");
+  assert.equal(page.data.nextReview, undefined);
+  assert.equal(calls.some(path => path.includes("upcoming-reviews")), false);
 });
 
 test("Today does not show first-use guidance when a future review plan already exists", async () => {
@@ -288,67 +248,4 @@ test("Today does not show first-use guidance when a future review plan already e
   await page.load();
 
   assert.equal(page.data.dashboard.show_guide, false);
-  assert.equal(page.data.sections.review, true);
-});
-
-test("Today appends bounded upcoming pages without duplicates and retains rows on retryable failure", async () => {
-  let shouldFail = false;
-  const paths = [];
-  async function request(requestPath) {
-    paths.push(requestPath);
-    if (shouldFail) throw new Error("后续安排暂时没加载出来");
-    return {
-      day: "2026-09-13", total_count: 3, estimated_minutes: 6,
-      returned_count: 2, remaining_count: 0, next_cursor: null,
-      groups: [{ id: "english-read-scheduled", subject_id: "english", subject_name: "英语", review_method: "朗读", estimated_minutes: 4,
-        items: [
-          { review_id: "r1", knowledge_name: "重复项", due_date: "2026-09-13" },
-          { review_id: "r2", knowledge_name: "新增项", due_date: "2026-09-13" }
-        ] }]
-    };
-  }
-  const { page } = loadPage("pages/today/index.js", request);
-  page.loadGeneration = 2;
-  page.data.childId = "child";
-  page.data.dashboard = todayDashboard({ next_review: { day: "2026-09-13", total_count: 3, estimated_minutes: 6,
-    returned_count: 1, remaining_count: 2, next_cursor: "cursor+/=", groups: [] } });
-  page.data.nextReview = { day: "2026-09-13", groups: [{ id: "english-read-scheduled", subject_id: "english", subject_name: "英语", review_method: "朗读", estimated_minutes: 2,
-    items: [{ reviewId: "r1", name: "重复项", dueDate: "2026-09-13" }] }], remainingCount: 2, nextCursor: "cursor+/=" };
-
-  await page.expandUpcoming();
-
-  assert.deepEqual(paths, ["/children/child/upcoming-reviews?after=2026-09-12&limit=20&cursor=cursor%2B%2F%3D"]);
-  assert.deepEqual(Array.from(page.data.nextReview.groups[0].items, (item) => item.reviewId), ["r1", "r2"]);
-  assert.equal(page.data.nextReview.remainingCount, 0);
-  assert.equal(page.data.nextReview.nextCursor, null);
-
-  page.data.nextReview.nextCursor = "retry";
-  page.data.nextReview.remainingCount = 1;
-  shouldFail = true;
-  await page.expandUpcoming();
-
-  assert.deepEqual(Array.from(page.data.nextReview.groups[0].items, (item) => item.reviewId), ["r1", "r2"]);
-  assert.equal(page.data.nextReview.nextCursor, "retry");
-  assert.equal(page.data.upcomingError, "后续安排暂时没加载出来");
-  assert.equal(page.data.loadingMoreUpcoming, false);
-});
-
-test("Today ignores a late upcoming page after the selected child changes", async () => {
-  let resolvePage;
-  const pending = new Promise((resolve) => { resolvePage = resolve; });
-  const { page } = loadPage("pages/today/index.js", () => pending);
-  page.loadGeneration = 8;
-  page.data.childId = "child-a";
-  page.data.dashboard = todayDashboard({ next_review: { day: "2026-09-13", next_cursor: "late" } });
-  page.data.nextReview = { day: "2026-09-13", groups: [], remainingCount: 1, nextCursor: "late" };
-
-  const loading = page.expandUpcoming();
-  page.loadGeneration = 9;
-  page.data.childId = "child-b";
-  page.data.nextReview = null;
-  resolvePage({ day: "2026-09-13", groups: [{ id: "stale", items: [{ review_id: "stale" }] }], remaining_count: 0 });
-  await loading;
-
-  assert.equal(page.data.childId, "child-b");
-  assert.equal(page.data.nextReview, null);
 });

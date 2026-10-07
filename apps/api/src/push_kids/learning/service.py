@@ -1253,6 +1253,7 @@ class LearningService:
         submission.error_code = None
         submission.error_message = None
         submission.confirmed_at = utcnow()
+        ChildrenService.invalidate_review_inventory(db, family_id, str(submission.child_id))
         purge_stages(db, family_id, submission_id=submission_id)
         db.commit()
         # The flat fields describe the first record so clients built before multi-subject

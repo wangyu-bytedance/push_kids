@@ -26,6 +26,11 @@
 降级为设计历史；`DREV-20260830-03`、`DREV-20260905-UX-03`、`DREV-20260905-UX-04` 同为设计历史。
 旧 Figma 和 waiver 记录仅作为当时流程的历史证据；当前设计与发布不依赖外部设计工具。
 
+2026-10-06本地增量：`SPEC-20261006-REVIEW-MANAGEMENT-03 / DREV-20261006-REVIEW-MANAGEMENT-03`
+已获用户“落地并实现”批准，复用本基线/FEC。源码在`prototypes/DREV-20261006-REVIEW-MANAGEMENT-03/`，
+候选证据在`snapshots/UI-001/DREV-20261006-REVIEW-MANAGEMENT-03/APPROVAL.md`；原生实现状态见UI-001。
+本增量的视觉导出、三视口与真机证据仍不完整，不纳入“已验证视觉”范围，不引用旧版截图充数。
+
 ### PKDS-2.0「纸 · 芽」视觉基线要点
 
 - 纸面：画布 `#FAF7F0`，卡片 `#FFFDF8`，凹陷 `#F3EFE4`；分层靠大而淡的阴影 + 发丝线，不靠强描边。

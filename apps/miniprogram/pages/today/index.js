@@ -109,81 +109,6 @@ function stableReviewPlan(dashboard) {
   };
 }
 
-function monthDay(iso) {
-  const parts = String(iso || "").split("-");
-  if (parts.length !== 3) return "";
-  return `${Number(parts[1])} 月 ${Number(parts[2])} 日`;
-}
-
-function relativeDayLabel(currentDay, scheduledDay) {
-  const current = String(currentDay || "").split("-").map(Number);
-  const scheduled = String(scheduledDay || "").split("-").map(Number);
-  if (current.length !== 3 || scheduled.length !== 3 || current.some(Number.isNaN) || scheduled.some(Number.isNaN)) return "";
-  const distance = Math.round((Date.UTC(scheduled[0], scheduled[1] - 1, scheduled[2])
-    - Date.UTC(current[0], current[1] - 1, current[2])) / 86400000);
-  return distance === 1 ? "明天" : monthDay(scheduledDay);
-}
-
-function normalizeUpcomingGroup(group) {
-  const subjectName = group.subject_name || group.subjectName || "学习";
-  const reviewMethod = group.review_method || group.reviewMethod || "复习";
-  return {
-    ...group,
-    id: group.id,
-    subjectId: group.subject_id || group.subjectId || "",
-    subjectName,
-    subjectClass: ui.subjectClass(subjectName),
-    subjectMark: ui.subjectMark(subjectName),
-    reviewMethod,
-    estimatedMinutes: Number(group.estimated_minutes !== undefined
-      ? group.estimated_minutes : group.estimatedMinutes) || 0,
-    items: (group.items || []).map((item) => ({
-      ...item,
-      reviewId: item.review_id || item.reviewId,
-      name: item.knowledge_name || item.name,
-      dueDate: item.due_date || item.dueDate,
-      estimatedMinutes: Number(item.estimated_minutes !== undefined
-        ? item.estimated_minutes : item.estimatedMinutes) || 0,
-      sourceSubmissionId: item.source_submission_id || item.sourceSubmissionId || "",
-      canOpenSource: !!(item.source_submission_id || item.sourceSubmissionId)
-    }))
-  };
-}
-
-function buildNextReview(value, currentDay) {
-  if (!value || !value.day || !(Number(value.total_count) > 0)) return null;
-  const shortLabel = relativeDayLabel(currentDay, value.day);
-  return {
-    day: value.day,
-    dayLabel: shortLabel === "明天" ? `明天 · ${monthDay(value.day)}` : shortLabel,
-    shortLabel,
-    summary: `${Number(value.total_count) || 0} 项 · 约 ${Number(value.estimated_minutes) || 0} 分钟`,
-    totalCount: Number(value.total_count) || 0,
-    estimatedMinutes: Number(value.estimated_minutes) || 0,
-    remainingCount: Number(value.remaining_count) || 0,
-    nextCursor: value.next_cursor || null,
-    groups: (value.groups || []).map(normalizeUpcomingGroup)
-  };
-}
-
-function mergeUpcomingGroups(current, incoming) {
-  const result = (current || []).map(normalizeUpcomingGroup);
-  const byId = Object.fromEntries(result.map((group) => [group.id, group]));
-  (incoming || []).map(normalizeUpcomingGroup).forEach((group) => {
-    const existing = byId[group.id];
-    if (!existing) {
-      byId[group.id] = group;
-      result.push(group);
-      return;
-    }
-    const ids = new Set(existing.items.map((item) => item.reviewId));
-    const additions = group.items.filter((item) => !ids.has(item.reviewId));
-    existing.items.push(...additions);
-    existing.estimatedMinutes += additions.reduce((sum, item) => sum + item.estimatedMinutes, 0);
-  });
-  return result;
-}
-
 Page({
   data: {
     loading: true, error: "", children: [], childIndex: 0, childId: "", dashboard: null,
@@ -192,8 +117,6 @@ Page({
     hero: { required: 0, optional: 0, total: 0, minutes: 0, note: "", ticks: [] },
     stablePlan: false, planCompleted: false,
     todoCards: [], hiddenTodoCount: 0, todosExpanded: false, loadingMoreTodos: false,
-    nextReview: null, nextReviewKnown: false, upcomingExpanded: false,
-    loadingMoreUpcoming: false, upcomingError: "",
     showChildSheet: false, multiChild: false, canAddChild: true,
     showSourceSheet: false, sourceSheet: null,
     canWrite: false, deleteTarget: null, deleting: false, deleteError: "",
@@ -217,8 +140,7 @@ Page({
   async load() {
     const generation = (this.loadGeneration || 0) + 1;
     this.loadGeneration = generation;
-    this.setData({ loading: true, error: "", loadingMoreTodos: false,
-      loadingMoreUpcoming: false, upcomingError: "" });
+    this.setData({ loading: true, error: "", loadingMoreTodos: false });
     try {
       const app = getApp();
       if (app.globalData.useCloud && !app.globalData.currentMember) await app.refreshBootstrap();
@@ -231,7 +153,7 @@ Page({
       const canAddChild = childContext.canAddChild(profiles);
       if (!children.length) {
         this.setData({ loading: false, children, dashboard: null, childId: "", multiChild: false,
-          canAddChild, nextReview: null, nextReviewKnown: false, upcomingExpanded: false });
+          canAddChild });
         return;
       }
       const childIndex = selection.childIndex;
@@ -263,15 +185,11 @@ Page({
       dashboard.optional_activity_suggestions = dashboard.activity_suggestions.filter((item) => item.suggested && !scheduledSubjects.has(item.subject_id));
       dashboard.is_empty = !dashboard.todo_groups.length && !dashboard.daily_summary.record_count && !dashboard.schedule_items.length && !dashboard.optional_activity_suggestions.length;
       dashboard.show_guide = !dashboard.todo_groups.length && !(plan && plan.plannedCount)
-        && !dashboard.daily_summary.record_count
-        && !dashboard.next_review;
+        && !dashboard.daily_summary.record_count && !dashboard.next_review;
       dashboard.activity_count = dashboard.schedule_items.length + dashboard.optional_activity_suggestions.length;
       const view = todoView(dashboard.must_todo_groups, dashboard.optional_todo_groups, this.data.todosExpanded);
       const remoteTodoCount = Number(dashboard.todo_remaining_count) || 0;
-      const nextReviewKnown = Object.prototype.hasOwnProperty.call(dashboard, "next_review");
-      const nextReview = buildNextReview(dashboard.next_review, dashboard.day);
       const sections = normalizeSections(ui.readPreference("todaySections", childId, DEFAULT_SECTIONS));
-      if (!dashboard.todo_count && nextReview) sections.review = true;
       const planCompleted = !!(plan && plan.plannedCount > 0 && plan.selectedCount === 0);
       const planNote = planCompleted
         ? `今天安排的 ${plan.plannedCount} 项已完成，今天不会再补入新内容。`
@@ -282,7 +200,7 @@ Page({
         ? `${plan ? "今天安排" : "今天"} ${dashboard.todo_count} 项 · 约 ${dashboard.estimated_minutes} 分钟`
         : (planCompleted
           ? `今天 ${plan.completedCount} 项已完成`
-          : (nextReview ? `今天 0 项 · ${nextReview.shortLabel} ${nextReview.totalCount} 项` : "今天 0 项"));
+          : "今天 0 项");
       this.setData({ loading: false, children, childIndex, childId, dashboard,
         multiChild: selection.multiChild, canAddChild,
         dayLabel: dayLabel(dashboard.day),
@@ -304,8 +222,7 @@ Page({
           activity: `${dashboard.activity_count} 项`
         },
         todoCards: view.cards, hiddenTodoCount: view.hidden + remoteTodoCount,
-        nextReview, nextReviewKnown, upcomingExpanded: false, loadingMoreTodos: false,
-        loadingMoreUpcoming: false, upcomingError: "" });
+        loadingMoreTodos: false });
       if (app.setTabBadge) app.setTabBadge("records", dashboard.pending_confirmation_count);
       const back = app.globalData.reviewReturn;
       if (back && back.childId === childId) {
@@ -375,41 +292,6 @@ Page({
       }
     }
   },
-  toggleUpcoming() {
-    if (!this.data.nextReview || !this.data.dashboard || !this.data.dashboard.todo_count) return;
-    this.setData({ upcomingExpanded: !this.data.upcomingExpanded, upcomingError: "" });
-  },
-  async expandUpcoming() {
-    const dashboard = this.data.dashboard;
-    const current = this.data.nextReview;
-    if (!dashboard || !current || !current.nextCursor || this.data.loadingMoreUpcoming) return;
-    const generation = this.loadGeneration;
-    const childId = this.data.childId;
-    const cursor = current.nextCursor;
-    this.setData({ loadingMoreUpcoming: true, upcomingError: "" });
-    try {
-      const after = encodeURIComponent(dashboard.day || "");
-      const page = await api.request(`/children/${childId}/upcoming-reviews?after=${after}&limit=20&cursor=${encodeURIComponent(cursor)}`);
-      if (generation !== this.loadGeneration || childId !== this.data.childId
-          || !this.data.nextReview || this.data.nextReview.nextCursor !== cursor) return;
-      const incoming = buildNextReview(page, dashboard.day);
-      const groups = mergeUpcomingGroups(this.data.nextReview.groups, incoming ? incoming.groups : []);
-      this.setData({
-        nextReview: {
-          ...this.data.nextReview,
-          groups,
-          remainingCount: Number(page.remaining_count) || 0,
-          nextCursor: page.next_cursor || null
-        },
-        loadingMoreUpcoming: false,
-        upcomingError: ""
-      });
-    } catch (error) {
-      if (generation === this.loadGeneration && childId === this.data.childId) {
-        this.setData({ loadingMoreUpcoming: false, upcomingError: error.message });
-      }
-    }
-  },
   openReviewSource(event) {
     const submissionId = event.currentTarget.dataset.submissionId;
     if (submissionId) wx.navigateTo({ url: `/pages/record-detail/index?id=${submissionId}` });
@@ -476,8 +358,7 @@ Page({
     const childId = this.data.children[childIndex].id;
     getApp().selectChild(childId);
     this.setData({ childIndex, childId, showChildSheet: false, showSourceSheet: false,
-      sourceSheet: null, todosExpanded: false,
-      nextReview: null, nextReviewKnown: false, upcomingExpanded: false, upcomingError: "" });
+      sourceSheet: null, todosExpanded: false });
     await this.load();
   },
   async changeChild(event) {
@@ -485,9 +366,7 @@ Page({
     const childIndex = Number(event.detail.value);
     const childId = this.data.children[childIndex].id;
     getApp().selectChild(childId);
-    this.setData({ childIndex, childId, showSourceSheet: false, sourceSheet: null,
-      nextReview: null, nextReviewKnown: false, upcomingExpanded: false,
-      upcomingError: "" });
+    this.setData({ childIndex, childId, showSourceSheet: false, sourceSheet: null });
     await this.load();
   },
   recordLearning() { getApp().globalData.recordIntent = { childId: this.data.childId, view: "new" }; wx.switchTab({ url: "/pages/records/index" }); },

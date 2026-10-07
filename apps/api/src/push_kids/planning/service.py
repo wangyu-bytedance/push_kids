@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 import json
-from dataclasses import dataclass
-from datetime import date, datetime
+from dataclasses import dataclass, replace
+from datetime import date, datetime, timedelta
 from hashlib import sha256
 
 from sqlalchemy import and_, case, delete, func, or_, select
@@ -23,6 +23,8 @@ from push_kids.persistence.models import (
     ReviewFeedbackBatchRequest,
     ReviewFeedbackRequest,
     ReviewItem,
+    ReviewScheduleChange,
+    ReviewScheduleOverride,
     Subject,
 )
 from push_kids.planning.deletion import delete_knowledge
@@ -31,12 +33,15 @@ from push_kids.planning.domain import (
     group_daily_todos,
     review_interval_days,
 )
+from push_kids.planning.inventory import inventory_page, subjects_page
+from push_kids.planning.plan_candidates import selected_candidates
 from push_kids.planning.policies import (
     CURVE_HEAT_POLICY_REVISION,
     ReviewPolicyTransition,
     ReviewState,
     apply_review_event,
 )
+from push_kids.planning.scheduling import consume_arrangement, schedule_review
 from push_kids.planning.selection import (
     DAILY_REVIEW_CANDIDATE_LIMIT,
     DAILY_REVIEW_POLICY_REVISION,
@@ -133,9 +138,17 @@ class PendingReviewLoad:
 
 class PlanningService:
     delete_knowledge = staticmethod(delete_knowledge)
+    inventory_page = staticmethod(inventory_page)
+    inventory_subjects = staticmethod(subjects_page)
+    schedule_review = staticmethod(schedule_review)
 
     @staticmethod
     def purge_data(db: Session, family_id: str, child_id: str | None) -> None:
+        for model in (ReviewScheduleOverride, ReviewScheduleChange):
+            scope = [model.family_id == family_id]
+            if child_id is not None:
+                scope.append(model.child_id == child_id)
+            db.execute(delete(model).where(*scope))
         review_query = select(ReviewItem.id).where(ReviewItem.family_id == family_id)
         knowledge_query = select(KnowledgeItem.id).where(KnowledgeItem.family_id == family_id)
         if child_id is not None:
@@ -529,6 +542,7 @@ class PlanningService:
                     DailyReviewPlanItem.plan_id == plan.id,
                     DailyReviewPlanItem.family_id == family_id,
                     DailyReviewPlanItem.child_id == child_id,
+                    DailyReviewPlanItem.state != "rescheduled",
                     KnowledgeItem.family_id == family_id,
                     Subject.kind == "learning",
                 )
@@ -658,45 +672,8 @@ class PlanningService:
             .where(*due_scope)
             .with_for_update()
         ).one()
-        bounded_minutes = case(
-            (KnowledgeItem.estimated_minutes < 1, 1),
-            (KnowledgeItem.estimated_minutes > 5, 5),
-            else_=KnowledgeItem.estimated_minutes,
-        )
-        rows = db.execute(
-            select(ReviewItem, KnowledgeItem, Subject, bounded_minutes.label("minutes"))
-            .join(KnowledgeItem, ReviewItem.knowledge_item_id == KnowledgeItem.id)
-            .join(Subject, KnowledgeItem.subject_id == Subject.id)
-            .where(*due_scope)
-            .order_by(
-                ReviewItem.due_date.asc(),
-                ReviewItem.last_reviewed_on.is_not(None).asc(),
-                ReviewItem.last_reviewed_on.asc(),
-                ReviewItem.id.asc(),
-            )
-            .limit(DAILY_REVIEW_CANDIDATE_LIMIT)
-            .with_for_update()
-        ).all()
-        candidates = [
-            ReviewSelectionCandidate(
-                review_id=review.id,
-                knowledge_id=knowledge.id,
-                subject_id=subject.id,
-                subject_name=subject.name,
-                knowledge_name=knowledge.name,
-                review_method=knowledge.review_method,
-                estimated_minutes=int(minutes),
-                due_date=review.due_date,
-                last_reviewed_on=review.last_reviewed_on,
-                review_step=int(review.step or 0),
-                last_feedback=review.last_feedback,
-                source_submission_id=review.source_submission_id,
-            )
-            for review, knowledge, subject, minutes in rows
-        ]
-        selected = select_daily_reviews(
-            candidates,
-            budget_minutes=min(120, max(5, int(child.daily_budget_minutes or 15))),
+        selected = selected_candidates(
+            db, family_id, str(child.id), target, int(child.daily_budget_minutes or 0), lock=True
         )
         plan = DailyReviewPlan(
             family_id=family_id,
@@ -722,6 +699,7 @@ class PlanningService:
                 )
             )
         try:
+            ChildrenService.invalidate_review_inventory(db, family_id, str(child.id))
             db.commit()
         except IntegrityError:
             db.rollback()
@@ -1245,7 +1223,27 @@ class PlanningService:
             lapse_count=max(0, int(review.lapse_count or 0)),
             state_version=max(0, int(review.state_version or 0)),
         )
-        transition = apply_review_event(state, action, reviewed_on)  # type: ignore[arg-type]
+        arrangement = consume_arrangement(db, family_id, review, reviewed_on, action)
+        policy_state = state
+        if arrangement == "consumed" and state.last_reviewed_on == reviewed_on:
+            # The parent's date is a reservation, not a new automatic curve interval.
+            # Repeated same-day events must use the unchanged interval of the actual review.
+            policy_state = replace(
+                state, due_date=reviewed_on + timedelta(days=state.interval_days)
+            )
+        transition = apply_review_event(policy_state, action, reviewed_on)  # type: ignore[arg-type]
+        if arrangement == "preserve":
+            transition = replace(
+                transition,
+                step=state.step,
+                due_date=state.due_date,
+                active=state.active,
+                last_reviewed_on=state.last_reviewed_on,
+                interval_days=state.interval_days,
+                heat_milli=state.heat_milli,
+                lapse_count=state.lapse_count,
+                advanced=False,
+            )
         review.step = transition.step
         review.due_date = transition.due_date
         review.active = transition.active
@@ -1291,6 +1289,7 @@ class PlanningService:
                 "reinforce": "reinforce",
                 "defer": "deferred",
             }[action]
+        ChildrenService.invalidate_review_inventory(db, family_id, str(review.child_id))
         return transition
 
     @staticmethod
@@ -1304,6 +1303,16 @@ class PlanningService:
         # Feedback closes a review item that already exists, so it is scoped by review id and
         # family only. An archived profile keeps accepting feedback on purpose (`BHV-025`);
         # the deterministic planner never creates new review items here.
+        child_id = db.scalar(
+            select(ReviewItem.child_id).where(
+                ReviewItem.id == review_id, ReviewItem.family_id == family_id
+            )
+        )
+        db.scalar(
+            select(Child)
+            .where(Child.id == child_id, Child.family_id == family_id)
+            .with_for_update()
+        )
         review = db.scalar(
             select(ReviewItem)
             .join(KnowledgeItem, ReviewItem.knowledge_item_id == KnowledgeItem.id)
@@ -1382,6 +1391,11 @@ class PlanningService:
         idempotency_key: str,
     ) -> dict:
         """Apply all selected feedback in one transaction, with byte-stable replay."""
+        db.scalar(
+            select(Child)
+            .where(Child.id == child_id, Child.family_id == family_id)
+            .with_for_update()
+        )
         ChildrenService.get_child(db, family_id, child_id)
         review_ids = [item["review_id"] for item in items]
         if len(review_ids) != len(set(review_ids)):

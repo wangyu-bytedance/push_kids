@@ -1,4 +1,4 @@
-from sqlalchemy import delete, func, select
+from sqlalchemy import delete, func, select, update
 from sqlalchemy.orm import Session
 
 from push_kids.children.schemas import ChildCreate, ChildUpdate, SubjectCreate, SubjectUpdate
@@ -19,6 +19,15 @@ def is_custom_subject(name: str, kind: str) -> bool:
 
 
 class ChildrenService:
+    @staticmethod
+    def invalidate_review_inventory(db: Session, family_id: str, child_id: str) -> None:
+        """Advance the child-owned read generation in the caller's transaction."""
+        db.execute(
+            update(Child)
+            .where(Child.family_id == family_id, Child.id == child_id)
+            .values(review_inventory_revision=Child.review_inventory_revision + 1)
+        )
+
     @staticmethod
     def notification_scope_is_active(
         db: Session, family_id: str, child_ids: set[str] | None
@@ -178,6 +187,7 @@ class ChildrenService:
             )
         for key, value in values.items():
             setattr(child, key, value)
+        cls.invalidate_review_inventory(db, family_id, child_id)
         db.commit()
         return child
 
@@ -220,6 +230,7 @@ class ChildrenService:
             raise ConflictError("这个孩子的资料正在清理")
         if child.active:
             child.active = False
+            cls.invalidate_review_inventory(db, family_id, child_id)
             cls._audit(db, family_id, actor_binding_id, "child.archived", child_id)
             db.commit()
         return child
@@ -240,6 +251,7 @@ class ChildrenService:
         cls._require_capacity(db, family_id)
         cls._require_free_name(db, family_id, str(child.name), exclude_child_id=child_id)
         child.active = True
+        cls.invalidate_review_inventory(db, family_id, child_id)
         cls._audit(db, family_id, actor_binding_id, "child.restored", child_id)
         db.commit()
         return child
@@ -262,6 +274,7 @@ class ChildrenService:
             is_custom=is_custom_subject(data.name, data.kind),
         )
         db.add(subject)
+        cls.invalidate_review_inventory(db, family_id, data.child_id)
         db.commit()
         return subject
 
@@ -287,5 +300,6 @@ class ChildrenService:
             raise NotFoundError("没有找到这个科目")
         cls.require_active_child(db, family_id, subject.child_id)
         subject.active = data.active
+        cls.invalidate_review_inventory(db, family_id, str(subject.child_id))
         db.commit()
         return subject

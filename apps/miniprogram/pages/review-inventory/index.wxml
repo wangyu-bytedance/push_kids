@@ -1,0 +1,73 @@
+<view class="inventory-page">
+  <text class="page-title">复习条目</text>
+  <text class="muted intro">看看学过什么，安排接下来的复习</text>
+  <view class="view-tabs">
+    <button wx:for="{{views}}" wx:key="id" class="tab {{view === item.id ? 'on' : ''}}" data-id="{{item.id}}" bindtap="changeView" aria-label="{{item.label}}{{view === item.id ? '，已选中' : ''}}">{{item.label}}</button>
+  </view>
+  <view class="choices dates" wx:if="{{view === 'time'}}">
+    <button class="choice {{offset === 1 ? 'on' : ''}}" data-offset="1" bindtap="selectDay">明天<text class="muted">计划复习</text></button>
+    <button class="choice {{offset === 2 ? 'on' : ''}}" data-offset="2" bindtap="selectDay">后天<text class="muted">计划复习</text></button>
+  </view>
+  <block wx:elif="{{view === 'subject'}}">
+    <view class="choices">
+      <button wx:for="{{subjects}}" wx:key="id" class="choice {{subjectId === item.id ? 'on' : ''}}" data-id="{{item.id}}" bindtap="selectSubject">{{item.name}}<text class="muted">{{item.count}} 个条目</text></button>
+    </view>
+    <view class="pager" wx:if="{{subjectCursor || subjectHasPrevious}}"><button bindtap="firstSubjects" disabled="{{subjectLoading || !subjectHasPrevious}}">科目首页</button><button bindtap="nextSubjects" disabled="{{subjectLoading || !subjectCursor}}">下一页科目</button></view>
+    <text class="muted" wx:if="{{subjectLoading}}">正在读取科目…</text>
+    <view class="error" wx:if="{{subjectError}}"><text>{{subjectError}}</text><button bindtap="firstSubjects">重新加载科目</button></view>
+  </block>
+  <view class="choices" wx:else>
+    <button class="choice {{count === null ? 'on' : ''}}" data-count="all" bindtap="selectCount">全部</button>
+    <button wx:for="{{counts}}" wx:key="*this" class="choice {{count === item ? 'on' : ''}}" data-count="{{item}}" bindtap="selectCount">{{item}} 次</button>
+    <button class="choice {{count > 3 ? 'on' : ''}}" bindtap="openCount">{{count > 3 ? count + ' 次' : '指定次数'}}</button>
+  </view>
+  <text class="notice" wx:if="{{notice}}" aria-live="polite">{{notice}}</text>
+  <view class="error" wx:if="{{error}}"><text>{{error}}</text><button bindtap="retry">{{conflict ? '重新加载' : '重试'}}</button></view>
+  <view class="loading" wx:if="{{loading && !loaded}}"><view class="sk"></view><view class="sk"></view><text class="muted">正在读取复习条目…</text></view>
+  <block wx:if="{{loaded}}">
+    <view class="result-head"><text class="result-title">{{total}} 个知识条目</text><text class="muted" wx:if="{{loading}}">正在更新…</text></view>
+    <text class="muted" wx:if="{{view === 'time'}}">{{planDate}} · 约 {{minutes}} 分钟。实际安排会随复习进度更新。</text>
+    <text class="muted" wx:elif="{{view === 'subject' || count === null}}">按复习次数从少到多展示。</text>
+    <text class="muted" wx:else>已复习 {{count}} 次</text>
+    <text class="notice" wx:if="{{view === 'time' && overBudget}}">手动安排已保留，比日常 {{budget}} 分钟预算多 {{overBudget}} 分钟。</text>
+    <text class="muted readonly" wx:if="{{!canWrite}}">当前为只读，可查看条目和安排。</text>
+    <view class="entry" wx:for="{{items}}" wx:key="knowledge_id">
+      <text class="muted">{{item.subject_name}}</text>
+      <text class="knowledge-name">{{item.knowledge_name}}</text>
+      <view class="facts"><text>{{item.review_count === null ? '复习次数待核实' : '已复习 ' + item.review_count + ' 次'}}</text><text>上次复习：{{item.last_reviewed_on || '尚未复习'}}</text></view>
+      <view class="entry-bottom"><text class="muted">{{item.due_date ? '下次 ' + item.due_date : (item.review_id ? '本轮复习已结束' : '暂无复习安排')}}{{item.manually_scheduled ? ' · 手动安排' : ''}}</text><button wx:if="{{canWrite}}" class="adjust" data-id="{{item.knowledge_id}}" bindtap="openActions" disabled="{{loading}}" aria-label="调整{{item.knowledge_name}}">调整</button></view>
+    </view>
+    <view class="empty" wx:if="{{!items.length && !error}}"><text>{{view === 'time' ? '这一天暂无计划复习' : (view === 'count' && count !== null ? '没有已复习 ' + count + ' 次的条目' : '暂无知识条目')}}</text><button wx:if="{{view === 'count' && count !== null}}" data-count="all" bindtap="selectCount">查看全部次数</button></view>
+    <view class="pager" wx:if="{{pageNumber > 1 || nextCursor}}"><button bindtap="reload" disabled="{{loading || pageNumber === 1}}">回到首页</button><text>第 {{pageNumber}} 页</text><button bindtap="nextPage" disabled="{{loading || !nextCursor}}">下一页</button></view>
+  </block>
+</view>
+
+<view class="overlay" wx:if="{{showCountSheet}}" bindtap="closeCount" catchtouchmove="ignore">
+  <view class="sheet" catchtap="ignore" aria-role="dialog" aria-label="指定复习次数">
+    <scroll-view scroll-y class="sheet-scroll">
+      <text class="sheet-title">指定复习次数</text><text class="muted">只查看恰好复习了这个次数的条目</text>
+      <label for="exact-count">复习次数</label>
+      <input id="exact-count" type="number" value="{{countDraft}}" focus="{{showCountSheet}}" maxlength="10" bindinput="inputCount" bindconfirm="confirmCount" confirm-type="done" aria-label="复习次数，0至2147483647的整数" />
+      <text class="error" wx:if="{{countError}}" aria-live="polite">{{countError}}</text>
+      <view class="sheet-buttons"><button bindtap="closeCount">取消</button><button class="primary" bindtap="confirmCount">确定</button></view>
+    </scroll-view>
+  </view>
+</view>
+<view class="overlay" wx:if="{{target}}" bindtap="closeActions" catchtouchmove="ignore">
+  <view class="sheet" catchtap="ignore" aria-role="dialog" aria-label="{{deleting ? '确认删除条目' : '调整复习安排'}}">
+    <scroll-view scroll-y class="sheet-scroll">
+      <text class="sheet-title">{{deleting ? '删除这个条目？' : '调整复习安排'}}</text><text class="target-name">{{target.knowledge_name}}</text>
+      <block wx:if="{{deleting}}"><text class="muted">将永久删除这条知识、相关复习历史和后续计划。同批其他知识、原始记录和图片会保留。删除后无法恢复。</text><button class="danger confirm-delete" bindtap="confirmDelete" disabled="{{saving || conflict || !canWrite}}" loading="{{saving}}">确认删除</button></block>
+      <block wx:else>
+        <button class="action" data-action="tomorrow" bindtap="schedule" disabled="{{saving || conflict || !canWrite || !target.can_schedule || (target.manually_scheduled && target.in_tomorrow_plan)}}">{{target.manually_scheduled && target.in_tomorrow_plan ? '已手动安排到明天' : '加入明天复习'}}<text class="muted">提高优先级，后续日期会重新计算</text></button>
+        <button class="action" data-action="day_after" bindtap="schedule" disabled="{{saving || conflict || !canWrite || !target.can_schedule || !target.in_tomorrow_plan}}">改到后天复习<text class="muted">{{target.in_tomorrow_plan ? '从明天移出，降低优先级' : '仅明天计划中的条目可操作'}}</text></button>
+        <text class="muted" wx:if="{{!target.can_schedule}}">当前条目无法调整排期</text>
+        <text class="muted">调整日期不会增加复习次数。</text>
+        <button class="action danger" bindtap="askDelete" disabled="{{saving || !canWrite}}">删除条目<text class="muted">用于重复或生成错误的知识</text></button>
+      </block>
+      <text class="muted" wx:if="{{saving}}">正在保存…</text>
+      <view class="error" wx:if="{{actionError}}"><text>{{actionError}}</text><button wx:if="{{conflict}}" bindtap="reload">读取最新安排</button></view>
+      <button bindtap="closeActions" disabled="{{saving}}">取消</button>
+    </scroll-view>
+  </view>
+</view>

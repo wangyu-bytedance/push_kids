@@ -6,6 +6,16 @@ from typing import Literal
 
 from push_kids.planning.policies import initial_review_state
 
+
+def parent_schedule_date(today: date, action: str, due: date) -> date:
+    """A parent changes a date, never an observed learning fact."""
+    if action == "tomorrow":
+        return today + timedelta(days=1)
+    if action == "day_after" and due in {today + timedelta(days=1), today + timedelta(days=2)}:
+        return today + timedelta(days=2)
+    raise ValueError("仅明天的安排可延后")
+
+
 REVIEW_INTERVALS = (1, 3, 7, 14, 30, 60)
 FeedbackAction = Literal["complete", "reinforce", "partial", "defer"]
 

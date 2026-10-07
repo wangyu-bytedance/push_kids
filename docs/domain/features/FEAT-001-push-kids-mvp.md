@@ -6,7 +6,11 @@
   Successful stage DTOs resume across retries; cancellation/manual confirmation/delete clean temporary data.
   This does not describe a deployed release. Evidence and remaining quality gates are in
   `specs/active/BUG-028-STAGED-ANALYSIS-RELIABILITY.md`.
-- Revision: `FEAT-STATE-20261006-SOURCE-DELETE-01-LOCAL`
+- Revision: `FEAT-STATE-20261006-REVIEW-MANAGEMENT-03-LOCAL`
+- Review management: `SPEC-20261006-REVIEW-MANAGEMENT-03` 已获用户“落地并实现”批准并本地实现。
+  报表独立条目页按明天/后天、单科学习科目、精确复习次数查看；删除清理相关历史和计划，手动改期不计复习。
+  今日下一次复习入口移除；后端兼容字段暂保留。预约优先且显式提示预算超量，120项硬上限、幂等及状态冲突由服务端控制。
+  自动化、真实MySQL与独立复查通过，原生视觉/真机验收待补；未发布。证据：`docs/quality/evidence/REVIEW-MANAGEMENT-20261006.md`。
 - Last verified: 2026-10-06，`SPEC-20261006-SOURCE-DELETE-02` 精确原图与单知识点删除已本地实现；
   自动化、隔离 MySQL 5.7 与微信 preview 结果见该 Spec 的 verification record；未部署后端或发布前端。
   原生三视口、iOS/Android 与独立人员审查仍待完成。

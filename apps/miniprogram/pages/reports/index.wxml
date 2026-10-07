@@ -18,6 +18,11 @@
     <view class="ico ico-refresh-dan sm" aria-role="button" aria-label="重新加载报表" bindtap="load"></view>
   </view>
 
+  <view class="inventory-entry pk-card" wx:if="{{children.length}}" aria-role="button" aria-label="查看和调整复习条目" bindtap="openReviewInventory">
+    <view><text class="inventory-title">复习条目</text><text class="inventory-description">查看次数，调整接下来的安排</text></view>
+    <view class="chev right"></view>
+  </view>
+
   <view class="range-seg" wx:if="{{children.length}}">
     <view class="seg n3">
       <view class="{{days === item ? 'on' : ''}}" wx:for="{{ranges}}" wx:key="*this" aria-role="button" aria-label="看近 {{item}} 天" data-days="{{item}}" bindtap="changeRange">近 {{item}} 天</view>

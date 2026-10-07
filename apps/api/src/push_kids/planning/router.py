@@ -1,5 +1,5 @@
 from datetime import date
-from typing import Annotated
+from typing import Annotated, Literal
 
 from fastapi import APIRouter, Depends, Header, Query, Response
 from sqlalchemy.orm import Session
@@ -9,6 +9,7 @@ from push_kids.planning.schemas import (
     BatchFeedbackResult,
     FeedbackRequest,
     FeedbackResult,
+    ScheduleReviewRequest,
 )
 from push_kids.planning.service import PlanningService
 from push_kids.platform.context import family_id
@@ -16,6 +17,68 @@ from push_kids.platform.dependencies import get_db
 from push_kids.platform.time import local_date
 
 router = APIRouter(tags=["planning"])
+
+
+@router.get("/children/{child_id}/review-inventory/subjects")
+def review_subjects(
+    child_id: str,
+    family: Annotated[str, Depends(family_id)],
+    db: Annotated[Session, Depends(get_db)],
+    cursor: Annotated[str | None, Query(max_length=1500)] = None,
+    limit: Annotated[int, Query(ge=1, le=50)] = 20,
+):
+    return PlanningService.inventory_subjects(db, family, child_id, cursor=cursor, limit=limit)
+
+
+@router.get("/children/{child_id}/review-inventory")
+def review_inventory(
+    child_id: str,
+    family: Annotated[str, Depends(family_id)],
+    db: Annotated[Session, Depends(get_db)],
+    view: Literal["time", "subject", "count"] = "time",
+    offset: Annotated[int, Query(ge=1, le=2)] = 1,
+    subject_id: Annotated[str | None, Query(max_length=36)] = None,
+    review_count: Annotated[int | None, Query(ge=0, le=2147483647)] = None,
+    cursor: Annotated[str | None, Query(max_length=1500)] = None,
+    limit: Annotated[int, Query(ge=1, le=50)] = 20,
+):
+    return PlanningService.inventory_page(
+        db,
+        family,
+        child_id,
+        view=view,
+        offset=offset,
+        subject_id=subject_id,
+        review_count=review_count,
+        cursor=cursor,
+        limit=limit,
+    )
+
+
+@router.post("/children/{child_id}/reviews/{review_id}/schedule")
+def schedule_review(
+    child_id: str,
+    review_id: str,
+    body: ScheduleReviewRequest,
+    family: Annotated[str, Depends(family_id)],
+    db: Annotated[Session, Depends(get_db)],
+    idempotency_key: Annotated[
+        str,
+        Header(
+            alias="Idempotency-Key", min_length=8, max_length=100, pattern=r"^[A-Za-z0-9._:-]+$"
+        ),
+    ],
+):
+    return PlanningService.schedule_review(
+        db,
+        family,
+        child_id,
+        review_id,
+        action=body.action,
+        base_day=body.base_day,
+        expected_version=body.expected_version,
+        idempotency_key=idempotency_key,
+    )
 
 
 @router.delete("/children/{child_id}/knowledge/{knowledge_id}", status_code=204)

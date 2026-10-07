@@ -282,6 +282,9 @@ Page({
     wx.switchTab({ url: "/pages/records/index" });
   },
   openSettings() { wx.switchTab({ url: "/pages/settings/index" }); },
+  openReviewInventory() {
+    if (this.data.childId) wx.navigateTo({ url: `/pages/review-inventory/index?childId=${this.data.childId}` });
+  },
   onUrgencyPageChange(event) {
     const urgencyPage = event.detail.current;
     this.setData({ urgencyPage, urgencyPageLabel: this.data.urgencyPages[urgencyPage].label });
