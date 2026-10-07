@@ -109,4 +109,5 @@ MySQL5.7相关查询显式使用科目索引，并把等值关联列包含在排
 旧业务兼容包在0014/0018均通过schema校验、拒绝unknown；两种本地容器健康/非root/SIGTERM通过。
 完整证据与尚未完成的生产/原生门禁见 `docs/quality/evidence/FAIR-REVIEW-PROJECTION-20261007.md`。
 本Spec保留active/VERIFYING，不能把兼容过渡版本当作新策略已上线。
-当前云托管返回ResourceInUse，本次没有新不可变版本；等待管理员处理已有发布任务后继续灰度、备份和迁移。
+继续执行后，兼容过渡包创建`flask-ik19-026`，平台版本及服务均为normal，PUBLIC关闭；
+流量接管和生产备份仍是迁移前人工门禁。新策略包尚未部署，见发布记录。
