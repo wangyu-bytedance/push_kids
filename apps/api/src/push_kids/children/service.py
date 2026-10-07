@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from push_kids.children.schemas import ChildCreate, ChildUpdate, SubjectCreate, SubjectUpdate
 from push_kids.persistence.models import Child, FamilyAuditEvent, Subject
 from push_kids.platform.errors import ConflictError, NotFoundError
+from push_kids.platform.time import local_date
 
 # The system preset learning catalog owned by this module; everything else is parent-built.
 PRESET_LEARNING_SUBJECTS = ("语文", "数学", "英语")
@@ -251,6 +252,7 @@ class ChildrenService:
         cls._require_capacity(db, family_id)
         cls._require_free_name(db, family_id, str(child.name), exclude_child_id=child_id)
         child.active = True
+        child.review_queue_resumed_on = local_date()
         cls.invalidate_review_inventory(db, family_id, child_id)
         cls._audit(db, family_id, actor_binding_id, "child.restored", child_id)
         db.commit()
@@ -299,6 +301,8 @@ class ChildrenService:
         if subject is None:
             raise NotFoundError("没有找到这个科目")
         cls.require_active_child(db, family_id, subject.child_id)
+        if data.active and not subject.active:
+            subject.review_queue_resumed_on = local_date()
         subject.active = data.active
         cls.invalidate_review_inventory(db, family_id, str(subject.child_id))
         db.commit()

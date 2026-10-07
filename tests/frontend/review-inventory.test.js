@@ -10,6 +10,24 @@ function setup(request = async () => result, options) {
 }
 const event = (dataset) => ({ currentTarget: { dataset } });
 
+test("dates and arrangement labels distinguish reservations and legacy responses", async () => {
+  const { page } = setup(async () => ({ ...result, items: [
+    { knowledge_id: "auto", arrangement_state: "waiting", suggested_review_on: "2026-10-07" },
+    { knowledge_id: "manual", arrangement_state: "reserved", scheduled_on: "2026-10-08", suggested_review_on: null },
+    { knowledge_id: "legacy", due_date: "2026-10-06" },
+    { knowledge_id: "unknown", arrangement_state: "new-state", due_date: null },
+    { knowledge_id: "done", arrangement_state: "reviewed_today", suggested_review_on: "2026-10-10" }
+  ] }));
+  await page.loadItems();
+  assert.equal(page.data.items[0].dateText, "建议复习日：2026-10-07");
+  assert.equal(page.data.items[0].arrangementText, "等待安排");
+  assert.equal(page.data.items[1].dateText, "家长安排日期：2026-10-08");
+  assert.equal(page.data.items[2].dateText, "计划日期：2026-10-06");
+  assert.equal(page.data.items[2].arrangementText, "安排状态待更新");
+  assert.equal(page.data.items[3].dateText, "");
+  assert.equal(page.data.items[4].arrangementText, "今日已完成");
+});
+
 test("cloud bootstrap may establish family and still load; switching context clears old rows", async () => {
   let ready; const paths = [];
   const { page, app } = setup(async path => { paths.push(path); return result; },

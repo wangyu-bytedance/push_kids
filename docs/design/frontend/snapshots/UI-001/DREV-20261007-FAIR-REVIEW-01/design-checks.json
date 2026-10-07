@@ -1,0 +1,438 @@
+{
+  "renderer": "Playwright Chromium (HTML design only)",
+  "nativeAcceptance": false,
+  "checks": [
+    {
+      "state": "today",
+      "width": 320,
+      "height": 568,
+      "scroll": 320,
+      "buttons": [],
+      "fontMin": 14
+    },
+    {
+      "state": "completed",
+      "width": 320,
+      "height": 568,
+      "scroll": 320,
+      "buttons": [],
+      "fontMin": 14
+    },
+    {
+      "state": "limited",
+      "width": 320,
+      "height": 568,
+      "scroll": 320,
+      "buttons": [],
+      "fontMin": 14
+    },
+    {
+      "state": "clear",
+      "width": 320,
+      "height": 568,
+      "scroll": 320,
+      "buttons": [],
+      "fontMin": 14
+    },
+    {
+      "state": "waiting",
+      "width": 320,
+      "height": 568,
+      "scroll": 320,
+      "buttons": [
+        {
+          "w": 64,
+          "h": 44
+        }
+      ],
+      "fontMin": 14
+    },
+    {
+      "state": "scheduled",
+      "width": 320,
+      "height": 568,
+      "scroll": 320,
+      "buttons": [
+        {
+          "w": 64,
+          "h": 44
+        }
+      ],
+      "fontMin": 14
+    },
+    {
+      "state": "reviewed",
+      "width": 320,
+      "height": 568,
+      "scroll": 320,
+      "buttons": [
+        {
+          "w": 64,
+          "h": 44
+        }
+      ],
+      "fontMin": 14
+    },
+    {
+      "state": "deferred",
+      "width": 320,
+      "height": 568,
+      "scroll": 320,
+      "buttons": [
+        {
+          "w": 64,
+          "h": 44
+        }
+      ],
+      "fontMin": 14
+    },
+    {
+      "state": "future",
+      "width": 320,
+      "height": 568,
+      "scroll": 320,
+      "buttons": [
+        {
+          "w": 64,
+          "h": 44
+        }
+      ],
+      "fontMin": 14
+    },
+    {
+      "state": "reserved",
+      "width": 320,
+      "height": 568,
+      "scroll": 320,
+      "buttons": [
+        {
+          "w": 64,
+          "h": 44
+        }
+      ],
+      "fontMin": 14
+    },
+    {
+      "state": "ungenerated",
+      "width": 320,
+      "height": 568,
+      "scroll": 320,
+      "buttons": [
+        {
+          "w": 64,
+          "h": 44
+        }
+      ],
+      "fontMin": 14
+    },
+    {
+      "state": "legacy",
+      "width": 320,
+      "height": 568,
+      "scroll": 320,
+      "buttons": [
+        {
+          "w": 64,
+          "h": 44
+        }
+      ],
+      "fontMin": 14
+    },
+    {
+      "state": "long",
+      "width": 320,
+      "height": 568,
+      "scroll": 320,
+      "buttons": [],
+      "fontMin": 14
+    },
+    {
+      "state": "today",
+      "width": 390,
+      "height": 844,
+      "scroll": 390,
+      "buttons": [],
+      "fontMin": 14
+    },
+    {
+      "state": "completed",
+      "width": 390,
+      "height": 844,
+      "scroll": 390,
+      "buttons": [],
+      "fontMin": 14
+    },
+    {
+      "state": "limited",
+      "width": 390,
+      "height": 844,
+      "scroll": 390,
+      "buttons": [],
+      "fontMin": 14
+    },
+    {
+      "state": "clear",
+      "width": 390,
+      "height": 844,
+      "scroll": 390,
+      "buttons": [],
+      "fontMin": 14
+    },
+    {
+      "state": "waiting",
+      "width": 390,
+      "height": 844,
+      "scroll": 390,
+      "buttons": [
+        {
+          "w": 64,
+          "h": 44
+        }
+      ],
+      "fontMin": 14
+    },
+    {
+      "state": "scheduled",
+      "width": 390,
+      "height": 844,
+      "scroll": 390,
+      "buttons": [
+        {
+          "w": 64,
+          "h": 44
+        }
+      ],
+      "fontMin": 14
+    },
+    {
+      "state": "reviewed",
+      "width": 390,
+      "height": 844,
+      "scroll": 390,
+      "buttons": [
+        {
+          "w": 64,
+          "h": 44
+        }
+      ],
+      "fontMin": 14
+    },
+    {
+      "state": "deferred",
+      "width": 390,
+      "height": 844,
+      "scroll": 390,
+      "buttons": [
+        {
+          "w": 64,
+          "h": 44
+        }
+      ],
+      "fontMin": 14
+    },
+    {
+      "state": "future",
+      "width": 390,
+      "height": 844,
+      "scroll": 390,
+      "buttons": [
+        {
+          "w": 64,
+          "h": 44
+        }
+      ],
+      "fontMin": 14
+    },
+    {
+      "state": "reserved",
+      "width": 390,
+      "height": 844,
+      "scroll": 390,
+      "buttons": [
+        {
+          "w": 64,
+          "h": 44
+        }
+      ],
+      "fontMin": 14
+    },
+    {
+      "state": "ungenerated",
+      "width": 390,
+      "height": 844,
+      "scroll": 390,
+      "buttons": [
+        {
+          "w": 64,
+          "h": 44
+        }
+      ],
+      "fontMin": 14
+    },
+    {
+      "state": "legacy",
+      "width": 390,
+      "height": 844,
+      "scroll": 390,
+      "buttons": [
+        {
+          "w": 64,
+          "h": 44
+        }
+      ],
+      "fontMin": 14
+    },
+    {
+      "state": "long",
+      "width": 390,
+      "height": 844,
+      "scroll": 390,
+      "buttons": [],
+      "fontMin": 14
+    },
+    {
+      "state": "today",
+      "width": 430,
+      "height": 932,
+      "scroll": 430,
+      "buttons": [],
+      "fontMin": 14
+    },
+    {
+      "state": "completed",
+      "width": 430,
+      "height": 932,
+      "scroll": 430,
+      "buttons": [],
+      "fontMin": 14
+    },
+    {
+      "state": "limited",
+      "width": 430,
+      "height": 932,
+      "scroll": 430,
+      "buttons": [],
+      "fontMin": 14
+    },
+    {
+      "state": "clear",
+      "width": 430,
+      "height": 932,
+      "scroll": 430,
+      "buttons": [],
+      "fontMin": 14
+    },
+    {
+      "state": "waiting",
+      "width": 430,
+      "height": 932,
+      "scroll": 430,
+      "buttons": [
+        {
+          "w": 64,
+          "h": 44
+        }
+      ],
+      "fontMin": 14
+    },
+    {
+      "state": "scheduled",
+      "width": 430,
+      "height": 932,
+      "scroll": 430,
+      "buttons": [
+        {
+          "w": 64,
+          "h": 44
+        }
+      ],
+      "fontMin": 14
+    },
+    {
+      "state": "reviewed",
+      "width": 430,
+      "height": 932,
+      "scroll": 430,
+      "buttons": [
+        {
+          "w": 64,
+          "h": 44
+        }
+      ],
+      "fontMin": 14
+    },
+    {
+      "state": "deferred",
+      "width": 430,
+      "height": 932,
+      "scroll": 430,
+      "buttons": [
+        {
+          "w": 64,
+          "h": 44
+        }
+      ],
+      "fontMin": 14
+    },
+    {
+      "state": "future",
+      "width": 430,
+      "height": 932,
+      "scroll": 430,
+      "buttons": [
+        {
+          "w": 64,
+          "h": 44
+        }
+      ],
+      "fontMin": 14
+    },
+    {
+      "state": "reserved",
+      "width": 430,
+      "height": 932,
+      "scroll": 430,
+      "buttons": [
+        {
+          "w": 64,
+          "h": 44
+        }
+      ],
+      "fontMin": 14
+    },
+    {
+      "state": "ungenerated",
+      "width": 430,
+      "height": 932,
+      "scroll": 430,
+      "buttons": [
+        {
+          "w": 64,
+          "h": 44
+        }
+      ],
+      "fontMin": 14
+    },
+    {
+      "state": "legacy",
+      "width": 430,
+      "height": 932,
+      "scroll": 430,
+      "buttons": [
+        {
+          "w": 64,
+          "h": 44
+        }
+      ],
+      "fontMin": 14
+    },
+    {
+      "state": "long",
+      "width": 430,
+      "height": 932,
+      "scroll": 430,
+      "buttons": [],
+      "fontMin": 14
+    }
+  ]
+}

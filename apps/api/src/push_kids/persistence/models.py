@@ -287,6 +287,7 @@ class Child(Base):
     grade = Column(String(20), nullable=True)
     daily_budget_minutes = Column(Integer, nullable=False, default=15)
     review_inventory_revision = Column(Integer, nullable=False, default=0, server_default="0")
+    review_queue_resumed_on = Column(Date, nullable=True)
     # False archives the profile: it leaves the switcher and refuses new writes, while every
     # existing record, review item and report stays readable. There is no physical delete.
     active = Column(Boolean, nullable=False, default=True, index=True)
@@ -305,6 +306,7 @@ class Subject(Base):
     kind = Column(String(20), nullable=False, default=SubjectKind.learning.value)
     color = Column(String(20), nullable=False, default="#39847A")
     active = Column(Boolean, nullable=False, default=True)
+    review_queue_resumed_on = Column(Date, nullable=True)
     # False marks the system preset catalog; True marks a parent- or proposal-created subject.
     is_custom = Column(Boolean, nullable=False, default=True)
     created_at = Column(UTCDateTime(), nullable=False, default=utcnow)
@@ -443,6 +445,7 @@ class LearningRecord(Base):
 class KnowledgeItem(Base):
     __tablename__ = "knowledge_items"
     __table_args__ = (
+        Index("ix_knowledge_scope_minutes_id", "family_id", "child_id", "estimated_minutes", "id"),
         UniqueConstraint(
             "family_id",
             "child_id",
@@ -535,6 +538,13 @@ class KnowledgeOccurrence(Base):
 class ReviewItem(Base):
     __tablename__ = "review_items"
     __table_args__ = (
+        Index(
+            "ix_review_scope_offered_knowledge",
+            "family_id",
+            "child_id",
+            "last_offered_on",
+            "knowledge_item_id",
+        ),
         UniqueConstraint("knowledge_item_id", name="uq_review_knowledge"),
         Index(
             "ix_review_scope_count_knowledge",
@@ -564,6 +574,8 @@ class ReviewItem(Base):
     step = Column(Integer, nullable=False, default=0)
     due_date = Column(Date, nullable=False, index=True)
     last_reviewed_on = Column(Date, nullable=True)
+    queue_eligible_on = Column(Date, nullable=True)
+    last_offered_on = Column(Date, nullable=True)
     review_count = Column(Integer, nullable=False, default=0)
     interval_days = Column(Integer, nullable=False, default=1)
     heat_milli = Column(Integer, nullable=False, default=0)
@@ -664,6 +676,8 @@ class DailyReviewPlan(Base):
     budget_minutes = Column(Integer, nullable=False)
     total_minutes = Column(Integer, nullable=False, default=0)
     due_count = Column(Integer, nullable=False, default=0)
+    eligible_subject_count = Column(Integer, nullable=True)
+    covered_subject_count = Column(Integer, nullable=True)
     earliest_due = Column(Date, nullable=True)
     policy_revision = Column(String(40), nullable=False, default="daily-plan-v1")
     state = Column(String(20), nullable=False, default="active")

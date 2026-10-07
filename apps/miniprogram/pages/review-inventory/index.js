@@ -1,5 +1,19 @@
 const api = require("../../utils/api");
 
+function arrangementView(item) {
+  const labels = {
+    reviewed_today: "今日已完成", deferred_today: "今天已跳过",
+    scheduled_today: "今日已安排", reserved: "家长已安排",
+    not_due: "尚未到建议日", waiting: "等待安排",
+    awaiting_daily_plan: "等待生成今日安排", unavailable: "暂无复习安排"
+  };
+  const current = Object.prototype.hasOwnProperty.call(labels, item.arrangement_state);
+  const dateLabel = !current ? "计划日期" : item.scheduled_on ? "家长安排日期" : "建议复习日";
+  const dateValue = !current ? item.due_date : (item.scheduled_on || item.suggested_review_on);
+  return { ...item, dateText: dateValue ? `${dateLabel}：${dateValue}` : "",
+    arrangementText: current ? labels[item.arrangement_state] : "安排状态待更新" };
+}
+
 function canWrite() {
   const context = getApp().globalData;
   return context.currentMember ? ["manager", "editor"].includes(context.currentMember.role) : !context.useCloud;
@@ -83,7 +97,7 @@ Page({
       const result = await api.request(`/children/${this.data.childId}/review-inventory?${query.join("&")}`);
       if (!this.visible || generation !== this.generation || context !== this.context()) return;
       this.currentCursor = cursor;
-      this.setData({ loaded: true, loading: false, items: result.items, total: result.total,
+      this.setData({ loaded: true, loading: false, items: result.items.map(arrangementView), total: result.total,
         nextCursor: result.next_cursor, pageNumber: nextPage, asOfDay: result.as_of_day,
         planDate: result.plan_date || "", minutes: result.planned_minutes || 0,
         budget: result.budget_minutes || 0, overBudget: result.over_budget_minutes || 0,

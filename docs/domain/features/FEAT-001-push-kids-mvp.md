@@ -1,6 +1,9 @@
 # FEAT-001 — 家庭学习持续跟进系统 MVP
 
 - Status: `CURRENT`
+- Local fair-review implementation: `SPEC-20261007-FAIR-REVIEW-01` 已批准并实现科目覆盖、首次/再次机会和实际计划日等待优先。
+  预约优先、真实反馈计数与当日快照保持原合同；日期与安排状态分开。未发布：5万条性能门禁失败、
+  schema兼容过渡尚未落实，独立审查BLOCK；补充修订02待批准。证据见`docs/quality/evidence/FAIR-REVIEW-20261007.md`。
 - Local analysis change under verification: `BUG-SPEC-20261006-STAGED-ANALYSIS-01` — default provider
   changed to bounded per-material extraction, consolidation, server-owned history lookup and alias matching.
   Successful stage DTOs resume across retries; cancellation/manual confirmation/delete clean temporary data.

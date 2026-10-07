@@ -133,7 +133,7 @@ test("Today uses the stable daily selection instead of the full due Todo list", 
   assert.equal(page.data.dashboard.todo_count, 2);
   assert.equal(page.data.dashboard.todo_next_cursor, null);
   assert.deepEqual(Array.from(page.data.todoCards[0].items, (item) => item.review_id), ["r1", "r2"]);
-  assert.equal(page.data.hero.note, "今天先做 2 项，其余 10 项会按最早到期顺序安排到后续复习。");
+  assert.equal(page.data.hero.note, "");
   assert.equal(page.data.sectionMeta.review, "今天安排 2 项 · 约 4 分钟");
 });
 
@@ -157,7 +157,7 @@ test("Today reports a completed fixed plan without refilling it", async () => {
   assert.equal(page.data.planCompleted, true);
   assert.equal(page.data.dashboard.todo_count, 0);
   assert.deepEqual(plain(page.data.todoCards), []);
-  assert.equal(page.data.hero.note, "今天安排的 3 项已完成，今天不会再补入新内容。");
+  assert.equal(page.data.hero.note, "");
   assert.equal(page.data.sectionMeta.review, "今天 3 项已完成");
 });
 

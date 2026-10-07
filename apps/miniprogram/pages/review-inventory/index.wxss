@@ -43,3 +43,6 @@ input { height: 48px; border: var(--pk-border-line); border-radius: var(--pk-r-l
 .sheet-buttons { display: flex; gap: 12px; margin-top: 24px; }
 .sheet-buttons button { flex: 1; }
 .primary { color: var(--pk-surface); background: var(--pk-primary); border-radius: var(--pk-r-lg); }
+.arrangement { flex: 1; min-width: 0; }
+.arrangement text { display: block; }
+.arrangement-state { margin-top: 8rpx; font-size: 15px; color: var(--pk-primary); }

@@ -78,7 +78,9 @@ def test_inventory_bounded_reads(client, app, family_headers, child, size):
                 cursor = data["next_cursor"]
             assert len(data["items"]) <= 20
             assert len(json.dumps(data).encode()) <= 96 * 1024
-            assert len(queries) <= (16 if view == "time" else 8)
+            # Fairness adds fixed coverage/bucket reads and today's arrangement projection.
+            # Day two previews need at most three bounded dry runs (never per-subject SQL).
+            assert len(queries) <= (27 if view == "time" else 13)
             assert all(q.lstrip().startswith("SELECT") for q in queries)
             # Every row query is LIMIT-bounded; totals use a database aggregate.
             assert all(

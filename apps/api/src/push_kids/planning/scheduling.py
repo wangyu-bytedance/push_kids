@@ -21,6 +21,7 @@ from push_kids.persistence.models import (
 )
 from push_kids.planning.domain import parent_schedule_date
 from push_kids.planning.inventory import preview_reviews
+from push_kids.planning.queue_state import record_offered, reset_queue
 from push_kids.platform.errors import ConflictError, NotFoundError
 from push_kids.platform.time import local_date
 
@@ -277,6 +278,7 @@ def schedule_review(
             review.step = 0
         review.active = True
         review.due_date = target
+        reset_queue(review, target)
         review.state_version += 1
         if override is None:
             override = ReviewScheduleOverride(
@@ -330,6 +332,7 @@ def schedule_review(
             # Refresh after SQL withdrawal; avoid writing a stale total from the identity map.
             db.refresh(target_plan, with_for_update=True)
             target_plan.total_minutes = int(target_plan.total_minutes or 0) + minutes
+            record_offered(db, family_id, child_id, [review_id], target)
         db.flush()
         # A due item may have been outside the plan's minute budget, so removing
         # only selected rows cannot maintain its due/backlog total. Recount every

@@ -12,7 +12,7 @@ from push_kids.platform.config import Settings
 
 
 class Database:
-    expected_cloud_revision = "20261006_0016"
+    expected_cloud_revision = "20261007_0017"
 
     _local_read_indexes = {
         "ix_learning_submissions_family_child_state_created_id",
@@ -63,6 +63,30 @@ class Database:
         Base.metadata.create_all(self.engine)
         self._upgrade_local_sqlite()
         if self.engine.dialect.name == "sqlite":
+            additions = {
+                "children": {"review_queue_resumed_on": "DATE"},
+                "subjects": {"review_queue_resumed_on": "DATE"},
+                "review_items": {"queue_eligible_on": "DATE", "last_offered_on": "DATE"},
+                "daily_review_plans": {
+                    "eligible_subject_count": "INTEGER",
+                    "covered_subject_count": "INTEGER",
+                },
+            }
+            with self.engine.begin() as connection:
+                for table, fields in additions.items():
+                    existing = {c["name"] for c in inspect(connection).get_columns(table)}
+                    for name, kind in fields.items():
+                        if name not in existing:
+                            connection.execute(
+                                text(f"ALTER TABLE {table} ADD COLUMN {name} {kind}")
+                            )
+                            if name == "queue_eligible_on":
+                                connection.execute(
+                                    text(
+                                        "UPDATE review_items SET queue_eligible_on = "
+                                        "MAX(due_date, DATE('now', '+8 hours'))"
+                                    )
+                                )
             columns = {item["name"] for item in inspect(self.engine).get_columns("children")}
             if "review_inventory_revision" not in columns:
                 with self.engine.begin() as connection:
@@ -73,7 +97,13 @@ class Database:
                         )
                     )
             for index in Base.metadata.tables["review_items"].indexes:
-                if index.name == "ix_review_scope_count_knowledge":
+                if index.name in {
+                    "ix_review_scope_count_knowledge",
+                    "ix_review_scope_offered_knowledge",
+                }:
+                    index.create(self.engine, checkfirst=True)
+            for index in Base.metadata.tables["knowledge_items"].indexes:
+                if index.name == "ix_knowledge_scope_minutes_id":
                     index.create(self.engine, checkfirst=True)
 
     def verify_cloud_schema(self) -> None:

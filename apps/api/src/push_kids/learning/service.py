@@ -1494,6 +1494,7 @@ class LearningService:
                     policy_revision="curve_heat_v1",
                     state_version=initial.state_version,
                 )
+                PlanningService.initialize_queue(review, local_date())
                 db.add(review)
                 db.flush()
             if knowledge.id is None or review.id is None:

@@ -71,7 +71,7 @@
         <view class="rg"><view class="rgd"></view><text>必做 {{hero.required}}</text></view>
         <view class="rg opt" wx:if="{{hero.optional}}"><view class="rgd"></view><text>有余力 {{hero.optional}}</text></view>
       </view>
-      <text class="hero-note">{{hero.note}}</text>
+      <text class="hero-note" wx:if="{{hero.note}}">{{hero.note}}</text>
       <view class="btn-row mt4">
         <view class="btn md" aria-role="button" aria-label="记录学习" bindtap="recordLearning"><view class="ico ico-camera-inv sm"></view><text>记录学习</text></view>
         <view class="btn md neutral" aria-role="button" aria-label="添加日程" bindtap="addSchedule"><view class="ico ico-plus sm"></view><text>添加日程</text></view>
@@ -107,7 +107,7 @@
         </view>
         <view class="review-today-clear" wx:if="{{!dashboard.todo_count}}">
           <view class="review-clear-mark">✓</view>
-          <text wx:if="{{planCompleted}}">今天安排的内容已完成，不会再补入新内容</text>
+          <text wx:if="{{planCompleted}}">今天安排的内容已完成</text>
           <text wx:elif="{{stablePlan}}">今天没有安排复习</text>
           <text wx:else>今天没有到期内容</text>
         </view>

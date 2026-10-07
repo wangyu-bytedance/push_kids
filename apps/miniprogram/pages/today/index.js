@@ -191,11 +191,9 @@ Page({
       const remoteTodoCount = Number(dashboard.todo_remaining_count) || 0;
       const sections = normalizeSections(ui.readPreference("todaySections", childId, DEFAULT_SECTIONS));
       const planCompleted = !!(plan && plan.plannedCount > 0 && plan.selectedCount === 0);
-      const planNote = planCompleted
-        ? `今天安排的 ${plan.plannedCount} 项已完成，今天不会再补入新内容。`
-        : (plan && plan.backlogCount > 0
-          ? `今天先做 ${plan.selectedCount} 项，其余 ${plan.backlogCount} 项会按最早到期顺序安排到后续复习。`
-          : "今天的安排生成后保持不变，完成后不会临时补入新内容。");
+      const planNote = !planCompleted && dashboard.review_selection
+        && dashboard.review_selection.coverage_limited
+        ? "本次预算未能覆盖所有待复习科目。" : "";
       const reviewMeta = dashboard.todo_count
         ? `${plan ? "今天安排" : "今天"} ${dashboard.todo_count} 项 · 约 ${dashboard.estimated_minutes} 分钟`
         : (planCompleted

@@ -1,6 +1,7 @@
 <view class="inventory-page">
   <text class="page-title">复习条目</text>
   <text class="muted intro">看看学过什么，安排接下来的复习</text>
+  <text class="muted intro">到了建议复习日后，还需按当天预算安排。</text>
   <view class="view-tabs">
     <button wx:for="{{views}}" wx:key="id" class="tab {{view === item.id ? 'on' : ''}}" data-id="{{item.id}}" bindtap="changeView" aria-label="{{item.label}}{{view === item.id ? '，已选中' : ''}}">{{item.label}}</button>
   </view>
@@ -35,7 +36,7 @@
       <text class="muted">{{item.subject_name}}</text>
       <text class="knowledge-name">{{item.knowledge_name}}</text>
       <view class="facts"><text>{{item.review_count === null ? '复习次数待核实' : '已复习 ' + item.review_count + ' 次'}}</text><text>上次复习：{{item.last_reviewed_on || '尚未复习'}}</text></view>
-      <view class="entry-bottom"><text class="muted">{{item.due_date ? '下次 ' + item.due_date : (item.review_id ? '本轮复习已结束' : '暂无复习安排')}}{{item.manually_scheduled ? ' · 手动安排' : ''}}</text><button wx:if="{{canWrite}}" class="adjust" data-id="{{item.knowledge_id}}" bindtap="openActions" disabled="{{loading}}" aria-label="调整{{item.knowledge_name}}">调整</button></view>
+      <view class="entry-bottom"><view class="arrangement"><text class="muted" wx:if="{{item.dateText}}">{{item.dateText}}</text><text class="arrangement-state">{{item.arrangementText}}</text></view><button wx:if="{{canWrite}}" class="adjust" data-id="{{item.knowledge_id}}" bindtap="openActions" disabled="{{loading}}" aria-label="调整{{item.knowledge_name}}">调整</button></view>
     </view>
     <view class="empty" wx:if="{{!items.length && !error}}"><text>{{view === 'time' ? '这一天暂无计划复习' : (view === 'count' && count !== null ? '没有已复习 ' + count + ' 次的条目' : '暂无知识条目')}}</text><button wx:if="{{view === 'count' && count !== null}}" data-count="all" bindtap="selectCount">查看全部次数</button></view>
     <view class="pager" wx:if="{{pageNumber > 1 || nextCursor}}"><button bindtap="reload" disabled="{{loading || pageNumber === 1}}">回到首页</button><text>第 {{pageNumber}} 页</text><button bindtap="nextPage" disabled="{{loading || !nextCursor}}">下一页</button></view>

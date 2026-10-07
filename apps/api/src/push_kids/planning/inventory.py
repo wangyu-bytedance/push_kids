@@ -16,6 +16,7 @@ from push_kids.persistence.models import (
     Subject,
 )
 from push_kids.planning.plan_candidates import selected_candidates
+from push_kids.planning.queue_state import missed_days, recent_plan_days
 from push_kids.platform.errors import AppError, ConflictError, NotFoundError
 from push_kids.platform.pagination import decode_cursor, encode_cursor
 from push_kids.platform.time import local_date
@@ -45,6 +46,8 @@ def preview_reviews(
     """Two sequential dry runs; tomorrow's projected selection is not duplicated on day two."""
     previous: tuple[str, ...] = ()
     selected: list[str] = []
+    projected_days: list = []
+    projected_subject_offers = {}
     for day_offset in range(1, offset + 1):
         target = local_date() + timedelta(days=day_offset)
         plan_query = select(DailyReviewPlan.id).where(
@@ -55,31 +58,41 @@ def preview_reviews(
         plan = db.scalar(plan_query.with_for_update() if lock else plan_query)
         if plan:
             item_query = (
-                select(DailyReviewPlanItem.review_item_id)
+                select(DailyReviewPlanItem.review_item_id, KnowledgeItem.subject_id)
+                .join(ReviewItem, ReviewItem.id == DailyReviewPlanItem.review_item_id)
+                .join(KnowledgeItem, KnowledgeItem.id == ReviewItem.knowledge_item_id)
                 .where(
                     DailyReviewPlanItem.family_id == family_id,
                     DailyReviewPlanItem.child_id == child.id,
                     DailyReviewPlanItem.plan_id == plan,
                     DailyReviewPlanItem.state == "pending",
+                    ReviewItem.family_id == family_id,
+                    ReviewItem.child_id == child.id,
+                    KnowledgeItem.family_id == family_id,
+                    KnowledgeItem.child_id == child.id,
                 )
                 .order_by(DailyReviewPlanItem.ordinal, DailyReviewPlanItem.id)
                 .limit(120)
             )
-            selected = list(db.scalars(item_query.with_for_update() if lock else item_query))
+            rows = list(db.execute(item_query.with_for_update() if lock else item_query))
+            selected = [rid for rid, _ in rows]
+            projected_subject_offers.update({sid: target for _, sid in rows})
         else:
-            selected = [
-                c.review_id
-                for c in selected_candidates(
-                    db,
-                    family_id,
-                    str(child.id),
-                    target,
-                    int(child.daily_budget_minutes or 0),
-                    exclude=previous,
-                    lock=lock,
-                )
-            ]
+            candidates = selected_candidates(
+                db,
+                family_id,
+                str(child.id),
+                target,
+                int(child.daily_budget_minutes or 0),
+                exclude=previous,
+                lock=lock,
+                projected_days=tuple(projected_days),
+                projected_subject_offers=projected_subject_offers,
+            )
+            selected = [c.review_id for c in candidates]
+            projected_subject_offers.update({c.subject_id: target for c in candidates})
         previous = tuple(selected)
+        projected_days.append(target)
     return selected
 
 
@@ -242,6 +255,50 @@ def inventory_page(
     tomorrow = set(
         ids if view == "time" and offset == 1 else preview_reviews(db, family_id, child, 1)
     )
+    today_plan = db.scalar(
+        select(DailyReviewPlan.id).where(
+            DailyReviewPlan.family_id == family_id,
+            DailyReviewPlan.child_id == child_id,
+            DailyReviewPlan.plan_date == today,
+        )
+    )
+    today_states = (
+        {
+            str(rid): str(state)
+            for rid, state in db.execute(
+                select(DailyReviewPlanItem.review_item_id, DailyReviewPlanItem.state)
+                .where(
+                    DailyReviewPlanItem.family_id == family_id,
+                    DailyReviewPlanItem.child_id == child_id,
+                    DailyReviewPlanItem.plan_id == today_plan,
+                    DailyReviewPlanItem.state != "rescheduled",
+                )
+                .limit(120)
+            ).all()
+        }
+        if today_plan
+        else {}
+    )
+    days = recent_plan_days(db, family_id, child_id, today + timedelta(days=1))
+
+    def arrangement(r, s, manual):
+        if not r or not child.active or child.deleting or not s.active:
+            return "unavailable"
+        state = today_states.get(r.id)
+        if state in {"complete", "partial", "reinforce"}:
+            return "reviewed_today"
+        if state == "deferred":
+            return "deferred_today"
+        if state == "pending":
+            return "scheduled_today"
+        if not r.active:
+            return "unavailable"
+        if manual:
+            return "reserved"
+        if r.due_date > today:
+            return "not_due"
+        return "waiting" if today_plan else "awaiting_daily_plan"
+
     items = [
         {
             "knowledge_id": k.id,
@@ -254,6 +311,19 @@ def inventory_page(
             if r and r.last_reviewed_on
             else None,
             "due_date": r.due_date.isoformat() if r and r.active else None,
+            "suggested_review_on": r.due_date.isoformat() if r and r.active and m is None else None,
+            "scheduled_on": m.isoformat() if m else None,
+            "arrangement_state": arrangement(r, s, m),
+            "missed_plan_days": missed_days(
+                r,
+                days,
+                resumed_on=max(
+                    child.review_queue_resumed_on or today.min,
+                    s.review_queue_resumed_on or today.min,
+                ),
+            )
+            if r and r.active and s.active and child.active and not m
+            else 0,
             "active": bool(r.active) if r else False,
             "state_version": int(r.state_version) if r else None,
             "manually_scheduled": m is not None,

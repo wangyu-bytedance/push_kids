@@ -238,7 +238,10 @@ def test_manual_add_of_budget_backlog_keeps_future_due_total(client, app, family
         today_after = PlanningService.daily_review_selection(db, family, child["id"])
         after = PlanningService.daily_review_selection(db, family, child["id"], day=tomorrow)
     assert today_after["total_due"] == 4
-    assert today_after["backlog_count"] == 1
+    original_today = {item["review_id"] for item in today_before["all_items"]}
+    expected_today = original_today - {backlog_id}
+    assert {item["review_id"] for item in today_after["all_items"]} == expected_today
+    assert today_after["backlog_count"] == 4 - len(expected_today)
     assert after["planned_count"] == 4
     assert after["total_due"] == 5
     assert after["backlog_count"] == 1

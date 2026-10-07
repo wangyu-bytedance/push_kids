@@ -41,6 +41,7 @@ from push_kids.planning.policies import (
     ReviewState,
     apply_review_event,
 )
+from push_kids.planning.queue_state import initialize_queue, record_offered, reset_queue
 from push_kids.planning.scheduling import consume_arrangement, schedule_review
 from push_kids.planning.selection import (
     DAILY_REVIEW_CANDIDATE_LIMIT,
@@ -137,6 +138,7 @@ class PendingReviewLoad:
 
 
 class PlanningService:
+    initialize_queue = staticmethod(initialize_queue)
     delete_knowledge = staticmethod(delete_knowledge)
     inventory_page = staticmethod(inventory_page)
     inventory_subjects = staticmethod(subjects_page)
@@ -628,6 +630,13 @@ class PlanningService:
             "today_feedback_count": completed_count,
             "today_feedback_minutes": completed_minutes,
             "policy_revision": plan.policy_revision,
+            "selection_policy": plan.policy_revision,
+            "coverage_limited": (
+                plan.covered_subject_count < plan.eligible_subject_count
+                if plan.covered_subject_count is not None
+                and plan.eligible_subject_count is not None
+                else False
+            ),
         }
 
     @staticmethod
@@ -665,7 +674,11 @@ class PlanningService:
             Subject.active.is_(True),
         )
         aggregate = db.execute(
-            select(func.count(ReviewItem.id), func.min(ReviewItem.due_date))
+            select(
+                func.count(ReviewItem.id),
+                func.min(ReviewItem.due_date),
+                func.count(func.distinct(Subject.id)),
+            )
             .select_from(ReviewItem)
             .join(KnowledgeItem, ReviewItem.knowledge_item_id == KnowledgeItem.id)
             .join(Subject, KnowledgeItem.subject_id == Subject.id)
@@ -683,6 +696,8 @@ class PlanningService:
             total_minutes=sum(item.bounded_minutes for item in selected),
             due_count=int(aggregate[0] or 0),
             earliest_due=aggregate[1],
+            eligible_subject_count=int(aggregate[2]),
+            covered_subject_count=len({c.subject_id for c in selected}),
             policy_revision=DAILY_REVIEW_POLICY_REVISION,
         )
         db.add(plan)
@@ -699,6 +714,7 @@ class PlanningService:
                 )
             )
         try:
+            record_offered(db, family_id, str(child.id), [c.review_id for c in selected], target)
             ChildrenService.invalidate_review_inventory(db, family_id, str(child.id))
             db.commit()
         except IntegrityError:
@@ -1255,6 +1271,7 @@ class PlanningService:
         review.policy_revision = CURVE_HEAT_POLICY_REVISION
         review.state_version = transition.state_version
         review.last_feedback = action
+        reset_queue(review, local_date(), deferred=action == "defer")
         db.add(
             ReviewFeedback(
                 family_id=family_id,
