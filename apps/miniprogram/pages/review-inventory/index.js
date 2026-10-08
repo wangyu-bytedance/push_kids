@@ -19,14 +19,32 @@ function canWrite() {
   return context.currentMember ? ["manager", "editor"].includes(context.currentMember.role) : !context.useCloud;
 }
 
+function groupItems(items) {
+  const groups = [];
+  const bySubject = new Map();
+  for (const item of items) {
+    const key = item.subject_id || item.subject_name || "unknown";
+    let group = bySubject.get(key);
+    if (!group) {
+      const name = item.subject_name || "未命名科目";
+      group = { key, name, mark: name.slice(0, 1), tone: name === "语文" ? "chinese" : name === "数学" ? "math" : name === "英语" ? "english" : "other", entries: [] };
+      bySubject.set(key, group);
+      groups.push(group);
+    }
+    group.entries.push(item);
+  }
+  return groups.map((group, index) => ({ ...group, expanded: index === 0 }));
+}
+
 Page({
   data: {
     childId: "", view: "time", offset: 1, subjectId: "", count: null,
     views: [{ id: "time", label: "按时间" }, { id: "subject", label: "按科目" }, { id: "count", label: "按次数" }],
     counts: [0, 1, 2, 3], subjects: [], subjectCursor: null, subjectHasPrevious: false, subjectLoading: false, subjectError: "",
-    items: [], total: 0, nextCursor: null, pageNumber: 1, loaded: false, loading: false, error: "",
+    items: [], groups: [], total: 0, nextCursor: null, pageNumber: 1, loaded: false, loading: false, error: "",
     asOfDay: "", planDate: "", minutes: 0, budget: 0, overBudget: 0, canWrite: false,
-    showCountSheet: false, countDraft: "", countError: "", target: null, deleting: false,
+    showCountInput: false, countDraft: "", countError: "", target: null, deleting: false,
+    actionMenuId: "", actionMenuGroup: "", actionMenuAbove: false,
     saving: false, actionError: "", notice: "", conflict: false
   },
   onLoad(options) {
@@ -43,21 +61,22 @@ Page({
       const family = app.globalData.familyId || "";
       const child = app.globalData.selectedChildId || this.data.childId;
       if (family !== this.familyAtLoad || child !== this.data.childId) {
-        this.setData({ childId: child, items: [], subjects: [], subjectId: "", total: 0,
-          loaded: false, target: null, notice: "", showCountSheet: false });
+        this.setData({ childId: child, items: [], groups: [], subjects: [], subjectId: "", total: 0,
+          loaded: false, target: null, notice: "", showCountInput: false,
+          actionMenuId: "", actionMenuGroup: "", actionMenuAbove: false });
       }
       this.familyAtLoad = family;
       this.setData({ canWrite: canWrite() });
       await this.reload();
     } catch (error) { if (this.visible && showGeneration === this.showGeneration) this.setData({ error: error.message, loading: false }); }
   },
-  onHide() { this.visible = false; this.showGeneration = (this.showGeneration || 0) + 1; this.generation = (this.generation || 0) + 1; this.subjectGeneration = (this.subjectGeneration || 0) + 1; this.setData({ target: null, showCountSheet: false, saving: false }); },
+  onHide() { this.visible = false; this.showGeneration = (this.showGeneration || 0) + 1; this.generation = (this.generation || 0) + 1; this.subjectGeneration = (this.subjectGeneration || 0) + 1; this.setData({ target: null, showCountInput: false, actionMenuId: "", actionMenuGroup: "", actionMenuAbove: false, deleting: false, saving: false }); },
   onUnload() { this.onHide(); },
   async onPullDownRefresh() { await this.reload(); wx.stopPullDownRefresh(); },
   context() { return `${getApp().globalData.familyId || ""}:${this.data.childId}:${getApp().globalData.selectedChildId || ""}`; },
   async reload() {
     this.currentCursor = null;
-    this.setData({ pageNumber: 1, nextCursor: null, target: null, conflict: false });
+    this.setData({ pageNumber: 1, nextCursor: null, target: null, actionMenuId: "", actionMenuGroup: "", actionMenuAbove: false, conflict: false });
     if (this.data.view === "subject" && !this.data.subjectId) await this.loadSubjects();
     else await this.loadItems();
   },
@@ -74,7 +93,7 @@ Page({
       this.currentCursor = null;
       this.setData({ pageNumber: 1 });
       if (selected) await this.loadItems();
-      else this.setData({ loaded: true, loading: false, items: [], total: 0, nextCursor: null });
+      else this.setData({ loaded: true, loading: false, items: [], groups: [], total: 0, nextCursor: null });
     } catch (error) {
       if (this.visible && generation === this.subjectGeneration && context === this.context()) {
         this.setData({ subjectLoading: false, subjectError: error.code === "cursor_stale" ? "科目已有变化，请重新加载科目" : error.message });
@@ -97,11 +116,13 @@ Page({
       const result = await api.request(`/children/${this.data.childId}/review-inventory?${query.join("&")}`);
       if (!this.visible || generation !== this.generation || context !== this.context()) return;
       this.currentCursor = cursor;
-      this.setData({ loaded: true, loading: false, items: result.items.map(arrangementView), total: result.total,
+      const items = result.items.map(arrangementView);
+      this.setData({ loaded: true, loading: false, items, groups: groupItems(items), total: result.total,
         nextCursor: result.next_cursor, pageNumber: nextPage, asOfDay: result.as_of_day,
         planDate: result.plan_date || "", minutes: result.planned_minutes || 0,
         budget: result.budget_minutes || 0, overBudget: result.over_budget_minutes || 0,
-        canWrite: canWrite() && result.child_writable });
+        canWrite: canWrite() && result.child_writable,
+        target: null, actionMenuId: "", actionMenuGroup: "", actionMenuAbove: false, actionError: "" });
       if (view === "subject") this.setData({ subjects: this.data.subjects.map(subject =>
         subject.id === subjectId ? { ...subject, count: result.total } : subject) });
     } catch (error) {
@@ -116,38 +137,67 @@ Page({
     if (view === this.data.view) return;
     this.generation = (this.generation || 0) + 1;
     this.subjectGeneration = (this.subjectGeneration || 0) + 1;
-    this.setData({ view, items: [], total: 0, loaded: false, error: "", notice: "" });
+    this.setData({ view, items: [], groups: [], total: 0, loaded: false, error: "", notice: "", showCountInput: false, actionMenuId: "", actionMenuGroup: "", actionMenuAbove: false, target: null });
     return this.reload();
   },
-  selectDay(event) { this.setData({ offset: Number(event.currentTarget.dataset.offset), loaded: false, items: [] }); return this.reload(); },
-  selectSubject(event) { this.setData({ subjectId: event.currentTarget.dataset.id, loaded: false, items: [], pageNumber: 1 }); return this.loadItems(); },
+  selectDay(event) { this.setData({ offset: Number(event.currentTarget.dataset.offset), loaded: false, items: [], groups: [] }); return this.reload(); },
+  selectSubject(event) { this.setData({ subjectId: event.currentTarget.dataset.id, loaded: false, items: [], groups: [], pageNumber: 1, target: null, actionMenuId: "", actionMenuGroup: "", actionMenuAbove: false }); return this.loadItems(); },
   selectCount(event) {
     const value = event.currentTarget.dataset.count;
-    this.setData({ count: value === "all" ? null : Number(value), loaded: false, items: [] });
+    this.setData({ count: value === "all" ? null : Number(value), loaded: false, items: [], groups: [], showCountInput: false, countError: "", target: null, actionMenuId: "", actionMenuGroup: "", actionMenuAbove: false });
     return this.reload();
   },
-  openCount() { this.setData({ showCountSheet: true, countDraft: this.data.count === null ? "" : String(this.data.count), countError: "" }); },
-  closeCount() { this.setData({ showCountSheet: false, countError: "" }); },
+  openCount() { this.setData({ showCountInput: true, countDraft: this.data.count === null ? "" : String(this.data.count), countError: "", target: null, actionMenuId: "", actionMenuGroup: "", actionMenuAbove: false }); },
+  closeCount() { this.setData({ showCountInput: false, countError: "" }); },
   inputCount(event) { this.setData({ countDraft: event.detail.value, countError: "" }); },
   confirmCount() {
     const value = this.data.countDraft.trim();
     if (!/^\d+$/.test(value) || Number(value) > 2147483647) {
       this.setData({ countError: "请输入 0 至 2147483647 的整数" }); return;
     }
-    this.setData({ count: Number(value), showCountSheet: false, loaded: false, items: [] });
+    this.setData({ count: Number(value), showCountInput: false, loaded: false, items: [], groups: [] });
     return this.reload();
   },
   nextPage() { if (!this.data.loading && this.data.nextCursor) return this.loadItems(this.data.nextCursor, this.data.pageNumber + 1); },
   retry() { return this.data.conflict ? this.reload() : this.loadItems(this.currentCursor, this.data.pageNumber); },
+  toggleGroup(event) {
+    const key = event.currentTarget.dataset.key;
+    this.setData({ groups: this.data.groups.map(group => group.key === key ? { ...group, expanded: !group.expanded } : group),
+      target: null, actionMenuId: "", actionMenuGroup: "", actionMenuAbove: false, actionError: "" });
+  },
   openActions(event) {
     if (!this.data.canWrite || !canWrite() || this.data.loading) return;
-    const target = this.data.items.find(item => item.knowledge_id === event.currentTarget.dataset.id);
-    this.setData({ target: target || null, deleting: false, actionError: "", conflict: false });
+    const id = event.currentTarget.dataset.id;
+    if (this.data.actionMenuId === id) { this.closeActionMenu(); return; }
+    const target = this.data.items.find(item => item.knowledge_id === id);
+    if (!target) return;
+    this.setData({ target, actionMenuId: id, actionMenuGroup: target.subject_id || target.subject_name || "unknown",
+      actionMenuAbove: false, deleting: false, actionError: "", conflict: false }, () => this.placeActionMenu(id));
     this.pendingRequest = null;
   },
-  closeActions() { if (!this.data.saving) { this.pendingRequest = null; this.setData({ target: null, actionError: "", deleting: false }); } },
-  askDelete() { if (!this.data.saving) this.setData({ deleting: true, actionError: "" }); },
-  schedule(event) { return this.mutate(event.currentTarget.dataset.action); },
+  placeActionMenu(id) {
+    if (typeof wx.createSelectorQuery !== "function") return;
+    const query = wx.createSelectorQuery().in(this);
+    query.select(`#more-${id}`).boundingClientRect();
+    query.select(`#menu-${id}`).boundingClientRect();
+    query.exec(([trigger, menu]) => {
+      if (!trigger || !menu || this.data.actionMenuId !== id) return;
+      const info = typeof wx.getWindowInfo === "function" ? wx.getWindowInfo() : wx.getSystemInfoSync();
+      const height = info.windowHeight || info.screenHeight;
+      this.setData({ actionMenuAbove: height - trigger.bottom < menu.height + 12 && trigger.top > menu.height + 12 });
+    });
+  },
+  closeActionMenu() {
+    if (!this.data.actionMenuId || this.data.saving || this.data.deleting) return;
+    this.setData({ actionMenuId: "", actionMenuGroup: "", actionMenuAbove: false,
+      target: this.data.actionError ? this.data.target : null });
+  },
+  closeActions() { if (!this.data.saving) { this.pendingRequest = null; this.setData({ target: null, actionMenuId: "", actionMenuGroup: "", actionMenuAbove: false, actionError: "", deleting: false }); } },
+  askDelete() { if (!this.data.saving) this.setData({ deleting: true, actionMenuId: "", actionMenuGroup: "", actionMenuAbove: false, actionError: "" }); },
+  schedule(event) {
+    this.setData({ actionMenuId: "", actionMenuGroup: "", actionMenuAbove: false });
+    return this.mutate(event.currentTarget.dataset.action);
+  },
   confirmDelete() { if (this.data.deleting) return this.mutate("delete"); },
   async mutate(action) {
     const target = this.data.target;

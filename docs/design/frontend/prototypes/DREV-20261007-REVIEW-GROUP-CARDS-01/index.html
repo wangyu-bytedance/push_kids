@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>复习条目 · 科目组卡设计</title>
+<style>
+:root{--canvas:#faf7f0;--paper:#fffdf8;--ink:#242b24;--muted:#79826f;--green:#1f5b45;--line:#e7e1d3;--tint:#e3ede6;--danger:#a85742;--soft:#f3efe4}
+*{box-sizing:border-box}
+body{margin:0;background:var(--canvas);color:var(--ink);font:15px/1.5 -apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif}
+button{font:inherit;cursor:pointer}
+button:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+.page{width:100%;max-width:480px;margin:auto;padding:16px 16px 48px}
+h1{font:600 26px/1.25 "Songti SC","Noto Serif SC",serif;margin:0}
+.tabs{display:flex;margin-top:15px;border-bottom:1px solid var(--line)}
+.tab{flex:1;border:0;background:transparent;color:#586455;min-height:48px;padding:8px 2px;font-size:15px}
+.tab.on{border-bottom:3px solid var(--green);color:var(--green);font-weight:600}
+.filters{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:14px 0 16px}
+.filters.time{grid-template-columns:repeat(2,minmax(0,1fr))}
+.filter{width:100%;min-width:0;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);min-height:44px;padding:7px 6px;font-size:14px;text-align:center;overflow-wrap:anywhere}
+.filter.on{border-color:var(--green);background:var(--tint);color:var(--green);font-weight:600}
+.count-entry{margin:-2px 0 16px;padding:14px;border:1px solid var(--line);border-radius:14px;background:var(--paper)}
+.count-entry label{display:block;margin-bottom:8px;font-size:14px}
+.count-entry-row{display:flex;gap:8px}
+.count-entry input{flex:1;min-width:0;min-height:44px;padding:7px 10px;border:1px solid var(--line);border-radius:10px;background:var(--paper);color:var(--ink);font:inherit}
+.count-entry button{min-width:72px;min-height:44px;border:0;border-radius:10px;background:var(--green);color:#fff}
+.count-error{min-height:20px;margin-top:5px;color:var(--danger);font-size:14px}
+.summary{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin:5px 2px 2px}
+.summary strong{font-size:17px;line-height:1.35}
+.summary span{color:var(--muted);font-size:13px;white-space:nowrap}
+.explain{margin:4px 2px 16px;color:var(--muted);font-size:14px}
+.group{position:relative;background:var(--paper);border:1px solid #eee9df;border-radius:24px;margin:0 0 14px;box-shadow:0 2px 9px rgba(30,40,30,.035)}
+.group.menu-open{z-index:5}
+.group:before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;border-radius:24px 0 0 24px;background:linear-gradient(#398367,var(--green))}
+.group-toggle{display:flex;align-items:center;gap:11px;width:100%;min-height:72px;padding:15px 18px 15px 22px;border:0;background:transparent;text-align:left;color:inherit}
+.group-toggle:hover{background:#f8f7f1}
+.group-body{padding:0 18px 8px 22px}
+.group-body[hidden]{display:none}
+.chevron{flex:none;width:11px;height:11px;border-right:2px solid #8d9c88;border-bottom:2px solid #8d9c88;transform:rotate(45deg);margin:0 6px 5px 3px;transition:transform .15s ease,margin .15s ease}
+.group.open .chevron{transform:rotate(225deg);margin:5px 6px 0 3px}
+.subject-mark{flex:none;width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:14px;background:#eae8f2;color:#50547d;font:600 18px/1 "Songti SC",serif}
+.subject-mark.math{background:#e8ede4;color:#456444}
+.subject-mark.chinese{background:#f1e9e2;color:#7a5949}
+.group-heading{display:block;flex:1;min-width:0}
+.group-name{display:block;font-size:17px;line-height:1.4;font-weight:600;overflow-wrap:anywhere}
+.group-sub{display:block;font-size:13px;color:var(--muted)}
+.group-status{flex:none;background:var(--tint);border-radius:999px;color:var(--green);font-size:12px;padding:5px 9px}
+.item{position:relative;padding:13px 0 14px}
+.item+.item{border-top:1px solid var(--line)}
+.item-top{display:flex;align-items:flex-start;gap:10px}
+.item-main{flex:1;min-width:0}
+.item-title{font-size:16px;line-height:1.48;font-weight:500;overflow-wrap:anywhere;word-break:break-word}
+.item-meta{font-size:14px;line-height:1.5;color:var(--muted);margin-top:6px}
+.item-meta+ .item-meta{margin-top:2px}
+.item-state{display:inline-block;margin-top:7px;font-size:14px;color:var(--green)}
+.item-state.waiting{color:#666f62}
+.more{flex:none;width:44px;height:44px;border:1px solid var(--line);border-radius:12px;background:var(--paper);display:flex;align-items:center;justify-content:center;color:#485348}
+.more svg{width:20px;height:20px}
+.more:hover{background:var(--soft)}
+.more[aria-expanded="true"]{border-color:var(--green);background:var(--tint);color:var(--green)}
+.action-menu{position:absolute;top:64px;right:0;width:min(238px,calc(100vw - 56px));max-height:calc(100vh - 24px);overflow-y:auto;padding:5px;background:var(--paper);border:1px solid var(--line);border-radius:14px;box-shadow:0 8px 24px rgba(26,41,29,.18);z-index:6}
+.action-menu[hidden]{display:none}
+.action-menu.above{top:auto;bottom:calc(100% - 5px)}
+.menu-option{display:block;width:100%;min-height:48px;border:0;border-radius:9px;background:transparent;padding:10px 12px;text-align:left;color:var(--ink);font-size:14px;line-height:1.4}
+.menu-option:hover:not(:disabled){background:var(--soft)}
+.menu-option:disabled{color:#939b90;cursor:default}
+.menu-option.danger{color:var(--danger)}
+.menu-option+.menu-option{border-top:1px solid var(--line);border-radius:0}
+.empty{margin:18px 0;padding:40px 18px;text-align:center;border:1px solid var(--line);border-radius:24px;background:var(--paper)}
+.empty-title{font-size:17px;font-weight:600}.empty-copy{margin-top:8px;color:var(--muted);font-size:14px}
+.pager{display:flex;align-items:center;justify-content:space-between;padding:6px 0 20px;color:var(--muted);font-size:14px}
+.pager button{min-height:44px;border:0;background:none;color:var(--green);padding:5px 8px}
+.footnote{color:var(--muted);font-size:12px;margin-top:26px}
+@media(max-width:340px){.page{padding:14px 12px 40px}.group-toggle{padding:14px 12px 14px 18px;gap:8px}.group-body{padding:0 12px 6px 18px}.subject-mark{width:36px;height:36px}.group-status{font-size:11px;padding:4px 6px}.item-title{font-size:15px}}
+</style>
+</head>
+<body>
+<main class="page" id="root"></main>
+<script>
+const params=new URLSearchParams(location.search);
+const state=params.get("state")||"time";
+const subjectNames={english:"英语",chinese:"语文",math:"数学"};
+const mark={english:"英",chinese:"语",math:"数"};
+const data={
+ time:[
+  {s:"english",name:"课文中的节日词汇与简单句型认读",count:0,last:"尚未复习",date:"建议复习日：10月7日",status:"等待安排"},
+  {s:"english",name:"26个大写英文字母辨认",count:1,last:"10月3日",date:"建议复习日：10月6日",status:"等待安排"},
+  {s:"chinese",name:"双引号引用他人话语的用法",count:0,last:"尚未复习",date:"建议复习日：10月2日",status:"等待安排"},
+  {s:"chinese",name:"常用量词的搭配运用",count:1,last:"9月22日",date:"建议复习日：9月25日",status:"等待安排"},
+  {s:"math",name:"认识钟表与时刻认读",count:0,last:"尚未复习",date:"家长安排日期：10月8日",status:"家长已安排"}
+ ],
+ subject:[
+  {s:"math",name:"认识钟表与时刻认读",count:0,last:"尚未复习",date:"家长安排日期：10月8日",status:"家长已安排"},
+  {s:"math",name:"带小括号的加减运算",count:2,last:"9月27日",date:"建议复习日：10月6日",status:"等待安排"},
+  {s:"math",name:"10以内数的大小比较与符号认识",count:2,last:"9月21日",date:"建议复习日：9月30日",status:"等待安排"}
+ ],
+ count:[
+  {s:"english",name:"节日词汇与简单句型认读",count:0,last:"尚未复习",date:"建议复习日：10月7日",status:"等待安排"},
+  {s:"chinese",name:"正确握笔姿势与基本笔画",count:0,last:"尚未复习",date:"建议复习日：10月7日",status:"等待安排"},
+  {s:"chinese",name:"双引号引用他人话语的用法",count:0,last:"尚未复习",date:"建议复习日：10月2日",status:"等待安排"},
+  {s:"math",name:"认识钟表与时刻认读",count:0,last:"尚未复习",date:"家长安排日期：10月8日",status:"家长已安排"}
+ ],
+ long:[
+  {s:"chinese",name:"阅读短文后准确识别自然段，区分句号与逗号，并尝试用完整的话复述段落内容和人物行为",count:0,last:"尚未复习",date:"建议复习日：10月7日",status:"等待安排"},
+  {s:"chinese",name:"辨认常见标点符号在较长句子中的位置",count:2,last:"10月3日",date:"建议复习日：10月12日",status:"尚未到建议日"}
+ ],
+ "count-three":[{s:"math",name:"年龄差不变规律",count:3,last:"10月2日",date:"建议复习日：10月20日",status:"尚未到建议日"}]
+};
+function esc(x){return String(x).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function dots(){return '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.6" fill="currentColor"/><circle cx="12" cy="12" r="1.6" fill="currentColor"/><circle cx="19" cy="12" r="1.6" fill="currentColor"/></svg>'}
+const mode=state.startsWith("subject")?"subject":state.startsWith("count")||state==="folded"?"count":"time";
+const customRaw=params.get("n");
+const customCount=customRaw!==null&&/^\d+$/.test(customRaw)&&Number(customRaw)<=2147483647?Number(customRaw):null;
+const needsCountInput=state==="count-input"||(state==="count-custom"&&customCount===null);
+const customRows=customCount===null?[]:[{s:"english",name:"简单英语问候语的认读与使用",count:customCount,last:customCount===0?"尚未复习":"10月6日",date:"建议复习日：10月20日",status:"尚未到建议日"}];
+const rows=needsCountInput?[]:state==="count-custom"?customRows:data[state]||(state==="folded"?data.count:state==="subject-chinese"?data.time.filter(x=>x.s==="chinese"):state==="subject-english"?data.time.filter(x=>x.s==="english"):state==="count-all"?data.time:state==="count-one"?data.time.filter(x=>x.count===1):state==="count-two"?data.subject.filter(x=>x.count===2):(state==="long"||state==="readonly")?data.long:data.time);
+const readonly=state==="readonly";
+function groupRows(items){const g=[];for(const item of items){let x=g.find(y=>y.s===item.s);if(!x){x={s:item.s,rows:[]};g.push(x)}x.rows.push(item)}return g}
+function card(g,index){
+ const title=subjectNames[g.s];
+ const open=index===0&&state!=="folded";
+ const heading='<button class="group-toggle" type="button" aria-expanded="'+open+'" aria-controls="group-'+index+'" aria-label="'+title+'，本页'+g.rows.length+'项"><span class="subject-mark '+g.s+'">'+mark[g.s]+'</span><span class="group-heading"><span class="group-name">'+title+'</span><span class="group-sub">本页 '+g.rows.length+' 个知识条目</span></span>'+(mode==="time"?'<span class="group-status">预计安排</span>':'')+'<span class="chevron" aria-hidden="true"></span></button>';
+ const items=g.rows.map((r,ri)=>{
+  const menuId='menu-'+index+'-'+ri;
+  const action=readonly?'':'<button class="more" type="button" aria-label="'+esc(r.name)+'的更多操作" aria-expanded="false" aria-controls="'+menuId+'">'+dots()+'</button>';
+  const menu=readonly?'':'<div class="action-menu" id="'+menuId+'" role="group" aria-label="'+esc(r.name)+'的操作" hidden><button class="menu-option" type="button" data-action="tomorrow">加入明天复习</button><button class="menu-option" type="button" data-action="day-after" disabled>改到后天复习</button><button class="menu-option danger" type="button" data-action="delete">删除条目</button></div>';
+  return '<div class="item"><div class="item-top"><div class="item-main"><div class="item-title">'+esc(r.name)+'</div><div class="item-meta">已复习 '+r.count+' 次 · 上次复习：'+r.last+'</div><div class="item-meta">'+r.date+'</div><span class="item-state '+(r.status==="等待安排"?"waiting":"")+'">'+r.status+'</span></div>'+action+'</div>'+menu+'</div>';
+ }).join('');
+ return '<section class="group '+(open?'open':'')+'" aria-label="'+title+'，本页'+g.rows.length+'项">'+heading+'<div class="group-body" id="group-'+index+'" '+(open?'':'hidden')+'>'+items+'</div></section>';
+}
+const tabs=[["time","按时间"],["subject","按科目"],["count","按次数"]].map(([id,label])=>'<button class="tab '+(mode===id?'on':'')+'" data-nav="'+id+'" type="button" aria-current="'+(mode===id?'page':'false')+'">'+label+'</button>').join('');
+const filters=mode==="time"?[["time","明天 · 预计"],["empty","后天 · 预计"]]:mode==="subject"?[["subject","数学 9项"],["subject-chinese","语文 50项"],["subject-english","英语 19项"]]:[["count-all","全部"],["count","0次"],["count-one","1次"],["count-two","2次"],["count-three","3次"],["count-input",state==="count-custom"&&customCount!==null?customCount+"次":"指定次数"]];
+const filterHtml=filters.map(([id,label])=>'<button class="filter '+((state===id||(state==="count-custom"&&id==="count-input")||(state==="folded"&&id==="count")||(state==="actions"&&id==="time")||(state==="readonly"&&id==="time")||(state==="long"&&id==="time"))?'on':'')+'" data-nav="'+id+'" type="button">'+label+'</button>').join('');
+const customForm=needsCountInput?'<form class="count-entry" id="count-form"><label for="custom-count">输入要查看的复习次数</label><div class="count-entry-row"><input id="custom-count" type="number" inputmode="numeric" min="0" max="2147483647" step="1" value="'+(customCount===null?'':customCount)+'" aria-describedby="count-error"><button type="submit">查看</button></div><div class="count-error" id="count-error" aria-live="polite"></div></form>':'';
+const subjectLabel=state==="subject-chinese"?"语文":state==="subject-english"?"英语":"数学";
+const subjectTotal=state==="subject-chinese"?50:state==="subject-english"?19:9;
+const countLabel=state==="count-all"?"全部次数":state==="count-one"?"已复习 1 次":state==="count-two"?"已复习 2 次":state==="count-three"?"已复习 3 次":state==="count-custom"?"已复习 "+customCount+" 次":"已复习 0 次";
+const countTotal=state==="count-all"?78:state==="count-one"?15:state==="count-two"?34:state==="count-three"?7:state==="count-custom"?1:13;
+const summary=state==="empty"||needsCountInput?"":mode==="time"?'<div class="summary"><strong>明天预计安排 · '+rows.length+' 项</strong><span>约 16 分钟</span></div><p class="explain">这是未来预览；条目下方的状态表示今天的安排情况。</p>':mode==="subject"?'<div class="summary"><strong>'+subjectLabel+' · 本页 '+rows.length+' 项</strong><span>共 '+subjectTotal+' 项</span></div><p class="explain">组内按复习次数从少到多展示。</p>':'<div class="summary"><strong>'+countLabel+' · 本页 '+rows.length+' 项</strong><span>共 '+countTotal+' 项</span></div><p class="explain">按科目分组；下一页继续显示剩余条目。</p>';
+document.getElementById("root").innerHTML='<h1>复习条目</h1><nav class="tabs" aria-label="查看方式">'+tabs+'</nav><div class="filters '+mode+'" aria-label="筛选条件">'+filterHtml+'</div>'+customForm+summary+(state==="empty"?'<div class="empty"><div class="empty-title">后天暂无预计安排</div><div class="empty-copy">未来预览会随实际复习进度更新。</div></div>':groupRows(rows).map(card).join(''))+(mode==="count"&&!needsCountInput?'<div class="pager"><span>第 1 页</span><button type="button">下一页 ›</button></div>':'')+'<p class="footnote">设计候选 · 合成示例 · DREV-20261007-REVIEW-GROUP-CARDS-01</p>';
+document.querySelectorAll("[data-nav]").forEach(el=>el.addEventListener("click",()=>{location.search="?state="+el.dataset.nav+(el.dataset.nav==="count-input"&&customCount!==null?"&n="+customCount:"")}));
+if(needsCountInput)document.getElementById("count-form").addEventListener("submit",event=>{event.preventDefault();const value=document.getElementById("custom-count").value.trim();if(!/^\d+$/.test(value)||Number(value)>2147483647){document.getElementById("count-error").textContent="请输入 0 至 2147483647 的整数";return}location.search="?state=count-custom&n="+Number(value)});
+let activeMenu=null;
+function closeMenu(restoreFocus=false){
+ if(!activeMenu)return;
+ const trigger=activeMenu;
+ const menu=document.getElementById(trigger.getAttribute("aria-controls"));
+ menu.hidden=true;
+ menu.classList.remove("above");
+ trigger.setAttribute("aria-expanded","false");
+ trigger.closest(".group").classList.remove("menu-open");
+ activeMenu=null;
+ if(restoreFocus)trigger.focus();
+}
+function openMenu(trigger,focusOption=true){
+ if(activeMenu===trigger){closeMenu(true);return}
+ closeMenu();
+ const menu=document.getElementById(trigger.getAttribute("aria-controls"));
+ menu.hidden=false;
+ const triggerBox=trigger.getBoundingClientRect();
+ const menuHeight=menu.getBoundingClientRect().height;
+ menu.classList.toggle("above",window.innerHeight-triggerBox.bottom<menuHeight+12&&triggerBox.top>menuHeight+12);
+ trigger.setAttribute("aria-expanded","true");
+ trigger.closest(".group").classList.add("menu-open");
+ activeMenu=trigger;
+ if(focusOption)menu.querySelector("button:not(:disabled)").focus();
+}
+document.querySelectorAll(".group-toggle").forEach(el=>el.addEventListener("click",()=>{closeMenu();const open=el.getAttribute("aria-expanded")!=="true";el.setAttribute("aria-expanded",String(open));document.getElementById(el.getAttribute("aria-controls")).hidden=!open;el.closest(".group").classList.toggle("open",open)}));
+document.querySelectorAll(".more").forEach(el=>el.addEventListener("click",()=>openMenu(el)));
+document.querySelectorAll(".menu-option").forEach(el=>el.addEventListener("click",()=>closeMenu(true)));
+document.addEventListener("click",event=>{if(activeMenu&&!event.target.closest(".more")&&!event.target.closest(".action-menu"))closeMenu()});
+document.addEventListener("keydown",event=>{if(event.key==="Escape"&&activeMenu){event.preventDefault();closeMenu(true)}});
+if(state==="actions")openMenu(document.querySelector(".more"),false);
+</script>
+</body>
+</html>

@@ -2,6 +2,10 @@
 
 - Status: `CURRENT / VOICE_INPUT_LOCAL_VERIFIED / MICROPHONE_PRIVACY_DECLARATION_BLOCKED / DEVELOPMENT_VERSION_0.1.12_UPLOADED / NATIVE_VIEWPORT_MATRIX_NOT_RUN`
 - Related Feature: `FEAT-001`
+- Local review-inventory grouped-card revision under verification: `SPEC-20261007-REVIEW-GROUP-CARDS-05 / DREV-20261007-REVIEW-GROUP-CARDS-01` 已获用户批准并在本地小程序实现。
+  时间/科目/次数视图将当前有界页按科目聚合为可折叠组卡；条目右侧固定 44×44px 的“…”就近打开操作菜单，指定次数仅在用户输入后显示具体数字。
+  筛选用日期两列、科目和次数三列的等宽按钮，第四个科目按同列宽度换行。320×568、390×844、430×932 微信原生数字矩形共 12 组（含菜单）审计通过；320/430 原生截图和390 CUA模拟器画面已人工检查。
+  前端 207 passed、静态检查通过；新版 DREV 快照仍为 AWAITING_EXPORT，iOS/Android 真机未验收，尚未部署此本地修订。详见 `specs/active/FEAT-001-REVIEW-INVENTORY-GROUPED-CARDS.md`。
 - Fair-review local revision: `DREV-20261007-FAIR-REVIEW-01 / SPEC-20261007-FAIR-REVIEW-01` 已获批准。
   今日移除策略说明和等待总数；条目分别显示建议复习日/家长安排日期和今日已安排/等待安排等状态。
   旧API显示“计划日期/安排状态待更新”；200项前端测试及静态检查通过，39张设计导出及hash通过。

@@ -51,15 +51,86 @@ test("specific count commits only on confirmation and uses exact server filter",
   page.openCount(); page.inputCount({ detail: { value: "6" } }); page.closeCount();
   assert.equal(page.data.count, null); assert.equal(paths.length, 0);
   page.openCount(); page.inputCount({ detail: { value: "-1" } }); await page.confirmCount();
-  assert.ok(page.data.countError); assert.equal(page.data.showCountSheet, true);
+  assert.ok(page.data.countError); assert.equal(page.data.showCountInput, true);
   for (const value of ["", "1.5", "2147483648", "foo"]) {
     page.inputCount({ detail: { value } }); await page.confirmCount(); assert.equal(paths.length, 0);
   }
   page.inputCount({ detail: { value: "6" } }); await page.confirmCount();
-  assert.equal(page.data.count, 6); assert.match(paths.at(-1), /review_count=6/);
+  assert.equal(page.data.count, 6); assert.equal(page.data.showCountInput, false);
+  assert.match(paths.at(-1), /review_count=6/);
   page.openCount(); page.inputCount({ detail: { value: "0" } }); await page.confirmCount();
   assert.equal(page.data.count, 0); assert.match(paths.at(-1), /review_count=0/);
   await page.selectCount(event({ count: "all" })); assert.doesNotMatch(paths.at(-1), /review_count=/);
+});
+
+test("current cursor page groups by subject and resets folding on a new page", async () => {
+  const requests = [];
+  const pages = [
+    { ...result, items: [
+      { knowledge_id: "e1", subject_id: "en", subject_name: "英语" },
+      { knowledge_id: "cn1", subject_id: "cn", subject_name: "语文" },
+      { knowledge_id: "e2", subject_id: "en", subject_name: "英语" },
+      { knowledge_id: "m1", subject_id: "math", subject_name: "数学" }
+    ], next_cursor: "next" },
+    { ...result, items: [{ knowledge_id: "cn2", subject_id: "cn", subject_name: "语文" }] }
+  ];
+  const { page } = setup(async path => { requests.push(path); return pages[requests.length - 1]; });
+  await page.loadItems();
+  assert.deepEqual(Array.from(page.data.groups, group => group.name), ["英语", "语文", "数学"]);
+  assert.deepEqual(Array.from(page.data.groups[0].entries, entry => entry.knowledge_id), ["e1", "e2"]);
+  assert.deepEqual(Array.from(page.data.groups, group => group.expanded), [true, false, false]);
+  page.toggleGroup(event({ key: "cn" }));
+  assert.deepEqual(Array.from(page.data.groups, group => group.expanded), [true, true, false]);
+  assert.equal(requests.length, 1);
+  await page.nextPage();
+  assert.deepEqual(Array.from(page.data.groups, group => group.name), ["语文"]);
+  assert.equal(page.data.groups[0].expanded, true);
+  assert.equal(page.data.pageNumber, 2);
+});
+
+test("ellipsis menu is one-at-a-time, closes on repeat or fold, and delete still confirms", async () => {
+  const { page } = setup();
+  page.data.canWrite = true;
+  page.data.items = [
+    { knowledge_id: "a", subject_id: "en", subject_name: "英语", can_schedule: true },
+    { knowledge_id: "b", subject_id: "en", subject_name: "英语", can_schedule: false }
+  ];
+  page.data.groups = [{ key: "en", name: "英语", expanded: true, entries: page.data.items }];
+  page.openActions(event({ id: "a" }));
+  assert.equal(page.data.actionMenuId, "a");
+  assert.equal(page.data.target.knowledge_id, "a");
+  page.openActions(event({ id: "b" }));
+  assert.equal(page.data.actionMenuId, "b");
+  page.closeActionMenu();
+  assert.equal(page.data.actionMenuId, "");
+  assert.equal(page.data.target, null);
+  page.openActions(event({ id: "a" }));
+  page.openActions(event({ id: "a" }));
+  assert.equal(page.data.actionMenuId, "");
+  page.openActions(event({ id: "a" }));
+  page.toggleGroup(event({ key: "en" }));
+  assert.equal(page.data.groups[0].expanded, false);
+  assert.equal(page.data.actionMenuId, "");
+  page.openActions(event({ id: "a" }));
+  page.askDelete();
+  assert.equal(page.data.actionMenuId, "");
+  assert.equal(page.data.deleting, true);
+  assert.equal(page.data.target.knowledge_id, "a");
+});
+
+test("ellipsis menu opens upward when the trigger is near the viewport bottom", () => {
+  const query = {
+    in() { return this; },
+    select() { return { boundingClientRect() {} }; },
+    exec(callback) { callback([{ top: 510, bottom: 554 }, { height: 156 }]); }
+  };
+  const { page } = setup(undefined, { wx: {
+    createSelectorQuery: () => query,
+    getWindowInfo: () => ({ windowHeight: 568 })
+  } });
+  page.data.actionMenuId = "a";
+  page.placeActionMenu("a");
+  assert.equal(page.data.actionMenuAbove, true);
 });
 
 test("pagination replaces rows and old filter responses cannot overwrite selection", async () => {

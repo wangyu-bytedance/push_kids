@@ -4,13 +4,12 @@
 
 - Frontend engineering scope: PRESENT
 - Constraint status: APPROVED
-- Constraint revision: FEC-20260913-LOCAL-DESIGN-EVIDENCE-01
+- Constraint revision: FEC-20261007-NATIVE-GEOMETRY-02
 - Owner: 产品负责人（用户）
 - Approved by: 产品负责人（用户）
-- Approved at: 2026-09-13
-- Approval evidence: 用户批准 `GOV-SPEC-LOCAL-DESIGN-EVIDENCE-20260913-01` 与
-  `ARCH-LOCAL-DESIGN-EVIDENCE-20260913-01`；所有既有质量预算继续有效，仅替换设计证据工具链
-- Superseded revision: FEC-20260911-READ-PERF-01（有界读取、视觉、视口、样式分层与图标条款不变）
+- Approved at: 2026-10-07
+- Approval evidence: 用户在本会话针对三张原生界面错误截图要求增加同类检查及约束，随后以“修改代码 并测试”批准 `SPEC-20261007-REVIEW-GROUP-CARDS-05`，其中明确提出本修订；既有预算与规则继续有效
+- Superseded revision: FEC-20260913-LOCAL-DESIGN-EVIDENCE-01（有界读取、视觉、视口、样式分层与图标条款不变）
 - Related frontend design baseline: FDB-20260913-04
 - Applies to: `apps/miniprogram`
 
@@ -65,7 +64,10 @@
 - Ordinary pages and sheets never require horizontal dragging to find a field, date, option, or action. Seven-day, three-range, three-subject and seven-weekday controls use shrinkable tracks and remain fully visible.
 - The 100-day report is the single approved horizontal gesture surface: it paginates inside its own swiper as 30/30/30/10 items, while the root page remains horizontally fixed.
 - Native buttons define width/min-width, margin, padding, box sizing and line height for their role. Circular controls keep equal computed width and height and cannot shrink inside flex layouts.
+- In a two- or three-column selector, the track owns its width and the native button fits that track with border-box sizing. Buttons in one row differ in rendered width by at most 1 logical pixel, with at least 8px between adjacent button edges and between rows; a partial final row retains the same column width. No selector or child may overlap or extend past the content boundary.
+- An item-level ellipsis action is a fixed 44×44 logical-pixel target (±1px native-renderer tolerance), never a flex-growing sibling. Reserve its width in the adjacent title layout so long text and metadata remain readable. The anchored menu must remain inside the viewport.
 - Hiding horizontal overflow is not acceptance evidence. At all three required viewports every required control must stay within its container by no more than 1px and every regular touch target remains at least 44px.
+- Every changed selector/action group requires WeChat native-node rectangle evidence at 320×568, 390×844 and 430×932, including a full row, a partial row, long text and an open action menu. Assert dimensions, equal columns, horizontal/vertical gaps, overlap, containment and text clearance; retain screenshots for reading and wrapping review. Static CSS assertions, HTML previews and screenshots without native node rectangles cannot pass this geometry gate.
 - Landscape needs a safe return/basic-action path but no dedicated MVP composition.
 
 ## Accessibility and inclusive content
@@ -136,6 +138,7 @@
 | architecture boundaries | `uv run python tools/check_architecture.py` |
 | device/visual | WeChat DevTools compile/preview plus representative iOS and Android smoke |
 | viewport/state | 320×568, 390×844, 430×932 captures for changed states |
+| native control geometry | three-viewport native rectangles and automated dimension/gap/overlap/containment assertions for changed selector/action groups |
 | privacy/authorization | contract/integration tests plus manual bundle/log inspection |
 
 ## Design evidence, exceptions, enforcement, and review
@@ -152,6 +155,7 @@
 
 - [ ] Affected state/form ownership and error recovery are tested.
 - [ ] Required viewport and device evidence is retained.
+- [ ] Native selector/action rectangles pass equal-width, gap, fixed-target, no-overlap and containment checks at all three viewports.
 - [ ] Touch, text, semantics and non-color cues are manually checked.
 - [ ] Package/resource budgets are measured for material changes.
 - [ ] Logs, local storage, share payloads and analytics contain no prohibited data.
