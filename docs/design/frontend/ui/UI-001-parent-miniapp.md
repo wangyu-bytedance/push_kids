@@ -2,6 +2,11 @@
 
 - Status: `CURRENT / VOICE_INPUT_LOCAL_VERIFIED / MICROPHONE_PRIVACY_DECLARATION_BLOCKED / DEVELOPMENT_VERSION_0.1.12_UPLOADED / NATIVE_VIEWPORT_MATRIX_NOT_RUN`
 - Related Feature: `FEAT-001`
+- Settings activity order: `SPEC-20261010-ACTIVITY-WEEKDAY-ORDER-02 / DREV-20261010-ACTIVITY-WEEKDAY-ORDER-01`
+  用户2026-10-10批准，已本地实现首时段星期、开始时间升序，缺少有效星期或时段排最后，同键保序。
+  WXML/WXSS、布局、图标、文案及交互结构完全不变；排序后点击仍按新列表索引编辑正确活动。
+  213项前端测试及静态检查通过，原生三视口证据待补；未上传/发布。
+  证据：`docs/quality/evidence/ACTIVITY-WEEKDAY-ORDER-20261010.md`。
 - Local review-inventory grouped-card revision under verification: `SPEC-20261007-REVIEW-GROUP-CARDS-05 / DREV-20261007-REVIEW-GROUP-CARDS-01` 已获用户批准并在本地小程序实现。
   时间/科目/次数视图将当前有界页按科目聚合为可折叠组卡；条目右侧固定 44×44px 的“…”就近打开操作菜单，指定次数仅在用户输入后显示具体数字。
   筛选用日期两列、科目和次数三列的等宽按钮，第四个科目按同列宽度换行。320×568、390×844、430×932 微信原生数字矩形共 12 组（含菜单）审计通过；320/430 原生截图和390 CUA模拟器画面已人工检查。

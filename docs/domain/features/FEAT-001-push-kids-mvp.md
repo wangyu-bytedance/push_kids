@@ -1,6 +1,10 @@
 # FEAT-001 — 家庭学习持续跟进系统 MVP
 
 - Status: `CURRENT`
+- Local settings activity ordering: `SPEC-20261010-ACTIVITY-WEEKDAY-ORDER-02` 已获用户批准并实现。
+  设置页课外活动按首时段星期（周一至周日）、开始时间升序；无有效星期/时段排最后，同键保序。
+  原UI、其他列表、API与排期不变；前端213项及静态检查通过，原生三视口待验收，未发布。
+  证据：`docs/quality/evidence/ACTIVITY-WEEKDAY-ORDER-20261010.md`。
 - Local review-inventory presentation under verification: `SPEC-20261007-REVIEW-GROUP-CARDS-05` 已获用户批准并在本地实现。
   复习条目目录按当前有界页的科目分组、可折叠；条目“…”菜单沿用既有调整/删除接口，筛选仍使用服务端原有日期、科目、精确次数条件。
   本修订只改变客户端呈现及交互，不改变复习计数、排期或反馈语义。三视口原生数字几何和前端测试已通过；设计快照和真机验收仍待完成，未部署。

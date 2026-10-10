@@ -84,6 +84,18 @@ function scheduleLabel(schedule) {
   return `每周${slotsSummary(slots)}`;
 }
 
+/* 展示排序只取首时段；协议0是周一，缺少星期排末尾，缺少时间排该星期末尾。 */
+function activityOrderKey(item) {
+  const slot = item.schedule && (item.schedule.time_slots || [])[0];
+  if (!slot || !Number.isInteger(slot.weekday) || slot.weekday < 0 || slot.weekday > 6) return 7 * 86401;
+  const time = typeof slot.start_time === "string" && /^(\d{2}):(\d{2})(?::(\d{2}))?$/.exec(slot.start_time);
+  let seconds = 86400;
+  if (time && Number(time[1]) < 24 && Number(time[2]) < 60 && Number(time[3] || 0) < 60) {
+    seconds = Number(time[1]) * 3600 + Number(time[2]) * 60 + Number(time[3] || 0);
+  }
+  return slot.weekday * 86401 + seconds;
+}
+
 function travelLabel(item) {
   return `每周${slotsSummary(item.time_slots || [])}`;
 }
@@ -192,12 +204,13 @@ Page({
         custom: isCustom(item) && !LEARNING_CATALOG.includes(item.name),
         canRemove: isCustom(item)
       }));
-      const addedActivities = activeActivities.map((item) => {
+      const addedActivities = activeActivities.map((item, index) => {
         const schedule = scheduleMap[item.id] || null;
-        return { ...item, short: item.name.charAt(0), schedule, scheduleLabel: scheduleLabel(schedule),
+        const activity = { ...item, short: item.name.charAt(0), schedule, scheduleLabel: scheduleLabel(schedule),
           iconClass: ui.activityIcon(item.name, "pri"),
           custom: isCustom(item) && !ACTIVITY_CATALOG.includes(item.name) };
-      });
+        return { activity, index, order: activityOrderKey(activity) };
+      }).sort((a, b) => a.order - b.order || a.index - b.index).map((item) => item.activity);
       const travelArrangements = (travelData.items || []).map((item) => ({
         ...item,
         scheduleLabel: travelLabel(item),
