@@ -6,7 +6,7 @@
 - Implementer: Codex
 - Reviewer / verifier: 产品负责人（用户）/ Codex
 - Created / last updated: 2026-10-11
-- Target release: N/A；本轮只计划本地实现与验证
+- Target release: 用户随后于 2026-10-11 授权上传，客户端随小程序 `0.1.13` 开发版本已上传；体验版与正式版未发布。
 - Spec revision: SPEC-20261011-REPORT-DISCLOSURES-01
 - User confirmation: 用户于2026-10-11先要求将候选区块“复习条目”改为“编辑计划”，随后在审阅方案后回复“然后按照这个方案进行落地”，批准 SPEC-20261011-REPORT-DISCLOSURES-01 与 DREV-20261011-REPORT-DISCLOSURES-01
 - Additional R2/R3 approval: 同上；批准领域控制器/模板复用与报表宿主边界
@@ -142,4 +142,4 @@ In scope: 报表中的位置、折叠、完整列表、原导航意图迁移；�
 
 ## 5. Verification and completion
 
-用户已批准本修订及 DREV；本地实现和当前状态文档已更新。逐点验证记录见 `docs/quality/evidence/REPORT-DISCLOSURES-20261011.md`：TP-001～004 的设计/自动化/微信开发者工具原生三视口证据为 PASS；TP-005 中前端、lint、静态、架构、设计校验为 PASS，iOS/Android 真机为 NOT_RUN（未连接真机）。因此本 Spec 保持 VERIFYING 于 `specs/active/`，不能宣称真机验收、发布或 DONE。
+用户已批准本修订及 DREV；本地实现和当前状态文档已更新。逐点验证记录见 `docs/quality/evidence/REPORT-DISCLOSURES-20261011.md`：TP-001～004 的设计/自动化/微信开发者工具原生三视口证据为 PASS；TP-005 中前端、lint、静态、架构、设计校验为 PASS，iOS/Android 真机为 NOT_RUN（未连接真机）。用户随后授权上传，`0.1.13` 开发版本已由微信 CLI 上传，见 `docs/deploy/releases/20261011-report-disclosures-frontend.md`；体验版、审核、正式版均未进行。因此本 Spec 保持 VERIFYING 于 `specs/active/`，不能宣称真机验收或 DONE。

@@ -1,6 +1,6 @@
 # 报表折叠区本地验证 — 2026-10-11
 
-对应 `SPEC-20261011-REPORT-DISCLOSURES-01`、`DREV-20261011-REPORT-DISCLOSURES-01`。这是本地实现证据；未上传小程序，也未进入体验、审核或生产状态。
+对应 `SPEC-20261011-REPORT-DISCLOSURES-01`、`DREV-20261011-REPORT-DISCLOSURES-01`。下表是上传前的本地实现证据；此后用户授权并已上传小程序开发版本 `0.1.13`，见 `docs/deploy/releases/20261011-report-disclosures-frontend.md`。体验、审核和生产状态仍未进入。
 
 | 测试点 | 结果 | 证据 |
 |---|---|---|

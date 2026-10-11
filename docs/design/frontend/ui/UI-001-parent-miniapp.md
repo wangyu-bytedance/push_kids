@@ -1,16 +1,17 @@
 # UI-001 — 家长端微信小程序
 
-- Status: `CURRENT / VOICE_INPUT_LOCAL_VERIFIED / MICROPHONE_PRIVACY_DECLARATION_BLOCKED / DEVELOPMENT_VERSION_0.1.12_UPLOADED / NATIVE_VIEWPORT_MATRIX_NOT_RUN`
+- Status: `CURRENT / VOICE_INPUT_LOCAL_VERIFIED / MICROPHONE_PRIVACY_DECLARATION_BLOCKED / DEVELOPMENT_VERSION_0.1.13_UPLOADED / NATIVE_VIEWPORT_MATRIX_NOT_RUN`
+- Release status: `0.1.13` 已上传为开发版本（687111 字节），体验版、审核、正式版均未进行；本次按 `SPEC-20261011-RISK-BASED-RELEASE-GATES-01` 判定双账号复测不适用，真机和麦克风隐私授权仍待体验验证。证据：`docs/deploy/releases/20261011-report-disclosures-frontend.md`。
 - Related Feature: `FEAT-001`
 - Local report disclosures: `SPEC-20261011-REPORT-DISCLOSURES-01 / DREV-20261011-REPORT-DISCLOSURES-01` 已获用户批准并本地实现。
-  报表科目统计后依次为「历史记录」「编辑计划」两张默认收起的卡，课外活动投入在其后；展开分别复用完整有界历史和条目清单，互不覆盖。原独立条目页标题同步改为「编辑计划」；记录页保留新增及待处理入口，历史列表移出。12张设计快照及SHA、前端自动化和三视口四状态微信原生数字几何已通过；iOS/Android真机未验收，未上传/发布。证据：`docs/quality/evidence/REPORT-DISCLOSURES-20261011.md`。
+  报表科目统计后依次为「历史记录」「编辑计划」两张默认收起的卡，课外活动投入在其后；展开分别复用完整有界历史和条目清单，互不覆盖。原独立条目页标题同步改为「编辑计划」；记录页保留新增及待处理入口，历史列表移出。12张设计快照及SHA、前端自动化和三视口四状态微信原生数字几何已通过；开发版本 `0.1.13` 已上传，iOS/Android真机未验收，未设体验版/正式版。证据：`docs/quality/evidence/REPORT-DISCLOSURES-20261011.md`、`docs/deploy/releases/20261011-report-disclosures-frontend.md`。
 - Local review-inventory redesign under verification: `SPEC-20261010-REVIEW-INVENTORY-REDESIGN-01 / DREV-20261010-REVIEW-INVENTORY-02` 已获用户批准并本地实现。
   当时原生导航保留唯一“复习条目”标题（2026-10-11 已改为「编辑计划」）；时间双日、科目/次数下拉分别占一层筛选；时间/次数按科目折叠、单科为扁平分隔清单。条目保留完整标题、真实次数、最近复习、建议/家长日期、今日安排状态和44×44就近菜单。科目翻页不再暗中切换当前科目。
-  前端216项、设计SHA、静态与320/390/430十组微信原生数字矩形通过；320次数展开和390时间视图已人工看图。iOS/Android真机与风险状态补充证据仍待完成，未上传/发布。证据：`docs/quality/evidence/REVIEW-INVENTORY-REDESIGN-20261010.md`。
+  前端216项、设计SHA、静态与320/390/430十组微信原生数字矩形通过；320次数展开和390时间视图已人工看图。该客户端实现随 `0.1.13` 开发版本上传；iOS/Android真机与风险状态补充证据仍待完成，未设体验版/正式版。证据：`docs/quality/evidence/REVIEW-INVENTORY-REDESIGN-20261010.md`。
 - Settings activity order: `SPEC-20261010-ACTIVITY-WEEKDAY-ORDER-02 / DREV-20261010-ACTIVITY-WEEKDAY-ORDER-01`
   用户2026-10-10批准，已本地实现首时段星期、开始时间升序，缺少有效星期或时段排最后，同键保序。
   WXML/WXSS、布局、图标、文案及交互结构完全不变；排序后点击仍按新列表索引编辑正确活动。
-  213项前端测试及静态检查通过，原生三视口证据待补；未上传/发布。
+  213项前端测试及静态检查通过，该排序随 `0.1.13` 开发版本上传；原生三视口证据待补，未设体验版/正式版。
   证据：`docs/quality/evidence/ACTIVITY-WEEKDAY-ORDER-20261010.md`。
 - Historical grouped-card revision superseded locally by the 2026-10-10 redesign: `SPEC-20261007-REVIEW-GROUP-CARDS-05 / DREV-20261007-REVIEW-GROUP-CARDS-01` 曾获用户批准并在本地小程序实现。
   时间/科目/次数视图将当前有界页按科目聚合为可折叠组卡；条目右侧固定 44×44px 的“…”就近打开操作菜单，指定次数仅在用户输入后显示具体数字。
@@ -23,7 +24,7 @@
   后端性能修复通过，生产迁移尚未执行。证据：`docs/quality/evidence/FAIR-REVIEW-PROJECTION-20261007.md`。
   下文旧“到期”条目日期展示由本地本修订替代。
 - Baseline: `FDB-20260913-04`
-- Engineering contract: `FEC-20260913-LOCAL-DESIGN-EVIDENCE-01`
+- Engineering contract: `FEC-20261007-NATIVE-GEOMETRY-02`
 - Design revision: `DREV-20261001-RECORD-VOICE-INLINE-03`（记录页紧凑输入框内嵌麦克风；仅本地验证）
 - Current-state revision: `UI-STATE-20261006-REVIEW-MANAGEMENT-03-LOCAL`
 - Review management design/spec: `DREV-20261006-REVIEW-MANAGEMENT-03 / SPEC-20261006-REVIEW-MANAGEMENT-03`，

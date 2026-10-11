@@ -3,13 +3,13 @@
 - Status: `CURRENT`
 - Release gate policy: `SPEC-20261011-RISK-BASED-RELEASE-GATES-01` 已获用户批准；不涉及身份/权限/图片归属的前端发布不重复执行双账号隔离与 owner 验收，须记录影响判定并验证本次主路径及目标后端兼容性。首次公开生产发布仍需确认既有安全基线有效；历史验收结论不因门禁变化而改写。
 - Local report disclosures: `SPEC-20261011-REPORT-DISCLOSURES-01 / DREV-20261011-REPORT-DISCLOSURES-01` 已获用户2026-10-11批准并在本地实现。
-  报表「科目学习记录」与「课外活动投入」之间依次加入默认收起的「历史记录」「编辑计划」；两区独立展开，复用原有界历史及复习条目行为。记录页保留新增表单和待处理入口，完整历史移到报表；今日待处理和报表科目行均可带意图打开报表历史。三视口四状态原生数字几何及自动化检查已通过；iOS/Android 真机尚未验收，未上传/发布。证据：`docs/quality/evidence/REPORT-DISCLOSURES-20261011.md`。
+  报表「科目学习记录」与「课外活动投入」之间依次加入默认收起的「历史记录」「编辑计划」；两区独立展开，复用原有界历史及复习条目行为。记录页保留新增表单和待处理入口，完整历史移到报表；今日待处理和报表科目行均可带意图打开报表历史。三视口四状态原生数字几何及自动化检查已通过；`0.1.13` 开发版本已上传，iOS/Android 真机尚未验收，未设体验版/正式版。证据：`docs/quality/evidence/REPORT-DISCLOSURES-20261011.md`、`docs/deploy/releases/20261011-report-disclosures-frontend.md`。
 - Local review-inventory redesign: `SPEC-20261010-REVIEW-INVENTORY-REDESIGN-01 / DREV-20261010-REVIEW-INVENTORY-02` 已获用户2026-10-10批准并在本地小程序实现。
   复习条目页移除重复内容标题，时间为双日单层筛选，科目/次数为当前值下拉；时间/次数仍按当前有界页科目折叠，单科改为直接清单，逐行完整显示次数、最近反馈、日期与今日状态。科目翻页不自动改变当前选择，原排期/删除接口及权限不变。
-  前端216项、静态与三视口10组原生几何通过；iOS/Android真机及风险状态补充证据待验收，未上传/发布。证据：`docs/quality/evidence/REVIEW-INVENTORY-REDESIGN-20261010.md`。
+  前端216项、静态与三视口10组原生几何通过；该客户端实现随 `0.1.13` 开发版本上传，iOS/Android真机及风险状态补充证据待验收，未设体验版/正式版。证据：`docs/quality/evidence/REVIEW-INVENTORY-REDESIGN-20261010.md`。
 - Local settings activity ordering: `SPEC-20261010-ACTIVITY-WEEKDAY-ORDER-02` 已获用户批准并实现。
   设置页课外活动按首时段星期（周一至周日）、开始时间升序；无有效星期/时段排最后，同键保序。
-  原UI、其他列表、API与排期不变；前端213项及静态检查通过，原生三视口待验收，未发布。
+  原UI、其他列表、API与排期不变；前端213项及静态检查通过，该排序随 `0.1.13` 开发版本上传，原生三视口待验收，未设体验版/正式版。
   证据：`docs/quality/evidence/ACTIVITY-WEEKDAY-ORDER-20261010.md`。
 - Historical review-inventory presentation superseded locally by the 2026-10-10 redesign: `SPEC-20261007-REVIEW-GROUP-CARDS-05` 曾获用户批准并在本地实现。
   复习条目目录按当前有界页的科目分组、可折叠；条目“…”菜单沿用既有调整/删除接口，筛选仍使用服务端原有日期、科目、精确次数条件。
