@@ -19,12 +19,13 @@
 - 小程序源码包 133 文件、724195 字节；文件名与内容模式扫描未发现 `.env`、数据库、私钥、凭据模式或儿童照片。开发者工具预览编译 PASS，候选包体 687111 字节（671.0 KB）；预览产物保存在忽略目录 `dist/local-preview/`。
 - 微信开发者工具 `islogin`：PASS。真实 AppID `wx.cloud.callContainer` 的 `/health/live` 与 `/health/ready` 均返回 HTTP 200。
 - 2026-10-11 只读查询：云托管服务 `normal`、PUBLIC 关闭；版本 `flask-ik19-026` 和 `flask-ik19-028` 均列为 `normal`。CLI 列表不含流量比例或 028 的源码身份。
+- 后续用户在本会话确认当前线上流量使用 `flask-ik19-028`。同一真实 AppID 小程序链路只读调用 `GET /api/v1/children/{child_id}/review-inventory` 和 `/subjects` 均返回 HTTP 200，响应均含预期 `items` 数组；仅记录状态与响应形状，未输出孩子 ID 或数据。此证据验证当前路由支持前端调用；028 源码身份和控制台流量比例未由 CLI 独立读取。
 - 本次实现的三视口、四种展开状态的原生几何及前端行为证据见 `docs/quality/evidence/REPORT-DISCLOSURES-20261011.md`。
 
 ## 上传前待确认
 
-- **后端流量兼容性：NOT_RUN。** 旧 `flask-ik19-026` 不含编辑计划所用的复习目录接口。需在云托管控制台确认 026 已无流量，所有承载流量的版本均支持该接口，并核对 028 的来源与灰度稳定性。服务/版本 `normal` 及一次成功业务请求不能替代流量核对。
+- **后端流量兼容性：PASS（用户控制台确认 + 当前业务路由只读 smoke）。** 旧 `flask-ik19-026` 不含编辑计划所用接口，但用户已确认线上使用 028，且当前小程序链路的两个目标 GET 接口均为 200。CLI 不提供流量比例，因此该比例来自用户确认，不声称由 CLI 独立验证。
 - **两个真实微信账号的家庭隔离、图片 owner 与主业务流程 smoke：NOT_RUN。** 2026-09-06 有历史双账号部分验收，但发生在此后多个后端版本变化之前；不据此声称本次已通过。
 - **iOS/Android 真机交互：NOT_RUN。** 本次 Spec 仍为 `VERIFYING`，体验版阶段需验收。
 
-按 `docs/deploy/FRONTEND-RELEASE.md` §2，“任一项失败都停止上传”；上述必需项尚未取得当前证据，因此本次停在**开发预览成功、开发版本未上传**。未设置体验版、未提审、未正式发布，也未运行 `release:version:bump`。取得上传前证据后，重新核对候选版本和工作区，再执行上传。
+按当前 `docs/deploy/FRONTEND-RELEASE.md` §2，双账号必需项仍缺本次证据；风险分级门禁修订 `SPEC-20261011-RISK-BASED-RELEASE-GATES-01` 尚待批准，因此本次仍停在**开发预览成功、开发版本未上传**。未设置体验版、未提审、未正式发布，也未运行 `release:version:bump`。门禁确定后重新核对候选版本和工作区，再执行上传。
