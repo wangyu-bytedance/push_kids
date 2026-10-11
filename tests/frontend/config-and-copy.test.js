@@ -122,13 +122,19 @@ test("key native controls fit their own grid cells without page-level horizontal
   assert.match(records, /class="action-row submit-row"/);
 });
 
-test("record entry is unified and history is disclosed at the bottom", () => {
+test("record entry stays unified while report owns history and edit plan disclosures", () => {
   const records = source("pages/records/index.wxml");
+  const reports = source("pages/reports/index.wxml");
   const styles = source("pages/records/index.wxss");
   assert.doesNotMatch(records, /data-view="new"|data-mode="photo"|data-mode="text"/);
   assert.doesNotMatch(records, />拍照记录<|>文字记录</);
-  assert.match(records, /id="record-history"/);
-  assert.match(records, /aria-expanded="\{\{historyExpanded\}\}"/);
+  assert.doesNotMatch(records, /id="record-history"/);
+  assert.match(reports, /id="report-history"/);
+  assert.match(reports, /aria-expanded="\{\{historyExpanded\}\}"/);
+  assert.match(reports, /aria-expanded="\{\{inventoryExpanded\}\}"/);
+  assert.ok(reports.indexOf("id=\"sec-subjects\"") < reports.indexOf("id=\"report-history\""));
+  assert.ok(reports.indexOf("id=\"report-history\"") < reports.indexOf("id=\"report-edit-plan\""));
+  assert.ok(reports.indexOf("id=\"report-edit-plan\"") < reports.indexOf("id=\"sec-activities\""));
   assert.match(records, /写下今天学了什么…/);
   assert.match(records, /添加照片或文字后继续/);
   assert.match(records, />添加学习照片</);

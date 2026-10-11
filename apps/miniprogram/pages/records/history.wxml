@@ -49,7 +49,7 @@
     <view class="sk card-sk"></view>
   </block>
 
-  <block wx:for="{{historyItems}}" wx:key="submission_id">
+  <block wx:for="{{historyItems}}" wx:key="rowKey">
     <text wx:if="{{item.showDay}}" class="h-day tnum">{{item.dayText}}</text>
 
     <view class="pk-card h-card {{item.state === 'pending_confirmation' ? 'att' : ''}}{{item.state === 'failed' ? 'dan' : ''}}"

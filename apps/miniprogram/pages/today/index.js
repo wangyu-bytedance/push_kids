@@ -370,13 +370,13 @@ Page({
   recordLearning() { getApp().globalData.recordIntent = { childId: this.data.childId, view: "new" }; wx.switchTab({ url: "/pages/records/index" }); },
   addSchedule() { getApp().globalData.openCalendarCreate = true; wx.switchTab({ url: "/pages/calendar/index" }); },
   openCalendar() { wx.switchTab({ url: "/pages/calendar/index" }); },
-  openPending() { getApp().globalData.recordIntent = { childId: this.data.childId, view: "history", status: "pending" }; wx.switchTab({ url: "/pages/records/index" }); },
+  openPending() { getApp().globalData.historyIntent = { childId: this.data.childId, view: "history", status: "pending" }; wx.switchTab({ url: "/pages/reports/index" }); },
   openLearningHistory(event) {
     const filters = { from: this.data.dashboard.day, to: this.data.dashboard.day };
     if (event.currentTarget.dataset.id) filters.subject_id = event.currentTarget.dataset.id;
-    getApp().globalData.recordIntent = { childId: this.data.childId, view: "history", status: "confirmed",
+    getApp().globalData.historyIntent = { childId: this.data.childId, view: "history", status: "confirmed",
       filters };
-    wx.switchTab({ url: "/pages/records/index" });
+    wx.switchTab({ url: "/pages/reports/index" });
   },
   returnToRecord() {
     if (!this.data.reviewReturn || this.data.reviewReturn.childId !== this.data.childId) return;

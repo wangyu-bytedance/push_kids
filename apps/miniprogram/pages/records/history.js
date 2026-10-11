@@ -25,6 +25,7 @@ function rowView(item, view) {
   const label = name || (item.source === "photo" ? "照片记录" : "文字记录");
   return {
     ...item,
+    rowKey: item.record_id || item.submission_id,
     label,
     mark: ui.subjectMark(name || label),
     markClass: ui.subjectClass(name, item.subject_kind),
@@ -53,9 +54,10 @@ module.exports = {
   methods: {
     async consumeRecordIntent() {
       const app = getApp();
-      const intent = app.globalData.recordIntent;
+      const intentKey = this.historyIntentKey || "recordIntent";
+      const intent = app.globalData[intentKey];
       if (!intent) return;
-      delete app.globalData.recordIntent;
+      delete app.globalData[intentKey];
       if (intent.childId && intent.childId !== this.data.childId) return;
       this.recordScroll = 0;
       if (intent.view === "new") {
@@ -72,22 +74,27 @@ module.exports = {
       await this.consumeRecordIntent();
       if (this.data.historyExpanded) return this.fetchHistory();
       const child = this.data.childId;
+      const generation = this.pendingGeneration = (this.pendingGeneration || 0) + 1;
       try {
         const result = await api.request(`/children/${child}/history?view=pending&limit=1`);
-        if (!this.hidden && child === this.data.childId) this.setData({
+        if (!this.hidden && generation === this.pendingGeneration && child === this.data.childId) this.setData({
           pendingCount: Number(result.pending_count || 0),
           pendingProcessing: Boolean(result.has_processing)
         });
       } catch (error) {
         if (error.statusCode === 401 || error.statusCode === 403) this.clearHistory();
-        if (!this.hidden && child === this.data.childId) this.setData({ error: error.message });
+        if (!this.hidden && generation === this.pendingGeneration && child === this.data.childId) {
+          this.setData(this.historySectionId ? { historyError: error.message } : { error: error.message });
+        }
       }
     },
     clearHistory() {
       this.historyRequest = (this.historyRequest || 0) + 1;
+      this.pendingGeneration = (this.pendingGeneration || 0) + 1;
       this.historyCursors = [null];
       this.recordScroll = 0;
-      this.setData({ historyExpanded: false, historyItems: [], historyFilters: emptyFilters(), searchText: "", filterOpen: false,
+      this.setData({ historyExpanded: false, historyView: "confirmed", historyItems: [], historyLoading: false,
+        historyError: "", historyFilters: emptyFilters(), searchText: "", filterOpen: false,
         filterSubjects: [], historyNext: null, historyPage: 1, pendingCount: 0, pendingProcessing: false, submittedId: "" });
     },
     /* 筛选条件按孩子记忆，纯界面偏好，读写失败一律回落到「不筛选」。 */
@@ -102,7 +109,7 @@ module.exports = {
     },
     scrollHistoryIntoView() {
       if (!wx.pageScrollTo) return;
-      const scroll = () => wx.pageScrollTo({ selector: "#record-history", duration: 200 });
+      const scroll = () => wx.pageScrollTo({ selector: this.historySectionId || "#record-history", duration: 200 });
       if (wx.nextTick) wx.nextTick(scroll); else scroll();
     },
     async toggleHistory() {
@@ -129,6 +136,7 @@ module.exports = {
       await this.fetchHistory(null, 1);
     },
     async fetchHistory(cursor, page) {
+      this.pendingGeneration = (this.pendingGeneration || 0) + 1;
       const generation = (this.historyRequest || 0) + 1;
       this.historyRequest = generation;
       const child = this.data.childId;
@@ -157,7 +165,11 @@ module.exports = {
         /* 记录页拿到的待处理数最新，顺手把 TabBar 徽标对齐，避免和今日页不一致。 */
         const app = typeof getApp === "function" && getApp();
         if (app && app.setTabBadge) app.setTabBadge("records", result.pending_count);
-        if (page) { this.recordScroll = 0; if (wx.pageScrollTo) wx.pageScrollTo({ scrollTop: 0, duration: 0 }); }
+        if (page) {
+          this.recordScroll = 0;
+          if (this.historySectionId) this.scrollHistoryIntoView();
+          else if (wx.pageScrollTo) wx.pageScrollTo({ scrollTop: 0, duration: 0 });
+        }
         if (this.schedulePoll) this.schedulePoll();
       } catch (error) {
         if (generation !== this.historyRequest || child !== this.data.childId || this.hidden) return;

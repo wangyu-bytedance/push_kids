@@ -32,13 +32,14 @@ test("reports consume server-side activity aggregates without loading raw histor
       review_urgency: [],
       review_activity: []
     };
+    if (requestPath === "/children/child/history?view=pending&limit=1") return { items: [], pending_count: 0, has_processing: false };
     throw new Error(`unexpected path: ${requestPath}`);
   }
   const { page } = loadPage("pages/reports/index.js", request);
 
   await page.load();
 
-  assert.deepEqual(paths, ["/children", "/children/child/report?days=7"]);
+  assert.deepEqual(paths, ["/children", "/children/child/report?days=7", "/children/child/history?view=pending&limit=1"]);
   assert.deepEqual(plain(page.data.activityRows), [{
     id: "swim",
     name: "游泳",

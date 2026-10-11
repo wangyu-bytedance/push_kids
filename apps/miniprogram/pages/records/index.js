@@ -36,6 +36,25 @@ Page({
     this.setData({ date: now.date, dateLabel: shortDate(now.date), time: now.time, today: now.date, submissionKey: api.newIdempotencyKey("record-entry") });
   },
   ...history.methods,
+  async consumeRecordIntent() {
+    const app = getApp();
+    const intent = app.globalData.recordIntent;
+    if (intent && intent.view === "history") {
+      delete app.globalData.recordIntent;
+      app.globalData.historyIntent = intent;
+      wx.switchTab({ url: "/pages/reports/index" });
+      return;
+    }
+    return history.methods.consumeRecordIntent.call(this);
+  },
+  openHistoryPending() {
+    getApp().globalData.historyIntent = { childId: this.data.childId, view: "history", status: "pending" };
+    wx.switchTab({ url: "/pages/reports/index" });
+  },
+  openHistoryInReports() {
+    getApp().globalData.historyIntent = { childId: this.data.childId, view: "history", status: "confirmed" };
+    wx.switchTab({ url: "/pages/reports/index" });
+  },
   onShow() {
     const tabBar = this.getTabBar && this.getTabBar();
     if (tabBar) tabBar.setData({ selected: 2 });
@@ -94,7 +113,7 @@ Page({
       const member = getApp().globalData.currentMember;
       const canWrite = !member || member.role !== "viewer";
       if (!canWrite && this.voiceController) this.voiceController.cancel();
-      this.setData({ canWrite, historyExpanded: canWrite ? this.data.historyExpanded : true });
+      this.setData({ canWrite, historyExpanded: false });
       if (loadId !== this.loadId) return;
       this.setData({ loading: false, children, childIndex, childId });
       if (this.refreshHistory) await this.refreshHistory();

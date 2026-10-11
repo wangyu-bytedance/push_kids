@@ -32,6 +32,7 @@ function loadReportsPage(overview, trends = overviewTrends(overview)) {
     if (requestPath.includes("/report?days=7")) {
       return { overview, overview_trends: trends, review_urgency: reportDays, review_activity: reportDays, subjects: [] };
     }
+    if (requestPath.includes("/history?")) return { items: [], pending_count: 0, has_processing: false };
     throw new Error(`unexpected path: ${requestPath}`);
   }
   const wx = { switchTab(options) { calls.tabs.push(options.url); } };
@@ -53,16 +54,18 @@ test("overview metric cards are passive summaries with seven-point trends", asyn
   assert.equal(page.openMetric, undefined);
 });
 
-test("subject rows keep their explicit history drill-down", async () => {
+test("subject rows expand the report history with their exact range filters", async () => {
   const overview = { learning_records: 6, new_knowledge_items: 12, review_feedback_count: 3, activity_records: 2 };
   const { page, calls, globalData } = loadReportsPage(overview);
   await page.load();
-  page.openSubjectHistory({ currentTarget: { dataset: { id: "math" } } });
+  await page.openSubjectHistory({ currentTarget: { dataset: { id: "math" } } });
 
-  assert.deepEqual(calls.tabs, ["/pages/records/index"]);
-  assert.deepEqual(plain(globalData.recordIntent), {
-    childId: "child-1", view: "history", status: "confirmed",
-    filters: { subject_id: "math", from: "2026-06-01", to: "2026-06-07" }
+  assert.deepEqual(calls.tabs, []);
+  assert.equal(globalData.historyIntent, undefined);
+  assert.equal(page.data.historyExpanded, true);
+  assert.equal(page.data.historyView, "confirmed");
+  assert.deepEqual(plain(page.data.historyFilters), {
+    q: "", subject_id: "math", source: "", from: "2026-06-01", to: "2026-06-07", cancelled: false
   });
 });
 

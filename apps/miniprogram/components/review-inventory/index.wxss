@@ -1,0 +1,4 @@
+@import "../../pages/review-inventory/content.wxss";
+
+.inventory-page { min-height: 0; padding: 0 0 12px; }
+@media (max-width: 340px) { .inventory-page { padding-left: 0; padding-right: 0; } }

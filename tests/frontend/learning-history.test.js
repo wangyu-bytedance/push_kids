@@ -9,6 +9,7 @@ function harness(entry, request, wxOverrides = {}, extraApi = {}) {
   const timers = new Set();
   const app = { globalData: { selectedChildId: "child" }, selectChild(id) { this.globalData.selectedChildId = id; } };
   const wx = { showToast() {}, setNavigationBarTitle() {}, pageScrollTo() {}, navigateBack() {},
+    switchTab() {},
     showModal({ success }) { success({ confirm: true }); }, ...wxOverrides };
   const modules = new Map();
   function load(file) {
@@ -74,8 +75,10 @@ test("late search response and hidden page cannot replace current history", asyn
   assert.equal(page.data.historyItems[0].submission_id, "new");
 });
 
-test("filter cancellation is read-only, date semantics reset, navigation intent consumed once", async () => {
-  const { page, app } = harness("pages/records/index.js", async (url) => url.includes("subjects") ? [] : { items: [], pending_count: 0 });
+test("filter cancellation is read-only, date semantics reset, old history intent redirects once", async () => {
+  const tabs = [];
+  const { page, app } = harness("pages/records/index.js", async (url) => url.includes("subjects") ? [] : { items: [], pending_count: 0 },
+    { switchTab({ url }) { tabs.push(url); } });
   page.data.childId = "child";
   page.data.historyFilters.q = "original";
   await page.openHistoryFilters(); page.data.filterDraft.q = "changed"; page.closeHistoryFilters();
@@ -85,12 +88,14 @@ test("filter cancellation is read-only, date semantics reset, navigation intent 
   assert.equal(page.data.historyFilters.from, "");
   app.globalData.recordIntent = { childId: "child", view: "history", status: "confirmed", filters: { subject_id: "math" } };
   await page.consumeRecordIntent();
-  assert.equal(page.data.historyExpanded, true);
-  assert.equal(page.data.historyFilters.subject_id, "math");
+  assert.equal(page.data.historyExpanded, false);
+  assert.deepEqual(tabs, ["/pages/reports/index"]);
+  assert.equal(app.globalData.historyIntent.filters.subject_id, "math");
   assert.equal(app.globalData.recordIntent, undefined);
-  page.data.historyFilters.subject_id = "english";
+  app.globalData.historyIntent.filters.subject_id = "english";
   await page.consumeRecordIntent();
-  assert.equal(page.data.historyFilters.subject_id, "english");
+  assert.deepEqual(tabs, ["/pages/reports/index"]);
+  assert.equal(app.globalData.historyIntent.filters.subject_id, "english");
 });
 
 test("confirmed and cancelled submissions open read-only and cannot be reconfirmed", async () => {
@@ -273,16 +278,20 @@ test("explicit new-record intent collapses history and returns to the form", asy
   assert.equal(scrolls.at(-1).scrollTop, 0);
 });
 
-test("viewer enters expanded read-only history", async () => {
+test("viewer record tab offers the report history route without expanding a hidden list", async () => {
+  const tabs = [];
   const { page, app } = harness("pages/records/index.js", async (url) => {
     if (url === "/children") return [{ id: "child", name: "A" }];
     return { items: [], pending_count: 0, has_processing: false };
-  });
+  }, { switchTab({ url }) { tabs.push(url); } });
   app.globalData.currentMember = { role: "viewer" };
   page.hidden = false;
   await page.load();
   assert.equal(page.data.canWrite, false);
-  assert.equal(page.data.historyExpanded, true);
+  assert.equal(page.data.historyExpanded, false);
+  page.openHistoryInReports();
+  assert.deepEqual(tabs, ["/pages/reports/index"]);
+  assert.equal(app.globalData.historyIntent.status, "confirmed");
 });
 
 test("unified record form rejects empty material and routes text-only submissions without media", async () => {

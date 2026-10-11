@@ -1,6 +1,7 @@
 const api = require("../../utils/api");
 const ui = require("../../utils/ui");
 const childContext = require("../../utils/child-context");
+const history = require("../records/history");
 
 const REPORT_PAGE_SIZE = 30;
 const RANGES = [7, 30, 100];
@@ -173,18 +174,34 @@ function activityRows(report) {
 
 Page({
   data: {
+    ...history.data,
     loading: true, error: "", children: [], childIndex: 0, childId: "", multiChild: false, showChildSheet: false, canAddChild: true,
     days: 7, ranges: RANGES, rangeLabel: "近 7 天", report: null, metrics: [], isEmpty: false,
     subjects: [], activityRows: [], activityDetailFailed: false, feedbackTotal: 0,
     urgencyPages: [], activityPages: [], urgencyPage: 0, activityPage: 0,
-    urgencyPageLabel: "", activityPageLabel: ""
+    urgencyPageLabel: "", activityPageLabel: "", inventoryExpanded: false, canWrite: false
   },
+  ...history.methods,
   onShow() {
     const tabBar = this.getTabBar && this.getTabBar();
     if (tabBar) tabBar.setData({ selected: 3 });
+    this.hidden = false;
+    this.historyIntentKey = "historyIntent";
+    this.historySectionId = "#report-history";
+    const intent = getApp().globalData.historyIntent;
+    if (intent && intent.childId) getApp().selectChild(intent.childId);
     const days = this.rememberedRange(getApp().globalData.selectedChildId);
-    if (days !== this.data.days) this.setData({ days, rangeLabel: `近 ${days} 天`, urgencyPage: 0, activityPage: 0 });
+    this.clearHistory();
+    this.setData({ days, rangeLabel: `近 ${days} 天`, urgencyPage: 0, activityPage: 0,
+      inventoryExpanded: false, report: null, metrics: [], subjects: [], activityRows: [], children: [], childId: "" });
     this.load();
+  },
+  onHide() {
+    this.hidden = true;
+    this.loadGeneration = (this.loadGeneration || 0) + 1;
+    this.historyRequest = (this.historyRequest || 0) + 1;
+    this.pendingGeneration = (this.pendingGeneration || 0) + 1;
+    this.setData({ historyExpanded: false, inventoryExpanded: false, filterOpen: false });
   },
   async onPullDownRefresh() {
     await this.load();
@@ -196,6 +213,8 @@ Page({
     return RANGES.indexOf(stored) >= 0 ? stored : 7;
   },
   async load() {
+    this.historyIntentKey = "historyIntent";
+    this.historySectionId = "#report-history";
     const generation = (this.loadGeneration || 0) + 1;
     this.loadGeneration = generation;
     this.setData({ loading: true, error: "" });
@@ -206,12 +225,17 @@ Page({
       const children = selection.children;
       const canAddChild = childContext.canAddChild(profiles);
       if (!children.length) {
+        this.clearHistory();
         this.setData({ loading: false, children, multiChild: false, canAddChild, report: null, metrics: [], subjects: [],
-          activityRows: [], urgencyPages: [], activityPages: [], urgencyPageLabel: "", activityPageLabel: "" });
+          activityRows: [], urgencyPages: [], activityPages: [], urgencyPageLabel: "", activityPageLabel: "", inventoryExpanded: false });
         return;
       }
       const childIndex = selection.childIndex;
       const childId = selection.childId;
+      if (this.data.childId && childId !== this.data.childId) {
+        this.clearHistory();
+        this.setData({ inventoryExpanded: false, report: null, metrics: [], subjects: [], activityRows: [] });
+      }
       const days = this.data.days;
       const report = await api.request(`/children/${childId}/report?days=${days}`);
       if (generation !== this.loadGeneration) return;
@@ -227,6 +251,7 @@ Page({
       const trendBuckets = normalizeTrendBuckets(report, overview, days);
       this.setData({
         loading: false, children, childIndex, childId, multiChild: selection.multiChild, canAddChild,
+        canWrite: !getApp().globalData.currentMember || ["manager", "editor"].includes(getApp().globalData.currentMember.role),
         report, subjects, urgencyPages, activityPages, urgencyPage: 0, activityPage: 0,
         urgencyPageLabel: urgencyPages.length ? urgencyPages[0].label : "",
         activityPageLabel: activityPages.length ? activityPages[0].label : "",
@@ -243,6 +268,11 @@ Page({
         isEmpty: !overview.learning_records && !overview.new_knowledge_items
           && !overview.review_feedback_count && !overview.activity_records
       });
+      await this.refreshHistory();
+      if (this.data.inventoryExpanded && typeof this.selectComponent === "function") {
+        const inventory = this.selectComponent("#inventory-component");
+        if (inventory) await inventory.reload();
+      }
     } catch (error) {
       /* 弱网时保留上一次读到的统计，只在顶部给一条可重试的说明。 */
       if (generation === this.loadGeneration) this.setData({ loading: false, error: error.message });
@@ -259,8 +289,9 @@ Page({
     const childId = this.data.children[childIndex].id;
     getApp().selectChild(childId);
     const days = this.rememberedRange(childId);
+    this.clearHistory();
     this.setData({ childIndex, childId, days, rangeLabel: `近 ${days} 天`, showChildSheet: false,
-      urgencyPage: 0, activityPage: 0 });
+      urgencyPage: 0, activityPage: 0, inventoryExpanded: false, report: null, metrics: [], subjects: [], activityRows: [] });
     this.load();
   },
   changeRange(event) {
@@ -273,9 +304,9 @@ Page({
   openSubjectHistory(event) {
     const report = this.data.report;
     if (!report) return;
-    getApp().globalData.recordIntent = { childId: this.data.childId, view: "history", status: "confirmed",
+    getApp().globalData.historyIntent = { childId: this.data.childId, view: "history", status: "confirmed",
       filters: { subject_id: event.currentTarget.dataset.id, ...rangeFilters(report, this.data.days) } };
-    wx.switchTab({ url: "/pages/records/index" });
+    return this.refreshHistory();
   },
   goRecord() {
     getApp().globalData.recordIntent = { childId: this.data.childId, view: "new" };
@@ -285,6 +316,7 @@ Page({
   openReviewInventory() {
     if (this.data.childId) wx.navigateTo({ url: `/pages/review-inventory/index?childId=${this.data.childId}` });
   },
+  toggleInventory() { this.setData({ inventoryExpanded: !this.data.inventoryExpanded }); },
   onUrgencyPageChange(event) {
     const urgencyPage = event.detail.current;
     this.setData({ urgencyPage, urgencyPageLabel: this.data.urgencyPages[urgencyPage].label });

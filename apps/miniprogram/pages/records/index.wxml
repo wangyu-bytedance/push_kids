@@ -1,4 +1,3 @@
-<import src="history.wxml" />
 <primary-nav></primary-nav>
 <view class="page record-page {{canWrite && children.length ? 'sticky-cta' : ''}}">
   <view class="pg-head">
@@ -135,16 +134,10 @@
 
     </block>
 
-    <view id="record-history" class="history-section {{historyExpanded ? 'expanded' : ''}}">
-      <view class="pk-card tight history-toggle" aria-role="button" aria-label="{{historyExpanded ? '收起历史记录' : '展开历史记录'}}" aria-expanded="{{historyExpanded}}" bindtap="toggleHistory">
-        <view class="flex">
-          <view class="ico ico-clock sm"></view>
-          <text class="t-sub-m grow">历史记录</text>
-          <text class="t-cap c-ink-3" wx:if="{{pendingCount}}">{{pendingCount}} 条待处理</text>
-          <view class="chev {{historyExpanded ? 'up' : ''}}"></view>
-        </view>
-      </view>
-      <template wx:if="{{historyExpanded}}" is="history" data="{{historyView,historyItems,historyLoading,historyError,historyPage,historyNext,historyFilters,hasFilters,pendingCount,pendingProcessing,searchText,filterOpen,filterDraft,filterSubjects,filterSubjectIndex,filterError,sourceOptions,canWrite}}" />
+    <view class="pk-notice quiet mt3" wx:if="{{!canWrite}}" aria-role="button" aria-label="到报表查看历史记录" bindtap="openHistoryInReports">
+      <view class="ico ico-clock sm"></view>
+      <text class="n-txt">历史记录已放在报表中 · 前往查看</text>
+      <view class="chev right"></view>
     </view>
   </block>
 </view>

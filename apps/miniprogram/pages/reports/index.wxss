@@ -1,3 +1,5 @@
+@import "../records/history.wxss";
+
 /* 报表页（F1/F2/F3/F4）：图表全部用 WXSS 色块与柱条实现，不引入 canvas 或图表库。
    这里只补本页几何，颜色与字号一律走 tokens.wxss / atoms.wxss。 */
 
@@ -160,6 +162,7 @@
 /* 与真实 2×2 指标卡等高：168rpx × 2 行 + 16rpx 间距 */
 .sk.metrics-sk { height: 352rpx; }
 .sk.chart-sk { height: 420rpx; }
-.inventory-entry { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 64px; padding: 16px; margin: 20px 0; }
-.inventory-title { display: block; color: var(--pk-primary); font-size: 18px; font-weight: 600; }
-.inventory-description { display: block; margin-top: 6px; color: var(--pk-ink-2); font-size: 14px; }
+.report-disclosure { margin-top: var(--pk-s4); }
+.report-disclosure.expanded .history-toggle { margin-bottom: var(--pk-s3); }
+.report-disclosure .safe-tail { display: none; }
+.report-disclosure review-inventory { display: block; width: 100%; }
