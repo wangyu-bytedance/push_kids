@@ -2,12 +2,15 @@
 
 - Status: `CURRENT / VOICE_INPUT_LOCAL_VERIFIED / MICROPHONE_PRIVACY_DECLARATION_BLOCKED / DEVELOPMENT_VERSION_0.1.12_UPLOADED / NATIVE_VIEWPORT_MATRIX_NOT_RUN`
 - Related Feature: `FEAT-001`
+- Local review-inventory redesign under verification: `SPEC-20261010-REVIEW-INVENTORY-REDESIGN-01 / DREV-20261010-REVIEW-INVENTORY-02` 已获用户批准并本地实现。
+  原生导航保留唯一“复习条目”标题；时间双日、科目/次数下拉分别占一层筛选；时间/次数按科目折叠、单科为扁平分隔清单。条目保留完整标题、真实次数、最近复习、建议/家长日期、今日安排状态和44×44就近菜单。科目翻页不再暗中切换当前科目。
+  前端216项、设计SHA、静态与320/390/430十组微信原生数字矩形通过；320次数展开和390时间视图已人工看图。iOS/Android真机与风险状态补充证据仍待完成，未上传/发布。证据：`docs/quality/evidence/REVIEW-INVENTORY-REDESIGN-20261010.md`。
 - Settings activity order: `SPEC-20261010-ACTIVITY-WEEKDAY-ORDER-02 / DREV-20261010-ACTIVITY-WEEKDAY-ORDER-01`
   用户2026-10-10批准，已本地实现首时段星期、开始时间升序，缺少有效星期或时段排最后，同键保序。
   WXML/WXSS、布局、图标、文案及交互结构完全不变；排序后点击仍按新列表索引编辑正确活动。
   213项前端测试及静态检查通过，原生三视口证据待补；未上传/发布。
   证据：`docs/quality/evidence/ACTIVITY-WEEKDAY-ORDER-20261010.md`。
-- Local review-inventory grouped-card revision under verification: `SPEC-20261007-REVIEW-GROUP-CARDS-05 / DREV-20261007-REVIEW-GROUP-CARDS-01` 已获用户批准并在本地小程序实现。
+- Historical grouped-card revision superseded locally by the 2026-10-10 redesign: `SPEC-20261007-REVIEW-GROUP-CARDS-05 / DREV-20261007-REVIEW-GROUP-CARDS-01` 曾获用户批准并在本地小程序实现。
   时间/科目/次数视图将当前有界页按科目聚合为可折叠组卡；条目右侧固定 44×44px 的“…”就近打开操作菜单，指定次数仅在用户输入后显示具体数字。
   筛选用日期两列、科目和次数三列的等宽按钮，第四个科目按同列宽度换行。320×568、390×844、430×932 微信原生数字矩形共 12 组（含菜单）审计通过；320/430 原生截图和390 CUA模拟器画面已人工检查。
   前端 207 passed、静态检查通过；新版 DREV 快照仍为 AWAITING_EXPORT，iOS/Android 真机未验收，尚未部署此本地修订。详见 `specs/active/FEAT-001-REVIEW-INVENTORY-GROUPED-CARDS.md`。

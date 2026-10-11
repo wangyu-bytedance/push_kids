@@ -1,6 +1,19 @@
 const api = require("../../utils/api");
 
-function arrangementView(item) {
+function shortDate(value, asOfDay) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value || "")) return value || "";
+  const [year, month, day] = value.split("-").map(Number);
+  return `${asOfDay && value.slice(0, 4) !== asOfDay.slice(0, 4) ? `${year}年` : ""}${month}月${day}日`;
+}
+
+function dayFrom(asOfDay, offset) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(asOfDay || "")) return "";
+  const date = new Date(`${asOfDay}T00:00:00Z`);
+  date.setUTCDate(date.getUTCDate() + offset);
+  return shortDate(date.toISOString().slice(0, 10), asOfDay);
+}
+
+function arrangementView(item, asOfDay) {
   const labels = {
     reviewed_today: "今日已完成", deferred_today: "今天已跳过",
     scheduled_today: "今日已安排", reserved: "家长已安排",
@@ -11,6 +24,9 @@ function arrangementView(item) {
   const dateLabel = !current ? "计划日期" : item.scheduled_on ? "家长安排日期" : "建议复习日";
   const dateValue = !current ? item.due_date : (item.scheduled_on || item.suggested_review_on);
   return { ...item, dateText: dateValue ? `${dateLabel}：${dateValue}` : "",
+    compactDateText: dateValue ? `${dateLabel === "建议复习日" ? "建议" : dateLabel === "家长安排日期" ? "家长安排" : "计划"}${shortDate(dateValue, asOfDay)}` : "",
+    lastReviewText: item.last_reviewed_on ? `上次${shortDate(item.last_reviewed_on, asOfDay)}` : "尚未复习",
+    reviewCountText: item.review_count === null || item.review_count === undefined ? "复习次数待核实" : `已复习${item.review_count}次`,
     arrangementText: current ? labels[item.arrangement_state] : "安排状态待更新" };
 }
 
@@ -39,6 +55,7 @@ function groupItems(items) {
 Page({
   data: {
     childId: "", view: "time", offset: 1, subjectId: "", count: null,
+    pickerOpen: false, selectedSubjectName: "请选择科目", countLabel: "全部", tomorrowLabel: "明天", dayAfterLabel: "后天",
     views: [{ id: "time", label: "按时间" }, { id: "subject", label: "按科目" }, { id: "count", label: "按次数" }],
     counts: [0, 1, 2, 3], subjects: [], subjectCursor: null, subjectHasPrevious: false, subjectLoading: false, subjectError: "",
     items: [], groups: [], total: 0, nextCursor: null, pageNumber: 1, loaded: false, loading: false, error: "",
@@ -61,8 +78,8 @@ Page({
       const family = app.globalData.familyId || "";
       const child = app.globalData.selectedChildId || this.data.childId;
       if (family !== this.familyAtLoad || child !== this.data.childId) {
-        this.setData({ childId: child, items: [], groups: [], subjects: [], subjectId: "", total: 0,
-          loaded: false, target: null, notice: "", showCountInput: false,
+        this.setData({ childId: child, items: [], groups: [], subjects: [], subjectId: "", selectedSubjectName: "请选择科目", total: 0,
+          loaded: false, target: null, notice: "", showCountInput: false, pickerOpen: false,
           actionMenuId: "", actionMenuGroup: "", actionMenuAbove: false });
       }
       this.familyAtLoad = family;
@@ -70,7 +87,7 @@ Page({
       await this.reload();
     } catch (error) { if (this.visible && showGeneration === this.showGeneration) this.setData({ error: error.message, loading: false }); }
   },
-  onHide() { this.visible = false; this.showGeneration = (this.showGeneration || 0) + 1; this.generation = (this.generation || 0) + 1; this.subjectGeneration = (this.subjectGeneration || 0) + 1; this.setData({ target: null, showCountInput: false, actionMenuId: "", actionMenuGroup: "", actionMenuAbove: false, deleting: false, saving: false }); },
+  onHide() { this.visible = false; this.showGeneration = (this.showGeneration || 0) + 1; this.generation = (this.generation || 0) + 1; this.subjectGeneration = (this.subjectGeneration || 0) + 1; this.setData({ target: null, showCountInput: false, pickerOpen: false, actionMenuId: "", actionMenuGroup: "", actionMenuAbove: false, deleting: false, saving: false }); },
   onUnload() { this.onHide(); },
   async onPullDownRefresh() { await this.reload(); wx.stopPullDownRefresh(); },
   context() { return `${getApp().globalData.familyId || ""}:${this.data.childId}:${getApp().globalData.selectedChildId || ""}`; },
@@ -88,15 +105,21 @@ Page({
     try {
       const result = await api.request(`/children/${this.data.childId}/review-inventory/subjects?limit=20${cursor ? `&cursor=${encodeURIComponent(cursor)}` : ""}`);
       if (!this.visible || generation !== this.subjectGeneration || context !== this.context() || this.data.view !== "subject") return;
-      const selected = result.items.find(item => item.id === this.data.subjectId) || result.items[0];
-      this.setData({ subjects: result.items, subjectCursor: result.next_cursor, subjectHasPrevious: !!cursor, subjectId: selected ? selected.id : "", subjectLoading: false });
-      this.currentCursor = null;
-      this.setData({ pageNumber: 1 });
-      if (selected) await this.loadItems();
-      else this.setData({ loaded: true, loading: false, items: [], groups: [], total: 0, nextCursor: null });
+      const selected = result.items.find(item => item.id === this.data.subjectId) ||
+        (!this.data.subjectId ? result.items[0] : null);
+      this.setData({ subjects: result.items, subjectCursor: result.next_cursor, subjectHasPrevious: !!cursor,
+        subjectId: selected ? selected.id : this.data.subjectId,
+        selectedSubjectName: selected ? selected.name || "未命名科目" : (this.data.subjectId ? this.data.selectedSubjectName : "暂无科目"),
+        subjectLoading: false });
+      if (!this.data.loaded && this.data.subjectId) {
+        this.currentCursor = null;
+        this.setData({ pageNumber: 1 });
+        await this.loadItems();
+      } else if (!this.data.subjectId) this.setData({ loaded: true, loading: false, items: [], groups: [], total: 0, nextCursor: null });
     } catch (error) {
       if (this.visible && generation === this.subjectGeneration && context === this.context()) {
-        this.setData({ subjectLoading: false, subjectError: error.code === "cursor_stale" ? "科目已有变化，请重新加载科目" : error.message });
+        this.setData({ subjectLoading: false, pickerOpen: true,
+          subjectError: error.code === "cursor_stale" ? "科目已有变化，请重新加载科目" : error.message });
       }
     }
   },
@@ -116,10 +139,12 @@ Page({
       const result = await api.request(`/children/${this.data.childId}/review-inventory?${query.join("&")}`);
       if (!this.visible || generation !== this.generation || context !== this.context()) return;
       this.currentCursor = cursor;
-      const items = result.items.map(arrangementView);
+      const items = result.items.map(item => arrangementView(item, result.as_of_day));
       this.setData({ loaded: true, loading: false, items, groups: groupItems(items), total: result.total,
         nextCursor: result.next_cursor, pageNumber: nextPage, asOfDay: result.as_of_day,
         planDate: result.plan_date || "", minutes: result.planned_minutes || 0,
+        tomorrowLabel: `明天 ${dayFrom(result.as_of_day, 1)}`.trim(),
+        dayAfterLabel: `后天 ${dayFrom(result.as_of_day, 2)}`.trim(),
         budget: result.budget_minutes || 0, overBudget: result.over_budget_minutes || 0,
         canWrite: canWrite() && result.child_writable,
         target: null, actionMenuId: "", actionMenuGroup: "", actionMenuAbove: false, actionError: "" });
@@ -137,17 +162,26 @@ Page({
     if (view === this.data.view) return;
     this.generation = (this.generation || 0) + 1;
     this.subjectGeneration = (this.subjectGeneration || 0) + 1;
-    this.setData({ view, items: [], groups: [], total: 0, loaded: false, error: "", notice: "", showCountInput: false, actionMenuId: "", actionMenuGroup: "", actionMenuAbove: false, target: null });
+    this.setData({ view, items: [], groups: [], total: 0, loaded: false, error: "", notice: "", showCountInput: false, pickerOpen: false, actionMenuId: "", actionMenuGroup: "", actionMenuAbove: false, target: null });
     return this.reload();
   },
-  selectDay(event) { this.setData({ offset: Number(event.currentTarget.dataset.offset), loaded: false, items: [], groups: [] }); return this.reload(); },
-  selectSubject(event) { this.setData({ subjectId: event.currentTarget.dataset.id, loaded: false, items: [], groups: [], pageNumber: 1, target: null, actionMenuId: "", actionMenuGroup: "", actionMenuAbove: false }); return this.loadItems(); },
+  selectDay(event) { this.setData({ offset: Number(event.currentTarget.dataset.offset), loaded: false, items: [], groups: [], pickerOpen: false }); return this.reload(); },
+  togglePicker() { if (!this.data.saving) this.setData({ pickerOpen: !this.data.pickerOpen, showCountInput: false, countError: "", actionMenuId: "", actionMenuGroup: "", actionMenuAbove: false }); },
+  closePicker() { this.setData({ pickerOpen: false, showCountInput: false, countError: "" }); },
+  selectSubject(event) {
+    const id = event.currentTarget.dataset.id;
+    const selected = this.data.subjects.find(subject => subject.id === id);
+    this.setData({ subjectId: id, selectedSubjectName: selected ? selected.name || "未命名科目" : this.data.selectedSubjectName,
+      pickerOpen: false, loaded: false, items: [], groups: [], pageNumber: 1, target: null, actionMenuId: "", actionMenuGroup: "", actionMenuAbove: false });
+    return this.loadItems();
+  },
   selectCount(event) {
     const value = event.currentTarget.dataset.count;
-    this.setData({ count: value === "all" ? null : Number(value), loaded: false, items: [], groups: [], showCountInput: false, countError: "", target: null, actionMenuId: "", actionMenuGroup: "", actionMenuAbove: false });
+    this.setData({ count: value === "all" ? null : Number(value), countLabel: value === "all" ? "全部" : `已复习${Number(value)}次`,
+      pickerOpen: false, loaded: false, items: [], groups: [], showCountInput: false, countError: "", target: null, actionMenuId: "", actionMenuGroup: "", actionMenuAbove: false });
     return this.reload();
   },
-  openCount() { this.setData({ showCountInput: true, countDraft: this.data.count === null ? "" : String(this.data.count), countError: "", target: null, actionMenuId: "", actionMenuGroup: "", actionMenuAbove: false }); },
+  openCount() { this.setData({ showCountInput: true, pickerOpen: false, countDraft: this.data.count === null ? "" : String(this.data.count), countError: "", target: null, actionMenuId: "", actionMenuGroup: "", actionMenuAbove: false }); },
   closeCount() { this.setData({ showCountInput: false, countError: "" }); },
   inputCount(event) { this.setData({ countDraft: event.detail.value, countError: "" }); },
   confirmCount() {
@@ -155,7 +189,7 @@ Page({
     if (!/^\d+$/.test(value) || Number(value) > 2147483647) {
       this.setData({ countError: "请输入 0 至 2147483647 的整数" }); return;
     }
-    this.setData({ count: Number(value), showCountInput: false, loaded: false, items: [], groups: [] });
+    this.setData({ count: Number(value), countLabel: `已复习${Number(value)}次`, pickerOpen: false, showCountInput: false, loaded: false, items: [], groups: [] });
     return this.reload();
   },
   nextPage() { if (!this.data.loading && this.data.nextCursor) return this.loadItems(this.data.nextCursor, this.data.pageNumber + 1); },

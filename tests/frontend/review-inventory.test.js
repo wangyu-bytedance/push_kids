@@ -26,6 +26,19 @@ test("dates and arrangement labels distinguish reservations and legacy responses
   assert.equal(page.data.items[2].arrangementText, "安排状态待更新");
   assert.equal(page.data.items[3].dateText, "");
   assert.equal(page.data.items[4].arrangementText, "今日已完成");
+  assert.equal(page.data.items[0].compactDateText, "建议10月7日");
+  assert.equal(page.data.items[0].lastReviewText, "尚未复习");
+});
+
+test("compact dates keep the year when a review crosses New Year", async () => {
+  const { page } = setup(async () => ({ ...result, as_of_day: "2026-12-31", items: [
+    { knowledge_id: "new-year", arrangement_state: "waiting", review_count: 1,
+      last_reviewed_on: "2026-12-30", suggested_review_on: "2027-01-01" }
+  ] }));
+  await page.loadItems();
+  assert.equal(page.data.items[0].compactDateText, "建议2027年1月1日");
+  assert.equal(page.data.items[0].lastReviewText, "上次12月30日");
+  assert.equal(page.data.tomorrowLabel, "明天 2027年1月1日");
 });
 
 test("cloud bootstrap may establish family and still load; switching context clears old rows", async () => {
@@ -57,10 +70,25 @@ test("specific count commits only on confirmation and uses exact server filter",
   }
   page.inputCount({ detail: { value: "6" } }); await page.confirmCount();
   assert.equal(page.data.count, 6); assert.equal(page.data.showCountInput, false);
+  assert.equal(page.data.countLabel, "已复习6次");
   assert.match(paths.at(-1), /review_count=6/);
   page.openCount(); page.inputCount({ detail: { value: "0" } }); await page.confirmCount();
   assert.equal(page.data.count, 0); assert.match(paths.at(-1), /review_count=0/);
   await page.selectCount(event({ count: "all" })); assert.doesNotMatch(paths.at(-1), /review_count=/);
+  assert.equal(page.data.countLabel, "全部");
+});
+
+test("one active filter picker closes after selection and preserves unconfirmed count", async () => {
+  const { page } = setup();
+  page.data.view = "count";
+  page.togglePicker(); assert.equal(page.data.pickerOpen, true);
+  page.openCount(); assert.equal(page.data.pickerOpen, false);
+  page.inputCount({ detail: { value: "7" } }); page.closeCount();
+  assert.equal(page.data.count, null);
+  page.togglePicker(); assert.equal(page.data.pickerOpen, true);
+  await page.selectCount(event({ count: "2" }));
+  assert.equal(page.data.pickerOpen, false);
+  assert.equal(page.data.countLabel, "已复习2次");
 });
 
 test("current cursor page groups by subject and resets folding on a new page", async () => {
@@ -157,7 +185,7 @@ test("single subject includes zero-count subjects and requests only selected sub
   await page.selectSubject(event({ id: "cn" })); assert.match(paths.at(-1), /subject_id=cn/);
 });
 
-test("refresh keeps a subject selected from a later subject page", async () => {
+test("browsing subject pages does not silently change selection; explicit choice survives refresh", async () => {
   const paths = [];
   const { page } = setup(async path => {
     paths.push(path);
@@ -168,6 +196,9 @@ test("refresh keeps a subject selected from a later subject page", async () => {
   });
   await page.changeView(event({ id: "subject" }));
   await page.nextSubjects();
+  assert.equal(page.data.subjectId, "math");
+  assert.equal(page.data.selectedSubjectName, "未命名科目");
+  await page.selectSubject(event({ id: "science" }));
   assert.equal(page.data.subjectId, "science");
   const subjectRequests = paths.filter(path => path.includes("/subjects")).length;
   await page.reload();
