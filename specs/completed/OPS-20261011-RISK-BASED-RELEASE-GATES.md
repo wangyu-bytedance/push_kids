@@ -1,13 +1,13 @@
 # OPS-20261011 — 按变更影响判定双账号与数据库备份门禁
 
-- Status: READY_FOR_REVIEW
+- Status: DONE
 - Risk: R3（生产身份隔离与数据库恢复能力的发布规则）
 - Owner / Reviewer: 产品负责人（用户）
 - Implementer: Codex
 - Date: 2026-10-11
 - Spec revision: SPEC-20261011-RISK-BASED-RELEASE-GATES-01
 - Architecture revision: N/A；仅改变发布验收决策，不改变服务拓扑、模块边界或数据库设计。
-- User confirmation: PENDING；用户本轮要求按账号逻辑和数据库向上兼容性收敛门禁，具体修订待确认。
+- User confirmation: 产品负责人于 2026-10-11 在本会话审阅本修订后回复“批准，上传”，明确批准 `SPEC-20261011-RISK-BASED-RELEASE-GATES-01` 并授权本次前端开发版本上传。
 - Affected Feature IDs: FEAT-001（前端交付）、FEAT-002（账号/家庭权限）、FEAT-006（数据清理与恢复边界）
 - Feature current-state documents: `docs/domain/features/FEAT-001-push-kids-mvp.md`、`FEAT-002-family-collaboration.md`、`FEAT-006-data-cleanup-and-family-reset.md`
 - Feature baseline: 以各文档当前 revision 为准；本修订不改变产品行为。
@@ -102,7 +102,7 @@ N/A：生产调用链、数据 owner 和部署拓扑不变；仅发布决策与�
 | `docs/deploy/BACKEND-RELEASE.md` | 修改 | 兼容增量迁移免新增备份；报告备份字段允许 `NOT_APPLICABLE` |
 | `docs/deploy/releases/20261011-report-disclosures-frontend.md` | 修改 | 按新规则复核本次候选，保留仍未满足的后端流量兼容门禁 |
 | FEAT-001/002/006 current state | 修改 | 只记录已批准的发布门禁事实，不重写历史验收结果 |
-| 本 Spec | 完成后移动 | 验证通过后 `DONE` 并移入 `specs/completed/` |
+| 本 Spec | 移动 | 验证通过后 `DONE` 并移入 `specs/completed/` |
 
 ## 5. 验收条件与测试点
 
@@ -115,8 +115,14 @@ N/A：生产调用链、数据 owner 和部署拓扑不变；仅发布决策与�
 
 批准后执行 TP-001～004 并记录实际 PASS/FAIL/NOT_RUN。文档门禁无需新增镜像或数据库测试；具体迁移发布仍须单独运行其真实 MySQL 5.7 与兼容性测试。
 
-## 6. 完成状态
+## 6. 验证与完成状态
 
-- 当前仅完成 Spec 草案；发布手册、发布候选和生产资源均未变更。
-- 草案结构检查：`python3 tools/check_architecture.py` → `ARCHITECTURE_VALID checked=3`；正式规则情景测试 TP-001～004 尚未运行（待批准后实施）。
-- 需用户明确批准 `SPEC-20261011-RISK-BASED-RELEASE-GATES-01` 后才修改正式发布手册。
+| 测试点 | 结果 | 证据 |
+|---|---|---|
+| TP-001 | PASS | `FRONTEND-RELEASE.md` §2 对报表纯展示判 `NOT_APPLICABLE`；角色、租户、图片 owner 和无法排除影响时要求双账号验收。§4 仅在触发时重复账号/归属验收，首次公开发布确认既有基线。 |
+| TP-002 | PASS | `BACKEND-RELEASE.md` §4.2 对无迁移、经真实 MySQL 5.7 与旧新服务合同验证的纯增量 DDL 不要求本次新增备份；回填、删列、旧版不能服务及证据不足仍需备份。 |
+| TP-003 | PASS | `README.md`、前后端手册、候选发布记录及 FEAT-001/002/006 当前状态已统一；后端目标版本和主路径 smoke、MySQL 5.7、真机/平台门禁未移除。历史发布事实未改写。 |
+| TP-004 | PASS | `git diff --check`；`python3 tools/check_architecture.py` → `ARCHITECTURE_VALID checked=3`；`npm run check:design-evidence` → `DESIGN_EVIDENCE_VALID`。 |
+
+本修订已完成并移入 `specs/completed/`；只改变发布判定和文档证据，不修改应用、Schema 或云资源。
+同次用户“批准，上传”另行授权的前端开发版本上传见 `docs/deploy/releases/20261011-report-disclosures-frontend.md`，其实际状态以该发布记录为准。

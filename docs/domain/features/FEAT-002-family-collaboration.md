@@ -1,6 +1,7 @@
 # FEAT-002 — 家庭协作与孩子授权
 
 - Feature ID: `FEAT-002`
+- Release gate policy: `SPEC-20261011-RISK-BASED-RELEASE-GATES-01` 已批准；身份、账号绑定、家庭成员/角色/邀请、租户权限或图片归属发生变化时，双账号隔离与 owner 验收仍是当次发布阻断项。其他发布不重复执行，但不能把未执行记为 `PASS`；本 Feature 未完成的角色生命周期验收状态不变。
 - Status: `IMPLEMENTING`
 - Current-state revision: `FEAT-STATE-20260913-BUG015-SIX-DIGIT-INVITE`
 - Owner: 产品负责人（用户）

@@ -1,6 +1,7 @@
 # FEAT-006 — 家庭资料清理与重新开始
 
 - Feature ID: `FEAT-006`
+- Release gate policy: `SPEC-20261011-RISK-BASED-RELEASE-GATES-01` 已批准；只有经真实 MySQL 5.7 和旧/新版合同验证的纯增量、无既有数据改写迁移可免本次新增备份。数据回填、改写、删除、收缩或证据不足仍须备份；这不改变已发生的删除验收或既有备份保留事实。
 - Status: `DEPLOYED_PENDING_CLOUD_ACCEPTANCE`
 - Current-state revision: `FEAT-STATE-20260919-MYSQL57-WORKER-04-LOCAL`
 - Owner: 产品负责人（用户）

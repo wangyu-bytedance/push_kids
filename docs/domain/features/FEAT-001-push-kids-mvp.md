@@ -1,6 +1,7 @@
 # FEAT-001 — 家庭学习持续跟进系统 MVP
 
 - Status: `CURRENT`
+- Release gate policy: `SPEC-20261011-RISK-BASED-RELEASE-GATES-01` 已获用户批准；不涉及身份/权限/图片归属的前端发布不重复执行双账号隔离与 owner 验收，须记录影响判定并验证本次主路径及目标后端兼容性。首次公开生产发布仍需确认既有安全基线有效；历史验收结论不因门禁变化而改写。
 - Local report disclosures: `SPEC-20261011-REPORT-DISCLOSURES-01 / DREV-20261011-REPORT-DISCLOSURES-01` 已获用户2026-10-11批准并在本地实现。
   报表「科目学习记录」与「课外活动投入」之间依次加入默认收起的「历史记录」「编辑计划」；两区独立展开，复用原有界历史及复习条目行为。记录页保留新增表单和待处理入口，完整历史移到报表；今日待处理和报表科目行均可带意图打开报表历史。三视口四状态原生数字几何及自动化检查已通过；iOS/Android 真机尚未验收，未上传/发布。证据：`docs/quality/evidence/REPORT-DISCLOSURES-20261011.md`。
 - Local review-inventory redesign: `SPEC-20261010-REVIEW-INVENTORY-REDESIGN-01 / DREV-20261010-REVIEW-INVENTORY-02` 已获用户2026-10-10批准并在本地小程序实现。

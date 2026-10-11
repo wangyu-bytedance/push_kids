@@ -69,7 +69,19 @@ uv run python tools/validate_miniprogram.py
 5. 验证 migration 失败时事务、人工修复和重新执行行为。
 6. 更新应用 `Database.expected_cloud_revision`，使其等于唯一 Alembic head。
 
-### 4.2 生产迁移前人工门禁
+### 4.2 生产迁移前备份判定与人工门禁
+
+先列出本次 Alembic DDL、数据写入和新旧服务合同，记录判定与证据：
+
+- 无 Schema 或数据迁移：本次不新建数据库备份，记 `NOT_APPLICABLE`。
+- 仅新增表、可空或有安全默认值的列、索引等增量 DDL，且不改写或删除既有行：在真实 MySQL 5.7
+  验证迁移及旧版和新版服务对目标 Schema 的读写合同、旧版代码回退后可继续服务后，本次不要求
+  新建备份；记录 DDL 清单、兼容性证据和剩余恢复风险，备份门禁记 `NOT_APPLICABLE`。
+- 数据回填/改写/删除、字段收缩或删除、不可逆外部副作用、旧版无法继续服务，或兼容性证据不足：
+  本次必须新建可恢复备份，以下人工门禁生效；失败时停止迁移。影响无法判明时按本类处理。
+
+免除本次新增备份不代表无需维护平台既有备份或故障恢复能力，也不允许事故中执行破坏性
+`alembic downgrade`。发布报告须保留判定依据，不把 `NOT_APPLICABLE` 写成 `PASS`。
 
 ```text
 【需要人工操作】创建并确认生产数据库备份
@@ -398,7 +410,8 @@ wxcloud service:list -e prod-d2g14rwoycac6b45d
 
 1. 通过真实 AppID 和 `wx.cloud.callContainer` 验证 `/health/live`、`/health/ready`。
 2. 验证未绑定 actor、已绑定 actor、错误 AppID/env、伪造 `X-Family-ID` 的预期状态。
-3. 完成两个真实账号的创建家庭、邀请、申请、批准和业务 API 流程。
+3. 仅当本次改动身份、家庭成员/角色/邀请、租户隔离、授权边界、图片 owner/私有访问或相关平台
+   配置时，完成两个真实账号的隔离与归属验收；否则记录 `NOT_APPLICABLE` 及变更清单理由。
 4. 完成文字、图片、AI、确认、Todo、活动、报表、重试、取消和重启恢复。
 5. 检查 5xx/429、延迟、MySQL、Job queue age、图片 claim/orphan 和脱敏日志。
 6. 至少覆盖约 2 分钟的新旧版本共存窗口，再逐步增加流量。
@@ -428,5 +441,5 @@ secret 泄漏、ready 持续失败、Job 无法恢复或数据库备份不可恢
 4. 验证上一版本 ready、读取、幂等和家庭隔离。
 5. 数据修复、字段删除和备份恢复另开经过审批的 migration/事故流程。
 
-发布报告必须记录：Git SHA/工作区差异、Alembic before/after、备份 ID、后端版本与摘要、运行配置版本、
+发布报告必须记录：Git SHA/工作区差异、Alembic before/after、备份判定及需要时的备份 ID、后端版本与摘要、运行配置版本、
 所有检查 PASS/FAIL/NOT_RUN、灰度指标、人工操作人、全量时间、前端版本和回滚目标。
