@@ -85,7 +85,10 @@ def test_fixed_activity_is_one_source_for_settings_calendar_and_today(
     ).json()["schedule_items"]
     assert len(calendar_items) == len(dashboard_items) == 1
     projected = calendar_items[0]
-    assert projected == dashboard_items[0]
+    assert dashboard_items[0]["completed"] is False
+    assert projected == {
+        key: value for key, value in dashboard_items[0].items() if key != "completed"
+    }
     assert projected["id"] == settings_item["id"]
     assert projected["subject_id"] == subject["id"]
     assert projected["start_time"] == "10:00"

@@ -115,13 +115,39 @@
       </view>
     </view>
 
+    <view class="sec daily-task-section">
+      <view class="sec-bar" aria-role="button" aria-label="展开或收起每日任务" aria-expanded="{{sections.daily}}" data-section="daily" bindtap="toggleSection">
+        <text class="s-t">每日任务</text><text class="s-m">{{sectionMeta.daily}}</text>
+        <view class="chev {{sections.daily ? 'up' : ''}}"></view>
+      </view>
+      <view class="sec-rule"></view>
+      <view class="pk-notice err" wx:if="{{dailyTaskError}}"><text class="n-txt">{{dailyTaskError}}，展开后可以再次点击重试。</text></view>
+      <view class="sec-body" wx:if="{{sections.daily}}">
+        <view class="pk-card daily-task-card" wx:if="{{dashboard.daily_tasks.total_count}}">
+          <view class="daily-task-row" wx:for="{{dashboard.daily_tasks.items}}" wx:key="id">
+            <view class="daily-task-copy grow">
+              <text class="daily-task-name">{{item.name}}</text>
+              <text class="daily-task-meta">每天 {{item.target_minutes}} 分钟{{item.completed ? ' · 已完成' : ''}}</text>
+            </view>
+            <button class="btn daily-task-action {{item.completed ? 'secondary' : ''}}" wx:if="{{canWrite}}" disabled="{{loading || dailyTaskPendingId}}" loading="{{dailyTaskPendingId === item.id}}" aria-label="{{item.completed ? '撤销' : '完成'}}{{item.name}}" data-id="{{item.id}}" bindtap="toggleDailyTask">{{item.completed ? '撤销' : '完成'}}</button>
+            <text class="daily-task-meta" wx:else>{{item.completed ? '已完成' : '未完成'}}</text>
+          </view>
+        </view>
+        <view class="pk-empty inline" wx:else>
+          <text class="et">还没有每日任务</text>
+          <text class="ec">在设置里添加阅读、跳绳等每天想做的事。</text>
+          <view class="ea"><button class="btn secondary" bindtap="openSettings">去设置</button></view>
+        </view>
+      </view>
+    </view>
+
     <view class="sec">
       <view class="sec-bar" aria-role="button" aria-label="展开或收起今天记录的学习" data-section="learning" bindtap="toggleSection">
         <text class="s-t">今天记录的学习</text><text class="s-m">{{sectionMeta.learning}}</text>
-        <view class="chev {{sections.learning ? 'up' : ''}}" wx:if="{{dashboard.daily_summary.record_count}}"></view>
+        <view class="chev {{sections.learning ? 'up' : ''}}"></view>
       </view>
       <view class="sec-rule"></view>
-      <view class="sec-body" wx:if="{{sections.learning || !dashboard.daily_summary.record_count}}">
+      <view class="sec-body" wx:if="{{sections.learning}}">
         <view class="rowlist" wx:if="{{dashboard.daily_summary.record_count}}">
           <view class="rowitem" wx:for="{{dashboard.daily_summary.subjects}}" wx:key="subject_id" aria-role="button" aria-label="查看这门科目的记录" data-id="{{item.subject_id}}" bindtap="openLearningHistory">
             <view class="sub-mark {{item.subject_class}}">{{item.subject_mark}}</view>
@@ -139,10 +165,10 @@
     <view class="sec">
       <view class="sec-bar" aria-role="button" aria-label="展开或收起课外活动" data-section="activity" bindtap="toggleSection">
         <text class="s-t">课外活动</text><text class="s-m">{{sectionMeta.activity}}</text>
-        <view class="chev {{sections.activity ? 'up' : ''}}" wx:if="{{dashboard.activity_count}}"></view>
+        <view class="chev {{sections.activity ? 'up' : ''}}"></view>
       </view>
       <view class="sec-rule"></view>
-      <view class="sec-body" wx:if="{{sections.activity || !dashboard.activity_count}}">
+      <view class="sec-body" wx:if="{{sections.activity}}">
         <view class="tl" wx:if="{{dashboard.activity_count}}">
           <view class="tl-item {{item.past ? 'past' : ''}}" wx:for="{{dashboard.schedule_items}}" wx:key="id">
             <text class="tl-time tnum">{{item.start_time}}</text>
@@ -150,7 +176,7 @@
             <view class="tl-card {{item.kind === 'class' ? 'accent' : ''}}">
               <view class="flex between">
                 <text class="tl-name">{{item.name}}</text>
-                <view class="pill neutral">{{item.past ? '已结束' : item.kind_label}}</view>
+                <view class="pill neutral">{{item.completed ? '已记录' : item.past ? '已结束' : item.kind_label}}</view>
               </view>
               <text class="tl-sub">{{item.time_text}} · {{item.kind_label}}</text>
               <view class="link-btn" wx:if="{{item.subject_id}}" aria-role="button" aria-label="{{item.action_text}}" data-subject-id="{{item.subject_id}}" bindtap="openActivity">

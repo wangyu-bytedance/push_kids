@@ -7,6 +7,7 @@ const LEARNING_CATALOG = ["科学", "道德与法治", "物理", "化学", "生�
 const ACTIVITY_CATALOG = ["游泳", "乒乓球", "篮球", "羽毛球", "足球", "网球", "围棋", "国际象棋", "钢琴", "小提琴", "舞蹈", "武术", "跆拳道", "书法", "绘画", "编程", "机器人"];
 const WEEKDAY_LABELS = ["一", "二", "三", "四", "五", "六", "日"];
 const TRAVEL_PRESETS = ["上学", "放学", "接送", "自定义"];
+const DAILY_TASK_PRESETS = ["阅读", "跳绳", "练字", "户外运动"];
 /* 携带能力标识后服务端才会对本客户端返回 mixed-time 数据，否则遇到多组时间会 fail-closed 返回 409。 */
 const WEEKLY_SLOTS_CAPABILITY = "weekly-time-slots-v1";
 
@@ -105,6 +106,9 @@ Page({
     loading: true, error: "", children: [], childIndex: 0, childId: "", multiChild: false, showChildSheet: false,
     archivedChildren: [], canAddChild: true, isManager: true, childLimitHint: childContext.limitHint(),
     canWrite: true, subjects: [],
+    dailyTasks: [], dailyTaskPresets: DAILY_TASK_PRESETS, showDailyTaskForm: false,
+    dailyTaskId: "", dailyTaskName: "", dailyTaskMinutes: "20", dailyTaskError: "",
+    savingDailyTask: false, deletingDailyTask: false,
     baseLearning: [], addedLearning: [], addedActivities: [], togglingName: "", removingId: "",
     pendingRequests: 0, requestsLabel: "",
     showCatalog: false, catalogType: "learning", catalogTitle: "", catalogWord: "科目",
@@ -132,6 +136,11 @@ Page({
     app.globalData.openTravelArrangementId = "";
     if (travelId) this.openTravelById(travelId);
   },
+  onHide() {
+    this.loadGeneration = (this.loadGeneration || 0) + 1;
+    this.resetDailyTaskForm();
+  },
+  onUnload() { this.onHide(); },
   async onPullDownRefresh() {
     await this.load();
     if (wx.stopPullDownRefresh) wx.stopPullDownRefresh();
@@ -178,14 +187,19 @@ Page({
       };
       if (!selection.children.length) {
         return this.setData({ loading: false, ...shared, childIndex: 0, childId: "", subjects: [],
-          baseLearning: [], addedLearning: [], addedActivities: [], travelArrangements: [] });
+          baseLearning: [], addedLearning: [], addedActivities: [], travelArrangements: [], dailyTasks: [] });
       }
       const childId = selection.childId;
-      const [subjects, scheduleData, travelData, pendingRequests] = await Promise.all([
+      if (childId !== this.data.childId) {
+        this.resetDailyTaskForm();
+        this.setData({ childId, dailyTasks: [] });
+      }
+      const [subjects, scheduleData, travelData, pendingRequests, dailyTasks] = await Promise.all([
         api.request(`/children/${childId}/subjects`),
         api.request(`/children/${childId}/activity-schedules`, { capabilities: WEEKLY_SLOTS_CAPABILITY }),
         api.request(`/children/${childId}/travel-arrangements`, { capabilities: WEEKLY_SLOTS_CAPABILITY }),
-        this.loadPendingRequests(member)
+        this.loadPendingRequests(member),
+        api.request(`/children/${childId}/daily-tasks`)
       ]);
       if (this.loadGeneration !== generation) return;
       const scheduleMap = {};
@@ -218,7 +232,7 @@ Page({
       }));
       this.setData({ loading: false, ...shared, childIndex: selection.childIndex, childId,
         subjects, baseLearning, addedLearning, addedActivities, togglingName: "", removingId: "",
-        travelArrangements,
+        travelArrangements, dailyTasks,
         pendingRequests, requestsLabel: pendingRequests ? `${pendingRequests} 份申请` : "" });
     } catch (error) {
       /* 弱网时保留已加载的科目与活动，只在顶部给一条可重试的说明。 */
@@ -231,7 +245,8 @@ Page({
   chooseChild(event) {
     const childIndex = Number(event.currentTarget.dataset.index);
     getApp().selectChild(this.data.children[childIndex].id);
-    this.setData({ childIndex, showChildSheet: false });
+    this.resetDailyTaskForm();
+    this.setData({ childIndex, childId: this.data.children[childIndex].id, dailyTasks: [], showChildSheet: false });
     this.load();
   },
   /* 新建与编辑走同一个表单页，避免两处重复维护名字与时长的校验文案。 */
@@ -252,6 +267,98 @@ Page({
     if (this.data.canWrite) return true;
     wx.showToast({ title: "你是只读成员，改动请找管理员", icon: "none" });
     return false;
+  },
+  resetDailyTaskForm() {
+    this.dailyTaskGeneration = (this.dailyTaskGeneration || 0) + 1;
+    this.setData({ showDailyTaskForm: false, dailyTaskId: "", dailyTaskName: "",
+      dailyTaskMinutes: "20", dailyTaskError: "", savingDailyTask: false, deletingDailyTask: false });
+  },
+  openDailyTaskForm(event) {
+    if (!this.guardWrite() || this.data.loading || !this.data.childId
+      || this.data.savingDailyTask || this.data.deletingDailyTask) return;
+    const data = event.currentTarget.dataset;
+    const task = this.data.dailyTasks.find((item) => item.id === data.id);
+    if (!task && this.data.dailyTasks.length >= 20) {
+      wx.showToast({ title: "最多设置 20 个任务，请先删除不再需要的任务", icon: "none" });
+      return;
+    }
+    this.resetDailyTaskForm();
+    this.setData({ showDailyTaskForm: true, dailyTaskId: task ? task.id : "",
+      dailyTaskName: task ? task.name : data.name || "",
+      dailyTaskMinutes: String(task ? task.target_minutes : data.name === "跳绳" ? 10 : 20) });
+  },
+  closeDailyTaskForm() {
+    if (this.data.savingDailyTask || this.data.deletingDailyTask) return;
+    this.resetDailyTaskForm();
+  },
+  setDailyTaskField(event) {
+    if (this.data.savingDailyTask || this.data.deletingDailyTask) return;
+    const field = event.currentTarget.dataset.field;
+    if (!["dailyTaskName", "dailyTaskMinutes"].includes(field)) return;
+    this.setData({ [field]: event.detail.value, dailyTaskError: "" });
+  },
+  dailyTaskRequestIsCurrent(generation, childId, familyId) {
+    return generation === this.dailyTaskGeneration && childId === this.data.childId
+      && familyId === getApp().globalData.familyId;
+  },
+  async saveDailyTask() {
+    if (!this.guardWrite() || this.data.loading || !this.data.childId
+      || !this.data.showDailyTaskForm || this.data.savingDailyTask || this.data.deletingDailyTask) return;
+    const name = this.data.dailyTaskName.trim();
+    const minutes = String(this.data.dailyTaskMinutes).trim();
+    if (!name || Array.from(name).length > 30) {
+      this.setData({ dailyTaskError: "任务名称请输入 1～30 个字" });
+      return;
+    }
+    if (!/^\d+$/.test(minutes) || Number(minutes) < 1 || Number(minutes) > 180) {
+      this.setData({ dailyTaskError: "请输入 1～180 的整数分钟" });
+      return;
+    }
+    const childId = this.data.childId;
+    const familyId = getApp().globalData.familyId;
+    const generation = this.dailyTaskGeneration;
+    const taskId = this.data.dailyTaskId;
+    this.setData({ savingDailyTask: true, dailyTaskError: "" });
+    try {
+      const task = await api.request(`/children/${childId}/daily-tasks${taskId ? `/${taskId}` : ""}`, {
+        method: taskId ? "PATCH" : "POST", data: { name, target_minutes: Number(minutes) }
+      });
+      if (!this.dailyTaskRequestIsCurrent(generation, childId, familyId)) return;
+      const tasks = taskId ? this.data.dailyTasks.map((item) => item.id === taskId ? task : item)
+        : [...this.data.dailyTasks, task];
+      this.resetDailyTaskForm();
+      this.setData({ dailyTasks: tasks });
+      wx.showToast({ title: "已保存", icon: "success" });
+    } catch (error) {
+      if (!this.dailyTaskRequestIsCurrent(generation, childId, familyId)) return;
+      this.setData({ savingDailyTask: false, dailyTaskError: error.message || "保存失败，请重试" });
+    }
+  },
+  deleteDailyTask() {
+    if (!this.guardWrite() || this.data.loading || !this.data.dailyTaskId
+      || this.data.savingDailyTask || this.data.deletingDailyTask) return;
+    const taskId = this.data.dailyTaskId;
+    const childId = this.data.childId;
+    const familyId = getApp().globalData.familyId;
+    const generation = this.dailyTaskGeneration;
+    wx.showModal({ title: "删除每日任务？", content: "删除后不再显示在今日，已有完成记录会保留。",
+      confirmText: "删除", success: async (answer) => {
+        if (!answer.confirm || !this.dailyTaskRequestIsCurrent(generation, childId, familyId)) return;
+        if (this.data.deletingDailyTask || this.data.savingDailyTask) return;
+        this.setData({ deletingDailyTask: true, dailyTaskError: "" });
+        try {
+          await api.request(`/children/${childId}/daily-tasks/${taskId}`, { method: "DELETE" });
+          if (!this.dailyTaskRequestIsCurrent(generation, childId, familyId)) return;
+          const tasks = this.data.dailyTasks.filter((item) => item.id !== taskId);
+          this.resetDailyTaskForm();
+          this.setData({ dailyTasks: tasks });
+          wx.showToast({ title: "已删除", icon: "success" });
+        } catch (error) {
+          if (!this.dailyTaskRequestIsCurrent(generation, childId, familyId)) return;
+          this.setData({ deletingDailyTask: false, dailyTaskError: error.message || "删除失败，请重试" });
+        }
+      }
+    });
   },
   async toggleBaseLearning(event) {
     if (!this.guardWrite()) return;

@@ -22,6 +22,8 @@
 
 ## Current user/system behavior
 
+- 每日任务配置与当天完成事实也按当前家庭/孩子隔离；切换后清除旧任务展示与表单，忽略迟到响应。
+  归档孩子可读取任务但不得新增、编辑、删除或完成/撤销；该域边界见 `FEAT-010-daily-tasks.md`，SQLite验证已通过，MySQL待补。
 - 家庭开通与建档解耦：`POST /families` 的 `child` 变为可选，家长可以先建家庭、之后再建档案；
   旧客户端继续传 `child` 时行为不变。
 - 一个家庭同时最多保留 5 个在用档案（`ChildrenService.MAX_ACTIVE_CHILDREN`）；超出返回 409，且不留下半条记录。

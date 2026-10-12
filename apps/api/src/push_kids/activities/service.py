@@ -58,6 +58,56 @@ class ScheduledOccurrence:
 
 class ActivitiesService:
     @staticmethod
+    def today_remaining(
+        db: Session,
+        family_id: str,
+        child_id: str,
+        day: date,
+        schedule: list[dict],
+        suggestions: list[dict],
+    ) -> int:
+        """Annotate timed activities from recorded facts, never from their end time.
+
+        Calendar entries have no subject key; the existing exact active-activity name mapping
+        is the only supported match. One grouped query covers the capped timed schedule.
+        Optional suggestions have no completion command and stay actionable.
+        """
+        names = {item["name"] for item in schedule}
+        completed_names: set[str] = set()
+        if names:
+            start = datetime.combine(day, time.min, tzinfo=SHANGHAI).astimezone(UTC)
+            end = start + timedelta(days=1)
+            completed_names = set(
+                db.scalars(
+                    select(Subject.name)
+                    .join(ActivityRecord, ActivityRecord.subject_id == Subject.id)
+                    .where(
+                        Subject.family_id == family_id,
+                        Subject.child_id == child_id,
+                        Subject.kind == "activity",
+                        Subject.active.is_(True),
+                        Subject.name.in_(names),
+                        ActivityRecord.family_id == family_id,
+                        ActivityRecord.child_id == child_id,
+                        ActivityRecord.occurred_at >= start,
+                        ActivityRecord.occurred_at < end,
+                    )
+                    .group_by(Subject.name)
+                    .limit(20)
+                )
+            )
+        for item in schedule:
+            item["completed"] = item["name"] in completed_names
+        scheduled_subjects = {item["subject_id"] for item in schedule if item.get("subject_id")}
+        scheduled_subjects.update(
+            item["subject_id"] for item in suggestions if item["subject_name"] in names
+        )
+        return sum(not item["completed"] for item in schedule) + sum(
+            bool(item["suggested"] and item["subject_id"] not in scheduled_subjects)
+            for item in suggestions
+        )
+
+    @staticmethod
     def purge_data(db: Session, family_id: str, child_id: str | None) -> None:
         event_query = select(CalendarEvent.id).where(CalendarEvent.family_id == family_id)
         activity_scope = [ActivityRecord.family_id == family_id]

@@ -1,6 +1,9 @@
 # Push Kids current architecture
 
 - Status: `IMPLEMENTED_LOCALLY_PENDING_CLOUD_ACCEPTANCE`
+- Local daily-task architecture: `ARCH-20261012-DAILY-TASKS-01`，用户2026-10-12批准 `SPEC-20261012-DAILY-TASKS-01`。
+  daily_tasks拥有配置与上海日期完成事实，reporting/清理编排调用其服务；不影响planning、AI或复习预算。
+  本地迁移head=`20261012_0019`，新增两表及tenant-leading索引，数据存在时拒绝破坏性降级；未部署，真实MySQL验收待补。
 - Revision: `ARCH-20261006-REVIEW-MANAGEMENT-01`
 - Latest approval: user instruction “落地并实现”, 2026-10-06，批准 `SPEC-20261006-REVIEW-MANAGEMENT-03`。
   Planning拥有inventory只读分页、scheduling事务和plan_candidates有界候选；ReviewScheduleOverride为单次预约，
@@ -42,6 +45,7 @@ media through the same bounded infrastructure ports.
 | `knowledge` | normalized knowledge identity and occurrences | normalization policy |
 | `planning` | versioned Review event projection, minute-bounded daily plans, Todo grouping and single-knowledge deletion | pure curve/heat policy + pure selection policy + application service; deletion.py owns atomic association cleanup |
 | `activities` | schedules and practice records | activity service |
+| `daily_tasks` | bounded parent configuration and Shanghai-day completion snapshots | daily task service + HTTP routes; child-locked writes and owned purge contract |
 | `travel` | child-scoped recurring travel arrangements | travel service and HTTP routes; calendar projection contract |
 | `reporting` | read models for dashboard/report/calendar | reporting service |
 | `agent_processing` | provider contract, analysis jobs, retries, deterministic subject routing (`subject_routing.py`, pure) | analysis service and worker |

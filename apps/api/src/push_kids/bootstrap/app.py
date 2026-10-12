@@ -15,6 +15,7 @@ from push_kids.activities.router import router as activities_router
 from push_kids.agent_processing.providers import build_provider
 from push_kids.agent_processing.worker import AnalysisWorker
 from push_kids.children.router import router as children_router
+from push_kids.daily_tasks.router import router as daily_tasks_router
 from push_kids.data_management.router import router as data_management_router
 from push_kids.data_management.worker import DataDeletionWorker
 from push_kids.families.rate_limit import InvitePreviewRateLimiter
@@ -247,6 +248,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     api_prefix = "/api/v1"
     app.include_router(children_router, prefix=api_prefix)
+    app.include_router(daily_tasks_router, prefix=api_prefix)
     app.include_router(data_management_router, prefix=api_prefix)
     app.include_router(families_router, prefix=api_prefix)
     app.include_router(learning_router, prefix=api_prefix)

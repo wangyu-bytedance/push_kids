@@ -10,6 +10,7 @@ from sqlalchemy.exc import SQLAlchemyError
 
 from push_kids.activities.service import ActivitiesService
 from push_kids.children.service import ChildrenService
+from push_kids.daily_tasks.service import DailyTasksService
 from push_kids.families.service import FamilyService
 from push_kids.learning.service import LearningService
 from push_kids.media.cleanup import MediaCleanup
@@ -178,6 +179,7 @@ class DataDeletionWorker:
         PlanningService.purge_data(db, family_id, child_id)
         ActivitiesService.purge_data(db, family_id, child_id)
         TravelService.purge_data(db, family_id, child_id)
+        DailyTasksService.purge_data(db, family_id, child_id)
         MediaCleanup.purge_rows(db, submission_ids)
         LearningService.purge_data(db, family_id, child_id)
         ChildrenService.purge_data(db, family_id, child_id)

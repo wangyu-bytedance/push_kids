@@ -118,6 +118,47 @@ class DeliveryState(enum.StrEnum):
     cancelled = "cancelled"
 
 
+class DailyTask(Base):
+    __tablename__ = "daily_tasks"
+    __table_args__ = (
+        Index(
+            "ix_daily_tasks_scope_active_order",
+            "family_id",
+            "child_id",
+            "active",
+            "created_at",
+            "id",
+        ),
+    )
+    id = Column(String(36), primary_key=True, default=new_id)
+    family_id = Column(String(80), nullable=False)
+    child_id = Column(String(36), ForeignKey("children.id"), nullable=False)
+    name = Column(String(30), nullable=False)
+    target_minutes = Column(Integer, nullable=False)
+    active = Column(Boolean, nullable=False, default=True)
+    created_at = Column(UTCDateTime(), nullable=False, default=utcnow)
+    updated_at = Column(UTCDateTime(), nullable=False, default=utcnow, onupdate=utcnow)
+
+
+class DailyTaskCompletion(Base):
+    __tablename__ = "daily_task_completions"
+    __table_args__ = (
+        UniqueConstraint(
+            "family_id", "child_id", "task_id", "day", name="uq_daily_task_completion_day"
+        ),
+        Index("ix_daily_completion_scope_day_task", "family_id", "child_id", "day", "task_id"),
+    )
+    id = Column(String(36), primary_key=True, default=new_id)
+    family_id = Column(String(80), nullable=False)
+    child_id = Column(String(36), ForeignKey("children.id"), nullable=False)
+    task_id = Column(String(36), ForeignKey("daily_tasks.id"), nullable=False)
+    day = Column(Date, nullable=False)
+    name_snapshot = Column(String(30), nullable=False)
+    minutes_snapshot = Column(Integer, nullable=False)
+    occurred_at = Column(UTCDateTime(), nullable=False)
+    created_at = Column(UTCDateTime(), nullable=False, default=utcnow)
+
+
 class WeChatActorBinding(Base):
     __tablename__ = "wechat_actor_bindings"
     __table_args__ = (UniqueConstraint("app_id", "subject_hmac", name="uq_wechat_actor_subject"),)

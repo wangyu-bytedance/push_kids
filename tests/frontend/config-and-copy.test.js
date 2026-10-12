@@ -61,8 +61,9 @@ test("today review section starts collapsed even when there are no due reviews",
   const script = source("pages/today/index.js");
   const template = source("pages/today/index.wxml");
 
-  assert.match(script, /const DEFAULT_SECTIONS = \{ review: false, learning: false, activity: true \}/);
-  assert.match(script, /if \(!counts\[section\] && section !== "review"\) return/);
+  assert.match(script, /const DEFAULT_SECTIONS = \{ review: false, daily: false, learning: false, activity: false \}/);
+  assert.doesNotMatch(script, /if \(!counts\[section\]/);
+  assert.doesNotMatch(script, /readPreference\("todaySections"|writePreference\("todaySections"/);
   assert.match(template, /<view class="sec-body" wx:if="\{\{sections\.review\}\}">/);
   assert.doesNotMatch(template, /sections\.review \|\| !dashboard\.todo_count/);
 });

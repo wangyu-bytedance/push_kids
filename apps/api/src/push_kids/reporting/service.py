@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 
 from push_kids.activities.service import ActivitiesService
 from push_kids.children.service import ChildrenService
+from push_kids.daily_tasks.service import DailyTasksService
 from push_kids.learning.history import LearningHistory
 from push_kids.persistence.models import (
     ActivityRecord,
@@ -153,6 +154,10 @@ class ReportingService:
         )
         summary = cls.daily_summary(db, family_id, child_id, target, limit=20, known_child=child)
         schedule = ActivitiesService.events_for_day(db, family_id, child_id, target)
+        suggestions = ActivitiesService.suggestions(db, family_id, child_id, target)
+        activity_remaining = ActivitiesService.today_remaining(
+            db, family_id, child_id, target, schedule, suggestions
+        )
         return {
             "day": target.isoformat(),
             "child": {
@@ -174,7 +179,11 @@ class ReportingService:
             "analyzing_count": analyzing,
             "failed_count": failed,
             "daily_summary": summary,
-            "activity_suggestions": ActivitiesService.suggestions(db, family_id, child_id, target),
+            "daily_tasks": DailyTasksService.today(
+                db, family_id, child_id, target, known_child=child
+            ),
+            "activity_remaining_count": activity_remaining,
+            "activity_suggestions": suggestions,
             "schedule_items": schedule,
         }
 

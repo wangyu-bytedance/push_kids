@@ -20,6 +20,9 @@
 
 ## Current behavior
 
+- 本地新增daily_tasks owned-data清理合同：同一事务先清除任务完成事实，再清除任务配置，随后删除孩子。
+  家庭清理覆盖所有孩子；孩子清理保留同家庭其他孩子任务。通过真实删除worker的SQLite测试，未部署；
+  关联 `specs/active/FEAT-010-DAILY-TASKS.md` 和 `docs/quality/evidence/DAILY-TASKS-20261012.md`。
 - 设置页以中性入口“删除配置”承载两条危险操作；最终确认明确显示影响并要求输入当前孩子称呼或家庭名。
 - `POST /data-management/deletions/children/{child_id}` 与 `/family` 仅允许 verified active manager；家庭删除还要求只剩本人一名 active member。`Idempotency-Key` 支持安全重放，状态与 retry 通过 deletion-request API 查询。
 - 请求接受时先把目标置为 deleting；新的孩子学习/科目/活动/日程等写入被拒绝，删除 worker 通过数据库租约执行媒体清理和跨领域数据库 purge。失败按有界策略重排，耗尽后为可人工重试的 `failed`。

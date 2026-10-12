@@ -109,6 +109,7 @@ test("settings loads active and archived profiles for the top-right manager", as
     if (requestPath.endsWith("/subjects")) return [];
     if (requestPath.endsWith("/activity-schedules")) return { items: [] };
     if (requestPath.endsWith("/travel-arrangements")) return { items: [] };
+    if (requestPath.endsWith("/daily-tasks")) return [];
     if (requestPath === "/families/current/requests") return [];
     throw new Error(`unexpected path: ${requestPath}`);
   }, { selectedChildId: "b" });
@@ -166,6 +167,7 @@ test("settings drops a stale response when the parent switched child mid-flight"
     if (requestPath.endsWith("/subjects")) return new Promise((resolve) => { subjectsGate = () => resolve([{ id: "s", name: "语文", kind: "learning", active: true, is_custom: false }]); });
     if (requestPath.endsWith("/activity-schedules")) return { items: [] };
     if (requestPath.endsWith("/travel-arrangements")) return { items: [] };
+    if (requestPath.endsWith("/daily-tasks")) return [];
     if (requestPath === "/families/current/requests") return [];
     throw new Error(`unexpected path: ${requestPath}`);
   }, { selectedChildId: "a" });

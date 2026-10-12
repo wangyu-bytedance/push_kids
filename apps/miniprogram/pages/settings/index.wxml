@@ -60,6 +60,27 @@
   </view>
 
   <block wx:else>
+    <view class="pk-card set-card daily-task-settings mt3">
+      <view class="card-head"><view class="grow"><text class="c-t">每日任务</text><text class="c-s">每天重复 · 目标时长以分钟设置</text></view></view>
+      <view class="daily-task-presets" wx:if="{{canWrite}}">
+        <button class="btn secondary daily-task-preset" wx:for="{{dailyTaskPresets}}" wx:key="*this" disabled="{{loading || savingDailyTask || deletingDailyTask}}" data-name="{{item}}" bindtap="openDailyTaskForm">{{item}}</button>
+      </view>
+      <view class="daily-task-setting-row" wx:for="{{dailyTasks}}" wx:key="id">
+        <view class="grow daily-task-setting-copy"><text class="a-t">{{item.name}}</text><text class="a-s">每天 {{item.target_minutes}} 分钟</text></view>
+        <button class="btn secondary daily-task-edit" wx:if="{{canWrite}}" disabled="{{loading || savingDailyTask || deletingDailyTask}}" aria-label="编辑{{item.name}}" data-id="{{item.id}}" bindtap="openDailyTaskForm">编辑</button>
+      </view>
+      <view class="inline-empty" wx:if="{{!dailyTasks.length}}">还没有每日任务</view>
+      <button class="btn secondary daily-task-add" wx:if="{{canWrite && !showDailyTaskForm}}" disabled="{{loading}}" bindtap="openDailyTaskForm">添加自定义任务</button>
+      <view class="daily-task-form" wx:if="{{showDailyTaskForm}}">
+        <view class="pk-field"><label class="lbl" for="daily-task-name">任务名称</label><input id="daily-task-name" class="pk-input" aria-label="任务名称，最多30个字" maxlength="30" value="{{dailyTaskName}}" disabled="{{savingDailyTask || deletingDailyTask}}" data-field="dailyTaskName" bindinput="setDailyTaskField" /></view>
+        <view class="pk-field"><label class="lbl" for="daily-task-minutes">目标时长（分钟）</label><input id="daily-task-minutes" class="pk-input" aria-label="目标时长，1至180整数分钟" type="number" maxlength="3" value="{{dailyTaskMinutes}}" disabled="{{savingDailyTask || deletingDailyTask}}" data-field="dailyTaskMinutes" bindinput="setDailyTaskField" /></view>
+        <view class="pk-notice err mt2" wx:if="{{dailyTaskError}}"><text class="n-txt">{{dailyTaskError}}</text></view>
+        <view class="daily-task-form-actions"><button class="btn" loading="{{savingDailyTask}}" disabled="{{loading || savingDailyTask || deletingDailyTask}}" bindtap="saveDailyTask">{{savingDailyTask ? '保存中…' : '保存任务'}}</button><button class="btn secondary" disabled="{{savingDailyTask || deletingDailyTask}}" bindtap="closeDailyTaskForm">取消</button></view>
+        <button class="btn secondary daily-task-delete" wx:if="{{dailyTaskId}}" loading="{{deletingDailyTask}}" disabled="{{loading || savingDailyTask || deletingDailyTask}}" bindtap="deleteDailyTask">删除此任务</button>
+        <text class="c-s">最多 20 项。目标时长不代表实际耗时。</text>
+      </view>
+    </view>
+
     <view class="pk-card set-card mt3">
       <view class="card-head">
         <view class="grow">

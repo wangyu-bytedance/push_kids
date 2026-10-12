@@ -34,7 +34,7 @@ test("activities follow Monday through Sunday and first-slot start time, with st
   await page.load();
   assert.deepEqual(ids(page), ["mon", "tue", "go", "tie", "piano", "thu", "fri", "sat", "sun"]);
   assert.equal(JSON.stringify({ subjects, schedules }), original);
-  assert.equal(calls.length, 5, "sorting adds no requests");
+  assert.equal(calls.length, 6, "sorting adds no requests; settings also reads daily tasks");
   page.openActivitySchedule({ currentTarget: { dataset: { index: 2 } } });
   assert.equal(page.data.scheduleSubject.id, "go");
   assert.equal(page.data.scheduleId, "schedule-go");
