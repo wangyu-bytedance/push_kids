@@ -102,7 +102,12 @@ function travelLabel(item) {
 }
 
 Page({
+  onIllustrationError(event) {
+    const field = { learning: "learningArtFailed", activity: "activityArtFailed", travel: "travelArtFailed" }[event.currentTarget.dataset.art];
+    if (field) this.setData({ [field]: true });
+  },
   data: {
+    learningArtFailed: false, activityArtFailed: false, travelArtFailed: false,
     loading: true, error: "", children: [], childIndex: 0, childId: "", multiChild: false, showChildSheet: false,
     archivedChildren: [], canAddChild: true, isManager: true, childLimitHint: childContext.limitHint(),
     canWrite: true, subjects: [],

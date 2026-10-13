@@ -1,6 +1,8 @@
 # FEAT-007 — 出行安排
 
 - Feature ID: `FEAT-007`
+- 2026-10-13设置卡片背景接入：书包路线插画、纸面渐变，出行配置行为不变。SPEC-20261013-CARD-BACKGROUNDS-01，证据docs/quality/evidence/CARD-BACKGROUNDS-20261013.md，原生验收待补。
+- Local visual update (2026-10-13): 日程页标题卡接入台历纸艺插画，出行数据与冲突行为保持原合同。Spec `SPEC-20261013-RECORD-CALENDAR-ILLUSTRATIONS-01`；原生验收待补，证据 `docs/quality/evidence/RECORD-CALENDAR-ILLUSTRATIONS-20261013.md`。
 - Status: `CURRENT_LOCAL / AUTOMATION_PASSED / NATIVE_ACCEPTANCE_PENDING`
 - Current-state revision: `FEAT-STATE-20260906-03-LOCAL`
 - Owner: 产品负责人（用户）

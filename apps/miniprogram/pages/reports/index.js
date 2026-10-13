@@ -173,7 +173,9 @@ function activityRows(report) {
 }
 
 Page({
+  onIllustrationError() { this.setData({ introArtFailed: true }); },
   data: {
+    introArtFailed: false,
     ...history.data,
     loading: true, error: "", children: [], childIndex: 0, childId: "", multiChild: false, showChildSheet: false, canAddChild: true,
     days: 7, ranges: RANGES, rangeLabel: "近 7 天", report: null, metrics: [], isEmpty: false,

@@ -55,10 +55,14 @@ function decorateItem(item) {
 Page({
   data: {
     loading: true, error: "", children: [], childIndex: 0, childId: "", multiChild: false, canAddChild: true,
+    introArtFailed: false,
     selectedDay: "", monthLabel: "", weekKicker: "", dayTitle: "", itemCount: 0, conflictCount: 0, weekEmpty: false,
     week: [], items: [], showChildSheet: false,
     showEditor: false, editingId: "", eventName: "", eventKind: "class", eventDate: "",
     startTime: "18:00", endTime: "19:00", repeatWeekly: true, saving: false, eventKey: "", endError: ""
+  },
+  onIllustrationError() {
+    this.setData({ introArtFailed: true });
   },
   onLoad() { this.cache = {}; this.marks = {}; this.cacheChildId = ""; },
   onShow() {

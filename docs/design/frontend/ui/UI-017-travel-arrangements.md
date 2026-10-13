@@ -1,5 +1,9 @@
 # UI-017 — 出行安排
 
+- 2026-10-13设置出行卡接入书包路线装饰与统一纸面背景；日程保留台历插画，行为不变。SPEC-20261013-CARD-BACKGROUNDS-01，本地验收证据docs/quality/evidence/CARD-BACKGROUNDS-20261013.md；未发布。
+
+- 2026-10-13本地视觉增量：日程页顶部采用纸面渐变与台历/时钟/叶枝插画；孩子切换、七天选择和出行冲突保持原行为。Design `DREV-20261013-RECORD-CALENDAR-ILLUSTRATIONS-01` 已批准，原生验收待补，未发布。详见 `docs/quality/evidence/RECORD-CALENDAR-ILLUSTRATIONS-20261013.md`。
+
 - Status: `CURRENT_LOCAL / AUTOMATION_PASSED / NATIVE_ACCEPTANCE_PENDING`
 - Related Feature: `FEAT-007`
 - Related Spec: `SPEC-20260906-TRAVEL-02`

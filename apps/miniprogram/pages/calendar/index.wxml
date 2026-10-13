@@ -1,15 +1,17 @@
 <primary-nav></primary-nav>
 <view class="page calendar-page">
-  <view class="pg-head">
-    <view class="head-intro">
+  <view class="pg-head pk-hero calendar-intro">
+    <view class="calendar-intro-copy">
       <text class="pg-title">这一周，心里有数</text>
       <text class="pg-context">{{weekKicker}}</text>
+      <view class="child-chip {{multiChild ? '' : 'single'}}" wx:if="{{children.length}}" aria-role="button" aria-label="切换孩子" bindtap="openChildSheet">
+        <text class="ava">{{children[childIndex].avatar}}</text>
+        <text class="chip-nm">{{children[childIndex].name}}</text>
+        <view class="chev" wx:if="{{multiChild}}"></view>
+      </view>
     </view>
-    <view class="child-chip {{multiChild ? '' : 'single'}}" wx:if="{{children.length}}" aria-role="button" aria-label="切换孩子" bindtap="openChildSheet">
-      <text class="ava">{{children[childIndex].avatar}}</text>
-      <text class="chip-nm">{{children[childIndex].name}}</text>
-      <view class="chev" wx:if="{{multiChild}}"></view>
-    </view>
+    <image class="calendar-intro-art" wx:if="{{!introArtFailed}}" src="/assets/illustrations/calendar-still-life.png" mode="aspectFit"
+      aria-hidden="{{true}}" binderror="onIllustrationError"></image>
   </view>
 
   <view class="pk-notice err mt2" wx:if="{{error}}">

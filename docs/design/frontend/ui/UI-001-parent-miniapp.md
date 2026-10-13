@@ -1,5 +1,9 @@
 # UI-001 — 家长端微信小程序
 
+- 2026-10-13背景全面接入：设置科目/活动/出行不同插画与纸面背景；每日任务同款背景和列表、紧随活动之后；报表顶部成长记录插画和统一卡片背景。Spec SPEC-20261013-CARD-BACKGROUNDS-01 / Design DREV-20261013-CARD-BACKGROUNDS-01。238测试、静态校验及1017670字节CLI预览包通过，三视口HTML仅辅助；原生/真机/用户验收待补，未发布。证据docs/quality/evidence/CARD-BACKGROUNDS-20261013.md；本增量取代上文“设置/报表背景未接入”的历史事实。
+
+- 2026-10-13本地视觉增量：记录标题卡书本插画、空上传相机插画及日程台历插画使用统一纸面渐变；Design `DREV-20261013-RECORD-CALENDAR-ILLUSTRATIONS-01` 已批准，新增资源173638字节。保留原文案、业务和导航；装饰失败自动回退。233项测试通过，原生三视口及真机验收待补，未发布。详见 `docs/quality/evidence/RECORD-CALENDAR-ILLUSTRATIONS-20261013.md`。
+
 - Status: `CURRENT / VOICE_INPUT_LOCAL_VERIFIED / MICROPHONE_PRIVACY_DECLARATION_BLOCKED / DEVELOPMENT_VERSION_0.1.13_UPLOADED / NATIVE_VIEWPORT_MATRIX_NOT_RUN`
 - Release status: `0.1.13` 已上传为开发版本（687111 字节），体验版、审核、正式版均未进行；本次按 `SPEC-20261011-RISK-BASED-RELEASE-GATES-01` 判定双账号复测不适用，真机和麦克风隐私授权仍待体验验证。证据：`docs/deploy/releases/20261011-report-disclosures-frontend.md`。
 - Related Feature: `FEAT-001`

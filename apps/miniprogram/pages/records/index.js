@@ -16,7 +16,13 @@ Page({
     loading: true, error: "", children: [], childIndex: 0, childId: "",
     date: "", dateLabel: "", time: "", text: "", hasText: false, photos: [], saving: false, uploadProgress: 0,
     submissionKey: "", canWrite: true, today: "", backfill: false, timeOpen: false,
-    voiceState: "idle", voiceBusy: false, voiceOverflowText: "", voiceOverflowOpen: false
+    voiceState: "idle", voiceBusy: false, voiceOverflowText: "", voiceOverflowOpen: false,
+    introArtFailed: false, uploadArtFailed: false
+  },
+  onIllustrationError(event) {
+    const art = event.currentTarget.dataset.art;
+    if (art === "intro") this.setData({ introArtFailed: true });
+    if (art === "upload") this.setData({ uploadArtFailed: true });
   },
   onLoad() {
     const now = localParts();

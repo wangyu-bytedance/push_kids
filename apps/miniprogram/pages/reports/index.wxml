@@ -1,16 +1,17 @@
 <import src="../records/history.wxml" />
 <primary-nav></primary-nav>
 <view class="page report-page">
-  <view class="pg-head">
+  <view class="pg-head pk-hero report-intro">
     <view class="head-intro">
       <text class="pg-title">一点一滴，看得见</text>
       <text class="pg-context">只统计已确认的学习</text>
+      <view class="child-chip {{multiChild ? '' : 'single'}}" wx:if="{{children.length}}" aria-role="button" aria-label="切换孩子" bindtap="openChildSheet">
+        <text class="ava">{{children[childIndex].avatar}}</text>
+        <text class="chip-nm trunc">{{children[childIndex].name}}</text>
+        <view class="chev" wx:if="{{multiChild}}"></view>
+      </view>
     </view>
-    <view class="child-chip {{multiChild ? '' : 'single'}}" wx:if="{{children.length}}" aria-role="button" aria-label="切换孩子" bindtap="openChildSheet">
-      <text class="ava">{{children[childIndex].avatar}}</text>
-      <text class="chip-nm trunc">{{children[childIndex].name}}</text>
-      <view class="chev" wx:if="{{multiChild}}"></view>
-    </view>
+    <image class="report-intro-art" wx:if="{{!introArtFailed}}" src="/assets/illustrations/report-growth.png" mode="aspectFit" aria-hidden="{{true}}" binderror="onIllustrationError"></image>
   </view>
 
   <view class="pk-notice err" wx:if="{{error}}">

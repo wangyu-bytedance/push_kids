@@ -52,7 +52,7 @@ test("primary tabs use one custom brand navigation and do not repeat the brand i
     assert.equal((template.match(/<primary-nav><\/primary-nav>/g) || []).length, 1, page);
     assert.doesNotMatch(template, /<brand-head/, page);
     assert.doesNotMatch(template, /under-brand/, page);
-    assert.match(template, /<view class="pg-head">/, page);
+    assert.match(template, /<view class="pg-head(?: [^"]+)?">/, page);
     assert.match(template, new RegExp(`<text class="pg-title">${TAB_TITLES[page]}</text>`), page);
     for (const label of tabLabels) {
       assert.doesNotMatch(template, new RegExp(`<text class="pg-title">${label}</text>`), `${page}/${label}`);

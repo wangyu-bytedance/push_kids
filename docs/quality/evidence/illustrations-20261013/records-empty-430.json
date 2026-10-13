@@ -1,0 +1,69 @@
+{
+  "viewport": {
+    "width": 430,
+    "height": 834,
+    "screenHeight": 932,
+    "dpr": 3,
+    "fontScale": 15,
+    "baseLibrary": "3.16.2"
+  },
+  "nodes": {
+    ".pk-hero": [
+      {
+        "left": 20,
+        "right": 410,
+        "top": 113,
+        "bottom": 288,
+        "width": 390,
+        "height": 175
+      }
+    ],
+    ".record-intro-copy, .calendar-intro-copy": [
+      {
+        "left": 37,
+        "right": 247,
+        "top": 183.5,
+        "bottom": 217.5,
+        "width": 210,
+        "height": 34
+      }
+    ],
+    ".pg-title": [
+      {
+        "left": 37,
+        "right": 247,
+        "top": 187.5,
+        "bottom": 217.5,
+        "width": 210,
+        "height": 30
+      }
+    ],
+    ".child-chip": [],
+    ".record-intro-art, .calendar-intro-art": [
+      {
+        "left": 256,
+        "right": 393,
+        "top": 132,
+        "bottom": 269,
+        "width": 137,
+        "height": 137
+      }
+    ],
+    ".add-photo-tile": [],
+    ".record-upload-art": [],
+    ".add-photo-tile > text": [],
+    ".week": [],
+    ".wd": [],
+    ".wk-nav": [],
+    ".wk-nav .icon-btn": [],
+    ".time-card": [],
+    ".voice-input-shell": [],
+    ".pcell": [],
+    ".pk-notice": []
+  },
+  "scrollLeft": 0,
+  "surface": "records",
+  "state": "empty",
+  "expectedWidth": 430,
+  "fixture": "synthetic"
+}

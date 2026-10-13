@@ -8,7 +8,13 @@
   padding-bottom: var(--pk-s3);
 }
 
-.pg-head .child-chip .chip-nm { max-width: 200rpx; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.record-intro { display: flex; align-items: center; gap: 16rpx; margin-top: 12rpx; padding: 32rpx 28rpx; }
+.record-intro-copy { position: relative; z-index: 1; flex: 1; min-width: 0; }
+.record-intro .pg-title { display: block; overflow-wrap: anywhere; }
+.record-intro picker { margin-top: 20rpx; }
+.record-intro .child-chip { max-width: 100%; min-height: 44px; box-sizing: border-box; }
+.record-intro .child-chip .chip-nm { min-width: 0; max-width: 200rpx; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.record-intro-art { position: relative; flex: none; width: 240rpx; height: 240rpx; pointer-events: none; }
 .child-chip.single { padding-right: 28rpx; }
 
 /* 两行文案的提示条（错误态需要标题 + 说明） */
@@ -21,7 +27,8 @@
 
 /* 字段标题行 */
 .field-head { margin: var(--pk-s4) 0 var(--pk-s2); }
-.add-photo-tile { width: 100%; }
+.add-photo-tile { width: 100%; height: auto; min-height: 320rpx; padding: 16rpx 24rpx 28rpx; }
+.record-upload-art { flex: none; width: 280rpx; height: 190rpx; pointer-events: none; }
 
 /* 文字记录输入区 */
 .voice-input-shell { position: relative; min-height: 184rpx; }

@@ -1,6 +1,7 @@
 # FEAT-010 — 每日任务与今日默认折叠
 
 - Status: `IMPLEMENTED_LOCALLY_PENDING_ACCEPTANCE`
+- 2026-10-13设置视觉增量：每日任务移至课外活动下方，复用活动行、标记与添加入口，纸面背景同其他设置卡片；原预设、表单、时长和权限行为不变。SPEC-20261013-SETTINGS-TASK-VISUAL-02及SPEC-20261013-CARD-BACKGROUNDS-01已本地实现，验收待补。证据docs/quality/evidence/CARD-BACKGROUNDS-20261013.md。
 - Current-state revision: `FEAT-STATE-20261012-DAILY-TASKS-01-LOCAL`
 - Last verified: 2026-10-12
 - Approved Spec / Design / Architecture: `SPEC-20261012-DAILY-TASKS-01` / `DREV-20261012-DAILY-TASKS-01` / `ARCH-20261012-DAILY-TASKS-01`

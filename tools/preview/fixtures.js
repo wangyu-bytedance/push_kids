@@ -121,6 +121,7 @@ sheet.showChildSheet = true;
 
 /* ---------------- 记录页（统一新增表单 · 历史默认折叠） ---------------- */
 const records = {
+  introArtFailed: false, uploadArtFailed: false,
   loading: false, error: "", children, childIndex: 0, childId: "c1", canWrite: true,
   historyExpanded: false, photos: [], saving: false, uploadProgress: 0,
   text: "", hasText: false, date: "2026-09-06", dateLabel: "09月06日", time: "19:20", today: "2026-09-06",
@@ -229,6 +230,7 @@ function reportTrend(values) {
 }
 
 const reports = {
+  introArtFailed: false,
   loading: false, error: "", children, childIndex: 0, multiChild: true, showChildSheet: false,
   days: 30, ranges: [7, 30, 100], report: { day: "2026-09-06" }, isEmpty: false,
   rangeLabel: "近 30 天", feedbackTotal: 41, activityDetailFailed: false,
@@ -262,6 +264,7 @@ const weekDays = ["一", "二", "三", "四", "五", "六", "日"].map((weekday,
 weekDays[3].key = "2026-09-06";
 
 const calendar = {
+  introArtFailed: false,
   loading: false, error: "", children, childIndex: 0, childId: "c1", multiChild: true,
   selectedDay: "2026-09-06", monthLabel: "2026 年 9 月", weekKicker: "这一周 3 项固定安排",
   dayTitle: "今天 · 9 月 6 日", itemCount: 3, weekEmpty: false,
@@ -282,6 +285,10 @@ const calendarEditor = { ...calendar, showEditor: true, editingId: "", eventName
 
 /* ---------------- 学习设置（Tab 5） ---------------- */
 const settings = {
+  learningArtFailed: false, activityArtFailed: false, travelArtFailed: false,
+  dailyTaskPresets: ["阅读", "跳绳", "练字", "户外运动"],
+  dailyTasks: [{ id: "preview-task", name: "阅读", target_minutes: 20 }],
+  showDailyTaskForm: false, savingDailyTask: false, deletingDailyTask: false,
   loading: false, error: "", children, childIndex: 0, childId: "c1", multiChild: true, showChildSheet: false,
   archivedChildren: [{ id: "c3", name: "小雪", grade: "小学六年级", avatar: "小", label: "小雪 · 小学六年级" }],
   canWrite: true, canAddChild: true, childLimitHint: "最多同时保留 5 个学习档案，可以先归档不再使用的档案。", togglingName: "", removingId: "", requestsLabel: "1 条待处理",

@@ -4,6 +4,15 @@
    这里只补本页几何，颜色与字号一律走 tokens.wxss / atoms.wxss。 */
 
 .report-page { padding-top: 0; }
+.report-intro { display: flex; align-items: center; gap: 16rpx; margin-top: 12rpx; padding: 32rpx 28rpx; }
+.report-intro .head-intro { position: relative; z-index: 1; }
+.report-intro .pg-title { display: block; overflow-wrap: anywhere; }
+.report-intro .child-chip { margin-top: 20rpx; max-width: 100%; min-height: 44px; box-sizing: border-box; }
+.report-intro .child-chip .chip-nm { min-width: 0; max-width: 160rpx; }
+.report-intro-art { flex: none; width: 220rpx; height: 240rpx; pointer-events: none; }
+.report-page .pk-card, .report-page .metric {
+  background: radial-gradient(120% 130% at 100% 0%, rgba(127, 166, 92, .12), rgba(127, 166, 92, 0) 58%), linear-gradient(158deg, #FFFEFA 0%, #F7F4EA 100%);
+}
 .report-page .head-intro { flex: 1; min-width: 0; }
 .report-page .child-chip .chip-nm { max-width: 190rpx; }
 .report-page .child-chip.single { padding-right: 28rpx; }

@@ -1,16 +1,18 @@
 <primary-nav></primary-nav>
 <view class="page record-page {{canWrite && children.length ? 'sticky-cta' : ''}}">
-  <view class="pg-head">
-    <view class="grow">
+  <view class="pg-head pk-hero record-intro">
+    <view class="record-intro-copy">
       <text class="pg-title">一笔一画，都算数</text>
+      <picker wx:if="{{children.length}}" range="{{children}}" range-key="name" value="{{childIndex}}" bindchange="changeChild">
+        <view class="child-chip {{children.length === 1 ? 'single' : ''}}">
+          <text class="ava">{{children[childIndex].avatar}}</text>
+          <text class="chip-nm">{{children[childIndex].name}}</text>
+          <view class="chev" wx:if="{{children.length > 1}}"></view>
+        </view>
+      </picker>
     </view>
-    <picker wx:if="{{children.length}}" range="{{children}}" range-key="name" value="{{childIndex}}" bindchange="changeChild">
-      <view class="child-chip {{children.length === 1 ? 'single' : ''}}">
-        <text class="ava">{{children[childIndex].avatar}}</text>
-        <text class="chip-nm">{{children[childIndex].name}}</text>
-        <view class="chev" wx:if="{{children.length > 1}}"></view>
-      </view>
-    </picker>
+    <image class="record-intro-art" wx:if="{{!introArtFailed}}" src="/assets/illustrations/record-books.png" mode="aspectFit"
+      aria-hidden="{{true}}" data-art="intro" binderror="onIllustrationError"></image>
   </view>
 
   <view class="pk-notice err" wx:if="{{error}}">
@@ -74,7 +76,9 @@
       </view>
       <view class="up-tile add-photo-tile" wx:if="{{!photos.length}}" aria-role="button"
         aria-label="添加学习照片，可拍摄或从相册选择" bindtap="addPhotos">
-        <view class="ico ico-camera-pri lg"></view>
+        <image class="record-upload-art" wx:if="{{!uploadArtFailed}}" src="/assets/illustrations/record-camera.png" mode="aspectFit"
+          aria-hidden="{{true}}" data-art="upload" binderror="onIllustrationError"></image>
+        <view class="ico ico-camera-pri lg" wx:else></view>
         <text>添加学习照片</text>
         <text class="us">拍摄或从相册选择</text>
       </view>

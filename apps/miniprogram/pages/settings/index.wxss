@@ -1,12 +1,11 @@
 /* 设置主页（G1）+ 目录半屏（G2）+ 活动安排半屏（G3）：只补本页几何，颜色与字号走 tokens/atoms。 */
 .daily-task-presets { display: flex; flex-wrap: wrap; gap: 8px; margin: 24rpx 0; }
 .daily-task-presets .daily-task-preset { flex: none; width: auto; height: auto; min-height: 44px; margin: 0; padding: 10px 14px; border-radius: var(--pk-r-md); font-size: 14px; }
-.daily-task-setting-row { display: flex; align-items: center; gap: 24rpx; padding: 24rpx 0; border-bottom: var(--pk-border-soft); }
+.daily-task-setting-row { min-height: 44px; }
 .daily-task-setting-copy { min-width: 0; overflow-wrap: anywhere; }
-.daily-task-setting-copy .a-t { display: block; font-size: 15px; line-height: 1.6; }
-.daily-task-setting-copy .a-s { display: block; margin-top: 8rpx; font-size: 13px; color: var(--pk-ink-3); line-height: 1.5; }
 .daily-task-setting-row .daily-task-edit { flex: none; width: auto; height: auto; min-height: 44px; margin: 0; padding: 10px 14px; border-radius: var(--pk-r-md); font-size: 14px; }
-.daily-task-settings .daily-task-add { margin: 24rpx 0 0; min-height: 44px; height: auto; width: 100%; }
+.daily-task-settings .daily-task-add { min-height: 44px; height: auto; width: 100%; text-align: left; }
+.daily-task-add::after { border: 0; }
 .daily-task-form { margin-top: 28rpx; }
 .daily-task-form .pk-input { min-height: 44px; }
 .daily-task-form-actions { display: flex; gap: 12px; margin-top: 24rpx; }
@@ -64,6 +63,10 @@
 .profile-restore { flex: none; color: var(--pk-primary-strong); font-size: 14px; }
 
 .set-card { padding: 32rpx 28rpx 24rpx; }
+.settings-paper > view, .settings-paper > button { position: relative; z-index: 1; }
+.settings-paper .card-head { align-items: center; }
+.settings-paper .card-head .grow { min-width: 0; overflow-wrap: anywhere; }
+.settings-card-art { flex: none; width: 164rpx; height: 140rpx; pointer-events: none; }
 .card-head {
   display: flex;
   align-items: flex-start;
