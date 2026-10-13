@@ -1,6 +1,7 @@
 # FEAT-001 — 设置页在学科目风格统一 (Spec Lite)
 
-- Status: DRAFT
+- Status: REJECTED
+- Superseded by: SPEC-20261013-SETTINGS-CONSISTENCY-01 / DREV-20261013-SETTINGS-CONSISTENCY-01，用户2026-10-13明确批准统一三项新方案；旧候选不再单独实施。历史PENDING与未实施证据保留。
 - Risk: R1
 - Owner: 产品负责人（用户）
 - Implementer: Codex

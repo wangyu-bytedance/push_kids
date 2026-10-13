@@ -1,6 +1,7 @@
 # FEAT-010 — 设置每日任务视觉统一（Spec Lite）
 
-- Status: VERIFYING
+- Status: REJECTED
+- Superseded by: SPEC-20261013-SETTINGS-CONSISTENCY-01 / DREV-20261013-SETTINGS-CONSISTENCY-01；用户2026-10-13明确批准新方案，旧视觉验收范围取消，由新Spec保留VERIFYING。历史实现记录保留，不能作为当前样式。
 - Risk: R1
 - Owner / Reviewer: 用户
 - Implementer / Feature merge owner: Codex

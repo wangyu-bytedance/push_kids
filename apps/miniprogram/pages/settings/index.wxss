@@ -1,9 +1,11 @@
 /* 设置主页（G1）+ 目录半屏（G2）+ 活动安排半屏（G3）：只补本页几何，颜色与字号走 tokens/atoms。 */
-.daily-task-presets { display: flex; flex-wrap: wrap; gap: 8px; margin: 24rpx 0; }
-.daily-task-presets .daily-task-preset { flex: none; width: auto; height: auto; min-height: 44px; margin: 0; padding: 10px 14px; border-radius: var(--pk-r-md); font-size: 14px; }
 .daily-task-setting-row { min-height: 44px; }
 .daily-task-setting-copy { min-width: 0; overflow-wrap: anywhere; }
-.daily-task-setting-row .daily-task-edit { flex: none; width: auto; height: auto; min-height: 44px; margin: 0; padding: 10px 14px; border-radius: var(--pk-r-md); font-size: 14px; }
+.subject-list .grow { min-width: 0; overflow-wrap: anywhere; }
+.subject-action { flex: none; box-sizing: border-box; width: 76px; min-width: 44px; min-height: 44px; margin: 0; padding: 0 8px; line-height: 44px; font-size: 14px; color: var(--pk-primary); background: transparent; }
+.subject-action::after { border: 0; }
+.daily-task-candidate { min-height: 44px; }
+.daily-task-settings .c-s { font-size: 14px; }
 .daily-task-settings .daily-task-add { min-height: 44px; height: auto; width: 100%; text-align: left; }
 .daily-task-add::after { border: 0; }
 .daily-task-form { margin-top: 28rpx; }
@@ -86,61 +88,6 @@
   font-size: 13px;
   line-height: 1.5;
   color: var(--pk-ink-3);
-}
-
-/* 在学科目：三列等宽，选中即在学 */
-.subj-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 16rpx;
-}
-.subj {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10rpx;
-  box-sizing: border-box;
-  min-width: 0;
-  height: 104rpx;
-  border-radius: var(--pk-r-lg);
-  background: var(--pk-surface-sunken);
-  color: var(--pk-ink-2);
-  font-size: 16px;
-  line-height: 1.2;
-  font-weight: 600;
-}
-.subj.on { background: var(--pk-primary); color: var(--pk-ink-inv); }
-.subj.busy { opacity: .55; }
-.subj.off { opacity: .6; }
-
-.added-list { margin-top: 24rpx; border-top: var(--pk-border-soft); }
-.added-row {
-  display: flex;
-  align-items: center;
-  gap: 16rpx;
-  min-height: 104rpx;
-  padding: 8rpx 0;
-}
-.added-row + .added-row { border-top: var(--pk-border-soft); }
-.added-row .a-n {
-  flex: 1;
-  min-width: 0;
-  font-size: 16px;
-  line-height: 1.45;
-}
-.added-row .mini-btn {
-  flex: none;
-  box-sizing: border-box;
-  min-width: 128rpx;
-  height: 88rpx;
-  padding: 0 24rpx;
-  border: var(--pk-border);
-  border-radius: var(--pk-r-md);
-  background: var(--pk-surface);
-  color: var(--pk-ink-2);
-  font-size: 14px;
-  line-height: 88rpx;
-  text-align: center;
 }
 
 /* 课外活动行 */

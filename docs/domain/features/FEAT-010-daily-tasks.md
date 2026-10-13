@@ -1,7 +1,7 @@
 # FEAT-010 — 每日任务与今日默认折叠
 
 - Status: `CLIENT_0.1.14_DEVELOPMENT_UPLOADED / BACKEND_030_FULL_DEPLOYED / SCHEMA_0019 / CLOUD_READ_SMOKE_PASS / DEVICE_ACCEPTANCE_PENDING`
-- 2026-10-13设置视觉增量：每日任务移至课外活动下方，复用活动行、标记与添加入口，纸面背景同其他设置卡片；原预设、表单、时长和权限行为不变。SPEC-20261013-SETTINGS-TASK-VISUAL-02及SPEC-20261013-CARD-BACKGROUNDS-01已本地实现，验收待补。证据docs/quality/evidence/CARD-BACKGROUNDS-20261013.md。
+- 2026-10-13设置最新本地增量：SPEC-20261013-SETTINGS-CONSISTENCY-01 / DREV-20261013-SETTINGS-CONSISTENCY-01批准并实现；每日任务仍在活动下方，独立书本/时钟装饰、整行编辑、底部候选半屏，阅读20/跳绳10/练字20/户外运动20分钟仅预填并需保存。取代常驻预设/独立编辑/内联表单；API、校验和权限不变。239项测试、静态与430原生八态通过；320/390原生、完整截图及真机待验收，本轮未上传。证据docs/quality/evidence/SETTINGS-CONSISTENCY-20261013.md。
 - Current-state revision: `FEAT-STATE-20261013-DAILY-TASKS-02-DEPLOYED`
 - Last verified: 2026-10-13；全套后端510通过、19跳过；前端238通过；隔离MySQL5.7迁移、11项集成检查及每日任务服务CRUD/幂等/快照/家庭范围通过。生产0019已迁移，030全量模式发布并normal，真实小程序13项读取接口200、设置加载无错误且显示档案。客户端0.1.14已开发上传，完整原生状态和真机待验收。
 - Approved Spec / Design / Architecture: `SPEC-20261012-DAILY-TASKS-01` / `DREV-20261012-DAILY-TASKS-01` / `ARCH-20261012-DAILY-TASKS-01`

@@ -103,15 +103,15 @@ function travelLabel(item) {
 
 Page({
   onIllustrationError(event) {
-    const field = { learning: "learningArtFailed", activity: "activityArtFailed", travel: "travelArtFailed" }[event.currentTarget.dataset.art];
+    const field = { learning: "learningArtFailed", activity: "activityArtFailed", travel: "travelArtFailed", daily: "dailyArtFailed" }[event.currentTarget.dataset.art];
     if (field) this.setData({ [field]: true });
   },
   data: {
-    learningArtFailed: false, activityArtFailed: false, travelArtFailed: false,
+    learningArtFailed: false, activityArtFailed: false, travelArtFailed: false, dailyArtFailed: false,
     loading: true, error: "", children: [], childIndex: 0, childId: "", multiChild: false, showChildSheet: false,
     archivedChildren: [], canAddChild: true, isManager: true, childLimitHint: childContext.limitHint(),
     canWrite: true, subjects: [],
-    dailyTasks: [], dailyTaskPresets: DAILY_TASK_PRESETS, showDailyTaskForm: false,
+    dailyTasks: [], dailyTaskPresets: DAILY_TASK_PRESETS.map((name) => ({ name, minutes: name === "跳绳" ? 10 : 20 })), showDailyTaskForm: false, showDailyTaskCatalog: false,
     dailyTaskId: "", dailyTaskName: "", dailyTaskMinutes: "20", dailyTaskError: "",
     savingDailyTask: false, deletingDailyTask: false,
     baseLearning: [], addedLearning: [], addedActivities: [], togglingName: "", removingId: "",
@@ -275,9 +275,20 @@ Page({
   },
   resetDailyTaskForm() {
     this.dailyTaskGeneration = (this.dailyTaskGeneration || 0) + 1;
-    this.setData({ showDailyTaskForm: false, dailyTaskId: "", dailyTaskName: "",
+    this.setData({ showDailyTaskForm: false, showDailyTaskCatalog: false, dailyTaskId: "", dailyTaskName: "",
       dailyTaskMinutes: "20", dailyTaskError: "", savingDailyTask: false, deletingDailyTask: false });
   },
+  openDailyTaskCatalog() {
+    if (!this.guardWrite() || this.data.loading || !this.data.childId
+      || this.data.savingDailyTask || this.data.deletingDailyTask) return;
+    if (this.data.dailyTasks.length >= 20) {
+      wx.showToast({ title: "最多设置 20 个任务，请先删除不再需要的任务", icon: "none" });
+      return;
+    }
+    this.resetDailyTaskForm();
+    this.setData({ showDailyTaskCatalog: true });
+  },
+  closeDailyTaskCatalog() { this.setData({ showDailyTaskCatalog: false }); },
   openDailyTaskForm(event) {
     if (!this.guardWrite() || this.data.loading || !this.data.childId
       || this.data.savingDailyTask || this.data.deletingDailyTask) return;

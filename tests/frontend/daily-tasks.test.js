@@ -189,6 +189,35 @@ test("late completion response cannot overwrite another child or hidden page", a
   }
 });
 
+test("settings candidate sheet prefills editable defaults without writes and resets on leaving", () => {
+  const { page, calls } = harness("settings", () => ({}));
+  page.setData({ loading: false, childId: "child-a", canWrite: true });
+  page.openDailyTaskCatalog();
+  assert.equal(page.data.showDailyTaskCatalog, true);
+  assert.equal(page.data.showDailyTaskForm, false);
+  for (const preset of page.data.dailyTaskPresets) {
+    page.openDailyTaskForm(event({ name: preset.name }));
+    assert.equal(page.data.showDailyTaskCatalog, false);
+    assert.equal(page.data.dailyTaskName, preset.name);
+    assert.equal(Number(page.data.dailyTaskMinutes), preset.minutes);
+    page.closeDailyTaskForm();
+    page.openDailyTaskCatalog();
+  }
+  page.onHide();
+  assert.equal(page.data.showDailyTaskCatalog, false);
+  assert.equal(page.data.showDailyTaskForm, false);
+  assert.equal(calls.length, 0);
+  page.setData({ canWrite: false });
+  page.openDailyTaskCatalog();
+  assert.equal(page.data.showDailyTaskCatalog, false);
+  page.setData({ canWrite: true, dailyTasks: Array.from({ length: 20 }, (_, i) => ({ id: String(i) })) });
+  page.openDailyTaskCatalog();
+  assert.equal(page.data.showDailyTaskCatalog, false);
+  page.setData({ dailyTasks: [], savingDailyTask: true });
+  page.openDailyTaskCatalog();
+  assert.equal(page.data.showDailyTaskCatalog, false);
+});
+
 test("settings presets are drafts and invalid or cancelled forms perform zero writes", async () => {
   const { page, calls } = harness("settings", () => ({}));
   page.data.loading = false;
