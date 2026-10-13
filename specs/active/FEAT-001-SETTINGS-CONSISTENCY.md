@@ -84,4 +84,4 @@ TP-004：validate_miniprogram、validate_design_evidence、check_architecture；
 
 ## 10. Completion
 
-本地实现与自动检查完成，已合并FEAT-001/010及UI-001；API/架构不变。两档原生、完整截图及真机验收仍待补，保留VERIFYING；本轮未上传。全部门禁完成后DONE并移completed。
+本地实现与自动检查完成，已合并FEAT-001/010及UI-001；API/架构不变。源码5837d59，前端0.1.15开发上传成功，1027271字节，13项云端读smoke 200；未体验/提审/正式发布。两档原生、完整截图及真机验收仍待补，保留VERIFYING，见docs/deploy/releases/20261013-settings-consistency-frontend.md。全部门禁完成后DONE并移completed。

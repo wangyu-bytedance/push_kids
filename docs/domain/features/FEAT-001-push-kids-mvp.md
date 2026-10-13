@@ -1,6 +1,6 @@
 # FEAT-001 — 家庭学习持续跟进系统 MVP
 
-- 2026-10-13设置最新本地增量：SPEC-20261013-SETTINGS-CONSISTENCY-01 / DREV-20261013-SETTINGS-CONSISTENCY-01批准并实现；在学科目改活动同款单列行，保留原加入/移出限制。每日任务同款行、独立背景及候选/编辑半屏。239项测试、静态及430原生八态通过；320/390原生、完整截图、真机待验收，本轮未上传。详见docs/quality/evidence/SETTINGS-CONSISTENCY-20261013.md，任务VERIFYING。
+- 2026-10-13设置最新增量：SPEC-20261013-SETTINGS-CONSISTENCY-01 / DREV-20261013-SETTINGS-CONSISTENCY-01批准并实现；在学科目改活动同款单列行，保留原加入/移出限制。每日任务同款行、独立背景及候选/编辑半屏。239项测试、静态及430原生八态通过；源码5837d59随0.1.15开发上传成功（1027271字节），未体验/提审/正式发布；320/390原生、完整截图、真机待验收。详见docs/quality/evidence/SETTINGS-CONSISTENCY-20261013.md，任务VERIFYING。
 
 - Local report panel refinement: `SPEC-20261013-REPORT-PANELS-01 / DREV-20261013-REPORT-PANELS-01` 已获用户批准并本地实现。历史和编辑计划统一展开容器，明确展开/收起及调整入口；查询与计划策略不变，外层背景由统一卡片样式负责。236项前端测试、三视口36态原生数字几何及静态校验通过；已随0.1.14开发上传，完整截图、字体放大与真机验收待补。证据：`docs/quality/evidence/REPORT-PANELS-20261013.md`。
 
