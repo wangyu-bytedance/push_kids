@@ -1,7 +1,8 @@
 # 2026-10-13 前后端发布差异与候选清单
 
-- Status: PREPARING / FRONTEND_UPLOAD_AUTHORIZED / NOT_DEPLOYED
+- Status: FRONTEND_0.1.14_DEVELOPMENT_UPLOADED / BACKEND_NOT_DEPLOYED
 - Request: 用户要求整理Git工程与当前发布版本差异，准备前后端发布。
+- Release engineering commit: 898aa4b；生产源码与314150f一致。
 - Frozen business candidate: `314150f`（背景/每日任务9f77774 + 已批准报表提交314150f）；后续设计脚本修复不改变生产源码。
 - Target: AppID `wx5d2e0014690bf285`；环境`prod-d2g14rwoycac6b45d`；服务`flask-ik19`；端口8000，PUBLIC关闭。
 - 本报告不修改业务代码、不迁移生产、不部署、不上传前端；未提交报表改动尚未纳入冻结候选。
@@ -81,4 +82,11 @@ BACKEND-RELEASE §4.2允许纯增量且真实MySQL新旧读写/回退验证完�
 4. 从冻结白名单候选构建新后端不可变灰度，确认normal及真实业务smoke，再经管理员确认流量；平台PUBLIC保持关闭。
 5. 后端稳定后上传0.1.14候选开发版本，管理员选体验版并完成iOS/Android验收，再人工提审/正式发布。
 
-当前实际状态：diff已整理、后端候选冻结；没有生产迁移、后端部署、前端上传或流量变化。
+## 8. 0.1.14开发上传实际结果
+
+- 用户明确“没有发布，但不影响 你可以上传14版本”，授权开发版本阶段上传；本次先暂存前端供后端稳定后体验验收，不宣称已满足前后端联调或正式上线。
+- 来源：314150f冻结源码，139个小程序文件逐字节对比Git通过；898aa4b只改设计工具和发布记录，不改生产源码。useCloud=true、真实AppID、目标env/service、urlCheck=true均核对；CLI islogin返回login=true。
+- CLI upload成功，0.1.14，描述“新增每日任务和今日折叠，统一卡片插画，优化报表历史与计划布局”，TOTAL=1017762字节（993.9KB）。成功后版本工具bump至0.1.14，下次候选0.1.15。
+- 前端0.1.13为历史开发上传基线、并未正式发布。0.1.14未设置体验版/审核/正式版；新每日任务尚不能宣称在线可用，需要先完成新后端0019迁移与API业务smoke。
+- 生产迁移、后端部署和流量变化均未执行。数据库MySQL兼容证据和受控运行环境不足，依据BACKEND-RELEASE §4.2尚不能免除本次备份；停在管理员备份/Schema/运行环境核验门禁前。
+- Feature/UI发布事实已同步，相关Spec保留VERIFYING于specs/active/，不是验收完成或DONE。

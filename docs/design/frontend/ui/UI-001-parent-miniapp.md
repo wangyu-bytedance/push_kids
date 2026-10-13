@@ -2,12 +2,12 @@
 
 - 2026-10-13背景全面接入：设置科目/活动/出行不同插画与纸面背景；每日任务同款背景和列表、紧随活动之后；报表顶部成长记录插画和统一卡片背景。Spec SPEC-20261013-CARD-BACKGROUNDS-01 / Design DREV-20261013-CARD-BACKGROUNDS-01。238测试、静态校验及1017670字节CLI预览包通过，三视口HTML仅辅助；原生/真机/用户验收待补，未发布。证据docs/quality/evidence/CARD-BACKGROUNDS-20261013.md；本增量取代上文“设置/报表背景未接入”的历史事实。
 
-- 2026-10-13报表展开区本地增量：`SPEC-20261013-REPORT-PANELS-01 / DREV-20261013-REPORT-PANELS-01` 已批准并实现；历史平铺分隔、计划明确「调整」、顶部与底部收起，两区独立展开。外层继承统一pk-card背景，不覆盖并行卡片美化。236项测试及三视口36态原生数字几何通过；完整截图、字体放大及真机待补，未上传。证据：`docs/quality/evidence/REPORT-PANELS-20261013.md`。
+- 2026-10-13报表展开区本地增量：`SPEC-20261013-REPORT-PANELS-01 / DREV-20261013-REPORT-PANELS-01` 已批准并实现；历史平铺分隔、计划明确「调整」、顶部与底部收起，两区独立展开。外层继承统一pk-card背景，不覆盖并行卡片美化。236项测试及三视口36态原生数字几何通过；完整截图、字体放大及真机待补；已随0.1.14开发上传，未设体验版/正式版。证据：`docs/quality/evidence/REPORT-PANELS-20261013.md`。
 
 - 2026-10-13本地视觉增量：记录标题卡书本插画、空上传相机插画及日程台历插画使用统一纸面渐变；Design `DREV-20261013-RECORD-CALENDAR-ILLUSTRATIONS-01` 已批准，新增资源173638字节。保留原文案、业务和导航；装饰失败自动回退。233项测试通过，原生三视口及真机验收待补，未发布。详见 `docs/quality/evidence/RECORD-CALENDAR-ILLUSTRATIONS-20261013.md`。
 
-- Status: `CURRENT / VOICE_INPUT_LOCAL_VERIFIED / MICROPHONE_PRIVACY_DECLARATION_BLOCKED / DEVELOPMENT_VERSION_0.1.13_UPLOADED / NATIVE_VIEWPORT_MATRIX_NOT_RUN`
-- Release status: `0.1.13` 已上传为开发版本（687111 字节），体验版、审核、正式版均未进行；本次按 `SPEC-20261011-RISK-BASED-RELEASE-GATES-01` 判定双账号复测不适用，真机和麦克风隐私授权仍待体验验证。证据：`docs/deploy/releases/20261011-report-disclosures-frontend.md`。
+- Status: `CURRENT / VOICE_INPUT_LOCAL_VERIFIED / MICROPHONE_PRIVACY_DECLARATION_BLOCKED / DEVELOPMENT_VERSION_0.1.14_UPLOADED / NATIVE_VIEWPORT_MATRIX_NOT_RUN`
+- Release status: `0.1.14` 已上传为开发版本（1017762字节），包含每日任务、背景插画、报表布局；未设体验版/审核/正式版。后端每日任务API与0019尚未部署，待迁移/兼容/业务smoke后方可体验验收。证据：`docs/deploy/releases/20261013-fullstack-diff.md`；0.1.13是历史开发上传基线。
 - Related Feature: `FEAT-001`
 - Local report disclosures: `SPEC-20261011-REPORT-DISCLOSURES-01 / DREV-20261011-REPORT-DISCLOSURES-01` 已获用户批准并本地实现。
   报表科目统计后依次为「历史记录」「编辑计划」两张默认收起的卡，课外活动投入在其后；展开分别复用完整有界历史和条目清单，互不覆盖。原独立条目页标题同步改为「编辑计划」；记录页保留新增及待处理入口，历史列表移出。12张设计快照及SHA、前端自动化和三视口四状态微信原生数字几何已通过；开发版本 `0.1.13` 已上传，iOS/Android真机未验收，未设体验版/正式版。证据：`docs/quality/evidence/REPORT-DISCLOSURES-20261011.md`、`docs/deploy/releases/20261011-report-disclosures-frontend.md`。
