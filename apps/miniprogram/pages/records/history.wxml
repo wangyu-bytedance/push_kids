@@ -1,5 +1,13 @@
 <!-- PKDS-1.0 · 历史记录列表（D4 / D5）与筛选半屏（D6）。所有展示字段都在 history.js 里算好。 -->
 <template name="history">
+  <view class="chips mt3">
+    <view class="h-status-choice {{historyView === 'confirmed' ? 'on' : ''}}" aria-role="button" aria-label="只看已确认" data-view="confirmed" bindtap="changeHistoryView">已确认</view>
+    <view class="h-status-choice {{historyView === 'pending' ? 'on' : ''}}" aria-role="button" aria-label="只看待处理" data-view="pending" bindtap="changeHistoryView">
+      <text>待处理</text><text class="cnt tnum" wx:if="{{pendingCount}}">{{pendingCount}}</text>
+    </view>
+    <view class="h-status-choice {{historyView === 'all' ? 'on' : ''}}" aria-role="button" aria-label="看全部记录" data-view="all" bindtap="changeHistoryView">全部</view>
+  </view>
+
   <view class="h-search mt3">
     <view class="s-box">
       <view class="ico ico-search-mute sm"></view>
@@ -11,14 +19,6 @@
       <view class="ico ico-filter xs"></view><text>筛选</text>
       <view class="dot" wx:if="{{hasFilters}}"></view>
     </view>
-  </view>
-
-  <view class="chips mt3">
-    <view class="{{historyView === 'confirmed' ? 'on' : ''}}" aria-role="button" aria-label="只看已确认" data-view="confirmed" bindtap="changeHistoryView">已确认</view>
-    <view class="{{historyView === 'pending' ? 'on' : ''}}" aria-role="button" aria-label="只看待处理" data-view="pending" bindtap="changeHistoryView">
-      <text>待处理</text><text class="cnt tnum" wx:if="{{pendingCount}}">{{pendingCount}}</text>
-    </view>
-    <view class="{{historyView === 'all' ? 'on' : ''}}" aria-role="button" aria-label="看全部记录" data-view="all" bindtap="changeHistoryView">全部</view>
   </view>
 
   <view class="flex between h-cap">
@@ -52,7 +52,7 @@
   <block wx:for="{{historyItems}}" wx:key="rowKey">
     <text wx:if="{{item.showDay}}" class="h-day tnum">{{item.dayText}}</text>
 
-    <view class="pk-card h-card {{item.state === 'pending_confirmation' ? 'att' : ''}}{{item.state === 'failed' ? 'dan' : ''}}"
+    <view class="{{embedded && !item.isPending ? 'h-record-row' : 'pk-card'}} h-card {{item.state === 'pending_confirmation' ? 'att' : ''}}{{item.state === 'failed' ? 'dan' : ''}}"
       aria-role="button" aria-label="查看这条记录详情" data-id="{{item.submission_id}}" bindtap="openHistoryItem">
       <block wx:if="{{item.isPending}}">
         <view class="flex between">
@@ -84,14 +84,14 @@
           </view>
           <view class="chev right"></view>
         </view>
-        <view class="flex wrap h-pills">
-          <view class="pill neutral">
+        <view class="flex wrap h-pills {{embedded ? 'h-record-meta' : ''}}">
+          <view class="{{embedded ? 'h-meta-chip' : 'pill neutral'}}">
             <view class="ico ico-image xs" wx:if="{{item.source === 'photo'}}"></view>
             <view class="ico ico-note xs" wx:else></view>
             <text>{{item.sourceLabel}}</text>
           </view>
-          <view class="pill neutral tnum" wx:if="{{item.knowledgeLabel}}">{{item.knowledgeLabel}}</view>
-          <view class="pill {{item.stateTone}}">{{item.stateLabel}}</view>
+          <view class="{{embedded ? 'h-meta-chip' : 'pill neutral'}} tnum" wx:if="{{item.knowledgeLabel}}">{{item.knowledgeLabel}}</view>
+          <view class="{{embedded ? 'h-meta-chip' : 'pill ' + item.stateTone}}">{{item.stateLabel}}</view>
         </view>
       </block>
     </view>

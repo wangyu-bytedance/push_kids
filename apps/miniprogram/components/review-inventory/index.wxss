@@ -2,3 +2,28 @@
 
 .inventory-page { min-height: 0; padding: 0 0 12px; }
 @media (max-width: 340px) { .inventory-page { padding-left: 0; padding-right: 0; } }
+
+/* 仅报表嵌入态：内部清单平铺；独立编辑计划页保留既有样式。 */
+.report-inventory { padding-top: 12px; padding-bottom: 0; }
+.report-inventory .view-tabs { border-bottom: 0; gap: 4px; padding: 3px; border-radius: var(--pk-r-sm); background: var(--pk-surface-sunken); }
+.report-inventory .tab { min-height: 44px; font-size: 13px; border-radius: var(--pk-r-xs); }
+.report-inventory .tab.on { border-bottom: 0; background: var(--pk-surface); }
+.report-inventory .segmented { border: 0; background: none; padding: 0; gap: 8px; height: 44px; min-height: 44px; }
+.report-inventory .segment { border: var(--pk-border-line); border-radius: var(--pk-r-sm); font-size: 13px; }
+.report-inventory .segment.on { border-color: var(--pk-primary-hairline); background: var(--pk-primary-wash); }
+.report-inventory .result-title { font-family: var(--pk-sans); font-size: 14px; }
+.report-inventory .result-head .muted, .report-inventory .result-explain { font-size: 12px; }
+.report-inventory .group { margin: 12px 0 0; border: 0; border-radius: 0; background: none; box-shadow: none; }
+.report-inventory .group::before { content: none; }
+.report-inventory .group-toggle { min-height: 44px; padding: 8px 0; }
+.report-inventory .subject-mark { width: 32px; height: 32px; font-size: 14px; border-radius: var(--pk-r-sm); }
+.report-inventory .group-name { font-size: 14px; }
+.report-inventory .group-count { font-size: 12px; }
+.report-inventory .group-body { padding: 0; }
+.report-inventory .item { border-bottom: var(--pk-border-line); }
+.report-inventory .item + .item { border-top: 0; }
+.report-inventory .item-title { font-size: 14px; font-weight: 500; line-height: 1.55; }
+.report-inventory .item-meta, .report-inventory .item-date, .report-inventory .item-state { font-size: 12px; line-height: 1.55; }
+.report-inventory .item-bottom { display: block; }
+.report-inventory .item-state { margin-left: 0; margin-top: 3px; }
+.report-inventory .more { border: 0; background: none; font-size: 12px; color: var(--pk-primary); }

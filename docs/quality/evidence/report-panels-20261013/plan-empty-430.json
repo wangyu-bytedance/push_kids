@@ -1,0 +1,152 @@
+{
+  "viewport": {
+    "width": 430,
+    "height": 834,
+    "screenHeight": 932,
+    "dpr": 3,
+    "baseLibrary": "3.16.2",
+    "fontScale": 15
+  },
+  "nodes": [
+    [
+      {
+        "left": 20,
+        "right": 410,
+        "top": 109,
+        "bottom": 197,
+        "width": 390,
+        "height": 88
+      }
+    ],
+    [
+      {
+        "left": 20,
+        "right": 410,
+        "top": 215,
+        "bottom": 613,
+        "width": 390,
+        "height": 398
+      }
+    ],
+    [
+      {
+        "left": 39,
+        "right": 391,
+        "top": 110,
+        "bottom": 196,
+        "width": 352,
+        "height": 86
+      },
+      {
+        "left": 39,
+        "right": 391,
+        "top": 216,
+        "bottom": 302,
+        "width": 352,
+        "height": 86
+      }
+    ],
+    [
+      {
+        "left": 39,
+        "right": 391,
+        "top": 550,
+        "bottom": 612,
+        "width": 352,
+        "height": 62
+      }
+    ],
+    [],
+    [],
+    [],
+    [
+      {
+        "left": 349,
+        "right": 373,
+        "top": 143.5,
+        "bottom": 162.5,
+        "width": 24,
+        "height": 19
+      },
+      {
+        "left": 349,
+        "right": 373,
+        "top": 249.5,
+        "bottom": 268.5,
+        "width": 24,
+        "height": 19
+      }
+    ],
+    [
+      {
+        "left": 66,
+        "right": 340,
+        "top": 130,
+        "bottom": 176,
+        "width": 274,
+        "height": 46
+      },
+      {
+        "left": 66,
+        "right": 340,
+        "top": 236,
+        "bottom": 282,
+        "width": 274,
+        "height": 46
+      }
+    ]
+  ],
+  "inventory": [
+    [
+      {
+        "left": 39,
+        "right": 391,
+        "top": 303,
+        "bottom": 532,
+        "width": 352,
+        "height": 229
+      }
+    ],
+    [
+      {
+        "left": 39,
+        "right": 391,
+        "top": 379,
+        "bottom": 423,
+        "width": 352,
+        "height": 44
+      }
+    ],
+    [
+      {
+        "left": 39,
+        "right": 211,
+        "top": 379,
+        "bottom": 423,
+        "width": 172,
+        "height": 44
+      },
+      {
+        "left": 219,
+        "right": 391,
+        "top": 379,
+        "bottom": 423,
+        "width": 172,
+        "height": 44
+      }
+    ],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    []
+  ],
+  "view": "time",
+  "state": "plan-empty",
+  "expectedWidth": 430,
+  "fixture": "synthetic"
+}

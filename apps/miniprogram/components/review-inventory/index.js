@@ -5,7 +5,7 @@ const methods = Object.fromEntries(Object.entries(controller).filter(([name]) =>
 
 Component({
   options: { styleIsolation: "apply-shared" },
-  properties: { contextChildId: { type: String, value: "" } },
+  properties: { contextChildId: { type: String, value: "" }, embedded: { type: Boolean, value: false } },
   data: { ...controller.data },
   methods,
   lifetimes: {

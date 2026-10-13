@@ -40,3 +40,4 @@
 - 12个SVG可编辑设计源和12张精确尺寸PNG均由同目录 render.py 生成；本清单记录当前SHA-256。
 - 候选图须由用户审阅并明确批准 Task Spec revision + Design Revision。批准后本清单不可修改，除 Superseded by 指针。
 - 原生微信节点几何、长内容/错误/权限状态、iOS/Android真机均 NOT_RUN；生产代码未修改。
+- Superseded by: DREV-20261013-REPORT-PANELS-01（仅历史/编辑计划展开区；其余范围保留原批准）

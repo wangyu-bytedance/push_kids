@@ -171,7 +171,31 @@
 /* 与真实 2×2 指标卡等高：168rpx × 2 行 + 16rpx 间距 */
 .sk.metrics-sk { height: 352rpx; }
 .sk.chart-sk { height: 420rpx; }
-.report-disclosure { margin-top: var(--pk-s4); }
-.report-disclosure.expanded .history-toggle { margin-bottom: var(--pk-s3); }
+.report-page .report-disclosure { margin-top: var(--pk-s4); padding: 0 var(--pk-s4); }
+/* 外层背景、阴影和装饰归 pk-card 所有；此处仅定义展开区内部几何。 */
+.report-disclosure .history-toggle { padding: var(--pk-s4) 0; }
+.report-disclosure.expanded .history-toggle { margin-bottom: 0; }
+.report-disclosure .history-toggle .ico { flex: none; }
+.disclosure-heading { min-width: 0; }
+.disclosure-title { display: block; font-family: var(--pk-serif); font-size: 17px; font-weight: 600; line-height: 1.45; }
+.disclosure-sub { display: block; margin-top: var(--pk-s1); font-size: 12px; line-height: 1.5; color: var(--pk-ink-3); overflow-wrap: anywhere; }
+.disclosure-action { flex: none; font-size: 12px; color: var(--pk-primary); }
+.disclosure-body { border-top: var(--pk-border-line); }
+.disclosure-footer { display: flex; align-items: center; justify-content: center; gap: var(--pk-s2); min-height: 44px; padding: var(--pk-s2) 0; font-size: 12px; color: var(--pk-primary); }
+.report-disclosure .h-search .s-box { border-radius: var(--pk-r-sm); }
+.report-disclosure .h-search .s-filter { min-height: 44px; padding: 0 var(--pk-s2); }
+.report-disclosure .chips { display: flex; gap: var(--pk-s1); padding: var(--pk-s1); border-radius: var(--pk-r-sm); background: var(--pk-surface-sunken); }
+.report-disclosure .chips > view { flex: 1; min-width: 0; min-height: 44px; justify-content: center; padding: 0 var(--pk-s1); font-size: 13px; border: 0; border-radius: var(--pk-r-xs); background: none; }
+.report-disclosure .chips > view.on { background: var(--pk-surface); color: var(--pk-primary); box-shadow: none; }
+.report-disclosure .h-cap { gap: var(--pk-s2); }
+.report-disclosure .h-cap > text { flex: 1; min-width: 0; }
+.report-disclosure .h-cap .link-btn { flex: none; min-height: 44px; }
+.report-disclosure .h-record-row { margin-top: 0; padding: var(--pk-s3) 0; border-bottom: var(--pk-border-line); }
+.report-disclosure .h-record-row .grow { min-width: 0; }
+.report-disclosure .h-record-row .h-title { font-size: 14px; font-weight: 500; line-height: 1.55; }
+.report-disclosure .h-record-row .h-sum { font-size: 13px; }
+.report-disclosure .h-record-meta { margin-top: var(--pk-s2); gap: var(--pk-s1); }
+.h-meta-chip { display: flex; align-items: center; gap: var(--pk-s1); font-size: 12px; color: var(--pk-ink-3); line-height: 1.55; }
+.h-meta-chip + .h-meta-chip::before { content: '·'; }
 .report-disclosure .safe-tail { display: none; }
 .report-disclosure review-inventory { display: block; width: 100%; }

@@ -157,28 +157,37 @@
         </view>
       </view>
 
-      <view id="report-history" class="report-disclosure history-section {{historyExpanded ? 'expanded' : ''}}">
-        <view class="pk-card tight history-toggle" aria-role="button" aria-label="{{historyExpanded ? '收起历史记录' : '展开历史记录'}}" aria-expanded="{{historyExpanded}}" bindtap="toggleHistory">
+      <view id="report-history" class="pk-card report-disclosure history-section {{historyExpanded ? 'expanded' : ''}}">
+        <view class="history-toggle" aria-role="button" aria-label="{{historyExpanded ? '收起历史记录' : '展开历史记录'}}" aria-expanded="{{historyExpanded}}" bindtap="toggleHistory">
           <view class="flex">
             <view class="ico ico-clock sm"></view>
-            <text class="t-sub-m grow">历史记录</text>
-            <text class="t-cap c-ink-3" wx:if="{{pendingCount}}">{{pendingCount}} 条待处理</text>
-            <text class="t-cap c-ink-3" wx:elif="{{historyError}}">读取失败</text>
+            <view class="disclosure-heading grow">
+              <text class="disclosure-title">历史记录</text>
+              <text class="disclosure-sub">回看学习内容<text class="c-att" wx:if="{{pendingCount}}"> · {{pendingCount}} 条待处理</text><text wx:elif="{{historyError}}"> · 读取失败</text></text>
+            </view>
+            <text class="disclosure-action">{{historyExpanded ? '收起' : '展开'}}</text>
             <view class="chev {{historyExpanded ? 'up' : ''}}"></view>
           </view>
         </view>
-        <template wx:if="{{historyExpanded}}" is="history" data="{{historyView,historyItems,historyLoading,historyError,historyPage,historyNext,historyFilters,hasFilters,pendingCount,pendingProcessing,searchText,filterOpen,filterDraft,filterSubjects,filterSubjectIndex,filterError,sourceOptions,canWrite}}" />
+        <view class="disclosure-body" wx:if="{{historyExpanded}}">
+          <template is="history" data="{{embedded:true,historyView,historyItems,historyLoading,historyError,historyPage,historyNext,historyFilters,hasFilters,pendingCount,pendingProcessing,searchText,filterOpen,filterDraft,filterSubjects,filterSubjectIndex,filterError,sourceOptions,canWrite}}" />
+          <view class="disclosure-footer" aria-role="button" aria-label="收起历史记录" bindtap="toggleHistory"><text>收起历史记录</text><view class="chev up"></view></view>
+        </view>
       </view>
 
-      <view id="report-edit-plan" class="report-disclosure {{inventoryExpanded ? 'expanded' : ''}}">
-        <view class="pk-card tight history-toggle" aria-role="button" aria-label="{{inventoryExpanded ? '收起编辑计划' : '展开编辑计划'}}" aria-expanded="{{inventoryExpanded}}" bindtap="toggleInventory">
+      <view id="report-edit-plan" class="pk-card report-disclosure {{inventoryExpanded ? 'expanded' : ''}}">
+        <view class="history-toggle" aria-role="button" aria-label="{{inventoryExpanded ? '收起编辑计划' : '展开编辑计划'}}" aria-expanded="{{inventoryExpanded}}" bindtap="toggleInventory">
           <view class="flex">
             <view class="ico ico-list-pri sm"></view>
-            <text class="t-sub-m grow">编辑计划</text>
+            <view class="disclosure-heading grow"><text class="disclosure-title">编辑计划</text><text class="disclosure-sub">查看复习安排，按条目调整</text></view>
+            <text class="disclosure-action">{{inventoryExpanded ? '收起' : '展开'}}</text>
             <view class="chev {{inventoryExpanded ? 'up' : ''}}"></view>
           </view>
         </view>
-        <review-inventory id="inventory-component" wx:if="{{inventoryExpanded}}" context-child-id="{{childId}}"></review-inventory>
+        <view class="disclosure-body" wx:if="{{inventoryExpanded}}">
+          <review-inventory id="inventory-component" context-child-id="{{childId}}" embedded="{{true}}"></review-inventory>
+          <view class="disclosure-footer" aria-role="button" aria-label="收起编辑计划" bindtap="toggleInventory"><text>收起编辑计划</text><view class="chev up"></view></view>
+        </view>
       </view>
 
       <view class="sec" id="sec-activities">

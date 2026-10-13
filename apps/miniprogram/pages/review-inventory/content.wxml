@@ -1,4 +1,4 @@
-<view class="inventory-page" bindtap="closeActionMenu">
+<view class="inventory-page {{embedded ? 'report-inventory' : ''}}" bindtap="closeActionMenu">
   <view class="view-tabs">
     <button wx:for="{{views}}" wx:key="id" class="inventory-button tab {{view === item.id ? 'on' : ''}}" data-id="{{item.id}}" bindtap="changeView" aria-label="{{item.label}}{{view === item.id ? '，已选中' : ''}}">{{item.label}}</button>
   </view>
@@ -43,7 +43,7 @@
     <view class="result-head" wx:if="{{items.length}}"><text class="result-title" wx:if="{{view === 'time'}}">预计 {{total}} 项</text><text class="result-title" wx:else>{{total}} 个知识条目</text><text class="muted" wx:if="{{view === 'time'}}">约 {{minutes}} 分钟</text><text class="muted" wx:elif="{{view === 'subject'}}">按复习次数排序</text><text class="muted" wx:if="{{loading}}">正在更新…</text></view>
     <text class="muted result-explain" wx:if="{{items.length && view === 'time'}}">实际安排会随今天的复习反馈更新</text>
     <text class="notice" wx:if="{{view === 'time' && overBudget}}">手动安排已保留，比日常 {{budget}} 分钟预算多 {{overBudget}} 分钟。</text>
-    <text class="muted readonly" wx:if="{{!canWrite}}">当前为只读，可查看条目和安排。</text>
+      <text class="muted readonly" wx:if="{{!canWrite}}">{{embedded ? '当前为只读，可查看条目和安排，无法调整计划。' : '当前为只读，可查看条目和安排。'}}</text>
     <view class="group {{view === 'subject' ? 'flat' : ''}} {{group.expanded ? 'open' : ''}} {{actionMenuGroup === group.key ? 'menu-open' : ''}}" wx:for="{{groups}}" wx:for-item="group" wx:key="key">
       <view class="group-toggle" wx:if="{{view !== 'subject'}}" aria-role="button" aria-label="{{group.name}}，本页{{group.entries.length}}项，{{group.expanded ? '收起' : '展开'}}" aria-expanded="{{group.expanded}}" data-key="{{group.key}}" catchtap="toggleGroup">
         <view class="subject-mark {{group.tone}}">{{group.mark}}</view>
@@ -58,7 +58,7 @@
               <text class="item-meta">{{entry.reviewCountText}} · {{entry.lastReviewText}}</text>
               <view class="item-bottom"><text class="item-date" wx:if="{{entry.compactDateText}}">{{entry.compactDateText}}</text><text class="item-state">{{entry.arrangementText}}</text></view>
             </view>
-            <button id="more-{{entry.knowledge_id}}" class="inventory-button more {{actionMenuId === entry.knowledge_id ? 'on' : ''}}" wx:if="{{canWrite}}" data-id="{{entry.knowledge_id}}" catchtap="openActions" disabled="{{loading || saving}}" aria-label="{{entry.knowledge_name}}的更多操作" aria-expanded="{{actionMenuId === entry.knowledge_id}}"><view class="ico ico-more sm"></view></button>
+            <button id="more-{{entry.knowledge_id}}" class="inventory-button more {{actionMenuId === entry.knowledge_id ? 'on' : ''}}" wx:if="{{canWrite}}" data-id="{{entry.knowledge_id}}" catchtap="openActions" disabled="{{loading || saving}}" aria-label="{{entry.knowledge_name}}的{{embedded ? '调整计划' : '更多操作'}}" aria-expanded="{{actionMenuId === entry.knowledge_id}}"><text wx:if="{{embedded}}">调整</text><view wx:else class="ico ico-more sm"></view></button>
           </view>
           <view id="menu-{{entry.knowledge_id}}" class="action-menu {{actionMenuAbove ? 'above' : ''}}" wx:if="{{actionMenuId === entry.knowledge_id && canWrite}}" catchtap="ignore" aria-label="{{entry.knowledge_name}}的操作">
             <button class="inventory-button menu-option" data-action="tomorrow" catchtap="schedule" disabled="{{saving || conflict || !entry.can_schedule || (entry.manually_scheduled && entry.in_tomorrow_plan)}}">{{entry.manually_scheduled && entry.in_tomorrow_plan ? '已手动安排到明天' : '加入明天复习'}}</button>
