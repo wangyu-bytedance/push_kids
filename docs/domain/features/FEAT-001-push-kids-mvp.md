@@ -1,14 +1,14 @@
 # FEAT-001 — 家庭学习持续跟进系统 MVP
 
-- Local report panel refinement: `SPEC-20261013-REPORT-PANELS-01 / DREV-20261013-REPORT-PANELS-01` 已获用户批准并本地实现。历史和编辑计划统一展开容器，明确展开/收起及调整入口；查询与计划策略不变，外层背景由统一卡片样式负责。236项前端测试、三视口36态原生数字几何及静态校验通过；完整截图、字体放大与真机验收待补，未上传。证据：`docs/quality/evidence/REPORT-PANELS-20261013.md`。
+- Local report panel refinement: `SPEC-20261013-REPORT-PANELS-01 / DREV-20261013-REPORT-PANELS-01` 已获用户批准并本地实现。历史和编辑计划统一展开容器，明确展开/收起及调整入口；查询与计划策略不变，外层背景由统一卡片样式负责。236项前端测试、三视口36态原生数字几何及静态校验通过；已随0.1.14开发上传，完整截图、字体放大与真机验收待补。证据：`docs/quality/evidence/REPORT-PANELS-20261013.md`。
 
 - Status: `CURRENT`
-- 当前发布状态（2026-10-13）：客户端每日任务/背景/报表布局已随0.1.14开发版本上传，源314150f；后端新daily_tasks API与0019尚未部署，不能声称每日任务线上可用；体验/审核/正式发布及MySQL/真机验收待补。报告docs/deploy/releases/20261013-fullstack-diff.md，旧0.1.13上传信息作为历史证据保留。
-- Local complete card backgrounds: SPEC-20261013-CARD-BACKGROUNDS-01已按用户明确指令本地实现，设置三块插画、每日任务同款卡片与新位置、报表背景均已接入；238测试和CLI预览通过，原生/真机/用户验收待补。证据docs/quality/evidence/CARD-BACKGROUNDS-20261013.md，未上传发布。
+- 当前发布状态（2026-10-13）：客户端每日任务/背景/报表布局已随0.1.14开发版本上传，源314150f；生产Schema0019与后端030已全量模式发布，真实小程序每日任务及设置等13项读取接口200，设置页刷新后档案/各设置加载且error为空。隔离MySQL合同已通过；生产写路径/多账号及完整原生/真机、体验/审核/正式发布仍待补。报告docs/deploy/releases/20261013-fullstack-diff.md，旧0.1.13上传信息作为历史证据保留。
+- Local complete card backgrounds: SPEC-20261013-CARD-BACKGROUNDS-01已按用户明确指令本地实现，设置三块插画、每日任务同款卡片与新位置、报表背景均已接入；238测试和CLI预览通过，已随0.1.14开发上传，原生/真机/用户验收待补。证据docs/quality/evidence/CARD-BACKGROUNDS-20261013.md，未设体验版/正式版。
 - Local illustrations: `SPEC-20261013-RECORD-CALENDAR-ILLUSTRATIONS-01 / DREV-20261013-RECORD-CALENDAR-ILLUSTRATIONS-01` 已获用户批准并本地实现；记录/日程使用不同纸艺插画，原业务不变。233项前端测试及静态校验通过；原生三视口、真机及预览包预算待验证，未发布。证据：`docs/quality/evidence/RECORD-CALENDAR-ILLUSTRATIONS-20261013.md`。
 - Local daily tasks: `SPEC-20261012-DAILY-TASKS-01 / DREV-20261012-DAILY-TASKS-01` 已获用户批准并实现前后端。
   设置可配置孩子的每日任务和分钟，今日复习安排下方完成/撤销；四区块空或全完成默认收起，有剩余展开，学习记录非空展开。
-  具体当前事实见 `FEAT-010-daily-tasks.md`；验证记录 `docs/quality/evidence/DAILY-TASKS-20261012.md`。未部署，MySQL/真机验收待补。
+  具体当前事实见 `FEAT-010-daily-tasks.md`；本地验证记录 `docs/quality/evidence/DAILY-TASKS-20261012.md`，生产0019/030及读取smoke见`docs/deploy/releases/20261013-fullstack-diff.md`。隔离MySQL验证通过，完整原生/真机及生产写路径验收待补。
 - Release gate policy: `SPEC-20261011-RISK-BASED-RELEASE-GATES-01` 已获用户批准；不涉及身份/权限/图片归属的前端发布不重复执行双账号隔离与 owner 验收，须记录影响判定并验证本次主路径及目标后端兼容性。首次公开生产发布仍需确认既有安全基线有效；历史验收结论不因门禁变化而改写。
 - Local report disclosures: `SPEC-20261011-REPORT-DISCLOSURES-01 / DREV-20261011-REPORT-DISCLOSURES-01` 已获用户2026-10-11批准并在本地实现。
   报表「科目学习记录」与「课外活动投入」之间依次加入默认收起的「历史记录」「编辑计划」；两区独立展开，复用原有界历史及复习条目行为。记录页保留新增表单和待处理入口，完整历史移到报表；今日待处理和报表科目行均可带意图打开报表历史。三视口四状态原生数字几何及自动化检查已通过；`0.1.13` 开发版本已上传，iOS/Android 真机尚未验收，未设体验版/正式版。证据：`docs/quality/evidence/REPORT-DISCLOSURES-20261011.md`、`docs/deploy/releases/20261011-report-disclosures-frontend.md`。

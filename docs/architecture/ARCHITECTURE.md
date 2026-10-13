@@ -1,9 +1,9 @@
 # Push Kids current architecture
 
-- Status: `IMPLEMENTED_LOCALLY_PENDING_CLOUD_ACCEPTANCE`
+- Status: `CURRENT / DAILY_TASK_BACKEND_030_DEPLOYED / FULL_PRODUCT_ACCEPTANCE_PENDING`
 - Local daily-task architecture: `ARCH-20261012-DAILY-TASKS-01`，用户2026-10-12批准 `SPEC-20261012-DAILY-TASKS-01`。
   daily_tasks拥有配置与上海日期完成事实，reporting/清理编排调用其服务；不影响planning、AI或复习预算。
-  本地迁移head=`20261012_0019`，新增两表及tenant-leading索引，数据存在时拒绝破坏性降级；未部署，真实MySQL验收待补。
+  本地与生产迁移head=`20261012_0019`，新增两表及tenant-leading索引，数据存在时拒绝破坏性降级；2026-10-13生产迁移/check及030全量模式部署完成，隔离MySQL合同及真实小程序读取smoke通过。完整原生/真机与生产写路径验收待补，发布事实见docs/deploy/releases/20261013-fullstack-diff.md；模块/依赖不因本次发布改变。
 - Revision: `ARCH-20261006-REVIEW-MANAGEMENT-01`
 - Latest approval: user instruction “落地并实现”, 2026-10-06，批准 `SPEC-20261006-REVIEW-MANAGEMENT-03`。
   Planning拥有inventory只读分页、scheduling事务和plan_candidates有界候选；ReviewScheduleOverride为单次预约，

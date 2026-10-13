@@ -7,7 +7,7 @@
 - 2026-10-13本地视觉增量：记录标题卡书本插画、空上传相机插画及日程台历插画使用统一纸面渐变；Design `DREV-20261013-RECORD-CALENDAR-ILLUSTRATIONS-01` 已批准，新增资源173638字节。保留原文案、业务和导航；装饰失败自动回退。233项测试通过，原生三视口及真机验收待补，未发布。详见 `docs/quality/evidence/RECORD-CALENDAR-ILLUSTRATIONS-20261013.md`。
 
 - Status: `CURRENT / VOICE_INPUT_LOCAL_VERIFIED / MICROPHONE_PRIVACY_DECLARATION_BLOCKED / DEVELOPMENT_VERSION_0.1.14_UPLOADED / NATIVE_VIEWPORT_MATRIX_NOT_RUN`
-- Release status: `0.1.14` 已上传为开发版本（1017762字节），包含每日任务、背景插画、报表布局；未设体验版/审核/正式版。后端每日任务API与0019尚未部署，待迁移/兼容/业务smoke后方可体验验收。证据：`docs/deploy/releases/20261013-fullstack-diff.md`；0.1.13是历史开发上传基线。
+- Release status: `0.1.14` 已上传为开发版本（1017762字节），包含每日任务、背景插画、报表布局；未设体验版/审核/正式版。2026-10-13生产Schema已升级0019、后端030已全量模式发布且normal，真实小程序设置依赖及每日任务等13项读取接口200；设置页刷新后档案与各设置数组加载、error为空。原生全部状态/真机验收仍待完成。证据：`docs/deploy/releases/20261013-fullstack-diff.md`；0.1.13是历史开发上传基线。
 - Related Feature: `FEAT-001`
 - Local report disclosures: `SPEC-20261011-REPORT-DISCLOSURES-01 / DREV-20261011-REPORT-DISCLOSURES-01` 已获用户批准并本地实现。
   报表科目统计后依次为「历史记录」「编辑计划」两张默认收起的卡，课外活动投入在其后；展开分别复用完整有界历史和条目清单，互不覆盖。原独立条目页标题同步改为「编辑计划」；记录页保留新增及待处理入口，历史列表移出。12张设计快照及SHA、前端自动化和三视口四状态微信原生数字几何已通过；开发版本 `0.1.13` 已上传，iOS/Android真机未验收，未设体验版/正式版。证据：`docs/quality/evidence/REPORT-DISCLOSURES-20261011.md`、`docs/deploy/releases/20261011-report-disclosures-frontend.md`。

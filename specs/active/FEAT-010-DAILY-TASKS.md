@@ -12,7 +12,7 @@
 - Affected Feature IDs: FEAT-010（新增）、FEAT-001、FEAT-005、FEAT-006（清理生命周期）
 - Feature baseline: FEAT-STATE-20261006-REVIEW-MANAGEMENT-03-LOCAL；FEAT-005 当前多孩子生命周期。
 - Current-state targets: docs/domain/features/FEAT-010-daily-tasks.md（实施后新增）；FEAT-001、FEAT-005、FEAT-006 对应文档。
-- Feature / UI merge owner: Codex；已合并本地实现及验证边界，未部署。
+- Feature / UI merge owner: Codex；已合并实现与验证边界；2026-10-13生产0019/030已发布，前端0.1.14为开发上传，完整设备验收待补。
 
 ## Frontend Design Impact and Repository-native Approval
 
@@ -210,13 +210,13 @@ TP-001/003 对旧实现应失败（接口缺失/默认折叠错误）；TP-007 �
 
 ## 16. Implementation and verification record
 
-生产代码本地实施完成：daily_tasks领域/两表迁移/聚合/清理合同，设置表单与今日任务/折叠规则；未部署。
+生产代码实施完成：daily_tasks领域/两表迁移/聚合/清理合同，设置表单与今日任务/折叠规则；2026-10-13用户另行授权发布，生产Schema0019与后端030已部署，前端0.1.14已开发上传。
 自动化：510 passed / 19 skipped；npm231 passed；新增每日任务SQLite22 passed、前端12 passed。
 类型、受影响Python lint/格式、小程序lint、设计manifest、架构纯政策/103模块无环、16页面静态检查均通过。
 全局Ruff142项和format6文件失败全部在6个其他设计render.py；保留无关工作。uv本机panic后使用仓库现有.venv等效命令。
 原生：三视口设置与今日基础数字几何/截图及390真实全部完成自动收起通过；完整状态矩阵/真机待补。
-真实MySQL5.7未运行（无测试URL），生产迁移未运行（不在本次授权范围）。
-AC-001～004本地功能已验证；TP-004MySQL和AC-005/TP-005完整原生设备验收仍缺证据。
+2026-10-13真实隔离MySQL5.7已运行：base→0018→0019/check、11项集成测试、每日任务CRUD/幂等/快照/家庭范围通过。生产0018→0019/check通过，030全量模式发布normal，真实小程序13项读取及设置加载通过；证据docs/deploy/releases/20261013-fullstack-diff.md。本次未在生产创建合成任务事实，生产写路径/多账号验收未运行。
+AC-001～004本地功能已验证；AC-005/TP-005完整原生设备验收及生产写路径/多账号证据仍待补，不能将发布成功等同完整产品验收。
 所有命令、结果及原生隔离配置见docs/quality/evidence/DAILY-TASKS-20261012.md。只读复核为最后阶段，结论留于聊天。
 Deviations: 无产品/架构/设计scope偏离；复用现有api.request无需修改api.js；验证环境差异如上。
 
@@ -227,7 +227,7 @@ Deviations: 无产品/架构/设计scope偏离；复用现有api.request无需�
 - [ ] 全部 required checks 与独立审查通过
 - [x] Feature/UI/Architecture/Behavior 合并最终事实
 - [x] 无无关改动、旧折叠分支已移除
-- [ ] DONE 后移至 specs/completed/；当前VERIFYING，等待真实MySQL与完整原生验收，不能提前关闭
+- [ ] DONE 后移至 specs/completed/；当前VERIFYING，等待完整原生设备及未完成验收，不能提前关闭
 
 ## 18. Revision history
 

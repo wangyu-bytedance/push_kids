@@ -1,6 +1,6 @@
 # BUG-20261013 — 每日任务发布的双版本 Schema 兼容
 
-- Status: VERIFYING
+- Status: DONE
 - Severity: 生产升级窗口旧后端健康检查失败、无法直接回退
 - Risk: R3
 - Owner: 用户
@@ -54,10 +54,24 @@ sequenceDiagram
 
 ## 4. 实施与生命周期
 
-此具体revision已批准并实施冻结兼容包。新增备份按用户明确要求跳过，记录恢复风险；生产迁移授权沿用“部署后端”“不需要备份直接发布”。当前VERIFYING保留active；完整门禁完成才DONE并迁入completed。
+此具体revision已批准并实施冻结兼容包。新增备份按用户明确要求跳过，记录恢复风险；生产迁移授权沿用“部署后端”“不需要备份直接发布”。用户随后明确调整直接迁移和最新后端发布顺序，见§6。按调整后的执行范围完成0019/030发布与读取smoke，Status DONE并迁入completed；FEAT-010产品Spec仍VERIFYING/active等待完整设备等验收。
 
-## 5. 当前验证证据
+## 5. 兼容版本发布阶段证据（迁移前历史）
 
 可追溯源码8052419d37503f7597995a87f1bfa84cfb953e34，仅Database校验一行变更；可重放补丁deploy/cloudbase/schema-0018-0019-compat.patch，reverse --check通过。冻结目录dist/release-compat-20261013-0018-0019，103文件；manifest SHA256 bd1c3432ac200596f43f65d95cd586916d10a7b7c69bbc8ca30324decf99c9f5。逐项Git差异与manifest及实际秘密扫描通过；新版冻结包无额外源码变更。
 
 TP-001本地MySQL5.7.44接受0018/0019、拒绝未知revision通过。旧模型CRUD、跨家庭读取拒绝通过；TP-002空库base→0018→0019、check无差异及11个MySQL集成检查通过，新每日任务真实MySQL服务合同通过，见发布报告。TP-003兼容/新版容器均构建通过、UID10001、live/ready、本地SIGTERM退出0。兼容校验文件Ruff check/format通过。TP-004兼容云版本029于2026-10-13 13:37:38达到normal，PUBLIC关闭；当前路由callContainer live/ready均200但尚不能归因于029，等待管理员灰度测试路由和流量确认，未宣称TP-004通过。生产数据库仍0018，Spec保留VERIFYING/active，恢复条件为029定向smoke及接管确认，然后继续0019迁移和新版灰度。
+
+## 6. 用户明确调整发布执行顺序
+
+2026-10-13用户明确“你来修改数据库，然后部署最新的代码”，取消等待管理员029接管步骤并要求由Codex直接执行最新后端发布。产品/API与兼容补丁范围不变；执行顺序按该具体指示调整，029未确认接管，不冒充已验证灰度流量。用户同时沿用“不需要备份直接发布”授权。
+
+已使用本机安全配置完成生产0018→0019：current=20261012_0019 (head)，check=No new upgrade operations detected，两表存在。最新冻结应用逐项与HEAD4672628生产源码一致，核对确认表FULL并输入yes，创建030（2026-10-13 13:40:39）；启动及小程序读取验收最终通过，见§7。此前029接管/灰度定向步骤因用户执行顺序调整未运行；不作为测试PASS记录。回退保留0019与新事实，只可使用接受0019的029，不回退严格0018的028，不执行破坏性downgrade。
+
+## 7. 完成记录与剩余产品验收
+
+030于2026-10-13 13:43:25达到normal，服务normal/PUBLIC关闭。FULL模式发布后，真实小程序live/ready、me/children、设置依赖、新daily-tasks/today、dashboard、report、review-inventory、schedule等13项读取均200，响应结构通过。设置页真实refreshBootstrap/load后loading=false、errorAbsent=true、childrenLoaded=true，各设置数组存在，截图所示404与误空态已消失。
+
+TP-001～003本地合同通过；TP-004按用户调整的FULL执行范围完成云端normal/读取验收，029定向灰度和接管步骤为未运行（用户明确取消该等待），不将它们标为PASS。发布包/有限兼容逻辑只读复核无额外源码修改，实际记录见docs/deploy/releases/20261013-fullstack-diff.md。
+
+当前完成的是数据库与后端发布、设置读取恢复；生产写流程、多账号、完整原生/真机和长观察窗口仍NOT_RUN，属于FEAT-010产品Spec及后续验收。兼容补丁保留为可追溯回退产物，不写入新版活动源码，不做任意Schema容错。新增备份按用户要求未创建，不声称恢复演练通过。

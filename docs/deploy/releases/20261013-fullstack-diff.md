@@ -1,11 +1,11 @@
 # 2026-10-13 前后端发布差异与候选清单
 
-- Status: FRONTEND_0.1.14_DEVELOPMENT_UPLOADED / COMPAT_BACKEND_029_NORMAL_PENDING_TRAFFIC / DAILY_TASK_BACKEND_NOT_DEPLOYED
+- Status: FRONTEND_0.1.14_DEVELOPMENT_UPLOADED / PRODUCTION_SCHEMA_0019 / BACKEND_030_FULL_DEPLOYED / SETTINGS_CLOUD_READ_SMOKE_PASS
 - Request: 用户要求整理Git工程与当前发布版本差异，准备前后端发布。
 - Release engineering commit: 898aa4b；生产源码与314150f一致。
 - Frozen business candidate: `314150f`（背景/每日任务9f77774 + 已批准报表提交314150f）；后续设计脚本修复不改变生产源码。
 - Target: AppID `wx5d2e0014690bf285`；环境`prod-d2g14rwoycac6b45d`；服务`flask-ik19`；端口8000，PUBLIC关闭。
-- 报表布局已纳入冻结前端0.1.14并完成开发上传。用户已授权后端部署及兼容过渡方案；本报告记录各阶段实际结果，数据库仍0018，兼容029已normal但流量尚未确认，每日任务新版未部署。
+- 报表布局已纳入冻结前端0.1.14并完成开发上传。用户最新明确要求Codex迁移并直接部署最新后端；生产已升级0019，每日任务030全量模式发布且normal，真实小程序新接口及设置加载通过；兼容029保留作回退候选。
 
 ## 1. 基线与可信范围
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | 前端 | 历史开发版本0.1.13，源码`b2f0aa28e66ce16666fbed50944ad5918085de38`；当前0.1.14已开发上传 | 用户确认0.1.13未正式发布；0.1.14也未设置体验/审核/正式版 |
 | 后端 | 历史用户确认线上028；2026-10-13 wxcloud只读version:list确认028 normal，service:list确认服务normal/PUBLIC关闭 | CLI不含源码commit及流量比例，无法证明028对应哪个Git树；需要控制台构建记录或来源manifest |
-| 数据库 | 本次安全连接只读确认current为20261007_0018；本地head及每日任务新版启动要求均20261012_0019 | 生产升级尚未执行；需兼容029接管并核验后才迁移 |
+| 数据库 | 本次生产0018→0019迁移已执行，current=head=20261012_0019，check无差异，两表存在 | 本次新增备份按用户明确要求跳过；不宣称恢复演练通过 |
 
 后端比较使用可追溯的最终0018候选源码`8052419d37503f7597995a87f1bfa84cfb953e34`；此提交与前端0.1.13源码基线b2f0aa28的整个apps/api无差异（git diff --quiet退出0）。**这不是已证明的028→候选精确diff**；确认028源码后须重做差异核对，若不等于该API树，发布范围可能扩大。
 
@@ -47,11 +47,11 @@
 
 0019仅新增daily_tasks、daily_task_completions两表，两个tenant-leading索引，完成事实唯一键family/child/task/day；不回填或修改旧行。无数据时允许降级，有任务/完成事实时拒绝丢表。
 
-**发布顺序必须是迁移与兼容旧版核验 → 新后端灰度/业务smoke → 流量核对 → 新前端上传/体验验收。** 当前新版服务启动严格要求0019，不能在0018直接启动。旧后端是否接受0019需要按028实际代码验证，不能由“只新增表”推出可回退。若旧版严格要求0018，应先生成/验收允许0018/0019的兼容过渡包，再迁移。
+原建议顺序为兼容旧版核验/接管 → 迁移 → 新后端灰度/业务smoke → 流量核对 → 前端体验验收；用户最终明确要求直接迁移并全量发布最新后端，实际执行与验收见§11。新版服务启动严格要求0019，不能在0018直接启动。旧028不作为可回退承诺；已另外冻结并验证允许0018/0019的兼容029作为回退候选。
 
 用户明确要求本次不新增备份，按其指示执行，不声称存在本次恢复点。真实MySQL5.7迁移及兼容过渡服务的读写/Schema白名单验证已通过，云端验收继续进行。回滚保留新表和完成事实，不在事故中破坏性downgrade；拟用接受0018/0019的029作回退点，须先完成云端验证，不能指定未经验证的028可回退。
 
-## 5. 未提交的额外候选
+## 5. 报表布局候选纳入经过
 
 生产文件6个：review-inventory/index.js、index.wxss；records/history.wxml；reports/index.wxml、index.wxss；review-inventory/content.wxml。内容为历史/计划独立卡片展开、日期分隔列表、明确调整入口、顶部与底部收起。另有相应Spec/Design/测试/证据和文档改动。
 
@@ -59,7 +59,7 @@
 
 报表组已提交为314150f，6个生产文件现纳入候选；frontend-0.1.13-to-final.patch包含累计完整前端diff，backend不随报表提交变化。
 
-## 6. 本次预检查与冻结产物
+## 6. 初次预检查与冻结产物（上传前历史阶段）
 
 - 全套后端pytest：PASS，510 passed / 19 skipped / 62 warnings，46.50秒；跳过项包含未配置真实MySQL的测试。
 - 当前工作区npm test：238/238 PASS；9f77774隔离提交内容235/235，记录见CARD-BACKGROUNDS-20261013.md。
@@ -76,10 +76,8 @@
 
 - 用户补充确认：纳入未提交报表布局；前端0.1.13未正式发布，授权上传0.1.14而非正式发布。后端028来源与0019兼容性仍需独立核实。
 
-1. 等待兼容029 normal，核对云端健康/业务，管理员按已批准方案确认兼容版本承载流量。
-2. 使用既有受控迁移账号升级0019，核对current/check及两表；本次新增备份按用户指示跳过。
-3. 从已冻结每日任务包创建新版灰度，验证每日任务和既有主流程，再确认流量；PUBLIC保持关闭。
-4. 前端0.1.14已开发上传；前后端稳定后管理员选体验版并完成iOS/Android验收，再人工提审/正式发布。
+1. 后端030与0019发布已完成；继续观察云端5xx/429、延迟与任务执行。当前设置加载与相关读取smoke通过，不冒充全量图片/AI/通知和写路径验收。
+2. 前端0.1.14已开发上传；后续按用户安排选体验版并完成iOS/Android验收，再人工提审/正式发布。本次未触发这些前端阶段。
 
 ## 8. 0.1.14开发上传实际结果
 
@@ -90,7 +88,7 @@
 - 本节记录上传当时状态：当时未迁移、未部署、未切流。此后用户授权后端部署并跳过新增备份，实际进展见§9和§10；不再将备份/连接准备视为当前阻塞。
 - Feature/UI发布事实已同步，相关Spec保留VERIFYING于specs/active/，不是验收完成或DONE。
 
-## 9. 用户要求部署后端后的复核
+## 9. 用户要求部署后端后的复核（迁移前历史阶段）
 
 - 用户明确授权部署后端；复核源码HEAD为ca413517628dc16af69fef0fbe6cba0753f0ae52，未提交文档治理改动不进入冻结应用包。
 - 实际重新执行wxcloud version:list/service:list：最新可见028为normal，服务normal，PUBLIC关闭；未创建新版本或调整流量。
@@ -100,7 +98,7 @@
 - 找到既有.env中MYSQL_ADMIN_*安全配置；其地址与用户提供的目标匹配。进程内读取并只读连接生产，未回显凭据：MySQL 5.7.18-cynos-2.1.14-log，current为20261007_0018，两张daily任务表不存在。生产尚未迁移。
 - 启动Docker后，冻结候选本地构建PASS；隔离本地容器UID10001、live/ready均成功、SIGTERM退出0/OOM=false。此为本地SQLite容器验证，不冒充生产链路证据。云托管dryRun打包成功，不创建云端版本。
 - 隔离MySQL5.7.44首次使用默认排序规则触发历史0003迁移collation失败；清理本次测试容器并显式utf8mb4_unicode_ci重建后，base→0018→0019成功，alembic check无差异。早期未就绪连接失败亦已重试成功；没有在失败的部分Schema上继续升级生产。
-- 旧源码严格要求0018，发布过渡兼容版本的额外代码修改已形成SPEC-20261013-DAILY-TASK-RELEASE-COMPAT-01（specs/active/BUG-20261013-DAILY-TASK-RELEASE-COMPATIBILITY.md）；用户2026-10-13明确批准，现为VERIFYING。备份不再是阻塞项；过渡029已创建，新版未部署，生产仍0018。
+- 旧源码严格要求0018，发布过渡兼容版本的额外代码修改已形成SPEC-20261013-DAILY-TASK-RELEASE-COMPAT-01；用户2026-10-13明确批准，又明确调整为直接迁移和最新版本全量发布。该发布修订已完成，Spec迁入specs/completed/BUG-20261013-DAILY-TASK-RELEASE-COMPATIBILITY.md；当前生产0019、最新后端030，详见§11。
 - 隔离MySQL专项pytest：11 passed / 1 warning，7.26秒（test_mysql_runtime、test_review_schedule_mysql、test_staged_mysql）。另外直接使用每日任务服务和合成家庭验证CRUD、重复完成幂等、编辑后完成快照保留、跨家庭拒绝、撤销、删除与清理PASS。没有操作生产儿童数据；证据不替代真实小程序云链路验收。
 
 ## 10. 已批准兼容过渡版本029
@@ -111,4 +109,16 @@
 - 容器build PASS，UID10001，隔离SQLite live/ready均200，SIGTERM退出0/OOM=false；云dryRun PASS。镜像本地manifest sha256 37ae0a82de7659a79503f3738b1165316cc1b972a5eb294ea20717f31caafcdf（不是云端镜像摘要）。
 - CLI确认表逐项匹配AppID/env/service/GRAY/Dockerfile/目标./8000，备注push-kids-20261013-compat01-8052419-0018-0019；确认表核对后输入yes，未使用noConfirm。detach返回部署请求成功；只读version:list确认029于2026-10-13 13:34:43创建，13:37:38达到normal，尚未宣称业务验收完成。
 - 实际通过真实AppID callContainer读取当前路由live/ready均200；CLI无流量字段，此检查尚不能归因于029。服务normal、PUBLIC关闭；生产仍0018，未迁移、未确认029流量接管。
-- 当前人工操作：在029发布单中将当前开发者配置为灰度测试用户，确认请求命中029，完成该版本健康与旧业务smoke后由管理员确认029接管流量。未确认前不升级生产0019；不得把normal或当前路由200当作029已承载线上流量。
+- 此阶段原计划等待管理员029灰度测试及接管；用户随后明确取消等待并要求Codex直接迁移、发布最新代码，按其具体指示调整执行顺序，实际结果见§11。029接管和定向smoke未运行，不冒充通过。
+
+## 11. 用户明确要求直接迁移与最新后端全量发布
+
+- 授权：“不用，你来修改数据库，然后部署最新的代码”；沿用跳过新增备份授权，取消029人工接管等待。此项执行顺序调整已记录于兼容Spec，不改产品功能或现有Schema白名单。
+- 生产migration账号由既有.env安全配置进程内注入，未回显秘密。迁移前重新核对0018，执行0019 additive升级；current=20261012_0019 (head)，check=No new upgrade operations detected，daily_tasks/daily_task_completions均存在。未改写既有行、未创建默认任务、未执行降级。
+- 最新应用冻结包逐项与HEAD4672628的生产源码相同；manifest仍为08593ed62ae10eb56e3f8db1acce13d07fedaa37e3576143cb39b87a6cbe1af4，107文件。其他任务未提交文档不进入包。
+- run:deploy确认表AppID/env/service/Dockerfile/./8000正确，明确FULL、备注push-kids-20261013-daily01-4672628-0019；输入yes，未使用noConfirm或明文envParams。CLI提交成功，云版本030于2026-10-13 13:40:39创建，13:43:25达到normal。服务normal，PUBLIC关闭；CLI无独立流量百分比字段，FULL模式及当前新API链路成功作为本次发布证据，不编造控制台比例截图。
+- 回退目标为接受0019的兼容029；旧028不可作为0019健康检查通过的回退点。保留0019与任务完成事实，不在事故中降级删表。
+- 真实AppID callContainer只读smoke：live、ready、me、children、subjects、activity-schedules、travel-arrangements、daily-tasks、daily-tasks/today、dashboard、report、review-inventory、schedule共13接口均200；任务列表数组、today.items、dashboard.daily_tasks合同存在。首次smoke工具误写weekly-slots-v1导致活动接口409，修正为与前端一致的weekly-time-slots-v1后全部通过；不是生产代码缺陷，不隐瞒失败。
+- 真实开发者工具switchTab到设置，refreshBootstrap后await页面load：loading=false、errorAbsent=true、childrenLoaded=true，subjects/activities/travel/dailyTasks均数组；误显示“没有档案”及Not Found提示已消失。只记录布尔和HTTP状态，不存储孩子名称、ID、原始响应、OpenID或密钥。
+- 本次生产写路径仅Schema迁移；未创建合成学习/任务/完成事实污染生产。新每日任务CRUD/幂等/快照/家庭边界已在隔离MySQL验证，生产CRUD/多账号权限、图片/AI/通知全流程、长观察窗口与iOS/Android真机为NOT_RUN，不冒充本次13个读取接口smoke覆盖。
+- 发布修订Spec完成并迁入completed；FEAT-010产品Spec仍VERIFYING于active，因为完整原生状态/真机验收尚未完成。Feature、UI、Behavior、Architecture当前发布事实已与0019/030对齐；前端仍仅开发上传，未设置体验版/提审/正式发布。
