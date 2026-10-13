@@ -1,4 +1,4 @@
-"""Render synthetic report disclosure candidates as editable SVG and exact-size PNG."""
+"Render synthetic report disclosure candidates as editable SVG and exact-size PNG."
 
 from __future__ import annotations
 
@@ -12,16 +12,25 @@ VIEWPORTS = ((320, 568), (390, 844), (430, 932))
 STATES = ("collapsed", "history-open", "review-open", "both-open")
 
 
-def text(x: int, y: int, value: str, size: int = 14, color: str = "#24342B", weight: int = 400) -> str:
+def text(
+    x: int, y: int, value: str, size: int = 14, color: str = "#24342B", weight: int = 400
+) -> str:
     return (
-        f'<text x="{x}" y="{y}" fill="{color}" font-size="{size}" font-weight="{weight}" '
-        'font-family="PingFang SC, Noto Sans CJK SC, sans-serif">'
+        f'<text x="{x}" y="{y}" fill="{color}" font-size="{size}"'
+        f' font-weight="{weight}" '
+        'font-family="PingFang SC, Noto Sans CJK SC, sans-serif"'
+        ">"
         f"{escape(value)}</text>"
     )
 
 
-def box(x: int, y: int, w: int, h: int, radius: int = 20, fill: str = "#FFFDF8", stroke: str = "#EBE8DE") -> str:
-    return f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="{radius}" fill="{fill}" stroke="{stroke}"/>'
+def box(
+    x: int, y: int, w: int, h: int, radius: int = 20, fill: str = "#FFFDF8", stroke: str = "#EBE8DE"
+) -> str:
+    return (
+        f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="{radius}'
+        f'" fill="{fill}" stroke="{stroke}"/>'
+    )
 
 
 def divider(x: int, y: int, width: int) -> str:
@@ -30,16 +39,32 @@ def divider(x: int, y: int, width: int) -> str:
 
 def chevron(x: int, y: int, opened: bool) -> str:
     shape = f"M{x - 6} {y + 3}l6 -6 6 6" if opened else f"M{x - 6} {y - 3}l6 6 6 -6"
-    return f'<path d="{shape}" fill="none" stroke="#8C988B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>'
+    return (
+        f'<path d="{shape}" fill="none" stroke="#8C988B" stroke-w'
+        f'idth="1.8" stroke-linecap="round" stroke-linejoin="roun'
+        f'd"/>'
+    )
 
 
-def disclosure(parts: list[str], x: int, y: int, w: int, title: str, hint: str, opened: bool, icon: str) -> int:
+def disclosure(
+    parts: list[str], x: int, y: int, w: int, title: str, hint: str, opened: bool, icon: str
+) -> int:
     parts.append(box(x, y, w, 64, 20))
     if icon == "clock":
-        parts.append(f'<circle cx="{x + 24}" cy="{y + 32}" r="9" fill="none" stroke="#315E48" stroke-width="1.8"/>')
-        parts.append(f'<path d="M{x + 24} {y + 26}v6l4 2" fill="none" stroke="#315E48" stroke-width="1.8" stroke-linecap="round"/>')
+        parts.append(
+            f'<circle cx="{x + 24}" cy="{y + 32}" r="9" fill="none" s'
+            f'troke="#315E48" stroke-width="1.8"/>'
+        )
+        parts.append(
+            f'<path d="M{x + 24} {y + 26}v6l4 2" fill="none" stroke="'
+            f'#315E48" stroke-width="1.8" stroke-linecap="round"/>'
+        )
     else:
-        parts.append(f'<path d="M{x + 16} {y + 26}h16M{x + 16} {y + 32}h16M{x + 16} {y + 38}h11" fill="none" stroke="#315E48" stroke-width="1.8" stroke-linecap="round"/>')
+        parts.append(
+            f'<path d="M{x + 16} {y + 26}h16M{x + 16} {y + 32}h16M{x + 16}'
+            f' {y + 38}h11" fill="none" stroke="#315E48" stroke-width'
+            f'="1.8" stroke-linecap="round"/>'
+        )
     parts.append(text(x + 44, y + 39, title, 16, "#24342B", 600))
     parts.append(text(x + w - 32 - len(hint) * 12, y + 38, hint, 12, "#798777"))
     parts.append(chevron(x + w - 18, y + 32, opened))
@@ -89,8 +114,13 @@ def review_body(parts: list[str], x: int, y: int, w: int) -> int:
 
 def render(width: int, height: int, state: str) -> str:
     x, w = 16, width - 32
-    parts = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}">',
-             f'<rect width="{width}" height="{height}" fill="#FAF7F0"/>']
+    parts = [
+        (
+            f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}"'
+            f' height="{height}" viewBox="0 0 {width} {height}">'
+        ),
+        f'<rect width="{width}" height="{height}" fill="#FAF7F0"/>',
+    ]
     parts.append(text(18, 35, "报表", 12, "#798777"))
     parts.append(text(18, 66, "一点一滴，看得见", 21, "#1F5B45", 600))
     parts.append(text(18, 92, "近 7 天 · 只统计已确认的学习", 12, "#657264"))

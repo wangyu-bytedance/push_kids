@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="568" viewBox="0 0 320 568">
+<rect width="100%" height="100%" fill="#FAF7F0"/>
+<defs>
+      <linearGradient id="card" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#EDF5EC"/><stop offset="0.48" stop-color="#F9FBF2"/><stop offset="1" stop-color="#FFFDF8"/></linearGradient>
+      <linearGradient id="icon" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#D3E7D8"/><stop offset="1" stop-color="#ECF0D8"/></linearGradient>
+      <linearGradient id="join" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#38826A"/><stop offset="1" stop-color="#1F5B45"/></linearGradient>
+    </defs>
+<text x="20" y="32" font-family="PingFang SC,sans-serif" font-size="18" fill="#1F5B45" font-weight="600">知芽</text>
+<text x="20" y="73" font-family="PingFang SC,sans-serif" font-size="22" fill="#22261F" font-weight="600">按你们的节奏来</text>
+<rect x="16" y="96" width="288" height="52" rx="12" fill="#F7E8E2"/>
+<text x="28" y="118" font-family="PingFang SC,sans-serif" font-size="14" fill="#22261F" font-weight="400">加载失败，已读设置仍可查看</text>
+<text x="28" y="138" font-family="PingFang SC,sans-serif" font-size="14" fill="#1F5B45" font-weight="400">重新加载</text>
+<rect x="16" y="160" width="288" height="294" rx="16" fill="url(#card)"/>
+<text x="30" y="190" font-family="PingFang SC,sans-serif" font-size="17" fill="#22261F" font-weight="600">在学科目</text>
+<rect x="30" y="218" width="32" height="32" rx="8" fill="url(#icon)"/>
+<path d="M39 227h7l4 3v13l-4 -3h-7z M46 227v13" fill="none" stroke="#1F5B45" stroke-width="1.5"/>
+<text x="74" y="230" font-family="PingFang SC,sans-serif" font-size="16" fill="#22261F" font-weight="400">数学</text>
+<text x="74" y="256" font-family="PingFang SC,sans-serif" font-size="14" fill="#79826F" font-weight="400">在学</text>
+<text x="246" y="238" font-family="PingFang SC,sans-serif" font-size="14" fill="#464E43" font-weight="400">移出</text>
+<path d="M30 268H290" stroke="#F1ECE0"/>
+<rect x="30" y="282" width="32" height="32" rx="8" fill="url(#icon)"/>
+<path d="M39 291h7l4 3v13l-4 -3h-7z M46 291v13" fill="none" stroke="#1F5B45" stroke-width="1.5"/>
+<text x="74" y="294" font-family="PingFang SC,sans-serif" font-size="16" fill="#22261F" font-weight="400">语文</text>
+<text x="74" y="320" font-family="PingFang SC,sans-serif" font-size="14" fill="#79826F" font-weight="400">在学</text>
+<text x="246" y="302" font-family="PingFang SC,sans-serif" font-size="14" fill="#464E43" font-weight="400">移出</text>
+<path d="M30 332H290" stroke="#F1ECE0"/>
+<rect x="30" y="346" width="32" height="32" rx="8" fill="url(#icon)"/>
+<path d="M39 355h7l4 3v13l-4 -3h-7z M46 355v13" fill="none" stroke="#1F5B45" stroke-width="1.5"/>
+<text x="74" y="358" font-family="PingFang SC,sans-serif" font-size="16" fill="#22261F" font-weight="400">英语</text>
+<text x="74" y="384" font-family="PingFang SC,sans-serif" font-size="14" fill="#79826F" font-weight="400">在学</text>
+<text x="246" y="366" font-family="PingFang SC,sans-serif" font-size="14" fill="#464E43" font-weight="400">移出</text>
+<path d="M30 396H290" stroke="#F1ECE0"/>
+<text x="30" y="427" font-family="PingFang SC,sans-serif" font-size="14" fill="#1F5B45" font-weight="400">＋ 添加其他科目</text>
+<rect x="16" y="466" width="288" height="166" rx="16" fill="url(#card)"/>
+<text x="30" y="496" font-family="PingFang SC,sans-serif" font-size="17" fill="#22261F" font-weight="600">课外活动</text>
+<rect x="30" y="524" width="32" height="32" rx="8" fill="url(#icon)"/>
+<path d="M39 533h7l4 3v13l-4 -3h-7z M46 533v13" fill="none" stroke="#1F5B45" stroke-width="1.5"/>
+<text x="74" y="536" font-family="PingFang SC,sans-serif" font-size="16" fill="#22261F" font-weight="400">游泳</text>
+<text x="74" y="562" font-family="PingFang SC,sans-serif" font-size="14" fill="#79826F" font-weight="400">周六 10:00–11:00</text>
+<text x="246" y="544" font-family="PingFang SC,sans-serif" font-size="14" fill="#464E43" font-weight="400">›</text>
+<path d="M30 574H290" stroke="#F1ECE0"/>
+<text x="30" y="605" font-family="PingFang SC,sans-serif" font-size="14" fill="#1F5B45" font-weight="400">＋ 添加课外活动</text>
+<rect x="16" y="644" width="288" height="188" rx="16" fill="url(#card)"/>
+<text x="30" y="674" font-family="PingFang SC,sans-serif" font-size="17" fill="#22261F" font-weight="600">出行安排</text>
+<text x="30" y="700" font-family="PingFang SC,sans-serif" font-size="13" fill="#79826F" font-weight="400">只显示在日程，不生成待办</text>
+<rect x="30" y="724" width="32" height="32" rx="8" fill="url(#icon)"/>
+<path d="M39 733h7l4 3v13l-4 -3h-7z M46 733v13" fill="none" stroke="#1F5B45" stroke-width="1.5"/>
+<text x="74" y="736" font-family="PingFang SC,sans-serif" font-size="16" fill="#22261F" font-weight="400">上学</text>
+<text x="74" y="762" font-family="PingFang SC,sans-serif" font-size="14" fill="#79826F" font-weight="400">周一至周五 07:30–08:00</text>
+<text x="246" y="744" font-family="PingFang SC,sans-serif" font-size="14" fill="#464E43" font-weight="400">›</text>
+<path d="M30 774H290" stroke="#F1ECE0"/>
+<text x="30" y="805" font-family="PingFang SC,sans-serif" font-size="14" fill="#1F5B45" font-weight="400">＋ 添加出行安排</text>
+<rect x="0" y="514" width="320" height="54" rx="0" fill="#FFFDF8"/>
+<text x="18.0" y="548" font-family="PingFang SC,sans-serif" font-size="14" fill="#79826F" font-weight="400">今日</text>
+<text x="82.0" y="548" font-family="PingFang SC,sans-serif" font-size="14" fill="#79826F" font-weight="400">日程</text>
+<text x="146.0" y="548" font-family="PingFang SC,sans-serif" font-size="14" fill="#79826F" font-weight="400">记录</text>
+<text x="210.0" y="548" font-family="PingFang SC,sans-serif" font-size="14" fill="#79826F" font-weight="400">报表</text>
+<text x="274.0" y="548" font-family="PingFang SC,sans-serif" font-size="14" fill="#1F5B45" font-weight="400">设置</text>
+</svg>

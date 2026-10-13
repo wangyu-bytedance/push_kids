@@ -1,0 +1,39 @@
+# UI-001 设置科目统一列表候选设计
+
+- Status: AWAITING_APPROVAL
+- UI ID: UI-001
+- Design Revision: DREV-20261012-SETTINGS-SUBJECT-LIST-02
+- Frontend baseline revision: FDB-20260913-04
+- Frontend engineering revision: FEC-20261007-NATIVE-GEOMETRY-02
+- Task Spec path and revision: specs/active/FEAT-001-SETTINGS-SUBJECT-LIST.md#SPEC-20261012-SETTINGS-SUBJECT-LIST-02
+- Frontend spec path: docs/design/frontend/prototypes/DREV-20261012-SETTINGS-SUBJECT-LIST-02/FRONTEND-SPEC.md
+- Editable design source path(s): docs/design/frontend/prototypes/DREV-20261012-SETTINGS-SUBJECT-LIST-02/content-320x568.svg; docs/design/frontend/prototypes/DREV-20261012-SETTINGS-SUBJECT-LIST-02/content-390x844.svg; docs/design/frontend/prototypes/DREV-20261012-SETTINGS-SUBJECT-LIST-02/content-430x932.svg; docs/design/frontend/prototypes/DREV-20261012-SETTINGS-SUBJECT-LIST-02/unselected-320x568.svg; docs/design/frontend/prototypes/DREV-20261012-SETTINGS-SUBJECT-LIST-02/unselected-390x844.svg; docs/design/frontend/prototypes/DREV-20261012-SETTINGS-SUBJECT-LIST-02/unselected-430x932.svg; docs/design/frontend/prototypes/DREV-20261012-SETTINGS-SUBJECT-LIST-02/readonly-320x568.svg; docs/design/frontend/prototypes/DREV-20261012-SETTINGS-SUBJECT-LIST-02/readonly-390x844.svg; docs/design/frontend/prototypes/DREV-20261012-SETTINGS-SUBJECT-LIST-02/readonly-430x932.svg; docs/design/frontend/prototypes/DREV-20261012-SETTINGS-SUBJECT-LIST-02/pending-320x568.svg; docs/design/frontend/prototypes/DREV-20261012-SETTINGS-SUBJECT-LIST-02/pending-390x844.svg; docs/design/frontend/prototypes/DREV-20261012-SETTINGS-SUBJECT-LIST-02/pending-430x932.svg; docs/design/frontend/prototypes/DREV-20261012-SETTINGS-SUBJECT-LIST-02/long-name-320x568.svg; docs/design/frontend/prototypes/DREV-20261012-SETTINGS-SUBJECT-LIST-02/long-name-390x844.svg; docs/design/frontend/prototypes/DREV-20261012-SETTINGS-SUBJECT-LIST-02/long-name-430x932.svg; docs/design/frontend/prototypes/DREV-20261012-SETTINGS-SUBJECT-LIST-02/error-320x568.svg; docs/design/frontend/prototypes/DREV-20261012-SETTINGS-SUBJECT-LIST-02/error-390x844.svg; docs/design/frontend/prototypes/DREV-20261012-SETTINGS-SUBJECT-LIST-02/error-430x932.svg
+- Editable source SHA-256: docs/design/frontend/prototypes/DREV-20261012-SETTINGS-SUBJECT-LIST-02/content-320x568.svg=faf06274605cabd7beeaca7b5886b2194d18aab03db3652998760c1c92a9bc13; docs/design/frontend/prototypes/DREV-20261012-SETTINGS-SUBJECT-LIST-02/content-390x844.svg=9936337254be57ce260631fe5d0e3699446da71071f8c28c50de9344396505b1; docs/design/frontend/prototypes/DREV-20261012-SETTINGS-SUBJECT-LIST-02/content-430x932.svg=14d4cc880ed6a9aab247cfcebcbb3fb81dea886123910078e39dabbd4f8e3191; docs/design/frontend/prototypes/DREV-20261012-SETTINGS-SUBJECT-LIST-02/unselected-320x568.svg=54c99f67631d9aaf295c94c2cf94eeb63a567ed9a563a532c5f68403d8016f21; docs/design/frontend/prototypes/DREV-20261012-SETTINGS-SUBJECT-LIST-02/unselected-390x844.svg=0c709513e1a528e3eb1208343fabe8fa3759922d22ddff3ac60ef3831a1790a1; docs/design/frontend/prototypes/DREV-20261012-SETTINGS-SUBJECT-LIST-02/unselected-430x932.svg=39e25b6a0bc49cdccfedb0c17c21e758a3676a50badf788535827cd97515a281; docs/design/frontend/prototypes/DREV-20261012-SETTINGS-SUBJECT-LIST-02/readonly-320x568.svg=6548faa589139a95b6a32c7cfcc5b037a352fc35c10cceebe180d5c1cb0ccba7; docs/design/frontend/prototypes/DREV-20261012-SETTINGS-SUBJECT-LIST-02/readonly-390x844.svg=29d02dfd04f562f7c2008a9283c9f5f635413c52c92dee9238d091b7a0222ca8; docs/design/frontend/prototypes/DREV-20261012-SETTINGS-SUBJECT-LIST-02/readonly-430x932.svg=240fa0ae99bf3372bc16946a4c39ace88234d42781696b9e4669578310ba05f4; docs/design/frontend/prototypes/DREV-20261012-SETTINGS-SUBJECT-LIST-02/pending-320x568.svg=a2a11c85cb1420769c7d0e061bca568393babd2c817088c216e6bacc227e004b; docs/design/frontend/prototypes/DREV-20261012-SETTINGS-SUBJECT-LIST-02/pending-390x844.svg=5dcf7d07ee801f806c022c04ba9e4297ad77edd72fe8c7e67c2c4befcacfc331; docs/design/frontend/prototypes/DREV-20261012-SETTINGS-SUBJECT-LIST-02/pending-430x932.svg=e0b97aff135d0005a5afe998e68e06d85b5d344d8da4791937b56c80c53224b4; docs/design/frontend/prototypes/DREV-20261012-SETTINGS-SUBJECT-LIST-02/long-name-320x568.svg=868b631a75f2569674f457d5e77fd661cddd3fec4319c2aa85a0dafa8645faeb; docs/design/frontend/prototypes/DREV-20261012-SETTINGS-SUBJECT-LIST-02/long-name-390x844.svg=e53d7ce0a1286974eae17e5abdbc5111723b9a4f17c643f2b15cc48ecd460883; docs/design/frontend/prototypes/DREV-20261012-SETTINGS-SUBJECT-LIST-02/long-name-430x932.svg=21c5eb9b42510eaa3c5546438b6ec90c447ea4df4c1c5c103756d93033f25079; docs/design/frontend/prototypes/DREV-20261012-SETTINGS-SUBJECT-LIST-02/error-320x568.svg=082f0f840892f874ed272cb49339c4befe8665e98b9d22319b21e7850e563554; docs/design/frontend/prototypes/DREV-20261012-SETTINGS-SUBJECT-LIST-02/error-390x844.svg=48cc77eb6e1821d1aa4c9fda257994cce15af649b1bfc53643664f2d0f6a9f85; docs/design/frontend/prototypes/DREV-20261012-SETTINGS-SUBJECT-LIST-02/error-430x932.svg=164780b8fcdc8bccd2575a5812426cf9c9da144b8289dbfe501fde13ceadf063
+- Approved by: PENDING
+- Approved at: PENDING
+- Approval evidence: PENDING — 等待用户确认具体 Spec + DREV
+
+## Export manifest
+
+| File | Viewport/state | CSS viewport | Scale/DPR | SHA-256 | Notes |
+|---|---|---|---|---|---|
+| content-320x568.png | content | 320x568 | 1x | d0b6b38661d8b0ae33846188de441beaa74654bf9a4976c9b50de490cadbc26e | 合成数据；可纵向滚动，底部遮挡代表首屏外内容 |
+| content-390x844.png | content | 390x844 | 1x | 752d5c0fad3527bc97c04042329a86201772106c85ee2ef4c15b8218c9d14583 | 合成数据；可纵向滚动，底部遮挡代表首屏外内容 |
+| content-430x932.png | content | 430x932 | 1x | aad43f9a729b541d98a64a00dd86b33a4cd672ac4842b2f37fa92fe7952e8c43 | 合成数据；可纵向滚动，底部遮挡代表首屏外内容 |
+| unselected-320x568.png | unselected | 320x568 | 1x | d175f93a521d39432161b3a5ebbd3919c26be8a41d2c2de38aa53a741f1c3519 | 合成数据；可纵向滚动，底部遮挡代表首屏外内容 |
+| unselected-390x844.png | unselected | 390x844 | 1x | 85d6428b349dcb64db0ad3eb4e7630d1c86cb951cbd0c1495193d50ae13586e4 | 合成数据；可纵向滚动，底部遮挡代表首屏外内容 |
+| unselected-430x932.png | unselected | 430x932 | 1x | ef0b9942b705cc96cf92194c7b96a24e03c692848ce8be8d65918f40708305c7 | 合成数据；可纵向滚动，底部遮挡代表首屏外内容 |
+| readonly-320x568.png | readonly | 320x568 | 1x | d0681e4660bfaa42f28af98c3cdff78f820cab6655a9716cfc28b7c51b091efc | 合成数据；可纵向滚动，底部遮挡代表首屏外内容 |
+| readonly-390x844.png | readonly | 390x844 | 1x | b7dd711195d164f8c5ba4fd903e43b61c1ba5b4e8dc40473e66cdab0c6b77eda | 合成数据；可纵向滚动，底部遮挡代表首屏外内容 |
+| readonly-430x932.png | readonly | 430x932 | 1x | 6eb75ad0ae37d415d610efc4062521d41ca25eeb18b0a0caaf2d198792ed5a12 | 合成数据；可纵向滚动，底部遮挡代表首屏外内容 |
+| pending-320x568.png | pending | 320x568 | 1x | 0f86624def6893717ec9d24365806ba2a851d46dec01ff59d129af073fe83960 | 合成数据；可纵向滚动，底部遮挡代表首屏外内容 |
+| pending-390x844.png | pending | 390x844 | 1x | 1bb70f7b9d4f31f81360a82f1323cff17fabfcad8b3cffd5e52f20edd26c621b | 合成数据；可纵向滚动，底部遮挡代表首屏外内容 |
+| pending-430x932.png | pending | 430x932 | 1x | 2cc45123ac599dc1fcb5f02e212c02d71026b5c44d50f203e10717ddf30b0ba8 | 合成数据；可纵向滚动，底部遮挡代表首屏外内容 |
+| long-name-320x568.png | long-name | 320x568 | 1x | 232e4ab2744bcae95a6959e70466aaf09852eac08bd11570941793e09530ba54 | 合成数据；可纵向滚动，底部遮挡代表首屏外内容 |
+| long-name-390x844.png | long-name | 390x844 | 1x | c11fd5f59d4d681a45239d86fbb40ab4f7bbe8a08217f50cde340d93b23a434d | 合成数据；可纵向滚动，底部遮挡代表首屏外内容 |
+| long-name-430x932.png | long-name | 430x932 | 1x | c9e4b5c86b9a90e978c870cf6e1dcd989892740cdba594509a3f98d865d1fad3 | 合成数据；可纵向滚动，底部遮挡代表首屏外内容 |
+| error-320x568.png | error | 320x568 | 1x | 93c99a1cead13a27c19e5cff4160fbc68141d86ece42f4c102c746dfeee0c8e1 | 合成数据；可纵向滚动，底部遮挡代表首屏外内容 |
+| error-390x844.png | error | 390x844 | 1x | 317780bf3939ae0b5323ab5ed06fb282b10d098804e1db190dc45de8bd3fa001 | 合成数据；可纵向滚动，底部遮挡代表首屏外内容 |
+| error-430x932.png | error | 430x932 | 1x | 498e3f3b4519805324f2a4494afa4af8acd47b9eb3fcac853d029507e43ad8af | 合成数据；可纵向滚动，底部遮挡代表首屏外内容 |
+
+原生节点矩形、交互、iOS/Android NOT_RUN。此处为设计候选图，未修改生产代码。
