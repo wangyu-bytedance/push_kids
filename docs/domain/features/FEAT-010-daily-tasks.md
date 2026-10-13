@@ -3,11 +3,11 @@
 - Status: `CLIENT_0.1.14_DEVELOPMENT_UPLOADED / BACKEND_UNDEPLOYED / PENDING_ACCEPTANCE`
 - 2026-10-13设置视觉增量：每日任务移至课外活动下方，复用活动行、标记与添加入口，纸面背景同其他设置卡片；原预设、表单、时长和权限行为不变。SPEC-20261013-SETTINGS-TASK-VISUAL-02及SPEC-20261013-CARD-BACKGROUNDS-01已本地实现，验收待补。证据docs/quality/evidence/CARD-BACKGROUNDS-20261013.md。
 - Current-state revision: `FEAT-STATE-20261012-DAILY-TASKS-01-LOCAL`
-- Last verified: 2026-10-13；全套后端510通过、19跳过；前端238通过；客户端0.1.14已开发上传，新API/0019未部署，真机及MySQL待验收。
+- Last verified: 2026-10-13；全套后端510通过、19跳过；前端238通过；另有隔离MySQL5.7迁移、11项集成检查及每日任务服务CRUD/幂等/快照/家庭范围通过。客户端0.1.14已开发上传，兼容过渡029已normal、流量待确认，新API/生产0019未部署，真机及云端新接口待验收。
 - Approved Spec / Design / Architecture: `SPEC-20261012-DAILY-TASKS-01` / `DREV-20261012-DAILY-TASKS-01` / `ARCH-20261012-DAILY-TASKS-01`
 - Source: `apps/api/src/push_kids/daily_tasks/`；设置与今日原生页面。
 - Evidence: `docs/quality/evidence/DAILY-TASKS-20261012.md`。
-- Change reference: `specs/active/FEAT-010-DAILY-TASKS.md`，当前 VERIFYING，未部署/上传。
+- Change reference: `specs/active/FEAT-010-DAILY-TASKS.md`，当前VERIFYING；前端已开发上传，日任务新版后端尚未部署。兼容发布修订见`specs/active/BUG-20261013-DAILY-TASK-RELEASE-COMPATIBILITY.md`，实际阶段见`docs/deploy/releases/20261013-fullstack-diff.md`。
 
 ## 当前行为
 

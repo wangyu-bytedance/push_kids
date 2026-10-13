@@ -1,0 +1,12 @@
+diff --git a/apps/api/src/push_kids/platform/database.py b/apps/api/src/push_kids/platform/database.py
+--- a/apps/api/src/push_kids/platform/database.py
++++ b/apps/api/src/push_kids/platform/database.py
+@@ -120,7 +120,7 @@ class Database:
+             raise RuntimeError("云环境数据库必须是 MySQL")
+         with self.engine.connect() as connection:
+             revision = connection.execute(text("SELECT version_num FROM alembic_version")).scalar()
+-        if revision != self.expected_cloud_revision:
++        if revision not in (self.expected_cloud_revision, "20261012_0019"):
+             raise RuntimeError("数据库 Schema 未迁移到当前版本")
+ 
+     def check_ready(self) -> None:
