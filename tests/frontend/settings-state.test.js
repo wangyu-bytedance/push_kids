@@ -17,7 +17,7 @@ function loadSettingsPage(overrides = {}) {
   vm.runInNewContext(fs.readFileSync(filename, "utf8"), {
     require(name) {
       if (name.includes("child-context")) return childContext;
-      return { request: async (...args) => { calls.push(args); return {}; }, newIdempotencyKey: () => "key" };
+      return { request: async (...args) => { calls.push(args); return overrides.request ? overrides.request(...args) : {}; }, newIdempotencyKey: () => "key" };
     },
     Page(value) { definition = value; },
     wx: { showToast() {}, showModal() {}, ...overrides.wx },
@@ -31,6 +31,117 @@ function loadSettingsPage(overrides = {}) {
   };
   return { page, calls };
 }
+
+function subjectFixture(overrides = {}) {
+  const fixture = loadSettingsPage(overrides);
+  Object.assign(fixture.page.data, { loading: false, childId: "child-a",
+    baseLearning: [{ name: "数学", selected: true, subject: { id: "math" } },
+      { name: "英语", selected: false, subject: null }],
+    addedLearning: [{ id: "custom", name: "科学", canRemove: true },
+      { id: "locked", name: "内置科目", canRemove: false }] });
+  fixture.page.load = async () => {};
+  return fixture;
+}
+
+test("base and custom subject removal needs confirmation; cancel does not write", async () => {
+  let modal;
+  const { page, calls } = subjectFixture({ wx: { showModal(value) { modal = value; } } });
+  for (const dataset of [{ kind: "base", index: 0 }, { id: "custom" }]) {
+    page.openSubjectManager({ currentTarget: { dataset } });
+    const before = calls.length;
+    page.changeManagedSubject();
+    assert.match(modal.content, /学习记录会保留/);
+    assert.equal(calls.length, before);
+    await modal.success({ confirm: false });
+    assert.equal(calls.length, before);
+    assert.equal(page.data.showSubjectManager, true);
+    page.changeManagedSubject();
+    await modal.success({ confirm: true });
+    assert.equal(calls.length, before + 1);
+    assert.equal(calls.at(-1)[1].method, "PATCH");
+    assert.equal(calls.at(-1)[1].data.active, false);
+    assert.equal(page.data.showSubjectManager, false);
+  }
+});
+
+test("subject manager joins missing and inactive base subjects with existing API", async () => {
+  const { page, calls } = subjectFixture();
+  page.openSubjectManager({ currentTarget: { dataset: { kind: "base", index: 1 } } });
+  await page.changeManagedSubject();
+  assert.equal(calls[0][0], "/subjects");
+  assert.deepEqual(plain(calls[0][1].data), { child_id: "child-a", name: "英语", kind: "learning" });
+  page.data.baseLearning[1].subject = { id: "english" };
+  page.openSubjectManager({ currentTarget: { dataset: { kind: "base", index: 1 } } });
+  await page.changeManagedSubject();
+  assert.equal(calls[1][0], "/subjects/english");
+  assert.equal(calls[1][1].data.active, true);
+});
+
+test("subject manager blocks readonly/restricted and stale confirmation after close or child switch", async () => {
+  let modal;
+  const { page, calls } = subjectFixture({ wx: { showModal(value) { modal = value; } } });
+  page.data.canWrite = false;
+  page.openSubjectManager({ currentTarget: { dataset: { kind: "base", index: 0 } } });
+  assert.equal(page.data.showSubjectManager, false);
+  page.data.canWrite = true;
+  page.openSubjectManager({ currentTarget: { dataset: { id: "locked" } } });
+  assert.equal(page.data.showSubjectManager, false);
+  for (const invalidate of [() => page.closeSubjectManager(), () => { page.data.childId = "child-b"; },
+    () => page.onHide(), () => { page.data.canWrite = false; }]) {
+    page.data.childId = "child-a";
+    page.data.canWrite = true;
+    page.openSubjectManager({ currentTarget: { dataset: { kind: "base", index: 0 } } });
+    page.changeManagedSubject();
+    invalidate();
+    await modal.success({ confirm: true });
+  }
+  assert.equal(calls.length, 0);
+});
+
+test("subject manager prevents duplicate confirmation and write; failure keeps panel for retry", async () => {
+  let modal, rejectWrite, confirmCount = 0;
+  const { page, calls } = subjectFixture({ request: () => new Promise((resolve, reject) => { rejectWrite = reject; }),
+    wx: { showModal(value) { modal = value; confirmCount += 1; } } });
+  page.openSubjectManager({ currentTarget: { dataset: { id: "custom" } } });
+  page.changeManagedSubject();
+  page.changeManagedSubject();
+  assert.equal(confirmCount, 1);
+  const writing = modal.success({ confirm: true });
+  await modal.success({ confirm: true });
+  assert.equal(calls.length, 1);
+  rejectWrite(Error("网络不可用"));
+  await writing;
+  assert.equal(page.data.showSubjectManager, true);
+  assert.equal(page.data.subjectBusy, false);
+  assert.equal(page.data.subjectError, "网络不可用");
+  page.changeManagedSubject();
+  modal.fail();
+  assert.equal(page.data.subjectConfirming, false);
+  page.changeManagedSubject();
+  const late = modal.success({ confirm: true });
+  page.onHide();
+  rejectWrite(Error("迟到错误"));
+  await late;
+  assert.equal(page.data.showSubjectManager, false);
+  assert.equal(page.data.subjectError, "");
+});
+
+test("subject manager discards successful response after switching children", async () => {
+  let finish, refreshes = 0;
+  const { page, calls } = subjectFixture({ request: () => new Promise((resolve) => { finish = resolve; }) });
+  page.data.children = [{ id: "child-a" }, { id: "child-b" }];
+  page.load = async () => { refreshes += 1; };
+  page.openSubjectManager({ currentTarget: { dataset: { kind: "base", index: 1 } } });
+  const write = page.changeManagedSubject();
+  page.chooseChild({ currentTarget: { dataset: { index: 1 } } });
+  finish({});
+  await write;
+  assert.equal(calls.length, 1);
+  assert.equal(calls[0][1].data.child_id, "child-a");
+  assert.equal(page.data.childId, "child-b");
+  assert.equal(page.data.showSubjectManager, false);
+  assert.equal(refreshes, 1);
+});
 
 test("opening and cancelling settings editors performs zero writes", () => {
   const { page, calls } = loadSettingsPage();

@@ -1,11 +1,17 @@
 # FEAT-001 — 家庭学习持续跟进系统 MVP
 
+- 2026-10-15学科管理本地增量：SPEC-20261014-SUBJECT-MANAGEMENT-01 / DREV-20261014-SUBJECT-MANAGEMENT-01已批准并实现。学科行统一箭头进入管理面板，移出位于面板底部；基础三科与可移出自定义科目均二次确认，已有学习记录保留。未加入基础科目仍可加入，其他科目沿用 canRemove 限制；只读无写入口，失败留面板重试，切孩子/离页丢弃迟到回调。取代原学科行尾直接加入/移出入口，未上传/发布。验收与未执行项见 [本轮证据](../../quality/evidence/SUBJECT-MANAGEMENT-20261015.md)，Spec 保留 VERIFYING。
+
+- 2026-10-15本地按钮与分页增量：SPEC-20261014-ACTION-PAGER-CONSISTENCY-02 / DREV-20261014-ACTION-PAGER-CONSISTENCY-02已批准并实现；每日任务无阴影胶囊，编辑计划共享分页固定三列、科目两列及显式禁用。243项前端测试和静态检查通过；430宽11态原生部分验证，完整三视口/内嵌/截图/真机待补，Spec为active/VERIFYING。本增量未上传；既有最新开发上传基线0.1.15（5837d59）。详见docs/quality/evidence/ACTION-PAGER-CONSISTENCY-20261015.md。
+
 - 2026-10-13设置最新增量：SPEC-20261013-SETTINGS-CONSISTENCY-01 / DREV-20261013-SETTINGS-CONSISTENCY-01批准并实现；在学科目改活动同款单列行，保留原加入/移出限制。每日任务同款行、独立背景及候选/编辑半屏。239项测试、静态及430原生八态通过；源码5837d59随0.1.15开发上传成功（1027271字节），未体验/提审/正式发布；320/390原生、完整截图、真机待验收。详见docs/quality/evidence/SETTINGS-CONSISTENCY-20261013.md，任务VERIFYING。
+
+- Design governance revision: `DOC-SPEC-20261013-02-01`；[门禁同步记录](../../../specs/completed/DOC-002-MARKDOWN-STATE-RECONCILIATION.md)，仅修订设计证据政策，不改变实现/发布状态。
 
 - Local report panel refinement: `SPEC-20261013-REPORT-PANELS-01 / DREV-20261013-REPORT-PANELS-01` 已获用户批准并本地实现。历史和编辑计划统一展开容器，明确展开/收起及调整入口；查询与计划策略不变，外层背景由统一卡片样式负责。236项前端测试、三视口36态原生数字几何及静态校验通过；已随0.1.14开发上传，完整截图、字体放大与真机验收待补。证据：`docs/quality/evidence/REPORT-PANELS-20261013.md`。
 
 - Status: `CURRENT`
-- 当前发布状态（2026-10-13）：客户端每日任务/背景/报表布局已随0.1.14开发版本上传，源314150f；生产Schema0019与后端030已全量模式发布，真实小程序每日任务及设置等13项读取接口200，设置页刷新后档案/各设置加载且error为空。隔离MySQL合同已通过；生产写路径/多账号及完整原生/真机、体验/审核/正式发布仍待补。报告docs/deploy/releases/20261013-fullstack-diff.md，旧0.1.13上传信息作为历史证据保留。
+- 当前发布状态：最新客户端开发上传为0.1.15（源码5837d59），包含每日任务/背景/报表布局及设置一致性，见docs/deploy/releases/20261013-settings-consistency-frontend.md；本轮按钮/分页仅本地实现。生产Schema0019与后端030已全量模式发布，2026-10-13真实小程序13项读取接口200；生产写路径/多账号及完整原生/真机、体验/审核/正式发布仍待补。后端报告docs/deploy/releases/20261013-fullstack-diff.md，0.1.13/0.1.14保留为历史上传。
 - Local complete card backgrounds: SPEC-20261013-CARD-BACKGROUNDS-01已按用户明确指令本地实现，设置三块插画、每日任务同款卡片与新位置、报表背景均已接入；238测试和CLI预览通过，已随0.1.14开发上传，原生/真机/用户验收待补。证据docs/quality/evidence/CARD-BACKGROUNDS-20261013.md，未设体验版/正式版。
 - Local illustrations: `SPEC-20261013-RECORD-CALENDAR-ILLUSTRATIONS-01 / DREV-20261013-RECORD-CALENDAR-ILLUSTRATIONS-01` 已获用户批准并本地实现；记录/日程使用不同纸艺插画，原业务不变。233项前端测试及静态校验通过；原生三视口、真机及预览包预算待验证，未发布。证据：`docs/quality/evidence/RECORD-CALENDAR-ILLUSTRATIONS-20261013.md`。
 - Local daily tasks: `SPEC-20261012-DAILY-TASKS-01 / DREV-20261012-DAILY-TASKS-01` 已获用户批准并实现前后端。
@@ -384,8 +390,8 @@ BUG-010 本地实现已通过微信开发者工具 registered AppID preview 编�
 - BUG-005/006 的故障注入及分类回归目前仅在本地隔离环境验证，未重新部署或执行真实云端/MySQL
   故障恢复验收。取消中的 Provider 失败竞争（CR-004）已在BUG-009本地修复；媒体路径清理
   （CR-005）仍属独立问题。
-- Figma Starter waiver remains scoped to FEAT-001 and expires before public production release.
-- BUG-010 的受控 Figma waiver 同样在公开生产前失效；三视口、字体放大、键盘和 iOS/Android 实机证据仍待补齐。
+- 当前设计门禁按 `GOV-SPEC-LOCAL-DESIGN-EVIDENCE-20260913-01` 要求仓库内可编辑 SVG/HTML、视口/状态导出与匹配 SHA-256 审批清单；旧工具 waiver 仅为历史审批记录。
+- 三视口、字体放大、键盘和 iOS/Android 实机证据仍待补齐。
 
 ## Change references
 

@@ -7,12 +7,16 @@ Spec 是单次变更的权威意图与验收来源。它描述“为什么改、
 Feature 长期当前状态位于 `docs/domain/features/`。了解 Feature 最终状态时先读
 Feature 文档；Spec 只用于追溯某一次变化的原因、设计、批准和证据。
 
-FEAT-001 当前实现的最终变更记录为
-`completed/FEAT-001-PUSH-KIDS-FINAL-SPEC.md`；HTML 评审阶段记录为
+FEAT-001 早期实现的历史变更记录为
+`completed/FEAT-001-PUSH-KIDS-FINAL-SPEC.md`；当前事实以 Feature/UI 文档为准。HTML 评审阶段记录为
 `completed/DESIGN-001-HTML-REDESIGN.md`，原型文件保留在
 `docs/design/frontend/prototypes/DREV-20260830-03/index.html`，不参与运行。
 
 ## Layout
+
+今日按钮与编辑计划分页统一：[`SPEC-20261014-ACTION-PAGER-CONSISTENCY-02`](active/FEAT-010-TODAY-ACTION-STYLE.md)，本地实现，VERIFYING；两项功能提交前联合核对见[`验证记录`](../docs/quality/evidence/TWO-FEATURE-PRECOMMIT-20261015.md)。
+
+学科管理与移出入口统一：[`SPEC-20261014-SUBJECT-MANAGEMENT-01`](active/FEAT-001-SUBJECT-MANAGEMENT-CONSISTENCY.md)，本地实现，VERIFYING；当前事实见FEAT-001、UI-001及`docs/quality/evidence/SUBJECT-MANAGEMENT-20261015.md`，未上传或发布。
 
 ```text
 specs/
@@ -64,9 +68,9 @@ specs/
 7. 关闭任务前，把验证后的最终事实合并回每个受影响 Feature 文档，替换过期
    正文，并追加 Spec、ADR、Release/Commit 和 Evidence 引用。
 8. 对用户可见前端变更，先确认 `FRONTEND-DESIGN.md` 中 style、interaction、
-   resolution baseline 已批准，再在 Figma 生成/更新原型，记录 UI-ID、node URL、
-   Design Revision 和 snapshot；用户确认具体 Spec + Design revision 后才能编码。
-9. 前端关闭时把最终事实语义合并到 UI current-state，并添加 Figma、snapshot、
+   resolution baseline 已批准，再生成/更新仓库内可编辑 SVG 或自包含 HTML 原型，记录 UI-ID、
+   Design Revision、源文件与视口/状态导出的 SHA-256 manifest；用户确认具体 Spec + Design revision 后才能编码。
+9. 前端关闭时把最终事实语义合并到 UI current-state，并添加设计源文件、snapshot、
    commit 和验证引用。
 
 
@@ -96,7 +100,7 @@ Spec 还必须包含：
 
 ## Frontend design gate
 
-All task templates include a `Frontend Design Impact and Figma Approval`
+All task templates include a `Frontend Design Impact and Repository-native Approval`
 section. `Frontend impact: yes` requires:
 
 - approved project frontend baseline revision;
@@ -105,10 +109,10 @@ section. `Frontend impact: yes` requires:
 - verification plan, retained evidence, and approved deviations;
 
 - affected UI-ID(s) and UI current-state document(s);
-- Figma file URL and node-specific URL(s);
+- repository-local editable SVG or self-contained HTML design source and SHA-256;
 - proposed and approved Design Revision;
 - required state/viewport exports;
-- explicit approval of Task Spec revision + Design Revision + nodes;
+- explicit approval of Task Spec revision + Design Revision;
 - immutable approval snapshot manifest;
 - UI current-state merge owner and verification plan.
 
@@ -116,9 +120,10 @@ section. `Frontend impact: yes` requires:
 still affecting engineering quality; it must cite the FEC revision and select
 quality dimensions when component/state/form, accessibility, browser,
 performance, security/privacy, data-viz, observability, or similar facts change. A pure internal refactor or restoration
-to a still-valid approved design may reuse that Design Revision. Figma
-unavailability blocks visible implementation unless an explicit, scoped,
-owned, expiring waiver is approved.
+to a still-valid approved design may reuse that Design Revision. Required viewport/state
+exports must match the immutable SHA-256 approval manifest. Native Mini Program
+geometry and three-viewport/device evidence remain required under the FEC and test policy.
+External design tools, node URLs and tool-availability waivers are not required.
 
 ## Naming
 

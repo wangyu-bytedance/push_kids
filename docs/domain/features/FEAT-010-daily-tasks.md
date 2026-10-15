@@ -1,15 +1,17 @@
 # FEAT-010 — 每日任务与今日默认折叠
 
-- Status: `CLIENT_0.1.14_DEVELOPMENT_UPLOADED / BACKEND_030_FULL_DEPLOYED / SCHEMA_0019 / CLOUD_READ_SMOKE_PASS / DEVICE_ACCEPTANCE_PENDING`
+- Status: `CLIENT_0.1.15_DEVELOPMENT_UPLOADED / ACTION_STYLE_LOCAL_VERIFYING / BACKEND_030_FULL_DEPLOYED / SCHEMA_0019 / CLOUD_READ_SMOKE_PASS / DEVICE_ACCEPTANCE_PENDING`
 - 2026-10-13设置最新增量：SPEC-20261013-SETTINGS-CONSISTENCY-01 / DREV-20261013-SETTINGS-CONSISTENCY-01批准并实现；每日任务仍在活动下方，独立书本/时钟装饰、整行编辑、底部候选半屏，阅读20/跳绳10/练字20/户外运动20分钟仅预填并需保存。取代常驻预设/独立编辑/内联表单；API、校验和权限不变。239项测试、静态与430原生八态通过；源码5837d59随0.1.15开发上传成功，未体验/提审/正式发布；320/390原生、完整截图及真机待验收。证据docs/quality/evidence/SETTINGS-CONSISTENCY-20261013.md。
-- Current-state revision: `FEAT-STATE-20261013-DAILY-TASKS-02-DEPLOYED`
-- Last verified: 2026-10-13；全套后端510通过、19跳过；前端238通过；隔离MySQL5.7迁移、11项集成检查及每日任务服务CRUD/幂等/快照/家庭范围通过。生产0019已迁移，030全量模式发布并normal，真实小程序13项读取接口200、设置加载无错误且显示档案。客户端0.1.14已开发上传，完整原生状态和真机待验收。
+- Current-state revision: `FEAT-STATE-20261015-ACTION-PAGER-02`
+- Last verified: 2026-10-15按钮增量243项前端测试、lint、静态/架构/设计校验通过，430宽原生五态部分验证，完整原生和真机待验收；证据ACTION-PAGER-CONSISTENCY-20261015.md。2026-10-13历史后端510通过、19跳过及生产0019/030、13项读取200证据保持有效但未在本轮重跑；最新既有客户端开发上传为0.1.15，本轮样式尚未上传。
 - Approved Spec / Design / Architecture: `SPEC-20261012-DAILY-TASKS-01` / `DREV-20261012-DAILY-TASKS-01` / `ARCH-20261012-DAILY-TASKS-01`
 - Source: `apps/api/src/push_kids/daily_tasks/`；设置与今日原生页面。
 - Evidence: `docs/quality/evidence/DAILY-TASKS-20261012.md`。
 - Change reference: `specs/active/FEAT-010-DAILY-TASKS.md`，当前VERIFYING；前端已开发上传，后端030与0019已发布。发布修订见`specs/completed/BUG-20261013-DAILY-TASK-RELEASE-COMPATIBILITY.md`，实际阶段见`docs/deploy/releases/20261013-fullstack-diff.md`。
 
 ## 当前行为
+
+2026-10-15本地样式：今日完成/撤销采用既有无阴影胶囊，与复习完成统一。SPEC-20261014-ACTION-PAGER-CONSISTENCY-02 / DREV-20261014-ACTION-PAGER-CONSISTENCY-02已批准；243项前端测试及静态检查通过，430宽原生五态部分验证；320/390、截图及真机待补。本增量未上传，不改变0.1.15既有开发上传事实。证据：docs/quality/evidence/ACTION-PAGER-CONSISTENCY-20261015.md。
 
 设置中的每日任务按家庭和孩子独立保存。阅读、跳绳、练字、户外运动是快捷候选，点击后仍需保存；不自动启用。
 允许自定义、编辑和删除。名称去首尾空白后为1～30字符；目标时长为1～180整数分钟；最多20个启用任务，启用名称不能重复。

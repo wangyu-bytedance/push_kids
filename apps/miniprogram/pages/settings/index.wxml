@@ -69,20 +69,33 @@
         <image class="settings-card-art" wx:if="{{!learningArtFailed}}" src="/assets/illustrations/record-books.png" mode="aspectFit" aria-hidden="{{true}}" data-art="learning" binderror="onIllustrationError"></image>
       </view>
       <view class="act-list subject-list">
-        <view class="act-row" wx:for="{{baseLearning}}" wx:key="name">
+        <view class="act-row" wx:for="{{baseLearning}}" wx:key="name" aria-role="{{canWrite ? 'button' : 'text'}}" aria-label="{{canWrite ? '管理' : ''}}{{item.name}}，{{item.selected ? '已加入' : '未加入'}}" data-kind="base" data-index="{{index}}" bindtap="openSubjectManager">
           <view class="act-mark"><view class="ico ico-book-pri sm"></view></view>
           <view class="grow"><text class="a-t">{{item.name}}</text><text class="a-s">{{item.selected ? '已加入' : '未加入'}}</text></view>
-          <button class="subject-action" wx:if="{{canWrite}}" disabled="{{loading || !!togglingName || !!removingId}}" aria-label="{{item.selected ? '移出' : '加入'}}{{item.name}}" data-index="{{index}}" bindtap="toggleBaseLearning">{{togglingName === item.name ? '处理中…' : item.selected ? '移出' : '加入'}}</button>
+          <view class="chev right" wx:if="{{canWrite}}"></view>
         </view>
-        <view class="act-row" wx:for="{{addedLearning}}" wx:key="id">
+        <view class="act-row" wx:for="{{addedLearning}}" wx:key="id" aria-role="{{item.canRemove && canWrite ? 'button' : 'text'}}" aria-label="{{item.canRemove && canWrite ? '管理' : ''}}{{item.name}}，已加入" data-id="{{item.id}}" bindtap="openSubjectManager">
           <view class="act-mark"><view class="ico ico-book-pri sm"></view></view>
           <view class="grow"><text class="a-t">{{item.name}}</text><text class="a-s">{{item.custom ? '自定义 · 已加入' : '已加入'}}</text></view>
-          <button class="subject-action" wx:if="{{item.canRemove && canWrite}}" disabled="{{loading || !!togglingName || !!removingId}}" aria-label="移出{{item.name}}" data-id="{{item.id}}" bindtap="removeLearning">{{removingId === item.id ? '移出中…' : '移出'}}</button>
+          <view class="chev right" wx:if="{{item.canRemove && canWrite}}"></view>
         </view>
       </view>
       <view class="add-entry" wx:if="{{canWrite}}" data-type="learning" aria-role="button" aria-label="添加其他科目" bindtap="openCatalog">
         <view class="ico ico-plus-pri sm"></view><text>添加其他科目</text>
       </view>
+    </view>
+
+    <view class="pk-mask" wx:if="{{showSubjectManager}}" bindtap="closeSubjectManager"></view>
+    <view class="pk-sheet subject-sheet" wx:if="{{showSubjectManager}}">
+      <view class="handle"></view>
+      <view class="sheet-head"><text class="sheet-title grow">管理科目</text><button class="icon-btn subject-close" aria-label="关闭科目管理" disabled="{{subjectBusy}}" bindtap="closeSubjectManager"><view class="ico ico-close sm"></view></button></view>
+      <scroll-view class="sheet-body subject-manager-body" scroll-y>
+        <text class="subject-name">{{managedSubject.name}}</text>
+        <text class="subject-status">{{managedSubject.selected ? '已加入' : '未加入'}}</text>
+        <text class="subject-note">已有的学习记录会保留。移出后不再出现在选项里。</text>
+        <text class="err-text" wx:if="{{subjectError}}" aria-role="alert">{{subjectError}}</text>
+        <button class="btn {{managedSubject.selected ? 'secondary subject-remove' : 'primary'}} subject-change" loading="{{subjectBusy}}" disabled="{{subjectBusy || subjectConfirming}}" bindtap="changeManagedSubject">{{subjectBusy ? (managedSubject.selected ? '移出中…' : '加入中…') : (managedSubject.selected ? '移出此科目' : '加入此科目')}}</button>
+      </scroll-view>
     </view>
 
     <view class="pk-card pk-hero set-card settings-paper">

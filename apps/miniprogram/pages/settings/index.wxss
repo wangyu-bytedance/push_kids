@@ -2,8 +2,16 @@
 .daily-task-setting-row { min-height: 44px; }
 .daily-task-setting-copy { min-width: 0; overflow-wrap: anywhere; }
 .subject-list .grow { min-width: 0; overflow-wrap: anywhere; }
-.subject-action { flex: none; box-sizing: border-box; width: 76px; min-width: 44px; min-height: 44px; margin: 0; padding: 0 8px; line-height: 44px; font-size: 14px; color: var(--pk-primary); background: transparent; }
-.subject-action::after { border: 0; }
+.subject-list .act-row { min-height: 44px; }
+.subject-list .a-s { font-size: 14px; }
+.subject-sheet { height: 450px; max-height: 85vh; }
+.subject-manager-body { box-sizing: border-box; max-height: 65vh; }
+.subject-name { display: block; font-size: 18px; font-weight: 600; overflow-wrap: anywhere; }
+.subject-status, .subject-note { display: block; margin-top: 16px; font-size: 14px; line-height: 1.5; color: var(--pk-ink-3); }
+.subject-change { width: 100%; min-height: 44px; height: auto; margin: 32px 0 16px; }
+.subject-change.subject-remove { color: var(--pk-danger); background: var(--pk-danger-bg); }
+.subject-close { flex: none; min-width: 44px; min-height: 44px; margin: 0; padding: 0; }
+.subject-close::after { border: 0; }
 .daily-task-candidate { min-height: 44px; }
 .daily-task-settings .c-s { font-size: 14px; }
 .daily-task-settings .daily-task-add { min-height: 44px; height: auto; width: 100%; text-align: left; }

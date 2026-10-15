@@ -13,7 +13,7 @@
         <view class="filter-option {{subjectId === item.id ? 'selected' : ''}}" wx:for="{{subjects}}" wx:key="id" data-id="{{item.id}}" catchtap="selectSubject" aria-role="button" aria-label="{{item.name || '未命名科目'}}，{{item.count}}项{{subjectId === item.id ? '，已选中' : ''}}">{{item.name || '未命名科目'}} <text class="filter-option-count">{{item.count}}项</text></view>
         <text class="muted" wx:if="{{subjectLoading}}">正在读取科目…</text>
         <view class="error" wx:if="{{subjectError}}"><text>{{subjectError}}</text><button class="inventory-button" catchtap="firstSubjects">重新加载科目</button></view>
-        <view class="pager subject-pager" wx:if="{{subjectCursor || subjectHasPrevious}}"><button class="inventory-button" catchtap="firstSubjects" disabled="{{subjectLoading || !subjectHasPrevious}}">科目首页</button><button class="inventory-button" catchtap="nextSubjects" disabled="{{subjectLoading || !subjectCursor}}">下一页科目</button></view>
+        <view class="inventory-pagination subject-pager" wx:if="{{subjectCursor || subjectHasPrevious}}"><button class="inventory-button inventory-page-button" catchtap="firstSubjects" disabled="{{subjectLoading || !subjectHasPrevious}}">科目首页</button><button class="inventory-button inventory-page-button" catchtap="nextSubjects" disabled="{{subjectLoading || !subjectCursor}}">下一页科目</button></view>
       </scroll-view>
     </view>
   </view>
@@ -70,7 +70,7 @@
       </view>
     </view>
     <view class="empty" wx:if="{{!items.length && !error}}"><text>{{view === 'time' ? '这一天暂无预计安排' : (view === 'count' && count !== null ? '没有已复习 ' + count + ' 次的条目' : '暂无知识条目')}}</text><button class="inventory-button" wx:if="{{view === 'count' && count !== null}}" data-count="all" bindtap="selectCount">查看全部次数</button></view>
-    <view class="pager" wx:if="{{pageNumber > 1 || nextCursor}}"><button class="inventory-button" bindtap="reload" disabled="{{loading || pageNumber === 1}}">回到首页</button><text>第 {{pageNumber}} 页</text><button class="inventory-button" bindtap="nextPage" disabled="{{loading || !nextCursor}}">下一页</button></view>
+    <view class="inventory-pagination" wx:if="{{pageNumber > 1 || nextCursor}}"><button class="inventory-button inventory-page-button" bindtap="reload" disabled="{{loading || pageNumber === 1}}">回到首页</button><text class="inventory-page-label">第 {{pageNumber}} 页</text><button class="inventory-button inventory-page-button" bindtap="nextPage" disabled="{{loading || !nextCursor}}">下一页</button></view>
   </block>
 </view>
 

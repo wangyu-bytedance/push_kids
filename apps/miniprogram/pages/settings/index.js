@@ -114,7 +114,8 @@ Page({
     dailyTasks: [], dailyTaskPresets: DAILY_TASK_PRESETS.map((name) => ({ name, minutes: name === "跳绳" ? 10 : 20 })), showDailyTaskForm: false, showDailyTaskCatalog: false,
     dailyTaskId: "", dailyTaskName: "", dailyTaskMinutes: "20", dailyTaskError: "",
     savingDailyTask: false, deletingDailyTask: false,
-    baseLearning: [], addedLearning: [], addedActivities: [], togglingName: "", removingId: "",
+    baseLearning: [], addedLearning: [], addedActivities: [],
+    showSubjectManager: false, managedSubject: null, subjectBusy: false, subjectConfirming: false, subjectError: "",
     pendingRequests: 0, requestsLabel: "",
     showCatalog: false, catalogType: "learning", catalogTitle: "", catalogWord: "科目",
     catalogOptions: [], allCatalogOptions: [], catalogMode: "catalog", catalogQuery: "",
@@ -144,6 +145,7 @@ Page({
   onHide() {
     this.loadGeneration = (this.loadGeneration || 0) + 1;
     this.resetDailyTaskForm();
+    this.resetSubjectManager();
   },
   onUnload() { this.onHide(); },
   async onPullDownRefresh() {
@@ -172,6 +174,7 @@ Page({
     }
   },
   async load() {
+    this.resetSubjectManager();
     /* 切换孩子会重新进入 load，用代际号丢弃上一轮迟到的响应，避免串档。 */
     const generation = (this.loadGeneration || 0) + 1;
     this.loadGeneration = generation;
@@ -236,7 +239,7 @@ Page({
         marker: item.name.charAt(0) || "行"
       }));
       this.setData({ loading: false, ...shared, childIndex: selection.childIndex, childId,
-        subjects, baseLearning, addedLearning, addedActivities, togglingName: "", removingId: "",
+        subjects, baseLearning, addedLearning, addedActivities,
         travelArrangements, dailyTasks,
         pendingRequests, requestsLabel: pendingRequests ? `${pendingRequests} 份申请` : "" });
     } catch (error) {
@@ -248,6 +251,7 @@ Page({
   openChildSheet() { if (this.data.children.length) this.setData({ showChildSheet: true }); },
   closeChildSheet() { this.setData({ showChildSheet: false }); },
   chooseChild(event) {
+    this.resetSubjectManager();
     const childIndex = Number(event.currentTarget.dataset.index);
     getApp().selectChild(this.data.children[childIndex].id);
     this.resetDailyTaskForm();
@@ -376,37 +380,74 @@ Page({
       }
     });
   },
-  async toggleBaseLearning(event) {
-    if (!this.guardWrite()) return;
-    const option = this.data.baseLearning[Number(event.currentTarget.dataset.index)];
-    if (this.data.togglingName) return;
-    this.setData({ togglingName: option.name });
+  resetSubjectManager() {
+    this.subjectGeneration = (this.subjectGeneration || 0) + 1;
+    this.setData({ showSubjectManager: false, managedSubject: null, subjectBusy: false,
+      subjectConfirming: false, subjectError: "" });
+  },
+  openSubjectManager(event) {
+    if (!this.guardWrite() || this.data.loading || !this.data.childId || this.data.subjectBusy) return;
+    const dataset = event.currentTarget.dataset;
+    const base = dataset.kind === "base";
+    const option = base ? this.data.baseLearning[Number(dataset.index)]
+      : this.data.addedLearning.find((item) => item.id === dataset.id);
+    if (!option || (!base && !option.canRemove)) return;
+    this.resetSubjectManager();
+    this.setData({ showSubjectManager: true, managedSubject: {
+      id: base ? (option.subject && option.subject.id) || "" : option.id,
+      name: option.name, selected: base ? option.selected : true,
+      childId: this.data.childId
+    } });
+  },
+  closeSubjectManager() {
+    if (!this.data.subjectBusy) this.resetSubjectManager();
+  },
+  subjectContextValid(generation, subject) {
+    const member = getApp().globalData.currentMember;
+    return this.subjectGeneration === generation && this.data.showSubjectManager
+      && this.data.managedSubject === subject && this.data.childId === subject.childId
+      && !this.data.loading && this.data.canWrite && (!member || member.role !== "viewer");
+  },
+  changeManagedSubject() {
+    const subject = this.data.managedSubject;
+    const generation = this.subjectGeneration;
+    if (!subject || !this.subjectContextValid(generation, subject)
+      || this.data.subjectBusy || this.data.subjectConfirming) return;
+    if (!subject.selected) return this.saveManagedSubject(generation, subject);
+    this.setData({ subjectConfirming: true, subjectError: "" });
+    wx.showModal({ title: `移出「${subject.name}」？`,
+      content: "已有的学习记录会保留，只是不再出现在选项里。",
+      confirmText: "移出", confirmColor: "#A85742",
+      success: (result) => {
+        if (!this.subjectContextValid(generation, subject)) return;
+        this.setData({ subjectConfirming: false });
+        if (result.confirm) return this.saveManagedSubject(generation, subject);
+      },
+      fail: () => {
+        if (this.subjectContextValid(generation, subject)) {
+          this.setData({ subjectConfirming: false, subjectError: "未能打开确认，请重试" });
+        }
+      }
+    });
+  },
+  async saveManagedSubject(generation, subject) {
+    if (!this.subjectContextValid(generation, subject) || this.data.subjectBusy) return;
+    this.setData({ subjectBusy: true, subjectError: "" });
     try {
-      if (option.subject) await api.request(`/subjects/${option.subject.id}`, { method: "PATCH", data: { active: !option.selected } });
-      else await api.request("/subjects", { method: "POST", data: { child_id: this.data.childId, name: option.name, kind: "learning" } });
-      wx.showToast({ title: option.selected ? `已移出${option.name}` : `已加入${option.name}`, icon: "success" });
+      if (subject.id) await api.request(`/subjects/${subject.id}`, {
+        method: "PATCH", data: { active: !subject.selected }
+      });
+      else await api.request("/subjects", { method: "POST", data: {
+        child_id: subject.childId, name: subject.name, kind: "learning"
+      } });
+      if (!this.subjectContextValid(generation, subject)) return;
+      wx.showToast({ title: subject.selected ? "已移出" : "已加入", icon: "success" });
+      this.resetSubjectManager();
       await this.load();
     } catch (error) {
-      this.setData({ togglingName: "" });
-      wx.showToast({ title: error.message, icon: "none" });
+      if (!this.subjectContextValid(generation, subject)) return;
+      this.setData({ subjectBusy: false, subjectError: error.message || "操作失败，请重试" });
     }
-  },
-  removeLearning(event) {
-    if (!this.guardWrite()) return;
-    const subject = this.data.addedLearning.find((item) => item.id === event.currentTarget.dataset.id);
-    if (!subject) return;
-    wx.showModal({ title: `移出「${subject.name}」？`, content: "已有的学习记录会保留，只是不再出现在选项里。", confirmText: "移出", confirmColor: "#A85742", success: async (result) => {
-      if (!result.confirm) return;
-      this.setData({ removingId: subject.id });
-      try {
-        await api.request(`/subjects/${subject.id}`, { method: "PATCH", data: { active: false } });
-        wx.showToast({ title: "已移出", icon: "success" });
-        await this.load();
-      } catch (error) {
-        this.setData({ removingId: "" });
-        wx.showToast({ title: error.message, icon: "none" });
-      }
-    } });
   },
   openCatalog(event) {
     const type = event.currentTarget.dataset.type;

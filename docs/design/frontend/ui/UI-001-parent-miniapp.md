@@ -1,5 +1,9 @@
 # UI-001 — 家长端微信小程序
 
+- 2026-10-15学科管理最新增量：SPEC-20261014-SUBJECT-MANAGEMENT-01 / DREV-20261014-SUBJECT-MANAGEMENT-01已批准并本地实现。学科行以整行箭头打开管理半屏，底部“移出此科目”经确认才生效，移出保留学习记录；未加入基础科目面板显示“加入此科目”。只读及受限项无操作箭头；错误保留面板可重试。替代旧行尾加入/移出按钮及基础科目无确认的操作。未上传/发布；当前验证见 [本轮证据](../../../quality/evidence/SUBJECT-MANAGEMENT-20261015.md)。
+
+- 2026-10-15本地按钮/分页：SPEC-20261014-ACTION-PAGER-CONSISTENCY-02 / DREV-20261014-ACTION-PAGER-CONSISTENCY-02批准并实现。每日任务完成/撤销为无阴影胶囊；编辑计划独立页和报表内嵌共享三列分页，科目双列，禁用透明底。243项测试及静态通过；430宽原生11态部分验证，320/390、内嵌、截图和真机待补。尚未上传，Spec active/VERIFYING。证据docs/quality/evidence/ACTION-PAGER-CONSISTENCY-20261015.md。
+
 - 2026-10-13最新设置增量：SPEC-20261013-SETTINGS-CONSISTENCY-01 / DREV-20261013-SETTINGS-CONSISTENCY-01批准并实现；在学科目统一活动式单列行；每日任务独立书本/时钟装饰、整行编辑、添加候选半屏，预设需保存。取代科目三列、任务常驻预设/独立编辑/内联表单描述。239项测试、静态/设计/架构与430原生八态通过；源码5837d59随0.1.15开发上传成功（1027271字节），未体验/提审/正式发布；320/390原生、完整截图、真机待验收。证据docs/quality/evidence/SETTINGS-CONSISTENCY-20261013.md。
 
 - 2026-10-13背景全面接入：设置科目/活动/出行不同插画与纸面背景；每日任务同款背景和列表、紧随活动之后；报表顶部成长记录插画和统一卡片背景。Spec SPEC-20261013-CARD-BACKGROUNDS-01 / Design DREV-20261013-CARD-BACKGROUNDS-01。238测试、静态校验及1017670字节CLI预览包通过，三视口HTML仅辅助；原生/真机/用户验收待补，未发布。证据docs/quality/evidence/CARD-BACKGROUNDS-20261013.md；本增量取代上文“设置/报表背景未接入”的历史事实。
@@ -8,8 +12,8 @@
 
 - 2026-10-13本地视觉增量：记录标题卡书本插画、空上传相机插画及日程台历插画使用统一纸面渐变；Design `DREV-20261013-RECORD-CALENDAR-ILLUSTRATIONS-01` 已批准，新增资源173638字节。保留原文案、业务和导航；装饰失败自动回退。233项测试通过，原生三视口及真机验收待补，未发布。详见 `docs/quality/evidence/RECORD-CALENDAR-ILLUSTRATIONS-20261013.md`。
 
-- Status: `CURRENT / VOICE_INPUT_LOCAL_VERIFIED / MICROPHONE_PRIVACY_DECLARATION_BLOCKED / DEVELOPMENT_VERSION_0.1.14_UPLOADED / NATIVE_VIEWPORT_MATRIX_NOT_RUN`
-- Release status: `0.1.14` 已上传为开发版本（1017762字节），包含每日任务、背景插画、报表布局；未设体验版/审核/正式版。2026-10-13生产Schema已升级0019、后端030已全量模式发布且normal，真实小程序设置依赖及每日任务等13项读取接口200；设置页刷新后档案与各设置数组加载、error为空。原生全部状态/真机验收仍待完成。证据：`docs/deploy/releases/20261013-fullstack-diff.md`；0.1.13是历史开发上传基线。
+- Status: `CURRENT / VOICE_INPUT_LOCAL_VERIFIED / MICROPHONE_PRIVACY_DECLARATION_BLOCKED / DEVELOPMENT_VERSION_0.1.15_UPLOADED / ACTION_PAGER_LOCAL_VERIFYING / NATIVE_VIEWPORT_MATRIX_INCOMPLETE`
+- Release status: 最新开发上传为`0.1.15`（1027271字节，源码5837d59），包含每日任务、背景插画、报表布局及设置一致性；未设体验版/审核/正式版。本轮按钮/分页修改仅本地实现。2026-10-13生产Schema已升级0019、后端030已全量模式发布且normal，真实小程序设置依赖及每日任务等13项读取接口200。原生全部状态/真机验收仍待完成。上传证据：`docs/deploy/releases/20261013-settings-consistency-frontend.md`；后端证据：`docs/deploy/releases/20261013-fullstack-diff.md`；0.1.13/0.1.14为历史开发上传。
 - Related Feature: `FEAT-001`
 - Local report disclosures: `SPEC-20261011-REPORT-DISCLOSURES-01 / DREV-20261011-REPORT-DISCLOSURES-01` 已获用户批准并本地实现。
   报表科目统计后依次为「历史记录」「编辑计划」两张默认收起的卡，课外活动投入在其后；展开分别复用完整有界历史和条目清单，互不覆盖。原独立条目页标题同步改为「编辑计划」；记录页保留新增及待处理入口，历史列表移出。12张设计快照及SHA、前端自动化和三视口四状态微信原生数字几何已通过；开发版本 `0.1.13` 已上传，iOS/Android真机未验收，未设体验版/正式版。证据：`docs/quality/evidence/REPORT-DISCLOSURES-20261011.md`、`docs/deploy/releases/20261011-report-disclosures-frontend.md`。
@@ -192,7 +196,7 @@
   摘要/入口，Todo 本体与反馈操作保持可用。
 - 知识点的置信度一律表述为"AI 识别把握程度"，并附"仅供核对、不代表模型判定掌握"的说明。
 - 原始材料按服务端 `sort_order` 升序渲染，照片编号稳定，重复进入顺序不变。
-- 设置页区分内置三科与家长自定义科目；只有自定义项可以移出。
+- 设置页固定展示基础三科，可在管理面板加入或经二次确认移出；其他科目只允许 canRemove 的自定义项移出。移出不删除学习记录；只读成员无操作入口。
 - 今日页与记录页都会用最新的待处理数更新"记录" Tab 徽标，两者不会互相覆盖出不一致的数字。
 - 需要远程数据的页面统一开启原生下拉刷新；弱网失败时保留已加载内容并显示页内可重试错误条，不清空为空态。
 - 报表区间和历史筛选条件按 childId 持久化在本地偏好中，不进入请求 URL；今日四分区和报表「历史记录」「编辑计划」展开态不持久化，今日按实时事实重算默认值，报表两区每次进入和切孩子均收起。

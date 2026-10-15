@@ -7,7 +7,7 @@
 .daily-task-copy { min-width: 0; }
 .daily-task-name { display: block; font-size: 15px; font-weight: 600; line-height: 1.6; overflow-wrap: anywhere; }
 .daily-task-meta { display: block; margin-top: 8rpx; font-size: 13px; line-height: 1.5; color: var(--pk-ink-3); }
-.daily-task-row .daily-task-action { flex: none; width: auto; min-width: 64px; min-height: 44px; height: auto; margin: 0; padding: 10px 14px; border-radius: var(--pk-r-md); font-size: 14px; }
+.daily-task-row .daily-task-action { flex: none; width: auto; min-width: 64px; min-height: 44px; height: auto; margin: 0; padding: 10px 14px; border-radius: var(--pk-r-pill); box-shadow: none; font-size: 14px; }
 .pg-head .head-intro { flex: 1; min-width: 0; }
 .child-chip .chip-nm { max-width: 200rpx; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .child-chip.single { padding-right: 28rpx; }
