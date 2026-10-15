@@ -65,7 +65,7 @@ queued --lease--> running --success--> succeeded --30d--> pruned
 - `UI-010`: 无家庭首屏仅有“创建家庭 / 申请加入家庭”；创建家庭不要求同时建孩子。
 - `UI-016`: 删除配置 overview、孩子/家庭影响确认、处理中、失败/重试与完成状态。
 - `UI-015`: 删除完成后通过共享 child context 清除 stale selection。
-- Design revision: `DREV-20260906-DATA-01`，由一次性 Figma waiver 支持本地实现；公开发布前仍需补节点与原生矩阵证据。
+- Design revision: `DREV-20260906-DATA-01`；当前按 `GOV-SPEC-LOCAL-DESIGN-EVIDENCE-20260913-01` 使用仓库原生设计证据，公开发布前仍需完成设计验收与原生矩阵证据。
 
 ## Verification evidence（2026-09-07，本地）
 
@@ -80,10 +80,12 @@ queued --lease--> running --success--> succeeded --30d--> pruned
 
 1. 生产 migration 已完成；恢复备份与 downgrade 未实操验证。
 2. 真实云托管 worker、对象存储删除与两账号身份回归待体验验收。
-3. `UI-016` 的正式 Figma node、320/390/430 原生节点几何和 iOS/Android 真机证据仍是公开发布门禁。
+3. `UI-016` 的仓库原生设计源文件/导出/审批清单验收、320/390/430 原生节点几何和 iOS/Android 真机证据仍是公开发布门禁。
 4. 若微信发送事务先取得锁并完成远端调用，删除请求会等待其提交后才被接受；外部已接受消息不可撤回。
 
 ## Source index
+
+- Design governance revision: `DOC-SPEC-20261013-02-01`；[门禁同步记录](../../../specs/completed/DOC-002-MARKDOWN-STATE-RECONCILIATION.md)，仅修订设计证据政策，不改变实现/发布状态。
 
 - Applied Specs: `specs/completed/FEAT-006-DATA-CLEANUP-AND-FAMILY-RESET.md`、`specs/completed/BUG-016-NOTIFICATION-DELETION-INTEGRATION.md`
 - Decisions: `docs/decisions/ADR-002-DURABLE-DATA-DELETION.md`

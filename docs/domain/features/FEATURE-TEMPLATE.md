@@ -159,9 +159,9 @@ flowchart LR
 - Project frontend baseline: `[docs/design/frontend/FRONTEND-DESIGN.md#FDB-*]`
 - Frontend engineering constraints: `[docs/design/frontend/FRONTEND-ENGINEERING-CONSTRAINTS.md#FEC-*]`
 
-| UI ID | User-visible responsibility | UI current-state document | Current Design Revision | FEC revision | Figma node | Implementation | Quality/verification |
+| UI ID | User-visible responsibility | UI current-state document | Current Design Revision | FEC revision | Editable SVG/HTML + approval manifest | Implementation | Quality/verification |
 |---|---|---|---|---|---|---|---|
-| `[UI-xxx]` | `[surface/flow]` | `[docs/design/frontend/ui/...]` | `[DREV-*]` | `[FEC-*]` | `[URL]` | `[path]` | `[design + engineering evidence]` |
+| `[UI-xxx]` | `[surface/flow]` | `[docs/design/frontend/ui/...]` | `[DREV-*]` | `[FEC-*]` | `[repository source + manifest paths and SHA-256]` | `[path]` | `[design + engineering evidence]` |
 
 Keep business behavior here and detailed visual/interaction facts in the linked
 UI document. Update both documents when one change affects both responsibilities.

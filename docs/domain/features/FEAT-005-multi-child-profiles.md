@@ -125,8 +125,8 @@ archived --restore--> active（受上限与在用重名校验约束）
 
 - `UI-015-child-profile` 是本 Feature 的当前状态文档（档案管理区与 `pages/child-edit`）。
 - `UI-001-parent-miniapp` 的档案切换弹层与设置页受影响：弹层底部新增「添加孩子」入口。
-- 实施依据 `SPEC-20260906-MULTI-CHILD-01` 的 Figma waiver（Owner 王宇），公开生产发布前必须补齐
-  Figma 节点、审批快照与 320×568 / 390×844 / 430×932 三视口原生节点几何证据，waiver 随即失效。
+- 实施依据 `SPEC-20260906-MULTI-CHILD-01`；当前设计证据按 `GOV-SPEC-LOCAL-DESIGN-EVIDENCE-20260913-01`
+  使用仓库内可编辑 SVG/HTML、视口/状态导出和匹配 SHA-256 审批清单。320×568 / 390×844 / 430×932 三视口原生节点几何证据仍须补齐。
 
 ## Current quality and operations
 
@@ -140,7 +140,7 @@ archived --restore--> active（受上限与在用重名校验约束）
 
 ## Limitations
 
-- 三视口与 Figma 视觉证据缺失，公开生产发布门禁未满足。
+- 三视口原生与完整设计验收证据待补，公开生产发布门禁未满足。
 - 云端迁移与真机双账号验证未执行。
 - 本地 `X-Family-ID` 路径的归档/恢复不留审计痕迹（无成员绑定，不伪造操作人）。
 - 红点与首屏摘要仍是「当前孩子」口径，多孩子家长可能漏看另一个孩子的待确认（Spec Q-001）。
@@ -158,6 +158,8 @@ archived --restore--> active（受上限与在用重名校验约束）
 - Related features: `docs/domain/features/FEAT-001-push-kids-mvp.md`、`docs/domain/features/FEAT-002-family-collaboration.md`
 
 ## Change References
+
+- 2026-10-13 — [DOC-SPEC-20261013-02-01](../../../specs/completed/DOC-002-MARKDOWN-STATE-RECONCILIATION.md)：删除失效外部设计工具门禁，统一仓库原生设计证据；实现/发布状态和原生/真机验收要求不变。
 
 - 2026-09-06 — `SPEC-20260906-MULTI-CHILD-01` 获用户批准并实施：新增 `children.active` 生命周期、
   归档/恢复接口与审计留痕、在用上限与重名规则、初始科目预置、家庭开通与建档解耦，新增小程序

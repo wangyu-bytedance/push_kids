@@ -1,5 +1,7 @@
 # FEAT-003 — 通知消息通道
 
+- Design governance revision: `DOC-SPEC-20261013-02-01`；[门禁同步记录](../../../specs/completed/DOC-002-MARKDOWN-STATE-RECONCILIATION.md)，仅修订设计证据政策，不改变实现/发布状态。
+
 - Feature ID: `FEAT-003`
 - Status: `DEPLOYED_PENDING_LIVE_CHANNEL_ACCEPTANCE`
 - Current-state revision: `FEAT-STATE-20260919-MYSQL57-WORKER-06-LOCAL`
@@ -131,7 +133,7 @@
    日程与复习提醒会退化成「每次都要家长再点一次」；若能选到同题材长期模板应替换并把 `long_term` 设为 `true`。
 3. 云端版本与 MySQL migration 已发布，但真实 `wx.cloud.callContainer`、两账号删除/通知链路、
    微信开发者工具三视口原生几何证据未做。
-4. `UI-011` 缺 Figma 节点级 URL，waiver 处于请求状态。
+4. `UI-011` 的仓库原生可编辑 SVG/HTML 设计源文件和审批 manifest 仍为 PENDING；按 `GOV-SPEC-LOCAL-DESIGN-EVIDENCE-20260913-01` 补齐设计证据。
 
 ## Change References
 

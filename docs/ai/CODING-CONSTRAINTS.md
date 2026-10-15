@@ -274,7 +274,7 @@ forms, accessibility, localization, browser behavior, performance, security,
 data integrity, or observability.
 
 
-- Do not implement a user-visible frontend before the approved Figma gate.
+- Do not implement a user-visible frontend before the approved repository-native design evidence gate.
 - Inherit the approved style consistency, interaction convention, and
   resolution baseline; do not introduce ad-hoc colors, spacing, typography,
   components, novel interaction patterns, or undocumented breakpoints.
@@ -287,7 +287,7 @@ data integrity, or observability.
 - Reuse Design System tokens/components when semantics match. Similar pixels do
   not alone justify a shared component; extracted UI abstractions still need a
   stable contract, Owner, consumers, and tests.
-- Record Figma component ↔ code component mapping; use Code Connect when available.
+- Record approved SVG/HTML design source and state ↔ code component mapping, with viewport/state exports and a matching SHA-256 approval manifest.
 - A material difference from the approved layout, flow, state, copy meaning,
   accessibility semantics, or responsive behavior requires a new Design Revision.
 - Delete replaced component branches, CSS, pages, flags, stories, snapshots, and

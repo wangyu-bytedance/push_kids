@@ -86,6 +86,14 @@ For every request that changes behavior, APIs, data, architecture, tests, or doc
 5. Merge verified final facts into Feature/UI current-state documents and check architecture cleanliness before completion.
 6. On finishing, evaluate the Spec's lifecycle status and relocate it — do not leave finished work in `specs/active/`. When the completion gate passes, set `Status: DONE` and move the file to `specs/completed/`; if the task was cancelled or rejected, record the reason and move it to `specs/rejected/`. A Spec stays in `active/` only while it is genuinely `DRAFT`/`READY_FOR_REVIEW`/`APPROVED`/`IMPLEMENTING`/`VERIFYING`/`BLOCKED`.
 
+### Mandatory documentation closure after every code change
+
+- 每次完成代码修改，必须按实际 diff 核对受影响的 Feature、Behavior Catalog、Architecture、UI current-state、Spec、测试证据与发布文档。逐项检查代码和当前文档是否冲突；不能只追加新说明而保留相互矛盾的当前正文。
+- 更新已验证事实对应的正文、状态、revision、变更引用和证据；明确区分本地实现、自动化通过、原生/真机验收、上传、体验、审核和正式发布。未执行检查不得写成通过，历史证据不得冒充当前 diff 的验证。
+- 每次收尾都必须检查 Spec 状态和存放位置：完成门禁通过才设为 DONE 并迁移到 specs/completed/；取消/拒绝应记录理由并迁移到 specs/rejected/；未完成则保留 specs/active/，记录缺失验收、阻塞原因和恢复条件。代码完成本身不等于验收完成。
+- 迁移文档后同步修复索引和引用，检查目标路径存在；已批准设计快照保持不可变，只按既有规则添加 Superseded by 指针。
+- 完成回复必须说明已同步的文档、Spec 最终状态/位置、代码与文档冲突核对结果，以及尚未验证或需要批准的事项。发现超出已批准范围的事实修订时先形成明确 Spec revision，不得静默扩展实现或用文档掩盖代码偏差。
+
 Before initial production coding, or before changing module boundaries, shared abstractions, dependency direction, or extension points, present the recommended design, alternatives, and trade-offs and obtain confirmation of the architecture/Spec revision.
 
 ### Frontend repository-native design gate

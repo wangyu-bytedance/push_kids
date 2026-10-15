@@ -32,7 +32,7 @@ AI 能快速追加规则、文档和抽象，也会快速制造信息熵。定�
 - [ ] 每个受影响 Feature 的 `docs/domain/features/` 正文已合并最终状态，并
       添加本次 Spec/ADR/Release/Evidence 引用；
 - [ ] 前端变更已将最终状态合并到 `docs/design/frontend/ui/`，并关联
-      Figma node、Design Revision、批准 snapshot 和视觉/a11y/分辨率证据；
+      可编辑 SVG/HTML 源文件、Design Revision、批准 snapshot/hash 和视觉/a11y/分辨率证据；
 
 - [ ] 新的架构决定形成 ADR；
 - [ ] 删除旧路径、旧测试、旧配置、旧文档；
@@ -51,7 +51,7 @@ AI 能快速追加规则、文档和抽象，也会快速制造信息熵。定�
 - Review 中的 Blocker/Major
 - 新增 TODO/FIXME/temporary/deprecated/legacy 标记
 - 架构例外和临时 Feature Flag
-- 前端 baseline、UI current-state、Figma node、批准 snapshot 和视觉回归证据
+- 前端 baseline、UI current-state、仓库内设计源文件、批准 snapshot/hash 和视觉回归证据
 - frontend engineering constraint revision、quality budgets、browser/a11y
   matrices、performance reports、exceptions、analytics schemas 和安全隐私证据
 
@@ -67,7 +67,7 @@ AI 能快速追加规则、文档和抽象，也会快速制造信息熵。定�
 6. 哪些任务实际扩大了范围但 Spec 未同步？
 7. 是否出现新增实现与旧实现并行？
 8. 哪些前端 Spec 已完成但 UI current-state 未合并？
-9. 哪些 Figma 记录只有文件链接、缺 node ID、Design Revision、snapshot 或 hash？
+9. 哪些设计记录缺可编辑 SVG/HTML 源文件、Design Revision、必需视口/状态导出、snapshot 或匹配的 SHA-256？
 10. 哪些页面声称支持的分辨率没有设计或测试证据？
 11. 哪些 frontend engineering constraints 仍是 Draft、与代码不符或包含假命令？
 12. 哪些 a11y/browser/performance/security/privacy 声明没有实际证据？
@@ -84,7 +84,7 @@ AI 能快速追加规则、文档和抽象，也会快速制造信息熵。定�
 - 为未知历史行为添加 characterization task；
 - 修正错误文档，不追加“补充说明”叠加冲突；
 - 对超大 active Spec 拆分。
-- 修复失效 Figma node/索引，补齐批准证据或创建阻塞任务；
+- 修复失效仓库设计源文件/索引，补齐批准证据或创建阻塞任务；
 - 删除非必要草稿导出，保留要求的批准快照；
 - 对 style、interaction、resolution baseline 漂移提出重新确认任务。
 
@@ -151,7 +151,7 @@ AI 能快速追加规则、文档和抽象，也会快速制造信息熵。定�
 1. 检查 style consistency、user interaction conventions 和 resolution
    support baseline 是否已批准且仍匹配代码/Design System；
 2. 从 UI current-state 复述当前节点、状态、视口、a11y 和实现映射；
-3. 核对 Figma node、Design Revision、snapshot/hash、代码和视觉测试；
+3. 核对可编辑 SVG/HTML 源文件、Design Revision、视口/状态导出与 snapshot/hash、代码和视觉测试；
 4. 查找 completed frontend Specs 未合并 current-state 或无 Change Reference；
 5. 查找实现超出批准设计、失效链接、无证据分辨率和到期 waiver；
 6. 替换过期正文，不把历史追加成冲突状态。
@@ -286,7 +286,7 @@ active/completed Specs、最近 CI/Review 证据。
 4. 找出重复出现但尚未自动化的 Review 问题；
 5. 找出关键行为的验证空缺和 flaky/quarantined 测试；
 6. 评估上期整改项是否关闭。
-7. 检查前端 current-state、Figma nodes、批准 snapshots、分辨率和 a11y 证据。
+7. 检查前端 current-state、仓库内设计源文件、批准 snapshots/hash、分辨率和 a11y 证据。
 
 
 只生成 MAINTENANCE-REPORT.md，不改生产代码，不删除不确定内容。

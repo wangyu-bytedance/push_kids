@@ -46,12 +46,14 @@
 - Proposed UI: `docs/design/frontend/ui/UI-017-travel-arrangements.md`.
 - Candidate design: `docs/design/frontend/prototypes/DREV-20260906-TRAVEL-01/index.html`.
 - Baseline/engineering: `FDB-20260906-02 / FEC-20260906-04`.
-- Figma node and approval snapshot: pending under the approved scoped waiver; Starter tool-call limit + View seat blocked the attempt.
-- `SPEC-20260906-TRAVEL-02`、`DREV-20260906-TRAVEL-01`、全部日程项冲突范围、20 项总上限与 FEAT-007 scoped Figma waiver 已由用户于 2026-09-06 批准；实现与验证进行中。
+- Repository-native approval manifest: pending per UI-017；当前按 `GOV-SPEC-LOCAL-DESIGN-EVIDENCE-20260913-01` 使用可编辑 HTML、视口/状态导出与匹配 SHA-256 清单。
+- `SPEC-20260906-TRAVEL-02`、`DREV-20260906-TRAVEL-01`、全部日程项冲突范围、20 项总上限已由用户于 2026-09-06 批准；实现与验证进行中。
 
 ## Quality and release status
 
-- Spec/Design approval: approved by the user on 2026-09-06, including all-calendar-source conflicts and the FEAT-007-only Figma waiver.
+- Design governance revision: `DOC-SPEC-20261013-02-01`；[门禁同步记录](../../../specs/completed/DOC-002-MARKDOWN-STATE-RECONCILIATION.md)，仅修订设计证据政策，不改变实现/发布状态。
+
+- Spec/Design approval: approved by the user on 2026-09-06, including all-calendar-source conflicts; historical tool waiver does not define the current design gate.
 - Production code/migration: implemented locally. Backend/frontend automation passed; local runtime deployment, cloud release and Mini Program upload were not run.
 - Required visible evidence after implementation: 320×568, 390×844, 430×932 for normal/conflict/form/error/read-only states.
 

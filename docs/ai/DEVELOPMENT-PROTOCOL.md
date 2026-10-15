@@ -103,17 +103,17 @@ Before any frontend implementation, verify
 `docs/design/frontend/FRONTEND-ENGINEERING-CONSTRAINTS.md` is approved and
 matches the frontend scope. Classify visible `Frontend impact` separately from
 `Frontend engineering impact`. The latter includes frontend code/quality/
-toolchain/policy changes even without a new Figma design.
+toolchain/policy changes even without a new visible design.
 
 
 For user-visible frontend changes, read
 `docs/design/frontend/FRONTEND-DESIGN.md` and
-`docs/design/frontend/ui/`, then follow the Figma design gate. The style
+`docs/design/frontend/ui/`, then follow the repository-native design evidence gate. The style
 consistency, target-user/platform interaction conventions, and supported
 resolution matrix must be approved before prototyping. The user must approve
-Task Spec revision + Design Revision + node-specific Figma targets before
-frontend implementation. Persist an approval snapshot; a file URL alone is not
-approval.
+Task Spec revision + Design Revision before frontend implementation. Persist the
+repository-local editable SVG/self-contained HTML source, required viewport/state
+exports and matching immutable SHA-256 approval manifest; a source path alone is not approval.
 
 
 ### Gate A — Intake
@@ -169,8 +169,8 @@ Discovery 输出至少包括：
 - 旧逻辑候选；
 - 未知项；
 - 风险升级建议。
-- for frontend impact: current style/interaction/resolution baseline, Figma
-  nodes, required UI states/viewports, code component mapping, and visual/a11y evidence.
+- for frontend impact: current style/interaction/resolution baseline, editable SVG/HTML
+  design sources, required UI states/viewports, code component mapping, and visual/a11y evidence.
 - for frontend engineering impact: component/state/form boundaries, complete
   states, a11y/i18n/browser/performance/security/privacy/data-viz/motion/media/
   AI/observability facts, test commands, reports, and current deviations.
@@ -201,8 +201,8 @@ Spec 通过条件：
 - 验收标准可观察；
 - R2/R3 的发布和回滚明确；
 - 没有 Blocker 级待决问题。
-- for `Frontend impact: yes`, the approved baseline revision, UI-ID, Figma
-  file/node URLs, proposed Design Revision, viewport/state exports, approval
+- for `Frontend impact: yes`, the approved baseline revision, UI-ID, editable SVG/HTML
+  source paths and SHA-256, proposed Design Revision, viewport/state exports, approval
   snapshot path, and explicit design approval are complete.
 - for `Frontend engineering impact: yes`, the approved FEC revision, quality
   dimensions/rule IDs/budgets, verification plan, and approved deviations are complete.
@@ -227,7 +227,7 @@ Failure/rollback:
 
 先实施最能验证核心假设的切片。数据库、公共接口和不可逆动作尽量延后，直到前置假设被验证。
 
-Frontend implementation planning starts only after the Figma gate is approved.
+Frontend implementation planning starts only after the repository-native design evidence gate is approved.
 Frontend engineering planning also maps each changed/risk-relevant quality
 contract to a test point, command/environment, budget, retained report, and Owner.
 
@@ -258,9 +258,9 @@ Plan by visible user outcome/state/viewport, not by vague “frontend” phases.
 
 禁止为了让实现通过而静默弱化验收标准。
 
-Frontend code must stay within approved Figma/Spec scope. A material change to
+Frontend code must stay within approved Design Revision/Spec scope. A material change to
 layout, flow, copy meaning, state, accessibility semantics, or responsive
-behavior returns to Gate C/Figma, creates a new Design Revision, and requires
+behavior returns to Gate C/repository-native design approval, creates a new Design Revision, and requires
 approval again.
 
 
@@ -318,7 +318,7 @@ filled checklist, and merges final facts/deviations into UI current state.
 
 - semantically merges final facts into each affected UI current-state document;
 - updates the frontend index when a global fact changed;
-- records Figma node, Design Revision, approval snapshot, release/commit, and verification;
+- records editable design source, Design Revision, SHA-256 approval snapshot, release/commit, and verification;
 - removes replaced UI/CSS/flags or records an owned, expiring exit plan.
 
 
