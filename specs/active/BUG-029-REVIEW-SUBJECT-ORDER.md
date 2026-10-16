@@ -211,4 +211,4 @@ pending → complete / partial / reinforce / deferred（沿用原反馈语义）
 - Monitoring: `回归断言；无新增生产埋点`。
 - Documentation/evidence merge: `Feature、BHV-006、Architecture、UI正文与索引已同步；详见 docs/quality/evidence/REVIEW-SUBJECT-ORDER-20261016.md 和 docs/deploy/releases/20261016-review-subject-order-backend.md`。
 - Independent Review: `R1 Codex逐文件Diff Review通过；同一实现者复核，不冒称独立人员审查`。
-- Current lifecycle decision: `VERIFYING，保留 specs/active/。代码及TP-001..008已完成；用户授权的Git/后端部署继续执行。Docker引擎未就绪，本地容器门禁待补；恢复条件为Docker可用后完成容器检查、冻结提交和灰度发布，再按发布手册处理人工切流/操作验收。代码完成不提前判DONE。`。
+- Current lifecycle decision: `VERIFYING，保留 specs/active/。代码及TP-001..008已完成；Git bug提交1b1e964、lint提交374b9ba。Docker恢复后通过冻结镜像构建/UID/health/SIGTERM、隔离MySQL5.7空库迁移及18项专项、冻结镜像HTTP保序；灰度不可变031于22:56:03 normal，副本1，PUBLIC关闭，配置与030一致。030=100%/031=0%，未定向smoke/全量；031日志TopicNotExist，未冒称验收通过。恢复/关闭条件为管理员在控制台配置031定向测试并完成小程序反馈保序/健康/共存观察，再按发布手册确认全量。Owner为产品/发布负责人，回复“已完成后端全量发布”后只读核验并关闭Spec；未完成不判DONE。`。

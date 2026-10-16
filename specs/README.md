@@ -14,7 +14,7 @@ FEAT-001 早期实现的历史变更记录为
 
 ## Layout
 
-复习完成后科目跳序修复：[`BUG-SPEC-20261016-REVIEW-SUBJECT-ORDER-01`](active/BUG-029-REVIEW-SUBJECT-ORDER.md)，用户已批准并本地实现，`VERIFYING`；后端518项、前端244项及静态门禁通过，容器和部署阶段见发布记录。
+复习完成后科目跳序修复：[`BUG-SPEC-20261016-REVIEW-SUBJECT-ORDER-01`](active/BUG-029-REVIEW-SUBJECT-ORDER.md)，`VERIFYING`；后端518项、前端244项、补充MySQL18项和冻结镜像门禁通过；灰度031 normal/0%流量，定向smoke与全量人工门禁待完成，见[发布记录](../docs/deploy/releases/20261016-review-subject-order-backend.md)。
 
 历史设计脚本lint清理：[`SPEC-20261016-RELEASE-LINT-01`](completed/CHORE-20261016-RELEASE-LINT.md)，用户明确批准，`DONE`；5个脚本等价整理，新旧168个输出哈希相同，批准快照未变，全仓Ruff通过。
 

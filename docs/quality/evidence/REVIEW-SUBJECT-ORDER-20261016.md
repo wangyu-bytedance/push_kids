@@ -3,7 +3,7 @@
 - Date: 2026-10-16
 - Spec: [`BUG-SPEC-20261016-REVIEW-SUBJECT-ORDER-01`](../../../specs/active/BUG-029-REVIEW-SUBJECT-ORDER.md)，用户明确批准实现、Git提交与部署。
 - Baseline: `8b933dae762f6dbdb1bb9c2286155106b0a5fdc6`。
-- Local implementation verified；不以本地通过或旧后端030的生产smoke表示本修复已上线。
+- Local implementation verified；灰度不可变031已normal但0%流量，定向验收/全量未完成；不以本地通过或旧后端030的生产smoke表示修复已承载生产流量。
 
 ## 根因与修复
 
@@ -18,7 +18,7 @@
 | 旧实现确定性反例 | FAIL（预期），同plan/count正确但完成语文1后由语数英变为数英语 |
 | 新持久回归在旧实现运行 | 5 failed/3 passed（预期红灯）；4种feedback及自定义HTTP顺序断言失败 |
 | 修复后专项：新文件 + review_fairness + review_inventory + test_review_selection | PASS，30 passed/8 skipped，3.53s；MySQL URL未配置的可选变体跳过 |
-| 全量`.venv/bin/python -m pytest tests/unit tests/integration tests/contract -q` | PASS，518 passed/19 skipped/62 warnings，44.46s；未配置隔离MySQL的可选测试未运行 |
+| 全量`.venv/bin/python -m pytest tests/unit tests/integration tests/contract -q` | PASS，518 passed/19 skipped/62 warnings，44.46s；18项MySQL可选用例首次未配置URL而跳过，另1项SQLite不适用MySQL repeatable-read测试；后续隔离MySQL18项已补跑通过 |
 | `.venv/bin/ruff check .` / `.venv/bin/ruff format --check .` | PASS，519文件格式通过；原68处历史问题经[单独批准chore](../../../specs/completed/CHORE-20261016-RELEASE-LINT.md)清理 |
 | `.venv/bin/mypy apps/api/src` | PASS，103 source files |
 | `npm test` / `npm run lint:miniapp` | PASS，244/244前端测试，ESLint通过 |
@@ -29,7 +29,10 @@
 | `.venv/bin/alembic heads` | PASS，唯一head 20261012_0019；生产只读核对同为0019，未执行迁移 |
 | `git diff --check` | PASS |
 | 原生三视口/iOS/Android | NOT_RUN；无小程序源码或几何变化，本轮不替代已有前端任务待验收项 |
-| 新候选本地容器/云部署/真实写反馈 | 尚未执行完成；持续状态见[发布报告](../../deploy/releases/20261016-review-subject-order-backend.md) |
+| 隔离MySQL发布门禁 | PASS；5.7.44全新空库按utf8mb4_unicode_ci迁移到0019，current/check通过；mysql专项18 passed/7 deselected，8.14s。首次默认排序规则失败在重建测试库后解决，生产未受影响 |
+| 冻结候选本地容器 | PASS；107文件逐字节等于提交1b1e964，构建成功；UID10001/8000/live200/ready200/SIGTERM退出0/OOM false |
+| 冻结镜像MySQL真实HTTP反馈 | PASS；合成家庭完成第一条语文后3次dashboard读取，原科目顺序、plan_id及反馈/剩余计数正确；仅写本次临时空库，结束清理本次资源 |
+| 云部署/生产真实写反馈 | 031于22:56:03 normal、副本1，PUBLIC关闭；030=100%/031=0%，配置内存比较一致；尚未定向smoke或写真实反馈。031日志TopicNotExist，不声称日志/指标通过；详见[发布报告](../../deploy/releases/20261016-review-subject-order-backend.md) |
 
 `uv`先因默认缓存权限失败，临时缓存又触发其Rust system-configuration panic；上述Python/Ruff/Mypy命令均通过已有`.venv/bin`直接实际运行，不把uv失败记为通过。全量后端日志暂存`/private/tmp/push-kids-bug029-pytest.log`，无真实孩子内容。
 
@@ -51,7 +54,7 @@
 
 | 项目 | 结论 |
 |---|---|
-| FEAT-001 | revision更新为本地保序修复，原计划正文加入终态锚点；旧030/客户端0.1.15仍是既有发布事实 |
+| FEAT-001 | revision更新为保序修复GRAY状态，原计划正文加入终态锚点；031 normal/0%，旧030仍100%，客户端0.1.15不变 |
 | Behavior Catalog | BHV-006补充session不变量、反例与本地证据；保留fair-v2的BHV-034覆盖关系 |
 | Architecture | 单service内响应组装，数据不变量正文同步；模块/依赖/Schema/扩展点不变，架构revision不变 |
 | UI-001/FDB/FEC | UI正文同步服务端保序；无前端代码和新设计，批准资源保持不可变 |

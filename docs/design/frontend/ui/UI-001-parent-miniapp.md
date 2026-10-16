@@ -1,6 +1,6 @@
 # UI-001 — 家长端微信小程序
 
-- 2026-10-16服务端复习保序修复：`BUG-SPEC-20261016-REVIEW-SUBJECT-ORDER-01`本地已实现；当前日计划反馈后仍按原计划科目顺序展示，空科目组才消失。小程序代码/设计未改，FDB/FEC及已批准快照保持；本轮前端244项通过，无新原生/真机验收。修复尚未部署，见[证据](../../../quality/evidence/REVIEW-SUBJECT-ORDER-20261016.md)与[发布记录](../../../deploy/releases/20261016-review-subject-order-backend.md)。
+- 2026-10-16服务端复习保序修复：`BUG-SPEC-20261016-REVIEW-SUBJECT-ORDER-01`已实现，冻结镜像HTTP回归通过；原计划反馈后仍按原科目顺序展示，空科目组才消失。灰度031已normal但0%流量，定向smoke/全量待人工完成；旧030仍100%。小程序代码/设计未改，FDB/FEC及批准快照保持；前端244项通过，无新原生/真机验收。见[证据](../../../quality/evidence/REVIEW-SUBJECT-ORDER-20261016.md)与[发布记录](../../../deploy/releases/20261016-review-subject-order-backend.md)。
 
 - 2026-10-15学科管理最新增量：SPEC-20261014-SUBJECT-MANAGEMENT-01 / DREV-20261014-SUBJECT-MANAGEMENT-01已批准并本地实现。学科行以整行箭头打开管理半屏，底部“移出此科目”经确认才生效，移出保留学习记录；未加入基础科目面板显示“加入此科目”。只读及受限项无操作箭头；错误保留面板可重试。替代旧行尾加入/移出按钮及基础科目无确认的操作。未上传/发布；当前验证见 [本轮证据](../../../quality/evidence/SUBJECT-MANAGEMENT-20261015.md)。
 

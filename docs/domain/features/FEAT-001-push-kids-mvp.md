@@ -1,6 +1,6 @@
 # FEAT-001 — 家庭学习持续跟进系统 MVP
 
-- 2026-10-16复习科目保序本地修复：`BUG-SPEC-20261016-REVIEW-SUBJECT-ORDER-01`已批准并实现，反馈后仍按原计划各科最早ordinal展示；全组无待复习项才移除空组。本轮后端518 passed/19 optional skipped、前端244 passed；尚未部署该修复，容器与发布状态见[发布记录](../../deploy/releases/20261016-review-subject-order-backend.md)，[验证证据](../../quality/evidence/REVIEW-SUBJECT-ORDER-20261016.md)。
+- 2026-10-16复习科目保序修复：`BUG-SPEC-20261016-REVIEW-SUBJECT-ORDER-01`已批准并实现，反馈后仍按原计划各科最早ordinal展示；全组无待复习项才移除空组。后端518 passed/19 skipped、前端244 passed，补充MySQL18项及冻结容器检查通过；灰度031已normal/0%流量，旧030仍100%，定向smoke与全量人工门禁待完成。见[发布记录](../../deploy/releases/20261016-review-subject-order-backend.md)和[验证证据](../../quality/evidence/REVIEW-SUBJECT-ORDER-20261016.md)。
 
 - 2026-10-15学科管理本地增量：SPEC-20261014-SUBJECT-MANAGEMENT-01 / DREV-20261014-SUBJECT-MANAGEMENT-01已批准并实现。学科行统一箭头进入管理面板，移出位于面板底部；基础三科与可移出自定义科目均二次确认，已有学习记录保留。未加入基础科目仍可加入，其他科目沿用 canRemove 限制；只读无写入口，失败留面板重试，切孩子/离页丢弃迟到回调。取代原学科行尾直接加入/移出入口，未上传/发布。验收与未执行项见 [本轮证据](../../quality/evidence/SUBJECT-MANAGEMENT-20261015.md)，Spec 保留 VERIFYING。
 
@@ -42,7 +42,7 @@
   Successful stage DTOs resume across retries; cancellation/manual confirmation/delete clean temporary data.
   This does not describe a deployed release. Evidence and remaining quality gates are in
   `specs/active/BUG-028-STAGED-ANALYSIS-RELIABILITY.md`.
-- Revision: `FEAT-STATE-20261016-REVIEW-SUBJECT-ORDER-01-LOCAL`（保留2026-10-15及更早增量的各自验收/发布状态）
+- Revision: `FEAT-STATE-20261016-REVIEW-SUBJECT-ORDER-01-GRAY`（保留2026-10-15及更早增量的各自验收/发布状态）
 - Review management: `SPEC-20261006-REVIEW-MANAGEMENT-03` 已获用户“落地并实现”批准并本地实现。
   报表独立条目页按明天/后天、单科学习科目、精确复习次数查看；删除清理相关历史和计划，手动改期不计复习。
   今日下一次复习入口移除；后端兼容字段暂保留。预约优先且显式提示预算超量，120项硬上限、幂等及状态冲突由服务端控制。
