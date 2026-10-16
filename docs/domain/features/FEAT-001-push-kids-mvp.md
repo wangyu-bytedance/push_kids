@@ -1,5 +1,7 @@
 # FEAT-001 — 家庭学习持续跟进系统 MVP
 
+- 2026-10-16复习科目保序本地修复：`BUG-SPEC-20261016-REVIEW-SUBJECT-ORDER-01`已批准并实现，反馈后仍按原计划各科最早ordinal展示；全组无待复习项才移除空组。本轮后端518 passed/19 optional skipped、前端244 passed；尚未部署该修复，容器与发布状态见[发布记录](../../deploy/releases/20261016-review-subject-order-backend.md)，[验证证据](../../quality/evidence/REVIEW-SUBJECT-ORDER-20261016.md)。
+
 - 2026-10-15学科管理本地增量：SPEC-20261014-SUBJECT-MANAGEMENT-01 / DREV-20261014-SUBJECT-MANAGEMENT-01已批准并实现。学科行统一箭头进入管理面板，移出位于面板底部；基础三科与可移出自定义科目均二次确认，已有学习记录保留。未加入基础科目仍可加入，其他科目沿用 canRemove 限制；只读无写入口，失败留面板重试，切孩子/离页丢弃迟到回调。取代原学科行尾直接加入/移出入口，未上传/发布。验收与未执行项见 [本轮证据](../../quality/evidence/SUBJECT-MANAGEMENT-20261015.md)，Spec 保留 VERIFYING。
 
 - 2026-10-15本地按钮与分页增量：SPEC-20261014-ACTION-PAGER-CONSISTENCY-02 / DREV-20261014-ACTION-PAGER-CONSISTENCY-02已批准并实现；每日任务无阴影胶囊，编辑计划共享分页固定三列、科目两列及显式禁用。243项前端测试和静态检查通过；430宽11态原生部分验证，完整三视口/内嵌/截图/真机待补，Spec为active/VERIFYING。本增量未上传；既有最新开发上传基线0.1.15（5837d59）。详见docs/quality/evidence/ACTION-PAGER-CONSISTENCY-20261015.md。
@@ -40,7 +42,7 @@
   Successful stage DTOs resume across retries; cancellation/manual confirmation/delete clean temporary data.
   This does not describe a deployed release. Evidence and remaining quality gates are in
   `specs/active/BUG-028-STAGED-ANALYSIS-RELIABILITY.md`.
-- Revision: `FEAT-STATE-20261006-REVIEW-MANAGEMENT-03-LOCAL`
+- Revision: `FEAT-STATE-20261016-REVIEW-SUBJECT-ORDER-01-LOCAL`（保留2026-10-15及更早增量的各自验收/发布状态）
 - Review management: `SPEC-20261006-REVIEW-MANAGEMENT-03` 已获用户“落地并实现”批准并本地实现。
   报表独立条目页按明天/后天、单科学习科目、精确复习次数查看；删除清理相关历史和计划，手动改期不计复习。
   今日下一次复习入口移除；后端兼容字段暂保留。预约优先且显式提示预算超量，120项硬上限、幂等及状态冲突由服务端控制。
@@ -139,7 +141,9 @@
   `active=true AND due_date<=today`，最多读取120项，按 due_date、从未复习/last_reviewed_on、ID 排序，
   再按孩子分钟预算装入；不固定限制6条。完成/部分/巩固/稍后只改变原计划项，当天不补题；未入选
   积压不改 due_date、不写 Feedback。返回精确 `total_due/backlog_count/earliest_due`、计划/待复习数量
-  和分钟、policy revision。旧 `todo_groups` 分页合同继续保留；小程序优先消费稳定计划，并在两条
+  和分钟、policy revision。本地2026-10-16修复使sessions按各科在原计划中最早ordinal保序：已反馈行仍作
+  顺序锚点，只把pending行放入卡片；全科无pending才移除空组。仅涵盖原计划行集合不变的反馈，不新增删除/
+  手动改期后的保序保证。旧 `todo_groups` 分页合同继续保留；小程序优先消费稳定计划，并在两条
   投影中使用同一 source summary/index 合同。
 - 原图每次经家庭/孩子/提交/媒体关联验证；viewer 允许读取，被移除成员拒绝新读取。
   云端签发最长 60 秒 GET 链接，本地下载每次带身份；临时文件退出清理。真实云端双账号 owner
@@ -394,6 +398,8 @@ BUG-010 本地实现已通过微信开发者工具 registered AppID preview 编�
 - 三视口、字体放大、键盘和 iOS/Android 实机证据仍待补齐。
 
 ## Change references
+
+- 2026-10-16 — [`BUG-SPEC-20261016-REVIEW-SUBJECT-ORDER-01`](../../../specs/active/BUG-029-REVIEW-SUBJECT-ORDER.md)：恢复反馈后的科目组序，未改SQL/Schema/选题；[证据](../../quality/evidence/REVIEW-SUBJECT-ORDER-20261016.md)及[发布状态](../../deploy/releases/20261016-review-subject-order-backend.md)区分本地与云端。
 
 - 2026-10-06 — `SPEC-20261006-SOURCE-DELETE-02 / DREV-20261006-SOURCE-DELETE-01`：本地实现Today精确原图、
   单知识删除、关联/计划/通知一致性；验证与未完成门禁见 `docs/quality/evidence/SOURCE-DELETE-20261006.md`。

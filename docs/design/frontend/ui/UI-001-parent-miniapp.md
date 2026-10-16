@@ -1,5 +1,7 @@
 # UI-001 — 家长端微信小程序
 
+- 2026-10-16服务端复习保序修复：`BUG-SPEC-20261016-REVIEW-SUBJECT-ORDER-01`本地已实现；当前日计划反馈后仍按原计划科目顺序展示，空科目组才消失。小程序代码/设计未改，FDB/FEC及已批准快照保持；本轮前端244项通过，无新原生/真机验收。修复尚未部署，见[证据](../../../quality/evidence/REVIEW-SUBJECT-ORDER-20261016.md)与[发布记录](../../../deploy/releases/20261016-review-subject-order-backend.md)。
+
 - 2026-10-15学科管理最新增量：SPEC-20261014-SUBJECT-MANAGEMENT-01 / DREV-20261014-SUBJECT-MANAGEMENT-01已批准并本地实现。学科行以整行箭头打开管理半屏，底部“移出此科目”经确认才生效，移出保留学习记录；未加入基础科目面板显示“加入此科目”。只读及受限项无操作箭头；错误保留面板可重试。替代旧行尾加入/移出按钮及基础科目无确认的操作。未上传/发布；当前验证见 [本轮证据](../../../quality/evidence/SUBJECT-MANAGEMENT-20261015.md)。
 
 - 2026-10-15本地按钮/分页：SPEC-20261014-ACTION-PAGER-CONSISTENCY-02 / DREV-20261014-ACTION-PAGER-CONSISTENCY-02批准并实现。每日任务完成/撤销为无阴影胶囊；编辑计划独立页和报表内嵌共享三列分页，科目双列，禁用透明底。243项测试及静态通过；430宽原生11态部分验证，320/390、内嵌、截图和真机待补。尚未上传，Spec active/VERIFYING。证据docs/quality/evidence/ACTION-PAGER-CONSISTENCY-20261015.md。
@@ -140,7 +142,9 @@
   并展示最新只读详情，不再显示“刷新会离开当前编辑的草稿/查看最新”；仍未进入终态或读取失败时保留编辑
   和页内错误，不假成功。
 - 今日从同一个 Dashboard 读取复习、已确认学习和日程。新后端存在 `review_selection` 时，复习数量、
-  分钟和卡片只取首次物化的稳定日计划；完成后只减少，不从全量到期列表补题。未选到当日计划的到期项
+  分钟和卡片只取首次物化的稳定日计划；完成后只减少，不从全量到期列表补题。本地服务端保序修复后，
+  科目顺序由原计划该科最早ordinal决定，已反馈项仍提供锚点；同科仍有待复习项时位置不变，无待复习项
+  才移除该组，其余组保持相对顺序。此保证不扩展到删除/手动改期改变原计划行集合。未选到当日计划的到期项
   只显示低压力的后续安排数量。旧后端缺少该字段时继续使用原 Todo 兼容路径，不承诺稳定计划。
   四栏独立折叠，不使用只计算复习的“今日总体进度”卡。每日任务位于复习安排下面。
   本地 `DREV-20261012-DAILY-TASKS-01` 实现：复习、每日任务、活动按完整剩余计数默认展开，空或全部完成收起；
@@ -302,6 +306,8 @@ guards for `callContainer`、`uploadFile` and `chooseMedia`; media permission fa
 classification and cancelable uploads are tracked by `BUG-SPEC-20260905-02` and remain unimplemented.
 
 ## Change references
+
+- 2026-10-16 — `BUG-SPEC-20261016-REVIEW-SUBJECT-ORDER-01`恢复既有稳定计划的服务端科目组序；无新DREV，自动化与发布阶段见[本轮证据](../../../quality/evidence/REVIEW-SUBJECT-ORDER-20261016.md)。
 
 - 2026-10-06 — `SPEC-20261006-SOURCE-DELETE-02 / DREV-20261006-SOURCE-DELETE-01`：Today单图来源与删除
   确认已实现；195项frontend tests与656208-byte微信preview通过。原生隔离副本遇插件41002，

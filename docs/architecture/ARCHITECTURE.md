@@ -1,6 +1,7 @@
 # Push Kids current architecture
 
 - Status: `CURRENT / DAILY_TASK_BACKEND_030_DEPLOYED / FULL_PRODUCT_ACCEPTANCE_PENDING`
+- 2026-10-16 local projection fix: `BUG-SPEC-20261016-REVIEW-SUBJECT-ORDER-01` keeps daily-plan subject ordering through feedback in the existing PlanningService. No module, SQL, Schema, dependency or extension-point change; architecture revision stays unchanged. Local verification and undeployed release state: `docs/quality/evidence/REVIEW-SUBJECT-ORDER-20261016.md`, `docs/deploy/releases/20261016-review-subject-order-backend.md`.
 - Local daily-task architecture: `ARCH-20261012-DAILY-TASKS-01`，用户2026-10-12批准 `SPEC-20261012-DAILY-TASKS-01`。
   daily_tasks拥有配置与上海日期完成事实，reporting/清理编排调用其服务；不影响planning、AI或复习预算。
   本地与生产迁移head=`20261012_0019`，新增两表及tenant-leading索引，数据存在时拒绝破坏性降级；2026-10-13生产迁移/check及030全量模式部署完成，隔离MySQL合同及真实小程序读取smoke通过。完整原生/真机与生产写路径验收待补，发布事实见docs/deploy/releases/20261013-fullstack-diff.md；模块/依赖不因本次发布改变。
@@ -83,7 +84,10 @@ generic deletion framework or planning → learning/agent dependency is introduc
   `curve_heat_v1` policy updates both in one transaction; `defer` changes only an existing daily plan item.
 - `DailyReviewPlan` is materialized once per family/child/local day from at most 120 indexed candidates and the
   child's minute budget. Selection is due date, then never/oldest reviewed, then ID; completing a plan item does
-  not refill the day. Unselected backlog rows keep their original due dates and receive no writes.
+  not refill the day. The local session projection orders subjects by their first original plan ordinal,
+  including feedback-terminal rows as anchors; only pending items enter a session, and empty sessions disappear.
+  This feedback guarantee does not extend to deletion/rescheduling that changes the plan's retained row set.
+  Unselected backlog rows keep their original due dates and receive no writes.
 - `KnowledgeSearchTerm` is a deterministic, at-most-32-term index per knowledge item. The analysis Agent can call
   only the family/child-scoped history tool, at most 20 times/100 unique candidates/8 turns.
 - Analysis input keeps two subject facts: configured subjects are active persisted learning subjects, while analysis

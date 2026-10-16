@@ -14,6 +14,10 @@ FEAT-001 早期实现的历史变更记录为
 
 ## Layout
 
+复习完成后科目跳序修复：[`BUG-SPEC-20261016-REVIEW-SUBJECT-ORDER-01`](active/BUG-029-REVIEW-SUBJECT-ORDER.md)，用户已批准并本地实现，`VERIFYING`；后端518项、前端244项及静态门禁通过，容器和部署阶段见发布记录。
+
+历史设计脚本lint清理：[`SPEC-20261016-RELEASE-LINT-01`](completed/CHORE-20261016-RELEASE-LINT.md)，用户明确批准，`DONE`；5个脚本等价整理，新旧168个输出哈希相同，批准快照未变，全仓Ruff通过。
+
 今日按钮与编辑计划分页统一：[`SPEC-20261014-ACTION-PAGER-CONSISTENCY-02`](active/FEAT-010-TODAY-ACTION-STYLE.md)，本地实现，VERIFYING；两项功能提交前联合核对见[`验证记录`](../docs/quality/evidence/TWO-FEATURE-PRECOMMIT-20261015.md)。
 
 学科管理与移出入口统一：[`SPEC-20261014-SUBJECT-MANAGEMENT-01`](active/FEAT-001-SUBJECT-MANAGEMENT-CONSISTENCY.md)，本地实现，VERIFYING；当前事实见FEAT-001、UI-001及`docs/quality/evidence/SUBJECT-MANAGEMENT-20261015.md`，未上传或发布。

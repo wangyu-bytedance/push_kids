@@ -604,12 +604,7 @@ class PlanningService:
                 "review_round": int(review.step or 0) + 1,
             }
             all_items.append(snapshot)
-            if plan_item.state != "pending":
-                completed_count += 1
-                completed_minutes += int(plan_item.estimated_minutes)
-                continue
-            pending_count += 1
-            pending_minutes += int(plan_item.estimated_minutes)
+            # Completed rows still anchor their subject's original position in the plan.
             session = by_subject.get(subject.id)
             if session is None:
                 session = {
@@ -622,6 +617,12 @@ class PlanningService:
                 }
                 by_subject[subject.id] = session
                 sessions.append(session)
+            if plan_item.state != "pending":
+                completed_count += 1
+                completed_minutes += int(plan_item.estimated_minutes)
+                continue
+            pending_count += 1
+            pending_minutes += int(plan_item.estimated_minutes)
             session["estimated_minutes"] += int(plan_item.estimated_minutes)
             session["items"].append(
                 {key: value for key, value in snapshot.items() if key != "subject_name"}
@@ -629,7 +630,7 @@ class PlanningService:
         return {
             "plan_id": plan.id,
             "day": target.isoformat(),
-            "sessions": sessions,
+            "sessions": [session for session in sessions if session["items"]],
             "all_items": all_items,
             "selected_count": pending_count,
             "planned_count": len(rows),
