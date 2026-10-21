@@ -1,0 +1,106 @@
+{
+  "state": "settings",
+  "surface": "settings",
+  "viewport": {
+    "width": 390,
+    "height": 844,
+    "screenHeight": 844,
+    "dpr": 3,
+    "baseLibrary": "3.17.4",
+    "fontScale": 15
+  },
+  "geometry": {
+    "nodes": {
+      ".pk-hero": [
+        {
+          "left": 18,
+          "right": 372,
+          "top": 166,
+          "bottom": 763,
+          "width": 354,
+          "height": 597
+        },
+        {
+          "left": 18,
+          "right": 372,
+          "top": 775,
+          "bottom": 1095,
+          "width": 354,
+          "height": 320
+        },
+        {
+          "left": 18,
+          "right": 372,
+          "top": 1107,
+          "bottom": 1351,
+          "width": 354,
+          "height": 244
+        },
+        {
+          "left": 18,
+          "right": 372,
+          "top": 1363,
+          "bottom": 1596,
+          "width": 354,
+          "height": 233
+        }
+      ],
+      ".btn": [],
+      ".child-chip": [
+        {
+          "left": 281,
+          "right": 372,
+          "top": 103,
+          "bottom": 140,
+          "width": 91,
+          "height": 37
+        }
+      ],
+      ".hero-line": [],
+      ".hero-note": [],
+      ".settings-card-art": [
+        {
+          "left": 272,
+          "right": 357,
+          "top": 183,
+          "bottom": 255,
+          "width": 85,
+          "height": 72
+        },
+        {
+          "left": 272,
+          "right": 357,
+          "top": 792,
+          "bottom": 864,
+          "width": 85,
+          "height": 72
+        },
+        {
+          "left": 272,
+          "right": 357,
+          "top": 1124,
+          "bottom": 1196,
+          "width": 85,
+          "height": 72
+        },
+        {
+          "left": 272,
+          "right": 357,
+          "top": 1380,
+          "bottom": 1452,
+          "width": 85,
+          "height": 72
+        }
+      ],
+      ".record-intro-art": [],
+      ".calendar-intro-art": [],
+      ".report-intro-art": []
+    },
+    "scrollLeft": 0
+  },
+  "screenshot": {
+    "file": "settings-390.png",
+    "sha256": "5a5e7a5f220beeaefc8c73b31e288c488d014dfdbe6e9f745eff22157a02eaad"
+  },
+  "fixture": "isolated synthetic presentation; unchanged production WXML/WXSS; no business/provider call"
+}

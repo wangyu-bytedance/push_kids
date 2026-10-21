@@ -1,0 +1,83 @@
+{
+  "state": "family-members",
+  "surface": "family-members",
+  "viewport": {
+    "width": 390,
+    "height": 844,
+    "screenHeight": 844,
+    "dpr": 3,
+    "baseLibrary": "3.17.4",
+    "fontScale": 15
+  },
+  "geometry": {
+    "nodes": {
+      ".pk-hero": [
+        {
+          "left": 18,
+          "right": 372,
+          "top": 12,
+          "bottom": 190,
+          "width": 354,
+          "height": 178
+        }
+      ],
+      ".btn": [
+        {
+          "left": 35,
+          "right": 190,
+          "top": 368,
+          "bottom": 413,
+          "width": 155,
+          "height": 45
+        },
+        {
+          "left": 200,
+          "right": 355,
+          "top": 368,
+          "bottom": 413,
+          "width": 155,
+          "height": 45
+        },
+        {
+          "left": 298.1875,
+          "right": 357,
+          "top": 648.5,
+          "bottom": 685.5,
+          "width": 58.8125,
+          "height": 37
+        }
+      ],
+      ".child-chip": [],
+      ".hero-line": [
+        {
+          "left": 90,
+          "right": 308,
+          "top": 50,
+          "bottom": 78,
+          "width": 218,
+          "height": 28
+        }
+      ],
+      ".hero-note": [
+        {
+          "left": 37,
+          "right": 353,
+          "top": 150,
+          "bottom": 171,
+          "width": 316,
+          "height": 21
+        }
+      ],
+      ".settings-card-art": [],
+      ".record-intro-art": [],
+      ".calendar-intro-art": [],
+      ".report-intro-art": []
+    },
+    "scrollLeft": 0
+  },
+  "screenshot": {
+    "file": "family-members-390.png",
+    "sha256": "f279097a6a73ff244c73a899a4403f56a90fc8608257e5817450cb28a07a1c16"
+  },
+  "fixture": "isolated synthetic presentation; unchanged production WXML/WXSS; no business/provider call"
+}

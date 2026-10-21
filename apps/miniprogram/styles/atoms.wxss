@@ -60,14 +60,13 @@
 .pk-card.tight { padding: 26rpx 28rpx; }
 .pk-card.plain { border-radius: var(--pk-r-lg); }
 
-/* Hero：右上角一抹嫩芽光，右下角一道年轮弧线 */
+/* Hero：右上角一抹嫩芽光 */
 .pk-hero {
   position: relative; overflow: hidden;
   border-radius: var(--pk-r-2xl); padding: 40rpx 36rpx 36rpx; box-sizing: border-box;
   background: radial-gradient(120% 130% at 100% 0%, rgba(127, 166, 92, .16), rgba(127, 166, 92, 0) 58%), linear-gradient(158deg, #FFFEFA 0%, #F7F4EA 100%);
   border: var(--pk-border); box-shadow: var(--pk-e2);
 }
-.pk-hero::after { content: ""; position: absolute; right: -104rpx; bottom: -148rpx; width: 320rpx; height: 320rpx; border-radius: 50%; border: 1rpx solid rgba(56, 130, 106, .16); }
 .pk-hero .hero-eyebrow { position: relative; display: block; font-size: 11px; line-height: 1.4; font-weight: 500; letter-spacing: 3rpx; color: var(--pk-primary-mid); }
 .pk-hero .hero-line { position: relative; display: block; margin-top: 16rpx; font-family: var(--pk-serif); font-size: 19px; line-height: 1.4; font-weight: 600; color: var(--pk-ink); }
 .pk-hero .hero-num { font-family: var(--pk-serif); font-size: 27px; font-weight: 600; letter-spacing: 0; color: var(--pk-primary); font-variant-numeric: tabular-nums; }

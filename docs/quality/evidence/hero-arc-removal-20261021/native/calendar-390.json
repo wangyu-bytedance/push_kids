@@ -1,0 +1,58 @@
+{
+  "state": "calendar",
+  "surface": "calendar",
+  "viewport": {
+    "width": 390,
+    "height": 844,
+    "screenHeight": 844,
+    "dpr": 3,
+    "baseLibrary": "3.17.4",
+    "fontScale": 15
+  },
+  "geometry": {
+    "nodes": {
+      ".pk-hero": [
+        {
+          "left": 18,
+          "right": 372,
+          "top": 93,
+          "bottom": 269,
+          "width": 354,
+          "height": 176
+        }
+      ],
+      ".btn": [],
+      ".child-chip": [
+        {
+          "left": 33,
+          "right": 124,
+          "top": 208,
+          "bottom": 252,
+          "width": 91,
+          "height": 44
+        }
+      ],
+      ".hero-line": [],
+      ".hero-note": [],
+      ".settings-card-art": [],
+      ".record-intro-art": [],
+      ".calendar-intro-art": [
+        {
+          "left": 233,
+          "right": 357,
+          "top": 113.5,
+          "bottom": 248.5,
+          "width": 124,
+          "height": 135
+        }
+      ],
+      ".report-intro-art": []
+    },
+    "scrollLeft": 0
+  },
+  "screenshot": {
+    "file": "calendar-390.png",
+    "sha256": "04cbe5dfae7fcc8f4947f5171f642f035df0ad635bc5c9b0593b7857a0c55f27"
+  },
+  "fixture": "isolated synthetic presentation; unchanged production WXML/WXSS; no business/provider call"
+}

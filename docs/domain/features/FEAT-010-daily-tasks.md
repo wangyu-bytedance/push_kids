@@ -11,6 +11,11 @@
 
 ## 当前行为
 
+本地视觉增量 `FEAT-VISUAL-20261021-HERO-ARC-01`：设置每日任务卡随共享样式删除细弧线，插画与任务配置/
+完成合同保留。[Spec01](../../../specs/active/BUG-030-HERO-BACKGROUND-ARC.md) /
+DREV-20261021-HERO-ARC-REMOVAL-01已批准；验证边界见[本轮证据](../../quality/evidence/HERO-ARC-REMOVAL-20261021.md)，
+该增量未上传/部署。
+
 2026-10-15本地样式：今日完成/撤销采用既有无阴影胶囊，与复习完成统一。SPEC-20261014-ACTION-PAGER-CONSISTENCY-02 / DREV-20261014-ACTION-PAGER-CONSISTENCY-02已批准；243项前端测试及静态检查通过，430宽原生五态部分验证；320/390、截图及真机待补。本增量未上传，不改变0.1.15既有开发上传事实。证据：docs/quality/evidence/ACTION-PAGER-CONSISTENCY-20261015.md。
 
 设置中的每日任务按家庭和孩子独立保存。阅读、跳绳、练字、户外运动是快捷候选，点击后仍需保存；不自动启用。

@@ -51,6 +51,12 @@
 
 ## Visual and responsive contract
 
+本地视觉增量revision `UI-VISUAL-20261021-HERO-ARC-01` 已随共享样式
+去掉提醒就绪/中性卡右下角细弧线，其他状态与授权行为保留。批准来源为
+[Spec01](../../../../specs/active/BUG-030-HERO-BACKGROUND-ARC.md) /
+[DREV-20261021-HERO-ARC-REMOVAL-01](../prototypes/DREV-20261021-HERO-ARC-REMOVAL-01/FRONTEND-SPEC.md)，
+本地验证和未完成验收见[质量证据](../../../quality/evidence/HERO-ARC-REMOVAL-20261021.md)，未上传/部署。
+
 沿用 PKDS 2.0：暖纸背景、低饱和青绿、既有 `pk-card / pk-hero / rowlist / pill / pk-notice` 原子与
 既有图标集（`ico-family` / `ico-clock` / `ico-book`），不新增品牌色、字体、图像或第三方资源。
 状态既用文字也用色彩表达，不只依赖颜色。评审矩阵为 320×568、390×844、430×932。

@@ -1,0 +1,76 @@
+{
+  "state": "guide",
+  "surface": "today",
+  "viewport": {
+    "width": 390,
+    "height": 844,
+    "screenHeight": 844,
+    "dpr": 3,
+    "baseLibrary": "3.17.4",
+    "fontScale": 15
+  },
+  "geometry": {
+    "nodes": {
+      ".pk-hero": [
+        {
+          "left": 18,
+          "right": 372,
+          "top": 183,
+          "bottom": 535,
+          "width": 354,
+          "height": 352
+        }
+      ],
+      ".btn": [
+        {
+          "left": 37,
+          "right": 353,
+          "top": 418,
+          "bottom": 467,
+          "width": 316,
+          "height": 49
+        }
+      ],
+      ".child-chip": [
+        {
+          "left": 281,
+          "right": 372,
+          "top": 103,
+          "bottom": 140,
+          "width": 91,
+          "height": 37
+        }
+      ],
+      ".hero-line": [
+        {
+          "left": 37,
+          "right": 353,
+          "top": 227,
+          "bottom": 256,
+          "width": 316,
+          "height": 29
+        }
+      ],
+      ".hero-note": [
+        {
+          "left": 37,
+          "right": 353,
+          "top": 264,
+          "bottom": 285,
+          "width": 316,
+          "height": 21
+        }
+      ],
+      ".settings-card-art": [],
+      ".record-intro-art": [],
+      ".calendar-intro-art": [],
+      ".report-intro-art": []
+    },
+    "scrollLeft": 0
+  },
+  "screenshot": {
+    "file": "guide-390.png",
+    "sha256": "8ba01457eef588be074345a4873175d6a6f47fb706f8faab9c6e603b1054ec33"
+  },
+  "fixture": "isolated synthetic presentation; unchanged production WXML/WXSS; no business/provider call"
+}

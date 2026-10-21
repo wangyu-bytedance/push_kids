@@ -1,0 +1,75 @@
+{
+  "state": "records",
+  "surface": "records",
+  "viewport": {
+    "width": 320,
+    "height": 568,
+    "screenHeight": 568,
+    "dpr": 2,
+    "baseLibrary": "3.17.4",
+    "fontScale": 15
+  },
+  "geometry": {
+    "nodes": {
+      ".pk-hero": [
+        {
+          "left": 15,
+          "right": 305,
+          "top": 75,
+          "bottom": 219,
+          "width": 290,
+          "height": 144
+        }
+      ],
+      ".btn": [
+        {
+          "left": 238.1875,
+          "right": 293,
+          "top": 354,
+          "bottom": 384,
+          "width": 54.8125,
+          "height": 30
+        },
+        {
+          "left": 15,
+          "right": 305,
+          "top": 415,
+          "bottom": 455,
+          "width": 290,
+          "height": 40
+        }
+      ],
+      ".child-chip": [
+        {
+          "left": 27,
+          "right": 105,
+          "top": 161,
+          "bottom": 205,
+          "width": 78,
+          "height": 44
+        }
+      ],
+      ".hero-line": [],
+      ".hero-note": [],
+      ".settings-card-art": [],
+      ".record-intro-art": [
+        {
+          "left": 191,
+          "right": 293,
+          "top": 96,
+          "bottom": 198,
+          "width": 102,
+          "height": 102
+        }
+      ],
+      ".calendar-intro-art": [],
+      ".report-intro-art": []
+    },
+    "scrollLeft": 0
+  },
+  "screenshot": {
+    "file": "records-320.png",
+    "sha256": "32061fe6d4fc512e8d4551c808e0408f1be772e36801929402e9ce766ef2e14b"
+  },
+  "fixture": "isolated synthetic presentation; unchanged production WXML/WXSS; no business/provider call"
+}

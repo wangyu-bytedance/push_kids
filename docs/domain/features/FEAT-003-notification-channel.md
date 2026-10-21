@@ -29,6 +29,10 @@
 
 ## Current user/system behavior
 
+本地视觉增量 `FEAT-VISUAL-20261021-HERO-ARC-01`：提醒状态卡随共享样式删除细弧线，通道、授权和发送行为不变。
+[Spec01](../../../specs/active/BUG-030-HERO-BACKGROUND-ARC.md) / DREV-20261021-HERO-ARC-REMOVAL-01已批准；
+验证范围见[质量证据](../../quality/evidence/HERO-ARC-REMOVAL-20261021.md)，未部署/上传。
+
 - 成员级偏好：三类提醒各有独立开关，`member_application` 仅管理员可见可改；其余类型成员可自己改。
 - 微信授权：`POST /notifications/subscriptions` 记录 `wx.requestSubscribeMessage` 的结果；
   长期模板额度为无限（`-1`），一次性模板每次授权只够发一条，发完置 `expired` 需重新授权。

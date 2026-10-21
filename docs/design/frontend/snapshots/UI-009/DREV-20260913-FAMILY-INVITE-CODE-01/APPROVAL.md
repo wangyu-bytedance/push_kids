@@ -13,7 +13,7 @@
 - Approved by: `产品负责人（用户）`
 - Approved at: `2026-09-13`
 - Approval evidence: `本对话“按照方案生成代码”明确对应上一轮 BUG-SPEC-20260913-19 + DREV-20260913-FAMILY-INVITE-CODE-01`
-- Superseded by: `N/A`
+- Superseded by: DREV-20261021-HERO-ARC-REMOVAL-01（仅邀请卡细弧线删除；原邀请/权限合同保留）
 
 ## Approval identity
 

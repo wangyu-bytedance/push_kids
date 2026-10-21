@@ -1,0 +1,448 @@
+{
+  "geometryCaptures": 20,
+  "screenshots": 17,
+  "captures": [
+    {
+      "capture": "calendar-320.json",
+      "state": "calendar",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "hasGeometry": true,
+      "screenshot": {
+        "file": "NOT_RUN",
+        "reason": "native screenshot API timed out or failed; numeric geometry retained"
+      }
+    },
+    {
+      "capture": "calendar-390.json",
+      "state": "calendar",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "hasGeometry": true,
+      "screenshot": {
+        "file": "calendar-390.png",
+        "sha256": "04cbe5dfae7fcc8f4947f5171f642f035df0ad635bc5c9b0593b7857a0c55f27"
+      },
+      "screenshotPixels": {
+        "width": 780,
+        "height": 1688
+      }
+    },
+    {
+      "capture": "calendar-430.json",
+      "state": "calendar",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "hasGeometry": true,
+      "screenshot": {
+        "file": "calendar-430.png",
+        "sha256": "412f2c6a0e8cf5cfbc8a24c91f6be49eec49237d3c4d67b0d56a997402c3e0c5"
+      },
+      "screenshotPixels": {
+        "width": 860,
+        "height": 1864
+      }
+    },
+    {
+      "capture": "family-members-390.json",
+      "state": "family-members",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "hasGeometry": true,
+      "screenshot": {
+        "file": "family-members-390.png",
+        "sha256": "f279097a6a73ff244c73a899a4403f56a90fc8608257e5817450cb28a07a1c16"
+      },
+      "screenshotPixels": {
+        "width": 780,
+        "height": 1506
+      }
+    },
+    {
+      "capture": "guide-320.json",
+      "state": "guide",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "hasGeometry": true,
+      "screenshot": {
+        "file": "guide-320.png",
+        "sha256": "02ed28f64cffa766f19640f56084d9b62e7984de5dbdba0702f9dfe1ca7d1308"
+      },
+      "screenshotPixels": {
+        "width": 640,
+        "height": 1136
+      }
+    },
+    {
+      "capture": "guide-390.json",
+      "state": "guide",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "hasGeometry": true,
+      "screenshot": {
+        "file": "guide-390.png",
+        "sha256": "8ba01457eef588be074345a4873175d6a6f47fb706f8faab9c6e603b1054ec33"
+      },
+      "screenshotPixels": {
+        "width": 780,
+        "height": 1688
+      }
+    },
+    {
+      "capture": "guide-430.json",
+      "state": "guide",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "hasGeometry": true,
+      "screenshot": {
+        "file": "guide-430.png",
+        "sha256": "7adbf85884c2da2efa65e080cda024a6f58acfa3ae11fdfff655a20133883717"
+      },
+      "screenshotPixels": {
+        "width": 860,
+        "height": 1864
+      }
+    },
+    {
+      "capture": "neutral-390.json",
+      "state": "neutral",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "hasGeometry": true,
+      "screenshot": {
+        "file": "neutral-390.png",
+        "sha256": "6373f540181d561f95e04a99db3cd9d8c79c1c88a39c8d9e5cdbe898fd76a5eb"
+      },
+      "screenshotPixels": {
+        "width": 780,
+        "height": 1506
+      }
+    },
+    {
+      "capture": "notifications-ready-390.json",
+      "state": "notifications-ready",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "hasGeometry": true,
+      "screenshot": {
+        "file": "notifications-ready-390.png",
+        "sha256": "15e220ae0193636d9c9d00e953a25498c5c27e32e50f027a6b93e8d5d49a052d"
+      },
+      "screenshotPixels": {
+        "width": 780,
+        "height": 1506
+      }
+    },
+    {
+      "capture": "records-320.json",
+      "state": "records",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "hasGeometry": true,
+      "screenshot": {
+        "file": "records-320.png",
+        "sha256": "32061fe6d4fc512e8d4551c808e0408f1be772e36801929402e9ce766ef2e14b"
+      },
+      "screenshotPixels": {
+        "width": 640,
+        "height": 1136
+      }
+    },
+    {
+      "capture": "records-390.json",
+      "state": "records",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "hasGeometry": true,
+      "screenshot": {
+        "file": "records-390.png",
+        "sha256": "ef26182b1cc01d98c5ce196a94465a4b50ead3d9b4b55f12d41c9b69769818ba"
+      },
+      "screenshotPixels": {
+        "width": 780,
+        "height": 1688
+      }
+    },
+    {
+      "capture": "records-430.json",
+      "state": "records",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "hasGeometry": true,
+      "screenshot": {
+        "file": "records-430.png",
+        "sha256": "32a893adf98b12b36475f06fc115254791f096b4c265350a87e8eafa13c56123"
+      },
+      "screenshotPixels": {
+        "width": 860,
+        "height": 1864
+      }
+    },
+    {
+      "capture": "reports-320.json",
+      "state": "reports",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "hasGeometry": true,
+      "screenshot": {
+        "file": "NOT_RUN",
+        "reason": "native screenshot API timed out or failed; numeric geometry retained"
+      }
+    },
+    {
+      "capture": "reports-390.json",
+      "state": "reports",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "hasGeometry": true,
+      "screenshot": {
+        "file": "reports-390.png",
+        "sha256": "292159ecddff27b30b4949c2033b8a579743bea77284c324bd0ba08fe33b1797"
+      },
+      "screenshotPixels": {
+        "width": 780,
+        "height": 1688
+      }
+    },
+    {
+      "capture": "reports-430.json",
+      "state": "reports",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "hasGeometry": true,
+      "screenshot": {
+        "file": "reports-430.png",
+        "sha256": "17dbbcf30185d4a39dec8471b65cd8e2368809a86f105a6a4a1ecd1639b5421a"
+      },
+      "screenshotPixels": {
+        "width": 860,
+        "height": 1864
+      }
+    },
+    {
+      "capture": "settings-320.json",
+      "state": "settings",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "hasGeometry": true,
+      "screenshot": {
+        "file": "NOT_RUN",
+        "reason": "native screenshot API timed out or failed; numeric geometry retained"
+      }
+    },
+    {
+      "capture": "settings-390.json",
+      "state": "settings",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "hasGeometry": true,
+      "screenshot": {
+        "file": "settings-390.png",
+        "sha256": "5a5e7a5f220beeaefc8c73b31e288c488d014dfdbe6e9f745eff22157a02eaad"
+      },
+      "screenshotPixels": {
+        "width": 780,
+        "height": 1688
+      }
+    },
+    {
+      "capture": "settings-lower-320.json",
+      "state": "settings-lower",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "hasGeometry": false,
+      "screenshot": {
+        "file": "NOT_RUN",
+        "reason": "native screenshot API timed out or failed; numeric geometry retained"
+      }
+    },
+    {
+      "capture": "settings-lower-390.json",
+      "state": "settings-lower",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "hasGeometry": false,
+      "screenshot": {
+        "file": "settings-lower-390.png",
+        "sha256": "2ed76a52c202959c2dfb3cf66760fdfe43321d3bb3d9b80e92c579eb8956d494"
+      },
+      "screenshotPixels": {
+        "width": 780,
+        "height": 1688
+      }
+    },
+    {
+      "capture": "today-320.json",
+      "state": "today",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "hasGeometry": true,
+      "screenshot": {
+        "file": "today-320.png",
+        "sha256": "273c949e7f4597987353ae1ffad92749f1aff6944a2f000348fde88c8a8e8ec6"
+      },
+      "screenshotPixels": {
+        "width": 640,
+        "height": 1136
+      }
+    },
+    {
+      "capture": "today-390.json",
+      "state": "today",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "hasGeometry": true,
+      "screenshot": {
+        "file": "today-390.png",
+        "sha256": "00b5b9dcff3af388d292612931ce88049aba37dc99252290934c3b21ced7e785"
+      },
+      "screenshotPixels": {
+        "width": 780,
+        "height": 1688
+      }
+    },
+    {
+      "capture": "today-430.json",
+      "state": "today",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "hasGeometry": true,
+      "screenshot": {
+        "file": "NOT_RUN",
+        "reason": "native screenshot API timed out or failed; numeric geometry retained"
+      }
+    }
+  ]
+}

@@ -1,0 +1,92 @@
+{
+  "state": "today",
+  "surface": "today",
+  "viewport": {
+    "width": 430,
+    "height": 932,
+    "screenHeight": 932,
+    "dpr": 3,
+    "baseLibrary": "3.17.4",
+    "fontScale": 15
+  },
+  "geometry": {
+    "nodes": {
+      ".pk-hero": [
+        {
+          "left": 20,
+          "right": 410,
+          "top": 257,
+          "bottom": 535,
+          "width": 390,
+          "height": 278
+        }
+      ],
+      ".btn": [
+        {
+          "left": 41,
+          "right": 209.5,
+          "top": 464,
+          "bottom": 514,
+          "width": 168.5,
+          "height": 50
+        },
+        {
+          "left": 220.5,
+          "right": 389,
+          "top": 464,
+          "bottom": 514,
+          "width": 168.5,
+          "height": 50
+        },
+        {
+          "left": 101,
+          "right": 395,
+          "top": 1882,
+          "bottom": 1923,
+          "width": 294,
+          "height": 41
+        }
+      ],
+      ".child-chip": [
+        {
+          "left": 314,
+          "right": 410,
+          "top": 112,
+          "bottom": 153,
+          "width": 96,
+          "height": 41
+        }
+      ],
+      ".hero-line": [
+        {
+          "left": 41,
+          "right": 271,
+          "top": 325.5,
+          "bottom": 362.5,
+          "width": 230,
+          "height": 37
+        }
+      ],
+      ".hero-note": [
+        {
+          "left": 41,
+          "right": 389,
+          "top": 421,
+          "bottom": 442,
+          "width": 348,
+          "height": 21
+        }
+      ],
+      ".settings-card-art": [],
+      ".record-intro-art": [],
+      ".calendar-intro-art": [],
+      ".report-intro-art": []
+    },
+    "scrollLeft": 0
+  },
+  "screenshot": {
+    "file": "NOT_RUN",
+    "reason": "native screenshot API timed out or failed; numeric geometry retained"
+  },
+  "fixture": "isolated synthetic presentation; unchanged production WXML/WXSS; no business/provider call"
+}

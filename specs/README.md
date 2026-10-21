@@ -14,6 +14,8 @@ FEAT-001 早期实现的历史变更记录为
 
 ## Layout
 
+背景细弧线清理：[`BUG-SPEC-20261021-HERO-ARC-01`](active/BUG-030-HERO-BACKGROUND-ARC.md)，`VERIFYING`。用户在Spec01/DREV01确认请求后要求“一起修复掉”，按既有全局方案删除共享 `.pk-hero::after`，七个页面、11处引用统一生效；265项前端回归及静态检查通过，27组当前渲染与批准设计一致。[本轮证据](../docs/quality/evidence/HERO-ARC-REMOVAL-20261021.md)记录原生与真机验收边界；未上传/发布，门禁未全齐，保留active。
+
 复习完成后科目跳序修复：[`BUG-SPEC-20261016-REVIEW-SUBJECT-ORDER-01`](active/BUG-029-REVIEW-SUBJECT-ORDER.md)，`VERIFYING`；后端518项、前端244项、补充MySQL18项和冻结镜像门禁通过；灰度031 normal/0%流量，定向smoke与全量人工门禁待完成，见[发布记录](../docs/deploy/releases/20261016-review-subject-order-backend.md)。
 
 历史设计脚本lint清理：[`SPEC-20261016-RELEASE-LINT-01`](completed/CHORE-20261016-RELEASE-LINT.md)，用户明确批准，`DONE`；5个脚本等价整理，新旧168个输出哈希相同，批准快照未变，全仓Ruff通过。

@@ -1,0 +1,58 @@
+{
+  "state": "calendar",
+  "surface": "calendar",
+  "viewport": {
+    "width": 320,
+    "height": 568,
+    "screenHeight": 568,
+    "dpr": 2,
+    "baseLibrary": "3.17.4",
+    "fontScale": 15
+  },
+  "geometry": {
+    "nodes": {
+      ".pk-hero": [
+        {
+          "left": 15,
+          "right": 305,
+          "top": 65,
+          "bottom": 231,
+          "width": 290,
+          "height": 166
+        }
+      ],
+      ".btn": [],
+      ".child-chip": [
+        {
+          "left": 27,
+          "right": 105,
+          "top": 173,
+          "bottom": 217,
+          "width": 78,
+          "height": 44
+        }
+      ],
+      ".hero-line": [],
+      ".hero-note": [],
+      ".settings-card-art": [],
+      ".record-intro-art": [],
+      ".calendar-intro-art": [
+        {
+          "left": 191,
+          "right": 293,
+          "top": 93,
+          "bottom": 203,
+          "width": 102,
+          "height": 110
+        }
+      ],
+      ".report-intro-art": []
+    },
+    "scrollLeft": 0
+  },
+  "screenshot": {
+    "file": "NOT_RUN",
+    "reason": "native screenshot API timed out or failed; numeric geometry retained"
+  },
+  "fixture": "isolated synthetic presentation; unchanged production WXML/WXSS; no business/provider call"
+}

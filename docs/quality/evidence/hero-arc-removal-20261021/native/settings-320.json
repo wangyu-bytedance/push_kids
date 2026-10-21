@@ -1,0 +1,106 @@
+{
+  "state": "settings",
+  "surface": "settings",
+  "viewport": {
+    "width": 320,
+    "height": 568,
+    "screenHeight": 568,
+    "dpr": 2,
+    "baseLibrary": "3.17.4",
+    "fontScale": 15
+  },
+  "geometry": {
+    "nodes": {
+      ".pk-hero": [
+        {
+          "left": 15,
+          "right": 305,
+          "top": 125,
+          "bottom": 664,
+          "width": 290,
+          "height": 539
+        },
+        {
+          "left": 15,
+          "right": 305,
+          "top": 674,
+          "bottom": 934,
+          "width": 290,
+          "height": 260
+        },
+        {
+          "left": 15,
+          "right": 305,
+          "top": 944,
+          "bottom": 1151,
+          "width": 290,
+          "height": 207
+        },
+        {
+          "left": 15,
+          "right": 305,
+          "top": 1161,
+          "bottom": 1358,
+          "width": 290,
+          "height": 197
+        }
+      ],
+      ".btn": [],
+      ".child-chip": [
+        {
+          "left": 227,
+          "right": 305,
+          "top": 72,
+          "bottom": 102,
+          "width": 78,
+          "height": 30
+        }
+      ],
+      ".hero-line": [],
+      ".hero-note": [],
+      ".settings-card-art": [
+        {
+          "left": 224,
+          "right": 293,
+          "top": 139,
+          "bottom": 198,
+          "width": 69,
+          "height": 59
+        },
+        {
+          "left": 224,
+          "right": 293,
+          "top": 688,
+          "bottom": 747,
+          "width": 69,
+          "height": 59
+        },
+        {
+          "left": 224,
+          "right": 293,
+          "top": 958,
+          "bottom": 1017,
+          "width": 69,
+          "height": 59
+        },
+        {
+          "left": 224,
+          "right": 293,
+          "top": 1175,
+          "bottom": 1234,
+          "width": 69,
+          "height": 59
+        }
+      ],
+      ".record-intro-art": [],
+      ".calendar-intro-art": [],
+      ".report-intro-art": []
+    },
+    "scrollLeft": 0
+  },
+  "screenshot": {
+    "file": "NOT_RUN",
+    "reason": "native screenshot API timed out or failed; numeric geometry retained"
+  },
+  "fixture": "isolated synthetic presentation; unchanged production WXML/WXSS; no business/provider call"
+}

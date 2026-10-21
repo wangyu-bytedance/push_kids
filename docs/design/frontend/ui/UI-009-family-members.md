@@ -49,6 +49,12 @@
 
 ## Visual and responsive contract
 
+本地视觉增量revision `UI-VISUAL-20261021-HERO-ARC-01`：家庭邀请卡已随共享样式删除右下角细弧线，
+其余邀请、成员和权限合同保留。批准来源为
+[Spec01](../../../../specs/active/BUG-030-HERO-BACKGROUND-ARC.md) /
+[DREV-20261021-HERO-ARC-REMOVAL-01](../prototypes/DREV-20261021-HERO-ARC-REMOVAL-01/FRONTEND-SPEC.md)，
+验收范围见[质量证据](../../../quality/evidence/HERO-ARC-REMOVAL-20261021.md)；仅本地实现，未上传/发布。
+
 沿用现有暖纸色、低饱和青绿、系统中文字体、克制分隔线和低阴影；不新增品牌色、字体或
 图像依赖。评审矩阵为 320×568、390×844、430×932。正文不小于 14px，主要触控目标不小于
 44px，权限不只依靠颜色表达。

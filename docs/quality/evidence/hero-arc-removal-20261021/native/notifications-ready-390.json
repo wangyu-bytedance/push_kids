@@ -1,0 +1,58 @@
+{
+  "state": "notifications-ready",
+  "surface": "notifications",
+  "viewport": {
+    "width": 390,
+    "height": 844,
+    "screenHeight": 844,
+    "dpr": 3,
+    "baseLibrary": "3.17.4",
+    "fontScale": 15
+  },
+  "geometry": {
+    "nodes": {
+      ".pk-hero": [
+        {
+          "left": 18,
+          "right": 372,
+          "top": 88,
+          "bottom": 262,
+          "width": 354,
+          "height": 174
+        }
+      ],
+      ".btn": [],
+      ".child-chip": [],
+      ".hero-line": [
+        {
+          "left": 37,
+          "right": 353,
+          "top": 132,
+          "bottom": 158,
+          "width": 316,
+          "height": 26
+        }
+      ],
+      ".hero-note": [
+        {
+          "left": 37,
+          "right": 353,
+          "top": 165,
+          "bottom": 211,
+          "width": 316,
+          "height": 46
+        }
+      ],
+      ".settings-card-art": [],
+      ".record-intro-art": [],
+      ".calendar-intro-art": [],
+      ".report-intro-art": []
+    },
+    "scrollLeft": 0
+  },
+  "screenshot": {
+    "file": "notifications-ready-390.png",
+    "sha256": "15e220ae0193636d9c9d00e953a25498c5c27e32e50f027a6b93e8d5d49a052d"
+  },
+  "fixture": "isolated synthetic presentation; unchanged production WXML/WXSS; no business/provider call"
+}

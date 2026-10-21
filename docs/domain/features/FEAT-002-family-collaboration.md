@@ -22,6 +22,10 @@
 
 ## Current user/system behavior
 
+本地视觉增量 `FEAT-VISUAL-20261021-HERO-ARC-01`：家庭邀请卡随共享样式删除细弧线，权限与邀请行为不变。
+[Spec01](../../../specs/active/BUG-030-HERO-BACKGROUND-ARC.md) / DREV-20261021-HERO-ARC-REMOVAL-01已批准；
+验收范围见[质量证据](../../quality/evidence/HERO-ARC-REMOVAL-20261021.md)，仅本地实现，未上传/发布。
+
 - 新 actor 通过 `/api/v1/me` 得到 `unbound`，可原子创建家庭与 manager membership；首个孩子档案
   可以同批创建，也可以留空之后再建（FEAT-005）。或凭短时邀请提交待审批申请。
 - 普通小程序启动先进入 `family-onboarding` 启动门并只依据 `/me.state` 分流：`unbound` 显示创建家庭/

@@ -62,6 +62,12 @@ approval snapshot，获得 Task Spec revision + DREV 的明确批准后才能实
 
 ## Style consistency baseline
 
+本地背景增量 `VISUAL-20261021-HERO-ARC-01`：用户批准的
+[DREV-20261021-HERO-ARC-REMOVAL-01](prototypes/DREV-20261021-HERO-ARC-REMOVAL-01/FRONTEND-SPEC.md)
+已删除所有共享 `.pk-hero` 卡片的细弧线；暖纸色、浅绿光斑、插画、边框和排版保留。
+该增量覆盖 UI-001、UI-009、UI-011，其他可见合同继续沿用各自DREV；验证与未完成项见
+[本轮证据](../../quality/evidence/HERO-ARC-REMOVAL-20261021.md)，本地实现不代表上传或发布。
+
 全局风格以暖白纸面、松绿主色、衬线标题 + 系统中文正文、4px 间距网格、清晰状态文字和
 非游戏化反馈为唯一基线。token 的唯一来源是 `apps/miniprogram/styles/tokens.wxss`，
 组件类的唯一来源是 `styles/atoms.wxss`；页面 wxss 只允许写本页特有几何，不得重复定义

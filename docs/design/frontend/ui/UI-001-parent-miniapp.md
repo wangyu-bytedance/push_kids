@@ -218,6 +218,13 @@
 
 当前视觉系统是 PKDS-2.0「纸 · 芽」，可见合同见 `DREV-20260906-PKDS-03`。
 
+共享背景增量revision `UI-VISUAL-20261021-HERO-ARC-01`：已按获批
+[BUG-SPEC-20261021-HERO-ARC-01](../../../../specs/active/BUG-030-HERO-BACKGROUND-ARC.md) /
+[DREV-20261021-HERO-ARC-REMOVAL-01](../prototypes/DREV-20261021-HERO-ARC-REMOVAL-01/FRONTEND-SPEC.md)
+在本地删除今日正常/引导、日程、记录、报表及设置四张共享卡片右下角的细弧线。
+原纸面渐变、插画、控件与交互保留；本轮验证与验收缺口见[质量证据](../../../quality/evidence/HERO-ARC-REMOVAL-20261021.md)。
+本增量未上传或发布，其他任务的历史状态不变。
+
 方向是暖白纸面 `#FAF7F0`（卡片 `#FFFDF8`）、松绿主色 `#1F5B45`、嫩芽成长色 `#7FA65C`、
 提醒赭石 `#A9762A`、异常陶土 `#A85742`。阴影大而淡，卡片像纸叠在纸上；标题使用衬线族
 （`Songti SC` / `Noto Serif SC`）制造纸感，正文用系统中文无衬线，数字统一 tabular-nums。

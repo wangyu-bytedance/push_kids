@@ -1,0 +1,58 @@
+{
+  "state": "reports",
+  "surface": "reports",
+  "viewport": {
+    "width": 390,
+    "height": 844,
+    "screenHeight": 844,
+    "dpr": 3,
+    "baseLibrary": "3.17.4",
+    "fontScale": 15
+  },
+  "geometry": {
+    "nodes": {
+      ".pk-hero": [
+        {
+          "left": 18,
+          "right": 372,
+          "top": 93,
+          "bottom": 251,
+          "width": 354,
+          "height": 158
+        }
+      ],
+      ".btn": [],
+      ".child-chip": [
+        {
+          "left": 33,
+          "right": 124,
+          "top": 183,
+          "bottom": 227,
+          "width": 91,
+          "height": 44
+        }
+      ],
+      ".hero-line": [],
+      ".hero-note": [],
+      ".settings-card-art": [],
+      ".record-intro-art": [],
+      ".calendar-intro-art": [],
+      ".report-intro-art": [
+        {
+          "left": 243,
+          "right": 357,
+          "top": 110,
+          "bottom": 234,
+          "width": 114,
+          "height": 124
+        }
+      ]
+    },
+    "scrollLeft": 0
+  },
+  "screenshot": {
+    "file": "reports-390.png",
+    "sha256": "292159ecddff27b30b4949c2033b8a579743bea77284c324bd0ba08fe33b1797"
+  },
+  "fixture": "isolated synthetic presentation; unchanged production WXML/WXSS; no business/provider call"
+}

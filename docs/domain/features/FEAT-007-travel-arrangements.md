@@ -26,6 +26,11 @@
 
 ## Current local behavior
 
+本地视觉增量 `FEAT-VISUAL-20261021-HERO-ARC-01`：设置出行卡与日程标题卡随共享样式删除细弧线，
+插画、出行与冲突合同保留。[Spec01](../../../specs/active/BUG-030-HERO-BACKGROUND-ARC.md) /
+DREV-20261021-HERO-ARC-REMOVAL-01已批准；[本轮证据](../../quality/evidence/HERO-ARC-REMOVAL-20261021.md)
+记录真实验证与验收缺口，未上传/发布。
+
 - 设置页按当前孩子新增“出行安排”卡，可新增、编辑、停用/删除每周重复时段。
 - 每项包含名称、星期集合、开始时间和结束时间；上学、放学、接送是快捷名称而非封闭枚举。
 - 出行只投影到“日程”，不进入“今日”、Todo、报表、AI、活动提醒或活动练习记录。
