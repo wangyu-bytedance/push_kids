@@ -7,11 +7,18 @@ from fastapi import APIRouter, Depends, Header, Request
 from sqlalchemy.orm import Session
 
 from push_kids.notifications.planner import NotificationPlanner
+from push_kids.notifications.renewal_service import NotificationRenewalService
 from push_kids.notifications.schemas import (
     DeliveryView,
     DispatchReport,
+    GrantAttemptView,
+    GrantPreparationView,
+    GrantPrepare,
+    GrantRegister,
     NotificationSettingsView,
     PreferenceUpdate,
+    RenewalUpdate,
+    RenewalView,
     SubscriptionRegister,
 )
 from push_kids.notifications.service import NotificationChannel, NotificationsService
@@ -31,6 +38,46 @@ ContextDep = Annotated[RequestContext, Depends(request_context)]
 # Reminder settings are per member, so even a viewer may change their own.
 SelfContextDep = Annotated[RequestContext, Depends(self_service_context)]
 DbDep = Annotated[Session, Depends(get_db)]
+KeyDep = Annotated[
+    str,
+    Header(alias="Idempotency-Key", min_length=8, max_length=100, pattern=r"^[A-Za-z0-9._:-]+$"),
+]
+
+
+@router.get("/notifications/renewal", response_model=RenewalView)
+def read_renewal(context: ContextDep, db: DbDep, channel: ChannelDep):
+    return NotificationRenewalService.view(db, context, channel)
+
+
+@router.patch("/notifications/renewal", response_model=RenewalView)
+def update_renewal(
+    body: RenewalUpdate, key: KeyDep, context: SelfContextDep, db: DbDep, channel: ChannelDep
+):
+    return NotificationRenewalService.update(db, context, channel, body, key)
+
+
+@router.post("/notifications/grant-attempts", response_model=GrantPreparationView)
+def prepare_grant(
+    body: GrantPrepare, key: KeyDep, context: SelfContextDep, db: DbDep, channel: ChannelDep
+):
+    return NotificationRenewalService.prepare(db, context, channel, body, key)
+
+
+@router.get("/notifications/grant-attempts/{attempt_id}", response_model=GrantAttemptView)
+def read_grant(attempt_id: str, context: ContextDep, db: DbDep):
+    return NotificationRenewalService.read_attempt(db, context, attempt_id)
+
+
+@router.post("/notifications/grant-attempts/{attempt_id}/started", response_model=GrantAttemptView)
+def start_grant(attempt_id: str, context: SelfContextDep, db: DbDep):
+    return NotificationRenewalService.started(db, context, attempt_id)
+
+
+@router.post("/notifications/grant-attempts/{attempt_id}/result", response_model=GrantAttemptView)
+def register_grant(
+    attempt_id: str, body: GrantRegister, context: SelfContextDep, db: DbDep, channel: ChannelDep
+):
+    return NotificationRenewalService.register(db, context, channel, attempt_id, body)
 
 
 @router.get("/notifications/settings", response_model=NotificationSettingsView)

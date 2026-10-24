@@ -1,0 +1,44 @@
+{
+  "nodes": {
+    ".grade-sheet": [],
+    ".grade-body": [],
+    ".grade-title": [],
+    ".grade-name": [],
+    ".grade-current": [],
+    ".grade-intro": [],
+    ".grade-picker": [],
+    ".grade-shared": [],
+    ".grade-error": [],
+    ".grade-actions": [],
+    ".grade-primary": [],
+    ".grade-secondary": [],
+    ".tabbar": [
+      {
+        "left": 0,
+        "right": 430,
+        "top": 837,
+        "bottom": 932,
+        "width": 430,
+        "height": 95,
+        "fontSize": "16px"
+      }
+    ]
+  },
+  "viewport": {
+    "width": 430,
+    "height": 932,
+    "screenHeight": 932,
+    "dpr": 3,
+    "fontScale": 15,
+    "baseLibrary": "3.17.4"
+  },
+  "state": "terminal",
+  "errors": [],
+  "fixture": "synthetic presentation only; actual lifecycle covered by frontend tests",
+  "capturedAt": "2026-10-24T11:34:36.747Z",
+  "screenshotSha256": "d6afe54dacfbfb46b92fa42982e6c2b2aecb613361d3d147ca13b3132ab453ee",
+  "screenshotPixels": {
+    "width": 860,
+    "height": 1864
+  }
+}

@@ -6,7 +6,6 @@ import pytest
 from alembic import command
 from alembic.config import Config
 from push_kids.persistence.models import (
-    Child,
     DailyReviewPlan,
     Family,
     KnowledgeItem,
@@ -29,7 +28,12 @@ def test_queue_upgrade_and_guarded_downgrade(tmp_path, monkeypatch):
     engine = create_engine(url)
     with engine.begin() as db:
         db.execute(Family.__table__.insert().values(id="f", display_name="synthetic"))
-        db.execute(Child.__table__.insert().values(id="c", family_id="f", name="synthetic"))
+        # Seed the frozen 0016 shape, independent of defaults added by later ORM revisions.
+        db.execute(
+            text("""INSERT INTO children
+            (id,family_id,name,daily_budget_minutes,review_inventory_revision,active,deleting,created_at)
+            VALUES ('c','f','synthetic',15,0,1,0,CURRENT_TIMESTAMP)""")
+        )
         db.execute(
             Subject.__table__.insert().values(id="s", family_id="f", child_id="c", name="math")
         )

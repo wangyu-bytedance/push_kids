@@ -1,4 +1,8 @@
 <view class="inventory-page {{embedded ? 'report-inventory' : ''}}" bindtap="closeActionMenu">
+  <view class="status-row segmented" aria-label="复习词条状态">
+    <button class="inventory-button status-segment {{reviewStatus === 'normal' ? 'on' : ''}}" data-status="normal" bindtap="changeStatus" disabled="{{saving}}" aria-label="参与复习{{reviewStatus === 'normal' ? '，已选中' : ''}}">参与复习</button>
+    <button class="inventory-button status-segment {{reviewStatus === 'superseded' ? 'on' : ''}}" data-status="superseded" bindtap="changeStatus" disabled="{{saving}}" aria-label="已替代{{reviewStatus === 'superseded' ? '，已选中' : ''}}">已替代</button>
+  </view>
   <view class="view-tabs">
     <button wx:for="{{views}}" wx:key="id" class="inventory-button tab {{view === item.id ? 'on' : ''}}" data-id="{{item.id}}" bindtap="changeView" aria-label="{{item.label}}{{view === item.id ? '，已选中' : ''}}">{{item.label}}</button>
   </view>
@@ -56,20 +60,22 @@
             <view class="item-main">
               <text class="item-title">{{entry.knowledge_name}}</text>
               <text class="item-meta">{{entry.reviewCountText}} · {{entry.lastReviewText}}</text>
-              <view class="item-bottom"><text class="item-date" wx:if="{{entry.compactDateText}}">{{entry.compactDateText}}</text><text class="item-state">{{entry.arrangementText}}</text></view>
+              <text class="item-coverage" wx:if="{{entry.review_status === 'superseded'}}">{{entry.coverageText}}</text>
+              <view class="item-bottom" wx:else><text class="item-date" wx:if="{{entry.compactDateText}}">{{entry.compactDateText}}</text><text class="item-state">{{entry.arrangementText}}</text></view>
             </view>
             <button id="more-{{entry.knowledge_id}}" class="inventory-button more {{actionMenuId === entry.knowledge_id ? 'on' : ''}}" wx:if="{{canWrite}}" data-id="{{entry.knowledge_id}}" catchtap="openActions" disabled="{{loading || saving}}" aria-label="{{entry.knowledge_name}}的{{embedded ? '调整计划' : '更多操作'}}" aria-expanded="{{actionMenuId === entry.knowledge_id}}"><text wx:if="{{embedded}}">调整</text><view wx:else class="ico ico-more sm"></view></button>
           </view>
+          <button class="inventory-button source-link" wx:if="{{entry.review_status === 'superseded' && entry.source_submission_id}}" data-id="{{entry.knowledge_id}}" catchtap="openSource" aria-label="查看{{entry.knowledge_name}}的原学习记录">查看原学习记录</button>
           <view id="menu-{{entry.knowledge_id}}" class="action-menu {{actionMenuAbove ? 'above' : ''}}" wx:if="{{actionMenuId === entry.knowledge_id && canWrite}}" catchtap="ignore" aria-label="{{entry.knowledge_name}}的操作">
-            <button class="inventory-button menu-option" data-action="tomorrow" catchtap="schedule" disabled="{{saving || conflict || !entry.can_schedule || (entry.manually_scheduled && entry.in_tomorrow_plan)}}">{{entry.manually_scheduled && entry.in_tomorrow_plan ? '已手动安排到明天' : '加入明天复习'}}</button>
-            <button class="inventory-button menu-option" data-action="day_after" catchtap="schedule" disabled="{{saving || conflict || !entry.can_schedule || !entry.in_tomorrow_plan}}">改到后天复习</button>
+            <button class="inventory-button menu-option" wx:if="{{entry.review_status !== 'superseded'}}" data-action="tomorrow" catchtap="schedule" disabled="{{saving || conflict || !entry.can_schedule || (entry.manually_scheduled && entry.in_tomorrow_plan)}}">{{entry.manually_scheduled && entry.in_tomorrow_plan ? '已手动安排到明天' : '加入明天复习'}}</button>
+            <button class="inventory-button menu-option" wx:if="{{entry.review_status !== 'superseded'}}" data-action="day_after" catchtap="schedule" disabled="{{saving || conflict || !entry.can_schedule || !entry.in_tomorrow_plan}}">改到后天复习</button>
             <button class="inventory-button menu-option danger" catchtap="askDelete" disabled="{{saving}}">删除条目</button>
           </view>
           <view class="error item-error" wx:if="{{target && target.knowledge_id === entry.knowledge_id && actionError}}"><text>{{actionError}}</text><button class="inventory-button" wx:if="{{conflict}}" catchtap="reload">读取最新安排</button></view>
         </view>
       </view>
     </view>
-    <view class="empty" wx:if="{{!items.length && !error}}"><text>{{view === 'time' ? '这一天暂无预计安排' : (view === 'count' && count !== null ? '没有已复习 ' + count + ' 次的条目' : '暂无知识条目')}}</text><button class="inventory-button" wx:if="{{view === 'count' && count !== null}}" data-count="all" bindtap="selectCount">查看全部次数</button></view>
+    <view class="empty" wx:if="{{!items.length && !error}}"><text>{{view === 'time' ? '这一天暂无预计安排' : (view === 'count' && count !== null ? '没有已复习 ' + count + ' 次的条目' : (reviewStatus === 'superseded' ? '暂无已替代词条' : '暂无知识条目'))}}</text><button class="inventory-button" wx:if="{{view === 'count' && count !== null}}" data-count="all" bindtap="selectCount">查看全部次数</button></view>
     <view class="inventory-pagination" wx:if="{{pageNumber > 1 || nextCursor}}"><button class="inventory-button inventory-page-button" bindtap="reload" disabled="{{loading || pageNumber === 1}}">回到首页</button><text class="inventory-page-label">第 {{pageNumber}} 页</text><button class="inventory-button inventory-page-button" bindtap="nextPage" disabled="{{loading || !nextCursor}}">下一页</button></view>
   </block>
 </view>

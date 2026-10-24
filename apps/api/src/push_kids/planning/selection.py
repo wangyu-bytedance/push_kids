@@ -33,6 +33,7 @@ class ReviewSelectionCandidate:
     missed_plan_days: int = 0
     waiting_since: date | None = None
     subject_last_offered_on: date | None = None
+    state_version: int = 0
 
     @property
     def bounded_minutes(self) -> int:

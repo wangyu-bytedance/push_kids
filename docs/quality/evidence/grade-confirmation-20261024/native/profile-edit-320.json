@@ -1,0 +1,44 @@
+{
+  "nodes": [
+    {
+      "left": 27,
+      "right": 293,
+      "top": 58,
+      "bottom": 102,
+      "width": 266,
+      "height": 44,
+      "fontSize": "15px"
+    },
+    {
+      "left": 27,
+      "right": 293,
+      "top": 138,
+      "bottom": 182,
+      "width": 266,
+      "height": 44,
+      "fontSize": "15px"
+    },
+    {
+      "left": 15,
+      "right": 305,
+      "top": 400,
+      "bottom": 444,
+      "width": 290,
+      "height": 44,
+      "fontSize": "16px"
+    }
+  ],
+  "viewport": {
+    "width": 320,
+    "height": 568,
+    "screenHeight": 568,
+    "dpr": 2,
+    "baseLibrary": "3.17.4"
+  },
+  "route": "pages/child-edit/index",
+  "selectedLabel": "九年级",
+  "errors": [],
+  "fixture": "offline synthetic profile; production chooseGrade handler, no form submission",
+  "capturedAt": "2026-10-24T11:40:39.038Z",
+  "screenshotSha256": "1de0abcee82c7f289e81f1e41f57f2389a9e26882e28304a397f5d6b71d92955"
+}

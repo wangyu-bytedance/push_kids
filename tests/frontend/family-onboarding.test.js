@@ -12,6 +12,8 @@ function loadApp() {
   const filename = path.join(root, "app.js");
   vm.runInNewContext(source("app.js"), {
     require(name) {
+      if (name === "./utils/grade-confirmation") return require("../../apps/miniprogram/utils/grade-confirmation");
+      if (name === "./utils/api") return { request() { throw Error("Unexpected API request in launch routing test"); } };
       if (name === "./config") return {
         useCloud: false, cloudEnv: "", cloudService: "", apiBasePath: "/api/v1",
         localFamilyId: "", localActorId: "actor", localApiBaseUrl: "http://localhost"

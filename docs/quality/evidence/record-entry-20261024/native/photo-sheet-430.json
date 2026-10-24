@@ -1,0 +1,343 @@
+{
+  "nodes": {
+    ".record-heading": [
+      {
+        "left": 0,
+        "right": 430,
+        "top": 94,
+        "bottom": 159,
+        "width": 430,
+        "height": 65,
+        "fontSize": "16px",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "position": "static",
+        "overflowX": "visible",
+        "overflowY": "visible"
+      }
+    ],
+    ".record-type-title": [
+      {
+        "left": 16,
+        "right": 121,
+        "top": 94,
+        "bottom": 143,
+        "width": 105,
+        "height": 49,
+        "fontSize": "22px",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "position": "relative",
+        "overflowX": "hidden",
+        "overflowY": "hidden"
+      }
+    ],
+    ".child-chip": [
+      {
+        "left": 302,
+        "right": 414,
+        "top": 96.5,
+        "bottom": 140.5,
+        "width": 112,
+        "height": 44,
+        "fontSize": "14px",
+        "backgroundColor": "rgb(255, 253, 248)",
+        "position": "static",
+        "overflowX": "visible",
+        "overflowY": "visible"
+      }
+    ],
+    ".ava": [
+      {
+        "left": 309,
+        "right": 337,
+        "top": 104.5,
+        "bottom": 132.5,
+        "width": 28,
+        "height": 28,
+        "fontSize": "14px",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "position": "static",
+        "overflowX": "visible",
+        "overflowY": "visible"
+      }
+    ],
+    ".record-child-name": [
+      {
+        "left": 345,
+        "right": 401,
+        "top": 109,
+        "bottom": 128,
+        "width": 56,
+        "height": 19,
+        "fontSize": "14px",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "position": "static",
+        "overflowX": "visible",
+        "overflowY": "visible"
+      }
+    ],
+    ".child-chip .chev": [],
+    ".record-type-menu": [],
+    ".record-type-choice": [],
+    ".record-type-dismiss": [],
+    ".footprints-page": [
+      {
+        "left": 0,
+        "right": 430,
+        "top": 159,
+        "bottom": 982,
+        "width": 430,
+        "height": 823,
+        "fontSize": "14px",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "position": "static",
+        "overflowX": "visible",
+        "overflowY": "visible"
+      }
+    ],
+    ".fp-tab": [
+      {
+        "left": 20,
+        "right": 144.671875,
+        "top": 352,
+        "bottom": 396,
+        "width": 124.671875,
+        "height": 44,
+        "fontSize": "14px",
+        "backgroundColor": "rgb(31, 91, 69)",
+        "position": "relative",
+        "overflowX": "hidden",
+        "overflowY": "hidden"
+      },
+      {
+        "left": 152.671875,
+        "right": 277.34375,
+        "top": 352,
+        "bottom": 396,
+        "width": 124.671875,
+        "height": 44,
+        "fontSize": "14px",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "position": "relative",
+        "overflowX": "hidden",
+        "overflowY": "hidden"
+      },
+      {
+        "left": 285.34375,
+        "right": 410.015625,
+        "top": 352,
+        "bottom": 396,
+        "width": 124.671875,
+        "height": 44,
+        "fontSize": "14px",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "position": "relative",
+        "overflowX": "hidden",
+        "overflowY": "hidden"
+      }
+    ],
+    ".fp-filter": [],
+    ".fp-date": [],
+    ".fp-timeline": [
+      {
+        "left": 16,
+        "right": 414,
+        "top": 518,
+        "bottom": 787,
+        "width": 398,
+        "height": 269,
+        "fontSize": "14px",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "position": "static",
+        "overflowX": "visible",
+        "overflowY": "visible"
+      }
+    ],
+    ".fp-map-content": [],
+    ".fp-import": [
+      {
+        "left": 16,
+        "right": 414,
+        "top": 807,
+        "bottom": 855,
+        "width": 398,
+        "height": 48,
+        "fontSize": "14px",
+        "backgroundColor": "rgb(31, 91, 69)",
+        "position": "relative",
+        "overflowX": "hidden",
+        "overflowY": "hidden"
+      }
+    ],
+    ".fp-import .ico": [
+      {
+        "left": 173,
+        "right": 193,
+        "top": 821,
+        "bottom": 841,
+        "width": 20,
+        "height": 20,
+        "fontSize": "14px",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "position": "static",
+        "overflowX": "visible",
+        "overflowY": "visible"
+      }
+    ],
+    ".fp-import text": [],
+    ".fp-empty": [],
+    ".fp-player": [],
+    ".fp-map": [],
+    ".fp-world-row": [],
+    ".fp-sheet": [
+      {
+        "left": 0,
+        "right": 430,
+        "top": 352.40625,
+        "bottom": 932,
+        "width": 430,
+        "height": 579.59375,
+        "fontSize": "16px",
+        "backgroundColor": "rgb(255, 253, 248)",
+        "position": "static",
+        "overflowX": "hidden",
+        "overflowY": "hidden"
+      }
+    ],
+    ".fp-sheet-body": [
+      {
+        "left": 0,
+        "right": 430,
+        "top": 417.40625,
+        "bottom": 825,
+        "width": 430,
+        "height": 407.59375,
+        "fontSize": "14px",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "position": "static",
+        "overflowX": "visible",
+        "overflowY": "visible"
+      }
+    ],
+    ".fp-sheet-footer": [
+      {
+        "left": 0,
+        "right": 430,
+        "top": 825,
+        "bottom": 932,
+        "width": 430,
+        "height": 107,
+        "fontSize": "16px",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "position": "static",
+        "overflowX": "visible",
+        "overflowY": "visible"
+      }
+    ],
+    ".fp-text-button": [
+      {
+        "left": 16,
+        "right": 88,
+        "top": 159,
+        "bottom": 203,
+        "width": 72,
+        "height": 44,
+        "fontSize": "14px",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "position": "relative",
+        "overflowX": "hidden",
+        "overflowY": "hidden"
+      },
+      {
+        "left": 42,
+        "right": 401,
+        "top": 730,
+        "bottom": 774,
+        "width": 359,
+        "height": 44,
+        "fontSize": "14px",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "position": "relative",
+        "overflowX": "hidden",
+        "overflowY": "hidden"
+      },
+      {
+        "left": 16,
+        "right": 74,
+        "top": 717,
+        "bottom": 761,
+        "width": 58,
+        "height": 44,
+        "fontSize": "14px",
+        "backgroundColor": "rgb(250, 250, 250)",
+        "position": "relative",
+        "overflowX": "hidden",
+        "overflowY": "hidden"
+      },
+      {
+        "left": 355.984375,
+        "right": 413.984375,
+        "top": 717,
+        "bottom": 761,
+        "width": 58,
+        "height": 44,
+        "fontSize": "14px",
+        "backgroundColor": "rgb(250, 250, 250)",
+        "position": "relative",
+        "overflowX": "hidden",
+        "overflowY": "hidden"
+      }
+    ],
+    ".fp-button": [
+      {
+        "left": 16,
+        "right": 414,
+        "top": 807,
+        "bottom": 855,
+        "width": 398,
+        "height": 48,
+        "fontSize": "14px",
+        "backgroundColor": "rgb(31, 91, 69)",
+        "position": "relative",
+        "overflowX": "hidden",
+        "overflowY": "hidden"
+      },
+      {
+        "left": 16,
+        "right": 414,
+        "top": 838,
+        "bottom": 886,
+        "width": 398,
+        "height": 48,
+        "fontSize": "14px",
+        "backgroundColor": "rgb(31, 91, 69)",
+        "position": "relative",
+        "overflowX": "hidden",
+        "overflowY": "hidden"
+      }
+    ],
+    ".tabbar": [],
+    ".is-center .key": []
+  },
+  "scrollLeft": 0,
+  "scrollTop": 0,
+  "viewport": {
+    "width": 430,
+    "height": 932,
+    "screenHeight": 932,
+    "dpr": 3,
+    "baseLibrary": "3.17.4",
+    "fontScale": 15
+  },
+  "recordType": "travel",
+  "menu": false,
+  "sheet": true,
+  "counts": {
+    "visits": 1,
+    "placeVisits": 1
+  },
+  "state": "photo-sheet",
+  "errors": [],
+  "capturedAt": "2026-10-24T11:54:25.889Z",
+  "screenshot": "photo-sheet-430.png",
+  "screenshotSha256": "d7de1cf4396bffe0be4683f8b0fc9c7be8e074f8bb4a8fa652a3e3b06649fce8"
+}

@@ -1,0 +1,331 @@
+{
+  "nodes": {
+    ".record-heading": [
+      {
+        "left": 0,
+        "right": 430,
+        "top": -299,
+        "bottom": -234,
+        "width": 430,
+        "height": 65,
+        "fontSize": "16px",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "position": "static",
+        "overflowX": "visible",
+        "overflowY": "visible"
+      }
+    ],
+    ".record-type-title": [
+      {
+        "left": 16,
+        "right": 121,
+        "top": -299,
+        "bottom": -250,
+        "width": 105,
+        "height": 49,
+        "fontSize": "22px",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "position": "relative",
+        "overflowX": "hidden",
+        "overflowY": "hidden"
+      }
+    ],
+    ".child-chip": [
+      {
+        "left": 302,
+        "right": 414,
+        "top": -296.5,
+        "bottom": -252.5,
+        "width": 112,
+        "height": 44,
+        "fontSize": "14px",
+        "backgroundColor": "rgb(255, 253, 248)",
+        "position": "static",
+        "overflowX": "visible",
+        "overflowY": "visible"
+      }
+    ],
+    ".ava": [
+      {
+        "left": 309,
+        "right": 337,
+        "top": -288.5,
+        "bottom": -260.5,
+        "width": 28,
+        "height": 28,
+        "fontSize": "14px",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "position": "static",
+        "overflowX": "visible",
+        "overflowY": "visible"
+      }
+    ],
+    ".record-child-name": [
+      {
+        "left": 345,
+        "right": 401,
+        "top": -284,
+        "bottom": -265,
+        "width": 56,
+        "height": 19,
+        "fontSize": "14px",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "position": "static",
+        "overflowX": "visible",
+        "overflowY": "visible"
+      }
+    ],
+    ".child-chip .chev": [],
+    ".record-type-menu": [],
+    ".record-type-choice": [],
+    ".record-type-dismiss": [],
+    ".footprints-page": [
+      {
+        "left": 0,
+        "right": 430,
+        "top": -234,
+        "bottom": 932.4375,
+        "width": 430,
+        "height": 1166.4375,
+        "fontSize": "14px",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "position": "static",
+        "overflowX": "visible",
+        "overflowY": "visible"
+      }
+    ],
+    ".fp-tab": [
+      {
+        "left": 20,
+        "right": 144.671875,
+        "top": -41,
+        "bottom": 3,
+        "width": 124.671875,
+        "height": 44,
+        "fontSize": "14px",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "position": "relative",
+        "overflowX": "hidden",
+        "overflowY": "hidden"
+      },
+      {
+        "left": 152.671875,
+        "right": 277.34375,
+        "top": -41,
+        "bottom": 3,
+        "width": 124.671875,
+        "height": 44,
+        "fontSize": "14px",
+        "backgroundColor": "rgb(31, 91, 69)",
+        "position": "relative",
+        "overflowX": "hidden",
+        "overflowY": "hidden"
+      },
+      {
+        "left": 285.34375,
+        "right": 410.015625,
+        "top": -41,
+        "bottom": 3,
+        "width": 124.671875,
+        "height": 44,
+        "fontSize": "14px",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "position": "relative",
+        "overflowX": "hidden",
+        "overflowY": "hidden"
+      }
+    ],
+    ".fp-filter": [],
+    ".fp-date": [],
+    ".fp-timeline": [],
+    ".fp-map-content": [
+      {
+        "left": 16,
+        "right": 414,
+        "top": 125,
+        "bottom": 737.4375,
+        "width": 398,
+        "height": 612.4375,
+        "fontSize": "14px",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "position": "static",
+        "overflowX": "visible",
+        "overflowY": "visible"
+      }
+    ],
+    ".fp-import": [
+      {
+        "left": 16,
+        "right": 414,
+        "top": 757.4375,
+        "bottom": 805.4375,
+        "width": 398,
+        "height": 48,
+        "fontSize": "14px",
+        "backgroundColor": "rgb(31, 91, 69)",
+        "position": "relative",
+        "overflowX": "hidden",
+        "overflowY": "hidden"
+      }
+    ],
+    ".fp-import .ico": [
+      {
+        "left": 173,
+        "right": 193,
+        "top": 771.4375,
+        "bottom": 791.4375,
+        "width": 20,
+        "height": 20,
+        "fontSize": "14px",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "position": "static",
+        "overflowX": "visible",
+        "overflowY": "visible"
+      }
+    ],
+    ".fp-import text": [],
+    ".fp-empty": [],
+    ".fp-player": [
+      {
+        "left": 16,
+        "right": 414,
+        "top": 528.4375,
+        "bottom": 737.4375,
+        "width": 398,
+        "height": 209,
+        "fontSize": "14px",
+        "backgroundColor": "rgb(255, 253, 248)",
+        "position": "static",
+        "overflowX": "visible",
+        "overflowY": "visible"
+      }
+    ],
+    ".fp-map": [
+      {
+        "left": 16,
+        "right": 414,
+        "top": 125,
+        "bottom": 516.4375,
+        "width": 398,
+        "height": 391.4375,
+        "fontSize": "14px",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "position": "relative",
+        "overflowX": "visible",
+        "overflowY": "visible"
+      }
+    ],
+    ".fp-world-row": [],
+    ".fp-sheet": [],
+    ".fp-sheet-body": [],
+    ".fp-sheet-footer": [],
+    ".fp-text-button": [
+      {
+        "left": 16,
+        "right": 88,
+        "top": -234,
+        "bottom": -190,
+        "width": 72,
+        "height": 44,
+        "fontSize": "14px",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "position": "relative",
+        "overflowX": "hidden",
+        "overflowY": "hidden"
+      },
+      {
+        "left": 32,
+        "right": 398,
+        "top": 655.4375,
+        "bottom": 699.4375,
+        "width": 366,
+        "height": 44,
+        "fontSize": "14px",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "position": "relative",
+        "overflowX": "hidden",
+        "overflowY": "hidden"
+      }
+    ],
+    ".fp-button": [
+      {
+        "left": 32,
+        "right": 84,
+        "top": 611.4375,
+        "bottom": 655.4375,
+        "width": 52,
+        "height": 44,
+        "fontSize": "14px",
+        "backgroundColor": "rgb(31, 91, 69)",
+        "position": "relative",
+        "overflowX": "hidden",
+        "overflowY": "hidden"
+      },
+      {
+        "left": 16,
+        "right": 414,
+        "top": 757.4375,
+        "bottom": 805.4375,
+        "width": 398,
+        "height": 48,
+        "fontSize": "14px",
+        "backgroundColor": "rgb(31, 91, 69)",
+        "position": "relative",
+        "overflowX": "hidden",
+        "overflowY": "hidden"
+      }
+    ],
+    ".tabbar": [
+      {
+        "left": 0,
+        "right": 430,
+        "top": 837,
+        "bottom": 932,
+        "width": 430,
+        "height": 95,
+        "fontSize": "16px",
+        "backgroundColor": "rgba(255, 253, 248, 0.92)",
+        "position": "fixed",
+        "overflowX": "visible",
+        "overflowY": "visible"
+      }
+    ],
+    ".is-center .key": [
+      {
+        "left": 185.5,
+        "right": 244.5,
+        "top": 820,
+        "bottom": 879,
+        "width": 59,
+        "height": 59,
+        "fontSize": "16px",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "position": "relative",
+        "overflowX": "visible",
+        "overflowY": "visible"
+      }
+    ]
+  },
+  "scrollLeft": 0,
+  "scrollTop": 393,
+  "viewport": {
+    "width": 430,
+    "height": 932,
+    "screenHeight": 932,
+    "dpr": 3,
+    "baseLibrary": "3.17.4",
+    "fontScale": 15
+  },
+  "recordType": "travel",
+  "menu": false,
+  "sheet": false,
+  "counts": {
+    "visits": 1,
+    "placeVisits": 1
+  },
+  "state": "playback-bottom",
+  "errors": [],
+  "capturedAt": "2026-10-24T11:54:24.019Z",
+  "screenshot": "playback-bottom-430.png",
+  "screenshotSha256": "fd1985360c85762842118a5776fd21207326748b98599932cf2a758bef6cdb24"
+}

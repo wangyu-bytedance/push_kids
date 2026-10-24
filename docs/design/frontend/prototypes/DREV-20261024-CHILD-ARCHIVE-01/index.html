@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>学习档案 · 归档操作设计候选</title>
+<style>
+:root{--canvas:#FAF7F0;--surface:#FFFDF8;--ink:#22261F;--ink2:#464E43;--muted:#79826F;--line:#EBE5D7;--primary:#1F5B45;--danger:#A85742;--danger-bg:#F7E8E2;--unit:calc(100vw / 750)}
+*{box-sizing:border-box}body{margin:0;background:var(--canvas);color:var(--ink);font:16px/1.5 -apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif}button{font:inherit;cursor:pointer}button:focus-visible{outline:2px solid var(--primary);outline-offset:3px}button:disabled{cursor:default}header{height:72px;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:600}main{padding:0 calc(36 * var(--unit)) 32px;max-width:480px;margin:auto}.card{border:1px solid rgba(34,38,31,.06);border-radius:calc(40 * var(--unit));background:var(--surface);box-shadow:0 1px 2px rgba(34,38,31,.04)}.form-context{padding:calc(28 * var(--unit));margin-bottom:calc(24 * var(--unit))}.context-row{display:flex;justify-content:space-between;gap:16px;padding:12px 0}.context-row+.context-row{border-top:1px solid var(--line)}.context-row span{color:var(--ink2)}.archive-row{display:flex;align-items:center;justify-content:space-between;gap:16px;width:100%;min-height:84px;text-align:left;padding:16px calc(28 * var(--unit));border:0;border-radius:inherit;background:transparent;color:var(--ink)}.archive-row:active{background:#F3EFE4}.copy{display:flex;flex-direction:column;gap:4px;min-width:0}.label{font-size:17px;line-height:1.45;font-weight:600}.description{font-size:14px;line-height:1.5;color:var(--ink2)}.chevron{flex:none;width:8px;height:8px;margin-right:4px;border-right:1.5px solid var(--muted);border-top:1.5px solid var(--muted);transform:rotate(45deg)}.pending{margin:0;padding:0 calc(28 * var(--unit)) 16px;color:var(--ink2);font-size:14px;line-height:1.5}.error{margin:0 0 12px;padding:12px 14px;border-radius:12px;background:var(--danger-bg);color:var(--danger);font-size:14px;line-height:1.5}.save{display:block;width:100%;min-height:48px;margin-top:calc(32 * var(--unit));border:0;border-radius:999px;background:var(--primary);color:var(--surface);font-weight:600}.overlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.45)}.dialog{width:100%;max-width:320px;border-radius:12px;background:#fff;overflow:hidden}.dialog h2{margin:0;padding:24px 20px 12px;font-size:17px;line-height:1.5;text-align:center}.dialog p{margin:0;padding:0 22px 24px;color:var(--ink2);font-size:15px;line-height:1.6;white-space:pre-line}.dialog-actions{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid #eee}.dialog-actions button{min-height:50px;border:0;background:#fff;font-size:17px}.dialog-actions button+button{border-left:1px solid #eee;color:var(--danger)}[hidden]{display:none!important}
+</style>
+<div id="background">
+  <header>学习档案</header>
+  <main>
+    <section class="card form-context" aria-label="原有表单上下文，仅示意">
+      <div class="context-row">名字<span>小满</span></div>
+      <div class="context-row">年级<span>三年级</span></div>
+      <div class="context-row">每天复习时长<span>15 分钟</span></div>
+    </section>
+    <div id="focus">
+      <p class="error" role="alert" hidden>无法连接服务，请检查网络后重试。</p>
+      <section class="card archive-card">
+        <button class="archive-row" type="button" aria-label="归档档案">
+          <span class="copy"><span class="label">归档档案</span><span class="description">保留全部记录，随时可恢复</span></span>
+          <span class="chevron" aria-hidden="true"></span>
+        </button>
+        <p class="pending" hidden>还有 3 条记录待处理，归档后仍可继续完成。</p>
+      </section>
+    </div>
+    <button class="save" type="button">保存</button>
+  </main>
+</div>
+<div class="overlay" hidden>
+  <section class="dialog" role="dialog" aria-modal="true" aria-labelledby="dialog-title">
+    <h2 id="dialog-title">归档「小满」？</h2>
+    <p id="dialog-copy"></p>
+    <div class="dialog-actions"><button id="cancel" type="button">取消</button><button id="confirm" type="button">归档</button></div>
+  </section>
+</div>
+<script>
+const row=document.querySelector('.archive-row');
+let current='active',previous='active';
+window.designStates=['active','unfinished','archived','working','error','confirm','confirm-unfinished'];
+window.designShow=function(state){
+  if(!window.designStates.includes(state))throw Error('unknown_design_state');
+  current=state;
+  const archived=state==='archived',working=state==='working',modal=state.startsWith('confirm');
+  document.querySelector('.label').textContent=working?'正在归档…':archived?'恢复档案':'归档档案';
+  document.querySelector('.description').textContent=archived?'重新加入孩子列表，继续记录':'保留全部记录，随时可恢复';
+  row.disabled=working;row.setAttribute('aria-label',archived?'恢复档案':'归档档案');
+  document.querySelector('.chevron').hidden=working;
+  document.querySelector('.pending').hidden=!['unfinished','confirm-unfinished'].includes(state);
+  document.querySelector('.error').hidden=state!=='error';
+  document.querySelector('.overlay').hidden=!modal;
+  document.querySelector('#background').inert=modal;
+  document.querySelector('#background').setAttribute('aria-hidden',String(modal));
+  document.querySelector('#dialog-copy').textContent='归档后从孩子列表隐藏，不能新增记录。历史记录和报表保留，随时可恢复。'+(state==='confirm-unfinished'?'\n还有 3 条记录待处理，归档后仍可完成确认和复习反馈。':'');
+  if(modal)document.querySelector('#cancel').focus();
+};
+function closeDialog(){window.designShow(previous);row.focus()}
+row.addEventListener('click',()=>{previous=current;window.designShow(current==='archived'?'active':current==='unfinished'?'confirm-unfinished':'confirm')});
+document.querySelector('#cancel').addEventListener('click',closeDialog);
+document.querySelector('#confirm').addEventListener('click',()=>window.designShow('working'));
+document.addEventListener('keydown',event=>{if(event.key==='Escape'&&!document.querySelector('.overlay').hidden)closeDialog()});
+window.designShow(new URLSearchParams(location.search).get('state')||'active');
+</script>
+</html>

@@ -3,7 +3,7 @@
 from datetime import timedelta
 
 from sqlalchemy import and_, func, or_, select
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, aliased
 
 from push_kids.children.service import ChildrenService
 from push_kids.persistence.models import (
@@ -15,6 +15,8 @@ from push_kids.persistence.models import (
     ReviewScheduleOverride,
     Subject,
 )
+from push_kids.planning.early_candidates import select_early_reviews
+from push_kids.planning.eligibility import scheduling_eligible
 from push_kids.planning.plan_candidates import selected_candidates
 from push_kids.planning.queue_state import missed_days, recent_plan_days
 from push_kids.platform.errors import AppError, ConflictError, NotFoundError
@@ -70,6 +72,7 @@ def preview_reviews(
                     ReviewItem.child_id == child.id,
                     KnowledgeItem.family_id == family_id,
                     KnowledgeItem.child_id == child.id,
+                    scheduling_eligible(),
                 )
                 .order_by(DailyReviewPlanItem.ordinal, DailyReviewPlanItem.id)
                 .limit(120)
@@ -89,6 +92,34 @@ def preview_reviews(
                 projected_days=tuple(projected_days),
                 projected_subject_offers=projected_subject_offers,
             )
+            if not candidates and db.info.get("empty_day_early_review_enabled", False):
+                due_exists = db.scalar(
+                    select(ReviewItem.id)
+                    .join(KnowledgeItem, KnowledgeItem.id == ReviewItem.knowledge_item_id)
+                    .join(Subject, Subject.id == KnowledgeItem.subject_id)
+                    .where(
+                        ReviewItem.family_id == family_id,
+                        ReviewItem.child_id == child.id,
+                        ReviewItem.active.is_(True),
+                        ReviewItem.id.not_in(previous),
+                        ReviewItem.due_date <= target,
+                        Subject.active.is_(True),
+                        Subject.kind == "learning",
+                        scheduling_eligible(),
+                    )
+                    .limit(1)
+                )
+                if not due_exists:
+                    candidates = select_early_reviews(
+                        db,
+                        family_id,
+                        str(child.id),
+                        target,
+                        int(child.daily_budget_minutes or 0),
+                        exclude=previous,
+                        lock=lock,
+                        projected_subject_offers=projected_subject_offers,
+                    )
             selected = [c.review_id for c in candidates]
             projected_subject_offers.update({c.subject_id: target for c in candidates})
         previous = tuple(selected)
@@ -97,12 +128,18 @@ def preview_reviews(
 
 
 def subjects_page(
-    db: Session, family_id: str, child_id: str, *, cursor: str | None = None, limit: int = 20
+    db: Session,
+    family_id: str,
+    child_id: str,
+    *,
+    cursor: str | None = None,
+    limit: int = 20,
+    review_status: str = "normal",
 ) -> dict:
     child = ChildrenService.get_child(db, family_id, child_id)
     revision = int(child.review_inventory_revision or 0)
     limit = max(1, min(50, limit))
-    scope = ["review-subjects", family_id, child_id]
+    scope = ["review-subjects", family_id, child_id, review_status]
     anchor = cursor_anchor(cursor, scope, revision)
     query = select(Subject).where(
         Subject.family_id == family_id, Subject.child_id == child_id, Subject.kind == "learning"
@@ -121,6 +158,7 @@ def subjects_page(
                 KnowledgeItem.family_id == family_id,
                 KnowledgeItem.child_id == child_id,
                 KnowledgeItem.subject_id.in_([s.id for s in page]),
+                KnowledgeItem.review_status == review_status,
             )
             .group_by(KnowledgeItem.subject_id)
         ).all()
@@ -149,6 +187,7 @@ def inventory_page(
     child_id: str,
     *,
     view: str = "time",
+    review_status: str = "normal",
     offset: int = 1,
     subject_id: str | None = None,
     review_count: int | None = None,
@@ -156,6 +195,10 @@ def inventory_page(
     limit: int = 20,
 ) -> dict:
     child = ChildrenService.get_child(db, family_id, child_id)
+    if review_status not in {"normal", "superseded"}:
+        raise AppError("无效的词条状态")
+    if review_status == "superseded" and view == "time":
+        view = "count"
     if view == "subject" and not subject_id:
         raise AppError("请选择一个科目")
     if review_count is not None and view != "count":
@@ -175,11 +218,22 @@ def inventory_page(
     today = local_date()
     revision = int(child.review_inventory_revision or 0)
     limit = max(1, min(50, limit))
-    scope = ["review-inventory", family_id, child_id, view, offset, subject_id, review_count, today]
+    scope = [
+        "review-inventory",
+        family_id,
+        child_id,
+        view,
+        offset,
+        subject_id,
+        review_count,
+        today,
+        review_status,
+    ]
     anchor = cursor_anchor(cursor, scope, revision)
     conditions = [
         KnowledgeItem.family_id == family_id,
         KnowledgeItem.child_id == child_id,
+        KnowledgeItem.review_status == review_status,
         Subject.family_id == family_id,
         Subject.child_id == child_id,
         Subject.kind == "learning",
@@ -252,21 +306,32 @@ def inventory_page(
         if rows[:limit]:
             k, r, _, _ = rows[:limit][-1]
             next_anchor.update(count=int(r.review_count) if r else 2147483648, id=k.id)
-    tomorrow = set(
-        ids if view == "time" and offset == 1 else preview_reviews(db, family_id, child, 1)
+    tomorrow = (
+        set(ids if view == "time" and offset == 1 else preview_reviews(db, family_id, child, 1))
+        if review_status == "normal"
+        else set()
     )
-    today_plan = db.scalar(
-        select(DailyReviewPlan.id).where(
-            DailyReviewPlan.family_id == family_id,
-            DailyReviewPlan.child_id == child_id,
-            DailyReviewPlan.plan_date == today,
+    today_plan = (
+        db.scalar(
+            select(DailyReviewPlan.id).where(
+                DailyReviewPlan.family_id == family_id,
+                DailyReviewPlan.child_id == child_id,
+                DailyReviewPlan.plan_date == today,
+            )
         )
+        if review_status == "normal"
+        else None
     )
     today_states = (
         {
-            str(rid): str(state)
-            for rid, state in db.execute(
-                select(DailyReviewPlanItem.review_item_id, DailyReviewPlanItem.state)
+            str(rid): (str(state), kind, original)
+            for rid, state, kind, original in db.execute(
+                select(
+                    DailyReviewPlanItem.review_item_id,
+                    DailyReviewPlanItem.state,
+                    DailyReviewPlanItem.selection_kind,
+                    DailyReviewPlanItem.original_due_date,
+                )
                 .where(
                     DailyReviewPlanItem.family_id == family_id,
                     DailyReviewPlanItem.child_id == child_id,
@@ -279,12 +344,16 @@ def inventory_page(
         if today_plan
         else {}
     )
-    days = recent_plan_days(db, family_id, child_id, today + timedelta(days=1))
+    days = (
+        recent_plan_days(db, family_id, child_id, today + timedelta(days=1))
+        if review_status == "normal"
+        else []
+    )
 
     def arrangement(r, s, manual):
         if not r or not child.active or child.deleting or not s.active:
             return "unavailable"
-        state = today_states.get(r.id)
+        state = today_states.get(r.id, (None, None, None))[0]
         if state in {"complete", "partial", "reinforce"}:
             return "reviewed_today"
         if state == "deferred":
@@ -299,21 +368,65 @@ def inventory_page(
             return "not_due"
         return "waiting" if today_plan else "awaiting_daily_plan"
 
+    covering = aliased(KnowledgeItem)
+    covering_ids = [
+        k.superseded_by_knowledge_id for k, _, _, _ in rows[:limit] if k.superseded_by_knowledge_id
+    ]
+    covering_names = (
+        {
+            str(kid): str(name)
+            for kid, name in db.execute(
+                select(covering.id, covering.name)
+                .where(
+                    covering.family_id == family_id,
+                    covering.child_id == child_id,
+                    covering.id.in_(covering_ids),
+                )
+                .limit(limit)
+            ).tuples()
+        }
+        if covering_ids
+        else {}
+    )
     items = [
         {
             "knowledge_id": k.id,
+            "review_status": k.review_status,
+            "superseded_by_knowledge_id": k.superseded_by_knowledge_id,
+            "superseded_by_name": covering_names.get(k.superseded_by_knowledge_id),
+            "source_submission_id": r.source_submission_id if r else None,
             "knowledge_name": k.name,
             "subject_id": s.id,
             "subject_name": s.name,
             "review_id": r.id if r else None,
             "review_count": int(r.review_count) if r else None,
+            "selection_kind": (
+                today_states[r.id][1]
+                if r and r.id in today_states
+                else (
+                    "early"
+                    if r and view == "time" and r.due_date > today + timedelta(days=offset)
+                    else "due"
+                )
+            ),
+            "original_due_date": (
+                today_states[r.id][2].isoformat()
+                if r and r.id in today_states and today_states[r.id][2]
+                else (
+                    r.due_date.isoformat()
+                    if r and view == "time" and r.due_date > today + timedelta(days=offset)
+                    else None
+                )
+            ),
             "last_reviewed_on": r.last_reviewed_on.isoformat()
             if r and r.last_reviewed_on
             else None,
             "due_date": r.due_date.isoformat() if r and r.active else None,
             "suggested_review_on": r.due_date.isoformat() if r and r.active and m is None else None,
             "scheduled_on": m.isoformat() if m else None,
-            "arrangement_state": arrangement(r, s, m),
+            "arrangement_state": "superseded"
+            if k.review_status == "superseded"
+            else arrangement(r, s, m),
             "missed_plan_days": missed_days(
                 r,
                 days,
@@ -322,13 +435,24 @@ def inventory_page(
                     s.review_queue_resumed_on or today.min,
                 ),
             )
-            if r and r.active and s.active and child.active and not m
+            if k.review_status == "normal"
+            and r
+            and r.active
+            and s.active
+            and child.active
+            and not m
             else 0,
             "active": bool(r.active) if r else False,
             "state_version": int(r.state_version) if r else None,
             "manually_scheduled": m is not None,
             "in_tomorrow_plan": bool(r and r.id in tomorrow),
-            "can_schedule": bool(r and s.active and child.active and not child.deleting),
+            "can_schedule": bool(
+                k.review_status == "normal"
+                and r
+                and s.active
+                and child.active
+                and not child.deleting
+            ),
             "estimated_minutes": min(5, max(1, k.estimated_minutes)),
         }
         for k, r, s, m in rows[:limit]

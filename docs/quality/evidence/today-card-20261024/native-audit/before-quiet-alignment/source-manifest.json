@@ -1,0 +1,37 @@
+{
+  "scope": "offline synthetic copy; no business writes or production network",
+  "source_sha256": {
+    "apps/miniprogram/components/today-learning/index.js": "1c4e2013d9401e7c2cd22cb7597c0d043b5bf71a1f659064078001d36782d291",
+    "apps/miniprogram/components/today-learning/index.json": "2f97104a3787d98b5058f0cab2aec29b5ff87542f95111dc6b2f2108ea38fb8a",
+    "apps/miniprogram/components/today-learning/index.wxml": "6b1f24365dfcc498d85742d4bc677068f967da8aca06dbfa88040f148a1e817b",
+    "apps/miniprogram/components/today-learning/index.wxss": "522d3ee5923450578c01d8d4fb7dca09d4bb07f8bdab36c27a88d5c263b87397",
+    "apps/miniprogram/components/todo-card/index.js": "735bca4375d72396a446f78ea55e09224b679a5d66d6a417c4c10df96ece2663",
+    "apps/miniprogram/components/todo-card/index.json": "e7b657f5a4b032a68e9e084639b3a5564ce552896d269c3f8c4463bf7a7fa3b5",
+    "apps/miniprogram/components/todo-card/index.wxml": "b4f23d982935fe28a82443b89882c1c5d6b1399d26ecbf410d4182b1cd0ffaf2",
+    "apps/miniprogram/components/todo-card/index.wxss": "9b44689ac3a57b598c74574d86d7847469d2c803df17c2adf3984370ce010dda",
+    "apps/miniprogram/pages/today/index.js": "161f467c835f252827b018b5b1e5f2db2048f8d92d0036554dca03f17c84a4b8",
+    "apps/miniprogram/pages/today/index.json": "35f5195cbcc51040db4fb927e4f5e7a9287472666ec765dcde71b7312989dc0f",
+    "apps/miniprogram/pages/today/index.wxml": "cc0c206835555a86c2e5a46351bc3fbc108cae3c8581bebe485698425b4461b7",
+    "apps/miniprogram/pages/today/index.wxss": "c6a298297f7e8d3e4e2c84b70bc3d860e323d374171483f4257cb9142c971415",
+    "tools/today_learning_geometry.js": "8d87c39ff4dd62fc75c7b93447f397a7d923fa645d7e0045c379a843cbee49d5",
+    "tools/prepare_today_learning_native.py": "918c5ac8842578e2e714a8051b3c085c309326c9417a280b3668b170702c09a0"
+  },
+  "copy_only_changes": [
+    "synthetic read-only api",
+    "Today first",
+    "plugins removed",
+    "geometry fixture setter",
+    "geometry-only heading scroll binding",
+    "base library 3.17.4"
+  ],
+  "tool_revision_audit": {
+    "previous_runner_sha256": "0cd4d38bccac9f413108e9d896389817b59ee9088d93dea6df7bdd9b611a1d12",
+    "final_runner_sha256": "8d87c39ff4dd62fc75c7b93447f397a7d923fa645d7e0045c379a843cbee49d5",
+    "reason": "Compare actual native 44px section bar geometry instead of assuming 80rpx at 320; all 81 captures rerun with final runner; production sources unchanged."
+  },
+  "shared_styles_checked_against_copy": {
+    "apps/miniprogram/app.wxss": "366f763d208d20f935185e2300fce429bd7a21f98616d1e040b892367e332dc1",
+    "apps/miniprogram/styles/tokens.wxss": "4078b00aa30e9d5eaafe9c1a687b6f267c212cf26724290b8635df909d6504a5",
+    "apps/miniprogram/styles/atoms.wxss": "1c569b76f2cecb5331371b1378092be3388544bceaa9bd3e6ff1365993a9e17f"
+  }
+}

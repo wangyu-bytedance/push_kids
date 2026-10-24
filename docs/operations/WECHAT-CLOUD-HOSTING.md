@@ -283,6 +283,27 @@ Issue。版本配置变更与代码变更一起评审；回滚前要比较旧版
 推荐 JSON 或稳定 key-value 输出，方便云托管日志检索。禁止 request body、headers、SQL URL、
 OpenID/HMAC、fileID、图片内容、孩子正文、模型 prompt/response。
 
+2026-10-17 已验证的只读运行日志入口为官方 `tcbr / 2022-02-17 / SearchClsLog`，使用现有
+CLI 认证代理查询；原 CLI 的 `tcb / 2018-06-08 / SearchClsLog` 在本环境返回
+`ResourceNotFound.TopicNotExist`，不能据此推断没有运行日志。查询须限定时间窗和结果数量，
+原始日志仅在内存解析，输出只保留允许的时间、异常类与安全数字码。
+
+通知 `transport_error` 目前包含 HTTPError，应用日志只保留异常类名，不能从该结果码判定是网络抖动、
+白名单还是微信上游故障。2026-10-17获批-02的032/0%固定空请求探针已实测HTTP502/HTTPError，
+未提取到整数errcode；随后032已清理，031保持normal/100%、受保护配置不变。探针阶段不能单独从502断言白名单缺失。
+后续获批-03的033细化解析仍为HTTP502、无白名单位置数字码，HTTPS对照URLError；033已删除，
+032/033的遗留GRAY管理任务均已停止。必要时须核对“版本已删除”与“管理任务已终态”两者，避免下一次发布ResourceInUse；
+仅收尾确认为本次已删除0%诊断版本的任务，不取消业务版本任务。
+用户prod修复前截图显示总开关开启、微信令牌权限为空，确认缺少`/cgi-bin/message/subscribe/send`的必要接口权限。
+管理员按已批准的[Spec-04](../../specs/completed/OPS-20261017-NOTIFICATION-OPENAPI-PERMISSION-FIX.md)添加仅这一精确路径，修复后截图及官方只读版本/配置不变量核验通过，配置Spec为DONE。
+031仍normal/100%、PUBLIC关闭、原版本保留，服务字段及031受保护配置摘要不变；未重新部署或补发旧通知。
+后续用户明确批准Spec-05家庭范围测试，通过既有API创建1条临时日程0F58，原调度使当前账号记录于18:49:19 CST达到sent/ok，日程授权额度1→0/expired；仅该日程已停用204并核验匹配数0。
+用户随后于2026-10-17明确确认微信“已收到”0F58（call_5b80efd7f9504c4ca286e2df7e031c75），本次单账号日程提醒已完成发送和实际收件验证；不代验其他成员、其他类型或解释全部历史502。
+诊断发布物、验收、历史创建API阻塞及最终清理见
+[2026-10-17诊断证据](../quality/evidence/NOTIFICATION-HTTP-DIAGNOSIS-20261017.md)。
+探针进程不得读取业务环境变量或真实收件人；-02批准的平台版本配置继承例外必须先经env -i清空后执行探针。
+隔离诊断Spec不授权dispatch、重置失败行或真实发送；本次真实单条验收单独取得了Spec-05及家庭范围批准，未调用全局dispatch。更改诊断请求/响应分类须有对应Spec批准。
+
 最小监控：
 
 - HTTP 5xx/429、p95 延迟、ready 失败、实例重启；

@@ -3,272 +3,90 @@ const assert = require("node:assert/strict");
 const { loadPage } = require("./harness");
 const notifications = require("../../apps/miniprogram/utils/notifications");
 
-const PREFERENCES = [
-  {
-    type: "member_application",
-    label: "家人加入申请",
-    description: "有人申请加入家庭时通知管理员",
-    enabled: true,
-    managers_only: true,
-    template_id: "tpl-apply",
-    subscription_status: "accepted",
-    remaining_quota: 1
-  },
-  {
-    type: "schedule_reminder",
-    label: "课前一小时提醒",
-    description: "日程开始前一小时提醒全家",
-    enabled: true,
-    managers_only: false,
-    template_id: "tpl-schedule",
-    subscription_status: "none",
-    remaining_quota: 0
-  },
-  {
-    type: "review_digest",
-    label: "每天 19:00 复习提醒",
-    description: "汇总当天还没复习的内容",
-    enabled: false,
-    managers_only: false,
-    template_id: "tpl-digest",
-    subscription_status: "none",
-    remaining_quota: 0
-  }
-];
-
-/* 页面在 VM 里运行，跨 realm 的数组/对象无法与本 realm 的字面量做引用级比较。 */
-function plain(value) {
-  return JSON.parse(JSON.stringify(value));
+function payload() {
+  return { choice: "enabled", version: 1, completion_cursor: 6,
+    settings: { channel: { available: true, reason: "" }, last_sent_at: "2026-09-05T19:00:00",
+      preferences: [
+        { type: "review_digest", label: "复习提醒", description: "每天19点", enabled: true, template_id: "tpl-digest", remaining_quota: 1 },
+        { type: "schedule_reminder", label: "日程提醒", enabled: true, template_id: "tpl-schedule", remaining_quota: 0 }
+      ] },
+    types: [{ type: "review_digest", status: "has_quota", cooldown_remaining: 10 },
+      { type: "schedule_reminder", status: "cooldown", cooldown_remaining: 4 }] };
 }
 
-function settingsPayload(overrides = {}) {
-  return {
-    channel: {
-      available: true,
-      reason: "",
-      template_ids: ["tpl-apply", "tpl-schedule", "tpl-digest"],
-      long_term: false
-    },
-    preferences: PREFERENCES.map((item) => ({ ...item })),
-    last_sent_at: "2026-09-05T19:00:00",
-    ...overrides
-  };
-}
-
-function loadNotifications({ settings = settingsPayload(), deliveries = [], wx = {} } = {}) {
+function screen({ view = payload(), history = [], writeError = false, wx = {} } = {}) {
   const calls = [];
   const request = async (url, options = {}) => {
     calls.push({ url, options });
-    if (url === "/notifications/deliveries") {
-      if (deliveries instanceof Error) throw deliveries;
-      return deliveries;
-    }
-    const payload = typeof settings === "function" ? settings(url, options) : settings;
-    if (payload instanceof Error) throw payload;
-    return payload;
+    if (url === "/notifications/deliveries") { if (history instanceof Error) throw history; return history; }
+    if (writeError && options.method === "PATCH") throw new Error("网络异常");
+    if (url === "/notifications/grant-attempts") return { attempt: null, renewal: view };
+    return view;
   };
   const harness = loadPage("pages/notifications/index.js", request, { wx });
   return { ...harness, calls };
 }
 
-test("settings load separates the on/off switch from the WeChat grant state", async () => {
-  const { page } = loadNotifications();
+test("settings separate opt-in, current quota and per-type cooldown", async () => {
+  const { page } = screen();
   page.onLoad();
   await page.load();
-
   assert.equal(page.data.loading, false);
-  assert.equal(page.data.channelAvailable, true);
-  assert.equal(page.data.items.length, 3);
-
-  const [apply, schedule, digest] = page.data.items;
-  // 有额度的一次性授权：已开启，但如实说明只够一条
-  assert.equal(apply.statusText, "已开启 · 本次一条");
-  assert.equal(apply.needsGrant, false);
-  // 开着但没授权：必须提示需要授权，不能显示成已开启
-  assert.equal(schedule.statusText, "待微信授权");
-  assert.equal(schedule.needsGrant, true);
-  // 关着的类别不催授权
-  assert.equal(digest.statusText, "已关闭");
-  assert.equal(digest.needsGrant, false);
+  assert.equal(page.data.autoEnabled, true);
+  assert.equal(page.data.items[0].statusText, "可发送 1 次");
+  assert.equal(page.data.items[1].statusText, "还需完成 4 条复习");
   assert.equal(page.data.grantCount, 1);
   assert.equal(page.data.lastSentLabel, "09-05 19:00");
 });
 
-test("a failed preference write rolls the switch back instead of faking success", async () => {
-  const { page } = loadNotifications({
-    settings: (url) => {
-      if (url === "/notifications/preferences") return new Error("网络异常");
-      return settingsPayload();
-    }
-  });
+test("failed preference and automatic-choice writes retain the server value", async () => {
+  const { page } = screen({ writeError: true });
   await page.load();
-  assert.equal(page.data.items[2].enabled, false);
-
-  await page.toggle({ currentTarget: { dataset: { type: "review_digest" } }, detail: { value: true } });
-
-  assert.equal(page.data.items[2].enabled, false);
+  await page.toggle({ currentTarget: { dataset: { type: "review_digest" } }, detail: { value: false } });
+  assert.equal(page.data.items[0].enabled, true);
   assert.equal(page.data.error, "网络异常");
-  assert.equal(page.data.togglingType, "");
+  page.setData({ error: "" });
+  await page.toggleAuto({ detail: { value: false } });
+  assert.equal(page.data.autoEnabled, true);
+  assert.equal(page.data.autoSaving, false);
 });
 
-test("granting posts only WeChat's own decisions and refuses to invent an accept", async () => {
-  let subscribeArgs = null;
-  const { page, calls } = loadNotifications({
-    wx: {
-      requestSubscribeMessage(options) {
-        subscribeArgs = options;
-        options.success({ errMsg: "ok", "tpl-schedule": "reject" });
-      }
-    }
-  });
-  page.onLoad();
+test("pending, unavailable and empty states never claim ready", async () => {
+  const view = payload();
+  view.types = view.types.map((item) => ({ ...item, status: "pending" }));
+  const { page } = screen({ view });
   await page.load();
-
-  page.requestGrant();
-  await new Promise((resolve) => setImmediate(resolve));
-
-  assert.deepEqual(plain(subscribeArgs.tmplIds), ["tpl-schedule"]);
-  const post = calls.find((call) => call.url === "/notifications/subscriptions");
-  assert.deepEqual(plain(post.options.data), { results: [{ type: "schedule_reminder", accepted: false }] });
-  assert.equal(page.data.granting, false);
-});
-
-test("a WeChat failure surfaces an actionable message and clears the pending flag", async () => {
-  const { page, calls } = loadNotifications({
-    wx: { requestSubscribeMessage(options) { options.fail({ errMsg: "fail" }); } }
-  });
-  page.onLoad();
+  assert.equal(page.data.heroTitle, "提醒次数待确认");
+  assert.equal(page.data.heroReady, false);
+  view.settings.channel.available = false;
   await page.load();
-
-  page.requestGrant();
-
-  assert.equal(page.data.granting, false);
-  assert.match(page.data.error, /再试一次/);
-  assert.equal(calls.some((call) => call.url === "/notifications/subscriptions"), false);
-});
-
-test("an unavailable channel asks for nothing and explains itself", async () => {
-  const { page } = loadNotifications({
-    settings: settingsPayload({
-      channel: { available: false, reason: "当前部署未配置模板", template_ids: [], long_term: false }
-    })
-  });
-  page.onLoad();
-  await page.load();
-
   assert.equal(page.data.channelAvailable, false);
-  assert.equal(page.data.channelReason, "当前部署未配置模板");
-  assert.equal(page.data.grantCount, 0);
-  assert.deepEqual(page.data.items.map((item) => item.statusText), ["暂不可用", "暂不可用", "暂不可用"]);
 });
 
-test("an old WeChat client is told to upgrade instead of hitting a missing API", async () => {
+test("old WeChat client gets a manual upgrade explanation", async () => {
   const modals = [];
-  const { page, calls } = loadNotifications({
-    wx: { showModal(options) { modals.push(options); } }
-  });
-  page.onLoad();
-  await page.load();
-
-  assert.equal(page.data.supported, false);
-  page.requestGrant();
-
+  const { page, calls } = screen({ wx: { showModal(options) { modals.push(options); } } });
+  page.onLoad(); await page.load(); page.requestGrant();
   assert.equal(modals.length, 1);
   assert.match(modals[0].content, /更新微信/);
-  assert.equal(calls.some((call) => call.url === "/notifications/subscriptions"), false);
+  assert.equal(calls.some((item) => item.url.endsWith("/result")), false);
 });
 
-test("delivery history keeps failures visible with a reason", async () => {
-  const { page } = loadNotifications({
-    deliveries: [
-      {
-        type: "schedule_reminder",
-        state: "failed",
-        headline: "小雨 18:00 游泳课",
-        detail: "出发前记得带泳镜",
-        scheduled_at: "2026-09-06T17:00:00",
-        sent_at: null,
-        result_code: "not_authorized"
-      }
-    ]
-  });
+test("history failure is isolated from settings", async () => {
+  const { page } = screen({ history: new Error("读取失败") });
   await page.load();
-
-  assert.equal(page.data.deliveries.length, 1);
-  const [row] = page.data.deliveries;
-  assert.equal(row.stateText, "发送失败");
-  assert.equal(row.stateTone, "dan");
-  assert.equal(row.timeLabel, "09-06 17:00");
-  assert.match(row.reason, /微信授权/);
-});
-
-test("a broken template mapping is explained instead of shown as a bare skip", () => {
-  const row = notifications.describeDelivery({
-    type: "schedule_reminder",
-    state: "skipped",
-    headline: "小雨 18:00 游泳课",
-    detail: "1 小时后开始",
-    scheduled_at: "2026-09-06T17:00:00",
-    sent_at: null,
-    result_code: "template_field_missing"
-  });
-
-  assert.equal(row.stateText, "未发送");
-  assert.equal(row.stateTone, "neutral");
-  /* 家长这边没有可操作项，所以只说清"不是你的问题、修好会重排"。 */
-  assert.match(row.reason, /模板/);
-  assert.match(row.reason, /重新排队/);
-});
-
-test("unreadable delivery history never blocks the switches", async () => {
-  const { page } = loadNotifications({ deliveries: new Error("读取失败") });
-  await page.load();
-
-  assert.equal(page.data.items.length, 3);
-  assert.deepEqual(plain(page.data.deliveries), []);
+  assert.equal(page.data.items.length, 2);
   assert.equal(page.data.deliveriesError, "读取失败");
   assert.equal(page.data.error, "");
 });
 
-test("only an explicit accept counts as authorized", () => {
-  const requested = [
-    { type: "schedule_reminder", template_id: "a" },
-    { type: "review_digest", template_id: "b" },
-    { type: "member_application", template_id: "c" }
-  ];
-  const results = notifications.resultsFromWx({ a: "accept", b: "ban", c: "filter" }, requested);
-  assert.deepEqual(results, [
-    { type: "schedule_reminder", accepted: true },
-    { type: "review_digest", accepted: false },
-    { type: "member_application", accepted: false }
-  ]);
-  assert.equal(notifications.acceptedCount(results), 1);
+test("delivery reasons keep real failures actionable", () => {
+  const row = notifications.describeDelivery({ type: "schedule_reminder", state: "skipped",
+    scheduled_at: "2026-09-06T17:00:00", result_code: "template_field_missing" });
+  assert.equal(row.stateText, "未发送");
+  assert.equal(row.stateTone, "neutral");
+  assert.match(row.reason, /模板/);
+  assert.match(row.reason, /重新排队/);
 });
 
-test("revoked and refused states each get their own recovery wording", () => {
-  const revoked = notifications.statusOf(
-    { enabled: true, template_id: "t", subscription_status: "revoked", remaining_quota: 0 }, true
-  );
-  assert.equal(revoked.needsGrant, true);
-  assert.equal(revoked.text, "需要重新开启");
-
-  const rejected = notifications.statusOf(
-    { enabled: true, template_id: "t", subscription_status: "rejected", remaining_quota: 0 }, true
-  );
-  assert.equal(rejected.tone, "dan");
-  assert.equal(rejected.needsGrant, true);
-
-  const longTerm = notifications.statusOf(
-    { enabled: true, template_id: "t", subscription_status: "accepted", remaining_quota: -1 }, true
-  );
-  assert.equal(longTerm.text, "已开启");
-  assert.equal(longTerm.needsGrant, false);
-});
-
-test("grant batches stay within WeChat's three-template limit", () => {
-  const many = ["a", "b", "c", "d"].map((id) => ({
-    type: `type-${id}`, enabled: true, template_id: id, subscription_status: "none", remaining_quota: 0
-  }));
-  assert.equal(notifications.grantTargets(many, true).length, 3);
-  assert.equal(notifications.grantTargets(many, false).length, 0);
-});
+module.exports = { payload };

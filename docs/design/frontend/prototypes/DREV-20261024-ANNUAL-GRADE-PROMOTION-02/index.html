@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>年级选择 · 简化候选</title>
+<style>
+  :root{color-scheme:light;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;color:#22261f;background:#faf7f0}
+  *{box-sizing:border-box}body{margin:0}button,select{font:inherit}button{cursor:pointer}
+  #background{padding:80px 24px}#background h2{font:600 28px/1.4 "Songti SC",serif}
+  .overlay{position:fixed;inset:0;display:flex;align-items:flex-end;justify-content:center;background:rgba(34,38,31,.32)}
+  .sheet{width:100%;max-width:480px;max-height:calc(100svh - 74px);display:flex;flex-direction:column;background:#fffdf8;padding:14px 20px calc(20px + env(safe-area-inset-bottom));border-radius:calc(40 * 100vw / 750) calc(40 * 100vw / 750) 0 0}
+  .handle{flex:none;width:36px;height:4px;border-radius:2px;background:#ddd6c4;margin:0 auto 20px}
+  .body{min-height:0;overflow-y:auto}h1{font:600 22px/1.45 "Songti SC",serif;margin:0 0 20px;overflow-wrap:anywhere;word-break:break-all}
+  .field{position:relative}.field::after{content:"";position:absolute;right:17px;top:20px;width:8px;height:8px;border-right:1.5px solid #464e43;border-bottom:1.5px solid #464e43;transform:rotate(45deg);pointer-events:none}
+  select,.latest-grade{appearance:none;display:block;width:100%;min-height:52px;border:1px solid #d4d9cb;border-radius:calc(24 * 100vw / 750);padding:12px 40px 12px 14px;background:#fffdf8;color:#22261f;font-size:18px;line-height:26px}
+  select:disabled{opacity:1;color:#464e43;background:#f3f4ed}
+  .latest-grade{border:0;padding:0;min-height:0;font-size:20px;line-height:1.5}
+  .message{font-size:14px;line-height:1.6;margin:12px 0 0;color:#87432f}.message.info{color:#355466}
+  .actions{flex:none;display:flex;gap:12px;margin-top:20px}.actions button{min-width:0;min-height:48px;border-radius:calc(24 * 100vw / 750);border:0;padding:12px;font-size:16px;line-height:24px}
+  .secondary{flex:1;background:#f3efe4;color:#464e43}.primary{flex:2;background:#1f5b45;color:#fffdf8;font-weight:600}.primary:disabled,.secondary:disabled{background:#e6ece4;color:#464e43;cursor:default}
+  button:focus-visible,select:focus-visible{outline:2px solid #1f5b45;outline-offset:3px}[hidden]{display:none!important}
+</style>
+<main id="background" inert aria-hidden="true"><h2>今日</h2></main>
+<div class="overlay">
+  <section class="sheet" role="dialog" aria-modal="true" aria-labelledby="title">
+    <div class="handle" aria-hidden="true"></div>
+    <div class="body">
+      <h1 id="title"></h1>
+      <div class="field"><select id="grade" aria-label="年级"></select></div>
+      <div class="latest-grade" hidden></div>
+      <p class="message" role="alert" hidden></p>
+    </div>
+    <div class="actions"><button class="secondary" type="button">稍后</button><button class="primary" type="button">确认</button></div>
+  </section>
+</div>
+<script>
+  // Synthetic, in-memory design examples only; no API or business-policy implementation.
+  const examples={
+    initial:{name:'小满',grade:'二年级'},annual:{name:'小满',grade:'三年级'},
+    catchup:{name:'小满',grade:'三年级'},corrected:{name:'小满',grade:'四年级'},
+    keep:{name:'小满',grade:'二年级'},'next-child':{name:'豆豆',grade:'大班'},
+    'long-name':{name:'这是用于检查换行的合成长姓名小朋友',grade:'九年级'},
+    saving:{name:'小满',grade:'四年级'},error:{name:'小满',grade:'四年级'},
+    conflict:{name:'小满',grade:'四年级'},latest:{name:'小满',grade:'三年级'}
+  };
+  const grades=['小班','中班','大班','一年级','二年级','三年级','四年级','五年级','六年级','七年级','八年级','九年级'];
+  const picker=document.querySelector('#grade'),primary=document.querySelector('.primary'),secondary=document.querySelector('.secondary');
+  grades.forEach(label=>picker.add(new Option(label,label)));
+  window.designStates=Object.keys(examples);window.designEvents=[];
+  window.designShow=function(state){
+    const example=examples[state];window.designState=state;
+    document.querySelector('.overlay').hidden=false;document.querySelector('#background').inert=true;
+    document.querySelector('#background').setAttribute('aria-hidden','true');
+    document.querySelector('#title').textContent=example.name+'的年级';picker.value=example.grade;
+    picker.disabled=state==='saving'||state==='conflict';
+    document.querySelector('.field').hidden=state==='latest';
+    const latest=document.querySelector('.latest-grade');latest.hidden=state!=='latest';latest.textContent=example.grade;
+    const message=document.querySelector('.message');message.hidden=!['error','conflict','latest'].includes(state);
+    message.classList.toggle('info',state!=='error');
+    message.textContent=state==='error'?'保存失败，请重试。':state==='conflict'?'年级已变化，请查看最新结果。':state==='latest'?'家人已确认，已更新。':'';
+    primary.textContent=state==='saving'?'保存中…':state==='conflict'?'查看最新':state==='latest'?'继续':'确认';
+    primary.disabled=state==='saving';secondary.disabled=state==='saving';secondary.hidden=state==='latest';
+    document.querySelector('.body').scrollTop=0;
+  };
+  function later(){if(window.designState==='saving')return;window.designEvents.push('later');document.querySelector('.overlay').hidden=true;document.querySelector('#background').inert=false;document.querySelector('#background').removeAttribute('aria-hidden');}
+  secondary.onclick=later;
+  document.querySelector('.overlay').onclick=event=>{if(event.target.classList.contains('overlay'))later();};
+  document.addEventListener('keydown',event=>{if(event.key==='Escape')later();});
+  picker.onchange=()=>window.designEvents.push('choose:'+picker.value);
+  primary.onclick=()=>{window.designEvents.push(window.designState==='conflict'?'refresh':window.designState==='latest'?'continue':'confirm:'+picker.value);if(window.designState==='conflict')window.designShow('latest');else if(window.designState==='latest')later();else{const chosen=picker.value;window.designShow('saving');picker.value=chosen;}};
+  window.designShow(new URLSearchParams(location.search).get('state')||'annual');
+</script>
+</html>

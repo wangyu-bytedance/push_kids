@@ -3,6 +3,7 @@ const cloudMedia = require("../../utils/cloud-media");
 const { localParts, toIso } = require("../../utils/date");
 const childContext = require("../../utils/child-context");
 const history = require("./history");
+const recordTypes = require("./record-types");
 const { createVoiceInputController } = require("./voice-input");
 
 function shortDate(value) {
@@ -11,17 +12,22 @@ function shortDate(value) {
 }
 
 Page({
+  onGradeConfirmation(event) {
+    const flow = getApp().gradeConfirmation;
+    if (flow) return flow.handle(this, event.detail);
+  },
   data: {
+    gradeConfirmation: null, gradeConfirmationVisible: false,
     ...history.data,
+    ...recordTypes.data,
     loading: true, error: "", children: [], childIndex: 0, childId: "",
     date: "", dateLabel: "", time: "", text: "", hasText: false, photos: [], saving: false, uploadProgress: 0,
     submissionKey: "", canWrite: true, today: "", backfill: false, timeOpen: false,
     voiceState: "idle", voiceBusy: false, voiceOverflowText: "", voiceOverflowOpen: false,
-    introArtFailed: false, uploadArtFailed: false
+    uploadArtFailed: false
   },
   onIllustrationError(event) {
     const art = event.currentTarget.dataset.art;
-    if (art === "intro") this.setData({ introArtFailed: true });
     if (art === "upload") this.setData({ uploadArtFailed: true });
   },
   onLoad() {
@@ -42,6 +48,7 @@ Page({
     this.setData({ date: now.date, dateLabel: shortDate(now.date), time: now.time, today: now.date, submissionKey: api.newIdempotencyKey("record-entry") });
   },
   ...history.methods,
+  ...recordTypes.methods,
   async consumeRecordIntent() {
     const app = getApp();
     const intent = app.globalData.recordIntent;
@@ -64,15 +71,30 @@ Page({
   onShow() {
     const tabBar = this.getTabBar && this.getTabBar();
     if (tabBar) tabBar.setData({ selected: 2 });
+    this.pageVisible = true;
+    this.syncRecordOverlay();
+    if (this.data.recordType === "travel") {
+      if (getApp().globalData.recordIntent) return this.selectRecordType({ currentTarget: { dataset: { type: "learning" } } });
+      return;
+    }
     this.hidden = false;
-    this.load().then(() => { if (this.recordScroll && wx.pageScrollTo) wx.pageScrollTo({ scrollTop: this.recordScroll, duration: 0 }); });
+    this.load().then(() => { if (!this.hidden && this.recordScroll && wx.pageScrollTo) wx.pageScrollTo({ scrollTop: this.recordScroll, duration: 0 }); });
   },
   async onPullDownRefresh() {
+    const view = this.travelView();
+    if (this.data.recordType === "travel" && view) return view.onPullDownRefresh();
     await this.load();
     if (wx.stopPullDownRefresh) wx.stopPullDownRefresh();
   },
   toggleTime() { if (!this.data.saving) this.setData({ timeOpen: !this.data.timeOpen }); },
   onHide() {
+    this.pageVisible = false;
+    this.typeSwitchSequence = (this.typeSwitchSequence || 0) + 1;
+    this.setData({ recordTypeOpen: false });
+    this.syncRecordOverlay();
+    this.stopLearning();
+  },
+  stopLearning() {
     this.hidden = true;
     this.loadId = (this.loadId || 0) + 1;
     this.historyRequest = (this.historyRequest || 0) + 1;

@@ -1,0 +1,172 @@
+{
+  "nodes": {
+    ".study-region": [
+      {
+        "left": 18,
+        "right": 372,
+        "top": 436,
+        "bottom": 596,
+        "width": 354,
+        "height": 160,
+        "fontSize": "16px",
+        "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "fontWeight": "400",
+        "lineHeight": "25.6px",
+        "letterSpacing": "normal",
+        "borderRadius": "0px",
+        "paddingLeft": "0px",
+        "paddingRight": "0px",
+        "textAlign": "start",
+        "justifyContent": "normal"
+      }
+    ],
+    ".study-region .s-t": [
+      {
+        "left": 20,
+        "right": 89.609375,
+        "top": 446,
+        "bottom": 470,
+        "width": 69.609375,
+        "height": 24,
+        "fontSize": "17px",
+        "fontFamily": "\"Songti SC\", \"Noto Serif SC\", \"Noto Serif CJK SC\", \"Source Han Serif SC\", STSong, serif",
+        "fontWeight": "600",
+        "lineHeight": "24.65px",
+        "letterSpacing": "0.4px",
+        "borderRadius": "0px",
+        "paddingLeft": "0px",
+        "paddingRight": "0px",
+        "textAlign": "start",
+        "justifyContent": "normal"
+      }
+    ],
+    ".study-card": [],
+    ".study-card .study-title": [],
+    ".study-region .btn": [
+      {
+        "left": 18,
+        "right": 372,
+        "top": 539,
+        "bottom": 584,
+        "width": 354,
+        "height": 45,
+        "fontSize": "15px",
+        "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "fontWeight": "500",
+        "lineHeight": "18px",
+        "letterSpacing": "0.4px",
+        "borderRadius": "519px",
+        "paddingLeft": "18px",
+        "paddingRight": "18px",
+        "textAlign": "center",
+        "justifyContent": "center"
+      }
+    ],
+    ".study-card .link-btn": [],
+    ".study-progress": [
+      {
+        "left": 18,
+        "right": 372,
+        "top": 493,
+        "bottom": 596,
+        "width": 354,
+        "height": 103,
+        "fontSize": "14px",
+        "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "fontWeight": "400",
+        "lineHeight": "22.4px",
+        "letterSpacing": "normal",
+        "borderRadius": "0px",
+        "paddingLeft": "0px",
+        "paddingRight": "0px",
+        "textAlign": "start",
+        "justifyContent": "normal"
+      }
+    ],
+    ".study-error-inline": [],
+    ".study-error-inline .link-btn": [],
+    ".study-label": [],
+    ".study-title": [],
+    ".study-meta": [],
+    ".study-copy": [],
+    ".study-source": [],
+    ".study-sheet": [],
+    ".study-top": [],
+    ".study-close": [],
+    ".study-body": [],
+    ".study-actions": [],
+    ".study-primary": [],
+    ".study-secondary": [],
+    ".study-quiet": [],
+    ".study-input": [],
+    ".study-textarea": [],
+    ".study-picker": [],
+    ".study-actions .study-primary": [],
+    ".study-secondary-row .study-secondary": [],
+    ".study-defer": [],
+    ".study-proposal-heading": [],
+    ".study-title-scroll": [],
+    ".study-proposal-title": [],
+    ".study-proposal-meta": [],
+    ".study-close .ico": []
+  },
+  "hero": {
+    "id": "",
+    "dataset": {},
+    "left": 18,
+    "right": 372,
+    "top": 183,
+    "bottom": 412,
+    "width": 354,
+    "height": 229
+  },
+  "reviewHeading": {
+    "left": 20,
+    "right": 89.609375,
+    "top": 630,
+    "bottom": 654,
+    "width": 69.609375,
+    "height": 24,
+    "fontSize": "17px",
+    "fontFamily": "\"Songti SC\", \"Noto Serif SC\", \"Noto Serif CJK SC\", \"Source Han Serif SC\", STSong, serif",
+    "fontWeight": "600",
+    "lineHeight": "24.65px",
+    "letterSpacing": "0.4px"
+  },
+  "reviewBar": {
+    "id": "",
+    "dataset": {
+      "section": "review"
+    },
+    "left": 18,
+    "right": 372,
+    "top": 620,
+    "bottom": 664,
+    "width": 354,
+    "height": 44
+  },
+  "reviewSection": {
+    "left": 18,
+    "right": 372,
+    "top": 620,
+    "bottom": 665,
+    "width": 354,
+    "height": 45,
+    "marginTop": "24px"
+  },
+  "card": "recover",
+  "scrollLeft": 0,
+  "headingScrollTop": 0,
+  "viewport": {
+    "width": 390,
+    "height": 844,
+    "screenHeight": 844,
+    "dpr": 3,
+    "baseLibrary": "3.17.4"
+  },
+  "sheet": "",
+  "state": "card-recover-after-remove",
+  "errors": [],
+  "capturedAt": "2026-10-24T12:40:43.002Z",
+  "screenshotSha256": "5ceedc3efda0c77d13f3261aa6cd41bb02f463c898679d1c378c4caa2809122d"
+}

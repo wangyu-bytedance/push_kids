@@ -1,0 +1,184 @@
+{
+  "nodes": {
+    ".footprints-page": [
+      {
+        "left": 0,
+        "right": 430,
+        "top": 159,
+        "bottom": 853,
+        "width": 430,
+        "height": 694,
+        "fontSize": "14px",
+        "position": "static"
+      }
+    ],
+    ".fp-toolbar": [],
+    ".fp-heading": [],
+    ".fp-archive": [],
+    ".fp-summary": [
+      {
+        "left": 16,
+        "right": 414,
+        "top": 159,
+        "bottom": 203,
+        "width": 398,
+        "height": 44,
+        "fontSize": "14px",
+        "position": "static"
+      }
+    ],
+    ".fp-stats": [
+      {
+        "left": 16,
+        "right": 362,
+        "top": 170,
+        "bottom": 192,
+        "width": 346,
+        "height": 22,
+        "fontSize": "14px",
+        "position": "static"
+      }
+    ],
+    ".fp-stats text": [],
+    ".fp-more": [
+      {
+        "left": 370,
+        "right": 414,
+        "top": 159,
+        "bottom": 203,
+        "width": 44,
+        "height": 44,
+        "fontSize": "14px",
+        "position": "relative"
+      }
+    ],
+    ".fp-more .ico": [
+      {
+        "left": 382,
+        "right": 402,
+        "top": 171,
+        "bottom": 191,
+        "width": 20,
+        "height": 20,
+        "fontSize": "14px",
+        "position": "static"
+      }
+    ],
+    ".fp-tabs": [
+      {
+        "left": 16,
+        "right": 414,
+        "top": 219,
+        "bottom": 271,
+        "width": 398,
+        "height": 52,
+        "fontSize": "14px",
+        "position": "static"
+      }
+    ],
+    ".fp-tab": [
+      {
+        "left": 20,
+        "right": 144.671875,
+        "top": 223,
+        "bottom": 267,
+        "width": 124.671875,
+        "height": 44,
+        "fontSize": "14px",
+        "position": "relative"
+      },
+      {
+        "left": 152.671875,
+        "right": 277.34375,
+        "top": 223,
+        "bottom": 267,
+        "width": 124.671875,
+        "height": 44,
+        "fontSize": "14px",
+        "position": "relative"
+      },
+      {
+        "left": 285.34375,
+        "right": 410.015625,
+        "top": 223,
+        "bottom": 267,
+        "width": 124.671875,
+        "height": 44,
+        "fontSize": "14px",
+        "position": "relative"
+      }
+    ],
+    ".fp-import": [
+      {
+        "left": 16,
+        "right": 414,
+        "top": 678,
+        "bottom": 726,
+        "width": 398,
+        "height": 48,
+        "fontSize": "14px",
+        "position": "relative"
+      }
+    ],
+    ".fp-settings": [],
+    ".fp-sheet": [],
+    ".fp-sheet-head": [],
+    ".fp-sheet-body": [],
+    ".fp-sheet-footer": [],
+    ".fp-switch": [],
+    ".fp-switch-label": [],
+    ".fp-close": [],
+    ".fp-text-button": [
+      {
+        "left": 42,
+        "right": 401,
+        "top": 601,
+        "bottom": 645,
+        "width": 359,
+        "height": 44,
+        "fontSize": "14px",
+        "position": "relative"
+      }
+    ],
+    ".fp-button": [
+      {
+        "left": 16,
+        "right": 414,
+        "top": 678,
+        "bottom": 726,
+        "width": 398,
+        "height": 48,
+        "fontSize": "14px",
+        "position": "relative"
+      }
+    ],
+    ".fp-error": []
+  },
+  "nav": [
+    {
+      "id": "",
+      "dataset": {},
+      "left": 0,
+      "right": 430,
+      "top": 837,
+      "bottom": 932,
+      "width": 430,
+      "height": 95
+    }
+  ],
+  "scrollLeft": 0,
+  "sheet": "",
+  "viewport": {
+    "width": 430,
+    "height": 932,
+    "screenHeight": 932,
+    "dpr": 3,
+    "baseLibrary": "3.17.4",
+    "fontScale": 15
+  },
+  "state": "overview",
+  "errors": [],
+  "capturedAt": "2026-10-24T13:00:22.349Z",
+  "screenshot": "overview-430.png",
+  "screenshotSha256": "2957a67b0844efbff1cebf1030569b3991c99129ec2b27cdc84bfca7ce97eb68"
+}

@@ -13,6 +13,7 @@ Page({
   data: {
     mode: "create", childId: "", loading: false, error: "", saving: false, working: false,
     title: "新建学习档案", isManager: true, active: true,
+    gradeConflict: false,
     nameDraft: "", gradeChoices: childContext.gradeChoices(null, true), gradeIndex: 0,
     budgetOptions: BUDGET_OPTIONS, budgetIndex: budgetIndex(15),
     presetSubjects: PRESET_SUBJECTS.map((name) => ({ name, selected: false })),
@@ -59,6 +60,9 @@ Page({
       const gradeChoices = childContext.gradeChoices(child.grade, true);
       this.setData({
         loading: false,
+        gradeTouched: false,
+        gradeConflict: false,
+        gradeRevision: child.grade_revision,
         active: child.active !== false,
         nameDraft: child.name,
         gradeChoices,
@@ -88,7 +92,11 @@ Page({
     });
   },
   setName(event) { this.setData({ nameDraft: event.detail.value, error: "" }); },
-  chooseGrade(event) { this.setData({ gradeIndex: Number(event.detail.value) }); },
+  chooseGrade(event) {
+    const resolved = this.data.gradeConflict && Number.isInteger(this.data.gradeRevision);
+    this.setData({ gradeIndex: Number(event.detail.value), gradeTouched: true,
+      ...(resolved ? { gradeConflict: false, error: "" } : {}) });
+  },
   chooseBudget(event) { this.setData({ budgetIndex: Number(event.detail.value) }); },
   togglePreset(event) {
     const index = Number(event.currentTarget.dataset.index);
@@ -107,11 +115,18 @@ Page({
   },
   async save() {
     if (this.data.saving) return;
+    if (this.data.gradeConflict) return this.refreshGradeConflict();
     const payload = this.formPayload();
     if (!payload.name) return this.setData({ error: "请填写孩子的名字，切换档案时要靠它区分。" });
     this.setData({ saving: true, error: "" });
     try {
       if (this.data.mode === "edit") {
+        if (this.data.gradeTouched) {
+          payload.confirm_grade = true;
+          payload.expected_grade_revision = this.data.gradeRevision;
+        } else {
+          delete payload.grade;
+        }
         await api.request(`/children/${this.data.childId}`, { method: "PATCH", data: payload });
         wx.showToast({ title: "已保存", icon: "success" });
       } else {
@@ -128,8 +143,26 @@ Page({
       await getApp().refreshBootstrap(false).catch(() => {});
       wx.navigateBack();
     } catch (error) {
+      if (error.code === "grade_confirmation_conflict") {
+        this.setData({ gradeConflict: true, gradeRevision: null });
+        return this.refreshGradeConflict();
+      }
       /* 失败时保留表单内容，家长可以直接改名字再试。 */
       this.setData({ saving: false, error: `${error.message}。刚才填的内容还在，可以修改后再试。` });
+    }
+  },
+  async refreshGradeConflict() {
+    this.setData({ saving: true, gradeRevision: null, error: "年级已变化，正在读取最新结果。刚才填写的内容会保留。" });
+    try {
+      const children = await api.request("/children?include_archived=true");
+      const child = children.find((item) => item.id === this.data.childId);
+      if (!child || !Number.isInteger(child.grade_revision)) throw new Error("无法读取最新年级");
+      this.setData({ gradeRevision: child.grade_revision,
+        error: `当前正式年级为「${childContext.gradeLabel(child.grade) || "暂不填写"}」。刚才填写的内容已保留，请重新选择年级后保存。` });
+    } catch {
+      this.setData({ error: "最新年级读取失败，刚才填写的内容已保留。请点击保存重试读取。" });
+    } finally {
+      this.setData({ saving: false });
     }
   },
   async archive() {

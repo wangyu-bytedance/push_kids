@@ -1,0 +1,282 @@
+{
+  "nodes": {
+    ".footprints-page": [
+      {
+        "left": 0,
+        "right": 390,
+        "top": 152,
+        "bottom": 841,
+        "width": 390,
+        "height": 689,
+        "fontSize": "14px",
+        "position": "static"
+      }
+    ],
+    ".fp-toolbar": [],
+    ".fp-heading": [],
+    ".fp-archive": [],
+    ".fp-summary": [
+      {
+        "left": 16,
+        "right": 374,
+        "top": 152,
+        "bottom": 196,
+        "width": 358,
+        "height": 44,
+        "fontSize": "14px",
+        "position": "static"
+      }
+    ],
+    ".fp-stats": [
+      {
+        "left": 16,
+        "right": 322,
+        "top": 163,
+        "bottom": 185,
+        "width": 306,
+        "height": 22,
+        "fontSize": "14px",
+        "position": "static"
+      }
+    ],
+    ".fp-stats text": [],
+    ".fp-more": [
+      {
+        "left": 330,
+        "right": 374,
+        "top": 152,
+        "bottom": 196,
+        "width": 44,
+        "height": 44,
+        "fontSize": "14px",
+        "position": "relative"
+      }
+    ],
+    ".fp-more .ico": [
+      {
+        "left": 342,
+        "right": 362,
+        "top": 164,
+        "bottom": 184,
+        "width": 20,
+        "height": 20,
+        "fontSize": "14px",
+        "position": "static"
+      }
+    ],
+    ".fp-tabs": [
+      {
+        "left": 16,
+        "right": 374,
+        "top": 212,
+        "bottom": 264,
+        "width": 358,
+        "height": 52,
+        "fontSize": "14px",
+        "position": "static"
+      }
+    ],
+    ".fp-tab": [
+      {
+        "left": 20,
+        "right": 131.328125,
+        "top": 216,
+        "bottom": 260,
+        "width": 111.328125,
+        "height": 44,
+        "fontSize": "14px",
+        "position": "relative"
+      },
+      {
+        "left": 139.328125,
+        "right": 250.65625,
+        "top": 216,
+        "bottom": 260,
+        "width": 111.328125,
+        "height": 44,
+        "fontSize": "14px",
+        "position": "relative"
+      },
+      {
+        "left": 258.65625,
+        "right": 369.984375,
+        "top": 216,
+        "bottom": 260,
+        "width": 111.328125,
+        "height": 44,
+        "fontSize": "14px",
+        "position": "relative"
+      }
+    ],
+    ".fp-import": [
+      {
+        "left": 16,
+        "right": 374,
+        "top": 671,
+        "bottom": 719,
+        "width": 358,
+        "height": 48,
+        "fontSize": "14px",
+        "position": "relative"
+      }
+    ],
+    ".fp-settings": [
+      {
+        "left": 0,
+        "right": 390,
+        "top": 498,
+        "bottom": 844,
+        "width": 390,
+        "height": 346,
+        "fontSize": "16px",
+        "position": "static"
+      }
+    ],
+    ".fp-sheet": [
+      {
+        "left": 0,
+        "right": 390,
+        "top": 498,
+        "bottom": 844,
+        "width": 390,
+        "height": 346,
+        "fontSize": "16px",
+        "position": "static"
+      }
+    ],
+    ".fp-sheet-head": [
+      {
+        "left": 0,
+        "right": 390,
+        "top": 498,
+        "bottom": 563,
+        "width": 390,
+        "height": 65,
+        "fontSize": "16px",
+        "position": "static"
+      }
+    ],
+    ".fp-sheet-body": [
+      {
+        "left": 0,
+        "right": 390,
+        "top": 563,
+        "bottom": 737,
+        "width": 390,
+        "height": 174,
+        "fontSize": "14px",
+        "position": "static"
+      }
+    ],
+    ".fp-sheet-footer": [
+      {
+        "left": 0,
+        "right": 390,
+        "top": 737,
+        "bottom": 844,
+        "width": 390,
+        "height": 107,
+        "fontSize": "16px",
+        "position": "static"
+      }
+    ],
+    ".fp-switch": [
+      {
+        "left": 16,
+        "right": 374,
+        "top": 649,
+        "bottom": 721,
+        "width": 358,
+        "height": 72,
+        "fontSize": "14px",
+        "position": "static"
+      }
+    ],
+    ".fp-switch-label": [
+      {
+        "left": 16,
+        "right": 305,
+        "top": 674,
+        "bottom": 696,
+        "width": 289,
+        "height": 22,
+        "fontSize": "14px",
+        "position": "static"
+      }
+    ],
+    ".fp-close": [
+      {
+        "left": 326,
+        "right": 374,
+        "top": 506,
+        "bottom": 554,
+        "width": 48,
+        "height": 48,
+        "fontSize": "26px",
+        "position": "relative"
+      }
+    ],
+    ".fp-text-button": [
+      {
+        "left": 42,
+        "right": 361,
+        "top": 594,
+        "bottom": 638,
+        "width": 319,
+        "height": 44,
+        "fontSize": "14px",
+        "position": "relative"
+      }
+    ],
+    ".fp-button": [
+      {
+        "left": 16,
+        "right": 374,
+        "top": 671,
+        "bottom": 719,
+        "width": 358,
+        "height": 48,
+        "fontSize": "14px",
+        "position": "relative"
+      },
+      {
+        "left": 16,
+        "right": 374,
+        "top": 750,
+        "bottom": 798,
+        "width": 358,
+        "height": 48,
+        "fontSize": "14px",
+        "position": "relative"
+      }
+    ],
+    ".fp-error": [
+      {
+        "left": 16,
+        "right": 374,
+        "top": 591,
+        "bottom": 637,
+        "width": 358,
+        "height": 46,
+        "fontSize": "14px",
+        "position": "static"
+      }
+    ]
+  },
+  "nav": [],
+  "scrollLeft": 0,
+  "sheet": "settings",
+  "viewport": {
+    "width": 390,
+    "height": 844,
+    "screenHeight": 844,
+    "dpr": 3,
+    "baseLibrary": "3.17.4",
+    "fontScale": 15
+  },
+  "state": "settings-error",
+  "errors": [],
+  "capturedAt": "2026-10-24T13:00:05.549Z",
+  "screenshot": "settings-error-390.png",
+  "screenshotSha256": "0cc04a79f31b57cada0dad43542745fd79e57982ebed65bd7ffc6e263700e8ef"
+}

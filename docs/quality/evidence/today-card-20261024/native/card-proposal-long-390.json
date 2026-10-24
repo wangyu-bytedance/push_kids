@@ -1,0 +1,229 @@
+{
+  "nodes": {
+    ".study-region": [
+      {
+        "left": 18,
+        "right": 372,
+        "top": 108,
+        "bottom": 444,
+        "width": 354,
+        "height": 336,
+        "fontSize": "16px",
+        "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "fontWeight": "400",
+        "lineHeight": "25.6px",
+        "letterSpacing": "normal",
+        "borderRadius": "0px",
+        "paddingLeft": "0px",
+        "paddingRight": "0px",
+        "textAlign": "start",
+        "justifyContent": "normal"
+      }
+    ],
+    ".study-region .s-t": [
+      {
+        "left": 20,
+        "right": 89.609375,
+        "top": 118,
+        "bottom": 142,
+        "width": 69.609375,
+        "height": 24,
+        "fontSize": "17px",
+        "fontFamily": "\"Songti SC\", \"Noto Serif SC\", \"Noto Serif CJK SC\", \"Source Han Serif SC\", STSong, serif",
+        "fontWeight": "600",
+        "lineHeight": "24.65px",
+        "letterSpacing": "0.4px",
+        "borderRadius": "0px",
+        "paddingLeft": "0px",
+        "paddingRight": "0px",
+        "textAlign": "start",
+        "justifyContent": "normal"
+      }
+    ],
+    ".study-card": [
+      {
+        "left": 18,
+        "right": 372,
+        "top": 165,
+        "bottom": 444,
+        "width": 354,
+        "height": 279,
+        "fontSize": "16px",
+        "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "fontWeight": "400",
+        "lineHeight": "25.6px",
+        "letterSpacing": "normal",
+        "borderRadius": "20px",
+        "paddingLeft": "16px",
+        "paddingRight": "16px",
+        "textAlign": "start",
+        "justifyContent": "normal"
+      }
+    ],
+    ".study-card .study-title": [
+      {
+        "left": 35,
+        "right": 355,
+        "top": 182,
+        "bottom": 336,
+        "width": 320,
+        "height": 154,
+        "fontSize": "16px",
+        "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "fontWeight": "600",
+        "lineHeight": "22.4px",
+        "letterSpacing": "0.2px",
+        "borderRadius": "0px",
+        "paddingLeft": "0px",
+        "paddingRight": "0px",
+        "textAlign": "start",
+        "justifyContent": "normal"
+      }
+    ],
+    ".study-region .btn": [
+      {
+        "left": 35,
+        "right": 355,
+        "top": 382,
+        "bottom": 427,
+        "width": 320,
+        "height": 45,
+        "fontSize": "15px",
+        "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "fontWeight": "500",
+        "lineHeight": "18px",
+        "letterSpacing": "0.4px",
+        "borderRadius": "519px",
+        "paddingLeft": "18px",
+        "paddingRight": "18px",
+        "textAlign": "center",
+        "justifyContent": "center"
+      }
+    ],
+    ".study-card .link-btn": [],
+    ".study-progress": [],
+    ".study-error-inline": [],
+    ".study-error-inline .link-btn": [],
+    ".study-label": [],
+    ".study-title": [
+      {
+        "left": 35,
+        "right": 355,
+        "top": 182,
+        "bottom": 336,
+        "width": 320,
+        "height": 154,
+        "fontSize": "16px",
+        "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "fontWeight": "600",
+        "lineHeight": "22.4px",
+        "letterSpacing": "0.2px",
+        "borderRadius": "0px",
+        "paddingLeft": "0px",
+        "paddingRight": "0px",
+        "textAlign": "start",
+        "justifyContent": "normal"
+      }
+    ],
+    ".study-meta": [
+      {
+        "left": 35,
+        "right": 355,
+        "top": 344,
+        "bottom": 366,
+        "width": 320,
+        "height": 22,
+        "fontSize": "14px",
+        "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "fontWeight": "400",
+        "lineHeight": "22.4px",
+        "letterSpacing": "normal",
+        "borderRadius": "0px",
+        "paddingLeft": "0px",
+        "paddingRight": "0px",
+        "textAlign": "start",
+        "justifyContent": "normal"
+      }
+    ],
+    ".study-copy": [],
+    ".study-source": [],
+    ".study-sheet": [],
+    ".study-top": [],
+    ".study-close": [],
+    ".study-body": [],
+    ".study-actions": [],
+    ".study-primary": [],
+    ".study-secondary": [],
+    ".study-quiet": [],
+    ".study-input": [],
+    ".study-textarea": [],
+    ".study-picker": [],
+    ".study-actions .study-primary": [],
+    ".study-secondary-row .study-secondary": [],
+    ".study-defer": [],
+    ".study-proposal-heading": [],
+    ".study-title-scroll": [],
+    ".study-proposal-title": [],
+    ".study-proposal-meta": [],
+    ".study-close .ico": []
+  },
+  "hero": {
+    "id": "",
+    "dataset": {},
+    "left": 18,
+    "right": 372,
+    "top": -145,
+    "bottom": 84,
+    "width": 354,
+    "height": 229
+  },
+  "reviewHeading": {
+    "left": 20,
+    "right": 89.609375,
+    "top": 478,
+    "bottom": 502,
+    "width": 69.609375,
+    "height": 24,
+    "fontSize": "17px",
+    "fontFamily": "\"Songti SC\", \"Noto Serif SC\", \"Noto Serif CJK SC\", \"Source Han Serif SC\", STSong, serif",
+    "fontWeight": "600",
+    "lineHeight": "24.65px",
+    "letterSpacing": "0.4px"
+  },
+  "reviewBar": {
+    "id": "",
+    "dataset": {
+      "section": "review"
+    },
+    "left": 18,
+    "right": 372,
+    "top": 468,
+    "bottom": 512,
+    "width": 354,
+    "height": 44
+  },
+  "reviewSection": {
+    "left": 18,
+    "right": 372,
+    "top": 468,
+    "bottom": 513,
+    "width": 354,
+    "height": 45,
+    "marginTop": "24px"
+  },
+  "card": "proposal",
+  "scrollLeft": 0,
+  "headingScrollTop": 0,
+  "viewport": {
+    "width": 390,
+    "height": 844,
+    "screenHeight": 844,
+    "dpr": 3,
+    "baseLibrary": "3.17.4"
+  },
+  "sheet": "",
+  "state": "card-proposal-long",
+  "errors": [],
+  "capturedAt": "2026-10-24T12:40:40.223Z",
+  "screenshotSha256": "c1ed2e1dacf6317c616599dbe192b43d367f92fcdadff33a6784ff40151a751f"
+}

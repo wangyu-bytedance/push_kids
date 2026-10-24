@@ -13,7 +13,7 @@ import logging
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 
-from sqlalchemy import delete, exists, or_, select
+from sqlalchemy import delete, exists, or_, select, update
 from sqlalchemy.orm import Session
 
 from push_kids.children.service import ChildrenService
@@ -42,7 +42,10 @@ from push_kids.persistence.models import (
     NotificationDelivery,
     NotificationDeliveryChild,
     NotificationDestination,
+    NotificationGrantAttempt,
     NotificationPreference,
+    NotificationRenewalPreference,
+    NotificationRenewalState,
     NotificationSubscription,
     NotificationType,
     SubscriptionStatus,
@@ -206,6 +209,12 @@ class NotificationsService:
                 delete(NotificationDelivery).where(NotificationDelivery.id.in_(delivery_ids))
             )
         if child_id is None:
+            for model in (
+                NotificationGrantAttempt,
+                NotificationRenewalState,
+                NotificationRenewalPreference,
+            ):
+                db.execute(delete(model).where(model.family_id == family_id))
             db.execute(
                 delete(NotificationSubscription).where(
                     NotificationSubscription.family_id == family_id
@@ -227,26 +236,37 @@ class NotificationsService:
         return context.member_id
 
     @classmethod
-    def _preference_rows(cls, db: Session, member_id: str) -> dict[str, NotificationPreference]:
-        rows = db.scalars(
-            select(NotificationPreference).where(NotificationPreference.member_id == member_id)
+    def _preference_rows(
+        cls, db: Session, member_id: str, *, locked: bool = False
+    ) -> dict[str, NotificationPreference]:
+        statement = select(NotificationPreference).where(
+            NotificationPreference.member_id == member_id
         )
+        rows = db.scalars(statement.with_for_update() if locked else statement)
         return {str(row.type): row for row in rows}
 
     @classmethod
-    def _subscription_rows(cls, db: Session, member_id: str) -> dict[str, NotificationSubscription]:
-        rows = db.scalars(
-            select(NotificationSubscription).where(NotificationSubscription.member_id == member_id)
+    def _subscription_rows(
+        cls, db: Session, member_id: str, *, locked: bool = False
+    ) -> dict[str, NotificationSubscription]:
+        statement = select(NotificationSubscription).where(
+            NotificationSubscription.member_id == member_id
         )
+        rows = db.scalars(statement.with_for_update() if locked else statement)
         return {str(row.type): row for row in rows}
 
     @classmethod
     def settings_view(
-        cls, db: Session, context: RequestContext, channel: NotificationChannel
+        cls,
+        db: Session,
+        context: RequestContext,
+        channel: NotificationChannel,
+        *,
+        locked: bool = False,
     ) -> NotificationSettingsView:
         member_id = cls._require_member(context)
-        preferences = cls._preference_rows(db, member_id)
-        subscriptions = cls._subscription_rows(db, member_id)
+        preferences = cls._preference_rows(db, member_id, locked=locked)
+        subscriptions = cls._subscription_rows(db, member_id, locked=locked)
         is_manager = context.role == MemberRole.manager.value
         views: list[PreferenceView] = []
         template_ids: list[str] = []
@@ -272,6 +292,7 @@ class NotificationsService:
                         subscription.status if subscription else SubscriptionStatus.unknown.value
                     ),
                     remaining_quota=subscription.remaining_quota if subscription else 0,
+                    previously_granted=bool(subscription and subscription.granted_at),
                 )
             )
         last_sent_at = db.scalar(
@@ -335,6 +356,18 @@ class NotificationsService:
         channel: NotificationChannel,
         body: SubscriptionRegister,
     ) -> NotificationSettingsView:
+        cls.apply_subscription(db, context, channel, body)
+        db.commit()
+        return cls.settings_view(db, context, channel)
+
+    @classmethod
+    def apply_subscription(
+        cls,
+        db: Session,
+        context: RequestContext,
+        channel: NotificationChannel,
+        body: SubscriptionRegister,
+    ) -> None:
         """Record a WeChat grant. Without a usable channel this stores nothing and stays honest."""
         member_id = cls._require_member(context)
         if not channel.available or channel.cipher is None:
@@ -369,7 +402,7 @@ class NotificationsService:
             existing.app_id = context.app_id or existing.app_id
             existing.status = "active"
             existing.updated_at = utcnow()
-        subscriptions = cls._subscription_rows(db, member_id)
+        subscriptions = cls._subscription_rows(db, member_id, locked=True)
         now = utcnow()
         for result in body.results:
             kind = kind_for(result.type)
@@ -406,8 +439,7 @@ class NotificationsService:
                 )
             else:
                 row.remaining_quota = 0
-        db.commit()
-        return cls.settings_view(db, context, channel)
+        db.flush()
 
     @classmethod
     def recent_deliveries(
@@ -537,6 +569,26 @@ class NotificationsService:
         if not departed:
             return 0
         now = utcnow()
+        db.execute(
+            update(NotificationRenewalPreference)
+            .where(NotificationRenewalPreference.member_id.in_(departed))
+            .values(
+                choice="disabled", version=NotificationRenewalPreference.version + 1, updated_at=now
+            )
+        )
+        db.execute(
+            update(NotificationRenewalState)
+            .where(NotificationRenewalState.member_id.in_(departed))
+            .values(active_attempt_id=None, stop_reason="member_departed", updated_at=now)
+        )
+        db.execute(
+            update(NotificationGrantAttempt)
+            .where(
+                NotificationGrantAttempt.member_id.in_(departed),
+                NotificationGrantAttempt.state.in_(("prepared", "started")),
+            )
+            .values(state="unknown", updated_at=now)
+        )
         for destination in db.scalars(
             select(NotificationDestination).where(
                 NotificationDestination.member_id.in_(departed),
@@ -581,8 +633,17 @@ class NotificationsService:
         )
         for row in rows:
             db.delete(row)
-        if rows:
-            db.commit()
+        active_attempts = select(NotificationRenewalState.active_attempt_id).where(
+            NotificationRenewalState.active_attempt_id.is_not(None)
+        )
+        db.execute(
+            delete(NotificationGrantAttempt).where(
+                NotificationGrantAttempt.updated_at < cutoff,
+                NotificationGrantAttempt.id.not_in(active_attempts),
+            )
+        )
+        PlanningService.prune_completion_receipts(db, local_date(cutoff))
+        db.commit()
         return len(rows)
 
     @classmethod

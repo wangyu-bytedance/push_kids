@@ -28,12 +28,21 @@ from push_kids.persistence.models import (
     ReviewScheduleOverride,
     Subject,
 )
+from push_kids.planning.completion_progress import (
+    completion_cursor,
+    prune_completion_receipts,
+    purge_completion_data,
+    record_completion,
+)
 from push_kids.planning.deletion import delete_knowledge
 from push_kids.planning.domain import (
     DueKnowledge,
     group_daily_todos,
     review_interval_days,
 )
+from push_kids.planning.early_candidates import select_early_reviews
+from push_kids.planning.early_review import EARLY_REVIEW_POLICY_REVISION
+from push_kids.planning.eligibility import scheduling_eligible
 from push_kids.planning.inventory import inventory_page, subjects_page
 from push_kids.planning.plan_candidates import selected_candidates
 from push_kids.planning.policies import (
@@ -51,7 +60,7 @@ from push_kids.planning.selection import (
     ReviewSelectionCandidate,
     select_daily_reviews,
 )
-from push_kids.platform.errors import ConflictError, NotFoundError
+from push_kids.platform.errors import ClientUpgradeRequiredError, ConflictError, NotFoundError
 from push_kids.platform.pagination import decode_cursor, encode_cursor
 from push_kids.platform.time import local_date, local_day_bounds, utcnow
 
@@ -140,6 +149,9 @@ class PendingReviewLoad:
 
 
 class PlanningService:
+    scheduling_eligible = staticmethod(scheduling_eligible)
+    completion_cursor = staticmethod(completion_cursor)
+    prune_completion_receipts = staticmethod(prune_completion_receipts)
     initialize_queue = staticmethod(initialize_queue)
     review_queue_drift = staticmethod(projection_drift)
     rebuild_review_queue = staticmethod(rebuild_projection)
@@ -150,6 +162,7 @@ class PlanningService:
 
     @staticmethod
     def purge_data(db: Session, family_id: str, child_id: str | None) -> None:
+        purge_completion_data(db, family_id, child_id)
         for model in (ReviewScheduleOverride, ReviewScheduleChange):
             scope = [model.family_id == family_id]
             if child_id is not None:
@@ -310,7 +323,10 @@ class PlanningService:
                     "name": k.name,
                     "active": r.active,
                     "due_date": r.due_date.isoformat(),
-                    "is_due": r.active and r.due_date <= local_date(),
+                    "is_due": r.active
+                    and k.review_status == "normal"
+                    and r.due_date <= local_date(),
+                    "review_status": k.review_status,
                     "feedback": grouped.get(r.id, [])[:3],
                     "next_before": grouped[r.id][2]["id"]
                     if len(grouped.get(r.id, [])) > 3
@@ -345,6 +361,7 @@ class PlanningService:
             ReviewItem.family_id == family_id,
             ReviewItem.child_id == child_id,
             ReviewItem.active.is_(True),
+            scheduling_eligible(),
             ReviewItem.due_date <= target,
             Subject.kind == "learning",
             Subject.active.is_(True),
@@ -528,8 +545,16 @@ class PlanningService:
                 DailyReviewPlan.plan_date == target,
             )
         )
-        if plan is None:
+        if plan is None or (
+            target == local_date()
+            and plan.materialization_state == "provisional_empty"
+            and plan.evaluated_inventory_revision != child.review_inventory_revision
+        ):
             plan = cls._create_daily_review_plan(db, family_id, child, target)
+        if plan.materialization_state == "fixed_early" and not db.info.get(
+            "early_review_client_capable", True
+        ):
+            raise ClientUpgradeRequiredError("请更新小程序后查看今日提前安排")
         rows = list(
             db.execute(
                 select(
@@ -586,6 +611,10 @@ class PlanningService:
                 "review_method": knowledge.review_method,
                 "estimated_minutes": int(plan_item.estimated_minutes),
                 "due_date": review.due_date.isoformat(),
+                "selection_kind": plan_item.selection_kind,
+                "original_due_date": plan_item.original_due_date.isoformat()
+                if plan_item.original_due_date
+                else None,
                 "step": int(review.step or 0),
                 "state": plan_item.state,
                 "state_version": int(review.state_version or 0),
@@ -634,6 +663,10 @@ class PlanningService:
             "all_items": all_items,
             "selected_count": pending_count,
             "planned_count": len(rows),
+            "early_count": sum(pi.selection_kind == "early" for pi, *_ in rows),
+            "early_minutes": sum(
+                int(pi.estimated_minutes) for pi, *_ in rows if pi.selection_kind == "early"
+            ),
             "selected_minutes": pending_minutes,
             "planned_minutes": int(plan.total_minutes or 0),
             "total_due": int(plan.due_count or 0),
@@ -660,11 +693,15 @@ class PlanningService:
     ) -> DailyReviewPlan:
         # Serialize plan materialization with confirmation and knowledge deletion. Recheck the
         # unique daily plan after waiting for another creator under MySQL REPEATABLE READ.
-        db.scalar(
+        locked_child = db.scalar(
             select(Child)
             .where(Child.id == child.id, Child.family_id == family_id)
             .with_for_update()
+            .execution_options(populate_existing=True)
         )
+        if locked_child is None:
+            raise NotFoundError("没有找到这个孩子")
+        child = locked_child
         existing = db.scalar(
             select(DailyReviewPlan)
             .where(
@@ -674,13 +711,18 @@ class PlanningService:
             )
             .with_for_update()
         )
-        if existing is not None:
+        if existing is not None and not (
+            target == local_date()
+            and existing.materialization_state == "provisional_empty"
+            and existing.evaluated_inventory_revision != child.review_inventory_revision
+        ):
             db.commit()
             return existing
         due_scope = (
             ReviewItem.family_id == family_id,
             ReviewItem.child_id == child.id,
             ReviewItem.active.is_(True),
+            scheduling_eligible(),
             ReviewItem.due_date <= target,
             Subject.kind == "learning",
             Subject.active.is_(True),
@@ -700,7 +742,21 @@ class PlanningService:
         selected = selected_candidates(
             db, family_id, str(child.id), target, int(child.daily_budget_minutes or 0), lock=True
         )
-        plan = DailyReviewPlan(
+        early = False
+        enabled = db.info.get("empty_day_early_review_enabled", False)
+        if enabled and aggregate[0] == 0 and not db.info.get("early_review_client_capable", True):
+            raise ClientUpgradeRequiredError("请更新小程序后查看今日安排")
+        if enabled and aggregate[0] == 0 and child.active and not child.deleting:
+            selected = select_early_reviews(
+                db,
+                family_id,
+                str(child.id),
+                target,
+                int(child.daily_budget_minutes or 0),
+                lock=True,
+            )
+            early = bool(selected)
+        plan = existing or DailyReviewPlan(
             family_id=family_id,
             child_id=child.id,
             plan_date=target,
@@ -712,6 +768,16 @@ class PlanningService:
             covered_subject_count=len({c.subject_id for c in selected}),
             policy_revision=DAILY_REVIEW_POLICY_REVISION,
         )
+        plan.total_minutes = sum(item.bounded_minutes for item in selected)
+        plan.due_count, plan.earliest_due = int(aggregate[0] or 0), aggregate[1]
+        plan.eligible_subject_count = int(aggregate[2])
+        plan.covered_subject_count = len({c.subject_id for c in selected})
+        plan.materialization_state = (
+            "fixed_early" if early else ("fixed_due" if aggregate[0] else "provisional_empty")
+        )
+        plan.evaluated_inventory_revision = int(child.review_inventory_revision or 0)
+        if enabled:
+            plan.policy_revision = EARLY_REVIEW_POLICY_REVISION
         db.add(plan)
         db.flush()
         for ordinal, item in enumerate(selected):
@@ -723,11 +789,15 @@ class PlanningService:
                     review_item_id=item.review_id,
                     ordinal=ordinal,
                     estimated_minutes=item.bounded_minutes,
+                    selection_kind="early" if early else "due",
+                    original_due_date=item.due_date,
+                    selected_review_version=item.state_version,
                 )
             )
         try:
             record_offered(db, family_id, str(child.id), [c.review_id for c in selected], target)
-            ChildrenService.invalidate_review_inventory(db, family_id, str(child.id))
+            if selected:
+                ChildrenService.invalidate_review_inventory(db, family_id, str(child.id))
             db.commit()
         except IntegrityError:
             db.rollback()
@@ -793,6 +863,7 @@ class PlanningService:
             ReviewItem.family_id == family_id,
             ReviewItem.child_id == child_id,
             ReviewItem.active.is_(True),
+            scheduling_eligible(),
             ReviewItem.due_date <= target,
             ReviewItem.updated_at <= as_of,
             Subject.kind == "learning",
@@ -1034,6 +1105,7 @@ class PlanningService:
             ReviewItem.family_id == family_id,
             ReviewItem.child_id == child_id,
             ReviewItem.active.is_(True),
+            scheduling_eligible(),
             ReviewItem.due_date > target,
             ReviewItem.updated_at <= as_of,
             Subject.kind == "learning",
@@ -1061,6 +1133,7 @@ class PlanningService:
             ReviewItem.family_id == family_id,
             ReviewItem.child_id == child_id,
             ReviewItem.active.is_(True),
+            scheduling_eligible(),
             ReviewItem.due_date == next_day,
             ReviewItem.updated_at <= as_of,
             Subject.kind == "learning",
@@ -1190,6 +1263,7 @@ class PlanningService:
             .join(Child, ReviewItem.child_id == Child.id)
             .where(
                 ReviewItem.active.is_(True),
+                scheduling_eligible(),
                 ReviewItem.due_date <= target,
                 Subject.kind == "learning",
                 Child.active.is_(True),
@@ -1240,6 +1314,45 @@ class PlanningService:
             raise ConflictError("这条复习已结束，请刷新列表后再操作")
         if review.due_date is None:
             raise ValueError("复习任务缺少计划日期")
+        plan_item = db.scalar(
+            select(DailyReviewPlanItem)
+            .join(DailyReviewPlan, DailyReviewPlan.id == DailyReviewPlanItem.plan_id)
+            .where(
+                DailyReviewPlanItem.family_id == family_id,
+                DailyReviewPlanItem.child_id == review.child_id,
+                DailyReviewPlanItem.review_item_id == review.id,
+                DailyReviewPlan.family_id == family_id,
+                DailyReviewPlan.child_id == review.child_id,
+                DailyReviewPlan.plan_date == reviewed_on,
+            )
+            .with_for_update()
+            .execution_options(populate_existing=True)
+        )
+        if (
+            source == "manual"
+            and review.due_date > reviewed_on
+            and (
+                plan_item is None
+                or plan_item.state != "pending"
+                or plan_item.selection_kind != "early"
+                or plan_item.original_due_date != review.due_date
+                or plan_item.selected_review_version != review.state_version
+            )
+        ):
+            reservation = db.scalar(
+                select(ReviewScheduleOverride.review_item_id)
+                .where(
+                    ReviewScheduleOverride.family_id == family_id,
+                    ReviewScheduleOverride.child_id == review.child_id,
+                    ReviewScheduleOverride.review_item_id == review.id,
+                )
+                .limit(1)
+            )
+            same_day_due_feedback = review.last_reviewed_on == reviewed_on and (
+                plan_item is None or plan_item.selection_kind == "due"
+            )
+            if not reservation and not same_day_due_feedback:
+                raise ConflictError("这条提前安排已有变化，请刷新后重试")
         state = ReviewState(
             step=0 if reactivate and not review.active else int(review.step or 0),
             due_date=review.due_date,
@@ -1300,16 +1413,6 @@ class PlanningService:
                 after_due_date=transition.due_date,
             )
         )
-        plan_item = db.scalar(
-            select(DailyReviewPlanItem)
-            .join(DailyReviewPlan, DailyReviewPlan.id == DailyReviewPlanItem.plan_id)
-            .where(
-                DailyReviewPlanItem.family_id == family_id,
-                DailyReviewPlanItem.review_item_id == review.id,
-                DailyReviewPlan.plan_date == reviewed_on,
-            )
-            .with_for_update()
-        )
         if plan_item is not None and plan_item.state == "pending":
             plan_item.state = {
                 "complete": "complete",
@@ -1328,6 +1431,8 @@ class PlanningService:
         review_id: str,
         action: str,
         idempotency_key: str | None = None,
+        *,
+        member_id: str | None = None,
     ) -> dict:
         # Feedback closes a review item that already exists, so it is scoped by review id and
         # family only. An archived profile keeps accepting feedback on purpose (`BHV-025`);
@@ -1374,6 +1479,10 @@ class PlanningService:
             reviewed_on=local_date(),
             source="manual",
         )
+        if action == "complete" and member_id:
+            record_completion(
+                db, family_id, member_id, str(review.id), str(review.child_id), local_date()
+            )
         if idempotency_key:
             db.add(
                 ReviewFeedbackRequest(
@@ -1469,7 +1578,7 @@ class PlanningService:
         if len(by_id) != len(review_ids):
             raise NotFoundError("批量反馈中有无法访问的复习项")
         today = local_date()
-        if any(not row.active or row.due_date is None or row.due_date > today for row in rows):
+        if any(not row.active or row.due_date is None for row in rows):
             raise ConflictError("批量复习状态已变化，请刷新后重试")
 
         results: list[dict] = []
@@ -1553,6 +1662,7 @@ class PlanningService:
                 KnowledgeItem.family_id == family_id,
                 KnowledgeItem.child_id == child_id,
                 ReviewItem.active.is_(True),
+                scheduling_eligible(),
                 Subject.kind == "learning",
             )
             .order_by(ReviewItem.due_date)

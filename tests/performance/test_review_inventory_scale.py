@@ -6,11 +6,12 @@ from datetime import timedelta
 import pytest
 from push_kids.persistence.models import KnowledgeItem, ReviewItem, Subject
 from push_kids.platform.time import local_date
-from sqlalchemy import event, insert
+from sqlalchemy import event, insert, update
 
 
+@pytest.mark.parametrize("review_status", ["normal", "superseded"])
 @pytest.mark.parametrize("size", [10_000, 50_000])
-def test_inventory_bounded_reads(client, app, family_headers, child, size):
+def test_inventory_bounded_reads(client, app, family_headers, child, size, review_status):
     family, cid = family_headers["X-Family-ID"], child["id"]
     with app.state.database.session_factory() as db:
         db.add(
@@ -28,6 +29,7 @@ def test_inventory_bounded_reads(client, app, family_headers, child, size):
                     "subject_id": "scale-subject",
                     "name": f"知识{i}",
                     "normalized_name": f"知识{i}",
+                    "review_status": "superseded" if i % 2 else "normal",
                 }
                 for i in range(start, start + 1000)
             ]
@@ -46,6 +48,15 @@ def test_inventory_bounded_reads(client, app, family_headers, child, size):
                     for i in range(start, start + 1000)
                 ],
             )
+        db.execute(
+            update(KnowledgeItem)
+            .where(
+                KnowledgeItem.family_id == family,
+                KnowledgeItem.child_id == cid,
+                KnowledgeItem.review_status == "superseded",
+            )
+            .values(superseded_by_knowledge_id="k000000")
+        )
         db.commit()
     queries = []
     captured = []
@@ -60,7 +71,7 @@ def test_inventory_bounded_reads(client, app, family_headers, child, size):
         cursor = None
         for view in ["count", "count-next", "count-exact", "subject", "time"]:
             queries.clear()
-            params = {"view": view.split("-")[0], "limit": 20}
+            params = {"view": view.split("-")[0], "limit": 20, "review_status": review_status}
             if view == "count-next":
                 params["cursor"] = cursor
             if view == "count-exact":

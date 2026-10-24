@@ -1,159 +1,129 @@
 const api = require("../../utils/api");
 const notifications = require("../../utils/notifications");
+const renewal = require("../../utils/notification-renewal");
 
-/* 提醒设置：开关走服务端偏好，"能不能发到微信"由微信授权决定。
-   这两件事必须分开显示，否则家长会把"开关是开的"误当成"一定会收到"。 */
+function currentScope() {
+  const data = getApp().globalData;
+  return `${data.familyId || ""}:${(data.currentMember || {}).id || data.localActorId || ""}`;
+}
+
+const STATUS_TEXT = {
+  ready: "下次完成复习时尝试补充", off: "自动补充未开启", needs_consent: "需先明确同意当前模板",
+  disabled: "已关闭", pending: "授权结果待确认", remembered_reject: "微信已记住拒绝",
+  main_switch_off: "微信提醒总开关已关闭", ban: "微信暂不允许此模板", filter: "微信过滤了此模板",
+  unavailable: "暂不可用"
+};
+
 Page({
   data: {
-    loading: true,
-    error: "",
-    supported: true,
-    channelAvailable: false,
-    channelReason: "",
-    longTerm: false,
-    items: [],
-    grantCount: 0,
-    granting: false,
-    togglingType: "",
-    lastSentLabel: "",
-    deliveries: [],
-    deliveriesError: ""
+    loading: true, error: "", supported: true, channelAvailable: false, channelReason: "",
+    items: [], grantCount: 0, granting: false, togglingType: "", lastSentLabel: "",
+    deliveries: [], deliveriesError: "", autoEnabled: false, autoSaving: false,
+    heroTitle: "提醒状态待更新", heroReady: false
   },
-  onLoad() {
-    /* 老版本微信没有订阅消息接口：诚实降级，不让家长点了才报错。 */
-    this.setData({ supported: typeof wx.requestSubscribeMessage === "function" });
-  },
-  onShow() { this.load(); },
+  onLoad() { this.setData({ supported: typeof wx.requestSubscribeMessage === "function" }); },
+  onShow() { if (this.controller) this.controller.show(); this.load(); },
+  onHide() { if (this.controller) this.controller.hide(); this.loadGeneration = (this.loadGeneration || 0) + 1; },
+  onUnload() { this.onHide(); },
   onPullDownRefresh() {
     this.load().then(() => { if (wx.stopPullDownRefresh) wx.stopPullDownRefresh(); });
   },
-  async load() {
-    this.setData({ loading: true, error: "" });
-    try {
-      const settings = await api.request("/notifications/settings");
-      this.render(settings);
-      this.setData({ loading: false });
-    } catch (error) {
-      this.setData({ loading: false, error: error.message });
-      return;
-    }
-    /* 最近发送只是解释用的，读不到不影响开关本身。 */
-    try {
-      const list = await api.request("/notifications/deliveries");
-      this.setData({
-        deliveries: list.map((item) => notifications.describeDelivery(item)),
-        deliveriesError: ""
-      });
-    } catch (error) {
-      this.setData({ deliveries: [], deliveriesError: error.message });
-    }
+  ensureController() {
+    if (!this.controller) this.controller = renewal.createController((view) => this.renderRenewal(view));
+    return this.controller;
   },
-  render(settings) {
+  async load() {
+    const token = (this.loadGeneration || 0) + 1;
+    this.loadGeneration = token;
+    const scope = currentScope();
+    const alive = () => token === this.loadGeneration && scope === currentScope();
+    this.setData({ loading: true, error: "", autoSaving: false, togglingType: "" });
+    const history = api.request("/notifications/deliveries").then((list) => {
+      if (alive()) this.setData({ deliveries: list.map(notifications.describeDelivery), deliveriesError: "" });
+    }).catch((error) => {
+      if (alive()) this.setData({ deliveriesError: error.message });
+    });
+    try {
+      await this.ensureController().refresh("manual");
+      if (alive()) this.setData({ loading: false });
+    } catch (error) {
+      if (alive()) this.setData({ loading: false, error: error.message,
+        ...(error.statusCode === 403 ? { items: [], grantCount: 0, channelAvailable: false, deliveries: [] } : {}),
+        heroTitle: "提醒状态待更新", heroReady: false });
+    }
+    await history;
+  },
+  renderRenewal(view) {
+    if (!view || !view.settings) return;
+    const settings = view.settings;
     const channel = settings.channel || {};
     const available = channel.available === true;
-    const items = (settings.preferences || []).map((item) => {
-      const status = notifications.statusOf(item, available);
-      return {
-        type: item.type,
-        label: item.label,
-        description: item.description,
-        icon: notifications.typeIcon(item.type),
-        enabled: item.enabled,
-        managersOnly: item.managers_only,
-        templateId: item.template_id || "",
-        statusText: status.text,
-        statusTone: status.tone,
-        needsGrant: status.needsGrant
-      };
+    const byType = Object.fromEntries(view.types.map((item) => [item.type, item]));
+    const pendingTypes = this.controller ? this.controller.pendingTypes() : [];
+    const items = settings.preferences.map((item) => {
+      const state = byType[item.type] || {};
+      const ready = this.controller && this.controller.ready(item.type);
+      const waiting = pendingTypes.includes(item.type);
+      let text = STATUS_TEXT[state.status] || "状态待确认";
+      if (state.status === "has_quota") text = item.remaining_quota === -1 ? "长期授权有效" : `可发送 ${item.remaining_quota} 次`;
+      if (state.status === "cooldown") text = `还需完成 ${state.cooldown_remaining} 条复习`;
+      if (state.status === "pending" && ready) text = "待微信授权";
+      if (waiting) text = "次数待确认 · 登记待恢复";
+      return { type: item.type, label: item.label, description: item.description,
+        enabled: item.enabled, managersOnly: item.managers_only, statusText: text,
+        statusTone: state.status === "has_quota" && !waiting ? "suc" : "neutral",
+        needsGrant: item.enabled && item.remaining_quota === 0 && !!item.template_id && !waiting,
+        grantReady: ready && !waiting,
+        needsWxSettings: ["remembered_reject", "main_switch_off"].includes(state.status) };
     });
-    this.setData({
-      channelAvailable: available,
-      channelReason: channel.reason || "",
-      longTerm: channel.long_term === true,
-      items,
-      grantCount: notifications.grantTargets(settings.preferences || [], available).length,
-      lastSentLabel: notifications.lastSentLabel(settings.last_sent_at)
-    });
-    this.pending = settings.preferences || [];
+    const hasQuota = items.some((item) => item.statusTone === "suc");
+    const uncertain = pendingTypes.length || items.some((item) => item.statusText === "授权结果待确认");
+    const grantCount = items.filter((item) => item.needsGrant).length;
+    this.setData({ items, channelAvailable: available, channelReason: channel.reason || "",
+      autoEnabled: view.choice === "enabled", granting: !!(this.controller && this.controller.busy()), grantCount,
+      heroReady: available && hasQuota && !uncertain,
+      heroTitle: uncertain ? "提醒次数待确认" : hasQuota ? "提醒已有可用次数" : grantCount ? "提醒需要补充次数" : "提醒尚未开启",
+      lastSentLabel: notifications.lastSentLabel(settings.last_sent_at) });
   },
   async toggle(event) {
     const type = event.currentTarget.dataset.type;
-    const enabled = event.detail.value === true;
     const item = this.data.items.find((entry) => entry.type === type);
-    if (!item || this.data.togglingType) return;
-    this.setData({ togglingType: type, error: "" });
+    if (!item || this.data.togglingType || this.data.error) return;
+    const token = this.loadGeneration;
+    this.setData({ togglingType: type });
     try {
-      const settings = await api.request("/notifications/preferences", {
-        method: "PATCH",
-        data: { type, enabled }
-      });
-      this.render(settings);
-      this.setData({ togglingType: "" });
-      if (!enabled) return wx.showToast({ title: "已关闭这类提醒", icon: "none" });
-      const refreshed = this.data.items.find((entry) => entry.type === type);
-      if (refreshed && refreshed.needsGrant) {
-        return wx.showToast({ title: "还需要微信授权", icon: "none" });
-      }
-      wx.showToast({ title: "已开启", icon: "success" });
+      await api.request("/notifications/preferences", { method: "PATCH", data: { type, enabled: event.detail.value === true } });
+      if (token !== this.loadGeneration) return;
+      await this.controller.refresh("manual");
     } catch (error) {
-      /* 失败时把开关拨回服务端的真实状态，不留下一个假的"已开启"。 */
+      if (token !== this.loadGeneration) return;
       const index = this.data.items.findIndex((entry) => entry.type === type);
-      const updates = { togglingType: "", error: error.message };
-      if (index >= 0) updates[`items[${index}].enabled`] = item.enabled;
-      this.setData(updates);
-    }
+      this.setData({ error: error.message, [`items[${index}].enabled`]: item.enabled });
+    } finally { if (token === this.loadGeneration) this.setData({ togglingType: "" }); }
   },
-  /* 微信要求订阅授权必须在用户点击的同一次手势里发起，所以这里第一行就调它，
-     不能先 await 任何网络请求。 */
-  requestGrant(event) {
-    if (this.data.granting) return;
-    if (!this.data.supported) {
-      return wx.showModal({
-        title: "当前微信版本不支持",
-        content: "更新微信到最新版本后就可以开启提醒。在此之前，打开小程序仍能看到全部日程和复习。",
-        showCancel: false,
-        confirmText: "知道了"
-      });
-    }
-    const single = event && event.currentTarget && event.currentTarget.dataset.type;
-    const source = this.pending || [];
-    const targets = single
-      ? source.filter((item) => item.type === single && item.template_id)
-      : notifications.grantTargets(source, this.data.channelAvailable);
-    if (!targets.length) return;
-    const templateIds = targets.map((item) => item.template_id);
-    this.setData({ granting: true, error: "" });
-    wx.requestSubscribeMessage({
-      tmplIds: templateIds,
-      success: (response) => this.saveGrant(notifications.resultsFromWx(response, targets)),
-      fail: () => this.setData({
-        granting: false,
-        error: "微信没有返回授权结果，可以再试一次"
-      })
-    });
-  },
-  async saveGrant(results) {
-    if (!results.length) return this.setData({ granting: false });
+  async toggleAuto(event) {
+    if (this.data.autoSaving || this.data.error) return;
+    const token = this.loadGeneration;
+    this.setData({ autoSaving: true });
+    const original = this.data.autoEnabled;
     try {
-      const settings = await api.request("/notifications/subscriptions", {
-        method: "POST",
-        data: { results }
-      });
-      this.render(settings);
-      this.setData({ granting: false });
-      const accepted = notifications.acceptedCount(results);
-      if (accepted) wx.showToast({ title: "微信提醒已开启", icon: "success" });
-      else wx.showToast({ title: "微信里没有同意，暂时发不出提醒", icon: "none" });
-    } catch (error) {
-      this.setData({ granting: false, error: error.message });
-    }
+      await this.ensureController().setChoice(event.detail.value === true);
+      if (token !== this.loadGeneration) return;
+      await this.controller.refresh("manual");
+    } catch (error) { if (token === this.loadGeneration) this.setData({ error: error.message, autoEnabled: original }); }
+    finally { if (token === this.loadGeneration) this.setData({ autoSaving: false }); }
+  },
+  requestGrant(event) {
+    if (!this.data.supported) return wx.showModal({ title: "当前微信版本不支持", content: "更新微信后再开启提醒。", showCancel: false });
+    if (this.data.error || !this.data.channelAvailable || this.data.granting) return;
+    const type = event && event.currentTarget && event.currentTarget.dataset.type;
+    if (this.ensureController().grant(type)) this.setData({ granting: true });
+  },
+  openWxSettings() {
+    if (typeof wx.openSetting === "function") wx.openSetting({ withSubscriptions: true,
+      success: () => this.load() });
   },
   explain() {
-    wx.showModal({
-      title: "关于提醒",
-      content: "提醒是尽力而为：微信是否送达由微信决定，所以这一页会如实显示每条提醒的结果。提醒里只写孩子的名字、时间和要做的事，不做评价，也不预测该学什么。",
-      showCancel: false,
-      confirmText: "知道了"
-    });
+    wx.showModal({ title: "关于提醒", content: "每次同意增加一次发送额度，不是永久订阅。自动补充仅在你点击完成复习时尝试；微信仍可能弹窗。普通拒绝或取消后，完成10条复习再询问。可随时关闭，提醒由微信尽力送达。", showCancel: false });
   }
 });

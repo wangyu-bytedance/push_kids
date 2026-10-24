@@ -208,11 +208,18 @@ def get_submission(
 @router.post("/submissions/{submission_id}/confirm", response_model=ConfirmationResult)
 def confirm_submission(
     submission_id: str,
+    request: Request,
     body: ConfirmSubmission,
     family: Annotated[str, Depends(family_id)],
     db: Annotated[Session, Depends(get_db)],
 ):
-    return LearningService.confirm(db, family, submission_id, body)
+    return LearningService.confirm(
+        db,
+        family,
+        submission_id,
+        body,
+        coverage_enabled=request.app.state.settings.coverage_enabled,
+    )
 
 
 @router.post("/submissions/{submission_id}/retry", response_model=SubmissionView)

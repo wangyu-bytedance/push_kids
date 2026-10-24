@@ -3,6 +3,7 @@
   "backgroundColor": "#F4F3EC",
   "navigationStyle": "custom",
   "usingComponents": {
+    "grade-confirmation": "/components/grade-confirmation/index",
     "primary-nav": "/components/primary-nav/index",
     "review-inventory": "/components/review-inventory/index"
   }

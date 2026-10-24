@@ -1,0 +1,146 @@
+{
+  "nodes": {
+    ".record-heading": [
+      {
+        "left": 0,
+        "right": 390,
+        "top": 87,
+        "bottom": 212,
+        "width": 390,
+        "height": 125,
+        "fontSize": "16px",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "position": "static",
+        "overflowX": "visible",
+        "overflowY": "visible"
+      }
+    ],
+    ".record-type-title": [
+      {
+        "left": 16,
+        "right": 120,
+        "top": 87,
+        "bottom": 136,
+        "width": 104,
+        "height": 49,
+        "fontSize": "22px",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "position": "relative",
+        "overflowX": "hidden",
+        "overflowY": "hidden"
+      }
+    ],
+    ".child-chip": [
+      {
+        "left": 16,
+        "right": 374,
+        "top": 144,
+        "bottom": 196,
+        "width": 358,
+        "height": 52,
+        "fontSize": "14px",
+        "backgroundColor": "rgb(255, 253, 248)",
+        "position": "static",
+        "overflowX": "visible",
+        "overflowY": "visible"
+      }
+    ],
+    ".ava": [
+      {
+        "left": 23,
+        "right": 51,
+        "top": 156,
+        "bottom": 184,
+        "width": 28,
+        "height": 28,
+        "fontSize": "14px",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "position": "static",
+        "overflowX": "visible",
+        "overflowY": "visible"
+      }
+    ],
+    ".record-child-name": [
+      {
+        "left": 59,
+        "right": 345,
+        "top": 151,
+        "bottom": 189,
+        "width": 286,
+        "height": 38,
+        "fontSize": "14px",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "position": "static",
+        "overflowX": "visible",
+        "overflowY": "visible"
+      }
+    ],
+    ".child-chip .chev": [
+      {
+        "left": 352.7573547363281,
+        "right": 364.0710754394531,
+        "top": 162.92892456054688,
+        "bottom": 174.24264526367188,
+        "width": 11.313720703125,
+        "height": 11.313720703125,
+        "fontSize": "14px",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "position": "static",
+        "overflowX": "visible",
+        "overflowY": "visible"
+      }
+    ],
+    ".record-type-menu": [],
+    ".record-type-choice": [],
+    ".record-type-dismiss": [],
+    ".tabbar": [
+      {
+        "left": 0,
+        "right": 390,
+        "top": 754,
+        "bottom": 844,
+        "width": 390,
+        "height": 90,
+        "fontSize": "16px",
+        "backgroundColor": "rgba(255, 253, 248, 0.92)",
+        "position": "fixed",
+        "overflowX": "visible",
+        "overflowY": "visible"
+      }
+    ],
+    ".is-center .key": [
+      {
+        "left": 168,
+        "right": 222,
+        "top": 739,
+        "bottom": 791,
+        "width": 54,
+        "height": 52,
+        "fontSize": "16px",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "position": "relative",
+        "overflowX": "visible",
+        "overflowY": "visible"
+      }
+    ]
+  },
+  "scrollLeft": 0,
+  "scrollTop": 0,
+  "viewport": {
+    "width": 390,
+    "height": 844,
+    "screenHeight": 844,
+    "dpr": 3,
+    "baseLibrary": "3.17.4",
+    "fontScale": 15
+  },
+  "recordType": "learning",
+  "menu": false,
+  "sheet": false,
+  "counts": null,
+  "state": "long",
+  "errors": [],
+  "capturedAt": "2026-10-24T11:59:10.301Z",
+  "screenshot": "long-390.png",
+  "screenshotSha256": "f0f2ad24d7fa54893c7571244f0ff20aea87e55110fef84433a3f695441fd540"
+}

@@ -322,10 +322,22 @@ class MediaObject(Base):
 
 class Child(Base):
     __tablename__ = "children"
+    __table_args__ = (
+        Index(
+            "ix_children_family_active_deleting_created_id",
+            "family_id",
+            "active",
+            "deleting",
+            "created_at",
+            "id",
+        ),
+    )
     id = Column(String(36), primary_key=True, default=new_id)
     family_id = Column(String(80), nullable=False, index=True)
     name = Column(String(40), nullable=False)
     grade = Column(String(20), nullable=True)
+    grade_confirmed_school_year = Column(Integer, nullable=True)
+    grade_revision = Column(Integer, nullable=False, default=0, server_default="0")
     daily_budget_minutes = Column(Integer, nullable=False, default=15)
     review_inventory_revision = Column(Integer, nullable=False, default=0, server_default="0")
     review_queue_resumed_on = Column(Date, nullable=True)
@@ -486,6 +498,9 @@ class LearningRecord(Base):
 class KnowledgeItem(Base):
     __tablename__ = "knowledge_items"
     __table_args__ = (
+        Index("ix_knowledge_status", "family_id", "child_id", "review_status", "subject_id", "id"),
+        Index("ix_knowledge_discovery", "created_at", "id"),
+        Index("ix_knowledge_covering", "superseded_by_knowledge_id"),
         Index("ix_knowledge_scope_minutes_id", "family_id", "child_id", "estimated_minutes", "id"),
         UniqueConstraint(
             "family_id",
@@ -516,7 +531,46 @@ class KnowledgeItem(Base):
     confidence = Column(String(10), nullable=True)
     # Quoted material lines the extraction came from; never an evaluation of the child.
     evidence_json = Column(Text, nullable=True)
+    review_status = Column(String(20), nullable=False, server_default="normal")
+    superseded_by_knowledge_id = Column(
+        String(36), ForeignKey("knowledge_items.id", ondelete="SET NULL"), nullable=True
+    )
+    superseded_at = Column(UTCDateTime(), nullable=True)
+    supersession_policy_revision = Column(String(50), nullable=True)
     created_at = Column(UTCDateTime(), nullable=False, default=utcnow)
+
+
+class KnowledgeCoverageScan(Base):
+    """Internal global discovery cursor; business writes remain family scoped."""
+
+    __tablename__ = "knowledge_coverage_scan"
+    id = Column(String(20), primary_key=True)
+    after_created_at = Column(UTCDateTime(), nullable=True)
+    after_id = Column(String(36), nullable=False, default="")
+
+
+class KnowledgeCoverageJob(Base):
+    """One bounded, restartable coverage pass per confirmed knowledge identity."""
+
+    __tablename__ = "knowledge_coverage_jobs"
+    __table_args__ = (
+        Index("ix_coverage_claim", "state", "available_at", "id"),
+        Index("ix_coverage_family", "family_id", "child_id", "state"),
+    )
+    knowledge_item_id = Column(
+        String(36),
+        ForeignKey("knowledge_items.id", ondelete="CASCADE"),
+        nullable=False,
+        unique=True,
+    )
+    id = Column(String(36), primary_key=True, default=new_id)
+    family_id = Column(String(80), nullable=False)
+    child_id = Column(String(36), nullable=False)
+    state = Column(String(20), nullable=False, default="queued")
+    attempts = Column(Integer, nullable=False, default=0)
+    available_at = Column(UTCDateTime(), nullable=False, default=utcnow)
+    lease_token = Column(String(36), nullable=True)
+    error_code = Column(String(30), nullable=True)
 
 
 class KnowledgeSearchTerm(Base):
@@ -692,6 +746,36 @@ class ReviewQueueEntry(Base):
     last_offered_on = Column(Date, nullable=True)
 
 
+class ReviewEarlySlot(Base):
+    """At most three indexed opportunities per review; never a changed due date."""
+
+    __tablename__ = "review_early_slots"
+    __table_args__ = (
+        Index("ix_early_slots_pool", "family_id", "child_id", "slot_on", "minutes", "priority_key"),
+        Index(
+            "ix_early_slots_subject",
+            "family_id",
+            "child_id",
+            "slot_on",
+            "subject_id",
+            "minutes",
+            "priority_key",
+        ),
+        Index(
+            "ix_early_slots_first", "family_id", "child_id", "slot_on", "subject_id", "priority_key"
+        ),
+    )
+    review_item_id = Column(
+        String(36), ForeignKey("review_items.id", ondelete="CASCADE"), primary_key=True
+    )
+    slot_on = Column(Date, primary_key=True)
+    family_id = Column(String(80), nullable=False)
+    child_id = Column(String(36), nullable=False)
+    subject_id = Column(String(36), nullable=False)
+    minutes = Column(Integer, nullable=False)
+    priority_key = Column(String(66), nullable=False)
+
+
 class ReviewScheduleOverride(Base):
     """One pending parent reservation per review; scheduling is not a review event."""
 
@@ -785,6 +869,8 @@ class DailyReviewPlan(Base):
     covered_subject_count = Column(Integer, nullable=True)
     earliest_due = Column(Date, nullable=True)
     policy_revision = Column(String(40), nullable=False, default="daily-plan-v1")
+    materialization_state = Column(String(20), nullable=False, server_default="legacy_fixed")
+    evaluated_inventory_revision = Column(Integer, nullable=True)
     state = Column(String(20), nullable=False, default="active")
     created_at = Column(UTCDateTime(), nullable=False, default=utcnow)
     updated_at = Column(UTCDateTime(), nullable=False, default=utcnow, onupdate=utcnow)
@@ -805,6 +891,9 @@ class DailyReviewPlanItem(Base):
     ordinal = Column(Integer, nullable=False)
     estimated_minutes = Column(Integer, nullable=False)
     state = Column(String(20), nullable=False, default="pending")
+    selection_kind = Column(String(8), nullable=False, server_default="due")
+    original_due_date = Column(Date, nullable=True)
+    selected_review_version = Column(Integer, nullable=True)
     created_at = Column(UTCDateTime(), nullable=False, default=utcnow)
     updated_at = Column(UTCDateTime(), nullable=False, default=utcnow, onupdate=utcnow)
 
@@ -1044,6 +1133,73 @@ class NotificationSubscription(Base):
     granted_at = Column(UTCDateTime(), nullable=True)
     created_at = Column(UTCDateTime(), nullable=False, default=utcnow)
     updated_at = Column(UTCDateTime(), nullable=False, default=utcnow, onupdate=utcnow)
+
+
+class ReviewMemberCompletionProgress(Base):
+    """Planning-owned monotonic cursor; historical feedback has no trustworthy actor."""
+
+    __tablename__ = "review_member_completion_progress"
+    family_id = Column(String(80), ForeignKey("families.id"), primary_key=True)
+    member_id = Column(String(36), ForeignKey("family_members.id"), primary_key=True)
+    total_completed = Column(Integer, nullable=False, default=0)
+    updated_at = Column(UTCDateTime(), nullable=False, default=utcnow)
+
+
+class ReviewMemberCompletionReceipt(Base):
+    __tablename__ = "review_member_completion_receipts"
+    family_id = Column(String(80), ForeignKey("families.id"), primary_key=True)
+    member_id = Column(String(36), ForeignKey("family_members.id"), primary_key=True)
+    review_id = Column(String(36), ForeignKey("review_items.id"), primary_key=True)
+    day = Column(Date, primary_key=True)
+    child_id = Column(String(36), ForeignKey("children.id"), nullable=False)
+    created_at = Column(UTCDateTime(), nullable=False, default=utcnow)
+    __table_args__ = (Index("ix_completion_receipt_scope_child", "family_id", "child_id"),)
+
+
+class NotificationRenewalPreference(Base):
+    __tablename__ = "notification_renewal_preferences"
+    family_id = Column(String(80), ForeignKey("families.id"), primary_key=True)
+    member_id = Column(String(36), ForeignKey("family_members.id"), primary_key=True)
+    choice = Column(String(12), nullable=False, default="unseen")
+    version = Column(Integer, nullable=False, default=0)
+    last_request_key = Column(String(100), nullable=True)
+    updated_at = Column(UTCDateTime(), nullable=False, default=utcnow)
+
+
+class NotificationRenewalState(Base):
+    __tablename__ = "notification_renewal_states"
+    family_id = Column(String(80), ForeignKey("families.id"), primary_key=True)
+    member_id = Column(String(36), ForeignKey("family_members.id"), primary_key=True)
+    type = Column(String(30), primary_key=True)
+    template_fingerprint = Column(String(64), nullable=False)
+    consented = Column(Boolean, nullable=False, default=False)
+    last_prompt_cursor = Column(Integer, nullable=False, default=0)
+    stop_reason = Column(String(30), nullable=True)
+    retry_after = Column(UTCDateTime(), nullable=True)
+    active_attempt_id = Column(String(36), nullable=True)
+    updated_at = Column(UTCDateTime(), nullable=False, default=utcnow)
+
+
+class NotificationGrantAttempt(Base):
+    __tablename__ = "notification_grant_attempts"
+    __table_args__ = (
+        UniqueConstraint("family_id", "member_id", "request_key", name="uq_grant_attempt_request"),
+        Index("ix_grant_attempt_scope_created", "family_id", "member_id", "created_at"),
+    )
+    id = Column(String(36), primary_key=True, default=new_id)
+    family_id = Column(String(80), ForeignKey("families.id"), nullable=False)
+    member_id = Column(String(36), ForeignKey("family_members.id"), nullable=False)
+    request_key = Column(String(100), nullable=False)
+    request_fingerprint = Column(String(64), nullable=False)
+    mode = Column(String(12), nullable=False)
+    choice_version = Column(Integer, nullable=False)
+    bindings_json = Column(Text, nullable=False)
+    state = Column(String(16), nullable=False, default="prepared")
+    expires_at = Column(UTCDateTime(), nullable=False)
+    result_fingerprint = Column(String(64), nullable=True)
+    result_json = Column(Text, nullable=True)
+    created_at = Column(UTCDateTime(), nullable=False, default=utcnow)
+    updated_at = Column(UTCDateTime(), nullable=False, default=utcnow)
 
 
 class NotificationDelivery(Base):

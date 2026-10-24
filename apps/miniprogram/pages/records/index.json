@@ -3,6 +3,8 @@
   "backgroundColor": "#F4F3EC",
   "navigationStyle": "custom",
   "usingComponents": {
-    "primary-nav": "/components/primary-nav/index"
+    "grade-confirmation": "/components/grade-confirmation/index",
+    "primary-nav": "/components/primary-nav/index",
+    "travel-diary": "/pages/footprints/embedded"
   }
 }

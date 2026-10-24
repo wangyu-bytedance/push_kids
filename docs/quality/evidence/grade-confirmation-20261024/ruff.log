@@ -1,0 +1,43 @@
+I001 [*] Import block is un-sorted or un-formatted
+  --> apps/api/migrations/env.py:1:1
+   |
+ 1 | / from __future__ import annotations
+ 2 | |
+ 3 | | from logging.config import fileConfig
+ 4 | |
+ 5 | | from alembic import context
+ 6 | | from push_kids.footprints import (
+ 7 | |     models as footprint_models,  # noqa: F401 - explicit ORM registration
+ 8 | | )
+ 9 | | from push_kids.persistence.models import Base
+10 | | from push_kids.knowledge import learning_context  # noqa: F401 - ORM registration
+11 | | from push_kids.learning_suggestions import models as suggestion_models  # noqa: F401
+12 | | from push_kids.platform.config import Settings
+13 | | from sqlalchemy import engine_from_config, pool
+   | |_______________________________________________^
+14 |
+15 |   config = context.config
+   |
+help: Organize imports
+   |
+8  | )
+   - from push_kids.persistence.models import Base
+9  | from push_kids.knowledge import learning_context  # noqa: F401 - ORM registration
+10 | from push_kids.learning_suggestions import models as suggestion_models  # noqa: F401
+11 + from push_kids.persistence.models import Base
+12 | from push_kids.platform.config import Settings
+   |
+
+E501 Line too long (105 > 100)
+   --> tests/integration/test_learning_suggestions.py:415:101
+    |
+413 |                 assert result["can_auto_open"] and result["current"]["job"]
+414 |             else:
+415 |                 result = generate(db, family_headers["X-Family-ID"], child["id"], 0, "budget-manual-001")
+    |                                                                                                     ^^^^^
+416 |                 assert result["state"] == "queued"
+417 |     finally:
+    |
+
+Found 2 errors.
+[*] 1 fixable with the `--fix` option.

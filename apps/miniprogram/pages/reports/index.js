@@ -173,8 +173,13 @@ function activityRows(report) {
 }
 
 Page({
+  onGradeConfirmation(event) {
+    const flow = getApp().gradeConfirmation;
+    if (flow) return flow.handle(this, event.detail);
+  },
   onIllustrationError() { this.setData({ introArtFailed: true }); },
   data: {
+    gradeConfirmation: null, gradeConfirmationVisible: false,
     introArtFailed: false,
     ...history.data,
     loading: true, error: "", children: [], childIndex: 0, childId: "", multiChild: false, showChildSheet: false, canAddChild: true,

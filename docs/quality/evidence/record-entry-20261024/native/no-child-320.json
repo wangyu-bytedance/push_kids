@@ -1,0 +1,208 @@
+{
+  "nodes": {
+    ".record-heading": [
+      {
+        "left": 0,
+        "right": 320,
+        "top": 60,
+        "bottom": 125,
+        "width": 320,
+        "height": 65,
+        "fontSize": "16px",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "position": "static",
+        "overflowX": "visible",
+        "overflowY": "visible"
+      }
+    ],
+    ".record-type-title": [
+      {
+        "left": 16,
+        "right": 118,
+        "top": 60,
+        "bottom": 109,
+        "width": 102,
+        "height": 49,
+        "fontSize": "22px",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "position": "relative",
+        "overflowX": "hidden",
+        "overflowY": "hidden"
+      }
+    ],
+    ".child-chip": [
+      {
+        "left": 192,
+        "right": 304,
+        "top": 62.5,
+        "bottom": 106.5,
+        "width": 112,
+        "height": 44,
+        "fontSize": "14px",
+        "backgroundColor": "rgb(255, 253, 248)",
+        "position": "static",
+        "overflowX": "visible",
+        "overflowY": "visible"
+      }
+    ],
+    ".ava": [
+      {
+        "left": 199,
+        "right": 227,
+        "top": 70.5,
+        "bottom": 98.5,
+        "width": 28,
+        "height": 28,
+        "fontSize": "14px",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "position": "static",
+        "overflowX": "visible",
+        "overflowY": "visible"
+      }
+    ],
+    ".record-child-name": [
+      {
+        "left": 235,
+        "right": 291,
+        "top": 75,
+        "bottom": 94,
+        "width": 56,
+        "height": 19,
+        "fontSize": "14px",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "position": "static",
+        "overflowX": "visible",
+        "overflowY": "visible"
+      }
+    ],
+    ".child-chip .chev": [],
+    ".record-type-menu": [],
+    ".record-type-choice": [],
+    ".record-type-dismiss": [],
+    ".footprints-page": [
+      {
+        "left": 0,
+        "right": 320,
+        "top": 125,
+        "bottom": 435,
+        "width": 320,
+        "height": 310,
+        "fontSize": "14px",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "position": "static",
+        "overflowX": "visible",
+        "overflowY": "visible"
+      }
+    ],
+    ".fp-tab": [],
+    ".fp-filter": [],
+    ".fp-date": [],
+    ".fp-timeline": [],
+    ".fp-map-content": [],
+    ".fp-import": [],
+    ".fp-import .ico": [],
+    ".fp-import text": [],
+    ".fp-empty": [
+      {
+        "left": 12,
+        "right": 308,
+        "top": 213,
+        "bottom": 357,
+        "width": 296,
+        "height": 144,
+        "fontSize": "14px",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "position": "static",
+        "overflowX": "visible",
+        "overflowY": "visible"
+      }
+    ],
+    ".fp-player": [],
+    ".fp-map": [],
+    ".fp-world-row": [],
+    ".fp-sheet": [],
+    ".fp-sheet-body": [],
+    ".fp-sheet-footer": [],
+    ".fp-text-button": [
+      {
+        "left": 12,
+        "right": 84,
+        "top": 125,
+        "bottom": 169,
+        "width": 72,
+        "height": 44,
+        "fontSize": "14px",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "position": "relative",
+        "overflowX": "hidden",
+        "overflowY": "hidden"
+      },
+      {
+        "left": 103,
+        "right": 217,
+        "top": 281,
+        "bottom": 325,
+        "width": 114,
+        "height": 44,
+        "fontSize": "14px",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "position": "relative",
+        "overflowX": "hidden",
+        "overflowY": "hidden"
+      }
+    ],
+    ".fp-button": [],
+    ".tabbar": [
+      {
+        "left": 0,
+        "right": 320,
+        "top": 522,
+        "bottom": 568,
+        "width": 320,
+        "height": 46,
+        "fontSize": "16px",
+        "backgroundColor": "rgba(255, 253, 248, 0.92)",
+        "position": "fixed",
+        "overflowX": "visible",
+        "overflowY": "visible"
+      }
+    ],
+    ".is-center .key": [
+      {
+        "left": 137.984375,
+        "right": 181.984375,
+        "top": 509,
+        "bottom": 550,
+        "width": 44,
+        "height": 41,
+        "fontSize": "16px",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "position": "relative",
+        "overflowX": "visible",
+        "overflowY": "visible"
+      }
+    ]
+  },
+  "scrollLeft": 0,
+  "scrollTop": 0,
+  "viewport": {
+    "width": 320,
+    "height": 568,
+    "screenHeight": 568,
+    "dpr": 2,
+    "baseLibrary": "3.17.4",
+    "fontScale": 15
+  },
+  "recordType": "travel",
+  "menu": false,
+  "sheet": false,
+  "counts": {
+    "visits": 0,
+    "placeVisits": 1
+  },
+  "state": "no-child",
+  "errors": [],
+  "capturedAt": "2026-10-24T11:55:29.765Z",
+  "screenshot": "no-child-320.png",
+  "screenshotSha256": "d0468fd455086cfc3dd42f2e3f586323f680c8e4bfbd1e8a0cb364352336e3c1"
+}

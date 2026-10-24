@@ -7,13 +7,20 @@ from sqlalchemy import create_engine, event, inspect, text
 from sqlalchemy.orm import Session, sessionmaker
 from sqlalchemy.pool import StaticPool
 
+from push_kids.footprints import (
+    models as footprint_models,  # noqa: F401 - explicit ORM registration
+)
+from push_kids.knowledge import learning_context as knowledge_context_models  # noqa: F401
+from push_kids.learning_suggestions import models as suggestion_models  # noqa: F401
+from push_kids.persistence import early_review_slots_v1
 from push_kids.persistence.models import Base
-from push_kids.persistence.review_queue_v1 import install as install_review_queue
+from push_kids.persistence.review_queue_v1 import uninstall as uninstall_review_queue_v1
+from push_kids.persistence.review_queue_v2 import install as install_review_queue
 from push_kids.platform.config import Settings
 
 
 class Database:
-    expected_cloud_revision = "20261012_0019"
+    expected_cloud_revision = "20261024_0025"
 
     _local_read_indexes = {
         "ix_learning_submissions_family_child_state_created_id",
@@ -49,7 +56,13 @@ class Database:
         if database_url.startswith("sqlite"):
             event.listen(self.engine, "connect", self._enable_sqlite_foreign_keys)
         self.session_factory = sessionmaker(
-            bind=self.engine, expire_on_commit=False, class_=Session
+            bind=self.engine,
+            expire_on_commit=False,
+            class_=Session,
+            info={
+                "empty_day_early_review_enabled": settings.empty_day_early_review_enabled,
+                "learning_suggestions_enabled": settings.learning_suggestions_enabled,
+            },
         )
 
     @staticmethod
@@ -65,12 +78,31 @@ class Database:
         self._upgrade_local_sqlite()
         if self.engine.dialect.name == "sqlite":
             additions = {
-                "children": {"review_queue_resumed_on": "DATE"},
+                "knowledge_items": {
+                    "review_status": "VARCHAR(20) NOT NULL DEFAULT 'normal'",
+                    "superseded_by_knowledge_id": (
+                        "VARCHAR(36) REFERENCES knowledge_items(id) ON DELETE SET NULL"
+                    ),
+                    "superseded_at": "DATETIME",
+                    "supersession_policy_revision": "VARCHAR(50)",
+                },
+                "children": {
+                    "review_queue_resumed_on": "DATE",
+                    "grade_confirmed_school_year": "INTEGER",
+                    "grade_revision": "INTEGER NOT NULL DEFAULT 0",
+                },
                 "subjects": {"review_queue_resumed_on": "DATE"},
                 "review_items": {"queue_eligible_on": "DATE", "last_offered_on": "DATE"},
                 "daily_review_plans": {
                     "eligible_subject_count": "INTEGER",
                     "covered_subject_count": "INTEGER",
+                    "materialization_state": "VARCHAR(20) NOT NULL DEFAULT 'legacy_fixed'",
+                    "evaluated_inventory_revision": "INTEGER",
+                },
+                "daily_review_plan_items": {
+                    "selection_kind": "VARCHAR(8) NOT NULL DEFAULT 'due'",
+                    "original_due_date": "DATE",
+                    "selected_review_version": "INTEGER",
                 },
             }
             with self.engine.begin() as connection:
@@ -103,25 +135,86 @@ class Database:
                     "ix_review_scope_offered_knowledge",
                 }:
                     index.create(self.engine, checkfirst=True)
+            for index in Base.metadata.tables["children"].indexes:
+                if index.name == "ix_children_family_active_deleting_created_id":
+                    index.create(self.engine, checkfirst=True)
             for index in Base.metadata.tables["knowledge_items"].indexes:
-                if index.name == "ix_knowledge_scope_minutes_id":
+                if index.name in {
+                    "ix_knowledge_scope_minutes_id",
+                    "ix_knowledge_status",
+                    "ix_knowledge_discovery",
+                    "ix_knowledge_covering",
+                }:
                     index.create(self.engine, checkfirst=True)
             with self.engine.begin() as connection:
-                if not connection.scalar(
-                    text(
-                        "SELECT name FROM sqlite_master WHERE type='trigger' "
-                        "AND name='rq_v1_review_items_insert'"
-                    )
-                ):
-                    install_review_queue(connection)
+                uninstall_review_queue_v1(connection)
+                install_review_queue(connection)
+                connection.execute(text("DELETE FROM review_early_slots"))
+                early_review_slots_v1.install(connection)
+                connection.execute(
+                    text("""INSERT INTO knowledge_input_clocks
+                    (family_id,child_id,observed_since,last_new_confirmed_on,input_revision)
+                    SELECT c.family_id,c.id,DATE('now','+8 hours'),
+                    (SELECT MAX(DATE(k.created_at,'+8 hours')) FROM knowledge_items k
+                    WHERE k.family_id=c.family_id AND k.child_id=c.id),0 FROM children c
+                    WHERE NOT EXISTS (SELECT 1 FROM knowledge_input_clocks x
+                    WHERE x.family_id=c.family_id AND x.child_id=c.id)""")
+                )
 
     def verify_cloud_schema(self) -> None:
         if self.engine.dialect.name != "mysql":
             raise RuntimeError("云环境数据库必须是 MySQL")
         with self.engine.connect() as connection:
             revision = connection.execute(text("SELECT version_num FROM alembic_version")).scalar()
-        if revision != self.expected_cloud_revision:
-            raise RuntimeError("数据库 Schema 未迁移到当前版本")
+            if revision != self.expected_cloud_revision:
+                raise RuntimeError("数据库 Schema 未迁移到当前版本")
+            schema = inspect(connection)
+            required = {
+                "review_early_slots": {"slot_on", "priority_key"},
+                "daily_review_plans": {"materialization_state", "evaluated_inventory_revision"},
+                "daily_review_plan_items": {
+                    "selection_kind",
+                    "original_due_date",
+                    "selected_review_version",
+                },
+                "knowledge_input_clocks": {"observed_since", "input_revision"},
+                "learning_suggestion_states": {"pending_task_id", "version"},
+                "learning_suggestions": {"validated_content_json", "expires_at"},
+                "learning_suggestion_prompt_days": {"prompt_on", "consumed_at"},
+                "learning_suggestion_jobs": {"lease_token", "bounded_context_json"},
+                "study_tasks": {"suggestion_id", "state"},
+                "study_task_record_intents": {"recovery_after", "mode"},
+                "study_task_records": {"confirmed_at", "created_at"},
+            }
+            tables = set(schema.get_table_names())
+            for table, fields in required.items():
+                if table not in tables or not fields <= {
+                    c["name"] for c in schema.get_columns(table)
+                }:
+                    raise RuntimeError("数据库 Schema 结构不完整")
+            from push_kids.persistence.early_review_slots_v1 import trigger_statements
+
+            triggers = set(
+                connection.execute(
+                    text(
+                        "SELECT TRIGGER_NAME FROM information_schema.TRIGGERS "
+                        "WHERE TRIGGER_SCHEMA=DATABASE()"
+                    )
+                ).scalars()
+            )
+            if not {name for name, _ in trigger_statements("mysql")} <= triggers:
+                raise RuntimeError("数据库提前复习投影触发器不完整")
+            for table, names in {
+                "review_early_slots": {
+                    "ix_early_slots_subject",
+                    "ix_early_slots_pool",
+                    "ix_early_slots_first",
+                },
+                "learning_suggestion_jobs": {"ix_suggestion_job_claim", "ix_suggestion_job_quota"},
+                "study_task_record_intents": {"ix_study_intent_recovery"},
+            }.items():
+                if not names <= {i["name"] for i in schema.get_indexes(table)}:
+                    raise RuntimeError("数据库索引不完整")
 
     def check_ready(self) -> None:
         with self.engine.connect() as connection:

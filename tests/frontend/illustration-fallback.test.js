@@ -27,10 +27,10 @@ test("record illustration failures preserve form, upload state and permission wi
   const { page } = loadPage("pages/records/index.js", () => { requests += 1; });
   page.setData({ childId: "synthetic", text: "保留输入", photos: ["local-photo"], saving: true, canWrite: false });
   const before = { ...page.data };
-  for (const art of ["intro", "upload", "unexpected"]) {
+  for (const art of ["upload", "unexpected"]) {
     page.onIllustrationError({ currentTarget: { dataset: { art } } });
   }
-  assert.deepEqual({ ...page.data }, { ...before, introArtFailed: true, uploadArtFailed: true });
+  assert.deepEqual({ ...page.data }, { ...before, uploadArtFailed: true });
   assert.equal(requests, 0);
 });
 

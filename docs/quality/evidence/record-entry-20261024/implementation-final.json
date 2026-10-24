@@ -1,0 +1,21 @@
+{
+  "spec": "BUG-SPEC-20261024-RECORD-ENTRY-05",
+  "design": "DREV-20261024-RECORD-ENTRY-01",
+  "scope": "9 production files; existing records/index.js unchanged by this task but included for native coupling",
+  "source_sha256": {
+    "apps/miniprogram/pages/records/record-types.js": "36cd51138d7af17b3d3cc7a1567ad706c08d6dbf4b8fce81fc1320cef13de093",
+    "apps/miniprogram/pages/records/index.js": "40369e8d0fe6e11eb252371831a9b89f9caeec408b5c534ad53dfd770291639e",
+    "apps/miniprogram/pages/records/index.wxml": "ac4ee1fe62e59aaddeedb29845905450dbf87ce976395f91edf789a3ec173f06",
+    "apps/miniprogram/pages/records/index.wxss": "1b8421a837ed10299e8f080a8db7c1832d374744242490d5956bd44c57ffa188",
+    "apps/miniprogram/pages/footprints/controller.js": "2050be93dd2b09ef6ae6c1cb0ba559d7868330563ec69e22ef5ed175e87e5916",
+    "apps/miniprogram/pages/footprints/maps.js": "649e088a2e2f4551c320b71346d124c6a03b8172a17308a5ed0d99674fb90471",
+    "apps/miniprogram/pages/footprints/imports.js": "654be94db04ec5a28761af722933739661a020fc99c4a2862c913f88b53ec13b",
+    "apps/miniprogram/pages/footprints/index.wxml": "343c1f7dafc28e1b09803c853db4772d82e64e724d55f9f787e2b4791593f8a5",
+    "apps/miniprogram/pages/footprints/index.wxss": "27d41578bcb9d8a5e79ec4e21879356fdc99f6bfd4bbddca39517dec813e417a"
+  },
+  "offline_copy_matches": true,
+  "tests_sha256": {
+    "tests/frontend/record-types.test.js": "0e7a0d3e17caa5926e3c1ae1160938071dc441a7345b01f090eaf18b9ea519f1",
+    "tests/frontend/footprints.test.js": "bff1883d4e8855e158adbdaa0adf55e8e3c20ab7e590e19045cba50e5af8cca1"
+  }
+}

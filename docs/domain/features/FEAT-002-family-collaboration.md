@@ -1,5 +1,7 @@
 # FEAT-002 — 家庭协作与孩子授权
 
+- 2026-10-24本地年级确认增量：沿用bound家庭及manager/editor权限，每孩子学年确认全家共享，viewer无可操作候选。App前台/后台会话与bootstrap接线在身份变化时失效旧窗口和迟到响应，人工确认/归档清理缓存并失效旧在途候选，恢复后安全刷新。家庭关系、成员角色和邀请流程不变；[FEAT-013](FEAT-013-annual-grade-promotion.md)拥有业务规则，[本轮证据](../../quality/evidence/ANNUAL-GRADE-IMPLEMENTATION-20261024.md)记录真API双家长权限/隔离、前端竞态自动化及独立评审PASS；真机双账号未验收，未部署。
+
 - Feature ID: `FEAT-002`
 - Release gate policy: `SPEC-20261011-RISK-BASED-RELEASE-GATES-01` 已批准；身份、账号绑定、家庭成员/角色/邀请、租户权限或图片归属发生变化时，双账号隔离与 owner 验收仍是当次发布阻断项。其他发布不重复执行，但不能把未执行记为 `PASS`；本 Feature 未完成的角色生命周期验收状态不变。
 - Status: `IMPLEMENTING`
@@ -25,6 +27,8 @@
 本地视觉增量 `FEAT-VISUAL-20261021-HERO-ARC-01`：家庭邀请卡随共享样式删除细弧线，权限与邀请行为不变。
 [Spec01](../../../specs/active/BUG-030-HERO-BACKGROUND-ARC.md) / DREV-20261021-HERO-ARC-REMOVAL-01已批准；
 验收范围见[质量证据](../../quality/evidence/HERO-ARC-REMOVAL-20261021.md)，仅本地实现，未上传/发布。
+
+- 2026-10-18本地集成，增量revision `FEAT-STATE-20261018-FOOTPRINTS-SCOPE-01`：FEAT-012所有API沿用可信成员/家庭边界，viewer仅可读，AI同意按family/member存储，上传票据绑定原上传者。新增公开scope锁/后台eligibility合同供足迹worker调用，不改角色定义；本地验证见[足迹证据](../../quality/evidence/CHILD-FOOTPRINTS-IMPLEMENTATION-20261018.md)，真实双账号/私有云媒体验收待补，未发布。
 
 - 新 actor 通过 `/api/v1/me` 得到 `unbound`，可原子创建家庭与 manager membership；首个孩子档案
   可以同批创建，也可以留空之后再建（FEAT-005）。或凭短时邀请提交待审批申请。

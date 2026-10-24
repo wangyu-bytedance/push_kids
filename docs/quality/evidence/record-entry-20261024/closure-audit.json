@@ -1,0 +1,36 @@
+{
+  "capturedAt": "2026-10-24T12:04:05.375588+00:00",
+  "source_matches": true,
+  "frontend_tests": {
+    "tests": 313,
+    "pass": 313,
+    "fail": 0,
+    "skipped": 0
+  },
+  "native_audit": "PASS",
+  "navigation": "PASS",
+  "local_references": {
+    "documents": 12,
+    "links": 210,
+    "missing": []
+  },
+  "spec_status": "VERIFYING",
+  "spec_location": "specs/active/BUG-032-RECORD-ENTRY-CONTEXT.md",
+  "implementer_readonly_review": {
+    "gate": "BLOCK_AT_REVIEW_RESOLVED_LOCALLY",
+    "finding": "CR-001: next-window response releases the newly opened photo sheet preview",
+    "reproduced": true,
+    "fixed_at_review": false,
+    "fixed": true,
+    "resolution_evidence": "../footprints-minimal-20261024/README.md",
+    "resolution_scope": "BUG-032 approved TP04/TP10; loaded and pending photo previews plus superseded request failure covered; current 327 frontend tests pass; no independent rereview claim",
+    "independent": false
+  },
+  "remaining": [
+    "system picker selection/cancellation and OS clicks",
+    "iOS/Android accessibility/font/real photo selection",
+    "independent review and parent acceptance"
+  ],
+  "not_uploaded": true,
+  "not_deployed": true
+}

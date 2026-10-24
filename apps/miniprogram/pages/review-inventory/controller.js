@@ -1,4 +1,5 @@
 const api = require("../../utils/api");
+const REVIEW_VIEWS = [{ id: "time", label: "按时间" }, { id: "subject", label: "按科目" }, { id: "count", label: "按次数" }];
 
 function shortDate(value, asOfDay) {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(value || "")) return value || "";
@@ -23,11 +24,13 @@ function arrangementView(item, asOfDay) {
   const current = Object.prototype.hasOwnProperty.call(labels, item.arrangement_state);
   const dateLabel = !current ? "计划日期" : item.scheduled_on ? "家长安排日期" : "建议复习日";
   const dateValue = !current ? item.due_date : (item.scheduled_on || item.suggested_review_on);
-  return { ...item, dateText: dateValue ? `${dateLabel}：${dateValue}` : "",
-    compactDateText: dateValue ? `${dateLabel === "建议复习日" ? "建议" : dateLabel === "家长安排日期" ? "家长安排" : "计划"}${shortDate(dateValue, asOfDay)}` : "",
+  const superseded = item.review_status === "superseded";
+  return { ...item, dateText: !superseded && dateValue ? `${dateLabel}：${dateValue}` : "",
+    compactDateText: !superseded && dateValue ? `${dateLabel === "建议复习日" ? "建议" : dateLabel === "家长安排日期" ? "家长安排" : "计划"}${shortDate(dateValue, asOfDay)}` : "",
+    coverageText: superseded ? (item.superseded_by_name ? `由「${item.superseded_by_name}」承接` : "原承接词条已删除") : "",
     lastReviewText: item.last_reviewed_on ? `上次${shortDate(item.last_reviewed_on, asOfDay)}` : "尚未复习",
     reviewCountText: item.review_count === null || item.review_count === undefined ? "复习次数待核实" : `已复习${item.review_count}次`,
-    arrangementText: current ? labels[item.arrangement_state] : "安排状态待更新" };
+    arrangementText: superseded ? "" : current ? labels[item.arrangement_state] : "安排状态待更新" };
 }
 
 function canWrite() {
@@ -54,9 +57,9 @@ function groupItems(items) {
 
 module.exports = {
   data: {
-    childId: "", view: "time", offset: 1, subjectId: "", count: null,
+    childId: "", reviewStatus: "normal", view: "time", offset: 1, subjectId: "", count: null,
     pickerOpen: false, selectedSubjectName: "请选择科目", countLabel: "全部", tomorrowLabel: "明天", dayAfterLabel: "后天",
-    views: [{ id: "time", label: "按时间" }, { id: "subject", label: "按科目" }, { id: "count", label: "按次数" }],
+    views: REVIEW_VIEWS,
     counts: [0, 1, 2, 3], subjects: [], subjectCursor: null, subjectHasPrevious: false, subjectLoading: false, subjectError: "",
     items: [], groups: [], total: 0, nextCursor: null, pageNumber: 1, loaded: false, loading: false, error: "",
     asOfDay: "", planDate: "", minutes: 0, budget: 0, overBudget: 0, canWrite: false,
@@ -90,7 +93,7 @@ module.exports = {
   onHide() { this.visible = false; this.showGeneration = (this.showGeneration || 0) + 1; this.generation = (this.generation || 0) + 1; this.subjectGeneration = (this.subjectGeneration || 0) + 1; this.setData({ target: null, showCountInput: false, pickerOpen: false, actionMenuId: "", actionMenuGroup: "", actionMenuAbove: false, deleting: false, saving: false }); },
   onUnload() { this.onHide(); },
   async onPullDownRefresh() { await this.reload(); wx.stopPullDownRefresh(); },
-  context() { return `${getApp().globalData.familyId || ""}:${this.data.childId}:${getApp().globalData.selectedChildId || ""}`; },
+  context() { return `${getApp().globalData.familyId || ""}:${this.data.childId}:${getApp().globalData.selectedChildId || ""}:${this.data.reviewStatus}`; },
   async reload() {
     this.currentCursor = null;
     this.setData({ pageNumber: 1, nextCursor: null, target: null, actionMenuId: "", actionMenuGroup: "", actionMenuAbove: false, conflict: false });
@@ -103,7 +106,7 @@ module.exports = {
     const context = this.context();
     this.setData({ subjectLoading: true, subjectError: "" });
     try {
-      const result = await api.request(`/children/${this.data.childId}/review-inventory/subjects?limit=20${cursor ? `&cursor=${encodeURIComponent(cursor)}` : ""}`);
+      const result = await api.request(`/children/${this.data.childId}/review-inventory/subjects?limit=20&review_status=${this.data.reviewStatus}${cursor ? `&cursor=${encodeURIComponent(cursor)}` : ""}`);
       if (!this.visible || generation !== this.subjectGeneration || context !== this.context() || this.data.view !== "subject") return;
       const selected = result.items.find(item => item.id === this.data.subjectId) ||
         (!this.data.subjectId ? result.items[0] : null);
@@ -129,8 +132,8 @@ module.exports = {
     if (!this.data.childId || (this.data.view === "subject" && !this.data.subjectId)) return;
     const generation = this.generation = (this.generation || 0) + 1;
     const context = this.context();
-    const { view, offset, subjectId, count } = this.data;
-    const query = [`view=${view}`, `offset=${offset}`, "limit=20"];
+    const { view, offset, subjectId, count, reviewStatus } = this.data;
+    const query = [`view=${view}`, `offset=${offset}`, "limit=20", `review_status=${reviewStatus}`];
     if (view === "subject") query.push(`subject_id=${encodeURIComponent(subjectId)}`);
     if (view === "count" && count !== null) query.push(`review_count=${count}`);
     if (cursor) query.push(`cursor=${encodeURIComponent(cursor)}`);
@@ -156,9 +159,25 @@ module.exports = {
         conflict: error.statusCode === 409 });
     }
   },
+  changeStatus(event) {
+    const reviewStatus = event.currentTarget.dataset.status;
+    if (this.data.saving || !["normal", "superseded"].includes(reviewStatus) || reviewStatus === this.data.reviewStatus) return;
+    this.generation = (this.generation || 0) + 1;
+    this.subjectGeneration = (this.subjectGeneration || 0) + 1;
+    this.pendingRequest = null;
+    this.setData({ reviewStatus, view: reviewStatus === "superseded" ? "count" : "time",
+      views: REVIEW_VIEWS.filter(item => reviewStatus === "normal" || item.id !== "time"),
+      subjectId: "", subjects: [], subjectCursor: null, subjectHasPrevious: false, subjectLoading: false, subjectError: "",
+      selectedSubjectName: "请选择科目", count: null, countLabel: "全部", offset: 1,
+      items: [], groups: [], total: 0, loaded: false, loading: false, error: "", notice: "",
+      showCountInput: false, countError: "", pickerOpen: false, deleting: false, saving: false,
+      actionMenuId: "", actionMenuGroup: "", actionMenuAbove: false, actionError: "", target: null });
+    return this.reload();
+  },
   changeView(event) {
     if (this.data.saving) return;
     const view = event.currentTarget.dataset.id;
+    if (!this.data.views.some(item => item.id === view)) return;
     if (view === this.data.view) return;
     this.generation = (this.generation || 0) + 1;
     this.subjectGeneration = (this.subjectGeneration || 0) + 1;
@@ -233,10 +252,14 @@ module.exports = {
     return this.mutate(event.currentTarget.dataset.action);
   },
   confirmDelete() { if (this.data.deleting) return this.mutate("delete"); },
+  openSource(event) {
+    const item = this.data.items.find(entry => entry.knowledge_id === event.currentTarget.dataset.id);
+    if (item && item.source_submission_id) wx.navigateTo({ url: `/pages/record-detail/index?id=${encodeURIComponent(item.source_submission_id)}` });
+  },
   async mutate(action) {
     const target = this.data.target;
     if (!target || this.data.saving || !this.data.canWrite || !canWrite() || this.data.conflict) return;
-    if (action !== "delete" && !target.can_schedule) return;
+    if (action !== "delete" && (target.review_status === "superseded" || !target.can_schedule)) return;
     if (action === "day_after" && !target.in_tomorrow_plan) return;
     const generation = this.generation;
     const context = this.context();

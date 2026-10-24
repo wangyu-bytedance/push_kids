@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>知芽 · 今日学习空区与一致性 03</title>
+<style>
+:root{--rpx:calc(100vw / 750);--pk-canvas:#FAF7F0;--pk-surface:#FFFDF8;--pk-primary:#1F5B45;--pk-primary-strong:#14402F;--pk-primary-tint:#E4EDE6;--pk-ink:#22261F;--pk-ink-2:#464E43;--pk-ink-3:#79826F;--pk-line:#EBE5D7;--pk-line-strong:#DDD6C4;--pk-danger:#A85742;--pk-serif:"Songti SC","Noto Serif SC","Noto Serif CJK SC","Source Han Serif SC","STSong",serif;--pk-sans:-apple-system,BlinkMacSystemFont,"PingFang SC","Noto Sans SC","Microsoft YaHei",sans-serif;--pk-s3:calc(24 * var(--rpx));--pk-s4:calc(32 * var(--rpx));--pk-s6:calc(48 * var(--rpx));--pk-border:calc(1 * var(--rpx)) solid rgba(34,38,31,.06);--pk-r-xl:calc(40 * var(--rpx));--pk-r-pill:999px;--pk-e0:0 calc(2 * var(--rpx)) calc(4 * var(--rpx)) #22261F0A}
+*{box-sizing:border-box}body{margin:0;background:var(--pk-canvas);color:var(--pk-ink);font:16px/1.6 var(--pk-sans);font-synthesis:none}button,a{font:inherit;color:inherit;-webkit-tap-highlight-color:transparent}button{border:0;background:none;cursor:pointer}a{text-decoration:none}button,a{overflow-wrap:anywhere}button:focus-visible,a:focus-visible{outline:2px solid var(--pk-primary);outline-offset:3px}h1,h2,h3,p{margin:0}h1{font:600 24px/1.28 var(--pk-serif);letter-spacing:.4px}.app{height:100dvh;max-width:480px;margin:auto;display:flex;flex-direction:column}.brand{display:flex;align-items:center;justify-content:center;gap:8px;height:68px;flex:none;font:600 23px var(--pk-serif)}.brand svg{width:24px;height:24px;fill:none;stroke:var(--pk-primary);stroke-width:2}.scroll{flex:1;min-height:0;overflow-y:auto;padding:12px calc(36 * var(--rpx)) 20px}.page-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:24px}.date{font-size:14px;color:var(--pk-ink-2);margin-top:8px}.child-chip{min-height:44px;min-width:80px;max-width:44%;display:flex;align-items:center;gap:8px;padding:4px 12px 4px 5px;border:var(--pk-border);border-radius:var(--pk-r-pill);background:var(--pk-surface);font-size:14px}.avatar{width:32px;height:32px;flex:none;border-radius:50%;background:var(--pk-primary-tint);color:var(--pk-primary);display:grid;place-items:center;font-family:var(--pk-serif)}.hero{padding:calc(36 * var(--rpx));border:var(--pk-border);border-radius:calc(48 * var(--rpx));background:radial-gradient(120% 130% at 100% 0%,#7FA65C29,transparent 58%),linear-gradient(158deg,#FFFEFA,#F7F4EA)}.hero-eyebrow{font-size:14px;color:var(--pk-primary)}.hero-line{font:600 19px/1.4 var(--pk-serif);margin-top:8px}.hero-note{font-size:14px;color:var(--pk-ink-2);margin:8px 0 16px}.btn{width:100%;min-width:0;max-width:none;min-height:44px;padding:10px 18px;border:0;border-radius:var(--pk-r-pill);background:var(--pk-primary);color:#FFFDF8;display:flex;align-items:center;justify-content:center;font:500 15px/1.4 var(--pk-sans);letter-spacing:.4px;text-align:center}.btn.secondary{background:var(--pk-primary-tint);color:var(--pk-primary-strong)}.btn:active{background:var(--pk-primary-strong);color:#FFFDF8}.sec{margin-top:var(--pk-s6)}.sec-bar{min-height:calc(80 * var(--rpx));display:flex;align-items:center;gap:8px;padding:0 calc(4 * var(--rpx))}.s-t{font:600 17px/1.45 var(--pk-serif);letter-spacing:.4px;flex:none}.s-m{font-size:14px;color:var(--pk-ink-2);margin-left:auto}.sec-rule{height:calc(1 * var(--rpx));margin:0 calc(4 * var(--rpx)) var(--pk-s3);background:linear-gradient(90deg,var(--pk-line-strong),transparent)}.pk-card{padding:var(--pk-s4);background:var(--pk-surface);border:var(--pk-border);border-radius:var(--pk-r-xl);box-shadow:var(--pk-e0)}.study-status,.study-meta{font-size:14px;color:var(--pk-ink-2);line-height:1.6;overflow-wrap:anywhere}.study-status{color:var(--pk-primary);margin-bottom:8px}.study-title{font:600 16px/1.4 var(--pk-sans);letter-spacing:.2px;overflow-wrap:anywhere}.study-meta{margin-top:8px}.study-copy{font-size:14px;line-height:1.65;color:var(--pk-ink-2);margin-top:12px;white-space:pre-wrap;overflow-wrap:anywhere}.study-card .btn{margin-top:16px}.link-btn{min-height:44px;width:100%;display:flex;align-items:center;justify-content:center;background:none;color:var(--pk-primary);font:500 14px/1.5 var(--pk-sans);margin-top:8px}.study-progress{padding:12px 0;font-size:14px;color:var(--pk-ink-2)}.study-progress .btn{margin-top:12px}.notice{margin-top:20px;padding:12px;border-left:2px solid var(--pk-danger);font-size:14px;color:var(--pk-danger)}.notice .link-btn{justify-content:flex-start}.review-row{display:flex;align-items:center;gap:12px}.review-row .grow{flex:1;min-width:0}.review-name{font:500 15px/1.45 var(--pk-sans)}.review-meta{font-size:14px;color:var(--pk-ink-2);margin-top:6px}.review-done{min-width:68px;min-height:44px;padding:8px 14px;border-radius:var(--pk-r-pill);background:var(--pk-primary);color:#FFFDF8;font-size:14px;flex:none}.nav{display:flex;flex:none;padding:6px 8px 10px;background:var(--pk-surface);border-top:var(--pk-border)}.nav button{flex:1;min-width:0;min-height:44px;padding:4px 2px;font-size:14px;color:var(--pk-ink-2)}.nav .active{color:var(--pk-primary);font-weight:600}@media(min-width:480px){:root{--rpx:.64px}}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto}}
+</style>
+<div class="app">
+  <header class="brand"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21V11M12 15C4 15 3 11 3 7c6 0 9 3 9 8ZM12 12c0-7 4-9 9-9 0 6-3 9-9 9Z"/></svg>知芽</header>
+  <main class="scroll" id="main"></main>
+  <nav class="nav" aria-label="主导航"><button class="active">今日</button><button>日程</button><button>记录</button><button>报表</button><button>设置</button></nav>
+</div>
+<script>
+'use strict';
+const states=['recent-new','warming-up','no-history','missing-grade','no-subject','disabled','inactive','eligible-empty','viewer-empty','unknown-empty','proposal','proposal-long','task','partial','viewer-task','task-feature-off','generating','generation-error','stale','recover-after-remove','network-error'];
+const hidden=states.slice(0,10);
+let state=new URLSearchParams(location.search).get('state')||'proposal';
+function link(label,target,cls){return '<a class="'+(cls||'btn secondary')+'" data-target="'+target+'" href="../DREV-20261024-TODAY-LEARNING-02/index.html?state='+target+'">'+label+'</a>';}
+function render(){
+ const task=['task','partial','viewer-task','task-feature-off'].includes(state),viewer=state==='viewer-task';
+ const proposal=['proposal','proposal-long'].includes(state);
+ const long=state==='proposal-long';
+ const title=long?'用小物件练习已经学过的加法'.repeat(10).slice(0,120):'用凑十法试算 8 + 7';
+ let html='<div class="page-head"><div><h1>今天，也慢慢来</h1><p class="date">10 月 24 日 星期六</p></div><button class="child-chip" aria-label="切换孩子"><span class="avatar">合</span>合成孩子</button></div>';
+ html+='<section class="hero"><p class="hero-eyebrow">今天的复习安排</p><p class="hero-line">今天安排 1 项，约 3 分钟</p><p class="hero-note">按自己的节奏，做一点就好。</p><button class="btn">记录学习</button></section>';
+ if(!hidden.includes(state)&&state!=='network-error'){
+  html+='<section class="sec study-region" aria-label="今日学习"><header class="sec-bar"><h2 class="s-t">今日学习</h2></header><div class="sec-rule"></div>';
+  if(task||proposal){
+   html+='<article class="pk-card study-card">';
+   if(task)html+='<p class="study-status">'+(state==='partial'?'已记录部分 · 继续待学':'家长已确认 · 待学')+'</p>';
+   html+='<h3 class="study-title">'+title+'</h3><p class="study-meta">数学 · 预计 12 分钟'+(proposal?' · AI 建议':'')+'</p>';
+   if(task)html+='<p class="study-copy">取 8 个和 7 个小物件。从 7 个里拿出 2 个与 8 个凑成 10，再数剩下的 5 个。</p><p class="study-meta">待学会保留，实际学过后再记录。</p>';
+   if(proposal)html+=link('查看学习建议','suggestion');
+   else if(viewer)html+='<p class="study-copy">当前为只读，请有编辑权限的家长记录。</p>';
+   else html+=link('记录实际学习','suggestion-record','btn')+link('删除并换一项','suggestion-delete','link-btn');
+   html+='</article>';
+  }else{
+   const recovery={generating:['正在准备学习建议','查看进度','suggestion-loading'],'generation-error':['学习建议暂时没准备好','查看并重试','suggestion-error'],stale:['学习内容有更新，请重新准备建议','查看并重新准备','suggestion-stale'],'recover-after-remove':['已移除待学，可以重新准备建议','重新准备建议','suggestion-loading']}[state];
+   html+='<div class="study-progress" role="status"><p>'+recovery[0]+'</p>'+link(recovery[1],recovery[2])+'</div>';
+  }
+  html+='</section>';
+ }
+ if(state==='network-error')html+='<div class="notice" role="alert">学习建议暂时没加载出来，请稍后重试。'+link('重新加载','suggestion-offline','link-btn')+'</div>';
+ html+='<section class="sec review-region"><header class="sec-bar"><h2 class="s-t">复习安排</h2><span class="s-m">今天 1 项</span></header><div class="sec-rule"></div><div class="pk-card review-row"><div class="grow"><p class="review-name">20 以内加法</p><p class="review-meta">数学 · 约 3 分钟</p></div><button class="review-done">完成</button></div></section>';
+ document.getElementById('main').innerHTML=html;
+ document.body.dataset.state=state;document.body.dataset.ready='true';
+}
+window.designStates=states;window.hiddenStates=hidden;window.designShow=function(next){if(!states.includes(next))throw Error('unknown design state');state=next;render();};render();
+</script>
+</html>

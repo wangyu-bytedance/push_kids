@@ -2,7 +2,7 @@
 // Audit rectangles returned by the native Mini Program renderer, not HTML previews.
 const fs = require("node:fs");
 
-const SELECTORS = [".inventory-page", ".filter-row", ".segment", ".filter-trigger", ".filter-panel", ".filter-option", ".more", ".item-main", ".item-title", ".item-meta", ".action-menu", ".group-toggle"];
+const SELECTORS = [".inventory-page", ".filter-row", ".segment", ".filter-trigger", ".filter-panel", ".filter-option", ".more", ".item-main", ".item-title", ".item-meta", ".action-menu", ".group-toggle", ".status-row", ".status-segment", ".source-link", ".item-coverage", ".menu-option"];
 const QUERY = `function() {
   return new Promise(resolve => {
     const q = wx.createSelectorQuery();
@@ -56,7 +56,7 @@ function audit(capture, expectedWidth) {
     if (panels[0]) check(contained(option, panels[0]), "filter option outside panel");
   }
   groups.forEach((rect, index) => check(rect.height >= 44, `group ${index}: toggle below 44px`));
-  check(more.length > 0, "no expanded writable item action to measure");
+  check(more.length > 0 || capture.readOnly || capture.empty, "no expanded writable item action to measure");
   more.forEach((rect, index) => {
     check(Math.abs(rect.width - 44) <= 1 && Math.abs(rect.height - 44) <= 1, `more ${index}: must be 44×44px`);
     if (page[0]) check(contained(rect, page[0]), `more ${index}: outside page`);
@@ -73,6 +73,26 @@ function audit(capture, expectedWidth) {
     const trigger = more[capture.menuTriggerIndex || 0];
     if (trigger) check(menu.top >= trigger.bottom - 1 || menu.bottom <= trigger.top + 1, `menu ${index}: overlaps trigger`);
   });
+  if (capture.reviewStatus) {
+    const [statusRows = [], statusButtons = [], sources = [], coverage = [], actions = []] = capture.nodes.slice(12);
+    check(statusRows.length === 1 && statusButtons.length === 2, "status selector missing");
+    if (statusButtons.length === 2) {
+      check(Math.abs(statusButtons[0].width - statusButtons[1].width) <= 1, "status segments unequal");
+      check(statusButtons[1].left - statusButtons[0].right >= 7.5, "status gap below 8px");
+    }
+    for (const rect of [...statusButtons, ...sources, ...actions]) {
+      check(rect.width >= 43 && rect.height >= 43, "status/source/action target below 44px");
+      if (page[0]) check(contained(rect, page[0]), "status/source/action outside page");
+    }
+    for (const rect of coverage) if (page[0]) check(contained(rect, page[0]), "covering text outside page");
+    check(!capture.readOnly || more.length === 0, "viewer has management actions");
+    if (capture.reviewStatus === "superseded") {
+      check(capture.view !== "time", "superseded has time view");
+      check(coverage.length === (capture.empty ? 0 : 1), "covering relationship missing");
+      check(sources.length === (capture.empty ? 0 : 1), "original source missing");
+      if (menus.length) check(actions.length === 1, "superseded menu must only delete");
+    }
+  }
   return errors;
 }
 
@@ -143,4 +163,4 @@ async function main() {
 }
 
 if (require.main === module) main().catch(error => { console.error(error.message); process.exitCode = 1; });
-module.exports = { audit };
+module.exports = { audit, SELECTORS, QUERY };

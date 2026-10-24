@@ -1,0 +1,26 @@
+{
+  "scope": "offline synthetic copy; no business writes or production network",
+  "source_sha256": {
+    "apps/miniprogram/components/today-learning/index.js": "75b77ab021332dacfd73cb20cdeecc1dc7569bf620efbbda59ac91c8963c13b8",
+    "apps/miniprogram/components/today-learning/index.json": "2f97104a3787d98b5058f0cab2aec29b5ff87542f95111dc6b2f2108ea38fb8a",
+    "apps/miniprogram/components/today-learning/index.wxml": "10518efa1fd873faa7e185cc3fd98a83e8fa1455d829b5bcbb666953bf86bcd3",
+    "apps/miniprogram/components/today-learning/index.wxss": "ea0816949238bdb01ef10173cc3ba890d3f2a3772df3cc64b5cc326933779b31",
+    "apps/miniprogram/components/todo-card/index.js": "735bca4375d72396a446f78ea55e09224b679a5d66d6a417c4c10df96ece2663",
+    "apps/miniprogram/components/todo-card/index.json": "e7b657f5a4b032a68e9e084639b3a5564ce552896d269c3f8c4463bf7a7fa3b5",
+    "apps/miniprogram/components/todo-card/index.wxml": "b4f23d982935fe28a82443b89882c1c5d6b1399d26ecbf410d4182b1cd0ffaf2",
+    "apps/miniprogram/components/todo-card/index.wxss": "9b44689ac3a57b598c74574d86d7847469d2c803df17c2adf3984370ce010dda",
+    "apps/miniprogram/pages/today/index.js": "152d4dcc6dae327224c37e1bbcb0e6204707310f499e13163ba7fba38efd09d0",
+    "apps/miniprogram/pages/today/index.json": "35f5195cbcc51040db4fb927e4f5e7a9287472666ec765dcde71b7312989dc0f",
+    "apps/miniprogram/pages/today/index.wxml": "bc0626f5348e0962eb1050beece098528995ea001cbd86e953fc524f576ced01",
+    "apps/miniprogram/pages/today/index.wxss": "c6a298297f7e8d3e4e2c84b70bc3d860e323d374171483f4257cb9142c971415",
+    "tools/today_learning_geometry.js": "a1b328588df5a99d51c3c5d93c2c74d8d69bb67442dca8f683015be2f9e1a762",
+    "tools/prepare_today_learning_native.py": "6e9cd218861872412de17834cd3fc6344a791e1905d33d4bbbce2f6b9c9973fb"
+  },
+  "copy_only_changes": [
+    "synthetic read-only api",
+    "Today first",
+    "plugins removed",
+    "geometry fixture setter",
+    "base library 3.17.4"
+  ]
+}

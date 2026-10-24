@@ -1,0 +1,30 @@
+{
+  "date": "2026-10-24",
+  "phase": "PRE_IMPLEMENTATION",
+  "runtime": "Full original local WeChat DevTools project, real AppID, automation port 9465",
+  "source_modified": false,
+  "fixture_injection": false,
+  "business_write": false,
+  "first_attempt": {
+    "status": "NOT_RUN",
+    "reason": "initial_route_is_not_travel",
+    "start": {"route": "pages/records/index", "type": "learning"}
+  },
+  "second_attempt": {
+    "status": "PASS",
+    "steps": ["existing selectRecordType(travel)", "switchTab(today)", "existing today.recordLearning()", "wait for records learning load"],
+    "initial_type": "travel",
+    "final_route": "pages/records/index",
+    "final_type": "learning",
+    "loading": false,
+    "error": false,
+    "has_child": true,
+    "intent_pending": false
+  },
+  "limits": [
+    "One clean native navigation path; does not reproduce all user-reported conditions",
+    "No unsaved learning input, active travel upload or travel edit in this probe",
+    "No child names, IDs, images, request bodies or credentials retained",
+    "Not evidence of new implementation, full native geometry or physical-device acceptance"
+  ]
+}

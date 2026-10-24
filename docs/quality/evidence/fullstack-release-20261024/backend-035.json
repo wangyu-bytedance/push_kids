@@ -1,0 +1,88 @@
+{
+  "observed_at": "2026-10-24T03:03:33.421Z",
+  "spec_revision": "OPS-SPEC-20261023-FULLSTACK-TEST-DEPLOYMENT-04",
+  "read_only": true,
+  "env": "prod-d2g14rwoycac6b45d",
+  "service": "flask-ik19",
+  "new_version": "flask-ik19-035",
+  "remark": "full-20261024-bug031-ops04-01",
+  "container_port": 8000,
+  "build_dir": ".",
+  "dockerfile": "Dockerfile",
+  "configuration": {
+    "keys": 18,
+    "coverage_disabled": true,
+    "differs_from_base": [],
+    "differs_from_034": "034 deleted; earlier equality verified"
+  },
+  "resources": {
+    "cpu": 0.25,
+    "memory": 0.5,
+    "min": 0,
+    "max": 5
+  },
+  "image_reference": "ccr.ccs.tencentyun.com/tcb-100038957625-qlka/ca-mswkexqy_flask-ik19:flask-ik19-035-20261024105555",
+  "image_differs_from_034": "034 deleted",
+  "old_034_deleted": true,
+  "old_code_replicas": 0,
+  "total_versions": 8,
+  "versions_complete": true,
+  "versions": [
+    {
+      "name": "flask-ik19-020",
+      "status": "normal",
+      "replicas": 0,
+      "flow": 0
+    },
+    {
+      "name": "flask-ik19-021",
+      "status": "normal",
+      "replicas": 0,
+      "flow": 0
+    },
+    {
+      "name": "flask-ik19-022",
+      "status": "normal",
+      "replicas": 0,
+      "flow": 0
+    },
+    {
+      "name": "flask-ik19-023",
+      "status": "normal",
+      "replicas": 0,
+      "flow": 0
+    },
+    {
+      "name": "flask-ik19-024",
+      "status": "normal",
+      "replicas": 0,
+      "flow": 0
+    },
+    {
+      "name": "flask-ik19-025",
+      "status": "normal",
+      "replicas": 0,
+      "flow": 0
+    },
+    {
+      "name": "flask-ik19-026",
+      "status": "normal",
+      "replicas": 0,
+      "flow": 0
+    },
+    {
+      "name": "flask-ik19-035",
+      "status": "normal",
+      "replicas": 1,
+      "flow": 100
+    }
+  ],
+  "access_types": [
+    "OA",
+    "MINIAPP"
+  ],
+  "real_callcontainer_new_version_health": "PASS",
+  "automatic_cutover": false,
+  "automatic_version_deletion": false,
+  "health_evidence_observed_at": "2026-10-24T03:01:18.311Z"
+}

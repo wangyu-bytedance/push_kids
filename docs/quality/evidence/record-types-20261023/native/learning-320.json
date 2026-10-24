@@ -1,0 +1,84 @@
+{
+  "nodes": {
+    ".record-heading": [
+      {
+        "left": 0,
+        "right": 320,
+        "top": 60,
+        "bottom": 135,
+        "width": 320,
+        "height": 75,
+        "fontSize": "16px"
+      }
+    ],
+    ".record-type-title": [
+      {
+        "left": 15,
+        "right": 117,
+        "top": 70,
+        "bottom": 119,
+        "width": 102,
+        "height": 49,
+        "fontSize": "22px"
+      }
+    ],
+    ".record-child": [
+      {
+        "left": 211,
+        "right": 305,
+        "top": 72.5,
+        "bottom": 116.5,
+        "width": 94,
+        "height": 44,
+        "fontSize": "14px"
+      }
+    ],
+    ".record-type-sheet": [],
+    ".record-type-close": [],
+    ".record-type-choice": [],
+    ".record-type-head": [],
+    ".record-cta": [
+      {
+        "left": 0,
+        "right": 320,
+        "top": 405,
+        "bottom": 509,
+        "width": 320,
+        "height": 104,
+        "fontSize": "16px"
+      }
+    ],
+    ".tabbar": [
+      {
+        "left": 0,
+        "right": 320,
+        "top": 522,
+        "bottom": 568,
+        "width": 320,
+        "height": 46,
+        "fontSize": "16px"
+      }
+    ]
+  },
+  "scrollLeft": 0,
+  "viewport": {
+    "width": 320,
+    "height": 568,
+    "screenHeight": 568,
+    "dpr": 2,
+    "baseLibrary": "3.17.4",
+    "fontScale": 15
+  },
+  "recordType": "learning",
+  "overlayOpen": false,
+  "childId": "synthetic",
+  "state": "learning",
+  "errors": [],
+  "capturedAt": "2026-10-23T07:02:39.328Z",
+  "screenshot": "learning-320.png",
+  "screenshotSha256": "548f7f452772e3fe372db8b403b502444e3984746e0c5fd85916e7f17ccada0a",
+  "screenshotPixels": {
+    "width": 640,
+    "height": 1136
+  }
+}

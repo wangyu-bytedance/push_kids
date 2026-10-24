@@ -26,6 +26,7 @@ class StagedArkProvider:
 
     def __init__(self, settings: Settings):
         self.settings = settings
+        self.coverage_enabled = settings.coverage_enabled
         self.model = settings.ark_model
         self.concurrency = settings.analysis_concurrency
         self.parameter_revision = f"{self.model}:disabled:4096:8192:2048"
@@ -89,6 +90,7 @@ class StagedArkProvider:
                             "group": 4096,
                             "merge": 8192,
                             "match": 2048,
+                            "coverage": 4096,
                         }[stage],
                         extra_body={"thinking": {"type": "disabled"}},
                         text={

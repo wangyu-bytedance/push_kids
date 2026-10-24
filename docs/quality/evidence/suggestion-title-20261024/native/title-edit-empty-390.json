@@ -1,0 +1,543 @@
+{
+  "nodes": {
+    ".study-region": [
+      {
+        "left": 18,
+        "right": 372,
+        "top": 436,
+        "bottom": 662,
+        "width": 354,
+        "height": 226,
+        "fontSize": "16px",
+        "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "fontWeight": "400",
+        "lineHeight": "25.6px",
+        "letterSpacing": "normal",
+        "borderRadius": "0px",
+        "paddingLeft": "0px",
+        "paddingRight": "0px",
+        "textAlign": "start",
+        "justifyContent": "normal"
+      }
+    ],
+    ".study-region .s-t": [
+      {
+        "left": 20,
+        "right": 89.609375,
+        "top": 446,
+        "bottom": 470,
+        "width": 69.609375,
+        "height": 24,
+        "fontSize": "17px",
+        "fontFamily": "\"Songti SC\", \"Noto Serif SC\", \"Noto Serif CJK SC\", \"Source Han Serif SC\", STSong, serif",
+        "fontWeight": "600",
+        "lineHeight": "24.65px",
+        "letterSpacing": "0.4px",
+        "borderRadius": "0px",
+        "paddingLeft": "0px",
+        "paddingRight": "0px",
+        "textAlign": "start",
+        "justifyContent": "normal"
+      }
+    ],
+    ".study-card": [
+      {
+        "left": 18,
+        "right": 372,
+        "top": 493,
+        "bottom": 662,
+        "width": 354,
+        "height": 169,
+        "fontSize": "16px",
+        "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "fontWeight": "400",
+        "lineHeight": "25.6px",
+        "letterSpacing": "normal",
+        "borderRadius": "20px",
+        "paddingLeft": "16px",
+        "paddingRight": "16px",
+        "textAlign": "start",
+        "justifyContent": "normal"
+      }
+    ],
+    ".study-card .study-title": [
+      {
+        "left": 35,
+        "right": 355,
+        "top": 510,
+        "bottom": 554,
+        "width": 320,
+        "height": 44,
+        "fontSize": "16px",
+        "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "fontWeight": "600",
+        "lineHeight": "22.4px",
+        "letterSpacing": "0.2px",
+        "borderRadius": "0px",
+        "paddingLeft": "0px",
+        "paddingRight": "0px",
+        "textAlign": "start",
+        "justifyContent": "normal"
+      }
+    ],
+    ".study-region .btn": [
+      {
+        "left": 35,
+        "right": 355,
+        "top": 600,
+        "bottom": 645,
+        "width": 320,
+        "height": 45,
+        "fontSize": "15px",
+        "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "fontWeight": "500",
+        "lineHeight": "18px",
+        "letterSpacing": "0.4px",
+        "borderRadius": "519px",
+        "paddingLeft": "18px",
+        "paddingRight": "18px",
+        "textAlign": "center",
+        "justifyContent": "center"
+      }
+    ],
+    ".study-card .link-btn": [],
+    ".study-progress": [],
+    ".study-error-inline": [],
+    ".study-error-inline .link-btn": [],
+    ".study-label": [
+      {
+        "left": 16,
+        "right": 112,
+        "top": 253.5,
+        "bottom": 278.5,
+        "width": 96,
+        "height": 25,
+        "fontSize": "16px",
+        "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "fontWeight": "600",
+        "lineHeight": "25.6px",
+        "letterSpacing": "normal",
+        "borderRadius": "0px",
+        "paddingLeft": "0px",
+        "paddingRight": "0px",
+        "textAlign": "start",
+        "justifyContent": "normal"
+      }
+    ],
+    ".study-title": [
+      {
+        "left": 35,
+        "right": 355,
+        "top": 510,
+        "bottom": 554,
+        "width": 320,
+        "height": 44,
+        "fontSize": "16px",
+        "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "fontWeight": "600",
+        "lineHeight": "22.4px",
+        "letterSpacing": "0.2px",
+        "borderRadius": "0px",
+        "paddingLeft": "0px",
+        "paddingRight": "0px",
+        "textAlign": "start",
+        "justifyContent": "normal"
+      }
+    ],
+    ".study-meta": [
+      {
+        "left": 35,
+        "right": 355,
+        "top": 562,
+        "bottom": 584,
+        "width": 320,
+        "height": 22,
+        "fontSize": "14px",
+        "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "fontWeight": "400",
+        "lineHeight": "22.4px",
+        "letterSpacing": "normal",
+        "borderRadius": "0px",
+        "paddingLeft": "0px",
+        "paddingRight": "0px",
+        "textAlign": "start",
+        "justifyContent": "normal"
+      }
+    ],
+    ".study-copy": [],
+    ".study-source": [],
+    ".study-sheet": [
+      {
+        "left": 0,
+        "right": 390,
+        "top": 236,
+        "bottom": 844,
+        "width": 390,
+        "height": 608,
+        "fontSize": "16px",
+        "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "fontWeight": "400",
+        "lineHeight": "25.6px",
+        "letterSpacing": "normal",
+        "borderRadius": "20px 20px 0px 0px",
+        "paddingLeft": "0px",
+        "paddingRight": "0px",
+        "textAlign": "start",
+        "justifyContent": "normal"
+      }
+    ],
+    ".study-top": [
+      {
+        "left": 0,
+        "right": 390,
+        "top": 236,
+        "bottom": 297,
+        "width": 390,
+        "height": 61,
+        "fontSize": "16px",
+        "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "fontWeight": "400",
+        "lineHeight": "25.6px",
+        "letterSpacing": "normal",
+        "borderRadius": "0px",
+        "paddingLeft": "16px",
+        "paddingRight": "16px",
+        "textAlign": "start",
+        "justifyContent": "space-between"
+      }
+    ],
+    ".study-close": [
+      {
+        "left": 330,
+        "right": 374,
+        "top": 244,
+        "bottom": 288,
+        "width": 44,
+        "height": 44,
+        "fontSize": "15px",
+        "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "fontWeight": "700",
+        "lineHeight": "22.5px",
+        "letterSpacing": "normal",
+        "borderRadius": "8px",
+        "paddingLeft": "0px",
+        "paddingRight": "0px",
+        "textAlign": "center",
+        "justifyContent": "center"
+      }
+    ],
+    ".study-body": [
+      {
+        "left": 0,
+        "right": 390,
+        "top": 297,
+        "bottom": 745,
+        "width": 390,
+        "height": 448,
+        "fontSize": "16px",
+        "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "fontWeight": "400",
+        "lineHeight": "25.6px",
+        "letterSpacing": "normal",
+        "borderRadius": "0px",
+        "paddingLeft": "16px",
+        "paddingRight": "16px",
+        "textAlign": "start",
+        "justifyContent": "normal"
+      }
+    ],
+    ".study-actions": [
+      {
+        "left": 0,
+        "right": 390,
+        "top": 745,
+        "bottom": 810,
+        "width": 390,
+        "height": 65,
+        "fontSize": "16px",
+        "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "fontWeight": "400",
+        "lineHeight": "25.6px",
+        "letterSpacing": "normal",
+        "borderRadius": "0px",
+        "paddingLeft": "16px",
+        "paddingRight": "16px",
+        "textAlign": "start",
+        "justifyContent": "normal"
+      }
+    ],
+    ".study-primary": [
+      {
+        "left": 16,
+        "right": 374,
+        "top": 754,
+        "bottom": 798,
+        "width": 358,
+        "height": 44,
+        "fontSize": "15px",
+        "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "fontWeight": "700",
+        "lineHeight": "22.5px",
+        "letterSpacing": "normal",
+        "borderRadius": "8px",
+        "paddingLeft": "12px",
+        "paddingRight": "12px",
+        "textAlign": "center",
+        "justifyContent": "center"
+      }
+    ],
+    ".study-secondary": [],
+    ".study-quiet": [],
+    ".study-input": [
+      {
+        "left": 16,
+        "right": 374,
+        "top": 349,
+        "bottom": 397,
+        "width": 358,
+        "height": 48,
+        "fontSize": "16px",
+        "fontFamily": "UICTFontTextStyleBody",
+        "fontWeight": "400",
+        "lineHeight": "25.6px",
+        "letterSpacing": "normal",
+        "borderRadius": "8px",
+        "paddingLeft": "10px",
+        "paddingRight": "10px",
+        "textAlign": "start",
+        "justifyContent": "normal"
+      },
+      {
+        "left": 16,
+        "right": 374,
+        "top": 685,
+        "bottom": 733,
+        "width": 358,
+        "height": 48,
+        "fontSize": "16px",
+        "fontFamily": "UICTFontTextStyleBody",
+        "fontWeight": "400",
+        "lineHeight": "25.6px",
+        "letterSpacing": "normal",
+        "borderRadius": "8px",
+        "paddingLeft": "10px",
+        "paddingRight": "10px",
+        "textAlign": "start",
+        "justifyContent": "normal"
+      }
+    ],
+    ".study-textarea": [
+      {
+        "left": 16,
+        "right": 374,
+        "top": 465,
+        "bottom": 645,
+        "width": 358,
+        "height": 180,
+        "fontSize": "16px",
+        "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "fontWeight": "400",
+        "lineHeight": "25.6px",
+        "letterSpacing": "normal",
+        "borderRadius": "8px",
+        "paddingLeft": "10px",
+        "paddingRight": "10px",
+        "textAlign": "start",
+        "justifyContent": "normal"
+      }
+    ],
+    ".study-picker": [],
+    ".study-actions .study-primary": [
+      {
+        "left": 16,
+        "right": 374,
+        "top": 754,
+        "bottom": 798,
+        "width": 358,
+        "height": 44,
+        "fontSize": "15px",
+        "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "fontWeight": "700",
+        "lineHeight": "22.5px",
+        "letterSpacing": "normal",
+        "borderRadius": "8px",
+        "paddingLeft": "12px",
+        "paddingRight": "12px",
+        "textAlign": "center",
+        "justifyContent": "center"
+      }
+    ],
+    ".study-secondary-row .study-secondary": [],
+    ".study-defer": [],
+    ".study-proposal-heading": [],
+    ".study-title-scroll": [],
+    ".study-proposal-title": [],
+    ".study-proposal-meta": [],
+    ".study-close .ico": [],
+    ".study-field-row": [
+      {
+        "left": 16,
+        "right": 374,
+        "top": 321,
+        "bottom": 343,
+        "width": 358,
+        "height": 22,
+        "fontSize": "16px",
+        "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "fontWeight": "400",
+        "lineHeight": "25.6px",
+        "letterSpacing": "normal",
+        "borderRadius": "0px",
+        "paddingLeft": "0px",
+        "paddingRight": "0px",
+        "textAlign": "start",
+        "justifyContent": "space-between"
+      }
+    ],
+    ".study-field-row .study-field-label": [
+      {
+        "left": 16,
+        "right": 72,
+        "top": 321,
+        "bottom": 343,
+        "width": 56,
+        "height": 22,
+        "fontSize": "14px",
+        "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "fontWeight": "600",
+        "lineHeight": "22.4px",
+        "letterSpacing": "normal",
+        "borderRadius": "0px",
+        "paddingLeft": "0px",
+        "paddingRight": "0px",
+        "textAlign": "start",
+        "justifyContent": "normal"
+      }
+    ],
+    ".study-title-counter": [
+      {
+        "left": 344.25,
+        "right": 374,
+        "top": 321,
+        "bottom": 343,
+        "width": 29.75,
+        "height": 22,
+        "fontSize": "14px",
+        "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "fontWeight": "400",
+        "lineHeight": "22.4px",
+        "letterSpacing": "normal",
+        "borderRadius": "0px",
+        "paddingLeft": "0px",
+        "paddingRight": "0px",
+        "textAlign": "start",
+        "justifyContent": "normal"
+      }
+    ],
+    ".study-title-error": [
+      {
+        "left": 16,
+        "right": 374,
+        "top": 403,
+        "bottom": 425,
+        "width": 358,
+        "height": 22,
+        "fontSize": "14px",
+        "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "fontWeight": "400",
+        "lineHeight": "22.4px",
+        "letterSpacing": "normal",
+        "borderRadius": "0px",
+        "paddingLeft": "0px",
+        "paddingRight": "0px",
+        "textAlign": "start",
+        "justifyContent": "normal"
+      }
+    ],
+    "#study-title": [
+      {
+        "left": 16,
+        "right": 374,
+        "top": 349,
+        "bottom": 397,
+        "width": 358,
+        "height": 48,
+        "fontSize": "16px",
+        "fontFamily": "UICTFontTextStyleBody",
+        "fontWeight": "400",
+        "lineHeight": "25.6px",
+        "letterSpacing": "normal",
+        "borderRadius": "8px",
+        "paddingLeft": "10px",
+        "paddingRight": "10px",
+        "textAlign": "start",
+        "justifyContent": "normal"
+      }
+    ]
+  },
+  "hero": {
+    "id": "",
+    "dataset": {},
+    "left": 18,
+    "right": 372,
+    "top": 183,
+    "bottom": 412,
+    "width": 354,
+    "height": 229
+  },
+  "reviewHeading": {
+    "left": 20,
+    "right": 89.609375,
+    "top": 696,
+    "bottom": 720,
+    "width": 69.609375,
+    "height": 24,
+    "fontSize": "17px",
+    "fontFamily": "\"Songti SC\", \"Noto Serif SC\", \"Noto Serif CJK SC\", \"Source Han Serif SC\", STSong, serif",
+    "fontWeight": "600",
+    "lineHeight": "24.65px",
+    "letterSpacing": "0.4px"
+  },
+  "reviewBar": {
+    "id": "",
+    "dataset": {
+      "section": "review"
+    },
+    "left": 18,
+    "right": 372,
+    "top": 686,
+    "bottom": 730,
+    "width": 354,
+    "height": 44
+  },
+  "reviewSection": {
+    "left": 18,
+    "right": 372,
+    "top": 686,
+    "bottom": 731,
+    "width": 354,
+    "height": 45,
+    "marginTop": "24px"
+  },
+  "card": "proposal",
+  "scrollLeft": 0,
+  "headingScrollTop": 0,
+  "viewport": {
+    "width": 390,
+    "height": 844,
+    "screenHeight": 844,
+    "dpr": 3,
+    "baseLibrary": "3.17.4"
+  },
+  "sheet": "edit",
+  "titleState": {
+    "value": "",
+    "count": 0,
+    "error": "请填写学习标题。",
+    "busy": false
+  },
+  "state": "title-edit-empty",
+  "errors": [],
+  "capturedAt": "2026-10-24T13:07:41.748Z",
+  "screenshotSha256": "669a93c708652f0dd9519949d5125c29d42869218ddfae1be40eef0ec9ca05de"
+}

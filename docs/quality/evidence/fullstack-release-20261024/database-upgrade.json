@@ -1,0 +1,28 @@
+{
+  "started_at": "2026-10-24T02:54:54.207460+00:00",
+  "database": "push_kids",
+  "target_schema": "20261020_0022",
+  "spec_revision": "OPS-SPEC-20261023-FULLSTACK-TEST-DEPLOYMENT-04",
+  "old_version_034_may_still_run": true,
+  "mode": "upgrade",
+  "steps": [
+    {
+      "name": "frozen_integrity_target_schema_and_inflight",
+      "status": "PASS"
+    }
+  ],
+  "status": "FAIL",
+  "schema_before": "20261012_0019",
+  "server_version": "5.7.18-cynos-2.1.14-log",
+  "preflight_inflight_and_queued_counts": [
+    0,
+    0,
+    0,
+    0
+  ],
+  "current_step": "alembic_current_before",
+  "error_category": "ProgrammingError",
+  "database_error_number": 1064,
+  "schema_after_failure": "20261012_0019",
+  "finished_at": "2026-10-24T02:54:57.184296+00:00"
+}

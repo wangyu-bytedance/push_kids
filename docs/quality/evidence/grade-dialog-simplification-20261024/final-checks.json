@@ -1,0 +1,56 @@
+{
+  "date": "2026-10-24",
+  "scope": "Grade-dialog simplification, shared dirty checkout; local only",
+  "frontend": {
+    "command": "npm test",
+    "exit_code": 0,
+    "tests": 327,
+    "passed": 327,
+    "failed": 0,
+    "skipped": 0,
+    "duration_ms": 1661.112625,
+    "note": "Final run output was streamed through the command tool, not saved as a complete TAP log. frontend.log preserves the earlier 317-test run. The additional ten tests belong to other concurrent work."
+  },
+  "targeted": {
+    "command": "node --test tests/frontend/grade-confirmation.test.js tests/frontend/child-profiles.test.js tests/frontend/family-onboarding.test.js",
+    "exit_code": 0,
+    "passed": 53,
+    "log": "frontend-targeted.log"
+  },
+  "eslint": { "command": "npm run lint:miniapp", "exit_code": 0 },
+  "miniapp": {
+    "command": ".venv/bin/python tools/validate_miniprogram.py",
+    "exit_code": 0,
+    "pages": 17,
+    "source_bytes": 1219222,
+    "note": "Source count from final static run, not an official uploaded package size."
+  },
+  "architecture": {
+    "command": ".venv/bin/python tools/check_architecture.py",
+    "exit_code": 0,
+    "policies": 4,
+    "modules": 150,
+    "log": "architecture.log"
+  },
+  "design_manifests": {
+    "command": ".venv/bin/python tools/validate_design_evidence.py --manifest <DREV01-or-DREV02>/APPROVAL.md --check-current-policy",
+    "exit_code": 0,
+    "revisions": ["DREV-20261024-ANNUAL-GRADE-PROMOTION-01", "DREV-20261024-ANNUAL-GRADE-PROMOTION-02"]
+  },
+  "verification_tools": {
+    "node_syntax_exit_code": 0,
+    "ruff_check_exit_code": 0,
+    "ruff_format_exit_code": 0,
+    "python_files": ["tools/prepare_grade_confirmation_native.py", "docs/design/frontend/prototypes/DREV-20261024-ANNUAL-GRADE-PROMOTION-02/render.py"],
+    "javascript_file": "tools/grade_confirmation_geometry.js"
+  },
+  "native": {
+    "matrix_passed": 51,
+    "actual_interaction_pairs_passed": 3,
+    "viewports": [[320, 568], [390, 844], [430, 932]],
+    "note": "Per-state JSON and PNG hashes, distinct source stages and failures are bound in manifest.json."
+  },
+  "not_run": ["real iOS/Android", "system enlarged font", "screen reader and focus", "two-parent old-client native end-to-end", "backend and database reruns for this presentation-only increment"],
+  "release": "NOT_UPLOADED / NOT_DEPLOYED / NOT_RELEASED",
+  "spec_status": "VERIFYING"
+}

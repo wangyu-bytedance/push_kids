@@ -1,0 +1,22 @@
+{
+  "source": "../record-entry-20261024/implementation-final.json",
+  "scope": "Pre-existing source digest from BUG-032 before this implementation, not a newly captured preimplementation snapshot",
+  "previous_manifest_sha256": "ae0fb0ef5e68bc9e3dd6bb5b3ad135458117a336c71a53e7eb36263accc31879",
+  "changed_coupled_production_files": [
+    {
+      "file": "apps/miniprogram/pages/footprints/controller.js",
+      "previous_sha256": "2050be93dd2b09ef6ae6c1cb0ba559d7868330563ec69e22ef5ed175e87e5916",
+      "current_sha256": "aef446c3bd67af4a729e2797ed5400d8cb1d1604725265f2a622a935742d8670"
+    },
+    {
+      "file": "apps/miniprogram/pages/footprints/index.wxml",
+      "previous_sha256": "343c1f7dafc28e1b09803c853db4772d82e64e724d55f9f787e2b4791593f8a5",
+      "current_sha256": "8fa9dc14bb6d729230e6b39538e5b339a1109d3881755ce8a6df9ab723ca70eb"
+    },
+    {
+      "file": "apps/miniprogram/pages/footprints/index.wxss",
+      "previous_sha256": "27d41578bcb9d8a5e79ec4e21879356fdc99f6bfd4bbddca39517dec813e417a",
+      "current_sha256": "39ca6d1ffcea8d3ebd0576af9367b71ba7e475e4d3fc30eb4e18531aa93e5bef"
+    }
+  ]
+}

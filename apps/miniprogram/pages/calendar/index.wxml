@@ -1,3 +1,4 @@
+<view aria-hidden="{{gradeConfirmationVisible}}">
 <primary-nav></primary-nav>
 <view class="page calendar-page">
   <view class="pg-head pk-hero calendar-intro">
@@ -186,3 +187,5 @@
     </view>
   </view>
 </view>
+</view>
+<grade-confirmation id="grade-confirmation" view="{{gradeConfirmation}}" blocked="{{loading || showChildSheet || showEditor || saving}}" bindaction="onGradeConfirmation"></grade-confirmation>

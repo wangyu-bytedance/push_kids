@@ -1,0 +1,41 @@
+{
+  "viewport": {
+    "width": 390,
+    "height": 753,
+    "screenHeight": 844,
+    "dpr": 3,
+    "fontScale": 15,
+    "baseLibrary": "3.17.4"
+  },
+  "nodes": {
+    ".page": [
+      {
+        "left": 0,
+        "right": 390,
+        "top": 87,
+        "bottom": 561,
+        "width": 390,
+        "height": 474,
+        "fontSize": "16px"
+      }
+    ],
+    ".auto-card": [],
+    ".noti-row": [],
+    ".noti-row .grow": [],
+    ".noti-switch": [],
+    ".grant-link": [],
+    ".notice-hero .btn": [],
+    ".auto-card switch": [],
+    ".icon-btn": [],
+    ".auto-copy": [],
+    ".r-s": [],
+    ".noti-state .pill": [],
+    ".n-txt": [],
+    ".hero-note": [],
+    ".help": []
+  },
+  "expectedWidth": 390,
+  "state": "today-quiet",
+  "fixture": "synthetic native page; no grant/provider invocation",
+  "screenshot": "NOT_RUN: automation screenshot unavailable; CUA samples separate"
+}

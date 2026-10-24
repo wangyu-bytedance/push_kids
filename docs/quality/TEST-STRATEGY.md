@@ -1,5 +1,19 @@
 # Test strategy — FEAT-001
 
+2026-10-24标题约束增量：已批准Title Limit Spec01/Architecture01/DREV04。新生成/PATCH标题统一trim后1–20码点、无内部换行；覆盖0/1/20/21/120、非BMP与绕过验证的provider实例、版本/JSON/任务/正式事实零写入，及旧120字完整读取/审批/记录/删除/主动精简。前端覆盖计数、无效零PATCH、失败保留及不同操作幂等键、reset/hide后排队焦点失效。先红后绿：后端11失败/9通过，前端4失败；现专项后端52、前端18，全量后端780通过/40个MySQL环境相关跳过、前端332通过。三视口各13态原生共39态和独立复核通过，含20字标题两行、14px计数/错误、21/空/旧120/非BMP、错误/保存及旧标题实际滚动；[绑定证据](evidence/SUGGESTION-TITLE-IMPLEMENTATION-20261024.md)明确真机/键盘/大字体/读屏未验，Spec留VERIFYING。下方120字用例仅为旧数据兼容，不再代表新生成/编辑有效上限。
+
+2026-10-24今日卡片显隐增量：已批准Card Visibility Spec01/DREV03。前端测试覆盖所有无资格/eligible空态、可写/只读、Task优先和开关关闭、生成/失败/失效/删除恢复、显示投影零写入、隐藏仍自动提示、请求失败保留及重置。原生要求21卡片态×320×568/390×844/430×932，节点与截图共同核对空区零节点/额外间距、邻接分区字体家族/字阶/字重/行高/字距一致、长标题完整、全宽胶囊及44px触控；另回归6个既有DREV02弹层态。当前327项前端和三视口81组原生通过（63卡片＋18弹层）；320初次取证脚本未计既有44px触控下限，改采实际bar/section矩形后全部重跑通过，首次失败留证；源码绑定、实际结果和设备/可访问性缺口见[本轮证据](evidence/TODAY-CARD-IMPLEMENTATION-20261024.md)。设计63张和旧弹层45组不能代验新卡片。
+
+2026-10-24建议弹层精简增量：针对等待中的重复确认/关闭、失败保留和同幂等键重试运行前端专项；标题/元信息、全宽确认、等宽编辑/换项、独立暂缓、44px关闭和8px间隔须由320×568、390×844、430×932原生节点和截图共同验证。覆盖普通与历史长标题、旧120字兼容、实际滚动或全内容可见、等待、失败、编辑及邻接待学状态；新生成/编辑有效上限由上方DREV04改为20码点。合成副本只增加测试setter和标题滚动取证绑定，禁止业务写入；45组取证及源码/工具版本说明见[实现证据](evidence/SUGGESTION-SHEET-IMPLEMENTATION-20261024.md)。默认字体模拟器不代替系统大字体、读屏、实际键盘或真机。
+
+2026-10-24今日学习增量专项：按两份批准Spec04执行`test_today_learning_policy`、`test_empty_day_early_review`、`test_learning_suggestions`、`test_today_learning_migrations`、`test_today_learning_reads`及`today-learning.test.js`。迁移固定0022→0024，避免独立0025改变旧库夹具；SQLite10k/50k验证有界上下文、槽索引和实际SQL数量，自动提示普通命令≤15条领域SQL（身份认证固定查询另计），/current≤8。MySQL5.7须实际引擎验证，MySQL8不可替代。78张设计PNG与合成原生矩形各有用途，均不能代替键盘、读屏、真实设备或内容/主体适用验收。精确本轮结果和未执行原因以[证据](evidence/TODAY-LEARNING-IMPLEMENTATION-20261024.md)为准，默认关闭且未部署。
+
+2026-10-23 BUG-031门禁：`tests/performance/test_footprints_reads.py`显式参数化SQLite与真实MySQL5.7，各执行单到访/1000到访的50k分布；MySQL未配置仍skip，发布必须单独运行且无skip。每例创建独立临时库，从冻结迁移链升head；解释实际预览SQL及绑定参数，检查每分支实际key=ix_footprint_photo_visit、type=ref/range，外层PRIMARY/eq_ref和无DEPENDENT，而非possible_keys字符串。保留500ms/16MiB/查询数/响应预算，验证精确前四、deleted/跨家庭排除及下一页；Decimal按FastAPI真实编码测响应大小。最终冻结源码31项专项/规模结果与首次失败均见[证据](evidence/FOOTPRINT-PREVIEW-MYSQL57-20261023.md)，不替代云端owner/真机/全球底图验收。
+
+2026-10-20 永久词条替代增量：测试单项完整覆盖的严格AI合同、跨科目人工标注合成语义样本、原分析流水线可选阶段失败降级，以及服务端覆盖快照与确认事务。验证编辑/篡改不生效、实际历史守恒、旧材料与Review重建不恢复、当前/未来自动行移出不补题、既有人工预约消费一次、仅所选词条删除、并发幂等、持久游标与租约重试/取消。SQLite和真实MySQL5.7分别执行迁移与行为门禁，10k/50k双状态目录检查真实ORM计划、查询数和响应预算；自引用SET NULL需显式反向索引覆盖批量清理，MySQL回退先移除自表外键再删除其索引。真实模型样本通过只代表该样本集。具体DREV已批准并实现，新筛选/分页/迟到响应/只读/共享内嵌和几何审计反例已测试；完整三视口原生截图与iOS/Android验收仍独立记录，自动化不抵扣。实际命令、结果和缺失项见[本轮证据](evidence/AUTO-SUPERSEDED-REVIEW-20261020.md)。
+
+2026-10-18 FEAT-012增量：合成照片不得含儿童内容；测试覆盖独立EXIF字段与解码10s超时、未知时间、确认幂等/版本/候选、原件24h/草稿168h、权限/归档/冻结、真实清理编排、worker确认竞态、有界画廊/草稿与镜头跟随。50k照片含单大到访及1000到访两种分布，核对SQL计划、查询数和响应预算；真实MySQL5.7门禁单列，未配置只能skip。解锁后24态×3隔离原生节点/PNG/SHA通过，见[原生范围](evidence/child-footprints-20261018/native/README.md)；不抵扣27态缺失7态、完整插件包、真机相册/海外地图、真实AI分层和私有云owner验收。HTML或mock不替代这些门禁。命令/当前结果见[实现证据](evidence/CHILD-FOOTPRINTS-IMPLEMENTATION-20261018.md)。
+
 ## Required layers
 
 - Unit: review intervals, feedback transitions, backfill, normalization and Todo grouping.
@@ -120,6 +134,51 @@ PUSH_KIDS_TEST_MYSQL_URL='mysql+pymysql://<test-user>:<password>@<host>/<isolate
 ```
 
 No live provider call is required for deterministic CI. If `ARK_API_KEY` is present, a separately marked smoke test may run and must not print requests, images, responses or the key.
+
+FEAT-013 grade gate: `test_grade_policy.py`, `test_grade_confirmation.py`,
+`test_grade_confirmation_migration.py`, `test_grade_confirmation_reads.py` and frontend
+`grade-confirmation.test.js` cover school-year boundaries, first confirmation, shared retries/conflicts,
+manual intent/version, archive/unknown/terminal/permission boundaries, rollback, App sessions,
+restoration at a safe host, stale in-flight bootstrap synchronization, report-filter exclusion and
+manual conflict recovery requiring a fresh choice without losing drafts. `test_grade_confirmation_mysql.py` requires disposable `grade_*` MySQL5.7
+runtime/migration databases through the existing test URL variables; never point it at production.
+Both engines exercise 50k archived rows plus five active children, a single limited query, actual index
+plans and 8KiB response budget. Historical-schema migration fixtures seed their frozen column list,
+not current ORM defaults. `tools/prepare_grade_confirmation_native.py` creates an offline synthetic
+copy and `tools/grade_confirmation_geometry.js` collects native rectangles/screenshots. The 2026-10-24
+run covers 17 presentation states at all three viewports, profile controls, native picker opening/cancel
+and a CUA-scrolled short-screen error. Layout fixtures do not prove actual
+foreground/picker semantics, accessibility focus or iOS/Android. Subsequent reviewed lifecycle/conflict
+repairs have automated evidence but no native end-to-end acceptance. Independent read-only review passed.
+Actual results and unexecuted gates:
+[2026-10-24 evidence](evidence/ANNUAL-GRADE-IMPLEMENTATION-20261024.md).
+
+FEAT-013 dialog simplification: approved `SPEC-20261024-GRADE-DIALOG-SIMPLIFICATION-01 / DREV02`
+removes explanatory text and uses side-by-side later/confirm actions. Reuse the existing grade/profile/session
+tests; update the old long-copy assertion without weakening the retained-choice/same-payload retry checks.
+The native capture tool now writes to `evidence/grade-dialog-simplification-20261024/native/`, preserving
+the original DREV01 evidence. Audit all three exact viewports for text/field clearance, 12px action gap,
+approved flex allocation (including each button's padding), full-row containment, 44px targets and latest
+fact without an editable picker. Long name, saving, error, conflict/latest and actual picker/retry/later
+paths need fresh evidence; HTML and prior geometry are not substitutes. Final 327/53 automated checks,
+51 fresh native states and actual picker/retry/later at each viewport passed. Computed button text contrast
+is at least 4.5, including saving; the platform disabled-style override was fixed and all 51 states recaptured.
+Unexecuted real-device/accessibility/full-business-native gates and distinct source stages are recorded in
+[this change's evidence](evidence/GRADE-DIALOG-SIMPLIFICATION-IMPLEMENTATION-20261024.md).
+
+FEAT-011 renewal gate: `test_notification_renewal_policy.py`, `test_notification_renewal.py`,
+`test_notification_renewal_migration.py`, `test_notification_renewal_reads.py` and frontend
+`notification-renewal.test.js` / `notifications.test.js` cover actor receipts, transaction rollback,
+per-type cooldown, original-event registration, identity changes and synchronous native wiring.
+`test_notification_renewal_mysql.py` additionally requires disposable MySQL5.7 runtime and migration
+databases via `PUSH_KIDS_TEST_MYSQL_URL` / `PUSH_KIDS_TEST_MYSQL_MIGRATION_URL`; never target production.
+Its migration, concurrent sessions and 50k receipt/attempt reads passed locally on2026-10-17.
+The ordinary suite skips it without explicit configuration; the separate run is recorded independently.
+Native geometry uses `tools/notification_renewal_geometry.js` in a verified useCloud=false copy with
+synthetic states. It cannot prove real authorization, remembered choices, accessibility focus or delivery.
+See `docs/quality/evidence/NOTIFICATION-AUTO-RENEWAL-IMPLEMENTATION-20261017.md` for actual coverage and
+remaining device gates. The SQLite whole-schema Alembic check exposes four historical learning-record
+index differences; the five new tables match metadata, and actual MySQL5.7 whole-schema check passes.
 
 The BUG-027 release quality gate is stricter than ordinary CI and is run explicitly in a controlled secret-bearing
 environment. It is blocking for release even though ordinary deterministic CI remains secret-free:

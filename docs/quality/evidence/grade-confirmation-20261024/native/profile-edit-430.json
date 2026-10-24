@@ -1,0 +1,44 @@
+{
+  "nodes": [
+    {
+      "left": 37,
+      "right": 393,
+      "top": 193,
+      "bottom": 245,
+      "width": 356,
+      "height": 52,
+      "fontSize": "15px"
+    },
+    {
+      "left": 37,
+      "right": 393,
+      "top": 287,
+      "bottom": 339,
+      "width": 356,
+      "height": 52,
+      "fontSize": "15px"
+    },
+    {
+      "left": 20,
+      "right": 410,
+      "top": 598,
+      "bottom": 653,
+      "width": 390,
+      "height": 55,
+      "fontSize": "16px"
+    }
+  ],
+  "viewport": {
+    "width": 430,
+    "height": 932,
+    "screenHeight": 932,
+    "dpr": 3,
+    "baseLibrary": "3.17.4"
+  },
+  "route": "pages/child-edit/index",
+  "selectedLabel": "九年级",
+  "errors": [],
+  "fixture": "offline synthetic; picker overlay is platform-owned and reviewed in screenshot/AX, not queried as WXML nodes",
+  "capturedAt": "2026-10-24T11:38:01.055Z",
+  "screenshotSha256": "3b3d09eabeceb9a89bfe137beb7e5d47c1725acfca5c7af373365bb24f3b34e8"
+}

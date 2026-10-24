@@ -12,6 +12,11 @@
 .segmented { display: flex; gap: 8px; width: 100%; height: 52px; min-height: 52px; padding: 3px; box-sizing: border-box; border: var(--pk-border-line); border-radius: var(--pk-r-md); background: var(--pk-surface); }
 .segment { flex: 1; min-width: 0; height: 44px; min-height: 44px; padding: 6px 4px; box-sizing: border-box; border-radius: var(--pk-r-xs); font-size: 14px; }
 .segment.on { color: var(--pk-primary); background: var(--pk-primary-tint); font-weight: 600; }
+.status-row { margin: 12px 0 4px; }
+.status-segment { flex: 1; min-width: 0; height: 44px; min-height: 44px; padding: 6px 4px; box-sizing: border-box; border-radius: var(--pk-r-xs); font-size: 14px; }
+.status-segment.on { color: var(--pk-primary); background: var(--pk-primary-tint); font-weight: 600; }
+.item-coverage { display: block; margin-top: 6px; color: var(--pk-ink-2); overflow-wrap: anywhere; font-size: 14px; }
+.source-link { display: block; min-height: 44px; margin-top: 4px; padding-left: 0; color: var(--pk-primary); text-align: left; }
 .filter-trigger { display: flex; align-items: center; width: 100%; max-width: none; min-height: 50px; margin-left: 0; margin-right: 0; box-sizing: border-box; padding: 8px 14px; border: var(--pk-border-line); border-radius: var(--pk-r-md); background: var(--pk-surface); text-align: left; }
 .filter-label { flex: none; margin-right: 18px; color: var(--pk-ink-3); }
 .filter-value { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }

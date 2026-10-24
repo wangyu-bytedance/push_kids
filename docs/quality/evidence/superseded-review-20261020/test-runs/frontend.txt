@@ -1,0 +1,1604 @@
+
+> push-kids-workspace@0.1.0 test
+> node --test tests/frontend/*.test.js
+
+TAP version 13
+# Subtest: built-in activities map to their own icon instead of one shared ball
+ok 1 - built-in activities map to their own icon instead of one shared ball
+  ---
+  duration_ms: 0.613
+  type: 'test'
+  ...
+# Subtest: parent-written activity names still match by keyword and fall back to a default icon
+ok 2 - parent-written activity names still match by keyword and fall back to a default icon
+  ---
+  duration_ms: 0.087792
+  type: 'test'
+  ...
+# Subtest: every activity icon class exists in the generated stylesheet and no ball icon remains
+ok 3 - every activity icon class exists in the generated stylesheet and no ball icon remains
+  ---
+  duration_ms: 9.171583
+  type: 'test'
+  ...
+# Subtest: activities follow Monday through Sunday and first-slot start time, with stable ties
+ok 4 - activities follow Monday through Sunday and first-slot start time, with stable ties
+  ---
+  duration_ms: 7.32625
+  type: 'test'
+  ...
+# Subtest: first slot is authoritative even when later weekdays or times are earlier
+ok 5 - first slot is authoritative even when later weekdays or times are earlier
+  ---
+  duration_ms: 3.142167
+  type: 'test'
+  ...
+# Subtest: missing slots and invalid weekdays follow all valid weekdays in original order
+ok 6 - missing slots and invalid weekdays follow all valid weekdays in original order
+  ---
+  duration_ms: 2.6455
+  type: 'test'
+  ...
+# Subtest: invalid times follow valid times within their weekday; seconds sort correctly
+ok 7 - invalid times follow valid times within their weekday; seconds sort correctly
+  ---
+  duration_ms: 1.854042
+  type: 'test'
+  ...
+# Subtest: reload reorders changed schedules, preserves other lists and keeps content on error
+ok 8 - reload reorders changed schedules, preserves other lists and keeps content on error
+  ---
+  duration_ms: 2.637292
+  type: 'test'
+  ...
+# Subtest: late activity response cannot overwrite a newly selected child's sorted list
+ok 9 - late activity response cannot overwrite a newly selected child's sorted list
+  ---
+  duration_ms: 6.42725
+  type: 'test'
+  ...
+# Subtest: API errors preserve stable backend message
+ok 10 - API errors preserve stable backend message
+  ---
+  duration_ms: 1.193084
+  type: 'test'
+  ...
+# Subtest: validation errors are understandable
+ok 11 - validation errors are understandable
+  ---
+  duration_ms: 0.17075
+  type: 'test'
+  ...
+# Subtest: reports consume server-side activity aggregates without loading raw histories
+ok 12 - reports consume server-side activity aggregates without loading raw histories
+  ---
+  duration_ms: 7.938667
+  type: 'test'
+  ...
+# Subtest: Today loads the next Todo page for the same day and keeps prior rows
+ok 13 - Today loads the next Todo page for the same day and keeps prior rows
+  ---
+  duration_ms: 4.492709
+  type: 'test'
+  ...
+# Subtest: Today uses the stable daily selection instead of the full due Todo list
+ok 14 - Today uses the stable daily selection instead of the full due Todo list
+  ---
+  duration_ms: 2.887167
+  type: 'test'
+  ...
+# Subtest: Today reports a completed fixed plan without refilling it
+ok 15 - Today reports a completed fixed plan without refilling it
+  ---
+  duration_ms: 2.324208
+  type: 'test'
+  ...
+# Subtest: Today retains loaded Todos when the next page fails
+ok 16 - Today retains loaded Todos when the next page fails
+  ---
+  duration_ms: 3.357333
+  type: 'test'
+  ...
+# Subtest: Today discards a late Todo page after the child generation changes
+ok 17 - Today discards a late Todo page after the child generation changes
+  ---
+  duration_ms: 3.4905
+  type: 'test'
+  ...
+# Subtest: Today ignores future preview data and keeps the review section preference
+ok 18 - Today ignores future preview data and keeps the review section preference
+  ---
+  duration_ms: 3.295333
+  type: 'test'
+  ...
+# Subtest: Today does not show first-use guidance when a future review plan already exists
+ok 19 - Today does not show first-use guidance when a future review plan already exists
+  ---
+  duration_ms: 2.40975
+  type: 'test'
+  ...
+# Subtest: primary tabs use one custom brand navigation and do not repeat the brand in page content
+ok 20 - primary tabs use one custom brand navigation and do not repeat the brand in page content
+  ---
+  duration_ms: 5.329416
+  type: 'test'
+  ...
+# Subtest: primary navigation uses the generated icon and has safe platform geometry fallbacks
+ok 21 - primary navigation uses the generated icon and has safe platform geometry fallbacks
+  ---
+  duration_ms: 1.847708
+  type: 'test'
+  ...
+# Subtest: primary navigation derives safe geometry and falls back when platform APIs fail
+ok 22 - primary navigation derives safe geometry and falls back when platform APIs fail
+  ---
+  duration_ms: 3.139292
+  type: 'test'
+  ...
+# Subtest: deep pages keep native navigation and primary-page context survives brand-row removal
+ok 23 - deep pages keep native navigation and primary-page context survives brand-row removal
+  ---
+  duration_ms: 8.242375
+  type: 'test'
+  ...
+# Subtest: primary surfaces do not explain affordances that the control already shows
+ok 24 - primary surfaces do not explain affordances that the control already shows
+  ---
+  duration_ms: 2.790833
+  type: 'test'
+  ...
+# Subtest: child selection falls back when the stored child was archived
+ok 25 - child selection falls back when the stored child was archived
+  ---
+  duration_ms: 1.273917
+  type: 'test'
+  ...
+# Subtest: child selection keeps the parent's choice and derives switcher labels
+ok 26 - child selection keeps the parent's choice and derives switcher labels
+  ---
+  duration_ms: 0.204875
+  type: 'test'
+  ...
+# Subtest: preschool choices are granular and legacy values remain lossless
+ok 27 - preschool choices are granular and legacy values remain lossless
+  ---
+  duration_ms: 0.431125
+  type: 'test'
+  ...
+# Subtest: selection sync writes the fallback back into global state exactly once
+ok 28 - selection sync writes the fallback back into global state exactly once
+  ---
+  duration_ms: 0.167875
+  type: 'test'
+  ...
+# Subtest: the profile ceiling matches the server and ignores archived profiles
+ok 29 - the profile ceiling matches the server and ignores archived profiles
+  ---
+  duration_ms: 0.096542
+  type: 'test'
+  ...
+# Subtest: settings loads active and archived profiles for the top-right manager
+ok 30 - settings loads active and archived profiles for the top-right manager
+  ---
+  duration_ms: 1.896792
+  type: 'test'
+  ...
+# Subtest: settings opens the top-right profile manager for one child and closes it before editing
+ok 31 - settings opens the top-right profile manager for one child and closes it before editing
+  ---
+  duration_ms: 1.590833
+  type: 'test'
+  ...
+# Subtest: settings profile management lives in the sheet instead of the main page
+ok 32 - settings profile management lives in the sheet instead of the main page
+  ---
+  duration_ms: 1.288375
+  type: 'test'
+  ...
+# Subtest: settings drops a stale response when the parent switched child mid-flight
+ok 33 - settings drops a stale response when the parent switched child mid-flight
+  ---
+  duration_ms: 11.375625
+  type: 'test'
+  ...
+# Subtest: settings refuses to add a profile past the ceiling and never navigates
+ok 34 - settings refuses to add a profile past the ceiling and never navigates
+  ---
+  duration_ms: 1.596166
+  type: 'test'
+  ...
+# Subtest: read-only members cannot reach the profile form
+ok 35 - read-only members cannot reach the profile form
+  ---
+  duration_ms: 0.772333
+  type: 'test'
+  ...
+# Subtest: creating a profile seeds the picked subjects and switches to the new child
+ok 36 - creating a profile seeds the picked subjects and switches to the new child
+  ---
+  duration_ms: 2.842084
+  type: 'test'
+  ...
+# Subtest: an unbound user is returned to the family gate before loading children
+ok 37 - an unbound user is returned to the family gate before loading children
+  ---
+  duration_ms: 1.192208
+  type: 'test'
+  ...
+# Subtest: creating a preschool profile submits the selected class verbatim
+ok 38 - creating a preschool profile submits the selected class verbatim
+  ---
+  duration_ms: 1.914625
+  type: 'test'
+  ...
+# Subtest: editing a legacy preschool grade shows an explicit label and preserves its stored value
+ok 39 - editing a legacy preschool grade shows an explicit label and preserves its stored value
+  ---
+  duration_ms: 2.032625
+  type: 'test'
+  ...
+# Subtest: editing an unknown valid grade keeps it visible and lossless
+ok 40 - editing an unknown valid grade keeps it visible and lossless
+  ---
+  duration_ms: 1.957541
+  type: 'test'
+  ...
+# Subtest: an empty name never reaches the server
+ok 41 - an empty name never reaches the server
+  ---
+  duration_ms: 2.604417
+  type: 'test'
+  ...
+# Subtest: a rejected create keeps the form so the parent can fix the name
+ok 42 - a rejected create keeps the form so the parent can fix the name
+  ---
+  duration_ms: 1.893291
+  type: 'test'
+  ...
+# Subtest: editing an archived profile shows restore instead of archive
+ok 43 - editing an archived profile shows restore instead of archive
+  ---
+  duration_ms: 1.244917
+  type: 'test'
+  ...
+# Subtest: archiving asks first and reports the server's refusal
+ok 44 - archiving asks first and reports the server's refusal
+  ---
+  duration_ms: 2.180416
+  type: 'test'
+  ...
+# Subtest: archiving warns how many records are still unfinished but never blocks
+ok 45 - archiving warns how many records are still unfinished but never blocks
+  ---
+  duration_ms: 2.411917
+  type: 'test'
+  ...
+# Subtest: an unreadable dashboard falls back to the plain archive copy
+ok 46 - an unreadable dashboard falls back to the plain archive copy
+  ---
+  duration_ms: 3.373042
+  type: 'test'
+  ...
+# Subtest: an archived profile never asks the server for unfinished counts
+ok 47 - an archived profile never asks the server for unfinished counts
+  ---
+  duration_ms: 2.692917
+  type: 'test'
+  ...
+# Subtest: cloud requests use callContainer without a client family header
+ok 48 - cloud requests use callContainer without a client family header
+  ---
+  duration_ms: 0.75425
+  type: 'test'
+  ...
+# Subtest: cloud startup initializes the configured environment without a backend domain
+ok 49 - cloud startup initializes the configured environment without a backend domain
+  ---
+  duration_ms: 1.398209
+  type: 'test'
+  ...
+# Subtest: cloud media upload uses the server-issued path and configured environment
+ok 50 - cloud media upload uses the server-issued path and configured environment
+  ---
+  duration_ms: 0.203333
+  type: 'test'
+  ...
+# Subtest: API base URL is build configuration and cannot be overridden from storage
+ok 51 - API base URL is build configuration and cannot be overridden from storage
+  ---
+  duration_ms: 3.361875
+  type: 'test'
+  ...
+# Subtest: voice input avoids unsupported app.json microphone permission declarations
+ok 52 - voice input avoids unsupported app.json microphone permission declarations
+  ---
+  duration_ms: 0.506917
+  type: 'test'
+  ...
+# Subtest: parent-facing actions guide an unconfigured family without pretending the app failed
+ok 53 - parent-facing actions guide an unconfigured family without pretending the app failed
+  ---
+  duration_ms: 3.357959
+  type: 'test'
+  ...
+# Subtest: today review section starts collapsed even when there are no due reviews
+ok 54 - today review section starts collapsed even when there are no due reviews
+  ---
+  duration_ms: 0.426834
+  type: 'test'
+  ...
+# Subtest: today removes the future preview without truncating current knowledge names
+ok 55 - today removes the future preview without truncating current knowledge names
+  ---
+  duration_ms: 1.233292
+  type: 'test'
+  ...
+# Subtest: today activity empty state does not repeat the schedule action
+ok 56 - today activity empty state does not repeat the schedule action
+  ---
+  duration_ms: 0.436125
+  type: 'test'
+  ...
+# Subtest: mini program JavaScript parses before static copy assertions run
+ok 57 - mini program JavaScript parses before static copy assertions run
+  ---
+  duration_ms: 1046.899416
+  type: 'test'
+  ...
+# Subtest: settings separates defaults from explicitly added subjects and activities
+ok 58 - settings separates defaults from explicitly added subjects and activities
+  ---
+  duration_ms: 0.458875
+  type: 'test'
+  ...
+# Subtest: key native controls fit their own grid cells without page-level horizontal scrolling
+ok 59 - key native controls fit their own grid cells without page-level horizontal scrolling
+  ---
+  duration_ms: 3.311125
+  type: 'test'
+  ...
+# Subtest: record entry stays unified while report owns history and edit plan disclosures
+ok 60 - record entry stays unified while report owns history and edit plan disclosures
+  ---
+  duration_ms: 0.534875
+  type: 'test'
+  ...
+# Subtest: custom tab bar keeps icon geometry and restores the active tab after direct page entry
+ok 61 - custom tab bar keeps icon geometry and restores the active tab after direct page entry
+  ---
+  duration_ms: 1.035667
+  type: 'test'
+  ...
+# Subtest: empty sections collapse and remain manually expandable without storage
+ok 62 - empty sections collapse and remain manually expandable without storage
+  ---
+  duration_ms: 6.069208
+  type: 'test'
+  ...
+# Subtest: full remaining aggregates expand even when rendered preview is empty
+ok 63 - full remaining aggregates expand even when rendered preview is empty
+  ---
+  duration_ms: 0.883166
+  type: 'test'
+  ...
+# Subtest: finished sections collapse; stable plan uses selected count rather than backlog
+ok 64 - finished sections collapse; stable plan uses selected count rather than backlog
+  ---
+  duration_ms: 1.647
+  type: 'test'
+  ...
+# Subtest: manual choice resets on child/day change and leaving today
+ok 65 - manual choice resets on child/day change and leaving today
+  ---
+  duration_ms: 1.443917
+  type: 'test'
+  ...
+# Subtest: daily completion commits returned facts; duplicate taps are blocked and manual choice retained
+ok 66 - daily completion commits returned facts; duplicate taps are blocked and manual choice retained
+  ---
+  duration_ms: 1.560417
+  type: 'test'
+  ...
+# Subtest: last completion collapses automatically and undo opens it
+ok 67 - last completion collapses automatically and undo opens it
+  ---
+  duration_ms: 0.733292
+  type: 'test'
+  ...
+# Subtest: failed completion keeps original facts and read-only members send no requests
+ok 68 - failed completion keeps original facts and read-only members send no requests
+  ---
+  duration_ms: 0.641292
+  type: 'test'
+  ...
+# Subtest: late completion response cannot overwrite another child or hidden page
+ok 69 - late completion response cannot overwrite another child or hidden page
+  ---
+  duration_ms: 3.325792
+  type: 'test'
+  ...
+# Subtest: settings candidate sheet prefills editable defaults without writes and resets on leaving
+ok 70 - settings candidate sheet prefills editable defaults without writes and resets on leaving
+  ---
+  duration_ms: 2.134583
+  type: 'test'
+  ...
+# Subtest: settings presets are drafts and invalid or cancelled forms perform zero writes
+ok 71 - settings presets are drafts and invalid or cancelled forms perform zero writes
+  ---
+  duration_ms: 1.74325
+  type: 'test'
+  ...
+# Subtest: settings creates then edits the same task and deletion uses confirmation
+ok 72 - settings creates then edits the same task and deletion uses confirmation
+  ---
+  duration_ms: 8.224583
+  type: 'test'
+  ...
+# Subtest: settings write failure retains form; pending blocks edits and late save cannot leak
+ok 73 - settings write failure retains form; pending blocks edits and late save cannot leak
+  ---
+  duration_ms: 2.609833
+  type: 'test'
+  ...
+# Subtest: daily task markup orders the region below review and empty learning/activity obey collapse
+ok 74 - daily task markup orders the region below review and empty learning/activity obey collapse
+  ---
+  duration_ms: 0.513542
+  type: 'test'
+  ...
+# Subtest: delete settings keeps the entry neutral and danger at final confirmation
+ok 75 - delete settings keeps the entry neutral and danger at final confirmation
+  ---
+  duration_ms: 0.927709
+  type: 'test'
+  ...
+# Subtest: canceling the confirmation performs no write
+ok 76 - canceling the confirmation performs no write
+  ---
+  duration_ms: 1.567334
+  type: 'test'
+  ...
+# Subtest: child deletion uses exact-name confirmation and persists only the request id
+ok 77 - child deletion uses exact-name confirmation and persists only the request id
+  ---
+  duration_ms: 1.170541
+  type: 'test'
+  ...
+# Subtest: family cleanup success clears family and child context before onboarding
+ok 78 - family cleanup success clears family and child context before onboarding
+  ---
+  duration_ms: 0.966875
+  type: 'test'
+  ...
+# Subtest: local date parts are padded
+ok 79 - local date parts are padded
+  ---
+  duration_ms: 3.085833
+  type: 'test'
+  ...
+# Subtest: date and time convert to a valid ISO instant
+ok 80 - date and time convert to a valid ISO instant
+  ---
+  duration_ms: 0.466208
+  type: 'test'
+  ...
+# Subtest: month and friendly labels are stable
+ok 81 - month and friendly labels are stable
+  ---
+  duration_ms: 0.33975
+  type: 'test'
+  ...
+# Subtest: a mixed photo batch splits into one group per configured subject
+ok 82 - a mixed photo batch splits into one group per configured subject
+  ---
+  duration_ms: 7.841916
+  type: 'test'
+  ...
+# Subtest: the confirmation draft presents new, today-review and history-review effects
+ok 83 - the confirmation draft presents new, today-review and history-review effects
+  ---
+  duration_ms: 4.127541
+  type: 'test'
+  ...
+# Subtest: unlinking a detected review keeps it as an editable new knowledge item
+ok 84 - unlinking a detected review keeps it as an editable new knowledge item
+  ---
+  duration_ms: 5.549542
+  type: 'test'
+  ...
+# Subtest: a review-only draft can be confirmed without inventing a new knowledge item
+ok 85 - a review-only draft can be confirmed without inventing a new knowledge item
+  ---
+  duration_ms: 4.49825
+  type: 'test'
+  ...
+# Subtest: confirmation sends one group per subject with positions that match the kept points
+ok 86 - confirmation sends one group per subject with positions that match the kept points
+  ---
+  duration_ms: 4.8525
+  type: 'test'
+  ...
+# Subtest: an unlisted subject is only created after the parent answers yes
+ok 87 - an unlisted subject is only created after the parent answers yes
+  ---
+  duration_ms: 2.8395
+  type: 'test'
+  ...
+# Subtest: declining the new subject writes nothing and keeps the draft editable
+ok 88 - declining the new subject writes nothing and keeps the draft editable
+  ---
+  duration_ms: 2.607
+  type: 'test'
+  ...
+# Subtest: moving a whole group onto an existing subject drops the unlisted one
+ok 89 - moving a whole group onto an existing subject drops the unlisted one
+  ---
+  duration_ms: 3.024375
+  type: 'test'
+  ...
+# Subtest: a pending draft is editable in place on the record page without another hop
+ok 90 - a pending draft is editable in place on the record page without another hop
+  ---
+  duration_ms: 7.61725
+  type: 'test'
+  ...
+# Subtest: a viewer cannot edit the pending draft in place
+ok 91 - a viewer cannot edit the pending draft in place
+  ---
+  duration_ms: 3.109958
+  type: 'test'
+  ...
+# Subtest: ordinary launch enters the family bootstrap gate before business tabs
+ok 92 - ordinary launch enters the family bootstrap gate before business tabs
+  ---
+  duration_ms: 1.71775
+  type: 'test'
+  ...
+# Subtest: family bootstrap states route without treating empty children or errors as no family
+ok 93 - family bootstrap states route without treating empty children or errors as no family
+  ---
+  duration_ms: 3.900042
+  type: 'test'
+  ...
+# Subtest: family onboarding creates the family without attempting to create a child
+ok 94 - family onboarding creates the family without attempting to create a child
+  ---
+  duration_ms: 0.578542
+  type: 'test'
+  ...
+# Subtest: join preview explains approval and does not expose family records
+ok 95 - join preview explains approval and does not expose family records
+  ---
+  duration_ms: 0.634791
+  type: 'test'
+  ...
+# Subtest: manual family join accepts only six digits and carries the code to preview
+ok 96 - manual family join accepts only six digits and carries the code to preview
+  ---
+  duration_ms: 0.626458
+  type: 'test'
+  ...
+# Subtest: manager pages expose explicit role choices and last-manager errors stay server-owned
+ok 97 - manager pages expose explicit role choices and last-manager errors stay server-owned
+  ---
+  duration_ms: 0.614042
+  type: 'test'
+  ...
+# Subtest: member management uses a detail sheet and never offers self removal
+ok 98 - member management uses a detail sheet and never offers self removal
+  ---
+  duration_ms: 0.820292
+  type: 'test'
+  ...
+# Subtest: manager UI exposes family invite codes and labels post-application codes as verification codes
+ok 99 - manager UI exposes family invite codes and labels post-application codes as verification codes
+  ---
+  duration_ms: 1.016542
+  type: 'test'
+  ...
+# Subtest: an unavailable active-invite list stays non-blocking and does not add a false page warning
+ok 100 - an unavailable active-invite list stays non-blocking and does not add a false page warning
+  ---
+  duration_ms: 0.393709
+  type: 'test'
+  ...
+# Subtest: family actions use full-width semantic containers instead of shrinking native buttons
+ok 101 - family actions use full-width semantic containers instead of shrinking native buttons
+  ---
+  duration_ms: 0.896583
+  type: 'test'
+  ...
+# Subtest: family mutations keep one idempotency key across a failed retry
+ok 102 - family mutations keep one idempotency key across a failed retry
+  ---
+  duration_ms: 0.277
+  type: 'test'
+  ...
+# Subtest: unknown capture date and timezone stay unknown
+ok 103 - unknown capture date and timezone stay unknown
+  ---
+  duration_ms: 1.578084
+  type: 'test'
+  ...
+# Subtest: draft capture fields can be cleared but formal dates remain required
+ok 104 - draft capture fields can be cleared but formal dates remain required
+  ---
+  duration_ms: 5.853292
+  type: 'test'
+  ...
+# Subtest: draft paging stops first-page polling and preserves selected rows
+ok 105 - draft paging stops first-page polling and preserves selected rows
+  ---
+  duration_ms: 4.765458
+  type: 'test'
+  ...
+# Subtest: confirmation blocks missing date and keeps only selected versions
+ok 106 - confirmation blocks missing date and keeps only selected versions
+  ---
+  duration_ms: 3.095708
+  type: 'test'
+  ...
+# Subtest: playback changes the native camera overseas and pauses on hide
+ok 107 - playback changes the native camera overseas and pauses on hide
+  ---
+  duration_ms: 2.399667
+  type: 'test'
+  ...
+# Subtest: late child response cannot overwrite another child's view
+ok 108 - late child response cannot overwrite another child's view
+  ---
+  duration_ms: 4.788833
+  type: 'test'
+  ...
+# Subtest: date filters remain identical for all three views
+ok 109 - date filters remain identical for all three views
+  ---
+  duration_ms: 3.562292
+  type: 'test'
+  ...
+# Subtest: archived and viewer profiles cannot start new intake
+ok 110 - archived and viewer profiles cannot start new intake
+  ---
+  duration_ms: 2.417916
+  type: 'test'
+  ...
+# Subtest: gallery uses bounded pages and can return to the previous page
+ok 111 - gallery uses bounded pages and can return to the previous page
+  ---
+  duration_ms: 5.253209
+  type: 'test'
+  ...
+# Subtest: edit failure preserves values and unsaved close respects cancellation
+ok 112 - edit failure preserves values and unsaved close respects cancellation
+  ---
+  duration_ms: 3.531125
+  type: 'test'
+  ...
+# Subtest: first-file upload failure retains a retryable batch
+ok 113 - first-file upload failure retains a retryable batch
+  ---
+  duration_ms: 3.790666
+  type: 'test'
+  ...
+# Subtest: submission retry keys are stable-format and unique
+ok 114 - submission retry keys are stable-format and unique
+  ---
+  duration_ms: 0.653125
+  type: 'test'
+  ...
+# Subtest: request forwards an idempotency key without exposing it in payload
+ok 115 - request forwards an idempotency key without exposing it in payload
+  ---
+  duration_ms: 0.421791
+  type: 'test'
+  ...
+# Subtest: upload forwards the same retry key
+ok 116 - upload forwards the same retry key
+  ---
+  duration_ms: 0.15
+  type: 'test'
+  ...
+# Subtest: settings decorative failures leave daily task edits and permissions untouched
+ok 117 - settings decorative failures leave daily task edits and permissions untouched
+  ---
+  duration_ms: 4.328958
+  type: 'test'
+  ...
+# Subtest: report decorative failure preserves statistics and disclosure state
+ok 118 - report decorative failure preserves statistics and disclosure state
+  ---
+  duration_ms: 4.20575
+  type: 'test'
+  ...
+# Subtest: record illustration failures preserve form, upload state and permission without requests
+ok 119 - record illustration failures preserve form, upload state and permission without requests
+  ---
+  duration_ms: 5.906834
+  type: 'test'
+  ...
+# Subtest: calendar illustration failure preserves selected date, items and open editor without requests
+ok 120 - calendar illustration failure preserves selected date, items and open editor without requests
+  ---
+  duration_ms: 4.349292
+  type: 'test'
+  ...
+# Subtest: cloud bootstrap cannot expose delete before a writable membership is known
+ok 121 - cloud bootstrap cannot expose delete before a writable membership is known
+  ---
+  duration_ms: 17.774791
+  type: 'test'
+  ...
+# Subtest: delete follows defer, uses a separate event, and requires confirmation
+ok 122 - delete follows defer, uses a separate event, and requires confirmation
+  ---
+  duration_ms: 2.903833
+  type: 'test'
+  ...
+# Subtest: delete is pessimistic, blocks duplicate confirms and retains recoverable errors
+ok 123 - delete is pessimistic, blocks duplicate confirms and retains recoverable errors
+  ---
+  duration_ms: 2.343208
+  type: 'test'
+  ...
+# Subtest: viewer and late delete responses cannot mutate another child or hidden page
+ok 124 - viewer and late delete responses cannot mutate another child or hidden page
+  ---
+  duration_ms: 3.539375
+  type: 'test'
+  ...
+# Subtest: card emits the selected knowledge identity only for a writer
+ok 125 - card emits the selected knowledge identity only for a writer
+  ---
+  duration_ms: 1.378708
+  type: 'test'
+  ...
+# Subtest: history paginates with bounded rows, restores cursor and does not write
+ok 126 - history paginates with bounded rows, restores cursor and does not write
+  ---
+  duration_ms: 14.701292
+  type: 'test'
+  ...
+# Subtest: late search response and hidden page cannot replace current history
+ok 127 - late search response and hidden page cannot replace current history
+  ---
+  duration_ms: 4.773334
+  type: 'test'
+  ...
+# Subtest: filter cancellation is read-only, date semantics reset, old history intent redirects once
+ok 128 - filter cancellation is read-only, date semantics reset, old history intent redirects once
+  ---
+  duration_ms: 5.341292
+  type: 'test'
+  ...
+# Subtest: confirmed and cancelled submissions open read-only and cannot be reconfirmed
+ok 129 - confirmed and cancelled submissions open read-only and cannot be reconfirmed
+  ---
+  duration_ms: 5.607916
+  type: 'test'
+  ...
+# Subtest: viewer sees submitted material without write affordances
+ok 130 - viewer sees submitted material without write affordances
+  ---
+  duration_ms: 3.280125
+  type: 'test'
+  ...
+# Subtest: a terminal confirmation conflict automatically renders the latest read-only result
+ok 131 - a terminal confirmation conflict automatically renders the latest read-only result
+  ---
+  duration_ms: 2.021333
+  type: 'test'
+  ...
+# Subtest: a conflict that does not resolve to a terminal result keeps the edited draft and visible error
+ok 132 - a conflict that does not resolve to a terminal result keeps the edited draft and visible error
+  ---
+  duration_ms: 3.29375
+  type: 'test'
+  ...
+# Subtest: the shared draft no longer renders a manual refresh-conflict prompt
+ok 133 - the shared draft no longer renders a manual refresh-conflict prompt
+  ---
+  duration_ms: 0.664583
+  type: 'test'
+  ...
+# Subtest: record-to-today review intent contains only existing due IDs and does not feedback
+ok 134 - record-to-today review intent contains only existing due IDs and does not feedback
+  ---
+  duration_ms: 4.020709
+  type: 'test'
+  ...
+# Subtest: list permission failure clears protected history
+ok 135 - list permission failure clears protected history
+  ---
+  duration_ms: 4.1195
+  type: 'test'
+  ...
+# Subtest: pending polling covers off-page jobs and stops in confirmed history or on hide
+ok 136 - pending polling covers off-page jobs and stops in confirmed history or on hide
+  ---
+  duration_ms: 2.818125
+  type: 'test'
+  ...
+# Subtest: resuming an upload in detail retains the same submission identity
+ok 137 - resuming an upload in detail retains the same submission identity
+  ---
+  duration_ms: 2.918125
+  type: 'test'
+  ...
+# Subtest: changing a child cannot move a dirty or uploading form to another child
+ok 138 - changing a child cannot move a dirty or uploading form to another child
+  ---
+  duration_ms: 4.560167
+  type: 'test'
+  ...
+# Subtest: history is collapsed by default and loads only when expanded
+ok 139 - history is collapsed by default and loads only when expanded
+  ---
+  duration_ms: 4.419708
+  type: 'test'
+  ...
+# Subtest: explicit new-record intent collapses history and returns to the form
+ok 140 - explicit new-record intent collapses history and returns to the form
+  ---
+  duration_ms: 2.407333
+  type: 'test'
+  ...
+# Subtest: viewer record tab offers the report history route without expanding a hidden list
+ok 141 - viewer record tab offers the report history route without expanding a hidden list
+  ---
+  duration_ms: 2.568416
+  type: 'test'
+  ...
+# Subtest: unified record form rejects empty material and routes text-only submissions without media
+ok 142 - unified record form rejects empty material and routes text-only submissions without media
+  ---
+  duration_ms: 3.464709
+  type: 'test'
+  ...
+# Subtest: unified record form keeps optional text on the existing photo upload path
+ok 143 - unified record form keeps optional text on the existing photo upload path
+  ---
+  duration_ms: 3.836667
+  type: 'test'
+  ...
+# Subtest: every photo add entry offers camera and album and can append repeated captures
+ok 144 - every photo add entry offers camera and album and can append repeated captures
+  ---
+  duration_ms: 2.481125
+  type: 'test'
+  ...
+# Subtest: photo picker cancellation, empty results and failures preserve the form
+ok 145 - photo picker cancellation, empty results and failures preserve the form
+  ---
+  duration_ms: 2.057166
+  type: 'test'
+  ...
+# Subtest: search text travels outside the URL and stays family scoped
+ok 146 - search text travels outside the URL and stays family scoped
+  ---
+  duration_ms: 2.261666
+  type: 'test'
+  ...
+# Subtest: manual form handles failed AI, retains full original text and filters activities
+ok 147 - manual form handles failed AI, retains full original text and filters activities
+  ---
+  duration_ms: 9.603166
+  type: 'test'
+  ...
+# Subtest: manual save bypasses analysis, blocks duplicate click and retains form on failure
+ok 148 - manual save bypasses analysis, blocks duplicate click and retains form on failure
+  ---
+  duration_ms: 4.025583
+  type: 'test'
+  ...
+# Subtest: editing a matched concept or moving its subject clears the old identity
+ok 149 - editing a matched concept or moving its subject clears the old identity
+  ---
+  duration_ms: 4.266708
+  type: 'test'
+  ...
+# Subtest: cloud preview uses the server-signed https url instead of downloadFile
+ok 150 - cloud preview uses the server-signed https url instead of downloadFile
+  ---
+  duration_ms: 1.555
+  type: 'test'
+  ...
+# Subtest: cloud preview without an https capability fails instead of hitting the container
+ok 151 - cloud preview without an https capability fails instead of hitting the container
+  ---
+  duration_ms: 1.624625
+  type: 'test'
+  ...
+# Subtest: local preview downloads with identity headers and keeps the temp file
+ok 152 - local preview downloads with identity headers and keeps the temp file
+  ---
+  duration_ms: 0.53275
+  type: 'test'
+  ...
+# Subtest: removePreview only unlinks local temp files
+ok 153 - removePreview only unlinks local temp files
+  ---
+  duration_ms: 2.158291
+  type: 'test'
+  ...
+# Subtest: native grant starts synchronously before any request from the click
+ok 154 - native grant starts synchronously before any request from the click
+  ---
+  duration_ms: 7.822
+  type: 'test'
+  ...
+# Subtest: registration recovery uses the original event without a second WeChat request
+ok 155 - registration recovery uses the original event without a second WeChat request
+  ---
+  duration_ms: 3.49
+  type: 'test'
+  ...
+# Subtest: late callback after identity change cannot register under the new family
+ok 156 - late callback after identity change cannot register under the new family
+  ---
+  duration_ms: 2.941667
+  type: 'test'
+  ...
+# Subtest: global native lock prevents a second click until the callback
+ok 157 - global native lock prevents a second click until the callback
+  ---
+  duration_ms: 1.476125
+  type: 'test'
+  ...
+# Subtest: late native callback stays isolated after controller hide and a new identity show
+ok 158 - late native callback stays isolated after controller hide and a new identity show
+  ---
+  duration_ms: 2.791125
+  type: 'test'
+  ...
+# Subtest: expired candidates skip the gesture and never request WeChat asynchronously
+ok 159 - expired candidates skip the gesture and never request WeChat asynchronously
+  ---
+  duration_ms: 3.336458
+  type: 'test'
+  ...
+# Subtest: guide remains explicit and only its button can opt in
+ok 160 - guide remains explicit and only its button can opt in
+  ---
+  duration_ms: 2.900875
+  type: 'test'
+  ...
+# Subtest: unknown and technical failures are never converted to permission
+ok 161 - unknown and technical failures are never converted to permission
+  ---
+  duration_ms: 1.197333
+  type: 'test'
+  ...
+# Subtest: actual todo-card event reaches the synchronous renewal hook only for complete
+ok 162 - actual todo-card event reaches the synchronous renewal hook only for complete
+  ---
+  duration_ms: 4.620042
+  type: 'test'
+  ...
+# Subtest: settings separate opt-in, current quota and per-type cooldown
+ok 163 - settings separate opt-in, current quota and per-type cooldown
+  ---
+  duration_ms: 7.179417
+  type: 'test'
+  ...
+# Subtest: failed preference and automatic-choice writes retain the server value
+ok 164 - failed preference and automatic-choice writes retain the server value
+  ---
+  duration_ms: 1.364209
+  type: 'test'
+  ...
+# Subtest: pending, unavailable and empty states never claim ready
+ok 165 - pending, unavailable and empty states never claim ready
+  ---
+  duration_ms: 1.848875
+  type: 'test'
+  ...
+# Subtest: old WeChat client gets a manual upgrade explanation
+ok 166 - old WeChat client gets a manual upgrade explanation
+  ---
+  duration_ms: 3.80475
+  type: 'test'
+  ...
+# Subtest: history failure is isolated from settings
+ok 167 - history failure is isolated from settings
+  ---
+  duration_ms: 1.521416
+  type: 'test'
+  ...
+# Subtest: delivery reasons keep real failures actionable
+ok 168 - delivery reasons keep real failures actionable
+  ---
+  duration_ms: 0.132916
+  type: 'test'
+  ...
+# Subtest: confirmation derives readable low-confidence and evidence labels
+ok 169 - confirmation derives readable low-confidence and evidence labels
+  ---
+  duration_ms: 9.197041
+  type: 'test'
+  ...
+# Subtest: cloud resume uploads and claims into the existing draft before finalizing
+ok 170 - cloud resume uploads and claims into the existing draft before finalizing
+  ---
+  duration_ms: 1.014917
+  type: 'test'
+  ...
+# Subtest: activity reminders use an explicit start and end time
+ok 171 - activity reminders use an explicit start and end time
+  ---
+  duration_ms: 0.895166
+  type: 'test'
+  ...
+# Subtest: activity reminder validation preserves invalid ranges
+ok 172 - activity reminder validation preserves invalid ranges
+  ---
+  duration_ms: 0.260209
+  type: 'test'
+  ...
+# Subtest: the same activity time range is synchronized to calendar and today
+ok 173 - the same activity time range is synchronized to calendar and today
+  ---
+  duration_ms: 0.226291
+  type: 'test'
+  ...
+# Subtest: today disclosures and child triggers share vector chevrons
+ok 174 - today disclosures and child triggers share vector chevrons
+  ---
+  duration_ms: 0.200208
+  type: 'test'
+  ...
+# Subtest: today starts with its three fact sections instead of a review-only progress card
+ok 175 - today starts with its three fact sections instead of a review-only progress card
+  ---
+  duration_ms: 0.380834
+  type: 'test'
+  ...
+# Subtest: calendar and today use the end-time boundary for the shared past state
+ok 176 - calendar and today use the end-time boundary for the shared past state
+  ---
+  duration_ms: 0.321292
+  type: 'test'
+  ...
+# Subtest: photo records support single capture and repeated multi-select with one shared cap
+ok 177 - photo records support single capture and repeated multi-select with one shared cap
+  ---
+  duration_ms: 0.3105
+  type: 'test'
+  ...
+# Subtest: interrupted native photo batches can be resumed or cancelled
+ok 178 - interrupted native photo batches can be resumed or cancelled
+  ---
+  duration_ms: 0.442459
+  type: 'test'
+  ...
+# Subtest: native today consumes optional activity suggestions without duplicating fixed schedules
+ok 179 - native today consumes optional activity suggestions without duplicating fixed schedules
+  ---
+  duration_ms: 0.225125
+  type: 'test'
+  ...
+# Subtest: native settings can remove an activity reminder
+ok 180 - native settings can remove an activity reminder
+  ---
+  duration_ms: 0.2905
+  type: 'test'
+  ...
+# Subtest: report disclosures start closed and only fetch bounded history on expansion
+ok 181 - report disclosures start closed and only fetch bounded history on expansion
+  ---
+  duration_ms: 7.081417
+  type: 'test'
+  ...
+# Subtest: switching children clears expanded content and ignores the old child's late history page
+ok 182 - switching children clears expanded content and ignores the old child's late history page
+  ---
+  duration_ms: 5.228416
+  type: 'test'
+  ...
+# Subtest: embedded edit plan runs the same bounded controller and discards detached responses
+ok 183 - embedded edit plan runs the same bounded controller and discards detached responses
+  ---
+  duration_ms: 3.236209
+  type: 'test'
+  ...
+# Subtest: 7, 30 and 100 day ranges always render exactly seven aggregate points
+ok 184 - 7, 30 and 100 day ranges always render exactly seven aggregate points
+  ---
+  duration_ms: 21.320625
+  type: 'test'
+  ...
+# Subtest: new-user zero series remains an honest flat seven-point line
+ok 185 - new-user zero series remains an honest flat seven-point line
+  ---
+  duration_ms: 5.893125
+  type: 'test'
+  ...
+# Subtest: missing or invalid trend contracts degrade all cards to no-trend copy
+ok 186 - missing or invalid trend contracts degrade all cards to no-trend copy
+  ---
+  duration_ms: 9.948833
+  type: 'test'
+  ...
+# Subtest: report panel audit accepts all captured native states and rejects absent rendered sections
+ok 187 - report panel audit accepts all captured native states and rejects absent rendered sections
+  ---
+  duration_ms: 28.411209
+  type: 'test'
+  ...
+# Subtest: report panel audit rejects clipped footer, enlarged adjustment, and overlapping copy
+ok 188 - report panel audit rejects clipped footer, enlarged adjustment, and overlapping copy
+  ---
+  duration_ms: 1.19675
+  type: 'test'
+  ...
+# Subtest: report panel audit rejects missing embedded content and off-screen menu
+ok 189 - report panel audit rejects missing embedded content and off-screen menu
+  ---
+  duration_ms: 0.545167
+  type: 'test'
+  ...
+# Subtest: overview metric cards are passive summaries with seven-point trends
+ok 190 - overview metric cards are passive summaries with seven-point trends
+  ---
+  duration_ms: 9.539167
+  type: 'test'
+  ...
+# Subtest: subject rows expand the report history with their exact range filters
+ok 191 - subject rows expand the report history with their exact range filters
+  ---
+  duration_ms: 4.305458
+  type: 'test'
+  ...
+# Subtest: metric tiles expose no tap affordance and render a native mini trend
+ok 192 - metric tiles expose no tap affordance and render a native mini trend
+  ---
+  duration_ms: 3.253541
+  type: 'test'
+  ...
+# Subtest: 100-day reports render as 30, 30, 30 and 10 day swiper pages
+ok 193 - 100-day reports render as 30, 30, 30 and 10 day swiper pages
+  ---
+  duration_ms: 6.512541
+  type: 'test'
+  ...
+# Subtest: report pagination is component-local and uses a six-by-five visual grid
+ok 194 - report pagination is component-local and uses a six-by-five visual grid
+  ---
+  duration_ms: 1.07575
+  type: 'test'
+  ...
+# Subtest: native rectangle audit accepts the one-row time and single-control subject/count filters
+ok 195 - native rectangle audit accepts the one-row time and single-control subject/count filters
+  ---
+  duration_ms: 0.851834
+  type: 'test'
+  ...
+# Subtest: native rectangle audit catches broken selector width, gap and overflow
+ok 196 - native rectangle audit catches broken selector width, gap and overflow
+  ---
+  duration_ms: 0.162667
+  type: 'test'
+  ...
+# Subtest: native rectangle audit catches enlarged ellipsis and title collision
+ok 197 - native rectangle audit catches enlarged ellipsis and title collision
+  ---
+  duration_ms: 0.242041
+  type: 'test'
+  ...
+# Subtest: native rectangle audit checks dropdown targets and anchored menu containment
+ok 198 - native rectangle audit checks dropdown targets and anchored menu containment
+  ---
+  duration_ms: 0.108125
+  type: 'test'
+  ...
+# Subtest: native rectangle audit uses the actual trigger for an upward menu
+ok 199 - native rectangle audit uses the actual trigger for an upward menu
+  ---
+  duration_ms: 0.128416
+  type: 'test'
+  ...
+# Subtest: status audit rejects small targets, missing provenance and scheduling actions in superseded menu
+ok 200 - status audit rejects small targets, missing provenance and scheduling actions in superseded menu
+  ---
+  duration_ms: 1.649667
+  type: 'test'
+  ...
+# Subtest: dates and arrangement labels distinguish reservations and legacy responses
+ok 201 - dates and arrangement labels distinguish reservations and legacy responses
+  ---
+  duration_ms: 4.522167
+  type: 'test'
+  ...
+# Subtest: compact dates keep the year when a review crosses New Year
+ok 202 - compact dates keep the year when a review crosses New Year
+  ---
+  duration_ms: 0.995291
+  type: 'test'
+  ...
+# Subtest: cloud bootstrap may establish family and still load; switching context clears old rows
+ok 203 - cloud bootstrap may establish family and still load; switching context clears old rows
+  ---
+  duration_ms: 1.591
+  type: 'test'
+  ...
+# Subtest: specific count commits only on confirmation and uses exact server filter
+ok 204 - specific count commits only on confirmation and uses exact server filter
+  ---
+  duration_ms: 1.406333
+  type: 'test'
+  ...
+# Subtest: one active filter picker closes after selection and preserves unconfirmed count
+ok 205 - one active filter picker closes after selection and preserves unconfirmed count
+  ---
+  duration_ms: 0.84925
+  type: 'test'
+  ...
+# Subtest: current cursor page groups by subject and resets folding on a new page
+ok 206 - current cursor page groups by subject and resets folding on a new page
+  ---
+  duration_ms: 1.076417
+  type: 'test'
+  ...
+# Subtest: ellipsis menu is one-at-a-time, closes on repeat or fold, and delete still confirms
+ok 207 - ellipsis menu is one-at-a-time, closes on repeat or fold, and delete still confirms
+  ---
+  duration_ms: 0.656083
+  type: 'test'
+  ...
+# Subtest: ellipsis menu opens upward when the trigger is near the viewport bottom
+ok 208 - ellipsis menu opens upward when the trigger is near the viewport bottom
+  ---
+  duration_ms: 1.26775
+  type: 'test'
+  ...
+# Subtest: pagination replaces rows and old filter responses cannot overwrite selection
+ok 209 - pagination replaces rows and old filter responses cannot overwrite selection
+  ---
+  duration_ms: 1.213375
+  type: 'test'
+  ...
+# Subtest: single subject includes zero-count subjects and requests only selected subject
+ok 210 - single subject includes zero-count subjects and requests only selected subject
+  ---
+  duration_ms: 1.26225
+  type: 'test'
+  ...
+# Subtest: browsing subject pages does not silently change selection; explicit choice survives refresh
+ok 211 - browsing subject pages does not silently change selection; explicit choice survives refresh
+  ---
+  duration_ms: 1.329958
+  type: 'test'
+  ...
+# Subtest: schedule failure preserves selection and retry key; conflicts demand reload
+ok 212 - schedule failure preserves selection and retry key; conflicts demand reload
+  ---
+  duration_ms: 1.048459
+  type: 'test'
+  ...
+# Subtest: delete requires confirmation, blocks duplicate saves, viewer and late family responses
+ok 213 - delete requires confirmation, blocks duplicate saves, viewer and late family responses
+  ---
+  duration_ms: 1.109791
+  type: 'test'
+  ...
+# Subtest: status selection resets filters and cursor, restricts views, and always scopes requests
+ok 214 - status selection resets filters and cursor, restricts views, and always scopes requests
+  ---
+  duration_ms: 1.679375
+  type: 'test'
+  ...
+# Subtest: superseded rows retain real history, name the covering item and omit scheduling dates
+ok 215 - superseded rows retain real history, name the covering item and omit scheduling dates
+  ---
+  duration_ms: 0.80975
+  type: 'test'
+  ...
+# Subtest: late item and subject responses cannot cross a status change
+ok 216 - late item and subject responses cannot cross a status change
+  ---
+  duration_ms: 0.873042
+  type: 'test'
+  ...
+# Subtest: superseded pagination and delete keep the status; scheduling is blocked even for a bad flag
+ok 217 - superseded pagination and delete keep the status; scheduling is blocked even for a bad flag
+  ---
+  duration_ms: 1.908041
+  type: 'test'
+  ...
+# Subtest: viewers can open only a returned original source and cannot modify superseded entries
+ok 218 - viewers can open only a returned original source and cannot modify superseded entries
+  ---
+  duration_ms: 0.760708
+  type: 'test'
+  ...
+# Subtest: embedded inventory shares status logic and readonly permissions
+ok 219 - embedded inventory shares status logic and readonly permissions
+  ---
+  duration_ms: 0.822083
+  type: 'test'
+  ...
+# Subtest: base and custom subject removal needs confirmation; cancel does not write
+ok 220 - base and custom subject removal needs confirmation; cancel does not write
+  ---
+  duration_ms: 3.124292
+  type: 'test'
+  ...
+# Subtest: subject manager joins missing and inactive base subjects with existing API
+ok 221 - subject manager joins missing and inactive base subjects with existing API
+  ---
+  duration_ms: 2.013958
+  type: 'test'
+  ...
+# Subtest: subject manager blocks readonly/restricted and stale confirmation after close or child switch
+ok 222 - subject manager blocks readonly/restricted and stale confirmation after close or child switch
+  ---
+  duration_ms: 1.251333
+  type: 'test'
+  ...
+# Subtest: subject manager prevents duplicate confirmation and write; failure keeps panel for retry
+ok 223 - subject manager prevents duplicate confirmation and write; failure keeps panel for retry
+  ---
+  duration_ms: 0.795875
+  type: 'test'
+  ...
+# Subtest: subject manager discards successful response after switching children
+ok 224 - subject manager discards successful response after switching children
+  ---
+  duration_ms: 0.667708
+  type: 'test'
+  ...
+# Subtest: opening and cancelling settings editors performs zero writes
+ok 225 - opening and cancelling settings editors performs zero writes
+  ---
+  duration_ms: 0.795584
+  type: 'test'
+  ...
+# Subtest: travel form preserves validation state and creates one weekly arrangement with canonical slots
+ok 226 - travel form preserves validation state and creates one weekly arrangement with canonical slots
+  ---
+  duration_ms: 0.719667
+  type: 'test'
+  ...
+# Subtest: activity editor opens mixed-time schedule in per-day mode and groups the summary
+ok 227 - activity editor opens mixed-time schedule in per-day mode and groups the summary
+  ---
+  duration_ms: 1.19675
+  type: 'test'
+  ...
+# Subtest: expanding per-day inherits uniform time and added weekday inherits first row
+ok 228 - expanding per-day inherits uniform time and added weekday inherits first row
+  ---
+  duration_ms: 1.008709
+  type: 'test'
+  ...
+# Subtest: removing a weekday drops its per-day row without writes
+ok 229 - removing a weekday drops its per-day row without writes
+  ---
+  duration_ms: 0.8595
+  type: 'test'
+  ...
+# Subtest: merging back to uniform requires confirmation and applies first weekday time
+ok 230 - merging back to uniform requires confirmation and applies first weekday time
+  ---
+  duration_ms: 1.470166
+  type: 'test'
+  ...
+# Subtest: cancelling the merge confirmation keeps every per-day row
+ok 231 - cancelling the merge confirmation keeps every per-day row
+  ---
+  duration_ms: 1.20825
+  type: 'test'
+  ...
+# Subtest: saving a per-day schedule submits distinct slots with the capability header
+ok 232 - saving a per-day schedule submits distinct slots with the capability header
+  ---
+  duration_ms: 0.786125
+  type: 'test'
+  ...
+# Subtest: a flexible activity submits empty slots
+ok 233 - a flexible activity submits empty slots
+  ---
+  duration_ms: 0.833208
+  type: 'test'
+  ...
+# Subtest: a per-day row with end before start blocks the save and keeps rows
+ok 234 - a per-day row with end before start blocks the save and keeps rows
+  ---
+  duration_ms: 1.208
+  type: 'test'
+  ...
+# Subtest: materials stay lazy, bound download concurrency and clean all temporary previews
+ok 235 - materials stay lazy, bound download concurrency and clean all temporary previews
+  ---
+  duration_ms: 2.518875
+  type: 'test'
+  ...
+# Subtest: late photo completion after leaving is deleted and cannot populate another view
+ok 236 - late photo completion after leaving is deleted and cannot populate another view
+  ---
+  duration_ms: 1.595167
+  type: 'test'
+  ...
+# Subtest: permission loss clears original material and preview URLs
+ok 237 - permission loss clears original material and preview URLs
+  ---
+  duration_ms: 0.446375
+  type: 'test'
+  ...
+# Subtest: embedded materials open and load immediately while keeping ordinary cards lazy
+ok 238 - embedded materials open and load immediately while keeping ordinary cards lazy
+  ---
+  duration_ms: 0.363167
+  type: 'test'
+  ...
+# Subtest: exact sources download and preview only the matching original index, including an unavailable predecessor
+ok 239 - exact sources download and preview only the matching original index, including an unavailable predecessor
+  ---
+  duration_ms: 0.541042
+  type: 'test'
+  ...
+# Subtest: unknown and invalid indices never load another image or mixed batch text
+ok 240 - unknown and invalid indices never load another image or mixed batch text
+  ---
+  duration_ms: 4.077125
+  type: 'test'
+  ...
+# Subtest: exact source preserves manual text and unavailable target without replacing it
+ok 241 - exact source preserves manual text and unavailable target without replacing it
+  ---
+  duration_ms: 0.351167
+  type: 'test'
+  ...
+# Subtest: changing index within a submission invalidates a late thumbnail
+ok 242 - changing index within a submission invalidates a late thumbnail
+  ---
+  duration_ms: 7.724667
+  type: 'test'
+  ...
+# Subtest: exact source errors never request a substitute photo and network failure can retry
+ok 243 - exact source errors never request a substitute photo and network failure can retry
+  ---
+  duration_ms: 1.689708
+  type: 'test'
+  ...
+# Subtest: hiding clears downloaded private media and ignores late platform preview failure
+ok 244 - hiding clears downloaded private media and ignores late platform preview failure
+  ---
+  duration_ms: 0.826792
+  type: 'test'
+  ...
+# Subtest: todo card projects evidence and emits the exact knowledge source
+ok 245 - todo card projects evidence and emits the exact knowledge source
+  ---
+  duration_ms: 1.801459
+  type: 'test'
+  ...
+# Subtest: today source material UI replaces appearance reason and practice prompt
+ok 246 - today source material UI replaces appearance reason and practice prompt
+  ---
+  duration_ms: 0.638666
+  type: 'test'
+  ...
+# Subtest: travel is configured in settings and explicitly excluded from today
+ok 247 - travel is configured in settings and explicitly excluded from today
+  ---
+  duration_ms: 1.104375
+  type: 'test'
+  ...
+# Subtest: calendar conflict state has text semantics in addition to red styling
+ok 248 - calendar conflict state has text semantics in addition to red styling
+  ---
+  duration_ms: 0.878208
+  type: 'test'
+  ...
+# Subtest: calendar lists every conflict object with its time and overlap
+ok 249 - calendar lists every conflict object with its time and overlap
+  ---
+  duration_ms: 6.418625
+  type: 'test'
+  ...
+# Subtest: tapping a projected travel item returns to its settings editor
+ok 250 - tapping a projected travel item returns to its settings editor
+  ---
+  duration_ms: 0.087708
+  type: 'test'
+  ...
+# Subtest: view state priority is honest
+ok 251 - view state priority is honest
+  ---
+  duration_ms: 0.388917
+  type: 'test'
+  ...
+# Subtest: analysis states use named progress rather than fake percentages
+ok 252 - analysis states use named progress rather than fake percentages
+  ---
+  duration_ms: 0.072
+  type: 'test'
+  ...
+# Subtest: authorized hold starts one 60-second Mandarin recognition and appends only final text
+ok 253 - authorized hold starts one 60-second Mandarin recognition and appends only final text
+  ---
+  duration_ms: 1.018125
+  type: 'test'
+  ...
+# Subtest: first microphone authorization completes without auto-start and requires a new hold
+ok 254 - first microphone authorization completes without auto-start and requires a new hold
+  ---
+  duration_ms: 0.581875
+  type: 'test'
+  ...
+# Subtest: privacy and microphone prompts can complete together but never start the released gesture
+ok 255 - privacy and microphone prompts can complete together but never start the released gesture
+  ---
+  duration_ms: 0.170541
+  type: 'test'
+  ...
+# Subtest: an ended gesture cannot start recording when the asynchronous setting check returns
+ok 256 - an ended gesture cannot start recording when the asynchronous setting check returns
+  ---
+  duration_ms: 0.078625
+  type: 'test'
+  ...
+# Subtest: permission denial exposes only safe copy and leaves manual input available
+ok 257 - permission denial exposes only safe copy and leaves manual input available
+  ---
+  duration_ms: 0.139958
+  type: 'test'
+  ...
+# Subtest: duplicate gestures are rejected while a recording or cancelled stop is draining
+ok 258 - duplicate gestures are rejected while a recording or cancelled stop is draining
+  ---
+  duration_ms: 0.103959
+  type: 'test'
+  ...
+# Subtest: cancel, context changes, disposal, empty speech and plugin errors never leak transcript data
+ok 259 - cancel, context changes, disposal, empty speech and plugin errors never leak transcript data
+  ---
+  duration_ms: 0.239167
+  type: 'test'
+  ...
+# Subtest: hiding during recognition discards the result without issuing a duplicate stop
+ok 260 - hiding during recognition discards the result without issuing a duplicate stop
+  ---
+  duration_ms: 0.07025
+  type: 'test'
+  ...
+# Subtest: record page appends transcript once, preserves existing text and protects the 4000-character boundary
+ok 261 - record page appends transcript once, preserves existing text and protects the 4000-character boundary
+  ---
+  duration_ms: 5.174667
+  type: 'test'
+  ...
+# Subtest: record page ignores a transcript for another child and blocks submit while voice work is active
+ok 262 - record page ignores a transcript for another child and blocks submit while voice work is active
+  ---
+  duration_ms: 2.819625
+  type: 'test'
+  ...
+# Subtest: record page cancels voice work when the child context disappears
+ok 263 - record page cancels voice work when the child context disappears
+  ---
+  duration_ms: 2.521083
+  type: 'test'
+  ...
+# Subtest: record page wires hold, upward cancel threshold, release and plugin callback end to end
+ok 264 - record page wires hold, upward cancel threshold, release and plugin callback end to end
+  ---
+  duration_ms: 2.021333
+  type: 'test'
+  ...
+# Subtest: record page keeps the mic inside the compact input and declares only the approved plugin
+ok 265 - record page keeps the mic inside the compact input and declares only the approved plugin
+  ---
+  duration_ms: 0.746042
+  type: 'test'
+  ...
+1..265
+# tests 265
+# suites 0
+# pass 265
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1119.787792

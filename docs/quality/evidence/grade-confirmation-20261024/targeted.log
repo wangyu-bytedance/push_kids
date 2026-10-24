@@ -1,0 +1,21 @@
+...........................................                              [100%]
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /Users/bytedance/Documents/push_kids/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+tests/integration/test_grade_confirmation_migration.py::test_additive_migration_preserves_grade_and_refuses_confirmation_loss[False]
+tests/integration/test_grade_confirmation_migration.py::test_additive_migration_preserves_grade_and_refuses_confirmation_loss[False]
+tests/integration/test_grade_confirmation_migration.py::test_additive_migration_preserves_grade_and_refuses_confirmation_loss[True]
+tests/integration/test_grade_confirmation_migration.py::test_additive_migration_preserves_grade_and_refuses_confirmation_loss[True]
+tests/integration/test_grade_confirmation_migration.py::test_old_local_sqlite_upgrades_once_without_faking_parent_confirmation
+tests/integration/test_grade_confirmation_migration.py::test_old_local_sqlite_upgrades_once_without_faking_parent_confirmation
+  /Users/bytedance/Documents/push_kids/.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py:952: DeprecationWarning: The default date adapter is deprecated as of Python 3.12; see the sqlite3 documentation for suggested replacement recipes
+    cursor.execute(statement, parameters)
+
+tests/integration/test_grade_confirmation_migration.py: 14 warnings
+  /Users/bytedance/Documents/push_kids/.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py:952: DeprecationWarning: The default datetime adapter is deprecated as of Python 3.12; see the sqlite3 documentation for suggested replacement recipes
+    cursor.execute(statement, parameters)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+43 passed, 21 warnings in 3.79s

@@ -1,0 +1,153 @@
+{
+  "nodes": {
+    ".grade-sheet": [
+      {
+        "left": 0,
+        "right": 430,
+        "top": 635,
+        "bottom": 932,
+        "width": 430,
+        "height": 297,
+        "scrollLeft": 0,
+        "scrollTop": 0,
+        "scrollWidth": 0,
+        "scrollHeight": 0,
+        "fontSize": "16px",
+        "lineHeight": "25.6px"
+      }
+    ],
+    ".grade-body": [
+      {
+        "left": 20,
+        "right": 410,
+        "top": 673,
+        "bottom": 810,
+        "width": 390,
+        "height": 137,
+        "scrollLeft": 0,
+        "scrollTop": 0,
+        "scrollWidth": 390,
+        "scrollHeight": 137,
+        "fontSize": "16px",
+        "lineHeight": "25.6px"
+      }
+    ],
+    ".grade-title": [
+      {
+        "left": 20,
+        "right": 410,
+        "top": 673,
+        "bottom": 704,
+        "width": 390,
+        "height": 31,
+        "scrollLeft": 0,
+        "scrollTop": 0,
+        "scrollWidth": 0,
+        "scrollHeight": 0,
+        "fontSize": "22px",
+        "lineHeight": "31.9px"
+      }
+    ],
+    ".grade-latest": [],
+    ".grade-picker": [
+      {
+        "left": 20,
+        "right": 410,
+        "top": 724,
+        "bottom": 776,
+        "width": 390,
+        "height": 52,
+        "scrollLeft": 0,
+        "scrollTop": 0,
+        "scrollWidth": 0,
+        "scrollHeight": 0,
+        "fontSize": "18px",
+        "lineHeight": "26px"
+      }
+    ],
+    ".grade-error": [
+      {
+        "left": 20,
+        "right": 410,
+        "top": 788,
+        "bottom": 810,
+        "width": 390,
+        "height": 22,
+        "scrollLeft": 0,
+        "scrollTop": 0,
+        "scrollWidth": 0,
+        "scrollHeight": 0,
+        "fontSize": "14px",
+        "lineHeight": "22.4px"
+      }
+    ],
+    ".grade-actions": [
+      {
+        "left": 20,
+        "right": 410,
+        "top": 830,
+        "bottom": 878,
+        "width": 390,
+        "height": 48,
+        "scrollLeft": 0,
+        "scrollTop": 0,
+        "scrollWidth": 0,
+        "scrollHeight": 0,
+        "fontSize": "16px",
+        "lineHeight": "25.6px"
+      }
+    ],
+    ".grade-primary": [
+      {
+        "left": 166,
+        "right": 410,
+        "top": 830,
+        "bottom": 878,
+        "width": 244,
+        "height": 48,
+        "scrollLeft": 0,
+        "scrollTop": 0,
+        "scrollWidth": 0,
+        "scrollHeight": 0,
+        "fontSize": "16px",
+        "lineHeight": "24px"
+      }
+    ],
+    ".grade-secondary": [
+      {
+        "left": 20,
+        "right": 154,
+        "top": 830,
+        "bottom": 878,
+        "width": 134,
+        "height": 48,
+        "scrollLeft": 0,
+        "scrollTop": 0,
+        "scrollWidth": 0,
+        "scrollHeight": 0,
+        "fontSize": "16px",
+        "lineHeight": "24px"
+      }
+    ],
+    ".tabbar": []
+  },
+  "viewport": {
+    "width": 430,
+    "height": 932,
+    "screenHeight": 932,
+    "dpr": 3,
+    "fontScale": 15,
+    "baseLibrary": "3.17.4"
+  },
+  "observed": {
+    "attempts": 2,
+    "visible": true,
+    "selected": "四年级",
+    "error": "保存失败，请重试。"
+  },
+  "errors": [],
+  "state": "interaction-check",
+  "fixture": "actual picker/component/host/controller; offline transport rejects every write",
+  "capturedAt": "2026-10-24T12:52:43.754Z",
+  "screenshotSha256": "f37ff40e526dd2ab460bf96fd763592892472a85a678db130d2d569aaeb506ee"
+}

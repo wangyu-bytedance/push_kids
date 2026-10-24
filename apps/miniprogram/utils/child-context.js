@@ -15,14 +15,22 @@ const GRADE_OPTIONS = [
   "小学五年级",
   "小学六年级",
   "初中一年级",
+  "初中二年级",
+  "初中三年级",
   "其他"
 ];
+const GRADE_LABELS = ["小班", "中班", "大班", "一年级", "二年级", "三年级", "四年级", "五年级", "六年级", "七年级", "八年级", "九年级", "其他"];
+
+function gradeLabel(value) {
+  const index = GRADE_OPTIONS.indexOf(value);
+  return index < 0 ? (value || "") : GRADE_LABELS[index];
+}
 
 /* 新建只展示 canonical 值；编辑历史档案时，把已有但不在列表中的值临时放回 picker。
    “学前”无法可靠推断成小/中/大班，因此只改变展示标签，提交值仍保持原样。 */
 function gradeChoices(currentGrade = null, includeEmpty = false) {
-  const choices = GRADE_OPTIONS.map((value) => ({ label: value, value }));
-  if (typeof currentGrade === "string" && currentGrade && !GRADE_OPTIONS.includes(currentGrade)) {
+  const choices = GRADE_OPTIONS.map((value) => ({ label: gradeLabel(value), value }));
+  if (typeof currentGrade === "string" && currentGrade && !GRADE_OPTIONS.includes(currentGrade) && !GRADE_LABELS.includes(currentGrade)) {
     choices.unshift({
       label: currentGrade === "学前" ? "学前（未细分）" : currentGrade,
       value: currentGrade,
@@ -34,7 +42,9 @@ function gradeChoices(currentGrade = null, includeEmpty = false) {
 }
 
 function gradeChoiceIndex(choices, grade) {
-  const index = (choices || []).findIndex((item) => item.value === (grade || null));
+  const aliasIndex = GRADE_LABELS.indexOf(grade);
+  const value = aliasIndex < 0 ? grade : GRADE_OPTIONS[aliasIndex];
+  const index = (choices || []).findIndex((item) => item.value === (value || null));
   return index < 0 ? 0 : index;
 }
 
@@ -43,7 +53,8 @@ function decorate(child) {
   return {
     ...child,
     avatar: name ? name.charAt(0) : FALLBACK_AVATAR,
-    label: child && child.grade ? `${name} · ${child.grade}` : name
+    gradeLabel: gradeLabel(child && child.grade),
+    label: child && child.grade ? `${name} · ${gradeLabel(child.grade)}` : name
   };
 }
 
@@ -99,6 +110,7 @@ function limitHint() {
 module.exports = {
   MAX_ACTIVE_CHILDREN,
   GRADE_OPTIONS,
+  gradeLabel,
   gradeChoices,
   gradeChoiceIndex,
   decorate,

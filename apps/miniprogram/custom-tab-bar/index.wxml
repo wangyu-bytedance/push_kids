@@ -1,4 +1,4 @@
-<view class="tabbar">
+<view class="tabbar" wx:if="{{!renewalGuideVisible && !recordOverlayVisible && !gradeConfirmationVisible}}">
   <view class="tab {{selected === index ? 'active' : ''}} {{item.center ? 'is-center' : ''}}" wx:for="{{tabs}}" wx:key="pagePath" data-index="{{index}}" bindtap="switchTab">
     <view class="key" wx:if="{{item.center}}">
       <image class="tab-icon key-icon" src="/assets/tab-records-key.png" mode="aspectFit"/>

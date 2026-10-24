@@ -12,7 +12,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from push_kids.activities.router import router as activities_router
+from push_kids.agent_processing.coverage_worker import CoverageWorker
+from push_kids.agent_processing.footprint_provider import build_footprint_provider
 from push_kids.agent_processing.providers import build_provider
+from push_kids.agent_processing.suggestion_provider import build_suggestion_provider
 from push_kids.agent_processing.worker import AnalysisWorker
 from push_kids.children.router import router as children_router
 from push_kids.daily_tasks.router import router as daily_tasks_router
@@ -20,7 +23,12 @@ from push_kids.data_management.router import router as data_management_router
 from push_kids.data_management.worker import DataDeletionWorker
 from push_kids.families.rate_limit import InvitePreviewRateLimiter
 from push_kids.families.router import router as families_router
+from push_kids.footprints.map_provider import TencentPlaces
+from push_kids.footprints.router import router as footprints_router
+from push_kids.footprints.worker import FootprintWorker
 from push_kids.learning.router import router as learning_router
+from push_kids.learning_suggestions.router import router as suggestions_router
+from push_kids.learning_suggestions.worker import SuggestionWorker
 from push_kids.media.preview_limit import MediaPreviewLimiter
 from push_kids.media.store import build_media_store
 from push_kids.notifications.router import router as notifications_router
@@ -63,7 +71,19 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     provider = build_provider(config)
     media_store = build_media_store(config)
     worker = AnalysisWorker(database, provider, media_store, config.worker_poll_seconds)
+    coverage_worker = CoverageWorker(database, provider)
+    suggestion_worker = SuggestionWorker(database, build_suggestion_provider(config))
     deletion_worker = DataDeletionWorker(database, media_store, config.worker_poll_seconds)
+    footprint_places = TencentPlaces(
+        config.footprint_map_key.get_secret_value() if config.footprint_map_key else None
+    )
+    footprint_worker = FootprintWorker(
+        database,
+        media_store,
+        build_footprint_provider(config),
+        footprint_places,
+        max(config.worker_poll_seconds, 1),
+    )
     notification_channel = build_channel(config)
     notification_scheduler = NotificationScheduler(
         database, notification_channel, config.notification_tick_seconds
@@ -89,10 +109,18 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             config.media_root.mkdir(parents=True, exist_ok=True)
             database.create_schema()
         task = asyncio.create_task(worker.run()) if config.run_worker else None
+        coverage_task = asyncio.create_task(coverage_worker.run()) if config.run_worker else None
+        app.state.coverage_worker_task = coverage_task
+        suggestion_task = (
+            asyncio.create_task(suggestion_worker.run()) if config.run_worker else None
+        )
+        app.state.suggestion_worker_task = suggestion_task
         deletion_task = asyncio.create_task(deletion_worker.run()) if config.run_worker else None
+        footprint_task = asyncio.create_task(footprint_worker.run()) if config.run_worker else None
+        app.state.footprint_worker_task = footprint_task
         app.state.worker_task = task
         app.state.deletion_worker_task = deletion_task
-        for running_task in (task, deletion_task):
+        for running_task in (task, deletion_task, footprint_task, coverage_task, suggestion_task):
             if running_task:
                 running_task.add_done_callback(worker_done)
         # Reminders are only scheduled where a channel exists, so an unconfigured deployment does
@@ -109,6 +137,18 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             yield
         finally:
             try:
+                if suggestion_task:
+                    suggestion_worker.stop()
+                    with suppress(asyncio.CancelledError, Exception):
+                        await suggestion_task
+                if coverage_task:
+                    coverage_worker.stop()
+                    with suppress(asyncio.CancelledError, Exception):
+                        await coverage_task
+                if footprint_task:
+                    footprint_worker.stop()
+                    with suppress(asyncio.CancelledError, Exception):
+                        await footprint_task
                 if scheduler_task:
                     notification_scheduler.stop()
                     with suppress(asyncio.CancelledError, Exception):
@@ -135,14 +175,20 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         openapi_url=None if config.is_cloud else "/openapi.json",
     )
     app.state.settings = config
+    app.state.suggestion_worker = suggestion_worker
     app.state.database = database
     app.state.analysis_provider = provider
     app.state.media_store = media_store
     app.state.media_preview_limiter = MediaPreviewLimiter()
+    app.state.coverage_worker = coverage_worker
+    app.state.coverage_worker_task = None
     app.state.worker = worker
     app.state.worker_task = None
     app.state.deletion_worker = deletion_worker
     app.state.deletion_worker_task = None
+    app.state.footprint_worker = footprint_worker
+    app.state.footprint_worker_task = None
+    app.state.footprint_places = footprint_places
     app.state.invite_preview_limiter = InvitePreviewRateLimiter()
     app.state.notification_channel = notification_channel
     app.state.notification_scheduler = notification_scheduler
@@ -234,6 +280,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             or deletion_task is None
             or deletion_task.done()
             or not deletion_worker.is_ready
+            or app.state.footprint_worker_task is None
+            or app.state.footprint_worker_task.done()
+            or not footprint_worker.is_ready
         ):
             return JSONResponse(
                 status_code=503,
@@ -252,9 +301,11 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.include_router(data_management_router, prefix=api_prefix)
     app.include_router(families_router, prefix=api_prefix)
     app.include_router(learning_router, prefix=api_prefix)
+    app.include_router(suggestions_router, prefix=api_prefix)
     app.include_router(planning_router, prefix=api_prefix)
     app.include_router(activities_router, prefix=api_prefix)
     app.include_router(travel_router, prefix=api_prefix)
     app.include_router(reporting_router, prefix=api_prefix)
     app.include_router(notifications_router, prefix=api_prefix)
+    app.include_router(footprints_router, prefix=api_prefix)
     return app

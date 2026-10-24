@@ -3,19 +3,43 @@ from typing import Annotated
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
+from push_kids.children.grade_confirmation import GradeConfirmationService
 from push_kids.children.schemas import (
     ChildCreate,
     ChildUpdate,
     ChildView,
+    GradeConfirmation,
+    GradeConfirmationResult,
+    GradeConfirmations,
     SubjectCreate,
     SubjectUpdate,
     SubjectView,
 )
 from push_kids.children.service import ChildrenService
-from push_kids.platform.context import RequestContext, family_id, manager_context
+from push_kids.platform.context import RequestContext, family_id, manager_context, request_context
 from push_kids.platform.dependencies import get_db
 
 router = APIRouter(tags=["children"])
+
+
+@router.get("/children/grade-confirmations", response_model=GradeConfirmations)
+def grade_confirmations(
+    context: Annotated[RequestContext, Depends(request_context)],
+    db: Annotated[Session, Depends(get_db)],
+):
+    return GradeConfirmationService.pending(
+        db, context.family_id, can_confirm=context.role in {"manager", "editor"}
+    )
+
+
+@router.post("/children/{child_id}/grade-confirmation", response_model=GradeConfirmationResult)
+def confirm_grade(
+    child_id: str,
+    body: GradeConfirmation,
+    family: Annotated[str, Depends(family_id)],
+    db: Annotated[Session, Depends(get_db)],
+):
+    return GradeConfirmationService.confirm(db, family, child_id, body)
 
 
 @router.get("/children", response_model=list[ChildView])

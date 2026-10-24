@@ -1,6 +1,15 @@
 # Feature Current-State Directory
 
+本地新增当前能力：[FEAT-004两日无新增的单项学习建议](FEAT-004-daily-learning-suggestions.md)，Spec04/DREV01已批准并实现，建议弹层按另批Spec01/DREV02精简，今日卡片按Visibility Spec01/DREV03隐藏空区并统一风格（revision06-LOCAL）；默认关闭、VERIFYING。[FEAT-001](FEAT-001-push-kids-mvp.md)同步空白日少量提前复习。自动化和缺口见[主功能证据](../../quality/evidence/TODAY-LEARNING-IMPLEMENTATION-20261024.md)、[弹层证据](../../quality/evidence/SUGGESTION-SHEET-IMPLEMENTATION-20261024.md)及[卡片证据](../../quality/evidence/TODAY-CARD-IMPLEMENTATION-20261024.md)，不代表已发布。
+
 ## Purpose
+
+新增本地实现：[FEAT-013 — 学年升年级建议与家长共享确认](FEAT-013-annual-grade-promotion.md)，`LOCAL_IMPLEMENTATION / VERIFYING / NOT_RELEASED`；[Spec02](../../../specs/active/FEAT-013-ANNUAL-GRADE-PROMOTION.md)及Architecture02/DREV01已获用户批准，当前弹窗由另批[精简Spec01/DREV02](../../../specs/active/FEAT-013-GRADE-DIALOG-SIMPLIFICATION.md)收敛为单标题/选择与并排操作。建议与正式级隔离、孩子学年共享、独立串行弹窗和显式人工定级保持；[主任务证据](../../quality/evidence/ANNUAL-GRADE-IMPLEMENTATION-20261024.md)与[精简实施证据](../../quality/evidence/GRADE-DIALOG-SIMPLIFICATION-IMPLEMENTATION-20261024.md)分别记录采集时事实，真实设备、原生端到端和可访问性待验，不代表已发布。
+
+新增本地实现：[FEAT-012 — 孩子照片足迹](FEAT-012-child-photo-footprints.md)，`LOCAL_IMPLEMENTATION / VERIFYING / NOT_RELEASED`。Spec04/Architecture03实现导入、家长确认和三视图；2026-10-23按获批入口Spec01和文案Spec01新增记录Tab标题切换“学习记录 / 旅行日记”及提示精简。当前验证见[本轮证据](../../quality/evidence/RECORD-TYPES-IMPLEMENTATION-20261023.md)，完整原生/真机、设计差异、真实全球底图、MySQL5.7及AI/选图素材评估仍待验收。
+
+本地实现入口：[FEAT-011 — 提醒授权自动补充](FEAT-011-notification-auto-renewal.md)，`LOCAL_IMPLEMENTED / VERIFYING / NOT_RELEASED`。
+Spec/架构/DREV已获批准；本人完成游标、逐类冷却、授权事件去重和前端已接入；真机与独立评审待补，线上未改变。
 
 `docs/domain/features/` 是功能当前状态的权威入口，用于回答：
 

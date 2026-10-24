@@ -1,0 +1,829 @@
+{
+  "capturedAt": "2026-10-24T12:00:58.819672+00:00",
+  "status": "PASS",
+  "states": 51,
+  "viewports": {
+    "320": 568,
+    "390": 844,
+    "430": 932
+  },
+  "errors": [],
+  "records": [
+    {
+      "file": "archived-320.json",
+      "state": "archived",
+      "width": 320,
+      "screenHeight": 568,
+      "dpr": 2,
+      "capturedAt": "2026-10-24T11:55:29.447Z",
+      "screenshotSha256": "97b2d7880b53bbecf170aac0d8eeec438ec6b549aa6c0f790718a393efd00223",
+      "checks": {
+        "viewport": true,
+        "assertions": true,
+        "sha": true,
+        "pixels": true,
+        "overflow": true
+      }
+    },
+    {
+      "file": "archived-390.json",
+      "state": "archived",
+      "width": 390,
+      "screenHeight": 844,
+      "dpr": 3,
+      "capturedAt": "2026-10-24T11:59:13.907Z",
+      "screenshotSha256": "06a1674600da36e5e119553f9f7e03f767abec5557e3bd8a53341624a12703f5",
+      "checks": {
+        "viewport": true,
+        "assertions": true,
+        "sha": true,
+        "pixels": true,
+        "overflow": true
+      }
+    },
+    {
+      "file": "archived-430.json",
+      "state": "archived",
+      "width": 430,
+      "screenHeight": 932,
+      "dpr": 3,
+      "capturedAt": "2026-10-24T11:54:25.161Z",
+      "screenshotSha256": "6831135bd24cce663cc2bde7b70cb8e84c9f7d9030f0fc23cb112b5b628c2b8a",
+      "checks": {
+        "viewport": true,
+        "assertions": true,
+        "sha": true,
+        "pixels": true,
+        "overflow": true
+      }
+    },
+    {
+      "file": "empty-bottom-320.json",
+      "state": "empty-bottom",
+      "width": 320,
+      "screenHeight": 568,
+      "dpr": 2,
+      "capturedAt": "2026-10-24T11:55:27.637Z",
+      "screenshotSha256": "7c28bf2f5161cb0f077df94fce04df45fb8586de15b3925692e56aae0a4266ae",
+      "checks": {
+        "viewport": true,
+        "assertions": true,
+        "sha": true,
+        "pixels": true,
+        "overflow": true
+      }
+    },
+    {
+      "file": "empty-bottom-390.json",
+      "state": "empty-bottom",
+      "width": 390,
+      "screenHeight": 844,
+      "dpr": 3,
+      "capturedAt": "2026-10-24T11:59:11.912Z",
+      "screenshotSha256": "58a8564fc455bf9ddf7087490a4871b7cc38ce3dc1c2c03e2e6ccd97761d015a",
+      "checks": {
+        "viewport": true,
+        "assertions": true,
+        "sha": true,
+        "pixels": true,
+        "overflow": true
+      }
+    },
+    {
+      "file": "empty-bottom-430.json",
+      "state": "empty-bottom",
+      "width": 430,
+      "screenHeight": 932,
+      "dpr": 3,
+      "capturedAt": "2026-10-24T11:54:23.307Z",
+      "screenshotSha256": "20fce64c1eccfc94609073796f64a694f6a2cae2ac4f2133aff9d5dcbb53c95f",
+      "checks": {
+        "viewport": true,
+        "assertions": true,
+        "sha": true,
+        "pixels": true,
+        "overflow": true
+      }
+    },
+    {
+      "file": "learning-320.json",
+      "state": "learning",
+      "width": 320,
+      "screenHeight": 568,
+      "dpr": 2,
+      "capturedAt": "2026-10-24T11:55:25.142Z",
+      "screenshotSha256": "e64b030d6954c86c552ef365cb045267200a40d7c33da6bd496a649eec0beac1",
+      "checks": {
+        "viewport": true,
+        "assertions": true,
+        "sha": true,
+        "pixels": true,
+        "overflow": true
+      }
+    },
+    {
+      "file": "learning-390.json",
+      "state": "learning",
+      "width": 390,
+      "screenHeight": 844,
+      "dpr": 3,
+      "capturedAt": "2026-10-24T11:59:09.293Z",
+      "screenshotSha256": "cef9011e2c7e11f322f6d5d8d2a6b36783271db63f27b8e22e39f4ae6a8e2562",
+      "checks": {
+        "viewport": true,
+        "assertions": true,
+        "sha": true,
+        "pixels": true,
+        "overflow": true
+      }
+    },
+    {
+      "file": "learning-430.json",
+      "state": "learning",
+      "width": 430,
+      "screenHeight": 932,
+      "dpr": 3,
+      "capturedAt": "2026-10-24T11:54:20.641Z",
+      "screenshotSha256": "b2191c9ac1ef28f020d6394022577d56257fb9091b8551c16c34fd6e00ddd8dd",
+      "checks": {
+        "viewport": true,
+        "assertions": true,
+        "sha": true,
+        "pixels": true,
+        "overflow": true
+      }
+    },
+    {
+      "file": "learning-menu-320.json",
+      "state": "learning-menu",
+      "width": 320,
+      "screenHeight": 568,
+      "dpr": 2,
+      "capturedAt": "2026-10-24T11:55:25.481Z",
+      "screenshotSha256": "118ed901e3c69275471500300319d7195beb5de45c6107620f883dbb2dc353af",
+      "checks": {
+        "viewport": true,
+        "assertions": true,
+        "sha": true,
+        "pixels": true,
+        "overflow": true
+      }
+    },
+    {
+      "file": "learning-menu-390.json",
+      "state": "learning-menu",
+      "width": 390,
+      "screenHeight": 844,
+      "dpr": 3,
+      "capturedAt": "2026-10-24T11:59:09.637Z",
+      "screenshotSha256": "51133975b24ba85632e0ba441d77962e6ff42c36d5e219b71d7b8dc9d9793e1f",
+      "checks": {
+        "viewport": true,
+        "assertions": true,
+        "sha": true,
+        "pixels": true,
+        "overflow": true
+      }
+    },
+    {
+      "file": "learning-menu-430.json",
+      "state": "learning-menu",
+      "width": 430,
+      "screenHeight": 932,
+      "dpr": 3,
+      "capturedAt": "2026-10-24T11:54:20.983Z",
+      "screenshotSha256": "4bf7338023e6980606970ce1757eca9465f35052b8126920be14a91413e2afa2",
+      "checks": {
+        "viewport": true,
+        "assertions": true,
+        "sha": true,
+        "pixels": true,
+        "overflow": true
+      }
+    },
+    {
+      "file": "lit-bottom-320.json",
+      "state": "lit-bottom",
+      "width": 320,
+      "screenHeight": 568,
+      "dpr": 2,
+      "capturedAt": "2026-10-24T11:55:28.672Z",
+      "screenshotSha256": "e827080b10e7b40bc95e98cdc91e8d60f103685bc92290acc60e8e8252a9f79f",
+      "checks": {
+        "viewport": true,
+        "assertions": true,
+        "sha": true,
+        "pixels": true,
+        "overflow": true
+      }
+    },
+    {
+      "file": "lit-bottom-390.json",
+      "state": "lit-bottom",
+      "width": 390,
+      "screenHeight": 844,
+      "dpr": 3,
+      "capturedAt": "2026-10-24T11:59:13.208Z",
+      "screenshotSha256": "e631eff6d4d8799c6128ed17d5dac6aea98b09fc33adb5ee59aa26e85bcacb28",
+      "checks": {
+        "viewport": true,
+        "assertions": true,
+        "sha": true,
+        "pixels": true,
+        "overflow": true
+      }
+    },
+    {
+      "file": "lit-bottom-430.json",
+      "state": "lit-bottom",
+      "width": 430,
+      "screenHeight": 932,
+      "dpr": 3,
+      "capturedAt": "2026-10-24T11:54:24.439Z",
+      "screenshotSha256": "f1f4ed15e7517a7d37ef3a6885d7d7948c00b7a4565fdd867bf294901da7e231",
+      "checks": {
+        "viewport": true,
+        "assertions": true,
+        "sha": true,
+        "pixels": true,
+        "overflow": true
+      }
+    },
+    {
+      "file": "long-320.json",
+      "state": "long",
+      "width": 320,
+      "screenHeight": 568,
+      "dpr": 2,
+      "capturedAt": "2026-10-24T11:55:26.116Z",
+      "screenshotSha256": "cb583402153e367b1dbc0bb74681e8178309a5962ee52a10aae6c6aed22f5056",
+      "checks": {
+        "viewport": true,
+        "assertions": true,
+        "sha": true,
+        "pixels": true,
+        "overflow": true
+      }
+    },
+    {
+      "file": "long-390.json",
+      "state": "long",
+      "width": 390,
+      "screenHeight": 844,
+      "dpr": 3,
+      "capturedAt": "2026-10-24T11:59:10.301Z",
+      "screenshotSha256": "f0f2ad24d7fa54893c7571244f0ff20aea87e55110fef84433a3f695441fd540",
+      "checks": {
+        "viewport": true,
+        "assertions": true,
+        "sha": true,
+        "pixels": true,
+        "overflow": true
+      }
+    },
+    {
+      "file": "long-430.json",
+      "state": "long",
+      "width": 430,
+      "screenHeight": 932,
+      "dpr": 3,
+      "capturedAt": "2026-10-24T11:54:21.672Z",
+      "screenshotSha256": "e4076f1bc42445193f2b76307353325cbe3adabcabf4a800668438e8ac27179a",
+      "checks": {
+        "viewport": true,
+        "assertions": true,
+        "sha": true,
+        "pixels": true,
+        "overflow": true
+      }
+    },
+    {
+      "file": "long-menu-320.json",
+      "state": "long-menu",
+      "width": 320,
+      "screenHeight": 568,
+      "dpr": 2,
+      "capturedAt": "2026-10-24T11:55:26.439Z",
+      "screenshotSha256": "1f35a3c94769a52600f2f7ac64e820203ad5d1fda875f0acd3af2d0bf957b2ad",
+      "checks": {
+        "viewport": true,
+        "assertions": true,
+        "sha": true,
+        "pixels": true,
+        "overflow": true
+      }
+    },
+    {
+      "file": "long-menu-390.json",
+      "state": "long-menu",
+      "width": 390,
+      "screenHeight": 844,
+      "dpr": 3,
+      "capturedAt": "2026-10-24T11:59:10.638Z",
+      "screenshotSha256": "7349c88a6515880e998f47b7f8c4ce4bb3d6f4fb0d57f2b9ae80c0b19531cbf8",
+      "checks": {
+        "viewport": true,
+        "assertions": true,
+        "sha": true,
+        "pixels": true,
+        "overflow": true
+      }
+    },
+    {
+      "file": "long-menu-430.json",
+      "state": "long-menu",
+      "width": 430,
+      "screenHeight": 932,
+      "dpr": 3,
+      "capturedAt": "2026-10-24T11:54:22.020Z",
+      "screenshotSha256": "2c261d03a24a4a8fb85e04e13f908aa3cb4d4fcdcff3393145841ced3263b5b5",
+      "checks": {
+        "viewport": true,
+        "assertions": true,
+        "sha": true,
+        "pixels": true,
+        "overflow": true
+      }
+    },
+    {
+      "file": "no-child-320.json",
+      "state": "no-child",
+      "width": 320,
+      "screenHeight": 568,
+      "dpr": 2,
+      "capturedAt": "2026-10-24T11:55:29.765Z",
+      "screenshotSha256": "d0468fd455086cfc3dd42f2e3f586323f680c8e4bfbd1e8a0cb364352336e3c1",
+      "checks": {
+        "viewport": true,
+        "assertions": true,
+        "sha": true,
+        "pixels": true,
+        "overflow": true
+      }
+    },
+    {
+      "file": "no-child-390.json",
+      "state": "no-child",
+      "width": 390,
+      "screenHeight": 844,
+      "dpr": 3,
+      "capturedAt": "2026-10-24T11:59:14.250Z",
+      "screenshotSha256": "2362d31259fc93b86edfaa0dd173a62a88c085492c730fa33782a1d305c2ea58",
+      "checks": {
+        "viewport": true,
+        "assertions": true,
+        "sha": true,
+        "pixels": true,
+        "overflow": true
+      }
+    },
+    {
+      "file": "no-child-430.json",
+      "state": "no-child",
+      "width": 430,
+      "screenHeight": 932,
+      "dpr": 3,
+      "capturedAt": "2026-10-24T11:54:25.509Z",
+      "screenshotSha256": "65819b32233b77baf64cccfb1b7779fe48ead1a623c3dcf49305c157840c6865",
+      "checks": {
+        "viewport": true,
+        "assertions": true,
+        "sha": true,
+        "pixels": true,
+        "overflow": true
+      }
+    },
+    {
+      "file": "photo-sheet-320.json",
+      "state": "photo-sheet",
+      "width": 320,
+      "screenHeight": 568,
+      "dpr": 2,
+      "capturedAt": "2026-10-24T11:55:30.094Z",
+      "screenshotSha256": "021e502409e343348fce06b3260e45f1713a7cad314bf0412f127c6e3ad903d8",
+      "checks": {
+        "viewport": true,
+        "assertions": true,
+        "sha": true,
+        "pixels": true,
+        "overflow": true
+      }
+    },
+    {
+      "file": "photo-sheet-390.json",
+      "state": "photo-sheet",
+      "width": 390,
+      "screenHeight": 844,
+      "dpr": 3,
+      "capturedAt": "2026-10-24T11:59:14.611Z",
+      "screenshotSha256": "6a039d60e13eeeae72286b681369dd2c99c863ddc56abbbe77c678d4193155e6",
+      "checks": {
+        "viewport": true,
+        "assertions": true,
+        "sha": true,
+        "pixels": true,
+        "overflow": true
+      }
+    },
+    {
+      "file": "photo-sheet-430.json",
+      "state": "photo-sheet",
+      "width": 430,
+      "screenHeight": 932,
+      "dpr": 3,
+      "capturedAt": "2026-10-24T11:54:25.889Z",
+      "screenshotSha256": "d7de1cf4396bffe0be4683f8b0fc9c7be8e074f8bb4a8fa652a3e3b06649fce8",
+      "checks": {
+        "viewport": true,
+        "assertions": true,
+        "sha": true,
+        "pixels": true,
+        "overflow": true
+      }
+    },
+    {
+      "file": "place-window-320.json",
+      "state": "place-window",
+      "width": 320,
+      "screenHeight": 568,
+      "dpr": 2,
+      "capturedAt": "2026-10-24T11:55:31.099Z",
+      "screenshotSha256": "11c21e7ab60d4d1f8fae53497f33e62cbb994780516d27b6d0d298d2d801b08d",
+      "checks": {
+        "viewport": true,
+        "assertions": true,
+        "sha": true,
+        "pixels": true,
+        "overflow": true
+      }
+    },
+    {
+      "file": "place-window-390.json",
+      "state": "place-window",
+      "width": 390,
+      "screenHeight": 844,
+      "dpr": 3,
+      "capturedAt": "2026-10-24T11:59:15.668Z",
+      "screenshotSha256": "f794ebaec84c8110de6b2612a7f2e8a8abf537b37e0be07952c469d47a36dabc",
+      "checks": {
+        "viewport": true,
+        "assertions": true,
+        "sha": true,
+        "pixels": true,
+        "overflow": true
+      }
+    },
+    {
+      "file": "place-window-430.json",
+      "state": "place-window",
+      "width": 430,
+      "screenHeight": 932,
+      "dpr": 3,
+      "capturedAt": "2026-10-24T11:54:26.942Z",
+      "screenshotSha256": "af0588d63a7219b4bf9d94a950c8c9a8faff0346e934e3f7d3e720da822e599f",
+      "checks": {
+        "viewport": true,
+        "assertions": true,
+        "sha": true,
+        "pixels": true,
+        "overflow": true
+      }
+    },
+    {
+      "file": "playback-bottom-320.json",
+      "state": "playback-bottom",
+      "width": 320,
+      "screenHeight": 568,
+      "dpr": 2,
+      "capturedAt": "2026-10-24T11:55:28.347Z",
+      "screenshotSha256": "eb135718975c1e49da8cc3351aaab2df27b3971adc159b4c4648d2fcc96ce5c8",
+      "checks": {
+        "viewport": true,
+        "assertions": true,
+        "sha": true,
+        "pixels": true,
+        "overflow": true
+      }
+    },
+    {
+      "file": "playback-bottom-390.json",
+      "state": "playback-bottom",
+      "width": 390,
+      "screenHeight": 844,
+      "dpr": 3,
+      "capturedAt": "2026-10-24T11:59:12.719Z",
+      "screenshotSha256": "07088cd96b81ee49d4efad89575264a6e6b7a110012f90b3546b92d86fb023e8",
+      "checks": {
+        "viewport": true,
+        "assertions": true,
+        "sha": true,
+        "pixels": true,
+        "overflow": true
+      }
+    },
+    {
+      "file": "playback-bottom-430.json",
+      "state": "playback-bottom",
+      "width": 430,
+      "screenHeight": 932,
+      "dpr": 3,
+      "capturedAt": "2026-10-24T11:54:24.019Z",
+      "screenshotSha256": "fd1985360c85762842118a5776fd21207326748b98599932cf2a758bef6cdb24",
+      "checks": {
+        "viewport": true,
+        "assertions": true,
+        "sha": true,
+        "pixels": true,
+        "overflow": true
+      }
+    },
+    {
+      "file": "single-320.json",
+      "state": "single",
+      "width": 320,
+      "screenHeight": 568,
+      "dpr": 2,
+      "capturedAt": "2026-10-24T11:55:25.806Z",
+      "screenshotSha256": "edbbfd9ec6b61408f8c1ebdde96285772555b40068a6d5c07d3cff0f74c3c73e",
+      "checks": {
+        "viewport": true,
+        "assertions": true,
+        "sha": true,
+        "pixels": true,
+        "overflow": true
+      }
+    },
+    {
+      "file": "single-390.json",
+      "state": "single",
+      "width": 390,
+      "screenHeight": 844,
+      "dpr": 3,
+      "capturedAt": "2026-10-24T11:59:09.971Z",
+      "screenshotSha256": "faf62c4d202ec3bd8363e9ba70d99ab3cc34d59706c70b47bdc5d229796fa3ba",
+      "checks": {
+        "viewport": true,
+        "assertions": true,
+        "sha": true,
+        "pixels": true,
+        "overflow": true
+      }
+    },
+    {
+      "file": "single-430.json",
+      "state": "single",
+      "width": 430,
+      "screenHeight": 932,
+      "dpr": 3,
+      "capturedAt": "2026-10-24T11:54:21.329Z",
+      "screenshotSha256": "faf7edbf9d131d98bca15f548e1e74fe6cffe07b8cb6140393c7059cc9a7a188",
+      "checks": {
+        "viewport": true,
+        "assertions": true,
+        "sha": true,
+        "pixels": true,
+        "overflow": true
+      }
+    },
+    {
+      "file": "timeline-bottom-320.json",
+      "state": "timeline-bottom",
+      "width": 320,
+      "screenHeight": 568,
+      "dpr": 2,
+      "capturedAt": "2026-10-24T11:55:27.980Z",
+      "screenshotSha256": "f9596b214201750de35b4280217ee8e166070e66ee65c33ef435614b63210977",
+      "checks": {
+        "viewport": true,
+        "assertions": true,
+        "sha": true,
+        "pixels": true,
+        "overflow": true
+      }
+    },
+    {
+      "file": "timeline-bottom-390.json",
+      "state": "timeline-bottom",
+      "width": 390,
+      "screenHeight": 844,
+      "dpr": 3,
+      "capturedAt": "2026-10-24T11:59:12.260Z",
+      "screenshotSha256": "59ed079098096da76ec64287ef228f11bfa84e045257a51fd0e31e1cbaf5337e",
+      "checks": {
+        "viewport": true,
+        "assertions": true,
+        "sha": true,
+        "pixels": true,
+        "overflow": true
+      }
+    },
+    {
+      "file": "timeline-bottom-430.json",
+      "state": "timeline-bottom",
+      "width": 430,
+      "screenHeight": 932,
+      "dpr": 3,
+      "capturedAt": "2026-10-24T11:54:23.657Z",
+      "screenshotSha256": "e9449fea1445d08d3e6154701946542f84eff017f6bd8bfa779627f6702cc708",
+      "checks": {
+        "viewport": true,
+        "assertions": true,
+        "sha": true,
+        "pixels": true,
+        "overflow": true
+      }
+    },
+    {
+      "file": "timeline-window-320.json",
+      "state": "timeline-window",
+      "width": 320,
+      "screenHeight": 568,
+      "dpr": 2,
+      "capturedAt": "2026-10-24T11:55:30.602Z",
+      "screenshotSha256": "0daff6f4e3ce0d41992710004b4b8973be48bea0b45ac8bd649b3db2e9a99b13",
+      "checks": {
+        "viewport": true,
+        "assertions": true,
+        "sha": true,
+        "pixels": true,
+        "overflow": true
+      }
+    },
+    {
+      "file": "timeline-window-390.json",
+      "state": "timeline-window",
+      "width": 390,
+      "screenHeight": 844,
+      "dpr": 3,
+      "capturedAt": "2026-10-24T11:59:15.140Z",
+      "screenshotSha256": "629755e729a050e3afcdc09fdd1694f7f8d32c6734090c90519cab7d6e4a315c",
+      "checks": {
+        "viewport": true,
+        "assertions": true,
+        "sha": true,
+        "pixels": true,
+        "overflow": true
+      }
+    },
+    {
+      "file": "timeline-window-430.json",
+      "state": "timeline-window",
+      "width": 430,
+      "screenHeight": 932,
+      "dpr": 3,
+      "capturedAt": "2026-10-24T11:54:26.425Z",
+      "screenshotSha256": "f7c3d493dcc7bbd87e44667cc4a9e6edbcba7c188017122dd91c661247e0925a",
+      "checks": {
+        "viewport": true,
+        "assertions": true,
+        "sha": true,
+        "pixels": true,
+        "overflow": true
+      }
+    },
+    {
+      "file": "travel-320.json",
+      "state": "travel",
+      "width": 320,
+      "screenHeight": 568,
+      "dpr": 2,
+      "capturedAt": "2026-10-24T11:55:26.973Z",
+      "screenshotSha256": "fd74077cd40afe53061a913851fde37627fbe5c05a9072d08b560a9ff33d7c84",
+      "checks": {
+        "viewport": true,
+        "assertions": true,
+        "sha": true,
+        "pixels": true,
+        "overflow": true
+      }
+    },
+    {
+      "file": "travel-390.json",
+      "state": "travel",
+      "width": 390,
+      "screenHeight": 844,
+      "dpr": 3,
+      "capturedAt": "2026-10-24T11:59:11.192Z",
+      "screenshotSha256": "f1cb6de43f1bc564d8a95d9c51b86f58bc41e10eede1850835c1cd265279304d",
+      "checks": {
+        "viewport": true,
+        "assertions": true,
+        "sha": true,
+        "pixels": true,
+        "overflow": true
+      }
+    },
+    {
+      "file": "travel-430.json",
+      "state": "travel",
+      "width": 430,
+      "screenHeight": 932,
+      "dpr": 3,
+      "capturedAt": "2026-10-24T11:54:22.582Z",
+      "screenshotSha256": "571b9cacffc5bdf1a265ecbb0c98be7d996df6d7af5df488536a9672824cb3ad",
+      "checks": {
+        "viewport": true,
+        "assertions": true,
+        "sha": true,
+        "pixels": true,
+        "overflow": true
+      }
+    },
+    {
+      "file": "travel-menu-320.json",
+      "state": "travel-menu",
+      "width": 320,
+      "screenHeight": 568,
+      "dpr": 2,
+      "capturedAt": "2026-10-24T11:55:27.298Z",
+      "screenshotSha256": "b406b60cfc6fb8590278eb9d9e571ab0e565e1ecf23d9a45d425abb48e39e8e4",
+      "checks": {
+        "viewport": true,
+        "assertions": true,
+        "sha": true,
+        "pixels": true,
+        "overflow": true
+      }
+    },
+    {
+      "file": "travel-menu-390.json",
+      "state": "travel-menu",
+      "width": 390,
+      "screenHeight": 844,
+      "dpr": 3,
+      "capturedAt": "2026-10-24T11:59:11.545Z",
+      "screenshotSha256": "1547fa4bbf1db263cbfe4c7ebbe71e158d3784734129603471e04c937629b7c2",
+      "checks": {
+        "viewport": true,
+        "assertions": true,
+        "sha": true,
+        "pixels": true,
+        "overflow": true
+      }
+    },
+    {
+      "file": "travel-menu-430.json",
+      "state": "travel-menu",
+      "width": 430,
+      "screenHeight": 932,
+      "dpr": 3,
+      "capturedAt": "2026-10-24T11:54:22.940Z",
+      "screenshotSha256": "1cdfad19a2ce455c2711ee0cf9cb9e611e1eb0954e35337247f930a2dbe828f9",
+      "checks": {
+        "viewport": true,
+        "assertions": true,
+        "sha": true,
+        "pixels": true,
+        "overflow": true
+      }
+    },
+    {
+      "file": "viewer-320.json",
+      "state": "viewer",
+      "width": 320,
+      "screenHeight": 568,
+      "dpr": 2,
+      "capturedAt": "2026-10-24T11:55:29.091Z",
+      "screenshotSha256": "b4d38cce715bd426165116d9bdb17a12b934cc6cab99fb8402921320df0b17b7",
+      "checks": {
+        "viewport": true,
+        "assertions": true,
+        "sha": true,
+        "pixels": true,
+        "overflow": true
+      }
+    },
+    {
+      "file": "viewer-390.json",
+      "state": "viewer",
+      "width": 390,
+      "screenHeight": 844,
+      "dpr": 3,
+      "capturedAt": "2026-10-24T11:59:13.555Z",
+      "screenshotSha256": "6e4c4531b81d02276120697ce9a253e0e14fdea5d739bc73dce25ad290d8f21d",
+      "checks": {
+        "viewport": true,
+        "assertions": true,
+        "sha": true,
+        "pixels": true,
+        "overflow": true
+      }
+    },
+    {
+      "file": "viewer-430.json",
+      "state": "viewer",
+      "width": 430,
+      "screenHeight": 932,
+      "dpr": 3,
+      "capturedAt": "2026-10-24T11:54:24.798Z",
+      "screenshotSha256": "c209063fde44899bc68ca7b7cf03c203d58713fbf531434919250d22eb37e212",
+      "checks": {
+        "viewport": true,
+        "assertions": true,
+        "sha": true,
+        "pixels": true,
+        "overflow": true
+      }
+    }
+  ]
+}

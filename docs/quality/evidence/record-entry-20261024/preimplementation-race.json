@@ -1,0 +1,25 @@
+{
+  "date": "2026-10-24",
+  "phase": "PRE_IMPLEMENTATION",
+  "level": "deterministic_state_reproduction",
+  "status": "FAIL",
+  "expected_type": "learning",
+  "actual_type": "travel",
+  "intent_pending": true,
+  "switch_busy": false,
+  "guards": 1,
+  "actual_today_handler": true,
+  "learning_load_replaced": false,
+  "production_source_modified": false,
+  "business_write": false,
+  "steps": [
+    "start travel-to-learning leave guard",
+    "hide records before guard resolves",
+    "actual today.recordLearning enters records while old switch is busy",
+    "resolve the old guard after returning",
+    "observe no retry of pending learning intent"
+  ],
+  "limits": [
+    "Synthetic lifecycle ordering; not a physical-device reproduction of the user screenshot"
+  ]
+}

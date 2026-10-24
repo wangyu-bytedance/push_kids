@@ -1,0 +1,172 @@
+{
+  "nodes": {
+    ".study-region": [
+      {
+        "left": 15,
+        "right": 305,
+        "top": 361,
+        "bottom": 518,
+        "width": 290,
+        "height": 157,
+        "fontSize": "16px",
+        "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "fontWeight": "400",
+        "lineHeight": "25.6px",
+        "letterSpacing": "normal",
+        "borderRadius": "0px",
+        "paddingLeft": "0px",
+        "paddingRight": "0px",
+        "textAlign": "start",
+        "justifyContent": "normal"
+      }
+    ],
+    ".study-region .s-t": [
+      {
+        "left": 16,
+        "right": 85.609375,
+        "top": 371,
+        "bottom": 395,
+        "width": 69.609375,
+        "height": 24,
+        "fontSize": "17px",
+        "fontFamily": "\"Songti SC\", \"Noto Serif SC\", \"Noto Serif CJK SC\", \"Source Han Serif SC\", STSong, serif",
+        "fontWeight": "600",
+        "lineHeight": "24.65px",
+        "letterSpacing": "0.4px",
+        "borderRadius": "0px",
+        "paddingLeft": "0px",
+        "paddingRight": "0px",
+        "textAlign": "start",
+        "justifyContent": "normal"
+      }
+    ],
+    ".study-card": [],
+    ".study-card .study-title": [],
+    ".study-region .btn": [
+      {
+        "left": 15,
+        "right": 305,
+        "top": 462,
+        "bottom": 506,
+        "width": 290,
+        "height": 44,
+        "fontSize": "15px",
+        "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "fontWeight": "500",
+        "lineHeight": "18px",
+        "letterSpacing": "0.4px",
+        "borderRadius": "426px",
+        "paddingLeft": "15px",
+        "paddingRight": "15px",
+        "textAlign": "center",
+        "justifyContent": "center"
+      }
+    ],
+    ".study-card .link-btn": [],
+    ".study-progress": [
+      {
+        "left": 15,
+        "right": 305,
+        "top": 416,
+        "bottom": 518,
+        "width": 290,
+        "height": 102,
+        "fontSize": "14px",
+        "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif",
+        "fontWeight": "400",
+        "lineHeight": "22.4px",
+        "letterSpacing": "normal",
+        "borderRadius": "0px",
+        "paddingLeft": "0px",
+        "paddingRight": "0px",
+        "textAlign": "start",
+        "justifyContent": "normal"
+      }
+    ],
+    ".study-error-inline": [],
+    ".study-error-inline .link-btn": [],
+    ".study-label": [],
+    ".study-title": [],
+    ".study-meta": [],
+    ".study-copy": [],
+    ".study-source": [],
+    ".study-sheet": [],
+    ".study-top": [],
+    ".study-close": [],
+    ".study-body": [],
+    ".study-actions": [],
+    ".study-primary": [],
+    ".study-secondary": [],
+    ".study-quiet": [],
+    ".study-input": [],
+    ".study-textarea": [],
+    ".study-picker": [],
+    ".study-actions .study-primary": [],
+    ".study-secondary-row .study-secondary": [],
+    ".study-defer": [],
+    ".study-proposal-heading": [],
+    ".study-title-scroll": [],
+    ".study-proposal-title": [],
+    ".study-proposal-meta": [],
+    ".study-close .ico": []
+  },
+  "hero": {
+    "id": "",
+    "dataset": {},
+    "left": 15,
+    "right": 305,
+    "top": 146,
+    "bottom": 341,
+    "width": 290,
+    "height": 195
+  },
+  "reviewHeading": {
+    "left": 16,
+    "right": 85.609375,
+    "top": 548,
+    "bottom": 572,
+    "width": 69.609375,
+    "height": 24,
+    "fontSize": "17px",
+    "fontFamily": "\"Songti SC\", \"Noto Serif SC\", \"Noto Serif CJK SC\", \"Source Han Serif SC\", STSong, serif",
+    "fontWeight": "600",
+    "lineHeight": "24.65px",
+    "letterSpacing": "0.4px"
+  },
+  "reviewBar": {
+    "id": "",
+    "dataset": {
+      "section": "review"
+    },
+    "left": 15,
+    "right": 305,
+    "top": 538,
+    "bottom": 582,
+    "width": 290,
+    "height": 44
+  },
+  "reviewSection": {
+    "left": 15,
+    "right": 305,
+    "top": 538,
+    "bottom": 583,
+    "width": 290,
+    "height": 45,
+    "marginTop": "20px"
+  },
+  "card": "stale",
+  "scrollLeft": 0,
+  "headingScrollTop": 0,
+  "viewport": {
+    "width": 320,
+    "height": 568,
+    "screenHeight": 568,
+    "dpr": 2,
+    "baseLibrary": "3.17.4"
+  },
+  "sheet": "",
+  "state": "card-stale",
+  "errors": [],
+  "capturedAt": "2026-10-24T12:43:29.133Z",
+  "screenshotSha256": "7085dec02f867488fe2b5292cadc1acf72c192abf099013aa4148f0720cf2f5f"
+}

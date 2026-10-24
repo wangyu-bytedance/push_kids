@@ -53,7 +53,12 @@ function decorateItem(item) {
 }
 
 Page({
+  onGradeConfirmation(event) {
+    const flow = getApp().gradeConfirmation;
+    if (flow) return flow.handle(this, event.detail);
+  },
   data: {
+    gradeConfirmation: null, gradeConfirmationVisible: false,
     loading: true, error: "", children: [], childIndex: 0, childId: "", multiChild: false, canAddChild: true,
     introArtFailed: false,
     selectedDay: "", monthLabel: "", weekKicker: "", dayTitle: "", itemCount: 0, conflictCount: 0, weekEmpty: false,

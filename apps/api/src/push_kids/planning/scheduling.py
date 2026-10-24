@@ -20,6 +20,7 @@ from push_kids.persistence.models import (
     Subject,
 )
 from push_kids.planning.domain import parent_schedule_date
+from push_kids.planning.eligibility import scheduling_eligible
 from push_kids.planning.inventory import preview_reviews
 from push_kids.planning.queue_state import record_offered, reset_queue
 from push_kids.platform.errors import ConflictError, NotFoundError
@@ -36,6 +37,7 @@ def refresh_future_due_stats(db: Session, family_id: str, child_id: str, from_da
         ReviewItem.family_id == family_id,
         ReviewItem.child_id == child_id,
         ReviewItem.active.is_(True),
+        scheduling_eligible(),
         ReviewItem.due_date <= DailyReviewPlan.plan_date,
         Subject.kind == "learning",
         Subject.active.is_(True),
@@ -210,6 +212,9 @@ def schedule_review(
     )
     if review is None:
         raise NotFoundError("没有找到这条复习安排")
+    knowledge = db.get(KnowledgeItem, review.knowledge_item_id)
+    if knowledge is None or knowledge.review_status == "superseded":
+        raise ConflictError("这条知识已被替代，不能新增复习安排")
     if review.state_version != expected_version:
         raise ConflictError("这条安排已发生变化，请重新加载")
     assert review.due_date is not None

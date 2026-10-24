@@ -16,6 +16,9 @@ App({
     apiBaseUrl: config.localApiBaseUrl
   },
   onLaunch(options = {}) {
+    this.gradeConfirmation = require("./utils/grade-confirmation").createController(
+      this, require("./utils/api"), () => getCurrentPages().slice(-1)[0]
+    );
     if (config.useCloud) wx.cloud.init({ env: config.cloudEnv });
     this.globalData.selectedChildId = wx.getStorageSync("selectedChildId") || "";
     const isFamilyEntryLaunch = [
@@ -25,6 +28,12 @@ App({
     if ((!config.useCloud || wx.cloud.callContainer) && !isFamilyEntryLaunch) {
       this.refreshBootstrap(true).catch(() => {});
     }
+  },
+  onShow() {
+    if (this.gradeConfirmation) this.gradeConfirmation.foreground();
+  },
+  onHide() {
+    if (this.gradeConfirmation) this.gradeConfirmation.background();
   },
   async refreshBootstrap(redirect = false) {
     const api = require("./utils/api");
@@ -36,12 +45,14 @@ App({
       this.globalData.familyId = result.family ? result.family.id : "";
       /* 档案可能已被别的家长归档或删档，这里统一回落，避免各页面读到失效的 childId。 */
       childContext.syncSelection(this, result.children || []);
+      if (this.gradeConfirmation) this.gradeConfirmation.bootstrapChanged(result.children || []);
       if (redirect && result.state !== "bound" && wx.reLaunch) {
         wx.reLaunch({ url: "/pages/family-onboarding/index" });
       }
       return result;
     } catch (error) {
       this.globalData.bootstrapState = "error";
+      if (this.gradeConfirmation) this.gradeConfirmation.bootstrapChanged();
       throw error;
     }
   },

@@ -1,0 +1,46 @@
+{
+  "observed_at": "2026-10-24T03:00:07.373Z",
+  "version": "flask-ik19-035",
+  "status": "normal",
+  "replicas": 1,
+  "flow": 100,
+  "task_status": "finished",
+  "task_steps": [
+    {
+      "name": "CreateVersion",
+      "status": "finished"
+    },
+    {
+      "name": "RunPipeline",
+      "status": "notInvolve"
+    },
+    {
+      "name": "GrayRelease",
+      "status": "finished"
+    },
+    {
+      "name": "ReleaseVersion",
+      "status": "notInvolve"
+    }
+  ],
+  "version_metadata_keys": [
+    "BaseImage",
+    "ImageUrl",
+    "Remark"
+  ],
+  "user_logs": "NOT_READ; CLI reports TopicNotExist",
+  "real_new_version_health": "NOT_RUN",
+  "process_log": {
+    "bytes": 307,
+    "startup_service_creation_succeeded": false,
+    "readiness_connection_refused_seen": false,
+    "schema_mismatch_seen": false
+  },
+  "build_log": {
+    "bytes": 27025,
+    "image_pushed": true,
+    "image_digest": "sha256:4aec5f680599624d07477d12729c8ab930b5c4453a0d2a9256b3ee1a1d16428f",
+    "api_source_copy_seen": true,
+    "dependency_install_seen": true
+  }
+}

@@ -36,7 +36,8 @@ function downloadPreview(capability) {
     if (/^https:\/\//.test(capability.url || "")) return Promise.resolve(capability.url);
     return Promise.reject(new Error("照片预览不可用，请稍后重试"));
   }
-  if (!capability.download_path || !capability.download_path.startsWith("/submissions/")) {
+  if (!capability.download_path || !(capability.download_path.startsWith("/submissions/") ||
+    /^\/footprints\/photos\/[a-zA-Z0-9-]+\/content\?/.test(capability.download_path))) {
     return Promise.reject(new Error("照片预览不可用"));
   }
   if (!wx.downloadFile) return Promise.reject(new Error("当前微信版本无法读取照片，请更新微信后重试"));
@@ -153,4 +154,20 @@ function appendSubmissionMedia(submissionId, filePath, onProgress) {
   });
 }
 
-module.exports = { request, uploadSubmission, appendSubmissionMedia, normalizedError, newIdempotencyKey, downloadPreview, removePreview };
+function uploadFootprint(photoId, childId, filePath) {
+  const context = appContext();
+  if (context.useCloud) return Promise.reject(new Error("云端照片请使用对象直传"));
+  const header = context.localActorId ? { "X-Debug-Actor": context.localActorId } : { "X-Family-ID": context.familyId };
+  return new Promise((resolve, reject) => wx.uploadFile({
+    url: `${context.apiBaseUrl}/footprints/photos/${encodeURIComponent(photoId)}/upload?child_id=${encodeURIComponent(childId)}`,
+    filePath, name: "file", header,
+    success(response) {
+      let data;
+      try { data = JSON.parse(response.data); } catch { data = {}; }
+      if (response.statusCode >= 200 && response.statusCode < 300) resolve(data);
+      else reject(responseError({ ...response, data }));
+    }, fail: () => reject(new Error("照片上传失败，已成功的照片保留，可重试"))
+  }));
+}
+
+module.exports = { request, uploadSubmission, appendSubmissionMedia, normalizedError, newIdempotencyKey, downloadPreview, removePreview, uploadFootprint };

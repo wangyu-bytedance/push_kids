@@ -1,0 +1,93 @@
+{
+  "reviewStatus": "superseded",
+  "view": "count",
+  "readOnly": false,
+  "empty": true,
+  "viewport": {
+    "width": 320,
+    "height": 504,
+    "screenHeight": 568,
+    "dpr": 2,
+    "baseLibrary": "3.17.4",
+    "fontScale": 15
+  },
+  "nodes": [
+    [
+      {
+        "left": 18,
+        "right": 302,
+        "top": 0,
+        "bottom": 295,
+        "width": 284,
+        "height": 295
+      }
+    ],
+    [
+      {
+        "left": 18,
+        "right": 302,
+        "top": 136,
+        "bottom": 186,
+        "width": 284,
+        "height": 50
+      }
+    ],
+    [],
+    [
+      {
+        "left": 18,
+        "right": 302,
+        "top": 136,
+        "bottom": 186,
+        "width": 284,
+        "height": 50
+      }
+    ],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [
+      {
+        "left": 18,
+        "right": 302,
+        "top": 24,
+        "bottom": 68,
+        "width": 284,
+        "height": 44
+      }
+    ],
+    [
+      {
+        "left": 18,
+        "right": 156,
+        "top": 24,
+        "bottom": 68,
+        "width": 138,
+        "height": 44
+      },
+      {
+        "left": 164,
+        "right": 302,
+        "top": 24,
+        "bottom": 68,
+        "width": 138,
+        "height": 44
+      }
+    ],
+    [],
+    [],
+    []
+  ],
+  "state": "empty",
+  "embedded": true,
+  "expectedWidth": 320,
+  "capturedAt": "2026-10-20T15:57:30.980Z",
+  "fixture": "isolated synthetic page-realm JSON; production WXML/WXSS unchanged",
+  "errors": [],
+  "screenshot": "NOT_RUN"
+}

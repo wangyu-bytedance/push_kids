@@ -57,6 +57,8 @@ class MediaStore(Protocol):
 
     def delete(self, storage_ref: str) -> None: ...
 
+    def write_derived(self, storage_ref: str, source: Path) -> None: ...
+
 
 class LocalMediaStore:
     def __init__(self, root: Path, max_bytes: int) -> None:
@@ -94,6 +96,13 @@ class LocalMediaStore:
         if self.root not in path.parents:
             raise ValueError("非法存储路径")
         path.unlink(missing_ok=True)
+
+    def write_derived(self, storage_ref: str, source: Path) -> None:
+        path = Path(storage_ref).resolve()
+        if self.root not in path.parents or source.stat().st_size > self.max_bytes:
+            raise ValueError("非法派生图片")
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(source.read_bytes())
 
 
 class WeChatCloudMediaStore:
@@ -240,6 +249,21 @@ class WeChatCloudMediaStore:
 
     def delete(self, storage_ref: str) -> None:
         self.delete_path(self._object_path(storage_ref))
+
+    def write_derived(self, storage_ref: str, source: Path) -> None:
+        path = self._object_path(storage_ref)
+        if source.stat().st_size > self.max_bytes:
+            raise ValueError("派生图片过大")
+        try:
+            self._client().put_object(
+                Bucket=self.bucket,
+                Key=path,
+                Body=source.read_bytes(),
+                ContentType="image/jpeg",
+                CacheControl="no-store",
+            )
+        except Exception as exc:
+            raise DependencyError("展示图片保存失败，请重试") from exc
 
     @contextmanager
     def materialize(self, storage_ref: str) -> Iterator[Path]:

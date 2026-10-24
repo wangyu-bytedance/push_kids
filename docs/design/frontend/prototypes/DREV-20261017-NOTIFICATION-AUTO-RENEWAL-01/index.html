@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>提醒授权自动补充 · 设计预览</title>
+  <style>
+    :root { --canvas:#FAF7F0; --surface:#FFFDF8; --sunken:#F3EFE4; --ink:#22261F; --secondary:#464E43; --primary:#1F5B45; --tint:#E4EDE6; --line:#EBE5D7; --attention:#A9762A; --warning-bg:#F8EFDC; --danger:#A85742; --danger-bg:#F7E8E2; --info:#4A6A7C; --info-bg:#E7EEF2; --r:calc(100vw / 750); }
+    * { box-sizing:border-box; }
+    body { margin:0; color:var(--ink); background:var(--canvas); font:14px/1.6 -apple-system,BlinkMacSystemFont,"PingFang SC","Noto Sans SC",sans-serif; }
+    button, select { font:inherit; color:inherit; }
+    button { min-height:44px; min-width:44px; border:0; cursor:pointer; background:none; padding:8px 12px; line-height:1.5; }
+    button:focus-visible, select:focus-visible { outline:3px solid var(--info); outline-offset:3px; }
+    button:disabled { cursor:default; opacity:.6; }
+    h1,h2,h3,p { margin:0; }
+    h1,h2 { font-family:"Songti SC","Noto Serif SC",serif; }
+    h1 { font-size:26px; line-height:1.4; font-weight:600; }
+    h2 { font-size:22px; line-height:1.45; font-weight:600; }
+    h3 { font-size:17px; line-height:1.5; }
+    p + p { margin-top:12px; }
+    svg { width:24px; height:24px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; flex:none; }
+    .review { max-width:1060px; margin:auto; padding:28px 24px; }
+    .review h1 { font-size:28px; }
+    .review > p { color:var(--secondary); margin-top:8px; }
+    .review-controls { display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin:20px 0; }
+    .review select { max-width:100%; min-height:44px; padding:8px; background:var(--surface); border:1px solid var(--line); border-radius:8px; }
+    .review button { border:1px solid var(--line); border-radius:8px; }
+    .review button[aria-pressed=true] { background:var(--primary); color:var(--surface); }
+    .preview-host { padding:16px 0; }
+    iframe { display:block; border:1px solid var(--line); border-radius:16px; background:var(--canvas); max-width:100%; box-shadow:0 12px 48px -28px rgba(34,38,31,.3); }
+    .screen { min-height:100vh; max-width:480px; margin:auto; position:relative; padding-bottom:24px; }
+    .statusbar { height:26px; display:flex; align-items:center; justify-content:space-between; padding:0 20px; font-weight:600; }
+    .battery { width:20px; height:10px; border:1.5px solid var(--ink); border-radius:3px; position:relative; }
+    .battery:before { content:""; position:absolute; inset:2px; background:var(--ink); }
+    .native { height:48px; display:flex; align-items:center; justify-content:center; font-size:17px; position:relative; }
+    .native > button { position:absolute; left:8px; top:2px; display:flex; align-items:center; justify-content:center; padding:10px; }
+    .capsule { position:absolute; right:12px; top:10px; height:30px; width:74px; border:1px solid var(--line); border-radius:999px; display:flex; align-items:center; justify-content:space-evenly; background:var(--surface); }
+    .capsule svg { width:18px; height:18px; }
+    main { padding:12px calc(36 * var(--r)) 24px; }
+    .kicker { font-size:14px; color:var(--secondary); }
+    .pagehead { margin-bottom:20px; }
+    .card { padding:16px; background:var(--surface); border:1px solid var(--line); border-radius:calc(32 * var(--r)); }
+    .card + .card { margin-top:16px; }
+    .hero { background:var(--tint); border-color:transparent; margin-bottom:20px; }
+    .hero h2 { color:var(--primary); font-size:21px; }
+    .hero p { margin-top:8px; color:var(--secondary); }
+    .hero.neutral { background:var(--sunken); }
+    .hero.neutral h2 { color:var(--ink); }
+    .row { display:flex; gap:12px; align-items:flex-start; }
+    .grow { flex:1; min-width:0; }
+    .stack { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+    .muted { color:var(--secondary); font-size:14px; }
+    .subtle { padding-top:12px; color:var(--secondary); }
+    .section-title { margin:24px 0 12px; font-size:17px; font-weight:600; }
+    .rule { border-top:1px solid var(--line); padding-top:12px; margin-top:12px; }
+    .toggle { display:flex; align-items:center; justify-content:center; flex:none; width:52px; height:44px; padding:0; }
+    .track { width:44px; height:26px; border-radius:999px; background:#DDD6C4; padding:3px; display:flex; }
+    .knob { width:20px; height:20px; border-radius:999px; background:var(--surface); }
+    .toggle[aria-checked=true] .track { background:var(--primary); justify-content:flex-end; }
+    .tag { display:inline-block; padding:3px 9px; border-radius:999px; background:var(--sunken); color:var(--secondary); font-size:14px; }
+    .tag.good { color:var(--primary); background:var(--tint); }
+    .tag.warn { color:#73501F; background:var(--warning-bg); }
+    .tag.info { color:var(--info); background:var(--info-bg); }
+    .text-action { color:var(--primary); padding:8px 0; text-align:left; font-weight:600; }
+    .primary { display:block; width:100%; min-height:48px; color:var(--surface); background:var(--primary); border-radius:calc(24 * var(--r)); font-size:16px; font-weight:600; }
+    .secondary { display:block; width:100%; min-height:44px; border:1px solid var(--line); border-radius:calc(24 * var(--r)); color:var(--secondary); background:var(--surface); }
+    .notice { padding:12px; border-radius:calc(16 * var(--r)); background:var(--sunken); color:var(--secondary); margin:12px 0; }
+    .notice.info { background:var(--info-bg); color:var(--info); }
+    .notice.error { background:var(--danger-bg); color:var(--danger); }
+    .type { padding:16px 0; border-bottom:1px solid var(--line); }
+    .type:first-child { padding-top:0; }
+    .type:last-child { border-bottom:0; padding-bottom:0; }
+    .type-title { font-size:16px; font-weight:600; }
+    .type .stack { margin-top:8px; }
+    .type .muted { margin-top:4px; }
+    .icon-box { display:flex; align-items:center; justify-content:center; width:36px; height:36px; color:var(--primary); background:var(--sunken); border-radius:calc(24 * var(--r)); flex:none; }
+    .num { font-variant-numeric:tabular-nums; }
+    .skeleton { background:var(--sunken); height:18px; border-radius:4px; margin:12px 0; }
+    .skeleton.large { height:96px; }
+    .skeleton.short { width:60%; }
+    .tabs { position:fixed; bottom:0; left:0; right:0; display:flex; min-height:58px; padding-bottom:env(safe-area-inset-bottom); background:var(--surface); border-top:1px solid var(--line); z-index:1; }
+    .tabs button { flex:1; min-width:0; height:58px; padding:4px 0; font-size:14px; }
+    .tabs svg { display:block; width:20px; height:20px; margin:0 auto 2px; }
+    .tabs .active { color:var(--primary); font-weight:600; }
+    .today { padding-bottom:70px; }
+    .today .task { margin-top:12px; }
+    .today .task h3 { margin:8px 0; }
+    .complete { border:1px solid var(--line); border-radius:999px; min-width:80px; font-size:14px; color:var(--primary); }
+    .finish-note { background:var(--tint); color:var(--primary); padding:12px 16px; border-radius:calc(24 * var(--r)); margin:16px 0; }
+    .overlay { position:fixed; inset:0; background:rgba(34,38,31,.32); z-index:3; display:flex; align-items:flex-end; justify-content:center; }
+    .sheet { width:100%; max-width:480px; max-height:88vh; background:var(--surface); border-radius:calc(40 * var(--r)) calc(40 * var(--r)) 0 0; padding:20px 20px calc(20px + env(safe-area-inset-bottom)); box-shadow:0 -16px 48px -20px rgba(34,38,31,.22); display:flex; flex-direction:column; }
+    .sheet .handle { width:36px; height:4px; border-radius:999px; background:#DDD6C4; margin:0 auto 16px; flex:none; }
+    .sheet-body { overflow-y:auto; min-height:0; padding-bottom:4px; }
+    .sheet h2 { margin-bottom:12px; }
+    .sheet h2:focus { outline:none; }
+    .sheet p { font-size:15px; color:var(--secondary); }
+    .sheet .benefit { display:flex; gap:10px; align-items:flex-start; padding:12px 0; }
+    .sheet .benefit svg { color:var(--primary); }
+    .sheet-actions { display:grid; grid-template-columns:minmax(0,1fr); gap:10px; padding-top:16px; flex:none; }
+    .sr-only { position:absolute; width:1px; height:1px; margin:-1px; padding:0; border:0; clip-path:inset(50%); }
+    @media (prefers-reduced-motion:no-preference) { button { transition:background-color 140ms ease; } }
+    @media (max-width:359px) { .sheet { padding-left:16px; padding-right:16px; } .card { padding:14px; } .review { padding:16px; } }
+  </style>
+</head>
+<body>
+<svg aria-hidden="true" style="display:none"><defs>
+  <symbol id="book" viewBox="0 0 24 24"><path d="M3 4h6a4 4 0 0 1 3 2 4 4 0 0 1 3-2h6v15h-6a4 4 0 0 0-3 2 4 4 0 0 0-3-2H3zM12 6v15"/></symbol>
+  <symbol id="clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+  <symbol id="people" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3 20v-2a6 6 0 0 1 12 0v2M16 5a3 3 0 0 1 0 6M17 14a5 5 0 0 1 4 4v2"/></symbol>
+  <symbol id="check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+  <symbol id="back" viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></symbol>
+  <symbol id="sprout" viewBox="0 0 24 24"><path d="M12 21V10M12 13C5 14 3 9 3 5c6-1 9 2 9 6M12 10c0-5 4-7 9-7 0 6-4 8-9 7"/></symbol>
+  <symbol id="more" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></symbol>
+  <symbol id="circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2"/></symbol>
+</defs></svg>
+<div id="app"></div>
+<script>
+  const STATES = {
+    guide:'今日 · 首次说明（长文案）', 'today-quiet':'今日 · 正常完成，无续期提示',
+    'settings-off':'设置 · 尚未开启', 'settings-enabled':'设置 · 已开启/有额度',
+    'settings-cooldown':'设置 · 普通拒绝后冷却', 'settings-stopped':'设置 · 已记住拒绝/停止',
+    'settings-pending':'设置 · 微信同意后登记待恢复', 'settings-loading':'设置 · 首次加载',
+    'settings-error':'设置 · 读取失败/保留已有状态', 'settings-unavailable':'设置 · 通道不可用',
+    'settings-partial':'设置 · 部分结果/普通成员', 'settings-forbidden':'设置 · 身份无效',
+    'settings-empty':'设置 · 无可补充类型', 'settings-saving':'设置 · 开关保存中'
+  };
+  const params = new URLSearchParams(location.search);
+  const state = Object.hasOwn(STATES, params.get('state')) ? params.get('state') : 'guide';
+  const isScreen = params.get('screen') === '1';
+  const icon = name => `<svg aria-hidden="true"><use href="#${name}"></use></svg>`;
+  const toggle = (name,on,disabled=false) => `<button class="toggle" role="switch" aria-label="${name}" aria-checked="${on}" ${disabled?'disabled':''} data-action="toggle"><span class="track"><span class="knob"></span></span></button>`;
+  const chrome = today => `<div class="statusbar" aria-hidden="true"><span>9:41</span><span class="battery"></span></div><header class="native">${today?'<span class="stack">'+icon('sprout')+'知芽</span>':'<button aria-label="返回设置" data-action="back">'+icon('back')+'</button><span>提醒设置</span>'}<span class="capsule" aria-hidden="true">${icon('more')}${icon('circle')}</span></header>`;
+  function todayScreen(withGuide) {
+    return `<div class="screen today">${chrome(true)}<main><div class="pagehead"><p class="kicker">今天，也慢慢来</p><h1>留一点时间，温习一下</h1></div><div class="finish-note" role="status">${icon('check')} 已完成一条复习</div><div class="stack"><h3>接下来可以复习</h3><span class="tag">2 项</span></div><article class="card task"><span class="tag">数学</span><h3>复习今天的计算练习</h3><p class="muted">约 3 分钟 · 看看之前的记录</p><div class="rule row"><span class="grow muted">完成后更新下次复习安排</span><button class="complete" data-action="complete">完成</button></div></article><article class="card task"><span class="tag">英语</span><h3>读一读最近学过的单词</h3><p class="muted">约 3 分钟</p><button class="text-action" data-action="complete">完成复习</button></article></main><nav class="tabs" aria-label="主导航">${['今日','日程','记录','报表','设置'].map((x,i)=>`<button class="${i===0?'active':''}" data-action="tab" aria-label="${x}">${icon(['sprout','clock','book','book','people'][i])}${x}</button>`).join('')}</nav>${withGuide?`<div class="overlay"><section class="sheet" role="dialog" aria-modal="true" aria-labelledby="guide-title" aria-describedby="guide-copy"><span class="handle" aria-hidden="true"></span><div class="sheet-body"><p class="kicker">让提醒更省心</p><h2 id="guide-title">以后少去一次提醒设置</h2><p id="guide-copy">完成复习时，尝试为你已开启的提醒补充次数。</p><div class="benefit">${icon('clock')}<span>微信记住允许后，后续可以减少询问；普通拒绝或取消后，完成 10 条复习再询问。</span></div><p>微信可能仍会弹出授权框。每次同意只增加一次发送额度，不等于永久订阅。</p><p class="muted">只影响你的提醒。随时可以在「提醒设置」关闭。</p></div><div class="sheet-actions"><button class="primary" data-action="enable">开启自动补充</button><button class="secondary" data-action="decline">暂不开启</button></div></section></div>`:''}</div>`;
+  }
+  const variants = {
+    'settings-off':{on:false,title:'尚未开启自动补充',desc:'开启后，完成复习时会尝试补充已开启提醒的次数。',tag:'未开启',status:'上一条已用完',quota:0},
+    'settings-enabled':{on:true,title:'自动补充已开启',desc:'次数用完时，在你下次完成复习时尝试补充。',tag:'已开启',status:'可发送 1 次',quota:1},
+    'settings-cooldown':{on:true,title:'已开启，正在减少询问',desc:'普通拒绝或取消后，不会每次完成复习都询问。',tag:'冷却中',status:'还需完成 4 条复习',quota:0,cooldown:true},
+    'settings-stopped':{on:true,title:'自动申请已暂停',desc:'微信已记住拒绝。不会再自动询问，你可以主动去调整。',tag:'需手动恢复',status:'微信已记住拒绝',quota:0,stopped:true},
+    'settings-pending':{on:true,title:'正在确认补充结果',desc:'微信已同意，登记结果尚未确认。恢复登记不会再次申请授权。',tag:'登记待恢复',status:'次数待确认',quota:null,pending:true},
+    'settings-error':{on:true,title:'暂时无法更新状态',desc:'下面保留上次读到的设置。未能确认状态时，暂不自动申请。',tag:'状态待更新',status:'上次状态：可发送 1 次',quota:1,error:true},
+    'settings-unavailable':{on:true,title:'自动补充暂不可用',desc:'提醒服务暂不可用，恢复后才会尝试。不影响记录和复习。',tag:'暂不可用',status:'提醒服务暂不可用',quota:0,unavailable:true},
+    'settings-partial':{on:true,title:'各类提醒独立补充',desc:'某一类被拒绝，不影响其他已允许的提醒。',tag:'已开启',status:'可发送 1 次',quota:1,partial:true},
+    'settings-empty':{on:false,title:'当前没有可补充的提醒',desc:'先开启需要的提醒，并在微信里同意一次，之后才能自动补充。',tag:'暂无适用提醒',status:'已关闭',quota:0,empty:true},
+    'settings-saving':{on:false,title:'正在保存设置',desc:'保存成功后才会开启。失败会保留原设置，不影响复习。',tag:'保存中',status:'上一条已用完',quota:0,saving:true}
+  };
+  function typeRow(label,name,typeStatus,quota,opts={}) {
+    return `<article class="type"><div class="row"><span class="icon-box">${icon(name)}</span><div class="grow"><div class="type-title">${label}</div><p class="muted">${name==='book'?'每天 19:00 提醒尚未复习的内容':name==='clock'?'在日程开始前提醒你':'有家人申请加入时提醒管理员'}</p></div>${toggle(label,!opts.off,opts.disabled)}</div><div class="stack"><span class="tag ${quota===1?'good':opts.cooldown?'warn':''}">${typeStatus}</span>${opts.manager?'<span class="tag">仅管理员</span>':''}</div>${opts.cooldown?'<p class="muted subtle">本轮已完成 6 / 10 条，之后下一次点击完成时再询问。</p>':''}${opts.pending?'<p class="muted subtle">登记未确认前，不显示已增加次数。</p>':''}${quota===0&&!opts.disabled&&!opts.off?'<button class="text-action" data-action="grant">'+(opts.stopped?'去微信调整':'手动补充次数')+'</button>':''}</article>`;
+  }
+  function settingsScreen() {
+    let body = '';
+    if (state==='settings-loading') {
+      body='<section class="card" aria-label="正在读取提醒设置" aria-busy="true"><div class="skeleton short"></div><div class="skeleton large"></div><p class="muted">正在读取提醒设置…</p></section>';
+    } else if (state==='settings-forbidden') {
+      body='<section class="card"><h2>暂时无法读取提醒设置</h2><p class="subtle">当前身份已失效，请重新进入小程序。身份恢复前不会申请授权。</p><button class="primary" data-action="retry" style="margin-top:16px">重新进入</button></section>';
+    } else {
+      const v=variants[state] || variants['settings-enabled'];
+      const controlDisabled=!!(v.saving||v.unavailable||v.error);
+      body=`${v.error?'<div class="notice error" role="status">连接暂时中断，已保留上次读取的设置。<button class="text-action" data-action="retry">重新读取</button></div>':''}<section class="card hero"><p class="kicker">微信服务通知</p><h2>${v.unavailable?'提醒服务暂不可用':v.empty?'选择你需要的提醒':v.quota===1?'已有可用提醒次数':'提醒次数需要补充'}</h2><p>开关表示你想不想收；能否发送，还取决于微信授权和剩余次数。</p></section><section class="card" aria-labelledby="renewal-title" ${v.saving?'aria-busy="true"':''}><div class="row"><div class="grow"><h3 id="renewal-title">完成复习时自动补充</h3><p class="muted">${v.title}</p></div>${toggle('完成复习时自动补充',v.on,controlDisabled)}</div><p class="subtle">${v.desc}</p><div class="stack rule"><span class="tag ${v.pending?'info':v.cooldown?'warn':v.on&&!v.stopped&&!v.unavailable?'good':''}">${v.tag}</span><span class="muted">仅你的提醒 · 跟随账号保存</span></div></section><h3 class="section-title">提醒内容</h3><section class="card">${typeRow('复习提醒','book',v.status,v.quota,{...v,off:v.empty,disabled:controlDisabled})}${typeRow('日程提醒','clock',v.partial?'还需完成 4 条复习':v.status,v.partial?0:v.quota,{...v,cooldown:v.partial||v.cooldown,off:v.empty,disabled:controlDisabled})}${!v.partial?typeRow('家人加入申请','people',v.empty?'已关闭':v.status,v.quota,{...v,manager:true,off:v.empty,disabled:controlDisabled}):''}</section><p class="muted subtle">每次同意只增加一次发送额度。新增或更换模板后，需要先在微信里同意一次。</p><h3 class="section-title">最近的提醒</h3><section class="card"><p class="muted">这里显示实际投递记录，与自动补充结果分别展示。</p><p class="muted subtle">提醒可能延迟或失败，重要安排请以小程序内日程为准。</p></section>`;
+    }
+    return `<div class="screen">${chrome(false)}<main><div class="pagehead"><p class="kicker">该记得的事，不用你记</p><h1>提醒设置</h1></div>${body}</main></div>`;
+  }
+  if (!isScreen) {
+    document.getElementById('app').innerHTML=`<div class="review"><p class="kicker">FEAT-011 · 候选设计 · 尚未实施</p><h1>提醒授权自动补充</h1><p>延续「纸 · 芽」。设计预览不调用微信、不发送通知；微信原生授权面板不在此模拟。</p><div class="review-controls"><label for="state">查看状态</label><select id="state">${Object.entries(STATES).map(([key,title])=>`<option value="${key}" ${key===state?'selected':''}>${title}</option>`).join('')}</select>${[[320,568],[390,844],[430,932]].map(([w,h])=>`<button data-width="${w}" data-height="${h}" aria-pressed="${w===390}">${w} × ${h}</button>`).join('')}</div><p id="demo-note" role="status">可切换状态和视口；屏内操作仅演示状态变化。</p><div class="preview-host"><iframe title="小程序候选设计" id="preview" width="390" height="844" src="?screen=1&state=${state}"></iframe></div></div>`;
+    document.getElementById('state').addEventListener('change',event=>{document.getElementById('preview').src='?screen=1&state='+event.target.value;});
+    document.querySelectorAll('[data-width]').forEach(button=>button.addEventListener('click',()=>{const frame=document.getElementById('preview');frame.width=button.dataset.width;frame.height=button.dataset.height;document.querySelectorAll('[data-width]').forEach(x=>x.setAttribute('aria-pressed',String(x===button)));}));
+    window.addEventListener('message',event=>{
+      const frame=document.getElementById('preview');
+      if(event.source!==frame.contentWindow||event.data?.kind!=='renewal-design')return;
+      document.getElementById('demo-note').textContent=event.data.demo;
+      if(Object.hasOwn(STATES,event.data.next))frame.src='?screen=1&state='+event.data.next;
+    });
+  } else {
+    document.getElementById('app').innerHTML=state==='guide'||state==='today-quiet'?todayScreen(state==='guide'):settingsScreen();
+    const hero=document.querySelector('.hero');
+    if(hero&&['settings-error','settings-pending','settings-unavailable'].includes(state)){
+      hero.classList.add('neutral');
+      if(state==='settings-error')hero.querySelector('h2').textContent='提醒状态待更新';
+      if(state==='settings-pending')hero.querySelector('h2').textContent='提醒次数待确认';
+    }
+    if(state==='guide'){
+      document.querySelectorAll('.today > :not(.overlay)').forEach(node=>{node.inert=true;});
+      const title=document.getElementById('guide-title'); title.tabIndex=-1; title.focus();
+      const first=document.querySelector('.sheet-actions .primary');
+      const last=document.querySelector('.sheet-actions .secondary');
+      document.addEventListener('keydown',event=>{
+        if(event.key!=='Tab')return;
+        if(event.shiftKey&&(document.activeElement===first||document.activeElement===title)){
+          event.preventDefault(); last.focus();
+        }else if(!event.shiftKey&&document.activeElement===last){
+          event.preventDefault(); first.focus();
+        }
+      });
+    }
+    document.addEventListener('click',event=>{
+      const button=event.target.closest('[data-action]'); if(!button||button.disabled)return;
+      const action=button.dataset.action;
+      let next='today-quiet';
+      if(action==='enable'||action==='grant')next='settings-pending';
+      if(action==='toggle')next=state==='settings-off'||state==='settings-empty'?'settings-saving':'settings-off';
+      if(action==='retry')next='settings-loading';
+      if(window.parent!==window){
+        window.parent.postMessage({kind:'renewal-design',next,demo:action==='enable'||action==='grant'?'设计演示：此处由微信显示真实授权面板；原型没有产生授权或额度。':'设计演示：'+button.textContent.trim()+'，不会写入真实数据。'},'*');
+      }else{location.search='?screen=1&state='+next;}
+    });
+    document.addEventListener('keydown',event=>{if(event.key==='Escape'&&state==='guide')location.search='?screen=1&state=today-quiet';});
+  }
+</script>
+</body>
+</html>

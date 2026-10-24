@@ -4,6 +4,7 @@
     "pages/today/index",
     "pages/calendar/index",
     "pages/records/index",
+    "pages/footprints/index",
     "pages/reports/index",
     "pages/review-inventory/index",
     "pages/settings/index",
@@ -41,6 +42,10 @@
   "style": "v2",
   "sitemapLocation": "sitemap.json",
   "lazyCodeLoading": "requiredComponents",
+  "requiredPrivateInfos": ["chooseLocation"],
+  "permission": {
+    "scope.userLocation": { "desc": "用于家长主动在地图上选择历史出游地点" }
+  },
   "plugins": {
     "WechatSI": {
       "version": "0.3.1",

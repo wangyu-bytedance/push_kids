@@ -1,0 +1,1235 @@
+{
+  "kind": "synthetic-html-design-only",
+  "native_acceptance": "NOT_RUN",
+  "exports": [
+    {
+      "file": "review-due-320x568.png",
+      "viewport": [
+        320,
+        568
+      ],
+      "state": "review-due",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": false,
+        "state": "review-due"
+      }
+    },
+    {
+      "file": "review-early-320x568.png",
+      "viewport": [
+        320,
+        568
+      ],
+      "state": "review-early",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": false,
+        "state": "review-early"
+      }
+    },
+    {
+      "file": "review-empty-320x568.png",
+      "viewport": [
+        320,
+        568
+      ],
+      "state": "review-empty",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": false,
+        "state": "review-empty"
+      }
+    },
+    {
+      "file": "review-handled-320x568.png",
+      "viewport": [
+        320,
+        568
+      ],
+      "state": "review-handled",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": false,
+        "state": "review-handled"
+      }
+    },
+    {
+      "file": "review-inventory-320x568.png",
+      "viewport": [
+        320,
+        568
+      ],
+      "state": "review-inventory",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": true,
+        "state": "review-inventory"
+      }
+    },
+    {
+      "file": "review-viewer-320x568.png",
+      "viewport": [
+        320,
+        568
+      ],
+      "state": "review-viewer",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": false,
+        "state": "review-viewer"
+      }
+    },
+    {
+      "file": "review-source-320x568.png",
+      "viewport": [
+        320,
+        568
+      ],
+      "state": "review-source",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": true,
+        "state": "review-source"
+      }
+    },
+    {
+      "file": "review-long-320x568.png",
+      "viewport": [
+        320,
+        568
+      ],
+      "state": "review-long",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": false,
+        "state": "review-long"
+      }
+    },
+    {
+      "file": "review-error-320x568.png",
+      "viewport": [
+        320,
+        568
+      ],
+      "state": "review-error",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": false,
+        "state": "review-error"
+      }
+    },
+    {
+      "file": "suggestion-320x568.png",
+      "viewport": [
+        320,
+        568
+      ],
+      "state": "suggestion",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": true,
+        "state": "suggestion"
+      }
+    },
+    {
+      "file": "suggestion-edit-320x568.png",
+      "viewport": [
+        320,
+        568
+      ],
+      "state": "suggestion-edit",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": true,
+        "state": "suggestion-edit"
+      }
+    },
+    {
+      "file": "suggestion-deferred-320x568.png",
+      "viewport": [
+        320,
+        568
+      ],
+      "state": "suggestion-deferred",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": false,
+        "state": "suggestion-deferred"
+      }
+    },
+    {
+      "file": "suggestion-planned-320x568.png",
+      "viewport": [
+        320,
+        568
+      ],
+      "state": "suggestion-planned",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": false,
+        "state": "suggestion-planned"
+      }
+    },
+    {
+      "file": "suggestion-partial-320x568.png",
+      "viewport": [
+        320,
+        568
+      ],
+      "state": "suggestion-partial",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": false,
+        "state": "suggestion-partial"
+      }
+    },
+    {
+      "file": "suggestion-delete-320x568.png",
+      "viewport": [
+        320,
+        568
+      ],
+      "state": "suggestion-delete",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": true,
+        "state": "suggestion-delete"
+      }
+    },
+    {
+      "file": "suggestion-record-320x568.png",
+      "viewport": [
+        320,
+        568
+      ],
+      "state": "suggestion-record",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": true,
+        "state": "suggestion-record"
+      }
+    },
+    {
+      "file": "suggestion-no-history-320x568.png",
+      "viewport": [
+        320,
+        568
+      ],
+      "state": "suggestion-no-history",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": false,
+        "state": "suggestion-no-history"
+      }
+    },
+    {
+      "file": "suggestion-missing-grade-320x568.png",
+      "viewport": [
+        320,
+        568
+      ],
+      "state": "suggestion-missing-grade",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": false,
+        "state": "suggestion-missing-grade"
+      }
+    },
+    {
+      "file": "suggestion-loading-320x568.png",
+      "viewport": [
+        320,
+        568
+      ],
+      "state": "suggestion-loading",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": true,
+        "state": "suggestion-loading"
+      }
+    },
+    {
+      "file": "suggestion-error-320x568.png",
+      "viewport": [
+        320,
+        568
+      ],
+      "state": "suggestion-error",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": true,
+        "state": "suggestion-error"
+      }
+    },
+    {
+      "file": "suggestion-viewer-320x568.png",
+      "viewport": [
+        320,
+        568
+      ],
+      "state": "suggestion-viewer",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": false,
+        "state": "suggestion-viewer"
+      }
+    },
+    {
+      "file": "suggestion-stale-320x568.png",
+      "viewport": [
+        320,
+        568
+      ],
+      "state": "suggestion-stale",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": true,
+        "state": "suggestion-stale"
+      }
+    },
+    {
+      "file": "suggestion-long-320x568.png",
+      "viewport": [
+        320,
+        568
+      ],
+      "state": "suggestion-long",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": true,
+        "state": "suggestion-long"
+      }
+    },
+    {
+      "file": "suggestion-keyboard-320x568.png",
+      "viewport": [
+        320,
+        568
+      ],
+      "state": "suggestion-keyboard",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": true,
+        "state": "suggestion-keyboard"
+      }
+    },
+    {
+      "file": "suggestion-saved-320x568.png",
+      "viewport": [
+        320,
+        568
+      ],
+      "state": "suggestion-saved",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": false,
+        "state": "suggestion-saved"
+      }
+    },
+    {
+      "file": "suggestion-offline-320x568.png",
+      "viewport": [
+        320,
+        568
+      ],
+      "state": "suggestion-offline",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": true,
+        "state": "suggestion-offline"
+      }
+    },
+    {
+      "file": "review-due-390x844.png",
+      "viewport": [
+        390,
+        844
+      ],
+      "state": "review-due",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": false,
+        "state": "review-due"
+      }
+    },
+    {
+      "file": "review-early-390x844.png",
+      "viewport": [
+        390,
+        844
+      ],
+      "state": "review-early",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": false,
+        "state": "review-early"
+      }
+    },
+    {
+      "file": "review-empty-390x844.png",
+      "viewport": [
+        390,
+        844
+      ],
+      "state": "review-empty",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": false,
+        "state": "review-empty"
+      }
+    },
+    {
+      "file": "review-handled-390x844.png",
+      "viewport": [
+        390,
+        844
+      ],
+      "state": "review-handled",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": false,
+        "state": "review-handled"
+      }
+    },
+    {
+      "file": "review-inventory-390x844.png",
+      "viewport": [
+        390,
+        844
+      ],
+      "state": "review-inventory",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": true,
+        "state": "review-inventory"
+      }
+    },
+    {
+      "file": "review-viewer-390x844.png",
+      "viewport": [
+        390,
+        844
+      ],
+      "state": "review-viewer",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": false,
+        "state": "review-viewer"
+      }
+    },
+    {
+      "file": "review-source-390x844.png",
+      "viewport": [
+        390,
+        844
+      ],
+      "state": "review-source",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": true,
+        "state": "review-source"
+      }
+    },
+    {
+      "file": "review-long-390x844.png",
+      "viewport": [
+        390,
+        844
+      ],
+      "state": "review-long",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": false,
+        "state": "review-long"
+      }
+    },
+    {
+      "file": "review-error-390x844.png",
+      "viewport": [
+        390,
+        844
+      ],
+      "state": "review-error",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": false,
+        "state": "review-error"
+      }
+    },
+    {
+      "file": "suggestion-390x844.png",
+      "viewport": [
+        390,
+        844
+      ],
+      "state": "suggestion",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": true,
+        "state": "suggestion"
+      }
+    },
+    {
+      "file": "suggestion-edit-390x844.png",
+      "viewport": [
+        390,
+        844
+      ],
+      "state": "suggestion-edit",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": true,
+        "state": "suggestion-edit"
+      }
+    },
+    {
+      "file": "suggestion-deferred-390x844.png",
+      "viewport": [
+        390,
+        844
+      ],
+      "state": "suggestion-deferred",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": false,
+        "state": "suggestion-deferred"
+      }
+    },
+    {
+      "file": "suggestion-planned-390x844.png",
+      "viewport": [
+        390,
+        844
+      ],
+      "state": "suggestion-planned",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": false,
+        "state": "suggestion-planned"
+      }
+    },
+    {
+      "file": "suggestion-partial-390x844.png",
+      "viewport": [
+        390,
+        844
+      ],
+      "state": "suggestion-partial",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": false,
+        "state": "suggestion-partial"
+      }
+    },
+    {
+      "file": "suggestion-delete-390x844.png",
+      "viewport": [
+        390,
+        844
+      ],
+      "state": "suggestion-delete",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": true,
+        "state": "suggestion-delete"
+      }
+    },
+    {
+      "file": "suggestion-record-390x844.png",
+      "viewport": [
+        390,
+        844
+      ],
+      "state": "suggestion-record",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": true,
+        "state": "suggestion-record"
+      }
+    },
+    {
+      "file": "suggestion-no-history-390x844.png",
+      "viewport": [
+        390,
+        844
+      ],
+      "state": "suggestion-no-history",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": false,
+        "state": "suggestion-no-history"
+      }
+    },
+    {
+      "file": "suggestion-missing-grade-390x844.png",
+      "viewport": [
+        390,
+        844
+      ],
+      "state": "suggestion-missing-grade",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": false,
+        "state": "suggestion-missing-grade"
+      }
+    },
+    {
+      "file": "suggestion-loading-390x844.png",
+      "viewport": [
+        390,
+        844
+      ],
+      "state": "suggestion-loading",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": true,
+        "state": "suggestion-loading"
+      }
+    },
+    {
+      "file": "suggestion-error-390x844.png",
+      "viewport": [
+        390,
+        844
+      ],
+      "state": "suggestion-error",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": true,
+        "state": "suggestion-error"
+      }
+    },
+    {
+      "file": "suggestion-viewer-390x844.png",
+      "viewport": [
+        390,
+        844
+      ],
+      "state": "suggestion-viewer",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": false,
+        "state": "suggestion-viewer"
+      }
+    },
+    {
+      "file": "suggestion-stale-390x844.png",
+      "viewport": [
+        390,
+        844
+      ],
+      "state": "suggestion-stale",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": true,
+        "state": "suggestion-stale"
+      }
+    },
+    {
+      "file": "suggestion-long-390x844.png",
+      "viewport": [
+        390,
+        844
+      ],
+      "state": "suggestion-long",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": true,
+        "state": "suggestion-long"
+      }
+    },
+    {
+      "file": "suggestion-keyboard-390x844.png",
+      "viewport": [
+        390,
+        844
+      ],
+      "state": "suggestion-keyboard",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": true,
+        "state": "suggestion-keyboard"
+      }
+    },
+    {
+      "file": "suggestion-saved-390x844.png",
+      "viewport": [
+        390,
+        844
+      ],
+      "state": "suggestion-saved",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": false,
+        "state": "suggestion-saved"
+      }
+    },
+    {
+      "file": "suggestion-offline-390x844.png",
+      "viewport": [
+        390,
+        844
+      ],
+      "state": "suggestion-offline",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": true,
+        "state": "suggestion-offline"
+      }
+    },
+    {
+      "file": "review-due-430x932.png",
+      "viewport": [
+        430,
+        932
+      ],
+      "state": "review-due",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": false,
+        "state": "review-due"
+      }
+    },
+    {
+      "file": "review-early-430x932.png",
+      "viewport": [
+        430,
+        932
+      ],
+      "state": "review-early",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": false,
+        "state": "review-early"
+      }
+    },
+    {
+      "file": "review-empty-430x932.png",
+      "viewport": [
+        430,
+        932
+      ],
+      "state": "review-empty",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": false,
+        "state": "review-empty"
+      }
+    },
+    {
+      "file": "review-handled-430x932.png",
+      "viewport": [
+        430,
+        932
+      ],
+      "state": "review-handled",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": false,
+        "state": "review-handled"
+      }
+    },
+    {
+      "file": "review-inventory-430x932.png",
+      "viewport": [
+        430,
+        932
+      ],
+      "state": "review-inventory",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": true,
+        "state": "review-inventory"
+      }
+    },
+    {
+      "file": "review-viewer-430x932.png",
+      "viewport": [
+        430,
+        932
+      ],
+      "state": "review-viewer",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": false,
+        "state": "review-viewer"
+      }
+    },
+    {
+      "file": "review-source-430x932.png",
+      "viewport": [
+        430,
+        932
+      ],
+      "state": "review-source",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": true,
+        "state": "review-source"
+      }
+    },
+    {
+      "file": "review-long-430x932.png",
+      "viewport": [
+        430,
+        932
+      ],
+      "state": "review-long",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": false,
+        "state": "review-long"
+      }
+    },
+    {
+      "file": "review-error-430x932.png",
+      "viewport": [
+        430,
+        932
+      ],
+      "state": "review-error",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": false,
+        "state": "review-error"
+      }
+    },
+    {
+      "file": "suggestion-430x932.png",
+      "viewport": [
+        430,
+        932
+      ],
+      "state": "suggestion",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": true,
+        "state": "suggestion"
+      }
+    },
+    {
+      "file": "suggestion-edit-430x932.png",
+      "viewport": [
+        430,
+        932
+      ],
+      "state": "suggestion-edit",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": true,
+        "state": "suggestion-edit"
+      }
+    },
+    {
+      "file": "suggestion-deferred-430x932.png",
+      "viewport": [
+        430,
+        932
+      ],
+      "state": "suggestion-deferred",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": false,
+        "state": "suggestion-deferred"
+      }
+    },
+    {
+      "file": "suggestion-planned-430x932.png",
+      "viewport": [
+        430,
+        932
+      ],
+      "state": "suggestion-planned",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": false,
+        "state": "suggestion-planned"
+      }
+    },
+    {
+      "file": "suggestion-partial-430x932.png",
+      "viewport": [
+        430,
+        932
+      ],
+      "state": "suggestion-partial",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": false,
+        "state": "suggestion-partial"
+      }
+    },
+    {
+      "file": "suggestion-delete-430x932.png",
+      "viewport": [
+        430,
+        932
+      ],
+      "state": "suggestion-delete",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": true,
+        "state": "suggestion-delete"
+      }
+    },
+    {
+      "file": "suggestion-record-430x932.png",
+      "viewport": [
+        430,
+        932
+      ],
+      "state": "suggestion-record",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": true,
+        "state": "suggestion-record"
+      }
+    },
+    {
+      "file": "suggestion-no-history-430x932.png",
+      "viewport": [
+        430,
+        932
+      ],
+      "state": "suggestion-no-history",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": false,
+        "state": "suggestion-no-history"
+      }
+    },
+    {
+      "file": "suggestion-missing-grade-430x932.png",
+      "viewport": [
+        430,
+        932
+      ],
+      "state": "suggestion-missing-grade",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": false,
+        "state": "suggestion-missing-grade"
+      }
+    },
+    {
+      "file": "suggestion-loading-430x932.png",
+      "viewport": [
+        430,
+        932
+      ],
+      "state": "suggestion-loading",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": true,
+        "state": "suggestion-loading"
+      }
+    },
+    {
+      "file": "suggestion-error-430x932.png",
+      "viewport": [
+        430,
+        932
+      ],
+      "state": "suggestion-error",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": true,
+        "state": "suggestion-error"
+      }
+    },
+    {
+      "file": "suggestion-viewer-430x932.png",
+      "viewport": [
+        430,
+        932
+      ],
+      "state": "suggestion-viewer",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": false,
+        "state": "suggestion-viewer"
+      }
+    },
+    {
+      "file": "suggestion-stale-430x932.png",
+      "viewport": [
+        430,
+        932
+      ],
+      "state": "suggestion-stale",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": true,
+        "state": "suggestion-stale"
+      }
+    },
+    {
+      "file": "suggestion-long-430x932.png",
+      "viewport": [
+        430,
+        932
+      ],
+      "state": "suggestion-long",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": true,
+        "state": "suggestion-long"
+      }
+    },
+    {
+      "file": "suggestion-keyboard-430x932.png",
+      "viewport": [
+        430,
+        932
+      ],
+      "state": "suggestion-keyboard",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": true,
+        "state": "suggestion-keyboard"
+      }
+    },
+    {
+      "file": "suggestion-saved-430x932.png",
+      "viewport": [
+        430,
+        932
+      ],
+      "state": "suggestion-saved",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": false,
+        "state": "suggestion-saved"
+      }
+    },
+    {
+      "file": "suggestion-offline-430x932.png",
+      "viewport": [
+        430,
+        932
+      ],
+      "state": "suggestion-offline",
+      "layout": {
+        "horizontal": false,
+        "bad": [],
+        "footerObscured": false,
+        "dialog": true,
+        "state": "suggestion-offline"
+      }
+    }
+  ],
+  "interactions": [
+    {
+      "from": "suggestion",
+      "action": "suggestion-planned",
+      "to": "suggestion-planned",
+      "result": "PASS"
+    },
+    {
+      "from": "suggestion",
+      "action": "suggestion-loading",
+      "to": "suggestion-loading",
+      "result": "PASS"
+    },
+    {
+      "from": "suggestion",
+      "action": "suggestion-deferred",
+      "to": "suggestion-deferred",
+      "result": "PASS"
+    },
+    {
+      "from": "suggestion-record",
+      "action": "suggestion-partial",
+      "to": "suggestion-partial",
+      "result": "PASS"
+    },
+    {
+      "from": "suggestion-record",
+      "action": "suggestion-saved",
+      "to": "suggestion-saved",
+      "result": "PASS"
+    },
+    {
+      "from": "suggestion-delete",
+      "action": "suggestion-loading",
+      "to": "suggestion-loading",
+      "result": "PASS"
+    },
+    {
+      "from": "review-early",
+      "action": "review-handled",
+      "to": "review-handled",
+      "result": "PASS"
+    },
+    {
+      "from": "review-early",
+      "action": "review-source",
+      "to": "review-source",
+      "result": "PASS"
+    }
+  ],
+  "keyboard_focus_cycle": "PASS",
+  "runtime_errors": [],
+  "browser_version": {
+    "protocolVersion": "1.3",
+    "product": "Chrome/155.0.8059.85",
+    "revision": "@0e66b94549a8bd85f03fbdf189b752d6e7b63c32",
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36",
+    "jsVersion": "15.5.35.25"
+  }
+}

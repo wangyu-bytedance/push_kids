@@ -22,6 +22,13 @@
 
 ## Information architecture and action hierarchy
 
+2026-10-24已批准文案附加条款：[UI文案减法要求](prototypes/DREV-20261024-FOOTPRINTS-MINIMAL-01/UI-COPY-REQUIREMENTS.md)，对应[SPEC-20261024-FOOTPRINTS-MINIMAL-UI-01](../../../specs/active/FEAT-012-FOOTPRINTS-MINIMAL-UI.md)及DREV01；产品负责人明确回复“批准 Spec01 + DREV01，按此实施并合并 UI 规范”。本条不改变 FEC 主revision、预算或授权/错误恢复合同。
+
+- UI 用内容、状态和操作表达产品，默认不堆叠解释。每次 UI 变更执行“删字检查”：可见文本须属于对象/数据、动作、当前状态、必要授权/后果；重复内容及其余冗余说明删除。
+- AI 思考、后台流程、实现细节、内部约束、开发/验收说明与假想风险辩护不得进入产品界面。先调整标签、控件与层级，不以长文弥补交互，也不把删除内容迁到新帮助层。
+- 必要授权、实际错误/恢复和删除/放弃后果只在当前操作处简短呈现；未知、AI候选、只读、归档及真实到期状态保留短标签。
+- 删除文案同步收紧布局、清除空容器和无消费者样式，保留44px/14px下限。用真实操作及三视口渲染验证，不新增逐字镜像测试；不以“可能有人不懂”为由堆提示。
+
 - Primary tabs remain 今日、日程、记录、报表、设置; onboarding, submission, confirmation, family application and approval are deep flows.
 - Each page exposes one dominant action. Secondary and destructive actions are visually separated.
 - Manager-only actions may be hidden for usability, but server authorization remains authoritative.

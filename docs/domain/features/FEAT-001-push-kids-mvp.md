@@ -1,6 +1,20 @@
 # FEAT-001 — 家庭学习持续跟进系统 MVP
 
-- 2026-10-16复习科目保序修复：`BUG-SPEC-20261016-REVIEW-SUBJECT-ORDER-01`已批准并实现，反馈后仍按原计划各科最早ordinal展示；全组无待复习项才移除空组。后端518 passed/19 skipped、前端244 passed，补充MySQL18项及冻结容器检查通过；灰度031已normal/0%流量，旧030仍100%，定向smoke与全量人工门禁待完成。见[发布记录](../../deploy/releases/20261016-review-subject-order-backend.md)和[验证证据](../../quality/evidence/REVIEW-SUBJECT-ORDER-20261016.md)。
+- 2026-10-24旅行界面减法：用户明确批准足迹精简Spec01/DREV01，记录Tab旅行组件及原足迹页共享实现去掉重复身份标题、收起次要操作、设置只留开关和保存。最终331项前端、三尺寸27态原生及430实际菜单操作通过，CR-001在已批准迟到保护范围修复；UI文案要求已并入工程规范。原学习入口/表单及确认合同不变；[当前证据](../../quality/evidence/footprints-minimal-20261024/README.md)区分本地原生与真机待验，未上传部署。
+
+- 2026-10-24年级确认本地增量：五Tab新增共享宿主，已有弹层/上传/未保存输入时等待，包含报表筛选表单；学习、复习和AI消费者仍只读取正式grade。年度建议确认只写children，不创建学习记录、Review或Todo；[FEAT-013证据](../../quality/evidence/ANNUAL-GRADE-IMPLEMENTATION-20261024.md)含零副作用、原API/启动/看板回归、三尺寸呈现及独立评审PASS。当前未部署，修复后原生端到端、设备与可访问性验收待补。
+
+- 2026-10-24本地今日增量：两份Spec04、Architecture02/03与`DREV-20261024-TODAY-LEARNING-01`已获用户「批准，按此实现」。空白日先处理自然到期；没有到期才从符合3日/80%/2日条件的已复习知识中提前少量安排，≤10分钟且不超孩子预算，原日期不变。只有初始`provisional_empty`可因正式库存代次变化重判，处理过的计划和旧计划不补排。另见[FEAT-004](FEAT-004-daily-learning-suggestions.md)的两完整自然日无新增建议→家长批准待学→实际确认入档。两开关默认关闭，迁移0023/0024只在本地验证，本增量未上传部署，完整验收仍VERIFYING；[本轮证据](../../quality/evidence/TODAY-LEARNING-IMPLEMENTATION-20261024.md)。
+
+- 2026-10-24记录入口本地增量：用户批准`BUG-SPEC-20261024-RECORD-ENTRY-05 / DREV-20261024-RECORD-ENTRY-01`后，记录标题改为顶部两项下拉，右侧复用纸色孩子chip；类型菜单保留Tab，旅行照片/编辑面板仍隐藏Tab。普通Tab记住类型，未提交学习表单/幂等键/滚动保留；今日与报表明确学习入口经原离开保护切回学习，修复旧确认跨代结束未续接新学习意图的问题。旅行默认全部已确认足迹，删除日期筛选；列表按最多100条窗口续看，导入是内容下方48px普通按钮，权限/同意/人工/确认合同保持。替代10-23入口的对应外观与筛选描述，详见[本轮验证边界](../../quality/evidence/record-entry-20261024/README.md)。本增量未上传或部署，真机验收待补。
+
+- 2026-10-20本地前后端增量：`SPEC-20261020-AUTO-SUPERSEDED-REVIEW-02`与`DREV-20261020-SUPERSEDED-REVIEW-01`已批准并实现；AI在原学习确认后自动应用单项完整覆盖，旧词条永久停止自动排期，历史不合并、不删除、不伪造。存量任务使用持久游标及租约；既有人工预约保留一次。独立页及报表内嵌默认「参与复习」，支持「已替代」筛选、承接关系与原学习记录，菜单仅删除。自动化通过，完整原生/真机验收待补，未部署。见[实现与验收边界](../../quality/evidence/AUTO-SUPERSEDED-REVIEW-20261020.md)。
+
+- 2026-10-17本地复习完成协作：已批准并实现`SPEC-20261017-NOTIFICATION-AUTO-RENEWAL-01`。仅可信本人成功的手动complete在原反馈事务内新增去重完成游标；今日点击同步尝试已准备好的本人授权，首次说明须显式开启。复习结果、科目顺序和日期政策不变，每日任务不触发。真机及独立评审待补，未上传/部署。当前能力见[FEAT-011](FEAT-011-notification-auto-renewal.md)和[实现证据](../../quality/evidence/NOTIFICATION-AUTO-RENEWAL-IMPLEMENTATION-20261017.md)；此增量不代表线上发布。
+
+- 2026-10-17通知受控验收：已批准`OPS-SPEC-20261017-NOTIFICATION-SINGLE-EVENT-SMOKE-05`及家庭接收范围；经既有API创建1条临时非重复日程0F58（201），原通知调度使当前账号投递sent/ok（18:49:19 CST），随后仅停用该日程（204）并确认当日日程中匹配数0。用户随后明确确认微信“已收到”（call_5b80efd7f9504c4ca286e2df7e031c75），补齐该账号本次实际收件证据。未改日程/学习/复习合同、代码或发布状态；不代验其他成员。见[证据](../../quality/evidence/NOTIFICATION-HTTP-DIAGNOSIS-20261017.md)。
+
+- 2026-10-16复习科目保序修复：`BUG-SPEC-20261016-REVIEW-SUBJECT-ORDER-01`已批准并实现，反馈后仍按原计划各科最早ordinal展示；全组无待复习项才移除空组。后端518 passed/19 skipped、前端244 passed，补充MySQL18项及冻结容器检查通过。当次历史阶段为031 normal/0%、030 100%，当次定向smoke与全量人工门禁未留验收证据；2026-10-24只读复核当前031 normal/100%，不据此补写当次smoke PASS。见[历史发布](../../deploy/releases/20261016-review-subject-order-backend.md)、[验证证据](../../quality/evidence/REVIEW-SUBJECT-ORDER-20261016.md)及[当前部署准备](../../deploy/releases/20261023-fullstack-test-deployment.md)。
 
 - 2026-10-15学科管理本地增量：SPEC-20261014-SUBJECT-MANAGEMENT-01 / DREV-20261014-SUBJECT-MANAGEMENT-01已批准并实现。学科行统一箭头进入管理面板，移出位于面板底部；基础三科与可移出自定义科目均二次确认，已有学习记录保留。未加入基础科目仍可加入，其他科目沿用 canRemove 限制；只读无写入口，失败留面板重试，切孩子/离页丢弃迟到回调。取代原学科行尾直接加入/移出入口，未上传/发布。验收与未执行项见 [本轮证据](../../quality/evidence/SUBJECT-MANAGEMENT-20261015.md)，Spec 保留 VERIFYING。
 
@@ -13,7 +27,7 @@
 - Local report panel refinement: `SPEC-20261013-REPORT-PANELS-01 / DREV-20261013-REPORT-PANELS-01` 已获用户批准并本地实现。历史和编辑计划统一展开容器，明确展开/收起及调整入口；查询与计划策略不变，外层背景由统一卡片样式负责。236项前端测试、三视口36态原生数字几何及静态校验通过；已随0.1.14开发上传，完整截图、字体放大与真机验收待补。证据：`docs/quality/evidence/REPORT-PANELS-20261013.md`。
 
 - Status: `CURRENT`
-- 当前发布状态：最新客户端开发上传为0.1.15（源码5837d59），包含每日任务/背景/报表布局及设置一致性，见docs/deploy/releases/20261013-settings-consistency-frontend.md；本轮按钮/分页仅本地实现。生产Schema0019与后端030已全量模式发布，2026-10-13真实小程序13项读取接口200；生产写路径/多账号及完整原生/真机、体验/审核/正式发布仍待补。后端报告docs/deploy/releases/20261013-fullstack-diff.md，0.1.13/0.1.14保留为历史上传。
+- 当前发布状态：最新客户端开发上传仍为0.1.15（源码5837d59），本次仅启动完整本地客户端、不上传。2026-10-24用户指定同库升级顺序，10:55生产0019→0022/current/check与结构/队列核验通过；035部署后由用户100%接管并删除034，11:01–11:03官方观察旧实例0、035 normal/100%/1实例。真实微信18项读取含live/ready和新足迹/续订均200，本地实际进入旅行日记；coverage=false，永久替代关闭。见[本次发布](../../deploy/releases/20261023-fullstack-test-deployment.md)。全量前定向验收未执行，当前生产写路径/真实照片/多账号/完整原生真机待用户验收，未沿用历史030/0019的smoke结果。
 - Local complete card backgrounds: SPEC-20261013-CARD-BACKGROUNDS-01已按用户明确指令本地实现，设置三块插画、每日任务同款卡片与新位置、报表背景均已接入；238测试和CLI预览通过，已随0.1.14开发上传，原生/真机/用户验收待补。证据docs/quality/evidence/CARD-BACKGROUNDS-20261013.md，未设体验版/正式版。
 - Local illustrations: `SPEC-20261013-RECORD-CALENDAR-ILLUSTRATIONS-01 / DREV-20261013-RECORD-CALENDAR-ILLUSTRATIONS-01` 已获用户批准并本地实现；记录/日程使用不同纸艺插画，原业务不变。233项前端测试及静态校验通过；原生三视口、真机及预览包预算待验证，未发布。证据：`docs/quality/evidence/RECORD-CALENDAR-ILLUSTRATIONS-20261013.md`。
 - Local daily tasks: `SPEC-20261012-DAILY-TASKS-01 / DREV-20261012-DAILY-TASKS-01` 已获用户批准并实现前后端。
@@ -42,7 +56,7 @@
   Successful stage DTOs resume across retries; cancellation/manual confirmation/delete clean temporary data.
   This does not describe a deployed release. Evidence and remaining quality gates are in
   `specs/active/BUG-028-STAGED-ANALYSIS-RELIABILITY.md`.
-- Revision: `FEAT-STATE-20261016-REVIEW-SUBJECT-ORDER-01-GRAY`（保留2026-10-15及更早增量的各自验收/发布状态）
+- Revision: `FEAT-STATE-20261024-TODAY-LEARNING-01-LOCAL`（保留2026-10-15及更早增量的各自验收/发布状态）
 - Review management: `SPEC-20261006-REVIEW-MANAGEMENT-03` 已获用户“落地并实现”批准并本地实现。
   报表独立条目页按明天/后天、单科学习科目、精确复习次数查看；删除清理相关历史和计划，手动改期不计复习。
   今日下一次复习入口移除；后端兼容字段暂保留。预约优先且显式提示预算超量，120项硬上限、幂等及状态冲突由服务端控制。
@@ -87,8 +101,7 @@ DREV-20261021-HERO-ARC-REMOVAL-01，所有共享卡片去掉右下角细弧线�
 [质量证据](../../quality/evidence/HERO-ARC-REMOVAL-20261021.md)。仅本地实现，未上传/发布。
 
 家长记录小学阶段孩子真实学过的内容。照片、手动文字或语音转成的可编辑文字创建异步分析任务；AI 只生成可编辑草稿，
-家长确认后才写入学习记录、知识点出现历史和复习计划。系统只安排已经学过的知识，不预测
-下一课，不自动批改或判断掌握。活动只进入日程、练习记录和温和提醒，不进入记忆曲线。
+家长确认实际已学后才写入学习记录、知识点出现历史和复习计划。复习仅安排已经学过的知识；FEAT-004独立提供一项可编辑增量提案，采纳只建立待学，不宣称下一课必须学什么，不自动批改或判断掌握。活动只进入日程、练习记录和温和提醒，不进入记忆曲线。
 
 原生微信小程序有五个 Tab：今日、日程、记录、报表、设置，共 15 个已注册页面。五个一级页使用
 共享 `components/primary-nav`，按状态栏和右上胶囊几何在导航中央显示唯一“芽图标 + 知芽”，内容区
@@ -144,8 +157,7 @@ DREV-20261021-HERO-ARC-REMOVAL-01，所有共享卡片去掉右下角细弧线�
   最多 20 项，游标绑定家庭、孩子、查询日与快照。今日页把它作为只读计划透明度展示，不提供反馈或
   带练；有到期项时仍以今日 Todo 为主。缺少该新增字段的旧服务端只显示今日到期事实，不声称未来为空。
 - Dashboard 的 `review_selection` 来自每天一个幂等物化的 `DailyReviewPlan`。候选为
-  `active=true AND due_date<=today`，最多读取120项，按 due_date、从未复习/last_reviewed_on、ID 排序，
-  再按孩子分钟预算装入；不固定限制6条。完成/部分/巩固/稍后只改变原计划项，当天不补题；未入选
+  自然到期`Review.active=true AND due_date<=today`及既有人工预约优先，正常自动候选要求Knowledge.review_status=normal，按现行fair-v2有界候选和孩子分钟预算装入，不固定限制6条。启用空白日开关且自然到期总量为0时，才使用最多3槽/条的索引投影选少量提前项；首次复习、手动日期、无效科目不提前，原due_date保留。只有初始空计划可按库存代次重判；完成/部分/巩固/稍后只改变原计划项，当天不补题；未入选
   积压不改 due_date、不写 Feedback。返回精确 `total_due/backlog_count/earliest_due`、计划/待复习数量
   和分钟、policy revision。本地2026-10-16修复使sessions按各科在原计划中最早ordinal保序：已反馈行仍作
   顺序锚点，只把pending行放入卡片；全科无pending才移除空组。仅涵盖原计划行集合不变的反馈，不新增删除/
@@ -237,7 +249,7 @@ DREV-20261021-HERO-ARC-REMOVAL-01，所有共享卡片去掉右下角细弧线�
   作为新学习条目。两个来源都必须有本次材料直接证据且只是可编辑候选；家长确认前零正式写入。
   家长确认时，`new` 创建 LearningRecord/KnowledgeOccurrence/必要的 Knowledge/Review；
   `today_review` 与 `history_item` 只写 ReviewFeedback 并更新原 Review 的最近复习日、次数、间隔、热度、
-  策略版本、状态版本和下次日期。历史 Review 可以提前推进、从 inactive 重启，或在缺失时重建；
+  策略版本、状态版本和下次日期。历史 Review 可以提前推进、从 inactive 重启，或在缺失时重建；这些操作不会清除Knowledge的永久已替代状态，已替代项仍不自动排期。
   已推进、删除或身份事实已变化
   的原始匹配安全跳过，不阻断同一事务里的其余复习和新学习，也不会重复推进。全部匹配均已变化的纯复习
   草稿仍确认成终态并返回空 `records[]` 和 `updated_reviews[]`。客户端注入或篡改的复习引用继续拒绝且

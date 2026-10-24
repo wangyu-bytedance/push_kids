@@ -1,0 +1,89 @@
+<view class="sec study-region" wx:if="{{card}}" aria-hidden="{{!!sheet}}">
+  <view class="sec-bar"><text class="s-t">今日学习</text></view>
+  <view class="sec-rule"></view>
+  <view class="pk-card study-card" wx:if="{{card === 'task' || card === 'proposal'}}">
+    <block wx:if="{{card === 'task'}}">
+      <text class="study-status">{{current.task.last_partial_at ? '已记录部分 · 继续待学' : '家长已确认 · 待学'}}</text>
+      <text class="study-title">{{current.task.content.title}}</text>
+      <text class="study-meta">{{current.task.content.subject_name}}{{current.task.content.estimated_minutes ? ' · 预计 ' + current.task.content.estimated_minutes + ' 分钟' : ''}}</text>
+      <text class="study-copy">{{current.task.content.instructions}}</text>
+      <text class="study-meta">待学会保留，实际学过后再记录。</text>
+      <block wx:if="{{canWrite}}">
+        <button class="btn md" bindtap="openRecord">记录实际学习</button>
+        <button class="link-btn study-card-remove" bindtap="openRemove">删除并换一项</button>
+      </block>
+      <text class="study-copy" wx:else>当前为只读，请有编辑权限的家长记录。</text>
+    </block>
+    <block wx:else>
+      <text class="study-title">{{current.proposal.title}}</text>
+      <text class="study-meta">{{current.proposal.subject_name}}{{current.proposal.estimated_minutes ? ' · 预计 ' + current.proposal.estimated_minutes + ' 分钟' : ''}} · AI 建议</text>
+      <button class="btn md secondary" focus="{{restoreFocus}}" bindtap="open">查看学习建议</button>
+    </block>
+  </view>
+  <view class="study-progress" wx:else aria-role="status">
+    <text>{{card === 'generating' ? '正在准备学习建议' : card === 'generation-error' ? '学习建议暂时没准备好' : card === 'stale' ? '学习内容有更新，请重新准备建议' : '已移除待学，可以重新准备建议'}}</text>
+    <button wx:if="{{card === 'recover'}}" class="btn md secondary" disabled="{{busy}}" loading="{{busy}}" bindtap="generate">重新准备建议</button>
+    <button wx:else class="btn md secondary" focus="{{restoreFocus}}" bindtap="open">{{card === 'generating' ? '查看进度' : card === 'stale' ? '查看并重新准备' : '查看并重试'}}</button>
+  </view>
+</view>
+<view class="study-error-inline" wx:if="{{error && !sheet}}" aria-role="alert"><text>{{error}}</text><button class="link-btn" bindtap="retry">重新加载</button></view>
+
+<view class="study-overlay {{busy ? 'study-busy' : ''}}" wx:if="{{sheet}}" catchtouchmove="noop">
+  <view class="study-mask" bindtap="close" aria-label="关闭学习建议"></view>
+  <view class="study-sheet {{sheet === 'proposal' && current.proposal ? 'study-proposal-sheet' : ''}}" aria-role="dialog" aria-label="{{sheet === 'record' ? '记录实际学习' : sheet === 'proposal' && current.proposal ? current.proposal.title : '学习建议'}}">
+    <view class="study-top study-proposal-top" wx:if="{{sheet === 'proposal' && current.proposal}}">
+      <view class="study-proposal-heading">
+        <scroll-view class="study-title-scroll" wx:if="{{current.proposal.title.length > 60}}" scroll-y enhanced show-scrollbar="{{true}}"><text class="study-title study-proposal-title">{{current.proposal.title}}</text><view class="study-proposal-meta"><text class="study-meta">{{current.proposal.subject_name}}{{current.proposal.estimated_minutes ? ' · 预计 ' + current.proposal.estimated_minutes + ' 分钟' : ''}}</text><text class="study-meta">AI 建议</text></view></scroll-view>
+        <block wx:else><text class="study-title study-proposal-title">{{current.proposal.title}}</text><view class="study-proposal-meta"><text class="study-meta">{{current.proposal.subject_name}}{{current.proposal.estimated_minutes ? ' · 预计 ' + current.proposal.estimated_minutes + ' 分钟' : ''}}</text><text class="study-meta">AI 建议</text></view></block>
+      </view>
+      <button class="study-close" disabled="{{busy}}" hover-class="study-control-pressed" bindtap="close" aria-label="关闭学习建议"><view class="ico ico-close" aria-hidden="true"></view></button>
+    </view>
+    <view class="study-top" wx:else><text class="study-label">{{sheet === 'record' ? '记录实际学习' : sheet === 'remove' ? '删除这项待学' : sheet === 'edit' ? '编辑学习建议' : '学习建议'}}</text><button class="study-close" disabled="{{busy}}" bindtap="close" aria-label="关闭">关闭</button></view>
+    <scroll-view class="study-body" scroll-y enhanced show-scrollbar="{{true}}" enable-flex="{{true}}">
+      <view class="study-error" wx:if="{{error}}" aria-role="alert">{{error}}</view>
+      <block wx:if="{{sheet === 'record'}}">
+        <text class="study-copy">只写孩子实际学过的部分，不会把整项建议自动记为已学。</text>
+        <label class="study-field-label" for="study-actual">实际学过的内容（每行一个知识点）</label>
+        <textarea id="study-actual" class="study-textarea" value="{{actual}}" maxlength="1000" focus="{{focusActual}}" disabled="{{busy || lockedActual}}" data-field="actual" bindinput="field" placeholder="只记录实际学过的内容，每行最多120字" adjust-position="{{true}}" cursor-spacing="24" aria-label="实际学过的内容"></textarea>
+        <text class="study-field-label">实际学习时间</text>
+        <view class="study-time-row"><picker class="study-time-picker" mode="date" value="{{actualDate}}" data-field="actualDate" bindchange="field" disabled="{{busy || lockedActual}}"><view class="study-picker">{{actualDate}}</view></picker><picker class="study-time-picker" mode="time" value="{{actualTime}}" data-field="actualTime" bindchange="field" disabled="{{busy || lockedActual}}"><view class="study-picker">{{actualTime}}</view></picker></view>
+        <text class="study-meta" wx:if="{{lockedActual}}">本次内容已提交。重试会继续同一次确认和关联。</text>
+        <text class="study-copy">照片不是必需的。记录部分后，这项待学继续保留。</text>
+      </block>
+      <block wx:elif="{{sheet === 'edit'}}">
+        <view class="study-field-row"><label class="study-field-label" for="study-title">学习标题</label><text class="study-title-counter {{titleError ? 'study-title-counter-error' : ''}}">{{editTitleCount}}/20</text></view>
+        <input id="study-title" class="study-input {{titleError ? 'study-title-invalid' : ''}}" value="{{editTitle}}" maxlength="120" focus="{{focusTitle}}" data-field="editTitle" bindinput="field" disabled="{{busy}}" aria-label="学习标题，最多20字"/>
+        <text class="study-title-error" wx:if="{{titleError}}" aria-role="alert">{{titleError}}</text>
+        <label class="study-field-label" for="study-instructions">具体学习内容</label>
+        <textarea id="study-instructions" class="study-textarea" value="{{editInstructions}}" maxlength="1000" data-field="editInstructions" bindinput="field" disabled="{{busy}}" adjust-position="{{true}}" cursor-spacing="24" aria-label="具体学习内容"></textarea>
+        <label class="study-field-label" for="study-minutes">参考时长（分钟，可留空）</label>
+        <input id="study-minutes" class="study-input" type="number" value="{{editMinutes}}" data-field="editMinutes" bindinput="field" disabled="{{busy}}" aria-label="参考时长"/>
+      </block>
+      <block wx:elif="{{sheet === 'remove'}}">
+        <text class="study-title">删除后，重新准备一项建议</text>
+        <text class="study-copy">已有的实际学习记录会保留。新建议还需要你再次确认，才会加入今日待学。</text>
+      </block>
+      <block wx:elif="{{current.proposal}}">
+        <text class="study-copy">{{current.proposal.instructions}}</text>
+        <text class="study-field-label">为什么建议这一项</text>
+        <text class="study-copy">{{current.proposal.rationale}}</text>
+        <view wx:for="{{current.proposal.sources}}" wx:key="knowledge_id" class="study-source">来自已确认内容：{{item.name}}</view>
+        <text class="study-copy">{{current.proposal.uncertainty}}</text>
+        <text class="study-meta">仅为可调整的建议，不代表已学、掌握或成绩判断。</text>
+      </block>
+      <block wx:elif="{{current.stale}}"><text class="study-title">学习内容有了变化</text><text class="study-copy">年级、科目或已学内容已有更新，请重新准备合适的建议。</text></block>
+      <block wx:elif="{{current.job.state === 'queued' || current.job.state === 'running'}}"><text class="study-title">正在准备一项小延展</text><text class="study-copy">可以先完成其他安排，建议会保留在这里。</text><text class="study-copy" wx:if="{{pollStopped}}">这次等待较久，可稍后重新查看。</text></block>
+      <block wx:else><text class="study-title">这次建议还没准备好</text><text class="study-copy">可以重试，或按自己的节奏手动记录学习。</text></block>
+      <text class="study-copy" wx:if="{{!canWrite}}">当前为只读，请有编辑权限的家长确认。</text>
+    </scroll-view>
+    <view class="study-actions">
+      <block wx:if="{{canWrite && sheet === 'record'}}"><button class="study-primary" disabled="{{busy}}" loading="{{busy}}" data-mode="complete" bindtap="record">完成并记录</button><button class="study-secondary" disabled="{{busy}}" data-mode="partial" bindtap="record">记录部分，继续待学</button></block>
+      <button wx:elif="{{canWrite && sheet === 'edit'}}" class="study-primary" disabled="{{busy}}" loading="{{busy}}" bindtap="saveEdit">保存修改</button>
+      <button wx:elif="{{canWrite && sheet === 'remove'}}" class="study-primary" disabled="{{busy}}" loading="{{busy}}" bindtap="remove">删除并重新生成</button>
+      <block wx:elif="{{canWrite && current.proposal}}"><button class="study-primary" disabled="{{busy}}" loading="{{busyAction === 'approve'}}" hover-class="study-primary-pressed" bindtap="approve">{{busyAction === 'approve' ? '正在加入…' : '确认加入今日学习'}}</button><view class="study-secondary-row"><button class="study-secondary" disabled="{{busy}}" hover-class="study-control-pressed" bindtap="edit">编辑内容</button><button class="study-secondary" disabled="{{busy}}" loading="{{busyAction === 'generate'}}" hover-class="study-control-pressed" bindtap="generate">{{busyAction === 'generate' ? '正在更换…' : '换一项'}}</button></view><button class="study-quiet study-defer" disabled="{{busy}}" loading="{{busyAction === 'defer'}}" hover-class="study-control-pressed" bindtap="defer">今天先不学</button></block>
+      <button wx:elif="{{current.job.state === 'queued' || current.job.state === 'running'}}" class="study-secondary" bindtap="retry">稍后查看</button>
+      <button wx:elif="{{canWrite && (current.eligibility === 'eligible' || current.can_regenerate)}}" class="study-primary" disabled="{{busy}}" bindtap="generate">重新准备建议</button>
+      <button wx:else class="study-secondary" bindtap="close">知道了</button>
+    </view>
+  </view>
+</view>

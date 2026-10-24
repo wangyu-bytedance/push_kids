@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>知芽 · 学年年级确认 · DREV01</title>
+<style>
+:root{--paper:#FAF7F0;--surface:#FFFDF8;--green:#1F5B45;--ink:#22261F;--secondary:#464E43;--line:#EBE5D7;--radius:calc(100vw / 750 * 24);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;color:var(--ink);background:var(--paper);font-size:16px}
+*{box-sizing:border-box}body{margin:0}button,input,select{font:inherit;color:inherit}button,select{cursor:pointer}button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid #4A6A7C;outline-offset:3px}button{min-height:44px;border:0;background:none}button:disabled,select:disabled{cursor:default;opacity:.65}h1,h2,p{margin:0}h1,h2{font-family:"Songti SC","STSong",serif;font-weight:600}.system{height:26px;display:flex;justify-content:space-between;padding:7px 22px 0;font-size:12px}.nav{height:48px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;font-size:16px}.capsule{border:1px solid var(--line);border-radius:999px;padding:6px 13px;font-size:14px}.page{padding:22px 20px 100px;max-width:480px;margin:auto}.eyebrow{font-size:14px;color:var(--secondary);margin-bottom:8px}h1{font-size:28px;line-height:1.4}.page-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:26px;gap:12px}.chip{border:1px solid var(--line);background:var(--surface);padding:10px 13px;border-radius:999px;font-size:14px;white-space:nowrap}.card{background:var(--surface);border:1px solid var(--line);padding:18px;border-radius:var(--radius);margin:14px 0}.card h2{font-size:20px;margin-bottom:10px}.card p{font-size:14px;line-height:1.65;color:var(--secondary)}.task{display:flex;align-items:center;gap:12px;margin-top:20px;font-size:16px}.circle{width:22px;height:22px;border:1px solid #BCC6B8;border-radius:50%;flex:none}.tabs{position:fixed;bottom:0;left:0;right:0;height:76px;padding:8px 8px 20px;display:flex;justify-content:space-around;background:var(--surface);border-top:1px solid var(--line);font-size:14px}.tabs span{display:flex;min-width:44px;min-height:44px;align-items:center;justify-content:center}.tabs .active{color:var(--green);font-weight:600}.overlay{position:fixed;inset:0;z-index:160;display:flex;align-items:flex-end;justify-content:center}.mask{position:absolute;inset:0;background:rgba(34,38,31,.32)}.sheet{position:relative;width:100%;max-width:480px;max-height:calc(100dvh - 74px);background:var(--surface);border-radius:calc(100vw / 750 * 40) calc(100vw / 750 * 40) 0 0;padding:14px 20px 28px;display:flex;flex-direction:column}.handle{flex:none;width:36px;height:4px;border-radius:4px;background:#DDD6C4;margin:0 auto 18px}.body{overflow:auto;min-height:0}.kicker{font-size:14px;color:var(--secondary);margin-bottom:6px}.sheet h2{font-size:24px;line-height:1.45;margin-bottom:12px}.child-name{font-size:18px;font-weight:600;line-height:1.5;overflow-wrap:anywhere}.old-grade{font-size:14px;color:var(--secondary);line-height:1.6;margin-top:3px}.intro{font-size:15px;line-height:1.65;color:var(--secondary);margin:14px 0 20px}.field{display:block;font-size:14px;font-weight:500;margin-bottom:9px}.select-wrap{position:relative}.select-wrap:after{content:"";width:7px;height:7px;border-right:1.5px solid var(--secondary);border-bottom:1.5px solid var(--secondary);transform:rotate(45deg);position:absolute;right:18px;top:19px;pointer-events:none}select,input{width:100%;min-height:50px;background:var(--surface);border:1px solid #D4D9CB;border-radius:var(--radius);padding:12px 40px 12px 14px;font-size:16px;appearance:none}input{padding-right:14px}.shared{font-size:14px;line-height:1.6;color:var(--secondary);margin-top:12px}.actions{display:flex;flex-direction:column;gap:10px;padding-top:24px;flex:none}.actions button,.save{width:100%;border-radius:var(--radius);font-size:16px;padding:11px 14px;line-height:1.5}.primary,.save{min-height:48px;background:var(--green);color:var(--surface);font-weight:600}.secondary{border:1px solid var(--line);min-height:44px;color:var(--secondary)}.notice{font-size:14px;line-height:1.6;padding:12px;border-radius:var(--radius);margin-top:14px;background:#F7E8E2;color:#87432F}.info{background:#E7EEF2;color:#355466}.form-field+.form-field{margin-top:22px}.help{font-size:14px;line-height:1.6;color:var(--secondary);margin-top:8px}.save{margin-top:24px}.toast{position:fixed;z-index:200;top:110px;left:24px;right:24px;margin:auto;max-width:380px;background:var(--ink);color:var(--surface);border-radius:var(--radius);padding:12px;font-size:14px;text-align:center}.picker-reference{position:fixed;z-index:180;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--line);padding:0 20px 24px;box-shadow:0 -10px 40px #22261f18}.picker-bar{display:flex;justify-content:space-between;border-bottom:1px solid var(--line);color:var(--green)}.wheel{height:220px;overflow:auto;text-align:center}.wheel div{height:44px;line-height:44px;font-size:18px}.wheel .selected{background:#E4EDE6;color:var(--green);font-weight:600}.review{max-width:1040px;margin:32px auto;padding:0 24px}.review h1{font-size:30px}.review p{margin:12px 0;color:var(--secondary);line-height:1.7}.review-controls{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:24px 0}.review select{width:auto;min-width:190px}.review iframe{display:block;border:1px solid #D4D9CB;border-radius:24px;background:var(--paper);margin:24px auto;max-width:100%}.review-label{font-size:14px}
+</style>
+<body>
+<script>
+const grades=['小班','中班','大班','一年级','二年级','三年级','四年级','五年级','六年级','七年级','八年级','九年级'];
+const states={initial:'首次启用 · 原级核对',annual:'年度建议 · 二升三',catchup:'多年未用 · 累计建议',corrected:'改为实际年级',keep:'保持原年级','next-child':'下一个孩子 · 不切换全局', 'long-name':'长姓名',saving:'提交中',error:'保存失败 · 保留输入',conflict:'他人已确认 · 获取最新',latest:'他人已确认 · 最新结果','profile-edit':'档案编辑 · 九年级','picker-open':'原生选择器 · 选项示意',deferred:'稍后处理 · 无待办时',forbidden:'只读家长 · 不弹窗',archived:'归档孩子 · 不弹窗',terminal:'已是九年级 · 不弹窗',unknown:'未知年级 · 不弹窗',confirmed:'本学年已确认 · 不弹窗'};
+window.designStates=Object.keys(states);
+const query=new URLSearchParams(location.search);
+if(query.get('screen')!=='1'){
+ document.body.innerHTML='<main class="review"><div class="eyebrow">DREV-20261024-ANNUAL-GRADE-PROMOTION-01 · 待批准</div><h1>新学年，核对一次年级</h1><p>每个孩子独立确认，家长之间共享结果。下面使用合成资料演示，可选年级、确认或稍后处理。</p><div class="review-controls"><label class="review-label">查看状态 <select id="state"></select></label><label class="review-label">视口 <select id="viewport"><option>320×568</option><option selected>390×844</option><option>430×932</option></select></label></div><p class="review-label">设计原型仅用于审阅；背景是承载示意。原生选择器外观、微信导航和设备安全区以小程序验收为准。</p><iframe title="年级确认设计预览"></iframe></main>';
+ const stateSelect=document.querySelector('#state');
+ for(const [key,label] of Object.entries(states)){const option=new Option(label,key);stateSelect.add(option);}
+ stateSelect.value='annual';
+ function preview(){const [width,height]=document.querySelector('#viewport').value.split('×');const frame=document.querySelector('iframe');frame.width=width;frame.height=height;frame.src='?screen=1&state='+stateSelect.value;}
+ stateSelect.onchange=preview;document.querySelector('#viewport').onchange=preview;preview();
+}else{
+ let currentState=query.get('state')||'annual',queueIndex=0,saving=false;
+ const escapeText=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const options=value=>grades.map(g=>'<option'+(g===value?' selected':'')+'>'+g+'</option>').join('');
+ const background=edit=>'<div id="background"><div class="system"><span>9:41</span><span>▂ ▄ ▆ ▰</span></div><div class="nav"><span>'+(edit?'‹　编辑档案':'知芽')+'</span><span class="capsule">•••　│　○</span></div>'+(edit?'<main class="page"><h1>编辑档案</h1><div class="card"><div class="form-field"><label class="field" for="name">名字</label><input id="name" value="小满" maxlength="40"><p class="help">切换孩子时按名字区分，同时在用的档案不能重名。</p></div><div class="form-field"><label class="field" for="profile-grade">年级</label><div class="select-wrap"><select id="profile-grade"><option>暂不填写</option>'+options('九年级')+'<option>其他</option></select></div></div><div class="form-field"><label class="field" for="budget">每天复习时长</label><div class="select-wrap"><select id="budget"><option>15 分钟</option></select></div><p class="help">用来安排每天的复习量，之后可以随时调整。</p></div></div><button class="save">保存</button></main>':'<main class="page"><p class="eyebrow">9月1日　星期二</p><div class="page-head"><h1>今日</h1><div class="chip">小满　⌄</div></div><section class="card"><h2>今天的复习</h2><p>跟着自己的节奏，温习已学内容。</p><div class="task"><span class="circle"></span><span>语文 · 古诗回顾</span></div><div class="task"><span class="circle"></span><span>数学 · 口算练习</span></div></section></main><nav class="tabs" aria-label="主导航"><span class="active">今日</span><span>日程</span><span>记录</span><span>报表</span><span>设置</span></nav>')+'</div>';
+ function render(state){
+  currentState=state;saving=state==='saving';document.body.innerHTML=background(state==='profile-edit');
+  if(['profile-edit','deferred','forbidden','archived','terminal','unknown','confirmed'].includes(state)){
+   if(state==='deferred')toast('已稍后处理');return;
+  }
+  const first=state==='initial';const name=state==='next-child'?'豆豆':state==='long-name'?'这是一个用于验证长姓名换行的孩子档案名称':'小满';
+  const old=state==='catchup'?'一年级':state==='next-child'?'中班':'二年级';
+  const selected=first||state==='keep'?old:state==='next-child'?'大班':state==='corrected'||state==='error'?'四年级':'三年级';
+  const latest=state==='latest';
+  document.body.insertAdjacentHTML('beforeend','<div class="overlay"><div class="mask"></div><section class="sheet" role="dialog" aria-modal="true" aria-labelledby="dialog-title"><div class="handle"></div><div class="body"><p class="kicker">2026—2027 学年</p><h2 id="dialog-title">'+(latest?'年级已确认':'确认本学年年级')+'</h2><p class="child-name">'+escapeText(name)+'</p><p class="old-grade">'+(latest?'已确认：三年级':'已记录：'+old)+'</p><p class="intro">'+(latest?'家里已有家长完成确认，将使用最新年级。':first?'请核对孩子现在的年级。':'新学年到了，请核对孩子现在的年级。')+'</p>'+(latest?'':'<label class="field" for="grade">本学年年级</label><div class="select-wrap"><select id="grade"'+(saving?' disabled':'')+'>'+options(selected)+'</select></div><p class="shared">确认后，全家共享本学年结果。</p>')+(state==='error'?'<p class="notice" role="alert">保存失败，所选年级已保留，请重试。</p>':state==='conflict'?'<p class="notice info" role="status">家里已有新的确认结果，请先查看最新年级。</p>':'')+'</div><div class="actions"><button class="primary"'+(saving?' disabled':'')+'>'+(saving?'正在保存…':latest?'继续':state==='conflict'?'查看最新结果':'确认年级')+'</button>'+(latest?'':'<button class="secondary"'+(saving?' disabled':'')+'>稍后处理</button>')+'</div></section></div>');
+  document.querySelector('#background').inert=true;
+  if(state==='conflict')document.querySelector('#grade').disabled=true;
+  document.querySelector('.primary').onclick=()=>{
+   if(currentState==='conflict'){render('latest');return;}
+   if(currentState==='latest'){advance();return;}
+   saving=true;document.querySelectorAll('.sheet button,.sheet select').forEach(e=>e.disabled=true);document.querySelector('.primary').textContent='正在保存…';setTimeout(advance,700);
+  };
+  const later=document.querySelector('.secondary');if(later)later.onclick=advance;
+  document.querySelector('.mask').onclick=()=>{if(!saving)advance();};
+  if(state==='picker-open'){
+   document.body.insertAdjacentHTML('beforeend','<section class="picker-reference" aria-label="原生picker选项设计示意"><div class="picker-bar"><button id="picker-cancel">取消</button><button id="picker-done">确定</button></div><div class="wheel">'+grades.map(g=>'<div class="'+(g==='三年级'?'selected':'')+'">'+g+'</div>').join('')+'</div></section>');
+   const wheel=document.querySelector('.wheel');wheel.scrollTop=4*44;
+   document.querySelectorAll('.picker-bar button').forEach(e=>e.onclick=()=>render('annual'));
+  }
+ }
+ function toast(message){document.body.insertAdjacentHTML('beforeend','<div class="toast" role="status">'+escapeText(message)+'</div>');}
+ function advance(){queueIndex++;render(queueIndex===1?'next-child':'confirmed');if(queueIndex>1)toast('本次年级核对已结束');}
+ document.addEventListener('keydown',event=>{if(event.key==='Escape'&&!saving&&document.querySelector('.overlay')){event.preventDefault();advance();}});
+ window.designShow=state=>{queueIndex=0;render(state);};
+ window.designShow(currentState);
+}
+document.body.dataset.ready='true';
+</script>
+</body>
+</html>

@@ -3,8 +3,11 @@
   "backgroundColor": "#F4F3EC",
   "navigationStyle": "custom",
   "usingComponents": {
+    "grade-confirmation": "/components/grade-confirmation/index",
+    "today-learning": "/components/today-learning/index",
     "todo-card": "/components/todo-card/index",
     "submission-materials": "/components/submission-materials/index",
-    "primary-nav": "/components/primary-nav/index"
+    "primary-nav": "/components/primary-nav/index",
+    "notification-renewal-guide": "/components/notification-renewal-guide/index"
   }
 }

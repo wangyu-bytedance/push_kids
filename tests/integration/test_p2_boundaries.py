@@ -11,7 +11,7 @@ from push_kids.persistence.models import (
     SubmissionMedia,
 )
 from push_kids.platform.context import RequestContext
-from push_kids.platform.time import utcnow
+from push_kids.platform.time import local_date, utcnow
 from sqlalchemy import func, select
 
 
@@ -163,6 +163,8 @@ def test_closed_review_rejects_new_feedback_but_replays_success(client, app, chi
     ).json()["review_item_ids"][0]
     with app.state.database.session_factory() as db:
         db.get(ReviewItem, rid).step = 5
+        # This test closes a due review; arbitrary future IDs now require an early plan.
+        db.get(ReviewItem, rid).due_date = local_date()
         db.commit()
     url = f"/api/v1/reviews/{rid}/feedback"
     headers = {**family_headers, "Idempotency-Key": "last-complete-123"}

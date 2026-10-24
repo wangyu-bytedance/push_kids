@@ -1,5 +1,9 @@
 # FEAT-005 — 一家庭多孩子档案管理与切换
 
+- 2026-10-24待批准设计（不改变当前实现）：[BUG-033 Spec01](../../../specs/active/BUG-033-CHILD-ARCHIVE-UI.md)与[DREV01](../../design/frontend/prototypes/DREV-20261024-CHILD-ARCHIVE-01/FRONTEND-SPEC.md)针对归档区域重复说明、居中长文与删除图标误导提出局部精简；业务归档/恢复规则保持原合同，候选尚未落入生产页面。
+
+- 2026-10-18本地增量revision `FEAT-STATE-20261018-FOOTPRINTS-ARCHIVE-01`：足迹页单独提供“查看已归档孩子”，可继续既有批次的核对/确认/删除和预分配槽位上传，不接受新导入/手填。168h仍从原上传成功时算。deleting冻结优先，学习草稿入口不改。相关[Spec04](../../../specs/active/FEAT-012-CHILD-PHOTO-FOOTPRINTS.md)、[验证证据](../../quality/evidence/CHILD-FOOTPRINTS-IMPLEMENTATION-20261018.md)，仅本地实现，原生验收待补。
+
 - Feature ID: `FEAT-005`
 - Status: `IMPLEMENTED_LOCALLY`
 - Current-state revision: `FEAT-STATE-20260906-02-MULTI-CHILD`
@@ -21,6 +25,8 @@
 体面退场而不丢历史。
 
 ## Current user/system behavior
+
+- 2026-10-24增量 `FEAT-STATE-20261024-ANNUAL-GRADE-LOCAL-06`：年级显示/选项扩展至九年级；新建支持级与明确触碰年级后保存建立当前学年确认基准，名字/时长普通保存不确认。人工改级提交意图与版本，冲突保留草稿、读取最新事实并要求重选；旧表单同级可保存、旧改级409。年度建议/共享确认由[FEAT-013](FEAT-013-annual-grade-promotion.md)拥有。归档保留基准，恢复累计建议并安全刷新，归档/确认失效旧在途候选；本轮不改变既有归档写入门禁。见[Spec02](../../../specs/active/FEAT-013-ANNUAL-GRADE-PROMOTION.md)及[证据](../../quality/evidence/ANNUAL-GRADE-IMPLEMENTATION-20261024.md)：三尺寸呈现/档案控件与独立review通过，修复后原生端到端/设备验收待补，未发布。
 
 - 每日任务配置与当天完成事实也按当前家庭/孩子隔离；切换后清除旧任务展示与表单，忽略迟到响应。
   归档孩子可读取任务但不得新增、编辑、删除或完成/撤销；该域边界见 `FEAT-010-daily-tasks.md`，SQLite验证已通过，MySQL待补。

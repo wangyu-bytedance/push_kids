@@ -1,6 +1,7 @@
 const api = require("../../utils/api");
 const ui = require("../../utils/ui");
 const childContext = require("../../utils/child-context");
+const renewal = require("../../utils/notification-renewal");
 
 const WEEKDAYS = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
 const KIND_LABELS = { class: "课外活动", activity: "自主活动", other: "其他安排" };
@@ -112,7 +113,12 @@ function stableReviewPlan(dashboard) {
 }
 
 Page({
+  onGradeConfirmation(event) {
+    const flow = getApp().gradeConfirmation;
+    if (flow) return flow.handle(this, event.detail);
+  },
   data: {
+    gradeConfirmation: null, gradeConfirmationVisible: false,
     loading: true, error: "", children: [], childIndex: 0, childId: "", dashboard: null,
     sections: { ...DEFAULT_SECTIONS }, reviewReturn: null, reviewGroupId: "",
     reviewFocusText: "", dayLabel: "",
@@ -123,9 +129,11 @@ Page({
     showSourceSheet: false, sourceSheet: null,
     canWrite: false, deleteTarget: null, deleting: false, deleteError: "",
     dailyTaskPendingId: "", dailyTaskError: "",
+    showRenewalGuide: false, renewalGuideSaving: false, showLearningSheet: false,
     sectionMeta: { review: "", daily: "", learning: "", activity: "" }
   },
   onShow() {
+    if (this.renewalController) this.renewalController.show();
     this.manualSections = {};
     this.resetDailyTaskRequest();
     this.setData({ canWrite: canWriteToday() });
@@ -135,11 +143,26 @@ Page({
   },
   onHide() {
     this.closeSourceSheet();
+    const learning = this.selectComponent && this.selectComponent("#today-learning");
+    if (learning) learning.hide();
+    if (this.data.showRenewalGuide && this.renewalController) {
+      // 离开说明等同暂不开启；网络失败不伪造已保存的选择。
+      this.renewalController.setChoice(false).catch(() => {});
+    }
+    if (this.renewalController) this.renewalController.hide();
+    this.setRenewalGuide(false);
     this.resetDelete();
     this.loadGeneration = (this.loadGeneration || 0) + 1;
     this.resetDailyTaskRequest();
   },
   onUnload() { this.onHide(); },
+  learningModal(event) {
+    const open = !!event.detail.open;
+    this.setData({ showLearningSheet: open });
+    const bar = this.getTabBar && this.getTabBar();
+    if (bar) bar.setData({ recordOverlayVisible: open });
+  },
+  learningRecorded() { this.load(); },
   async onPullDownRefresh() {
     this.manualSections = {};
     await this.load();
@@ -154,6 +177,10 @@ Page({
       if (app.globalData.useCloud && !app.globalData.currentMember) await app.refreshBootstrap();
       if (generation !== this.loadGeneration) return;
       this.setData({ canWrite: canWriteToday() });
+      if (app.globalData.currentMember && app.globalData.currentMember.id && this.data.canWrite) {
+        if (!this.renewalController) this.renewalController = renewal.createController();
+        this.renewalController.refresh().catch(() => {});
+      }
       const profiles = await api.request("/children");
       if (generation !== this.loadGeneration) return;
       const selection = childContext.syncSelection(app, profiles);
@@ -174,7 +201,7 @@ Page({
         this.setData({ childId, dashboard: null, sections: { ...DEFAULT_SECTIONS } });
       }
       const [dashboard, subjects] = await Promise.all([
-        api.request(`/children/${childId}/dashboard`),
+        api.request(`/children/${childId}/dashboard`, { capabilities: "empty-day-v1" }),
         api.request(`/children/${childId}/subjects`)
       ]);
       if (generation !== this.loadGeneration) return;
@@ -438,6 +465,10 @@ Page({
   openActivity(event) { wx.navigateTo({ url: `/pages/activity/edit?subjectId=${event.currentTarget.dataset.subjectId}` }); },
   async feedback(event) {
     const { reviewId, action } = event.detail;
+    if (!this.data.canWrite || !this.data.dashboard) return;
+    // 同步点击链：在任何反馈网络请求/await之前尝试；失败不阻断复习。
+    if (action === "complete" && this.renewalController) this.renewalController.complete();
+    const renewalScope = `${getApp().globalData.familyId || ""}:${(getApp().globalData.currentMember || {}).id || ""}:${this.data.childId}`;
     this.feedbackRetryKeys = this.feedbackRetryKeys || {};
     const intent = `${reviewId}:${action}`;
     const idempotencyKey = this.feedbackRetryKeys[intent] || api.newIdempotencyKey("feedback");
@@ -460,6 +491,12 @@ Page({
       delete this.feedbackRetryKeys[intent];
       wx.showToast({ title: action === "complete" ? "已完成" : "计划已调整", icon: "success" });
       await this.load();
+      if (action === "complete" && this.renewalController) {
+        this.renewalController.refresh().then(() => {
+          if (renewalScope === `${getApp().globalData.familyId || ""}:${(getApp().globalData.currentMember || {}).id || ""}:${this.data.childId}`
+            && this.renewalController.guideReady()) this.setRenewalGuide(true);
+        }).catch(() => {});
+      }
     } catch (error) {
       this.feedbackRetryKeys[intent] = idempotencyKey;
       const rollback = todoView(previous.must_todo_groups, previous.optional_todo_groups, this.data.todosExpanded);
@@ -467,5 +504,27 @@ Page({
         hiddenTodoCount: rollback.hidden + (Number(previous.todo_remaining_count) || 0) });
       wx.showToast({ title: `${error.message}·刚才那条没保存成功`, icon: "none" });
     }
+  },
+  setRenewalGuide(visible) {
+    const bar = this.getTabBar && this.getTabBar();
+    if (bar) bar.setData({ renewalGuideVisible: visible });
+    this.setData({ showRenewalGuide: visible });
+  },
+  enableRenewal() {
+    if (!this.renewalController || !this.renewalController.enableFromGuide()) {
+      if (this.renewalController) this.renewalController.refresh().catch(() => {});
+      return;
+    }
+    this.setRenewalGuide(false);
+  },
+  async declineRenewal() {
+    if (!this.renewalController || this.data.renewalGuideSaving) return;
+    this.setData({ renewalGuideSaving: true });
+    try {
+      await this.renewalController.setChoice(false);
+      this.setRenewalGuide(false);
+    } catch {
+      // 未确认服务端选择不伪造成功；说明保留，允许再次操作。
+    } finally { this.setData({ renewalGuideSaving: false }); }
   }
 });

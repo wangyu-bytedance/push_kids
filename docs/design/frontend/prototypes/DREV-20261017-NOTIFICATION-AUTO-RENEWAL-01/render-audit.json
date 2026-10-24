@@ -1,0 +1,2531 @@
+{
+  "scope": "HTML design only; not native acceptance",
+  "exports": [
+    {
+      "ui": "UI-001",
+      "state": "guide",
+      "viewport": [
+        320,
+        568
+      ],
+      "console_errors": [],
+      "measurements": {
+        "width": 320,
+        "contentWidth": 320,
+        "controls": [
+          {
+            "label": "完成",
+            "x": 209.640625,
+            "y": 407.84375,
+            "width": 80,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "完成复习",
+            "x": 30.359375,
+            "y": 586.125,
+            "width": 56,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "今日",
+            "x": 0,
+            "y": 510,
+            "width": 64,
+            "height": 58,
+            "dialog": false
+          },
+          {
+            "label": "日程",
+            "x": 64,
+            "y": 510,
+            "width": 64,
+            "height": 58,
+            "dialog": false
+          },
+          {
+            "label": "记录",
+            "x": 128,
+            "y": 510,
+            "width": 64,
+            "height": 58,
+            "dialog": false
+          },
+          {
+            "label": "报表",
+            "x": 192,
+            "y": 510,
+            "width": 64,
+            "height": 58,
+            "dialog": false
+          },
+          {
+            "label": "设置",
+            "x": 256,
+            "y": 510,
+            "width": 64,
+            "height": 58,
+            "dialog": false
+          },
+          {
+            "label": "开启自动补充",
+            "x": 16,
+            "y": 446,
+            "width": 288,
+            "height": 48,
+            "dialog": true
+          },
+          {
+            "label": "暂不开启",
+            "x": 16,
+            "y": 504,
+            "width": 288,
+            "height": 44,
+            "dialog": true
+          }
+        ]
+      }
+    },
+    {
+      "ui": "UI-001",
+      "state": "guide",
+      "viewport": [
+        390,
+        844
+      ],
+      "console_errors": [],
+      "measurements": {
+        "width": 390,
+        "contentWidth": 390,
+        "controls": [
+          {
+            "label": "完成",
+            "x": 274.28125,
+            "y": 409.84375,
+            "width": 80,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "完成复习",
+            "x": 35.71875,
+            "y": 592.125,
+            "width": 56,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "今日",
+            "x": 0,
+            "y": 786,
+            "width": 78,
+            "height": 58,
+            "dialog": false
+          },
+          {
+            "label": "日程",
+            "x": 78,
+            "y": 786,
+            "width": 78,
+            "height": 58,
+            "dialog": false
+          },
+          {
+            "label": "记录",
+            "x": 156,
+            "y": 786,
+            "width": 78,
+            "height": 58,
+            "dialog": false
+          },
+          {
+            "label": "报表",
+            "x": 234,
+            "y": 786,
+            "width": 78,
+            "height": 58,
+            "dialog": false
+          },
+          {
+            "label": "设置",
+            "x": 312,
+            "y": 786,
+            "width": 78,
+            "height": 58,
+            "dialog": false
+          },
+          {
+            "label": "开启自动补充",
+            "x": 20,
+            "y": 722,
+            "width": 350,
+            "height": 48,
+            "dialog": true
+          },
+          {
+            "label": "暂不开启",
+            "x": 20,
+            "y": 780,
+            "width": 350,
+            "height": 44,
+            "dialog": true
+          }
+        ]
+      }
+    },
+    {
+      "ui": "UI-001",
+      "state": "guide",
+      "viewport": [
+        430,
+        932
+      ],
+      "console_errors": [],
+      "measurements": {
+        "width": 430,
+        "contentWidth": 430,
+        "controls": [
+          {
+            "label": "完成",
+            "x": 312.375,
+            "y": 409.84375,
+            "width": 80,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "完成复习",
+            "x": 37.625,
+            "y": 592.125,
+            "width": 56,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "今日",
+            "x": 0,
+            "y": 874,
+            "width": 86,
+            "height": 58,
+            "dialog": false
+          },
+          {
+            "label": "日程",
+            "x": 86,
+            "y": 874,
+            "width": 86,
+            "height": 58,
+            "dialog": false
+          },
+          {
+            "label": "记录",
+            "x": 172,
+            "y": 874,
+            "width": 86,
+            "height": 58,
+            "dialog": false
+          },
+          {
+            "label": "报表",
+            "x": 258,
+            "y": 874,
+            "width": 86,
+            "height": 58,
+            "dialog": false
+          },
+          {
+            "label": "设置",
+            "x": 344,
+            "y": 874,
+            "width": 86,
+            "height": 58,
+            "dialog": false
+          },
+          {
+            "label": "开启自动补充",
+            "x": 20,
+            "y": 810,
+            "width": 390,
+            "height": 48,
+            "dialog": true
+          },
+          {
+            "label": "暂不开启",
+            "x": 20,
+            "y": 868,
+            "width": 390,
+            "height": 44,
+            "dialog": true
+          }
+        ]
+      }
+    },
+    {
+      "ui": "UI-001",
+      "state": "today-quiet",
+      "viewport": [
+        320,
+        568
+      ],
+      "console_errors": [],
+      "measurements": {
+        "width": 320,
+        "contentWidth": 320,
+        "controls": [
+          {
+            "label": "完成",
+            "x": 209.640625,
+            "y": 407.84375,
+            "width": 80,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "完成复习",
+            "x": 30.359375,
+            "y": 586.125,
+            "width": 56,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "今日",
+            "x": 0,
+            "y": 510,
+            "width": 64,
+            "height": 58,
+            "dialog": false
+          },
+          {
+            "label": "日程",
+            "x": 64,
+            "y": 510,
+            "width": 64,
+            "height": 58,
+            "dialog": false
+          },
+          {
+            "label": "记录",
+            "x": 128,
+            "y": 510,
+            "width": 64,
+            "height": 58,
+            "dialog": false
+          },
+          {
+            "label": "报表",
+            "x": 192,
+            "y": 510,
+            "width": 64,
+            "height": 58,
+            "dialog": false
+          },
+          {
+            "label": "设置",
+            "x": 256,
+            "y": 510,
+            "width": 64,
+            "height": 58,
+            "dialog": false
+          }
+        ]
+      }
+    },
+    {
+      "ui": "UI-001",
+      "state": "today-quiet",
+      "viewport": [
+        390,
+        844
+      ],
+      "console_errors": [],
+      "measurements": {
+        "width": 390,
+        "contentWidth": 390,
+        "controls": [
+          {
+            "label": "完成",
+            "x": 274.28125,
+            "y": 409.84375,
+            "width": 80,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "完成复习",
+            "x": 35.71875,
+            "y": 592.125,
+            "width": 56,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "今日",
+            "x": 0,
+            "y": 786,
+            "width": 78,
+            "height": 58,
+            "dialog": false
+          },
+          {
+            "label": "日程",
+            "x": 78,
+            "y": 786,
+            "width": 78,
+            "height": 58,
+            "dialog": false
+          },
+          {
+            "label": "记录",
+            "x": 156,
+            "y": 786,
+            "width": 78,
+            "height": 58,
+            "dialog": false
+          },
+          {
+            "label": "报表",
+            "x": 234,
+            "y": 786,
+            "width": 78,
+            "height": 58,
+            "dialog": false
+          },
+          {
+            "label": "设置",
+            "x": 312,
+            "y": 786,
+            "width": 78,
+            "height": 58,
+            "dialog": false
+          }
+        ]
+      }
+    },
+    {
+      "ui": "UI-001",
+      "state": "today-quiet",
+      "viewport": [
+        430,
+        932
+      ],
+      "console_errors": [],
+      "measurements": {
+        "width": 430,
+        "contentWidth": 430,
+        "controls": [
+          {
+            "label": "完成",
+            "x": 312.375,
+            "y": 409.84375,
+            "width": 80,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "完成复习",
+            "x": 37.625,
+            "y": 592.125,
+            "width": 56,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "今日",
+            "x": 0,
+            "y": 874,
+            "width": 86,
+            "height": 58,
+            "dialog": false
+          },
+          {
+            "label": "日程",
+            "x": 86,
+            "y": 874,
+            "width": 86,
+            "height": 58,
+            "dialog": false
+          },
+          {
+            "label": "记录",
+            "x": 172,
+            "y": 874,
+            "width": 86,
+            "height": 58,
+            "dialog": false
+          },
+          {
+            "label": "报表",
+            "x": 258,
+            "y": 874,
+            "width": 86,
+            "height": 58,
+            "dialog": false
+          },
+          {
+            "label": "设置",
+            "x": 344,
+            "y": 874,
+            "width": 86,
+            "height": 58,
+            "dialog": false
+          }
+        ]
+      }
+    },
+    {
+      "ui": "UI-011",
+      "state": "settings-off",
+      "viewport": [
+        320,
+        568
+      ],
+      "console_errors": [],
+      "measurements": {
+        "width": 320,
+        "contentWidth": 320,
+        "controls": [
+          {
+            "label": "返回设置",
+            "x": 8,
+            "y": 28,
+            "width": 44,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "完成复习时自动补充",
+            "x": 237.640625,
+            "y": 343.390625,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "复习提醒",
+            "x": 237.640625,
+            "y": 592.953125,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "手动补充次数",
+            "x": 30.359375,
+            "y": 703.71875,
+            "width": 84,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "日程提醒",
+            "x": 237.640625,
+            "y": 780.71875,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "手动补充次数",
+            "x": 30.359375,
+            "y": 869.09375,
+            "width": 84,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "家人加入申请",
+            "x": 237.640625,
+            "y": 946.09375,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "手动补充次数",
+            "x": 30.359375,
+            "y": 1056.859375,
+            "width": 84,
+            "height": 44,
+            "dialog": false
+          }
+        ]
+      }
+    },
+    {
+      "ui": "UI-011",
+      "state": "settings-off",
+      "viewport": [
+        390,
+        844
+      ],
+      "console_errors": [],
+      "measurements": {
+        "width": 390,
+        "contentWidth": 390,
+        "controls": [
+          {
+            "label": "返回设置",
+            "x": 8,
+            "y": 28,
+            "width": 44,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "完成复习时自动补充",
+            "x": 302.28125,
+            "y": 349.390625,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "复习提醒",
+            "x": 302.28125,
+            "y": 602.953125,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "手动补充次数",
+            "x": 35.71875,
+            "y": 691.328125,
+            "width": 84,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "日程提醒",
+            "x": 302.28125,
+            "y": 768.328125,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "手动补充次数",
+            "x": 35.71875,
+            "y": 856.703125,
+            "width": 84,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "家人加入申请",
+            "x": 302.28125,
+            "y": 933.703125,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "手动补充次数",
+            "x": 35.71875,
+            "y": 1022.078125,
+            "width": 84,
+            "height": 44,
+            "dialog": false
+          }
+        ]
+      }
+    },
+    {
+      "ui": "UI-011",
+      "state": "settings-off",
+      "viewport": [
+        430,
+        932
+      ],
+      "console_errors": [],
+      "measurements": {
+        "width": 430,
+        "contentWidth": 430,
+        "controls": [
+          {
+            "label": "返回设置",
+            "x": 8,
+            "y": 28,
+            "width": 44,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "完成复习时自动补充",
+            "x": 340.375,
+            "y": 349.390625,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "复习提醒",
+            "x": 340.375,
+            "y": 580.5625,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "手动补充次数",
+            "x": 37.625,
+            "y": 668.9375,
+            "width": 84,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "日程提醒",
+            "x": 340.375,
+            "y": 745.9375,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "手动补充次数",
+            "x": 37.625,
+            "y": 834.3125,
+            "width": 84,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "家人加入申请",
+            "x": 340.375,
+            "y": 911.3125,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "手动补充次数",
+            "x": 37.625,
+            "y": 999.6875,
+            "width": 84,
+            "height": 44,
+            "dialog": false
+          }
+        ]
+      }
+    },
+    {
+      "ui": "UI-011",
+      "state": "settings-enabled",
+      "viewport": [
+        320,
+        568
+      ],
+      "console_errors": [],
+      "measurements": {
+        "width": 320,
+        "contentWidth": 320,
+        "controls": [
+          {
+            "label": "返回设置",
+            "x": 8,
+            "y": 28,
+            "width": 44,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "完成复习时自动补充",
+            "x": 237.640625,
+            "y": 343.390625,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "复习提醒",
+            "x": 237.640625,
+            "y": 592.953125,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "日程提醒",
+            "x": 237.640625,
+            "y": 736.71875,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "家人加入申请",
+            "x": 237.640625,
+            "y": 858.09375,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          }
+        ]
+      }
+    },
+    {
+      "ui": "UI-011",
+      "state": "settings-enabled",
+      "viewport": [
+        390,
+        844
+      ],
+      "console_errors": [],
+      "measurements": {
+        "width": 390,
+        "contentWidth": 390,
+        "controls": [
+          {
+            "label": "返回设置",
+            "x": 8,
+            "y": 28,
+            "width": 44,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "完成复习时自动补充",
+            "x": 302.28125,
+            "y": 349.390625,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "复习提醒",
+            "x": 302.28125,
+            "y": 580.5625,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "日程提醒",
+            "x": 302.28125,
+            "y": 701.9375,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "家人加入申请",
+            "x": 302.28125,
+            "y": 823.3125,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          }
+        ]
+      }
+    },
+    {
+      "ui": "UI-011",
+      "state": "settings-enabled",
+      "viewport": [
+        430,
+        932
+      ],
+      "console_errors": [],
+      "measurements": {
+        "width": 430,
+        "contentWidth": 430,
+        "controls": [
+          {
+            "label": "返回设置",
+            "x": 8,
+            "y": 28,
+            "width": 44,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "完成复习时自动补充",
+            "x": 340.375,
+            "y": 349.390625,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "复习提醒",
+            "x": 340.375,
+            "y": 580.5625,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "日程提醒",
+            "x": 340.375,
+            "y": 701.9375,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "家人加入申请",
+            "x": 340.375,
+            "y": 823.3125,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          }
+        ]
+      }
+    },
+    {
+      "ui": "UI-011",
+      "state": "settings-cooldown",
+      "viewport": [
+        320,
+        568
+      ],
+      "console_errors": [],
+      "measurements": {
+        "width": 320,
+        "contentWidth": 320,
+        "controls": [
+          {
+            "label": "返回设置",
+            "x": 8,
+            "y": 28,
+            "width": 44,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "完成复习时自动补充",
+            "x": 237.640625,
+            "y": 343.390625,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "复习提醒",
+            "x": 237.640625,
+            "y": 592.953125,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "手动补充次数",
+            "x": 30.359375,
+            "y": 764.5,
+            "width": 84,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "日程提醒",
+            "x": 237.640625,
+            "y": 841.5,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "手动补充次数",
+            "x": 30.359375,
+            "y": 990.65625,
+            "width": 84,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "家人加入申请",
+            "x": 237.640625,
+            "y": 1067.65625,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "手动补充次数",
+            "x": 30.359375,
+            "y": 1239.203125,
+            "width": 84,
+            "height": 44,
+            "dialog": false
+          }
+        ]
+      }
+    },
+    {
+      "ui": "UI-011",
+      "state": "settings-cooldown",
+      "viewport": [
+        390,
+        844
+      ],
+      "console_errors": [],
+      "measurements": {
+        "width": 390,
+        "contentWidth": 390,
+        "controls": [
+          {
+            "label": "返回设置",
+            "x": 8,
+            "y": 28,
+            "width": 44,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "完成复习时自动补充",
+            "x": 302.28125,
+            "y": 349.390625,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "复习提醒",
+            "x": 302.28125,
+            "y": 580.5625,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "手动补充次数",
+            "x": 35.71875,
+            "y": 729.71875,
+            "width": 84,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "日程提醒",
+            "x": 302.28125,
+            "y": 806.71875,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "手动补充次数",
+            "x": 35.71875,
+            "y": 955.875,
+            "width": 84,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "家人加入申请",
+            "x": 302.28125,
+            "y": 1032.875,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "手动补充次数",
+            "x": 35.71875,
+            "y": 1182.03125,
+            "width": 84,
+            "height": 44,
+            "dialog": false
+          }
+        ]
+      }
+    },
+    {
+      "ui": "UI-011",
+      "state": "settings-cooldown",
+      "viewport": [
+        430,
+        932
+      ],
+      "console_errors": [],
+      "measurements": {
+        "width": 430,
+        "contentWidth": 430,
+        "controls": [
+          {
+            "label": "返回设置",
+            "x": 8,
+            "y": 28,
+            "width": 44,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "完成复习时自动补充",
+            "x": 340.375,
+            "y": 349.390625,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "复习提醒",
+            "x": 340.375,
+            "y": 580.5625,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "手动补充次数",
+            "x": 37.625,
+            "y": 707.328125,
+            "width": 84,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "日程提醒",
+            "x": 340.375,
+            "y": 784.328125,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "手动补充次数",
+            "x": 37.625,
+            "y": 911.09375,
+            "width": 84,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "家人加入申请",
+            "x": 340.375,
+            "y": 988.09375,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "手动补充次数",
+            "x": 37.625,
+            "y": 1114.859375,
+            "width": 84,
+            "height": 44,
+            "dialog": false
+          }
+        ]
+      }
+    },
+    {
+      "ui": "UI-011",
+      "state": "settings-stopped",
+      "viewport": [
+        320,
+        568
+      ],
+      "console_errors": [],
+      "measurements": {
+        "width": 320,
+        "contentWidth": 320,
+        "controls": [
+          {
+            "label": "返回设置",
+            "x": 8,
+            "y": 28,
+            "width": 44,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "完成复习时自动补充",
+            "x": 237.640625,
+            "y": 343.390625,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "复习提醒",
+            "x": 237.640625,
+            "y": 623.34375,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "去微信调整",
+            "x": 30.359375,
+            "y": 734.109375,
+            "width": 70,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "日程提醒",
+            "x": 237.640625,
+            "y": 811.109375,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "去微信调整",
+            "x": 30.359375,
+            "y": 899.484375,
+            "width": 70,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "家人加入申请",
+            "x": 237.640625,
+            "y": 976.484375,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "去微信调整",
+            "x": 30.359375,
+            "y": 1087.25,
+            "width": 70,
+            "height": 44,
+            "dialog": false
+          }
+        ]
+      }
+    },
+    {
+      "ui": "UI-011",
+      "state": "settings-stopped",
+      "viewport": [
+        390,
+        844
+      ],
+      "console_errors": [],
+      "measurements": {
+        "width": 390,
+        "contentWidth": 390,
+        "controls": [
+          {
+            "label": "返回设置",
+            "x": 8,
+            "y": 28,
+            "width": 44,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "完成复习时自动补充",
+            "x": 302.28125,
+            "y": 349.390625,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "复习提醒",
+            "x": 302.28125,
+            "y": 602.953125,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "去微信调整",
+            "x": 35.71875,
+            "y": 691.328125,
+            "width": 70,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "日程提醒",
+            "x": 302.28125,
+            "y": 768.328125,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "去微信调整",
+            "x": 35.71875,
+            "y": 856.703125,
+            "width": 70,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "家人加入申请",
+            "x": 302.28125,
+            "y": 933.703125,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "去微信调整",
+            "x": 35.71875,
+            "y": 1022.078125,
+            "width": 70,
+            "height": 44,
+            "dialog": false
+          }
+        ]
+      }
+    },
+    {
+      "ui": "UI-011",
+      "state": "settings-stopped",
+      "viewport": [
+        430,
+        932
+      ],
+      "console_errors": [],
+      "measurements": {
+        "width": 430,
+        "contentWidth": 430,
+        "controls": [
+          {
+            "label": "返回设置",
+            "x": 8,
+            "y": 28,
+            "width": 44,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "完成复习时自动补充",
+            "x": 340.375,
+            "y": 349.390625,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "复习提醒",
+            "x": 340.375,
+            "y": 580.5625,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "去微信调整",
+            "x": 37.625,
+            "y": 668.9375,
+            "width": 70,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "日程提醒",
+            "x": 340.375,
+            "y": 745.9375,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "去微信调整",
+            "x": 37.625,
+            "y": 834.3125,
+            "width": 70,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "家人加入申请",
+            "x": 340.375,
+            "y": 911.3125,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "去微信调整",
+            "x": 37.625,
+            "y": 999.6875,
+            "width": 70,
+            "height": 44,
+            "dialog": false
+          }
+        ]
+      }
+    },
+    {
+      "ui": "UI-011",
+      "state": "settings-pending",
+      "viewport": [
+        320,
+        568
+      ],
+      "console_errors": [],
+      "measurements": {
+        "width": 320,
+        "contentWidth": 320,
+        "controls": [
+          {
+            "label": "返回设置",
+            "x": 8,
+            "y": 28,
+            "width": 44,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "完成复习时自动补充",
+            "x": 237.640625,
+            "y": 343.390625,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "复习提醒",
+            "x": 237.640625,
+            "y": 623.34375,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "日程提醒",
+            "x": 237.640625,
+            "y": 805.5,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "家人加入申请",
+            "x": 237.640625,
+            "y": 965.265625,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          }
+        ]
+      }
+    },
+    {
+      "ui": "UI-011",
+      "state": "settings-pending",
+      "viewport": [
+        390,
+        844
+      ],
+      "console_errors": [],
+      "measurements": {
+        "width": 390,
+        "contentWidth": 390,
+        "controls": [
+          {
+            "label": "返回设置",
+            "x": 8,
+            "y": 28,
+            "width": 44,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "完成复习时自动补充",
+            "x": 302.28125,
+            "y": 349.390625,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "复习提醒",
+            "x": 302.28125,
+            "y": 602.953125,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "日程提醒",
+            "x": 302.28125,
+            "y": 762.71875,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "家人加入申请",
+            "x": 302.28125,
+            "y": 922.484375,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          }
+        ]
+      }
+    },
+    {
+      "ui": "UI-011",
+      "state": "settings-pending",
+      "viewport": [
+        430,
+        932
+      ],
+      "console_errors": [],
+      "measurements": {
+        "width": 430,
+        "contentWidth": 430,
+        "controls": [
+          {
+            "label": "返回设置",
+            "x": 8,
+            "y": 28,
+            "width": 44,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "完成复习时自动补充",
+            "x": 340.375,
+            "y": 349.390625,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "复习提醒",
+            "x": 340.375,
+            "y": 602.953125,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "日程提醒",
+            "x": 340.375,
+            "y": 762.71875,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "家人加入申请",
+            "x": 340.375,
+            "y": 922.484375,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          }
+        ]
+      }
+    },
+    {
+      "ui": "UI-011",
+      "state": "settings-loading",
+      "viewport": [
+        320,
+        568
+      ],
+      "console_errors": [],
+      "measurements": {
+        "width": 320,
+        "contentWidth": 320,
+        "controls": [
+          {
+            "label": "返回设置",
+            "x": 8,
+            "y": 28,
+            "width": 44,
+            "height": 44,
+            "dialog": false
+          }
+        ]
+      }
+    },
+    {
+      "ui": "UI-011",
+      "state": "settings-loading",
+      "viewport": [
+        390,
+        844
+      ],
+      "console_errors": [],
+      "measurements": {
+        "width": 390,
+        "contentWidth": 390,
+        "controls": [
+          {
+            "label": "返回设置",
+            "x": 8,
+            "y": 28,
+            "width": 44,
+            "height": 44,
+            "dialog": false
+          }
+        ]
+      }
+    },
+    {
+      "ui": "UI-011",
+      "state": "settings-loading",
+      "viewport": [
+        430,
+        932
+      ],
+      "console_errors": [],
+      "measurements": {
+        "width": 430,
+        "contentWidth": 430,
+        "controls": [
+          {
+            "label": "返回设置",
+            "x": 8,
+            "y": 28,
+            "width": 44,
+            "height": 44,
+            "dialog": false
+          }
+        ]
+      }
+    },
+    {
+      "ui": "UI-011",
+      "state": "settings-error",
+      "viewport": [
+        320,
+        568
+      ],
+      "console_errors": [],
+      "measurements": {
+        "width": 320,
+        "contentWidth": 320,
+        "controls": [
+          {
+            "label": "返回设置",
+            "x": 8,
+            "y": 28,
+            "width": 44,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "重新读取",
+            "x": 27.359375,
+            "y": 199.171875,
+            "width": 56,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "完成复习时自动补充",
+            "x": 237.640625,
+            "y": 445.78125,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "复习提醒",
+            "x": 237.640625,
+            "y": 725.734375,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "日程提醒",
+            "x": 237.640625,
+            "y": 869.5,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "家人加入申请",
+            "x": 237.640625,
+            "y": 990.875,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          }
+        ]
+      }
+    },
+    {
+      "ui": "UI-011",
+      "state": "settings-error",
+      "viewport": [
+        390,
+        844
+      ],
+      "console_errors": [],
+      "measurements": {
+        "width": 390,
+        "contentWidth": 390,
+        "controls": [
+          {
+            "label": "返回设置",
+            "x": 8,
+            "y": 28,
+            "width": 44,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "重新读取",
+            "x": 282.71875,
+            "y": 176.78125,
+            "width": 56,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "完成复习时自动补充",
+            "x": 302.28125,
+            "y": 429.390625,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "复习提醒",
+            "x": 302.28125,
+            "y": 682.953125,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "日程提醒",
+            "x": 302.28125,
+            "y": 804.328125,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "家人加入申请",
+            "x": 302.28125,
+            "y": 925.703125,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          }
+        ]
+      }
+    },
+    {
+      "ui": "UI-011",
+      "state": "settings-error",
+      "viewport": [
+        430,
+        932
+      ],
+      "console_errors": [],
+      "measurements": {
+        "width": 430,
+        "contentWidth": 430,
+        "controls": [
+          {
+            "label": "返回设置",
+            "x": 8,
+            "y": 28,
+            "width": 44,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "重新读取",
+            "x": 284.625,
+            "y": 176.78125,
+            "width": 56,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "完成复习时自动补充",
+            "x": 340.375,
+            "y": 429.390625,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "复习提醒",
+            "x": 340.375,
+            "y": 682.953125,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "日程提醒",
+            "x": 340.375,
+            "y": 804.328125,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "家人加入申请",
+            "x": 340.375,
+            "y": 925.703125,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          }
+        ]
+      }
+    },
+    {
+      "ui": "UI-011",
+      "state": "settings-unavailable",
+      "viewport": [
+        320,
+        568
+      ],
+      "console_errors": [],
+      "measurements": {
+        "width": 320,
+        "contentWidth": 320,
+        "controls": [
+          {
+            "label": "返回设置",
+            "x": 8,
+            "y": 28,
+            "width": 44,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "完成复习时自动补充",
+            "x": 237.640625,
+            "y": 343.390625,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "复习提醒",
+            "x": 237.640625,
+            "y": 592.953125,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "日程提醒",
+            "x": 237.640625,
+            "y": 736.71875,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "家人加入申请",
+            "x": 237.640625,
+            "y": 858.09375,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          }
+        ]
+      }
+    },
+    {
+      "ui": "UI-011",
+      "state": "settings-unavailable",
+      "viewport": [
+        390,
+        844
+      ],
+      "console_errors": [],
+      "measurements": {
+        "width": 390,
+        "contentWidth": 390,
+        "controls": [
+          {
+            "label": "返回设置",
+            "x": 8,
+            "y": 28,
+            "width": 44,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "完成复习时自动补充",
+            "x": 302.28125,
+            "y": 349.390625,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "复习提醒",
+            "x": 302.28125,
+            "y": 602.953125,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "日程提醒",
+            "x": 302.28125,
+            "y": 724.328125,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "家人加入申请",
+            "x": 302.28125,
+            "y": 845.703125,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          }
+        ]
+      }
+    },
+    {
+      "ui": "UI-011",
+      "state": "settings-unavailable",
+      "viewport": [
+        430,
+        932
+      ],
+      "console_errors": [],
+      "measurements": {
+        "width": 430,
+        "contentWidth": 430,
+        "controls": [
+          {
+            "label": "返回设置",
+            "x": 8,
+            "y": 28,
+            "width": 44,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "完成复习时自动补充",
+            "x": 340.375,
+            "y": 349.390625,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "复习提醒",
+            "x": 340.375,
+            "y": 602.953125,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "日程提醒",
+            "x": 340.375,
+            "y": 724.328125,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "家人加入申请",
+            "x": 340.375,
+            "y": 845.703125,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          }
+        ]
+      }
+    },
+    {
+      "ui": "UI-011",
+      "state": "settings-partial",
+      "viewport": [
+        320,
+        568
+      ],
+      "console_errors": [],
+      "measurements": {
+        "width": 320,
+        "contentWidth": 320,
+        "controls": [
+          {
+            "label": "返回设置",
+            "x": 8,
+            "y": 28,
+            "width": 44,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "完成复习时自动补充",
+            "x": 237.640625,
+            "y": 343.390625,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "复习提醒",
+            "x": 237.640625,
+            "y": 592.953125,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "日程提醒",
+            "x": 237.640625,
+            "y": 736.71875,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "手动补充次数",
+            "x": 30.359375,
+            "y": 885.875,
+            "width": 84,
+            "height": 44,
+            "dialog": false
+          }
+        ]
+      }
+    },
+    {
+      "ui": "UI-011",
+      "state": "settings-partial",
+      "viewport": [
+        390,
+        844
+      ],
+      "console_errors": [],
+      "measurements": {
+        "width": 390,
+        "contentWidth": 390,
+        "controls": [
+          {
+            "label": "返回设置",
+            "x": 8,
+            "y": 28,
+            "width": 44,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "完成复习时自动补充",
+            "x": 302.28125,
+            "y": 349.390625,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "复习提醒",
+            "x": 302.28125,
+            "y": 580.5625,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "日程提醒",
+            "x": 302.28125,
+            "y": 701.9375,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "手动补充次数",
+            "x": 35.71875,
+            "y": 851.09375,
+            "width": 84,
+            "height": 44,
+            "dialog": false
+          }
+        ]
+      }
+    },
+    {
+      "ui": "UI-011",
+      "state": "settings-partial",
+      "viewport": [
+        430,
+        932
+      ],
+      "console_errors": [],
+      "measurements": {
+        "width": 430,
+        "contentWidth": 430,
+        "controls": [
+          {
+            "label": "返回设置",
+            "x": 8,
+            "y": 28,
+            "width": 44,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "完成复习时自动补充",
+            "x": 340.375,
+            "y": 349.390625,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "复习提醒",
+            "x": 340.375,
+            "y": 580.5625,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "日程提醒",
+            "x": 340.375,
+            "y": 701.9375,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "手动补充次数",
+            "x": 37.625,
+            "y": 828.703125,
+            "width": 84,
+            "height": 44,
+            "dialog": false
+          }
+        ]
+      }
+    },
+    {
+      "ui": "UI-011",
+      "state": "settings-forbidden",
+      "viewport": [
+        320,
+        568
+      ],
+      "console_errors": [],
+      "measurements": {
+        "width": 320,
+        "contentWidth": 320,
+        "controls": [
+          {
+            "label": "返回设置",
+            "x": 8,
+            "y": 28,
+            "width": 44,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "重新进入",
+            "x": 30.359375,
+            "y": 284.453125,
+            "width": 259.28125,
+            "height": 48,
+            "dialog": false
+          }
+        ]
+      }
+    },
+    {
+      "ui": "UI-011",
+      "state": "settings-forbidden",
+      "viewport": [
+        390,
+        844
+      ],
+      "console_errors": [],
+      "measurements": {
+        "width": 390,
+        "contentWidth": 390,
+        "controls": [
+          {
+            "label": "返回设置",
+            "x": 8,
+            "y": 28,
+            "width": 44,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "重新进入",
+            "x": 35.71875,
+            "y": 286.453125,
+            "width": 318.5625,
+            "height": 48,
+            "dialog": false
+          }
+        ]
+      }
+    },
+    {
+      "ui": "UI-011",
+      "state": "settings-forbidden",
+      "viewport": [
+        430,
+        932
+      ],
+      "console_errors": [],
+      "measurements": {
+        "width": 430,
+        "contentWidth": 430,
+        "controls": [
+          {
+            "label": "返回设置",
+            "x": 8,
+            "y": 28,
+            "width": 44,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "重新进入",
+            "x": 37.625,
+            "y": 286.453125,
+            "width": 354.75,
+            "height": 48,
+            "dialog": false
+          }
+        ]
+      }
+    },
+    {
+      "ui": "UI-011",
+      "state": "settings-empty",
+      "viewport": [
+        320,
+        568
+      ],
+      "console_errors": [],
+      "measurements": {
+        "width": 320,
+        "contentWidth": 320,
+        "controls": [
+          {
+            "label": "返回设置",
+            "x": 8,
+            "y": 28,
+            "width": 44,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "完成复习时自动补充",
+            "x": 237.640625,
+            "y": 343.390625,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "复习提醒",
+            "x": 237.640625,
+            "y": 623.34375,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "日程提醒",
+            "x": 237.640625,
+            "y": 767.109375,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "家人加入申请",
+            "x": 237.640625,
+            "y": 888.484375,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          }
+        ]
+      }
+    },
+    {
+      "ui": "UI-011",
+      "state": "settings-empty",
+      "viewport": [
+        390,
+        844
+      ],
+      "console_errors": [],
+      "measurements": {
+        "width": 390,
+        "contentWidth": 390,
+        "controls": [
+          {
+            "label": "返回设置",
+            "x": 8,
+            "y": 28,
+            "width": 44,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "完成复习时自动补充",
+            "x": 302.28125,
+            "y": 349.390625,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "复习提醒",
+            "x": 302.28125,
+            "y": 602.953125,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "日程提醒",
+            "x": 302.28125,
+            "y": 724.328125,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "家人加入申请",
+            "x": 302.28125,
+            "y": 845.703125,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          }
+        ]
+      }
+    },
+    {
+      "ui": "UI-011",
+      "state": "settings-empty",
+      "viewport": [
+        430,
+        932
+      ],
+      "console_errors": [],
+      "measurements": {
+        "width": 430,
+        "contentWidth": 430,
+        "controls": [
+          {
+            "label": "返回设置",
+            "x": 8,
+            "y": 28,
+            "width": 44,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "完成复习时自动补充",
+            "x": 340.375,
+            "y": 349.390625,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "复习提醒",
+            "x": 340.375,
+            "y": 602.953125,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "日程提醒",
+            "x": 340.375,
+            "y": 724.328125,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "家人加入申请",
+            "x": 340.375,
+            "y": 845.703125,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          }
+        ]
+      }
+    },
+    {
+      "ui": "UI-011",
+      "state": "settings-saving",
+      "viewport": [
+        320,
+        568
+      ],
+      "console_errors": [],
+      "measurements": {
+        "width": 320,
+        "contentWidth": 320,
+        "controls": [
+          {
+            "label": "返回设置",
+            "x": 8,
+            "y": 28,
+            "width": 44,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "完成复习时自动补充",
+            "x": 237.640625,
+            "y": 343.390625,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "复习提醒",
+            "x": 237.640625,
+            "y": 592.953125,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "日程提醒",
+            "x": 237.640625,
+            "y": 736.71875,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "家人加入申请",
+            "x": 237.640625,
+            "y": 858.09375,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          }
+        ]
+      }
+    },
+    {
+      "ui": "UI-011",
+      "state": "settings-saving",
+      "viewport": [
+        390,
+        844
+      ],
+      "console_errors": [],
+      "measurements": {
+        "width": 390,
+        "contentWidth": 390,
+        "controls": [
+          {
+            "label": "返回设置",
+            "x": 8,
+            "y": 28,
+            "width": 44,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "完成复习时自动补充",
+            "x": 302.28125,
+            "y": 349.390625,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "复习提醒",
+            "x": 302.28125,
+            "y": 602.953125,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "日程提醒",
+            "x": 302.28125,
+            "y": 724.328125,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "家人加入申请",
+            "x": 302.28125,
+            "y": 845.703125,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          }
+        ]
+      }
+    },
+    {
+      "ui": "UI-011",
+      "state": "settings-saving",
+      "viewport": [
+        430,
+        932
+      ],
+      "console_errors": [],
+      "measurements": {
+        "width": 430,
+        "contentWidth": 430,
+        "controls": [
+          {
+            "label": "返回设置",
+            "x": 8,
+            "y": 28,
+            "width": 44,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "完成复习时自动补充",
+            "x": 340.375,
+            "y": 349.390625,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "复习提醒",
+            "x": 340.375,
+            "y": 580.5625,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "日程提醒",
+            "x": 340.375,
+            "y": 701.9375,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          },
+          {
+            "label": "家人加入申请",
+            "x": 340.375,
+            "y": 823.3125,
+            "width": 52,
+            "height": 44,
+            "dialog": false
+          }
+        ]
+      }
+    }
+  ]
+}

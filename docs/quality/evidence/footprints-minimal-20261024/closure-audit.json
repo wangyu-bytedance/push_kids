@@ -1,0 +1,152 @@
+{
+  "capturedAt": "2026-10-24T13:06:08.325249+00:00",
+  "status": "LOCAL_IMPLEMENTATION_VERIFIED_WITH_OPEN_ACCEPTANCE",
+  "spec_status": "VERIFYING",
+  "spec_path": "specs/active/FEAT-012-FOOTPRINTS-MINIMAL-UI.md",
+  "documentation": {
+    "checked_files": [
+      "specs/active/FEAT-012-FOOTPRINTS-MINIMAL-UI.md",
+      "specs/README.md",
+      "docs/domain/features/FEAT-012-child-photo-footprints.md",
+      "docs/domain/features/FEAT-001-push-kids-mvp.md",
+      "docs/domain/BEHAVIOR-CATALOG.md",
+      "docs/architecture/ARCHITECTURE.md",
+      "docs/design/frontend/FRONTEND-DESIGN.md",
+      "docs/design/frontend/FRONTEND-ENGINEERING-CONSTRAINTS.md",
+      "docs/design/frontend/ui/UI-001-parent-miniapp.md",
+      "docs/design/frontend/ui/UI-018-child-photo-footprints.md",
+      "docs/design/frontend/prototypes/DREV-20261024-FOOTPRINTS-MINIMAL-01/FRONTEND-SPEC.md",
+      "docs/design/frontend/prototypes/DREV-20261024-FOOTPRINTS-MINIMAL-01/UI-COPY-REQUIREMENTS.md",
+      "docs/deploy/releases/20261024-footprints-minimal-local.md",
+      "docs/quality/evidence/footprints-minimal-20261024/README.md",
+      "specs/active/BUG-032-RECORD-ENTRY-CONTEXT.md",
+      "docs/quality/evidence/record-entry-20261024/README.md"
+    ],
+    "links_checked": 285,
+    "missing": [],
+    "conflicts": "No unresolved code/document contradiction found in this approved scope. Historical evidence remains scoped; shared unrelated task text is not this increment acceptance.",
+    "source_sha256": {
+      "specs/active/FEAT-012-FOOTPRINTS-MINIMAL-UI.md": "5cc2540cd370d098079b68d3b0941bc339d3d937581a96db502167a225f750a8",
+      "specs/README.md": "73b25e3f4c1abe16691011be4da2068fdfc505c8f60ee3bb971558e81b8d66f1",
+      "docs/domain/features/FEAT-012-child-photo-footprints.md": "6923c9714150366918951cdb933e35ad0915e1ebf646527f7dbf4e91e839ccb8",
+      "docs/domain/features/FEAT-001-push-kids-mvp.md": "2c4a0a0557706d017487ee5f0c85beef1bd580766930cd890ff1e56970155304",
+      "docs/domain/BEHAVIOR-CATALOG.md": "8b62e22c06ca8b9d8fb2f31ffd92cc570ab61cd0b9b17130e2112133c0cfa8bb",
+      "docs/architecture/ARCHITECTURE.md": "99fe22471ed0e4c1475d9bf512b1685dda5ef0a1b34a618cf314da4c844da901",
+      "docs/design/frontend/FRONTEND-DESIGN.md": "aacb5543f05f6f7a4878dba3f11440b511d1a2a64190349d1f095d1f14fe8f39",
+      "docs/design/frontend/FRONTEND-ENGINEERING-CONSTRAINTS.md": "d51319e7254140764fc4d439c722e5ad013a48e8afc427c32478cfd99813a358",
+      "docs/design/frontend/ui/UI-001-parent-miniapp.md": "e63867a3d1f06451002f760aa5f88af03dc11d7480cd079792b36a721b52f5c6",
+      "docs/design/frontend/ui/UI-018-child-photo-footprints.md": "a5bb46bc44065408561e21c57f009c28ab325d82083caa3559c06057341594fb",
+      "docs/design/frontend/prototypes/DREV-20261024-FOOTPRINTS-MINIMAL-01/FRONTEND-SPEC.md": "53d33af03b2eb685808a38c4cdc3ed4be277538ad94e785d04afdc32784019a9",
+      "docs/design/frontend/prototypes/DREV-20261024-FOOTPRINTS-MINIMAL-01/UI-COPY-REQUIREMENTS.md": "d8def7252ac6d316c696e46907553eab5b221620987fa1c776b0dc3efec6d255",
+      "docs/deploy/releases/20261024-footprints-minimal-local.md": "06c3bc6b66910d5bd5178619850517d50042fe3c1df71f1bbd6557ae2806b7c8",
+      "docs/quality/evidence/footprints-minimal-20261024/README.md": "5ffd29672aea7854ececec5d2da113030592d2500b29f221d9d05ba39abee224",
+      "specs/active/BUG-032-RECORD-ENTRY-CONTEXT.md": "6af7b4b92c1037502e1334538e96ab7dcf01fd07c525956021b41d21ba8cd497",
+      "docs/quality/evidence/record-entry-20261024/README.md": "d3f6a1dd40263c5ecb2635f7ba8bf1031883f70b5fbe64fc9d0189fae7b57b67"
+    }
+  },
+  "frozen_source_sha256": {
+    "docs/design/frontend/prototypes/DREV-20261024-FOOTPRINTS-MINIMAL-01/index.html": "bdac2c6cb900db7ac4676b73683fb3033a061312623001ccf498a506d817ee83",
+    "docs/design/frontend/prototypes/DREV-20261024-RECORD-ENTRY-01/index.html": "c8c626ce7f9d0becf63817e21cc75f39eee235aa4790ec026d834d1bb3122987"
+  },
+  "approved_design_exports": 24,
+  "source_files_match_manifest": 17,
+  "native_copy_coupled_source_matches": 9,
+  "native_geometry": {
+    "states": 9,
+    "viewports": [
+      [
+        320,
+        568
+      ],
+      [
+        390,
+        844
+      ],
+      [
+        430,
+        932
+      ]
+    ],
+    "node_png_pairs": 27,
+    "audit": "native-audit.json"
+  },
+  "actual_native_interactions": {
+    "viewport": [
+      430,
+      932
+    ],
+    "record": "native-actions.json",
+    "captures": [
+      {
+        "file": "interactions/actions-cancel-430.json",
+        "sha256": "d313f80ed3bc8e23f4d52fe2ff16b577feb722c759d6219cd512ad12d86fb2d2",
+        "screenshotSha256": "0edf323b0aa39bf973363132eab28f83710291c2f25e37a19773fffb1c916ab0",
+        "pixels": [
+          860,
+          1864
+        ]
+      },
+      {
+        "file": "interactions/actions-open-430.json",
+        "sha256": "e2fe18a4f34714ccc2633f05a637104c4ca3376750bacabc0b68e9b77a2a6256",
+        "screenshotSha256": "0edf323b0aa39bf973363132eab28f83710291c2f25e37a19773fffb1c916ab0",
+        "pixels": [
+          860,
+          1864
+        ]
+      },
+      {
+        "file": "interactions/archive-cancel-430.json",
+        "sha256": "91242e72227b772d5f39b20431b81f96d8a3080ad878ce72fb08321dcedc1bf5",
+        "screenshotSha256": "0edf323b0aa39bf973363132eab28f83710291c2f25e37a19773fffb1c916ab0",
+        "pixels": [
+          860,
+          1864
+        ]
+      },
+      {
+        "file": "interactions/archive-open-430.json",
+        "sha256": "46d33fc589811789d8084cafcf9312fee235b683328e1574387150be56f60567",
+        "screenshotSha256": "0edf323b0aa39bf973363132eab28f83710291c2f25e37a19773fffb1c916ab0",
+        "pixels": [
+          860,
+          1864
+        ]
+      },
+      {
+        "file": "interactions/archive-selected-430.json",
+        "sha256": "1ad29e560baf30d4594b03b71718cee60c91a8e70ac00ba61e77945c2d226872",
+        "screenshotSha256": "fad5f3dc86774372d57f2b59d0494c433cc88ab127b8c6e51ffe8fc620615fd6",
+        "pixels": [
+          860,
+          1864
+        ]
+      },
+      {
+        "file": "interactions/settings-open-430.json",
+        "sha256": "f70e1f376c2b4a716a528625cf5965544b777dd1ed1d52d37f1b89a108736cd5",
+        "screenshotSha256": "ba3b4d542d274860311f096dde11eb8a0ac33d3b6640f0e7b1d03d6e36c9fa11",
+        "pixels": [
+          860,
+          1864
+        ]
+      }
+    ],
+    "system_sheet_omitted_from_official_phone_png": true
+  },
+  "checks": "automated-checks.json",
+  "independent_review": "NOT_RUN",
+  "remaining_acceptance": [
+    "Standalone Page native matrix",
+    "Real iOS/Android, screen reader and system large font",
+    "Real service/media/maps and preference write",
+    "Independent review",
+    "Parent product acceptance"
+  ],
+  "release": {
+    "committed": false,
+    "pushed": false,
+    "uploaded": false,
+    "deployed": false
+  }
+}

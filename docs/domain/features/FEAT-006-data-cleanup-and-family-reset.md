@@ -1,5 +1,8 @@
 # FEAT-006 — 家庭资料清理与重新开始
 
+- 2026-10-20本地兼容：单条知识删除仍仅删除所选知识及既有规划关联，覆盖关系不会联动删除或恢复其他词条。承接FK删除时SET NULL，旧项保留永久superseded；覆盖后台任务随所属Knowledge级联清理。全局发现游标仅内部遍历控制元数据，无学习内容。见[本轮证据](../../quality/evidence/AUTO-SUPERSEDED-REVIEW-20261020.md)，未部署。
+
+
 - Feature ID: `FEAT-006`
 - Release gate policy: `SPEC-20261011-RISK-BASED-RELEASE-GATES-01` 已批准；只有经真实 MySQL 5.7 和旧/新版合同验证的纯增量、无既有数据改写迁移可免本次新增备份。数据回填、改写、删除、收缩或证据不足仍须备份；这不改变已发生的删除验收或既有备份保留事实。
 - Status: `DEPLOYED_PENDING_CLOUD_ACCEPTANCE`
@@ -19,6 +22,8 @@
 家庭管理员可以永久删除一个孩子的全部资料，或在自己是唯一有效成员时删除整个家庭；清理失败可观察、可重试，不会把部分清理报告为成功。归档仍是可恢复的日常路径，永久删除是独立且不可恢复的数据权利路径。删除家庭后 actor 回到“创建家庭 / 申请加入家庭”的无家庭入口。
 
 ## Current behavior
+
+- 2026-10-18本地owned-data增量revision `FEAT-STATE-20261018-FOOTPRINTS-PURGE-01`：删除编排先调用FootprintMediaCleanup按100条窗口清私有原件/展示图/缩略图及云预分配路径，再在既有事务调用FootprintsService.purge_data。孩子删除清照片/到访/批次/scope，保留家庭偏好和其他孩子；家庭删除连成员AI偏好一并清理。与worker共享家庭/孩子冻结合同，迟到任务不复活确认/删除状态。[足迹证据](../../quality/evidence/CHILD-FOOTPRINTS-IMPLEMENTATION-20261018.md)覆盖SQLite真实编排及兄弟档案保留；真实云对象/MySQL删除待验，未部署。
 
 - 本地新增daily_tasks owned-data清理合同：同一事务先清除任务完成事实，再清除任务配置，随后删除孩子。
   家庭清理覆盖所有孩子；孩子清理保留同家庭其他孩子任务。通过真实删除worker的SQLite测试，未部署；

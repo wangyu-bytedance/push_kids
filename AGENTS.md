@@ -47,7 +47,7 @@ Never claim a check passed unless it ran. Record skipped checks and the reason.
 ## Non-negotiable product rules
 
 - AI output is an editable proposal. Only a parent confirmation creates formal learning records and review items.
-- AI never grades answers, declares mastery, or predicts what the child should learn next.
+- AI never grades answers or declares mastery. Extraction only describes learned facts. Approved FEAT-004 permits one editable incremental suggestion based on existing grade and confirmed learning; it never prescribes a required next lesson. Parent approval creates only a StudyTask; actual learning confirmation alone creates formal records and deterministic reviews.
 - Review dates are produced by deterministic planning policy, never by the model.
 - Every query and write is family-scoped at the server boundary. MVP uses `X-Family-ID`; public release must replace it with verified WeChat identity.
 - Never store secrets, tokens, raw model payloads, or child images in logs or the repository.

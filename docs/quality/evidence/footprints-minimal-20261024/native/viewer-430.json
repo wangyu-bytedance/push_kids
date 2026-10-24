@@ -1,0 +1,140 @@
+{
+  "nodes": {
+    ".footprints-page": [
+      {
+        "left": 0,
+        "right": 430,
+        "top": 171,
+        "bottom": 807,
+        "width": 430,
+        "height": 636,
+        "fontSize": "14px",
+        "position": "static"
+      }
+    ],
+    ".fp-toolbar": [],
+    ".fp-heading": [],
+    ".fp-archive": [],
+    ".fp-summary": [
+      {
+        "left": 16,
+        "right": 414,
+        "top": 229,
+        "bottom": 273,
+        "width": 398,
+        "height": 44,
+        "fontSize": "14px",
+        "position": "static"
+      }
+    ],
+    ".fp-stats": [
+      {
+        "left": 16,
+        "right": 414,
+        "top": 240,
+        "bottom": 262,
+        "width": 398,
+        "height": 22,
+        "fontSize": "14px",
+        "position": "static"
+      }
+    ],
+    ".fp-stats text": [],
+    ".fp-more": [],
+    ".fp-more .ico": [],
+    ".fp-tabs": [
+      {
+        "left": 16,
+        "right": 414,
+        "top": 289,
+        "bottom": 341,
+        "width": 398,
+        "height": 52,
+        "fontSize": "14px",
+        "position": "static"
+      }
+    ],
+    ".fp-tab": [
+      {
+        "left": 20,
+        "right": 144.671875,
+        "top": 293,
+        "bottom": 337,
+        "width": 124.671875,
+        "height": 44,
+        "fontSize": "14px",
+        "position": "relative"
+      },
+      {
+        "left": 152.671875,
+        "right": 277.34375,
+        "top": 293,
+        "bottom": 337,
+        "width": 124.671875,
+        "height": 44,
+        "fontSize": "14px",
+        "position": "relative"
+      },
+      {
+        "left": 285.34375,
+        "right": 410.015625,
+        "top": 293,
+        "bottom": 337,
+        "width": 124.671875,
+        "height": 44,
+        "fontSize": "14px",
+        "position": "relative"
+      }
+    ],
+    ".fp-import": [],
+    ".fp-settings": [],
+    ".fp-sheet": [],
+    ".fp-sheet-head": [],
+    ".fp-sheet-body": [],
+    ".fp-sheet-footer": [],
+    ".fp-switch": [],
+    ".fp-switch-label": [],
+    ".fp-close": [],
+    ".fp-text-button": [
+      {
+        "left": 42,
+        "right": 401,
+        "top": 623,
+        "bottom": 667,
+        "width": 359,
+        "height": 44,
+        "fontSize": "14px",
+        "position": "relative"
+      }
+    ],
+    ".fp-button": [],
+    ".fp-error": []
+  },
+  "nav": [
+    {
+      "id": "",
+      "dataset": {},
+      "left": 0,
+      "right": 430,
+      "top": 837,
+      "bottom": 932,
+      "width": 430,
+      "height": 95
+    }
+  ],
+  "scrollLeft": 0,
+  "sheet": "",
+  "viewport": {
+    "width": 430,
+    "height": 932,
+    "screenHeight": 932,
+    "dpr": 3,
+    "baseLibrary": "3.17.4",
+    "fontScale": 15
+  },
+  "state": "viewer",
+  "errors": [],
+  "capturedAt": "2026-10-24T13:00:24.108Z",
+  "screenshot": "viewer-430.png",
+  "screenshotSha256": "b8b9eb356b88c19810077308d01d3ee570b1037d97a724f6e997d71875c346c5"
+}

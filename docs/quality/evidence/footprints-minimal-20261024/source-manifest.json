@@ -1,0 +1,29 @@
+{
+  "capturedAt": "2026-10-24T13:04:52.850049+00:00",
+  "scope": "3 production changes plus coupled production files, 2 frontend test files and local synthetic tools; not all shared dirty worktree changes",
+  "source_sha256": {
+    "apps/miniprogram/pages/records/record-types.js": "36cd51138d7af17b3d3cc7a1567ad706c08d6dbf4b8fce81fc1320cef13de093",
+    "apps/miniprogram/pages/records/index.js": "40369e8d0fe6e11eb252371831a9b89f9caeec408b5c534ad53dfd770291639e",
+    "apps/miniprogram/pages/records/index.wxml": "ac4ee1fe62e59aaddeedb29845905450dbf87ce976395f91edf789a3ec173f06",
+    "apps/miniprogram/pages/records/index.wxss": "1b8421a837ed10299e8f080a8db7c1832d374744242490d5956bd44c57ffa188",
+    "apps/miniprogram/pages/footprints/controller.js": "aef446c3bd67af4a729e2797ed5400d8cb1d1604725265f2a622a935742d8670",
+    "apps/miniprogram/pages/footprints/imports.js": "654be94db04ec5a28761af722933739661a020fc99c4a2862c913f88b53ec13b",
+    "apps/miniprogram/pages/footprints/index.wxml": "8fa9dc14bb6d729230e6b39538e5b339a1109d3881755ce8a6df9ab723ca70eb",
+    "apps/miniprogram/pages/footprints/index.wxss": "39ca6d1ffcea8d3ebd0576af9367b71ba7e475e4d3fc30eb4e18531aa93e5bef",
+    "apps/miniprogram/pages/footprints/embedded.js": "9277c602eec2d34f81e10c22cbd1f81120e1fd6477edfe9e3b01291ec801eba5",
+    "apps/miniprogram/pages/footprints/photos.js": "d6062c25c09580db64cf3cd009c30f7680fa950911cb773e7eb5d198574b73c5",
+    "apps/miniprogram/pages/footprints/maps.js": "649e088a2e2f4551c320b71346d124c6a03b8172a17308a5ed0d99674fb90471",
+    "apps/miniprogram/pages/footprints/presentation.js": "327d76f39cba263827efc07e5079e42400e3e83a31f3ce260a572c25067ba5c8",
+    "tests/frontend/footprints.test.js": "2caed4349cd7e33cba28a129bd35b69a5c748cf4f47de1665be405d88b704d29",
+    "tests/frontend/record-types.test.js": "8ce1ddfc0e678101c53e6beb6346a8b3a0f3300fd5f7f2d955c226883a62816c",
+    "tools/prepare_footprints_minimal_native.py": "4d65f802617050b454b255947154c12992433658059a088a07d7b4e2f1c3c427",
+    "tools/footprints_minimal_geometry.js": "e6ec626205b3483630d3597bb88ebf0cc497fb18be4a6ecff3e459d34cac57ec",
+    "tools/footprints_minimal_interactions.js": "ff8bfc795975272f5d2b7c76ba54ae7fb55cba9f0f437fc80afdbf6f5f4ac64c"
+  },
+  "native_copy_coupled_source_matches": true,
+  "native_fixture_scope": "synthetic read-only transport plus applyGeometryFixture only; no business writes",
+  "spec": "SPEC-20261024-FOOTPRINTS-MINIMAL-UI-01",
+  "design": "DREV-20261024-FOOTPRINTS-MINIMAL-01",
+  "uploaded": false,
+  "deployed": false
+}

@@ -12,7 +12,7 @@ from push_kids.planning.schemas import (
     ScheduleReviewRequest,
 )
 from push_kids.planning.service import PlanningService
-from push_kids.platform.context import family_id
+from push_kids.platform.context import RequestContext, family_id, request_context
 from push_kids.platform.dependencies import get_db
 from push_kids.platform.time import local_date
 
@@ -24,10 +24,13 @@ def review_subjects(
     child_id: str,
     family: Annotated[str, Depends(family_id)],
     db: Annotated[Session, Depends(get_db)],
+    review_status: Literal["normal", "superseded"] = "normal",
     cursor: Annotated[str | None, Query(max_length=1500)] = None,
     limit: Annotated[int, Query(ge=1, le=50)] = 20,
 ):
-    return PlanningService.inventory_subjects(db, family, child_id, cursor=cursor, limit=limit)
+    return PlanningService.inventory_subjects(
+        db, family, child_id, cursor=cursor, limit=limit, review_status=review_status
+    )
 
 
 @router.get("/children/{child_id}/review-inventory")
@@ -39,6 +42,7 @@ def review_inventory(
     offset: Annotated[int, Query(ge=1, le=2)] = 1,
     subject_id: Annotated[str | None, Query(max_length=36)] = None,
     review_count: Annotated[int | None, Query(ge=0, le=2147483647)] = None,
+    review_status: Literal["normal", "superseded"] = "normal",
     cursor: Annotated[str | None, Query(max_length=1500)] = None,
     limit: Annotated[int, Query(ge=1, le=50)] = 20,
 ):
@@ -47,6 +51,7 @@ def review_inventory(
         family,
         child_id,
         view=view,
+        review_status=review_status,
         offset=offset,
         subject_id=subject_id,
         review_count=review_count,
@@ -98,6 +103,7 @@ def daily_todos(
     family: Annotated[str, Depends(family_id)],
     db: Annotated[Session, Depends(get_db)],
     day: Annotated[date | None, Query()] = None,
+    review_status: Literal["normal", "superseded"] = "normal",
     cursor: Annotated[str | None, Query(max_length=1500)] = None,
     limit: Annotated[int, Query(ge=1, le=50)] = 50,
 ):
@@ -120,6 +126,7 @@ def upcoming_reviews(
     family: Annotated[str, Depends(family_id)],
     db: Annotated[Session, Depends(get_db)],
     after: Annotated[date | None, Query(alias="after")] = None,
+    review_status: Literal["normal", "superseded"] = "normal",
     cursor: Annotated[str | None, Query(max_length=1500)] = None,
     limit: Annotated[int, Query(ge=1, le=20)] = 20,
 ):
@@ -148,6 +155,7 @@ def feedback(
     body: FeedbackRequest,
     family: Annotated[str, Depends(family_id)],
     db: Annotated[Session, Depends(get_db)],
+    context: Annotated[RequestContext, Depends(request_context)],
     idempotency_key: Annotated[
         str | None,
         Header(
@@ -155,7 +163,9 @@ def feedback(
         ),
     ] = None,
 ):
-    return PlanningService.feedback(db, family, review_id, body.action, idempotency_key)
+    return PlanningService.feedback(
+        db, family, review_id, body.action, idempotency_key, member_id=context.member_id
+    )
 
 
 @router.post("/review-feedback-batches", response_model=BatchFeedbackResult)

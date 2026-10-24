@@ -1,0 +1,1074 @@
+{
+  "status": "PASS_NATIVE_MATRIX",
+  "passed_captures": 81,
+  "card_captures": 63,
+  "modal_captures": 18,
+  "verified_widths": [
+    320,
+    390,
+    430
+  ],
+  "not_run_widths": [],
+  "source_matches": true,
+  "shared_styles_match_copy": true,
+  "remaining_gates": [
+    "real iOS/Android",
+    "system large font/screen reader/keyboard",
+    "independent read-only review"
+  ],
+  "captures": [
+    {
+      "file": "approve-error-320.json",
+      "state": "approve-error",
+      "capturedAt": "2026-10-24T12:36:43.881Z",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "93c9d61c19a38aa955ce67476b2f0374ba976fb708986fcd76f97bd1df295806"
+    },
+    {
+      "file": "approve-error-390.json",
+      "state": "approve-error",
+      "capturedAt": "2026-10-24T12:38:05.418Z",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "0d59594991172914b0d8f0881cc8f37d576e60f73c66db2628ddb707c5deb70a"
+    },
+    {
+      "file": "approve-error-430.json",
+      "state": "approve-error",
+      "capturedAt": "2026-10-24T12:37:26.793Z",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "22f797265d8442d8441791c395e76cb180334f2fe81454e7f45bac0e37c2b18d"
+    },
+    {
+      "file": "card-disabled-320.json",
+      "state": "card-disabled",
+      "capturedAt": "2026-10-24T12:36:37.776Z",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "0bbfab6a251b7e933d771c43307954613988a6bf9aa29276b54922bb51f7905a"
+    },
+    {
+      "file": "card-disabled-390.json",
+      "state": "card-disabled",
+      "capturedAt": "2026-10-24T12:37:58.984Z",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "0120f91946b1f09ffdedcd633d870fb0f05a2d63da5a3ecd45f832b67f4857c0"
+    },
+    {
+      "file": "card-disabled-430.json",
+      "state": "card-disabled",
+      "capturedAt": "2026-10-24T12:37:20.099Z",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "dc51622b86c36d8d5fffe47a97f9ce2df58f29f7c21d7a7122a4684686838a6d"
+    },
+    {
+      "file": "card-eligible-empty-320.json",
+      "state": "card-eligible-empty",
+      "capturedAt": "2026-10-24T12:36:38.455Z",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "0bbfab6a251b7e933d771c43307954613988a6bf9aa29276b54922bb51f7905a"
+    },
+    {
+      "file": "card-eligible-empty-390.json",
+      "state": "card-eligible-empty",
+      "capturedAt": "2026-10-24T12:37:59.696Z",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "0120f91946b1f09ffdedcd633d870fb0f05a2d63da5a3ecd45f832b67f4857c0"
+    },
+    {
+      "file": "card-eligible-empty-430.json",
+      "state": "card-eligible-empty",
+      "capturedAt": "2026-10-24T12:37:20.823Z",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "dc51622b86c36d8d5fffe47a97f9ce2df58f29f7c21d7a7122a4684686838a6d"
+    },
+    {
+      "file": "card-generating-320.json",
+      "state": "card-generating",
+      "capturedAt": "2026-10-24T12:36:41.672Z",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "b751027b0c211ff91425368aa12afb411e19ec3996e89c452d970fc5fd4a8c44"
+    },
+    {
+      "file": "card-generating-390.json",
+      "state": "card-generating",
+      "capturedAt": "2026-10-24T12:38:03.050Z",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "011df077aababd3c1af057870ee12ea2842ae9ff5b485c245cc357a4a730f20b"
+    },
+    {
+      "file": "card-generating-430.json",
+      "state": "card-generating",
+      "capturedAt": "2026-10-24T12:37:24.310Z",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "2058da72fbb36d02996245515d32f5c8ae6c6f96ccc796621366d83282862ce6"
+    },
+    {
+      "file": "card-generation-error-320.json",
+      "state": "card-generation-error",
+      "capturedAt": "2026-10-24T12:36:42.009Z",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "e84b7687eb193c21947320cdbaffa38cd7fbbfb06176bc559bc4bc4fc5e06396"
+    },
+    {
+      "file": "card-generation-error-390.json",
+      "state": "card-generation-error",
+      "capturedAt": "2026-10-24T12:38:03.409Z",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "de4d0ffeeb44491d4a7277f566a79a9586215882744c782c37d0191832ac67ba"
+    },
+    {
+      "file": "card-generation-error-430.json",
+      "state": "card-generation-error",
+      "capturedAt": "2026-10-24T12:37:24.689Z",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "5649727fa10ff73bb8a575b90333779a0bd20e2d9372681d010b93400e6ac492"
+    },
+    {
+      "file": "card-inactive-320.json",
+      "state": "card-inactive",
+      "capturedAt": "2026-10-24T12:36:38.119Z",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "0bbfab6a251b7e933d771c43307954613988a6bf9aa29276b54922bb51f7905a"
+    },
+    {
+      "file": "card-inactive-390.json",
+      "state": "card-inactive",
+      "capturedAt": "2026-10-24T12:37:59.348Z",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "0120f91946b1f09ffdedcd633d870fb0f05a2d63da5a3ecd45f832b67f4857c0"
+    },
+    {
+      "file": "card-inactive-430.json",
+      "state": "card-inactive",
+      "capturedAt": "2026-10-24T12:37:20.465Z",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "dc51622b86c36d8d5fffe47a97f9ce2df58f29f7c21d7a7122a4684686838a6d"
+    },
+    {
+      "file": "card-missing-grade-320.json",
+      "state": "card-missing-grade",
+      "capturedAt": "2026-10-24T12:36:37.111Z",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "0bbfab6a251b7e933d771c43307954613988a6bf9aa29276b54922bb51f7905a"
+    },
+    {
+      "file": "card-missing-grade-390.json",
+      "state": "card-missing-grade",
+      "capturedAt": "2026-10-24T12:37:58.275Z",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "0120f91946b1f09ffdedcd633d870fb0f05a2d63da5a3ecd45f832b67f4857c0"
+    },
+    {
+      "file": "card-missing-grade-430.json",
+      "state": "card-missing-grade",
+      "capturedAt": "2026-10-24T12:37:19.382Z",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "dc51622b86c36d8d5fffe47a97f9ce2df58f29f7c21d7a7122a4684686838a6d"
+    },
+    {
+      "file": "card-network-error-320.json",
+      "state": "card-network-error",
+      "capturedAt": "2026-10-24T12:36:43.022Z",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "e47184865cc4c0a8a90d019265c8f2acee480094b3e1e80feacf56672647b6ef"
+    },
+    {
+      "file": "card-network-error-390.json",
+      "state": "card-network-error",
+      "capturedAt": "2026-10-24T12:38:04.448Z",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "d97fa62cb9f19c738dd846d68f3f2fbb84ae7a72c89ae995c95cca223cedd72a"
+    },
+    {
+      "file": "card-network-error-430.json",
+      "state": "card-network-error",
+      "capturedAt": "2026-10-24T12:37:25.788Z",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "ff34c4cca47bc09db27a7c6590b9879cc19ae52bac6a9231dc15902e2d64c3cf"
+    },
+    {
+      "file": "card-no-history-320.json",
+      "state": "card-no-history",
+      "capturedAt": "2026-10-24T12:36:36.752Z",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "0bbfab6a251b7e933d771c43307954613988a6bf9aa29276b54922bb51f7905a"
+    },
+    {
+      "file": "card-no-history-390.json",
+      "state": "card-no-history",
+      "capturedAt": "2026-10-24T12:37:57.926Z",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "0120f91946b1f09ffdedcd633d870fb0f05a2d63da5a3ecd45f832b67f4857c0"
+    },
+    {
+      "file": "card-no-history-430.json",
+      "state": "card-no-history",
+      "capturedAt": "2026-10-24T12:37:19.003Z",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "dc51622b86c36d8d5fffe47a97f9ce2df58f29f7c21d7a7122a4684686838a6d"
+    },
+    {
+      "file": "card-no-subject-320.json",
+      "state": "card-no-subject",
+      "capturedAt": "2026-10-24T12:36:37.442Z",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "0bbfab6a251b7e933d771c43307954613988a6bf9aa29276b54922bb51f7905a"
+    },
+    {
+      "file": "card-no-subject-390.json",
+      "state": "card-no-subject",
+      "capturedAt": "2026-10-24T12:37:58.622Z",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "0120f91946b1f09ffdedcd633d870fb0f05a2d63da5a3ecd45f832b67f4857c0"
+    },
+    {
+      "file": "card-no-subject-430.json",
+      "state": "card-no-subject",
+      "capturedAt": "2026-10-24T12:37:19.740Z",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "dc51622b86c36d8d5fffe47a97f9ce2df58f29f7c21d7a7122a4684686838a6d"
+    },
+    {
+      "file": "card-partial-320.json",
+      "state": "card-partial",
+      "capturedAt": "2026-10-24T12:36:40.667Z",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "71dfd20ed24a36d8c292ea5e6c6e4099dbae11b3dba654771f87c5a082b81e02"
+    },
+    {
+      "file": "card-partial-390.json",
+      "state": "card-partial",
+      "capturedAt": "2026-10-24T12:38:02.010Z",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "7a7717d4032cfaf7dbf415fe06912e8becc0155f515d3f287eb7e118e9a2ada8"
+    },
+    {
+      "file": "card-partial-430.json",
+      "state": "card-partial",
+      "capturedAt": "2026-10-24T12:37:23.226Z",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "b584dce4fda9efed8b216dc0ecf81767e0cfbe6ee4eb60bb29799bb6ab5afc68"
+    },
+    {
+      "file": "card-proposal-320.json",
+      "state": "card-proposal",
+      "capturedAt": "2026-10-24T12:36:39.473Z",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "670a6637b709d7d94d6446722859f6c99800231c7cd2f139c01276fe322eb76d"
+    },
+    {
+      "file": "card-proposal-390.json",
+      "state": "card-proposal",
+      "capturedAt": "2026-10-24T12:38:00.753Z",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "dbefb56be4ba84bf4d4f55c22c1b3bd6057024adaa9d9e0c1a3bb51dec9e705c"
+    },
+    {
+      "file": "card-proposal-430.json",
+      "state": "card-proposal",
+      "capturedAt": "2026-10-24T12:37:21.919Z",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "77a287170466f108ca275fdf7ff2ae87eff386b7ef1682ef8e3e3eb4715a0226"
+    },
+    {
+      "file": "card-proposal-long-320.json",
+      "state": "card-proposal-long",
+      "capturedAt": "2026-10-24T12:36:40.006Z",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "ff86c3bb713ababcf84d4355739492bc9b5cf7ab164b6c1b0c82cbea8dcec050"
+    },
+    {
+      "file": "card-proposal-long-390.json",
+      "state": "card-proposal-long",
+      "capturedAt": "2026-10-24T12:38:01.320Z",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "b4efebf8250813592f72ee9018c36d04caed5b84a90a72c7b6a5284a8ab911df"
+    },
+    {
+      "file": "card-proposal-long-430.json",
+      "state": "card-proposal-long",
+      "capturedAt": "2026-10-24T12:37:22.517Z",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "e24ea5b0ad01ed2f34b13e901dd0b9e6501d88f64737cf92ad522e04c64b2c4d"
+    },
+    {
+      "file": "card-recent-new-320.json",
+      "state": "card-recent-new",
+      "capturedAt": "2026-10-24T12:36:36.063Z",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "0bbfab6a251b7e933d771c43307954613988a6bf9aa29276b54922bb51f7905a"
+    },
+    {
+      "file": "card-recent-new-390.json",
+      "state": "card-recent-new",
+      "capturedAt": "2026-10-24T12:37:57.190Z",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "0120f91946b1f09ffdedcd633d870fb0f05a2d63da5a3ecd45f832b67f4857c0"
+    },
+    {
+      "file": "card-recent-new-430.json",
+      "state": "card-recent-new",
+      "capturedAt": "2026-10-24T12:37:18.253Z",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "dc51622b86c36d8d5fffe47a97f9ce2df58f29f7c21d7a7122a4684686838a6d"
+    },
+    {
+      "file": "card-recover-after-remove-320.json",
+      "state": "card-recover-after-remove",
+      "capturedAt": "2026-10-24T12:36:42.696Z",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "198183171629a59d1d9aced88e32fded11aa9e82535b5ac6b47ea688a3340a59"
+    },
+    {
+      "file": "card-recover-after-remove-390.json",
+      "state": "card-recover-after-remove",
+      "capturedAt": "2026-10-24T12:38:04.087Z",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "eb18596b54a3d05077fa86d1953970516a6167ceac5ecf13b59b6d151954b77e"
+    },
+    {
+      "file": "card-recover-after-remove-430.json",
+      "state": "card-recover-after-remove",
+      "capturedAt": "2026-10-24T12:37:25.421Z",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "44098bc0ddfabf75f1b2b6a4ac0befd82f34e043633f33699c39b8967b3c1928"
+    },
+    {
+      "file": "card-stale-320.json",
+      "state": "card-stale",
+      "capturedAt": "2026-10-24T12:36:42.346Z",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "975697a17148569ea224eade6350be0f2568735a7a90369a75003955b2a40135"
+    },
+    {
+      "file": "card-stale-390.json",
+      "state": "card-stale",
+      "capturedAt": "2026-10-24T12:38:03.748Z",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "9293e9b71fd05e73c19edf75c174e69c9b5f8d87783f656f365075bccfa0b6c8"
+    },
+    {
+      "file": "card-stale-430.json",
+      "state": "card-stale",
+      "capturedAt": "2026-10-24T12:37:25.060Z",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "f4a6f736578b886f308a6c5a213de13269f62469dee7a928396d60f208e429b0"
+    },
+    {
+      "file": "card-task-320.json",
+      "state": "card-task",
+      "capturedAt": "2026-10-24T12:36:40.341Z",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "092954578e98cbede457bb9433858507207f37957e6cb2dbc6e978a149ce9375"
+    },
+    {
+      "file": "card-task-390.json",
+      "state": "card-task",
+      "capturedAt": "2026-10-24T12:38:01.676Z",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "53d8190b1ca2267c3704fd85f218b70cb33a2c0d17c231917a73aded95822809"
+    },
+    {
+      "file": "card-task-430.json",
+      "state": "card-task",
+      "capturedAt": "2026-10-24T12:37:22.868Z",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "63820d3b9495a8d270d8542db8e35ae89d73a9f4d71347e252bb5844716f3d07"
+    },
+    {
+      "file": "card-task-feature-off-320.json",
+      "state": "card-task-feature-off",
+      "capturedAt": "2026-10-24T12:36:41.330Z",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "c4085cc085648621e0a601939903511d10e8eae2a7be1997ab2714fcf573e6ec"
+    },
+    {
+      "file": "card-task-feature-off-390.json",
+      "state": "card-task-feature-off",
+      "capturedAt": "2026-10-24T12:38:02.706Z",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "00f4a6dfab49ecfe5386b7ab171e58e58201d256272392544575ca863b05289b"
+    },
+    {
+      "file": "card-task-feature-off-430.json",
+      "state": "card-task-feature-off",
+      "capturedAt": "2026-10-24T12:37:23.950Z",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "5ad5cd053bb77a757376066589fce852ec75f5f70dcd29c4ece178d7bf6da05e"
+    },
+    {
+      "file": "card-unknown-empty-320.json",
+      "state": "card-unknown-empty",
+      "capturedAt": "2026-10-24T12:36:39.142Z",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "0bbfab6a251b7e933d771c43307954613988a6bf9aa29276b54922bb51f7905a"
+    },
+    {
+      "file": "card-unknown-empty-390.json",
+      "state": "card-unknown-empty",
+      "capturedAt": "2026-10-24T12:38:00.408Z",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "0120f91946b1f09ffdedcd633d870fb0f05a2d63da5a3ecd45f832b67f4857c0"
+    },
+    {
+      "file": "card-unknown-empty-430.json",
+      "state": "card-unknown-empty",
+      "capturedAt": "2026-10-24T12:37:21.559Z",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "dc51622b86c36d8d5fffe47a97f9ce2df58f29f7c21d7a7122a4684686838a6d"
+    },
+    {
+      "file": "card-viewer-empty-320.json",
+      "state": "card-viewer-empty",
+      "capturedAt": "2026-10-24T12:36:38.800Z",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "0bbfab6a251b7e933d771c43307954613988a6bf9aa29276b54922bb51f7905a"
+    },
+    {
+      "file": "card-viewer-empty-390.json",
+      "state": "card-viewer-empty",
+      "capturedAt": "2026-10-24T12:38:00.056Z",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "0120f91946b1f09ffdedcd633d870fb0f05a2d63da5a3ecd45f832b67f4857c0"
+    },
+    {
+      "file": "card-viewer-empty-430.json",
+      "state": "card-viewer-empty",
+      "capturedAt": "2026-10-24T12:37:21.190Z",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "dc51622b86c36d8d5fffe47a97f9ce2df58f29f7c21d7a7122a4684686838a6d"
+    },
+    {
+      "file": "card-viewer-task-320.json",
+      "state": "card-viewer-task",
+      "capturedAt": "2026-10-24T12:36:41.000Z",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "d9440c2797c0fcfa3cf38fc83a527b390e9c07937f79f148828485b22fa01237"
+    },
+    {
+      "file": "card-viewer-task-390.json",
+      "state": "card-viewer-task",
+      "capturedAt": "2026-10-24T12:38:02.363Z",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "414919fcfb4e337afad1d19e5064242deaf526b0d905dff3a159dc7822674a69"
+    },
+    {
+      "file": "card-viewer-task-430.json",
+      "state": "card-viewer-task",
+      "capturedAt": "2026-10-24T12:37:23.594Z",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "895d15e979bf3679576a78342baab31c748ea778205a9e0bdffeafcd95714f13"
+    },
+    {
+      "file": "card-warming-up-320.json",
+      "state": "card-warming-up",
+      "capturedAt": "2026-10-24T12:36:36.409Z",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "0bbfab6a251b7e933d771c43307954613988a6bf9aa29276b54922bb51f7905a"
+    },
+    {
+      "file": "card-warming-up-390.json",
+      "state": "card-warming-up",
+      "capturedAt": "2026-10-24T12:37:57.560Z",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "0120f91946b1f09ffdedcd633d870fb0f05a2d63da5a3ecd45f832b67f4857c0"
+    },
+    {
+      "file": "card-warming-up-430.json",
+      "state": "card-warming-up",
+      "capturedAt": "2026-10-24T12:37:18.627Z",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "dc51622b86c36d8d5fffe47a97f9ce2df58f29f7c21d7a7122a4684686838a6d"
+    },
+    {
+      "file": "design-320.json",
+      "state": "design",
+      "capturedAt": "2026-10-24T12:36:43.312Z",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "586e2276ff76dc1996ea2b5cd8c1f86b4b26295f096045a97654292ce36b0a56"
+    },
+    {
+      "file": "design-390.json",
+      "state": "design",
+      "capturedAt": "2026-10-24T12:38:04.775Z",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "d2b94fc226dcba8cc6f69a59197727d1d64cf35b72184874b5ae3da1a38eefb3"
+    },
+    {
+      "file": "design-430.json",
+      "state": "design",
+      "capturedAt": "2026-10-24T12:37:26.126Z",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "f9cdfb56368965a67d3fbe3d7f6e21a4d215066e68f84ade45168a7ad641eafb"
+    },
+    {
+      "file": "edit-320.json",
+      "state": "edit",
+      "capturedAt": "2026-10-24T12:36:44.162Z",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "1bd12663cbfc3c91de3abaabc169d100d42a45a5673d331af9132ee9b9d1cde1"
+    },
+    {
+      "file": "edit-390.json",
+      "state": "edit",
+      "capturedAt": "2026-10-24T12:38:05.738Z",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "2e1538c8f71d794a6c8db5e53c30e586d997296ab7be877f49b9cebf5548494c"
+    },
+    {
+      "file": "edit-430.json",
+      "state": "edit",
+      "capturedAt": "2026-10-24T12:37:27.123Z",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "7480c4c7746a11e08687cd7efd4bfb349f69bec992354334658f4d7a0c8533ed"
+    },
+    {
+      "file": "max-title-320.json",
+      "state": "max-title",
+      "capturedAt": "2026-10-24T12:36:44.452Z",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "dcfa0faf5bf759b48aa17f56c7ab146931851a24fc1e708f3ecef8d32a60fbfa"
+    },
+    {
+      "file": "max-title-390.json",
+      "state": "max-title",
+      "capturedAt": "2026-10-24T12:38:06.066Z",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "eee161c8ff3f5983c3b65c903fd39a20b87d0696435edc52caab7f5d524f6648"
+    },
+    {
+      "file": "max-title-430.json",
+      "state": "max-title",
+      "capturedAt": "2026-10-24T12:37:27.452Z",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "a9d27e5a36954b94ec87ddbaada75938c4ac59a72fb119c594f6f2f03d85cf09"
+    },
+    {
+      "file": "max-title-scrolled-320.json",
+      "state": "max-title-scrolled",
+      "capturedAt": "2026-10-24T12:36:44.751Z",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "2bcca01d23a644234623d71f1fccc537bc4d14771bbbac06c0c3fd0b8ccde7e9"
+    },
+    {
+      "file": "max-title-scrolled-390.json",
+      "state": "max-title-scrolled",
+      "capturedAt": "2026-10-24T12:38:06.387Z",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "b63bc6f1ad8073edd7d70d11f686f4f503fafd3336af995789b5c24020d17ea4"
+    },
+    {
+      "file": "max-title-scrolled-430.json",
+      "state": "max-title-scrolled",
+      "capturedAt": "2026-10-24T12:37:27.781Z",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "a9d27e5a36954b94ec87ddbaada75938c4ac59a72fb119c594f6f2f03d85cf09"
+    },
+    {
+      "file": "saving-320.json",
+      "state": "saving",
+      "capturedAt": "2026-10-24T12:36:43.599Z",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "73800b8e57dd914c47cbd8d45284c6df005a445aad530663da663fd879fda4e3"
+    },
+    {
+      "file": "saving-390.json",
+      "state": "saving",
+      "capturedAt": "2026-10-24T12:38:05.094Z",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "881e9fe4298c36828b7b3bcdd48703db3ab443e3a4479558e7c7bcc16f0b2c96"
+    },
+    {
+      "file": "saving-430.json",
+      "state": "saving",
+      "capturedAt": "2026-10-24T12:37:26.455Z",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "screenshot_sha256": "750453aedc3ec8889e9afe5f567d599e54de51d095ce05de852acd1167aa3060"
+    }
+  ]
+}

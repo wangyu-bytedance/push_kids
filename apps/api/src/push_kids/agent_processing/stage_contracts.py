@@ -8,7 +8,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 from push_kids.agent_processing.contracts import DisplayKind, ReviewMethod
 
-PIPELINE_REVISION = "staged-20261006-03"
+PIPELINE_REVISION = "staged-20261020-04"
 
 
 class StageModel(BaseModel):

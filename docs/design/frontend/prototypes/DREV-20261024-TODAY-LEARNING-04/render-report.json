@@ -1,0 +1,1043 @@
+{
+  "kind": "synthetic-html-design-only",
+  "native_acceptance": "NOT_RUN",
+  "exports": [
+    {
+      "file": "proposal-320x568.png",
+      "viewport": [
+        320,
+        568
+      ],
+      "state": "proposal",
+      "layout": {
+        "horizontal": false,
+        "badControls": 0,
+        "sheetContained": true,
+        "bodyHeight": 229.359375,
+        "overlap": false,
+        "titleHeight": 29,
+        "titleLines": 1,
+        "counter": null,
+        "titleValue": null,
+        "error": "",
+        "bodyScroll": true,
+        "legacyScroll": 0,
+        "legacyHeight": 0,
+        "busy": false,
+        "small": false
+      },
+      "sha256": "4a7e83adb3b91264c5e2d89465841370acfec738f20d9b610185e8185013a88e"
+    },
+    {
+      "file": "proposal-max-320x568.png",
+      "viewport": [
+        320,
+        568
+      ],
+      "state": "proposal-max",
+      "layout": {
+        "horizontal": false,
+        "badControls": 0,
+        "sheetContained": true,
+        "bodyHeight": 200.359375,
+        "overlap": false,
+        "titleHeight": 58,
+        "titleLines": 2,
+        "counter": null,
+        "titleValue": null,
+        "error": "",
+        "bodyScroll": true,
+        "legacyScroll": 0,
+        "legacyHeight": 0,
+        "busy": false,
+        "small": false
+      },
+      "sha256": "e1c0e1f25eab5c04e8e2bebd270354b905775c4796dc077faca30ea6e4222ee6"
+    },
+    {
+      "file": "card-max-320x568.png",
+      "viewport": [
+        320,
+        568
+      ],
+      "state": "card-max",
+      "layout": {
+        "horizontal": false,
+        "badControls": 0,
+        "sheetContained": true,
+        "bodyHeight": null,
+        "overlap": null,
+        "titleHeight": 0,
+        "titleLines": 0,
+        "counter": null,
+        "titleValue": null,
+        "error": "",
+        "bodyScroll": null,
+        "legacyScroll": 0,
+        "legacyHeight": 0,
+        "busy": false,
+        "small": false
+      },
+      "sha256": "8920c038dc9167de590c1a732937ec8849a78b8c4edac881af4201a29bde7b2a"
+    },
+    {
+      "file": "edit-320x568.png",
+      "viewport": [
+        320,
+        568
+      ],
+      "state": "edit",
+      "layout": {
+        "horizontal": false,
+        "badControls": 0,
+        "sheetContained": true,
+        "bodyHeight": 362.125,
+        "overlap": false,
+        "titleHeight": 0,
+        "titleLines": 0,
+        "counter": "10/20",
+        "titleValue": "用积木表示两组数相加",
+        "error": "",
+        "bodyScroll": true,
+        "legacyScroll": 0,
+        "legacyHeight": 0,
+        "busy": false,
+        "small": false
+      },
+      "sha256": "262975442e498a13d4efc3142fa5ecdf6f7fa737bd0e73072881c88a5f35b399"
+    },
+    {
+      "file": "edit-max-320x568.png",
+      "viewport": [
+        320,
+        568
+      ],
+      "state": "edit-max",
+      "layout": {
+        "horizontal": false,
+        "badControls": 0,
+        "sheetContained": true,
+        "bodyHeight": 362.125,
+        "overlap": false,
+        "titleHeight": 0,
+        "titleLines": 0,
+        "counter": "20/20",
+        "titleValue": "用积木表示加法并说说两组数量合起来的变化",
+        "error": "",
+        "bodyScroll": true,
+        "legacyScroll": 0,
+        "legacyHeight": 0,
+        "busy": false,
+        "small": false
+      },
+      "sha256": "4045c30d0daa8149fec6e76f752a34ddb66c1b65336a216e3106fea486d9c765"
+    },
+    {
+      "file": "edit-over-320x568.png",
+      "viewport": [
+        320,
+        568
+      ],
+      "state": "edit-over",
+      "layout": {
+        "horizontal": false,
+        "badControls": 0,
+        "sheetContained": true,
+        "bodyHeight": 362.125,
+        "overlap": false,
+        "titleHeight": 0,
+        "titleLines": 0,
+        "counter": "21/20",
+        "titleValue": "用积木表示加法并说说两组数量合起来的变化呀",
+        "error": "标题最多20字，请精简。",
+        "bodyScroll": true,
+        "legacyScroll": 0,
+        "legacyHeight": 0,
+        "busy": false,
+        "small": false
+      },
+      "sha256": "45b488dcc2061ed8976d8af9f0e1123b8acbbe5d279436d1e34bd363baecd7aa"
+    },
+    {
+      "file": "edit-empty-320x568.png",
+      "viewport": [
+        320,
+        568
+      ],
+      "state": "edit-empty",
+      "layout": {
+        "horizontal": false,
+        "badControls": 0,
+        "sheetContained": true,
+        "bodyHeight": 362.125,
+        "overlap": false,
+        "titleHeight": 0,
+        "titleLines": 0,
+        "counter": "0/20",
+        "titleValue": "",
+        "error": "请填写学习标题。",
+        "bodyScroll": true,
+        "legacyScroll": 0,
+        "legacyHeight": 0,
+        "busy": false,
+        "small": false
+      },
+      "sha256": "a661a4b8c994bb7cc846bceb24eac2f09bff5bd659df8bb882d5850e8d06be65"
+    },
+    {
+      "file": "edit-legacy-320x568.png",
+      "viewport": [
+        320,
+        568
+      ],
+      "state": "edit-legacy",
+      "layout": {
+        "horizontal": false,
+        "badControls": 0,
+        "sheetContained": true,
+        "bodyHeight": 362.125,
+        "overlap": false,
+        "titleHeight": 0,
+        "titleLines": 0,
+        "counter": "120/20",
+        "titleValue": "用小物件练习已经学过的加法用小物件练习已经学过的加法用小物件练习已经学过的加法用小物件练习已经学过的加法用小物件练习已经学过的加法用小物件练习已经学过的加法用小物件练习已经学过的加法用小物件练习已经学过的加法用小物件练习已经学过的加法用小物",
+        "error": "标题最多20字，请精简。",
+        "bodyScroll": true,
+        "legacyScroll": 0,
+        "legacyHeight": 0,
+        "busy": false,
+        "small": false
+      },
+      "sha256": "6428a74102aadfa7539279a0eebd1c29453242f3d1866d9c95cd4ff318986364"
+    },
+    {
+      "file": "edit-error-320x568.png",
+      "viewport": [
+        320,
+        568
+      ],
+      "state": "edit-error",
+      "layout": {
+        "horizontal": false,
+        "badControls": 0,
+        "sheetContained": true,
+        "bodyHeight": 362.125,
+        "overlap": false,
+        "titleHeight": 0,
+        "titleLines": 0,
+        "counter": "10/20",
+        "titleValue": "用积木表示两组数相加",
+        "error": "",
+        "bodyScroll": true,
+        "legacyScroll": 0,
+        "legacyHeight": 0,
+        "busy": false,
+        "small": false
+      },
+      "sha256": "d89f63a25b78fbaf648e2e2f3993f79c54a1095a23d86fa5b7c501183a380ea8"
+    },
+    {
+      "file": "edit-saving-320x568.png",
+      "viewport": [
+        320,
+        568
+      ],
+      "state": "edit-saving",
+      "layout": {
+        "horizontal": false,
+        "badControls": 0,
+        "sheetContained": true,
+        "bodyHeight": 362.125,
+        "overlap": false,
+        "titleHeight": 0,
+        "titleLines": 0,
+        "counter": "10/20",
+        "titleValue": "用积木表示两组数相加",
+        "error": "",
+        "bodyScroll": true,
+        "legacyScroll": 0,
+        "legacyHeight": 0,
+        "busy": true,
+        "small": false
+      },
+      "sha256": "a4d9d3259c55d900df375254186b48562f7c8b9f32763a588887655c038f54c0"
+    },
+    {
+      "file": "legacy-320x568.png",
+      "viewport": [
+        320,
+        568
+      ],
+      "state": "legacy",
+      "layout": {
+        "horizontal": false,
+        "badControls": 0,
+        "sheetContained": true,
+        "bodyHeight": 118.359375,
+        "overlap": false,
+        "titleHeight": 290,
+        "titleLines": 10,
+        "counter": null,
+        "titleValue": null,
+        "error": "",
+        "bodyScroll": true,
+        "legacyScroll": 320,
+        "legacyHeight": 170,
+        "busy": false,
+        "small": false
+      },
+      "sha256": "eeb31f956612cc486db3d1caef376ce35464ca766c5e74d9a5e4a850d7085570"
+    },
+    {
+      "file": "proposal-390x844.png",
+      "viewport": [
+        390,
+        844
+      ],
+      "state": "proposal",
+      "layout": {
+        "horizontal": false,
+        "badControls": 0,
+        "sheetContained": true,
+        "bodyHeight": 269.609375,
+        "overlap": false,
+        "titleHeight": 29,
+        "titleLines": 1,
+        "counter": null,
+        "titleValue": null,
+        "error": "",
+        "bodyScroll": false,
+        "legacyScroll": 0,
+        "legacyHeight": 0,
+        "busy": false,
+        "small": false
+      },
+      "sha256": "edc352ba0e07626f20d4d906ce690e43ac27d2b40354645b41c6f056ce076282"
+    },
+    {
+      "file": "proposal-max-390x844.png",
+      "viewport": [
+        390,
+        844
+      ],
+      "state": "proposal-max",
+      "layout": {
+        "horizontal": false,
+        "badControls": 0,
+        "sheetContained": true,
+        "bodyHeight": 269.609375,
+        "overlap": false,
+        "titleHeight": 58,
+        "titleLines": 2,
+        "counter": null,
+        "titleValue": null,
+        "error": "",
+        "bodyScroll": false,
+        "legacyScroll": 0,
+        "legacyHeight": 0,
+        "busy": false,
+        "small": false
+      },
+      "sha256": "d8b7f1fab0b394af4b0b36de64d80ff9bde34e4af0c53fe070e93c402878031a"
+    },
+    {
+      "file": "card-max-390x844.png",
+      "viewport": [
+        390,
+        844
+      ],
+      "state": "card-max",
+      "layout": {
+        "horizontal": false,
+        "badControls": 0,
+        "sheetContained": true,
+        "bodyHeight": null,
+        "overlap": null,
+        "titleHeight": 0,
+        "titleLines": 0,
+        "counter": null,
+        "titleValue": null,
+        "error": "",
+        "bodyScroll": null,
+        "legacyScroll": 0,
+        "legacyHeight": 0,
+        "busy": false,
+        "small": false
+      },
+      "sha256": "07e8cb97485a7932d1b810625bb8772de8a2db9c36173852153a687fe3640554"
+    },
+    {
+      "file": "edit-390x844.png",
+      "viewport": [
+        390,
+        844
+      ],
+      "state": "edit",
+      "layout": {
+        "horizontal": false,
+        "badControls": 0,
+        "sheetContained": true,
+        "bodyHeight": 424.21875,
+        "overlap": false,
+        "titleHeight": 0,
+        "titleLines": 0,
+        "counter": "10/20",
+        "titleValue": "用积木表示两组数相加",
+        "error": "",
+        "bodyScroll": false,
+        "legacyScroll": 0,
+        "legacyHeight": 0,
+        "busy": false,
+        "small": false
+      },
+      "sha256": "57b16acde099dc194cb67082d9699023bbc94bff0cf5ee7fcc3f47bc9d85f206"
+    },
+    {
+      "file": "edit-max-390x844.png",
+      "viewport": [
+        390,
+        844
+      ],
+      "state": "edit-max",
+      "layout": {
+        "horizontal": false,
+        "badControls": 0,
+        "sheetContained": true,
+        "bodyHeight": 424.21875,
+        "overlap": false,
+        "titleHeight": 0,
+        "titleLines": 0,
+        "counter": "20/20",
+        "titleValue": "用积木表示加法并说说两组数量合起来的变化",
+        "error": "",
+        "bodyScroll": false,
+        "legacyScroll": 0,
+        "legacyHeight": 0,
+        "busy": false,
+        "small": false
+      },
+      "sha256": "2bcecc7a56cfd0dc848d741fd01b6e7ff4b934aa4d4f65c6f36822bd7bd97759"
+    },
+    {
+      "file": "edit-over-390x844.png",
+      "viewport": [
+        390,
+        844
+      ],
+      "state": "edit-over",
+      "layout": {
+        "horizontal": false,
+        "badControls": 0,
+        "sheetContained": true,
+        "bodyHeight": 452.609375,
+        "overlap": false,
+        "titleHeight": 0,
+        "titleLines": 0,
+        "counter": "21/20",
+        "titleValue": "用积木表示加法并说说两组数量合起来的变化呀",
+        "error": "标题最多20字，请精简。",
+        "bodyScroll": false,
+        "legacyScroll": 0,
+        "legacyHeight": 0,
+        "busy": false,
+        "small": false
+      },
+      "sha256": "7a60ac3e7166054763551c0a66493bb4490a2d13b463a0f537d12cd2ca96b7b4"
+    },
+    {
+      "file": "edit-empty-390x844.png",
+      "viewport": [
+        390,
+        844
+      ],
+      "state": "edit-empty",
+      "layout": {
+        "horizontal": false,
+        "badControls": 0,
+        "sheetContained": true,
+        "bodyHeight": 452.609375,
+        "overlap": false,
+        "titleHeight": 0,
+        "titleLines": 0,
+        "counter": "0/20",
+        "titleValue": "",
+        "error": "请填写学习标题。",
+        "bodyScroll": false,
+        "legacyScroll": 0,
+        "legacyHeight": 0,
+        "busy": false,
+        "small": false
+      },
+      "sha256": "17ee6aeffbc5f2ced0b48212c92b86f67258028536b1df185b77f9151db053ca"
+    },
+    {
+      "file": "edit-legacy-390x844.png",
+      "viewport": [
+        390,
+        844
+      ],
+      "state": "edit-legacy",
+      "layout": {
+        "horizontal": false,
+        "badControls": 0,
+        "sheetContained": true,
+        "bodyHeight": 452.609375,
+        "overlap": false,
+        "titleHeight": 0,
+        "titleLines": 0,
+        "counter": "120/20",
+        "titleValue": "用小物件练习已经学过的加法用小物件练习已经学过的加法用小物件练习已经学过的加法用小物件练习已经学过的加法用小物件练习已经学过的加法用小物件练习已经学过的加法用小物件练习已经学过的加法用小物件练习已经学过的加法用小物件练习已经学过的加法用小物",
+        "error": "标题最多20字，请精简。",
+        "bodyScroll": false,
+        "legacyScroll": 0,
+        "legacyHeight": 0,
+        "busy": false,
+        "small": false
+      },
+      "sha256": "8707bd24f6aee1a92e0b97b6aadcbd5b4b08eae9a06f873f118ea2fba2f5aaf6"
+    },
+    {
+      "file": "edit-error-390x844.png",
+      "viewport": [
+        390,
+        844
+      ],
+      "state": "edit-error",
+      "layout": {
+        "horizontal": false,
+        "badControls": 0,
+        "sheetContained": true,
+        "bodyHeight": 467.390625,
+        "overlap": false,
+        "titleHeight": 0,
+        "titleLines": 0,
+        "counter": "10/20",
+        "titleValue": "用积木表示两组数相加",
+        "error": "",
+        "bodyScroll": false,
+        "legacyScroll": 0,
+        "legacyHeight": 0,
+        "busy": false,
+        "small": false
+      },
+      "sha256": "9c6a7f2ab52edb378b3a428dfc9afa9a32500977cbb64667eb2acef3ef43a4ec"
+    },
+    {
+      "file": "edit-saving-390x844.png",
+      "viewport": [
+        390,
+        844
+      ],
+      "state": "edit-saving",
+      "layout": {
+        "horizontal": false,
+        "badControls": 0,
+        "sheetContained": true,
+        "bodyHeight": 424.21875,
+        "overlap": false,
+        "titleHeight": 0,
+        "titleLines": 0,
+        "counter": "10/20",
+        "titleValue": "用积木表示两组数相加",
+        "error": "",
+        "bodyScroll": false,
+        "legacyScroll": 0,
+        "legacyHeight": 0,
+        "busy": true,
+        "small": false
+      },
+      "sha256": "c7a9ac2997774e5b2dbcf757de6efd8832a5115345f29b3cdbc580bb6df51c7f"
+    },
+    {
+      "file": "legacy-390x844.png",
+      "viewport": [
+        390,
+        844
+      ],
+      "state": "legacy",
+      "layout": {
+        "horizontal": false,
+        "badControls": 0,
+        "sheetContained": true,
+        "bodyHeight": 266.421875,
+        "overlap": false,
+        "titleHeight": 232,
+        "titleLines": 8,
+        "counter": null,
+        "titleValue": null,
+        "error": "",
+        "bodyScroll": true,
+        "legacyScroll": 262,
+        "legacyHeight": 253,
+        "busy": false,
+        "small": false
+      },
+      "sha256": "c295b31c4c24e0bebdcef6e67ec2e3d40091477b144aa0d32bc98d78477e303c"
+    },
+    {
+      "file": "proposal-430x932.png",
+      "viewport": [
+        430,
+        932
+      ],
+      "state": "proposal",
+      "layout": {
+        "horizontal": false,
+        "badControls": 0,
+        "sheetContained": true,
+        "bodyHeight": 249.265625,
+        "overlap": false,
+        "titleHeight": 29,
+        "titleLines": 1,
+        "counter": null,
+        "titleValue": null,
+        "error": "",
+        "bodyScroll": false,
+        "legacyScroll": 0,
+        "legacyHeight": 0,
+        "busy": false,
+        "small": false
+      },
+      "sha256": "5e0d08cd0cd13c9466a9a9a5ab7c3055483bd398d9331a49996dc67b5a4d5977"
+    },
+    {
+      "file": "proposal-max-430x932.png",
+      "viewport": [
+        430,
+        932
+      ],
+      "state": "proposal-max",
+      "layout": {
+        "horizontal": false,
+        "badControls": 0,
+        "sheetContained": true,
+        "bodyHeight": 249.265625,
+        "overlap": false,
+        "titleHeight": 58,
+        "titleLines": 2,
+        "counter": null,
+        "titleValue": null,
+        "error": "",
+        "bodyScroll": false,
+        "legacyScroll": 0,
+        "legacyHeight": 0,
+        "busy": false,
+        "small": false
+      },
+      "sha256": "e6481d879f51fee2f0b8b8b5091fa27858066b403c76757fcb4ba07b24387051"
+    },
+    {
+      "file": "card-max-430x932.png",
+      "viewport": [
+        430,
+        932
+      ],
+      "state": "card-max",
+      "layout": {
+        "horizontal": false,
+        "badControls": 0,
+        "sheetContained": true,
+        "bodyHeight": null,
+        "overlap": null,
+        "titleHeight": 0,
+        "titleLines": 0,
+        "counter": null,
+        "titleValue": null,
+        "error": "",
+        "bodyScroll": null,
+        "legacyScroll": 0,
+        "legacyHeight": 0,
+        "busy": false,
+        "small": false
+      },
+      "sha256": "9867c7b7bb4ff6fb61fe84a07fecaaab363c71bd0f425ad21a95852d4e7d9c88"
+    },
+    {
+      "file": "edit-430x932.png",
+      "viewport": [
+        430,
+        932
+      ],
+      "state": "edit",
+      "layout": {
+        "horizontal": false,
+        "badControls": 0,
+        "sheetContained": true,
+        "bodyHeight": 432.546875,
+        "overlap": false,
+        "titleHeight": 0,
+        "titleLines": 0,
+        "counter": "10/20",
+        "titleValue": "用积木表示两组数相加",
+        "error": "",
+        "bodyScroll": false,
+        "legacyScroll": 0,
+        "legacyHeight": 0,
+        "busy": false,
+        "small": false
+      },
+      "sha256": "eed24b98429d2ebdd0e7ee9435de8b9f9b52159adada04598ab05c2eaa162606"
+    },
+    {
+      "file": "edit-max-430x932.png",
+      "viewport": [
+        430,
+        932
+      ],
+      "state": "edit-max",
+      "layout": {
+        "horizontal": false,
+        "badControls": 0,
+        "sheetContained": true,
+        "bodyHeight": 432.546875,
+        "overlap": false,
+        "titleHeight": 0,
+        "titleLines": 0,
+        "counter": "20/20",
+        "titleValue": "用积木表示加法并说说两组数量合起来的变化",
+        "error": "",
+        "bodyScroll": false,
+        "legacyScroll": 0,
+        "legacyHeight": 0,
+        "busy": false,
+        "small": false
+      },
+      "sha256": "4582e2b6dad6c8cc2cd33eb32bdf32375f4d651c74092bdb772e4a554683d33b"
+    },
+    {
+      "file": "edit-over-430x932.png",
+      "viewport": [
+        430,
+        932
+      ],
+      "state": "edit-over",
+      "layout": {
+        "horizontal": false,
+        "badControls": 0,
+        "sheetContained": true,
+        "bodyHeight": 460.9375,
+        "overlap": false,
+        "titleHeight": 0,
+        "titleLines": 0,
+        "counter": "21/20",
+        "titleValue": "用积木表示加法并说说两组数量合起来的变化呀",
+        "error": "标题最多20字，请精简。",
+        "bodyScroll": false,
+        "legacyScroll": 0,
+        "legacyHeight": 0,
+        "busy": false,
+        "small": false
+      },
+      "sha256": "1d97492060e39265c9faf1777ff360fffcd8dd7a7431218cf6fd2a48d5d313bb"
+    },
+    {
+      "file": "edit-empty-430x932.png",
+      "viewport": [
+        430,
+        932
+      ],
+      "state": "edit-empty",
+      "layout": {
+        "horizontal": false,
+        "badControls": 0,
+        "sheetContained": true,
+        "bodyHeight": 460.9375,
+        "overlap": false,
+        "titleHeight": 0,
+        "titleLines": 0,
+        "counter": "0/20",
+        "titleValue": "",
+        "error": "请填写学习标题。",
+        "bodyScroll": false,
+        "legacyScroll": 0,
+        "legacyHeight": 0,
+        "busy": false,
+        "small": false
+      },
+      "sha256": "5d605320a05a482ebe7f7cac738efea238c460e1b5647b65b955ba3a7fe1fdca"
+    },
+    {
+      "file": "edit-legacy-430x932.png",
+      "viewport": [
+        430,
+        932
+      ],
+      "state": "edit-legacy",
+      "layout": {
+        "horizontal": false,
+        "badControls": 0,
+        "sheetContained": true,
+        "bodyHeight": 460.9375,
+        "overlap": false,
+        "titleHeight": 0,
+        "titleLines": 0,
+        "counter": "120/20",
+        "titleValue": "用小物件练习已经学过的加法用小物件练习已经学过的加法用小物件练习已经学过的加法用小物件练习已经学过的加法用小物件练习已经学过的加法用小物件练习已经学过的加法用小物件练习已经学过的加法用小物件练习已经学过的加法用小物件练习已经学过的加法用小物",
+        "error": "标题最多20字，请精简。",
+        "bodyScroll": false,
+        "legacyScroll": 0,
+        "legacyHeight": 0,
+        "busy": false,
+        "small": false
+      },
+      "sha256": "d93cade8317cdd717cef784061101c0512fe4e7d6e6cda289ee20ce08e83a277"
+    },
+    {
+      "file": "edit-error-430x932.png",
+      "viewport": [
+        430,
+        932
+      ],
+      "state": "edit-error",
+      "layout": {
+        "horizontal": false,
+        "badControls": 0,
+        "sheetContained": true,
+        "bodyHeight": 477.84375,
+        "overlap": false,
+        "titleHeight": 0,
+        "titleLines": 0,
+        "counter": "10/20",
+        "titleValue": "用积木表示两组数相加",
+        "error": "",
+        "bodyScroll": false,
+        "legacyScroll": 0,
+        "legacyHeight": 0,
+        "busy": false,
+        "small": false
+      },
+      "sha256": "1b5a6870eec5988acfcb6a41a7b753e86082b566897e4f936b272d88c2b8a567"
+    },
+    {
+      "file": "edit-saving-430x932.png",
+      "viewport": [
+        430,
+        932
+      ],
+      "state": "edit-saving",
+      "layout": {
+        "horizontal": false,
+        "badControls": 0,
+        "sheetContained": true,
+        "bodyHeight": 432.546875,
+        "overlap": false,
+        "titleHeight": 0,
+        "titleLines": 0,
+        "counter": "10/20",
+        "titleValue": "用积木表示两组数相加",
+        "error": "",
+        "bodyScroll": false,
+        "legacyScroll": 0,
+        "legacyHeight": 0,
+        "busy": true,
+        "small": false
+      },
+      "sha256": "dd4d8b5376ee64ff0207b116c919442b9ec2979d09f3217473025c613091b251"
+    },
+    {
+      "file": "legacy-430x932.png",
+      "viewport": [
+        430,
+        932
+      ],
+      "state": "legacy",
+      "layout": {
+        "horizontal": false,
+        "badControls": 0,
+        "sheetContained": true,
+        "bodyHeight": 249.265625,
+        "overlap": false,
+        "titleHeight": 232,
+        "titleLines": 8,
+        "counter": null,
+        "titleValue": null,
+        "error": "",
+        "bodyScroll": false,
+        "legacyScroll": 280,
+        "legacyHeight": 280,
+        "busy": false,
+        "small": false
+      },
+      "sha256": "724ebedf79c8772413bca9ae7a3fe2d40fd5dda99b4e606da7df0e132ef90f3d"
+    }
+  ],
+  "interactions": [
+    {
+      "viewport": [
+        320,
+        568
+      ],
+      "case": "20-code-point-save",
+      "result": "PASS"
+    },
+    {
+      "viewport": [
+        320,
+        568
+      ],
+      "case": "21-preserved-zero-write",
+      "result": "PASS"
+    },
+    {
+      "viewport": [
+        320,
+        568
+      ],
+      "case": "empty-zero-write",
+      "result": "PASS"
+    },
+    {
+      "viewport": [
+        320,
+        568
+      ],
+      "case": "legacy-no-truncation-and-shorten",
+      "result": "PASS"
+    },
+    {
+      "viewport": [
+        320,
+        568
+      ],
+      "case": "non-bmp-count-and-line-break",
+      "result": "PASS"
+    },
+    {
+      "viewport": [
+        320,
+        568
+      ],
+      "case": "save-failure-retains-form",
+      "result": "PASS"
+    },
+    {
+      "viewport": [
+        320,
+        568
+      ],
+      "case": "pending-disables-submit-and-close",
+      "result": "PASS"
+    },
+    {
+      "viewport": [
+        390,
+        844
+      ],
+      "case": "20-code-point-save",
+      "result": "PASS"
+    },
+    {
+      "viewport": [
+        390,
+        844
+      ],
+      "case": "21-preserved-zero-write",
+      "result": "PASS"
+    },
+    {
+      "viewport": [
+        390,
+        844
+      ],
+      "case": "empty-zero-write",
+      "result": "PASS"
+    },
+    {
+      "viewport": [
+        390,
+        844
+      ],
+      "case": "legacy-no-truncation-and-shorten",
+      "result": "PASS"
+    },
+    {
+      "viewport": [
+        390,
+        844
+      ],
+      "case": "non-bmp-count-and-line-break",
+      "result": "PASS"
+    },
+    {
+      "viewport": [
+        390,
+        844
+      ],
+      "case": "save-failure-retains-form",
+      "result": "PASS"
+    },
+    {
+      "viewport": [
+        390,
+        844
+      ],
+      "case": "pending-disables-submit-and-close",
+      "result": "PASS"
+    },
+    {
+      "viewport": [
+        430,
+        932
+      ],
+      "case": "20-code-point-save",
+      "result": "PASS"
+    },
+    {
+      "viewport": [
+        430,
+        932
+      ],
+      "case": "21-preserved-zero-write",
+      "result": "PASS"
+    },
+    {
+      "viewport": [
+        430,
+        932
+      ],
+      "case": "empty-zero-write",
+      "result": "PASS"
+    },
+    {
+      "viewport": [
+        430,
+        932
+      ],
+      "case": "legacy-no-truncation-and-shorten",
+      "result": "PASS"
+    },
+    {
+      "viewport": [
+        430,
+        932
+      ],
+      "case": "non-bmp-count-and-line-break",
+      "result": "PASS"
+    },
+    {
+      "viewport": [
+        430,
+        932
+      ],
+      "case": "save-failure-retains-form",
+      "result": "PASS"
+    },
+    {
+      "viewport": [
+        430,
+        932
+      ],
+      "case": "pending-disables-submit-and-close",
+      "result": "PASS"
+    }
+  ],
+  "runtime_errors": [],
+  "browser_version": {
+    "protocolVersion": "1.3",
+    "product": "Chrome/155.0.8059.85",
+    "revision": "@0e66b94549a8bd85f03fbdf189b752d6e7b63c32",
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36",
+    "jsVersion": "15.5.35.25"
+  },
+  "source_sha256": "6ebbac1c69481fc5d5d09376f6bde689e6be2a5e678b0e61a0a9dfcf3008a754"
+}

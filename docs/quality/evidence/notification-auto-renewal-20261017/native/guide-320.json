@@ -1,0 +1,120 @@
+{
+  "viewport": {
+    "width": 320,
+    "height": 504,
+    "screenHeight": 568,
+    "dpr": 2,
+    "fontScale": 15,
+    "baseLibrary": "3.17.4"
+  },
+  "nodes": {
+    ".renewal-sheet": [
+      {
+        "left": 0,
+        "right": 320,
+        "top": 83,
+        "bottom": 568,
+        "width": 320,
+        "height": 485,
+        "fontSize": "16px"
+      }
+    ],
+    ".renewal-body": [
+      {
+        "left": 20,
+        "right": 300,
+        "top": 123,
+        "bottom": 428,
+        "width": 280,
+        "height": 305,
+        "fontSize": "16px"
+      }
+    ],
+    ".renewal-actions": [
+      {
+        "left": 20,
+        "right": 300,
+        "top": 428,
+        "bottom": 548,
+        "width": 280,
+        "height": 120,
+        "fontSize": "16px"
+      }
+    ],
+    ".renewal-primary": [
+      {
+        "left": 20,
+        "right": 300,
+        "top": 444,
+        "bottom": 492,
+        "width": 280,
+        "height": 48,
+        "fontSize": "16px"
+      }
+    ],
+    ".renewal-secondary": [
+      {
+        "left": 20,
+        "right": 300,
+        "top": 502,
+        "bottom": 548,
+        "width": 280,
+        "height": 46,
+        "fontSize": "16px"
+      }
+    ],
+    ".renewal-title": [
+      {
+        "left": 20,
+        "right": 300,
+        "top": 145,
+        "bottom": 176,
+        "width": 280,
+        "height": 31,
+        "fontSize": "22px"
+      }
+    ],
+    ".renewal-copy": [
+      {
+        "left": 20,
+        "right": 300,
+        "top": 188,
+        "bottom": 236,
+        "width": 280,
+        "height": 48,
+        "fontSize": "15px"
+      },
+      {
+        "left": 20,
+        "right": 300,
+        "top": 248,
+        "bottom": 296,
+        "width": 280,
+        "height": 48,
+        "fontSize": "15px"
+      },
+      {
+        "left": 20,
+        "right": 300,
+        "top": 308,
+        "bottom": 356,
+        "width": 280,
+        "height": 48,
+        "fontSize": "15px"
+      },
+      {
+        "left": 20,
+        "right": 300,
+        "top": 368,
+        "bottom": 416,
+        "width": 280,
+        "height": 48,
+        "fontSize": "15px"
+      }
+    ]
+  },
+  "expectedWidth": 320,
+  "state": "guide",
+  "fixture": "synthetic native page; no grant/provider invocation",
+  "screenshot": "NOT_RUN: automation screenshot unavailable; CUA samples separate"
+}

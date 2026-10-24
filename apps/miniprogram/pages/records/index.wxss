@@ -8,14 +8,21 @@
   padding-bottom: var(--pk-s3);
 }
 
-.record-intro { display: flex; align-items: center; gap: 16rpx; margin-top: 12rpx; padding: 32rpx 28rpx; }
-.record-intro-copy { position: relative; z-index: 1; flex: 1; min-width: 0; }
-.record-intro .pg-title { display: block; overflow-wrap: anywhere; }
-.record-intro picker { margin-top: 20rpx; }
-.record-intro .child-chip { max-width: 100%; min-height: 44px; box-sizing: border-box; }
-.record-intro .child-chip .chip-nm { min-width: 0; max-width: 200rpx; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.record-intro-art { position: relative; flex: none; width: 240rpx; height: 240rpx; pointer-events: none; }
-.child-chip.single { padding-right: 28rpx; }
+.record-heading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; padding: 0 16px 16px; overflow: visible; }
+.record-heading picker { flex: none; min-width: 44px; max-width: 100%; margin-left: auto; }
+.record-heading .child-chip { height: auto; min-height: 44px; max-width: 100%; margin: 0; padding: 6px 12px 6px 6px; gap: 8px; font-size: 14px; }
+.record-heading .ava { width: 28px; height: 28px; line-height: 28px; font-size: 14px; }
+.record-child-name { min-width: 0; overflow-wrap: anywhere; word-break: break-all; text-align: left; }
+.record-type-title, .record-type-choice { min-width: 44px; max-width: none; margin: 0; padding: 8px 12px; box-sizing: border-box; min-height: 44px; line-height: 1.5; background: transparent; color: var(--pk-ink); border-radius: var(--pk-r-md); }
+.record-type-title::after, .record-type-choice::after { border: none; }
+.record-heading .record-type-title { display: flex; align-items: center; gap: 8px; width: auto; max-width: none; margin: 0; padding-left: 0; padding-right: 0; font-family: var(--pk-serif); font-size: 22px; flex: none; }
+.record-type-dismiss { position: fixed; inset: 0; z-index: 150; background: transparent; }
+.record-type-anchor { position: relative; flex: none; }
+.record-type-anchor.is-open { z-index: 151; }
+.record-type-menu { position: absolute; top: calc(100% + 8px); left: 0; width: 200px; max-width: calc(100vw - 32px); box-sizing: border-box; padding: 4px; border: var(--pk-border-line); border-radius: 12px; background: var(--pk-surface); box-shadow: var(--pk-e1); }
+.record-type-menu .record-type-choice { width: 100%; max-width: none; display: flex; align-items: center; gap: 12px; min-height: 48px; margin: 0; text-align: left; font-size: 14px; }
+.record-type-choice text { flex: 1; min-width: 0; }
+.record-type-choice.selected { color: var(--pk-primary); background: var(--pk-primary-tint); }
 
 /* 两行文案的提示条（错误态需要标题 + 说明） */
 .pk-notice .n-txt .n-t { display: block; font-size: 14px; font-weight: 600; line-height: 1.45; }

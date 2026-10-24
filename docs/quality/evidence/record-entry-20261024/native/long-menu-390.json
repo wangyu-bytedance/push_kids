@@ -1,0 +1,201 @@
+{
+  "nodes": {
+    ".record-heading": [
+      {
+        "left": 0,
+        "right": 390,
+        "top": 87,
+        "bottom": 212,
+        "width": 390,
+        "height": 125,
+        "fontSize": "16px",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "position": "static",
+        "overflowX": "visible",
+        "overflowY": "visible"
+      }
+    ],
+    ".record-type-title": [
+      {
+        "left": 16,
+        "right": 120,
+        "top": 87,
+        "bottom": 136,
+        "width": 104,
+        "height": 49,
+        "fontSize": "22px",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "position": "relative",
+        "overflowX": "hidden",
+        "overflowY": "hidden"
+      }
+    ],
+    ".child-chip": [
+      {
+        "left": 16,
+        "right": 374,
+        "top": 144,
+        "bottom": 196,
+        "width": 358,
+        "height": 52,
+        "fontSize": "14px",
+        "backgroundColor": "rgb(255, 253, 248)",
+        "position": "static",
+        "overflowX": "visible",
+        "overflowY": "visible"
+      }
+    ],
+    ".ava": [
+      {
+        "left": 23,
+        "right": 51,
+        "top": 156,
+        "bottom": 184,
+        "width": 28,
+        "height": 28,
+        "fontSize": "14px",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "position": "static",
+        "overflowX": "visible",
+        "overflowY": "visible"
+      }
+    ],
+    ".record-child-name": [
+      {
+        "left": 59,
+        "right": 345,
+        "top": 151,
+        "bottom": 189,
+        "width": 286,
+        "height": 38,
+        "fontSize": "14px",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "position": "static",
+        "overflowX": "visible",
+        "overflowY": "visible"
+      }
+    ],
+    ".child-chip .chev": [
+      {
+        "left": 352.7573547363281,
+        "right": 364.0710754394531,
+        "top": 162.92892456054688,
+        "bottom": 174.24264526367188,
+        "width": 11.313720703125,
+        "height": 11.313720703125,
+        "fontSize": "14px",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "position": "static",
+        "overflowX": "visible",
+        "overflowY": "visible"
+      }
+    ],
+    ".record-type-menu": [
+      {
+        "left": 16,
+        "right": 216,
+        "top": 144,
+        "bottom": 250,
+        "width": 200,
+        "height": 106,
+        "fontSize": "16px",
+        "backgroundColor": "rgb(255, 253, 248)",
+        "position": "absolute",
+        "overflowX": "visible",
+        "overflowY": "visible"
+      }
+    ],
+    ".record-type-choice": [
+      {
+        "left": 21,
+        "right": 211,
+        "top": 149,
+        "bottom": 197,
+        "width": 190,
+        "height": 48,
+        "fontSize": "14px",
+        "backgroundColor": "rgb(228, 237, 230)",
+        "position": "relative",
+        "overflowX": "hidden",
+        "overflowY": "hidden"
+      },
+      {
+        "left": 21,
+        "right": 211,
+        "top": 197,
+        "bottom": 245,
+        "width": 190,
+        "height": 48,
+        "fontSize": "14px",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "position": "relative",
+        "overflowX": "hidden",
+        "overflowY": "hidden"
+      }
+    ],
+    ".record-type-dismiss": [
+      {
+        "left": 0,
+        "right": 390,
+        "top": 0,
+        "bottom": 844,
+        "width": 390,
+        "height": 844,
+        "fontSize": "16px",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "position": "fixed",
+        "overflowX": "visible",
+        "overflowY": "visible"
+      }
+    ],
+    ".tabbar": [
+      {
+        "left": 0,
+        "right": 390,
+        "top": 754,
+        "bottom": 844,
+        "width": 390,
+        "height": 90,
+        "fontSize": "16px",
+        "backgroundColor": "rgba(255, 253, 248, 0.92)",
+        "position": "fixed",
+        "overflowX": "visible",
+        "overflowY": "visible"
+      }
+    ],
+    ".is-center .key": [
+      {
+        "left": 168,
+        "right": 222,
+        "top": 739,
+        "bottom": 791,
+        "width": 54,
+        "height": 52,
+        "fontSize": "16px",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "position": "relative",
+        "overflowX": "visible",
+        "overflowY": "visible"
+      }
+    ]
+  },
+  "scrollLeft": 0,
+  "scrollTop": 0,
+  "viewport": {
+    "width": 390,
+    "height": 844,
+    "screenHeight": 844,
+    "dpr": 3,
+    "baseLibrary": "3.17.4",
+    "fontScale": 15
+  },
+  "recordType": "learning",
+  "menu": true,
+  "sheet": false,
+  "counts": null,
+  "state": "long-menu",
+  "errors": [],
+  "capturedAt": "2026-10-24T11:59:10.638Z",
+  "screenshot": "long-menu-390.png",
+  "screenshotSha256": "7349c88a6515880e998f47b7f8c4ce4bb3d6f4fb0d57f2b9ae80c0b19531cbf8"
+}

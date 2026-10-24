@@ -1,0 +1,21 @@
+.grade-overlay { position: fixed; inset: 0; z-index: 160; display: flex; align-items: flex-end; justify-content: center; }
+.grade-mask { position: absolute; inset: 0; background: rgba(34,38,31,.32); }
+.grade-sheet { position: relative; width: 100%; max-width: 480px; max-height: calc(100vh - 74px); box-sizing: border-box; background: #FFFDF8; color: #22261F; border-radius: 40rpx 40rpx 0 0; padding: 14px 20px calc(20px + env(safe-area-inset-bottom)); display: flex; flex-direction: column; }
+.grade-handle { flex: none; width: 36px; height: 4px; background: #DDD6C4; border-radius: 4px; margin: 0 auto 20px; }
+.grade-body { flex: 1; min-height: 0; max-height: 60vh; }
+.grade-title, .grade-latest, .grade-error { display: block; }
+.grade-title { font: 600 22px/1.45 "Songti SC",serif; margin-bottom: 20px; overflow-wrap: anywhere; word-break: break-all; }
+.grade-picker { min-height: 52px; box-sizing: border-box; padding: 12px 14px; border: 1px solid #D4D9CB; border-radius: 24rpx; display: flex; align-items: center; justify-content: space-between; font-size: 18px; line-height: 26px; }
+.grade-picker-disabled { background: #F3F4ED; color: #464E43; }
+.grade-chevron { width: 7px; height: 7px; border-right: 1.5px solid #464E43; border-bottom: 1.5px solid #464E43; transform: rotate(45deg); margin-right: 3px; }
+.grade-latest { font-size: 20px; line-height: 1.5; }
+.grade-actions { flex: none; display: flex; gap: 12px; margin-top: 20px; }
+.grade-sheet .grade-actions .grade-primary, .grade-sheet .grade-actions .grade-secondary { width: 0; min-width: 44px; max-width: none; min-height: 48px; margin: 0; box-sizing: border-box; padding: 12px; border-radius: 24rpx; font-size: 16px; line-height: 24px; }
+.grade-sheet .grade-actions .grade-primary { flex: 2; }
+.grade-sheet .grade-actions .grade-secondary { flex: 1; }
+.grade-primary::after, .grade-secondary::after { border: 0; }
+.grade-primary { background: #1F5B45; color: #FFFDF8; font-weight: 600; }
+.grade-secondary { background: #F3EFE4; color: #464E43; font-weight: 400; }
+.grade-sheet .grade-actions .grade-primary[disabled], .grade-sheet .grade-actions .grade-secondary[disabled] { background: #E6ECE4; color: #464E43; }
+.grade-error { font-size: 14px; line-height: 1.6; margin-top: 12px; color: #87432F; }
+.grade-info { color: #355466; }

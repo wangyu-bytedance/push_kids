@@ -22,6 +22,7 @@ from push_kids.agent_processing.contracts import (
     review_candidate_key,
     unique_knowledge_points,
 )
+from push_kids.agent_processing.coverage_jobs import ensure_coverage_job
 from push_kids.agent_processing.history_search import add_search_terms
 from push_kids.agent_processing.presentation import project_display_groups
 from push_kids.agent_processing.subject_routing import (
@@ -31,6 +32,7 @@ from push_kids.agent_processing.subject_routing import (
 )
 from push_kids.children.service import ChildrenService, is_custom_subject
 from push_kids.knowledge.normalization import normalize_knowledge_name
+from push_kids.learning.coverage import apply_confirmed_coverage
 from push_kids.learning.schemas import (
     ConfirmationResult,
     ConfirmedRecord,
@@ -1055,7 +1057,13 @@ class LearningService:
 
     @classmethod
     def confirm(
-        cls, db: Session, family_id: str, submission_id: str, data: ConfirmSubmission
+        cls,
+        db: Session,
+        family_id: str,
+        submission_id: str,
+        data: ConfirmSubmission,
+        *,
+        coverage_enabled: bool = True,
     ) -> ConfirmationResult:
         # Match checkpoint/deletion lock order, including conversion of a running job
         # to manual input. Read scope first, then re-read the submission under its lock.
@@ -1192,6 +1200,7 @@ class LearningService:
 
         records: list[ConfirmedRecord] = []
         kept_points: list[KnowledgeProposal] = []
+        coverage_confirmed: list[tuple] = []
         for subject, summary, points in plans:
             record, knowledge_ids, review_ids = cls._create_learning_record(
                 db,
@@ -1212,6 +1221,7 @@ class LearningService:
                 )
             )
             kept_points.extend(points)
+            coverage_confirmed.extend(zip(points, knowledge_ids, strict=True))
         # The stored draft keeps exactly what was written, with every point carrying its subject.
         data.proposal.knowledge_points = kept_points
         if records:
@@ -1237,6 +1247,11 @@ class LearningService:
                     active=transition.active,
                 )
             )
+        if not data.manual_entry and coverage_enabled:
+            apply_confirmed_coverage(
+                db, family_id, str(submission.child_id), stored_proposal, coverage_confirmed
+            )
+        data.proposal.coverage_matches = []
         if data.manual_entry:
             data.proposal.source = "人工录入"
             if job and job.state in {
@@ -1253,6 +1268,9 @@ class LearningService:
         submission.error_code = None
         submission.error_message = None
         submission.confirmed_at = utcnow()
+        from push_kids.knowledge.learning_context import invalidate_input
+
+        invalidate_input(db, family_id, str(submission.child_id))
         ChildrenService.invalidate_review_inventory(db, family_id, str(submission.child_id))
         purge_stages(db, family_id, submission_id=submission_id)
         db.commit()
@@ -1441,6 +1459,9 @@ class LearningService:
             if point.existing_knowledge_id and knowledge is None:
                 raise ValueError("关联知识点与所选科目或编辑内容不一致，请取消关联后重试")
             if knowledge is None:
+                from push_kids.knowledge.learning_context import record_confirmation
+
+                record_confirmation(db, family_id, str(submission.child_id), new_knowledge=True)
                 knowledge = KnowledgeItem(
                     family_id=family_id,
                     child_id=submission.child_id,
@@ -1464,6 +1485,7 @@ class LearningService:
                 # Never fill source evidence from a later submission: its image indices belong
                 # to a different media batch than the review's first source_submission_id.
             add_search_terms(db, knowledge)
+            ensure_coverage_job(db, knowledge)
             db.add(
                 KnowledgeOccurrence(
                     family_id=family_id,

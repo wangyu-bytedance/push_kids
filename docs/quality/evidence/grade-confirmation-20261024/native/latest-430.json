@@ -1,0 +1,114 @@
+{
+  "nodes": {
+    ".grade-sheet": [
+      {
+        "left": 0,
+        "right": 430,
+        "top": 586,
+        "bottom": 932,
+        "width": 430,
+        "height": 346,
+        "fontSize": "16px"
+      }
+    ],
+    ".grade-body": [
+      {
+        "left": 20,
+        "right": 410,
+        "top": 622,
+        "bottom": 806,
+        "width": 390,
+        "height": 184,
+        "fontSize": "16px"
+      }
+    ],
+    ".grade-title": [
+      {
+        "left": 20,
+        "right": 410,
+        "top": 650,
+        "bottom": 684,
+        "width": 390,
+        "height": 34,
+        "fontSize": "24px"
+      }
+    ],
+    ".grade-name": [
+      {
+        "left": 20,
+        "right": 410,
+        "top": 696,
+        "bottom": 723,
+        "width": 390,
+        "height": 27,
+        "fontSize": "18px"
+      }
+    ],
+    ".grade-current": [
+      {
+        "left": 20,
+        "right": 410,
+        "top": 726,
+        "bottom": 748,
+        "width": 390,
+        "height": 22,
+        "fontSize": "14px"
+      }
+    ],
+    ".grade-intro": [
+      {
+        "left": 20,
+        "right": 410,
+        "top": 762,
+        "bottom": 786,
+        "width": 390,
+        "height": 24,
+        "fontSize": "15px"
+      }
+    ],
+    ".grade-picker": [],
+    ".grade-shared": [],
+    ".grade-error": [],
+    ".grade-actions": [
+      {
+        "left": 20,
+        "right": 410,
+        "top": 806,
+        "bottom": 878,
+        "width": 390,
+        "height": 72,
+        "fontSize": "16px"
+      }
+    ],
+    ".grade-primary": [
+      {
+        "left": 20,
+        "right": 410,
+        "top": 830,
+        "bottom": 878,
+        "width": 390,
+        "height": 48,
+        "fontSize": "16px"
+      }
+    ],
+    ".grade-secondary": [],
+    ".tabbar": []
+  },
+  "viewport": {
+    "width": 430,
+    "height": 932,
+    "screenHeight": 932,
+    "dpr": 3,
+    "fontScale": 15,
+    "baseLibrary": "3.17.4"
+  },
+  "state": "latest",
+  "errors": [],
+  "fixture": "synthetic presentation only; actual lifecycle covered by frontend tests",
+  "capturedAt": "2026-10-24T11:34:35.352Z",
+  "screenshotSha256": "fe6dabf15dc548a8ed409dd39684f24ba7c780c68d05edd761c1fd12633dd00d",
+  "screenshotPixels": {
+    "width": 860,
+    "height": 1864
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "spec_revision": "OPS-SPEC-20261023-FULLSTACK-TEST-DEPLOYMENT-04",
+  "source": "Official read-only version listing; snapshots recorded during this execution",
+  "user_confirmation": "34已删除，35流量100% (call_e3f0c1f666d641359e216d9c66f96a49)",
+  "samples": [
+    {"observed_at": "2026-10-24T03:01:16.668Z", "035_status": "normal", "035_flow": 100, "035_replicas": 1, "034_deleted": true, "old_code_replicas": 0},
+    {"observed_at": "2026-10-24T03:02:08.461Z", "035_status": "normal", "035_flow": 100, "035_replicas": 1, "034_deleted": true, "old_code_replicas": 0},
+    {"observed_at": "2026-10-24T03:03:04.586Z", "035_status": "normal", "035_flow": 100, "035_replicas": 1, "034_deleted": true, "old_code_replicas": 0},
+    {"observed_at": "2026-10-24T03:03:33.421Z", "035_status": "normal", "035_flow": 100, "035_replicas": 1, "034_deleted": true, "old_code_replicas": 0}
+  ],
+  "span_seconds": 136.753,
+  "coverage_disabled_in_base_and_035": true,
+  "schema_after": "20261020_0022",
+  "task_observations": {
+    "at": ["2026-10-24T03:02:08Z", "2026-10-24T03:03:33Z"],
+    "analysis_running": 0,
+    "analysis_queued": 0,
+    "deletion_running": 0,
+    "deletion_queued": 0,
+    "notification_sending": 0,
+    "other_visible_innodb_transactions": 0
+  },
+  "real_get_smoke": "PASS; cloud-smoke-035.json; 18 of 18 HTTP 200",
+  "client_entry": "PASS; client-local-entry.json; full project, real account, travel timeline",
+  "status": "PASS_WITH_LIMITS",
+  "limits": [
+    "Four control-plane snapshots, not a continuous event trace",
+    "Transaction visibility is subject to account privileges",
+    "User completed cutover before directed pre-cutover checks; those checks remain NOT_RUN",
+    "Application user-log query unavailable (TopicNotExist); no claim of zero runtime errors or production percentile latency",
+    "Real photo uploads, cross-account isolation, writes, maps and AI effects remain user/product acceptance work"
+  ]
+}

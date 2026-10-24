@@ -134,6 +134,7 @@ def load_candidates(
             ReviewItem.last_feedback,
             ReviewItem.source_submission_id,
             ReviewItem.review_count,
+            ReviewItem.state_version,
             q.anchor_on,
             q.manual,
             served.c.served,

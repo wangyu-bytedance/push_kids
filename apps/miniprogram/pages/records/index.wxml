@@ -1,19 +1,25 @@
+<view aria-hidden="{{gradeConfirmationVisible}}">
 <primary-nav></primary-nav>
-<view class="page record-page {{canWrite && children.length ? 'sticky-cta' : ''}}">
-  <view class="pg-head pk-hero record-intro">
-    <view class="record-intro-copy">
-      <text class="pg-title">一笔一画，都算数</text>
-      <picker wx:if="{{children.length}}" range="{{children}}" range-key="name" value="{{childIndex}}" bindchange="changeChild">
-        <view class="child-chip {{children.length === 1 ? 'single' : ''}}">
-          <text class="ava">{{children[childIndex].avatar}}</text>
-          <text class="chip-nm">{{children[childIndex].name}}</text>
-          <view class="chev" wx:if="{{children.length > 1}}"></view>
-        </view>
-      </picker>
+<view class="record-type-dismiss" wx:if="{{recordTypeOpen}}" catchtap="closeRecordTypes" catchtouchmove="closeRecordTypes" aria-hidden="{{true}}"></view>
+<view class="page record-heading" aria-hidden="{{travelOverlayOpen}}">
+  <view class="record-type-anchor {{recordTypeOpen ? 'is-open' : ''}}">
+    <button class="record-type-title" bindtap="openRecordTypes" aria-label="切换记录类型，当前{{recordType === 'travel' ? '旅行日记' : '学习记录'}}" aria-expanded="{{recordTypeOpen}}">
+      <text>{{recordType === 'travel' ? '旅行日记' : '学习记录'}}</text><view class="chev {{recordTypeOpen ? 'up' : ''}}" aria-hidden="{{true}}"></view>
+    </button>
+    <view class="record-type-menu" wx:if="{{recordTypeOpen}}" catchtap="keepRecordTypesOpen" aria-label="记录类型">
+      <button class="record-type-choice {{recordType === 'learning' ? 'selected' : ''}}" data-type="learning" bindtap="selectRecordType" disabled="{{recordSwitching}}" aria-pressed="{{recordType === 'learning'}}"><view class="ico ico-book-pri sm" aria-hidden="{{true}}"></view><text>学习记录</text><view wx:if="{{recordType === 'learning'}}" class="ico ico-check-pri sm" aria-hidden="{{true}}"></view></button>
+      <button class="record-type-choice {{recordType === 'travel' ? 'selected' : ''}}" data-type="travel" bindtap="selectRecordType" disabled="{{recordSwitching}}" aria-pressed="{{recordType === 'travel'}}"><view class="ico ico-camera-pri sm" aria-hidden="{{true}}"></view><text>旅行日记</text><view wx:if="{{recordType === 'travel'}}" class="ico ico-check-pri sm" aria-hidden="{{true}}"></view></button>
     </view>
-    <image class="record-intro-art" wx:if="{{!introArtFailed}}" src="/assets/illustrations/record-books.png" mode="aspectFit"
-      aria-hidden="{{true}}" data-art="intro" binderror="onIllustrationError"></image>
   </view>
+  <picker wx:if="{{recordType === 'learning' && children.length}}" range="{{children}}" range-key="name" value="{{childIndex}}" bindchange="changeChild" disabled="{{saving}}" aria-hidden="{{recordTypeOpen}}" aria-label="切换孩子，当前{{children[childIndex].name}}">
+    <view class="child-chip"><view class="ava" aria-hidden="{{true}}">{{children[childIndex].avatar}}</view><text class="record-child-name">{{children[childIndex].name}}</text><view wx:if="{{children.length > 1}}" class="chev" aria-hidden="{{true}}"></view></view>
+  </picker>
+  <picker wx:if="{{recordType === 'travel' && travelChildren.length}}" range="{{travelChildren}}" range-key="label" value="{{travelChildIndex}}" bindchange="changeTravelChild" aria-hidden="{{recordTypeOpen}}" aria-label="切换孩子，当前{{travelChildren[travelChildIndex].label}}">
+    <view class="child-chip"><view class="ava" aria-hidden="{{true}}">{{travelChildren[travelChildIndex].avatar}}</view><text class="record-child-name">{{travelChildren[travelChildIndex].label}}</text><view wx:if="{{travelChildren.length > 1}}" class="chev" aria-hidden="{{true}}"></view></view>
+  </picker>
+</view>
+<view aria-hidden="{{recordTypeOpen}}"><travel-diary wx:if="{{recordType === 'travel'}}" id="travel-diary" initial-child-id="{{travelChildId}}" menu-open="{{recordTypeOpen}}" bindcontextchange="travelContextChanged" bindsheetchange="travelOverlayChanged"></travel-diary></view>
+<view hidden="{{recordType !== 'learning'}}" aria-hidden="{{recordTypeOpen || recordType !== 'learning'}}" class="page record-page {{canWrite && children.length ? 'sticky-cta' : ''}}">
 
   <view class="pk-notice err" wx:if="{{error}}">
     <view class="ico ico-cloud-off-dan sm"></view>
@@ -146,7 +152,7 @@
   </block>
 </view>
 
-<view class="pk-cta-bar record-cta" wx:if="{{children.length && canWrite}}">
+<view class="pk-cta-bar record-cta" aria-hidden="{{recordTypeOpen}}" wx:if="{{recordType === 'learning' && children.length && canWrite}}">
   <view class="action-row submit-row">
     <view class="btn {{saving ? 'is-disabled' : ''}}" aria-role="button" aria-label="{{saving ? (photos.length ? '正在上传照片' : '正在提交文字记录') : (photos.length ? '上传并整理' : (hasText ? '提交整理' : '添加照片或文字后继续'))}}" bindtap="save">
       <view class="ico ico-sparkle-inv sm" wx:if="{{!saving}}"></view>
@@ -155,3 +161,6 @@
   </view>
   <text class="help center">提交后会先生成待确认的草稿，确认后才进入学习档案。</text>
 </view>
+
+</view>
+<grade-confirmation id="grade-confirmation" view="{{gradeConfirmation}}" blocked="{{loading || saving || hasText || photos.length || voiceBusy || voiceOverflowOpen || recordTypeOpen || travelOverlayOpen || recordSwitching}}" bindaction="onGradeConfirmation"></grade-confirmation>

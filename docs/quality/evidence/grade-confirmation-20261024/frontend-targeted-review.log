@@ -1,0 +1,328 @@
+TAP version 13
+# Subtest: child selection falls back when the stored child was archived
+ok 1 - child selection falls back when the stored child was archived
+  ---
+  duration_ms: 1.092208
+  type: 'test'
+  ...
+# Subtest: child selection keeps the parent's choice and derives switcher labels
+ok 2 - child selection keeps the parent's choice and derives switcher labels
+  ---
+  duration_ms: 0.149417
+  type: 'test'
+  ...
+# Subtest: preschool choices are granular and legacy values remain lossless
+ok 3 - preschool choices are granular and legacy values remain lossless
+  ---
+  duration_ms: 0.38925
+  type: 'test'
+  ...
+# Subtest: selection sync writes the fallback back into global state exactly once
+ok 4 - selection sync writes the fallback back into global state exactly once
+  ---
+  duration_ms: 0.1445
+  type: 'test'
+  ...
+# Subtest: the profile ceiling matches the server and ignores archived profiles
+ok 5 - the profile ceiling matches the server and ignores archived profiles
+  ---
+  duration_ms: 0.096959
+  type: 'test'
+  ...
+# Subtest: settings loads active and archived profiles for the top-right manager
+ok 6 - settings loads active and archived profiles for the top-right manager
+  ---
+  duration_ms: 1.589291
+  type: 'test'
+  ...
+# Subtest: settings opens the top-right profile manager for one child and closes it before editing
+ok 7 - settings opens the top-right profile manager for one child and closes it before editing
+  ---
+  duration_ms: 1.25425
+  type: 'test'
+  ...
+# Subtest: settings profile management lives in the sheet instead of the main page
+ok 8 - settings profile management lives in the sheet instead of the main page
+  ---
+  duration_ms: 0.394458
+  type: 'test'
+  ...
+# Subtest: settings drops a stale response when the parent switched child mid-flight
+ok 9 - settings drops a stale response when the parent switched child mid-flight
+  ---
+  duration_ms: 5.45
+  type: 'test'
+  ...
+# Subtest: settings refuses to add a profile past the ceiling and never navigates
+ok 10 - settings refuses to add a profile past the ceiling and never navigates
+  ---
+  duration_ms: 1.204292
+  type: 'test'
+  ...
+# Subtest: read-only members cannot reach the profile form
+ok 11 - read-only members cannot reach the profile form
+  ---
+  duration_ms: 0.816
+  type: 'test'
+  ...
+# Subtest: creating a profile seeds the picked subjects and switches to the new child
+ok 12 - creating a profile seeds the picked subjects and switches to the new child
+  ---
+  duration_ms: 1.382583
+  type: 'test'
+  ...
+# Subtest: an unbound user is returned to the family gate before loading children
+ok 13 - an unbound user is returned to the family gate before loading children
+  ---
+  duration_ms: 0.684042
+  type: 'test'
+  ...
+# Subtest: creating a preschool profile submits the selected class verbatim
+ok 14 - creating a preschool profile submits the selected class verbatim
+  ---
+  duration_ms: 1.136875
+  type: 'test'
+  ...
+# Subtest: editing a legacy preschool grade shows an explicit label and preserves its stored value
+ok 15 - editing a legacy preschool grade shows an explicit label and preserves its stored value
+  ---
+  duration_ms: 0.877458
+  type: 'test'
+  ...
+# Subtest: editing an unknown valid grade keeps it visible and lossless
+ok 16 - editing an unknown valid grade keeps it visible and lossless
+  ---
+  duration_ms: 1.099792
+  type: 'test'
+  ...
+# Subtest: an empty name never reaches the server
+ok 17 - an empty name never reaches the server
+  ---
+  duration_ms: 0.768958
+  type: 'test'
+  ...
+# Subtest: a rejected create keeps the form so the parent can fix the name
+ok 18 - a rejected create keeps the form so the parent can fix the name
+  ---
+  duration_ms: 0.9815
+  type: 'test'
+  ...
+# Subtest: editing an archived profile shows restore instead of archive
+ok 19 - editing an archived profile shows restore instead of archive
+  ---
+  duration_ms: 0.878125
+  type: 'test'
+  ...
+# Subtest: archiving asks first and reports the server's refusal
+ok 20 - archiving asks first and reports the server's refusal
+  ---
+  duration_ms: 0.974542
+  type: 'test'
+  ...
+# Subtest: archiving warns how many records are still unfinished but never blocks
+ok 21 - archiving warns how many records are still unfinished but never blocks
+  ---
+  duration_ms: 0.779083
+  type: 'test'
+  ...
+# Subtest: an unreadable dashboard falls back to the plain archive copy
+ok 22 - an unreadable dashboard falls back to the plain archive copy
+  ---
+  duration_ms: 0.630542
+  type: 'test'
+  ...
+# Subtest: an archived profile never asks the server for unfinished counts
+ok 23 - an archived profile never asks the server for unfinished counts
+  ---
+  duration_ms: 1.058708
+  type: 'test'
+  ...
+# Subtest: ordinary launch enters the family bootstrap gate before business tabs
+ok 24 - ordinary launch enters the family bootstrap gate before business tabs
+  ---
+  duration_ms: 3.090375
+  type: 'test'
+  ...
+# Subtest: family bootstrap states route without treating empty children or errors as no family
+ok 25 - family bootstrap states route without treating empty children or errors as no family
+  ---
+  duration_ms: 2.356916
+  type: 'test'
+  ...
+# Subtest: family onboarding creates the family without attempting to create a child
+ok 26 - family onboarding creates the family without attempting to create a child
+  ---
+  duration_ms: 0.603292
+  type: 'test'
+  ...
+# Subtest: join preview explains approval and does not expose family records
+ok 27 - join preview explains approval and does not expose family records
+  ---
+  duration_ms: 0.363333
+  type: 'test'
+  ...
+# Subtest: manual family join accepts only six digits and carries the code to preview
+ok 28 - manual family join accepts only six digits and carries the code to preview
+  ---
+  duration_ms: 1.140833
+  type: 'test'
+  ...
+# Subtest: manager pages expose explicit role choices and last-manager errors stay server-owned
+ok 29 - manager pages expose explicit role choices and last-manager errors stay server-owned
+  ---
+  duration_ms: 1.217042
+  type: 'test'
+  ...
+# Subtest: member management uses a detail sheet and never offers self removal
+ok 30 - member management uses a detail sheet and never offers self removal
+  ---
+  duration_ms: 0.164375
+  type: 'test'
+  ...
+# Subtest: manager UI exposes family invite codes and labels post-application codes as verification codes
+ok 31 - manager UI exposes family invite codes and labels post-application codes as verification codes
+  ---
+  duration_ms: 0.288917
+  type: 'test'
+  ...
+# Subtest: an unavailable active-invite list stays non-blocking and does not add a false page warning
+ok 32 - an unavailable active-invite list stays non-blocking and does not add a false page warning
+  ---
+  duration_ms: 1.213958
+  type: 'test'
+  ...
+# Subtest: family actions use full-width semantic containers instead of shrinking native buttons
+ok 33 - family actions use full-width semantic containers instead of shrinking native buttons
+  ---
+  duration_ms: 0.723917
+  type: 'test'
+  ...
+# Subtest: family mutations keep one idempotency key across a failed retry
+ok 34 - family mutations keep one idempotency key across a failed retry
+  ---
+  duration_ms: 0.323583
+  type: 'test'
+  ...
+# Subtest: all twelve labels and exact aliases share one catalog without duplicate picker rows
+ok 35 - all twelve labels and exact aliases share one catalog without duplicate picker rows
+  ---
+  duration_ms: 0.976791
+  type: 'test'
+  ...
+# Subtest: five independent dialogs put selected child first, later continues, tabs do not reset
+ok 36 - five independent dialogs put selected child first, later continues, tabs do not reset
+  ---
+  duration_ms: 4.644875
+  type: 'test'
+  ...
+# Subtest: new foreground waits for bootstrap; blocked input defers until a safe host
+ok 37 - new foreground waits for bootstrap; blocked input defers until a safe host
+  ---
+  duration_ms: 1.227875
+  type: 'test'
+  ...
+# Subtest: native picker lifecycle never starts a second academic-year session
+ok 38 - native picker lifecycle never starts a second academic-year session
+  ---
+  duration_ms: 0.4935
+  type: 'test'
+  ...
+# Subtest: manual grade confirmation or archive prunes cached dialogs before returning from profile
+ok 39 - manual grade confirmation or archive prunes cached dialogs before returning from profile
+  ---
+  duration_ms: 1.467208
+  type: 'test'
+  ...
+# Subtest: restoring an archived child refreshes once at a safe host without repeating deferred children
+ok 40 - restoring an archived child refreshes once at a safe host without repeating deferred children
+  ---
+  duration_ms: 0.984042
+  type: 'test'
+  ...
+# Subtest: a restored child appearing during an in-flight candidate read invalidates the old response
+ok 41 - a restored child appearing during an in-flight candidate read invalidates the old response
+  ---
+  duration_ms: 0.490083
+  type: 'test'
+  ...
+# Subtest: archive invalidates an older in-flight candidate response before returning from profile
+ok 42 - archive invalidates an older in-flight candidate response before returning from profile
+  ---
+  duration_ms: 0.495417
+  type: 'test'
+  ...
+# Subtest: manual-confirmation invalidates an older in-flight candidate response before returning from profile
+ok 43 - manual-confirmation invalidates an older in-flight candidate response before returning from profile
+  ---
+  duration_ms: 1.200125
+  type: 'test'
+  ...
+# Subtest: report filters remain unobstructed when a late candidate read completes
+ok 44 - report filters remain unobstructed when a late candidate read completes
+  ---
+  duration_ms: 1.55875
+  type: 'test'
+  ...
+# Subtest: duplicate submit is blocked, errors preserve input, retry submits the same parent choice
+ok 45 - duplicate submit is blocked, errors preserve input, retry submits the same parent choice
+  ---
+  duration_ms: 1.298792
+  type: 'test'
+  ...
+# Subtest: conflict refresh shows server-confirmed fact without offering an overwrite
+ok 46 - conflict refresh shows server-confirmed fact without offering an overwrite
+  ---
+  duration_ms: 0.476083
+  type: 'test'
+  ...
+# Subtest: viewer, family changes and late results cannot revive an old dialog
+ok 47 - viewer, family changes and late results cannot revive an old dialog
+  ---
+  duration_ms: 0.4665
+  type: 'test'
+  ...
+# Subtest: late submission cannot update a different family's visible children
+ok 48 - late submission cannot update a different family's visible children
+  ---
+  duration_ms: 0.399333
+  type: 'test'
+  ...
+# Subtest: production App lifecycle and five tab bridges wire the shared controller
+ok 49 - production App lifecycle and five tab bridges wire the shared controller
+  ---
+  duration_ms: 11.592167
+  type: 'test'
+  ...
+# Subtest: real edit form omits untouched grade and explicitly confirms picker choices
+ok 50 - real edit form omits untouched grade and explicitly confirms picker choices
+  ---
+  duration_ms: 1.64525
+  type: 'test'
+  ...
+# Subtest: manual grade conflict preserves drafts and requires a fresh parent choice before retrying
+ok 51 - manual grade conflict preserves drafts and requires a fresh parent choice before retrying
+  ---
+  duration_ms: 0.828875
+  type: 'test'
+  ...
+# Subtest: a failed conflict refresh cannot be bypassed by reselecting the old grade
+ok 52 - a failed conflict refresh cannot be bypassed by reselecting the old grade
+  ---
+  duration_ms: 0.656833
+  type: 'test'
+  ...
+# Subtest: component forwards native picker and foreground events after the host data update
+ok 53 - component forwards native picker and foreground events after the host data update
+  ---
+  duration_ms: 0.928542
+  type: 'test'
+  ...
+1..53
+# tests 53
+# suites 0
+# pass 53
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 78.151542

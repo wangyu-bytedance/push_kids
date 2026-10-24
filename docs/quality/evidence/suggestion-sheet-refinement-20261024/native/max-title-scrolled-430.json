@@ -1,0 +1,417 @@
+{
+  "nodes": {
+    ".study-card": [
+      {
+        "left": 20,
+        "right": 410,
+        "top": 590,
+        "bottom": 815,
+        "width": 390,
+        "height": 225,
+        "fontSize": "16px",
+        "paddingLeft": "18px",
+        "paddingRight": "18px"
+      }
+    ],
+    ".study-label": [
+      {
+        "left": 39,
+        "right": 103,
+        "top": 609,
+        "bottom": 634,
+        "width": 64,
+        "height": 25,
+        "fontSize": "16px",
+        "paddingLeft": "0px",
+        "paddingRight": "0px"
+      }
+    ],
+    ".study-title": [
+      {
+        "left": 39,
+        "right": 391,
+        "top": 647,
+        "bottom": 676,
+        "width": 352,
+        "height": 29,
+        "fontSize": "20px",
+        "paddingLeft": "0px",
+        "paddingRight": "0px"
+      },
+      {
+        "left": 18,
+        "right": 359,
+        "top": 191.40625,
+        "bottom": 423.40625,
+        "width": 341,
+        "height": 232,
+        "fontSize": "20px",
+        "paddingLeft": "0px",
+        "paddingRight": "0px"
+      }
+    ],
+    ".study-meta": [
+      {
+        "left": 265,
+        "right": 391,
+        "top": 610.5,
+        "bottom": 632.5,
+        "width": 126,
+        "height": 22,
+        "fontSize": "14px",
+        "paddingLeft": "0px",
+        "paddingRight": "0px"
+      },
+      {
+        "left": 18,
+        "right": 135.796875,
+        "top": 431.40625,
+        "bottom": 453.40625,
+        "width": 117.796875,
+        "height": 22,
+        "fontSize": "14px",
+        "paddingLeft": "0px",
+        "paddingRight": "0px"
+      },
+      {
+        "left": 143.796875,
+        "right": 188.46875,
+        "top": 431.40625,
+        "bottom": 453.40625,
+        "width": 44.671875,
+        "height": 22,
+        "fontSize": "14px",
+        "paddingLeft": "0px",
+        "paddingRight": "0px"
+      },
+      {
+        "left": 18,
+        "right": 412,
+        "top": 692,
+        "bottom": 714,
+        "width": 394,
+        "height": 22,
+        "fontSize": "14px",
+        "paddingLeft": "0px",
+        "paddingRight": "0px"
+      }
+    ],
+    ".study-copy": [
+      {
+        "left": 39,
+        "right": 391,
+        "top": 685,
+        "bottom": 739,
+        "width": 352,
+        "height": 54,
+        "fontSize": "16px",
+        "paddingLeft": "0px",
+        "paddingRight": "0px"
+      },
+      {
+        "left": 18,
+        "right": 412,
+        "top": 483,
+        "bottom": 537,
+        "width": 394,
+        "height": 54,
+        "fontSize": "16px",
+        "paddingLeft": "0px",
+        "paddingRight": "0px"
+      },
+      {
+        "left": 18,
+        "right": 412,
+        "top": 581,
+        "bottom": 608,
+        "width": 394,
+        "height": 27,
+        "fontSize": "16px",
+        "paddingLeft": "0px",
+        "paddingRight": "0px"
+      },
+      {
+        "left": 18,
+        "right": 412,
+        "top": 652,
+        "bottom": 679,
+        "width": 394,
+        "height": 27,
+        "fontSize": "16px",
+        "paddingLeft": "0px",
+        "paddingRight": "0px"
+      }
+    ],
+    ".study-source": [
+      {
+        "left": 18,
+        "right": 412,
+        "top": 621,
+        "bottom": 643,
+        "width": 394,
+        "height": 22,
+        "fontSize": "14px",
+        "paddingLeft": "0px",
+        "paddingRight": "0px"
+      }
+    ],
+    ".study-sheet": [
+      {
+        "left": 0,
+        "right": 430,
+        "top": 175.40625,
+        "bottom": 932,
+        "width": 430,
+        "height": 756.59375,
+        "fontSize": "16px",
+        "paddingLeft": "0px",
+        "paddingRight": "0px"
+      }
+    ],
+    ".study-top": [
+      {
+        "left": 0,
+        "right": 430,
+        "top": 175.40625,
+        "bottom": 483,
+        "width": 430,
+        "height": 307.59375,
+        "fontSize": "16px",
+        "paddingLeft": "18px",
+        "paddingRight": "18px"
+      }
+    ],
+    ".study-close": [
+      {
+        "left": 368,
+        "right": 412,
+        "top": 191.40625,
+        "bottom": 235.40625,
+        "width": 44,
+        "height": 44,
+        "fontSize": "15px",
+        "paddingLeft": "0px",
+        "paddingRight": "0px"
+      }
+    ],
+    ".study-body": [
+      {
+        "left": 0,
+        "right": 430,
+        "top": 483,
+        "bottom": 727,
+        "width": 430,
+        "height": 244,
+        "fontSize": "16px",
+        "paddingLeft": "18px",
+        "paddingRight": "18px"
+      }
+    ],
+    ".study-actions": [
+      {
+        "left": 0,
+        "right": 430,
+        "top": 727,
+        "bottom": 898,
+        "width": 430,
+        "height": 171,
+        "fontSize": "16px",
+        "paddingLeft": "18px",
+        "paddingRight": "18px"
+      }
+    ],
+    ".study-primary": [
+      {
+        "left": 39,
+        "right": 391,
+        "top": 752,
+        "bottom": 796,
+        "width": 352,
+        "height": 44,
+        "fontSize": "15px",
+        "paddingLeft": "13px",
+        "paddingRight": "13px"
+      },
+      {
+        "left": 18,
+        "right": 412,
+        "top": 737,
+        "bottom": 781,
+        "width": 394,
+        "height": 44,
+        "fontSize": "15px",
+        "paddingLeft": "13px",
+        "paddingRight": "13px"
+      }
+    ],
+    ".study-secondary": [
+      {
+        "left": 18,
+        "right": 211,
+        "top": 789,
+        "bottom": 833,
+        "width": 193,
+        "height": 44,
+        "fontSize": "14px",
+        "paddingLeft": "12px",
+        "paddingRight": "12px"
+      },
+      {
+        "left": 219,
+        "right": 412,
+        "top": 789,
+        "bottom": 833,
+        "width": 193,
+        "height": 44,
+        "fontSize": "14px",
+        "paddingLeft": "12px",
+        "paddingRight": "12px"
+      }
+    ],
+    ".study-quiet": [
+      {
+        "left": 18,
+        "right": 412,
+        "top": 841,
+        "bottom": 885,
+        "width": 394,
+        "height": 44,
+        "fontSize": "15px",
+        "paddingLeft": "12px",
+        "paddingRight": "12px"
+      }
+    ],
+    ".study-input": [],
+    ".study-textarea": [],
+    ".study-picker": [],
+    ".study-actions .study-primary": [
+      {
+        "left": 18,
+        "right": 412,
+        "top": 737,
+        "bottom": 781,
+        "width": 394,
+        "height": 44,
+        "fontSize": "15px",
+        "paddingLeft": "13px",
+        "paddingRight": "13px"
+      }
+    ],
+    ".study-secondary-row .study-secondary": [
+      {
+        "left": 18,
+        "right": 211,
+        "top": 789,
+        "bottom": 833,
+        "width": 193,
+        "height": 44,
+        "fontSize": "14px",
+        "paddingLeft": "12px",
+        "paddingRight": "12px"
+      },
+      {
+        "left": 219,
+        "right": 412,
+        "top": 789,
+        "bottom": 833,
+        "width": 193,
+        "height": 44,
+        "fontSize": "14px",
+        "paddingLeft": "12px",
+        "paddingRight": "12px"
+      }
+    ],
+    ".study-defer": [
+      {
+        "left": 18,
+        "right": 412,
+        "top": 841,
+        "bottom": 885,
+        "width": 394,
+        "height": 44,
+        "fontSize": "15px",
+        "paddingLeft": "12px",
+        "paddingRight": "12px"
+      }
+    ],
+    ".study-proposal-heading": [
+      {
+        "left": 18,
+        "right": 359,
+        "top": 191.40625,
+        "bottom": 471,
+        "width": 341,
+        "height": 279.59375,
+        "fontSize": "16px",
+        "paddingLeft": "0px",
+        "paddingRight": "0px"
+      }
+    ],
+    ".study-title-scroll": [
+      {
+        "left": 18,
+        "right": 359,
+        "top": 191.40625,
+        "bottom": 471,
+        "width": 341,
+        "height": 279.59375,
+        "fontSize": "16px",
+        "paddingLeft": "0px",
+        "paddingRight": "0px"
+      }
+    ],
+    ".study-proposal-title": [
+      {
+        "left": 18,
+        "right": 359,
+        "top": 191.40625,
+        "bottom": 423.40625,
+        "width": 341,
+        "height": 232,
+        "fontSize": "20px",
+        "paddingLeft": "0px",
+        "paddingRight": "0px"
+      }
+    ],
+    ".study-proposal-meta": [
+      {
+        "left": 18,
+        "right": 359,
+        "top": 431.40625,
+        "bottom": 453.40625,
+        "width": 341,
+        "height": 22,
+        "fontSize": "16px",
+        "paddingLeft": "0px",
+        "paddingRight": "0px"
+      }
+    ],
+    ".study-close .ico": [
+      {
+        "left": 380,
+        "right": 400,
+        "top": 203.40625,
+        "bottom": 223.40625,
+        "width": 20,
+        "height": 20,
+        "fontSize": "15px",
+        "paddingLeft": "0px",
+        "paddingRight": "0px"
+      }
+    ]
+  },
+  "scrollLeft": 0,
+  "headingScrollTop": 0,
+  "viewport": {
+    "width": 430,
+    "height": 932,
+    "screenHeight": 932,
+    "dpr": 3,
+    "baseLibrary": "3.17.4"
+  },
+  "sheet": "proposal",
+  "state": "max-title-scrolled",
+  "errors": [],
+  "capturedAt": "2026-10-24T11:57:58.293Z",
+  "screenshotSha256": "a9d27e5a36954b94ec87ddbaada75938c4ac59a72fb119c594f6f2f03d85cf09"
+}

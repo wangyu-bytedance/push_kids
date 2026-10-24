@@ -3,7 +3,9 @@ from __future__ import annotations
 from datetime import datetime
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
+
+from push_kids.children.grade_policy import canonical_grade
 
 
 class ChildCreate(BaseModel):
@@ -19,6 +21,16 @@ class ChildUpdate(BaseModel):
     name: str | None = Field(default=None, min_length=1, max_length=40)
     grade: str | None = Field(default=None, max_length=20)
     daily_budget_minutes: int | None = Field(default=None, ge=5, le=120)
+    confirm_grade: bool = False
+    expected_grade_revision: int | None = Field(default=None, ge=0)
+
+    @model_validator(mode="after")
+    def explicit_grade_confirmation(self):
+        if self.confirm_grade and (
+            "grade" not in self.model_fields_set or self.expected_grade_revision is None
+        ):
+            raise ValueError("确认年级需要年级值与当前版本")
+        return self
 
 
 class ChildView(BaseModel):
@@ -26,9 +38,45 @@ class ChildView(BaseModel):
     id: str
     name: str
     grade: str | None
+    grade_confirmed_school_year: int | None
+    grade_revision: int
     daily_budget_minutes: int
     active: bool
     created_at: datetime
+
+
+class PendingGradeConfirmation(BaseModel):
+    id: str
+    name: str
+    current_grade: str
+    suggested_grade: str
+    reason: Literal["initial_check", "annual_progression"]
+    revision: int
+
+
+class GradeConfirmations(BaseModel):
+    school_year: int
+    can_confirm: bool
+    items: list[PendingGradeConfirmation] = Field(max_length=5)
+
+
+class GradeConfirmation(BaseModel):
+    school_year: int = Field(ge=1900, le=9999)
+    expected_grade_revision: int = Field(ge=0)
+    grade: str = Field(min_length=1, max_length=20)
+
+    @field_validator("grade")
+    @classmethod
+    def supported_grade(cls, value: str) -> str:
+        grade = canonical_grade(value)
+        if grade is None:
+            raise ValueError("请选择小班至九年级的实际年级")
+        return grade
+
+
+class GradeConfirmationResult(BaseModel):
+    child: ChildView
+    outcome: Literal["confirmed", "already_confirmed"]
 
 
 class SubjectCreate(BaseModel):

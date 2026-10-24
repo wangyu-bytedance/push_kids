@@ -1,0 +1,42 @@
+unformatted: File would be reformatted
+  --> tools/prepare_record_entry_native.py:18:20
+   |
+17 |     api = base.OUT / "utils/api.js"
+   -     api.write_text(api.read_text().replace(
+   -         "if(url.startsWith('/footprints/visits?'))",
+   -         "if(url.startsWith('/footprints/visits?')&&url.includes('cursor='))"
+   -         "return {items:Array.from({length:20},(_,i)=>({...visit,id:'next-'+i,photos:[]})),next_cursor:null};\n"
+   -         "if(url.startsWith('/footprints/visits?'))",
+   -     ))
+18 +     api.write_text(
+19 +         api.read_text().replace(
+20 +             "if(url.startsWith('/footprints/visits?'))",
+21 +             "if(url.startsWith('/footprints/visits?')&&url.includes('cursor='))"
+22 +             "return {items:Array.from({length:20},(_,i)=>({...visit,id:'next-'+i,photos:[]})),next_cursor:null};\n"
+23 +             "if(url.startsWith('/footprints/visits?'))",
+24 +         )
+25 +     )
+26 |     files = [
+   -         "pages/records/record-types.js", "pages/records/index.js",
+   -         "pages/records/index.wxml", "pages/records/index.wxss",
+   -         "pages/footprints/controller.js", "pages/footprints/maps.js",
+   -         "pages/footprints/index.wxml", "pages/footprints/index.wxss",
+27 +         "pages/records/record-types.js",
+28 +         "pages/records/index.js",
+29 +         "pages/records/index.wxml",
+30 +         "pages/records/index.wxss",
+31 +         "pages/footprints/controller.js",
+32 +         "pages/footprints/maps.js",
+33 +         "pages/footprints/index.wxml",
+34 +         "pages/footprints/index.wxss",
+35 |     ]
+--------------------------------------------------------------------------------
+42 |     }
+   -     (base.OUT / "record-entry-source-sha256.json").write_text(
+   -         json.dumps(manifest, indent=2) + "\n"
+   -     )
+43 +     (base.OUT / "record-entry-source-sha256.json").write_text(json.dumps(manifest, indent=2) + "\n")
+44 |
+   |
+
+1 file would be reformatted, 693 files already formatted

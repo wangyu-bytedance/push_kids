@@ -1,0 +1,306 @@
+{
+  "viewport": {
+    "width": 390,
+    "height": 753,
+    "screenHeight": 844,
+    "dpr": 3,
+    "fontScale": 15,
+    "baseLibrary": "3.17.4"
+  },
+  "nodes": {
+    ".page": [
+      {
+        "left": 0,
+        "right": 390,
+        "top": 0,
+        "bottom": 1394,
+        "width": 390,
+        "height": 1394,
+        "fontSize": "16px"
+      }
+    ],
+    ".auto-card": [
+      {
+        "left": 18,
+        "right": 372,
+        "top": 413,
+        "bottom": 578,
+        "width": 354,
+        "height": 165,
+        "fontSize": "16px"
+      }
+    ],
+    ".noti-row": [
+      {
+        "left": 19,
+        "right": 371,
+        "top": 657,
+        "bottom": 802,
+        "width": 352,
+        "height": 145,
+        "fontSize": "16px"
+      },
+      {
+        "left": 19,
+        "right": 371,
+        "top": 802,
+        "bottom": 947,
+        "width": 352,
+        "height": 145,
+        "fontSize": "16px"
+      },
+      {
+        "left": 19,
+        "right": 371,
+        "top": 947,
+        "bottom": 1093,
+        "width": 352,
+        "height": 146,
+        "fontSize": "16px"
+      }
+    ],
+    ".noti-row .grow": [
+      {
+        "left": 33,
+        "right": 290,
+        "top": 669,
+        "bottom": 790,
+        "width": 257,
+        "height": 121,
+        "fontSize": "16px"
+      },
+      {
+        "left": 33,
+        "right": 290,
+        "top": 814,
+        "bottom": 935,
+        "width": 257,
+        "height": 121,
+        "fontSize": "16px"
+      },
+      {
+        "left": 33,
+        "right": 290,
+        "top": 959,
+        "bottom": 1081,
+        "width": 257,
+        "height": 122,
+        "fontSize": "16px"
+      }
+    ],
+    ".noti-switch": [
+      {
+        "left": 300,
+        "right": 357,
+        "top": 671,
+        "bottom": 715,
+        "width": 57,
+        "height": 44,
+        "fontSize": "16px"
+      },
+      {
+        "left": 300,
+        "right": 357,
+        "top": 816,
+        "bottom": 860,
+        "width": 57,
+        "height": 44,
+        "fontSize": "16px"
+      },
+      {
+        "left": 300,
+        "right": 357,
+        "top": 961,
+        "bottom": 1005,
+        "width": 57,
+        "height": 44,
+        "fontSize": "16px"
+      }
+    ],
+    ".grant-link": [
+      {
+        "left": 69.5,
+        "right": 253.5,
+        "top": 746,
+        "bottom": 790,
+        "width": 184,
+        "height": 44,
+        "fontSize": "14px"
+      },
+      {
+        "left": 69.5,
+        "right": 253.5,
+        "top": 891,
+        "bottom": 935,
+        "width": 184,
+        "height": 44,
+        "fontSize": "14px"
+      },
+      {
+        "left": 69.5,
+        "right": 253.5,
+        "top": 1037,
+        "bottom": 1081,
+        "width": 184,
+        "height": 44,
+        "fontSize": "14px"
+      }
+    ],
+    ".notice-hero .btn": [
+      {
+        "left": 103,
+        "right": 287,
+        "top": 293,
+        "bottom": 342,
+        "width": 184,
+        "height": 49,
+        "fontSize": "16px"
+      }
+    ],
+    ".auto-card switch": [],
+    ".icon-btn": [
+      {
+        "left": 314,
+        "right": 358,
+        "top": 24,
+        "bottom": 68,
+        "width": 44,
+        "height": 44,
+        "fontSize": "13px"
+      },
+      {
+        "left": 328,
+        "right": 372,
+        "top": 94,
+        "bottom": 138,
+        "width": 44,
+        "height": 44,
+        "fontSize": "16px"
+      }
+    ],
+    ".auto-copy": [
+      {
+        "left": 35,
+        "right": 290,
+        "top": 465,
+        "bottom": 487,
+        "width": 255,
+        "height": 22,
+        "fontSize": "14px"
+      },
+      {
+        "left": 35,
+        "right": 355,
+        "top": 495,
+        "bottom": 561,
+        "width": 320,
+        "height": 66,
+        "fontSize": "14px"
+      }
+    ],
+    ".r-s": [
+      {
+        "left": 33,
+        "right": 290,
+        "top": 693,
+        "bottom": 714,
+        "width": 257,
+        "height": 21,
+        "fontSize": "14px"
+      },
+      {
+        "left": 33,
+        "right": 290,
+        "top": 838,
+        "bottom": 859,
+        "width": 257,
+        "height": 21,
+        "fontSize": "14px"
+      },
+      {
+        "left": 33,
+        "right": 290,
+        "top": 984,
+        "bottom": 1005,
+        "width": 257,
+        "height": 21,
+        "fontSize": "14px"
+      }
+    ],
+    ".noti-state .pill": [
+      {
+        "left": 33,
+        "right": 193,
+        "top": 720,
+        "bottom": 742,
+        "width": 160,
+        "height": 22,
+        "fontSize": "14px"
+      },
+      {
+        "left": 33,
+        "right": 193,
+        "top": 865,
+        "bottom": 887,
+        "width": 160,
+        "height": 22,
+        "fontSize": "14px"
+      },
+      {
+        "left": 33,
+        "right": 193,
+        "top": 1011,
+        "bottom": 1033,
+        "width": 160,
+        "height": 22,
+        "fontSize": "14px"
+      }
+    ],
+    ".n-txt": [
+      {
+        "left": 57,
+        "right": 305,
+        "top": 24,
+        "bottom": 68,
+        "width": 248,
+        "height": 44,
+        "fontSize": "14px"
+      }
+    ],
+    ".hero-note": [
+      {
+        "left": 37,
+        "right": 353,
+        "top": 233,
+        "bottom": 279,
+        "width": 316,
+        "height": 46,
+        "fontSize": "14px"
+      }
+    ],
+    ".help": [
+      {
+        "left": 18,
+        "right": 372,
+        "top": 1100,
+        "bottom": 1144,
+        "width": 354,
+        "height": 44,
+        "fontSize": "14px"
+      },
+      {
+        "left": 18,
+        "right": 372,
+        "top": 1292,
+        "bottom": 1336,
+        "width": 354,
+        "height": 44,
+        "fontSize": "14px"
+      }
+    ]
+  },
+  "expectedWidth": 390,
+  "state": "settings-error",
+  "fixture": "synthetic native page; no grant/provider invocation",
+  "screenshot": "NOT_RUN: automation screenshot unavailable; CUA samples separate"
+}

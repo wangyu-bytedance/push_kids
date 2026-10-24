@@ -1,0 +1,930 @@
+{
+  "status": "PASS",
+  "scope": "CANDIDATE_HTML_ONLY",
+  "date": "2026-10-24",
+  "source_sha256": "c8c626ce7f9d0becf63817e21cc75f39eee235aa4790ec026d834d1bb3122987",
+  "exports": [
+    {
+      "state": "travel",
+      "viewport": [
+        320,
+        568
+      ],
+      "geometry": {
+        "title": {
+          "x": 16,
+          "y": 88,
+          "width": 112,
+          "height": 49
+        },
+        "child": {
+          "x": 206,
+          "y": 90.5,
+          "width": 98,
+          "height": 44
+        }
+      },
+      "status": "PASS",
+      "page_errors": [],
+      "date_filter_removed": true,
+      "dropdown_geometry": null,
+      "upload_geometry": {
+        "x": 16,
+        "y": 531.765625,
+        "width": 288,
+        "height": 48
+      }
+    },
+    {
+      "state": "learning",
+      "viewport": [
+        320,
+        568
+      ],
+      "geometry": {
+        "title": {
+          "x": 16,
+          "y": 88,
+          "width": 112,
+          "height": 49
+        },
+        "child": {
+          "x": 206,
+          "y": 90.5,
+          "width": 98,
+          "height": 44
+        }
+      },
+      "status": "PASS",
+      "page_errors": [],
+      "date_filter_removed": true,
+      "dropdown_geometry": null,
+      "upload_geometry": null
+    },
+    {
+      "state": "long",
+      "viewport": [
+        320,
+        568
+      ],
+      "geometry": {
+        "title": {
+          "x": 16,
+          "y": 88,
+          "width": 112,
+          "height": 49
+        },
+        "child": {
+          "x": 52,
+          "y": 145,
+          "width": 252,
+          "height": 44
+        }
+      },
+      "status": "PASS",
+      "page_errors": [],
+      "date_filter_removed": true,
+      "dropdown_geometry": null,
+      "upload_geometry": {
+        "x": 16,
+        "y": 614.5625,
+        "width": 288,
+        "height": 48
+      }
+    },
+    {
+      "state": "single",
+      "viewport": [
+        320,
+        568
+      ],
+      "geometry": {
+        "title": {
+          "x": 16,
+          "y": 88,
+          "width": 112,
+          "height": 49
+        },
+        "child": {
+          "x": 226,
+          "y": 90.5,
+          "width": 78,
+          "height": 44
+        }
+      },
+      "status": "PASS",
+      "page_errors": [],
+      "date_filter_removed": true,
+      "dropdown_geometry": null,
+      "upload_geometry": {
+        "x": 16,
+        "y": 531.765625,
+        "width": 288,
+        "height": 48
+      }
+    },
+    {
+      "state": "types",
+      "viewport": [
+        320,
+        568
+      ],
+      "geometry": {
+        "title": {
+          "x": 16,
+          "y": 88,
+          "width": 112,
+          "height": 49
+        },
+        "child": {
+          "x": 206,
+          "y": 90.5,
+          "width": 98,
+          "height": 44
+        }
+      },
+      "status": "PASS",
+      "page_errors": [],
+      "date_filter_removed": true,
+      "dropdown_geometry": {
+        "x": 16,
+        "y": 145,
+        "width": 200,
+        "height": 114
+      },
+      "upload_geometry": {
+        "x": 16,
+        "y": 531.765625,
+        "width": 288,
+        "height": 48
+      }
+    },
+    {
+      "state": "learning-types",
+      "viewport": [
+        320,
+        568
+      ],
+      "geometry": {
+        "title": {
+          "x": 16,
+          "y": 88,
+          "width": 112,
+          "height": 49
+        },
+        "child": {
+          "x": 206,
+          "y": 90.5,
+          "width": 98,
+          "height": 44
+        }
+      },
+      "status": "PASS",
+      "page_errors": [],
+      "date_filter_removed": true,
+      "dropdown_geometry": {
+        "x": 16,
+        "y": 145,
+        "width": 200,
+        "height": 114
+      },
+      "upload_geometry": null
+    },
+    {
+      "state": "long-types",
+      "viewport": [
+        320,
+        568
+      ],
+      "geometry": {
+        "title": {
+          "x": 16,
+          "y": 88,
+          "width": 112,
+          "height": 49
+        },
+        "child": {
+          "x": 52,
+          "y": 145,
+          "width": 252,
+          "height": 44
+        }
+      },
+      "status": "PASS",
+      "page_errors": [],
+      "date_filter_removed": true,
+      "dropdown_geometry": {
+        "x": 16,
+        "y": 145,
+        "width": 200,
+        "height": 114
+      },
+      "upload_geometry": {
+        "x": 16,
+        "y": 614.5625,
+        "width": 288,
+        "height": 48
+      }
+    },
+    {
+      "state": "today",
+      "viewport": [
+        320,
+        568
+      ],
+      "geometry": null,
+      "status": "PASS",
+      "page_errors": [],
+      "date_filter_removed": true,
+      "dropdown_geometry": null,
+      "upload_geometry": null
+    },
+    {
+      "state": "from-learning",
+      "viewport": [
+        320,
+        568
+      ],
+      "geometry": {
+        "title": {
+          "x": 16,
+          "y": 88,
+          "width": 112,
+          "height": 49
+        },
+        "child": {
+          "x": 206,
+          "y": 90.5,
+          "width": 98,
+          "height": 44
+        }
+      },
+      "status": "PASS",
+      "page_errors": [],
+      "date_filter_removed": true,
+      "dropdown_geometry": null,
+      "upload_geometry": null
+    },
+    {
+      "state": "travel-bottom",
+      "viewport": [
+        320,
+        568
+      ],
+      "geometry": {
+        "title": {
+          "x": 16,
+          "y": -40,
+          "width": 112,
+          "height": 49
+        },
+        "child": {
+          "x": 206,
+          "y": -37.5,
+          "width": 98,
+          "height": 44
+        }
+      },
+      "status": "PASS",
+      "page_errors": [],
+      "date_filter_removed": true,
+      "dropdown_geometry": null,
+      "upload_geometry": {
+        "x": 16,
+        "y": 403.765625,
+        "width": 288,
+        "height": 48
+      }
+    },
+    {
+      "state": "travel",
+      "viewport": [
+        390,
+        844
+      ],
+      "geometry": {
+        "title": {
+          "x": 16,
+          "y": 88,
+          "width": 112,
+          "height": 49
+        },
+        "child": {
+          "x": 276,
+          "y": 90.5,
+          "width": 98,
+          "height": 44
+        }
+      },
+      "status": "PASS",
+      "page_errors": [],
+      "date_filter_removed": true,
+      "dropdown_geometry": null,
+      "upload_geometry": {
+        "x": 16,
+        "y": 531.765625,
+        "width": 358,
+        "height": 48
+      }
+    },
+    {
+      "state": "learning",
+      "viewport": [
+        390,
+        844
+      ],
+      "geometry": {
+        "title": {
+          "x": 16,
+          "y": 88,
+          "width": 112,
+          "height": 49
+        },
+        "child": {
+          "x": 276,
+          "y": 90.5,
+          "width": 98,
+          "height": 44
+        }
+      },
+      "status": "PASS",
+      "page_errors": [],
+      "date_filter_removed": true,
+      "dropdown_geometry": null,
+      "upload_geometry": null
+    },
+    {
+      "state": "long",
+      "viewport": [
+        390,
+        844
+      ],
+      "geometry": {
+        "title": {
+          "x": 16,
+          "y": 88,
+          "width": 112,
+          "height": 49
+        },
+        "child": {
+          "x": 122,
+          "y": 145,
+          "width": 252,
+          "height": 44
+        }
+      },
+      "status": "PASS",
+      "page_errors": [],
+      "date_filter_removed": true,
+      "dropdown_geometry": null,
+      "upload_geometry": {
+        "x": 16,
+        "y": 583.765625,
+        "width": 358,
+        "height": 48
+      }
+    },
+    {
+      "state": "single",
+      "viewport": [
+        390,
+        844
+      ],
+      "geometry": {
+        "title": {
+          "x": 16,
+          "y": 88,
+          "width": 112,
+          "height": 49
+        },
+        "child": {
+          "x": 296,
+          "y": 90.5,
+          "width": 78,
+          "height": 44
+        }
+      },
+      "status": "PASS",
+      "page_errors": [],
+      "date_filter_removed": true,
+      "dropdown_geometry": null,
+      "upload_geometry": {
+        "x": 16,
+        "y": 531.765625,
+        "width": 358,
+        "height": 48
+      }
+    },
+    {
+      "state": "types",
+      "viewport": [
+        390,
+        844
+      ],
+      "geometry": {
+        "title": {
+          "x": 16,
+          "y": 88,
+          "width": 112,
+          "height": 49
+        },
+        "child": {
+          "x": 276,
+          "y": 90.5,
+          "width": 98,
+          "height": 44
+        }
+      },
+      "status": "PASS",
+      "page_errors": [],
+      "date_filter_removed": true,
+      "dropdown_geometry": {
+        "x": 16,
+        "y": 145,
+        "width": 200,
+        "height": 114
+      },
+      "upload_geometry": {
+        "x": 16,
+        "y": 531.765625,
+        "width": 358,
+        "height": 48
+      }
+    },
+    {
+      "state": "learning-types",
+      "viewport": [
+        390,
+        844
+      ],
+      "geometry": {
+        "title": {
+          "x": 16,
+          "y": 88,
+          "width": 112,
+          "height": 49
+        },
+        "child": {
+          "x": 276,
+          "y": 90.5,
+          "width": 98,
+          "height": 44
+        }
+      },
+      "status": "PASS",
+      "page_errors": [],
+      "date_filter_removed": true,
+      "dropdown_geometry": {
+        "x": 16,
+        "y": 145,
+        "width": 200,
+        "height": 114
+      },
+      "upload_geometry": null
+    },
+    {
+      "state": "long-types",
+      "viewport": [
+        390,
+        844
+      ],
+      "geometry": {
+        "title": {
+          "x": 16,
+          "y": 88,
+          "width": 112,
+          "height": 49
+        },
+        "child": {
+          "x": 122,
+          "y": 145,
+          "width": 252,
+          "height": 44
+        }
+      },
+      "status": "PASS",
+      "page_errors": [],
+      "date_filter_removed": true,
+      "dropdown_geometry": {
+        "x": 16,
+        "y": 145,
+        "width": 200,
+        "height": 114
+      },
+      "upload_geometry": {
+        "x": 16,
+        "y": 583.765625,
+        "width": 358,
+        "height": 48
+      }
+    },
+    {
+      "state": "today",
+      "viewport": [
+        390,
+        844
+      ],
+      "geometry": null,
+      "status": "PASS",
+      "page_errors": [],
+      "date_filter_removed": true,
+      "dropdown_geometry": null,
+      "upload_geometry": null
+    },
+    {
+      "state": "from-learning",
+      "viewport": [
+        390,
+        844
+      ],
+      "geometry": {
+        "title": {
+          "x": 16,
+          "y": 88,
+          "width": 112,
+          "height": 49
+        },
+        "child": {
+          "x": 276,
+          "y": 90.5,
+          "width": 98,
+          "height": 44
+        }
+      },
+      "status": "PASS",
+      "page_errors": [],
+      "date_filter_removed": true,
+      "dropdown_geometry": null,
+      "upload_geometry": null
+    },
+    {
+      "state": "travel-bottom",
+      "viewport": [
+        390,
+        844
+      ],
+      "geometry": {
+        "title": {
+          "x": 16,
+          "y": 88,
+          "width": 112,
+          "height": 49
+        },
+        "child": {
+          "x": 276,
+          "y": 90.5,
+          "width": 98,
+          "height": 44
+        }
+      },
+      "status": "PASS",
+      "page_errors": [],
+      "date_filter_removed": true,
+      "dropdown_geometry": null,
+      "upload_geometry": {
+        "x": 16,
+        "y": 531.765625,
+        "width": 358,
+        "height": 48
+      }
+    },
+    {
+      "state": "travel",
+      "viewport": [
+        430,
+        932
+      ],
+      "geometry": {
+        "title": {
+          "x": 16,
+          "y": 88,
+          "width": 112,
+          "height": 49
+        },
+        "child": {
+          "x": 316,
+          "y": 90.5,
+          "width": 98,
+          "height": 44
+        }
+      },
+      "status": "PASS",
+      "page_errors": [],
+      "date_filter_removed": true,
+      "dropdown_geometry": null,
+      "upload_geometry": {
+        "x": 16,
+        "y": 531.765625,
+        "width": 398,
+        "height": 48
+      }
+    },
+    {
+      "state": "learning",
+      "viewport": [
+        430,
+        932
+      ],
+      "geometry": {
+        "title": {
+          "x": 16,
+          "y": 88,
+          "width": 112,
+          "height": 49
+        },
+        "child": {
+          "x": 316,
+          "y": 90.5,
+          "width": 98,
+          "height": 44
+        }
+      },
+      "status": "PASS",
+      "page_errors": [],
+      "date_filter_removed": true,
+      "dropdown_geometry": null,
+      "upload_geometry": null
+    },
+    {
+      "state": "long",
+      "viewport": [
+        430,
+        932
+      ],
+      "geometry": {
+        "title": {
+          "x": 16,
+          "y": 88,
+          "width": 112,
+          "height": 49
+        },
+        "child": {
+          "x": 162,
+          "y": 90.5,
+          "width": 252,
+          "height": 44
+        }
+      },
+      "status": "PASS",
+      "page_errors": [],
+      "date_filter_removed": true,
+      "dropdown_geometry": null,
+      "upload_geometry": {
+        "x": 16,
+        "y": 531.765625,
+        "width": 398,
+        "height": 48
+      }
+    },
+    {
+      "state": "single",
+      "viewport": [
+        430,
+        932
+      ],
+      "geometry": {
+        "title": {
+          "x": 16,
+          "y": 88,
+          "width": 112,
+          "height": 49
+        },
+        "child": {
+          "x": 336,
+          "y": 90.5,
+          "width": 78,
+          "height": 44
+        }
+      },
+      "status": "PASS",
+      "page_errors": [],
+      "date_filter_removed": true,
+      "dropdown_geometry": null,
+      "upload_geometry": {
+        "x": 16,
+        "y": 531.765625,
+        "width": 398,
+        "height": 48
+      }
+    },
+    {
+      "state": "types",
+      "viewport": [
+        430,
+        932
+      ],
+      "geometry": {
+        "title": {
+          "x": 16,
+          "y": 88,
+          "width": 112,
+          "height": 49
+        },
+        "child": {
+          "x": 316,
+          "y": 90.5,
+          "width": 98,
+          "height": 44
+        }
+      },
+      "status": "PASS",
+      "page_errors": [],
+      "date_filter_removed": true,
+      "dropdown_geometry": {
+        "x": 16,
+        "y": 145,
+        "width": 200,
+        "height": 114
+      },
+      "upload_geometry": {
+        "x": 16,
+        "y": 531.765625,
+        "width": 398,
+        "height": 48
+      }
+    },
+    {
+      "state": "learning-types",
+      "viewport": [
+        430,
+        932
+      ],
+      "geometry": {
+        "title": {
+          "x": 16,
+          "y": 88,
+          "width": 112,
+          "height": 49
+        },
+        "child": {
+          "x": 316,
+          "y": 90.5,
+          "width": 98,
+          "height": 44
+        }
+      },
+      "status": "PASS",
+      "page_errors": [],
+      "date_filter_removed": true,
+      "dropdown_geometry": {
+        "x": 16,
+        "y": 145,
+        "width": 200,
+        "height": 114
+      },
+      "upload_geometry": null
+    },
+    {
+      "state": "long-types",
+      "viewport": [
+        430,
+        932
+      ],
+      "geometry": {
+        "title": {
+          "x": 16,
+          "y": 88,
+          "width": 112,
+          "height": 49
+        },
+        "child": {
+          "x": 162,
+          "y": 90.5,
+          "width": 252,
+          "height": 44
+        }
+      },
+      "status": "PASS",
+      "page_errors": [],
+      "date_filter_removed": true,
+      "dropdown_geometry": {
+        "x": 16,
+        "y": 145,
+        "width": 200,
+        "height": 114
+      },
+      "upload_geometry": {
+        "x": 16,
+        "y": 531.765625,
+        "width": 398,
+        "height": 48
+      }
+    },
+    {
+      "state": "today",
+      "viewport": [
+        430,
+        932
+      ],
+      "geometry": null,
+      "status": "PASS",
+      "page_errors": [],
+      "date_filter_removed": true,
+      "dropdown_geometry": null,
+      "upload_geometry": null
+    },
+    {
+      "state": "from-learning",
+      "viewport": [
+        430,
+        932
+      ],
+      "geometry": {
+        "title": {
+          "x": 16,
+          "y": 88,
+          "width": 112,
+          "height": 49
+        },
+        "child": {
+          "x": 316,
+          "y": 90.5,
+          "width": 98,
+          "height": 44
+        }
+      },
+      "status": "PASS",
+      "page_errors": [],
+      "date_filter_removed": true,
+      "dropdown_geometry": null,
+      "upload_geometry": null
+    },
+    {
+      "state": "travel-bottom",
+      "viewport": [
+        430,
+        932
+      ],
+      "geometry": {
+        "title": {
+          "x": 16,
+          "y": 88,
+          "width": 112,
+          "height": 49
+        },
+        "child": {
+          "x": 316,
+          "y": 90.5,
+          "width": 98,
+          "height": 44
+        }
+      },
+      "status": "PASS",
+      "page_errors": [],
+      "date_filter_removed": true,
+      "dropdown_geometry": null,
+      "upload_geometry": {
+        "x": 16,
+        "y": 531.765625,
+        "width": 398,
+        "height": 48
+      }
+    }
+  ],
+  "interactions": [
+    {
+      "viewport": [
+        320,
+        568
+      ],
+      "ordinary_tab_remembers_travel": true,
+      "learning_entry_chooses_learning": true,
+      "unsent_text_retained": true,
+      "escape_restores_focus": true,
+      "trigger_toggle_closes": true,
+      "outside_click_closes": true,
+      "keyboard_selects_type": true,
+      "tab_leaves_menu": true
+    },
+    {
+      "viewport": [
+        390,
+        844
+      ],
+      "ordinary_tab_remembers_travel": true,
+      "learning_entry_chooses_learning": true,
+      "unsent_text_retained": true,
+      "escape_restores_focus": true,
+      "trigger_toggle_closes": true,
+      "outside_click_closes": true,
+      "keyboard_selects_type": true,
+      "tab_leaves_menu": true
+    },
+    {
+      "viewport": [
+        430,
+        932
+      ],
+      "ordinary_tab_remembers_travel": true,
+      "learning_entry_chooses_learning": true,
+      "unsent_text_retained": true,
+      "escape_restores_focus": true,
+      "trigger_toggle_closes": true,
+      "outside_click_closes": true,
+      "keyboard_selects_type": true,
+      "tab_leaves_menu": true
+    }
+  ],
+  "native_geometry": "NOT_RUN",
+  "production_code_modified": false
+}

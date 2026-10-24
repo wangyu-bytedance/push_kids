@@ -238,3 +238,93 @@ test("delete requires confirmation, blocks duplicate saves, viewer and late fami
   page.visible = true; app.globalData.currentMember = { role: "viewer" };
   page.openActions(event({ id: "k" })); assert.equal(page.data.target, null);
 });
+
+test("status selection resets filters and cursor, restricts views, and always scopes requests", async () => {
+  const paths = [];
+  const { page } = setup(async path => { paths.push(path); return result; });
+  await page.loadItems();
+  assert.equal(page.data.reviewStatus, "normal");
+  assert.match(paths.at(-1), /review_status=normal/);
+  Object.assign(page.data, { subjectId: "old", subjects: [{ id: "old" }], count: 6, nextCursor: "old", pageNumber: 3 });
+  await page.changeStatus(event({ status: "superseded" }));
+  assert.equal(page.data.view, "count");
+  assert.deepEqual(Array.from(page.data.views, view => view.id), ["subject", "count"]);
+  assert.equal(page.data.subjectId, ""); assert.equal(page.data.count, null);
+  assert.equal(page.data.pageNumber, 1); assert.equal(page.data.nextCursor, null);
+  assert.match(paths.at(-1), /review_status=superseded/);
+  assert.doesNotMatch(paths.at(-1), /cursor=|review_count=|subject_id=/);
+  await page.changeView(event({ id: "time" })); assert.equal(page.data.view, "count");
+  await page.changeStatus(event({ status: "normal" }));
+  assert.equal(page.data.view, "time"); assert.equal(page.data.views.length, 3);
+});
+
+test("superseded rows retain real history, name the covering item and omit scheduling dates", async () => {
+  const { page } = setup(async () => ({ ...result, items: [
+    { knowledge_id: "k", review_status: "superseded", review_count: 3, last_reviewed_on: "2026-10-05",
+      superseded_by_name: "20以内加减法", suggested_review_on: "2026-10-07", scheduled_on: "2026-10-08" },
+    { knowledge_id: "deleted-cover", review_status: "superseded", superseded_by_name: null }
+  ] }));
+  await page.changeStatus(event({ status: "superseded" }));
+  assert.equal(page.data.items[0].coverageText, "由「20以内加减法」承接");
+  assert.equal(page.data.items[0].reviewCountText, "已复习3次");
+  assert.equal(page.data.items[0].lastReviewText, "上次10月5日");
+  assert.equal(page.data.items[0].compactDateText, ""); assert.equal(page.data.items[0].dateText, "");
+  assert.equal(page.data.items[1].coverageText, "原承接词条已删除");
+});
+
+test("late item and subject responses cannot cross a status change", async () => {
+  const pending = [];
+  const { page } = setup(path => new Promise(resolve => pending.push({ path, resolve })));
+  const initial = page.loadItems();
+  const replaced = page.changeStatus(event({ status: "superseded" }));
+  pending[1].resolve({ ...result, items: [{ knowledge_id: "replaced" }] }); await replaced;
+  pending[0].resolve({ ...result, items: [{ knowledge_id: "normal-old" }] }); await initial;
+  assert.equal(page.data.items[0].knowledge_id, "replaced");
+  const subject = page.changeView(event({ id: "subject" }));
+  assert.match(pending[2].path, /subjects.*review_status=superseded/);
+  const normal = page.changeStatus(event({ status: "normal" }));
+  pending[3].resolve(result); await normal;
+  pending[2].resolve({ items: [{ id: "stale", name: "旧科目", count: 9 }], next_cursor: "old" }); await subject;
+  assert.equal(page.data.subjects.length, 0); assert.equal(page.data.subjectId, "");
+  assert.equal(page.data.subjectCursor, null); assert.equal(page.data.subjectLoading, false);
+});
+
+test("superseded pagination and delete keep the status; scheduling is blocked even for a bad flag", async () => {
+  const calls = [];
+  const item = { knowledge_id: "k", review_status: "superseded", can_schedule: true };
+  const { page } = setup(async (path, options) => {
+    calls.push({ path, options }); return { ...result, items: [item], next_cursor: "next" };
+  });
+  await page.changeStatus(event({ status: "superseded" }));
+  await page.nextPage(); assert.match(calls.at(-1).path, /review_status=superseded.*cursor=next/);
+  page.openActions(event({ id: "k" })); await page.schedule(event({ action: "tomorrow" }));
+  assert.equal(calls.filter(call => call.options).length, 0);
+  page.askDelete(); await page.confirmDelete();
+  assert.equal(calls.filter(call => call.options)[0].options.method, "DELETE");
+  assert.match(calls.at(-1).path, /review_status=superseded/); assert.doesNotMatch(calls.at(-1).path, /cursor=/);
+  assert.equal(page.data.reviewStatus, "superseded"); assert.equal(page.data.pageNumber, 1);
+});
+
+test("viewers can open only a returned original source and cannot modify superseded entries", async () => {
+  const urls = [], calls = [];
+  const { page } = setup(async path => { calls.push(path); return { ...result, items: [
+    { knowledge_id: "k", review_status: "superseded", source_submission_id: "source?id=2" },
+    { knowledge_id: "missing", review_status: "superseded" }
+  ] }; }, { globalData: { currentMember: { role: "viewer" } }, wx: { navigateTo: options => urls.push(options.url) } });
+  await page.changeStatus(event({ status: "superseded" }));
+  page.openSource(event({ id: "k" })); page.openSource(event({ id: "missing" })); page.openSource(event({ id: "forged" }));
+  assert.deepEqual(urls, ["/pages/record-detail/index?id=source%3Fid%3D2"]);
+  page.openActions(event({ id: "k" })); assert.equal(page.data.target, null);
+  await page.mutate("delete"); assert.equal(calls.length, 1);
+});
+
+test("embedded inventory shares status logic and readonly permissions", async () => {
+  const paths = [];
+  const { page } = loadPage("components/review-inventory/index.js", async path => { paths.push(path); return result; },
+    { globalData: { currentMember: { role: "viewer" } } });
+  Object.assign(page, page.methods);
+  page.properties = { contextChildId: "child", embedded: true };
+  await page.lifetimes.attached.call(page);
+  await page.changeStatus(event({ status: "superseded" }));
+  assert.equal(page.data.canWrite, false); assert.match(paths.at(-1), /review_status=superseded/);
+});

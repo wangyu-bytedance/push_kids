@@ -19,6 +19,6 @@
 .form-card .danger-link { color: var(--pk-danger); }
 
 .form-foot { margin-top: 32rpx; }
-.form-foot .btn { width: 100%; min-width: 0; box-sizing: border-box; }
+.form-foot .btn { width: 100%; min-width: 0; min-height: 44px; box-sizing: border-box; }
 
 .sk.card-sk { height: 420rpx; }

@@ -1,0 +1,316 @@
+{
+  "viewport": {
+    "width": 320,
+    "height": 504,
+    "screenHeight": 568,
+    "dpr": 2,
+    "fontScale": 15,
+    "baseLibrary": "3.17.4"
+  },
+  "nodes": {
+    ".page": [
+      {
+        "left": 0,
+        "right": 320,
+        "top": 0,
+        "bottom": 1273,
+        "width": 320,
+        "height": 1273,
+        "fontSize": "16px"
+      }
+    ],
+    ".auto-card": [
+      {
+        "left": 15,
+        "right": 305,
+        "top": 403,
+        "bottom": 562,
+        "width": 290,
+        "height": 159,
+        "fontSize": "16px"
+      }
+    ],
+    ".noti-row": [
+      {
+        "left": 16,
+        "right": 304,
+        "top": 628,
+        "bottom": 763,
+        "width": 288,
+        "height": 135,
+        "fontSize": "16px"
+      },
+      {
+        "left": 16,
+        "right": 304,
+        "top": 763,
+        "bottom": 898,
+        "width": 288,
+        "height": 135,
+        "fontSize": "16px"
+      },
+      {
+        "left": 16,
+        "right": 304,
+        "top": 898,
+        "bottom": 1033,
+        "width": 288,
+        "height": 135,
+        "fontSize": "16px"
+      }
+    ],
+    ".noti-row .grow": [
+      {
+        "left": 27,
+        "right": 228,
+        "top": 638,
+        "bottom": 753,
+        "width": 201,
+        "height": 115,
+        "fontSize": "16px"
+      },
+      {
+        "left": 27,
+        "right": 228,
+        "top": 773,
+        "bottom": 888,
+        "width": 201,
+        "height": 115,
+        "fontSize": "16px"
+      },
+      {
+        "left": 27,
+        "right": 228,
+        "top": 908,
+        "bottom": 1023,
+        "width": 201,
+        "height": 115,
+        "fontSize": "16px"
+      }
+    ],
+    ".noti-switch": [
+      {
+        "left": 236,
+        "right": 293,
+        "top": 639,
+        "bottom": 683,
+        "width": 57,
+        "height": 44,
+        "fontSize": "16px"
+      },
+      {
+        "left": 236,
+        "right": 293,
+        "top": 774,
+        "bottom": 818,
+        "width": 57,
+        "height": 44,
+        "fontSize": "16px"
+      },
+      {
+        "left": 236,
+        "right": 293,
+        "top": 909,
+        "bottom": 953,
+        "width": 57,
+        "height": 44,
+        "fontSize": "16px"
+      }
+    ],
+    ".grant-link": [
+      {
+        "left": 35.5,
+        "right": 219.5,
+        "top": 709,
+        "bottom": 753,
+        "width": 184,
+        "height": 44,
+        "fontSize": "14px"
+      },
+      {
+        "left": 35.5,
+        "right": 219.5,
+        "top": 844,
+        "bottom": 888,
+        "width": 184,
+        "height": 44,
+        "fontSize": "14px"
+      },
+      {
+        "left": 35.5,
+        "right": 219.5,
+        "top": 979,
+        "bottom": 1023,
+        "width": 184,
+        "height": 44,
+        "fontSize": "14px"
+      }
+    ],
+    ".notice-hero .btn": [
+      {
+        "left": 68,
+        "right": 252,
+        "top": 271,
+        "bottom": 315,
+        "width": 184,
+        "height": 44,
+        "fontSize": "16px"
+      }
+    ],
+    ".auto-switch": [
+      {
+        "left": 234,
+        "right": 291,
+        "top": 417,
+        "bottom": 461,
+        "width": 57,
+        "height": 44,
+        "fontSize": "16px"
+      }
+    ],
+    ".icon-btn": [
+      {
+        "left": 249,
+        "right": 293,
+        "top": 20,
+        "bottom": 64,
+        "width": 44,
+        "height": 44,
+        "fontSize": "13px"
+      },
+      {
+        "left": 261,
+        "right": 305,
+        "top": 85,
+        "bottom": 129,
+        "width": 44,
+        "height": 44,
+        "fontSize": "16px"
+      }
+    ],
+    ".auto-copy": [
+      {
+        "left": 29,
+        "right": 228,
+        "top": 452,
+        "bottom": 474,
+        "width": 199,
+        "height": 22,
+        "fontSize": "14px"
+      },
+      {
+        "left": 29,
+        "right": 291,
+        "top": 482,
+        "bottom": 548,
+        "width": 262,
+        "height": 66,
+        "fontSize": "14px"
+      }
+    ],
+    ".r-s": [
+      {
+        "left": 27,
+        "right": 228,
+        "top": 661,
+        "bottom": 682,
+        "width": 201,
+        "height": 21,
+        "fontSize": "14px"
+      },
+      {
+        "left": 27,
+        "right": 228,
+        "top": 796,
+        "bottom": 817,
+        "width": 201,
+        "height": 21,
+        "fontSize": "14px"
+      },
+      {
+        "left": 27,
+        "right": 228,
+        "top": 931,
+        "bottom": 952,
+        "width": 201,
+        "height": 21,
+        "fontSize": "14px"
+      }
+    ],
+    ".noti-state .pill": [
+      {
+        "left": 27,
+        "right": 183,
+        "top": 687,
+        "bottom": 705,
+        "width": 156,
+        "height": 18,
+        "fontSize": "14px"
+      },
+      {
+        "left": 27,
+        "right": 183,
+        "top": 822,
+        "bottom": 840,
+        "width": 156,
+        "height": 18,
+        "fontSize": "14px"
+      },
+      {
+        "left": 27,
+        "right": 183,
+        "top": 957,
+        "bottom": 975,
+        "width": 156,
+        "height": 18,
+        "fontSize": "14px"
+      }
+    ],
+    ".n-txt": [
+      {
+        "left": 47,
+        "right": 242,
+        "top": 20,
+        "bottom": 64,
+        "width": 195,
+        "height": 44,
+        "fontSize": "14px"
+      }
+    ],
+    ".hero-note": [
+      {
+        "left": 31,
+        "right": 289,
+        "top": 214,
+        "bottom": 260,
+        "width": 258,
+        "height": 46,
+        "fontSize": "14px"
+      }
+    ],
+    ".help": [
+      {
+        "left": 15,
+        "right": 305,
+        "top": 1039,
+        "bottom": 1083,
+        "width": 290,
+        "height": 44,
+        "fontSize": "14px"
+      },
+      {
+        "left": 15,
+        "right": 305,
+        "top": 1209,
+        "bottom": 1253,
+        "width": 290,
+        "height": 44,
+        "fontSize": "14px"
+      }
+    ]
+  },
+  "expectedWidth": 320,
+  "state": "settings-error",
+  "fixture": "synthetic native page; no grant/provider invocation",
+  "screenshot": "NOT_RUN: automation screenshot unavailable; CUA samples separate"
+}

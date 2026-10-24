@@ -1,4 +1,5 @@
 <import src="../records/history.wxml" />
+<view aria-hidden="{{gradeConfirmationVisible}}">
 <primary-nav></primary-nav>
 <view class="page report-page">
   <view class="pg-head pk-hero report-intro">
@@ -242,3 +243,5 @@
     </view>
   </view>
 </view>
+</view>
+<grade-confirmation id="grade-confirmation" view="{{gradeConfirmation}}" blocked="{{loading || showChildSheet || inventoryExpanded || filterOpen}}" bindaction="onGradeConfirmation"></grade-confirmation>

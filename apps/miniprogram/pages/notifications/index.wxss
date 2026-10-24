@@ -1,9 +1,18 @@
 /* 提醒设置（G9）：通道 Hero + 三类提醒行 + 最近投递记录。
    这一页的视觉重点是"状态"，所以状态胶囊与开关分列两侧，互不遮挡。 */
 .notifications-page { padding-bottom: 8rpx; }
+.notifications-page .icon-btn { min-width: 44px; min-height: 44px; }
+.notifications-page .notice-hero .btn { min-height: 44px; }
+.auto-switch { flex: none; min-height: 44px; }
+.notifications-page .n-txt, .notifications-page .hero-note,
+.notifications-page .help, .notifications-page .noti-state .pill { font-size: 14px; }
 
 .notice-hero .hero-ok { display: flex; align-items: flex-start; gap: 12rpx; margin-top: 20rpx; }
-.notice-hero .hero-ok .ok-txt { flex: 1; min-width: 0; font-size: 13px; line-height: 1.5; color: #5A6E64; }
+.notice-hero .hero-ok .ok-txt { flex: 1; min-width: 0; font-size: 14px; line-height: 1.6; color: #464E43; }
+.neutral-hero { background: var(--pk-surface-sunken); color: var(--pk-ink); }
+.auto-card { margin-top: 20px; }
+.auto-title { display: block; font-size: 17px; font-weight: 600; }
+.auto-copy { display: block; margin-top: 8px; font-size: 14px; line-height: 1.6; color: #464E43; }
 
 .off-hero { margin-top: 8rpx; background: var(--pk-surface-warm); }
 .off-hero .off-mark { flex: none; width: 72rpx; height: 72rpx; border-radius: 50%; background: var(--pk-surface-sunken); display: flex; align-items: center; justify-content: center; }
@@ -15,10 +24,12 @@
 .noti-line { display: flex; align-items: center; gap: 12rpx; min-width: 0; }
 .noti-line .r-t { flex: 1; min-width: 0; }
 .noti-line .pill { flex: none; }
-.noti-state { display: flex; align-items: center; gap: 16rpx; margin-top: 12rpx; }
-.noti-state .grant-link { font-size: 13px; line-height: 1.45; font-weight: 500; color: var(--pk-primary); }
-.noti-switch { flex: none; margin-top: 4rpx; transform: scale(.86); transform-origin: right center; }
+.noti-state { display: flex; flex-wrap: wrap; align-items: center; gap: 16rpx; margin-top: 12rpx; }
+.grant-link { display: block; width: 100%; min-height: 44px; padding: 8px 0; margin: 4px 0 0; background: transparent; text-align: left; font-size: 14px; line-height: 1.6; color: var(--pk-primary); }
+.grant-link::after { border: 0; }
+.noti-switch { flex: none; min-height: 44px; margin-top: 4rpx; }
+.noti-row .r-s, .off-hero .off-sub, .log-row .log-meta, .log-row .log-why { font-size: 14px; }
 
 .log-row { align-items: flex-start; }
-.log-row .log-meta { display: block; margin-top: 8rpx; font-size: 12px; line-height: 1.45; color: var(--pk-ink-4); }
-.log-row .log-why { display: block; margin-top: 8rpx; font-size: 13px; line-height: 1.5; color: var(--pk-ink-3); }
+.log-row .log-meta { display: block; margin-top: 8rpx; font-size: 14px; line-height: 1.45; color: var(--pk-ink-4); }
+.log-row .log-why { display: block; margin-top: 8rpx; font-size: 14px; line-height: 1.5; color: var(--pk-ink-3); }

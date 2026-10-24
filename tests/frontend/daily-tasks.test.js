@@ -22,6 +22,7 @@ function harness(name, request) {
   const source = fs.readFileSync(path.join(__dirname, `../../apps/miniprogram/pages/${name}/index.js`), "utf8");
   vm.runInNewContext(source, {
     require(module) {
+      if (module.includes("notification-renewal")) return { createController() { throw Error("legacy family-only fixture cannot renew"); } };
       if (module.includes("child-context")) return childContext;
       if (module.includes("/ui")) return { subjectClass: () => "", subjectMark: () => "",
         readPreference() { throw Error("old folding preference must not be read"); },

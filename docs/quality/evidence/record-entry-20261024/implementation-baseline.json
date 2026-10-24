@@ -1,0 +1,17 @@
+{
+  "stage": "approved_preimplementation",
+  "spec": "BUG-SPEC-20261024-RECORD-ENTRY-05",
+  "design": "DREV-20261024-RECORD-ENTRY-01",
+  "head": "82ca52775bc948f2a963a8f4ed614322d8859de8",
+  "files": {
+    "apps/miniprogram/pages/records/record-types.js": "4f879e688182ec6997325b0058c54af22d4ae5775a8b82650e9a23b220f93692",
+    "apps/miniprogram/pages/records/index.wxml": "d580ed99ab62f4a3c0539bd27033b2cbc4643d2a2e4d13a65f3ecaf08399c5c2",
+    "apps/miniprogram/pages/records/index.wxss": "00317d39d23dfb73ab8a54eeba4e4fc49a62d389f211938539f557e27700f3e7",
+    "apps/miniprogram/pages/footprints/controller.js": "e4dfb76884099e4037842a7bd3d37c87544bbc3f4bb0076dbb20cb1f9ff659ff",
+    "apps/miniprogram/pages/footprints/maps.js": "1ba17d7905a2eee9f5de9bc30a551fecfabe48ecc77ea38688294b5960277a92",
+    "apps/miniprogram/pages/footprints/index.wxml": "dc870dae0fe793406efb3f4b9fc5839601aea7feab62ebd574942cadd941770f",
+    "apps/miniprogram/pages/footprints/index.wxss": "e27a910914dbea2641c83b6c46be00a3ca6fe10c906689402bf79dfcfbb6a35e",
+    "tests/frontend/record-types.test.js": "7012037c2dbba7913a50407824cb4183280149e7d1010beaf93a184e456c1c57",
+    "tests/frontend/footprints.test.js": "9a8738b83d1f8eb6448eec16446e3b5e14652a4ea1701b9bedc0e55b6756bb6a"
+  }
+}

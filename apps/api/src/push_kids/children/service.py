@@ -1,9 +1,10 @@
 from sqlalchemy import delete, func, select, update
 from sqlalchemy.orm import Session
 
+from push_kids.children.grade_confirmation import GradeConfirmationService
 from push_kids.children.schemas import ChildCreate, ChildUpdate, SubjectCreate, SubjectUpdate
 from push_kids.persistence.models import Child, FamilyAuditEvent, Subject
-from push_kids.platform.errors import ConflictError, NotFoundError
+from push_kids.platform.errors import ClientUpgradeRequiredError, ConflictError, NotFoundError
 from push_kids.platform.time import local_date
 
 # The system preset learning catalog owned by this module; everything else is parent-built.
@@ -20,6 +21,30 @@ def is_custom_subject(name: str, kind: str) -> bool:
 
 
 class ChildrenService:
+    @staticmethod
+    def data_scope_available(family_id, child_id):
+        """SQL eligibility for existing owned work, including archived profiles."""
+        return (
+            select(Child.id)
+            .where(Child.family_id == family_id, Child.id == child_id, Child.deleting.is_(False))
+            .exists()
+        )
+
+    @staticmethod
+    def lock_existing_data_scope(db: Session, family_id: str, child_id: str) -> Child:
+        """Finish existing owned work, including archived profiles; deletion always wins."""
+        child = db.scalar(
+            select(Child)
+            .where(Child.family_id == family_id, Child.id == child_id)
+            .with_for_update()
+            .execution_options(populate_existing=True)
+        )
+        if child is None:
+            raise NotFoundError("没有找到这个孩子")
+        if child.deleting:
+            raise ConflictError("这个孩子的资料正在清理")
+        return child
+
     @staticmethod
     def invalidate_review_inventory(db: Session, family_id: str, child_id: str) -> None:
         """Advance the child-owned read generation in the caller's transaction."""
@@ -148,6 +173,7 @@ class ChildrenService:
         payload = data.model_dump(exclude={"subject_names"})
         payload["name"] = cls._require_free_name(db, family_id, data.name)
         child = Child(family_id=family_id, **payload)
+        GradeConfirmationService.initialize(child)
         db.add(child)
         db.flush()
         if child.id is None:
@@ -180,8 +206,20 @@ class ChildrenService:
 
     @classmethod
     def update_child(cls, db: Session, family_id: str, child_id: str, data: ChildUpdate) -> Child:
-        child = cls.require_active_child(db, family_id, child_id)
-        values = data.model_dump(exclude_unset=True)
+        child = cls.lock_existing_data_scope(db, family_id, child_id)
+        if not child.active:
+            raise ConflictError("这个学习档案已归档，恢复后才能继续记录")
+        values = data.model_dump(
+            exclude_unset=True, exclude={"confirm_grade", "expected_grade_revision"}
+        )
+        if "grade" in values:
+            grade = values.pop("grade")
+            if data.confirm_grade and data.expected_grade_revision is not None:
+                GradeConfirmationService.save_manual_grade(
+                    db, child, grade, data.expected_grade_revision
+                )
+            elif grade != child.grade:
+                raise ClientUpgradeRequiredError("请更新小程序后修改年级，刚才填写的内容仍保留")
         if "name" in values and values["name"] is not None:
             values["name"] = cls._require_free_name(
                 db, family_id, values["name"], exclude_child_id=child_id

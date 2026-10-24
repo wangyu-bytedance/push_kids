@@ -1,0 +1,154 @@
+{
+  "nodes": {
+    ".grade-sheet": [
+      {
+        "left": 0,
+        "right": 430,
+        "top": 352,
+        "bottom": 932,
+        "width": 430,
+        "height": 580,
+        "fontSize": "16px"
+      }
+    ],
+    ".grade-body": [
+      {
+        "left": 20,
+        "right": 410,
+        "top": 388,
+        "bottom": 748,
+        "width": 390,
+        "height": 360,
+        "fontSize": "16px"
+      }
+    ],
+    ".grade-title": [
+      {
+        "left": 20,
+        "right": 410,
+        "top": 416,
+        "bottom": 450,
+        "width": 390,
+        "height": 34,
+        "fontSize": "24px"
+      }
+    ],
+    ".grade-name": [
+      {
+        "left": 20,
+        "right": 410,
+        "top": 462,
+        "bottom": 489,
+        "width": 390,
+        "height": 27,
+        "fontSize": "18px"
+      }
+    ],
+    ".grade-current": [
+      {
+        "left": 20,
+        "right": 410,
+        "top": 492,
+        "bottom": 514,
+        "width": 390,
+        "height": 22,
+        "fontSize": "14px"
+      }
+    ],
+    ".grade-intro": [
+      {
+        "left": 20,
+        "right": 410,
+        "top": 528,
+        "bottom": 552,
+        "width": 390,
+        "height": 24,
+        "fontSize": "15px"
+      }
+    ],
+    ".grade-picker": [
+      {
+        "left": 20,
+        "right": 410,
+        "top": 603,
+        "bottom": 654,
+        "width": 390,
+        "height": 51,
+        "fontSize": "16px"
+      }
+    ],
+    ".grade-shared": [
+      {
+        "left": 20,
+        "right": 410,
+        "top": 666,
+        "bottom": 688,
+        "width": 390,
+        "height": 22,
+        "fontSize": "14px"
+      }
+    ],
+    ".grade-error": [
+      {
+        "left": 20,
+        "right": 410,
+        "top": 702,
+        "bottom": 748,
+        "width": 390,
+        "height": 46,
+        "fontSize": "14px"
+      }
+    ],
+    ".grade-actions": [
+      {
+        "left": 20,
+        "right": 410,
+        "top": 748,
+        "bottom": 878,
+        "width": 390,
+        "height": 130,
+        "fontSize": "16px"
+      }
+    ],
+    ".grade-primary": [
+      {
+        "left": 20,
+        "right": 410,
+        "top": 772,
+        "bottom": 820,
+        "width": 390,
+        "height": 48,
+        "fontSize": "16px"
+      }
+    ],
+    ".grade-secondary": [
+      {
+        "left": 20,
+        "right": 410,
+        "top": 830,
+        "bottom": 878,
+        "width": 390,
+        "height": 48,
+        "fontSize": "16px"
+      }
+    ],
+    ".tabbar": []
+  },
+  "viewport": {
+    "width": 430,
+    "height": 932,
+    "screenHeight": 932,
+    "dpr": 3,
+    "fontScale": 15,
+    "baseLibrary": "3.17.4"
+  },
+  "state": "error",
+  "errors": [],
+  "fixture": "synthetic presentation only; actual lifecycle covered by frontend tests",
+  "capturedAt": "2026-10-24T11:34:34.736Z",
+  "screenshotSha256": "a46c34a4138b6d9a5c6388ebc0d0345afc3ca1e0515ac3fa120ef558ab90d27e",
+  "screenshotPixels": {
+    "width": 860,
+    "height": 1864
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "nodes": {
+    ".grade-sheet": [],
+    ".grade-body": [],
+    ".grade-title": [],
+    ".grade-latest": [],
+    ".grade-picker": [],
+    ".grade-error": [],
+    ".grade-actions": [],
+    ".grade-primary": [],
+    ".grade-secondary": [],
+    ".tabbar": [
+      {
+        "left": 0,
+        "right": 390,
+        "top": 754,
+        "bottom": 844,
+        "width": 390,
+        "height": 90,
+        "scrollLeft": 0,
+        "scrollTop": 0,
+        "scrollWidth": 0,
+        "scrollHeight": 0,
+        "fontSize": "16px",
+        "lineHeight": "normal"
+      }
+    ]
+  },
+  "viewport": {
+    "width": 390,
+    "height": 844,
+    "screenHeight": 844,
+    "dpr": 3,
+    "fontScale": 15,
+    "baseLibrary": "3.17.4"
+  },
+  "observed": {
+    "attempts": 2,
+    "visible": false,
+    "selected": null,
+    "error": null
+  },
+  "errors": [],
+  "state": "interaction-dismissed",
+  "fixture": "actual picker/component/host/controller; offline transport rejects every write",
+  "capturedAt": "2026-10-24T12:51:45.106Z",
+  "screenshotSha256": "f470b0a1e73f89eb4c593acf7ad0f825fb90d17b64e0f2d1b0465c65b062cd45"
+}

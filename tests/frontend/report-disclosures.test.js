@@ -80,7 +80,7 @@ test("embedded edit plan runs the same bounded controller and discards detached 
   await component.lifetimes.attached.call(component);
   assert.equal(component.data.childId, "child");
   assert.equal(component.data.loaded, true);
-  assert.deepEqual(paths, ["/children/child/review-inventory?view=time&offset=1&limit=20"]);
+  assert.deepEqual(paths, ["/children/child/review-inventory?view=time&offset=1&limit=20&review_status=normal"]);
   const second = component.selectDay({ currentTarget: { dataset: { offset: 2 } } });
   component.lifetimes.detached.call(component);
   completeSecond({ items: [{ knowledge_id: "old" }], total: 1, as_of_day: "2026-10-11", child_writable: true });

@@ -1052,6 +1052,7 @@ dependencies = [
     { name = "cos-python-sdk-v5" },
     { name = "fastapi" },
     { name = "openai" },
+    { name = "pillow" },
     { name = "pycryptodome" },
     { name = "pydantic-settings" },
     { name = "pymysql" },
@@ -1064,7 +1065,6 @@ dependencies = [
 dev = [
     { name = "httpx" },
     { name = "mypy" },
-    { name = "pillow" },
     { name = "pytest" },
     { name = "pytest-asyncio" },
     { name = "pytest-cov" },
@@ -1077,6 +1077,7 @@ requires-dist = [
     { name = "cos-python-sdk-v5", specifier = ">=1.9,<2" },
     { name = "fastapi", specifier = ">=0.116,<1" },
     { name = "openai", specifier = ">=1.99,<3" },
+    { name = "pillow", specifier = ">=11,<12" },
     { name = "pycryptodome", specifier = ">=3.20,<4" },
     { name = "pydantic-settings", specifier = ">=2.10,<3" },
     { name = "pymysql", specifier = ">=1.1,<2" },
@@ -1089,7 +1090,6 @@ requires-dist = [
 dev = [
     { name = "httpx", specifier = ">=0.28,<1" },
     { name = "mypy", specifier = ">=1.17,<2" },
-    { name = "pillow", specifier = ">=11,<12" },
     { name = "pytest", specifier = ">=8.4,<9" },
     { name = "pytest-asyncio", specifier = ">=1.1,<2" },
     { name = "pytest-cov", specifier = ">=6.2,<7" },

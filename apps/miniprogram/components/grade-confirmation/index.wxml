@@ -1,0 +1,23 @@
+<view class="grade-overlay" wx:if="{{view}}" catchtouchmove="contain">
+  <view class="grade-mask" bindtap="later" aria-hidden="{{true}}"></view>
+  <view class="grade-sheet" aria-role="dialog" aria-label="{{view.name}}的年级" aria-modal="{{true}}">
+    <view class="grade-handle" aria-hidden="{{true}}"></view>
+    <scroll-view class="grade-body" scroll-y="{{true}}">
+      <text class="grade-title">{{view.name}}的年级</text>
+      <block wx:if="{{view.status !== 'latest'}}">
+        <picker range="{{view.choices}}" range-key="label" value="{{view.index}}" disabled="{{view.status === 'saving' || view.status === 'conflict'}}" bindtap="pickerOpen" bindchange="choose" bindcancel="pickerCancel">
+          <view class="grade-picker {{view.status === 'saving' || view.status === 'conflict' ? 'grade-picker-disabled' : ''}}" aria-label="年级，{{view.selectedLabel}}"><text>{{view.selectedLabel}}</text><view class="grade-chevron" aria-hidden="{{true}}"></view></view>
+        </picker>
+      </block>
+      <block wx:else>
+        <text class="grade-latest">{{view.currentLabel}}</text>
+        <text class="grade-error grade-info" aria-role="alert">家人已确认，已更新。</text>
+      </block>
+      <text class="grade-error {{view.status === 'conflict' ? 'grade-info' : ''}}" wx:if="{{view.error}}" aria-role="alert">{{view.error}}</text>
+    </scroll-view>
+    <view class="grade-actions">
+      <button class="grade-secondary" wx:if="{{view.status !== 'latest'}}" disabled="{{view.status === 'saving'}}" bindtap="later">稍后</button>
+      <button class="grade-primary" disabled="{{view.status === 'saving'}}" bindtap="confirm">{{view.status === 'saving' ? '保存中…' : view.status === 'latest' ? '继续' : view.status === 'conflict' ? '查看最新' : '确认'}}</button>
+    </view>
+  </view>
+</view>

@@ -464,7 +464,7 @@ class ReportingService:
         returned_activity_records = sum(int(row.records) for row in activity_subject_rows)
 
         occurrence_day = _local_day_expression(db, KnowledgeOccurrence.occurred_at)
-        active = ReviewItem.active.is_(True)
+        active = and_(ReviewItem.active.is_(True), PlanningService.scheduling_eligible())
         urgency_level = case(
             (
                 and_(

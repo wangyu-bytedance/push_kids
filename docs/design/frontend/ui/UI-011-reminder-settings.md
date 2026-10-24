@@ -1,55 +1,44 @@
 # UI-011 — 提醒设置与微信授权入口
 
-- Status: `CURRENT_LOCAL / PREVIEW_ONLY / NATIVE_MATRIX_PENDING`
-- Related Feature: `FEAT-003`
-- Related Spec: `SPEC-20260906-CHANNEL-02`
-- Baseline: `FDB-20260906-02`（PKDS 2.0「纸 · 芽」，未新增视觉语言）
-- Engineering contract: `FEC-20260905-02`
-- Design revision: `DREV-20260906-PKDS-03`（屏 G9；仅复用既有 tokens/atoms/图标集）
-- Interactive artifact: `N/A` — 本轮未产出独立原型，走查用 `tools/preview` 近似渲染
-- Snapshot manifest: `PENDING`
-- Editable design source: `PENDING — UI-011 visible work requires a repository-native SVG/HTML DREV`
-- Design evidence governance: `GOV-SPEC-LOCAL-DESIGN-EVIDENCE-20260913-01`
-
-> 本文只描述当前本地事实。页面已实现并通过前端单测与结构校验，**微信开发者工具编译、三视口原生
-> 节点几何、真机 `wx.requestSubscribeMessage` 授权与真实送达均为 `NOT RUN`**，因此不能描述为已验收。
+- Status: CURRENT_LOCAL / VERIFYING / NOT_RELEASED
+- Current-state revision: UI-STATE-20261017-NOTIFICATION-AUTO-RENEWAL-01
+- Related Features: FEAT-003 / FEAT-011
+- Approved Spec: SPEC-20261017-NOTIFICATION-AUTO-RENEWAL-01
+- Baseline: FDB-20260913-04；engineering constraints: FEC-20261007-NATIVE-GEOMETRY-02
+- Approved Design Revision: DREV-20261017-NOTIFICATION-AUTO-RENEWAL-01
+- Approval: 用户，2026-10-17，“按照这个方案落地”。
+- Source/matrix: [FRONTEND-SPEC](../prototypes/DREV-20261017-NOTIFICATION-AUTO-RENEWAL-01/FRONTEND-SPEC.md)
+- Immutable snapshots: [manifest](../snapshots/UI-011/DREV-20261017-NOTIFICATION-AUTO-RENEWAL-01/APPROVAL.md)
+- Evidence: [实现与验收缺口](../../../quality/evidence/NOTIFICATION-AUTO-RENEWAL-IMPLEMENTATION-20261017.md)
 
 ## Information architecture
 
-入口位于「设置 → 提醒设置」，非 Tab 二级页 `pages/notifications/index`。家庭还没有学习档案时，
-设置页空态里同样提供该入口——家人加入申请的提醒在建档之前就有意义。
+入口仍是“设置 → 提醒设置”，非Tab二级页，空档案也可进入。
+顺序为通道与次数概况、自动补充独立开关、逐类提醒开关及授权状态、最近实际投递。
+想不想收、是否自动补充、微信额度和真实送达分别展示，不用一个开关冒充全部就绪。
 
-页面自上而下三段：**通道状态（能不能收到）→ 三类提醒开关（想不想收）→ 最近的提醒（实际收到了什么）**。
-这个顺序来自一条硬约束：开关代表意愿，授权代表能力，两者必须分开显示，否则家长会把「开关是开的」
-误当成「一定会收到」。
-
-## Review states
+## Current states
 
 | State | Visible contract |
 |---|---|
-| 通道可用 · 有待授权 | 绿色 Hero 报出待授权类别数与主操作「在微信里开启提醒」；对应行显示 `待微信授权` + 行内「去授权」 |
-| 通道可用 · 全部就绪 | Hero 改为「提醒已就绪」并显示最近一条发出时间；一次性模板额外说明一次授权只够一条 |
-| 通道不可用 | Hero 降级为中性卡片，说明服务端给出的原因，并明确「不影响记录和复习」；所有行显示 `暂不可用`，不出现授权按钮 |
-| 微信版本过低 | 追加中性提示条；点击授权只弹「更新微信」说明，不调用不存在的接口 |
-| 单类关闭 | 行显示 `已关闭` 且不催授权 |
-| 拒收 / 额度用完 / 授权被收回 | 分别显示 `微信里已拒收`（危险色）、`上一条已用完`、`需要重新开启`，都提供再授权入口 |
-| 最近的提醒 | 每条显示标题、内容、类别、时间、状态胶囊；非成功结果附一句可据此行动的原因 |
-| 模板配置有问题 | 该条显示 `未发送` + 「提醒模板缺少内容，已跳过；修好配置后会重新排队」——不指责家长，也不让家长去操作 |
-| 投递记录读取失败 | 只降级这一段为提示条，开关与授权照常可用 |
-| 偏好写入失败 | 开关拨回服务端真实状态并显示错误，不留下假的「已开启」 |
+| 次数0/新模板 | 中性“提醒需要补充次数”；逐类说明需同意当前模板，提供“手动补充次数” |
+| 有次数/长期授权 | 按实际显示“可发送N次”或“长期授权有效”，不囤积额度 |
+| 冷却 | “还需完成N条复习”，保留显式手动补充；自动动作仅在后续复习点击 |
+| 明确停止 | 记住拒绝/总开关关闭显示原因及“去微信调整”；ban/filter显示平台原因 |
+| 登记未确认 | “提醒次数待确认”及“次数待确认 · 登记待恢复”；保有真实回调时仅恢复原事件登记，隐藏该类再次申请入口 |
+| 已预备尚未调用 | 显示“待微信授权”，不是已授权 |
+| 开关保存中/失败 | 保留真实值并禁重复操作；失败回滚并显示错误 |
+| 全部类别关闭 | “提醒尚未开启”，不自动申请 |
+| 查询失败 | 状态待更新、保留旧设置、禁写；403清空家庭设置，迟到回调不覆盖新页 |
+| 通道不可用/旧微信 | 如实显示原因；不调用原生授权，旧微信提供升级说明 |
+| 投递读取失败 | 仅记录段降级，其余设置独立 |
 
-## Interaction and safety contract
+## Interaction and responsive contract
 
-- 授权必须在用户点击的同一次手势里第一时间调用 `wx.requestSubscribeMessage`，其前不得 `await`
-  任何网络请求；一次最多带 3 个模板（微信上限）。
-- 只有 `accept` 计为授权；`reject / ban / filter` 一律按未授权回传服务端，界面不做乐观解释。
-- 通道不可用时不发起授权，也不显示授权入口——服务端会以 404 拒绝收下无法消费的授权。
-- `member_application` 行标注「仅管理员」；非管理员的可见性与可改性由服务端决定，前端不自行放行。
-- 页面文案不评价孩子、不预测该学什么，只复述「哪个孩子、几点、做什么」和「还有哪些没复习」。
-- 页面明确声明提醒是尽力而为，重要安排以小程序内日程为准。
-- loading / empty / error / 401 / 403 / 并发变更遵循 `FEC-20260830-01`；下拉刷新重新读取设置与记录。
-
-## Visual and responsive contract
+候选在点击前预备，原生调用在同步点击链里、任何await之前，最多3个模板。
+只有真实accept登记额度；普通reject/cancel按10条冷却，ban/filter和技术失败分别处理。
+未决事件到期不自动重开，丢失结果不能由getSetting推测，手动重新授权是明确操作。
+本人自动开关默认未开启；服务端跨设备保存，版本冲突需刷新，不被迟到开启覆盖。
 
 本地视觉增量revision `UI-VISUAL-20261021-HERO-ARC-01` 已随共享样式
 去掉提醒就绪/中性卡右下角细弧线，其他状态与授权行为保留。批准来源为
@@ -57,20 +46,12 @@
 [DREV-20261021-HERO-ARC-REMOVAL-01](../prototypes/DREV-20261021-HERO-ARC-REMOVAL-01/FRONTEND-SPEC.md)，
 本地验证和未完成验收见[质量证据](../../../quality/evidence/HERO-ARC-REMOVAL-20261021.md)，未上传/部署。
 
-沿用 PKDS 2.0：暖纸背景、低饱和青绿、既有 `pk-card / pk-hero / rowlist / pill / pk-notice` 原子与
-既有图标集（`ico-family` / `ico-clock` / `ico-book`），不新增品牌色、字体、图像或第三方资源。
-状态既用文字也用色彩表达，不只依赖颜色。评审矩阵为 320×568、390×844、430×932。
-
-## Approval status
-
-- 用户指令（2026-09-06）：「继续做，我需要一个完整的功能」——据此实现授权入口，`SPEC-20260906-CHANNEL-02` 待评审确认。
-- 已完成：`node --test tests/frontend/notifications.test.js`（11 项）、`npm test`、`npm run lint:miniapp`、
-  `tools/validate_miniprogram.py`（`pages=15`）、320/390/430 近似渲染走查。
-- 待完成（发布门禁）：微信开发者工具编译与三视口原生节点几何证据、真机授权与真实送达、
-  repository-native editable source、快照 manifest 与明确批准。
+沿用“纸 · 芽”颜色、字体和卡片。正文/状态至少14px，操作目标至少44px，中文自然换行；
+矩阵320×568、390×844、430×932。原生几何、完整截图、字体放大/读屏与真机分别验收。
+不新增自动补充Toast，不改变通知受众、调度或学习/复习规则。
 
 ## Change references
 
-- `specs/completed/FEAT-003-NOTIFICATION-CHANNEL.md` revision `SPEC-20260906-CHANNEL-02`
-- `docs/domain/features/FEAT-003-notification-channel.md`
-- `docs/domain/BEHAVIOR-CATALOG.md` `BHV-028`
+2026-10-17 SPEC-20261017-NOTIFICATION-AUTO-RENEWAL-01 / BHV-037：
+本页替换旧“提醒已就绪/去授权”、ban/filter统一当拒绝等本地描述。
+线上发布事实见FEAT-003，本地实现不等于发布。

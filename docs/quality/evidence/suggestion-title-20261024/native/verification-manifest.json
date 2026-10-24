@@ -1,0 +1,574 @@
+{
+  "status": "PASS_NATIVE_MATRIX",
+  "passed_captures": 39,
+  "verified_widths": [
+    320,
+    390,
+    430
+  ],
+  "source_matches": true,
+  "source_manifest_sha256": "097ef591ecd0b03984c24a87aa079c757434d42f418079099cad0c84581e49bc",
+  "shared_styles_sha256": {
+    "app.wxss": "366f763d208d20f935185e2300fce429bd7a21f98616d1e040b892367e332dc1",
+    "styles/tokens.wxss": "4078b00aa30e9d5eaafe9c1a687b6f267c212cf26724290b8635df909d6504a5",
+    "styles/atoms.wxss": "1c569b76f2cecb5331371b1378092be3388544bceaa9bd3e6ff1365993a9e17f"
+  },
+  "shared_styles_match_copy": true,
+  "devtools": "Stable 2.01.2510290",
+  "font_scale": "default (not system enlarged)",
+  "scope": "official native automation; offline synthetic copy; no business writes",
+  "remaining_gates": [
+    "real iOS/Android",
+    "actual keyboard",
+    "system large font",
+    "screen reader"
+  ],
+  "captures": [
+    {
+      "file": "title-proposal-320.json",
+      "state": "title-proposal",
+      "capturedAt": "2026-10-24T13:05:00.303Z",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4"
+      },
+      "node_json_sha256": "bc058fd61e943e33f0ee152ffbc7524f2118291ed1cc744541f26374ed2c7895",
+      "screenshot_sha256": "b2be13b1beb231903fc076e72fec5a621b1faaf4fc963fc8a4eb5415ab123b01"
+    },
+    {
+      "file": "title-proposal-max-320.json",
+      "state": "title-proposal-max",
+      "capturedAt": "2026-10-24T13:05:00.657Z",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4"
+      },
+      "node_json_sha256": "d304ec54678e8fdd575b61cf465d12e8f90a0eaf1b90d7525789e4089a59e3ee",
+      "screenshot_sha256": "dcf8cad3a769d920bf23de1a6d730e15ee0b393ea3d047637b2fe38082f2854e"
+    },
+    {
+      "file": "title-card-max-320.json",
+      "state": "title-card-max",
+      "capturedAt": "2026-10-24T13:05:01.116Z",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4"
+      },
+      "node_json_sha256": "b84d2c4958e776d8110cfe77270035a7bd6ca387cc1db7322d3a3f8d054029cd",
+      "screenshot_sha256": "848d78e25e9e609e13f64857afee7037daa76d778ab7a8c582f0228bc3255b04"
+    },
+    {
+      "file": "title-edit-default-320.json",
+      "state": "title-edit-default",
+      "capturedAt": "2026-10-24T13:05:01.440Z",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4"
+      },
+      "node_json_sha256": "999494bc42b7e89960ee29d4dfa139ba9510eecda14d51cf6d6501ec0dd63885",
+      "screenshot_sha256": "28b03e0dc37be77bf798218cb6cb73b5fba682a75dc1434cc5071e744bc2e95b"
+    },
+    {
+      "file": "title-edit-max-320.json",
+      "state": "title-edit-max",
+      "capturedAt": "2026-10-24T13:05:01.742Z",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4"
+      },
+      "node_json_sha256": "8418fa7c047f97bd0fcc827da24d4f08e28dd92331ecb0efe91cb2220ffedc2a",
+      "screenshot_sha256": "a6d419b5b6276548e9ac22733528a03dcd2ceb40f6f2d8442ce0833158be9c60"
+    },
+    {
+      "file": "title-edit-over-320.json",
+      "state": "title-edit-over",
+      "capturedAt": "2026-10-24T13:05:02.043Z",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4"
+      },
+      "node_json_sha256": "7db8f5759fde2b1cf748f8c4465751dd7a558241174da370ae92e230eaf27fc7",
+      "screenshot_sha256": "198c04a7add8a2a16e1b636115b14a5db83652387b95affff663e2e9fc418085"
+    },
+    {
+      "file": "title-edit-empty-320.json",
+      "state": "title-edit-empty",
+      "capturedAt": "2026-10-24T13:05:02.355Z",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4"
+      },
+      "node_json_sha256": "f26bf4fe9005fdf36466816475c5369f5c939e58261550325a3d4e885d08f644",
+      "screenshot_sha256": "cf1f1b6ae452416251a26e23409e49b2a1631ed2f9e62b403de6ccf448e17441"
+    },
+    {
+      "file": "title-edit-legacy-320.json",
+      "state": "title-edit-legacy",
+      "capturedAt": "2026-10-24T13:05:02.650Z",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4"
+      },
+      "node_json_sha256": "d2268e0937df2100b6bb0e08844e0a9d0ce6f055215cca6d880cef9e9e35f324",
+      "screenshot_sha256": "9af97fd81ff83e9079a1120535228c382f7cdd7108814ea0b0eac3687d4560d3"
+    },
+    {
+      "file": "title-edit-error-320.json",
+      "state": "title-edit-error",
+      "capturedAt": "2026-10-24T13:05:02.953Z",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4"
+      },
+      "node_json_sha256": "3bb93a5cb57015a413b55c116b34d9ca74283ca8e53fee76fdb16a62122dc5d9",
+      "screenshot_sha256": "7d351941a054c863078ed8917c5352437fb6ef04b50ece76311708355e007253"
+    },
+    {
+      "file": "title-edit-saving-320.json",
+      "state": "title-edit-saving",
+      "capturedAt": "2026-10-24T13:05:03.249Z",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4"
+      },
+      "node_json_sha256": "c5fe94d1e544e2eae2c783cbcda135b715f18a02904eb45835ef41e1f3a612cb",
+      "screenshot_sha256": "2ed19e06c4d3c2e3f990fd06ec2b09325c05a8350397ada022100fca05e4faac"
+    },
+    {
+      "file": "title-edit-unicode-320.json",
+      "state": "title-edit-unicode",
+      "capturedAt": "2026-10-24T13:05:03.546Z",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4"
+      },
+      "node_json_sha256": "20400766a054be84145ded1e98a91875b3fb8b23bb128a5301d1d03446f4c01d",
+      "screenshot_sha256": "441cdca158f84b66b14b0874eb89949ac64100920a3b171e0ae052bb43acd41a"
+    },
+    {
+      "file": "title-legacy-320.json",
+      "state": "title-legacy",
+      "capturedAt": "2026-10-24T13:05:03.850Z",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4"
+      },
+      "node_json_sha256": "b8f37cb3ba10abc65deefaf6cd17d93f2d0ab16e43515159ed20af0128f99ae5",
+      "screenshot_sha256": "dcfa0faf5bf759b48aa17f56c7ab146931851a24fc1e708f3ecef8d32a60fbfa"
+    },
+    {
+      "file": "max-title-scrolled-320.json",
+      "state": "max-title-scrolled",
+      "capturedAt": "2026-10-24T13:05:04.151Z",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4"
+      },
+      "node_json_sha256": "5d0bdf336d1ebe6a8fed27d20034b7d7313f94b1c2e017aaa843c46553c1d7f8",
+      "screenshot_sha256": "2bcca01d23a644234623d71f1fccc537bc4d14771bbbac06c0c3fd0b8ccde7e9"
+    },
+    {
+      "file": "title-proposal-390.json",
+      "state": "title-proposal",
+      "capturedAt": "2026-10-24T13:07:39.677Z",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "node_json_sha256": "7c1ceaa0c787b6b6b0d49d9ad7eb14e4cc50a0f7f8264303c1ee4b98f9247518",
+      "screenshot_sha256": "b0eb231edc4db0545e514804b1b03529268da82ce9458371f2956d09e86579a1"
+    },
+    {
+      "file": "title-proposal-max-390.json",
+      "state": "title-proposal-max",
+      "capturedAt": "2026-10-24T13:07:40.033Z",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "node_json_sha256": "4d3bf7c0cb65217134565dba11e3dd4d4233b55cd938c2f98083af2c7cdcee8b",
+      "screenshot_sha256": "ad51a71798cb7e7cd2db51494ce47b310709ed9e75be77e74eb0581b125208b9"
+    },
+    {
+      "file": "title-card-max-390.json",
+      "state": "title-card-max",
+      "capturedAt": "2026-10-24T13:07:40.401Z",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "node_json_sha256": "6748ae3d696981b222a7319eda315b80c69c53a69ffa6d6376681b49bb6e80ee",
+      "screenshot_sha256": "b7db1f29db47011a35ef2dc4c69ee1ffa3843dbb13790522a618b7421d314b32"
+    },
+    {
+      "file": "title-edit-default-390.json",
+      "state": "title-edit-default",
+      "capturedAt": "2026-10-24T13:07:40.736Z",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "node_json_sha256": "7f1b90206cf64acc40214d778ebe568cfaa3a2d8e753dd75ae80ec01c804ea44",
+      "screenshot_sha256": "daf941d276e930eccbb42d5ba2cc73b7bae24eb88a8d9935bed3f037ce0e58da"
+    },
+    {
+      "file": "title-edit-max-390.json",
+      "state": "title-edit-max",
+      "capturedAt": "2026-10-24T13:07:41.093Z",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "node_json_sha256": "4206f687a35dd2b20bc7346b33e2d229297a3014f1fca170c7a357a384e51edd",
+      "screenshot_sha256": "13b90b6379d17d952be6e8da5046ae2c6934cc6b6610a767e06213f941256ab8"
+    },
+    {
+      "file": "title-edit-over-390.json",
+      "state": "title-edit-over",
+      "capturedAt": "2026-10-24T13:07:41.426Z",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "node_json_sha256": "ea81979bebc095bef93f3f7869715a5e5906f2c2ddd0027d387e9d5c1d188af1",
+      "screenshot_sha256": "25f236409251a66533508a29a0f5b4177a75e6b3e6dd4030301cdb64b0788ba5"
+    },
+    {
+      "file": "title-edit-empty-390.json",
+      "state": "title-edit-empty",
+      "capturedAt": "2026-10-24T13:07:41.748Z",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "node_json_sha256": "91f438f53e4b6ba4a4282810d79d67a8219012481c10f0d3f75daf27d38978c0",
+      "screenshot_sha256": "669a93c708652f0dd9519949d5125c29d42869218ddfae1be40eef0ec9ca05de"
+    },
+    {
+      "file": "title-edit-legacy-390.json",
+      "state": "title-edit-legacy",
+      "capturedAt": "2026-10-24T13:07:42.071Z",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "node_json_sha256": "729f631afcad2bb61d4b105d7eb482b67fc335eb5615a20d1bb8b2b4fb8d2d24",
+      "screenshot_sha256": "31b0b0b933e7749464cdc96ee9a9c989a7750a7a3b373a7acbb6da24a5ce01bd"
+    },
+    {
+      "file": "title-edit-error-390.json",
+      "state": "title-edit-error",
+      "capturedAt": "2026-10-24T13:07:42.408Z",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "node_json_sha256": "b472b208bf094a65be3a814adbbd6d401e5cbf8b87fd68ae0b280c8d257d30fb",
+      "screenshot_sha256": "0d8f25e414cbae3764fe6952837c9319ad499b6c1f27219d902446133c41a582"
+    },
+    {
+      "file": "title-edit-saving-390.json",
+      "state": "title-edit-saving",
+      "capturedAt": "2026-10-24T13:07:43.090Z",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "node_json_sha256": "6c46ab3f51f2c6893e037f4e31a6ba4b8b68f4691bc6b2ef9db80083f70af47c",
+      "screenshot_sha256": "1b42f441ccf694b5c9300da9eac1a84e42eadbfb4bf7ec6f30bf7aaf30460544"
+    },
+    {
+      "file": "title-edit-unicode-390.json",
+      "state": "title-edit-unicode",
+      "capturedAt": "2026-10-24T13:07:43.480Z",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "node_json_sha256": "61c4bdbcc8c079c29f8e7bc1cd5c829ca85abf976de101ea39fcccc1dfea46b4",
+      "screenshot_sha256": "4d7267283fcf80e679cecbc8f6783979d5d8f90629818162abde7478f1b0272e"
+    },
+    {
+      "file": "title-legacy-390.json",
+      "state": "title-legacy",
+      "capturedAt": "2026-10-24T13:07:43.844Z",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "node_json_sha256": "756d4c9e20a633e3d2176ea5f0a6e7de740c4318c2b9ecfb83c62fd281fbb39d",
+      "screenshot_sha256": "da2ef2d3c824eb5baa79d699e67604bf4df22402d91f83d1e0ef1703966a4159"
+    },
+    {
+      "file": "max-title-scrolled-390.json",
+      "state": "max-title-scrolled",
+      "capturedAt": "2026-10-24T13:07:44.218Z",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "node_json_sha256": "36e69f4fb4356429c40deb6e1b76f5139cd4e93f8af1c145ede5e2bf1d0fa44e",
+      "screenshot_sha256": "447e8390eab8b603726e208846b53e89466178409b7de89d26783c4d0a5547d9"
+    },
+    {
+      "file": "title-proposal-430.json",
+      "state": "title-proposal",
+      "capturedAt": "2026-10-24T13:04:19.065Z",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "node_json_sha256": "e3acb3e03a11ce253b0b180ef488f006d467748ecc43ec8b5a64bd814451b7ac",
+      "screenshot_sha256": "4688707f18d17aeb3e589be1787ad818cb6e3bc203b59b3a17544d5e48c256dc"
+    },
+    {
+      "file": "title-proposal-max-430.json",
+      "state": "title-proposal-max",
+      "capturedAt": "2026-10-24T13:04:19.421Z",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "node_json_sha256": "fc02a7cb85a54e13adcf586f09f15b11f011725bd8dd9c580204b5be4a687543",
+      "screenshot_sha256": "ba7928006a0fbf29a071f4375f952e97a0da657c22f4b9527be92b8c4a6e5ed6"
+    },
+    {
+      "file": "title-card-max-430.json",
+      "state": "title-card-max",
+      "capturedAt": "2026-10-24T13:04:19.802Z",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "node_json_sha256": "3af779baef47c82c23deee7ff20b78a5bb47038c0cc0bf53542442381e98c7bd",
+      "screenshot_sha256": "797e642d105ea734413b1a367c9aad5bb1ffb6d1f66cdf9340ad7760cf941984"
+    },
+    {
+      "file": "title-edit-default-430.json",
+      "state": "title-edit-default",
+      "capturedAt": "2026-10-24T13:04:20.131Z",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "node_json_sha256": "b13ad93b3b9e58a34de2e78b5b7c5fc6394f3933c0d741f5c37e10b9c4b31ae5",
+      "screenshot_sha256": "62b11f5c8f7e57d3c9e94ac93f15eb611ebc4eba2d7b2489cbbbc0f2f0ccab45"
+    },
+    {
+      "file": "title-edit-max-430.json",
+      "state": "title-edit-max",
+      "capturedAt": "2026-10-24T13:04:20.468Z",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "node_json_sha256": "6511351dfb3c65bc8d7d31ff23e4dbce1507bfe0293e075749d54604bc2dc885",
+      "screenshot_sha256": "b16b550401654269ea7c6227caad0c28c2cd89d19f3b126335f4b14ee1160c0f"
+    },
+    {
+      "file": "title-edit-over-430.json",
+      "state": "title-edit-over",
+      "capturedAt": "2026-10-24T13:04:20.806Z",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "node_json_sha256": "f159729436628a40a4beb309feeda666be2f247257f73f67806c6ae03ebf4c5d",
+      "screenshot_sha256": "d990221fc0779286940273253747d1e9a34adda824980f75ec7b56e1d312138b"
+    },
+    {
+      "file": "title-edit-empty-430.json",
+      "state": "title-edit-empty",
+      "capturedAt": "2026-10-24T13:04:21.139Z",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "node_json_sha256": "18d0668f4a0ceafef6bade22a06ec279215fda7f6d6f0f910082f9d557295f86",
+      "screenshot_sha256": "e45bd458074f4a65a9ad6e274fa26768b9e3843fefcfaef904e9a73a2ee29d20"
+    },
+    {
+      "file": "title-edit-legacy-430.json",
+      "state": "title-edit-legacy",
+      "capturedAt": "2026-10-24T13:04:21.466Z",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "node_json_sha256": "636784ad8be228cbaf3db888f5016395ae89bba0aaffc3948bdab126f6b044c2",
+      "screenshot_sha256": "d3dfa6ebee3001b0e32f59b18afe613cebb6ebf2d448c8ce63ca43bef92f48b7"
+    },
+    {
+      "file": "title-edit-error-430.json",
+      "state": "title-edit-error",
+      "capturedAt": "2026-10-24T13:04:21.788Z",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "node_json_sha256": "8055cf97a8c8959bb04d9b56fb9a61ab654dc0250a62b887ae7dd9a449a77bf0",
+      "screenshot_sha256": "c5a9fd8c1a646bd84e864592cdeee18a030c00b32e4ff42b4aa7677331ae7e85"
+    },
+    {
+      "file": "title-edit-saving-430.json",
+      "state": "title-edit-saving",
+      "capturedAt": "2026-10-24T13:04:22.117Z",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "node_json_sha256": "9e9300b1dfaa346eac3c6d8987662e60dfce834678f29c712efea79f74784b44",
+      "screenshot_sha256": "6b9e5424d497a1611476cec47f04baf286556fa3d24f86ed121c4d53d6aca0e4"
+    },
+    {
+      "file": "title-edit-unicode-430.json",
+      "state": "title-edit-unicode",
+      "capturedAt": "2026-10-24T13:04:22.445Z",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "node_json_sha256": "dbafa171753491ad1ba8b959e7c661d45103ebd66815a2ba153749b8f9ba83dd",
+      "screenshot_sha256": "84cef5622dba6cbaa6084cf27306174aefbc0fab40164c4aa5192a7498b0766e"
+    },
+    {
+      "file": "title-legacy-430.json",
+      "state": "title-legacy",
+      "capturedAt": "2026-10-24T13:04:22.782Z",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "node_json_sha256": "46a6afc3182a8b3695df9cdd47924b88ca3559ffde7af827f9bf09b15052cc2d",
+      "screenshot_sha256": "a9d27e5a36954b94ec87ddbaada75938c4ac59a72fb119c594f6f2f03d85cf09"
+    },
+    {
+      "file": "max-title-scrolled-430.json",
+      "state": "max-title-scrolled",
+      "capturedAt": "2026-10-24T13:04:23.121Z",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4"
+      },
+      "node_json_sha256": "a7202bc68bf1fea33f3a75ce564bee86dbcb83f323abff223de5f3bfaf0a2163",
+      "screenshot_sha256": "a9d27e5a36954b94ec87ddbaada75938c4ac59a72fb119c594f6f2f03d85cf09"
+    }
+  ]
+}

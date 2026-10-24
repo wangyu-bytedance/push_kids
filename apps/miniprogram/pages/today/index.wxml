@@ -1,6 +1,7 @@
-<primary-nav></primary-nav>
-<view class="page today-page">
-  <view class="pg-head">
+<view aria-hidden="{{gradeConfirmationVisible}}">
+<view aria-hidden="{{showLearningSheet}}"><primary-nav></primary-nav></view>
+<view class="page today-page" aria-hidden="{{showRenewalGuide}}">
+  <view class="pg-head" aria-hidden="{{showLearningSheet}}">
     <view class="head-intro">
       <text class="pg-title">今天，也慢慢来</text>
       <text class="pg-context">{{dayLabel}}</text>
@@ -48,7 +49,7 @@
       <view class="back-link" aria-role="button" aria-label="返回这条学习记录" bindtap="returnToRecord"><text>返回记录</text><view class="chev right"></view></view>
     </view>
 
-    <view class="pk-hero mt3" wx:if="{{!dashboard.show_guide}}">
+    <view class="pk-hero mt3" wx:if="{{!dashboard.show_guide}}" aria-hidden="{{showLearningSheet}}">
       <view class="hero-main">
         <view class="grow">
           <text class="hero-eyebrow">今天的复习安排</text>
@@ -78,7 +79,7 @@
       </view>
     </view>
 
-    <view class="pk-hero guide mt3" wx:else>
+    <view class="pk-hero guide mt3" wx:else aria-hidden="{{showLearningSheet}}">
       <text class="hero-eyebrow">陪伴，从一条记录开始</text>
       <text class="hero-line">记下今天学到的</text>
       <text class="hero-note">拍照或写几句都可以，AI 只出草稿。</text>
@@ -91,7 +92,9 @@
       <view class="guide-link"><view class="link-btn" aria-role="button" aria-label="也可以先添加日程" bindtap="addSchedule"><text>也可以先添加日程</text><view class="chev right pri"></view></view></view>
     </view>
 
-    <view class="sec">
+    <today-learning id="today-learning" child-id="{{childId}}" can-write="{{canWrite}}" blocked="{{loading || gradeConfirmationVisible || showChildSheet || showSourceSheet || showRenewalGuide || deleteTarget || deleting}}" bindmodal="learningModal" bindrecorded="learningRecorded"></today-learning>
+
+    <view class="sec" aria-hidden="{{showLearningSheet}}">
       <view class="sec-bar" aria-role="button" aria-label="展开或收起复习安排" data-section="review" bindtap="toggleSection">
         <text class="s-t">复习安排</text><text class="s-m">{{sectionMeta.review}}</text>
         <view class="chev {{sections.review ? 'up' : ''}}"></view>
@@ -115,7 +118,7 @@
       </view>
     </view>
 
-    <view class="sec daily-task-section">
+    <view class="sec daily-task-section" aria-hidden="{{showLearningSheet}}">
       <view class="sec-bar" aria-role="button" aria-label="展开或收起每日任务" aria-expanded="{{sections.daily}}" data-section="daily" bindtap="toggleSection">
         <text class="s-t">每日任务</text><text class="s-m">{{sectionMeta.daily}}</text>
         <view class="chev {{sections.daily ? 'up' : ''}}"></view>
@@ -141,7 +144,7 @@
       </view>
     </view>
 
-    <view class="sec">
+    <view class="sec" aria-hidden="{{showLearningSheet}}">
       <view class="sec-bar" aria-role="button" aria-label="展开或收起今天记录的学习" data-section="learning" bindtap="toggleSection">
         <text class="s-t">今天记录的学习</text><text class="s-m">{{sectionMeta.learning}}</text>
         <view class="chev {{sections.learning ? 'up' : ''}}"></view>
@@ -162,7 +165,7 @@
       </view>
     </view>
 
-    <view class="sec">
+    <view class="sec" aria-hidden="{{showLearningSheet}}">
       <view class="sec-bar" aria-role="button" aria-label="展开或收起课外活动" data-section="activity" bindtap="toggleSection">
         <text class="s-t">课外活动</text><text class="s-m">{{sectionMeta.activity}}</text>
         <view class="chev {{sections.activity ? 'up' : ''}}"></view>
@@ -237,6 +240,8 @@
   <view class="delete-actions"><button class="btn secondary" disabled="{{deleting}}" bindtap="cancelDelete">取消</button><button class="btn delete-confirm" disabled="{{deleting}}" loading="{{deleting}}" bindtap="confirmDelete">{{deleting ? '删除中…' : '确认删除'}}</button></view>
 </view>
 
+<notification-renewal-guide id="renewal-guide" visible="{{showRenewalGuide}}" saving="{{renewalGuideSaving}}" bindenable="enableRenewal" binddecline="declineRenewal"></notification-renewal-guide>
+
 <view class="pk-mask" wx:if="{{showChildSheet}}" bindtap="closeChildSheet"></view>
 <view class="pk-sheet child-sheet" wx:if="{{showChildSheet}}">
   <view class="handle"></view>
@@ -259,3 +264,5 @@
     </view>
   </view>
 </view>
+</view>
+<grade-confirmation id="grade-confirmation" view="{{gradeConfirmation}}" blocked="{{loading || showChildSheet || showSourceSheet || showRenewalGuide || showLearningSheet || deleteTarget || deleting || dailyTaskPendingId}}" bindaction="onGradeConfirmation"></grade-confirmation>

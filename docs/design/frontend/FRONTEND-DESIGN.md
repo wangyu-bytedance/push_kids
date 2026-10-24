@@ -1,5 +1,19 @@
 # Push Kids 前端设计基线
 
+- 已批准标题约束：[`DREV-20261024-TODAY-LEARNING-04`](prototypes/DREV-20261024-TODAY-LEARNING-04/FRONTEND-SPEC.md)与[Title Limit Spec01 / Architecture01](../../../specs/active/FEAT-004-SUGGESTION-TITLE-LIMIT.md)获用户「批准，按此实现」，已本地实施。新生成/重新编辑标题trim后1–20码点、无内部换行，字段显示n/20和14px错误，超限保留输入不提交；旧提案/任务完整兼容。33张批准导出冻结；三视口39态原生、前端332项及独立复核通过，[实现证据](../../quality/evidence/SUGGESTION-TITLE-IMPLEMENTATION-20261024.md)明确真机/可访问性待验。DREV02仅本范围由DREV04替代，其余弹层与DREV03卡片风格继续有效；VERIFYING，未发布。
+
+- 2026-10-24产品方批准[足迹精简 Spec01](../../../specs/active/FEAT-012-FOOTPRINTS-MINIMAL-UI.md) / [DREV01](prototypes/DREV-20261024-FOOTPRINTS-MINIMAL-01/FRONTEND-SPEC.md)及[工程 UI 文案附加条款](prototypes/DREV-20261024-FOOTPRINTS-MINIMAL-01/UI-COPY-REQUIREMENTS.md)，规则已合并到下方“界面文案与减法”；既有 FDB/FEC 预算继续有效。足迹本地实现及原生验收以该Spec当前证据为准。
+
+- 已批准今日卡片修订：[`DREV-20261024-TODAY-LEARNING-03`](prototypes/DREV-20261024-TODAY-LEARNING-03/FRONTEND-SPEC.md) / [Card Visibility Spec01](../../../specs/active/FEAT-004-TODAY-CARD-VISIBILITY.md)，已本地实现空区整体隐藏、具体标题及既有分区/复习卡字阶与胶囊按钮。63张批准导出冻结；320/390/430各21卡片态及6弹层回归，共81组原生通过；真实设备/可访问性与独立复核待补。DREV02弹层保持冻结；[实现证据](../../quality/evidence/TODAY-CARD-IMPLEMENTATION-20261024.md)，VERIFYING，未发布。
+
+- 已批准本地增量：[`DREV-20261024-ANNUAL-GRADE-PROMOTION-02`](prototypes/DREV-20261024-ANNUAL-GRADE-PROMOTION-02/FRONTEND-SPEC.md)与[年级弹窗精简Spec01](../../../specs/active/FEAT-013-GRADE-DIALOG-SIMPLIFICATION.md)获用户“继续”批准并本地实现，正常态只保留孩子名标题、一个picker和并排操作，恢复提示按需显示。33张批准HTML导出冻结；最终327项前端、53项定向、三尺寸51组原生及实际选级/重试/稍后通过，[实施证据](../../quality/evidence/GRADE-DIALOG-SIMPLIFICATION-IMPLEMENTATION-20261024.md)单列真实设备/可访问性及全业务原生端到端缺口。旧DREV01只追加弹窗范围Superseded by，档案表单继续有效。
+
+- 待批准局部候选：[`DREV-20261024-CHILD-ARCHIVE-01`](prototypes/DREV-20261024-CHILD-ARCHIVE-01/FRONTEND-SPEC.md)对应[BUG-033 Spec01](../../../specs/active/BUG-033-CHILD-ARCHIVE-UI.md)，精简档案归档/恢复卡与确认文案；21张三视口HTML导出不代表原生验收。该候选未实施归档区修改，与上方已批准年级弹窗增量分开。
+
+- 已批准批注增量：[`DREV-20261024-TODAY-LEARNING-02`](prototypes/DREV-20261024-TODAY-LEARNING-02/FRONTEND-SPEC.md)及[SUGGESTION-SHEET-REFINEMENT Spec01](../../../specs/active/FEAT-004-SUGGESTION-SHEET-REFINEMENT.md)获用户「批准，按此实现」。原组件已精简提案标题和操作层级；84张批准设计导出冻结，三视口45组原生节点/截图通过，设备及可访问性仍待验。旧DREV01仅追加本次范围的Superseded by指针；当前事实见[实现证据](../../quality/evidence/SUGGESTION-SHEET-IMPLEMENTATION-20261024.md)。
+
+- 已批准本地增量：`DREV-20261024-TODAY-LEARNING-01`与两份Spec04于2026-10-24获用户「批准，按此实现」。[可编辑源/状态矩阵](prototypes/DREV-20261024-TODAY-LEARNING-01/FRONTEND-SPEC.md)及[冻结78张SHA清单](snapshots/UI-001/DREV-20261024-TODAY-LEARNING-01/APPROVAL.md)覆盖今日待学与提前复习；沿用FDB/FEC，不改变全局设计基线。实现及原生/真机边界见[本轮证据](../../quality/evidence/TODAY-LEARNING-IMPLEMENTATION-20261024.md)。
+
 > 本文是微信小程序交互与视觉方向的已批准实现基线。
 
 ## 1. Baseline identity and approval
@@ -62,6 +76,8 @@ approval snapshot，获得 Task Spec revision + DREV 的明确批准后才能实
 
 ## Style consistency baseline
 
+记录入口当前增量 `DREV-20261024-RECORD-ENTRY-01` 与BUG-032 Spec05于2026-10-24获用户「可以」批准并本地实施：标题下方锚定菜单切换学习记录/旅行日记，菜单展开保留五Tab；旅行照片/编辑面板继续隐藏导航。右侧复用纸色child-chip、首字头像与线性箭头，长名整块换行；明确学习入口经原保护切回学习。旅行默认全部时间，整行日期筛选删除，三视图内容之后使用唯一48px普通导入按钮；历史以有界窗口续看。UI-001/018共用旅行领域组件，暖纸/松绿和14px/44px约束保持。[当前批准清单](snapshots/UI-001/DREV-20261024-RECORD-ENTRY-01/APPROVAL.md)与旧批准快照冻结，当前验证边界见[本轮证据](../../quality/evidence/record-entry-20261024/README.md)。该增量未上传、未发布，完整真机验收仍开放。
+
 本地背景增量 `VISUAL-20261021-HERO-ARC-01`：用户批准的
 [DREV-20261021-HERO-ARC-REMOVAL-01](prototypes/DREV-20261021-HERO-ARC-REMOVAL-01/FRONTEND-SPEC.md)
 已删除所有共享 `.pk-hero` 卡片的细弧线；暖纸色、浅绿光斑、插画、边框和排版保留。
@@ -113,6 +129,19 @@ MVP 支持手机竖屏 320×568、390×844、430×932 三个逻辑视口，安�
 - 类企业 BI 的密集仪表盘和大量饼图/仪表盘。
 - 用红色填满逾期内容，或用恐吓式文案推动家长。
 - AI 对话框占据产品主入口；AI 是后台能力，不是主要导航方式。
+
+### 界面文案与减法
+
+**界面用内容、状态和操作表达产品，默认不需要解释。** 本条经产品负责人2026-10-24明确批准 Spec01 / DREV01 后生效，适用于后续 UI 设计与评审。
+
+- 每段可见文案须服务当前任务：识别对象、作出选择、完成操作或从实际错误中恢复。删掉不影响这些任务的句子。
+- 不把 AI 的思考、实现细节、后台处理流程、内部约束、开发/验收说明或为假想问题预先辩护的文字放进产品界面。
+- 同一对象、身份、状态和动作只表达一次；上方已选孩子，不再重复“某某的足迹”。低频设置和管理操作按需展开。
+- 优先改清楚标签、控件、层级和反馈，不用一段说明弥补不清楚的交互；不把删下的说明改成帮助弹层、折叠长文或更多提示。
+- 当前必要的授权范围、实际错误与恢复动作、删除/放弃的直接后果，在发生的操作处简短呈现，日常浏览不反复显示。
+- AI 候选/未确认、未知值、只读、归档、草稿实际到期日等影响操作的状态，用短标签表达；精简不改变业务规则和权限。
+- 空态只留状态和可执行动作；成功反馈不重复叙述步骤。无事实支撑的统计、占位人物和演示内容不得混入真实业务数据。
+- 删文案后同步收紧布局，移除空容器和无消费者样式；不靠隐藏溢出、缩小文字或触控目标制造简洁。
 
 ## 3. 平台与 Design System
 
@@ -394,9 +423,11 @@ Todo 卡片必须包含：
 
 ## 11. UI current-state index
 
+2026-10-24本地增量：用户“好的 按照这个方案落地”批准FEAT-013的[Spec02 / Architecture02](../../../specs/active/FEAT-013-ANNUAL-GRADE-PROMOTION.md)、UI-001/UI-015的[DREV01](prototypes/DREV-20261024-ANNUAL-GRADE-PROMOTION-01/FRONTEND-SPEC.md)与[57张导出/SHA](snapshots/UI-015/DREV-20261024-ANNUAL-GRADE-PROMOTION-01/APPROVAL.md)，批准源已冻结。已本地实现每孩子独立核对弹窗和一至九年级选项，沿用有效FDB/FEC；[实现证据](../../quality/evidence/ANNUAL-GRADE-IMPLEMENTATION-20261024.md)含三视口呈现矩阵/系统picker/档案控件、短屏错误滚动及四项修复后的独立评审PASS。修复后原生端到端、真实设备与可访问性仍待验收，不抵扣以下历史增量验收。
+
 | UI-ID | Surface | Feature | Design Revision | Status |
 |---|---|---|---|---|
-| UI-001 | 孩子选择与驾驶舱 | FEAT-001 | proposed DREV-20260830-01 | not prototyped |
+| [UI-001](ui/UI-001-parent-miniapp.md) | 家长端与复习目录 | FEAT-001 | [DREV-20261020-SUPERSEDED-REVIEW-01](snapshots/UI-001/DREV-20261020-SUPERSEDED-REVIEW-01/APPROVAL.md)（本次目录增量） | approved 2026-10-20; implemented locally; complete native/device acceptance pending; earlier surfaces retain their own evidence |
 | UI-002 | 今日计划 | FEAT-001 | proposed DREV-20260830-01 | not prototyped |
 | UI-003 | 上传与手动录入 | FEAT-001 | proposed DREV-20260830-01 | not prototyped |
 | UI-004 | 待处理/待确认中心 | FEAT-001 | proposed DREV-20260830-01 | not prototyped |
@@ -405,9 +436,10 @@ Todo 卡片必须包含：
 | UI-007 | 科目与知识详情 | FEAT-001 | proposed DREV-20260830-01 | not prototyped |
 | UI-008 | 活动日程与练习记录 | FEAT-001 | proposed DREV-20260830-01 | not prototyped |
 | UI-009 | 家庭与成员 | FEAT-002 | current DREV-20260906-PKDS-01；proposed DREV-20260906-MULTI-FAMILY-02 | current local；成员资料/退出扩展 pending |
-| UI-011 | 提醒设置与微信授权入口 | FEAT-003 | DREV-20260906-PKDS-03 | implemented locally, native matrix pending |
+| UI-011 | 提醒设置、本人自动补充与微信授权 | FEAT-003 / FEAT-011 | DREV-20261017-NOTIFICATION-AUTO-RENEWAL-01 | approved 2026-10-17; implemented locally, device/full native acceptance pending |
 | UI-014 | 家庭与孩子上下文切换 | FEAT-002 | proposed DREV-20260906-MULTI-FAMILY-02 | proposed, repository design approval pending |
 | UI-015 | 学习档案管理与切换入口 | FEAT-005 | DREV-20260906-CHILD-01 | implemented locally, matrix pending |
+| [UI-018](ui/UI-018-child-photo-footprints.md) | 孩子照片足迹：导入、核对、三视图与全球自适应 | FEAT-012 | DREV-20261017-CHILD-PHOTO-FOOTPRINTS-01 + DREV-20261018-CHILD-PHOTO-FOOTPRINTS-02 + DREV-20261024-RECORD-ENTRY-01 + DREV-20261024-FOOTPRINTS-MINIMAL-01 | local VERIFYING; minimal Spec01/DREV01 approved/implemented 2026-10-24, copy rules merged; current evidence in footprints-minimal-20261024/README.md; full device/design parity/global basemap pending; approved sources frozen |
 
 ## 12. Review decisions requested
 

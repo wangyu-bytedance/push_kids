@@ -4,6 +4,7 @@ from sqlalchemy import case, delete, func, or_, select, update
 from sqlalchemy.orm import Session
 
 from push_kids.children.service import ChildrenService
+from push_kids.knowledge.learning_context import invalidate_input
 from push_kids.persistence.models import (
     Child,
     DailyReviewPlan,
@@ -14,10 +15,12 @@ from push_kids.persistence.models import (
     ReviewFeedback,
     ReviewFeedbackRequest,
     ReviewItem,
+    ReviewMemberCompletionReceipt,
     ReviewScheduleChange,
     ReviewScheduleOverride,
     Subject,
 )
+from push_kids.planning.eligibility import scheduling_eligible
 from push_kids.platform.time import local_date
 
 
@@ -46,7 +49,14 @@ def delete_knowledge(db: Session, family_id: str, child_id: str, knowledge_id: s
     if knowledge is None:
         db.commit()
         return
+    invalidate_input(db, family_id, child_id)
     if review is not None:
+        db.execute(
+            delete(ReviewMemberCompletionReceipt).where(
+                ReviewMemberCompletionReceipt.family_id == family_id,
+                ReviewMemberCompletionReceipt.review_id == review.id,
+            )
+        )
         plan_link = (
             select(DailyReviewPlanItem.id)
             .where(
@@ -78,6 +88,7 @@ def delete_knowledge(db: Session, family_id: str, child_id: str, knowledge_id: s
                 ReviewItem.child_id == child_id,
                 ReviewItem.id != review.id,
                 ReviewItem.active.is_(True),
+                scheduling_eligible(),
                 ReviewItem.due_date <= DailyReviewPlan.plan_date,
                 Subject.kind == "learning",
                 Subject.active.is_(True),

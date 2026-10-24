@@ -12,7 +12,10 @@ from push_kids.activities.service import ActivitiesService
 from push_kids.children.service import ChildrenService
 from push_kids.daily_tasks.service import DailyTasksService
 from push_kids.families.service import FamilyService
+from push_kids.footprints.media_lifecycle import FootprintMediaCleanup
+from push_kids.footprints.service import FootprintsService
 from push_kids.learning.service import LearningService
+from push_kids.learning_suggestions.service import purge_data as purge_suggestions
 from push_kids.media.cleanup import MediaCleanup
 from push_kids.media.store import MediaStore, WeChatCloudMediaStore
 from push_kids.notifications.service import NotificationsService
@@ -164,6 +167,7 @@ class DataDeletionWorker:
 
     def _delete_media(self, target_type: str, family_id: str, target_id: str) -> None:
         child_id = target_id if target_type == "child" else None
+        FootprintMediaCleanup.delete_owned(self.database, self.media_store, family_id, child_id)
         with self.database.session_factory() as db:
             submission_ids = LearningService.deletion_submission_ids(db, family_id, child_id)
             refs, paths = MediaCleanup.inventory(db, family_id, submission_ids)
@@ -174,12 +178,14 @@ class DataDeletionWorker:
                 self.media_store.delete_path(path)
 
     def _purge_owned_rows(self, db, family_id: str, child_id: str | None) -> None:
+        purge_suggestions(db, family_id, child_id)
         submission_ids = LearningService.deletion_submission_ids(db, family_id, child_id)
         NotificationsService.purge_data(db, family_id, child_id)
         PlanningService.purge_data(db, family_id, child_id)
         ActivitiesService.purge_data(db, family_id, child_id)
         TravelService.purge_data(db, family_id, child_id)
         DailyTasksService.purge_data(db, family_id, child_id)
+        FootprintsService.purge_data(db, family_id, child_id)
         MediaCleanup.purge_rows(db, submission_ids)
         LearningService.purge_data(db, family_id, child_id)
         ChildrenService.purge_data(db, family_id, child_id)

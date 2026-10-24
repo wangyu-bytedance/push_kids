@@ -1,0 +1,146 @@
+{
+  "reviewStatus": "normal",
+  "view": "time",
+  "readOnly": false,
+  "empty": false,
+  "viewport": {
+    "width": 390,
+    "height": 753,
+    "screenHeight": 844,
+    "dpr": 3,
+    "baseLibrary": "3.17.4",
+    "fontScale": 15
+  },
+  "nodes": [
+    [
+      {
+        "left": 0,
+        "right": 390,
+        "top": 0,
+        "bottom": 753,
+        "width": 390,
+        "height": 753
+      }
+    ],
+    [
+      {
+        "left": 18,
+        "right": 372,
+        "top": 143,
+        "bottom": 195,
+        "width": 354,
+        "height": 52
+      }
+    ],
+    [
+      {
+        "left": 22,
+        "right": 191,
+        "top": 147,
+        "bottom": 191,
+        "width": 169,
+        "height": 44
+      },
+      {
+        "left": 199,
+        "right": 368,
+        "top": 147,
+        "bottom": 191,
+        "width": 169,
+        "height": 44
+      }
+    ],
+    [],
+    [],
+    [],
+    [
+      {
+        "left": 312,
+        "right": 356,
+        "top": 350,
+        "bottom": 394,
+        "width": 44,
+        "height": 44
+      }
+    ],
+    [
+      {
+        "left": 34,
+        "right": 304,
+        "top": 350,
+        "bottom": 417,
+        "width": 270,
+        "height": 67
+      }
+    ],
+    [
+      {
+        "left": 34,
+        "right": 304,
+        "top": 350,
+        "bottom": 371,
+        "width": 270,
+        "height": 21
+      }
+    ],
+    [
+      {
+        "left": 34,
+        "right": 304,
+        "top": 374,
+        "bottom": 394,
+        "width": 270,
+        "height": 20
+      }
+    ],
+    [],
+    [
+      {
+        "left": 19,
+        "right": 371,
+        "top": 276,
+        "bottom": 337,
+        "width": 352,
+        "height": 61
+      }
+    ],
+    [
+      {
+        "left": 18,
+        "right": 372,
+        "top": 18,
+        "bottom": 70,
+        "width": 354,
+        "height": 52
+      }
+    ],
+    [
+      {
+        "left": 22,
+        "right": 191,
+        "top": 22,
+        "bottom": 66,
+        "width": 169,
+        "height": 44
+      },
+      {
+        "left": 199,
+        "right": 368,
+        "top": 22,
+        "bottom": 66,
+        "width": 169,
+        "height": 44
+      }
+    ],
+    [],
+    [],
+    []
+  ],
+  "state": "normal",
+  "embedded": false,
+  "expectedWidth": 390,
+  "capturedAt": "2026-10-20T15:57:00.518Z",
+  "fixture": "isolated synthetic page-realm JSON; production WXML/WXSS unchanged",
+  "errors": [],
+  "screenshot": "NOT_RUN"
+}

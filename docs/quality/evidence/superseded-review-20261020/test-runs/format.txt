@@ -1,0 +1,15 @@
+unformatted: File would be reformatted
+   --> docs/design/frontend/prototypes/DREV-20261018-CHILD-PHOTO-FOOTPRINTS-02/render.py:16:13
+    |
+15  | VIEWPORTS = ((320, 568), (390, 844), (430, 932))
+    - TASK_SPEC = (
+    -     "specs/active/FEAT-012-FOOTPRINTS-UI-COPY.md#SPEC-20261018-FOOTPRINTS-UI-COPY-01"
+    - )
+16  + TASK_SPEC = "specs/active/FEAT-012-FOOTPRINTS-UI-COPY.md#SPEC-20261018-FOOTPRINTS-UI-COPY-01"
+17  | STATES = (
+--------------------------------------------------------------------------------
+298 |     main()
+    -
+    |
+
+1 file would be reformatted, 609 files already formatted

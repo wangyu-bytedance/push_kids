@@ -1,0 +1,487 @@
+{
+  "viewport": {
+    "width": 390,
+    "height": 753,
+    "screenHeight": 844,
+    "dpr": 3,
+    "baseLibrary": "3.17.4",
+    "fontScale": 15
+  },
+  "nodes": {
+    ".footprints-page": [
+      {
+        "left": 0,
+        "right": 390,
+        "top": 0,
+        "bottom": 780,
+        "width": 390,
+        "height": 780,
+        "fontSize": "14px",
+        "minWidth": "0px",
+        "maxWidth": "none",
+        "display": "block"
+      }
+    ],
+    ".fp-toolbar": [
+      {
+        "left": 16,
+        "right": 374,
+        "top": 12,
+        "bottom": 56,
+        "width": 358,
+        "height": 44,
+        "fontSize": "14px",
+        "minWidth": "0px",
+        "maxWidth": "none",
+        "display": "flex"
+      }
+    ],
+    ".fp-child": [
+      {
+        "left": 16,
+        "right": 294,
+        "top": 12,
+        "bottom": 56,
+        "width": 278,
+        "height": 44,
+        "fontSize": "14px",
+        "minWidth": "0px",
+        "maxWidth": "none",
+        "display": "flex"
+      }
+    ],
+    ".fp-heading": [
+      {
+        "left": 16,
+        "right": 374,
+        "top": 118,
+        "bottom": 173,
+        "width": 358,
+        "height": 55,
+        "fontSize": "14px",
+        "minWidth": "0px",
+        "maxWidth": "none",
+        "display": "flex"
+      }
+    ],
+    ".fp-tabs": [
+      {
+        "left": 16,
+        "right": 374,
+        "top": 275,
+        "bottom": 327,
+        "width": 358,
+        "height": 52,
+        "fontSize": "14px",
+        "minWidth": "0px",
+        "maxWidth": "none",
+        "display": "flex"
+      }
+    ],
+    ".fp-tab": [
+      {
+        "left": 20,
+        "right": 131.328125,
+        "top": 279,
+        "bottom": 323,
+        "width": 111.328125,
+        "height": 44,
+        "fontSize": "14px",
+        "minWidth": "0px",
+        "maxWidth": "none",
+        "display": "block"
+      },
+      {
+        "left": 139.328125,
+        "right": 250.65625,
+        "top": 279,
+        "bottom": 323,
+        "width": 111.328125,
+        "height": 44,
+        "fontSize": "14px",
+        "minWidth": "0px",
+        "maxWidth": "none",
+        "display": "block"
+      },
+      {
+        "left": 258.65625,
+        "right": 369.984375,
+        "top": 279,
+        "bottom": 323,
+        "width": 111.328125,
+        "height": 44,
+        "fontSize": "14px",
+        "minWidth": "0px",
+        "maxWidth": "none",
+        "display": "block"
+      }
+    ],
+    ".fp-date": [
+      {
+        "left": 16,
+        "right": 154,
+        "top": 219,
+        "bottom": 263,
+        "width": 138,
+        "height": 44,
+        "fontSize": "14px",
+        "minWidth": "0px",
+        "maxWidth": "none",
+        "display": "block"
+      },
+      {
+        "left": 184,
+        "right": 322,
+        "top": 219,
+        "bottom": 263,
+        "width": 138,
+        "height": 44,
+        "fontSize": "14px",
+        "minWidth": "0px",
+        "maxWidth": "none",
+        "display": "block"
+      }
+    ],
+    ".fp-button": [
+      {
+        "left": 276.328125,
+        "right": 374,
+        "top": 118,
+        "bottom": 162,
+        "width": 97.671875,
+        "height": 44,
+        "fontSize": "14px",
+        "minWidth": "0px",
+        "maxWidth": "none",
+        "display": "block"
+      },
+      {
+        "left": 16,
+        "right": 374,
+        "top": 607,
+        "bottom": 655,
+        "width": 358,
+        "height": 48,
+        "fontSize": "14px",
+        "minWidth": "0px",
+        "maxWidth": "none",
+        "display": "block"
+      }
+    ],
+    ".fp-text-button": [
+      {
+        "left": 302,
+        "right": 374,
+        "top": 12,
+        "bottom": 56,
+        "width": 72,
+        "height": 44,
+        "fontSize": "14px",
+        "minWidth": "0px",
+        "maxWidth": "none",
+        "display": "block"
+      },
+      {
+        "left": 330,
+        "right": 374,
+        "top": 219,
+        "bottom": 263,
+        "width": 44,
+        "height": 44,
+        "fontSize": "14px",
+        "minWidth": "0px",
+        "maxWidth": "none",
+        "display": "block"
+      },
+      {
+        "left": 42,
+        "right": 361,
+        "top": 657,
+        "bottom": 701,
+        "width": 319,
+        "height": 44,
+        "fontSize": "14px",
+        "minWidth": "0px",
+        "maxWidth": "none",
+        "display": "block"
+      },
+      {
+        "left": 16,
+        "right": 374,
+        "top": 663,
+        "bottom": 707,
+        "width": 358,
+        "height": 44,
+        "fontSize": "14px",
+        "minWidth": "0px",
+        "maxWidth": "none",
+        "display": "block"
+      }
+    ],
+    ".fp-archive": [
+      {
+        "left": 16,
+        "right": 374,
+        "top": 56,
+        "bottom": 100,
+        "width": 358,
+        "height": 44,
+        "fontSize": "14px",
+        "minWidth": "0px",
+        "maxWidth": "none",
+        "display": "block"
+      }
+    ],
+    ".fp-select": [],
+    ".fp-input": [],
+    ".fp-close": [
+      {
+        "left": 326,
+        "right": 374,
+        "top": 117,
+        "bottom": 165,
+        "width": 48,
+        "height": 48,
+        "fontSize": "26px",
+        "minWidth": "0px",
+        "maxWidth": "none",
+        "display": "flex"
+      }
+    ],
+    ".fp-world-point": [],
+    ".fp-sheet": [
+      {
+        "left": 0,
+        "right": 390,
+        "top": 109,
+        "bottom": 753,
+        "width": 390,
+        "height": 644,
+        "fontSize": "16px",
+        "minWidth": "auto",
+        "maxWidth": "none",
+        "display": "flex"
+      }
+    ],
+    ".fp-sheet-head": [
+      {
+        "left": 0,
+        "right": 390,
+        "top": 109,
+        "bottom": 174,
+        "width": 390,
+        "height": 65,
+        "fontSize": "16px",
+        "minWidth": "auto",
+        "maxWidth": "none",
+        "display": "flex"
+      }
+    ],
+    ".fp-sheet-body": [
+      {
+        "left": 0,
+        "right": 390,
+        "top": 174,
+        "bottom": 594,
+        "width": 390,
+        "height": 420,
+        "fontSize": "14px",
+        "minWidth": "auto",
+        "maxWidth": "none",
+        "display": "block"
+      }
+    ],
+    ".fp-sheet-footer": [
+      {
+        "left": 0,
+        "right": 390,
+        "top": 594,
+        "bottom": 753,
+        "width": 390,
+        "height": 159,
+        "fontSize": "16px",
+        "minWidth": "auto",
+        "maxWidth": "none",
+        "display": "flex"
+      }
+    ],
+    ".fp-draft-top": [],
+    ".fp-title": [
+      {
+        "left": 16,
+        "right": 268.328125,
+        "top": 140,
+        "bottom": 173,
+        "width": 252.328125,
+        "height": 33,
+        "fontSize": "24px",
+        "minWidth": "0px",
+        "maxWidth": "none",
+        "display": "block"
+      }
+    ],
+    ".fp-muted": [
+      {
+        "left": 334.421875,
+        "right": 361,
+        "top": 509.5,
+        "bottom": 531.5,
+        "width": 26.578125,
+        "height": 22,
+        "fontSize": "14px",
+        "minWidth": "auto",
+        "maxWidth": "none",
+        "display": "block"
+      },
+      {
+        "left": 16,
+        "right": 374,
+        "top": 250,
+        "bottom": 294,
+        "width": 358,
+        "height": 44,
+        "fontSize": "14px",
+        "minWidth": "0px",
+        "maxWidth": "none",
+        "display": "block"
+      },
+      {
+        "left": 16,
+        "right": 374,
+        "top": 534,
+        "bottom": 578,
+        "width": 358,
+        "height": 44,
+        "fontSize": "14px",
+        "minWidth": "0px",
+        "maxWidth": "none",
+        "display": "block"
+      }
+    ],
+    ".fp-visit": [
+      {
+        "left": 16,
+        "right": 374,
+        "top": 445,
+        "bottom": 714,
+        "width": 358,
+        "height": 269,
+        "fontSize": "14px",
+        "minWidth": "0px",
+        "maxWidth": "none",
+        "display": "block"
+      }
+    ],
+    ".fp-empty": [],
+    ".fp-draft": [],
+    ".fp-grid": [
+      {
+        "left": 42,
+        "right": 361,
+        "top": 545,
+        "bottom": 657,
+        "width": 319,
+        "height": 112,
+        "fontSize": "14px",
+        "minWidth": "0px",
+        "maxWidth": "none",
+        "display": "flex"
+      }
+    ],
+    ".fp-thumb": [
+      {
+        "left": 42,
+        "right": 197.5,
+        "top": 545,
+        "bottom": 657,
+        "width": 155.5,
+        "height": 112,
+        "fontSize": "14px",
+        "minWidth": "auto",
+        "maxWidth": "none",
+        "display": "block"
+      }
+    ],
+    ".fp-drafts": [
+      {
+        "left": 16,
+        "right": 374,
+        "top": 327,
+        "bottom": 375,
+        "width": 358,
+        "height": 48,
+        "fontSize": "14px",
+        "minWidth": "0px",
+        "maxWidth": "none",
+        "display": "block"
+      }
+    ],
+    ".fp-world-row": [],
+    ".fp-candidate": [],
+    ".fp-sheet-footer .fp-full": [
+      {
+        "left": 16,
+        "right": 374,
+        "top": 607,
+        "bottom": 655,
+        "width": 358,
+        "height": 48,
+        "fontSize": "14px",
+        "minWidth": "0px",
+        "maxWidth": "none",
+        "display": "block"
+      },
+      {
+        "left": 16,
+        "right": 374,
+        "top": 663,
+        "bottom": 707,
+        "width": 358,
+        "height": 44,
+        "fontSize": "14px",
+        "minWidth": "0px",
+        "maxWidth": "none",
+        "display": "block"
+      }
+    ],
+    ".fp-sheet-head .fp-place-title": [
+      {
+        "left": 16,
+        "right": 160,
+        "top": 128.5,
+        "bottom": 153.5,
+        "width": 144,
+        "height": 25,
+        "fontSize": "16px",
+        "minWidth": "auto",
+        "maxWidth": "none",
+        "display": "flex"
+      }
+    ],
+    ".fp-review-tools .fp-text-button": [],
+    ".fp-scope .fp-text-button": [],
+    ".fp-two-fields .fp-input": [],
+    ".fp-draft-top .fp-grow": [],
+    ".fp-loading": [],
+    ".fp-error": [],
+    ".fp-player": [],
+    ".fp-world": []
+  },
+  "dataCounts": {
+    "children": 1,
+    "visits": 1,
+    "drafts": 1
+  },
+  "scrollLeft": 0,
+  "state": "importing",
+  "expectedWidth": 390,
+  "capturedAt": "2026-10-18T09:35:06.938Z",
+  "fixture": "isolated copy with page-realm JSON harness; synthetic; no photo/provider/business writes",
+  "errors": [],
+  "screenshot": "importing-390.png",
+  "screenshotSha256": "1570ec7253545cd51cc6a6176f1de251158361c43bb6c8241f72ab957ca933e2",
+  "screenshotPixels": {
+    "width": 780,
+    "height": 1506
+  }
+}

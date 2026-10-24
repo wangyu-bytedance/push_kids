@@ -35,12 +35,20 @@ class Settings(BaseSettings):
     )
     actor_hmac_key: SecretStr | None = Field(None, alias="PUSH_KIDS_ACTOR_HMAC_KEY")
     ai_provider: Literal["ark", "test"] = Field("ark", alias="PUSH_KIDS_AI_PROVIDER")
+    coverage_enabled: bool = Field(True, alias="PUSH_KIDS_COVERAGE_ENABLED")
+    empty_day_early_review_enabled: bool = Field(
+        False, alias="PUSH_KIDS_EMPTY_DAY_EARLY_REVIEW_ENABLED"
+    )
+    learning_suggestions_enabled: bool = Field(
+        False, alias="PUSH_KIDS_LEARNING_SUGGESTIONS_ENABLED"
+    )
     run_worker: bool = Field(True, alias="PUSH_KIDS_RUN_WORKER")
     cors_origins: str = Field("", alias="PUSH_KIDS_CORS_ORIGINS")
     ark_api_key: SecretStr | None = Field(None, alias="ARK_API_KEY")
     ark_base_url: str = Field("https://ark.cn-beijing.volces.com/api/v3", alias="ARK_BASE_URL")
     ark_model: str = Field("doubao-seed-2-1-pro-260628", alias="ARK_MODEL")
     ark_context_cache_enabled: bool = Field(True, alias="ARK_CONTEXT_CACHE_ENABLED")
+    footprint_map_key: SecretStr | None = Field(None, alias="PUSH_KIDS_FOOTPRINT_MAP_KEY")
     analysis_concurrency: int = Field(2, ge=1, le=2, alias="PUSH_KIDS_ANALYSIS_CONCURRENCY")
     # Notifications stay off until a deployment supplies a real template map and key, so no
     # environment can accidentally promise WeChat reminders it cannot deliver.

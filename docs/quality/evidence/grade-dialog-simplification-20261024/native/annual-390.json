@@ -1,0 +1,157 @@
+{
+  "nodes": {
+    ".grade-sheet": [
+      {
+        "left": 0,
+        "right": 390,
+        "top": 581,
+        "bottom": 844,
+        "width": 390,
+        "height": 263,
+        "scrollLeft": 0,
+        "scrollTop": 0,
+        "scrollWidth": 0,
+        "scrollHeight": 0,
+        "fontSize": "16px",
+        "lineHeight": "25.6px",
+        "color": "rgb(34, 38, 31)",
+        "backgroundColor": "rgb(255, 253, 248)",
+        "opacity": "1"
+      }
+    ],
+    ".grade-body": [
+      {
+        "left": 20,
+        "right": 370,
+        "top": 619,
+        "bottom": 722,
+        "width": 350,
+        "height": 103,
+        "scrollLeft": 0,
+        "scrollTop": 0,
+        "scrollWidth": 350,
+        "scrollHeight": 103,
+        "fontSize": "16px",
+        "lineHeight": "25.6px",
+        "color": "rgb(34, 38, 31)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "opacity": "1"
+      }
+    ],
+    ".grade-title": [
+      {
+        "left": 20,
+        "right": 370,
+        "top": 619,
+        "bottom": 650,
+        "width": 350,
+        "height": 31,
+        "scrollLeft": 0,
+        "scrollTop": 0,
+        "scrollWidth": 0,
+        "scrollHeight": 0,
+        "fontSize": "22px",
+        "lineHeight": "31.9px",
+        "color": "rgb(34, 38, 31)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "opacity": "1"
+      }
+    ],
+    ".grade-latest": [],
+    ".grade-picker": [
+      {
+        "left": 20,
+        "right": 370,
+        "top": 670,
+        "bottom": 722,
+        "width": 350,
+        "height": 52,
+        "scrollLeft": 0,
+        "scrollTop": 0,
+        "scrollWidth": 0,
+        "scrollHeight": 0,
+        "fontSize": "18px",
+        "lineHeight": "26px",
+        "color": "rgb(34, 38, 31)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "opacity": "1"
+      }
+    ],
+    ".grade-error": [],
+    ".grade-actions": [
+      {
+        "left": 20,
+        "right": 370,
+        "top": 742,
+        "bottom": 790,
+        "width": 350,
+        "height": 48,
+        "scrollLeft": 0,
+        "scrollTop": 0,
+        "scrollWidth": 0,
+        "scrollHeight": 0,
+        "fontSize": "16px",
+        "lineHeight": "25.6px",
+        "color": "rgb(34, 38, 31)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "opacity": "1"
+      }
+    ],
+    ".grade-primary": [
+      {
+        "left": 152.671875,
+        "right": 370,
+        "top": 742,
+        "bottom": 790,
+        "width": 217.328125,
+        "height": 48,
+        "scrollLeft": 0,
+        "scrollTop": 0,
+        "scrollWidth": 0,
+        "scrollHeight": 0,
+        "fontSize": "16px",
+        "lineHeight": "24px",
+        "color": "rgb(255, 253, 248)",
+        "backgroundColor": "rgb(31, 91, 69)",
+        "opacity": "1"
+      }
+    ],
+    ".grade-secondary": [
+      {
+        "left": 20,
+        "right": 140.671875,
+        "top": 742,
+        "bottom": 790,
+        "width": 120.671875,
+        "height": 48,
+        "scrollLeft": 0,
+        "scrollTop": 0,
+        "scrollWidth": 0,
+        "scrollHeight": 0,
+        "fontSize": "16px",
+        "lineHeight": "24px",
+        "color": "rgb(70, 78, 67)",
+        "backgroundColor": "rgb(243, 239, 228)",
+        "opacity": "1"
+      }
+    ],
+    ".tabbar": []
+  },
+  "viewport": {
+    "width": 390,
+    "height": 844,
+    "screenHeight": 844,
+    "dpr": 3,
+    "fontScale": 15,
+    "baseLibrary": "3.17.4"
+  },
+  "state": "annual",
+  "errors": [],
+  "fixture": "synthetic presentation only; actual lifecycle covered by frontend tests",
+  "capturedAt": "2026-10-24T12:55:52.056Z",
+  "screenshotSha256": "f94bbd956766eb621fd5bdf7274081a47dd177c9cb6084d364d878eec4129571",
+  "screenshotPixels": {
+    "width": 780,
+    "height": 1688
+  }
+}

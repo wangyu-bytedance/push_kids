@@ -4,7 +4,7 @@ from sqlalchemy import delete, select, text
 from sqlalchemy.orm import Session
 
 from push_kids.persistence.models import Child, ReviewQueueEntry
-from push_kids.persistence.review_queue_v1 import COLUMNS, projection_select, upsert_sql
+from push_kids.persistence.review_queue_v2 import COLUMNS, projection_select, upsert_sql
 from push_kids.platform.errors import NotFoundError
 
 

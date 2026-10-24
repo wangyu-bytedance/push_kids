@@ -1,0 +1,562 @@
+{
+  "capturedAt": "2026-10-24T13:04:52.850049+00:00",
+  "status": "PASS",
+  "count": 27,
+  "scope": "9 synthetic geometry states at each actual native viewport; fixture replaces load/previews, not real service/media/maps.",
+  "copy_source_sha256": {
+    "pages/records/record-types.js": "36cd51138d7af17b3d3cc7a1567ad706c08d6dbf4b8fce81fc1320cef13de093",
+    "pages/records/index.js": "40369e8d0fe6e11eb252371831a9b89f9caeec408b5c534ad53dfd770291639e",
+    "pages/records/index.wxml": "ac4ee1fe62e59aaddeedb29845905450dbf87ce976395f91edf789a3ec173f06",
+    "pages/records/index.wxss": "1b8421a837ed10299e8f080a8db7c1832d374744242490d5956bd44c57ffa188",
+    "pages/footprints/controller.js": "aef446c3bd67af4a729e2797ed5400d8cb1d1604725265f2a622a935742d8670",
+    "pages/footprints/imports.js": "654be94db04ec5a28761af722933739661a020fc99c4a2862c913f88b53ec13b",
+    "pages/footprints/index.wxml": "8fa9dc14bb6d729230e6b39538e5b339a1109d3881755ce8a6df9ab723ca70eb",
+    "pages/footprints/index.wxss": "39ca6d1ffcea8d3ebd0576af9367b71ba7e475e4d3fc30eb4e18531aa93e5bef",
+    "pages/footprints/embedded.js": "9277c602eec2d34f81e10c22cbd1f81120e1fd6477edfe9e3b01291ec801eba5"
+  },
+  "coupled_source_matches": true,
+  "screenshots_pixel_scale": 2,
+  "device_acceptance": false,
+  "rows": [
+    {
+      "file": "native/archived-320.json",
+      "sha256": "0fd4523091046591b1ddcbc5ce0591fe909923ea4221e668521daeaa4efcf4d2",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "native/archived-320.png",
+      "pixels": [
+        640,
+        1136
+      ],
+      "screenshotSha256": "f1c232379ff15988d496b47bfe118fe41e6b08a9dca7428ef3b28fa77a46f71b",
+      "capturedAt": "2026-10-24T12:59:43.879Z",
+      "errors": []
+    },
+    {
+      "file": "native/archived-390.json",
+      "sha256": "de3b97bdb2b9c788f8cf376750587b820f2e83fe4b849d07dabdcb65d3f450bc",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "native/archived-390.png",
+      "pixels": [
+        780,
+        1688
+      ],
+      "screenshotSha256": "42b44823a7d483123f6459378333a83a8616f5aafbe05d96e2c82fbca3df449b",
+      "capturedAt": "2026-10-24T13:00:05.870Z",
+      "errors": []
+    },
+    {
+      "file": "native/archived-430.json",
+      "sha256": "568d6a9d0570143fc1deb7e392ba8374aaef1dea446947c75f794096167f3c96",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "native/archived-430.png",
+      "pixels": [
+        860,
+        1864
+      ],
+      "screenshotSha256": "06b25ad5acc0f4f30eb0994f58f97d6fee6565fd603bebf161d17fc37b632396",
+      "capturedAt": "2026-10-24T13:00:23.714Z",
+      "errors": []
+    },
+    {
+      "file": "native/empty-320.json",
+      "sha256": "5dd9d997fe338934b528f4d3fa8ac6deee803cd3bf77ed6408fb98cd06bd9f4b",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "native/empty-320.png",
+      "pixels": [
+        640,
+        1136
+      ],
+      "screenshotSha256": "2585bcc034991e1007a7268df1aacfd61f4429e137888208a42063f534d4c939",
+      "capturedAt": "2026-10-24T12:59:42.993Z",
+      "errors": []
+    },
+    {
+      "file": "native/empty-390.json",
+      "sha256": "afc5af12cbcfbd446c5af1422677e6dad837e9719b135ee2a1f52d95298c3e09",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "native/empty-390.png",
+      "pixels": [
+        780,
+        1688
+      ],
+      "screenshotSha256": "c1f339847f42553571ede5b8077630b5605f97ba27a353d8b8a245fd8940e976",
+      "capturedAt": "2026-10-24T13:00:04.920Z",
+      "errors": []
+    },
+    {
+      "file": "native/empty-430.json",
+      "sha256": "b26227e700ef685e9d040662825055ec67315b45ad115ccf97de9395b36d9adc",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "native/empty-430.png",
+      "pixels": [
+        860,
+        1864
+      ],
+      "screenshotSha256": "8123f29d24a4cab67dc59ebff483c8f0b4dd1b9f300035345db9b51d44c2e56d",
+      "capturedAt": "2026-10-24T13:00:22.702Z",
+      "errors": []
+    },
+    {
+      "file": "native/long-320.json",
+      "sha256": "896d59ec1a72b6ca16497ed99ce98eb08c1bb70b1c74f8f998b0353e641f21b1",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "native/long-320.png",
+      "pixels": [
+        640,
+        1136
+      ],
+      "screenshotSha256": "9fa97c141d69041b50dbb8feb6a1c3ba89f35f99712f55c682549235a4269bb4",
+      "capturedAt": "2026-10-24T12:59:44.777Z",
+      "errors": []
+    },
+    {
+      "file": "native/long-390.json",
+      "sha256": "346da14986048507fb78336dd18c8fa819b324afe6434cd91223400baaa74b52",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "native/long-390.png",
+      "pixels": [
+        780,
+        1688
+      ],
+      "screenshotSha256": "700db6b20a6eccb878b8f664f318ce2ed95946f230b0d18fdaf51e6f34487d67",
+      "capturedAt": "2026-10-24T13:00:06.869Z",
+      "errors": []
+    },
+    {
+      "file": "native/long-430.json",
+      "sha256": "302e79b770640a54173d4e75180725e1ec56c3b498a9379a33238134d27eb9f5",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "native/long-430.png",
+      "pixels": [
+        860,
+        1864
+      ],
+      "screenshotSha256": "2957a67b0844efbff1cebf1030569b3991c99129ec2b27cdc84bfca7ce97eb68",
+      "capturedAt": "2026-10-24T13:00:24.822Z",
+      "errors": []
+    },
+    {
+      "file": "native/no-child-320.json",
+      "sha256": "bc36b8413d30265eb20a7a71f363b9d9c3607179ba9a0b483f799d80d5ad67c9",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "native/no-child-320.png",
+      "pixels": [
+        640,
+        1136
+      ],
+      "screenshotSha256": "58cc98b084b7edef6eae1d25848f454a431f06216f368c952fba19aae9a7f288",
+      "capturedAt": "2026-10-24T12:59:45.072Z",
+      "errors": []
+    },
+    {
+      "file": "native/no-child-390.json",
+      "sha256": "54579cc104cef638f8511b04a2b6cce59c19c5eb15e8c0130bf0b53016ac39bd",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "native/no-child-390.png",
+      "pixels": [
+        780,
+        1688
+      ],
+      "screenshotSha256": "1d85fcc3584cda8df30d26f44ad9b1a29e6d6a7d3619fb220cc9c61a5787d0e9",
+      "capturedAt": "2026-10-24T13:00:07.184Z",
+      "errors": []
+    },
+    {
+      "file": "native/no-child-430.json",
+      "sha256": "183956394f6c4e8a95bcfe3f1e83d5934cec5983278096a115f3ebdc8439a153",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "native/no-child-430.png",
+      "pixels": [
+        860,
+        1864
+      ],
+      "screenshotSha256": "3b0d51083007e1b520fdad17f0472b50db1e75cd3085d0247a5fdc0f53e9820b",
+      "capturedAt": "2026-10-24T13:00:25.147Z",
+      "errors": []
+    },
+    {
+      "file": "native/overview-320.json",
+      "sha256": "0341e081d778805aa91cfa0016c80040977a334df6968fb2900faaaec56de72e",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "native/overview-320.png",
+      "pixels": [
+        640,
+        1136
+      ],
+      "screenshotSha256": "9fa97c141d69041b50dbb8feb6a1c3ba89f35f99712f55c682549235a4269bb4",
+      "capturedAt": "2026-10-24T12:59:42.673Z",
+      "errors": []
+    },
+    {
+      "file": "native/overview-390.json",
+      "sha256": "7aefc68662e7eec8c1a7a1cc123c822be683d6789b7a3e69f8287a5ea148645c",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "native/overview-390.png",
+      "pixels": [
+        780,
+        1688
+      ],
+      "screenshotSha256": "3944bc6d983309420bc017b70c80ff40f1457dbe242a841303ba6f0138487bfb",
+      "capturedAt": "2026-10-24T13:00:04.588Z",
+      "errors": []
+    },
+    {
+      "file": "native/overview-430.json",
+      "sha256": "33e019e1c2577375db8f985787ae25b29683968fc8f063fddb4964d46a098816",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "native/overview-430.png",
+      "pixels": [
+        860,
+        1864
+      ],
+      "screenshotSha256": "2957a67b0844efbff1cebf1030569b3991c99129ec2b27cdc84bfca7ce97eb68",
+      "capturedAt": "2026-10-24T13:00:22.349Z",
+      "errors": []
+    },
+    {
+      "file": "native/settings-320.json",
+      "sha256": "132c3d66f9a3e97db3f73b0df728cb1e14a3c9653fdb1e54bc7b5b0f9084bd01",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "native/settings-320.png",
+      "pixels": [
+        640,
+        1136
+      ],
+      "screenshotSha256": "d65d9917be559f35813ed69b851ef236892965bed84548b43b6142e0164ab900",
+      "capturedAt": "2026-10-24T12:59:43.289Z",
+      "errors": []
+    },
+    {
+      "file": "native/settings-390.json",
+      "sha256": "adac08a9a7e88041f83046c5df53a40c020aced0f6cd8233e63cf77c16cebaa1",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "native/settings-390.png",
+      "pixels": [
+        780,
+        1688
+      ],
+      "screenshotSha256": "1eb789b20bedd266a43688a0c9d88eff1c12601c80f16704a201fda5f25dd0e5",
+      "capturedAt": "2026-10-24T13:00:05.234Z",
+      "errors": []
+    },
+    {
+      "file": "native/settings-430.json",
+      "sha256": "7c8310e830ea962613b80db11a76f0e1f34a75a3ab2a452efe67d69389709eca",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "native/settings-430.png",
+      "pixels": [
+        860,
+        1864
+      ],
+      "screenshotSha256": "407a7e3c8d01217f27a29ebac437c585adb6fd8b7e86abcb614504f6ffd55bb8",
+      "capturedAt": "2026-10-24T13:00:23.027Z",
+      "errors": []
+    },
+    {
+      "file": "native/settings-error-320.json",
+      "sha256": "9ca46d196c01bdbc067faf793dd4688e523ba8c3f3ca117e1729cce08e7da2ad",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "native/settings-error-320.png",
+      "pixels": [
+        640,
+        1136
+      ],
+      "screenshotSha256": "d9d93185015fb22b6cf300aaa0e5b922c00cf5155f11ae9dd6d85fe5997e74cc",
+      "capturedAt": "2026-10-24T12:59:43.580Z",
+      "errors": []
+    },
+    {
+      "file": "native/settings-error-390.json",
+      "sha256": "e9295e77ff11bab32db816785974c7bf8bcb69b431e8581cf0b6a0b1e43e2a90",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "native/settings-error-390.png",
+      "pixels": [
+        780,
+        1688
+      ],
+      "screenshotSha256": "0cc04a79f31b57cada0dad43542745fd79e57982ebed65bd7ffc6e263700e8ef",
+      "capturedAt": "2026-10-24T13:00:05.549Z",
+      "errors": []
+    },
+    {
+      "file": "native/settings-error-430.json",
+      "sha256": "3e2a6286f105eefbb3b0e5f24f9ff5fc4658e17b86956b4af2ae8a2e302c1473",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "native/settings-error-430.png",
+      "pixels": [
+        860,
+        1864
+      ],
+      "screenshotSha256": "eda677ded3af6cc0c2f5f6cf98c9b70e78270f59db28e51877e2f1fc2ead7356",
+      "capturedAt": "2026-10-24T13:00:23.348Z",
+      "errors": []
+    },
+    {
+      "file": "native/viewer-320.json",
+      "sha256": "08f24c7fa06b8c6ded9d5393c8f377c8846f34ef31c5c8920a832dce45d6b943",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "native/viewer-320.png",
+      "pixels": [
+        640,
+        1136
+      ],
+      "screenshotSha256": "ebea4b441c7fce4ab278f6ea59eb3854aab8f54999472b1dfe0301cbc03875db",
+      "capturedAt": "2026-10-24T12:59:44.181Z",
+      "errors": []
+    },
+    {
+      "file": "native/viewer-390.json",
+      "sha256": "4fd7f340ccb2ebfb659314b251dc1aba9ba6e675594dfaa5ff9ba99b0906d3cc",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "native/viewer-390.png",
+      "pixels": [
+        780,
+        1688
+      ],
+      "screenshotSha256": "d2add4447e11690601c9ad5e11e02589ffbb4916602c7cb731ae2c96e8932f86",
+      "capturedAt": "2026-10-24T13:00:06.201Z",
+      "errors": []
+    },
+    {
+      "file": "native/viewer-430.json",
+      "sha256": "e248478bcc15fd73aeff9521ee89c50f494a0d34b638a09b57891a3081684f1b",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "native/viewer-430.png",
+      "pixels": [
+        860,
+        1864
+      ],
+      "screenshotSha256": "b8b9eb356b88c19810077308d01d3ee570b1037d97a724f6e997d71875c346c5",
+      "capturedAt": "2026-10-24T13:00:24.108Z",
+      "errors": []
+    },
+    {
+      "file": "native/viewer-archive-320.json",
+      "sha256": "929add715504411af239ff90529fcb4bee714b31688da4249db51a1a43641168",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "native/viewer-archive-320.png",
+      "pixels": [
+        640,
+        1136
+      ],
+      "screenshotSha256": "58a5ca5de352679d56a15adcffa91eda2ff3d5c9fac5f584400cfae543d82d4e",
+      "capturedAt": "2026-10-24T12:59:44.481Z",
+      "errors": []
+    },
+    {
+      "file": "native/viewer-archive-390.json",
+      "sha256": "47a8ed3553a766fb7039077135f150b631a8260e6ba0ae984871e22496745da2",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "native/viewer-archive-390.png",
+      "pixels": [
+        780,
+        1688
+      ],
+      "screenshotSha256": "b7270fba767333ea12571a8be25968212285ed76a140598d5c7f8ee39b096f51",
+      "capturedAt": "2026-10-24T13:00:06.536Z",
+      "errors": []
+    },
+    {
+      "file": "native/viewer-archive-430.json",
+      "sha256": "8459c8046798858b99185b53a76ebdfa9c7bef137c5cf653600608c98a6e6595",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "native/viewer-archive-430.png",
+      "pixels": [
+        860,
+        1864
+      ],
+      "screenshotSha256": "cbcf6c9fc85dd112edcb562ee93c0d7667d61695847584c4c35cc3b7ba7acbcd",
+      "capturedAt": "2026-10-24T13:00:24.468Z",
+      "errors": []
+    }
+  ]
+}

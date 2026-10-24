@@ -35,77 +35,8 @@ const RESULT_TEXT = {
   member_departed: "你已不在这个家庭"
 };
 
-/* 图标只取自已有图标集，不为通知新增视觉资产。 */
-const TYPE_ICONS = {
-  member_application: "ico-family-pri",
-  schedule_reminder: "ico-clock-pri",
-  review_digest: "ico-book-pri"
-};
-
 function typeLabel(type) {
   return TYPE_LABELS[type] || "提醒";
-}
-
-function typeIcon(type) {
-  return TYPE_ICONS[type] || "ico-info-pri";
-}
-
-/* 一条偏好是否还能真的送到：开着、有模板、微信授权还有额度。 */
-function isAuthorized(preference) {
-  if (!preference) return false;
-  if (preference.subscription_status !== "accepted") return false;
-  const quota = Number(preference.remaining_quota);
-  return quota === -1 || quota > 0;
-}
-
-/* 状态胶囊：先说最需要家长处理的事，其次才是"已开启"。 */
-function statusOf(preference, channelAvailable) {
-  if (!channelAvailable) return { text: "暂不可用", tone: "neutral", needsGrant: false };
-  if (!preference.enabled) return { text: "已关闭", tone: "neutral", needsGrant: false };
-  if (!preference.template_id) return { text: "暂不可用", tone: "neutral", needsGrant: false };
-  if (preference.subscription_status === "rejected") {
-    return { text: "微信里已拒收", tone: "dan", needsGrant: true };
-  }
-  if (preference.subscription_status === "revoked") {
-    return { text: "需要重新开启", tone: "att", needsGrant: true };
-  }
-  if (isAuthorized(preference)) {
-    return {
-      text: Number(preference.remaining_quota) === -1 ? "已开启" : "已开启 · 本次一条",
-      tone: "suc",
-      needsGrant: false
-    };
-  }
-  if (preference.subscription_status === "expired") {
-    return { text: "上一条已用完", tone: "att", needsGrant: true };
-  }
-  return { text: "待微信授权", tone: "att", needsGrant: true };
-}
-
-/* 微信一次最多带 3 个模板；这里按界面顺序取还需要授权的那几个。 */
-function grantTargets(preferences, channelAvailable) {
-  if (!channelAvailable) return [];
-  const targets = [];
-  (preferences || []).forEach((item) => {
-    const status = statusOf(item, true);
-    if (status.needsGrant && item.template_id) targets.push(item);
-  });
-  return targets.slice(0, 3);
-}
-
-/* wx.requestSubscribeMessage 的返回是「模板 ID → accept/reject/ban/filter」，
-   只有 accept 算授权；其余一律按未授权回传，绝不替用户乐观解释。 */
-function resultsFromWx(response, requested) {
-  const results = [];
-  (requested || []).forEach((item) => {
-    const decision = String((response || {})[item.template_id] || "");
-    results.push({ type: item.type, accepted: decision === "accept" });
-  });
-  return results;
-}
-
-function acceptedCount(results) {
-  return (results || []).filter((item) => item.accepted).length;
 }
 
 /* 投递记录的一行文案。时间只做展示截断，不参与任何判断。 */
@@ -132,12 +63,6 @@ function lastSentLabel(value) {
 
 module.exports = {
   typeLabel,
-  typeIcon,
-  isAuthorized,
-  statusOf,
-  grantTargets,
-  resultsFromWx,
-  acceptedCount,
   describeDelivery,
   lastSentLabel
 };

@@ -1,0 +1,108 @@
+<view class="footprints-page {{embedded ? 'fp-embedded' : ''}}" aria-hidden="{{!!sheet}}">
+  <view class="fp-toolbar" wx:if="{{!embedded && children.length}}">
+    <picker class="fp-picker" wx:if="{{!embedded && children.length}}" range="{{children}}" range-key="label" value="{{childIndex}}" bindchange="changeChild" disabled="{{saving}}">
+      <view class="fp-child"><text>{{child.label}}</text><text>⌄</text></view>
+    </picker>
+  </view>
+  <view class="fp-notice" wx:if="{{child.active === false}}">已归档</view>
+  <view class="fp-notice" wx:if="{{!canWrite}}">只读</view>
+  <view class="fp-error" wx:if="{{error}}"><text>{{error}}</text><button class="fp-text-button" bindtap="load">重新读取</button></view>
+  <view class="fp-loading" wx:if="{{loading}}">正在加载…</view>
+  <block wx:if="{{childId}}">
+    <view class="fp-summary">
+      <view class="fp-stats"><text>{{summary.places || 0}} 个地点</text><text>{{summary.cities || 0}} 座城市</text><text>{{summary.countries || 0}} 个国家</text><text>{{summary.photos || 0}} 张照片</text></view>
+      <button class="fp-more" wx:if="{{canWrite || hasArchivedChildren}}" bindtap="openFootprintActions" disabled="{{saving}}" aria-label="更多足迹操作"><view class="ico ico-more-mute" aria-hidden="{{true}}"></view></button>
+    </view>
+    <view class="fp-tabs">
+      <button class="fp-tab {{mode === 'timeline' ? 'active' : ''}}" data-mode="timeline" bindtap="changeMode" aria-label="时间线视图">时间线</button>
+      <button class="fp-tab {{mode === 'playback' ? 'active' : ''}}" data-mode="playback" bindtap="changeMode" aria-label="轨迹回放视图">轨迹回放</button>
+      <button class="fp-tab {{mode === 'lit' ? 'active' : ''}}" data-mode="lit" bindtap="changeMode" aria-label="地图点亮视图">地图点亮</button>
+    </view>
+    <button class="fp-drafts" wx:if="{{canWrite && summary.drafts}}" bindtap="openDrafts">{{summary.drafts}} 张待核对</button>
+    <button class="fp-text-button" wx:elif="{{canWrite}}" bindtap="openDrafts">查看待整理照片</button>
+    <view class="fp-notice" wx:if="{{summary.unlocated_photos}}">{{summary.unlocated_photos}} 张待补地点</view>
+    <view class="fp-timeline" wx:if="{{mode === 'timeline'}}">
+      <view class="fp-empty" wx:if="{{!loading && !visits.length}}">
+        <image class="fp-empty-image" src="/assets/illustrations/record-camera.png" mode="aspectFit" aria-hidden="{{true}}"></image>
+        <text class="fp-title">还没有足迹</text>
+        <button wx:if="{{canWrite && child.active !== false}}" class="fp-text-button" bindtap="manualEntry">手动记录</button>
+      </view>
+      <view class="fp-visit" wx:for="{{visits}}" wx:key="id">
+        <view class="fp-date-label">{{item.local_date}}</view>
+        <view class="fp-card"><view class="fp-place-title"><text class="fp-place-name">{{item.place_name || (item.latitude !== null ? '照片拍摄位置' : '待补地点')}}</text><text class="fp-muted">{{item.photo_count}} 张</text></view>
+          <view class="fp-grid" wx:if="{{item.photos.length}}"><view class="fp-thumb" wx:for="{{item.photos}}" wx:for-item="photo" wx:key="id" data-id="{{item.id}}" bindtap="openVisit" aria-role="button" aria-label="查看{{item.local_date}}的照片">
+            <image class="fp-thumb-image" wx:if="{{photo.previewUrl}}" src="{{photo.previewUrl}}" mode="aspectFill"></image><text wx:else>{{photo.is_manual ? '手动到访' : '查看照片'}}</text>
+          </view></view>
+          <button class="fp-text-button fp-full" data-id="{{item.id}}" bindtap="openVisit">查看照片</button>
+        </view>
+      </view>
+      <button class="fp-text-button fp-full" wx:if="{{nextCursor}}" bindtap="moreVisits" loading="{{loadingMore}}" disabled="{{loadingMore}}">{{visits.length >= 100 ? '查看下一组' : '查看更多'}}</button>
+    </view>
+    <view class="fp-map-content" wx:else>
+      <view class="fp-scope" wx:if="{{mode === 'lit'}}"><button class="fp-text-button {{mapMode === 'auto' ? 'selected' : ''}}" data-scope="auto" bindtap="mapScope">主要区域</button><button class="fp-text-button" data-scope="china" bindtap="mapScope">中国</button><button class="fp-text-button" data-scope="world" bindtap="mapScope">看全球</button></view>
+      <view class="fp-notice" wx:if="{{mapData.needs_conversion}}">{{mapData.needs_conversion}} 个到访日暂未显示在地图上</view>
+      <view class="fp-world" wx:if="{{mode === 'lit' && mapMode === 'world'}}" aria-label="全球足迹点位总览，位置示意">
+        <text class="fp-world-label">全球足迹 · 位置示意</text>
+        <view class="fp-world-point" wx:for="{{mapData.items}}" wx:key="id" style="left: {{item.worldX}}%; top: {{item.worldY}}%;" aria-hidden="{{true}}">{{index + 1}}</view>
+        
+      </view>
+      <map wx:elif="{{!sheet && !mapError && !menuOpen}}" id="footprint-map" class="fp-map" latitude="{{mapLatitude}}" longitude="{{mapLongitude}}" scale="{{mapScale}}" markers="{{markers}}" polyline="{{polyline}}" show-location="{{false}}" bindmarkertap="mapTap" bindcallouttap="mapTap" bindregionchange="mapRegionChange" binderror="mapFailed" aria-label="已确认的照片足迹地图"></map>
+      <view class="fp-empty" wx:if="{{mapError}}"><text>地图暂不可用</text><button class="fp-text-button" data-mode="timeline" bindtap="changeMode">查看时间线</button></view>
+      <view class="fp-notice" wx:if="{{mode === 'lit' && mapData.outside_visit_days}}">还有 {{mapData.outside_visit_days}} 个到访日<button class="fp-text-button" data-scope="world" bindtap="mapScope">查看全部</button></view>
+      <block wx:if="{{mode === 'lit' && mapMode === 'world'}}"><button class="fp-world-row" wx:for="{{mapData.items}}" wx:key="id" data-id="{{item.id}}" bindtap="worldPointTap">{{index + 1}} · {{item.label || '照片拍摄位置'}} · {{item.visit_days}} 个到访日 ›</button></block>
+      <view class="fp-player" wx:if="{{mode === 'playback'}}">
+        <block wx:if="{{currentPoint}}"><text class="fp-date-label">{{currentPoint.local_date}}</text><text class="fp-place-title">{{currentPoint.place_name || '照片拍摄位置'}}</text>
+          <view class="fp-player-controls"><button class="fp-button fp-small" bindtap="togglePlayback">{{playing ? '暂停' : '播放'}}</button><slider class="fp-progress" min="0" max="{{playback.length > 1 ? playback.length - 1 : 1}}" value="{{playbackIndex}}" disabled="{{playback.length < 2}}" bindchange="seekPlayback" activeColor="#1F5B45" aria-label="回放进度"></slider><text>{{playbackIndex + 1}}/{{playback.length}}</text></view>
+          <button class="fp-text-button" data-id="{{currentPoint.id}}" bindtap="openVisit">查看照片</button><button class="fp-text-button" wx:if="{{playbackCursor}}" bindtap="nextPlaybackPage">继续回放</button>
+        </block><text wx:else>暂无可回放地点</text>
+        <text class="fp-muted fp-block">连线为顺序示意</text>
+      </view>
+    </view>
+    <button class="fp-button fp-import" wx:if="{{canWrite && child.active !== false}}" bindtap="beginImport" disabled="{{saving}}"><view class="ico ico-camera-inv" aria-hidden="{{true}}"></view><text>导入照片</text></button>
+  </block>
+  <view class="fp-empty" wx:elif="{{!loading}}"><text>还没有可查看的孩子档案。</text></view>
+</view>
+
+<view class="fp-overlay" wx:if="{{sheet}}" catchtap="closeSheet">
+  <view class="fp-sheet {{sheet === 'settings' ? 'fp-settings' : ''}}" catchtap="noop">
+    <view class="fp-sheet-head"><text class="fp-place-title">{{sheet === 'consent' ? '导入照片' : sheet === 'settings' ? '足迹设置' : sheet === 'review' ? '核对照片' : sheet === 'confirm' ? '确认到访' : sheet === 'edit' ? (manual ? '手动记录到访' : batchEdit ? '批量修改' : '修改时间与地点') : sheet === 'place' ? '到访记录' : '照片与到访详情'}}</text><button class="fp-close" bindtap="closeSheet" disabled="{{saving}}" aria-label="关闭面板">×</button></view>
+    <view class="fp-sheet-body" wx:if="{{sheet === 'settings'}}">
+      <view class="fp-error" wx:if="{{sheetError}}">{{sheetError}}</view>
+      <label class="fp-switch"><text class="fp-switch-label">AI 地点候选</text><switch checked="{{aiEnabled}}" bindchange="aiChange" color="#1F5B45"/></label>
+    </view>
+    <scroll-view wx:else class="fp-sheet-body" scroll-y="{{true}}" scroll-into-view="{{sheet === 'place' ? placeScrollTarget : ''}}">
+      <view class="fp-error" wx:if="{{sheetError}}">{{sheetError}}</view>
+      <block wx:if="{{sheet === 'consent'}}"><text class="fp-block">读取照片时间和地点，由你核对后入档。</text><text class="fp-muted fp-block fp-gap">仅保存浏览版照片，不提供原图备份。</text><view class="fp-notice fp-gap">上传7天后，未确认照片自动清理。</view><checkbox-group bindchange="consentChange"><label class="fp-check"><checkbox class="fp-checkbox" value="photos" checked="{{photoConsent}}" color="#1F5B45"/><text class="fp-check-label">同意处理所选照片的时间和位置信息</text></label></checkbox-group><label class="fp-switch"><text class="fp-switch-label">AI 辅助补地点（可选）</text><switch checked="{{aiEnabled}}" bindchange="aiChange" color="#1F5B45"/></label><text class="fp-muted fp-block">仅将缺地点的照片交由火山方舟识别，可在设置中关闭。</text></block>
+      <block wx:elif="{{sheet === 'review'}}"><view class="fp-review-tools"><button class="fp-text-button" bindtap="selectAll">{{selectedCount ? '取消选择' : '全选本页'}}</button><button class="fp-text-button" bindtap="batchEdit">批量修改</button></view><view class="fp-notice" wx:if="{{hasPendingUpload}}">可重试上次未完成的上传。</view>
+        <view class="fp-draft" wx:for="{{drafts}}" wx:key="id"><view class="fp-draft-top"><button class="fp-select" data-id="{{item.id}}" bindtap="selectDraft" aria-label="{{item.selected ? '取消选择' : '选择'}}{{item.dateLabel}}的照片">{{item.selected ? '✓' : '○'}}</button><image wx:if="{{item.previewUrl}}" src="{{item.previewUrl}}" class="fp-draft-image" mode="aspectFill"></image><view class="fp-grow"><text class="fp-block">{{item.dateLabel}} · {{item.local_time || '时刻未知'}}</text><text class="fp-block">{{item.placeLabel}}</text><text wx:if="{{item.candidates.length}}" class="fp-muted fp-block">AI 候选 · 待核对</text></view></view><text class="fp-muted fp-block">{{item.statusLabel}} · {{item.expiryLabel}} 到期</text><view class="fp-draft-actions"><button class="fp-text-button" data-id="{{item.id}}" bindtap="editDraft">核对照片</button><button class="fp-text-button" wx:if="{{item.job_state === 'failed'}}" data-id="{{item.id}}" bindtap="retryPhoto">重试解析</button></view></view>
+        <text wx:if="{{!drafts.length}}" class="fp-block fp-gap">没有待核对照片</text><button class="fp-text-button fp-full" wx:if="{{draftsCursor}}" bindtap="moreDrafts">查看更多</button><button class="fp-text-button fp-full" bindtap="refreshDrafts">刷新</button>
+      </block>
+      <block wx:elif="{{sheet === 'confirm'}}"><text class="fp-block">{{confirmCount}} 张照片 · {{child.name}}</text><view class="fp-notice fp-gap" wx:if="{{unlocatedCount}}">{{unlocatedCount}} 张待补地点</view><text class="fp-block fp-gap">确认孩子在这些日期实际到访过所选地点。</text></block>
+      <block wx:elif="{{sheet === 'edit'}}">
+        <view class="fp-notice" wx:if="{{batchEdit}}">留空项不修改</view>
+        <view class="fp-field"><text class="fp-field-label">拍摄日期{{manual ? '（必填）' : ''}}</text><picker class="fp-picker" mode="date" value="{{form.local_date}}" data-field="local_date" bindchange="editField"><view class="fp-input">{{form.local_date || '选择日期'}}</view></picker></view>
+        <button wx:if="{{!manual && editing.state !== 'confirmed' && form.local_date}}" class="fp-text-button" data-field="local_date" bindtap="clearCaptureField">清除日期</button>
+        <view class="fp-field"><text class="fp-field-label">当地时刻（可选）</text><picker class="fp-picker" mode="time" value="{{form.local_time}}" data-field="local_time" bindchange="editField"><view class="fp-input">{{form.local_time || '未填写'}}</view></picker></view>
+        <button wx:if="{{form.local_time}}" class="fp-text-button" data-field="local_time" bindtap="clearCaptureField">清除时间</button>
+        <view wx:if="{{editing.state === 'confirmed'}}" class="fp-field"><text class="fp-field-label">同日播放顺序</text><input class="fp-input fp-text-input" type="number" value="{{form.day_order}}" data-field="day_order" bindinput="editField" maxlength="6" aria-label="同日回放顺序"/></view>
+        <label class="fp-field"><text class="fp-field-label">地点（可留空）</text><input class="fp-input fp-text-input" value="{{form.place_name}}" data-field="place_name" bindinput="editField" maxlength="120" placeholder="地点名称，或在地图选点"/></label>
+        <view class="fp-two-fields"><label class="fp-field"><text class="fp-field-label">城市</text><input class="fp-input fp-text-input" value="{{form.city}}" data-field="city" bindinput="editField" maxlength="80" placeholder="未知可留空"/></label><label class="fp-field"><text class="fp-field-label">国家</text><input class="fp-input fp-text-input" value="{{form.country}}" data-field="country" bindinput="editField" maxlength="80" placeholder="未知可留空"/></label></view>
+        <view class="fp-inline-actions"><button class="fp-text-button" bindtap="searchPlaces">查找地点</button><button class="fp-text-button" bindtap="choosePlace">地图选点</button></view>
+        <button class="fp-candidate" wx:for="{{placeResults}}" wx:key="index" data-index="{{index}}" bindtap="chooseCandidate">候选：{{item.place_name}} · {{item.city || item.country || '请核对'}} ›</button>
+        
+        <text class="fp-muted fp-block fp-gap" wx:if="{{editing && editing.state !== 'confirmed'}}">{{editing.expiryLabel}} 到期</text>
+        <button class="fp-text-button fp-full" wx:if="{{editing}}" bindtap="deletePhoto">删除这一条{{editing.is_manual ? '到访' : '照片'}}</button>
+      </block>
+      <block wx:elif="{{sheet === 'photo'}}"><block wx:if="{{photoList.length}}"><image wx:if="{{photoList[photoIndex].previewUrl}}" class="fp-view-image" src="{{photoList[photoIndex].previewUrl}}" mode="aspectFit" bindtap="previewCurrent" aria-label="放大照片"></image><view class="fp-placeholder" wx:else>{{photoList[photoIndex].is_manual ? '家长手动记录' : '照片暂不可预览'}}</view><view class="fp-pager"><button class="fp-text-button {{photoIndex === 0 && !hasPreviousPhotoPage ? 'fp-disabled' : ''}}" data-delta="-1" bindtap="nextPhoto" disabled="{{photoIndex === 0 && !hasPreviousPhotoPage}}">上一张</button><text>{{photoIndex + 1}} / {{photoList.length}}{{photoCursor ? '+' : ''}}</text><button class="fp-text-button {{!photoCursor && photoIndex + 1 >= photoList.length ? 'fp-disabled' : ''}}" data-delta="1" bindtap="nextPhoto" disabled="{{!photoCursor && photoIndex + 1 >= photoList.length}}">下一张</button></view><text class="fp-block">{{photoList[photoIndex].dateLabel}} · {{photoList[photoIndex].placeLabel}}</text><text class="fp-muted fp-block">{{photoList[photoIndex].sourceLabel}}</text></block></block>
+      <view wx:elif="{{sheet === 'place'}}" id="fp-place-start-{{placeWindow}}"><button class="fp-world-row" wx:for="{{placeVisits}}" wx:key="id" data-id="{{item.id}}" bindtap="openVisit">{{item.local_date}} · {{item.place_name || '照片拍摄位置'}} · {{item.photo_count}} 张 ›</button><button class="fp-text-button fp-full" wx:if="{{placeCursor}}" bindtap="morePlaceVisits" loading="{{loadingPlaceMore}}" disabled="{{loadingPlaceMore}}">{{placeVisits.length >= 100 ? '查看下一组' : '继续查看到访日'}}</button></view>
+    </scroll-view>
+    <view class="fp-sheet-footer">
+      <block wx:if="{{sheet === 'consent'}}"><button class="fp-button fp-full {{saving ? 'fp-disabled' : ''}}" bindtap="choosePhotos" loading="{{saving}}" disabled="{{saving}}">{{saving ? '正在上传 ' + importProgress + '%' : '同意并选择照片'}}</button><button class="fp-text-button fp-full {{saving ? 'fp-disabled' : ''}}" bindtap="manualEntry" disabled="{{saving}}">手动记录</button></block>
+      <button class="fp-button fp-full {{saving ? 'fp-disabled' : ''}}" wx:elif="{{sheet === 'settings'}}" bindtap="saveSettings" loading="{{saving}}" disabled="{{saving}}">保存设置</button>
+      <block wx:elif="{{sheet === 'review'}}"><button class="fp-button fp-full {{saving ? 'fp-disabled' : ''}}" bindtap="askConfirm">确认选中的 {{selectedCount}} 条</button><button class="fp-text-button fp-full" bindtap="uploadBatch" wx:if="{{hasPendingUpload}}">重试未完成上传</button></block>
+      <block wx:elif="{{sheet === 'confirm'}}"><button class="fp-button fp-full {{saving ? 'fp-disabled' : ''}}" bindtap="confirmSelected" loading="{{saving}}" disabled="{{saving}}">确认入档</button><button class="fp-text-button fp-full {{saving ? 'fp-disabled' : ''}}" bindtap="backToReview" disabled="{{saving}}">返回核对</button></block>
+      <button class="fp-button fp-full {{saving ? 'fp-disabled' : ''}}" wx:elif="{{sheet === 'edit'}}" bindtap="saveEdit" loading="{{saving}}" disabled="{{saving}}">{{manual ? '保存待确认草稿' : '保存修改'}}</button>
+      <button class="fp-button fp-full {{saving ? 'fp-disabled' : ''}}" wx:elif="{{sheet === 'photo' && canWrite}}" bindtap="editFormal">修改日期和地点</button>
+    </view>
+  </view>
+</view>

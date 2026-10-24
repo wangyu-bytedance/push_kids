@@ -111,6 +111,25 @@ class PendingApplication:
 
 
 class FamilyService:
+    @staticmethod
+    def data_scope_available(family_id):
+        """SQL eligibility contract for owned durable work; local legacy scopes may lack a row."""
+        return ~select(Family.id).where(Family.id == family_id, Family.status != "active").exists()
+
+    @staticmethod
+    def lock_active_data_scope(db: Session, family_id: str) -> None:
+        """Serialize owned-data mutations/workers with family deletion acceptance."""
+        family = db.scalar(
+            select(Family)
+            .where(Family.id == family_id)
+            .with_for_update()
+            .execution_options(populate_existing=True)
+        )
+        # The explicit local X-Family-ID compatibility path predates Family rows.
+        # Authenticated requests already require an existing active family at the boundary.
+        if family is not None and family.status != "active":
+            raise ConflictError("家庭资料正在清理或不可访问")
+
     _MAX_INVITE_CODE_CANDIDATES = 32
 
     @staticmethod
@@ -325,10 +344,12 @@ class FamilyService:
         return {str(item) for item in rows}
 
     @classmethod
-    def notification_member_is_active(cls, db: Session, family_id: str, member_id: str) -> bool:
+    def notification_member_is_active(
+        cls, db: Session, family_id: str, member_id: str, *, expected_role: str | None = None
+    ) -> bool:
         """Serialize notification delivery with family deletion acceptance."""
         item = db.scalar(
-            select(FamilyMember.id)
+            select(FamilyMember.role)
             .join(Family, Family.id == FamilyMember.family_id)
             .where(
                 FamilyMember.id == member_id,
@@ -338,7 +359,7 @@ class FamilyService:
             )
             .with_for_update()
         )
-        return item is not None
+        return item is not None and (expected_role is None or item == expected_role)
 
     @classmethod
     def notification_family_is_active(cls, db: Session, family_id: str) -> bool:

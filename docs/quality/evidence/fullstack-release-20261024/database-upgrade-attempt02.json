@@ -1,0 +1,61 @@
+{
+  "started_at": "2026-10-24T02:55:17.308763+00:00",
+  "database": "push_kids",
+  "target_schema": "20261020_0022",
+  "spec_revision": "OPS-SPEC-20261023-FULLSTACK-TEST-DEPLOYMENT-04",
+  "old_version_034_may_still_run": true,
+  "mode": "upgrade",
+  "steps": [
+    {
+      "name": "frozen_integrity_target_schema_and_inflight",
+      "status": "PASS"
+    },
+    {
+      "name": "alembic_current_before",
+      "status": "PASS"
+    },
+    {
+      "name": "alembic_upgrade_0022",
+      "status": "PASS"
+    },
+    {
+      "name": "alembic_current_after",
+      "status": "PASS"
+    },
+    {
+      "name": "alembic_check",
+      "status": "PASS"
+    },
+    {
+      "name": "schema_tables_fields_triggers_and_projection",
+      "status": "PASS"
+    }
+  ],
+  "status": "PASS",
+  "schema_before": "20261012_0019",
+  "server_version": "5.7.18-cynos-2.1.14-log",
+  "preflight_inflight_and_queued_counts": [
+    0,
+    0,
+    0,
+    0
+  ],
+  "current_step": "alembic_check",
+  "schema_after": "20261020_0022",
+  "expected_tables": 55,
+  "missing_tables": [],
+  "queue_v2_triggers": [
+    "rq_v2_children_update",
+    "rq_v2_knowledge_items_update",
+    "rq_v2_review_items_insert",
+    "rq_v2_review_items_update",
+    "rq_v2_review_schedule_overrides_delete",
+    "rq_v2_review_schedule_overrides_insert",
+    "rq_v2_review_schedule_overrides_update",
+    "rq_v2_subjects_update"
+  ],
+  "queue_projection_mismatch": 0,
+  "queue_projection_extra": 0,
+  "superseded_count": 0,
+  "finished_at": "2026-10-24T02:55:25.592098+00:00"
+}

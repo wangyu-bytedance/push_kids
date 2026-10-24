@@ -1,0 +1,12 @@
+unformatted: File would be reformatted
+   --> tests/integration/test_learning_suggestions.py:415:35
+    |
+414 |             else:
+    -                 result = generate(db, family_headers["X-Family-ID"], child["id"], 0, "budget-manual-001")
+415 +                 result = generate(
+416 +                     db, family_headers["X-Family-ID"], child["id"], 0, "budget-manual-001"
+417 +                 )
+418 |                 assert result["state"] == "queued"
+    |
+
+1 file would be reformatted, 684 files already formatted

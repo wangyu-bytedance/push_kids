@@ -1,0 +1,23 @@
+{
+  "date": "2026-10-24",
+  "status": "PASS_WITH_SCOPE_LIMITS",
+  "project": "push-kids-footprints-minimal-synthetic",
+  "viewport": [430, 932],
+  "driver": "Actual CUA clicks using fresh native accessibility elements; production handlers, synthetic read-only transport",
+  "steps": [
+    {"action": "Select travel using the top record-type dropdown", "observed": "Current travel label, synthetic active child, statistics and more button visible"},
+    {"action": "Click more", "observed_ax": ["足迹设置", "已归档孩子", "取消"], "state": "interactions/actions-open-430.json"},
+    {"action": "Click cancel", "observed": "Same active child; sheet empty; nativeMenuOpen and archivePickerOpen false", "state": "interactions/actions-cancel-430.json"},
+    {"action": "Click more and settings", "observed_ax": ["足迹设置", "关闭面板", "AI 地点候选", "保存设置"], "state": "interactions/settings-open-430.json"},
+    {"action": "Close settings", "observed": "Returned to travel; more visible"},
+    {"action": "Click more and archived children container", "observed_ax": ["合成旧档案", "取消"], "state": "interactions/archive-open-430.json"},
+    {"action": "Click archive cancel", "observed": "Same active child; both menu locks released", "state": "interactions/archive-cancel-430.json"},
+    {"action": "Reopen and select archived child", "observed_ax": ["切换孩子，当前合成旧档案（已归档）", "已归档"], "observed": "Child id synthetic-archive, active false; import button absent; both menu locks released", "state": "interactions/archive-selected-430.json"}
+  ],
+  "capture_limits": "Official App.captureScreenshot omits the native system action sheet layer. actions-open/archive-open PNGs show the underlying page only, not menu visuals. Menu contents and actual transitions were observed through CUA AX; settings and archived result PNGs are visible.",
+  "harness_recovery": "Initial setup helper read a null component during asynchronous reLaunch. Travel was then entered using the real dropdown and all above choices were actual CUA clicks. The unstable setup shortcut was removed. One text-node click did not choose archived action; clicking its observed container opened the list.",
+  "not_verified": ["Real settings preference write", "Unsaved edit discard protection through native UI", "Long archived-list pagination through native UI", "Standalone Page native matrix", "iOS/Android, screen reader and system large font", "Real photos, AI and maps", "Independent review and parent acceptance"],
+  "business_writes": false,
+  "uploaded": false,
+  "deployed": false
+}

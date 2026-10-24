@@ -1,0 +1,259 @@
+{
+  "nodes": {
+    ".record-heading": [
+      {
+        "left": 0,
+        "right": 320,
+        "top": 60,
+        "bottom": 135,
+        "width": 320,
+        "height": 75,
+        "fontSize": "16px"
+      }
+    ],
+    ".record-type-title": [
+      {
+        "left": 15,
+        "right": 117,
+        "top": 70,
+        "bottom": 119,
+        "width": 102,
+        "height": 49,
+        "fontSize": "22px"
+      }
+    ],
+    ".record-child": [
+      {
+        "left": 211,
+        "right": 305,
+        "top": 72.5,
+        "bottom": 116.5,
+        "width": 94,
+        "height": 44,
+        "fontSize": "14px"
+      }
+    ],
+    ".record-type-sheet": [
+      {
+        "left": 0,
+        "right": 320,
+        "top": 340,
+        "bottom": 568,
+        "width": 320,
+        "height": 228,
+        "fontSize": "16px"
+      }
+    ],
+    ".record-type-close": [
+      {
+        "left": 260,
+        "right": 304,
+        "top": 356,
+        "bottom": 400,
+        "width": 44,
+        "height": 44,
+        "fontSize": "17px"
+      }
+    ],
+    ".record-type-choice": [
+      {
+        "left": 16,
+        "right": 304,
+        "top": 408,
+        "bottom": 472,
+        "width": 288,
+        "height": 64,
+        "fontSize": "16px"
+      },
+      {
+        "left": 16,
+        "right": 304,
+        "top": 480,
+        "bottom": 544,
+        "width": 288,
+        "height": 64,
+        "fontSize": "16px"
+      }
+    ],
+    ".record-type-head": [
+      {
+        "left": 16,
+        "right": 304,
+        "top": 356,
+        "bottom": 400,
+        "width": 288,
+        "height": 44,
+        "fontSize": "18px"
+      }
+    ],
+    ".record-cta": [],
+    ".footprints-page": [
+      {
+        "left": 0,
+        "right": 320,
+        "top": 135,
+        "bottom": 834,
+        "width": 320,
+        "height": 699,
+        "fontSize": "14px"
+      }
+    ],
+    ".fp-tab": [
+      {
+        "left": 16,
+        "right": 106.671875,
+        "top": 391,
+        "bottom": 435,
+        "width": 90.671875,
+        "height": 44,
+        "fontSize": "14px"
+      },
+      {
+        "left": 114.671875,
+        "right": 205.34375,
+        "top": 391,
+        "bottom": 435,
+        "width": 90.671875,
+        "height": 44,
+        "fontSize": "14px"
+      },
+      {
+        "left": 213.34375,
+        "right": 304.015625,
+        "top": 391,
+        "bottom": 435,
+        "width": 90.671875,
+        "height": 44,
+        "fontSize": "14px"
+      }
+    ],
+    ".fp-date": [
+      {
+        "left": 12,
+        "right": 119,
+        "top": 331,
+        "bottom": 375,
+        "width": 107,
+        "height": 44,
+        "fontSize": "14px"
+      },
+      {
+        "left": 149,
+        "right": 256,
+        "top": 331,
+        "bottom": 375,
+        "width": 107,
+        "height": 44,
+        "fontSize": "14px"
+      }
+    ],
+    ".fp-button": [
+      {
+        "left": 228,
+        "right": 308,
+        "top": 241,
+        "bottom": 285,
+        "width": 80,
+        "height": 44,
+        "fontSize": "14px"
+      }
+    ],
+    ".fp-text-button": [
+      {
+        "left": 12,
+        "right": 84,
+        "top": 135,
+        "bottom": 179,
+        "width": 72,
+        "height": 44,
+        "fontSize": "14px"
+      },
+      {
+        "left": 264,
+        "right": 308,
+        "top": 331,
+        "bottom": 375,
+        "width": 44,
+        "height": 44,
+        "fontSize": "14px"
+      },
+      {
+        "left": 38,
+        "right": 295,
+        "top": 699,
+        "bottom": 743,
+        "width": 257,
+        "height": 44,
+        "fontSize": "14px"
+      }
+    ],
+    ".fp-close": [],
+    ".fp-select": [],
+    ".fp-drafts": [
+      {
+        "left": 12,
+        "right": 308,
+        "top": 439,
+        "bottom": 487,
+        "width": 296,
+        "height": 48,
+        "fontSize": "14px"
+      }
+    ],
+    ".fp-input": [],
+    ".fp-candidate": [],
+    ".fp-sheet": [],
+    ".fp-sheet-head": [],
+    ".fp-sheet-body": [],
+    ".fp-sheet-footer": [],
+    ".fp-draft": [],
+    ".fp-title": [
+      {
+        "left": 12,
+        "right": 220,
+        "top": 241,
+        "bottom": 271,
+        "width": 208,
+        "height": 30,
+        "fontSize": "22px"
+      }
+    ],
+    ".fp-muted": [
+      {
+        "left": 270.640625,
+        "right": 295,
+        "top": 551.5,
+        "bottom": 573.5,
+        "width": 24.359375,
+        "height": 22,
+        "fontSize": "14px"
+      }
+    ],
+    ".fp-scope .fp-text-button": [],
+    ".fp-two-fields .fp-input": [],
+    ".fp-sheet-footer .fp-full": [],
+    ".fp-check-label": [],
+    ".tabbar": []
+  },
+  "scrollLeft": 0,
+  "viewport": {
+    "width": 320,
+    "height": 568,
+    "screenHeight": 568,
+    "dpr": 2,
+    "baseLibrary": "3.17.4",
+    "fontScale": 15
+  },
+  "recordType": "travel",
+  "overlayOpen": true,
+  "childId": "synthetic",
+  "state": "travel-picker",
+  "errors": [],
+  "capturedAt": "2026-10-23T07:02:40.148Z",
+  "screenshot": "travel-picker-320.png",
+  "screenshotSha256": "f8788563500c8bace72dc9df703d9b640c4b5e2ab8cf39d2bd45237643b184ef",
+  "screenshotPixels": {
+    "width": 640,
+    "height": 1136
+  }
+}

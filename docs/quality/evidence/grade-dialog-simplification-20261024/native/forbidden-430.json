@@ -1,0 +1,49 @@
+{
+  "nodes": {
+    ".grade-sheet": [],
+    ".grade-body": [],
+    ".grade-title": [],
+    ".grade-latest": [],
+    ".grade-picker": [],
+    ".grade-error": [],
+    ".grade-actions": [],
+    ".grade-primary": [],
+    ".grade-secondary": [],
+    ".tabbar": [
+      {
+        "left": 0,
+        "right": 430,
+        "top": 837,
+        "bottom": 932,
+        "width": 430,
+        "height": 95,
+        "scrollLeft": 0,
+        "scrollTop": 0,
+        "scrollWidth": 0,
+        "scrollHeight": 0,
+        "fontSize": "16px",
+        "lineHeight": "normal",
+        "color": "rgb(142, 150, 134)",
+        "backgroundColor": "rgba(255, 253, 248, 0.92)",
+        "opacity": "1"
+      }
+    ]
+  },
+  "viewport": {
+    "width": 430,
+    "height": 932,
+    "screenHeight": 932,
+    "dpr": 3,
+    "fontScale": 15,
+    "baseLibrary": "3.17.4"
+  },
+  "state": "forbidden",
+  "errors": [],
+  "fixture": "synthetic presentation only; actual lifecycle covered by frontend tests",
+  "capturedAt": "2026-10-24T12:55:32.192Z",
+  "screenshotSha256": "86e8ee9f0d6dd7a00487eda3e000b581a727ce67601e4b1ae22473dc5e936c19",
+  "screenshotPixels": {
+    "width": 860,
+    "height": 1864
+  }
+}

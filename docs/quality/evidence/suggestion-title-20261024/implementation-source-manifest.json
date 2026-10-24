@@ -1,0 +1,27 @@
+{
+  "baseline_head": "82ca52775bc948f2a963a8f4ed614322d8859de8",
+  "scope": "final title implementation and verification files; shared dirty checkout, not all owned by this task",
+  "sha256": {
+    "apps/miniprogram/components/today-learning/index.js": "677a8031ab4d86e0748bb23ce4031c3bdd5c77f0297b45cfedac408f37bc8515",
+    "apps/miniprogram/components/today-learning/index.json": "2f97104a3787d98b5058f0cab2aec29b5ff87542f95111dc6b2f2108ea38fb8a",
+    "apps/miniprogram/components/today-learning/index.wxml": "256883798e6f15602ef7c82d5e8848ce8b6626c867d91e738679526a484130bc",
+    "apps/miniprogram/components/today-learning/index.wxss": "9bd8422bb691cd2dd2bf74ec73a8f6ccf04a3dc5360868ef5bc165ed08166a21",
+    "apps/miniprogram/components/todo-card/index.js": "735bca4375d72396a446f78ea55e09224b679a5d66d6a417c4c10df96ece2663",
+    "apps/miniprogram/components/todo-card/index.json": "e7b657f5a4b032a68e9e084639b3a5564ce552896d269c3f8c4463bf7a7fa3b5",
+    "apps/miniprogram/components/todo-card/index.wxml": "b4f23d982935fe28a82443b89882c1c5d6b1399d26ecbf410d4182b1cd0ffaf2",
+    "apps/miniprogram/components/todo-card/index.wxss": "9b44689ac3a57b598c74574d86d7847469d2c803df17c2adf3984370ce010dda",
+    "apps/miniprogram/pages/today/index.js": "161f467c835f252827b018b5b1e5f2db2048f8d92d0036554dca03f17c84a4b8",
+    "apps/miniprogram/pages/today/index.json": "35f5195cbcc51040db4fb927e4f5e7a9287472666ec765dcde71b7312989dc0f",
+    "apps/miniprogram/pages/today/index.wxml": "cc0c206835555a86c2e5a46351bc3fbc108cae3c8581bebe485698425b4461b7",
+    "apps/miniprogram/pages/today/index.wxss": "c6a298297f7e8d3e4e2c84b70bc3d860e323d374171483f4257cb9142c971415",
+    "tools/today_learning_geometry.js": "6bba2a5630c8cb3bbec164d99b86a049759c3050fe7f905213b229a7e7b2b9be",
+    "tools/prepare_today_learning_native.py": "918c5ac8842578e2e714a8051b3c085c309326c9417a280b3668b170702c09a0",
+    "apps/api/src/push_kids/agent_processing/suggestion_contracts.py": "917ac3d40133976c42466bf126aed0dbcf5aaf7831df5e97885cae771ef86c1b",
+    "apps/api/src/push_kids/agent_processing/suggestion_provider.py": "ed9fa86f6e4c557fd50c378d70bf36e98363bfa4a14049805a389eb51a8b4810",
+    "apps/api/src/push_kids/learning_suggestions/schemas.py": "25ae8ad9e4e6462c27b1833692cc9ff16d7367701ec61c54f264f26c0c97f131",
+    "apps/api/src/push_kids/learning_suggestions/generation.py": "86d79d78f6fa4cdad0e5cd2a37556f141e20a3bc3e69cbb7ffd14fb40725094b",
+    "tests/unit/test_today_learning_policy.py": "dbd34100a748d32e81d958f2ea144eefa593123619f78c512cd7f4153007d98e",
+    "tests/integration/test_learning_suggestions.py": "6d9f88db047b1a9e25f63746f7027a30238ab02a3806789d00daf5ce20064ebe",
+    "tests/frontend/today-learning.test.js": "f9f40c851506df124970d6118e5c11a0f4b62b9b314d2552d3292865b84ec791"
+  }
+}

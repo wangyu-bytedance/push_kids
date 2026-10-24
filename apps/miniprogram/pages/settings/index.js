@@ -102,11 +102,16 @@ function travelLabel(item) {
 }
 
 Page({
+  onGradeConfirmation(event) {
+    const flow = getApp().gradeConfirmation;
+    if (flow) return flow.handle(this, event.detail);
+  },
   onIllustrationError(event) {
     const field = { learning: "learningArtFailed", activity: "activityArtFailed", travel: "travelArtFailed", daily: "dailyArtFailed" }[event.currentTarget.dataset.art];
     if (field) this.setData({ [field]: true });
   },
   data: {
+    gradeConfirmation: null, gradeConfirmationVisible: false,
     learningArtFailed: false, activityArtFailed: false, travelArtFailed: false, dailyArtFailed: false,
     loading: true, error: "", children: [], childIndex: 0, childId: "", multiChild: false, showChildSheet: false,
     archivedChildren: [], canAddChild: true, isManager: true, childLimitHint: childContext.limitHint(),

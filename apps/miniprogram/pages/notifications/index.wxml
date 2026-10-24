@@ -2,7 +2,7 @@
   <view class="pk-notice err" wx:if="{{error}}">
     <view class="ico ico-cloud-off-dan sm"></view>
     <text class="n-txt">{{error}}。已经读到的设置还能继续看。</text>
-    <view class="ico ico-refresh-dan sm" aria-role="button" aria-label="重新加载" bindtap="load"></view>
+    <view class="icon-btn" aria-role="button" aria-label="重新加载" bindtap="load"><view class="ico ico-refresh-dan sm"></view></view>
   </view>
 
   <view class="pg-head">
@@ -20,18 +20,17 @@
 
   <block wx:else>
     <!-- 通道状态：先说清楚"现在能不能收到"，再谈单条开关 -->
-    <view class="pk-hero notice-hero" wx:if="{{channelAvailable}}">
+    <view class="pk-hero notice-hero {{heroReady ? '' : 'neutral-hero'}}" wx:if="{{channelAvailable}}">
       <text class="hero-eyebrow">微信服务通知</text>
-      <text class="hero-line" wx:if="{{grantCount}}">还有 <text class="hero-num">{{grantCount}}</text> 类提醒等你授权</text>
-      <text class="hero-line" wx:else>提醒已就绪，会发到你的微信</text>
+      <text class="hero-line">{{heroTitle}}</text>
       <text class="hero-note" wx:if="{{lastSentLabel}}">最近一条提醒发出于 {{lastSentLabel}}。</text>
       <text class="hero-note" wx:else>提醒只写孩子的名字、时间和要做的事，不做评价。</text>
-      <view class="btn mt3 {{granting ? 'is-disabled' : ''}}" wx:if="{{grantCount}}" aria-role="button" aria-label="在微信里开启提醒" aria-disabled="{{granting ? true : false}}" bindtap="requestGrant">
-        <text>{{granting ? '正在等微信确认…' : '在微信里开启提醒'}}</text>
-      </view>
-      <view class="hero-ok" wx:elif="{{!longTerm}}">
+      <button class="btn mt3" wx:if="{{grantCount && supported}}" disabled="{{granting || error}}" bindtap="requestGrant">
+        <text>{{granting ? '正在等微信确认…' : '手动补充次数'}}</text>
+      </button>
+      <view class="hero-ok">
         <view class="ico ico-info-pri sm"></view>
-        <text class="ok-txt">微信的一次授权只能发一条提醒，发出后这一页会提示你再开一次。</text>
+        <text class="ok-txt">每次同意只增加一次发送额度，不是永久订阅。</text>
       </view>
     </view>
 
@@ -51,6 +50,15 @@
       <text class="n-txt">当前微信版本不支持订阅消息，更新微信后就能开启提醒。</text>
     </view>
 
+    <view class="pk-card auto-card">
+      <view class="flex top">
+        <view class="grow"><text class="auto-title">完成复习时自动补充</text><text class="auto-copy">仅补充你的提醒；可随时关闭。</text></view>
+        <switch class="auto-switch" checked="{{autoEnabled}}" disabled="{{loading || autoSaving || error || !channelAvailable || !supported}}" color="#1F5B45" aria-label="完成复习时自动补充" bindchange="toggleAuto" />
+      </view>
+      <text class="auto-copy">微信记住允许后可以减少询问。普通拒绝或取消后，完成 10 条复习再询问；明确关闭后不再自动申请。</text>
+      <text class="auto-copy" wx:if="{{autoSaving}}">正在保存…</text>
+    </view>
+
     <!-- 三类提醒 -->
     <view class="sec">
       <view class="sec-bar"><text class="s-t">提醒内容</text><text class="s-m">关掉的类别不会再发</text></view>
@@ -58,19 +66,19 @@
 
       <view class="rowlist">
         <view class="rowitem noti-row" wx:for="{{items}}" wx:key="type">
-          <view class="noti-mark"><view class="ico {{item.icon}} sm"></view></view>
           <view class="grow">
             <view class="noti-line">
-              <text class="r-t trunc">{{item.label}}</text>
+              <text class="r-t">{{item.label}}</text>
               <text class="pill neutral" wx:if="{{item.managersOnly}}">仅管理员</text>
             </view>
             <text class="r-s">{{item.description}}</text>
             <view class="noti-state">
               <text class="pill {{item.statusTone}}">{{item.statusText}}</text>
-              <text class="grant-link" wx:if="{{item.needsGrant && item.enabled}}" aria-role="button" aria-label="为{{item.label}}授权" data-type="{{item.type}}" bindtap="requestGrant">去授权</text>
             </view>
+            <button class="grant-link" wx:if="{{item.needsWxSettings}}" bindtap="openWxSettings">去微信调整</button>
+            <button class="grant-link" wx:elif="{{item.needsGrant && supported && channelAvailable}}" disabled="{{granting || error}}" aria-label="为{{item.label}}补充次数" data-type="{{item.type}}" bindtap="requestGrant">手动补充次数</button>
           </view>
-          <switch class="noti-switch" checked="{{item.enabled}}" color="#2E6A56" disabled="{{togglingType === item.type}}" data-type="{{item.type}}" bindchange="toggle" />
+          <switch class="noti-switch" checked="{{item.enabled}}" aria-label="{{item.label}}" color="#1F5B45" disabled="{{!!togglingType || loading || error}}" data-type="{{item.type}}" bindchange="toggle" />
         </view>
       </view>
       <view class="help">开关记录的是「你想不想收」；能不能发到微信，取决于上面的授权状态。</view>

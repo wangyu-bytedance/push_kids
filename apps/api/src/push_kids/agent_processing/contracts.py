@@ -107,6 +107,11 @@ class ExistingKnowledgeContext(BaseModel):
     last_reviewed_on: str | None = None
     review_count: int | None = None
     state_version: int | None = None
+    review_method: str = ""
+    evidence: str = Field(default="", max_length=4000)
+    review_status: str = "normal"
+    coverage_evidence_complete: bool = True
+    created_at: str | None = None
     match_signals: list[str] = Field(default_factory=list, max_length=8)
 
 
@@ -265,11 +270,20 @@ class AnalysisOutputValidationError(ValueError):
         super().__init__(",".join(self.codes))
 
 
+class CoverageMatch(BaseModel):
+    """Server-owned snapshot; submitted client values are never trusted."""
+
+    point_fingerprint: str = Field(max_length=64)
+    old_knowledge_id: str = Field(max_length=36)
+    old_fingerprint: str = Field(max_length=64)
+
+
 class AnalysisProposal(BaseModel):
     summary: str = Field(min_length=1, max_length=500)
     subject_name: str = Field(min_length=1, max_length=40)
     subject_kind: str = Field(default="learning", pattern="^(learning|activity)$")
     source: str = Field(default="课内", max_length=30)
+    coverage_matches: list[CoverageMatch] = Field(default_factory=list, max_length=400)
     knowledge_points: list[KnowledgeProposal] = Field(default_factory=list, max_length=20)
     todo_matches: list[TodoCandidate] = Field(default_factory=list, max_length=20)
     uncertainties: list[str] = Field(default_factory=list, max_length=20)

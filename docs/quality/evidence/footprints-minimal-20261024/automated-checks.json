@@ -1,0 +1,41 @@
+{
+  "capturedAt": "2026-10-24T13:04:52.672826+00:00",
+  "scope": "Final observed shared worktree checks; no release/device acceptance. Other chats may add unrelated code after this capture.",
+  "checks": [
+    {
+      "command": "npm test",
+      "exit_code": 0,
+      "output": "1..331\n# tests 331\n# suites 0\n# pass 331\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 2011.244917\n"
+    },
+    {
+      "command": "npm run lint:miniapp",
+      "exit_code": 0,
+      "output": "\n> push-kids-workspace@0.1.0 lint:miniapp\n> eslint apps/miniprogram tests/frontend --ext .js\n\n"
+    },
+    {
+      "command": "python3 tools/validate_miniprogram.py",
+      "exit_code": 0,
+      "output": "MINIPROGRAM_VALID pages=17 source_bytes=1221025\n"
+    },
+    {
+      "command": ".venv/bin/python tools/check_architecture.py",
+      "exit_code": 0,
+      "output": "ARCHITECTURE_VALID policies=4 modules=150 (runtime/lazy DAG)\n"
+    },
+    {
+      "command": "python3 tools/validate_design_evidence.py --check-current-policy",
+      "exit_code": 0,
+      "output": "DESIGN_EVIDENCE_VALID\n"
+    },
+    {
+      "command": "node --check tools/footprints_minimal_interactions.js",
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0,
+      "output": ""
+    }
+  ]
+}

@@ -1,0 +1,174 @@
+{
+  "reviewStatus": "superseded",
+  "view": "count",
+  "readOnly": false,
+  "empty": false,
+  "viewport": {
+    "width": 390,
+    "height": 753,
+    "screenHeight": 844,
+    "dpr": 3,
+    "baseLibrary": "3.17.4",
+    "fontScale": 15
+  },
+  "nodes": [
+    [
+      {
+        "left": 0,
+        "right": 390,
+        "top": 0,
+        "bottom": 753,
+        "width": 390,
+        "height": 753
+      }
+    ],
+    [
+      {
+        "left": 18,
+        "right": 372,
+        "top": 143,
+        "bottom": 193,
+        "width": 354,
+        "height": 50
+      }
+    ],
+    [],
+    [
+      {
+        "left": 18,
+        "right": 372,
+        "top": 143,
+        "bottom": 193,
+        "width": 354,
+        "height": 50
+      }
+    ],
+    [],
+    [],
+    [
+      {
+        "left": 312,
+        "right": 356,
+        "top": 320,
+        "bottom": 364,
+        "width": 44,
+        "height": 44
+      }
+    ],
+    [
+      {
+        "left": 34,
+        "right": 304,
+        "top": 320,
+        "bottom": 391,
+        "width": 270,
+        "height": 71
+      }
+    ],
+    [
+      {
+        "left": 34,
+        "right": 304,
+        "top": 320,
+        "bottom": 341,
+        "width": 270,
+        "height": 21
+      }
+    ],
+    [
+      {
+        "left": 34,
+        "right": 304,
+        "top": 344,
+        "bottom": 364,
+        "width": 270,
+        "height": 20
+      }
+    ],
+    [
+      {
+        "left": 136,
+        "right": 356,
+        "top": 367,
+        "bottom": 427,
+        "width": 220,
+        "height": 60
+      }
+    ],
+    [
+      {
+        "left": 19,
+        "right": 371,
+        "top": 246,
+        "bottom": 307,
+        "width": 352,
+        "height": 61
+      }
+    ],
+    [
+      {
+        "left": 18,
+        "right": 372,
+        "top": 18,
+        "bottom": 70,
+        "width": 354,
+        "height": 52
+      }
+    ],
+    [
+      {
+        "left": 22,
+        "right": 191,
+        "top": 22,
+        "bottom": 66,
+        "width": 169,
+        "height": 44
+      },
+      {
+        "left": 199,
+        "right": 368,
+        "top": 22,
+        "bottom": 66,
+        "width": 169,
+        "height": 44
+      }
+    ],
+    [
+      {
+        "left": 103,
+        "right": 287,
+        "top": 395,
+        "bottom": 439,
+        "width": 184,
+        "height": 44
+      }
+    ],
+    [
+      {
+        "left": 34,
+        "right": 304,
+        "top": 370,
+        "bottom": 391,
+        "width": 270,
+        "height": 21
+      }
+    ],
+    [
+      {
+        "left": 154,
+        "right": 338,
+        "top": 373,
+        "bottom": 421,
+        "width": 184,
+        "height": 48
+      }
+    ]
+  ],
+  "state": "menu",
+  "embedded": false,
+  "expectedWidth": 390,
+  "capturedAt": "2026-10-20T15:57:00.797Z",
+  "fixture": "isolated synthetic page-realm JSON; production WXML/WXSS unchanged",
+  "errors": [],
+  "screenshot": "NOT_RUN"
+}

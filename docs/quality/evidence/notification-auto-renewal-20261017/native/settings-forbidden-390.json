@@ -1,0 +1,127 @@
+{
+  "viewport": {
+    "width": 390,
+    "height": 753,
+    "screenHeight": 844,
+    "dpr": 3,
+    "fontScale": 15,
+    "baseLibrary": "3.17.4"
+  },
+  "nodes": {
+    ".page": [
+      {
+        "left": 0,
+        "right": 390,
+        "top": 0,
+        "bottom": 848,
+        "width": 390,
+        "height": 848,
+        "fontSize": "16px"
+      }
+    ],
+    ".auto-card": [
+      {
+        "left": 18,
+        "right": 372,
+        "top": 303,
+        "bottom": 468,
+        "width": 354,
+        "height": 165,
+        "fontSize": "16px"
+      }
+    ],
+    ".noti-row": [],
+    ".noti-row .grow": [],
+    ".noti-switch": [],
+    ".grant-link": [],
+    ".notice-hero .btn": [],
+    ".auto-card switch": [],
+    ".icon-btn": [
+      {
+        "left": 314,
+        "right": 358,
+        "top": 24,
+        "bottom": 68,
+        "width": 44,
+        "height": 44,
+        "fontSize": "13px"
+      },
+      {
+        "left": 328,
+        "right": 372,
+        "top": 94,
+        "bottom": 138,
+        "width": 44,
+        "height": 44,
+        "fontSize": "16px"
+      }
+    ],
+    ".auto-copy": [
+      {
+        "left": 35,
+        "right": 290,
+        "top": 355,
+        "bottom": 377,
+        "width": 255,
+        "height": 22,
+        "fontSize": "14px"
+      },
+      {
+        "left": 35,
+        "right": 355,
+        "top": 385,
+        "bottom": 451,
+        "width": 320,
+        "height": 66,
+        "fontSize": "14px"
+      }
+    ],
+    ".r-s": [],
+    ".noti-state .pill": [],
+    ".n-txt": [
+      {
+        "left": 57,
+        "right": 305,
+        "top": 24,
+        "bottom": 68,
+        "width": 248,
+        "height": 44,
+        "fontSize": "14px"
+      }
+    ],
+    ".hero-note": [],
+    ".help": [
+      {
+        "left": 35,
+        "right": 355,
+        "top": 230,
+        "bottom": 274,
+        "width": 320,
+        "height": 44,
+        "fontSize": "14px"
+      },
+      {
+        "left": 18,
+        "right": 372,
+        "top": 554,
+        "bottom": 598,
+        "width": 354,
+        "height": 44,
+        "fontSize": "14px"
+      },
+      {
+        "left": 18,
+        "right": 372,
+        "top": 746,
+        "bottom": 790,
+        "width": 354,
+        "height": 44,
+        "fontSize": "14px"
+      }
+    ]
+  },
+  "expectedWidth": 390,
+  "state": "settings-forbidden",
+  "fixture": "synthetic native page; no grant/provider invocation",
+  "screenshot": "NOT_RUN: automation screenshot unavailable; CUA samples separate"
+}

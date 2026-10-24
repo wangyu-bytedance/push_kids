@@ -66,7 +66,7 @@ test("child selection keeps the parent's choice and derives switcher labels", ()
   assert.equal(resolved.childId, "b");
   assert.equal(resolved.changed, false);
   assert.equal(resolved.multiChild, true);
-  assert.equal(resolved.children[1].label, "小星 · 小学四年级");
+  assert.equal(resolved.children[1].label, "小星 · 四年级");
   assert.equal(resolved.children[0].label, "小雨");
   assert.equal(resolved.children[0].avatar, "小");
 });
@@ -151,7 +151,7 @@ test("settings profile management lives in the sheet instead of the main page", 
   assert.doesNotMatch(template, /class="profile-manage-btn"/);
   assert.doesNotMatch(template, />编辑<\/view>/);
   assert.match(template, /class="profile-meta-line"/);
-  assert.match(template, />\{\{item\.grade\}\}<\/text>/);
+  assert.match(template, />\{\{item\.gradeLabel\}\}<\/text>/);
   assert.match(template, /当前使用/);
   assert.match(template, /class="rowitem profile-add-row"[^>]+bindtap="addChild"/);
   assert.match(template, />新建学习档案<\/text>/);

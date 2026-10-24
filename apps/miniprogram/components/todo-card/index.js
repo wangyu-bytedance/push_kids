@@ -45,6 +45,11 @@ Component({
             reviewId: item.review_id,
             knowledgeId: item.knowledge_id || "",
             name: item.knowledge_name,
+            arrangementLabel: item.selection_kind === "early" ? `提前安排 · 原计划 ${item.original_due_date || item.due_date}` : (item.selection_kind && item.selection_kind !== "due" ? "今日安排" : ""),
+            early: item.selection_kind === "early",
+            actionAllowed: !item.selection_kind || ["due", "early"].includes(item.selection_kind),
+            actions: MORE_ACTIONS.map((entry) => ({ ...entry, label: ui.feedbackLabel(entry.action),
+              effect: item.selection_kind === "early" && entry.action === "defer" ? "今天先不做，原计划日期保留" : entry.effect })),
             sourceSummary: String(item.source_summary || "").trim(),
             sourceSubmissionId: item.source_submission_id || "",
             sourceImageIndex: Number.isInteger(item.source_image_index) && item.source_image_index >= 1 && item.source_image_index <= 9 ? item.source_image_index : 0,
@@ -81,7 +86,8 @@ Component({
     },
     /* busyId 只做 pending 态；父页刷新或回滚都会重建视图并清空它。 */
     sendFeedback(reviewId, action) {
-      if (!reviewId || !action || this.data.busyId === reviewId) return;
+      const item = (this.data.view.items || []).find((entry) => entry.reviewId === reviewId);
+      if (!this.data.canWrite || (item && item.actionAllowed === false) || !reviewId || !action || this.data.busyId === reviewId) return;
       this.setData({ busyId: reviewId, panelId: "" });
       this.triggerEvent("feedback", { reviewId, action });
     }

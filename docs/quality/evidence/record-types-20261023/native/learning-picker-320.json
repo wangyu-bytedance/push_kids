@@ -1,0 +1,123 @@
+{
+  "nodes": {
+    ".record-heading": [
+      {
+        "left": 0,
+        "right": 320,
+        "top": 60,
+        "bottom": 135,
+        "width": 320,
+        "height": 75,
+        "fontSize": "16px"
+      }
+    ],
+    ".record-type-title": [
+      {
+        "left": 15,
+        "right": 117,
+        "top": 70,
+        "bottom": 119,
+        "width": 102,
+        "height": 49,
+        "fontSize": "22px"
+      }
+    ],
+    ".record-child": [
+      {
+        "left": 211,
+        "right": 305,
+        "top": 72.5,
+        "bottom": 116.5,
+        "width": 94,
+        "height": 44,
+        "fontSize": "14px"
+      }
+    ],
+    ".record-type-sheet": [
+      {
+        "left": 0,
+        "right": 320,
+        "top": 340,
+        "bottom": 568,
+        "width": 320,
+        "height": 228,
+        "fontSize": "16px"
+      }
+    ],
+    ".record-type-close": [
+      {
+        "left": 260,
+        "right": 304,
+        "top": 356,
+        "bottom": 400,
+        "width": 44,
+        "height": 44,
+        "fontSize": "17px"
+      }
+    ],
+    ".record-type-choice": [
+      {
+        "left": 16,
+        "right": 304,
+        "top": 408,
+        "bottom": 472,
+        "width": 288,
+        "height": 64,
+        "fontSize": "16px"
+      },
+      {
+        "left": 16,
+        "right": 304,
+        "top": 480,
+        "bottom": 544,
+        "width": 288,
+        "height": 64,
+        "fontSize": "16px"
+      }
+    ],
+    ".record-type-head": [
+      {
+        "left": 16,
+        "right": 304,
+        "top": 356,
+        "bottom": 400,
+        "width": 288,
+        "height": 44,
+        "fontSize": "18px"
+      }
+    ],
+    ".record-cta": [
+      {
+        "left": 0,
+        "right": 320,
+        "top": 405,
+        "bottom": 509,
+        "width": 320,
+        "height": 104,
+        "fontSize": "16px"
+      }
+    ],
+    ".tabbar": []
+  },
+  "scrollLeft": 0,
+  "viewport": {
+    "width": 320,
+    "height": 568,
+    "screenHeight": 568,
+    "dpr": 2,
+    "baseLibrary": "3.17.4",
+    "fontScale": 15
+  },
+  "recordType": "learning",
+  "overlayOpen": true,
+  "childId": "synthetic",
+  "state": "learning-picker",
+  "errors": [],
+  "capturedAt": "2026-10-23T07:02:39.576Z",
+  "screenshot": "learning-picker-320.png",
+  "screenshotSha256": "e4b18885c50e54c4feb98b14d75afcb0823ce0bceed3ca8fe33247a3566da4e0",
+  "screenshotPixels": {
+    "width": 640,
+    "height": 1136
+  }
+}

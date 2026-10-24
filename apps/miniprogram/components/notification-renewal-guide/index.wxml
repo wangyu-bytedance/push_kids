@@ -1,0 +1,18 @@
+<view wx:if="{{visible}}" class="renewal-overlay" catchtouchmove="contain">
+  <view class="renewal-mask" bindtap="decline" aria-label="暂不开启"></view>
+  <view class="renewal-sheet" aria-role="dialog" aria-label="以后少去一次提醒设置">
+    <view class="renewal-handle"></view>
+    <scroll-view scroll-y class="renewal-body">
+      <text class="renewal-kicker">让提醒更省心</text>
+      <text class="renewal-title">以后少去一次提醒设置</text>
+      <text class="renewal-copy">完成复习时，尝试为你已开启的提醒补充次数。</text>
+      <text class="renewal-copy">微信记住允许后，后续可以减少询问；普通拒绝或取消后，完成 10 条复习再询问。</text>
+      <text class="renewal-copy">微信可能仍会弹出授权框。每次同意只增加一次发送额度，不等于永久订阅。</text>
+      <text class="renewal-copy">只影响你的提醒。随时可以在「提醒设置」关闭。</text>
+    </scroll-view>
+    <view class="renewal-actions">
+      <button class="renewal-primary" disabled="{{saving}}" bindtap="enable">开启自动补充</button>
+      <button class="renewal-secondary" disabled="{{saving}}" loading="{{saving}}" bindtap="decline">暂不开启</button>
+    </view>
+  </view>
+</view>

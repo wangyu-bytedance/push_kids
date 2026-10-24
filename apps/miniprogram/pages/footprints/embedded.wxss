@@ -1,0 +1,2 @@
+@import "./index.wxss";
+.footprints-page { padding-top: 0; padding-bottom: calc(var(--pk-tabbar-h) + 32px + env(safe-area-inset-bottom)); }

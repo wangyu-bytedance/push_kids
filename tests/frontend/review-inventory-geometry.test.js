@@ -68,3 +68,23 @@ test("native rectangle audit uses the actual trigger for an upward menu", () => 
   capture.nodes[10] = [rect(174, 620, 220, 156)];
   assert.match(audit(capture, 430).join("; "), /overlaps trigger/);
 });
+
+test("status audit rejects small targets, missing provenance and scheduling actions in superseded menu", () => {
+  const capture = fixture("count");
+  capture.reviewStatus = "superseded";
+  capture.nodes.push([rect(18, 12, 394, 52)],
+    [rect(22, 16, 189, 44), rect(219, 16, 189, 44)],
+    [rect(36, 500, 180, 44)], [rect(36, 460, 306, 40)], []);
+  assert.deepEqual(audit(capture, 430), []);
+  capture.nodes[13][0].height = 30;
+  assert.match(audit(capture, 430).join("; "), /target below 44px/);
+  capture.nodes[13][0].height = 44;
+  capture.nodes[14] = [];
+  assert.match(audit(capture, 430).join("; "), /original source missing/);
+  capture.nodes[14] = [rect(36, 500, 180, 44)];
+  capture.nodes[10] = [rect(174, 452, 220, 100)];
+  capture.nodes[16] = [rect(180, 456, 200, 44), rect(180, 500, 200, 44)];
+  assert.match(audit(capture, 430).join("; "), /must only delete/);
+  capture.readOnly = true;
+  assert.match(audit(capture, 430).join("; "), /viewer has management actions/);
+});

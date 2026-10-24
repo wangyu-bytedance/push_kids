@@ -1,0 +1,175 @@
+{
+  "nodes": {
+    ".grade-sheet": [
+      {
+        "left": 0,
+        "right": 320,
+        "top": 305,
+        "bottom": 568,
+        "width": 320,
+        "height": 263,
+        "scrollLeft": 0,
+        "scrollTop": 0,
+        "scrollWidth": 0,
+        "scrollHeight": 0,
+        "fontSize": "16px",
+        "lineHeight": "25.6px",
+        "color": "rgb(34, 38, 31)",
+        "backgroundColor": "rgb(255, 253, 248)",
+        "opacity": "1"
+      }
+    ],
+    ".grade-body": [
+      {
+        "left": 20,
+        "right": 300,
+        "top": 343,
+        "bottom": 480,
+        "width": 280,
+        "height": 137,
+        "scrollLeft": 0,
+        "scrollTop": 0,
+        "scrollWidth": 280,
+        "scrollHeight": 137,
+        "fontSize": "16px",
+        "lineHeight": "25.6px",
+        "color": "rgb(34, 38, 31)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "opacity": "1"
+      }
+    ],
+    ".grade-title": [
+      {
+        "left": 20,
+        "right": 300,
+        "top": 343,
+        "bottom": 374,
+        "width": 280,
+        "height": 31,
+        "scrollLeft": 0,
+        "scrollTop": 0,
+        "scrollWidth": 0,
+        "scrollHeight": 0,
+        "fontSize": "22px",
+        "lineHeight": "31.9px",
+        "color": "rgb(34, 38, 31)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "opacity": "1"
+      }
+    ],
+    ".grade-latest": [],
+    ".grade-picker": [
+      {
+        "left": 20,
+        "right": 300,
+        "top": 394,
+        "bottom": 446,
+        "width": 280,
+        "height": 52,
+        "scrollLeft": 0,
+        "scrollTop": 0,
+        "scrollWidth": 0,
+        "scrollHeight": 0,
+        "fontSize": "18px",
+        "lineHeight": "26px",
+        "color": "rgb(70, 78, 67)",
+        "backgroundColor": "rgb(243, 244, 237)",
+        "opacity": "1"
+      }
+    ],
+    ".grade-error": [
+      {
+        "left": 20,
+        "right": 300,
+        "top": 458,
+        "bottom": 480,
+        "width": 280,
+        "height": 22,
+        "scrollLeft": 0,
+        "scrollTop": 0,
+        "scrollWidth": 0,
+        "scrollHeight": 0,
+        "fontSize": "14px",
+        "lineHeight": "22.4px",
+        "color": "rgb(53, 84, 102)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "opacity": "1"
+      }
+    ],
+    ".grade-actions": [
+      {
+        "left": 20,
+        "right": 300,
+        "top": 500,
+        "bottom": 548,
+        "width": 280,
+        "height": 48,
+        "scrollLeft": 0,
+        "scrollTop": 0,
+        "scrollWidth": 0,
+        "scrollHeight": 0,
+        "fontSize": "16px",
+        "lineHeight": "25.6px",
+        "color": "rgb(34, 38, 31)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "opacity": "1"
+      }
+    ],
+    ".grade-primary": [
+      {
+        "left": 129.328125,
+        "right": 300,
+        "top": 500,
+        "bottom": 548,
+        "width": 170.671875,
+        "height": 48,
+        "scrollLeft": 0,
+        "scrollTop": 0,
+        "scrollWidth": 0,
+        "scrollHeight": 0,
+        "fontSize": "16px",
+        "lineHeight": "24px",
+        "color": "rgb(255, 253, 248)",
+        "backgroundColor": "rgb(31, 91, 69)",
+        "opacity": "1"
+      }
+    ],
+    ".grade-secondary": [
+      {
+        "left": 20,
+        "right": 117.328125,
+        "top": 500,
+        "bottom": 548,
+        "width": 97.328125,
+        "height": 48,
+        "scrollLeft": 0,
+        "scrollTop": 0,
+        "scrollWidth": 0,
+        "scrollHeight": 0,
+        "fontSize": "16px",
+        "lineHeight": "24px",
+        "color": "rgb(70, 78, 67)",
+        "backgroundColor": "rgb(243, 239, 228)",
+        "opacity": "1"
+      }
+    ],
+    ".tabbar": []
+  },
+  "viewport": {
+    "width": 320,
+    "height": 568,
+    "screenHeight": 568,
+    "dpr": 2,
+    "fontScale": 15,
+    "baseLibrary": "3.17.4"
+  },
+  "state": "conflict",
+  "errors": [],
+  "fixture": "synthetic presentation only; actual lifecycle covered by frontend tests",
+  "capturedAt": "2026-10-24T12:57:32.414Z",
+  "screenshotSha256": "76d8e19840ab43912d69a3ac03b3f6e677f45ed08595d3fa7977c212309c280d",
+  "screenshotPixels": {
+    "width": 640,
+    "height": 1136
+  }
+}

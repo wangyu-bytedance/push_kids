@@ -23,6 +23,7 @@ from push_kids.agent_processing.contracts import (
     _model_summary_errors,
     explicit_same_day_review,
 )
+from push_kids.agent_processing.coverage import propose_coverage
 from push_kids.agent_processing.failures import StageFailure
 from push_kids.agent_processing.history_search import HistorySearchRequest
 from push_kids.agent_processing.stage_contracts import (
@@ -496,7 +497,7 @@ class StagedPipeline:
                     if len(kept.direct_evidence) > 20:
                         raise StageFailure("capacity")
             final[subject] = list(unique.values())
-        return data.validate_model_result(
+        proposal = data.validate_model_result(
             ModelAnalysisResult(
                 summary=merged.summary,
                 source="图片记录" if materials else "手动记录",
@@ -504,3 +505,7 @@ class StagedPipeline:
                 uncertainties=uncertainties[:20],
             )
         )
+        await propose_coverage(
+            self.provider, proposal, data.existing_knowledge, deadline, self.trace
+        )
+        return proposal

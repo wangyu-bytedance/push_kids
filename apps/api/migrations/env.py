@@ -3,6 +3,11 @@ from __future__ import annotations
 from logging.config import fileConfig
 
 from alembic import context
+from push_kids.footprints import (
+    models as footprint_models,  # noqa: F401 - explicit ORM registration
+)
+from push_kids.knowledge import learning_context  # noqa: F401 - ORM registration
+from push_kids.learning_suggestions import models as suggestion_models  # noqa: F401
 from push_kids.persistence.models import Base
 from push_kids.platform.config import Settings
 from sqlalchemy import engine_from_config, pool
