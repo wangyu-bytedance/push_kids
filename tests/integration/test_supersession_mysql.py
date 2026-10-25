@@ -13,7 +13,7 @@ from fastapi.testclient import TestClient
 from push_kids.bootstrap.app import create_app
 from push_kids.persistence.models import KnowledgeItem, ReviewItem
 from push_kids.platform.config import Settings
-from sqlalchemy import create_engine, event, update
+from sqlalchemy import create_engine, event, inspect, text, update
 from sqlalchemy.engine import make_url
 
 from tests.integration.test_knowledge_supersession import (
@@ -177,28 +177,115 @@ def test_mysql_status_inventory_actual_queries_are_bounded_and_indexed(
         event.remove(engine, "before_cursor_execute", capture)
 
 
-def test_mysql_guarded_downgrade_and_reupgrade(client, app, family_headers, child):
-    family, cid = family_headers["X-Family-ID"], child["id"]
-    _, ids = seed(app, family, cid, size=2)
-    assert apply(app, family, cid, ids[0][1], ids[1][1])
+def test_mysql_guarded_downgrade_and_reupgrade(monkeypatch):
+    # Exercise the historical contract without current API/ORM-created grade facts.
+    base_url = make_url(os.environ["PUSH_KIDS_TEST_MYSQL_URL"])
+    name = "coverage_migration_" + uuid4().hex[:12]
+    server = create_engine(base_url._replace(database=None))
+    with server.begin() as db:
+        db.exec_driver_sql(f"CREATE DATABASE `{name}` CHARACTER SET utf8mb4")
+    url = base_url.set(database=name).render_as_string(hide_password=False)
+    engine = create_engine(url)
+    monkeypatch.setenv("PUSH_KIDS_DATABASE_URL", url)
     config = Config()
     config.set_main_option(
         "script_location", str(Path(__file__).parents[2] / "apps/api/migrations")
     )
-    config.set_main_option(
-        "sqlalchemy.url",
-        app.state.database.engine.url.render_as_string(hide_password=False).replace("%", "%%"),
-    )
-    with pytest.raises(RuntimeError, match="Cannot discard permanent supersession states"):
+    config.set_main_option("sqlalchemy.url", url.replace("%", "%%"))
+    try:
+        command.upgrade(config, "20261020_0022")
+        with engine.begin() as db:
+            db.execute(
+                text(
+                    "INSERT INTO children "
+                    "(id,family_id,name,daily_budget_minutes,active,deleting,created_at) VALUES "
+                    "('c','f','test',15,1,0,CURRENT_TIMESTAMP)"
+                )
+            )
+            db.execute(
+                text(
+                    "INSERT INTO subjects "
+                    "(id,family_id,child_id,name,kind,color,active,is_custom,created_at) VALUES "
+                    "('s','f','c','math','learning','#000000',1,1,CURRENT_TIMESTAMP)"
+                )
+            )
+            for kid in ("old", "new"):
+                db.execute(
+                    text(
+                        "INSERT INTO knowledge_items "
+                        "(id,family_id,child_id,subject_id,name,normalized_name,category,"
+                        "review_method,estimated_minutes,created_at) VALUES "
+                        "(:id,'f','c','s',:id,:id,'skill','practice',3,CURRENT_TIMESTAMP)"
+                    ),
+                    {"id": kid},
+                )
+            db.execute(
+                text(
+                    "INSERT INTO review_items "
+                    "(id,family_id,child_id,knowledge_item_id,step,due_date,review_count,"
+                    "interval_days,heat_milli,lapse_count,policy_revision,state_version,"
+                    "active,updated_at) VALUES "
+                    "('r','f','c','old',2,'2026-10-09',7,4,0,0,'curve_heat_v1',3,1,"
+                    "CURRENT_TIMESTAMP)"
+                )
+            )
+            available = text("SELECT available FROM review_queue_entries WHERE review_item_id='r'")
+            assert db.scalar(available) == 1
+            db.execute(
+                text(
+                    "UPDATE knowledge_items SET review_status='superseded',"
+                    "superseded_by_knowledge_id='new' WHERE id='old'"
+                )
+            )
+            assert db.scalar(available) == 0
+            facts = tuple(
+                db.execute(
+                    text(
+                        "SELECT review_count,state_version,due_date FROM review_items WHERE id='r'"
+                    )
+                ).one()
+            )
+        with pytest.raises(RuntimeError, match="Cannot discard permanent supersession states"):
+            command.downgrade(config, "20261018_0021")
+        with engine.begin() as db:
+            assert db.scalar(text("SELECT version_num FROM alembic_version")) == "20261020_0022"
+            assert tuple(
+                db.execute(
+                    text(
+                        "SELECT review_status,superseded_by_knowledge_id FROM knowledge_items "
+                        "WHERE id='old'"
+                    )
+                ).one()
+            ) == ("superseded", "new")
+            assert db.scalar(available) == 0
+            assert (
+                tuple(
+                    db.execute(
+                        text(
+                            "SELECT review_count,state_version,due_date FROM review_items "
+                            "WHERE id='r'"
+                        )
+                    ).one()
+                )
+                == facts
+            )
+            db.execute(text("DELETE FROM review_items"))
+            db.execute(text("DELETE FROM knowledge_items"))
         command.downgrade(config, "20261018_0021")
-    for _, kid in ids:
-        assert (
-            client.delete(
-                f"/api/v1/children/{cid}/knowledge/{kid}", headers=family_headers
-            ).status_code
-            == 204
-        )
-    command.downgrade(config, "20261018_0021")
-    command.upgrade(config, "head")
-    response = client.get(path(child), headers=family_headers, params={"view": "count"})
-    assert response.status_code == 200 and response.json()["total"] == 0
+        assert "knowledge_coverage_jobs" not in inspect(engine).get_table_names()
+        assert "review_status" not in {
+            column["name"] for column in inspect(engine).get_columns("knowledge_items")
+        }
+        command.upgrade(config, "head")
+        with engine.connect() as db:
+            assert db.scalar(text("SELECT version_num FROM alembic_version")) == "20261024_0025"
+            assert db.scalar(text("SELECT COUNT(*) FROM knowledge_items")) == 0
+        assert "review_status" in {
+            column["name"] for column in inspect(engine).get_columns("knowledge_items")
+        }
+        command.check(config)
+    finally:
+        engine.dispose()
+        with server.begin() as db:
+            db.exec_driver_sql(f"DROP DATABASE `{name}`")
+        server.dispose()

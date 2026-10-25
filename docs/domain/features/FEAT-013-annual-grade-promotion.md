@@ -1,14 +1,16 @@
 # FEAT-013 — 学年升年级建议与家长共享确认
 
 - Feature ID: `FEAT-013`
-- Status: `LOCAL_IMPLEMENTATION / VERIFYING / NOT_RELEASED`
-- Current-state revision: `FEAT-STATE-20261024-ANNUAL-GRADE-LOCAL-08`
+- Status: `SCHEMA_0025_MIGRATED / BACKEND_037_NORMAL_100_PERCENT / CLIENT_LOCAL / VERIFYING`
+- Current-state revision: `FEAT-STATE-20261024-ANNUAL-GRADE-DEPLOY-10`
 - Owner: 产品负责人（用户）
 - Last updated: 2026-10-24
 - Task Spec: [Spec02 / Architecture02](../../../specs/active/FEAT-013-ANNUAL-GRADE-PROMOTION.md)，用户“好的 按照这个方案落地”批准，当前VERIFYING。
 - Verification: [本轮证据与未验收项](../../quality/evidence/ANNUAL-GRADE-IMPLEMENTATION-20261024.md)。
 
-本文记录本地实现；原生端到端和设备门禁尚未全部满足，不代表线上可用。
+2026-10-24发布回归：MySQL5.7.44年级4项及SQLite年级/永久替代迁移4项通过；历史永久替代测试改用独占0022库后13项通过，0025保护未放松。[本轮发布验证](../../quality/evidence/latest-backend-release-20261024/README.md)不代替产品/设备验收。
+
+生产0025已迁移，旧年级不变、未伪造学年确认；CRUD启动校验Spec01/Architecture01获批并验证，修复后的037 normal/100%，实际微信年级候选GET200。036失败保留；035 0%且不能在0025重启。客户端只在本地，用户年级确认/原生端到端与设备门禁未全部满足，不代表完整产品验收通过。实际阶段见[本轮发布记录](../../deploy/releases/20261024-latest-backend-test-deployment.md)。
 
 当前呈现增量：[年级弹窗精简Spec01](../../../specs/active/FEAT-013-GRADE-DIALOG-SIMPLIFICATION.md)与[DREV02](../../design/frontend/prototypes/DREV-20261024-ANNUAL-GRADE-PROMOTION-02/FRONTEND-SPEC.md)于2026-10-24获用户“继续”批准并本地实现，只保留孩子名标题、picker和并排操作，必要时显示简短恢复提示。最终全前端327项、定向53项、三尺寸51组原生及实际选级/失败重试/稍后通过；真实设备/可访问性及全业务原生端到端边界见[实施证据](../../quality/evidence/GRADE-DIALOG-SIMPLIFICATION-IMPLEMENTATION-20261024.md)。主Spec02领域规则不变。
 

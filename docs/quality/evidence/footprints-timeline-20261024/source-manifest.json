@@ -1,0 +1,20 @@
+{
+  "scope": "BUG-034 production/template/style plus coupled native source, tests/tools; not all dirty worktree",
+  "files": {
+    "apps/miniprogram/pages/footprints/controller.js": "d917c559e4524d64f20585ecc8f7dce95e71f9149e8b4e623e816f3c90789f0f",
+    "apps/miniprogram/pages/footprints/presentation.js": "436908ddf87c0f2bfddff9462ee12d3bc0397276402d89ad25ee8b2d07c9e62f",
+    "apps/miniprogram/pages/footprints/index.wxml": "b4dcc6b7672a70f7818f5b84fd8f518069944686f48077481a3175c9c358722d",
+    "apps/miniprogram/pages/footprints/index.wxss": "439998e0df9995778d670b7fb98caeea78c28beae2a3c4e40e3eee6d5a9da7a6",
+    "apps/miniprogram/pages/footprints/embedded.js": "9277c602eec2d34f81e10c22cbd1f81120e1fd6477edfe9e3b01291ec801eba5",
+    "apps/miniprogram/pages/footprints/embedded.wxml": "183695a497a94ea3b7065f1814ec36dc64baa577e262e6469a1e1213a0cc45c8",
+    "apps/miniprogram/pages/footprints/embedded.wxss": "79b3d56e5857268ebbee310a892f2a6b576bed8eee94d8d387f0f17d03bbfbe6",
+    "apps/miniprogram/pages/records/index.wxml": "ac4ee1fe62e59aaddeedb29845905450dbf87ce976395f91edf789a3ec173f06",
+    "apps/miniprogram/pages/records/index.wxss": "1b8421a837ed10299e8f080a8db7c1832d374744242490d5956bd44c57ffa188",
+    "apps/miniprogram/styles/atoms.wxss": "1c569b76f2cecb5331371b1378092be3388544bceaa9bd3e6ff1365993a9e17f",
+    "apps/miniprogram/styles/tokens.wxss": "4078b00aa30e9d5eaafe9c1a687b6f267c212cf26724290b8635df909d6504a5",
+    "tests/frontend/footprints.test.js": "1a656369083692eeb4b4bbce9897dfb8867344da4c05bb4a5b8641907148025d",
+    "tools/prepare_footprints_timeline_native.py": "2feeb1e197bb01c559152f5aae152deb9f31dcb38993a60f56b3a193740eb0f6",
+    "tools/footprints_timeline_geometry.js": "1a45e7f182cff151db5e83a2d44c7a3087c7bde22c4cec0f9dc3b6e12b06db31"
+  },
+  "native_copy_comparison_errors": []
+}

@@ -1,5 +1,11 @@
 # Test strategy — FEAT-001
 
+2026-10-25 BUG-034: [current evidence](evidence/footprints-timeline-20261024/README.md) records frontend335/ESLint/source budget/DAG/design SHA PASS and 320/390/430 native18 states each (54 node/PNG pairs) plus actual390 interactions. The 430 capture completed after the user unlocked the Mac on 2026-10-25; device/accessibility/user acceptance remain separate. No backend/API/SQL change, so backend/MySQL suites were not repeated for this UI diff. Synthetic native screenshots never substitute for real media or user acceptance.
+
+2026-10-24最小权限启动回归（已批准CRUD Readiness Spec01/Architecture01）：必须在本机任务独占MySQL5.7库创建仅SELECT/INSERT/UPDATE/DELETE账号，确认trigger元数据可见0、默认Schema/ready通过、CREATE/ALTER/TRIGGER实际被拒绝；错revision、缺表/列/索引继续失败。发布账号显式严格模式检查trigger，删除一个后失败并恢复；CRUD严格模式也须失败。发布工具固定输出不得含URL/凭据。此项补齐原root-only测试盲区，不能只用mock或admin代替。本轮6项权限、年级4/今日1/永久13/计划2共26项实库通过，后端780 passed/46条件skip、Ruff/format740/mypy150/DAG150通过。今日MySQL既有用例不得假定DATETIME带小数的available_at立即可领取：实库round至下一秒，测试按Worker重试合同有界轮询最多2秒，保留唯一提示/审批/零正式写入断言；attempt04失败与attempt05通过均保留。[证据](evidence/latest-backend-release-20261024/README.md)区分生产037读取smoke与用户写入/设备未验。
+
+2026-10-24历史MySQL迁移隔离：永久替代0022保护用例必须使用独占历史库、固定0022和冻结列SQL种子，不能由最新API创建年级确认后跨历史Schema，也不能放宽0025保护或skip。断言拒绝后revision/正式事实/queue守恒，清理合成依赖后0021结构与head重升；finally只销毁本用例库。本轮MySQL13项/年级4项及SQLite迁移4项通过，[证据](evidence/latest-backend-release-20261024/README.md)保留先前失败。
+
 2026-10-24标题约束增量：已批准Title Limit Spec01/Architecture01/DREV04。新生成/PATCH标题统一trim后1–20码点、无内部换行；覆盖0/1/20/21/120、非BMP与绕过验证的provider实例、版本/JSON/任务/正式事实零写入，及旧120字完整读取/审批/记录/删除/主动精简。前端覆盖计数、无效零PATCH、失败保留及不同操作幂等键、reset/hide后排队焦点失效。先红后绿：后端11失败/9通过，前端4失败；现专项后端52、前端18，全量后端780通过/40个MySQL环境相关跳过、前端332通过。三视口各13态原生共39态和独立复核通过，含20字标题两行、14px计数/错误、21/空/旧120/非BMP、错误/保存及旧标题实际滚动；[绑定证据](evidence/SUGGESTION-TITLE-IMPLEMENTATION-20261024.md)明确真机/键盘/大字体/读屏未验，Spec留VERIFYING。下方120字用例仅为旧数据兼容，不再代表新生成/编辑有效上限。
 
 2026-10-24今日卡片显隐增量：已批准Card Visibility Spec01/DREV03。前端测试覆盖所有无资格/eligible空态、可写/只读、Task优先和开关关闭、生成/失败/失效/删除恢复、显示投影零写入、隐藏仍自动提示、请求失败保留及重置。原生要求21卡片态×320×568/390×844/430×932，节点与截图共同核对空区零节点/额外间距、邻接分区字体家族/字阶/字重/行高/字距一致、长标题完整、全宽胶囊及44px触控；另回归6个既有DREV02弹层态。当前327项前端和三视口81组原生通过（63卡片＋18弹层）；320初次取证脚本未计既有44px触控下限，改采实际bar/section矩形后全部重跑通过，首次失败留证；源码绑定、实际结果和设备/可访问性缺口见[本轮证据](evidence/TODAY-CARD-IMPLEMENTATION-20261024.md)。设计63张和旧弹层45组不能代验新卡片。

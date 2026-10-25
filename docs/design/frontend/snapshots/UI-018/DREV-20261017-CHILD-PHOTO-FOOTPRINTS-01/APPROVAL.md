@@ -13,7 +13,7 @@
 - Approved by: 产品负责人（用户）
 - Approved at: 2026-10-17
 - Approval evidence: Q19 request_user_input_async / call_68a44a48d02740b6befbef52d0b390d9 / item 0；用户“认可，评审收敛”。问题明确对应Spec04 / Architecture03 / DREV01，仅确认需求共识与交互稿，生产实施另行批准。原话与范围记录：docs/research/child-footprints/20261017-grill-review.md#q19-整体确认记录。
-- Superseded by: N/A
+- Superseded by:; [DREV-20261024-FOOTPRINTS-TIMELINE-01](../../../prototypes/DREV-20261024-FOOTPRINTS-TIMELINE-01/FRONTEND-SPEC.md) covers ordinary button/view-control pills and timeline thumbnail time labels only; other flows/layout remain in their approved scope.
 
 ## Approved scope
 

@@ -1,5 +1,7 @@
 # FEAT-005 — 一家庭多孩子档案管理与切换
 
+2026-10-24运行证据revision LATEST-037-01：生产0025新增共享年级确认列，迁移保留原grade、确认年级为空/revision0；获批CRUD启动检查修复后的037 normal/100%，真实微信孩子/年级候选读取200，用户确认/档案写入尚未验收。客户端仍本地未上传，档案/归档合同不变，旧035为0%且不能在0025重启。[本轮记录](../../deploy/releases/20261024-latest-backend-test-deployment.md)。
+
 - 2026-10-24待批准设计（不改变当前实现）：[BUG-033 Spec01](../../../specs/active/BUG-033-CHILD-ARCHIVE-UI.md)与[DREV01](../../design/frontend/prototypes/DREV-20261024-CHILD-ARCHIVE-01/FRONTEND-SPEC.md)针对归档区域重复说明、居中长文与删除图标误导提出局部精简；业务归档/恢复规则保持原合同，候选尚未落入生产页面。
 
 - 2026-10-18本地增量revision `FEAT-STATE-20261018-FOOTPRINTS-ARCHIVE-01`：足迹页单独提供“查看已归档孩子”，可继续既有批次的核对/确认/删除和预分配槽位上传，不接受新导入/手填。168h仍从原上传成功时算。deleting冻结优先，学习草稿入口不改。相关[Spec04](../../../specs/active/FEAT-012-CHILD-PHOTO-FOOTPRINTS.md)、[验证证据](../../quality/evidence/CHILD-FOOTPRINTS-IMPLEMENTATION-20261018.md)，仅本地实现，原生验收待补。

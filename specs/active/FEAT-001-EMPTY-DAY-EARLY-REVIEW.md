@@ -8,7 +8,7 @@
 - Verifier: Codex；原生与真机验收由发布负责人完成
 - Created: 2026-10-24
 - Last updated: 2026-10-24
-- Target release: 待确认；不自动加入正在冻结或交付的其他发布包
+- Target release: 后续独立[OPS Spec01](OPS-20261024-LATEST-BACKEND-TEST-DEPLOYMENT.md)已批准26714b9服务端部署；0023随0025落生产库、CRUD启动修复另获批准，037 normal/100%且20项真实读取通过；提前复习保持默认关闭，前端未上传。本Spec剩余验收继续VERIFYING。
 - Spec revision: SPEC-20261024-EMPTY-DAY-EARLY-REVIEW-04
 - Architecture revision: ARCH-20261024-EMPTY-DAY-EARLY-REVIEW-02（APPROVED）
 - User confirmation: 产品负责人2026-10-24先以「按照这个方案 落地」批准Spec03及完整需求，再针对两份Spec04、Architecture02/03与首次Design01明确回复「批准，按此实现」；已获本修订实施授权

@@ -1,0 +1,14 @@
+{
+  "scope": "BUG-034 frontend diff; results from actual commands in this approved implementation turn",
+  "checks": [
+    {"command": "npm test", "status": "PASS", "tests": 335, "pass": 335, "fail": 0, "skip": 0, "duration_ms": 1268.881375},
+    {"command": "npm run lint:miniapp", "status": "PASS"},
+    {"command": "python3 tools/validate_miniprogram.py", "status": "PASS", "pages": 17, "source_bytes": 1221792},
+    {"command": ".venv/bin/python tools/check_architecture.py", "status": "PASS", "policies": 4, "modules": 150},
+    {"command": ".venv/bin/python tools/validate_design_evidence.py --manifest docs/design/frontend/snapshots/UI-018/DREV-20261024-FOOTPRINTS-TIMELINE-01/APPROVAL.md --check-current-policy", "status": "PASS"},
+    {"command": ".venv/bin/ruff check tools/prepare_footprints_timeline_native.py", "status": "PASS"},
+    {"command": ".venv/bin/ruff format --check tools/prepare_footprints_timeline_native.py", "status": "PASS", "files": 1}
+  ],
+  "not_run": ["backend pytest/MySQL/migrations: no backend/API/SQL diff", "real-device accessibility/font scaling", "parent business acceptance"],
+  "native_results": "native-audit.json"
+}

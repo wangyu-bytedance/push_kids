@@ -1,5 +1,12 @@
 const SOURCES = { exif: "照片信息", gps: "照片信息", parent: "家长填写", unknown: "待补充" };
 const missing = (value) => value === null || value === undefined;
+function captureTime(value) {
+  return typeof value === "string" && /^([01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?$/.test(value)
+    ? value.slice(0, 5) : "时刻未知";
+}
+function timelineVisit(visit) {
+  return { ...visit, photos: visit.photos.map((photo) => ({ ...photo, timeLabel: captureTime(photo.local_time) })) };
+}
 function photoView(photo) {
   return { ...photo, dateLabel: photo.local_date || "待补日期",
     placeLabel: photo.place_name || (!missing(photo.latitude) ? "照片拍摄位置" : "待补地点"),
@@ -36,4 +43,4 @@ function correction(form, batch = false) {
   }
   return values;
 }
-module.exports = { photoView, query, editValues, correction };
+module.exports = { photoView, timelineVisit, query, editValues, correction };

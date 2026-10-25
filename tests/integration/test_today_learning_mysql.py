@@ -4,6 +4,7 @@ import os
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from threading import Barrier
+from time import monotonic, sleep
 from uuid import uuid4
 
 import pytest
@@ -121,7 +122,12 @@ def test_mysql57_shared_prompt_and_approval_races(
         responses = list(pool.map(claim, range(2)))
     assert all(r.status_code == 200 for r in responses)
     assert sum(r.json()["can_auto_open"] for r in responses) == 1
-    assert app.state.suggestion_worker.process_one()
+    # MySQL5.7 DATETIME rounds available_at to whole seconds. Match the
+    # production worker's polling contract instead of requiring an immediate claim.
+    deadline = monotonic() + 2
+    while not app.state.suggestion_worker.process_one():
+        assert monotonic() < deadline, "suggestion job was not claimed within two seconds"
+        sleep(0.05)
     proposal = client.get(root + "/current", headers=family_headers).json()["proposal"]
     gate = Barrier(2)
 

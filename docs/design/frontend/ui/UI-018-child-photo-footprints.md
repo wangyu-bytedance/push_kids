@@ -1,15 +1,17 @@
 # UI-018 — 孩子照片足迹
 
+已批准并本地实施：[BUG-034 Spec01 / Architecture01](../../../../specs/active/BUG-034-FOOTPRINTS-CONTROLS-TIMELINE.md)及[DREV01](../prototypes/DREV-20261024-FOOTPRINTS-TIMELINE-01/FRONTEND-SPEC.md)。普通主操作与三视图复用学习btn/seg胶囊，时间线保留日期倒序/游标，缩略图下显示确认HH:mm或“时刻未知”；manual文本无伪图，失败仍可看日期/时刻和详情。335项/静态、320/390/430各18原生态共54组及390实际点击通过；设备/用户验收开放。42张批准HTML与原生证据分开，见[本轮证据](../../../quality/evidence/footprints-timeline-20261024/README.md)。
+
 当前精简增量：[Spec01](../../../../specs/active/FEAT-012-FOOTPRINTS-MINIMAL-UI.md) / [DREV01](../prototypes/DREV-20261024-FOOTPRINTS-MINIMAL-01/FRONTEND-SPEC.md)获用户明确批准，已本地删除重复身份标题、设置两段长文及两行常驻次要入口。统计右侧44px既有线性更多图标，原生菜单按权限/归档显示，单项直接执行、无项隐藏；归档选择不截断并复用原放弃保护。设置只留开关/关闭/保存并按内容收高；工程文案要求已合并。CR-001已修复并有已加载/在途预览回归；[当前源码证据](../../../quality/evidence/footprints-minimal-20261024/README.md)与历史原生结果分开记录，仍未上传。
 
-- Status: CLIENT_LOCAL / BACKEND_035_DEPLOYED / VERIFYING / CLIENT_NOT_UPLOADED
-- UI state revision: UI-STATE-20261024-PHOTO-FOOTPRINTS-15
+- Status: CLIENT_LOCAL / BACKEND_037_DEPLOYED / VERIFYING / CLIENT_NOT_UPLOADED
+- UI state revision: UI-STATE-20261025-PHOTO-FOOTPRINTS-18
 - Feature: [FEAT-012](../../../domain/features/FEAT-012-child-photo-footprints.md)
 - Spec: [SPEC-20261017-CHILD-PHOTO-FOOTPRINTS-04](../../../../specs/active/FEAT-012-CHILD-PHOTO-FOOTPRINTS.md)，VERIFYING，2026-10-18获本地实施批准。
 - Baseline: FDB-20260913-04；FEC-20261007-NATIVE-GEOMETRY-02。
-- Effective Design Revisions: DREV-20261017-CHILD-PHOTO-FOOTPRINTS-01基础流程；[DREV-20261018-CHILD-PHOTO-FOOTPRINTS-02](../prototypes/DREV-20261018-CHILD-PHOTO-FOOTPRINTS-02/FRONTEND-SPEC.md)文案增量；[DREV-20261024-RECORD-ENTRY-01](../prototypes/DREV-20261024-RECORD-ENTRY-01/FRONTEND-SPEC.md)接管类型菜单/孩子外观/全部范围与导入入口；本次[DREV-20261024-FOOTPRINTS-MINIMAL-01](../prototypes/DREV-20261024-FOOTPRINTS-MINIMAL-01/FRONTEND-SPEC.md)再接管重复标题、次要入口和紧凑设置。旧批准源与快照冻结；其他主功能视觉差异验收未完成。
+- Effective Design Revisions: DREV-20261017-CHILD-PHOTO-FOOTPRINTS-01基础流程；[DREV-20261018-CHILD-PHOTO-FOOTPRINTS-02](../prototypes/DREV-20261018-CHILD-PHOTO-FOOTPRINTS-02/FRONTEND-SPEC.md)文案增量；[DREV-20261024-RECORD-ENTRY-01](../prototypes/DREV-20261024-RECORD-ENTRY-01/FRONTEND-SPEC.md)接管类型菜单/孩子外观/全部范围与导入入口；本次[DREV-20261024-FOOTPRINTS-MINIMAL-01](../prototypes/DREV-20261024-FOOTPRINTS-MINIMAL-01/FRONTEND-SPEC.md)再接管重复标题、次要入口和紧凑设置。旧批准源与快照冻结；其他主功能视觉差异验收未完成。 DREV-20261024-FOOTPRINTS-TIMELINE-01 now covers ordinary buttons, three view controls and thumbnail time labels only.
 - Companion Specs: [BUG-032 Spec05](../../../../specs/active/BUG-032-RECORD-ENTRY-CONTEXT.md)、[文案Spec01](../../../../specs/active/FEAT-012-FOOTPRINTS-UI-COPY.md)、[入口Spec01](../../../../specs/active/FEAT-012-RECORD-TYPE-SWITCHER.md)，均VERIFYING。
-- Last verified: 2026-10-24，最终共享工作区331项前端、lint、Mini Program/架构/批准设计校验通过；本次三尺寸27态原生及430实际菜单取消/设置/归档选择通过，系统操作菜单不在官方手机截图层内。设备/独立复核边界见[当前证据](../../../quality/evidence/footprints-minimal-20261024/README.md)。旧313项/51组原生与035接管后18项读取仅保留历史范围；完整设计/真机验收PARTIAL。
+- Last verified: 2026-10-25; BUG-034 frontend335 / native320+390+430 54 captures / actual390 interactions PASS; device, screen-reader, enlarged-font and parent acceptance NOT_RUN. See [current evidence](../../../quality/evidence/footprints-timeline-20261024/README.md); old 331/27 and 037 read smoke retain their own scope. Client not uploaded.
 
 ## 当前已验证事实
 
@@ -19,7 +21,7 @@
 
 点击记录标题展开其下8px、200px宽的顶部菜单，两项各48px，当前项淡绿底/勾选；无灰色遮罩、重复标题或关闭按钮。再次点击标题、外部点击、滚动或离页收起；外部点击不透传，选择先收起再走离开保护。菜单保留底部导航，旅行照片/编辑面板隐藏导航。右侧孩子复用纸色child-chip/首字头像/细箭头，单孩子无箭头、长名整块右对齐换行。首次默认学习，普通Tab返回记住类型；切换保留学习文字/照片/日期/孩子/幂等键和滚动。旅行孩子独立，上传中阻止切换，编辑离开须确认；明确学习入口经同样保护切回学习，旧确认跨代结束时续接新意图，普通取消不重复弹窗。
 
-时间线、回放、点亮、统计和地点详情统一读取当前孩子全部已确认足迹。时间线/地点详情按游标读取、每窗口最多100条，“查看下一组”显式替换并回到列表开始；触底不自动替换，失败保留窗口和游标，释放旧窗口预览并拒收迟到文件。各视图内容之后只有一个48px通栏导入按钮，20px线性相机＋14px文字，上距20px、圆角12px，随页面滚动；底部留白避开导航及中央凸起键。活动且可写时显示，保存/上传保护有效；空态保留手动记录，学习上传路径不变。
+时间线、回放、点亮、统计和地点详情统一读取当前孩子全部已确认足迹。三视图复用学习seg.n3胶囊、44px等列，on态纸色底/绿字/轻阴影。时间线按当地日期DESC/id DESC显示，照片两列/8px间隔/每卡≤4张，图下14px时刻HH:mm或“时刻未知”；manual文本无伪图、计数仍为真实照片数。时间线/地点详情按游标读取、每窗口最多100条，“查看下一组”显式替换并回到列表开始；触底不自动替换，失败保留窗口和游标，释放旧窗口预览并拒收迟到文件。各视图内容之后只有一个48px通栏导入按钮，20px线性相机＋16px文字，上距20px、btn胶囊圆角，随页面滚动；底部留白避开导航及中央凸起键。活动且可写时显示，保存/上传保护有效；空态保留手动记录，学习上传路径不变。
 用户已确认事后出游回忆、确认后入档、足迹相册、首版全球；主要区域优先可看全部、空态中国；地点点亮＋城市/国家汇总；一批一个孩子；无日期草稿、有日期无地点可入时间线；记录入口与自动日期整理。
 第三、四轮确认的固定7天草稿、条件原件24h清理、按需AI、到访日、镜头跟随、分批继续、归档收尾及逐张纠正/删除已接入。首次文件失败保留批次重试；草稿多页停止首屏轮询以保留选择；画廊使用20张窗口可前后翻页。退出/切孩子忽略迟到请求、停止回放并清预览临时文件；AI设置以当前成员为单位。
 

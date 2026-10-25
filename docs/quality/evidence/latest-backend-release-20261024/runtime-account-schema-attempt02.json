@@ -1,0 +1,11 @@
+{
+  "status": "FAIL",
+  "access": "runtime account, SELECT only",
+  "version": "flask-ik19-036",
+  "network_endpoint": "approved endpoint, same database and runtime credentials",
+  "schema": "20261024_0025",
+  "visible_early_trigger_count": 0,
+  "error_category": "RuntimeError",
+  "safe_reason": "数据库提前复习投影触发器不完整",
+  "observed_at": "2026-10-24T14:41:51.336Z"
+}

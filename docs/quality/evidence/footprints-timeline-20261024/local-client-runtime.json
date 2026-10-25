@@ -1,0 +1,38 @@
+{
+  "verified_on": "2026-10-25 Asia/Shanghai",
+  "scope": "Recompiled complete local cloud client; UI navigation and read-only state/geometry only. No synthetic fixtures injected, real photos not opened, no business writes requested.",
+  "project": "/Users/bytedance/Documents/push_kids/apps/miniprogram",
+  "state": {
+    "route": "pages/records/index",
+    "cloudClient": true,
+    "travelMounted": true,
+    "mode": "timeline",
+    "loaded": true,
+    "hasError": false,
+    "tabs": [
+      {
+        "width": 117.328125,
+        "height": 44,
+        "borderRadius": "519px"
+      },
+      {
+        "width": 117.328125,
+        "height": 44,
+        "borderRadius": "519px"
+      },
+      {
+        "width": 117.328125,
+        "height": 44,
+        "borderRadius": "519px"
+      }
+    ]
+  },
+  "cua_observation": {
+    "timeline_selected": true,
+    "playback_selected": false,
+    "lit_selected": false,
+    "import_button_present": true,
+    "devtools_errors": 0
+  },
+  "client_uploaded": false
+}

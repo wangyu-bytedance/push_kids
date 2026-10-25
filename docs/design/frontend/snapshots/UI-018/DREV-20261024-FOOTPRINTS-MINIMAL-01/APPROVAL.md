@@ -13,7 +13,7 @@
 - Approved by: 产品负责人（用户）
 - Approved at: 2026-10-24
 - Approval evidence: 本会话 call_3e246df48da4467983d023b06a443aeb 回复“批准 Spec01 + DREV01，按此实施并合并 UI 规范”。本清单、设计源及24张导出自批准起冻结。
-- Superseded by: N/A
+- Superseded by:; [DREV-20261024-FOOTPRINTS-TIMELINE-01](../../../prototypes/DREV-20261024-FOOTPRINTS-TIMELINE-01/FRONTEND-SPEC.md) covers ordinary button/view-control pills and timeline thumbnail time labels only; other flows/layout remain in their approved scope.
 
 已批准设计；所有人物、数字与图像均为合成内容，无业务请求。
 HTML原生菜单模拟不等于微信原生或真机验收；实现状态与证据另见 Task Spec。

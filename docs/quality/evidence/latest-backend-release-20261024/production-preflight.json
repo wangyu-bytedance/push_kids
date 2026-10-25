@@ -1,0 +1,27 @@
+{
+  "status": "PASS",
+  "mode": "preflight",
+  "started_at": "2026-10-24T14:35:29.598612+00:00",
+  "database": "push_kids",
+  "spec_revision": "OPS-SPEC-20261024-LATEST-BACKEND-TEST-DEPLOYMENT-01",
+  "backup": "OPERATOR_CONFIRMED",
+  "steps": [
+    {
+      "name": "frozen_integrity_required_checks_schema_and_inflight",
+      "status": "PASS"
+    }
+  ],
+  "schema_before": "20261020_0022",
+  "mysql_version": "5.7.18-cynos-2.1.14-log",
+  "inflight_and_queued": {
+    "agent_jobs": 0,
+    "deletion_requests": 0,
+    "notification_sending": 0,
+    "footprint_photo_jobs": 0,
+    "knowledge_coverage_running": 0,
+    "other_transactions": 0
+  },
+  "paused_coverage_queued": 23,
+  "paused_queue_preserved_with_coverage_disabled": true,
+  "finished_at": "2026-10-24T14:35:31.009721+00:00"
+}

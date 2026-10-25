@@ -1,0 +1,23 @@
+{
+  "commit": "26714b997465fd2d1d9199f45ed931bd85c39405",
+  "approved_fix": "BUG-SPEC-20261024-CRUD-SCHEMA-READINESS-01",
+  "uncommitted_production_diff_sha256": "d3799f092594c7e31a356a8e822c8c9d3d3803fbe15f3a6085633b78088238b0",
+  "packages": [
+    {
+      "path": "dist/release-20261024-latest-0025-02",
+      "files": 154,
+      "bytes": 1513300,
+      "manifest_sha256": "4c12f38271ec8659e4b7b472bd8d62992c8754260d5b0210aed0079ce36eda23",
+      "known_secret_scan": "PASS",
+      "source_match": "PASS"
+    },
+    {
+      "path": "dist/migration-20261024-latest-0025-02",
+      "files": 183,
+      "bytes": 1648727,
+      "manifest_sha256": "4b89bf485feef9d9e9b78034fc2d3a1d85b002bd635f2341c4dd1d0d2da8c9a7",
+      "known_secret_scan": "PASS",
+      "source_match": "PASS"
+    }
+  ]
+}

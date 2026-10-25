@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "observed_at": "2026-10-24T15:01:48.966062+00:00",
+  "read_only": true,
+  "schema": "20261024_0025",
+  "counts": {
+    "agent_queued_or_running": 0,
+    "deletions_queued_or_running": 0,
+    "notifications_sending": 0,
+    "footprint_queued_or_running": 0,
+    "coverage_running": 0,
+    "coverage_paused_queued": 23,
+    "suggestion_queued_or_running": 0,
+    "other_transactions": 0
+  }
+}

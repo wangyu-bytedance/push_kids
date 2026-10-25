@@ -21,6 +21,71 @@ test("unknown capture date and timezone stay unknown", () => {
   assert.equal(values.offset_minutes, null);
 });
 
+test("timeline shows confirmed capture minutes without guessing unknown or manual media", () => {
+  const { exports: presentation } = loadPage("pages/footprints/presentation.js", () => {});
+  const values = ["14:30", "09:05:59", "00:00:00.000000", null, "", "24:00", "12:60:00", "invalid"];
+  const visit = { id: "visit", local_date: "2026-10-24", photo_count: 7,
+    photos: values.map((local_time, index) => ({ id: String(index), local_time,
+      created_at: "2026-10-24T18:00:00Z", is_manual: index === 3, has_display: index !== 3 })) };
+  const result = presentation.timelineVisit(visit);
+  assert.deepEqual(Array.from(result.photos, (photo) => photo.timeLabel),
+    ["14:30", "09:05", "00:00", "时刻未知", "时刻未知", "时刻未知", "时刻未知", "时刻未知"]);
+  assert.equal(result.photos[3].is_manual, true);
+  assert.equal(result.photos[3].has_display, false);
+  assert.equal(result.photo_count, 7);
+  assert.equal(visit.photos[0].timeLabel, undefined);
+  assert.equal(result.photos[1].local_time, "09:05:59");
+});
+
+test("timeline initial, appended and replaced windows retain server order and capture labels", async () => {
+  const newer = { id: "same-day-z", local_date: "2026-10-24", photos: [{ id: "a", local_time: "14:30:00" }] };
+  const sameDay = { id: "same-day-a", local_date: "2026-10-24", photos: [{ id: "b", local_time: null }] };
+  const older = { id: "older", local_date: "2026-10-03", photos: [{ id: "c", local_time: "10:20" }] };
+  const manual = { id: "manual", local_date: "2026-09-18", photo_count: 0,
+    photos: [{ id: "d", is_manual: true, local_time: "08:15:00", has_display: false }] };
+  const pages = [{ items: [newer, sameDay], next_cursor: "older" },
+    { items: [older], next_cursor: "manual" }, { items: [manual], next_cursor: null }];
+  const calls = [];
+  const { page: p } = page(async (url) => {
+    calls.push(url);
+    return url.includes("/summary?") ? { photos: 3 } : pages.shift();
+  });
+  await p.refresh();
+  await p.moreVisits();
+  assert.deepEqual(Array.from(p.data.visits, (visit) => visit.id), ["same-day-z", "same-day-a", "older"]);
+  assert.deepEqual(Array.from(p.data.visits, (visit) => visit.photos[0].timeLabel), ["14:30", "时刻未知", "10:20"]);
+  p.setData({ visits: [...p.data.visits, ...visitRows(3, 97)] });
+  await p.moreVisits();
+  assert.equal(p.data.visits.length, 1);
+  assert.equal(p.data.visits[0].id, "manual");
+  assert.equal(p.data.visits[0].photos[0].timeLabel, "08:15");
+  assert.equal(p.data.visits[0].photos[0].is_manual, true);
+  assert.equal(p.data.visits[0].photo_count, 0);
+  assert.equal(p.data.nextCursor, null);
+  assert.ok(calls.every((url) => url.includes("child_id=child")));
+  assert.match(calls[2], /cursor=older/);
+  assert.match(calls[3], /cursor=manual&limit=20/);
+});
+
+test("unavailable private thumbnail preserves dated capture labels and the detail path", async () => {
+  const photo = { id: "photo", local_time: "14:30:59", has_display: true };
+  const visit = { id: "visit", local_date: "2026-10-24", photos: [photo] };
+  const { page: p } = page(async (url) => {
+    if (url.includes("/preview?")) throw Error("预览暂不可用");
+    if (url.includes("/photos?")) return { items: [photo], next_cursor: null };
+    return url.includes("/summary?") ? {} : { items: [visit], next_cursor: null };
+  });
+  await p.refresh();
+  await p.fillPreviews(p.data.visits[0].photos, "visits");
+  assert.equal(p.data.visits[0].local_date, "2026-10-24");
+  assert.equal(p.data.visits[0].photos[0].timeLabel, "14:30");
+  assert.equal(p.data.visits[0].photos[0].previewUrl, undefined);
+  await p.openVisit(event({ id: "visit" }));
+  assert.equal(p.data.sheet, "photo");
+  assert.equal(p.data.photoVisitId, "visit");
+  assert.equal(p.data.photoList[0].id, "photo");
+});
+
 test("draft capture fields can be cleared but formal dates remain required", () => {
   const { page: p } = page();
   p.setData({ editing: { state: "ready" }, form: { local_date: "2024-01-01", local_time: "10:00:00", offset_minutes: 480 } });

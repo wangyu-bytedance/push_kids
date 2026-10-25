@@ -6,7 +6,7 @@
 - Implementer: Codex；已按批准范围完成本地业务实现
 - Reviewer / Verifier: Codex执行本地验证；独立实现评审、内容与真机验收仍待完成
 - Created / Last updated: 2026-10-24
-- Target release: 未安排，不进入其他聊天正在冻结的发布包
+- Target release: 后续独立[OPS Spec01](OPS-20261024-LATEST-BACKEND-TEST-DEPLOYMENT.md)已批准26714b9服务端部署；0024随0025落生产库、CRUD启动修复另获批准，037 normal/100%且当前建议读取200；建议保持默认关闭，前端未上传。本Spec剩余内容/设备验收继续VERIFYING。
 - Spec revision: SPEC-20261024-INCREMENTAL-LEARNING-PATH-04
 - Architecture candidate: ARCH-20261024-INCREMENTAL-LEARNING-PATH-03（APPROVED）
 - User confirmation: 产品负责人2026-10-24先以「按照这个方案 落地」批准Spec03及完整需求，再针对两份Spec04、Architecture02/03与首次Design01明确回复「批准，按此实现」；已获本修订实施授权

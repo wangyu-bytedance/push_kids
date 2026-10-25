@@ -1,10 +1,14 @@
 # FEAT-001 — 家庭学习持续跟进系统 MVP
 
+2026-10-24旅行控件增量：[BUG-034 Spec01/Architecture01](../../../specs/active/BUG-034-FOOTPRINTS-CONTROLS-TIMELINE.md)及DREV01获用户批准并本地实现。旅行组件/独立Page复用学习btn/seg胶囊，时间线保留日期倒序/分页并展示确认时刻，manual不造图；学习表单/入口及回放合同不改。335项及320/390/430各18原生态共54组、390实际点击通过，2026-10-25补齐430，设备/用户验收开放；[本轮证据](../../quality/evidence/footprints-timeline-20261024/README.md)，未上传部署。
+
+2026-10-24发布回归：历史MySQL测试隔离及CRUD readiness两项Spec获批并验证，生产迁移保护/领域行为不改。应用不查无权限的trigger元数据，发布账号仍严格检查；后端780、相关MySQL26、原前端332及冻结02/容器门禁通过。生产Schema0025，037 normal/100%/1（用户人工接管）、035 0%，036失败保留。真实本地客户端20项GET均200，包含新年级/建议读取；真实业务写入和设备/内容验收待用户测试。035不能在0025重启。[本轮证据](../../quality/evidence/latest-backend-release-20261024/README.md)保留历史失败和各阶段。
+
 - 2026-10-24旅行界面减法：用户明确批准足迹精简Spec01/DREV01，记录Tab旅行组件及原足迹页共享实现去掉重复身份标题、收起次要操作、设置只留开关和保存。最终331项前端、三尺寸27态原生及430实际菜单操作通过，CR-001在已批准迟到保护范围修复；UI文案要求已并入工程规范。原学习入口/表单及确认合同不变；[当前证据](../../quality/evidence/footprints-minimal-20261024/README.md)区分本地原生与真机待验，未上传部署。
 
-- 2026-10-24年级确认本地增量：五Tab新增共享宿主，已有弹层/上传/未保存输入时等待，包含报表筛选表单；学习、复习和AI消费者仍只读取正式grade。年度建议确认只写children，不创建学习记录、Review或Todo；[FEAT-013证据](../../quality/evidence/ANNUAL-GRADE-IMPLEMENTATION-20261024.md)含零副作用、原API/启动/看板回归、三尺寸呈现及独立评审PASS。当前未部署，修复后原生端到端、设备与可访问性验收待补。
+- 2026-10-24年级确认本地增量：五Tab新增共享宿主，已有弹层/上传/未保存输入时等待，包含报表筛选表单；学习、复习和AI消费者仍只读取正式grade。年度建议确认只写children，不创建学习记录、Review或Todo；[FEAT-013证据](../../quality/evidence/ANNUAL-GRADE-IMPLEMENTATION-20261024.md)含零副作用、原API/启动/看板回归、三尺寸呈现及独立评审PASS。后端037/0025已部署且候选读取通过；客户端仍本地，原生端到端、设备与可访问性验收待补。
 
-- 2026-10-24本地今日增量：两份Spec04、Architecture02/03与`DREV-20261024-TODAY-LEARNING-01`已获用户「批准，按此实现」。空白日先处理自然到期；没有到期才从符合3日/80%/2日条件的已复习知识中提前少量安排，≤10分钟且不超孩子预算，原日期不变。只有初始`provisional_empty`可因正式库存代次变化重判，处理过的计划和旧计划不补排。另见[FEAT-004](FEAT-004-daily-learning-suggestions.md)的两完整自然日无新增建议→家长批准待学→实际确认入档。两开关默认关闭，迁移0023/0024只在本地验证，本增量未上传部署，完整验收仍VERIFYING；[本轮证据](../../quality/evidence/TODAY-LEARNING-IMPLEMENTATION-20261024.md)。
+- 2026-10-24今日增量：两份Spec04、Architecture02/03与`DREV-20261024-TODAY-LEARNING-01`已获用户「批准，按此实现」。空白日先处理自然到期；没有到期才从符合3日/80%/2日条件的已复习知识中提前少量安排，≤10分钟且不超孩子预算，原日期不变。只有初始`provisional_empty`可因正式库存代次变化重判，处理过的计划和旧计划不补排。另见[FEAT-004](FEAT-004-daily-learning-suggestions.md)的两完整自然日无新增建议→家长批准待学→实际确认入档。两开关仍关闭；0023/0024随0025落生产库，代码在037 normal/100%中、读取smoke通过；前端未上传、两能力未启用，完整验收仍VERIFYING；[实现证据](../../quality/evidence/TODAY-LEARNING-IMPLEMENTATION-20261024.md)与本轮发布阶段分开。
 
 - 2026-10-24记录入口本地增量：用户批准`BUG-SPEC-20261024-RECORD-ENTRY-05 / DREV-20261024-RECORD-ENTRY-01`后，记录标题改为顶部两项下拉，右侧复用纸色孩子chip；类型菜单保留Tab，旅行照片/编辑面板仍隐藏Tab。普通Tab记住类型，未提交学习表单/幂等键/滚动保留；今日与报表明确学习入口经原离开保护切回学习，修复旧确认跨代结束未续接新学习意图的问题。旅行默认全部已确认足迹，删除日期筛选；列表按最多100条窗口续看，导入是内容下方48px普通按钮，权限/同意/人工/确认合同保持。替代10-23入口的对应外观与筛选描述，详见[本轮验证边界](../../quality/evidence/record-entry-20261024/README.md)。本增量未上传或部署，真机验收待补。
 
@@ -27,7 +31,7 @@
 - Local report panel refinement: `SPEC-20261013-REPORT-PANELS-01 / DREV-20261013-REPORT-PANELS-01` 已获用户批准并本地实现。历史和编辑计划统一展开容器，明确展开/收起及调整入口；查询与计划策略不变，外层背景由统一卡片样式负责。236项前端测试、三视口36态原生数字几何及静态校验通过；已随0.1.14开发上传，完整截图、字体放大与真机验收待补。证据：`docs/quality/evidence/REPORT-PANELS-20261013.md`。
 
 - Status: `CURRENT`
-- 当前发布状态：最新客户端开发上传仍为0.1.15（源码5837d59），本次仅启动完整本地客户端、不上传。2026-10-24用户指定同库升级顺序，10:55生产0019→0022/current/check与结构/队列核验通过；035部署后由用户100%接管并删除034，11:01–11:03官方观察旧实例0、035 normal/100%/1实例。真实微信18项读取含live/ready和新足迹/续订均200，本地实际进入旅行日记；coverage=false，永久替代关闭。见[本次发布](../../deploy/releases/20261023-fullstack-test-deployment.md)。全量前定向验收未执行，当前生产写路径/真实照片/多账号/完整原生真机待用户验收，未沿用历史030/0019的smoke结果。
+- 当前发布状态：037 normal/100%、Schema0025，真实微信20项读取通过，当前生产写路径/真实照片/多账号/完整原生真机待用户验收；全量前定向smoke未执行，用户接管后才做读取检查。完整客户端本地打开，最新开发上传仍0.1.15（5837d59），本次未上传。10:55的035/0022与18项读取属于[早间历史发布](../../deploy/releases/20261023-fullstack-test-deployment.md)，本轮以[037记录](../../deploy/releases/20261024-latest-backend-test-deployment.md)为准，未沿用旧证据。
 - Local complete card backgrounds: SPEC-20261013-CARD-BACKGROUNDS-01已按用户明确指令本地实现，设置三块插画、每日任务同款卡片与新位置、报表背景均已接入；238测试和CLI预览通过，已随0.1.14开发上传，原生/真机/用户验收待补。证据docs/quality/evidence/CARD-BACKGROUNDS-20261013.md，未设体验版/正式版。
 - Local illustrations: `SPEC-20261013-RECORD-CALENDAR-ILLUSTRATIONS-01 / DREV-20261013-RECORD-CALENDAR-ILLUSTRATIONS-01` 已获用户批准并本地实现；记录/日程使用不同纸艺插画，原业务不变。233项前端测试及静态校验通过；原生三视口、真机及预览包预算待验证，未发布。证据：`docs/quality/evidence/RECORD-CALENDAR-ILLUSTRATIONS-20261013.md`。
 - Local daily tasks: `SPEC-20261012-DAILY-TASKS-01 / DREV-20261012-DAILY-TASKS-01` 已获用户批准并实现前后端。
@@ -56,7 +60,7 @@
   Successful stage DTOs resume across retries; cancellation/manual confirmation/delete clean temporary data.
   This does not describe a deployed release. Evidence and remaining quality gates are in
   `specs/active/BUG-028-STAGED-ANALYSIS-RELIABILITY.md`.
-- Revision: `FEAT-STATE-20261024-TODAY-LEARNING-01-LOCAL`（保留2026-10-15及更早增量的各自验收/发布状态）
+- Revision: `FEAT-STATE-20261024-LATEST-037-02`（领域合同不改；保留各增量原生/设备验收边界）
 - Review management: `SPEC-20261006-REVIEW-MANAGEMENT-03` 已获用户“落地并实现”批准并本地实现。
   报表独立条目页按明天/后天、单科学习科目、精确复习次数查看；删除清理相关历史和计划，手动改期不计复习。
   今日下一次复习入口移除；后端兼容字段暂保留。预约优先且显式提示预算超量，120项硬上限、幂等及状态冲突由服务端控制。

@@ -1,7 +1,7 @@
 # FEAT-004 — 单项增量学习建议
 
-- Status: LOCAL_IMPLEMENTATION / VERIFYING / DEFAULT_OFF / NOT_RELEASED
-- Revision: FEAT-STATE-20261024-INCREMENTAL-LEARNING-07-LOCAL
+- Status: BACKEND_037_NORMAL_100_PERCENT / CLIENT_LOCAL / VERIFYING / DEFAULT_OFF / FEATURE_NOT_ENABLED
+- Revision: FEAT-STATE-20261024-INCREMENTAL-LEARNING-09-DEPLOY
 - Current title constraint: 用户明确批准[Title Limit Spec01 / Architecture01](../../../specs/active/FEAT-004-SUGGESTION-TITLE-LIMIT.md)与[DREV04](../../design/frontend/prototypes/DREV-20261024-TODAY-LEARNING-04/FRONTEND-SPEC.md)，已本地实现，VERIFYING。新生成/重新编辑标题trim后1–20个Unicode码点，无内部换行；编辑计数/错误就地显示，超限保留草稿、零PATCH。旧21–120字提案/任务保留原文和读取/审批/实际记录/删除路径，重新编辑须主动精简。后端780通过/40个MySQL环境相关跳过、前端332通过、三视口39态原生及独立复核通过，真实设备/可访问性待补；见[当前证据](../../quality/evidence/SUGGESTION-TITLE-IMPLEMENTATION-20261024.md)。33张批准设计导出冻结，不代替原生结果。
 - Current card refinement: [Visibility Spec01](../../../specs/active/FEAT-004-TODAY-CARD-VISIBILITY.md)/[DREV03](../../design/frontend/prototypes/DREV-20261024-TODAY-LEARNING-03/FRONTEND-SPEC.md)获用户「批准，按此实现」，已在原组件实现。空区整体隐藏，具体内容沿用今日分区/复习卡字阶与胶囊按钮；保留生成/失败恢复与批准待学。前端327项及320/390/430三视口81组原生通过；真实设备/可访问性及独立复核待补，详见[本轮证据](../../quality/evidence/TODAY-CARD-IMPLEMENTATION-20261024.md)。该卡片范围未改领域合同、DREV02弹层和默认开关；当前标题写入合同另由DREV04覆盖。
 - Updated: 2026-10-24
@@ -21,4 +21,4 @@ manager/editor确认后只创建一项待学，不创建LearningRecord、Knowled
 
 今日组件保持挂载，内容区域位于hero后、复习前。无内容/进行中或恢复操作时不渲染标题、卡片或额外间距；eligible纯空快照也隐藏，但既有自动提示继续执行。有提案直接显示具体标题及元信息；Task优先且不受生成开关/资格误隐藏。生成中、失败/失效和删除后恢复保留入口，请求错误保留重试。已确认学习统计仍只消费正式记录。viewer只读已批准待学，未批准提案/生成空区隐藏，不触发生成或审批。切孩子、家庭、成员/角色或离页后丢弃迟到结果，轮询最多8次。普通GET不调用模型。
 
-`PUSH_KIDS_LEARNING_SUGGESTIONS_ENABLED=false`为默认。关闭新生成和审批时仍保留已批准待学读取、删除和实际记录。迁移0024及owner清理已本地实现；真实MySQL5.7、真实模型分层样本、iOS/Android及实际类目/隐私/内容义务验收仍须单独完成，不能由mock或家长确认代替。当前没有上传、体验、审核或生产发布。
+`PUSH_KIDS_LEARNING_SUGGESTIONS_ENABLED=false`为默认。关闭新生成和审批时仍保留已批准待学读取、删除和实际记录。0024已随生产0025落库，知识计时从迁移日起初始化；获批CRUD readiness修复后的037 normal/100%，当前建议GET真实微信200，开关仍关闭。真实MySQL5.7迁移/新查询规模和相关今日回归通过；真实模型分层样本、iOS/Android及实际类目/隐私/内容义务验收仍须单独完成，不能由mock或家长确认代替。前端未上传/体验/审核，建议未启用。[本轮发布记录](../../deploy/releases/20261024-latest-backend-test-deployment.md)描述实际阶段，036保留为旧失败。

@@ -1,0 +1,51 @@
+diff --git a/apps/api/src/push_kids/platform/database.py b/apps/api/src/push_kids/platform/database.py
+index a5c8122..d9cbd39 100644
+--- a/apps/api/src/push_kids/platform/database.py
++++ b/apps/api/src/push_kids/platform/database.py
+@@ -161,7 +161,12 @@ class Database:
+                     WHERE x.family_id=c.family_id AND x.child_id=c.id)""")
+                 )
+ 
+-    def verify_cloud_schema(self) -> None:
++    def verify_cloud_schema(self, *, verify_triggers: bool = False) -> None:
++        """Validate runtime-visible structure; release accounts also verify trigger metadata.
++
++        MySQL requires TRIGGER privilege to expose that metadata. CRUD-only app
++        accounts must not gain DDL privileges just to pass startup/readiness.
++        """
+         if self.engine.dialect.name != "mysql":
+             raise RuntimeError("云环境数据库必须是 MySQL")
+         with self.engine.connect() as connection:
+@@ -192,18 +197,20 @@ class Database:
+                     c["name"] for c in schema.get_columns(table)
+                 }:
+                     raise RuntimeError("数据库 Schema 结构不完整")
+-            from push_kids.persistence.early_review_slots_v1 import trigger_statements
+-
+-            triggers = set(
+-                connection.execute(
+-                    text(
+-                        "SELECT TRIGGER_NAME FROM information_schema.TRIGGERS "
+-                        "WHERE TRIGGER_SCHEMA=DATABASE()"
+-                    )
+-                ).scalars()
+-            )
+-            if not {name for name, _ in trigger_statements("mysql")} <= triggers:
+-                raise RuntimeError("数据库提前复习投影触发器不完整")
++            if verify_triggers:
++                triggers = set(
++                    connection.execute(
++                        text(
++                            "SELECT TRIGGER_NAME FROM information_schema.TRIGGERS "
++                            "WHERE TRIGGER_SCHEMA=DATABASE()"
++                        )
++                    ).scalars()
++                )
++                if (
++                    not {name for name, _ in early_review_slots_v1.trigger_statements("mysql")}
++                    <= triggers
++                ):
++                    raise RuntimeError("数据库提前复习投影触发器不完整")
+             for table, names in {
+                 "review_early_slots": {
+                     "ix_early_slots_subject",

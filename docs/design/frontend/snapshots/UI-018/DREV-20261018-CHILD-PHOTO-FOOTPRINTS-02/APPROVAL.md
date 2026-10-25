@@ -13,7 +13,7 @@
 - Approved by: 产品负责人（用户）
 - Approved at: 2026-10-23
 - Approval evidence: 用户审阅精简候选及标题入口方案后要求“完成这个功能的代码编写”，批准既定文案清单；入口另见SPEC-20261023-RECORD-TYPE-SWITCHER-01。源与导出哈希保持不变。
-- Superseded by: [UI-018当前状态](../../../ui/UI-018-child-photo-footprints.md)及[2026-10-23实现证据](../../../../../quality/evidence/RECORD-TYPES-IMPLEMENTATION-20261023.md)接管实施/验证状态；下方生成阶段“待批准/NOT_RUN”为历史语境，批准以本清单2026-10-23头部为准。入口由DREV-20261024-RECORD-ENTRY-01接管；[DREV-20261024-FOOTPRINTS-MINIMAL-01](../../../prototypes/DREV-20261024-FOOTPRINTS-MINIMAL-01/FRONTEND-SPEC.md)于2026-10-24获批，覆盖重复身份标题、次要入口及设置长文/高度，其余DREV02合同继续有效。冻结源与导出不变。
+- Superseded by: [UI-018当前状态](../../../ui/UI-018-child-photo-footprints.md)及[2026-10-23实现证据](../../../../../quality/evidence/RECORD-TYPES-IMPLEMENTATION-20261023.md)接管实施/验证状态；下方生成阶段“待批准/NOT_RUN”为历史语境，批准以本清单2026-10-23头部为准。入口由DREV-20261024-RECORD-ENTRY-01接管；[DREV-20261024-FOOTPRINTS-MINIMAL-01](../../../prototypes/DREV-20261024-FOOTPRINTS-MINIMAL-01/FRONTEND-SPEC.md)于2026-10-24获批，覆盖重复身份标题、次要入口及设置长文/高度，其余DREV02合同继续有效。冻结源与导出不变。; [DREV-20261024-FOOTPRINTS-TIMELINE-01](../../../prototypes/DREV-20261024-FOOTPRINTS-TIMELINE-01/FRONTEND-SPEC.md) covers ordinary button/view-control pills and timeline thumbnail time labels only; other flows/layout remain in their approved scope.
 
 ## Candidate scope
 

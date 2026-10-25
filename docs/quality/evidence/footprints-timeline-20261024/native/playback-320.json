@@ -1,0 +1,240 @@
+{
+  "nodes": {
+    ".footprints-page": [
+      {
+        "left": 0,
+        "right": 320,
+        "top": 125,
+        "bottom": 989,
+        "width": 320,
+        "height": 864,
+        "fontSize": "14px",
+        "borderRadius": "0px",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "color": "rgb(34, 38, 31)"
+      }
+    ],
+    ".fp-tabs": [
+      {
+        "left": 12,
+        "right": 308,
+        "top": 191,
+        "bottom": 239,
+        "width": 296,
+        "height": 48,
+        "fontSize": "14px",
+        "borderRadius": "426px",
+        "backgroundColor": "rgba(34, 38, 31, 0.05)",
+        "color": "rgb(34, 38, 31)"
+      }
+    ],
+    ".fp-tab": [
+      {
+        "left": 14,
+        "right": 111.328125,
+        "top": 193,
+        "bottom": 237,
+        "width": 97.328125,
+        "height": 44,
+        "fontSize": "14px",
+        "borderRadius": "426px",
+        "backgroundColor": "rgba(255, 255, 255, 0.016)",
+        "color": "rgb(120, 129, 110)"
+      },
+      {
+        "left": 111.328125,
+        "right": 208.65625,
+        "top": 193,
+        "bottom": 237,
+        "width": 97.328125,
+        "height": 44,
+        "fontSize": "14px",
+        "borderRadius": "426px",
+        "backgroundColor": "rgba(255, 255, 255, 0.984)",
+        "color": "rgb(21, 65, 48)"
+      },
+      {
+        "left": 208.65625,
+        "right": 305.984375,
+        "top": 193,
+        "bottom": 237,
+        "width": 97.328125,
+        "height": 44,
+        "fontSize": "14px",
+        "borderRadius": "426px",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "color": "rgb(121, 130, 111)"
+      }
+    ],
+    ".fp-tab.on": [
+      {
+        "left": 111.328125,
+        "right": 208.65625,
+        "top": 193,
+        "bottom": 237,
+        "width": 97.328125,
+        "height": 44,
+        "fontSize": "14px",
+        "borderRadius": "426px",
+        "backgroundColor": "rgba(255, 255, 255, 0.984)",
+        "color": "rgb(21, 65, 48)"
+      }
+    ],
+    ".fp-import": [
+      {
+        "left": 12,
+        "right": 308,
+        "top": 863,
+        "bottom": 911,
+        "width": 296,
+        "height": 48,
+        "fontSize": "16px",
+        "borderRadius": "426px",
+        "backgroundColor": "rgb(31, 91, 69)",
+        "color": "rgb(255, 253, 248)"
+      }
+    ],
+    ".fp-button": [
+      {
+        "left": 28,
+        "right": 84.8125,
+        "top": 717,
+        "bottom": 761,
+        "width": 56.8125,
+        "height": 44,
+        "fontSize": "16px",
+        "borderRadius": "426px",
+        "backgroundColor": "rgb(31, 91, 69)",
+        "color": "rgb(255, 253, 248)"
+      },
+      {
+        "left": 12,
+        "right": 308,
+        "top": 863,
+        "bottom": 911,
+        "width": 296,
+        "height": 48,
+        "fontSize": "16px",
+        "borderRadius": "426px",
+        "backgroundColor": "rgb(31, 91, 69)",
+        "color": "rgb(255, 253, 248)"
+      }
+    ],
+    ".fp-sheet-footer .fp-button": [],
+    ".fp-text-button": [
+      {
+        "left": 28,
+        "right": 292,
+        "top": 761,
+        "bottom": 805,
+        "width": 264,
+        "height": 44,
+        "fontSize": "14px",
+        "borderRadius": "426px",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "color": "rgb(31, 91, 69)"
+      }
+    ],
+    ".fp-date-label": [
+      {
+        "left": 28,
+        "right": 292,
+        "top": 625,
+        "bottom": 647,
+        "width": 264,
+        "height": 22,
+        "fontSize": "14px",
+        "borderRadius": "0px",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "color": "rgb(31, 91, 69)"
+      }
+    ],
+    ".fp-visit": [],
+    ".fp-card": [],
+    ".fp-grid": [],
+    ".fp-thumb": [],
+    ".fp-thumb-media": [],
+    ".fp-thumb-image": [],
+    ".fp-time": [],
+    ".fp-manual": [],
+    ".fp-sheet": [],
+    ".fp-sheet-body": [],
+    ".fp-sheet-footer": [],
+    ".fp-close": [],
+    ".fp-drafts": [
+      {
+        "left": 12,
+        "right": 308,
+        "top": 239,
+        "bottom": 287,
+        "width": 296,
+        "height": 48,
+        "fontSize": "16px",
+        "borderRadius": "426px",
+        "backgroundColor": "rgb(228, 237, 230)",
+        "color": "rgb(20, 64, 47)"
+      }
+    ],
+    ".fp-world-row": [],
+    ".fp-candidate": []
+  },
+  "scrollLeft": 0,
+  "sheet": "",
+  "mode": "playback",
+  "visits": [
+    {
+      "id": "synthetic-recent",
+      "date": "2026-10-24",
+      "photoCount": 2,
+      "photos": [
+        {
+          "manual": false,
+          "time": "14:30",
+          "preview": true
+        },
+        {
+          "manual": false,
+          "time": "时刻未知",
+          "preview": true
+        }
+      ]
+    },
+    {
+      "id": "synthetic-older",
+      "date": "2026-10-03",
+      "photoCount": 1,
+      "photos": [
+        {
+          "manual": false,
+          "time": "10:20",
+          "preview": true
+        }
+      ]
+    },
+    {
+      "id": "synthetic-manual",
+      "date": "2026-09-18",
+      "photoCount": 0,
+      "photos": [
+        {
+          "manual": true,
+          "time": "时刻未知",
+          "preview": false
+        }
+      ]
+    }
+  ],
+  "viewport": {
+    "width": 320,
+    "height": 568,
+    "screenHeight": 568,
+    "dpr": 2,
+    "baseLibrary": "3.17.4",
+    "fontScale": 15
+  },
+  "state": "playback",
+  "errors": [],
+  "capturedAt": "2026-10-24T15:27:06.186Z",
+  "screenshot": "playback-320.png",
+  "screenshotSha256": "d2c29a5fdb7f721c8f81c2f471ded3a76dc17769ef1a370cc4b542abc9373e3f"
+}

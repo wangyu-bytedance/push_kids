@@ -1,5 +1,7 @@
 # Push Kids 前端设计基线
 
+已批准旅行局部修订：[BUG-034 Spec01 / Architecture01](../../../specs/active/BUG-034-FOOTPRINTS-CONTROLS-TIMELINE.md)及[DREV-20261024-FOOTPRINTS-TIMELINE-01](prototypes/DREV-20261024-FOOTPRINTS-TIMELINE-01/FRONTEND-SPEC.md)已本地实施学习同款胶囊主操作/三视图，以及倒序时间线的缩略图与确认时刻。42张批准设计导出冻结；335项/静态、320/390/430各18原生态共54组及390实际点击通过，2026-10-25补齐430，设备/用户验收开放。见[本轮证据](../../quality/evidence/footprints-timeline-20261024/README.md)；FDB/FEC主revision及其他批准范围不改。
+
 - 已批准标题约束：[`DREV-20261024-TODAY-LEARNING-04`](prototypes/DREV-20261024-TODAY-LEARNING-04/FRONTEND-SPEC.md)与[Title Limit Spec01 / Architecture01](../../../specs/active/FEAT-004-SUGGESTION-TITLE-LIMIT.md)获用户「批准，按此实现」，已本地实施。新生成/重新编辑标题trim后1–20码点、无内部换行，字段显示n/20和14px错误，超限保留输入不提交；旧提案/任务完整兼容。33张批准导出冻结；三视口39态原生、前端332项及独立复核通过，[实现证据](../../quality/evidence/SUGGESTION-TITLE-IMPLEMENTATION-20261024.md)明确真机/可访问性待验。DREV02仅本范围由DREV04替代，其余弹层与DREV03卡片风格继续有效；VERIFYING，未发布。
 
 - 2026-10-24产品方批准[足迹精简 Spec01](../../../specs/active/FEAT-012-FOOTPRINTS-MINIMAL-UI.md) / [DREV01](prototypes/DREV-20261024-FOOTPRINTS-MINIMAL-01/FRONTEND-SPEC.md)及[工程 UI 文案附加条款](prototypes/DREV-20261024-FOOTPRINTS-MINIMAL-01/UI-COPY-REQUIREMENTS.md)，规则已合并到下方“界面文案与减法”；既有 FDB/FEC 预算继续有效。足迹本地实现及原生验收以该Spec当前证据为准。

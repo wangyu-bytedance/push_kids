@@ -13,12 +13,12 @@
       <view class="fp-stats"><text>{{summary.places || 0}} 个地点</text><text>{{summary.cities || 0}} 座城市</text><text>{{summary.countries || 0}} 个国家</text><text>{{summary.photos || 0}} 张照片</text></view>
       <button class="fp-more" wx:if="{{canWrite || hasArchivedChildren}}" bindtap="openFootprintActions" disabled="{{saving}}" aria-label="更多足迹操作"><view class="ico ico-more-mute" aria-hidden="{{true}}"></view></button>
     </view>
-    <view class="fp-tabs">
-      <button class="fp-tab {{mode === 'timeline' ? 'active' : ''}}" data-mode="timeline" bindtap="changeMode" aria-label="时间线视图">时间线</button>
-      <button class="fp-tab {{mode === 'playback' ? 'active' : ''}}" data-mode="playback" bindtap="changeMode" aria-label="轨迹回放视图">轨迹回放</button>
-      <button class="fp-tab {{mode === 'lit' ? 'active' : ''}}" data-mode="lit" bindtap="changeMode" aria-label="地图点亮视图">地图点亮</button>
+    <view class="seg n3 fp-tabs">
+      <button class="fp-tab {{mode === 'timeline' ? 'on' : ''}}" data-mode="timeline" bindtap="changeMode" aria-pressed="{{mode === 'timeline'}}" aria-label="时间线视图">时间线</button>
+      <button class="fp-tab {{mode === 'playback' ? 'on' : ''}}" data-mode="playback" bindtap="changeMode" aria-pressed="{{mode === 'playback'}}" aria-label="轨迹回放视图">轨迹回放</button>
+      <button class="fp-tab {{mode === 'lit' ? 'on' : ''}}" data-mode="lit" bindtap="changeMode" aria-pressed="{{mode === 'lit'}}" aria-label="地图点亮视图">地图点亮</button>
     </view>
-    <button class="fp-drafts" wx:if="{{canWrite && summary.drafts}}" bindtap="openDrafts">{{summary.drafts}} 张待核对</button>
+    <button class="btn secondary fp-drafts" wx:if="{{canWrite && summary.drafts}}" bindtap="openDrafts">{{summary.drafts}} 张待核对</button>
     <button class="fp-text-button" wx:elif="{{canWrite}}" bindtap="openDrafts">查看待整理照片</button>
     <view class="fp-notice" wx:if="{{summary.unlocated_photos}}">{{summary.unlocated_photos}} 张待补地点</view>
     <view class="fp-timeline" wx:if="{{mode === 'timeline'}}">
@@ -30,10 +30,14 @@
       <view class="fp-visit" wx:for="{{visits}}" wx:key="id">
         <view class="fp-date-label">{{item.local_date}}</view>
         <view class="fp-card"><view class="fp-place-title"><text class="fp-place-name">{{item.place_name || (item.latitude !== null ? '照片拍摄位置' : '待补地点')}}</text><text class="fp-muted">{{item.photo_count}} 张</text></view>
-          <view class="fp-grid" wx:if="{{item.photos.length}}"><view class="fp-thumb" wx:for="{{item.photos}}" wx:for-item="photo" wx:key="id" data-id="{{item.id}}" bindtap="openVisit" aria-role="button" aria-label="查看{{item.local_date}}的照片">
-            <image class="fp-thumb-image" wx:if="{{photo.previewUrl}}" src="{{photo.previewUrl}}" mode="aspectFill"></image><text wx:else>{{photo.is_manual ? '手动到访' : '查看照片'}}</text>
-          </view></view>
-          <button class="fp-text-button fp-full" data-id="{{item.id}}" bindtap="openVisit">查看照片</button>
+          <view class="fp-grid" wx:if="{{item.photos.length}}"><block wx:for="{{item.photos}}" wx:for-item="photo" wx:key="id">
+            <view class="fp-manual" wx:if="{{photo.is_manual}}"><text>手动到访</text><text class="fp-time">{{photo.timeLabel}}</text></view>
+            <view class="fp-thumb" wx:else data-id="{{item.id}}" bindtap="openVisit" aria-role="button" aria-label="查看{{item.local_date}} {{photo.timeLabel}}的照片">
+              <view class="fp-thumb-media"><image class="fp-thumb-image" wx:if="{{photo.previewUrl}}" src="{{photo.previewUrl}}" mode="aspectFill"></image><text wx:else>查看照片</text></view>
+              <text class="fp-time">{{photo.timeLabel}}</text>
+            </view>
+          </block></view>
+          <button class="fp-text-button fp-full" data-id="{{item.id}}" bindtap="openVisit">{{item.photo_count ? '查看照片' : '查看到访'}}</button>
         </view>
       </view>
       <button class="fp-text-button fp-full" wx:if="{{nextCursor}}" bindtap="moreVisits" loading="{{loadingMore}}" disabled="{{loadingMore}}">{{visits.length >= 100 ? '查看下一组' : '查看更多'}}</button>
@@ -52,13 +56,13 @@
       <block wx:if="{{mode === 'lit' && mapMode === 'world'}}"><button class="fp-world-row" wx:for="{{mapData.items}}" wx:key="id" data-id="{{item.id}}" bindtap="worldPointTap">{{index + 1}} · {{item.label || '照片拍摄位置'}} · {{item.visit_days}} 个到访日 ›</button></block>
       <view class="fp-player" wx:if="{{mode === 'playback'}}">
         <block wx:if="{{currentPoint}}"><text class="fp-date-label">{{currentPoint.local_date}}</text><text class="fp-place-title">{{currentPoint.place_name || '照片拍摄位置'}}</text>
-          <view class="fp-player-controls"><button class="fp-button fp-small" bindtap="togglePlayback">{{playing ? '暂停' : '播放'}}</button><slider class="fp-progress" min="0" max="{{playback.length > 1 ? playback.length - 1 : 1}}" value="{{playbackIndex}}" disabled="{{playback.length < 2}}" bindchange="seekPlayback" activeColor="#1F5B45" aria-label="回放进度"></slider><text>{{playbackIndex + 1}}/{{playback.length}}</text></view>
+          <view class="fp-player-controls"><button class="btn fp-button fp-small" bindtap="togglePlayback">{{playing ? '暂停' : '播放'}}</button><slider class="fp-progress" min="0" max="{{playback.length > 1 ? playback.length - 1 : 1}}" value="{{playbackIndex}}" disabled="{{playback.length < 2}}" bindchange="seekPlayback" activeColor="#1F5B45" aria-label="回放进度"></slider><text>{{playbackIndex + 1}}/{{playback.length}}</text></view>
           <button class="fp-text-button" data-id="{{currentPoint.id}}" bindtap="openVisit">查看照片</button><button class="fp-text-button" wx:if="{{playbackCursor}}" bindtap="nextPlaybackPage">继续回放</button>
         </block><text wx:else>暂无可回放地点</text>
         <text class="fp-muted fp-block">连线为顺序示意</text>
       </view>
     </view>
-    <button class="fp-button fp-import" wx:if="{{canWrite && child.active !== false}}" bindtap="beginImport" disabled="{{saving}}"><view class="ico ico-camera-inv" aria-hidden="{{true}}"></view><text>导入照片</text></button>
+    <button class="btn fp-button fp-import" wx:if="{{canWrite && child.active !== false}}" bindtap="beginImport" disabled="{{saving}}"><view class="ico ico-camera-inv" aria-hidden="{{true}}"></view><text>导入照片</text></button>
   </block>
   <view class="fp-empty" wx:elif="{{!loading}}"><text>还没有可查看的孩子档案。</text></view>
 </view>
@@ -97,12 +101,12 @@
       <view wx:elif="{{sheet === 'place'}}" id="fp-place-start-{{placeWindow}}"><button class="fp-world-row" wx:for="{{placeVisits}}" wx:key="id" data-id="{{item.id}}" bindtap="openVisit">{{item.local_date}} · {{item.place_name || '照片拍摄位置'}} · {{item.photo_count}} 张 ›</button><button class="fp-text-button fp-full" wx:if="{{placeCursor}}" bindtap="morePlaceVisits" loading="{{loadingPlaceMore}}" disabled="{{loadingPlaceMore}}">{{placeVisits.length >= 100 ? '查看下一组' : '继续查看到访日'}}</button></view>
     </scroll-view>
     <view class="fp-sheet-footer">
-      <block wx:if="{{sheet === 'consent'}}"><button class="fp-button fp-full {{saving ? 'fp-disabled' : ''}}" bindtap="choosePhotos" loading="{{saving}}" disabled="{{saving}}">{{saving ? '正在上传 ' + importProgress + '%' : '同意并选择照片'}}</button><button class="fp-text-button fp-full {{saving ? 'fp-disabled' : ''}}" bindtap="manualEntry" disabled="{{saving}}">手动记录</button></block>
-      <button class="fp-button fp-full {{saving ? 'fp-disabled' : ''}}" wx:elif="{{sheet === 'settings'}}" bindtap="saveSettings" loading="{{saving}}" disabled="{{saving}}">保存设置</button>
-      <block wx:elif="{{sheet === 'review'}}"><button class="fp-button fp-full {{saving ? 'fp-disabled' : ''}}" bindtap="askConfirm">确认选中的 {{selectedCount}} 条</button><button class="fp-text-button fp-full" bindtap="uploadBatch" wx:if="{{hasPendingUpload}}">重试未完成上传</button></block>
-      <block wx:elif="{{sheet === 'confirm'}}"><button class="fp-button fp-full {{saving ? 'fp-disabled' : ''}}" bindtap="confirmSelected" loading="{{saving}}" disabled="{{saving}}">确认入档</button><button class="fp-text-button fp-full {{saving ? 'fp-disabled' : ''}}" bindtap="backToReview" disabled="{{saving}}">返回核对</button></block>
-      <button class="fp-button fp-full {{saving ? 'fp-disabled' : ''}}" wx:elif="{{sheet === 'edit'}}" bindtap="saveEdit" loading="{{saving}}" disabled="{{saving}}">{{manual ? '保存待确认草稿' : '保存修改'}}</button>
-      <button class="fp-button fp-full {{saving ? 'fp-disabled' : ''}}" wx:elif="{{sheet === 'photo' && canWrite}}" bindtap="editFormal">修改日期和地点</button>
+      <block wx:if="{{sheet === 'consent'}}"><button class="btn fp-button fp-full {{saving ? 'is-disabled' : ''}}" bindtap="choosePhotos" loading="{{saving}}" disabled="{{saving}}">{{saving ? '正在上传 ' + importProgress + '%' : '同意并选择照片'}}</button><button class="fp-text-button fp-full {{saving ? 'fp-disabled' : ''}}" bindtap="manualEntry" disabled="{{saving}}">手动记录</button></block>
+      <button class="btn fp-button fp-full {{saving ? 'is-disabled' : ''}}" wx:elif="{{sheet === 'settings'}}" bindtap="saveSettings" loading="{{saving}}" disabled="{{saving}}">保存设置</button>
+      <block wx:elif="{{sheet === 'review'}}"><button class="btn fp-button fp-full {{saving ? 'is-disabled' : ''}}" bindtap="askConfirm">确认选中的 {{selectedCount}} 条</button><button class="fp-text-button fp-full" bindtap="uploadBatch" wx:if="{{hasPendingUpload}}">重试未完成上传</button></block>
+      <block wx:elif="{{sheet === 'confirm'}}"><button class="btn fp-button fp-full {{saving ? 'is-disabled' : ''}}" bindtap="confirmSelected" loading="{{saving}}" disabled="{{saving}}">确认入档</button><button class="fp-text-button fp-full {{saving ? 'fp-disabled' : ''}}" bindtap="backToReview" disabled="{{saving}}">返回核对</button></block>
+      <button class="btn fp-button fp-full {{saving ? 'is-disabled' : ''}}" wx:elif="{{sheet === 'edit'}}" bindtap="saveEdit" loading="{{saving}}" disabled="{{saving}}">{{manual ? '保存待确认草稿' : '保存修改'}}</button>
+      <button class="btn fp-button fp-full {{saving ? 'is-disabled' : ''}}" wx:elif="{{sheet === 'photo' && canWrite}}" bindtap="editFormal">修改日期和地点</button>
     </view>
   </view>
 </view>

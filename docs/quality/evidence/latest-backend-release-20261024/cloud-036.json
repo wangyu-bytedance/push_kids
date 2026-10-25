@@ -1,0 +1,179 @@
+{
+  "observed_at": "2026-10-24T14:41:15.523Z",
+  "env": "prod-d2g14rwoycac6b45d",
+  "service": "flask-ik19",
+  "access_types": [
+    "OA",
+    "MINIAPP"
+  ],
+  "public_closed": true,
+  "config": {
+    "key_count": 18,
+    "same_as_base": true,
+    "same_as_035": true,
+    "coverage_disabled": true,
+    "early_disabled_or_absent": true,
+    "suggestions_disabled_or_absent": true
+  },
+  "latest": {
+    "VersionName": "flask-ik19-036",
+    "Status": "deploy_failed",
+    "CreatedTime": "2026-10-24 22:36:16",
+    "UpdatedTime": "2026-10-24 22:40:40",
+    "ImageUrl": "ccr.ccs.tencentyun.com/tcb-100038957625-qlka/ca-mswkexqy_flask-ik19:flask-ik19-036-20261024223617",
+    "Remark": "latest-20261024-0025-01-26714b9",
+    "Cpu": 0.25,
+    "Mem": 0.5,
+    "MinNum": 0,
+    "MaxNum": 5,
+    "ContainerPort": 8000
+  },
+  "old_resources": {
+    "VersionName": "flask-ik19-035",
+    "Status": "normal",
+    "CreatedTime": "2026-10-24 10:55:54",
+    "UpdatedTime": "2026-10-24 10:58:34",
+    "ImageUrl": "ccr.ccs.tencentyun.com/tcb-100038957625-qlka/ca-mswkexqy_flask-ik19:flask-ik19-035-20261024105555",
+    "Remark": "full-20261024-bug031-ops04-01",
+    "Cpu": 0.25,
+    "Mem": 0.5,
+    "MinNum": 0,
+    "MaxNum": 5,
+    "ContainerPort": 8000
+  },
+  "latest_field_names": [
+    "BaseImage",
+    "Branch",
+    "BuildDir",
+    "ContainerPort",
+    "Cpu",
+    "CpuLimit",
+    "CpuSize",
+    "CpuTotalQuota",
+    "CreatedTime",
+    "CustomLogs",
+    "DockerfilePath",
+    "EntryPoint",
+    "EnvParams",
+    "HasDockerfile",
+    "ImageUrl",
+    "InitContainerSpecs",
+    "InitialDelaySeconds",
+    "IsPublic",
+    "MaxNum",
+    "Mem",
+    "MemLimit",
+    "MemSize",
+    "MemTotalQuota",
+    "MinNum",
+    "MountWxToken",
+    "PackageName",
+    "PackageVersion",
+    "PolicyDetail",
+    "PolicyThreshold",
+    "PolicyType",
+    "Remark",
+    "Repo",
+    "RepoLanguage",
+    "RepoType",
+    "RequestId",
+    "ServerName",
+    "SidecarSpecs",
+    "Status",
+    "SubnetIds",
+    "TkeClusterInfo",
+    "TkeWorkloadType",
+    "UpdatedTime",
+    "UploadType",
+    "VersionIP",
+    "VersionName",
+    "VersionPort",
+    "VpcId"
+  ],
+  "latest_list_item": [
+    {
+      "fields": [
+        "VersionName",
+        "FlowRatio",
+        "Status",
+        "CreatedTime",
+        "UpdatedTime",
+        "BuildId",
+        "UploadType",
+        "Remark",
+        "UrlParam",
+        "Priority",
+        "IsDefaultPriority",
+        "FlowParams",
+        "MinReplicas",
+        "MaxReplicas",
+        "RunId",
+        "Percent",
+        "CurrentReplicas",
+        "Architecture",
+        "TkeClusterInfo",
+        "TkeWorkloadType"
+      ],
+      "BuildId": 2609339005,
+      "RunId": "multi_tenant_1xKcr1tD4ISPfe",
+      "Status": "deploy_failed"
+    }
+  ],
+  "versions": [
+    {
+      "name": "flask-ik19-020",
+      "status": "normal",
+      "flow": 0,
+      "replicas": 0
+    },
+    {
+      "name": "flask-ik19-021",
+      "status": "normal",
+      "flow": 0,
+      "replicas": 0
+    },
+    {
+      "name": "flask-ik19-022",
+      "status": "normal",
+      "flow": 0,
+      "replicas": 0
+    },
+    {
+      "name": "flask-ik19-023",
+      "status": "normal",
+      "flow": 0,
+      "replicas": 0
+    },
+    {
+      "name": "flask-ik19-024",
+      "status": "normal",
+      "flow": 0,
+      "replicas": 0
+    },
+    {
+      "name": "flask-ik19-025",
+      "status": "normal",
+      "flow": 0,
+      "replicas": 0
+    },
+    {
+      "name": "flask-ik19-026",
+      "status": "normal",
+      "flow": 0,
+      "replicas": 0
+    },
+    {
+      "name": "flask-ik19-035",
+      "status": "normal",
+      "flow": 100,
+      "replicas": 1
+    },
+    {
+      "name": "flask-ik19-036",
+      "status": "deploy_failed",
+      "flow": 0,
+      "replicas": 1
+    }
+  ],
+  "versions_complete": true
+}

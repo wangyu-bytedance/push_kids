@@ -1,0 +1,17 @@
+{
+  "environment": "offline synthetic DevTools project only",
+  "method": "actual CUA accessibility clicks; no replacement of wx callbacks",
+  "logical_viewport": [390, 844],
+  "status": "PASS",
+  "observations": [
+    {"action": "click playback tab", "observed": "playback aria-pressed=1, timeline=0, play button available"},
+    {"action": "click play", "observed": "button changes to pause"},
+    {"action": "click timeline tab", "observed": "timeline aria-pressed=1; dates 2026-10-24, 2026-10-03 visible"},
+    {"action": "click unknown-time thumbnail", "observed": "photo details sheet with close, previous/next disabled for single synthetic photo and edit action"},
+    {"action": "close details", "observed": "timeline controls and more action restored"},
+    {"action": "click more", "observed": "sole settings action opens compact settings sheet"},
+    {"action": "click AI setting switch", "observed": "native checkbox changes 0 to 1"},
+    {"action": "close settings", "observed": "timeline restored"}
+  ],
+  "not_run": ["real settings save", "real media upload/preview", "device screen reader", "actual native next-group click; covered by controller regression and synthetic geometry only"]
+}

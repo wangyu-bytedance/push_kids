@@ -1,5 +1,5 @@
 const api = require("../../utils/api");
-const { photoView, query } = require("./presentation");
+const { photoView, timelineVisit, query } = require("./presentation");
 const imports = require("./imports");
 const photos = require("./photos");
 const maps = require("./maps");
@@ -74,7 +74,7 @@ module.exports = function createController() { return {
     ]);
     if (this.stale(seq)) return;
     this.releasePreviews();
-    this.setData({ summary, visits: visits.items, nextCursor: visits.next_cursor });
+    this.setData({ summary, visits: visits.items.map(timelineVisit), nextCursor: visits.next_cursor });
     this.fillPreviews(visits.items.flatMap((visit) => visit.photos), "visits", seq);
     if (this.data.mode !== "timeline") await this.loadMap();
   },
@@ -97,7 +97,8 @@ module.exports = function createController() { return {
       // Keep this cursor retryable when the user has moved into another context.
       if (this.data.sheet || this.data.mode !== "timeline") return this.setData({ loadingMore: false });
       if (replace) this.releasePreviews();
-      this.setData({ visits: replace ? result.items : [...this.data.visits, ...result.items], nextCursor: result.next_cursor, loadingMore: false });
+      const visits = result.items.map(timelineVisit);
+      this.setData({ visits: replace ? visits : [...this.data.visits, ...visits], nextCursor: result.next_cursor, loadingMore: false });
       if (replace) this.scrollTimelineStart(seq);
       this.fillPreviews(result.items.flatMap((visit) => visit.photos), "visits", seq);
     } catch (error) {

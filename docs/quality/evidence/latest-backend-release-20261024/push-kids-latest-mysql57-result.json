@@ -1,0 +1,47 @@
+{
+  "status": "FAIL",
+  "database_scope": "disposable local Docker only",
+  "suites": [
+    {
+      "name": "migration-base-head",
+      "exit_code": 0,
+      "tail": [
+        "INFO  [alembic.runtime.migration] Running upgrade 20261018_0021 -> 20261020_0022, Permanent review supersession and bounded coverage work.",
+        "INFO  [alembic.runtime.migration] Running upgrade 20261020_0022 -> 20261024_0023, Conservative empty-day review snapshots and indexed opportunities.",
+        "INFO  [alembic.runtime.migration] Running upgrade 20261024_0023 -> 20261024_0024, Reliable input clock and parent-approved suggestion workflow (additive).",
+        "INFO  [alembic.runtime.migration] Running upgrade 20261024_0024 -> 20261024_0025, Shared child academic-year confirmation; preserve all existing formal grades."
+      ]
+    },
+    {
+      "name": "migration-current",
+      "exit_code": 0,
+      "tail": [
+        "20261024_0025 (head)",
+        "INFO  [alembic.runtime.migration] Context impl MySQLImpl.",
+        "INFO  [alembic.runtime.migration] Will assume non-transactional DDL."
+      ]
+    },
+    {
+      "name": "migration-check",
+      "exit_code": 0,
+      "tail": [
+        "INFO  [alembic.runtime.plugins] setting up autogenerate plugin alembic.autogenerate.constraints",
+        "INFO  [alembic.runtime.plugins] setting up autogenerate plugin alembic.autogenerate.defaults",
+        "INFO  [alembic.runtime.plugins] setting up autogenerate plugin alembic.autogenerate.comments",
+        "INFO  [alembic.runtime.plugins] setting up autogenerate plugin alembic.autogenerate.checkconstraint_byname"
+      ]
+    },
+    {
+      "name": "test_today_learning_mysql",
+      "exit_code": 1,
+      "tail": [
+        "-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html",
+        "=========================== short test summary info ============================",
+        "ERROR tests/integration/test_today_learning_mysql.py::test_mysql57_shared_prompt_and_approval_races",
+        "1 warning, 1 error in 0.77s"
+      ]
+    }
+  ],
+  "mysql_version": "5.7.44",
+  "error_category": "RuntimeError"
+}

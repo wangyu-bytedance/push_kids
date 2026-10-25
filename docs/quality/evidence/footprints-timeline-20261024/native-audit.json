@@ -1,0 +1,1039 @@
+{
+  "status": "PASS",
+  "captures": 54,
+  "expected": 54,
+  "missing_viewports": [],
+  "errors": [],
+  "captures_detail": [
+    {
+      "state": "confirm",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "confirm-320.png",
+      "screenshotSha256": "8c8c8d32328d82ad85f00adaa18a3b093d1993d626721723214f5b91c00aae9d",
+      "pngDimensions": [
+        640,
+        1136
+      ],
+      "status": "PASS",
+      "screenshotExtent": "full custom-navigation viewport"
+    },
+    {
+      "state": "confirm",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "confirm-390.png",
+      "screenshotSha256": "a515faff7ab8673481388945584509d559b281cb924d5f83ef4ff4286369ce8e",
+      "pngDimensions": [
+        780,
+        1688
+      ],
+      "status": "PASS",
+      "screenshotExtent": "full custom-navigation viewport"
+    },
+    {
+      "state": "confirm",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "confirm-430.png",
+      "screenshotSha256": "cee334535167eb04b94a312781cddd4ccb9da7116f9227cbebe1c801b009fff7",
+      "pngDimensions": [
+        860,
+        1864
+      ],
+      "status": "PASS",
+      "screenshotExtent": "full custom-navigation viewport"
+    },
+    {
+      "state": "consent",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "consent-320.png",
+      "screenshotSha256": "95e2085d065bd716f1188738305485b08172f14dd720a37b5e57c8b711fb466a",
+      "pngDimensions": [
+        640,
+        1136
+      ],
+      "status": "PASS",
+      "screenshotExtent": "full custom-navigation viewport"
+    },
+    {
+      "state": "consent",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "consent-390.png",
+      "screenshotSha256": "bdf31d26e729e749108c57b2c1bfed3df4296e0f2d1db02050d77f816d222eb9",
+      "pngDimensions": [
+        780,
+        1688
+      ],
+      "status": "PASS",
+      "screenshotExtent": "full custom-navigation viewport"
+    },
+    {
+      "state": "consent",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "consent-430.png",
+      "screenshotSha256": "3a0b07f7d76b21f31fe66bdb88321db59aa4a4c29d6a4f5fdc10e493803cd1bb",
+      "pngDimensions": [
+        860,
+        1864
+      ],
+      "status": "PASS",
+      "screenshotExtent": "full custom-navigation viewport"
+    },
+    {
+      "state": "edit",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "edit-320.png",
+      "screenshotSha256": "c7cb1baf573646ac058b540b48f6ab941a57f6900dc69c5ad9656f75d8be0d45",
+      "pngDimensions": [
+        640,
+        1136
+      ],
+      "status": "PASS",
+      "screenshotExtent": "full custom-navigation viewport"
+    },
+    {
+      "state": "edit",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "edit-390.png",
+      "screenshotSha256": "19ba145d6b8fdc32e5bdbdab15125b62908ba0616696a65051fdb74b837b43a1",
+      "pngDimensions": [
+        780,
+        1688
+      ],
+      "status": "PASS",
+      "screenshotExtent": "full custom-navigation viewport"
+    },
+    {
+      "state": "edit",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "edit-430.png",
+      "screenshotSha256": "93267230d4555e93c56b215b78109bf21fd3513c39edb2a8574f27b612ca881f",
+      "pngDimensions": [
+        860,
+        1864
+      ],
+      "status": "PASS",
+      "screenshotExtent": "full custom-navigation viewport"
+    },
+    {
+      "state": "empty",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "empty-320.png",
+      "screenshotSha256": "f2c184250f17c33aa0193485088a14383ab4acad4d3220561a91f29791245735",
+      "pngDimensions": [
+        640,
+        1136
+      ],
+      "status": "PASS",
+      "screenshotExtent": "full custom-navigation viewport"
+    },
+    {
+      "state": "empty",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "empty-390.png",
+      "screenshotSha256": "735d67626fee557218e79e5cee7f573645e31afc0cfa81c784770743521ab285",
+      "pngDimensions": [
+        780,
+        1688
+      ],
+      "status": "PASS",
+      "screenshotExtent": "full custom-navigation viewport"
+    },
+    {
+      "state": "empty",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "empty-430.png",
+      "screenshotSha256": "39a1f29c7101fecfcbc3ca8a4d622b2f7431d87d9618925c0f265dd57b110f23",
+      "pngDimensions": [
+        860,
+        1864
+      ],
+      "status": "PASS",
+      "screenshotExtent": "full custom-navigation viewport"
+    },
+    {
+      "state": "error",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "error-320.png",
+      "screenshotSha256": "4ccefa53b35caf667cee2b01fbd720fb4d83bcb61fe48248ca3d97e01faa1c2d",
+      "pngDimensions": [
+        640,
+        1136
+      ],
+      "status": "PASS",
+      "screenshotExtent": "full custom-navigation viewport"
+    },
+    {
+      "state": "error",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "error-390.png",
+      "screenshotSha256": "49ea0350193034a46b8c6556dd9a077d9c9d5efd131acea29c2fa67d7099bf0b",
+      "pngDimensions": [
+        780,
+        1688
+      ],
+      "status": "PASS",
+      "screenshotExtent": "full custom-navigation viewport"
+    },
+    {
+      "state": "error",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "error-430.png",
+      "screenshotSha256": "5600a01bd775028569a2bbe454f9009206a737f4f51840f9e17fa4da2bb6b40a",
+      "pngDimensions": [
+        860,
+        1864
+      ],
+      "status": "PASS",
+      "screenshotExtent": "full custom-navigation viewport"
+    },
+    {
+      "state": "lit",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "lit-320.png",
+      "screenshotSha256": "ecc2daa840da714c7f476f3fd72e52c696966e3d5e06ead19a0c1dd80468a738",
+      "pngDimensions": [
+        640,
+        1136
+      ],
+      "status": "PASS",
+      "screenshotExtent": "full custom-navigation viewport"
+    },
+    {
+      "state": "lit",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "lit-390.png",
+      "screenshotSha256": "f42d459b9fcdfceecac976030ccfb9d2add48b145d6f42f7d92ab0f0d1ab84ab",
+      "pngDimensions": [
+        780,
+        1688
+      ],
+      "status": "PASS",
+      "screenshotExtent": "full custom-navigation viewport"
+    },
+    {
+      "state": "lit",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "lit-430.png",
+      "screenshotSha256": "3edf44ebc54a1ca2acad91dc2157f625b0602019dee73f3a43196697b8efaf1c",
+      "pngDimensions": [
+        860,
+        1864
+      ],
+      "status": "PASS",
+      "screenshotExtent": "full custom-navigation viewport"
+    },
+    {
+      "state": "loading",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "loading-320.png",
+      "screenshotSha256": "3d7bcc1e09b528928dca1d7d16641036cacbca6e0d2102e860870ea66838dcdd",
+      "pngDimensions": [
+        640,
+        1136
+      ],
+      "status": "PASS",
+      "screenshotExtent": "full custom-navigation viewport"
+    },
+    {
+      "state": "loading",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "loading-390.png",
+      "screenshotSha256": "d7ca0eb96499ac6e0a786055853670e3e75925c562a57b1793a703180e8e0f0b",
+      "pngDimensions": [
+        780,
+        1688
+      ],
+      "status": "PASS",
+      "screenshotExtent": "full custom-navigation viewport"
+    },
+    {
+      "state": "loading",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "loading-430.png",
+      "screenshotSha256": "e04e1484e5d61879482f34337691c45ccd73bb796d6ff5f79ab68b9328bd757b",
+      "pngDimensions": [
+        860,
+        1864
+      ],
+      "status": "PASS",
+      "screenshotExtent": "full custom-navigation viewport"
+    },
+    {
+      "state": "long",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "long-320.png",
+      "screenshotSha256": "00212a2c5c840bcc20f8c8f4a858260fb5812afb8fa1819129cfb504dd1feb99",
+      "pngDimensions": [
+        640,
+        1136
+      ],
+      "status": "PASS",
+      "screenshotExtent": "full custom-navigation viewport"
+    },
+    {
+      "state": "long",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "long-390.png",
+      "screenshotSha256": "a93b736fa5bd74ce2bc1ce3d7f260f6f564be9e63905fade571ed3a3fd4d5b8f",
+      "pngDimensions": [
+        780,
+        1688
+      ],
+      "status": "PASS",
+      "screenshotExtent": "full custom-navigation viewport"
+    },
+    {
+      "state": "long",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "long-430.png",
+      "screenshotSha256": "c6a8477912b95bb13c6b3d23ee33c759b07c6790062d0548896731f5d2bd6b29",
+      "pngDimensions": [
+        860,
+        1864
+      ],
+      "status": "PASS",
+      "screenshotExtent": "full custom-navigation viewport"
+    },
+    {
+      "state": "older_window",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "older_window-320.png",
+      "screenshotSha256": "264978bf9cc4c29375782c281b6d2827256ec675bbecdfb11acf0049fb63c252",
+      "pngDimensions": [
+        640,
+        1136
+      ],
+      "status": "PASS",
+      "screenshotExtent": "full custom-navigation viewport"
+    },
+    {
+      "state": "older_window",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "older_window-390.png",
+      "screenshotSha256": "4248f034768d85862912eabf7210d64a5c2aa44a0d180f5914dc2390e3d11723",
+      "pngDimensions": [
+        780,
+        1688
+      ],
+      "status": "PASS",
+      "screenshotExtent": "full custom-navigation viewport"
+    },
+    {
+      "state": "older_window",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "older_window-430.png",
+      "screenshotSha256": "1546ae5c70dc4ed3329e02f97f083ebafba08aebf0499b4eb12a6e8fa341720b",
+      "pngDimensions": [
+        860,
+        1864
+      ],
+      "status": "PASS",
+      "screenshotExtent": "full custom-navigation viewport"
+    },
+    {
+      "state": "overview",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "overview-320.png",
+      "screenshotSha256": "517238c279db6a04c1869043dd32dc6a84138358d4dba94194de39f3fdcd47d3",
+      "pngDimensions": [
+        640,
+        1136
+      ],
+      "status": "PASS",
+      "screenshotExtent": "full custom-navigation viewport"
+    },
+    {
+      "state": "overview",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "overview-390.png",
+      "screenshotSha256": "47d7978cf9a6549574d02c1995a4950f4e98e8fbbe6c46689459c2af36837f3e",
+      "pngDimensions": [
+        780,
+        1688
+      ],
+      "status": "PASS",
+      "screenshotExtent": "full custom-navigation viewport"
+    },
+    {
+      "state": "overview",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "overview-430.png",
+      "screenshotSha256": "6c0e83c909581b6816131568fe21a34a5d42e125a97f63e91585a957871770b3",
+      "pngDimensions": [
+        860,
+        1864
+      ],
+      "status": "PASS",
+      "screenshotExtent": "full custom-navigation viewport"
+    },
+    {
+      "state": "photo",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "photo-320.png",
+      "screenshotSha256": "3a7859df9578454cdab69e65ab311e7d266bb03b1fdec53d364c5214f8a77ec6",
+      "pngDimensions": [
+        640,
+        1136
+      ],
+      "status": "PASS",
+      "screenshotExtent": "full custom-navigation viewport"
+    },
+    {
+      "state": "photo",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "photo-390.png",
+      "screenshotSha256": "bc91c988c7a2332e1d197c01939e355fdf2a77713a30722c151af5aca9fc1ef2",
+      "pngDimensions": [
+        780,
+        1688
+      ],
+      "status": "PASS",
+      "screenshotExtent": "full custom-navigation viewport"
+    },
+    {
+      "state": "photo",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "photo-430.png",
+      "screenshotSha256": "e7a1f0dac970ace93769bb7047326b1c48c1052a75d40e4b887c69f90595fd34",
+      "pngDimensions": [
+        860,
+        1864
+      ],
+      "status": "PASS",
+      "screenshotExtent": "full custom-navigation viewport"
+    },
+    {
+      "state": "playback",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "playback-320.png",
+      "screenshotSha256": "d2c29a5fdb7f721c8f81c2f471ded3a76dc17769ef1a370cc4b542abc9373e3f",
+      "pngDimensions": [
+        640,
+        1136
+      ],
+      "status": "PASS",
+      "screenshotExtent": "full custom-navigation viewport"
+    },
+    {
+      "state": "playback",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "playback-390.png",
+      "screenshotSha256": "ff712765669c806838684a024e9365a1b9188b41c7c611fd406a9f0a73fa66f0",
+      "pngDimensions": [
+        780,
+        1688
+      ],
+      "status": "PASS",
+      "screenshotExtent": "full custom-navigation viewport"
+    },
+    {
+      "state": "playback",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "playback-430.png",
+      "screenshotSha256": "778ad304f3164716545a153d4618e4548eded9178fb60e4b21d135545b6f89d6",
+      "pngDimensions": [
+        860,
+        1864
+      ],
+      "status": "PASS",
+      "screenshotExtent": "full custom-navigation viewport"
+    },
+    {
+      "state": "preview_failed",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "preview_failed-320.png",
+      "screenshotSha256": "ab9827966ffa3fd11a1ed4891ec7ebd1499363afdefcdc48d917187e80f4e723",
+      "pngDimensions": [
+        640,
+        1136
+      ],
+      "status": "PASS",
+      "screenshotExtent": "full custom-navigation viewport"
+    },
+    {
+      "state": "preview_failed",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "preview_failed-390.png",
+      "screenshotSha256": "9f1b63d589fbfcb4a8a0a33bd6bee6ecd21a394b39d063cb7422b46b98b4e3c9",
+      "pngDimensions": [
+        780,
+        1688
+      ],
+      "status": "PASS",
+      "screenshotExtent": "full custom-navigation viewport"
+    },
+    {
+      "state": "preview_failed",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "preview_failed-430.png",
+      "screenshotSha256": "e45c239c4ef9a709cf0ab67e9190175fe0a0ccf6e6e4374b66b62ab38416df26",
+      "pngDimensions": [
+        860,
+        1864
+      ],
+      "status": "PASS",
+      "screenshotExtent": "full custom-navigation viewport"
+    },
+    {
+      "state": "review",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "review-320.png",
+      "screenshotSha256": "35d6951868bbaab07d370a806df633c398755ed138d4c3aed972cae354270d75",
+      "pngDimensions": [
+        640,
+        1136
+      ],
+      "status": "PASS",
+      "screenshotExtent": "full custom-navigation viewport"
+    },
+    {
+      "state": "review",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "review-390.png",
+      "screenshotSha256": "422a0f96060aa0eb633eccd86879a3791156cef3a1378adf79927e1507cfe8e5",
+      "pngDimensions": [
+        780,
+        1688
+      ],
+      "status": "PASS",
+      "screenshotExtent": "full custom-navigation viewport"
+    },
+    {
+      "state": "review",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "review-430.png",
+      "screenshotSha256": "36f5e39c3ff828aa8bb3a8164fcc721aac115fe7934f12c1be7d8db51cf15b42",
+      "pngDimensions": [
+        860,
+        1864
+      ],
+      "status": "PASS",
+      "screenshotExtent": "full custom-navigation viewport"
+    },
+    {
+      "state": "saving",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "saving-320.png",
+      "screenshotSha256": "1ff7ae731c69caa6929c4602b295865ec7bb7daadf92f58f5b35ac9723b63684",
+      "pngDimensions": [
+        640,
+        1136
+      ],
+      "status": "PASS",
+      "screenshotExtent": "full custom-navigation viewport"
+    },
+    {
+      "state": "saving",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "saving-390.png",
+      "screenshotSha256": "52a67184b1e21972e60a8f11e0e203e71ad6921ab50c72fa8c42f67bd5dc24b0",
+      "pngDimensions": [
+        780,
+        1688
+      ],
+      "status": "PASS",
+      "screenshotExtent": "full custom-navigation viewport"
+    },
+    {
+      "state": "saving",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "saving-430.png",
+      "screenshotSha256": "435e60b2f5636dd752bd9a9a0ea3f827f232fa5a2de4e15e7b1d385633e61654",
+      "pngDimensions": [
+        860,
+        1864
+      ],
+      "status": "PASS",
+      "screenshotExtent": "full custom-navigation viewport"
+    },
+    {
+      "state": "settings",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "settings-320.png",
+      "screenshotSha256": "50452f7d3db2f07b1009a326f2e5f6df6758b7f84d2845c17114d7befaeaeb5e",
+      "pngDimensions": [
+        640,
+        1136
+      ],
+      "status": "PASS",
+      "screenshotExtent": "full custom-navigation viewport"
+    },
+    {
+      "state": "settings",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "settings-390.png",
+      "screenshotSha256": "f59624f5bdfb5bd7c217d93e6d83aa0e98624ca0827372f14a3e7239163eb207",
+      "pngDimensions": [
+        780,
+        1688
+      ],
+      "status": "PASS",
+      "screenshotExtent": "full custom-navigation viewport"
+    },
+    {
+      "state": "settings",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "settings-430.png",
+      "screenshotSha256": "7790b95378fce1f6741b8e7c926cc653ee460ddaa189f00430fa32e7155aff21",
+      "pngDimensions": [
+        860,
+        1864
+      ],
+      "status": "PASS",
+      "screenshotExtent": "full custom-navigation viewport"
+    },
+    {
+      "state": "standalone",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "standalone-320.png",
+      "screenshotSha256": "b8f1d8182f3f84cc0690f27e5c94d934d54a4c16f25870681d1ba032722e5cae",
+      "pngDimensions": [
+        640,
+        1008
+      ],
+      "status": "PASS",
+      "screenshotExtent": "page content excluding native navigation/status area",
+      "nativeChromeExcludedLogicalHeight": 64.0
+    },
+    {
+      "state": "standalone",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "standalone-390.png",
+      "screenshotSha256": "2694b1276f06dcb08e771f6404ba23ae38cdcb0cb5148fefae5edc939bc6ca4c",
+      "pngDimensions": [
+        780,
+        1506
+      ],
+      "status": "PASS",
+      "screenshotExtent": "page content excluding native navigation/status area",
+      "nativeChromeExcludedLogicalHeight": 91.0
+    },
+    {
+      "state": "standalone",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "standalone-430.png",
+      "screenshotSha256": "a3a470bbe284cf84f26007c5a835a9cd4810cb3a5c8a852fa472ef982b48369a",
+      "pngDimensions": [
+        860,
+        1668
+      ],
+      "status": "PASS",
+      "screenshotExtent": "page content excluding native navigation/status area",
+      "nativeChromeExcludedLogicalHeight": 98.0
+    },
+    {
+      "state": "viewer",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "viewer-320.png",
+      "screenshotSha256": "27eca7f6164fc375dfbf4edd76d8aaf9b40c81b21e4e478f5855ec92e045d5c2",
+      "pngDimensions": [
+        640,
+        1136
+      ],
+      "status": "PASS",
+      "screenshotExtent": "full custom-navigation viewport"
+    },
+    {
+      "state": "viewer",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "viewer-390.png",
+      "screenshotSha256": "d65aa14c80020cf65786d7f9d79a207af482e65e504bee9b8eeca8118da6acb3",
+      "pngDimensions": [
+        780,
+        1688
+      ],
+      "status": "PASS",
+      "screenshotExtent": "full custom-navigation viewport"
+    },
+    {
+      "state": "viewer",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.17.4",
+        "fontScale": 15
+      },
+      "screenshot": "viewer-430.png",
+      "screenshotSha256": "9561f82a93f6db52b656c4035acf22423c6e366a05532157c9a681561a505e29",
+      "pngDimensions": [
+        860,
+        1864
+      ],
+      "status": "PASS",
+      "screenshotExtent": "full custom-navigation viewport"
+    }
+  ],
+  "completed_on": "2026-10-25 Asia/Shanghai"
+}

@@ -1,0 +1,21 @@
+{
+  "commit": "26714b997465fd2d1d9199f45ed931bd85c39405",
+  "packages": [
+    {
+      "path": "dist/release-20261024-latest-0025-01",
+      "files": 154,
+      "bytes": 1512935,
+      "manifest_sha256": "abbafd997450213e26c467823de89223bb47e5f6105af5f9b352d109ea4b240c",
+      "known_secret_scan": "PASS",
+      "source_match": "PASS"
+    },
+    {
+      "path": "dist/migration-20261024-latest-0025-01",
+      "files": 182,
+      "bytes": 1647519,
+      "manifest_sha256": "8ff4d5fd9e508613cda6ae4397d60789db85a8168d92dd89d5e3331ce58339bc",
+      "known_secret_scan": "PASS",
+      "source_match": "PASS"
+    }
+  ]
+}

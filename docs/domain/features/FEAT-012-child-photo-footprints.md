@@ -1,10 +1,10 @@
 # FEAT-012 — 孩子照片足迹
 
 - Feature ID: `FEAT-012`
-- Status: `BACKEND_035_DEPLOYED / CLIENT_LOCAL / VERIFYING / CLIENT_NOT_UPLOADED`
-- Current-state revision: `FEAT-STATE-20261024-PHOTO-FOOTPRINTS-18`
+- Status: `BACKEND_037_DEPLOYED / CLIENT_LOCAL / VERIFYING / CLIENT_NOT_UPLOADED`
+- Current-state revision: `FEAT-STATE-20261025-PHOTO-FOOTPRINTS-21`
 - Owner: 产品负责人（用户）
-- Last verified: 2026-10-24（精简Spec01/DREV01获批并本地实现，最终331项前端及lint/Mini Program/架构/批准设计检查通过；当前三尺寸27态原生、430实际菜单取消/设置/归档选择通过。设备/独立复核边界见精简实施证据。生产0022/035和历史真实读取不变，完整产品验收未完成）
+- Last verified: 2026-10-25（BUG-034当前335项前端/静态门禁、320/390/430各18原生态共54组及390实际点击通过；设备/用户验收未完成。后端仍037/0025，客户端未上传；[本轮UI证据](../../quality/evidence/footprints-timeline-20261024/README.md)与既有部署证据分开）
 - Active Spec: [SPEC-20261017-CHILD-PHOTO-FOOTPRINTS-04](../../../specs/active/FEAT-012-CHILD-PHOTO-FOOTPRINTS.md)，`VERIFYING`；用户2026-10-18“落地编写代码”批准本地实施。
 - Research: [孩子照片足迹可行性报告](../../research/child-footprints/20261017-feasibility.md)。
 - Authoritative implementation: `apps/api/src/push_kids/footprints/`、`agent_processing/footprint_provider.py`、`apps/miniprogram/pages/footprints/`、迁移`20261018_0021`。
@@ -12,11 +12,13 @@
 
 ## Current verified state
 
+当前BUG-034增量：[Spec01 / Architecture01](../../../specs/active/BUG-034-FOOTPRINTS-CONTROLS-TIMELINE.md)及[DREV01](../../design/frontend/prototypes/DREV-20261024-FOOTPRINTS-TIMELINE-01/FRONTEND-SPEC.md)已获明确批准并本地实施。普通主操作复用学习btn胶囊/16px，三视图使用seg.n3纸色选中态、44px等列。时间线沿用API当地日期DESC/id DESC及稳定cursor；每张实际缩略图下显示确认HH:mm，缺失为“时刻未知”，manual用文本、不伪造照片，失败保留时刻与详情入口。同日回放、100条窗口和预览清理不变。335项及三尺寸54组原生证据见[本轮验证](../../quality/evidence/footprints-timeline-20261024/README.md)，设备/读屏/大字体及用户验收待补；42张批准HTML仅设计证据，未上传。
+
 2026-10-24用户明确批准并本地实现[足迹界面减法Spec01](../../../specs/active/FEAT-012-FOOTPRINTS-MINIMAL-UI.md) / [DREV01](../../design/frontend/prototypes/DREV-20261024-FOOTPRINTS-MINIMAL-01/FRONTEND-SPEC.md)：删除重复孩子标题与设置长文，常驻两行次要入口改统计右侧44px更多按钮。可用操作按权限/归档显示，单项直接执行、无项隐藏；原生归档选择每页4个孩子加翻页、最多6项，不截断历史，选择经过原放弃保护。设置仅开关/关闭/保存，内容收高，失败保留值重试。工程UI文案附加条款已并入设计/FEC正文；不改首次授权、候选确认、7天/24h业务规则。BUG-032的CR-001已在原批准范围修复并通过两种照片预览时序回归，见[当前证据与未验收项](../../quality/evidence/footprints-minimal-20261024/README.md)。本轮未上传或部署。
 
 用户于2026-10-17提出可行性调研：给孩子上传一张/多张照片，提取每张时间、地点，缺地点时AI辅助，展示时间线、地图按时间播放、地图点亮与缩略图；默认中国，支持扩展世界。
 
-研究、[grill review](../../research/child-footprints/20261017-grill-review.md)与[交互稿](../../design/frontend/prototypes/DREV-20261017-CHILD-PHOTO-FOOTPRINTS-01/index.html)于2026-10-17获需求/设计确认；2026-10-18获得实施批准。已实现独立源码/API、五张领域表、持久worker和三视图；2026-10-24生产迁移0022并由035后端接管，本地完整客户端可进入旅行日记，真实产品验收仍开放。客户端未上传、体验、提审或正式发布。其他任务的未提交修改不作为本Feature证据。
+研究、[grill review](../../research/child-footprints/20261017-grill-review.md)与[交互稿](../../design/frontend/prototypes/DREV-20261017-CHILD-PHOTO-FOOTPRINTS-01/index.html)于2026-10-17获需求/设计确认；2026-10-18获得实施批准。已实现独立源码/API、五张领域表、持久worker和三视图；2026-10-24早间0022/035接管后，晚间独立OPS将生产迁至0025并由037接管，足迹领域/API未变。本地完整客户端可进入旅行日记，真实产品验收仍开放。客户端未上传、体验、提审或正式发布；其他任务未提交修改不作为本Feature验收。
 
 现有FEAT-007“出行安排”是上学/放学等周期时段，没有照片地点/历史足迹能力。现有学习上传使用压缩图，媒体归属和AI合同绑定学习提交，不能直接描述成已经可用的足迹基础流程。
 

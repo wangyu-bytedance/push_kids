@@ -1,0 +1,14 @@
+{
+  "status": "PASS",
+  "image": "push-kids:release-20261024-latest-0025-02",
+  "image_id": "sha256:c1762e8a7e6b13fece636cfe09ba24eeec738f4fa01c2ff90accb2b2d7cef07d",
+  "image_user": "10001",
+  "image_source_match": 150,
+  "health": {
+    "uid": 10001,
+    "live": 200,
+    "ready": 200
+  },
+  "sigterm_seconds": 4.808,
+  "exit_code": 0
+}

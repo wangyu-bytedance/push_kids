@@ -1,0 +1,15 @@
+{
+  "status": "FAIL",
+  "mode": "preflight",
+  "started_at": "2026-10-24T14:34:25.287663+00:00",
+  "database": "push_kids",
+  "spec_revision": "OPS-SPEC-20261024-LATEST-BACKEND-TEST-DEPLOYMENT-01",
+  "backup": "OPERATOR_CONFIRMED",
+  "steps": [],
+  "schema_before": "20261020_0022",
+  "mysql_version": "5.7.18-cynos-2.1.14-log",
+  "error_category": "ProgrammingError",
+  "database_error_number": 1146,
+  "schema_after_failure": "20261020_0022",
+  "finished_at": "2026-10-24T14:34:27.477885+00:00"
+}

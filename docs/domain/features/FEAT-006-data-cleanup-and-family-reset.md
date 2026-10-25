@@ -1,5 +1,7 @@
 # FEAT-006 — 家庭资料清理与重新开始
 
+2026-10-24运行证据revision LATEST-037-01：用户批准0022→0025维护窗口并确认备份/隔离恢复路径，代理未独立恢复；迁移完成，无降级/清库/合成业务写入，停用覆盖队列保留。获批CRUD readiness修复后037 normal/100%；实际CRUD默认结构检查及发布账号严格trigger检查分别PASS，不授予应用TRIGGER/admin，修复不重复DDL。真实删除/恢复与设备验收未执行，本轮读取smoke不关闭这些门禁。[本轮记录](../../deploy/releases/20261024-latest-backend-test-deployment.md)。
+
 - 2026-10-20本地兼容：单条知识删除仍仅删除所选知识及既有规划关联，覆盖关系不会联动删除或恢复其他词条。承接FK删除时SET NULL，旧项保留永久superseded；覆盖后台任务随所属Knowledge级联清理。全局发现游标仅内部遍历控制元数据，无学习内容。见[本轮证据](../../quality/evidence/AUTO-SUPERSEDED-REVIEW-20261020.md)，未部署。
 
 

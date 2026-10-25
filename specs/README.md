@@ -1,5 +1,11 @@
 # Specs Directory
 
+旅行按钮与倒序时间线：[BUG-034 Spec01 / Architecture01](active/BUG-034-FOOTPRINTS-CONTROLS-TIMELINE.md)及[DREV01](../docs/design/frontend/prototypes/DREV-20261024-FOOTPRINTS-TIMELINE-01/FRONTEND-SPEC.md)获批并本地实施，active/VERIFYING；学习同款胶囊、日期DESC/cursor保持、照片显示HH:mm/未知。335项前端/静态、320/390/430原生54组及390实际点击通过；2026-10-25补齐430，设备/用户验收开放。见[本轮证据](../docs/quality/evidence/footprints-timeline-20261024/README.md)，未上传/部署。
+
+最新后端恢复部署：[BUG-SPEC-20261024-CRUD-SCHEMA-READINESS-01](active/BUG-CRUD-SCHEMA-READINESS.md)与Architecture01已获明确批准，VERIFYING。已区分CRUD运行检查和发布账号严格trigger检查，未给应用扩权；后端780项、实库权限6项及相关26项、冻结02/容器、生产两类账号只读门禁通过。生产0025不重复DDL，036失败证据保留；037已normal/100%、真实微信20项GET全200，完整本地客户端供用户测试，OPS与修复Spec留VERIFYING等待业务反馈。详情以[发布记录](../docs/deploy/releases/20261024-latest-backend-test-deployment.md)为准。
+
+2026-10-24最新后端部署：[OPS Spec01](active/OPS-20261024-LATEST-BACKEND-TEST-DEPLOYMENT.md)已批准，用户确认本次备份/恢复路径；冻结26714b9。[测试隔离Spec01](completed/BUG-MYSQL-SUPERSESSION-MIGRATION-ISOLATION.md)经具体批准修复并完成：MySQL永久替代13项、年级4项、SQLite迁移4项通过，生产保护未改。部署实际阶段以[本轮记录](../docs/deploy/releases/20261024-latest-backend-test-deployment.md)为准。
+
 学习建议标题约束：[`SPEC-20261024-SUGGESTION-TITLE-LIMIT-01`](active/FEAT-004-SUGGESTION-TITLE-LIMIT.md)，`VERIFYING`。用户明确批准Spec01/Architecture01与[DREV04](../docs/design/frontend/prototypes/DREV-20261024-TODAY-LEARNING-04/FRONTEND-SPEC.md)，已本地实现新生成/重新编辑trim后1–20码点、单行合同与字段计数/错误；旧120字读取/审批/实际记录/删除兼容。后端780通过/40个MySQL环境相关跳过、前端332通过、三视口39态原生及独立复核通过，[当前证据](../docs/quality/evidence/SUGGESTION-TITLE-IMPLEMENTATION-20261024.md)列明真机/实际键盘/读屏/系统大字体缺口。未满足DONE门禁，留active，未上传部署。
 
 足迹界面减法及工程UI文案要求：[`SPEC-20261024-FOOTPRINTS-MINIMAL-UI-01`](active/FEAT-012-FOOTPRINTS-MINIMAL-UI.md)，`VERIFYING`。用户明确批准Spec01 / [DREV01](../docs/design/frontend/prototypes/DREV-20261024-FOOTPRINTS-MINIMAL-01/FRONTEND-SPEC.md)并合并UI规范；本地删除重复标题/设置长文，次要入口进原生菜单，设置按内容收高，保留原权限/授权/确认。工程文案规则已进入设计/FEC正文；BUG-032 CR-001在原已批准范围修复并补回归。最终331项前端、三尺寸27态原生和430实际菜单操作通过，[本轮证据](../docs/quality/evidence/footprints-minimal-20261024/README.md)记录设备/独立复核边界，未上传部署。

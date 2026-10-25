@@ -56,6 +56,19 @@ uv run python tools/validate_miniprogram.py
 - 本地 Docker 构建、非 root UID、端口 8000、SIGTERM、`/health/live`、`/health/ready`。
 - 发布包清单和镜像环境中没有 `.env`、密钥、OpenID、儿童内容或本地数据库。
 
+Schema检查分开记录两种身份（`BUG-SPEC-20261024-CRUD-SCHEMA-READINESS-01 / ARCH-20261024-CRUD-SCHEMA-READINESS-01`）：
+运行账户保持CRUD-only，启动/ready校验revision、必需表/字段/索引，不查询需要TRIGGER权限的元数据。
+每次相关发布必须由受控migration账号执行严格只读门禁：
+
+```bash
+PYTHONPATH=apps/api/src uv run python tools/verify_cloud_schema.py
+```
+
+连接凭据通过安全环境注入；工具不打印URL、错误原文或秘密，只返回固定PASS/FAIL类别。
+该门禁显式`verify_triggers=True`检查提前复习trigger集合，缺失或权限不足均失败；迁移Runner还核验
+queue-v2触发器和两个派生投影。另用实际运行账号默认Schema校验通过后才能创建GRAY，不给应用TRIGGER/admin。
+不要把admin探针通过冒充CRUD运行校验；运行ready不负责持续发现管理员绕过流程破坏的trigger。
+
 任何未运行项必须写明 `NOT_RUN` 和原因；必需项不能被口头视为通过。
 
 ## 4. 数据库变更流程

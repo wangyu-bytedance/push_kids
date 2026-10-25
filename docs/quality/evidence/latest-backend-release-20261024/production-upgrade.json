@@ -1,0 +1,66 @@
+{
+  "status": "PASS",
+  "mode": "upgrade",
+  "started_at": "2026-10-24T14:35:45.944582+00:00",
+  "database": "push_kids",
+  "spec_revision": "OPS-SPEC-20261024-LATEST-BACKEND-TEST-DEPLOYMENT-01",
+  "backup": "OPERATOR_CONFIRMED",
+  "steps": [
+    {
+      "name": "frozen_integrity_required_checks_schema_and_inflight",
+      "status": "PASS"
+    },
+    {
+      "name": "alembic_current_before",
+      "status": "PASS"
+    },
+    {
+      "name": "alembic_upgrade_0025",
+      "status": "PASS"
+    },
+    {
+      "name": "alembic_current_after",
+      "status": "PASS"
+    },
+    {
+      "name": "alembic_check",
+      "status": "PASS"
+    },
+    {
+      "name": "runtime_schema_verification",
+      "status": "PASS"
+    },
+    {
+      "name": "structure_projections_and_existing_grade_preservation",
+      "status": "PASS"
+    }
+  ],
+  "schema_before": "20261020_0022",
+  "mysql_version": "5.7.18-cynos-2.1.14-log",
+  "inflight_and_queued": {
+    "agent_jobs": 0,
+    "deletion_requests": 0,
+    "notification_sending": 0,
+    "footprint_photo_jobs": 0,
+    "knowledge_coverage_running": 0,
+    "other_transactions": 0
+  },
+  "paused_coverage_queued": 23,
+  "paused_queue_preserved_with_coverage_disabled": true,
+  "current_step": "runtime_schema_verification",
+  "schema_after": "20261024_0025",
+  "formal_grades_preserved": true,
+  "unexpected_grade_confirmation_facts": 0,
+  "missing_input_clocks": 0,
+  "review_queue_entries": {
+    "triggers": 8,
+    "mismatch": 0,
+    "extra": 0
+  },
+  "review_early_slots": {
+    "triggers": 9,
+    "mismatch": 0,
+    "extra": 0
+  },
+  "finished_at": "2026-10-24T14:35:51.161943+00:00"
+}

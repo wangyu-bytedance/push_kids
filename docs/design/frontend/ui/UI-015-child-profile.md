@@ -1,5 +1,7 @@
 # UI-015 — 学习档案管理与切换入口
 
+2026-10-24运行证据revision LATEST-037-01：年级Schema0025保留旧年级，CRUD启动检查修复已批准并验证；037 normal/100%，真实微信年级候选GET200，用户确认写入尚未验收。完整客户端仍本地未上传，本页呈现/归档合同和批准设计不变。[本轮记录](../../../deploy/releases/20261024-latest-backend-test-deployment.md)。
+
 - 当前年级弹窗增量 `UI-STATE-20261024-ANNUAL-GRADE-05`：[精简Spec01](../../../../specs/active/FEAT-013-GRADE-DIALOG-SIMPLIFICATION.md)与[DREV02](../prototypes/DREV-20261024-ANNUAL-GRADE-PROMOTION-02/FRONTEND-SPEC.md)获用户2026-10-24“继续”批准并本地实现，保留孩子名标题、单个年级选择和并排操作，失败/冲突按需显示行内短提示，最新事实不可覆盖。33张批准设计导出冻结，最终327项前端/53项定向、三尺寸51组原生及实际选级/重试/稍后通过；真实设备/可访问性及全业务原生端到端边界见[实施证据](../../../quality/evidence/GRADE-DIALOG-SIMPLIFICATION-IMPLEMENTATION-20261024.md)。档案编辑表单仍用DREV01，归档区候选未实施。
 
 - 待批准候选（非当前实现）：用户2026-10-24截图指出档案状态区UI/文字堆砌；[BUG-033 Spec01](../../../../specs/active/BUG-033-CHILD-ARCHIVE-UI.md)及[DREV-20261024-CHILD-ARCHIVE-01](../prototypes/DREV-20261024-CHILD-ARCHIVE-01/FRONTEND-SPEC.md)提议整行操作、短说明、详细影响集中到原确认框。21张合成三视口导出已生成，待具体批准；下面的已实现行为暂不被提案替换。

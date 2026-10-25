@@ -1,13 +1,13 @@
 # FEAT-013 — 学年升年级建议与家长共享确认
 
 - Status: VERIFYING
-- Readiness: Spec02 / Architecture02 / DREV01已批准；本地代码、自动化、三尺寸原生呈现/控件及独立只读评审完成，真实设备/修复后原生端到端/可访问性待补，不包含部署或发布
+- Readiness: Spec02 / Architecture02 / DREV01已批准；本地代码、自动化、三尺寸原生呈现/控件及独立只读评审完成，真实设备/修复后原生端到端/可访问性待补；部署由独立OPS记录，037/0025与候选读取通过不替代产品/设备验收。
 - Risk: R2（跨模块/API/持久化/前端会话与并发）
 - Spec owner: 产品负责人（用户）
 - Implementer / Verifier: Codex（批准后）；产品负责人验收
 - Reviewer: 独立上下文 `/root/grade_dialog_facts`，第三轮PASS，无剩余Blocker/Major；[评审记录](../../docs/quality/evidence/grade-confirmation-20261024/independent-review.md)
 - Created / Last updated: 2026-10-24
-- Target release: N/A，当前为本地实现与验证，不包含生产迁移、部署或发布
+- Target release: 本Spec实施范围不变；后续经独立[OPS Spec01](OPS-20261024-LATEST-BACKEND-TEST-DEPLOYMENT.md)批准，26714b9已生产迁移0025，另获批CRUD启动修复后的037 normal/100%、候选读取200，客户端仍本地；本Spec产品/设备验收继续VERIFYING。
 - Spec revision: `SPEC-20261024-ANNUAL-GRADE-PROMOTION-02`
 - Architecture revision: `ARCH-20261024-ANNUAL-GRADE-PROMOTION-02`（APPROVED）
 - User confirmation: Q18“是（推荐）”确认完整产品规则；后续“好的 按照这个方案落地”批准具体Spec02 / Architecture02 / DREV01及实施

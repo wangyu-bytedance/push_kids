@@ -1,0 +1,7304 @@
+{
+  "status": "PASS",
+  "type": "candidate HTML only, not implementation/native/device evidence",
+  "revision": "DREV-20261024-FOOTPRINTS-TIMELINE-01",
+  "source_sha256": "e1f468a9eff823de181bd563a6814fe9207004fc86571b0bc4c4c605cd45e47c",
+  "exports": [
+    {
+      "file": "overview-320x568.png",
+      "state": "overview",
+      "width": 320,
+      "height": 568,
+      "sha256": "f3f38551d1f58d6e2b2ec787e939e0d3320462d85d1de6d5239d24d10d50017c"
+    },
+    {
+      "file": "preview_failed-320x568.png",
+      "state": "preview_failed",
+      "width": 320,
+      "height": 568,
+      "sha256": "ef78592c132ccea11d74dec0eafb9f5c0413835dcb004ec457d935d6b659821b"
+    },
+    {
+      "file": "empty-320x568.png",
+      "state": "empty",
+      "width": 320,
+      "height": 568,
+      "sha256": "bd82fe20bb815464aff444313d3ae8173491786bdc45e2ac1f4424da5f80c550"
+    },
+    {
+      "file": "loading-320x568.png",
+      "state": "loading",
+      "width": 320,
+      "height": 568,
+      "sha256": "f5d8c2a8f442853e1ca4035e3298fa57c8b5f6578cb7d2f3175e38c82f47a89a"
+    },
+    {
+      "file": "error-320x568.png",
+      "state": "error",
+      "width": 320,
+      "height": 568,
+      "sha256": "e8c655d976f870dc687d53fdbbea13af191be4cca42a90acfb4424c54489a3c0"
+    },
+    {
+      "file": "viewer-320x568.png",
+      "state": "viewer",
+      "width": 320,
+      "height": 568,
+      "sha256": "990d17bfd87d6fec7b322f7920dfe884142922de1fd79d4532f2fdc23fc013c0"
+    },
+    {
+      "file": "long-320x568.png",
+      "state": "long",
+      "width": 320,
+      "height": 568,
+      "sha256": "3dd1c707726835683bbd83d3e365bea988ae370bfc091cfd818ef5c0303b9004"
+    },
+    {
+      "file": "playback-320x568.png",
+      "state": "playback",
+      "width": 320,
+      "height": 568,
+      "sha256": "4088006dda77d5c6eac52a29bb210b3b52cd19cdf77661e77c32ab44d2251dca"
+    },
+    {
+      "file": "lit-320x568.png",
+      "state": "lit",
+      "width": 320,
+      "height": 568,
+      "sha256": "4ffbb9eac9dcce8fbc1f64b1e9f5d9e2cc4b9ecd64d87fb3d5c5a021c83223a7"
+    },
+    {
+      "file": "settings-320x568.png",
+      "state": "settings",
+      "width": 320,
+      "height": 568,
+      "sha256": "b8803d2438813c21a0bda5eecba257e26ec3cae548a6f733fcccb8c6133b68ab"
+    },
+    {
+      "file": "saving-320x568.png",
+      "state": "saving",
+      "width": 320,
+      "height": 568,
+      "sha256": "ef39bb64e00ea79916ab3f69acddb984d29877d69ddb9dd08c831488c3066016"
+    },
+    {
+      "file": "photo-320x568.png",
+      "state": "photo",
+      "width": 320,
+      "height": 568,
+      "sha256": "df9be374ed12dc7c49609d6ce1544dbce60bfa69b490ab2d1958204466e9ca9a"
+    },
+    {
+      "file": "older_window-320x568.png",
+      "state": "older_window",
+      "width": 320,
+      "height": 568,
+      "sha256": "107f7cd3bc9920d1330b52267ce2e5ae1af3b961746b2d5f718566339b1f07f8"
+    },
+    {
+      "file": "standalone-320x568.png",
+      "state": "standalone",
+      "width": 320,
+      "height": 568,
+      "sha256": "d39e7ee9cc725ecfbaddb8f2ca345c32ff13055877160b55a4948766cab6c650"
+    },
+    {
+      "file": "overview-390x844.png",
+      "state": "overview",
+      "width": 390,
+      "height": 844,
+      "sha256": "a09d88c35580f977272c656d3a00bc7955e078c97097664694230bfb6b5bb6fa"
+    },
+    {
+      "file": "preview_failed-390x844.png",
+      "state": "preview_failed",
+      "width": 390,
+      "height": 844,
+      "sha256": "4b1204fd74ef6efa048820b9470604b9fdcadc7e2d24ed5c48dfff9c0eda6e10"
+    },
+    {
+      "file": "empty-390x844.png",
+      "state": "empty",
+      "width": 390,
+      "height": 844,
+      "sha256": "a8f57c7eb73ae8b5d6f7222c47222424e4e8b2adb2e47dc4255616c21929d3eb"
+    },
+    {
+      "file": "loading-390x844.png",
+      "state": "loading",
+      "width": 390,
+      "height": 844,
+      "sha256": "978cdc4236e6ab310f6a85b5ecd022d3278a93cfae2669917a28b2aef61ab159"
+    },
+    {
+      "file": "error-390x844.png",
+      "state": "error",
+      "width": 390,
+      "height": 844,
+      "sha256": "25c614acc6690f2d3ad11d74bf80409f5488f1b5fd08a2e521865defc9c21b75"
+    },
+    {
+      "file": "viewer-390x844.png",
+      "state": "viewer",
+      "width": 390,
+      "height": 844,
+      "sha256": "17f1432fd967d1ebfdaf28ca82a31ecca388a273f782ac0e0ee61e98f3c0ff31"
+    },
+    {
+      "file": "long-390x844.png",
+      "state": "long",
+      "width": 390,
+      "height": 844,
+      "sha256": "e708e6b6d58c507e9afcf87a6344165524016827874caac4677af8eba7bdca45"
+    },
+    {
+      "file": "playback-390x844.png",
+      "state": "playback",
+      "width": 390,
+      "height": 844,
+      "sha256": "c66c352bbb380e2ca7d287b7d4b2a8febc0b757a20d741fcd55feedee085cca0"
+    },
+    {
+      "file": "lit-390x844.png",
+      "state": "lit",
+      "width": 390,
+      "height": 844,
+      "sha256": "c022039674927ae5c535d8cda6b08b39e2801c8df5e9ab5089dd8b582489028a"
+    },
+    {
+      "file": "settings-390x844.png",
+      "state": "settings",
+      "width": 390,
+      "height": 844,
+      "sha256": "c54bf4b046c9f1d27c808cb45fd966374efd74fbe66ac28a305091486b706947"
+    },
+    {
+      "file": "saving-390x844.png",
+      "state": "saving",
+      "width": 390,
+      "height": 844,
+      "sha256": "2c9857dd149e6fa9ede4e8a62326e195e6570c11a403444e4616adcbcd3a0879"
+    },
+    {
+      "file": "photo-390x844.png",
+      "state": "photo",
+      "width": 390,
+      "height": 844,
+      "sha256": "1486620e4d8d50aefacb9699428e538312e7a03655b18aea472dae2a4cedf036"
+    },
+    {
+      "file": "older_window-390x844.png",
+      "state": "older_window",
+      "width": 390,
+      "height": 844,
+      "sha256": "baeb9046c09bd00f9e27c25b2e47024acac3f7b936f7d89cc4a4a0f396927c93"
+    },
+    {
+      "file": "standalone-390x844.png",
+      "state": "standalone",
+      "width": 390,
+      "height": 844,
+      "sha256": "a37e0511fbb5abe22183f5bb3c426f8693c1756cf4b45225093b72628f42ac42"
+    },
+    {
+      "file": "overview-430x932.png",
+      "state": "overview",
+      "width": 430,
+      "height": 932,
+      "sha256": "227d3245871fd69508eccceb6a4f3a0843c49e24e14a5c8d98ac18b6b1f837bb"
+    },
+    {
+      "file": "preview_failed-430x932.png",
+      "state": "preview_failed",
+      "width": 430,
+      "height": 932,
+      "sha256": "d183e3a7289b680d62d1bcd9ca7248f25e9f74cf33ab3d2e697837bbd4242ebc"
+    },
+    {
+      "file": "empty-430x932.png",
+      "state": "empty",
+      "width": 430,
+      "height": 932,
+      "sha256": "7e21dd0bc7082326425b00a172dec9fa9d8648d696e01278d01542572d287e54"
+    },
+    {
+      "file": "loading-430x932.png",
+      "state": "loading",
+      "width": 430,
+      "height": 932,
+      "sha256": "f019a0b8ffe39bdd338a5442a3eff3baee3102caad36e3c02d152fc27016dbeb"
+    },
+    {
+      "file": "error-430x932.png",
+      "state": "error",
+      "width": 430,
+      "height": 932,
+      "sha256": "1b7a92e3885a1a04ea7a4d7a52a0610e3fed86efb7fa309bdf5ded2ac759aa7b"
+    },
+    {
+      "file": "viewer-430x932.png",
+      "state": "viewer",
+      "width": 430,
+      "height": 932,
+      "sha256": "a97c6af6bf140051939b22e5e481965a88a9507b15ef711820dc2988a68730c1"
+    },
+    {
+      "file": "long-430x932.png",
+      "state": "long",
+      "width": 430,
+      "height": 932,
+      "sha256": "73107d4133710f4bbd44a77418fd4ccee5cadcce647a469f05c09c27c56087d0"
+    },
+    {
+      "file": "playback-430x932.png",
+      "state": "playback",
+      "width": 430,
+      "height": 932,
+      "sha256": "b691cfad59303c9cf9f13094792281187eecf03e26efa2952e02496feecca760"
+    },
+    {
+      "file": "lit-430x932.png",
+      "state": "lit",
+      "width": 430,
+      "height": 932,
+      "sha256": "04cb643e74b1c18927b2a93b49911b2355a85bf54df22726a94bcb6d783596f2"
+    },
+    {
+      "file": "settings-430x932.png",
+      "state": "settings",
+      "width": 430,
+      "height": 932,
+      "sha256": "ed1575ca14ff6bb960e2389c4b0a5f1fa430e908e582fb99eab4e15a4be3a960"
+    },
+    {
+      "file": "saving-430x932.png",
+      "state": "saving",
+      "width": 430,
+      "height": 932,
+      "sha256": "fb53cf26f9bb22f3b548f61654542cfe4b2e16d178a76b2bc46fc9d3a74d004d"
+    },
+    {
+      "file": "photo-430x932.png",
+      "state": "photo",
+      "width": 430,
+      "height": 932,
+      "sha256": "0c4c65d3d575a58b4a2b9194f46c1c00cce5a9692e8fe4bc182527739e0f25a3"
+    },
+    {
+      "file": "older_window-430x932.png",
+      "state": "older_window",
+      "width": 430,
+      "height": 932,
+      "sha256": "fcb83e580528cd7b29470f71ec454396e7901ce2ce26f5d4391da29dfcd50824"
+    },
+    {
+      "file": "standalone-430x932.png",
+      "state": "standalone",
+      "width": 430,
+      "height": 932,
+      "sha256": "4c07af983cde89dd4befa5e590cb084fed38591d65bb20e1c7cc17f7afcfe7e8"
+    }
+  ],
+  "audits": [
+    {
+      "state": "overview",
+      "viewport": [
+        320,
+        568
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "记录类型，旅行日记",
+          "width": 112,
+          "height": 44,
+          "font": 22,
+          "radius": "999px"
+        },
+        {
+          "label": "切换孩子",
+          "width": 108,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "更多足迹操作",
+          "width": 44,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "时间线",
+          "width": 96.65625,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "轨迹回放",
+          "width": 96.671875,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "地图点亮",
+          "width": 96.65625,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看待整理照片",
+          "width": 122,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看2026-10-24 14:30的照片",
+          "width": 124.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看2026-10-24 时刻未知的照片",
+          "width": 124.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看照片",
+          "width": 257,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看2026-10-03 14:30的照片",
+          "width": 124.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看2026-10-03 时刻未知的照片",
+          "width": 124.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看照片",
+          "width": 257,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看到访",
+          "width": 257,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看下一组",
+          "width": 296,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "导入照片",
+          "width": 296,
+          "height": 48,
+          "font": 16,
+          "radius": "999px"
+        },
+        {
+          "label": "今日",
+          "width": 60.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "日程",
+          "width": 60.8125,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "记录",
+          "width": 60.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "报表",
+          "width": 60.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "设置",
+          "width": 60.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        }
+      ],
+      "tabs": [
+        {
+          "width": 96.65625,
+          "height": 44,
+          "x": 15,
+          "right": 111.65625
+        },
+        {
+          "width": 96.671875,
+          "height": 44,
+          "x": 111.65625,
+          "right": 208.328125
+        },
+        {
+          "width": 96.65625,
+          "height": 44,
+          "x": 208.328125,
+          "right": 304.984375
+        }
+      ],
+      "dates": [
+        "2026-10-24",
+        "2026-10-03",
+        "2026-09-18"
+      ],
+      "times": [
+        "14:30",
+        "时刻未知",
+        "10:20",
+        "时刻未知"
+      ]
+    },
+    {
+      "state": "preview_failed",
+      "viewport": [
+        320,
+        568
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "记录类型，旅行日记",
+          "width": 112,
+          "height": 44,
+          "font": 22,
+          "radius": "999px"
+        },
+        {
+          "label": "切换孩子",
+          "width": 108,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "更多足迹操作",
+          "width": 44,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "时间线",
+          "width": 96.65625,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "轨迹回放",
+          "width": 96.671875,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "地图点亮",
+          "width": 96.65625,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看待整理照片",
+          "width": 122,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看2026-10-24 14:30的照片",
+          "width": 124.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看2026-10-24 时刻未知的照片",
+          "width": 124.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看照片",
+          "width": 257,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看2026-10-03 14:30的照片",
+          "width": 124.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看2026-10-03 时刻未知的照片",
+          "width": 124.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看照片",
+          "width": 257,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看到访",
+          "width": 257,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看下一组",
+          "width": 296,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "导入照片",
+          "width": 296,
+          "height": 48,
+          "font": 16,
+          "radius": "999px"
+        },
+        {
+          "label": "今日",
+          "width": 60.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "日程",
+          "width": 60.8125,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "记录",
+          "width": 60.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "报表",
+          "width": 60.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "设置",
+          "width": 60.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        }
+      ],
+      "tabs": [
+        {
+          "width": 96.65625,
+          "height": 44,
+          "x": 15,
+          "right": 111.65625
+        },
+        {
+          "width": 96.671875,
+          "height": 44,
+          "x": 111.65625,
+          "right": 208.328125
+        },
+        {
+          "width": 96.65625,
+          "height": 44,
+          "x": 208.328125,
+          "right": 304.984375
+        }
+      ],
+      "dates": [
+        "2026-10-24",
+        "2026-10-03",
+        "2026-09-18"
+      ],
+      "times": [
+        "14:30",
+        "时刻未知",
+        "10:20",
+        "时刻未知"
+      ]
+    },
+    {
+      "state": "empty",
+      "viewport": [
+        320,
+        568
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "记录类型，旅行日记",
+          "width": 112,
+          "height": 44,
+          "font": 22,
+          "radius": "999px"
+        },
+        {
+          "label": "切换孩子",
+          "width": 108,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "更多足迹操作",
+          "width": 44,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "时间线",
+          "width": 96.65625,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "轨迹回放",
+          "width": 96.671875,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "地图点亮",
+          "width": 96.65625,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看待整理照片",
+          "width": 122,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "手动记录",
+          "width": 80,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "导入照片",
+          "width": 296,
+          "height": 48,
+          "font": 16,
+          "radius": "999px"
+        },
+        {
+          "label": "今日",
+          "width": 60.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "日程",
+          "width": 60.8125,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "记录",
+          "width": 60.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "报表",
+          "width": 60.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "设置",
+          "width": 60.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        }
+      ],
+      "tabs": [
+        {
+          "width": 96.65625,
+          "height": 44,
+          "x": 15,
+          "right": 111.65625
+        },
+        {
+          "width": 96.671875,
+          "height": 44,
+          "x": 111.65625,
+          "right": 208.328125
+        },
+        {
+          "width": 96.65625,
+          "height": 44,
+          "x": 208.328125,
+          "right": 304.984375
+        }
+      ],
+      "dates": [],
+      "times": []
+    },
+    {
+      "state": "loading",
+      "viewport": [
+        320,
+        568
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "记录类型，旅行日记",
+          "width": 112,
+          "height": 44,
+          "font": 22,
+          "radius": "999px"
+        },
+        {
+          "label": "切换孩子",
+          "width": 108,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "更多足迹操作",
+          "width": 44,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "时间线",
+          "width": 96.65625,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "轨迹回放",
+          "width": 96.671875,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "地图点亮",
+          "width": 96.65625,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看待整理照片",
+          "width": 122,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "今日",
+          "width": 60.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "日程",
+          "width": 60.8125,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "记录",
+          "width": 60.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "报表",
+          "width": 60.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "设置",
+          "width": 60.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        }
+      ],
+      "tabs": [
+        {
+          "width": 96.65625,
+          "height": 44,
+          "x": 15,
+          "right": 111.65625
+        },
+        {
+          "width": 96.671875,
+          "height": 44,
+          "x": 111.65625,
+          "right": 208.328125
+        },
+        {
+          "width": 96.65625,
+          "height": 44,
+          "x": 208.328125,
+          "right": 304.984375
+        }
+      ],
+      "dates": [],
+      "times": []
+    },
+    {
+      "state": "error",
+      "viewport": [
+        320,
+        568
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "记录类型，旅行日记",
+          "width": 112,
+          "height": 44,
+          "font": 22,
+          "radius": "999px"
+        },
+        {
+          "label": "切换孩子",
+          "width": 108,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "更多足迹操作",
+          "width": 44,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "时间线",
+          "width": 96.65625,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "轨迹回放",
+          "width": 96.671875,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "地图点亮",
+          "width": 96.65625,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看待整理照片",
+          "width": 122,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "重新读取",
+          "width": 296,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "导入照片",
+          "width": 296,
+          "height": 48,
+          "font": 16,
+          "radius": "999px"
+        },
+        {
+          "label": "今日",
+          "width": 60.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "日程",
+          "width": 60.8125,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "记录",
+          "width": 60.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "报表",
+          "width": 60.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "设置",
+          "width": 60.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        }
+      ],
+      "tabs": [
+        {
+          "width": 96.65625,
+          "height": 44,
+          "x": 15,
+          "right": 111.65625
+        },
+        {
+          "width": 96.671875,
+          "height": 44,
+          "x": 111.65625,
+          "right": 208.328125
+        },
+        {
+          "width": 96.65625,
+          "height": 44,
+          "x": 208.328125,
+          "right": 304.984375
+        }
+      ],
+      "dates": [],
+      "times": []
+    },
+    {
+      "state": "viewer",
+      "viewport": [
+        320,
+        568
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "记录类型，旅行日记",
+          "width": 112,
+          "height": 44,
+          "font": 22,
+          "radius": "999px"
+        },
+        {
+          "label": "切换孩子",
+          "width": 108,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "时间线",
+          "width": 96.65625,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "轨迹回放",
+          "width": 96.671875,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "地图点亮",
+          "width": 96.65625,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看2026-10-24 14:30的照片",
+          "width": 124.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看2026-10-24 时刻未知的照片",
+          "width": 124.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看照片",
+          "width": 257,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看2026-10-03 14:30的照片",
+          "width": 124.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看2026-10-03 时刻未知的照片",
+          "width": 124.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看照片",
+          "width": 257,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看到访",
+          "width": 257,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看下一组",
+          "width": 296,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "今日",
+          "width": 60.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "日程",
+          "width": 60.8125,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "记录",
+          "width": 60.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "报表",
+          "width": 60.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "设置",
+          "width": 60.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        }
+      ],
+      "tabs": [
+        {
+          "width": 96.65625,
+          "height": 44,
+          "x": 15,
+          "right": 111.65625
+        },
+        {
+          "width": 96.671875,
+          "height": 44,
+          "x": 111.65625,
+          "right": 208.328125
+        },
+        {
+          "width": 96.65625,
+          "height": 44,
+          "x": 208.328125,
+          "right": 304.984375
+        }
+      ],
+      "dates": [
+        "2026-10-24",
+        "2026-10-03",
+        "2026-09-18"
+      ],
+      "times": [
+        "14:30",
+        "时刻未知",
+        "10:20",
+        "时刻未知"
+      ]
+    },
+    {
+      "state": "long",
+      "viewport": [
+        320,
+        568
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "记录类型，旅行日记",
+          "width": 112,
+          "height": 44,
+          "font": 22,
+          "radius": "999px"
+        },
+        {
+          "label": "切换孩子",
+          "width": 262,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "更多足迹操作",
+          "width": 44,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "时间线",
+          "width": 96.65625,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "轨迹回放",
+          "width": 96.671875,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "地图点亮",
+          "width": 96.65625,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看待整理照片",
+          "width": 122,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看2026-10-24 14:30的照片",
+          "width": 124.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看2026-10-24 时刻未知的照片",
+          "width": 124.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看照片",
+          "width": 257,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看2026-10-03 14:30的照片",
+          "width": 124.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看2026-10-03 时刻未知的照片",
+          "width": 124.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看照片",
+          "width": 257,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看到访",
+          "width": 257,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看下一组",
+          "width": 296,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "导入照片",
+          "width": 296,
+          "height": 48,
+          "font": 16,
+          "radius": "999px"
+        },
+        {
+          "label": "今日",
+          "width": 60.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "日程",
+          "width": 60.8125,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "记录",
+          "width": 60.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "报表",
+          "width": 60.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "设置",
+          "width": 60.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        }
+      ],
+      "tabs": [
+        {
+          "width": 96.65625,
+          "height": 44,
+          "x": 15,
+          "right": 111.65625
+        },
+        {
+          "width": 96.671875,
+          "height": 44,
+          "x": 111.65625,
+          "right": 208.328125
+        },
+        {
+          "width": 96.65625,
+          "height": 44,
+          "x": 208.328125,
+          "right": 304.984375
+        }
+      ],
+      "dates": [
+        "2026-10-24",
+        "2026-10-03",
+        "2026-09-18"
+      ],
+      "times": [
+        "14:30",
+        "时刻未知",
+        "10:20",
+        "时刻未知"
+      ]
+    },
+    {
+      "state": "playback",
+      "viewport": [
+        320,
+        568
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "记录类型，旅行日记",
+          "width": 112,
+          "height": 44,
+          "font": 22,
+          "radius": "999px"
+        },
+        {
+          "label": "切换孩子",
+          "width": 108,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "更多足迹操作",
+          "width": 44,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "时间线",
+          "width": 96.65625,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "轨迹回放",
+          "width": 96.671875,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "地图点亮",
+          "width": 96.65625,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看待整理照片",
+          "width": 122,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "播放",
+          "width": 54.109375,
+          "height": 64.78125,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看照片",
+          "width": 264,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "导入照片",
+          "width": 296,
+          "height": 48,
+          "font": 16,
+          "radius": "999px"
+        },
+        {
+          "label": "今日",
+          "width": 60.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "日程",
+          "width": 60.8125,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "记录",
+          "width": 60.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "报表",
+          "width": 60.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "设置",
+          "width": 60.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        }
+      ],
+      "tabs": [
+        {
+          "width": 96.65625,
+          "height": 44,
+          "x": 15,
+          "right": 111.65625
+        },
+        {
+          "width": 96.671875,
+          "height": 44,
+          "x": 111.65625,
+          "right": 208.328125
+        },
+        {
+          "width": 96.65625,
+          "height": 44,
+          "x": 208.328125,
+          "right": 304.984375
+        }
+      ],
+      "dates": [],
+      "times": []
+    },
+    {
+      "state": "lit",
+      "viewport": [
+        320,
+        568
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "记录类型，旅行日记",
+          "width": 112,
+          "height": 44,
+          "font": 22,
+          "radius": "999px"
+        },
+        {
+          "label": "切换孩子",
+          "width": 108,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "更多足迹操作",
+          "width": 44,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "时间线",
+          "width": 96.65625,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "轨迹回放",
+          "width": 96.671875,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "地图点亮",
+          "width": 96.65625,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看待整理照片",
+          "width": 122,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "主要区域",
+          "width": 93.328125,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "中国",
+          "width": 93.34375,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "看全球",
+          "width": 93.328125,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "导入照片",
+          "width": 296,
+          "height": 48,
+          "font": 16,
+          "radius": "999px"
+        },
+        {
+          "label": "今日",
+          "width": 60.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "日程",
+          "width": 60.8125,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "记录",
+          "width": 60.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "报表",
+          "width": 60.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "设置",
+          "width": 60.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        }
+      ],
+      "tabs": [
+        {
+          "width": 96.65625,
+          "height": 44,
+          "x": 15,
+          "right": 111.65625
+        },
+        {
+          "width": 96.671875,
+          "height": 44,
+          "x": 111.65625,
+          "right": 208.328125
+        },
+        {
+          "width": 96.65625,
+          "height": 44,
+          "x": 208.328125,
+          "right": 304.984375
+        }
+      ],
+      "dates": [],
+      "times": []
+    },
+    {
+      "state": "settings",
+      "viewport": [
+        320,
+        568
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "记录类型，旅行日记",
+          "width": 112,
+          "height": 44,
+          "font": 22,
+          "radius": "999px"
+        },
+        {
+          "label": "切换孩子",
+          "width": 108,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "更多足迹操作",
+          "width": 44,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "时间线",
+          "width": 96.65625,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "轨迹回放",
+          "width": 96.671875,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "地图点亮",
+          "width": 96.65625,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看待整理照片",
+          "width": 122,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看2026-10-24 14:30的照片",
+          "width": 124.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看2026-10-24 时刻未知的照片",
+          "width": 124.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看照片",
+          "width": 257,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看2026-10-03 14:30的照片",
+          "width": 124.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看2026-10-03 时刻未知的照片",
+          "width": 124.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看照片",
+          "width": 257,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看到访",
+          "width": 257,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看下一组",
+          "width": 296,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "导入照片",
+          "width": 296,
+          "height": 48,
+          "font": 16,
+          "radius": "999px"
+        },
+        {
+          "label": "今日",
+          "width": 60.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "日程",
+          "width": 60.8125,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "记录",
+          "width": 60.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "报表",
+          "width": 60.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "设置",
+          "width": 60.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "关闭",
+          "width": 48,
+          "height": 48,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "AI 地点候选",
+          "width": 288,
+          "height": 48,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "保存设置",
+          "width": 288,
+          "height": 48,
+          "font": 16,
+          "radius": "999px"
+        }
+      ],
+      "tabs": [
+        {
+          "width": 96.65625,
+          "height": 44,
+          "x": 15,
+          "right": 111.65625
+        },
+        {
+          "width": 96.671875,
+          "height": 44,
+          "x": 111.65625,
+          "right": 208.328125
+        },
+        {
+          "width": 96.65625,
+          "height": 44,
+          "x": 208.328125,
+          "right": 304.984375
+        }
+      ],
+      "dates": [
+        "2026-10-24",
+        "2026-10-03",
+        "2026-09-18"
+      ],
+      "times": [
+        "14:30",
+        "时刻未知",
+        "10:20",
+        "时刻未知"
+      ]
+    },
+    {
+      "state": "saving",
+      "viewport": [
+        320,
+        568
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "记录类型，旅行日记",
+          "width": 112,
+          "height": 44,
+          "font": 22,
+          "radius": "999px"
+        },
+        {
+          "label": "切换孩子",
+          "width": 108,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "更多足迹操作",
+          "width": 44,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "时间线",
+          "width": 96.65625,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "轨迹回放",
+          "width": 96.671875,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "地图点亮",
+          "width": 96.65625,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看待整理照片",
+          "width": 122,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看2026-10-24 14:30的照片",
+          "width": 124.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看2026-10-24 时刻未知的照片",
+          "width": 124.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看照片",
+          "width": 257,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看2026-10-03 14:30的照片",
+          "width": 124.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看2026-10-03 时刻未知的照片",
+          "width": 124.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看照片",
+          "width": 257,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看到访",
+          "width": 257,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看下一组",
+          "width": 296,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "导入照片",
+          "width": 296,
+          "height": 48,
+          "font": 16,
+          "radius": "999px"
+        },
+        {
+          "label": "今日",
+          "width": 60.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "日程",
+          "width": 60.8125,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "记录",
+          "width": 60.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "报表",
+          "width": 60.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "设置",
+          "width": 60.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "关闭",
+          "width": 48,
+          "height": 48,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "AI 地点候选",
+          "width": 288,
+          "height": 48,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "正在保存…",
+          "width": 288,
+          "height": 48,
+          "font": 16,
+          "radius": "999px"
+        }
+      ],
+      "tabs": [
+        {
+          "width": 96.65625,
+          "height": 44,
+          "x": 15,
+          "right": 111.65625
+        },
+        {
+          "width": 96.671875,
+          "height": 44,
+          "x": 111.65625,
+          "right": 208.328125
+        },
+        {
+          "width": 96.65625,
+          "height": 44,
+          "x": 208.328125,
+          "right": 304.984375
+        }
+      ],
+      "dates": [
+        "2026-10-24",
+        "2026-10-03",
+        "2026-09-18"
+      ],
+      "times": [
+        "14:30",
+        "时刻未知",
+        "10:20",
+        "时刻未知"
+      ]
+    },
+    {
+      "state": "photo",
+      "viewport": [
+        320,
+        568
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "记录类型，旅行日记",
+          "width": 112,
+          "height": 44,
+          "font": 22,
+          "radius": "999px"
+        },
+        {
+          "label": "切换孩子",
+          "width": 108,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "更多足迹操作",
+          "width": 44,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "时间线",
+          "width": 96.65625,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "轨迹回放",
+          "width": 96.671875,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "地图点亮",
+          "width": 96.65625,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看待整理照片",
+          "width": 122,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看2026-10-24 14:30的照片",
+          "width": 124.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看2026-10-24 时刻未知的照片",
+          "width": 124.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看照片",
+          "width": 257,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看2026-10-03 14:30的照片",
+          "width": 124.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看2026-10-03 时刻未知的照片",
+          "width": 124.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看照片",
+          "width": 257,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看到访",
+          "width": 257,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看下一组",
+          "width": 296,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "导入照片",
+          "width": 296,
+          "height": 48,
+          "font": 16,
+          "radius": "999px"
+        },
+        {
+          "label": "今日",
+          "width": 60.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "日程",
+          "width": 60.8125,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "记录",
+          "width": 60.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "报表",
+          "width": 60.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "设置",
+          "width": 60.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "关闭",
+          "width": 48,
+          "height": 48,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "修改日期和地点",
+          "width": 288,
+          "height": 48,
+          "font": 16,
+          "radius": "999px"
+        }
+      ],
+      "tabs": [
+        {
+          "width": 96.65625,
+          "height": 44,
+          "x": 15,
+          "right": 111.65625
+        },
+        {
+          "width": 96.671875,
+          "height": 44,
+          "x": 111.65625,
+          "right": 208.328125
+        },
+        {
+          "width": 96.65625,
+          "height": 44,
+          "x": 208.328125,
+          "right": 304.984375
+        }
+      ],
+      "dates": [
+        "2026-10-24",
+        "2026-10-03",
+        "2026-09-18"
+      ],
+      "times": [
+        "14:30",
+        "时刻未知",
+        "10:20",
+        "时刻未知"
+      ]
+    },
+    {
+      "state": "older_window",
+      "viewport": [
+        320,
+        568
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "记录类型，旅行日记",
+          "width": 112,
+          "height": 44,
+          "font": 22,
+          "radius": "999px"
+        },
+        {
+          "label": "切换孩子",
+          "width": 108,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "更多足迹操作",
+          "width": 44,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "时间线",
+          "width": 96.65625,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "轨迹回放",
+          "width": 96.671875,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "地图点亮",
+          "width": 96.65625,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看待整理照片",
+          "width": 122,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看2026-09-18 14:30的照片",
+          "width": 124.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看2026-09-18 时刻未知的照片",
+          "width": 124.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看照片",
+          "width": 257,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看到访",
+          "width": 257,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看下一组",
+          "width": 296,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "导入照片",
+          "width": 296,
+          "height": 48,
+          "font": 16,
+          "radius": "999px"
+        },
+        {
+          "label": "今日",
+          "width": 60.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "日程",
+          "width": 60.8125,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "记录",
+          "width": 60.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "报表",
+          "width": 60.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "设置",
+          "width": 60.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        }
+      ],
+      "tabs": [
+        {
+          "width": 96.65625,
+          "height": 44,
+          "x": 15,
+          "right": 111.65625
+        },
+        {
+          "width": 96.671875,
+          "height": 44,
+          "x": 111.65625,
+          "right": 208.328125
+        },
+        {
+          "width": 96.65625,
+          "height": 44,
+          "x": 208.328125,
+          "right": 304.984375
+        }
+      ],
+      "dates": [
+        "2026-09-18",
+        "2026-08-30"
+      ],
+      "times": [
+        "14:30",
+        "时刻未知"
+      ]
+    },
+    {
+      "state": "standalone",
+      "viewport": [
+        320,
+        568
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "切换孩子",
+          "width": 108,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "更多足迹操作",
+          "width": 44,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "时间线",
+          "width": 96.65625,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "轨迹回放",
+          "width": 96.671875,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "地图点亮",
+          "width": 96.65625,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看待整理照片",
+          "width": 122,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看2026-10-24 14:30的照片",
+          "width": 124.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看2026-10-24 时刻未知的照片",
+          "width": 124.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看照片",
+          "width": 257,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看2026-10-03 14:30的照片",
+          "width": 124.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看2026-10-03 时刻未知的照片",
+          "width": 124.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看照片",
+          "width": 257,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看到访",
+          "width": 257,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看下一组",
+          "width": 296,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "导入照片",
+          "width": 296,
+          "height": 48,
+          "font": 16,
+          "radius": "999px"
+        }
+      ],
+      "tabs": [
+        {
+          "width": 96.65625,
+          "height": 44,
+          "x": 15,
+          "right": 111.65625
+        },
+        {
+          "width": 96.671875,
+          "height": 44,
+          "x": 111.65625,
+          "right": 208.328125
+        },
+        {
+          "width": 96.65625,
+          "height": 44,
+          "x": 208.328125,
+          "right": 304.984375
+        }
+      ],
+      "dates": [
+        "2026-10-24",
+        "2026-10-03",
+        "2026-09-18"
+      ],
+      "times": [
+        "14:30",
+        "时刻未知",
+        "10:20",
+        "时刻未知"
+      ]
+    },
+    {
+      "state": "overview",
+      "viewport": [
+        390,
+        844
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "记录类型，旅行日记",
+          "width": 112,
+          "height": 44,
+          "font": 22,
+          "radius": "999px"
+        },
+        {
+          "label": "切换孩子",
+          "width": 108,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "更多足迹操作",
+          "width": 44,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "时间线",
+          "width": 117.328125,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "轨迹回放",
+          "width": 117.328125,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "地图点亮",
+          "width": 117.34375,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看待整理照片",
+          "width": 122,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看2026-10-24 14:30的照片",
+          "width": 155.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看2026-10-24 时刻未知的照片",
+          "width": 155.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看照片",
+          "width": 319,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看2026-10-03 14:30的照片",
+          "width": 155.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看2026-10-03 时刻未知的照片",
+          "width": 155.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看照片",
+          "width": 319,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看到访",
+          "width": 319,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看下一组",
+          "width": 358,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "导入照片",
+          "width": 358,
+          "height": 48,
+          "font": 16,
+          "radius": "999px"
+        },
+        {
+          "label": "今日",
+          "width": 74.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "日程",
+          "width": 74.8125,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "记录",
+          "width": 74.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "报表",
+          "width": 74.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "设置",
+          "width": 74.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        }
+      ],
+      "tabs": [
+        {
+          "width": 117.328125,
+          "height": 44,
+          "x": 19,
+          "right": 136.328125
+        },
+        {
+          "width": 117.328125,
+          "height": 44,
+          "x": 136.328125,
+          "right": 253.65625
+        },
+        {
+          "width": 117.34375,
+          "height": 44,
+          "x": 253.65625,
+          "right": 371
+        }
+      ],
+      "dates": [
+        "2026-10-24",
+        "2026-10-03",
+        "2026-09-18"
+      ],
+      "times": [
+        "14:30",
+        "时刻未知",
+        "10:20",
+        "时刻未知"
+      ]
+    },
+    {
+      "state": "preview_failed",
+      "viewport": [
+        390,
+        844
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "记录类型，旅行日记",
+          "width": 112,
+          "height": 44,
+          "font": 22,
+          "radius": "999px"
+        },
+        {
+          "label": "切换孩子",
+          "width": 108,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "更多足迹操作",
+          "width": 44,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "时间线",
+          "width": 117.328125,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "轨迹回放",
+          "width": 117.328125,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "地图点亮",
+          "width": 117.34375,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看待整理照片",
+          "width": 122,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看2026-10-24 14:30的照片",
+          "width": 155.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看2026-10-24 时刻未知的照片",
+          "width": 155.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看照片",
+          "width": 319,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看2026-10-03 14:30的照片",
+          "width": 155.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看2026-10-03 时刻未知的照片",
+          "width": 155.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看照片",
+          "width": 319,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看到访",
+          "width": 319,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看下一组",
+          "width": 358,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "导入照片",
+          "width": 358,
+          "height": 48,
+          "font": 16,
+          "radius": "999px"
+        },
+        {
+          "label": "今日",
+          "width": 74.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "日程",
+          "width": 74.8125,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "记录",
+          "width": 74.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "报表",
+          "width": 74.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "设置",
+          "width": 74.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        }
+      ],
+      "tabs": [
+        {
+          "width": 117.328125,
+          "height": 44,
+          "x": 19,
+          "right": 136.328125
+        },
+        {
+          "width": 117.328125,
+          "height": 44,
+          "x": 136.328125,
+          "right": 253.65625
+        },
+        {
+          "width": 117.34375,
+          "height": 44,
+          "x": 253.65625,
+          "right": 371
+        }
+      ],
+      "dates": [
+        "2026-10-24",
+        "2026-10-03",
+        "2026-09-18"
+      ],
+      "times": [
+        "14:30",
+        "时刻未知",
+        "10:20",
+        "时刻未知"
+      ]
+    },
+    {
+      "state": "empty",
+      "viewport": [
+        390,
+        844
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "记录类型，旅行日记",
+          "width": 112,
+          "height": 44,
+          "font": 22,
+          "radius": "999px"
+        },
+        {
+          "label": "切换孩子",
+          "width": 108,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "更多足迹操作",
+          "width": 44,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "时间线",
+          "width": 117.328125,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "轨迹回放",
+          "width": 117.328125,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "地图点亮",
+          "width": 117.34375,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看待整理照片",
+          "width": 122,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "手动记录",
+          "width": 80,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "导入照片",
+          "width": 358,
+          "height": 48,
+          "font": 16,
+          "radius": "999px"
+        },
+        {
+          "label": "今日",
+          "width": 74.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "日程",
+          "width": 74.8125,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "记录",
+          "width": 74.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "报表",
+          "width": 74.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "设置",
+          "width": 74.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        }
+      ],
+      "tabs": [
+        {
+          "width": 117.328125,
+          "height": 44,
+          "x": 19,
+          "right": 136.328125
+        },
+        {
+          "width": 117.328125,
+          "height": 44,
+          "x": 136.328125,
+          "right": 253.65625
+        },
+        {
+          "width": 117.34375,
+          "height": 44,
+          "x": 253.65625,
+          "right": 371
+        }
+      ],
+      "dates": [],
+      "times": []
+    },
+    {
+      "state": "loading",
+      "viewport": [
+        390,
+        844
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "记录类型，旅行日记",
+          "width": 112,
+          "height": 44,
+          "font": 22,
+          "radius": "999px"
+        },
+        {
+          "label": "切换孩子",
+          "width": 108,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "更多足迹操作",
+          "width": 44,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "时间线",
+          "width": 117.328125,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "轨迹回放",
+          "width": 117.328125,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "地图点亮",
+          "width": 117.34375,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看待整理照片",
+          "width": 122,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "今日",
+          "width": 74.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "日程",
+          "width": 74.8125,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "记录",
+          "width": 74.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "报表",
+          "width": 74.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "设置",
+          "width": 74.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        }
+      ],
+      "tabs": [
+        {
+          "width": 117.328125,
+          "height": 44,
+          "x": 19,
+          "right": 136.328125
+        },
+        {
+          "width": 117.328125,
+          "height": 44,
+          "x": 136.328125,
+          "right": 253.65625
+        },
+        {
+          "width": 117.34375,
+          "height": 44,
+          "x": 253.65625,
+          "right": 371
+        }
+      ],
+      "dates": [],
+      "times": []
+    },
+    {
+      "state": "error",
+      "viewport": [
+        390,
+        844
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "记录类型，旅行日记",
+          "width": 112,
+          "height": 44,
+          "font": 22,
+          "radius": "999px"
+        },
+        {
+          "label": "切换孩子",
+          "width": 108,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "更多足迹操作",
+          "width": 44,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "时间线",
+          "width": 117.328125,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "轨迹回放",
+          "width": 117.328125,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "地图点亮",
+          "width": 117.34375,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看待整理照片",
+          "width": 122,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "重新读取",
+          "width": 358,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "导入照片",
+          "width": 358,
+          "height": 48,
+          "font": 16,
+          "radius": "999px"
+        },
+        {
+          "label": "今日",
+          "width": 74.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "日程",
+          "width": 74.8125,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "记录",
+          "width": 74.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "报表",
+          "width": 74.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "设置",
+          "width": 74.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        }
+      ],
+      "tabs": [
+        {
+          "width": 117.328125,
+          "height": 44,
+          "x": 19,
+          "right": 136.328125
+        },
+        {
+          "width": 117.328125,
+          "height": 44,
+          "x": 136.328125,
+          "right": 253.65625
+        },
+        {
+          "width": 117.34375,
+          "height": 44,
+          "x": 253.65625,
+          "right": 371
+        }
+      ],
+      "dates": [],
+      "times": []
+    },
+    {
+      "state": "viewer",
+      "viewport": [
+        390,
+        844
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "记录类型，旅行日记",
+          "width": 112,
+          "height": 44,
+          "font": 22,
+          "radius": "999px"
+        },
+        {
+          "label": "切换孩子",
+          "width": 108,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "时间线",
+          "width": 117.328125,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "轨迹回放",
+          "width": 117.328125,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "地图点亮",
+          "width": 117.34375,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看2026-10-24 14:30的照片",
+          "width": 155.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看2026-10-24 时刻未知的照片",
+          "width": 155.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看照片",
+          "width": 319,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看2026-10-03 14:30的照片",
+          "width": 155.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看2026-10-03 时刻未知的照片",
+          "width": 155.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看照片",
+          "width": 319,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看到访",
+          "width": 319,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看下一组",
+          "width": 358,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "今日",
+          "width": 74.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "日程",
+          "width": 74.8125,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "记录",
+          "width": 74.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "报表",
+          "width": 74.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "设置",
+          "width": 74.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        }
+      ],
+      "tabs": [
+        {
+          "width": 117.328125,
+          "height": 44,
+          "x": 19,
+          "right": 136.328125
+        },
+        {
+          "width": 117.328125,
+          "height": 44,
+          "x": 136.328125,
+          "right": 253.65625
+        },
+        {
+          "width": 117.34375,
+          "height": 44,
+          "x": 253.65625,
+          "right": 371
+        }
+      ],
+      "dates": [
+        "2026-10-24",
+        "2026-10-03",
+        "2026-09-18"
+      ],
+      "times": [
+        "14:30",
+        "时刻未知",
+        "10:20",
+        "时刻未知"
+      ]
+    },
+    {
+      "state": "long",
+      "viewport": [
+        390,
+        844
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "记录类型，旅行日记",
+          "width": 112,
+          "height": 44,
+          "font": 22,
+          "radius": "999px"
+        },
+        {
+          "label": "切换孩子",
+          "width": 262,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "更多足迹操作",
+          "width": 44,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "时间线",
+          "width": 117.328125,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "轨迹回放",
+          "width": 117.328125,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "地图点亮",
+          "width": 117.34375,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看待整理照片",
+          "width": 122,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看2026-10-24 14:30的照片",
+          "width": 155.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看2026-10-24 时刻未知的照片",
+          "width": 155.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看照片",
+          "width": 319,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看2026-10-03 14:30的照片",
+          "width": 155.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看2026-10-03 时刻未知的照片",
+          "width": 155.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看照片",
+          "width": 319,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看到访",
+          "width": 319,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看下一组",
+          "width": 358,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "导入照片",
+          "width": 358,
+          "height": 48,
+          "font": 16,
+          "radius": "999px"
+        },
+        {
+          "label": "今日",
+          "width": 74.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "日程",
+          "width": 74.8125,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "记录",
+          "width": 74.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "报表",
+          "width": 74.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "设置",
+          "width": 74.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        }
+      ],
+      "tabs": [
+        {
+          "width": 117.328125,
+          "height": 44,
+          "x": 19,
+          "right": 136.328125
+        },
+        {
+          "width": 117.328125,
+          "height": 44,
+          "x": 136.328125,
+          "right": 253.65625
+        },
+        {
+          "width": 117.34375,
+          "height": 44,
+          "x": 253.65625,
+          "right": 371
+        }
+      ],
+      "dates": [
+        "2026-10-24",
+        "2026-10-03",
+        "2026-09-18"
+      ],
+      "times": [
+        "14:30",
+        "时刻未知",
+        "10:20",
+        "时刻未知"
+      ]
+    },
+    {
+      "state": "playback",
+      "viewport": [
+        390,
+        844
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "记录类型，旅行日记",
+          "width": 112,
+          "height": 44,
+          "font": 22,
+          "radius": "999px"
+        },
+        {
+          "label": "切换孩子",
+          "width": 108,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "更多足迹操作",
+          "width": 44,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "时间线",
+          "width": 117.328125,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "轨迹回放",
+          "width": 117.328125,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "地图点亮",
+          "width": 117.34375,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看待整理照片",
+          "width": 122,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "播放",
+          "width": 55.84375,
+          "height": 64.78125,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看照片",
+          "width": 326,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "导入照片",
+          "width": 358,
+          "height": 48,
+          "font": 16,
+          "radius": "999px"
+        },
+        {
+          "label": "今日",
+          "width": 74.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "日程",
+          "width": 74.8125,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "记录",
+          "width": 74.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "报表",
+          "width": 74.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "设置",
+          "width": 74.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        }
+      ],
+      "tabs": [
+        {
+          "width": 117.328125,
+          "height": 44,
+          "x": 19,
+          "right": 136.328125
+        },
+        {
+          "width": 117.328125,
+          "height": 44,
+          "x": 136.328125,
+          "right": 253.65625
+        },
+        {
+          "width": 117.34375,
+          "height": 44,
+          "x": 253.65625,
+          "right": 371
+        }
+      ],
+      "dates": [],
+      "times": []
+    },
+    {
+      "state": "lit",
+      "viewport": [
+        390,
+        844
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "记录类型，旅行日记",
+          "width": 112,
+          "height": 44,
+          "font": 22,
+          "radius": "999px"
+        },
+        {
+          "label": "切换孩子",
+          "width": 108,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "更多足迹操作",
+          "width": 44,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "时间线",
+          "width": 117.328125,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "轨迹回放",
+          "width": 117.328125,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "地图点亮",
+          "width": 117.34375,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看待整理照片",
+          "width": 122,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "主要区域",
+          "width": 114,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "中国",
+          "width": 114,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "看全球",
+          "width": 114,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "导入照片",
+          "width": 358,
+          "height": 48,
+          "font": 16,
+          "radius": "999px"
+        },
+        {
+          "label": "今日",
+          "width": 74.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "日程",
+          "width": 74.8125,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "记录",
+          "width": 74.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "报表",
+          "width": 74.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "设置",
+          "width": 74.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        }
+      ],
+      "tabs": [
+        {
+          "width": 117.328125,
+          "height": 44,
+          "x": 19,
+          "right": 136.328125
+        },
+        {
+          "width": 117.328125,
+          "height": 44,
+          "x": 136.328125,
+          "right": 253.65625
+        },
+        {
+          "width": 117.34375,
+          "height": 44,
+          "x": 253.65625,
+          "right": 371
+        }
+      ],
+      "dates": [],
+      "times": []
+    },
+    {
+      "state": "settings",
+      "viewport": [
+        390,
+        844
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "记录类型，旅行日记",
+          "width": 112,
+          "height": 44,
+          "font": 22,
+          "radius": "999px"
+        },
+        {
+          "label": "切换孩子",
+          "width": 108,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "更多足迹操作",
+          "width": 44,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "时间线",
+          "width": 117.328125,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "轨迹回放",
+          "width": 117.328125,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "地图点亮",
+          "width": 117.34375,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看待整理照片",
+          "width": 122,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看2026-10-24 14:30的照片",
+          "width": 155.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看2026-10-24 时刻未知的照片",
+          "width": 155.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看照片",
+          "width": 319,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看2026-10-03 14:30的照片",
+          "width": 155.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看2026-10-03 时刻未知的照片",
+          "width": 155.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看照片",
+          "width": 319,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看到访",
+          "width": 319,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看下一组",
+          "width": 358,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "导入照片",
+          "width": 358,
+          "height": 48,
+          "font": 16,
+          "radius": "999px"
+        },
+        {
+          "label": "今日",
+          "width": 74.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "日程",
+          "width": 74.8125,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "记录",
+          "width": 74.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "报表",
+          "width": 74.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "设置",
+          "width": 74.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "关闭",
+          "width": 48,
+          "height": 48,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "AI 地点候选",
+          "width": 358,
+          "height": 48,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "保存设置",
+          "width": 358,
+          "height": 48,
+          "font": 16,
+          "radius": "999px"
+        }
+      ],
+      "tabs": [
+        {
+          "width": 117.328125,
+          "height": 44,
+          "x": 19,
+          "right": 136.328125
+        },
+        {
+          "width": 117.328125,
+          "height": 44,
+          "x": 136.328125,
+          "right": 253.65625
+        },
+        {
+          "width": 117.34375,
+          "height": 44,
+          "x": 253.65625,
+          "right": 371
+        }
+      ],
+      "dates": [
+        "2026-10-24",
+        "2026-10-03",
+        "2026-09-18"
+      ],
+      "times": [
+        "14:30",
+        "时刻未知",
+        "10:20",
+        "时刻未知"
+      ]
+    },
+    {
+      "state": "saving",
+      "viewport": [
+        390,
+        844
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "记录类型，旅行日记",
+          "width": 112,
+          "height": 44,
+          "font": 22,
+          "radius": "999px"
+        },
+        {
+          "label": "切换孩子",
+          "width": 108,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "更多足迹操作",
+          "width": 44,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "时间线",
+          "width": 117.328125,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "轨迹回放",
+          "width": 117.328125,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "地图点亮",
+          "width": 117.34375,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看待整理照片",
+          "width": 122,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看2026-10-24 14:30的照片",
+          "width": 155.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看2026-10-24 时刻未知的照片",
+          "width": 155.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看照片",
+          "width": 319,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看2026-10-03 14:30的照片",
+          "width": 155.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看2026-10-03 时刻未知的照片",
+          "width": 155.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看照片",
+          "width": 319,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看到访",
+          "width": 319,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看下一组",
+          "width": 358,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "导入照片",
+          "width": 358,
+          "height": 48,
+          "font": 16,
+          "radius": "999px"
+        },
+        {
+          "label": "今日",
+          "width": 74.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "日程",
+          "width": 74.8125,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "记录",
+          "width": 74.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "报表",
+          "width": 74.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "设置",
+          "width": 74.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "关闭",
+          "width": 48,
+          "height": 48,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "AI 地点候选",
+          "width": 358,
+          "height": 48,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "正在保存…",
+          "width": 358,
+          "height": 48,
+          "font": 16,
+          "radius": "999px"
+        }
+      ],
+      "tabs": [
+        {
+          "width": 117.328125,
+          "height": 44,
+          "x": 19,
+          "right": 136.328125
+        },
+        {
+          "width": 117.328125,
+          "height": 44,
+          "x": 136.328125,
+          "right": 253.65625
+        },
+        {
+          "width": 117.34375,
+          "height": 44,
+          "x": 253.65625,
+          "right": 371
+        }
+      ],
+      "dates": [
+        "2026-10-24",
+        "2026-10-03",
+        "2026-09-18"
+      ],
+      "times": [
+        "14:30",
+        "时刻未知",
+        "10:20",
+        "时刻未知"
+      ]
+    },
+    {
+      "state": "photo",
+      "viewport": [
+        390,
+        844
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "记录类型，旅行日记",
+          "width": 112,
+          "height": 44,
+          "font": 22,
+          "radius": "999px"
+        },
+        {
+          "label": "切换孩子",
+          "width": 108,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "更多足迹操作",
+          "width": 44,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "时间线",
+          "width": 117.328125,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "轨迹回放",
+          "width": 117.328125,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "地图点亮",
+          "width": 117.34375,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看待整理照片",
+          "width": 122,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看2026-10-24 14:30的照片",
+          "width": 155.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看2026-10-24 时刻未知的照片",
+          "width": 155.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看照片",
+          "width": 319,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看2026-10-03 14:30的照片",
+          "width": 155.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看2026-10-03 时刻未知的照片",
+          "width": 155.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看照片",
+          "width": 319,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看到访",
+          "width": 319,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看下一组",
+          "width": 358,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "导入照片",
+          "width": 358,
+          "height": 48,
+          "font": 16,
+          "radius": "999px"
+        },
+        {
+          "label": "今日",
+          "width": 74.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "日程",
+          "width": 74.8125,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "记录",
+          "width": 74.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "报表",
+          "width": 74.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "设置",
+          "width": 74.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "关闭",
+          "width": 48,
+          "height": 48,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "修改日期和地点",
+          "width": 358,
+          "height": 48,
+          "font": 16,
+          "radius": "999px"
+        }
+      ],
+      "tabs": [
+        {
+          "width": 117.328125,
+          "height": 44,
+          "x": 19,
+          "right": 136.328125
+        },
+        {
+          "width": 117.328125,
+          "height": 44,
+          "x": 136.328125,
+          "right": 253.65625
+        },
+        {
+          "width": 117.34375,
+          "height": 44,
+          "x": 253.65625,
+          "right": 371
+        }
+      ],
+      "dates": [
+        "2026-10-24",
+        "2026-10-03",
+        "2026-09-18"
+      ],
+      "times": [
+        "14:30",
+        "时刻未知",
+        "10:20",
+        "时刻未知"
+      ]
+    },
+    {
+      "state": "older_window",
+      "viewport": [
+        390,
+        844
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "记录类型，旅行日记",
+          "width": 112,
+          "height": 44,
+          "font": 22,
+          "radius": "999px"
+        },
+        {
+          "label": "切换孩子",
+          "width": 108,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "更多足迹操作",
+          "width": 44,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "时间线",
+          "width": 117.328125,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "轨迹回放",
+          "width": 117.328125,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "地图点亮",
+          "width": 117.34375,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看待整理照片",
+          "width": 122,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看2026-09-18 14:30的照片",
+          "width": 155.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看2026-09-18 时刻未知的照片",
+          "width": 155.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看照片",
+          "width": 319,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看到访",
+          "width": 319,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看下一组",
+          "width": 358,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "导入照片",
+          "width": 358,
+          "height": 48,
+          "font": 16,
+          "radius": "999px"
+        },
+        {
+          "label": "今日",
+          "width": 74.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "日程",
+          "width": 74.8125,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "记录",
+          "width": 74.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "报表",
+          "width": 74.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "设置",
+          "width": 74.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        }
+      ],
+      "tabs": [
+        {
+          "width": 117.328125,
+          "height": 44,
+          "x": 19,
+          "right": 136.328125
+        },
+        {
+          "width": 117.328125,
+          "height": 44,
+          "x": 136.328125,
+          "right": 253.65625
+        },
+        {
+          "width": 117.34375,
+          "height": 44,
+          "x": 253.65625,
+          "right": 371
+        }
+      ],
+      "dates": [
+        "2026-09-18",
+        "2026-08-30"
+      ],
+      "times": [
+        "14:30",
+        "时刻未知"
+      ]
+    },
+    {
+      "state": "standalone",
+      "viewport": [
+        390,
+        844
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "切换孩子",
+          "width": 108,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "更多足迹操作",
+          "width": 44,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "时间线",
+          "width": 117.328125,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "轨迹回放",
+          "width": 117.328125,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "地图点亮",
+          "width": 117.34375,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看待整理照片",
+          "width": 122,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看2026-10-24 14:30的照片",
+          "width": 155.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看2026-10-24 时刻未知的照片",
+          "width": 155.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看照片",
+          "width": 319,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看2026-10-03 14:30的照片",
+          "width": 155.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看2026-10-03 时刻未知的照片",
+          "width": 155.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看照片",
+          "width": 319,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看到访",
+          "width": 319,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看下一组",
+          "width": 358,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "导入照片",
+          "width": 358,
+          "height": 48,
+          "font": 16,
+          "radius": "999px"
+        }
+      ],
+      "tabs": [
+        {
+          "width": 117.328125,
+          "height": 44,
+          "x": 19,
+          "right": 136.328125
+        },
+        {
+          "width": 117.328125,
+          "height": 44,
+          "x": 136.328125,
+          "right": 253.65625
+        },
+        {
+          "width": 117.34375,
+          "height": 44,
+          "x": 253.65625,
+          "right": 371
+        }
+      ],
+      "dates": [
+        "2026-10-24",
+        "2026-10-03",
+        "2026-09-18"
+      ],
+      "times": [
+        "14:30",
+        "时刻未知",
+        "10:20",
+        "时刻未知"
+      ]
+    },
+    {
+      "state": "overview",
+      "viewport": [
+        430,
+        932
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "记录类型，旅行日记",
+          "width": 112,
+          "height": 44,
+          "font": 22,
+          "radius": "999px"
+        },
+        {
+          "label": "切换孩子",
+          "width": 108,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "更多足迹操作",
+          "width": 44,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "时间线",
+          "width": 130.65625,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "轨迹回放",
+          "width": 130.671875,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "地图点亮",
+          "width": 130.671875,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看待整理照片",
+          "width": 122,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看2026-10-24 14:30的照片",
+          "width": 175.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看2026-10-24 时刻未知的照片",
+          "width": 175.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看照片",
+          "width": 359,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看2026-10-03 14:30的照片",
+          "width": 175.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看2026-10-03 时刻未知的照片",
+          "width": 175.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看照片",
+          "width": 359,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看到访",
+          "width": 359,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看下一组",
+          "width": 398,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "导入照片",
+          "width": 398,
+          "height": 48,
+          "font": 16,
+          "radius": "999px"
+        },
+        {
+          "label": "今日",
+          "width": 82.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "日程",
+          "width": 82.8125,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "记录",
+          "width": 82.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "报表",
+          "width": 82.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "设置",
+          "width": 82.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        }
+      ],
+      "tabs": [
+        {
+          "width": 130.65625,
+          "height": 44,
+          "x": 19,
+          "right": 149.65625
+        },
+        {
+          "width": 130.671875,
+          "height": 44,
+          "x": 149.65625,
+          "right": 280.328125
+        },
+        {
+          "width": 130.671875,
+          "height": 44,
+          "x": 280.328125,
+          "right": 411
+        }
+      ],
+      "dates": [
+        "2026-10-24",
+        "2026-10-03",
+        "2026-09-18"
+      ],
+      "times": [
+        "14:30",
+        "时刻未知",
+        "10:20",
+        "时刻未知"
+      ]
+    },
+    {
+      "state": "preview_failed",
+      "viewport": [
+        430,
+        932
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "记录类型，旅行日记",
+          "width": 112,
+          "height": 44,
+          "font": 22,
+          "radius": "999px"
+        },
+        {
+          "label": "切换孩子",
+          "width": 108,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "更多足迹操作",
+          "width": 44,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "时间线",
+          "width": 130.65625,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "轨迹回放",
+          "width": 130.671875,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "地图点亮",
+          "width": 130.671875,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看待整理照片",
+          "width": 122,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看2026-10-24 14:30的照片",
+          "width": 175.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看2026-10-24 时刻未知的照片",
+          "width": 175.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看照片",
+          "width": 359,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看2026-10-03 14:30的照片",
+          "width": 175.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看2026-10-03 时刻未知的照片",
+          "width": 175.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看照片",
+          "width": 359,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看到访",
+          "width": 359,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看下一组",
+          "width": 398,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "导入照片",
+          "width": 398,
+          "height": 48,
+          "font": 16,
+          "radius": "999px"
+        },
+        {
+          "label": "今日",
+          "width": 82.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "日程",
+          "width": 82.8125,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "记录",
+          "width": 82.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "报表",
+          "width": 82.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "设置",
+          "width": 82.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        }
+      ],
+      "tabs": [
+        {
+          "width": 130.65625,
+          "height": 44,
+          "x": 19,
+          "right": 149.65625
+        },
+        {
+          "width": 130.671875,
+          "height": 44,
+          "x": 149.65625,
+          "right": 280.328125
+        },
+        {
+          "width": 130.671875,
+          "height": 44,
+          "x": 280.328125,
+          "right": 411
+        }
+      ],
+      "dates": [
+        "2026-10-24",
+        "2026-10-03",
+        "2026-09-18"
+      ],
+      "times": [
+        "14:30",
+        "时刻未知",
+        "10:20",
+        "时刻未知"
+      ]
+    },
+    {
+      "state": "empty",
+      "viewport": [
+        430,
+        932
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "记录类型，旅行日记",
+          "width": 112,
+          "height": 44,
+          "font": 22,
+          "radius": "999px"
+        },
+        {
+          "label": "切换孩子",
+          "width": 108,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "更多足迹操作",
+          "width": 44,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "时间线",
+          "width": 130.65625,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "轨迹回放",
+          "width": 130.671875,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "地图点亮",
+          "width": 130.671875,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看待整理照片",
+          "width": 122,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "手动记录",
+          "width": 80,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "导入照片",
+          "width": 398,
+          "height": 48,
+          "font": 16,
+          "radius": "999px"
+        },
+        {
+          "label": "今日",
+          "width": 82.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "日程",
+          "width": 82.8125,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "记录",
+          "width": 82.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "报表",
+          "width": 82.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "设置",
+          "width": 82.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        }
+      ],
+      "tabs": [
+        {
+          "width": 130.65625,
+          "height": 44,
+          "x": 19,
+          "right": 149.65625
+        },
+        {
+          "width": 130.671875,
+          "height": 44,
+          "x": 149.65625,
+          "right": 280.328125
+        },
+        {
+          "width": 130.671875,
+          "height": 44,
+          "x": 280.328125,
+          "right": 411
+        }
+      ],
+      "dates": [],
+      "times": []
+    },
+    {
+      "state": "loading",
+      "viewport": [
+        430,
+        932
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "记录类型，旅行日记",
+          "width": 112,
+          "height": 44,
+          "font": 22,
+          "radius": "999px"
+        },
+        {
+          "label": "切换孩子",
+          "width": 108,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "更多足迹操作",
+          "width": 44,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "时间线",
+          "width": 130.65625,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "轨迹回放",
+          "width": 130.671875,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "地图点亮",
+          "width": 130.671875,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看待整理照片",
+          "width": 122,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "今日",
+          "width": 82.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "日程",
+          "width": 82.8125,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "记录",
+          "width": 82.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "报表",
+          "width": 82.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "设置",
+          "width": 82.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        }
+      ],
+      "tabs": [
+        {
+          "width": 130.65625,
+          "height": 44,
+          "x": 19,
+          "right": 149.65625
+        },
+        {
+          "width": 130.671875,
+          "height": 44,
+          "x": 149.65625,
+          "right": 280.328125
+        },
+        {
+          "width": 130.671875,
+          "height": 44,
+          "x": 280.328125,
+          "right": 411
+        }
+      ],
+      "dates": [],
+      "times": []
+    },
+    {
+      "state": "error",
+      "viewport": [
+        430,
+        932
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "记录类型，旅行日记",
+          "width": 112,
+          "height": 44,
+          "font": 22,
+          "radius": "999px"
+        },
+        {
+          "label": "切换孩子",
+          "width": 108,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "更多足迹操作",
+          "width": 44,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "时间线",
+          "width": 130.65625,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "轨迹回放",
+          "width": 130.671875,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "地图点亮",
+          "width": 130.671875,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看待整理照片",
+          "width": 122,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "重新读取",
+          "width": 398,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "导入照片",
+          "width": 398,
+          "height": 48,
+          "font": 16,
+          "radius": "999px"
+        },
+        {
+          "label": "今日",
+          "width": 82.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "日程",
+          "width": 82.8125,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "记录",
+          "width": 82.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "报表",
+          "width": 82.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "设置",
+          "width": 82.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        }
+      ],
+      "tabs": [
+        {
+          "width": 130.65625,
+          "height": 44,
+          "x": 19,
+          "right": 149.65625
+        },
+        {
+          "width": 130.671875,
+          "height": 44,
+          "x": 149.65625,
+          "right": 280.328125
+        },
+        {
+          "width": 130.671875,
+          "height": 44,
+          "x": 280.328125,
+          "right": 411
+        }
+      ],
+      "dates": [],
+      "times": []
+    },
+    {
+      "state": "viewer",
+      "viewport": [
+        430,
+        932
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "记录类型，旅行日记",
+          "width": 112,
+          "height": 44,
+          "font": 22,
+          "radius": "999px"
+        },
+        {
+          "label": "切换孩子",
+          "width": 108,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "时间线",
+          "width": 130.65625,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "轨迹回放",
+          "width": 130.671875,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "地图点亮",
+          "width": 130.671875,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看2026-10-24 14:30的照片",
+          "width": 175.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看2026-10-24 时刻未知的照片",
+          "width": 175.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看照片",
+          "width": 359,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看2026-10-03 14:30的照片",
+          "width": 175.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看2026-10-03 时刻未知的照片",
+          "width": 175.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看照片",
+          "width": 359,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看到访",
+          "width": 359,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看下一组",
+          "width": 398,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "今日",
+          "width": 82.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "日程",
+          "width": 82.8125,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "记录",
+          "width": 82.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "报表",
+          "width": 82.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "设置",
+          "width": 82.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        }
+      ],
+      "tabs": [
+        {
+          "width": 130.65625,
+          "height": 44,
+          "x": 19,
+          "right": 149.65625
+        },
+        {
+          "width": 130.671875,
+          "height": 44,
+          "x": 149.65625,
+          "right": 280.328125
+        },
+        {
+          "width": 130.671875,
+          "height": 44,
+          "x": 280.328125,
+          "right": 411
+        }
+      ],
+      "dates": [
+        "2026-10-24",
+        "2026-10-03",
+        "2026-09-18"
+      ],
+      "times": [
+        "14:30",
+        "时刻未知",
+        "10:20",
+        "时刻未知"
+      ]
+    },
+    {
+      "state": "long",
+      "viewport": [
+        430,
+        932
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "记录类型，旅行日记",
+          "width": 112,
+          "height": 44,
+          "font": 22,
+          "radius": "999px"
+        },
+        {
+          "label": "切换孩子",
+          "width": 262,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "更多足迹操作",
+          "width": 44,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "时间线",
+          "width": 130.65625,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "轨迹回放",
+          "width": 130.671875,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "地图点亮",
+          "width": 130.671875,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看待整理照片",
+          "width": 122,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看2026-10-24 14:30的照片",
+          "width": 175.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看2026-10-24 时刻未知的照片",
+          "width": 175.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看照片",
+          "width": 359,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看2026-10-03 14:30的照片",
+          "width": 175.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看2026-10-03 时刻未知的照片",
+          "width": 175.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看照片",
+          "width": 359,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看到访",
+          "width": 359,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看下一组",
+          "width": 398,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "导入照片",
+          "width": 398,
+          "height": 48,
+          "font": 16,
+          "radius": "999px"
+        },
+        {
+          "label": "今日",
+          "width": 82.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "日程",
+          "width": 82.8125,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "记录",
+          "width": 82.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "报表",
+          "width": 82.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "设置",
+          "width": 82.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        }
+      ],
+      "tabs": [
+        {
+          "width": 130.65625,
+          "height": 44,
+          "x": 19,
+          "right": 149.65625
+        },
+        {
+          "width": 130.671875,
+          "height": 44,
+          "x": 149.65625,
+          "right": 280.328125
+        },
+        {
+          "width": 130.671875,
+          "height": 44,
+          "x": 280.328125,
+          "right": 411
+        }
+      ],
+      "dates": [
+        "2026-10-24",
+        "2026-10-03",
+        "2026-09-18"
+      ],
+      "times": [
+        "14:30",
+        "时刻未知",
+        "10:20",
+        "时刻未知"
+      ]
+    },
+    {
+      "state": "playback",
+      "viewport": [
+        430,
+        932
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "记录类型，旅行日记",
+          "width": 112,
+          "height": 44,
+          "font": 22,
+          "radius": "999px"
+        },
+        {
+          "label": "切换孩子",
+          "width": 108,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "更多足迹操作",
+          "width": 44,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "时间线",
+          "width": 130.65625,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "轨迹回放",
+          "width": 130.671875,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "地图点亮",
+          "width": 130.671875,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看待整理照片",
+          "width": 122,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "播放",
+          "width": 56.671875,
+          "height": 64.78125,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看照片",
+          "width": 366,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "导入照片",
+          "width": 398,
+          "height": 48,
+          "font": 16,
+          "radius": "999px"
+        },
+        {
+          "label": "今日",
+          "width": 82.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "日程",
+          "width": 82.8125,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "记录",
+          "width": 82.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "报表",
+          "width": 82.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "设置",
+          "width": 82.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        }
+      ],
+      "tabs": [
+        {
+          "width": 130.65625,
+          "height": 44,
+          "x": 19,
+          "right": 149.65625
+        },
+        {
+          "width": 130.671875,
+          "height": 44,
+          "x": 149.65625,
+          "right": 280.328125
+        },
+        {
+          "width": 130.671875,
+          "height": 44,
+          "x": 280.328125,
+          "right": 411
+        }
+      ],
+      "dates": [],
+      "times": []
+    },
+    {
+      "state": "lit",
+      "viewport": [
+        430,
+        932
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "记录类型，旅行日记",
+          "width": 112,
+          "height": 44,
+          "font": 22,
+          "radius": "999px"
+        },
+        {
+          "label": "切换孩子",
+          "width": 108,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "更多足迹操作",
+          "width": 44,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "时间线",
+          "width": 130.65625,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "轨迹回放",
+          "width": 130.671875,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "地图点亮",
+          "width": 130.671875,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看待整理照片",
+          "width": 122,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "主要区域",
+          "width": 127.328125,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "中国",
+          "width": 127.34375,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "看全球",
+          "width": 127.328125,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "导入照片",
+          "width": 398,
+          "height": 48,
+          "font": 16,
+          "radius": "999px"
+        },
+        {
+          "label": "今日",
+          "width": 82.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "日程",
+          "width": 82.8125,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "记录",
+          "width": 82.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "报表",
+          "width": 82.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "设置",
+          "width": 82.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        }
+      ],
+      "tabs": [
+        {
+          "width": 130.65625,
+          "height": 44,
+          "x": 19,
+          "right": 149.65625
+        },
+        {
+          "width": 130.671875,
+          "height": 44,
+          "x": 149.65625,
+          "right": 280.328125
+        },
+        {
+          "width": 130.671875,
+          "height": 44,
+          "x": 280.328125,
+          "right": 411
+        }
+      ],
+      "dates": [],
+      "times": []
+    },
+    {
+      "state": "settings",
+      "viewport": [
+        430,
+        932
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "记录类型，旅行日记",
+          "width": 112,
+          "height": 44,
+          "font": 22,
+          "radius": "999px"
+        },
+        {
+          "label": "切换孩子",
+          "width": 108,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "更多足迹操作",
+          "width": 44,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "时间线",
+          "width": 130.65625,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "轨迹回放",
+          "width": 130.671875,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "地图点亮",
+          "width": 130.671875,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看待整理照片",
+          "width": 122,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看2026-10-24 14:30的照片",
+          "width": 175.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看2026-10-24 时刻未知的照片",
+          "width": 175.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看照片",
+          "width": 359,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看2026-10-03 14:30的照片",
+          "width": 175.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看2026-10-03 时刻未知的照片",
+          "width": 175.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看照片",
+          "width": 359,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看到访",
+          "width": 359,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看下一组",
+          "width": 398,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "导入照片",
+          "width": 398,
+          "height": 48,
+          "font": 16,
+          "radius": "999px"
+        },
+        {
+          "label": "今日",
+          "width": 82.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "日程",
+          "width": 82.8125,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "记录",
+          "width": 82.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "报表",
+          "width": 82.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "设置",
+          "width": 82.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "关闭",
+          "width": 48,
+          "height": 48,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "AI 地点候选",
+          "width": 398,
+          "height": 48,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "保存设置",
+          "width": 398,
+          "height": 48,
+          "font": 16,
+          "radius": "999px"
+        }
+      ],
+      "tabs": [
+        {
+          "width": 130.65625,
+          "height": 44,
+          "x": 19,
+          "right": 149.65625
+        },
+        {
+          "width": 130.671875,
+          "height": 44,
+          "x": 149.65625,
+          "right": 280.328125
+        },
+        {
+          "width": 130.671875,
+          "height": 44,
+          "x": 280.328125,
+          "right": 411
+        }
+      ],
+      "dates": [
+        "2026-10-24",
+        "2026-10-03",
+        "2026-09-18"
+      ],
+      "times": [
+        "14:30",
+        "时刻未知",
+        "10:20",
+        "时刻未知"
+      ]
+    },
+    {
+      "state": "saving",
+      "viewport": [
+        430,
+        932
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "记录类型，旅行日记",
+          "width": 112,
+          "height": 44,
+          "font": 22,
+          "radius": "999px"
+        },
+        {
+          "label": "切换孩子",
+          "width": 108,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "更多足迹操作",
+          "width": 44,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "时间线",
+          "width": 130.65625,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "轨迹回放",
+          "width": 130.671875,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "地图点亮",
+          "width": 130.671875,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看待整理照片",
+          "width": 122,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看2026-10-24 14:30的照片",
+          "width": 175.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看2026-10-24 时刻未知的照片",
+          "width": 175.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看照片",
+          "width": 359,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看2026-10-03 14:30的照片",
+          "width": 175.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看2026-10-03 时刻未知的照片",
+          "width": 175.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看照片",
+          "width": 359,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看到访",
+          "width": 359,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看下一组",
+          "width": 398,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "导入照片",
+          "width": 398,
+          "height": 48,
+          "font": 16,
+          "radius": "999px"
+        },
+        {
+          "label": "今日",
+          "width": 82.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "日程",
+          "width": 82.8125,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "记录",
+          "width": 82.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "报表",
+          "width": 82.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "设置",
+          "width": 82.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "关闭",
+          "width": 48,
+          "height": 48,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "AI 地点候选",
+          "width": 398,
+          "height": 48,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "正在保存…",
+          "width": 398,
+          "height": 48,
+          "font": 16,
+          "radius": "999px"
+        }
+      ],
+      "tabs": [
+        {
+          "width": 130.65625,
+          "height": 44,
+          "x": 19,
+          "right": 149.65625
+        },
+        {
+          "width": 130.671875,
+          "height": 44,
+          "x": 149.65625,
+          "right": 280.328125
+        },
+        {
+          "width": 130.671875,
+          "height": 44,
+          "x": 280.328125,
+          "right": 411
+        }
+      ],
+      "dates": [
+        "2026-10-24",
+        "2026-10-03",
+        "2026-09-18"
+      ],
+      "times": [
+        "14:30",
+        "时刻未知",
+        "10:20",
+        "时刻未知"
+      ]
+    },
+    {
+      "state": "photo",
+      "viewport": [
+        430,
+        932
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "记录类型，旅行日记",
+          "width": 112,
+          "height": 44,
+          "font": 22,
+          "radius": "999px"
+        },
+        {
+          "label": "切换孩子",
+          "width": 108,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "更多足迹操作",
+          "width": 44,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "时间线",
+          "width": 130.65625,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "轨迹回放",
+          "width": 130.671875,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "地图点亮",
+          "width": 130.671875,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看待整理照片",
+          "width": 122,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看2026-10-24 14:30的照片",
+          "width": 175.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看2026-10-24 时刻未知的照片",
+          "width": 175.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看照片",
+          "width": 359,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看2026-10-03 14:30的照片",
+          "width": 175.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看2026-10-03 时刻未知的照片",
+          "width": 175.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看照片",
+          "width": 359,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看到访",
+          "width": 359,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看下一组",
+          "width": 398,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "导入照片",
+          "width": 398,
+          "height": 48,
+          "font": 16,
+          "radius": "999px"
+        },
+        {
+          "label": "今日",
+          "width": 82.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "日程",
+          "width": 82.8125,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "记录",
+          "width": 82.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "报表",
+          "width": 82.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "设置",
+          "width": 82.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "关闭",
+          "width": 48,
+          "height": 48,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "修改日期和地点",
+          "width": 398,
+          "height": 48,
+          "font": 16,
+          "radius": "999px"
+        }
+      ],
+      "tabs": [
+        {
+          "width": 130.65625,
+          "height": 44,
+          "x": 19,
+          "right": 149.65625
+        },
+        {
+          "width": 130.671875,
+          "height": 44,
+          "x": 149.65625,
+          "right": 280.328125
+        },
+        {
+          "width": 130.671875,
+          "height": 44,
+          "x": 280.328125,
+          "right": 411
+        }
+      ],
+      "dates": [
+        "2026-10-24",
+        "2026-10-03",
+        "2026-09-18"
+      ],
+      "times": [
+        "14:30",
+        "时刻未知",
+        "10:20",
+        "时刻未知"
+      ]
+    },
+    {
+      "state": "older_window",
+      "viewport": [
+        430,
+        932
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "记录类型，旅行日记",
+          "width": 112,
+          "height": 44,
+          "font": 22,
+          "radius": "999px"
+        },
+        {
+          "label": "切换孩子",
+          "width": 108,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "更多足迹操作",
+          "width": 44,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "时间线",
+          "width": 130.65625,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "轨迹回放",
+          "width": 130.671875,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "地图点亮",
+          "width": 130.671875,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看待整理照片",
+          "width": 122,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看2026-09-18 14:30的照片",
+          "width": 175.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看2026-09-18 时刻未知的照片",
+          "width": 175.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看照片",
+          "width": 359,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看到访",
+          "width": 359,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看下一组",
+          "width": 398,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "导入照片",
+          "width": 398,
+          "height": 48,
+          "font": 16,
+          "radius": "999px"
+        },
+        {
+          "label": "今日",
+          "width": 82.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "日程",
+          "width": 82.8125,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "记录",
+          "width": 82.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "报表",
+          "width": 82.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "设置",
+          "width": 82.796875,
+          "height": 60.390625,
+          "font": 14,
+          "radius": "999px"
+        }
+      ],
+      "tabs": [
+        {
+          "width": 130.65625,
+          "height": 44,
+          "x": 19,
+          "right": 149.65625
+        },
+        {
+          "width": 130.671875,
+          "height": 44,
+          "x": 149.65625,
+          "right": 280.328125
+        },
+        {
+          "width": 130.671875,
+          "height": 44,
+          "x": 280.328125,
+          "right": 411
+        }
+      ],
+      "dates": [
+        "2026-09-18",
+        "2026-08-30"
+      ],
+      "times": [
+        "14:30",
+        "时刻未知"
+      ]
+    },
+    {
+      "state": "standalone",
+      "viewport": [
+        430,
+        932
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "切换孩子",
+          "width": 108,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "更多足迹操作",
+          "width": 44,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "时间线",
+          "width": 130.65625,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "轨迹回放",
+          "width": 130.671875,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "地图点亮",
+          "width": 130.671875,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看待整理照片",
+          "width": 122,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看2026-10-24 14:30的照片",
+          "width": 175.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看2026-10-24 时刻未知的照片",
+          "width": 175.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看照片",
+          "width": 359,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看2026-10-03 14:30的照片",
+          "width": 175.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看2026-10-03 时刻未知的照片",
+          "width": 175.5,
+          "height": 127,
+          "font": 14,
+          "radius": "12px"
+        },
+        {
+          "label": "查看照片",
+          "width": 359,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看到访",
+          "width": 359,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "查看下一组",
+          "width": 398,
+          "height": 44,
+          "font": 14,
+          "radius": "999px"
+        },
+        {
+          "label": "导入照片",
+          "width": 398,
+          "height": 48,
+          "font": 16,
+          "radius": "999px"
+        }
+      ],
+      "tabs": [
+        {
+          "width": 130.65625,
+          "height": 44,
+          "x": 19,
+          "right": 149.65625
+        },
+        {
+          "width": 130.671875,
+          "height": 44,
+          "x": 149.65625,
+          "right": 280.328125
+        },
+        {
+          "width": 130.671875,
+          "height": 44,
+          "x": 280.328125,
+          "right": 411
+        }
+      ],
+      "dates": [
+        "2026-10-24",
+        "2026-10-03",
+        "2026-09-18"
+      ],
+      "times": [
+        "14:30",
+        "时刻未知",
+        "10:20",
+        "时刻未知"
+      ]
+    }
+  ],
+  "interaction_viewports": [
+    [
+      320,
+      568
+    ],
+    [
+      390,
+      844
+    ],
+    [
+      430,
+      932
+    ]
+  ],
+  "network_requests": 0,
+  "production_changes": false,
+  "console_errors": [],
+  "detail_context_checks": [
+    {
+      "viewport": [
+        320,
+        568
+      ],
+      "unknown_time_context": "PASS",
+      "older_visit_context": "PASS",
+      "manual_no_fabricated_image": "PASS"
+    },
+    {
+      "viewport": [
+        390,
+        844
+      ],
+      "unknown_time_context": "PASS",
+      "older_visit_context": "PASS",
+      "manual_no_fabricated_image": "PASS"
+    },
+    {
+      "viewport": [
+        430,
+        932
+      ],
+      "unknown_time_context": "PASS",
+      "older_visit_context": "PASS",
+      "manual_no_fabricated_image": "PASS"
+    }
+  ]
+}

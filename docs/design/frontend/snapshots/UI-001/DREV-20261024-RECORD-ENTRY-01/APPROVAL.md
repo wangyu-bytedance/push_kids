@@ -13,7 +13,7 @@
 - Approved by: 产品负责人（用户）
 - Approved at: 2026-10-24
 - Approval evidence: 本聊天在Spec05及当前交互稿收尾后用户回复「可以」，唯一对应Spec05 + 本DREV01；本地实施/验证获批，上传/发布另行授权。
-- Superseded by: [DREV-20261024-FOOTPRINTS-MINIMAL-01](../../../prototypes/DREV-20261024-FOOTPRINTS-MINIMAL-01/FRONTEND-SPEC.md)仅覆盖旅行重复身份标题、次要入口与设置内容/高度，Spec01+DREV01于2026-10-24获批；其余记录入口/孩子/范围/导入合同继续有效。旧源与导出冻结。
+- Superseded by: [DREV-20261024-FOOTPRINTS-MINIMAL-01](../../../prototypes/DREV-20261024-FOOTPRINTS-MINIMAL-01/FRONTEND-SPEC.md)仅覆盖旅行重复身份标题、次要入口与设置内容/高度，Spec01+DREV01于2026-10-24获批；其余记录入口/孩子/范围/导入合同继续有效。旧源与导出冻结。; [DREV-20261024-FOOTPRINTS-TIMELINE-01](../../../prototypes/DREV-20261024-FOOTPRINTS-TIMELINE-01/FRONTEND-SPEC.md) covers ordinary button/view-control pills and timeline thumbnail time labels only; other flows/layout remain in their approved scope.
 
 合成内容；仅设计验证，未修改业务源码，不代表原生/真机或生产实施验收。
 

@@ -1,5 +1,9 @@
 # UI-001 — 家长端微信小程序
 
+2026-10-24旅行局部增量，revision UI-STATE-20261025-FOOTPRINTS-TIMELINE-02：[BUG-034 Spec01/Architecture01](../../../../specs/active/BUG-034-FOOTPRINTS-CONTROLS-TIMELINE.md)及DREV01获批本地实施，内嵌旅行页复用学习btn/seg胶囊与原日期倒序/游标，照片显示HH:mm/时刻未知，手动无伪图。records协调、学习输入/明确学习意图及五Tab合同不改。335项/320与390及430原生54组和390实际点击通过，2026-10-25补齐430，真机/用户验收开放；[本轮证据](../../../quality/evidence/footprints-timeline-20261024/README.md)，未上传。
+
+2026-10-24运行证据revision LATEST-037-01：Schema0025、获批CRUD readiness修复后的037 normal/100%，完整真实AppID本地客户端已打开，useCloud/env/service正确；20项真实微信GET全200，含新年级/建议读取。用户正式写入、真机和内容验收未执行；本轮前端源码/设计未改、未上传，下述UI原生/设备验收保持原边界。[本轮记录](../../../deploy/releases/20261024-latest-backend-test-deployment.md)。
+
 - 2026-10-24标题约束，revision `UI-STATE-20261024-SUGGESTION-TITLE-04`：用户明确批准[Title Limit Spec01 / Architecture01](../../../../specs/active/FEAT-004-SUGGESTION-TITLE-LIMIT.md)/[DREV04](../prototypes/DREV-20261024-TODAY-LEARNING-04/FRONTEND-SPEC.md)，已本地实现。新生成/重新编辑标题trim后1–20码点、无内部换行；编辑显示n/20和14px字段错误，超限保留输入、定位标题、零PATCH。保留DREV02/03字体、按钮及布局，旧120字完整读取/审批/待学记录/删除兼容，重新编辑须精简；maxlength=120仅为输入防护。33张批准导出冻结；前端332项、三视口39态原生节点/截图及独立复核通过，[本轮证据](../../../quality/evidence/SUGGESTION-TITLE-IMPLEMENTATION-20261024.md)列明真机/实际键盘/读屏/系统大字体缺口。Spec active/VERIFYING，未上传部署。
 
 - 2026-10-24旅行减法，revision `UI-STATE-20261024-FOOTPRINTS-MINIMAL-02`：用户明确批准Spec01/DREV01，内嵌/原足迹页共享精简实现；重复身份标题及常驻次要入口删除，统计右侧44px更多进原生菜单；设置正文随单开关收高。工程文案附加条款已合并；最终331项前端、三尺寸27态原生及430实际菜单操作通过，[当前原生/设备边界](../../../quality/evidence/footprints-minimal-20261024/README.md)独立记录，不复用旧51组。Spec active/VERIFYING，未上传部署。
