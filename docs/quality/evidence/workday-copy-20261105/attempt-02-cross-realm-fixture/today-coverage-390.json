@@ -1,0 +1,31 @@
+{
+  "route": "pages/today/index",
+  "viewport": {
+    "width": 390,
+    "height": 844,
+    "screenHeight": 844
+  },
+  "nodes": [
+    {
+      "selector": ".pk-empty",
+      "left": 18,
+      "right": 372,
+      "top": 169,
+      "bottom": 467,
+      "width": 354,
+      "height": 298,
+      "fontSize": "16px",
+      "lineHeight": "25.6px"
+    }
+  ],
+  "mode": {},
+  "source": "native wx.createSelectorQuery; synthetic fixtures; production WXML/WXSS exact",
+  "errors": [
+    "unknown status missing or duplicated",
+    "unknown rendered as empty"
+  ],
+  "state": "coverage",
+  "host": "today",
+  "screenshot_status": "CAPTURED_REQUIRES_VISUAL_REVIEW",
+  "screenshot_sha256": "fedb1987571e3626f980ad4bf27e27a4666e5bf4841d2c543627a78fbb175d34"
+}

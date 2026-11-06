@@ -1,0 +1,66 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+____________ test_explicit_retry_refreshes_only_own_semantic_branch ____________
+
+client = <starlette.testclient.TestClient object at 0x10a4c1a00>
+app = <fastapi.applications.FastAPI object at 0x10a50a690>
+family_headers = {'X-Family-ID': 'family-test-a'}
+child = {'active': True, 'created_at': '2026-11-05T09:48:54.386015Z', 'daily_budget_minutes': 15, 'grade': '小学二年级', ...}
+
+    def test_explicit_retry_refreshes_only_own_semantic_branch(client, app, family_headers, child):
+        store = seed_failed_stages(client, app, family_headers, child)
+        sibling = seed_failed_stages(client, app, family_headers, child)
+        foreign = seed_failed_stages(
+            client,
+            app,
+            {"X-Family-ID": "foreign-family"},
+            {
+                "id": client.post(
+                    "/api/v1/children",
+                    headers={"X-Family-ID": "foreign-family"},
+                    json={"name": "合成孩子"},
+                ).json()["id"]
+            },
+        )
+        with app.state.database.session_factory() as db:
+            for row in db.scalars(
+                select(AnalysisStageResult).where(
+                    AnalysisStageResult.submission_id == store.submission_id,
+                    AnalysisStageResult.unit_key.in_(DECISION_UNITS),
+                )
+            ):
+                row.revision = "staged-20261031-06"
+            db.commit()
+        response = client.post(
+            f"/api/v1/submissions/{store.submission_id}/retry",
+            headers={"X-Family-ID": "foreign-family"},
+        )
+        assert response.status_code == 404
+        response = client.post(
+            f"/api/v1/submissions/{store.submission_id}/retry", headers=family_headers
+        )
+        assert response.status_code == 200 and response.json()["state"] == "queued"
+        assert (
+            client.post(
+                f"/api/v1/submissions/{store.submission_id}/retry", headers=family_headers
+            ).status_code
+            == 409
+        )
+        with app.state.database.session_factory() as db:
+>           assert stage_keys(db, store.submission_id) == EXTRACTION_UNITS
+E           AssertionError: assert {'classify', ...1', 'm9', 't'} == {'group0', 'g...1', 'm9', 't'}
+E             
+E             Extra items in the left set:
+E             'classify'
+E             Use -v to get more diff
+
+tests/integration/test_analysis_checkpoints.py:373: AssertionError
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /Users/bytedance/Documents/push_kids/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/integration/test_analysis_checkpoints.py::test_explicit_retry_refreshes_only_own_semantic_branch
+1 failed, 1 warning in 0.58s

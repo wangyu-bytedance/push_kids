@@ -1,0 +1,5822 @@
+{
+  "revision": "EVAL-20261101-BUG036-CONTENT03-12-01",
+  "status": "FAIL",
+  "rubric": "Unchanged C1-C6 and approved summary/uncertainty output contracts",
+  "judge": "执行会话直接逐份对照原图/实际文字与最终输出；没有外部judge",
+  "privacy": "只保留来源SHA、case短编号、安全计数和不含儿童内容的原因",
+  "source_review_note_correction": "早期case07/08/10/16/17私有阅读笔记有误，最终高分辨率原图复核取代；未改来源或响应。",
+  "source_totals": {
+    "original": 30,
+    "original_images": 68,
+    "original_with_text": 4,
+    "supplemental": 3,
+    "supplemental_images": 6,
+    "boundary": 10
+  },
+  "groups": {
+    "diagnostic": {
+      "mode": "diagnostic",
+      "model": "doubao-seed-2-1-pro-260628",
+      "pipeline_revision": "staged-20261101-11",
+      "prompt_revision": "child-aware-history-agent-20261101-14",
+      "source_sha256": {
+        "pipeline.py": "b6b958d0300ad0a6f3ee825ef95fa9d3756e782e1a63306a5d40696b99441b78",
+        "stage_provider.py": "445c404669cc2da604782e5790c1d94d18cf370a4aec26cb9c90cd7f281f2f93",
+        "stage_contracts.py": "b23d6ab0aaf67784e4e4701dbdc65db9b45c25a8722f2b5d984d475932670a64",
+        "contracts.py": "7524e52c4ffbc27e1127d54bb7ac33f676165d8f303961374ad68b959df25564",
+        "history_search.py": "951cfbefa128f782e4a4f53035a3e2ca2d3c51c5c554cd89665af6bd3b22c265",
+        "coverage.py": "44f3f6340b6fcc20367efe7dedd3d311e246acc282bd02d8ea742b6ef6c0aaf4",
+        "failures.py": "3b7a4c1ba9b788c5916fceedceed76611ca22e78789fce1184a1dc3509dabdd4",
+        "telemetry.py": "8cdb0ffc8fd59b7c00551a1a41defc7e76544c2bddd8ec368b35af25a0e8ab4a",
+        "checkpoints.py": "45a0ce6401bc2780bf849fa7acec70a938f24fa77fde36c02afedae909e18e80",
+        "prompt.py": "fae31796c8ed305c17934f86f41b737315d314b75db498182ecf62927a050441"
+      },
+      "sample_count": 8,
+      "case_concurrency": 2,
+      "request_concurrency": 2,
+      "database_writes": 0,
+      "checkpoint_writes": 0,
+      "business_api_posts": 0,
+      "source_unchanged": true,
+      "process_peak_rss_bytes": 186777600,
+      "results": [
+        {
+          "case": "case02",
+          "source_digest": "57e9047f497371be9b92b6e157c04e8fd8d97231a99decb8c1ee23a4ff02fc5b",
+          "images": 6,
+          "attempts": 1,
+          "success": false,
+          "failure_code": "analysis_failed",
+          "failure_reason": "provider_timeout",
+          "failure_stage": "merge",
+          "failure_unit": "merge",
+          "seconds": 57.46,
+          "provider_calls": 7,
+          "history_queries": 0,
+          "quality_reviews": 0,
+          "quality_corrections": 0,
+          "input_tokens": 25920,
+          "output_tokens": 1831,
+          "successful_stage_metrics": [
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 12170,
+              "queue_ms": 0,
+              "input_tokens": 4320,
+              "output_tokens": 351,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 434380,
+              "request_bytes": 592430
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 8662,
+              "queue_ms": 0,
+              "input_tokens": 4320,
+              "output_tokens": 361,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 421608,
+              "request_bytes": 575398
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 7368,
+              "queue_ms": 0,
+              "input_tokens": 4320,
+              "output_tokens": 340,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 450738,
+              "request_bytes": 614238
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 8050,
+              "queue_ms": 0,
+              "input_tokens": 4320,
+              "output_tokens": 317,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 418080,
+              "request_bytes": 570694
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 5846,
+              "queue_ms": 0,
+              "input_tokens": 4320,
+              "output_tokens": 147,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 468402,
+              "request_bytes": 637790
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 7891,
+              "queue_ms": 0,
+              "input_tokens": 4320,
+              "output_tokens": 315,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 472482,
+              "request_bytes": 643230
+            }
+          ]
+        },
+        {
+          "case": "case03",
+          "source_digest": "2f5b6a5836b7aa61f841d6017265cbf2ec4a8fc792292fe162942e84a70ecac8",
+          "images": 5,
+          "attempts": 1,
+          "success": true,
+          "new_points": 3,
+          "history_matches": 0,
+          "seconds": 142.17,
+          "provider_calls": 10,
+          "history_queries": 3,
+          "quality_reviews": 1,
+          "quality_corrections": 0,
+          "input_tokens": 81574,
+          "output_tokens": 6330,
+          "successful_stage_metrics": [
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 29259,
+              "queue_ms": 22555,
+              "input_tokens": 4320,
+              "output_tokens": 279,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 357363,
+              "request_bytes": 489738
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 7215,
+              "queue_ms": 0,
+              "input_tokens": 4320,
+              "output_tokens": 285,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 370598,
+              "request_bytes": 507386
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 8534,
+              "queue_ms": 0,
+              "input_tokens": 4320,
+              "output_tokens": 455,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 347026,
+              "request_bytes": 475958
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 7057,
+              "queue_ms": 0,
+              "input_tokens": 4320,
+              "output_tokens": 307,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 357422,
+              "request_bytes": 489818
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 59166,
+              "queue_ms": 52075,
+              "input_tokens": 4320,
+              "output_tokens": 279,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 345854,
+              "request_bytes": 474394
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "merge",
+              "duration_ms": 28608,
+              "queue_ms": 0,
+              "input_tokens": 12434,
+              "output_tokens": 1654,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 6192,
+              "image_bytes": 1778263,
+              "request_bytes": 2395145
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "merge",
+              "duration_ms": 25111,
+              "queue_ms": 0,
+              "input_tokens": 12486,
+              "output_tokens": 1419,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 6415,
+              "image_bytes": 1778263,
+              "request_bytes": 2395382
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "review",
+              "duration_ms": 3336,
+              "queue_ms": 0,
+              "input_tokens": 13111,
+              "output_tokens": 9,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 10072,
+              "image_bytes": 1778263,
+              "request_bytes": 2397643
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "match",
+              "duration_ms": 3494,
+              "queue_ms": 0,
+              "input_tokens": 6136,
+              "output_tokens": 51,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 10715,
+              "image_bytes": 0,
+              "request_bytes": 25049
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "coverage",
+              "duration_ms": 18785,
+              "queue_ms": 0,
+              "input_tokens": 15807,
+              "output_tokens": 1592,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 57928,
+              "image_bytes": 0,
+              "request_bytes": 63751
+            }
+          ]
+        },
+        {
+          "case": "case09",
+          "source_digest": "ed2681303ee2c79abec9f3aa5c89602a5c5d3d2054dba7409465fd73cb6c8426",
+          "images": 3,
+          "attempts": 1,
+          "success": false,
+          "failure_code": "analysis_output_invalid",
+          "failure_reason": "quality",
+          "failure_stage": "review",
+          "failure_unit": "review1",
+          "seconds": 63.59,
+          "provider_calls": 8,
+          "history_queries": 0,
+          "quality_reviews": 2,
+          "quality_corrections": 1,
+          "input_tokens": 54383,
+          "output_tokens": 2545,
+          "successful_stage_metrics": [
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 8545,
+              "queue_ms": 0,
+              "input_tokens": 4323,
+              "output_tokens": 424,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 127,
+              "image_bytes": 381471,
+              "request_bytes": 521897
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 15707,
+              "queue_ms": 8529,
+              "input_tokens": 4323,
+              "output_tokens": 169,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 127,
+              "image_bytes": 369935,
+              "request_bytes": 506517
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 2498,
+              "queue_ms": 0,
+              "input_tokens": 3019,
+              "output_tokens": 62,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 126,
+              "image_bytes": 0,
+              "request_bytes": 13149
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 15004,
+              "queue_ms": 9651,
+              "input_tokens": 4323,
+              "output_tokens": 97,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 127,
+              "image_bytes": 451049,
+              "request_bytes": 614669
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "merge",
+              "duration_ms": 15343,
+              "queue_ms": 0,
+              "input_tokens": 8846,
+              "output_tokens": 752,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 2855,
+              "image_bytes": 1202455,
+              "request_bytes": 1623643
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "review",
+              "duration_ms": 5506,
+              "queue_ms": 0,
+              "input_tokens": 9259,
+              "output_tokens": 87,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 5816,
+              "image_bytes": 1202455,
+              "request_bytes": 1625146
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "merge",
+              "duration_ms": 14413,
+              "queue_ms": 0,
+              "input_tokens": 9884,
+              "output_tokens": 873,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 6383,
+              "image_bytes": 1202455,
+              "request_bytes": 1627483
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "review",
+              "duration_ms": 4686,
+              "queue_ms": 0,
+              "input_tokens": 10406,
+              "output_tokens": 81,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 9680,
+              "image_bytes": 1202455,
+              "request_bytes": 1629388
+            }
+          ]
+        },
+        {
+          "case": "case13",
+          "source_digest": "b6aa57db660b48d1d40aa53bb305fdf18fa9fe0ba6d2eb1cb8702d4ed792427a",
+          "images": 4,
+          "attempts": 1,
+          "success": false,
+          "failure_code": "analysis_failed",
+          "failure_reason": "provider_timeout",
+          "failure_stage": "merge",
+          "failure_unit": "merge",
+          "seconds": 65.77,
+          "provider_calls": 5,
+          "history_queries": 0,
+          "quality_reviews": 0,
+          "quality_corrections": 0,
+          "input_tokens": 17280,
+          "output_tokens": 1878,
+          "successful_stage_metrics": [
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 16623,
+              "queue_ms": 0,
+              "input_tokens": 4320,
+              "output_tokens": 1170,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 472913,
+              "request_bytes": 643806
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 26920,
+              "queue_ms": 16605,
+              "input_tokens": 4320,
+              "output_tokens": 338,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 504117,
+              "request_bytes": 685410
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 6600,
+              "queue_ms": 0,
+              "input_tokens": 4320,
+              "output_tokens": 210,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 434434,
+              "request_bytes": 592502
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 19093,
+              "queue_ms": 14679,
+              "input_tokens": 4320,
+              "output_tokens": 160,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 377107,
+              "request_bytes": 516066
+            }
+          ]
+        },
+        {
+          "case": "case18",
+          "source_digest": "75f6a1fdc270171c731e0b6ca39dc18fedd4ea15474fc0caf02c166733d3783e",
+          "images": 2,
+          "attempts": 1,
+          "success": false,
+          "failure_code": "analysis_output_invalid",
+          "failure_reason": "validation",
+          "failure_stage": "merge",
+          "failure_unit": "merge",
+          "seconds": 36.25,
+          "provider_calls": 4,
+          "history_queries": 0,
+          "quality_reviews": 0,
+          "quality_corrections": 0,
+          "input_tokens": 22830,
+          "output_tokens": 1711,
+          "successful_stage_metrics": [
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 5673,
+              "queue_ms": 0,
+              "input_tokens": 4321,
+              "output_tokens": 187,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 112,
+              "image_bytes": 368045,
+              "request_bytes": 503980
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 10201,
+              "queue_ms": 5662,
+              "input_tokens": 4321,
+              "output_tokens": 134,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 112,
+              "image_bytes": 463357,
+              "request_bytes": 631064
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "merge",
+              "duration_ms": 14511,
+              "queue_ms": 2177,
+              "input_tokens": 7068,
+              "output_tokens": 700,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 1380,
+              "image_bytes": 831402,
+              "request_bytes": 1127226
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "merge",
+              "duration_ms": 11474,
+              "queue_ms": 0,
+              "input_tokens": 7120,
+              "output_tokens": 690,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 1603,
+              "image_bytes": 831402,
+              "request_bytes": 1127463
+            }
+          ]
+        },
+        {
+          "case": "case25",
+          "source_digest": "3fd88e0ee76b0d14a78bd69bc5ad672e4624a4d34b46978ed15c5a20e9414e94",
+          "images": 1,
+          "attempts": 1,
+          "success": false,
+          "failure_code": "analysis_output_invalid",
+          "failure_reason": "quality",
+          "failure_stage": "review",
+          "failure_unit": "review1",
+          "seconds": 27.54,
+          "provider_calls": 5,
+          "history_queries": 0,
+          "quality_reviews": 2,
+          "quality_corrections": 1,
+          "input_tokens": 26925,
+          "output_tokens": 1060,
+          "successful_stage_metrics": [
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 6323,
+              "queue_ms": 0,
+              "input_tokens": 4321,
+              "output_tokens": 239,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 112,
+              "image_bytes": 299587,
+              "request_bytes": 412704
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "merge",
+              "duration_ms": 6756,
+              "queue_ms": 0,
+              "input_tokens": 5562,
+              "output_tokens": 346,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 816,
+              "image_bytes": 299587,
+              "request_bytes": 417401
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "review",
+              "duration_ms": 4278,
+              "queue_ms": 0,
+              "input_tokens": 5364,
+              "output_tokens": 42,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 1719,
+              "image_bytes": 299587,
+              "request_bytes": 416644
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "merge",
+              "duration_ms": 6738,
+              "queue_ms": 0,
+              "input_tokens": 5939,
+              "output_tokens": 393,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 2143,
+              "image_bytes": 299587,
+              "request_bytes": 418826
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "review",
+              "duration_ms": 3432,
+              "queue_ms": 0,
+              "input_tokens": 5739,
+              "output_tokens": 40,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 2929,
+              "image_bytes": 299587,
+              "request_bytes": 417950
+            }
+          ]
+        },
+        {
+          "case": "failed02",
+          "source_digest": "b526d9d0de299acce634c470cf6c5024b7f3920eeecd9e28a9796f911718fc12",
+          "images": 1,
+          "attempts": 1,
+          "success": true,
+          "new_points": 13,
+          "history_matches": 0,
+          "seconds": 114.33,
+          "provider_calls": 6,
+          "history_queries": 13,
+          "quality_reviews": 1,
+          "quality_corrections": 0,
+          "input_tokens": 33872,
+          "output_tokens": 5808,
+          "successful_stage_metrics": [
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 21385,
+              "queue_ms": 0,
+              "input_tokens": 4320,
+              "output_tokens": 1366,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 619657,
+              "request_bytes": 839466
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "merge",
+              "duration_ms": 27771,
+              "queue_ms": 0,
+              "input_tokens": 6542,
+              "output_tokens": 2049,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 4513,
+              "image_bytes": 619657,
+              "request_bytes": 848134
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "merge",
+              "duration_ms": 27785,
+              "queue_ms": 0,
+              "input_tokens": 6594,
+              "output_tokens": 2180,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 4736,
+              "image_bytes": 619657,
+              "request_bytes": 848371
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "review",
+              "duration_ms": 2441,
+              "queue_ms": 0,
+              "input_tokens": 7927,
+              "output_tokens": 9,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 10784,
+              "image_bytes": 619657,
+              "request_bytes": 853345
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "match",
+              "duration_ms": 4905,
+              "queue_ms": 0,
+              "input_tokens": 8489,
+              "output_tokens": 204,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 16914,
+              "image_bytes": 0,
+              "request_bytes": 32202
+            }
+          ]
+        },
+        {
+          "case": "failed03",
+          "source_digest": "88f3646dd90bf856dffb084dd31b08fc96b05429f6ae7677c52f9fdd12840923",
+          "images": 3,
+          "attempts": 1,
+          "success": false,
+          "failure_code": "analysis_output_invalid",
+          "failure_reason": "validation",
+          "failure_stage": "merge",
+          "failure_unit": "merge",
+          "seconds": 64.4,
+          "provider_calls": 5,
+          "history_queries": 0,
+          "quality_reviews": 0,
+          "quality_corrections": 0,
+          "input_tokens": 31360,
+          "output_tokens": 3214,
+          "successful_stage_metrics": [
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 8925,
+              "queue_ms": 0,
+              "input_tokens": 4320,
+              "output_tokens": 426,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 468087,
+              "request_bytes": 637370
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 9425,
+              "queue_ms": 0,
+              "input_tokens": 4320,
+              "output_tokens": 320,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 469514,
+              "request_bytes": 639274
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 26451,
+              "queue_ms": 18344,
+              "input_tokens": 4320,
+              "output_tokens": 268,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 443262,
+              "request_bytes": 604270
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "merge",
+              "duration_ms": 21704,
+              "queue_ms": 0,
+              "input_tokens": 9174,
+              "output_tokens": 1194,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 3435,
+              "image_bytes": 1380863,
+              "request_bytes": 1862137
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "merge",
+              "duration_ms": 16212,
+              "queue_ms": 0,
+              "input_tokens": 9226,
+              "output_tokens": 1006,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 3658,
+              "image_bytes": 1380863,
+              "request_bytes": 1862374
+            }
+          ]
+        }
+      ],
+      "successful_request_resources": {
+        "request_bytes": {
+          "observations": 47,
+          "total": 38447921,
+          "maximum": 2397643
+        },
+        "payload_bytes": {
+          "observations": 47,
+          "total": 173695,
+          "maximum": 57928
+        },
+        "image_bytes": {
+          "observations": 47,
+          "total": 28192946,
+          "maximum": 1778263
+        },
+        "input_tokens": {
+          "observations": 47,
+          "total": 294144,
+          "maximum": 15807
+        },
+        "output_tokens": {
+          "observations": 47,
+          "total": 24377,
+          "maximum": 2180
+        },
+        "duration_ms": {
+          "observations": 47,
+          "total": 627880,
+          "maximum": 59166
+        },
+        "queue_ms": {
+          "observations": 47,
+          "total": 150277,
+          "maximum": 52075
+        }
+      }
+    },
+    "final": {
+      "mode": "final",
+      "model": "doubao-seed-2-1-pro-260628",
+      "pipeline_revision": "staged-20261101-12",
+      "prompt_revision": "child-aware-history-agent-20261101-15",
+      "source_sha256": {
+        "pipeline.py": "017be7497fc8c6515259183975ed845bbc798ddc347aff48ee160a57f14c9373",
+        "stage_provider.py": "e3a64018d101f8ded8eddfedb1413143bf31ad6f0224b89dddb5b3250e73972e",
+        "stage_contracts.py": "18de2d80fddb1707a160f1827008dcf5cef941529bcfdd6d670095229bb44f94",
+        "contracts.py": "7524e52c4ffbc27e1127d54bb7ac33f676165d8f303961374ad68b959df25564",
+        "history_search.py": "951cfbefa128f782e4a4f53035a3e2ca2d3c51c5c554cd89665af6bd3b22c265",
+        "coverage.py": "44f3f6340b6fcc20367efe7dedd3d311e246acc282bd02d8ea742b6ef6c0aaf4",
+        "failures.py": "3b7a4c1ba9b788c5916fceedceed76611ca22e78789fce1184a1dc3509dabdd4",
+        "telemetry.py": "8cdb0ffc8fd59b7c00551a1a41defc7e76544c2bddd8ec368b35af25a0e8ab4a",
+        "checkpoints.py": "45a0ce6401bc2780bf849fa7acec70a938f24fa77fde36c02afedae909e18e80",
+        "prompt.py": "d8658104bc9e2e65090e2a9221fb030bcb8a56d35d299607841238906124a77c"
+      },
+      "sample_count": 30,
+      "case_concurrency": 2,
+      "request_concurrency": 2,
+      "database_writes": 0,
+      "checkpoint_writes": 0,
+      "business_api_posts": 0,
+      "source_unchanged": true,
+      "process_peak_rss_bytes": 172425216,
+      "results": [
+        {
+          "case": "case01",
+          "source_digest": "01f90bb95592b13aaa5e14bceea6b5141f6239dfc6ae168dc4d867a3dd69f7a4",
+          "images": 0,
+          "attempts": 1,
+          "success": true,
+          "new_points": 1,
+          "history_matches": 0,
+          "seconds": 18.11,
+          "provider_calls": 5,
+          "history_queries": 1,
+          "quality_reviews": 1,
+          "quality_corrections": 0,
+          "input_tokens": 17520,
+          "output_tokens": 593,
+          "successful_stage_metrics": [
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 3840,
+              "queue_ms": 0,
+              "input_tokens": 3033,
+              "output_tokens": 84,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 146,
+              "image_bytes": 0,
+              "request_bytes": 13037
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "merge",
+              "duration_ms": 6511,
+              "queue_ms": 0,
+              "input_tokens": 4161,
+              "output_tokens": 275,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 473,
+              "image_bytes": 0,
+              "request_bytes": 17400
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "review",
+              "duration_ms": 2406,
+              "queue_ms": 0,
+              "input_tokens": 3955,
+              "output_tokens": 9,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 1159,
+              "image_bytes": 0,
+              "request_bytes": 16966
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "match",
+              "duration_ms": 1964,
+              "queue_ms": 0,
+              "input_tokens": 4271,
+              "output_tokens": 21,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 4297,
+              "image_bytes": 0,
+              "request_bytes": 17837
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "coverage",
+              "duration_ms": 3378,
+              "queue_ms": 0,
+              "input_tokens": 2100,
+              "output_tokens": 204,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 5441,
+              "image_bytes": 0,
+              "request_bytes": 7900
+            }
+          ],
+          "assessment": {
+            "status": "PASS",
+            "content_pass": true,
+            "codes": [],
+            "reason": "明确对象集合、技能及摘要一致。"
+          }
+        },
+        {
+          "case": "case02",
+          "source_digest": "57e9047f497371be9b92b6e157c04e8fd8d97231a99decb8c1ee23a4ff02fc5b",
+          "images": 6,
+          "attempts": 1,
+          "success": false,
+          "failure_code": "analysis_failed",
+          "failure_reason": "provider_timeout",
+          "failure_stage": "merge",
+          "failure_unit": "merge",
+          "seconds": 80.72,
+          "provider_calls": 7,
+          "history_queries": 0,
+          "quality_reviews": 0,
+          "quality_corrections": 0,
+          "input_tokens": 25956,
+          "output_tokens": 1818,
+          "successful_stage_metrics": [
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 9409,
+              "queue_ms": 0,
+              "input_tokens": 4326,
+              "output_tokens": 431,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 434380,
+              "request_bytes": 592290
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 8607,
+              "queue_ms": 0,
+              "input_tokens": 4326,
+              "output_tokens": 336,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 450738,
+              "request_bytes": 614098
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 29503,
+              "queue_ms": 18011,
+              "input_tokens": 4326,
+              "output_tokens": 415,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 421608,
+              "request_bytes": 575258
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 6662,
+              "queue_ms": 0,
+              "input_tokens": 4326,
+              "output_tokens": 186,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 472482,
+              "request_bytes": 643090
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 6248,
+              "queue_ms": 0,
+              "input_tokens": 4326,
+              "output_tokens": 215,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 468402,
+              "request_bytes": 637650
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 32660,
+              "queue_ms": 24398,
+              "input_tokens": 4326,
+              "output_tokens": 235,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 418080,
+              "request_bytes": 570554
+            }
+          ],
+          "assessment": {
+            "status": "NO_PROPOSAL",
+            "content_pass": false,
+            "codes": [],
+            "reason": "merge provider_timeout，无最终提案。"
+          }
+        },
+        {
+          "case": "case03",
+          "source_digest": "2f5b6a5836b7aa61f841d6017265cbf2ec4a8fc792292fe162942e84a70ecac8",
+          "images": 5,
+          "attempts": 1,
+          "success": false,
+          "failure_code": "analysis_output_invalid",
+          "failure_reason": "validation",
+          "failure_stage": "merge",
+          "failure_unit": "merge-correction",
+          "seconds": 127.71,
+          "provider_calls": 9,
+          "history_queries": 0,
+          "quality_reviews": 1,
+          "quality_corrections": 2,
+          "input_tokens": 76044,
+          "output_tokens": 6014,
+          "successful_stage_metrics": [
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 5683,
+              "queue_ms": 0,
+              "input_tokens": 4326,
+              "output_tokens": 282,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 357363,
+              "request_bytes": 489598
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 13518,
+              "queue_ms": 5659,
+              "input_tokens": 4326,
+              "output_tokens": 326,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 345854,
+              "request_bytes": 474254
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 8207,
+              "queue_ms": 0,
+              "input_tokens": 4326,
+              "output_tokens": 409,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 347026,
+              "request_bytes": 475818
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 8287,
+              "queue_ms": 0,
+              "input_tokens": 4326,
+              "output_tokens": 381,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 357422,
+              "request_bytes": 489678
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 44564,
+              "queue_ms": 33301,
+              "input_tokens": 4326,
+              "output_tokens": 474,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 370598,
+              "request_bytes": 507246
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "merge",
+              "duration_ms": 22423,
+              "queue_ms": 0,
+              "input_tokens": 12624,
+              "output_tokens": 1119,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 6718,
+              "image_bytes": 1778263,
+              "request_bytes": 2395552
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "review",
+              "duration_ms": 6025,
+              "queue_ms": 0,
+              "input_tokens": 13539,
+              "output_tokens": 80,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 11012,
+              "image_bytes": 1778263,
+              "request_bytes": 2399106
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "merge",
+              "duration_ms": 24974,
+              "queue_ms": 0,
+              "input_tokens": 14100,
+              "output_tokens": 1511,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 11581,
+              "image_bytes": 1778263,
+              "request_bytes": 2400905
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "merge",
+              "duration_ms": 23959,
+              "queue_ms": 0,
+              "input_tokens": 14151,
+              "output_tokens": 1432,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 11799,
+              "image_bytes": 1778263,
+              "request_bytes": 2401137
+            }
+          ],
+          "assessment": {
+            "status": "NO_PROPOSAL",
+            "content_pass": false,
+            "codes": [],
+            "reason": "局部纠正两次结构尝试均改动受保护证据，在复审/历史前拒绝。"
+          }
+        },
+        {
+          "case": "case04",
+          "source_digest": "f8ecf8ac2c63fee396d8e8740e86246fa55b098ea8299722f2216b87940d1174",
+          "images": 4,
+          "attempts": 1,
+          "success": false,
+          "failure_code": "analysis_failed",
+          "failure_reason": "provider_timeout",
+          "failure_stage": "merge",
+          "failure_unit": "merge",
+          "seconds": 55.37,
+          "provider_calls": 5,
+          "history_queries": 0,
+          "quality_reviews": 0,
+          "quality_corrections": 0,
+          "input_tokens": 17304,
+          "output_tokens": 1173,
+          "successful_stage_metrics": [
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 4467,
+              "queue_ms": 0,
+              "input_tokens": 4326,
+              "output_tokens": 188,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 361823,
+              "request_bytes": 495546
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 4000,
+              "queue_ms": 0,
+              "input_tokens": 4326,
+              "output_tokens": 203,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 510660,
+              "request_bytes": 693994
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 7275,
+              "queue_ms": 0,
+              "input_tokens": 4326,
+              "output_tokens": 386,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 379257,
+              "request_bytes": 518790
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 25336,
+              "queue_ms": 16566,
+              "input_tokens": 4326,
+              "output_tokens": 396,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 337871,
+              "request_bytes": 463610
+            }
+          ],
+          "assessment": {
+            "status": "NO_PROPOSAL",
+            "content_pass": false,
+            "codes": [],
+            "reason": "merge provider_timeout，无最终提案。"
+          }
+        },
+        {
+          "case": "case05",
+          "source_digest": "497ccb9d4ae997b69d701fc415de0516470b89f18ed0f72f0826eb2c014ad3df",
+          "images": 3,
+          "attempts": 1,
+          "success": true,
+          "new_points": 7,
+          "history_matches": 0,
+          "seconds": 86.64,
+          "provider_calls": 8,
+          "history_queries": 7,
+          "quality_reviews": 1,
+          "quality_corrections": 0,
+          "input_tokens": 57482,
+          "output_tokens": 4849,
+          "successful_stage_metrics": [
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 11166,
+              "queue_ms": 0,
+              "input_tokens": 4326,
+              "output_tokens": 582,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 329890,
+              "request_bytes": 452970
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 8032,
+              "queue_ms": 0,
+              "input_tokens": 4326,
+              "output_tokens": 322,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 393658,
+              "request_bytes": 537994
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 26495,
+              "queue_ms": 18104,
+              "input_tokens": 4326,
+              "output_tokens": 347,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 381877,
+              "request_bytes": 522286
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "merge",
+              "duration_ms": 29204,
+              "queue_ms": 0,
+              "input_tokens": 9507,
+              "output_tokens": 1921,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 4172,
+              "image_bytes": 1105425,
+              "request_bytes": 1495560
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "review",
+              "duration_ms": 2980,
+              "queue_ms": 0,
+              "input_tokens": 10692,
+              "output_tokens": 9,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 8817,
+              "image_bytes": 1105425,
+              "request_bytes": 1499463
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "match",
+              "duration_ms": 3360,
+              "queue_ms": 0,
+              "input_tokens": 6534,
+              "output_tokens": 113,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 11281,
+              "image_bytes": 0,
+              "request_bytes": 25569
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "reuse",
+              "duration_ms": 3939,
+              "queue_ms": 0,
+              "input_tokens": 3754,
+              "output_tokens": 103,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 2308,
+              "image_bytes": 0,
+              "request_bytes": 15797
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "coverage",
+              "duration_ms": 20612,
+              "queue_ms": 0,
+              "input_tokens": 14017,
+              "output_tokens": 1452,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 44048,
+              "image_bytes": 0,
+              "request_bytes": 49719
+            }
+          ],
+          "assessment": {
+            "status": "FAIL",
+            "content_pass": false,
+            "codes": [
+              "C1",
+              "C4"
+            ],
+            "reason": "目标名称保留填括号操作，缺实际减法不等式限制。"
+          }
+        },
+        {
+          "case": "case06",
+          "source_digest": "f3fe4f2bd8dce5bdd6bfbf66bff3461c96a9ec5a7a8d9189f8f1c3533be134d9",
+          "images": 2,
+          "attempts": 1,
+          "success": false,
+          "failure_code": "analysis_failed",
+          "failure_reason": "provider_timeout",
+          "failure_stage": "merge",
+          "failure_unit": "merge",
+          "seconds": 58.74,
+          "provider_calls": 3,
+          "history_queries": 0,
+          "quality_reviews": 0,
+          "quality_corrections": 0,
+          "input_tokens": 8652,
+          "output_tokens": 1448,
+          "successful_stage_metrics": [
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 12853,
+              "queue_ms": 0,
+              "input_tokens": 4326,
+              "output_tokens": 657,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 407652,
+              "request_bytes": 556650
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 28723,
+              "queue_ms": 12849,
+              "input_tokens": 4326,
+              "output_tokens": 791,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 417065,
+              "request_bytes": 569202
+            }
+          ],
+          "assessment": {
+            "status": "NO_PROPOSAL",
+            "content_pass": false,
+            "codes": [],
+            "reason": "merge provider_timeout，无最终提案。"
+          }
+        },
+        {
+          "case": "case07",
+          "source_digest": "98995eec2ceaf0ecbf17d06d43662a8679e5f396911495232e28404b7f5a9402",
+          "images": 1,
+          "attempts": 1,
+          "success": true,
+          "new_points": 3,
+          "history_matches": 0,
+          "seconds": 37.73,
+          "provider_calls": 5,
+          "history_queries": 3,
+          "quality_reviews": 1,
+          "quality_corrections": 0,
+          "input_tokens": 34454,
+          "output_tokens": 2260,
+          "successful_stage_metrics": [
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 8394,
+              "queue_ms": 0,
+              "input_tokens": 4326,
+              "output_tokens": 364,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 406228,
+              "request_bytes": 554754
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "merge",
+              "duration_ms": 7663,
+              "queue_ms": 0,
+              "input_tokens": 5820,
+              "output_tokens": 459,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 1721,
+              "image_bytes": 406228,
+              "request_bytes": 560445
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "review",
+              "duration_ms": 2572,
+              "queue_ms": 0,
+              "input_tokens": 5953,
+              "output_tokens": 9,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 3662,
+              "image_bytes": 406228,
+              "request_bytes": 561366
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "match",
+              "duration_ms": 2266,
+              "queue_ms": 0,
+              "input_tokens": 6012,
+              "output_tokens": 51,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 10286,
+              "image_bytes": 0,
+              "request_bytes": 24476
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "coverage",
+              "duration_ms": 16825,
+              "queue_ms": 0,
+              "input_tokens": 12343,
+              "output_tokens": 1377,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 43453,
+              "image_bytes": 0,
+              "request_bytes": 49032
+            }
+          ],
+          "assessment": {
+            "status": "FAIL",
+            "content_pass": false,
+            "codes": [
+              "C5"
+            ],
+            "reason": "同技能完整书写集合按版面容器拆为重复目标；完整名称可在上限内。"
+          }
+        },
+        {
+          "case": "case08",
+          "source_digest": "b271d8ce91ea33a58cdd09f53c258f6a5c93dca5a32925f88308d126dfe95a62",
+          "images": 1,
+          "attempts": 1,
+          "success": true,
+          "new_points": 1,
+          "history_matches": 0,
+          "seconds": 21.72,
+          "provider_calls": 4,
+          "history_queries": 1,
+          "quality_reviews": 1,
+          "quality_corrections": 0,
+          "input_tokens": 18992,
+          "output_tokens": 812,
+          "successful_stage_metrics": [
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 7969,
+              "queue_ms": 0,
+              "input_tokens": 4326,
+              "output_tokens": 295,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 315004,
+              "request_bytes": 433122
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "merge",
+              "duration_ms": 9426,
+              "queue_ms": 0,
+              "input_tokens": 5725,
+              "output_tokens": 487,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 1388,
+              "image_bytes": 315004,
+              "request_bytes": 438436
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "review",
+              "duration_ms": 2404,
+              "queue_ms": 0,
+              "input_tokens": 5695,
+              "output_tokens": 9,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 2743,
+              "image_bytes": 315004,
+              "request_bytes": 438713
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "match",
+              "duration_ms": 1914,
+              "queue_ms": 0,
+              "input_tokens": 3246,
+              "output_tokens": 21,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 963,
+              "image_bytes": 0,
+              "request_bytes": 14029
+            }
+          ],
+          "assessment": {
+            "status": "PASS",
+            "content_pass": true,
+            "codes": [],
+            "reason": "具名作品及直接教学证据一致。"
+          }
+        },
+        {
+          "case": "case09",
+          "source_digest": "ed2681303ee2c79abec9f3aa5c89602a5c5d3d2054dba7409465fd73cb6c8426",
+          "images": 3,
+          "attempts": 1,
+          "success": false,
+          "failure_code": "analysis_output_invalid",
+          "failure_reason": "coverage",
+          "failure_stage": "group",
+          "failure_unit": "group0",
+          "seconds": 50.21,
+          "provider_calls": 6,
+          "history_queries": 0,
+          "quality_reviews": 0,
+          "quality_corrections": 0,
+          "input_tokens": 30593,
+          "output_tokens": 2073,
+          "successful_stage_metrics": [
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 9303,
+              "queue_ms": 0,
+              "input_tokens": 4329,
+              "output_tokens": 425,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 127,
+              "image_bytes": 381471,
+              "request_bytes": 521757
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 4120,
+              "queue_ms": 0,
+              "input_tokens": 4329,
+              "output_tokens": 96,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 127,
+              "image_bytes": 451049,
+              "request_bytes": 614529
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 4063,
+              "queue_ms": 0,
+              "input_tokens": 3025,
+              "output_tokens": 64,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 126,
+              "image_bytes": 0,
+              "request_bytes": 13017
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 24277,
+              "queue_ms": 17476,
+              "input_tokens": 4329,
+              "output_tokens": 131,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 127,
+              "image_bytes": 369935,
+              "request_bytes": 506377
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "group",
+              "duration_ms": 12989,
+              "queue_ms": 0,
+              "input_tokens": 7268,
+              "output_tokens": 699,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 1161,
+              "image_bytes": 1202455,
+              "request_bytes": 1617690
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "group",
+              "duration_ms": 12906,
+              "queue_ms": 0,
+              "input_tokens": 7313,
+              "output_tokens": 658,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 1351,
+              "image_bytes": 1202455,
+              "request_bytes": 1617892
+            }
+          ],
+          "assessment": {
+            "status": "NO_PROPOSAL",
+            "content_pass": false,
+            "codes": [],
+            "reason": "group覆盖校验两次失败，可读材料未到最终核验。"
+          }
+        },
+        {
+          "case": "case10",
+          "source_digest": "36dc2493d55215b555a133efa1e662090ca47e5c0af84f0da020d8f49679900d",
+          "images": 1,
+          "attempts": 1,
+          "success": true,
+          "new_points": 1,
+          "history_matches": 0,
+          "seconds": 16.99,
+          "provider_calls": 5,
+          "history_queries": 1,
+          "quality_reviews": 1,
+          "quality_corrections": 0,
+          "input_tokens": 19616,
+          "output_tokens": 488,
+          "successful_stage_metrics": [
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 4256,
+              "queue_ms": 0,
+              "input_tokens": 4326,
+              "output_tokens": 111,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 553125,
+              "request_bytes": 750614
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "merge",
+              "duration_ms": 6276,
+              "queue_ms": 0,
+              "input_tokens": 5544,
+              "output_tokens": 297,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 614,
+              "image_bytes": 553125,
+              "request_bytes": 755154
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "review",
+              "duration_ms": 2796,
+              "queue_ms": 0,
+              "input_tokens": 5360,
+              "output_tokens": 9,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 1383,
+              "image_bytes": 553125,
+              "request_bytes": 754803
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "match",
+              "duration_ms": 1747,
+              "queue_ms": 0,
+              "input_tokens": 3497,
+              "output_tokens": 21,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 1822,
+              "image_bytes": 0,
+              "request_bytes": 15042
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "coverage",
+              "duration_ms": 1903,
+              "queue_ms": 0,
+              "input_tokens": 889,
+              "output_tokens": 50,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 1368,
+              "image_bytes": 0,
+              "request_bytes": 3367
+            }
+          ],
+          "assessment": {
+            "status": "PASS",
+            "content_pass": true,
+            "codes": [],
+            "reason": "原图重新核对后，完整书写对象与摘要一致。"
+          }
+        },
+        {
+          "case": "case11",
+          "source_digest": "f79d3c52fc537f46fe019c3984ca1d5d850cd6592ec7c5ec5dda863bf7874760",
+          "images": 0,
+          "attempts": 1,
+          "success": false,
+          "failure_code": "analysis_output_invalid",
+          "failure_reason": "coverage",
+          "failure_stage": "merge",
+          "failure_unit": "merge",
+          "seconds": 14.48,
+          "provider_calls": 3,
+          "history_queries": 0,
+          "quality_reviews": 0,
+          "quality_corrections": 0,
+          "input_tokens": 11261,
+          "output_tokens": 405,
+          "successful_stage_metrics": [
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 2540,
+              "queue_ms": 0,
+              "input_tokens": 3027,
+              "output_tokens": 52,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 130,
+              "image_bytes": 0,
+              "request_bytes": 13021
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "merge",
+              "duration_ms": 6131,
+              "queue_ms": 0,
+              "input_tokens": 4095,
+              "output_tokens": 174,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 286,
+              "image_bytes": 0,
+              "request_bytes": 17191
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "merge",
+              "duration_ms": 5149,
+              "queue_ms": 0,
+              "input_tokens": 4139,
+              "output_tokens": 179,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 476,
+              "image_bytes": 0,
+              "request_bytes": 17393
+            }
+          ],
+          "assessment": {
+            "status": "NEEDS_MORE_MATERIAL",
+            "content_pass": false,
+            "correct_rejection": true,
+            "codes": [],
+            "reason": "只有笼统活动标题，缺规则/范围；正确拒绝虚构目标。"
+          }
+        },
+        {
+          "case": "case12",
+          "source_digest": "1592b18d13f1ff696e6a3990d571bb8a600c306ba8a9cb03fe901e10af391843",
+          "images": 6,
+          "attempts": 1,
+          "success": false,
+          "failure_code": "analysis_failed",
+          "failure_reason": "provider_timeout",
+          "failure_stage": "merge",
+          "failure_unit": "merge",
+          "seconds": 80.93,
+          "provider_calls": 7,
+          "history_queries": 0,
+          "quality_reviews": 0,
+          "quality_corrections": 0,
+          "input_tokens": 25956,
+          "output_tokens": 2073,
+          "successful_stage_metrics": [
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 4465,
+              "queue_ms": 0,
+              "input_tokens": 4326,
+              "output_tokens": 146,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 376077,
+              "request_bytes": 514550
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 11657,
+              "queue_ms": 0,
+              "input_tokens": 4326,
+              "output_tokens": 501,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 356039,
+              "request_bytes": 487834
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 6062,
+              "queue_ms": 0,
+              "input_tokens": 4326,
+              "output_tokens": 229,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 342744,
+              "request_bytes": 470106
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 11223,
+              "queue_ms": 0,
+              "input_tokens": 4326,
+              "output_tokens": 459,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 394349,
+              "request_bytes": 538914
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 10327,
+              "queue_ms": 0,
+              "input_tokens": 4326,
+              "output_tokens": 511,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 359133,
+              "request_bytes": 491958
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 50903,
+              "queue_ms": 43738,
+              "input_tokens": 4326,
+              "output_tokens": 227,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 368895,
+              "request_bytes": 504974
+            }
+          ],
+          "assessment": {
+            "status": "NO_PROPOSAL",
+            "content_pass": false,
+            "codes": [],
+            "reason": "merge provider_timeout，无最终提案。"
+          }
+        },
+        {
+          "case": "case13",
+          "source_digest": "b6aa57db660b48d1d40aa53bb305fdf18fa9fe0ba6d2eb1cb8702d4ed792427a",
+          "images": 4,
+          "attempts": 1,
+          "success": false,
+          "failure_code": "analysis_failed",
+          "failure_reason": "provider_timeout",
+          "failure_stage": "merge",
+          "failure_unit": "merge",
+          "seconds": 67.54,
+          "provider_calls": 5,
+          "history_queries": 0,
+          "quality_reviews": 0,
+          "quality_corrections": 0,
+          "input_tokens": 17304,
+          "output_tokens": 1910,
+          "successful_stage_metrics": [
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 14481,
+              "queue_ms": 3,
+              "input_tokens": 4326,
+              "output_tokens": 730,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 472913,
+              "request_bytes": 643666
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 5538,
+              "queue_ms": 0,
+              "input_tokens": 4326,
+              "output_tokens": 164,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 377107,
+              "request_bytes": 515926
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 7584,
+              "queue_ms": 0,
+              "input_tokens": 4326,
+              "output_tokens": 263,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 434434,
+              "request_bytes": 592362
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 37483,
+              "queue_ms": 18623,
+              "input_tokens": 4326,
+              "output_tokens": 753,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 504117,
+              "request_bytes": 685270
+            }
+          ],
+          "assessment": {
+            "status": "NO_PROPOSAL",
+            "content_pass": false,
+            "codes": [],
+            "reason": "merge provider_timeout，无最终提案。"
+          }
+        },
+        {
+          "case": "case14",
+          "source_digest": "27493160e0974e0b977d5a959580e40d8ca6c77da6f1591cd48d8d8a24a483a1",
+          "images": 3,
+          "attempts": 1,
+          "success": true,
+          "new_points": 2,
+          "history_matches": 0,
+          "seconds": 54.47,
+          "provider_calls": 9,
+          "history_queries": 2,
+          "quality_reviews": 2,
+          "quality_corrections": 1,
+          "input_tokens": 55881,
+          "output_tokens": 1864,
+          "successful_stage_metrics": [
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 4995,
+              "queue_ms": 0,
+              "input_tokens": 4303,
+              "output_tokens": 94,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 112,
+              "image_bytes": 97094,
+              "request_bytes": 142572
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 7520,
+              "queue_ms": 0,
+              "input_tokens": 4302,
+              "output_tokens": 192,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 112,
+              "image_bytes": 70223,
+              "request_bytes": 106744
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 16815,
+              "queue_ms": 11688,
+              "input_tokens": 4303,
+              "output_tokens": 115,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 112,
+              "image_bytes": 93398,
+              "request_bytes": 137644
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "merge",
+              "duration_ms": 12427,
+              "queue_ms": 0,
+              "input_tokens": 8511,
+              "output_tokens": 505,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 1798,
+              "image_bytes": 260715,
+              "request_bytes": 366770
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "review",
+              "duration_ms": 4718,
+              "queue_ms": 0,
+              "input_tokens": 8708,
+              "output_tokens": 80,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 3825,
+              "image_bytes": 260715,
+              "request_bytes": 367819
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "merge",
+              "duration_ms": 8540,
+              "queue_ms": 0,
+              "input_tokens": 9270,
+              "output_tokens": 445,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 4371,
+              "image_bytes": 260715,
+              "request_bytes": 369595
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "review",
+              "duration_ms": 3666,
+              "queue_ms": 0,
+              "input_tokens": 9342,
+              "output_tokens": 9,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 5916,
+              "image_bytes": 260715,
+              "request_bytes": 370128
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "match",
+              "duration_ms": 2781,
+              "queue_ms": 0,
+              "input_tokens": 4040,
+              "output_tokens": 36,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 3492,
+              "image_bytes": 0,
+              "request_bytes": 16918
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "coverage",
+              "duration_ms": 5485,
+              "queue_ms": 0,
+              "input_tokens": 3102,
+              "output_tokens": 388,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 8687,
+              "image_bytes": 0,
+              "request_bytes": 11400
+            }
+          ],
+          "assessment": {
+            "status": "PASS",
+            "content_pass": true,
+            "codes": [],
+            "reason": "具体计数及有限数列规则一致，未从插图扩大学科。"
+          }
+        },
+        {
+          "case": "case15",
+          "source_digest": "966cb71faf5d58400a657c7069f720cd185fd194d1d5e9e556368fb49e6617bc",
+          "images": 2,
+          "attempts": 1,
+          "success": false,
+          "failure_code": "analysis_failed",
+          "failure_reason": "provider_timeout",
+          "failure_stage": "merge",
+          "failure_unit": "merge",
+          "seconds": 65.93,
+          "provider_calls": 3,
+          "history_queries": 0,
+          "quality_reviews": 0,
+          "quality_corrections": 0,
+          "input_tokens": 8652,
+          "output_tokens": 1744,
+          "successful_stage_metrics": [
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 21373,
+              "queue_ms": 1063,
+              "input_tokens": 4326,
+              "output_tokens": 1108,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 594949,
+              "request_bytes": 806382
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 35904,
+              "queue_ms": 21377,
+              "input_tokens": 4326,
+              "output_tokens": 636,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 460222,
+              "request_bytes": 626746
+            }
+          ],
+          "assessment": {
+            "status": "NO_PROPOSAL",
+            "content_pass": false,
+            "codes": [],
+            "reason": "merge provider_timeout，无最终提案。"
+          }
+        },
+        {
+          "case": "case16",
+          "source_digest": "f54263cbaca81ca1c0194d229ba5c52976438a3a8e89515daab85db531d440e1",
+          "images": 1,
+          "attempts": 1,
+          "success": true,
+          "new_points": 4,
+          "history_matches": 0,
+          "seconds": 41.79,
+          "provider_calls": 5,
+          "history_queries": 4,
+          "quality_reviews": 1,
+          "quality_corrections": 0,
+          "input_tokens": 28374,
+          "output_tokens": 2107,
+          "successful_stage_metrics": [
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 13642,
+              "queue_ms": 0,
+              "input_tokens": 4327,
+              "output_tokens": 487,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 112,
+              "image_bytes": 370821,
+              "request_bytes": 507540
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "merge",
+              "duration_ms": 11158,
+              "queue_ms": 0,
+              "input_tokens": 5957,
+              "output_tokens": 541,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 1548,
+              "image_bytes": 370821,
+              "request_bytes": 513082
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "review",
+              "duration_ms": 2067,
+              "queue_ms": 0,
+              "input_tokens": 6197,
+              "output_tokens": 9,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 3507,
+              "image_bytes": 370821,
+              "request_bytes": 514071
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "match",
+              "duration_ms": 2745,
+              "queue_ms": 0,
+              "input_tokens": 4640,
+              "output_tokens": 66,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 5076,
+              "image_bytes": 0,
+              "request_bytes": 18726
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "coverage",
+              "duration_ms": 12163,
+              "queue_ms": 0,
+              "input_tokens": 7253,
+              "output_tokens": 1004,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 21052,
+              "image_bytes": 0,
+              "request_bytes": 25151
+            }
+          ],
+          "assessment": {
+            "status": "FAIL",
+            "content_pass": false,
+            "codes": [
+              "C3",
+              "C4",
+              "C5"
+            ],
+            "reason": "同混合运算规则按应用题容器重复拆分，名称缺具体量关系。"
+          }
+        },
+        {
+          "case": "case17",
+          "source_digest": "9b7a1e215f0350f2efdb97972aa7fe883f18adbaa95a991bdaf313a9244e308f",
+          "images": 2,
+          "attempts": 1,
+          "success": true,
+          "new_points": 4,
+          "history_matches": 0,
+          "seconds": 50.63,
+          "provider_calls": 6,
+          "history_queries": 4,
+          "quality_reviews": 1,
+          "quality_corrections": 0,
+          "input_tokens": 29632,
+          "output_tokens": 2381,
+          "successful_stage_metrics": [
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 11650,
+              "queue_ms": 0,
+              "input_tokens": 4327,
+              "output_tokens": 671,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 112,
+              "image_bytes": 253654,
+              "request_bytes": 351320
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 19679,
+              "queue_ms": 11637,
+              "input_tokens": 4327,
+              "output_tokens": 294,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 112,
+              "image_bytes": 351852,
+              "request_bytes": 482248
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "merge",
+              "duration_ms": 22589,
+              "queue_ms": 0,
+              "input_tokens": 7792,
+              "output_tokens": 1313,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 2804,
+              "image_bytes": 605506,
+              "request_bytes": 827382
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "review",
+              "duration_ms": 3652,
+              "queue_ms": 0,
+              "input_tokens": 8466,
+              "output_tokens": 9,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 6015,
+              "image_bytes": 605506,
+              "request_bytes": 829693
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "match",
+              "duration_ms": 2602,
+              "queue_ms": 0,
+              "input_tokens": 3902,
+              "output_tokens": 66,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 2760,
+              "image_bytes": 0,
+              "request_bytes": 15984
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "coverage",
+              "duration_ms": 2080,
+              "queue_ms": 0,
+              "input_tokens": 818,
+              "output_tokens": 28,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 1110,
+              "image_bytes": 0,
+              "request_bytes": 3035
+            }
+          ],
+          "assessment": {
+            "status": "FAIL",
+            "content_pass": false,
+            "codes": [
+              "C3",
+              "C5"
+            ],
+            "reason": "已有两步运算规则之外，另以故事容器重复命名同规则。"
+          }
+        },
+        {
+          "case": "case18",
+          "source_digest": "75f6a1fdc270171c731e0b6ca39dc18fedd4ea15474fc0caf02c166733d3783e",
+          "images": 2,
+          "attempts": 1,
+          "success": true,
+          "new_points": 2,
+          "history_matches": 0,
+          "seconds": 27.43,
+          "provider_calls": 6,
+          "history_queries": 2,
+          "quality_reviews": 1,
+          "quality_corrections": 0,
+          "input_tokens": 27257,
+          "output_tokens": 1099,
+          "successful_stage_metrics": [
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 5108,
+              "queue_ms": 0,
+              "input_tokens": 4327,
+              "output_tokens": 169,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 112,
+              "image_bytes": 368045,
+              "request_bytes": 503840
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 9762,
+              "queue_ms": 5084,
+              "input_tokens": 4327,
+              "output_tokens": 147,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 112,
+              "image_bytes": 463357,
+              "request_bytes": 630924
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "merge",
+              "duration_ms": 11618,
+              "queue_ms": 0,
+              "input_tokens": 7133,
+              "output_tokens": 710,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 1364,
+              "image_bytes": 831402,
+              "request_bytes": 1127109
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "review",
+              "duration_ms": 2657,
+              "queue_ms": 0,
+              "input_tokens": 7279,
+              "output_tokens": 9,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 3165,
+              "image_bytes": 831402,
+              "request_bytes": 1127898
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "match",
+              "duration_ms": 1857,
+              "queue_ms": 0,
+              "input_tokens": 3453,
+              "output_tokens": 36,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 1582,
+              "image_bytes": 0,
+              "request_bytes": 14730
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "coverage",
+              "duration_ms": 1492,
+              "queue_ms": 0,
+              "input_tokens": 738,
+              "output_tokens": 28,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 736,
+              "image_bytes": 0,
+              "request_bytes": 2657
+            }
+          ],
+          "assessment": {
+            "status": "FAIL",
+            "content_pass": true,
+            "codes": [
+              "OUTPUT_SUMMARY_SCOPE"
+            ],
+            "reason": "知识项读写子集正确；摘要把全部认读集合扩成全部书写。"
+          }
+        },
+        {
+          "case": "case19",
+          "source_digest": "5cabba18271cf855e9cd037b4150f484c2fa121cb9fb6d10d7689d7bb8b1dc2d",
+          "images": 0,
+          "attempts": 1,
+          "success": true,
+          "new_points": 1,
+          "history_matches": 0,
+          "seconds": 16.94,
+          "provider_calls": 5,
+          "history_queries": 1,
+          "quality_reviews": 1,
+          "quality_corrections": 0,
+          "input_tokens": 15458,
+          "output_tokens": 372,
+          "successful_stage_metrics": [
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 5130,
+              "queue_ms": 0,
+              "input_tokens": 3035,
+              "output_tokens": 93,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 137,
+              "image_bytes": 0,
+              "request_bytes": 13028
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "merge",
+              "duration_ms": 5821,
+              "queue_ms": 0,
+              "input_tokens": 4172,
+              "output_tokens": 199,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 476,
+              "image_bytes": 0,
+              "request_bytes": 17403
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "review",
+              "duration_ms": 1759,
+              "queue_ms": 0,
+              "input_tokens": 3996,
+              "output_tokens": 9,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 1284,
+              "image_bytes": 0,
+              "request_bytes": 17093
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "match",
+              "duration_ms": 1709,
+              "queue_ms": 0,
+              "input_tokens": 3353,
+              "output_tokens": 21,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 1182,
+              "image_bytes": 0,
+              "request_bytes": 14332
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "coverage",
+              "duration_ms": 2515,
+              "queue_ms": 0,
+              "input_tokens": 902,
+              "output_tokens": 50,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 1236,
+              "image_bytes": 0,
+              "request_bytes": 3235
+            }
+          ],
+          "assessment": {
+            "status": "FAIL",
+            "content_pass": false,
+            "codes": [
+              "C4"
+            ],
+            "reason": "名称只说差值递增，缺材料中明确的差值/增量规则。"
+          }
+        },
+        {
+          "case": "case20",
+          "source_digest": "bc4cc4a51b6002d98a62c15e9fa91d2e8e33bb37fdc23a9802c384ab3cedd446",
+          "images": 1,
+          "attempts": 1,
+          "success": true,
+          "new_points": 1,
+          "history_matches": 0,
+          "seconds": 26.22,
+          "provider_calls": 5,
+          "history_queries": 1,
+          "quality_reviews": 1,
+          "quality_corrections": 0,
+          "input_tokens": 20428,
+          "output_tokens": 954,
+          "successful_stage_metrics": [
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 6964,
+              "queue_ms": 0,
+              "input_tokens": 4326,
+              "output_tokens": 265,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 380314,
+              "request_bytes": 520202
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "merge",
+              "duration_ms": 13589,
+              "queue_ms": 0,
+              "input_tokens": 5651,
+              "output_tokens": 609,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 1041,
+              "image_bytes": 380314,
+              "request_bytes": 525174
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "review",
+              "duration_ms": 2171,
+              "queue_ms": 0,
+              "input_tokens": 5719,
+              "output_tokens": 9,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 2691,
+              "image_bytes": 380314,
+              "request_bytes": 525774
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "match",
+              "duration_ms": 1603,
+              "queue_ms": 0,
+              "input_tokens": 3560,
+              "output_tokens": 21,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 2073,
+              "image_bytes": 0,
+              "request_bytes": 15263
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "coverage",
+              "duration_ms": 1884,
+              "queue_ms": 0,
+              "input_tokens": 1172,
+              "output_tokens": 50,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 2515,
+              "image_bytes": 0,
+              "request_bytes": 4514
+            }
+          ],
+          "assessment": {
+            "status": "NEEDS_PARENT_VERIFICATION",
+            "content_pass": false,
+            "codes": [
+              "C2"
+            ],
+            "reason": "叠加标记/改动无法支持高置信具体分点/段数，需家长核对。"
+          }
+        },
+        {
+          "case": "case21",
+          "source_digest": "a6645e5cf00a52856e3b7ca10dd85adc2cc0569a30425bad38addee47be307f0",
+          "images": 5,
+          "attempts": 1,
+          "success": false,
+          "failure_code": "analysis_output_invalid",
+          "failure_reason": "validation",
+          "failure_stage": "reuse",
+          "failure_unit": "reuse",
+          "seconds": 66.21,
+          "provider_calls": 9,
+          "history_queries": 2,
+          "quality_reviews": 1,
+          "quality_corrections": 0,
+          "input_tokens": 54889,
+          "output_tokens": 2495,
+          "successful_stage_metrics": [
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 7359,
+              "queue_ms": 0,
+              "input_tokens": 4326,
+              "output_tokens": 341,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 576675,
+              "request_bytes": 782014
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 6489,
+              "queue_ms": 0,
+              "input_tokens": 4326,
+              "output_tokens": 255,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 508996,
+              "request_bytes": 691778
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 4018,
+              "queue_ms": 0,
+              "input_tokens": 4326,
+              "output_tokens": 99,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 596133,
+              "request_bytes": 807958
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 8346,
+              "queue_ms": 0,
+              "input_tokens": 4326,
+              "output_tokens": 309,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 525978,
+              "request_bytes": 714418
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 34873,
+              "queue_ms": 26211,
+              "input_tokens": 4326,
+              "output_tokens": 346,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 481356,
+              "request_bytes": 654922
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "merge",
+              "duration_ms": 21376,
+              "queue_ms": 0,
+              "input_tokens": 12194,
+              "output_tokens": 1037,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 5115,
+              "image_bytes": 2689138,
+              "request_bytes": 3608385
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "review",
+              "duration_ms": 4755,
+              "queue_ms": 0,
+              "input_tokens": 12726,
+              "output_tokens": 9,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 8247,
+              "image_bytes": 2689138,
+              "request_bytes": 3610637
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "match",
+              "duration_ms": 2297,
+              "queue_ms": 0,
+              "input_tokens": 4740,
+              "output_tokens": 37,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 6251,
+              "image_bytes": 0,
+              "request_bytes": 20009
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "reuse",
+              "duration_ms": 2869,
+              "queue_ms": 0,
+              "input_tokens": 3599,
+              "output_tokens": 62,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 1941,
+              "image_bytes": 0,
+              "request_bytes": 15394
+            }
+          ],
+          "assessment": {
+            "status": "NO_PROPOSAL",
+            "content_pass": false,
+            "codes": [],
+            "reason": "reuse理由超80字符，末端校验拒绝；质量首审通过不等于最终产出。"
+          }
+        },
+        {
+          "case": "case22",
+          "source_digest": "e78682126b6219c7c85173422b4efb2c19f57bd2d7443679ae846b3313fc3224",
+          "images": 3,
+          "attempts": 1,
+          "success": true,
+          "new_points": 3,
+          "history_matches": 0,
+          "seconds": 51.4,
+          "provider_calls": 7,
+          "history_queries": 3,
+          "quality_reviews": 1,
+          "quality_corrections": 0,
+          "input_tokens": 40049,
+          "output_tokens": 1851,
+          "successful_stage_metrics": [
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 7381,
+              "queue_ms": 0,
+              "input_tokens": 4326,
+              "output_tokens": 174,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 354205,
+              "request_bytes": 485390
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 13258,
+              "queue_ms": 7360,
+              "input_tokens": 4326,
+              "output_tokens": 154,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 372409,
+              "request_bytes": 509662
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 15671,
+              "queue_ms": 5885,
+              "input_tokens": 4326,
+              "output_tokens": 279,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 458982,
+              "request_bytes": 625090
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "merge",
+              "duration_ms": 14335,
+              "queue_ms": 0,
+              "input_tokens": 8812,
+              "output_tokens": 684,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 2619,
+              "image_bytes": 1185596,
+              "request_bytes": 1600789
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "review",
+              "duration_ms": 3010,
+              "queue_ms": 0,
+              "input_tokens": 9207,
+              "output_tokens": 9,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 5333,
+              "image_bytes": 1185596,
+              "request_bytes": 1602571
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "match",
+              "duration_ms": 2581,
+              "queue_ms": 0,
+              "input_tokens": 4438,
+              "output_tokens": 51,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 5050,
+              "image_bytes": 0,
+              "request_bytes": 18566
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "coverage",
+              "duration_ms": 8381,
+              "queue_ms": 0,
+              "input_tokens": 4614,
+              "output_tokens": 500,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 14998,
+              "image_bytes": 0,
+              "request_bytes": 17985
+            }
+          ],
+          "assessment": {
+            "status": "PASS",
+            "content_pass": true,
+            "codes": [],
+            "reason": "完整对象集合及独立语法结构、摘要一致。"
+          }
+        },
+        {
+          "case": "case23",
+          "source_digest": "045d2e3e59965d713d975eda908247130bf7cccf031f55de3306f19949454119",
+          "images": 2,
+          "attempts": 1,
+          "success": true,
+          "new_points": 3,
+          "history_matches": 0,
+          "seconds": 44.72,
+          "provider_calls": 6,
+          "history_queries": 3,
+          "quality_reviews": 1,
+          "quality_corrections": 0,
+          "input_tokens": 35357,
+          "output_tokens": 2089,
+          "successful_stage_metrics": [
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 8342,
+              "queue_ms": 0,
+              "input_tokens": 4326,
+              "output_tokens": 308,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 385014,
+              "request_bytes": 526466
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 17125,
+              "queue_ms": 8332,
+              "input_tokens": 4326,
+              "output_tokens": 300,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 397822,
+              "request_bytes": 543546
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "merge",
+              "duration_ms": 14349,
+              "queue_ms": 0,
+              "input_tokens": 7432,
+              "output_tokens": 804,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 2464,
+              "image_bytes": 782836,
+              "request_bytes": 1063484
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "review",
+              "duration_ms": 3462,
+              "queue_ms": 0,
+              "input_tokens": 7659,
+              "output_tokens": 9,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 4686,
+              "image_bytes": 782836,
+              "request_bytes": 1064718
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "match",
+              "duration_ms": 2274,
+              "queue_ms": 0,
+              "input_tokens": 5062,
+              "output_tokens": 51,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 7283,
+              "image_bytes": 0,
+              "request_bytes": 21215
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "coverage",
+              "duration_ms": 7493,
+              "queue_ms": 0,
+              "input_tokens": 6552,
+              "output_tokens": 617,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 22489,
+              "image_bytes": 0,
+              "request_bytes": 26706
+            }
+          ],
+          "assessment": {
+            "status": "FAIL",
+            "content_pass": false,
+            "codes": [
+              "C1",
+              "C4"
+            ],
+            "reason": "词义目标缺完整具体词组；语法名称仍以填空/作答容器为主。"
+          }
+        },
+        {
+          "case": "case24",
+          "source_digest": "11221e1888d21f70b06bf1bad6108463e53fcd50b72607f92710d03651d916b6",
+          "images": 1,
+          "attempts": 1,
+          "success": true,
+          "new_points": 1,
+          "history_matches": 0,
+          "seconds": 21.28,
+          "provider_calls": 5,
+          "history_queries": 1,
+          "quality_reviews": 1,
+          "quality_corrections": 0,
+          "input_tokens": 22292,
+          "output_tokens": 829,
+          "successful_stage_metrics": [
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 5080,
+              "queue_ms": 0,
+              "input_tokens": 4327,
+              "output_tokens": 149,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 112,
+              "image_bytes": 454989,
+              "request_bytes": 619764
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "merge",
+              "duration_ms": 9205,
+              "queue_ms": 0,
+              "input_tokens": 5594,
+              "output_tokens": 468,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 788,
+              "image_bytes": 454989,
+              "request_bytes": 624502
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "review",
+              "duration_ms": 1816,
+              "queue_ms": 0,
+              "input_tokens": 5545,
+              "output_tokens": 9,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 1979,
+              "image_bytes": 454989,
+              "request_bytes": 624617
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "match",
+              "duration_ms": 1773,
+              "queue_ms": 0,
+              "input_tokens": 4416,
+              "output_tokens": 21,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 4773,
+              "image_bytes": 0,
+              "request_bytes": 18389
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "coverage",
+              "duration_ms": 3400,
+              "queue_ms": 0,
+              "input_tokens": 2410,
+              "output_tokens": 182,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 6741,
+              "image_bytes": 0,
+              "request_bytes": 9128
+            }
+          ],
+          "assessment": {
+            "status": "FAIL",
+            "content_pass": false,
+            "codes": [
+              "C2"
+            ],
+            "reason": "把普通手写词认作描红；原PASS回退。"
+          }
+        },
+        {
+          "case": "case25",
+          "source_digest": "3fd88e0ee76b0d14a78bd69bc5ad672e4624a4d34b46978ed15c5a20e9414e94",
+          "images": 1,
+          "attempts": 1,
+          "success": true,
+          "new_points": 1,
+          "history_matches": 0,
+          "seconds": 28.38,
+          "provider_calls": 4,
+          "history_queries": 1,
+          "quality_reviews": 1,
+          "quality_corrections": 0,
+          "input_tokens": 19263,
+          "output_tokens": 1014,
+          "successful_stage_metrics": [
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 5534,
+              "queue_ms": 0,
+              "input_tokens": 4327,
+              "output_tokens": 214,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 112,
+              "image_bytes": 299587,
+              "request_bytes": 412564
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "merge",
+              "duration_ms": 17004,
+              "queue_ms": 0,
+              "input_tokens": 5651,
+              "output_tokens": 770,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 799,
+              "image_bytes": 299587,
+              "request_bytes": 417291
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "review",
+              "duration_ms": 3086,
+              "queue_ms": 0,
+              "input_tokens": 5850,
+              "output_tokens": 9,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 2744,
+              "image_bytes": 299587,
+              "request_bytes": 418216
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "match",
+              "duration_ms": 2752,
+              "queue_ms": 0,
+              "input_tokens": 3435,
+              "output_tokens": 21,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 1488,
+              "image_bytes": 0,
+              "request_bytes": 14602
+            }
+          ],
+          "assessment": {
+            "status": "FAIL",
+            "content_pass": false,
+            "codes": [
+              "C2",
+              "C4"
+            ],
+            "reason": "旋转原图字母遗漏两项且错误判为线条/重复；不确定性未补回全集。"
+          }
+        },
+        {
+          "case": "case26",
+          "source_digest": "9f78e6763fb0b1f1e71a396ab3bdf38dbca8da1a017b1a984f1f63c6c8ffa7f1",
+          "images": 3,
+          "attempts": 1,
+          "success": true,
+          "new_points": 4,
+          "history_matches": 0,
+          "seconds": 76.02,
+          "provider_calls": 8,
+          "history_queries": 4,
+          "quality_reviews": 1,
+          "quality_corrections": 0,
+          "input_tokens": 48387,
+          "output_tokens": 3575,
+          "successful_stage_metrics": [
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 8251,
+              "queue_ms": 0,
+              "input_tokens": 4326,
+              "output_tokens": 368,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 446811,
+              "request_bytes": 608862
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 6804,
+              "queue_ms": 0,
+              "input_tokens": 4326,
+              "output_tokens": 185,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 384164,
+              "request_bytes": 525334
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 24569,
+              "queue_ms": 15047,
+              "input_tokens": 4326,
+              "output_tokens": 384,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 467166,
+              "request_bytes": 636002
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "merge",
+              "duration_ms": 20302,
+              "queue_ms": 0,
+              "input_tokens": 9069,
+              "output_tokens": 1413,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 3328,
+              "image_bytes": 1298141,
+              "request_bytes": 1751562
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "merge",
+              "duration_ms": 21083,
+              "queue_ms": 0,
+              "input_tokens": 9125,
+              "output_tokens": 901,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 3561,
+              "image_bytes": 1298141,
+              "request_bytes": 1751809
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "review",
+              "duration_ms": 3454,
+              "queue_ms": 0,
+              "input_tokens": 9718,
+              "output_tokens": 9,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 6642,
+              "image_bytes": 1298141,
+              "request_bytes": 1754022
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "match",
+              "duration_ms": 2038,
+              "queue_ms": 0,
+              "input_tokens": 4518,
+              "output_tokens": 66,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 5100,
+              "image_bytes": 0,
+              "request_bytes": 18650
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "coverage",
+              "duration_ms": 4531,
+              "queue_ms": 0,
+              "input_tokens": 2979,
+              "output_tokens": 249,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 8337,
+              "image_bytes": 0,
+              "request_bytes": 10946
+            }
+          ],
+          "assessment": {
+            "status": "PASS",
+            "content_pass": true,
+            "codes": [],
+            "reason": "完整词表与独立问答/介绍结构一致，数词具体范围规则可恢复。"
+          }
+        },
+        {
+          "case": "case27",
+          "source_digest": "c531dcf2f45753a971b6312203a65f1382fc84060c974d03ed4a0b62d043961f",
+          "images": 1,
+          "attempts": 1,
+          "success": true,
+          "new_points": 1,
+          "history_matches": 0,
+          "seconds": 24.99,
+          "provider_calls": 5,
+          "history_queries": 1,
+          "quality_reviews": 1,
+          "quality_corrections": 0,
+          "input_tokens": 21015,
+          "output_tokens": 829,
+          "successful_stage_metrics": [
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 6822,
+              "queue_ms": 0,
+              "input_tokens": 4326,
+              "output_tokens": 290,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 407607,
+              "request_bytes": 556590
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "merge",
+              "duration_ms": 10601,
+              "queue_ms": 0,
+              "input_tokens": 5734,
+              "output_tokens": 437,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 1471,
+              "image_bytes": 407607,
+              "request_bytes": 562009
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "review",
+              "duration_ms": 2295,
+              "queue_ms": 0,
+              "input_tokens": 5838,
+              "output_tokens": 9,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 3252,
+              "image_bytes": 407607,
+              "request_bytes": 562770
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "match",
+              "duration_ms": 2722,
+              "queue_ms": 0,
+              "input_tokens": 3672,
+              "output_tokens": 21,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 2492,
+              "image_bytes": 0,
+              "request_bytes": 15756
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "coverage",
+              "duration_ms": 2541,
+              "queue_ms": 0,
+              "input_tokens": 1445,
+              "output_tokens": 72,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 3725,
+              "image_bytes": 0,
+              "request_bytes": 5806
+            }
+          ],
+          "assessment": {
+            "status": "PASS",
+            "content_pass": true,
+            "codes": [],
+            "reason": "具名作品及完整词表一致，无插图数学规则扩展。"
+          }
+        },
+        {
+          "case": "case28",
+          "source_digest": "4da6f378f8734d7fb30a68cf53b7eefb5f99d24f0050151e5c43762cf351f250",
+          "images": 3,
+          "attempts": 1,
+          "success": true,
+          "new_points": 3,
+          "history_matches": 0,
+          "seconds": 36.8,
+          "provider_calls": 7,
+          "history_queries": 3,
+          "quality_reviews": 1,
+          "quality_corrections": 0,
+          "input_tokens": 42567,
+          "output_tokens": 1544,
+          "successful_stage_metrics": [
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 3551,
+              "queue_ms": 0,
+              "input_tokens": 4326,
+              "output_tokens": 87,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 284023,
+              "request_bytes": 391814
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 3743,
+              "queue_ms": 0,
+              "input_tokens": 4326,
+              "output_tokens": 106,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 291483,
+              "request_bytes": 401758
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 11236,
+              "queue_ms": 7276,
+              "input_tokens": 4326,
+              "output_tokens": 111,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 293543,
+              "request_bytes": 404506
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "merge",
+              "duration_ms": 10236,
+              "queue_ms": 0,
+              "input_tokens": 8488,
+              "output_tokens": 471,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 1478,
+              "image_bytes": 869049,
+              "request_bytes": 1177540
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "review",
+              "duration_ms": 3336,
+              "queue_ms": 0,
+              "input_tokens": 8643,
+              "output_tokens": 9,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 3409,
+              "image_bytes": 869049,
+              "request_bytes": 1178479
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "match",
+              "duration_ms": 2492,
+              "queue_ms": 0,
+              "input_tokens": 6068,
+              "output_tokens": 51,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 10554,
+              "image_bytes": 0,
+              "request_bytes": 24854
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "coverage",
+              "duration_ms": 9452,
+              "queue_ms": 0,
+              "input_tokens": 6390,
+              "output_tokens": 709,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 21161,
+              "image_bytes": 0,
+              "request_bytes": 25140
+            }
+          ],
+          "assessment": {
+            "status": "PASS",
+            "content_pass": true,
+            "codes": [],
+            "reason": "原图对象逐一复核，纠正旧字形并保持完整集合。"
+          }
+        },
+        {
+          "case": "case29",
+          "source_digest": "d9329ec642eb99e5c71b4e7c5ad5995aee4c7893b8f4ba3fdd6ed34f3681c143",
+          "images": 1,
+          "attempts": 1,
+          "success": true,
+          "new_points": 1,
+          "history_matches": 0,
+          "seconds": 24.17,
+          "provider_calls": 5,
+          "history_queries": 1,
+          "quality_reviews": 1,
+          "quality_corrections": 0,
+          "input_tokens": 20713,
+          "output_tokens": 775,
+          "successful_stage_metrics": [
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 8661,
+              "queue_ms": 0,
+              "input_tokens": 4326,
+              "output_tokens": 267,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 532038,
+              "request_bytes": 722498
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "merge",
+              "duration_ms": 8944,
+              "queue_ms": 0,
+              "input_tokens": 5715,
+              "output_tokens": 384,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 1306,
+              "image_bytes": 532038,
+              "request_bytes": 727752
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "review",
+              "duration_ms": 2671,
+              "queue_ms": 0,
+              "input_tokens": 5606,
+              "output_tokens": 9,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 2400,
+              "image_bytes": 532038,
+              "request_bytes": 727742
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "match",
+              "duration_ms": 1539,
+              "queue_ms": 0,
+              "input_tokens": 3640,
+              "output_tokens": 21,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 2311,
+              "image_bytes": 0,
+              "request_bytes": 15553
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "coverage",
+              "duration_ms": 2339,
+              "queue_ms": 0,
+              "input_tokens": 1426,
+              "output_tokens": 94,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 3476,
+              "image_bytes": 0,
+              "request_bytes": 5583
+            }
+          ],
+          "assessment": {
+            "status": "PASS",
+            "content_pass": true,
+            "codes": [],
+            "reason": "具体语法条件及全部来源场景一致。"
+          }
+        },
+        {
+          "case": "case30",
+          "source_digest": "7b51e28d8ce92c8d06e10fbebf0bffb945405f09811e19fe16645830dd19d1d3",
+          "images": 1,
+          "attempts": 1,
+          "success": true,
+          "new_points": 2,
+          "history_matches": 0,
+          "seconds": 22.23,
+          "provider_calls": 5,
+          "history_queries": 2,
+          "quality_reviews": 1,
+          "quality_corrections": 0,
+          "input_tokens": 22119,
+          "output_tokens": 952,
+          "successful_stage_metrics": [
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 5180,
+              "queue_ms": 0,
+              "input_tokens": 4327,
+              "output_tokens": 224,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 112,
+              "image_bytes": 323622,
+              "request_bytes": 444608
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "merge",
+              "duration_ms": 9728,
+              "queue_ms": 0,
+              "input_tokens": 5669,
+              "output_tokens": 501,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 985,
+              "image_bytes": 323622,
+              "request_bytes": 449543
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "review",
+              "duration_ms": 1949,
+              "queue_ms": 0,
+              "input_tokens": 5651,
+              "output_tokens": 9,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 2303,
+              "image_bytes": 323622,
+              "request_bytes": 449793
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "match",
+              "duration_ms": 1889,
+              "queue_ms": 0,
+              "input_tokens": 4450,
+              "output_tokens": 36,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 4827,
+              "image_bytes": 0,
+              "request_bytes": 18429
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "coverage",
+              "duration_ms": 3474,
+              "queue_ms": 0,
+              "input_tokens": 2022,
+              "output_tokens": 182,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 5019,
+              "image_bytes": 0,
+              "request_bytes": 7398
+            }
+          ],
+          "assessment": {
+            "status": "FAIL",
+            "content_pass": false,
+            "codes": [
+              "C2"
+            ],
+            "reason": "明确手写汉字仍识成另一字并保持high，缺相应歧义说明。"
+          }
+        }
+      ],
+      "counts": {
+        "total": 30,
+        "generated": 20,
+        "content_pass": 10,
+        "strict_proposal_pass": 9,
+        "correct_rejection": 1,
+        "statuses": {
+          "PASS": 9,
+          "NO_PROPOSAL": 9,
+          "FAIL": 10,
+          "NEEDS_MORE_MATERIAL": 1,
+          "NEEDS_PARENT_VERIFICATION": 1
+        }
+      },
+      "successful_request_resources": {
+        "request_bytes": {
+          "observations": 166,
+          "total": 89952314,
+          "maximum": 3610637
+        },
+        "payload_bytes": {
+          "observations": 166,
+          "total": 498322,
+          "maximum": 44048
+        },
+        "image_bytes": {
+          "observations": 166,
+          "total": 65452677,
+          "maximum": 2689138
+        },
+        "input_tokens": {
+          "observations": 166,
+          "total": 873467,
+          "maximum": 14151
+        },
+        "output_tokens": {
+          "observations": 166,
+          "total": 52390,
+          "maximum": 1921
+        },
+        "duration_ms": {
+          "observations": 166,
+          "total": 1544899,
+          "maximum": 50903
+        },
+        "queue_ms": {
+          "observations": 166,
+          "total": 329688,
+          "maximum": 43738
+        }
+      }
+    },
+    "supplemental": {
+      "mode": "supplemental",
+      "model": "doubao-seed-2-1-pro-260628",
+      "pipeline_revision": "staged-20261101-12",
+      "prompt_revision": "child-aware-history-agent-20261101-15",
+      "source_sha256": {
+        "pipeline.py": "017be7497fc8c6515259183975ed845bbc798ddc347aff48ee160a57f14c9373",
+        "stage_provider.py": "e3a64018d101f8ded8eddfedb1413143bf31ad6f0224b89dddb5b3250e73972e",
+        "stage_contracts.py": "18de2d80fddb1707a160f1827008dcf5cef941529bcfdd6d670095229bb44f94",
+        "contracts.py": "7524e52c4ffbc27e1127d54bb7ac33f676165d8f303961374ad68b959df25564",
+        "history_search.py": "951cfbefa128f782e4a4f53035a3e2ca2d3c51c5c554cd89665af6bd3b22c265",
+        "coverage.py": "44f3f6340b6fcc20367efe7dedd3d311e246acc282bd02d8ea742b6ef6c0aaf4",
+        "failures.py": "3b7a4c1ba9b788c5916fceedceed76611ca22e78789fce1184a1dc3509dabdd4",
+        "telemetry.py": "8cdb0ffc8fd59b7c00551a1a41defc7e76544c2bddd8ec368b35af25a0e8ab4a",
+        "checkpoints.py": "45a0ce6401bc2780bf849fa7acec70a938f24fa77fde36c02afedae909e18e80",
+        "prompt.py": "d8658104bc9e2e65090e2a9221fb030bcb8a56d35d299607841238906124a77c"
+      },
+      "sample_count": 3,
+      "case_concurrency": 2,
+      "request_concurrency": 2,
+      "database_writes": 0,
+      "checkpoint_writes": 0,
+      "business_api_posts": 0,
+      "source_unchanged": true,
+      "process_peak_rss_bytes": 161120256,
+      "results": [
+        {
+          "case": "failed01",
+          "source_digest": "48b3eb516e46fe83ad4989b62d72b1fce9ed722cbfeb8e208a223c35a4b26ed8",
+          "images": 2,
+          "attempts": 1,
+          "success": true,
+          "new_points": 2,
+          "history_matches": 0,
+          "seconds": 36.27,
+          "provider_calls": 7,
+          "history_queries": 2,
+          "quality_reviews": 1,
+          "quality_corrections": 0,
+          "input_tokens": 40823,
+          "output_tokens": 1928,
+          "successful_stage_metrics": [
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 6616,
+              "queue_ms": 0,
+              "input_tokens": 4326,
+              "output_tokens": 199,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 463418,
+              "request_bytes": 631006
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 6276,
+              "queue_ms": 0,
+              "input_tokens": 4326,
+              "output_tokens": 154,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 399353,
+              "request_bytes": 545586
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "merge",
+              "duration_ms": 6378,
+              "queue_ms": 0,
+              "input_tokens": 7159,
+              "output_tokens": 361,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 1428,
+              "image_bytes": 862771,
+              "request_bytes": 1168990
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "review",
+              "duration_ms": 2649,
+              "queue_ms": 0,
+              "input_tokens": 7174,
+              "output_tokens": 9,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 2908,
+              "image_bytes": 862771,
+              "request_bytes": 1169414
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "match",
+              "duration_ms": 2340,
+              "queue_ms": 0,
+              "input_tokens": 6512,
+              "output_tokens": 38,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 11726,
+              "image_bytes": 0,
+              "request_bytes": 26160
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "reuse",
+              "duration_ms": 2499,
+              "queue_ms": 0,
+              "input_tokens": 3274,
+              "output_tokens": 51,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 705,
+              "image_bytes": 0,
+              "request_bytes": 14074
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "coverage",
+              "duration_ms": 14814,
+              "queue_ms": 0,
+              "input_tokens": 8052,
+              "output_tokens": 1116,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 26845,
+              "image_bytes": 0,
+              "request_bytes": 31144
+            }
+          ],
+          "assessment": {
+            "status": "FAIL",
+            "content_pass": true,
+            "codes": [
+              "OUTPUT_SUMMARY_QUANTITY"
+            ],
+            "reason": "两作品知识项正确；摘要使用数量词，违反批准输出合同。"
+          }
+        },
+        {
+          "case": "failed02",
+          "source_digest": "b526d9d0de299acce634c470cf6c5024b7f3920eeecd9e28a9796f911718fc12",
+          "images": 1,
+          "attempts": 1,
+          "success": false,
+          "failure_code": "analysis_output_invalid",
+          "failure_reason": "validation",
+          "failure_stage": "merge",
+          "failure_unit": "merge-correction",
+          "seconds": 84.48,
+          "provider_calls": 5,
+          "history_queries": 0,
+          "quality_reviews": 1,
+          "quality_corrections": 2,
+          "input_tokens": 32481,
+          "output_tokens": 4804,
+          "successful_stage_metrics": [
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 21471,
+              "queue_ms": 5316,
+              "input_tokens": 4326,
+              "output_tokens": 940,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 619657,
+              "request_bytes": 839326
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "merge",
+              "duration_ms": 20521,
+              "queue_ms": 0,
+              "input_tokens": 6254,
+              "output_tokens": 1283,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 3230,
+              "image_bytes": 619657,
+              "request_bytes": 846614
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "review",
+              "duration_ms": 5137,
+              "queue_ms": 0,
+              "input_tokens": 6884,
+              "output_tokens": 112,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 6858,
+              "image_bytes": 619657,
+              "request_bytes": 849390
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "merge",
+              "duration_ms": 20758,
+              "queue_ms": 0,
+              "input_tokens": 7483,
+              "output_tokens": 1428,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 7526,
+              "image_bytes": 619657,
+              "request_bytes": 851302
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "merge",
+              "duration_ms": 15278,
+              "queue_ms": 0,
+              "input_tokens": 7534,
+              "output_tokens": 1041,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 7743,
+              "image_bytes": 619657,
+              "request_bytes": 851533
+            }
+          ],
+          "assessment": {
+            "status": "NO_PROPOSAL",
+            "content_pass": false,
+            "codes": [],
+            "reason": "两次结构纠正改变受保护成员/目标，确定性拒绝。"
+          }
+        },
+        {
+          "case": "failed03",
+          "source_digest": "88f3646dd90bf856dffb084dd31b08fc96b05429f6ae7677c52f9fdd12840923",
+          "images": 3,
+          "attempts": 1,
+          "success": true,
+          "new_points": 4,
+          "history_matches": 0,
+          "seconds": 90.64,
+          "provider_calls": 7,
+          "history_queries": 4,
+          "quality_reviews": 1,
+          "quality_corrections": 0,
+          "input_tokens": 60562,
+          "output_tokens": 4867,
+          "successful_stage_metrics": [
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 14071,
+              "queue_ms": 0,
+              "input_tokens": 4326,
+              "output_tokens": 540,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 468087,
+              "request_bytes": 637230
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 9243,
+              "queue_ms": 0,
+              "input_tokens": 4326,
+              "output_tokens": 336,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 469514,
+              "request_bytes": 639134
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 31967,
+              "queue_ms": 23295,
+              "input_tokens": 4326,
+              "output_tokens": 278,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 114,
+              "image_bytes": 443262,
+              "request_bytes": 604130
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "merge",
+              "duration_ms": 26652,
+              "queue_ms": 0,
+              "input_tokens": 9396,
+              "output_tokens": 1402,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 3835,
+              "image_bytes": 1380863,
+              "request_bytes": 1862445
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "review",
+              "duration_ms": 2866,
+              "queue_ms": 0,
+              "input_tokens": 10255,
+              "output_tokens": 9,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 7567,
+              "image_bytes": 1380863,
+              "request_bytes": 1865345
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "match",
+              "duration_ms": 3890,
+              "queue_ms": 0,
+              "input_tokens": 7121,
+              "output_tokens": 66,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 12671,
+              "image_bytes": 0,
+              "request_bytes": 27279
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "coverage",
+              "duration_ms": 25207,
+              "queue_ms": 0,
+              "input_tokens": 20812,
+              "output_tokens": 2236,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 62673,
+              "image_bytes": 0,
+              "request_bytes": 69692
+            }
+          ],
+          "assessment": {
+            "status": "FAIL",
+            "content_pass": false,
+            "codes": [
+              "C2",
+              "OUTPUT_UNCERTAINTY_ALIAS"
+            ],
+            "reason": "韵母归类错误及备注升为教学仍存在；不确定性泄漏素材alias。"
+          }
+        }
+      ],
+      "counts": {
+        "total": 3,
+        "generated": 2,
+        "content_pass": 1,
+        "strict_proposal_pass": 0,
+        "correct_rejection": 0,
+        "statuses": {
+          "FAIL": 2,
+          "NO_PROPOSAL": 1
+        }
+      },
+      "successful_request_resources": {
+        "request_bytes": {
+          "observations": 19,
+          "total": 13529794,
+          "maximum": 1865345
+        },
+        "payload_bytes": {
+          "observations": 19,
+          "total": 156399,
+          "maximum": 62673
+        },
+        "image_bytes": {
+          "observations": 19,
+          "total": 9829187,
+          "maximum": 1380863
+        },
+        "input_tokens": {
+          "observations": 19,
+          "total": 133866,
+          "maximum": 20812
+        },
+        "output_tokens": {
+          "observations": 19,
+          "total": 11599,
+          "maximum": 2236
+        },
+        "duration_ms": {
+          "observations": 19,
+          "total": 238633,
+          "maximum": 31967
+        },
+        "queue_ms": {
+          "observations": 19,
+          "total": 28611,
+          "maximum": 23295
+        }
+      }
+    },
+    "boundaries": {
+      "mode": "boundaries",
+      "model": "doubao-seed-2-1-pro-260628",
+      "pipeline_revision": "staged-20261101-12",
+      "prompt_revision": "child-aware-history-agent-20261101-15",
+      "source_sha256": {
+        "pipeline.py": "017be7497fc8c6515259183975ed845bbc798ddc347aff48ee160a57f14c9373",
+        "stage_provider.py": "e3a64018d101f8ded8eddfedb1413143bf31ad6f0224b89dddb5b3250e73972e",
+        "stage_contracts.py": "18de2d80fddb1707a160f1827008dcf5cef941529bcfdd6d670095229bb44f94",
+        "contracts.py": "7524e52c4ffbc27e1127d54bb7ac33f676165d8f303961374ad68b959df25564",
+        "history_search.py": "951cfbefa128f782e4a4f53035a3e2ca2d3c51c5c554cd89665af6bd3b22c265",
+        "coverage.py": "44f3f6340b6fcc20367efe7dedd3d311e246acc282bd02d8ea742b6ef6c0aaf4",
+        "failures.py": "3b7a4c1ba9b788c5916fceedceed76611ca22e78789fce1184a1dc3509dabdd4",
+        "telemetry.py": "8cdb0ffc8fd59b7c00551a1a41defc7e76544c2bddd8ec368b35af25a0e8ab4a",
+        "checkpoints.py": "45a0ce6401bc2780bf849fa7acec70a938f24fa77fde36c02afedae909e18e80",
+        "prompt.py": "d8658104bc9e2e65090e2a9221fb030bcb8a56d35d299607841238906124a77c"
+      },
+      "sample_count": 10,
+      "case_concurrency": 2,
+      "request_concurrency": 2,
+      "database_writes": 0,
+      "checkpoint_writes": 0,
+      "business_api_posts": 0,
+      "source_unchanged": true,
+      "process_peak_rss_bytes": 151388160,
+      "results": [
+        {
+          "case": "holdout01",
+          "synthetic": true,
+          "attempts": 1,
+          "success": true,
+          "seconds": 13.19,
+          "provider_calls": 4,
+          "input_tokens": 14359,
+          "output_tokens": 372,
+          "successful_stage_metrics": [
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 4423,
+              "queue_ms": 0,
+              "input_tokens": 3046,
+              "output_tokens": 154,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 209,
+              "image_bytes": 0,
+              "request_bytes": 13098
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "merge",
+              "duration_ms": 5763,
+              "queue_ms": 0,
+              "input_tokens": 4200,
+              "output_tokens": 188,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 675,
+              "image_bytes": 0,
+              "request_bytes": 17600
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "review",
+              "duration_ms": 1418,
+              "queue_ms": 0,
+              "input_tokens": 4012,
+              "output_tokens": 9,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 1482,
+              "image_bytes": 0,
+              "request_bytes": 17287
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "match",
+              "duration_ms": 1582,
+              "queue_ms": 0,
+              "input_tokens": 3101,
+              "output_tokens": 21,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 401,
+              "image_bytes": 0,
+              "request_bytes": 13431
+            }
+          ],
+          "assessment": {
+            "status": "FAIL",
+            "content_pass": true,
+            "codes": [
+              "OUTPUT_SUMMARY_QUANTITY"
+            ],
+            "reason": "完整目标正确；摘要写数量，违反批准合同。"
+          }
+        },
+        {
+          "case": "holdout02",
+          "synthetic": true,
+          "attempts": 1,
+          "success": true,
+          "seconds": 16.18,
+          "provider_calls": 4,
+          "input_tokens": 14636,
+          "output_tokens": 455,
+          "successful_stage_metrics": [
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 4027,
+              "queue_ms": 0,
+              "input_tokens": 3048,
+              "output_tokens": 151,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 234,
+              "image_bytes": 0,
+              "request_bytes": 13123
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "merge",
+              "duration_ms": 6235,
+              "queue_ms": 0,
+              "input_tokens": 4255,
+              "output_tokens": 259,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 936,
+              "image_bytes": 0,
+              "request_bytes": 17883
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "review",
+              "duration_ms": 2551,
+              "queue_ms": 0,
+              "input_tokens": 4163,
+              "output_tokens": 9,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 2094,
+              "image_bytes": 0,
+              "request_bytes": 17971
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "match",
+              "duration_ms": 2111,
+              "queue_ms": 0,
+              "input_tokens": 3170,
+              "output_tokens": 36,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 677,
+              "image_bytes": 0,
+              "request_bytes": 13739
+            }
+          ],
+          "assessment": {
+            "status": "PASS",
+            "content_pass": true,
+            "codes": [],
+            "reason": "跨科目具体目标和对象集合一致。"
+          }
+        },
+        {
+          "case": "holdout03",
+          "synthetic": true,
+          "attempts": 1,
+          "success": false,
+          "failure_reason": "coverage",
+          "failure_code": "analysis_output_invalid",
+          "failure_stage": "merge",
+          "failure_unit": "merge",
+          "seconds": 14.18,
+          "provider_calls": 3,
+          "input_tokens": 11434,
+          "output_tokens": 648,
+          "successful_stage_metrics": [
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 3020,
+              "queue_ms": 0,
+              "input_tokens": 3045,
+              "output_tokens": 83,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 209,
+              "image_bytes": 0,
+              "request_bytes": 13098
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "merge",
+              "duration_ms": 4813,
+              "queue_ms": 0,
+              "input_tokens": 4172,
+              "output_tokens": 199,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 573,
+              "image_bytes": 0,
+              "request_bytes": 17498
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "merge",
+              "duration_ms": 6339,
+              "queue_ms": 0,
+              "input_tokens": 4217,
+              "output_tokens": 366,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 763,
+              "image_bytes": 0,
+              "request_bytes": 17700
+            }
+          ],
+          "assessment": {
+            "status": "NO_PROPOSAL",
+            "content_pass": false,
+            "codes": [],
+            "reason": "已知书写对象因无关听力材料缺失被整体丢弃。"
+          }
+        },
+        {
+          "case": "holdout04",
+          "synthetic": true,
+          "attempts": 1,
+          "success": true,
+          "seconds": 12.23,
+          "provider_calls": 5,
+          "input_tokens": 15043,
+          "output_tokens": 342,
+          "successful_stage_metrics": [
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 3161,
+              "queue_ms": 0,
+              "input_tokens": 3043,
+              "output_tokens": 101,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 177,
+              "image_bytes": 0,
+              "request_bytes": 13066
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "merge",
+              "duration_ms": 4372,
+              "queue_ms": 0,
+              "input_tokens": 4188,
+              "output_tokens": 183,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 558,
+              "image_bytes": 0,
+              "request_bytes": 17483
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "review",
+              "duration_ms": 1527,
+              "queue_ms": 0,
+              "input_tokens": 3995,
+              "output_tokens": 9,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 1285,
+              "image_bytes": 0,
+              "request_bytes": 17090
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "match",
+              "duration_ms": 1607,
+              "queue_ms": 0,
+              "input_tokens": 3167,
+              "output_tokens": 21,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 574,
+              "image_bytes": 0,
+              "request_bytes": 13634
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "coverage",
+              "duration_ms": 1561,
+              "queue_ms": 0,
+              "input_tokens": 650,
+              "output_tokens": 28,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 415,
+              "image_bytes": 0,
+              "request_bytes": 2314
+            }
+          ],
+          "assessment": {
+            "status": "PASS",
+            "content_pass": true,
+            "codes": [],
+            "reason": "可变差值规则明确，未复用固定步长旧身份。"
+          }
+        },
+        {
+          "case": "holdout05",
+          "synthetic": true,
+          "attempts": 1,
+          "success": true,
+          "seconds": 12.09,
+          "provider_calls": 5,
+          "input_tokens": 14881,
+          "output_tokens": 334,
+          "successful_stage_metrics": [
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 3357,
+              "queue_ms": 0,
+              "input_tokens": 3029,
+              "output_tokens": 115,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 134,
+              "image_bytes": 0,
+              "request_bytes": 13023
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "merge",
+              "duration_ms": 3845,
+              "queue_ms": 0,
+              "input_tokens": 4144,
+              "output_tokens": 161,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 438,
+              "image_bytes": 0,
+              "request_bytes": 17363
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "review",
+              "duration_ms": 1484,
+              "queue_ms": 0,
+              "input_tokens": 3929,
+              "output_tokens": 9,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 1120,
+              "image_bytes": 0,
+              "request_bytes": 16925
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "match",
+              "duration_ms": 1955,
+              "queue_ms": 0,
+              "input_tokens": 3148,
+              "output_tokens": 21,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 547,
+              "image_bytes": 0,
+              "request_bytes": 13607
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "coverage",
+              "duration_ms": 1446,
+              "queue_ms": 0,
+              "input_tokens": 631,
+              "output_tokens": 28,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 388,
+              "image_bytes": 0,
+              "request_bytes": 2287
+            }
+          ],
+          "assessment": {
+            "status": "PASS",
+            "content_pass": true,
+            "codes": [],
+            "reason": "听写未错误复用仅认读的历史身份。"
+          }
+        },
+        {
+          "case": "holdout06",
+          "synthetic": true,
+          "attempts": 1,
+          "success": false,
+          "failure_reason": "coverage",
+          "failure_code": "analysis_output_invalid",
+          "failure_stage": "group",
+          "failure_unit": "t",
+          "seconds": 3.07,
+          "provider_calls": 1,
+          "input_tokens": 3028,
+          "output_tokens": 70,
+          "successful_stage_metrics": [
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 3069,
+              "queue_ms": 0,
+              "input_tokens": 3028,
+              "output_tokens": 70,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 128,
+              "image_bytes": 0,
+              "request_bytes": 13017
+            }
+          ],
+          "assessment": {
+            "status": "PASS_EXPECTED_REJECTION",
+            "content_pass": true,
+            "correct_rejection": true,
+            "codes": [],
+            "reason": "缺具体单元内容，正确拒绝虚构。"
+          }
+        },
+        {
+          "case": "holdout07",
+          "synthetic": true,
+          "attempts": 1,
+          "success": true,
+          "seconds": 11.38,
+          "provider_calls": 4,
+          "input_tokens": 14378,
+          "output_tokens": 325,
+          "successful_stage_metrics": [
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 3819,
+              "queue_ms": 0,
+              "input_tokens": 3053,
+              "output_tokens": 113,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 218,
+              "image_bytes": 0,
+              "request_bytes": 13107
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "merge",
+              "duration_ms": 4208,
+              "queue_ms": 0,
+              "input_tokens": 4210,
+              "output_tokens": 182,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 662,
+              "image_bytes": 0,
+              "request_bytes": 17587
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "review",
+              "duration_ms": 1689,
+              "queue_ms": 0,
+              "input_tokens": 4016,
+              "output_tokens": 9,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 1415,
+              "image_bytes": 0,
+              "request_bytes": 17220
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "match",
+              "duration_ms": 1656,
+              "queue_ms": 0,
+              "input_tokens": 3099,
+              "output_tokens": 21,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 373,
+              "image_bytes": 0,
+              "request_bytes": 13403
+            }
+          ],
+          "assessment": {
+            "status": "PASS",
+            "content_pass": true,
+            "codes": [],
+            "reason": "明确字母方向及对象集合保持。"
+          }
+        },
+        {
+          "case": "holdout08",
+          "synthetic": true,
+          "attempts": 1,
+          "success": true,
+          "seconds": 12.49,
+          "provider_calls": 4,
+          "input_tokens": 14268,
+          "output_tokens": 320,
+          "successful_stage_metrics": [
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 4018,
+              "queue_ms": 0,
+              "input_tokens": 3049,
+              "output_tokens": 115,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 221,
+              "image_bytes": 0,
+              "request_bytes": 13110
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "merge",
+              "duration_ms": 4149,
+              "queue_ms": 0,
+              "input_tokens": 4164,
+              "output_tokens": 175,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 516,
+              "image_bytes": 0,
+              "request_bytes": 17441
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "review",
+              "duration_ms": 1830,
+              "queue_ms": 0,
+              "input_tokens": 3963,
+              "output_tokens": 9,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 1246,
+              "image_bytes": 0,
+              "request_bytes": 17051
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "match",
+              "duration_ms": 2484,
+              "queue_ms": 0,
+              "input_tokens": 3092,
+              "output_tokens": 21,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 362,
+              "image_bytes": 0,
+              "request_bytes": 13392
+            }
+          ],
+          "assessment": {
+            "status": "PASS",
+            "content_pass": true,
+            "codes": [],
+            "reason": "认读集合保持，家长备注未升为教学。"
+          }
+        },
+        {
+          "case": "holdout09",
+          "synthetic": true,
+          "attempts": 1,
+          "success": false,
+          "failure_reason": "validation",
+          "failure_code": "analysis_output_invalid",
+          "failure_stage": "merge",
+          "failure_unit": "merge",
+          "seconds": 25.23,
+          "provider_calls": 4,
+          "input_tokens": 14995,
+          "output_tokens": 1045,
+          "successful_stage_metrics": [
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 6463,
+              "queue_ms": 0,
+              "input_tokens": 3112,
+              "output_tokens": 352,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 413,
+              "image_bytes": 0,
+              "request_bytes": 13302
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 7011,
+              "queue_ms": 0,
+              "input_tokens": 3178,
+              "output_tokens": 213,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 683,
+              "image_bytes": 0,
+              "request_bytes": 13588
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "merge",
+              "duration_ms": 5717,
+              "queue_ms": 0,
+              "input_tokens": 4325,
+              "output_tokens": 240,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 1059,
+              "image_bytes": 0,
+              "request_bytes": 17984
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "merge",
+              "duration_ms": 6035,
+              "queue_ms": 0,
+              "input_tokens": 4380,
+              "output_tokens": 240,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 1287,
+              "image_bytes": 0,
+              "request_bytes": 18226
+            }
+          ],
+          "assessment": {
+            "status": "NO_PROPOSAL",
+            "content_pass": false,
+            "codes": [],
+            "reason": "长词表提取及合并名称/证据超限，未形成完整有界分组。"
+          }
+        },
+        {
+          "case": "holdout10",
+          "synthetic": true,
+          "attempts": 1,
+          "success": true,
+          "seconds": 12.4,
+          "provider_calls": 4,
+          "input_tokens": 14490,
+          "output_tokens": 624,
+          "successful_stage_metrics": [
+            {
+              "event": "analysis_stage_completed",
+              "stage": "extract",
+              "duration_ms": 3351,
+              "queue_ms": 0,
+              "input_tokens": 3039,
+              "output_tokens": 181,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 182,
+              "image_bytes": 0,
+              "request_bytes": 13071
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "merge",
+              "duration_ms": 5987,
+              "queue_ms": 0,
+              "input_tokens": 4208,
+              "output_tokens": 398,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 696,
+              "image_bytes": 0,
+              "request_bytes": 17643
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "review",
+              "duration_ms": 1438,
+              "queue_ms": 0,
+              "input_tokens": 4093,
+              "output_tokens": 9,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 1711,
+              "image_bytes": 0,
+              "request_bytes": 17588
+            },
+            {
+              "event": "analysis_stage_completed",
+              "stage": "match",
+              "duration_ms": 1619,
+              "queue_ms": 0,
+              "input_tokens": 3150,
+              "output_tokens": 36,
+              "reasoning_tokens": 0,
+              "status": "completed",
+              "payload_bytes": 570,
+              "image_bytes": 0,
+              "request_bytes": 13632
+            }
+          ],
+          "assessment": {
+            "status": "PASS",
+            "content_pass": true,
+            "codes": [],
+            "reason": "认读全集和书写子集分别保持，摘要未扩张。"
+          }
+        }
+      ],
+      "counts": {
+        "total": 10,
+        "generated": 7,
+        "content_pass": 8,
+        "strict_proposal_pass": 6,
+        "correct_rejection": 1,
+        "statuses": {
+          "FAIL": 1,
+          "PASS": 6,
+          "NO_PROPOSAL": 2,
+          "PASS_EXPECTED_REJECTION": 1
+        }
+      },
+      "successful_request_resources": {
+        "request_bytes": {
+          "observations": 38,
+          "total": 559582,
+          "maximum": 18226
+        },
+        "payload_bytes": {
+          "observations": 38,
+          "total": 25631,
+          "maximum": 2094
+        },
+        "image_bytes": {
+          "observations": 38,
+          "total": 0,
+          "maximum": 0
+        },
+        "input_tokens": {
+          "observations": 38,
+          "total": 131512,
+          "maximum": 4380
+        },
+        "output_tokens": {
+          "observations": 38,
+          "total": 4535,
+          "maximum": 398
+        },
+        "duration_ms": {
+          "observations": 38,
+          "total": 131140,
+          "maximum": 7011
+        },
+        "queue_ms": {
+          "observations": 38,
+          "total": 0,
+          "maximum": 0
+        }
+      }
+    }
+  },
+  "original_six_pass_regression": {
+    "baseline": [
+      "case01",
+      "case08",
+      "case10",
+      "case18",
+      "case24",
+      "case25"
+    ],
+    "current_strict_pass": [
+      "case01",
+      "case08",
+      "case10"
+    ],
+    "current_failed": [
+      "case18",
+      "case24",
+      "case25"
+    ]
+  },
+  "resource_status": "PARTIAL",
+  "resource_limits": "成功请求有实际HTTP body计数；失败请求token/费用/请求字节不完整；进程RSS非最大9图SDK云峰值。",
+  "correction_count_semantics": "quality_corrections为Provider请求计数；同一语义纠正位置可有两个DTO结构尝试，不代表两轮语义纠正。",
+  "database_audit": {
+    "status": "PARTIAL",
+    "readonly_before": {
+      "readonly": 1,
+      "version": "5.7.18-cynos-2.1.14-log"
+    },
+    "readonly_after": {
+      "readonly": 1,
+      "version": "5.7.18-cynos-2.1.14-log"
+    },
+    "total_tables": 61,
+    "schema_metadata": {
+      "before": ["20261024_0025"],
+      "after": ["20261024_0025"],
+      "unchanged": true,
+      "excluded_from_table_denominator": true
+    },
+    "tables": {
+      "activity_records": {
+        "before": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "after": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "unchanged": true
+      },
+      "activity_schedules": {
+        "before": {
+          "count": 11,
+          "sha256": "a6228668a51d57b8bfe2cb2d578e777945f1c1139be8ed9f7875ae1ad231279c"
+        },
+        "after": {
+          "count": 11,
+          "sha256": "a6228668a51d57b8bfe2cb2d578e777945f1c1139be8ed9f7875ae1ad231279c"
+        },
+        "unchanged": true
+      },
+      "activity_schedule_slots": {
+        "before": {
+          "count": 14,
+          "sha256": "d696abaed6109b5642c3efe5a45e53dc3683be0917153f93cce68c92800a0883"
+        },
+        "after": {
+          "count": 14,
+          "sha256": "d696abaed6109b5642c3efe5a45e53dc3683be0917153f93cce68c92800a0883"
+        },
+        "unchanged": true
+      },
+      "agent_jobs": {
+        "before": {
+          "count": 128,
+          "sha256": "9b59ea503d6e2bb7adbcc5c5525b6d5a7310d292137ab2bc0a245fd28ee6f7da"
+        },
+        "after": {
+          "count": 128,
+          "sha256": "9b59ea503d6e2bb7adbcc5c5525b6d5a7310d292137ab2bc0a245fd28ee6f7da"
+        },
+        "unchanged": true
+      },
+      "analysis_stage_results": {
+        "before": {
+          "count": 18,
+          "sha256": "c1d00d1ef11164cdb473a31e1b6858bd606599169d8aa26c30809babd106dedb"
+        },
+        "after": {
+          "count": 18,
+          "sha256": "c1d00d1ef11164cdb473a31e1b6858bd606599169d8aa26c30809babd106dedb"
+        },
+        "unchanged": true
+      },
+      "calendar_events": {
+        "before": {
+          "count": 2,
+          "sha256": "9846f69208a37b9ddc96260f7c37aac883823db50537858339f307a1dbd190db"
+        },
+        "after": {
+          "count": 2,
+          "sha256": "9846f69208a37b9ddc96260f7c37aac883823db50537858339f307a1dbd190db"
+        },
+        "unchanged": true
+      },
+      "calendar_event_requests": {
+        "before": {
+          "count": 2,
+          "sha256": "37deaf0c3cd91df25e460b12b53bbc656caf4cff6d1000bf35c637016cd10f97"
+        },
+        "after": {
+          "count": 2,
+          "sha256": "37deaf0c3cd91df25e460b12b53bbc656caf4cff6d1000bf35c637016cd10f97"
+        },
+        "unchanged": true
+      },
+      "children": {
+        "before": {
+          "count": 2,
+          "sha256": "6288900ef0e975f70507bbcad893411abd9343fa492e0d9389011bf53d3e0ec0"
+        },
+        "after": {
+          "count": 2,
+          "sha256": "08afb0ff2caa2b83b1d1956a84c37932713e52a86b7682d8d497fea73c180fa3"
+        },
+        "unchanged": false
+      },
+      "daily_review_plans": {
+        "before": {
+          "count": 97,
+          "sha256": "8d3694b344dc602f16dee3a12c107fcb0eac474133b0c27adfa675483f773c26"
+        },
+        "after": {
+          "count": 97,
+          "sha256": "8d3694b344dc602f16dee3a12c107fcb0eac474133b0c27adfa675483f773c26"
+        },
+        "unchanged": true
+      },
+      "daily_review_plan_items": {
+        "before": {
+          "count": 637,
+          "sha256": "e1335c156c6dca6be5077278ba0492f2677b0306ff911747202f9d38f3006e18"
+        },
+        "after": {
+          "count": 637,
+          "sha256": "dd98e87fbcf9b3368cc2d6c404a7828ba576c64b439fb09cd4666e08706817ac"
+        },
+        "unchanged": false
+      },
+      "daily_tasks": {
+        "before": {
+          "count": 3,
+          "sha256": "b86308cab250ae311d51a24d21e2cabc6de732741151bba1c765ea195e207f7f"
+        },
+        "after": {
+          "count": 3,
+          "sha256": "b86308cab250ae311d51a24d21e2cabc6de732741151bba1c765ea195e207f7f"
+        },
+        "unchanged": true
+      },
+      "daily_task_completions": {
+        "before": {
+          "count": 1,
+          "sha256": "afbe4993fb456c7a981f68e6bc6b8406780899780aed0b1f820d31ff26b5712a"
+        },
+        "after": {
+          "count": 2,
+          "sha256": "ba33aee10eb8f78b45e2d4fb85113eb8282e2328f1434ff6dc8677aaf8906345"
+        },
+        "unchanged": false
+      },
+      "deletion_requests": {
+        "before": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "after": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "unchanged": true
+      },
+      "family_audit_events": {
+        "before": {
+          "count": 12,
+          "sha256": "86a646e92886a5cef3b98cbdf1e4326d2adf73dfb59e650471eac31361a87c9e"
+        },
+        "after": {
+          "count": 12,
+          "sha256": "86a646e92886a5cef3b98cbdf1e4326d2adf73dfb59e650471eac31361a87c9e"
+        },
+        "unchanged": true
+      },
+      "family_invites": {
+        "before": {
+          "count": 5,
+          "sha256": "f8571461ba526b112d748deb3c84f8262d719ea475f527488ec8a3d93e9ef614"
+        },
+        "after": {
+          "count": 5,
+          "sha256": "f8571461ba526b112d748deb3c84f8262d719ea475f527488ec8a3d93e9ef614"
+        },
+        "unchanged": true
+      },
+      "family_join_requests": {
+        "before": {
+          "count": 2,
+          "sha256": "f530b8f95462d2c4b5505f781819d9c0e4cddc1092b4f6aa1242e3b25c41931e"
+        },
+        "after": {
+          "count": 2,
+          "sha256": "f530b8f95462d2c4b5505f781819d9c0e4cddc1092b4f6aa1242e3b25c41931e"
+        },
+        "unchanged": true
+      },
+      "family_members": {
+        "before": {
+          "count": 3,
+          "sha256": "0fc33a5e729217788e90a4ff36f4710d99a4c85ce146fe3c8d049a18c0f3d3fb"
+        },
+        "after": {
+          "count": 3,
+          "sha256": "0fc33a5e729217788e90a4ff36f4710d99a4c85ce146fe3c8d049a18c0f3d3fb"
+        },
+        "unchanged": true
+      },
+      "footprint_imports": {
+        "before": {
+          "count": 1,
+          "sha256": "ad8b80e4ec0d1ec930a92eff640d0e87971354341f3981a66c759797f477bd47"
+        },
+        "after": {
+          "count": 1,
+          "sha256": "ad8b80e4ec0d1ec930a92eff640d0e87971354341f3981a66c759797f477bd47"
+        },
+        "unchanged": true
+      },
+      "footprint_photos": {
+        "before": {
+          "count": 3,
+          "sha256": "2a47529d85867002cfe056ee784350ef6335a20fe9e05dc80c8adb848486ea46"
+        },
+        "after": {
+          "count": 3,
+          "sha256": "2a47529d85867002cfe056ee784350ef6335a20fe9e05dc80c8adb848486ea46"
+        },
+        "unchanged": true
+      },
+      "footprint_preferences": {
+        "before": {
+          "count": 1,
+          "sha256": "d223b4b1f33c4c3c1c69fd86396fe64afd03cb2f279571e5b1e349544891f26d"
+        },
+        "after": {
+          "count": 1,
+          "sha256": "d223b4b1f33c4c3c1c69fd86396fe64afd03cb2f279571e5b1e349544891f26d"
+        },
+        "unchanged": true
+      },
+      "footprint_scopes": {
+        "before": {
+          "count": 1,
+          "sha256": "f2bda3f931c8351ac1ba21c71a4e2960a52437deb3aad0fa23b58b347085b29c"
+        },
+        "after": {
+          "count": 1,
+          "sha256": "f2bda3f931c8351ac1ba21c71a4e2960a52437deb3aad0fa23b58b347085b29c"
+        },
+        "unchanged": true
+      },
+      "footprint_visits": {
+        "before": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "after": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "unchanged": true
+      },
+      "knowledge_coverage_jobs": {
+        "before": {
+          "count": 74,
+          "sha256": "00098a84fc743231b5e58b39cd97eeb10bdb74bc4ad11b5392c682eb2cb6ebc4"
+        },
+        "after": {
+          "count": 74,
+          "sha256": "00098a84fc743231b5e58b39cd97eeb10bdb74bc4ad11b5392c682eb2cb6ebc4"
+        },
+        "unchanged": true
+      },
+      "knowledge_input_clocks": {
+        "before": {
+          "count": 2,
+          "sha256": "ebd0ca15ad7abbb5b31ad44d0fe00b79068f0ce55df93b47d02bc7726c0fa8c5"
+        },
+        "after": {
+          "count": 2,
+          "sha256": "ebd0ca15ad7abbb5b31ad44d0fe00b79068f0ce55df93b47d02bc7726c0fa8c5"
+        },
+        "unchanged": true
+      },
+      "knowledge_items": {
+        "before": {
+          "count": 264,
+          "sha256": "5100d48937f163bdc5bf87196e50ac2969c81c6e2cbd32571e56147827784e9c"
+        },
+        "after": {
+          "count": 264,
+          "sha256": "5100d48937f163bdc5bf87196e50ac2969c81c6e2cbd32571e56147827784e9c"
+        },
+        "unchanged": true
+      },
+      "knowledge_occurrences": {
+        "before": {
+          "count": 264,
+          "sha256": "e38f9eed2b4deef91f7d0c2ec6697967e19c413eabdf5908784593bd3f3666f7"
+        },
+        "after": {
+          "count": 264,
+          "sha256": "e38f9eed2b4deef91f7d0c2ec6697967e19c413eabdf5908784593bd3f3666f7"
+        },
+        "unchanged": true
+      },
+      "knowledge_search_terms": {
+        "before": {
+          "count": 7214,
+          "sha256": "c2b1fac3cac48c0f394f7fd470937d6023896a211da385bc73dbca5a4e90e315"
+        },
+        "after": {
+          "count": 7214,
+          "sha256": "c2b1fac3cac48c0f394f7fd470937d6023896a211da385bc73dbca5a4e90e315"
+        },
+        "unchanged": true
+      },
+      "learning_records": {
+        "before": {
+          "count": 120,
+          "sha256": "8cbd5937e25a354a339e90aa9bec1573c4de7792951b7c932c563ea7a199ea40"
+        },
+        "after": {
+          "count": 120,
+          "sha256": "8cbd5937e25a354a339e90aa9bec1573c4de7792951b7c932c563ea7a199ea40"
+        },
+        "unchanged": true
+      },
+      "learning_submissions": {
+        "before": {
+          "count": 128,
+          "sha256": "ec8b9985970145f086f4fc64a128f6ed08494d5caf50352aa23d42dd104c31dd"
+        },
+        "after": {
+          "count": 128,
+          "sha256": "ec8b9985970145f086f4fc64a128f6ed08494d5caf50352aa23d42dd104c31dd"
+        },
+        "unchanged": true
+      },
+      "learning_suggestions": {
+        "before": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "after": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "unchanged": true
+      },
+      "learning_suggestion_jobs": {
+        "before": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "after": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "unchanged": true
+      },
+      "learning_suggestion_prompt_days": {
+        "before": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "after": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "unchanged": true
+      },
+      "learning_suggestion_states": {
+        "before": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "after": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "unchanged": true
+      },
+      "media_objects": {
+        "before": {
+          "count": 206,
+          "sha256": "df87ed406813dd1907af0f73fa9df949a8fa00134aed000b452439d53e624596"
+        },
+        "after": {
+          "count": 206,
+          "sha256": "df87ed406813dd1907af0f73fa9df949a8fa00134aed000b452439d53e624596"
+        },
+        "unchanged": true
+      },
+      "notification_deliveries": {
+        "before": {
+          "count": 37,
+          "sha256": "7b20fb7e84225ecbc7f373945dff063039f679ef6c5aac14e43c6bb09492c418"
+        },
+        "after": {
+          "count": 37,
+          "sha256": "7b20fb7e84225ecbc7f373945dff063039f679ef6c5aac14e43c6bb09492c418"
+        },
+        "unchanged": true
+      },
+      "notification_destinations": {
+        "before": {
+          "count": 1,
+          "sha256": "7ed5b337ec61fb85711570d322c2babd45762b9c35a4015c699f421101929e95"
+        },
+        "after": {
+          "count": 1,
+          "sha256": "7ed5b337ec61fb85711570d322c2babd45762b9c35a4015c699f421101929e95"
+        },
+        "unchanged": true
+      },
+      "notification_grant_attempts": {
+        "before": {
+          "count": 8,
+          "sha256": "e7ab655a6b37ae47a6f927b92f56cf3ebd128ad8e882a17421740e3929214f83"
+        },
+        "after": {
+          "count": 8,
+          "sha256": "e7ab655a6b37ae47a6f927b92f56cf3ebd128ad8e882a17421740e3929214f83"
+        },
+        "unchanged": true
+      },
+      "notification_preferences": {
+        "before": {
+          "count": 1,
+          "sha256": "fac26bdbe763cdab670e5bfd37a2c13cc00b3bce1a4a006fd75ada6d54ced5eb"
+        },
+        "after": {
+          "count": 1,
+          "sha256": "fac26bdbe763cdab670e5bfd37a2c13cc00b3bce1a4a006fd75ada6d54ced5eb"
+        },
+        "unchanged": true
+      },
+      "notification_renewal_preferences": {
+        "before": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "after": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "unchanged": true
+      },
+      "notification_renewal_states": {
+        "before": {
+          "count": 2,
+          "sha256": "5ae4fe57f3c4b232535de4a43ab978596a719c96600049b368e0785b4f94b4f6"
+        },
+        "after": {
+          "count": 2,
+          "sha256": "5ae4fe57f3c4b232535de4a43ab978596a719c96600049b368e0785b4f94b4f6"
+        },
+        "unchanged": true
+      },
+      "notification_subscriptions": {
+        "before": {
+          "count": 2,
+          "sha256": "f9840454cf9a0f65be7b9399c5399be6ac7c4a8911937643219cf116ec160a4c"
+        },
+        "after": {
+          "count": 2,
+          "sha256": "f9840454cf9a0f65be7b9399c5399be6ac7c4a8911937643219cf116ec160a4c"
+        },
+        "unchanged": true
+      },
+      "review_early_slots": {
+        "before": {
+          "count": 258,
+          "sha256": "84ea9508a1d78bc41d6159e1e348faae72640537d1fc7d3b124165474284c77e"
+        },
+        "after": {
+          "count": 261,
+          "sha256": "40c61e3472aacb7766ed4e7a799310e93b50d16469553b4736a1533167557737"
+        },
+        "unchanged": false
+      },
+      "review_feedback": {
+        "before": {
+          "count": 467,
+          "sha256": "9331185898ec6efa7997d07b28c9afcaf8a8d3a7afd32b97c922d6b57c6a2f00"
+        },
+        "after": {
+          "count": 468,
+          "sha256": "72f012b7a0122a3ea073cf359ad9b003e648bf10e02b475be461a12ec5c93886"
+        },
+        "unchanged": false
+      },
+      "review_feedback_batch_requests": {
+        "before": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "after": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "unchanged": true
+      },
+      "review_feedback_requests": {
+        "before": {
+          "count": 395,
+          "sha256": "cffa602f9d145702915fbd27aa89c3e52d002762194240529a2f9aaed16c7ad2"
+        },
+        "after": {
+          "count": 396,
+          "sha256": "5031da415a395ed5e56506936b7c715dcad1e7e3e12bc15d7d92a0165841435d"
+        },
+        "unchanged": false
+      },
+      "review_items": {
+        "before": {
+          "count": 264,
+          "sha256": "9225dc1d72989a5562412da04d3a931aa266b94cf697c21eae387c01b4a7de22"
+        },
+        "after": {
+          "count": 264,
+          "sha256": "d9819095ff9342fce9af15af98758a4dc7c00da48eb651cdbd10893518808fd7"
+        },
+        "unchanged": false
+      },
+      "review_member_completion_progress": {
+        "before": {
+          "count": 3,
+          "sha256": "0ba84b65c19c06b676f1ec82cdc46df9270d8002b94fd87d0d339b0543d3216b"
+        },
+        "after": {
+          "count": 3,
+          "sha256": "de5eb8ae2f2b347019b817849eea41f3db6e249ca41195e44f1f8f7c5987295c"
+        },
+        "unchanged": false
+      },
+      "review_member_completion_receipts": {
+        "before": {
+          "count": 56,
+          "sha256": "fda08fada40c05a14cd42e013670e989cb943bd6439372258e935d67533efff6"
+        },
+        "after": {
+          "count": 57,
+          "sha256": "25514c9181710cc74e920ea3ede9e0efeaffe9128b1ff22f9c40f189e9752fdc"
+        },
+        "unchanged": false
+      },
+      "review_queue_entries": {
+        "before": {
+          "count": 264,
+          "sha256": "a1c64cccfb9169c40e98ab57351738ceec9c59f2fd222414dc591d26194103f0"
+        },
+        "after": {
+          "count": 264,
+          "sha256": "683501af65716886f3c47508f9252cf94e71e767c4f68c2e2fb1cdb052590c96"
+        },
+        "unchanged": false
+      },
+      "review_schedule_changes": {
+        "before": {
+          "count": 2,
+          "sha256": "a14b70897f5da554e72d779d3036d0f3020cc1f8f37dcabb1386e159131e50c5"
+        },
+        "after": {
+          "count": 2,
+          "sha256": "a14b70897f5da554e72d779d3036d0f3020cc1f8f37dcabb1386e159131e50c5"
+        },
+        "unchanged": true
+      },
+      "review_schedule_overrides": {
+        "before": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "after": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "unchanged": true
+      },
+      "study_tasks": {
+        "before": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "after": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "unchanged": true
+      },
+      "study_task_records": {
+        "before": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "after": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "unchanged": true
+      },
+      "study_task_record_intents": {
+        "before": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "after": {
+          "count": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "unchanged": true
+      },
+      "subjects": {
+        "before": {
+          "count": 18,
+          "sha256": "7310cf2e0137cda1545e3ddda6bb1e08011cb052c13028f76267c454c3f3ab20"
+        },
+        "after": {
+          "count": 18,
+          "sha256": "7310cf2e0137cda1545e3ddda6bb1e08011cb052c13028f76267c454c3f3ab20"
+        },
+        "unchanged": true
+      },
+      "submission_requests": {
+        "before": {
+          "count": 128,
+          "sha256": "50450cdf47e1a0aee203d2507275eb83b0d411b3617338b546f16ab78a3f52b7"
+        },
+        "after": {
+          "count": 128,
+          "sha256": "50450cdf47e1a0aee203d2507275eb83b0d411b3617338b546f16ab78a3f52b7"
+        },
+        "unchanged": true
+      },
+      "travel_arrangements": {
+        "before": {
+          "count": 4,
+          "sha256": "ccbd6716b82bedbac1b340c10cca62b4951ad3a7306c08a7850c05695346a738"
+        },
+        "after": {
+          "count": 4,
+          "sha256": "ccbd6716b82bedbac1b340c10cca62b4951ad3a7306c08a7850c05695346a738"
+        },
+        "unchanged": true
+      },
+      "travel_arrangement_requests": {
+        "before": {
+          "count": 4,
+          "sha256": "c2e896d550c5b930de7f5335feeadf154376af9ea99a63af4654c28c1f20d3de"
+        },
+        "after": {
+          "count": 4,
+          "sha256": "c2e896d550c5b930de7f5335feeadf154376af9ea99a63af4654c28c1f20d3de"
+        },
+        "unchanged": true
+      },
+      "travel_arrangement_slots": {
+        "before": {
+          "count": 20,
+          "sha256": "b2796384f3a15e7b3b8b89ccb2736b4d2134fcc41242f6a7abe689b1d4051a5f"
+        },
+        "after": {
+          "count": 20,
+          "sha256": "b2796384f3a15e7b3b8b89ccb2736b4d2134fcc41242f6a7abe689b1d4051a5f"
+        },
+        "unchanged": true
+      },
+      "wechat_actor_bindings": {
+        "before": {
+          "count": 3,
+          "sha256": "e11f07d11b089dd90e68daff352a51c10d88547f7d33bdb248d4d78fd1c427d6"
+        },
+        "after": {
+          "count": 3,
+          "sha256": "e11f07d11b089dd90e68daff352a51c10d88547f7d33bdb248d4d78fd1c427d6"
+        },
+        "unchanged": true
+      },
+      "submission_media": {
+        "before": {
+          "count": 205,
+          "sha256": "d3b469e9376e550487f37208a351227b8023c8994be07e05df4f10a4437788fe"
+        },
+        "after": {
+          "count": 205,
+          "sha256": "d3b469e9376e550487f37208a351227b8023c8994be07e05df4f10a4437788fe"
+        },
+        "unchanged": true
+      }
+    },
+    "database_writes_by_runner": 0,
+    "checkpoint_writes_by_runner": 0,
+    "business_api_posts_by_runner": 0,
+    "external_writer_attribution": "NOT_VERIFIED",
+    "unchanged_tables": 51,
+    "changed_tables": [
+      "children",
+      "daily_review_plan_items",
+      "daily_task_completions",
+      "review_early_slots",
+      "review_feedback",
+      "review_feedback_requests",
+      "review_items",
+      "review_member_completion_progress",
+      "review_member_completion_receipts",
+      "review_queue_entries"
+    ]
+  },
+  "source_integrity": {
+    "candidate12": [
+      {
+        "path": "apps/api/src/push_kids/agent_processing/pipeline.py",
+        "live_matches": true,
+        "snapshot_matches": true
+      },
+      {
+        "path": "apps/api/src/push_kids/agent_processing/stage_contracts.py",
+        "live_matches": true,
+        "snapshot_matches": true
+      },
+      {
+        "path": "apps/api/src/push_kids/agent_processing/stage_provider.py",
+        "live_matches": true,
+        "snapshot_matches": true
+      },
+      {
+        "path": "apps/api/src/push_kids/agent_processing/prompt.py",
+        "live_matches": true,
+        "snapshot_matches": true
+      },
+      {
+        "path": "apps/api/src/push_kids/agent_processing/failures.py",
+        "live_matches": true,
+        "snapshot_matches": true
+      },
+      {
+        "path": "apps/api/src/push_kids/agent_processing/telemetry.py",
+        "live_matches": true,
+        "snapshot_matches": true
+      },
+      {
+        "path": "tests/staged_analysis_fakes.py",
+        "live_matches": true,
+        "snapshot_matches": true
+      },
+      {
+        "path": "tests/unit/test_staged_analysis.py",
+        "live_matches": true,
+        "snapshot_matches": true
+      },
+      {
+        "path": "tests/unit/test_staged_proposal_recovery.py",
+        "live_matches": true,
+        "snapshot_matches": true
+      },
+      {
+        "path": "tests/unit/test_stage_provider.py",
+        "live_matches": true,
+        "snapshot_matches": true
+      },
+      {
+        "path": "tests/unit/test_provider_evidence.py",
+        "live_matches": true,
+        "snapshot_matches": true
+      }
+    ],
+    "historical_and_candidate_manifest_checks": "PASS",
+    "mode_source_unchanged": {
+      "diagnostic": true,
+      "final": true,
+      "supplemental": true,
+      "boundaries": true
+    }
+  }
+}

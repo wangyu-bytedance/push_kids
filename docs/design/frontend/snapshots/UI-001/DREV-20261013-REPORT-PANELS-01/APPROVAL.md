@@ -12,7 +12,7 @@
 - Approved by: 产品负责人（用户）
 - Approved at: 2026-10-13
 - Approval evidence: 用户审阅效果图后回复“可以 这个方案可行”，批准 SPEC-20261013-REPORT-PANELS-01 + DREV-20261013-REPORT-PANELS-01；同时明确不影响并行每个card背景优化。
-- Superseded by: N/A
+- Superseded by: DREV-20261101-REPORT-FOOTER-TIPS-01（用户2026-11-01批准Spec01 + DREV01；仅编辑计划分页及删除/预算提示容器几何，当前为本地实现；报表外层、展开/收起、历史布局和其他范围继续有效）
 
 ## Approved scope
 

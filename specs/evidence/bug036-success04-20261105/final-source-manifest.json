@@ -1,0 +1,66 @@
+{
+  "apps/api/src/push_kids/agent_processing/checkpoints.py": {
+    "sha256": "45a0ce6401bc2780bf849fa7acec70a938f24fa77fde36c02afedae909e18e80",
+    "bytes": 7516
+  },
+  "apps/api/src/push_kids/agent_processing/contracts.py": {
+    "sha256": "7524e52c4ffbc27e1127d54bb7ac33f676165d8f303961374ad68b959df25564",
+    "bytes": 28430
+  },
+  "apps/api/src/push_kids/agent_processing/failures.py": {
+    "sha256": "3b7a4c1ba9b788c5916fceedceed76611ca22e78789fce1184a1dc3509dabdd4",
+    "bytes": 3597
+  },
+  "apps/api/src/push_kids/agent_processing/pipeline.py": {
+    "sha256": "2fb6f22239387d27d66fd2bbf21cbed7e34a1c9ebd2d76bd49539102dde6b69e",
+    "bytes": 43590
+  },
+  "apps/api/src/push_kids/agent_processing/prompt.py": {
+    "sha256": "c6a5b5ddc8e30951e900b5622e728e483117066cf06b278fa8628be995cadfaa",
+    "bytes": 5119
+  },
+  "apps/api/src/push_kids/agent_processing/stage_contracts.py": {
+    "sha256": "403819c248fe73ff73fcfa374ed2169254811c8ccb6a96646c8c1728d7ce9ac8",
+    "bytes": 27186
+  },
+  "apps/api/src/push_kids/agent_processing/stage_provider.py": {
+    "sha256": "e3a64018d101f8ded8eddfedb1413143bf31ad6f0224b89dddb5b3250e73972e",
+    "bytes": 8877
+  },
+  "apps/api/src/push_kids/agent_processing/telemetry.py": {
+    "sha256": "8cdb0ffc8fd59b7c00551a1a41defc7e76544c2bddd8ec368b35af25a0e8ab4a",
+    "bytes": 4331
+  },
+  "apps/api/src/push_kids/agent_processing/worker.py": {
+    "sha256": "32f8cb9f7b4a7e181ae4227bbffadfa5f2c582c4cfabf02ae8528f7172cbc2b8",
+    "bytes": 23993
+  },
+  "apps/api/src/push_kids/learning/service.py": {
+    "sha256": "c0d3e595a7b9b6b947b5ad1bf38931d2988a484e985c959ad97c39b587766e27",
+    "bytes": 64652
+  },
+  "tests/fixtures/analysis_quality/cases.json": {
+    "sha256": "9bdaec483fa9f6cc65e7a46c3656e70f2304efd42ecab3fe362864afa8fd829f",
+    "bytes": 5323
+  },
+  "tests/integration/test_analysis_checkpoints.py": {
+    "sha256": "2a991220d9b8c17c6ad99ae80f606d5a1ac11f6dc3268e4006ad326f488bdc20",
+    "bytes": 25150
+  },
+  "tests/unit/test_provider_evidence.py": {
+    "sha256": "a9d0684956cb63dbeeaeaaabd371c171bf1f1adb028a6f217601e9d8316bbfab",
+    "bytes": 5856
+  },
+  "tests/unit/test_staged_analysis.py": {
+    "sha256": "8056974c0785126988a64b93e4a115eba0d7ca9b0d513cb7a450e7390d7e10c5",
+    "bytes": 32378
+  },
+  "tests/unit/test_staged_proposal_recovery.py": {
+    "sha256": "e6ad5eef8f3928916f08250fe6b61e194fbd4704519269752d866a3fb71a5b7e",
+    "bytes": 29811
+  },
+  "tools/evaluate_analysis_quality.py": {
+    "sha256": "c603045b06d03836e4d16b6b9dcd998a0219c67afe700bd6d4c4bd7d85f79374",
+    "bytes": 16082
+  }
+}

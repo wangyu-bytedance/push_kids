@@ -2,7 +2,7 @@
 
 - Date: 2026-10-24
 - State: LOCAL_IMPLEMENTATION / VERIFYING / NOT_UPLOADED / NOT_DEPLOYED
-- Authorization: 用户「可以」批准[BUG-032 Spec05](../../../specs/active/BUG-032-RECORD-ENTRY-CONTEXT.md)与DREV-20261024-RECORD-ENTRY-01。
+- Authorization: 用户「可以」批准[BUG-032 Spec05](../../../specs/completed/BUG-032-RECORD-ENTRY-CONTEXT.md)与DREV-20261024-RECORD-ENTRY-01。
 - Evidence: [测试和验收边界](../../quality/evidence/record-entry-20261024/README.md)。
 
 本轮只调整小程序记录页协调、孩子控件、旅行范围/有界续看与内容下方导入按钮，没有后端、API、SQL、迁移或运行配置变更。没有提交、推送、客户端上传、体验版、提审或正式发布；既有035后端/Schema0022、coverage=false保持其既有发布状态。

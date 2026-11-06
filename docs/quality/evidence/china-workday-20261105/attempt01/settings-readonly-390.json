@@ -1,0 +1,129 @@
+{
+  "route": "pages/settings/index",
+  "viewport": {
+    "width": 390,
+    "height": 844,
+    "screenHeight": 844
+  },
+  "nodes": [
+    {
+      "selector": ".pk-sheet",
+      "left": 0,
+      "right": 390,
+      "top": 284,
+      "bottom": 844,
+      "width": 390,
+      "height": 560,
+      "fontSize": "16px",
+      "lineHeight": "25.6px"
+    },
+    {
+      "selector": ".sheet-head",
+      "left": 18,
+      "right": 372,
+      "top": 306,
+      "bottom": 365,
+      "width": 354,
+      "height": 59,
+      "fontSize": "16px",
+      "lineHeight": "25.6px"
+    },
+    {
+      "selector": ".sheet-body",
+      "left": 18,
+      "right": 372,
+      "top": 365,
+      "bottom": 679,
+      "width": 354,
+      "height": 314,
+      "fontSize": "16px",
+      "lineHeight": "25.6px"
+    },
+    {
+      "selector": ".sheet-foot",
+      "left": 18,
+      "right": 372,
+      "top": 679,
+      "bottom": 740,
+      "width": 354,
+      "height": 61,
+      "fontSize": "16px",
+      "lineHeight": "25.6px"
+    },
+    {
+      "selector": ".schedule-mode",
+      "left": 18,
+      "right": 372,
+      "top": 365,
+      "bottom": 415,
+      "width": 354,
+      "height": 50,
+      "fontSize": "16px",
+      "lineHeight": "25.6px"
+    },
+    {
+      "selector": ".sheet-foot .btn",
+      "left": 103,
+      "right": 287,
+      "top": 691,
+      "bottom": 740,
+      "width": 184,
+      "height": 49,
+      "fontSize": "16px",
+      "lineHeight": "19.2px"
+    },
+    {
+      "selector": ".pk-picker",
+      "left": 18,
+      "right": 191,
+      "top": 570,
+      "bottom": 618,
+      "width": 173,
+      "height": 48,
+      "fontSize": "15px",
+      "lineHeight": "22.5px"
+    },
+    {
+      "selector": ".pk-picker",
+      "left": 199,
+      "right": 372,
+      "top": 570,
+      "bottom": 618,
+      "width": 173,
+      "height": 48,
+      "fontSize": "15px",
+      "lineHeight": "22.5px"
+    },
+    {
+      "selector": ".workday-rule .n-txt",
+      "left": 32,
+      "right": 358,
+      "top": 443,
+      "bottom": 485,
+      "width": 326,
+      "height": 42,
+      "fontSize": "14px",
+      "lineHeight": "21.7px"
+    },
+    {
+      "selector": ".workday-rule .n-txt",
+      "left": 32,
+      "right": 358,
+      "top": 510,
+      "bottom": 531,
+      "width": 326,
+      "height": 21,
+      "fontSize": "14px",
+      "lineHeight": "21.7px"
+    }
+  ],
+  "mode": {
+    "workday": true,
+    "flexible": false
+  },
+  "source": "native wx.createSelectorQuery; synthetic fixtures; production WXML/WXSS exact",
+  "errors": [],
+  "state": "readonly",
+  "host": "settings",
+  "screenshot_status": "NOT_RUN"
+}

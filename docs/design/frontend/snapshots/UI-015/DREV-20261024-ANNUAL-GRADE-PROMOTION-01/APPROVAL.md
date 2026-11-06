@@ -13,7 +13,7 @@
 - Approved by: 用户
 - Approved at: 2026-10-24
 - Approval evidence: 本聊天用户在具体Spec02、Architecture02和DREV01审阅请求后回复“好的 按照这个方案落地”；源SHA及57张导出不变，批准后冻结。
-- Superseded by: DREV-20261024-ANNUAL-GRADE-PROMOTION-02，仅五Tab共享年级弹窗呈现；UI-015档案编辑表单及其他规则继续有效。对应SPEC-20261024-GRADE-DIALOG-SIMPLIFICATION-01于2026-10-24获用户“继续”批准；原源/导出/SHA/批准事实保持不变。
+- Superseded by: DREV-20261024-ANNUAL-GRADE-PROMOTION-02，仅五Tab共享年级弹窗呈现（2026-10-24用户“继续”）；DREV-20261024-CHILD-ARCHIVE-01，仅UI-015归档/恢复卡及确认文案（BUG-033 Spec01，2026-11-05用户“批准”）。UI-015其他档案字段及规则继续有效；原源/导出/SHA/批准事实保持不变。
 
 覆盖UI-015与UI-001本功能增量；合成承载背景不扩大批准范围。
 Chrome 155.0.8059.85 / macOS系统字体 / font scale 100% / DPR 1。

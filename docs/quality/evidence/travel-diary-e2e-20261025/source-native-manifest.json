@@ -1,0 +1,564 @@
+{
+  "scope": "offline synthetic transport, geometry/scroll bindings only in copy",
+  "source_sha256": {
+    "pages/footprints/controller.js": "59589c30cfcdb36ede078061813ef493dcc85b5af9982a26b16dcb639360e7c7",
+    "pages/footprints/imports.js": "f1ff9f63ff364f22e3fc799e8be0b165d1539f2c17d056cd94c3062fa7e528c5",
+    "pages/footprints/photos.js": "0d16b0c87be94788739c29e4a576f5dbd5ba35fa21d019065e2515211829afec",
+    "pages/footprints/presentation.js": "436908ddf87c0f2bfddff9462ee12d3bc0397276402d89ad25ee8b2d07c9e62f",
+    "pages/footprints/embedded.js": "6b34d0c1170527a85c55eb1e881030d1fa3d9ab092b053a64351791abb435e87",
+    "pages/footprints/index.wxml": "2b1696a4efdc3c7271d1c589fc00e50c3f19d2fe3daa978461e60e83675118a9",
+    "pages/footprints/index.wxss": "e05515f6b09343c29c2280e1446addc3a5777716b4ea9f49dd6bd3a7213b7ded"
+  },
+  "captures": [
+    {
+      "state": "batch-date",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.16.2"
+      },
+      "nodes": "native/batch-date-320.json",
+      "png": "native/batch-date-320.png",
+      "sha256": "886ba9014b85b60c6cc0513a957cfae43ba5f21d618e5b9f6a1b6ecb151a546f"
+    },
+    {
+      "state": "batch-date",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.16.2"
+      },
+      "nodes": "native/batch-date-390.json",
+      "png": "native/batch-date-390.png",
+      "sha256": "e7aaef43650f7a017662b48879758d7f6b851d22ead14f72b82e43601c821627"
+    },
+    {
+      "state": "batch-date",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.16.2"
+      },
+      "nodes": "native/batch-date-430.json",
+      "png": "native/batch-date-430.png",
+      "sha256": "17c4fd969dd7bff26a0c423fc7d812874bb829455046bbe916371d99d38b58a5"
+    },
+    {
+      "state": "confirm",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.16.2"
+      },
+      "nodes": "native/confirm-320.json",
+      "png": "native/confirm-320.png",
+      "sha256": "ffa1ac83882945cdf4dcc9882b579b2c3f66c6b477f8e396a200ae268325c566"
+    },
+    {
+      "state": "confirm",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.16.2"
+      },
+      "nodes": "native/confirm-390.json",
+      "png": "native/confirm-390.png",
+      "sha256": "ed4d73110065eec890e0f251fd9dddec4c5ffa50ac419a05717fb42ba5572b52"
+    },
+    {
+      "state": "confirm",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.16.2"
+      },
+      "nodes": "native/confirm-430.json",
+      "png": "native/confirm-430.png",
+      "sha256": "a9b3803199c571cadfdd167b3112e57bdecbf95dd37be29fd817c2e08c276358"
+    },
+    {
+      "state": "conflict",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.16.2"
+      },
+      "nodes": "native/conflict-320.json",
+      "png": "native/conflict-320.png",
+      "sha256": "fa25f3fbbf438fd46b7e2b6a1455323e917d1e56a303264844c7ce626e81d5e6"
+    },
+    {
+      "state": "conflict",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.16.2"
+      },
+      "nodes": "native/conflict-390.json",
+      "png": "native/conflict-390.png",
+      "sha256": "097722027005d674eba90a00de1a9bbeda17715c64c0db54c987b5c4f6cef9d6"
+    },
+    {
+      "state": "conflict",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.16.2"
+      },
+      "nodes": "native/conflict-430.json",
+      "png": "native/conflict-430.png",
+      "sha256": "ba22fbeb8a40eb60efa928c565ddf1c8a93300cf3ce2afcfc883297bf45ede1a"
+    },
+    {
+      "state": "consent",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.16.2"
+      },
+      "nodes": "native/consent-320.json",
+      "png": "native/consent-320.png",
+      "sha256": "14a1cb4473263b02a0c2f12ff765d82e355826c3c55124a3d4c5f99736e9bd3d"
+    },
+    {
+      "state": "consent",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.16.2"
+      },
+      "nodes": "native/consent-390.json",
+      "png": "native/consent-390.png",
+      "sha256": "f77d5b8a8f6c3128044e9a436535b53307a698441ad2730b71425f5d013a824e"
+    },
+    {
+      "state": "consent",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.16.2"
+      },
+      "nodes": "native/consent-430.json",
+      "png": "native/consent-430.png",
+      "sha256": "8255b004d1e917cdaf4f6f56c8e22c540dc997b08173fe67bfde0b6f7a7cbef5"
+    },
+    {
+      "state": "edit",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.16.2"
+      },
+      "nodes": "native/edit-320.json",
+      "png": "native/edit-320.png",
+      "sha256": "92b105f293f51e69ecfcdb8bb34bc6c18d7170a36204651271726e4c16ff2756"
+    },
+    {
+      "state": "edit",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.16.2"
+      },
+      "nodes": "native/edit-390.json",
+      "png": "native/edit-390.png",
+      "sha256": "b84acb571571de841d0a4563967857fd0720018441a9b99d52855cf9ef470e0a"
+    },
+    {
+      "state": "edit",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.16.2"
+      },
+      "nodes": "native/edit-430.json",
+      "png": "native/edit-430.png",
+      "sha256": "9472469998fa6131314fcdf8a6e903168f0057885cda57a464c13e3a2c660721"
+    },
+    {
+      "state": "edit-keyboard",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.16.2"
+      },
+      "nodes": "native/edit-keyboard-320.json",
+      "png": "native/edit-keyboard-320.png",
+      "sha256": "af10c3216349cb8fd7f57ccdb2e31787e61dbf111848d3268ff70a0c7680de67"
+    },
+    {
+      "state": "edit-keyboard",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.16.2"
+      },
+      "nodes": "native/edit-keyboard-390.json",
+      "png": "native/edit-keyboard-390.png",
+      "sha256": "dcec4fb24b8f67924f001247bab9cdca3feed98875c6d1c11428b0cd67092e64"
+    },
+    {
+      "state": "edit-keyboard",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.16.2"
+      },
+      "nodes": "native/edit-keyboard-430.json",
+      "png": "native/edit-keyboard-430.png",
+      "sha256": "574a5be99e2749f7e0891fafebe841bcbab71d3cf4732f3b84f5adfba547b239"
+    },
+    {
+      "state": "gallery-focused",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.16.2"
+      },
+      "nodes": "native/gallery-focused-320.json",
+      "png": "native/gallery-focused-320.png",
+      "sha256": "47fc3f9a829928699dbb821bea606f5d175500d47b9d9490da6d809c029e1e0e"
+    },
+    {
+      "state": "gallery-focused",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.16.2"
+      },
+      "nodes": "native/gallery-focused-390.json",
+      "png": "native/gallery-focused-390.png",
+      "sha256": "860dc33a6b6b5ec82a05faec3ab66dff7a28b2e006bdd9eb3f2f5ef0526636f7"
+    },
+    {
+      "state": "gallery-focused",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.16.2"
+      },
+      "nodes": "native/gallery-focused-430.json",
+      "png": "native/gallery-focused-430.png",
+      "sha256": "0184c21f1649c9c78e26f87732f2f33b55fc54751e35d8a6cc378e4cff3e0958"
+    },
+    {
+      "state": "processing-error",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.16.2"
+      },
+      "nodes": "native/processing-error-320.json",
+      "png": "native/processing-error-320.png",
+      "sha256": "8354974e2592eebd49b92b2521d27a901b65ddb828b49231df09d995577f1c18"
+    },
+    {
+      "state": "processing-error",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.16.2"
+      },
+      "nodes": "native/processing-error-390.json",
+      "png": "native/processing-error-390.png",
+      "sha256": "a8b182304ccf5cfccc906b8d2f3c9303b9998d9335af8792fe580ec16d5b4a86"
+    },
+    {
+      "state": "processing-error",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.16.2"
+      },
+      "nodes": "native/processing-error-430.json",
+      "png": "native/processing-error-430.png",
+      "sha256": "d1e88fe713902fd260faea5ade2ccc4ab8086aaf74b00d29ee6fec81b3638a97"
+    },
+    {
+      "state": "readonly",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.16.2"
+      },
+      "nodes": "native/readonly-320.json",
+      "png": "native/readonly-320.png",
+      "sha256": "a59c015360f5c08dc5b702f143e14b03e4864c819c330a90e7b03cd84e7f7f77"
+    },
+    {
+      "state": "readonly",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.16.2"
+      },
+      "nodes": "native/readonly-390.json",
+      "png": "native/readonly-390.png",
+      "sha256": "1ed7a6178231767602025ad40e2f8b2b195544e5a983da8e44a090335d8f0e67"
+    },
+    {
+      "state": "readonly",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.16.2"
+      },
+      "nodes": "native/readonly-430.json",
+      "png": "native/readonly-430.png",
+      "sha256": "d34fcf8bcaa0db735495156aa2b586de2e83000fa199cafc58a8ca5893abca18"
+    },
+    {
+      "state": "review-missing",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.16.2"
+      },
+      "nodes": "native/review-missing-320.json",
+      "png": "native/review-missing-320.png",
+      "sha256": "4e5a78924e68bffea7fb8c24955e1453417c195223e3faf7d5d0bdb1a7ac4f14"
+    },
+    {
+      "state": "review-missing",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.16.2"
+      },
+      "nodes": "native/review-missing-390.json",
+      "png": "native/review-missing-390.png",
+      "sha256": "c6b82d6d060bff646c0824be3a194a2ce7d3a998f2318b335458a80b5b3dbe28"
+    },
+    {
+      "state": "review-missing",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.16.2"
+      },
+      "nodes": "native/review-missing-430.json",
+      "png": "native/review-missing-430.png",
+      "sha256": "297ae2b678c59b070cf21bf4d6bb02514e6f6f68a5d0db56b4e239c2174228d9"
+    },
+    {
+      "state": "review-ready",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.16.2"
+      },
+      "nodes": "native/review-ready-320.json",
+      "png": "native/review-ready-320.png",
+      "sha256": "b5ec831f0e04b1d4c804297245590e314ea70e67ca668f9e31030a7fdc714eb8"
+    },
+    {
+      "state": "review-ready",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.16.2"
+      },
+      "nodes": "native/review-ready-390.json",
+      "png": "native/review-ready-390.png",
+      "sha256": "e1c42133c3292deb458da81fb46292b840c6b335e2fdb7d8fcf339618b942bbd"
+    },
+    {
+      "state": "review-ready",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.16.2"
+      },
+      "nodes": "native/review-ready-430.json",
+      "png": "native/review-ready-430.png",
+      "sha256": "f9b020e8447e1788f0cdc0538ff51216fe5f16aa0abb3072b600d6fb1ba1fc26"
+    },
+    {
+      "state": "saved",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.16.2"
+      },
+      "nodes": "native/saved-320.json",
+      "png": "native/saved-320.png",
+      "sha256": "1a3984ff0247cdbfcb7f27beedc2c3b15a35c973618ddb77a1a93127a4f615f1"
+    },
+    {
+      "state": "saved",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.16.2"
+      },
+      "nodes": "native/saved-390.json",
+      "png": "native/saved-390.png",
+      "sha256": "297d7d9fb8b5914a7b4bb6b5ad19bdf217eec42bbd5a2e688d19e845f1838ea9"
+    },
+    {
+      "state": "saved",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.16.2"
+      },
+      "nodes": "native/saved-430.json",
+      "png": "native/saved-430.png",
+      "sha256": "7894c7d8ec8fe7deb49fd3bf0f72ff4bccc556f15261fff32b5b32d10ceaac36"
+    },
+    {
+      "state": "upload-error",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.16.2"
+      },
+      "nodes": "native/upload-error-320.json",
+      "png": "native/upload-error-320.png",
+      "sha256": "3ef8dabac0ccc01aaa5c245616097498f566da16a51395d6a681c756bbdb4289"
+    },
+    {
+      "state": "upload-error",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.16.2"
+      },
+      "nodes": "native/upload-error-390.json",
+      "png": "native/upload-error-390.png",
+      "sha256": "3b94f09b667aec82f8bebbc524484f6ff3ba9c53627e8ce29548d27256ae53d2"
+    },
+    {
+      "state": "upload-error",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.16.2"
+      },
+      "nodes": "native/upload-error-430.json",
+      "png": "native/upload-error-430.png",
+      "sha256": "bf6f54425845789e50e1f84244c8edd9c82ce957fc785a66d4a51b9eadcc2fb4"
+    },
+    {
+      "state": "uploading",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "dpr": 2,
+        "baseLibrary": "3.16.2"
+      },
+      "nodes": "native/uploading-320.json",
+      "png": "native/uploading-320.png",
+      "sha256": "bb98a2ae98b7aeb2a62d250d904d7b96dcf065e0c10e013f0cdb611438b2e808"
+    },
+    {
+      "state": "uploading",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "baseLibrary": "3.16.2"
+      },
+      "nodes": "native/uploading-390.json",
+      "png": "native/uploading-390.png",
+      "sha256": "c8f01fe7b427b63b5dba078724d7fa1c1552d8abad235f70852ab240c29eebfe"
+    },
+    {
+      "state": "uploading",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "baseLibrary": "3.16.2"
+      },
+      "nodes": "native/uploading-430.json",
+      "png": "native/uploading-430.png",
+      "sha256": "ba8c48d09a14c7a5ba5df6b0b1e2219620d0ecd5b8552bf22fda44cec22622b7"
+    }
+  ],
+  "production_backend_sha256": {
+    "apps/api/src/push_kids/footprints/reads.py": "eee208494d419076b80e38e8cb4cb595ce1fa81eea576f157e875d85c6530d88",
+    "apps/api/src/push_kids/footprints/router.py": "c108604f6e92d74acf1b0593a22221ee02ca7f619f2d466dcb59f55fbf1a60fe"
+  }
+}

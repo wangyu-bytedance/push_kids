@@ -1,0 +1,38 @@
+{
+  "revision": "system-one-20261105-05-local-final",
+  "files": {
+    "apps/api/src/push_kids/agent_processing/request_limits.py": "2c38dec8bb2c5b272421ea654c8e4c7f9054f34b4a1aafbf8d95c5423785089e",
+    "apps/api/src/push_kids/agent_processing/decision_contracts.py": "3b3e979e99ee49d0e3e735cafc69c9173e7a2ed4ad47b3efddbe8a42e90732d1",
+    "apps/api/src/push_kids/agent_processing/system_one_provider.py": "1d809cd19a1d102a864b7fd01d70916e04b944de274a916ebfe2693473749ce2",
+    "apps/api/src/push_kids/agent_processing/decision_workflow.py": "d85978fe0ed5e1f7eb3701c60dda919d4573ec4f0cd7748d39734a060c2440e8",
+    "apps/api/src/push_kids/agent_processing/stage_provider.py": "38164cefeef7f975eadda4806980dc606b3962fcf9faf830173733aae83049a4",
+    "apps/api/src/push_kids/agent_processing/pipeline.py": "c594dc4e39d1f6b990a700458cf16a744608b86d73a83c202f721958333ebcad",
+    "apps/api/src/push_kids/agent_processing/contracts.py": "cd38a3ddbcc429c72d29d2fe67073be6cb7b5fc353f2391bd8d7da4ade5b6bea",
+    "apps/api/src/push_kids/agent_processing/context.py": "2fc87c82d408f0d5c0467df1e10b60d7b1643053b64f5e9deaf99667163773da",
+    "apps/api/src/push_kids/agent_processing/history_search.py": "9fd92bde2324087b73f7a7fbb2865e2f52250dc17ad4633ae8c6e58752692814",
+    "apps/api/src/push_kids/agent_processing/runner.py": "bb968cc8df409d81277eaab41a84ea3a4dd253aa96d3e41429438262740da964",
+    "apps/api/src/push_kids/agent_processing/checkpoints.py": "8cb1efb2d4f1c99b1fe3df9e6e2e83be604f390215b427bf711ec1359186562e",
+    "apps/api/src/push_kids/platform/config.py": "242ac397bceb5b59ada066d32d98a352c1d6269845245c69600c1c6f0d489037",
+    "apps/api/src/push_kids/platform/database.py": "bb58863e798c4710391bd1daa07b2fb193cc7b2aabc88833c484ad67408ec12f",
+    "apps/api/src/push_kids/persistence/models.py": "424a8f45601a64e6b6578f3f16aecb71126ee9bd57f115eb51c87f1811268f5f",
+    "apps/api/src/push_kids/learning/coverage.py": "2025e798fd93dfb9b941e6920face503ae469194ae3c2ffa6706b3c456beaea7",
+    "apps/api/src/push_kids/learning/service.py": "8e37ce81ccc0aa522017066d6e984bc4ca7ae1f290334fd320e6251b16e5b954",
+    "apps/api/migrations/versions/20261105_0027_recent_learning_history.py": "636ecc0d29947c365d76c2c18004b8d599644396fa36f330e9e624f7013901a0",
+    "tests/unit/test_system_one_provider.py": "c7279ac401aeb7ad9a533089a5696557e22e396ddae0512f40aa5cded7847b33",
+    "tests/unit/test_system_one_workflow.py": "27c8bfffd58db9f1b51b946fd302239d165a4b90ea788de26f475e3ba0497b64",
+    "tests/integration/test_system_one_history.py": "206d0df81859dd1bb01627c7133a7fed1f055a8ec6b20fa9020fc1e09b448a53",
+    "tests/integration/test_system_one_confirmation.py": "75f85f7f735986ae3a172db4e8ca55e369651ef886231e95fa8ef4d518dfc66f",
+    "tests/integration/test_system_one_index_migration.py": "85201a9dbf480a9d3d4fad85bc574fdbe01336375c649ec7d79acdb187146db5",
+    "tests/integration/test_system_one_mysql.py": "7405ed4e6f3d05ffdb417703082fcd0e69f1438ef9e2dbc46abdd3dc490efb56",
+    "tests/integration/test_analysis_checkpoints.py": "bf73ca8ac353da9e0245ca4f261009ae8861fb72dedb007bb48799dcdefe9a58",
+    "tests/fixtures/system_one_relations.json": "c00404a6ed11772adb3466917d3d2e694383784c0131cf53283ccadc5041fbf0"
+  },
+  "delta_from_real_candidate03": {
+    "apps/api/src/push_kids/agent_processing/pipeline.py": "c594dc4e39d1f6b990a700458cf16a744608b86d73a83c202f721958333ebcad",
+    "apps/api/src/push_kids/agent_processing/history_search.py": "9fd92bde2324087b73f7a7fbb2865e2f52250dc17ad4633ae8c6e58752692814",
+    "apps/api/src/push_kids/agent_processing/checkpoints.py": "8cb1efb2d4f1c99b1fe3df9e6e2e83be604f390215b427bf711ec1359186562e"
+  },
+  "delta_scope": "classify cache purge; derived reuse cache key removal; MySQL-only recent-subject index hint. Real replay uses in-memory historical snapshot, so no production SQL/purge. The final differences have separate DB/cache and full-suite checks.",
+  "production_business_writes": 0,
+  "post_full_suite_delta": "Only six new confirmation-route tests; 26 related tests passed afterwards. Production source unchanged after final full suite."
+}

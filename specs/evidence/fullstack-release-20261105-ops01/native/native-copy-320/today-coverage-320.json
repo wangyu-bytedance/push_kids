@@ -1,0 +1,41 @@
+{
+  "route": "pages/today/index",
+  "viewport": {
+    "width": 320,
+    "height": 568,
+    "screenHeight": 568,
+    "pixelRatio": 2
+  },
+  "base_library": "3.17.4",
+  "nodes": [
+    {
+      "selector": ".workday-status",
+      "left": 91.609375,
+      "right": 292,
+      "top": 460,
+      "bottom": 482,
+      "width": 200.390625,
+      "height": 22,
+      "fontSize": "14px",
+      "lineHeight": "22.4px"
+    },
+    {
+      "selector": ".page",
+      "left": 0,
+      "right": 320,
+      "top": 17,
+      "bottom": 568,
+      "width": 320,
+      "height": 551,
+      "fontSize": "16px",
+      "lineHeight": "25.6px"
+    }
+  ],
+  "mode": {},
+  "source": "native wx.createSelectorQuery; synthetic fixtures; production WXML/WXSS exact",
+  "errors": [],
+  "state": "coverage",
+  "host": "today",
+  "screenshot_status": "CAPTURED_REQUIRES_VISUAL_REVIEW",
+  "screenshot_sha256": "8647528d575979cf92d1a15d6ee7c8451b9b58f1d2a129cd55e1dd93f148cb71"
+}

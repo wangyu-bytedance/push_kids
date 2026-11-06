@@ -1,7 +1,11 @@
 # UI-011 — 提醒设置与微信授权入口
 
-- Status: CURRENT_LOCAL / VERIFYING / NOT_RELEASED
-- Current-state revision: UI-STATE-20261017-NOTIFICATION-AUTO-RENEWAL-01
+2026-10-26开发归档：已交付037后端/0.1.16客户端所覆盖的需求按用户批准规则标记开发DONE，验收缺项独立保留；后续BUG-035和旅行导入精简尚未交付，继续active。当前归档和待验入口见[Spec状态清单](../../../../specs/STATUS.md)，依据为[治理Spec](../../../../specs/completed/GOV-002-CLOUD-DELIVERY-DEVELOPMENT-COMPLETION.md)。本轮不改产品合同、测试结论、设计或发布阶段。
+
+2026-10-25交付revision UI-DELIVERY-0.1.16-01：当前实现随0.1.16开发上传，未设体验版、未提审/正式发布；批准设计源/快照及验收缺口保持原范围。[发布记录](../../../deploy/releases/20261025-latest-client-upload.md)。
+
+- Status: DEVELOPMENT_VERSION_0.1.16_UPLOADED / DEVELOPMENT_DONE / VERIFICATION_PENDING / EXPERIENCE_PENDING / NOT_OFFICIALLY_PUBLISHED
+- Current-state revision: UI-STATE-20261026-NOTIFICATION-AUTO-RENEWAL-03-DEVELOPMENT-DONE
 - Related Features: FEAT-003 / FEAT-011
 - Approved Spec: SPEC-20261017-NOTIFICATION-AUTO-RENEWAL-01
 - Baseline: FDB-20260913-04；engineering constraints: FEC-20261007-NATIVE-GEOMETRY-02
@@ -42,9 +46,9 @@
 
 本地视觉增量revision `UI-VISUAL-20261021-HERO-ARC-01` 已随共享样式
 去掉提醒就绪/中性卡右下角细弧线，其他状态与授权行为保留。批准来源为
-[Spec01](../../../../specs/active/BUG-030-HERO-BACKGROUND-ARC.md) /
+[Spec01](../../../../specs/completed/BUG-030-HERO-BACKGROUND-ARC.md) /
 [DREV-20261021-HERO-ARC-REMOVAL-01](../prototypes/DREV-20261021-HERO-ARC-REMOVAL-01/FRONTEND-SPEC.md)，
-本地验证和未完成验收见[质量证据](../../../quality/evidence/HERO-ARC-REMOVAL-20261021.md)，未上传/部署。
+原验证和未完成验收见[质量证据](../../../quality/evidence/HERO-ARC-REMOVAL-20261021.md)，对应样式已随0.1.16开发上传。
 
 沿用“纸 · 芽”颜色、字体和卡片。正文/状态至少14px，操作目标至少44px，中文自然换行；
 矩阵320×568、390×844、430×932。原生几何、完整截图、字体放大/读屏与真机分别验收。

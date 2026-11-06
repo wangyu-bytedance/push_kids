@@ -1,0 +1,91 @@
+/* 日程（C1~C3）：WeekStrip / Timeline / FAB 复用 atoms，这里只补本页几何。 */
+.calendar-page { min-height: 100vh; padding-top: 0; padding-bottom: calc(240rpx + env(safe-area-inset-bottom)); box-sizing: border-box; }
+.calendar-intro { display: flex; align-items: center; gap: 16rpx; margin-top: 12rpx; padding: 32rpx 28rpx; }
+.calendar-intro-copy { position: relative; z-index: 1; flex: 1; min-width: 0; }
+.calendar-intro .pg-title { display: block; overflow-wrap: anywhere; }
+.calendar-intro .pg-context { display: block; margin-top: 12rpx; }
+.calendar-intro .child-chip { margin-top: 20rpx; min-height: 44px; max-width: 100%; box-sizing: border-box; }
+.calendar-intro .child-chip .chip-nm { min-width: 0; max-width: 200rpx; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.calendar-intro-art { position: relative; flex: none; width: 240rpx; height: 260rpx; pointer-events: none; }
+.child-chip.single { padding-right: 28rpx; }
+
+/* 周导航：左右各一个 88rpx 触控块，中间是原生日期 picker */
+.wk-nav { display: grid; grid-template-columns: 88rpx minmax(0, 1fr) 88rpx; align-items: center; margin-bottom: 20rpx; }
+.wk-nav .icon-btn { flex: 0 0 88rpx; width: 88rpx; height: 88rpx; min-height: 88rpx; background: transparent; }
+.wk-picker { min-width: 0; }
+.wk-month { min-height: 88rpx; display: flex; align-items: center; justify-content: center; font-size: 17px; line-height: 1.45; font-weight: 600; }
+
+/* 7 列等宽，单元 124rpx，圆点表示这天有安排 */
+.week { display: grid; grid-template-columns: repeat(7,minmax(0,1fr)); gap: 8rpx; width: 100%; box-sizing: border-box; }
+
+.day-bar { display: flex; align-items: baseline; justify-content: space-between; gap: 16rpx; padding: 40rpx 4rpx 24rpx; }
+.day-bar .day-title { font-size: 17px; line-height: 1.45; font-weight: 600; }
+.day-bar .day-count { flex: none; font-size: 13px; color: var(--pk-ink-3); }
+
+.calendar-conflict-summary {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  min-height: 56rpx;
+  padding: 0 4rpx 20rpx;
+  color: var(--pk-danger);
+  font-size: 13px;
+  line-height: 1.45;
+  font-weight: 500;
+}
+.conflict-dot {
+  flex: none;
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: 50%;
+  background: var(--pk-danger);
+}
+.tl-item.conflict .tl-node { background: var(--pk-danger); }
+.tl-item .conflict-card {
+  border-color: var(--pk-danger-line);
+  border-left: 8rpx solid var(--pk-danger);
+  background: var(--pk-danger-bg);
+}
+.pill.danger-outline {
+  border: 1rpx solid var(--pk-danger-line);
+  background: var(--pk-surface);
+  color: var(--pk-danger);
+}
+.conflict-detail {
+  display: flex;
+  align-items: flex-start;
+  gap: 10rpx;
+  margin-top: 16rpx;
+  color: var(--pk-danger);
+  font-size: 13px;
+  line-height: 1.5;
+}
+.conflict-detail .ico { flex: none; margin-top: 2rpx; }
+.conflict-copy { display: flex; flex: 1; min-width: 0; flex-direction: column; gap: 6rpx; }
+.conflict-summary { display: block; font-weight: 600; }
+.conflict-line { display: block; overflow-wrap: anywhere; }
+.tl-item.past.conflict { opacity: .72; }
+
+.tl .tl-card .link-btn { min-height: 72rpx; }
+
+/* 编辑半屏（C3） */
+.editor-sheet .time-row { display: flex; align-items: center; gap: 20rpx; }
+.editor-sheet .time-row .grow { flex: 1; min-width: 0; }
+.editor-sheet .time-to { flex: none; font-size: 14px; color: var(--pk-ink-3); }
+.editor-sheet .pk-picker.is-error { border-color: var(--pk-danger); }
+.editor-sheet .repeat-card { margin-top: 32rpx; }
+.editor-sheet .del-row { display: flex; justify-content: center; margin-top: 8rpx; }
+.editor-sheet .del-link { color: var(--pk-danger); }
+
+/* 孩子切换半屏 */
+.child-sheet .rowitem.on { background: var(--pk-primary-tint); }
+.child-sheet .ava-lg { flex: none; width: 80rpx; height: 80rpx; border-radius: 50%; background: linear-gradient(150deg, var(--pk-primary-mid), var(--pk-primary-strong)); color: var(--pk-ink-inv); font-size: 14px; font-weight: 600; line-height: 80rpx; text-align: center; }
+/* Approved DREV-20261105-WORKDAY-02; retain native scroll-body and pinned footer. */
+.editor-sheet .seg > view { min-height: 44px; font-size: 14px; }
+.editor-sheet .pk-picker { min-height: 44px; box-sizing: border-box; }
+.editor-sheet .sheet-foot .btn { width: 100%; min-height: 44px; }
+.editor-sheet .sheet-head .icon-btn { width: 44px; height: 44px; min-height: 44px; flex: none; }
+.editor-sheet .del-link { min-height: 44px; }
+.editor-sheet .sheet-sub, .editor-sheet .lbl { font-size: 14px; }
+.workday-rule .n-txt { font-size: 14px; line-height: 1.55; }
+.editor-sheet .seg > view[aria-disabled="true"] { opacity: .5; }

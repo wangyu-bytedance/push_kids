@@ -1,0 +1,34 @@
+{
+  "queried_at": "2026-10-31T11:41:42.407Z",
+  "versions": [
+    "flask-ik19-038",
+    "flask-ik19-039"
+  ],
+  "results": {
+    "MYSQL_ADDRESS": {
+      "present": true,
+      "unchanged": true
+    },
+    "MYSQL_USERNAME": {
+      "present": true,
+      "unchanged": true
+    },
+    "MYSQL_PASSWORD": {
+      "present": true,
+      "unchanged": true
+    },
+    "MYSQL_DATABASE": {
+      "present": true,
+      "unchanged": true
+    },
+    "ARK_API_KEY": {
+      "present": true,
+      "unchanged": true
+    },
+    "PUSH_KIDS_ACTOR_HMAC_KEY": {
+      "present": true,
+      "unchanged": true
+    }
+  },
+  "secret_values_persisted": false
+}

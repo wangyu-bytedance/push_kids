@@ -1,0 +1,49 @@
+{
+  "observedAt": "2026-11-06T01:18:12.721Z",
+  "target": "040 normal100%",
+  "response": {
+    "id": "1",
+    "result": {
+      "result": {
+        "results": [
+          {
+            "route": "live",
+            "status": 200,
+            "ms": 1849
+          },
+          {
+            "route": "ready",
+            "status": 200,
+            "ms": 1846
+          },
+          {
+            "route": "bootstrap",
+            "status": 200,
+            "ms": 1844
+          },
+          {
+            "route": "children",
+            "status": 200,
+            "ms": 1843
+          },
+          {
+            "route": "calendar",
+            "status": 200,
+            "ms": 229
+          },
+          {
+            "route": "schedule",
+            "status": 422,
+            "ms": 332
+          },
+          {
+            "route": "report",
+            "status": 200,
+            "ms": 329
+          }
+        ],
+        "writes": 0
+      }
+    }
+  }
+}

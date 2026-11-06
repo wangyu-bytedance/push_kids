@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>知芽 · 六个成长小世界</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f4f2ed;color:#29352d;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif}.review{max-width:1440px;margin:auto;padding:42px 46px 30px}.head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;border-bottom:1px solid #cbd0c5;padding-bottom:24px;margin-bottom:29px}.eyebrow{font-size:12px;letter-spacing:2px;color:#65705e}h1{font-size:36px;letter-spacing:-1px;line-height:1.25;margin:9px 0 12px;font-weight:650}.intro{font-size:15px;line-height:1.6;color:#596653;margin:0}.edition{font-size:13px;text-align:right;line-height:1.8;color:#65705e;white-space:nowrap}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px 26px}.variant{min-width:0}.label{display:flex;gap:10px;align-items:center;font-size:25px;font-weight:650;letter-spacing:-.5px}.letter{width:30px;height:30px;display:grid;place-items:center;border:1px solid #96a38e;border-radius:50%;font-size:15px;font-weight:500}.description{font-size:13px;color:#63705a;line-height:1.6;margin:9px 0 17px;min-height:21px}.picture{display:block;border-radius:21px;overflow:hidden;outline:1px solid #28352624;background:#fff;box-shadow:0 7px 24px #3345240a}.picture img{display:block;width:100%;height:auto}.picture:focus-visible{outline:3px solid #526e3c;outline-offset:6px}.open{display:block;color:#4c6041;text-decoration:none;padding:12px 1px;font-size:13px;min-height:44px}.open:hover{text-decoration:underline}.foot{display:flex;justify-content:space-between;gap:18px;border-top:1px solid #cbd0c5;padding-top:18px;margin-top:20px;font-size:13px;color:#65705e;line-height:1.8}.foot strong{color:#33452c;font-weight:600}@media(max-width:1100px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.review{padding:30px}.head{align-items:flex-start}}@media(max-width:650px){.review{padding:25px 18px}.grid{grid-template-columns:1fr;gap:25px}.head{display:block}h1{font-size:29px}.edition{display:none}.foot{display:block}.label{font-size:24px}}
+</style>
+</head>
+<body>
+<main class="review">
+<header class="head"><div><div class="eyebrow">知芽 / EDUCATION WORLDS / 04</div><h1>把学习，放进一个小世界。</h1><p class="intro">六种教育主题 · 背景、插画、图标、材质与布局一起探索</p></div><div class="edition">同一设置页 / A–F<br>主题概念图 · 待选方向</div></header>
+<div class="grid" id="grid"></div>
+<footer class="foot"><span><strong>选择喜欢的世界 A–F</strong>，再细化全套界面。</span><span>点击单图查看原图 · AI生成主题探索 · 尚未实施</span></footer>
+</main>
+<script>
+const themes=[
+['a','成长花园','纸雕花园 · 嫩芽角色 · 叶片与花盆图标'],
+['b','星际探索','小小观测站 · 轨道背景 · 星球与航天图标'],
+['c','绘本小屋','原创绘本场景 · 书页分章 · 布纹与手绘图标'],
+['d','自然观察站','探究手册 · 植物标本 · 科普插画与索引'],
+['e','积木乐园','原创软陶积木 · 拼插模块 · 立体学习道具'],
+['f','灵感手帐','格纸背景 · 原创贴纸 · 胶带拼贴与彩铅线条']
+];
+const assetBase='../../snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-04/';
+document.querySelector('#grid').innerHTML=themes.map(([id,name,note])=>`<section class="variant" id="${id}"><header><div class="label"><span class="letter">${id.toUpperCase()}</span>${name}</div><p class="description">${note}</p></header><a class="picture" href="${assetBase}style-${id}.png" target="_blank" rel="noopener" aria-label="打开 ${id.toUpperCase()} ${name} 原图"><img src="${assetBase}style-${id}.png" alt="${id.toUpperCase()} ${name}，知芽设置页教育主题概念图"></a><a class="open" href="${assetBase}style-${id}.png" target="_blank" rel="noopener">${id.toUpperCase()} · 单独放大看 ↗</a></section>`).join('');
+window.DESIGN_READY=true;
+</script>
+</body>
+</html>

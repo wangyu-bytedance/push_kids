@@ -80,3 +80,12 @@
 /* 孩子切换半屏 */
 .child-sheet .rowitem.on { background: var(--pk-primary-tint); }
 .child-sheet .ava-lg { flex: none; width: 80rpx; height: 80rpx; border-radius: 50%; background: linear-gradient(150deg, var(--pk-primary-mid), var(--pk-primary-strong)); color: var(--pk-ink-inv); font-size: 14px; font-weight: 600; line-height: 80rpx; text-align: center; }
+/* Approved DREV-20261105-WORKDAY-02; retain native scroll-body and pinned footer. */
+.editor-sheet .seg > view { min-height: 44px; font-size: 14px; }
+.editor-sheet .pk-picker { min-height: 44px; box-sizing: border-box; }
+.editor-sheet .sheet-foot .btn { width: 100%; min-height: 44px; }
+.editor-sheet .sheet-head .icon-btn { width: 44px; height: 44px; min-height: 44px; flex: none; }
+.editor-sheet .del-link { min-height: 44px; }
+.editor-sheet .sheet-sub, .editor-sheet .lbl { font-size: 14px; }
+.workday-status .n-txt { font-size: 14px; line-height: 1.55; }
+.editor-sheet .seg > view[aria-disabled="true"] { opacity: .5; }

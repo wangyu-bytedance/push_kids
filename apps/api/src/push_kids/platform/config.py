@@ -47,6 +47,8 @@ class Settings(BaseSettings):
     ark_api_key: SecretStr | None = Field(None, alias="ARK_API_KEY")
     ark_base_url: str = Field("https://ark.cn-beijing.volces.com/api/v3", alias="ARK_BASE_URL")
     ark_model: str = Field("doubao-seed-2-1-pro-260628", alias="ARK_MODEL")
+    ark_system_one_model: str = Field("doubao-seed-2-1-lite-260915", alias="ARK_SYSTEM_ONE_MODEL")
+    system_one_enabled: bool = Field(True, alias="PUSH_KIDS_SYSTEM_ONE_ENABLED")
     ark_context_cache_enabled: bool = Field(True, alias="ARK_CONTEXT_CACHE_ENABLED")
     footprint_map_key: SecretStr | None = Field(None, alias="PUSH_KIDS_FOOTPRINT_MAP_KEY")
     analysis_concurrency: int = Field(2, ge=1, le=2, alias="PUSH_KIDS_ANALYSIS_CONCURRENCY")

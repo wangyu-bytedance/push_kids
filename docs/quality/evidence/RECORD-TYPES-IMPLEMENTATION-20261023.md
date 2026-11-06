@@ -1,8 +1,8 @@
 # 记录类型切换与足迹文案 — 本地实现（2026-10-23）
 
 - Status: LOCAL_IMPLEMENTATION / VERIFYING / NOT_RELEASED。
-- Approval: 用户选中“标题切换 · 推荐”后要求“完成这个功能的代码编写”，2026-10-23。对应[入口Spec01](../../../specs/active/FEAT-012-RECORD-TYPE-SWITCHER.md) / Architecture01 / DREV-20261023-RECORD-TYPE-SWITCHER-01，以及[文案Spec01](../../../specs/active/FEAT-012-FOOTPRINTS-UI-COPY.md) / DREV-20261018-CHILD-PHOTO-FOOTPRINTS-02。
-- 主功能[Spec04](../../../specs/active/FEAT-012-CHILD-PHOTO-FOOTPRINTS.md)仍VERIFYING，本轮不降低其首版全球地图、照片/AI效果和真机要求。
+- Approval: 用户选中“标题切换 · 推荐”后要求“完成这个功能的代码编写”，2026-10-23。对应[入口Spec01](../../../specs/completed/FEAT-012-RECORD-TYPE-SWITCHER.md) / Architecture01 / DREV-20261023-RECORD-TYPE-SWITCHER-01，以及[文案Spec01](../../../specs/completed/FEAT-012-FOOTPRINTS-UI-COPY.md) / DREV-20261018-CHILD-PHOTO-FOOTPRINTS-02。
+- 主功能[Spec04](../../../specs/completed/FEAT-012-CHILD-PHOTO-FOOTPRINTS.md)仍VERIFYING，本轮不降低其首版全球地图、照片/AI效果和真机要求。
 - 工作区包含其他通知/词条替代/背景任务的未提交变更；全仓检查结果不表示这些变更属于本任务。无提交、上传、部署或发布操作。
 
 ## 实现与边界

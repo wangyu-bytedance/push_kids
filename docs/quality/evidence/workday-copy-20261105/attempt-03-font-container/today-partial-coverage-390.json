@@ -1,0 +1,50 @@
+{
+  "route": "pages/today/index",
+  "viewport": {
+    "width": 390,
+    "height": 844,
+    "screenHeight": 844
+  },
+  "nodes": [
+    {
+      "selector": ".workday-status",
+      "left": 97.609375,
+      "right": 354,
+      "top": 578,
+      "bottom": 600,
+      "width": 256.390625,
+      "height": 22,
+      "fontSize": "14px",
+      "lineHeight": "22.4px"
+    },
+    {
+      "selector": ".sec-body",
+      "left": 18,
+      "right": 372,
+      "top": 624,
+      "bottom": 705,
+      "width": 354,
+      "height": 81,
+      "fontSize": "16px",
+      "lineHeight": "25.6px"
+    },
+    {
+      "selector": ".tl-card",
+      "left": 78,
+      "right": 372,
+      "top": 624,
+      "bottom": 693,
+      "width": 294,
+      "height": 69,
+      "fontSize": "16px",
+      "lineHeight": "25.6px"
+    }
+  ],
+  "mode": {},
+  "source": "native wx.createSelectorQuery; synthetic fixtures; production WXML/WXSS exact",
+  "errors": [],
+  "state": "partial-coverage",
+  "host": "today",
+  "screenshot_status": "CAPTURED_REQUIRES_VISUAL_REVIEW",
+  "screenshot_sha256": "0ecf432f0a7748a786dbb9e87d22536281a9743aa24f3884245169269e468e96"
+}

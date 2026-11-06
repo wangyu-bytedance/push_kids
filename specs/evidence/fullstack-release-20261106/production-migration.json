@@ -1,0 +1,19 @@
+{
+  "operator_backup_and_window": "CONFIRMED_IN_CHAT_20261106",
+  "business_writes": 0,
+  "steps": [
+    "UPGRADE_0027_PASS",
+    "ALEMBIC_CURRENT_CHECK_PASS",
+    "STRICT_SCHEMA_EARLY_TRIGGER_PASS",
+    "QUEUE_V2_AND_EARLY_TRIGGER_SETS_PASS"
+  ],
+  "before": [
+    "20261024_0025"
+  ],
+  "required_trigger_count": 17,
+  "actual_trigger_count": 17,
+  "after": [
+    "20261105_0027"
+  ],
+  "status": "PASS"
+}

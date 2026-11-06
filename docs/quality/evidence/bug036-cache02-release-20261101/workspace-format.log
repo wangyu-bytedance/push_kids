@@ -1,0 +1,65 @@
+unformatted: File would be reformatted
+  --> docs/quality/evidence/report-footer-tips-20261101/prepare-native.py:12:78
+   |
+11 | config = json.loads((ROOT / "project.config.json").read_text())
+   - config.update(miniprogramRoot="./", projectname="push-kids-footer-synthetic",
+   -               libVersion="3.16.2")
+12 + config.update(miniprogramRoot="./", projectname="push-kids-footer-synthetic", libVersion="3.16.2")
+13 | (OUT / "project.config.json").write_text(json.dumps(config, ensure_ascii=False, indent=2) + "\n")
+--------------------------------------------------------------------------------
+32 | }}\n""")
+   - files = ["pages/review-inventory/content.wxml", "pages/review-inventory/content.wxss",
+   -          "pages/review-inventory/controller.js", "components/review-inventory/index.wxss",
+   -          "components/review-inventory/index.js", "pages/reports/index.wxml",
+   -          "pages/reports/index.wxss", "app.wxss", "styles/tokens.wxss"]
+   - manifest = {"scope": "production templates/styles/controllers; isolated config and read-only synthetic API",
+   -             "files": {file: hashlib.sha256((OUT / file).read_bytes()).hexdigest() for file in files}}
+33 + files = [
+34 +     "pages/review-inventory/content.wxml",
+35 +     "pages/review-inventory/content.wxss",
+36 +     "pages/review-inventory/controller.js",
+37 +     "components/review-inventory/index.wxss",
+38 +     "components/review-inventory/index.js",
+39 +     "pages/reports/index.wxml",
+40 +     "pages/reports/index.wxss",
+41 +     "app.wxss",
+42 +     "styles/tokens.wxss",
+43 + ]
+44 + manifest = {
+45 +     "scope": "production templates/styles/controllers; isolated config and read-only synthetic API",
+46 +     "files": {file: hashlib.sha256((OUT / file).read_bytes()).hexdigest() for file in files},
+47 + }
+48 | (OUT / "source-baseline.json").write_text(json.dumps(manifest, indent=2) + "\n")
+   |
+
+unformatted: File would be reformatted
+   --> tests/unit/test_staged_analysis.py:175:26
+    |
+174 |                     source_checks=[
+    -                         {"material": "t", "disposition": "covered", "item_aliases": ["i0"], "basis": "明确字母对象"}
+175 +                         {
+176 +                             "material": "t",
+177 +                             "disposition": "covered",
+178 +                             "item_aliases": ["i0"],
+179 +                             "basis": "明确字母对象",
+180 +                         }
+181 |                     ],
+--------------------------------------------------------------------------------
+193 |     point = result.knowledge_points[0]
+    -     assert (point.subject_name, point.name, point.confidence) == ("英语", "英语字母Tt的认读", "medium")
+194 +     assert (point.subject_name, point.name, point.confidence) == (
+195 +         "英语",
+196 +         "英语字母Tt的认读",
+197 +         "medium",
+198 +     )
+199 |     assert [e.detail for e in point.direct_evidence] == ["原文字明确给出字母Tt"]
+200 |     assert provider.audited["evidence"][0]["key"] == "e0"
+    -     assert provider.match_payload["candidates"][0]["direct_evidence"][0]["detail"] == "原文字明确给出字母Tt"
+201 +     assert (
+202 +         provider.match_payload["candidates"][0]["direct_evidence"][0]["detail"]
+203 +         == "原文字明确给出字母Tt"
+204 +     )
+205 |
+    |
+
+2 files would be reformatted, 853 files already formatted

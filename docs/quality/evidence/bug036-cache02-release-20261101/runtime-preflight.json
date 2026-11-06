@@ -1,0 +1,106 @@
+{
+  "at": "2026-11-01T10:32:34.374Z",
+  "read_only": true,
+  "access_types": [
+    "OA",
+    "MINIAPP"
+  ],
+  "versions": [
+    {
+      "version": "flask-ik19-021",
+      "status": "normal",
+      "flow_ratio": 0,
+      "percent": 0,
+      "replicas": 0,
+      "remark": "SPEC-UNIFIED-REVIEW-20260913-02 88ab2093d6b2 unified review agent"
+    },
+    {
+      "version": "flask-ik19-022",
+      "status": "normal",
+      "flow_ratio": 0,
+      "percent": 0,
+      "replicas": 0,
+      "remark": "push-kids-20260913-019-bug015-88ab209"
+    },
+    {
+      "version": "flask-ik19-023",
+      "status": "normal",
+      "flow_ratio": 0,
+      "percent": 0,
+      "replicas": 0,
+      "remark": "push-kids-20260919-023-f4bd997"
+    },
+    {
+      "version": "flask-ik19-024",
+      "status": "normal",
+      "flow_ratio": 0,
+      "percent": 0,
+      "replicas": 0,
+      "remark": "push-kids-20260922-bug026-5397a82"
+    },
+    {
+      "version": "flask-ik19-025",
+      "status": "normal",
+      "flow_ratio": 0,
+      "percent": 0,
+      "replicas": 0,
+      "remark": "push-kids-20260926-bug027-b3db219"
+    },
+    {
+      "version": "flask-ik19-026",
+      "status": "normal",
+      "flow_ratio": 0,
+      "percent": 0,
+      "replicas": 0,
+      "remark": "push-kids-20261007-fair02-bridge-b3db219"
+    },
+    {
+      "version": "flask-ik19-035",
+      "status": "normal",
+      "flow_ratio": 0,
+      "percent": 0,
+      "replicas": 0,
+      "remark": "full-20261024-bug031-ops04-01"
+    },
+    {
+      "version": "flask-ik19-036",
+      "status": "deploy_failed",
+      "flow_ratio": 0,
+      "percent": 0,
+      "replicas": 0,
+      "remark": "latest-20261024-0025-01-26714b9"
+    },
+    {
+      "version": "flask-ik19-039",
+      "status": "normal",
+      "flow_ratio": 100,
+      "percent": 0,
+      "replicas": 1,
+      "remark": "travel-bug035-20261031-spec01-0576ac3-01"
+    }
+  ],
+  "configuration": {
+    "version": "flask-ik19-039",
+    "status": "normal",
+    "port": 8000,
+    "cpu": 0.25,
+    "memory": 0.5,
+    "min_replicas": 0,
+    "max_replicas": 5,
+    "worker_enabled": true,
+    "public_closed": true,
+    "runtime_variables_configured": true,
+    "variables_modified": false
+  },
+  "runtime_schema": {
+    "identity": "platform version039 runtime account",
+    "candidate": "staged10/prompt13",
+    "read_only": true,
+    "verify_triggers": false,
+    "result": "PASS",
+    "revision": "20261024_0025",
+    "ready": true,
+    "ddl_privilege_detected": false
+  },
+  "secrets_saved": false
+}

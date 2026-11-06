@@ -1,0 +1,19 @@
+{
+  "scope": "原三份/六图09/13只读复测；不是10/13内容或部署验收",
+  "pipeline": "staged-20261031-09",
+  "prompt": "child-aware-history-agent-20261031-13",
+  "results": {
+    "content_pass": 1,
+    "content_fail": 1,
+    "no_output": 1,
+    "outputs": 2,
+    "images": 6
+  },
+  "family_business_tables_matching": 61,
+  "limitations": [
+    "名称长度",
+    "拼音归类",
+    "教学角色",
+    "未执行新的10/13live复测"
+  ]
+}

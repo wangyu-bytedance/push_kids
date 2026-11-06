@@ -1,0 +1,25 @@
+{
+  "revision": "FINAL-CLOSURE-20261101-BUG036-CONTENT03-12-01",
+  "status": "PASS",
+  "source_files_live_and_frozen": 11,
+  "final_document_scope_count": 19,
+  "final_task_links_checked": 101,
+  "missing_links": [],
+  "counts_and_table_denominators": "PASS",
+  "task_private_directory_exists": false,
+  "spec_status": "VERIFYING",
+  "spec_location": "specs/active/BUG-036-SOURCE-GROUNDED-CONTENT-REPAIR.md",
+  "matching_cloud_delivery": false,
+  "files": {
+    "evaluation-12.json": "bb7c0044e5c3d678931fa26b253f3b05048f5e6c0e65dd023327ff8fc07d8967",
+    "evaluation-12.md": "79adc7e7190747276a0a4de7db2def3dccb0d93d9df312516d94cea99afad997",
+    "source-integrity.json": "7d3ca083855f9fb7c00528d2111b439b1b1587dfa1a60f98ceed60435c190ca8",
+    "privacy-audit.json": "a4e7f28d1c4dc3ca50e8beab7cff93adbf93ba6e7f27e04ee9d0ee1b132407ba",
+    "cleanup.json": "9ddefb65483ca65367aa06cd1604bb7a0477e77fd56c8e744d350117fa1e5bd3",
+    "closure-checks.json": "5af58f83000ec85bc8ef6b6befe455e95c94b49e7cf4d3336d9a684c97b0ae3d",
+    "document-closure.md": "9fc33d74cb7790b2b095bccb520a20eb60ec4f4ad0054d3de9a3b855cb763ee1",
+    "README.md": "a062435b3b2c95a94777ade42668173fe8025790a48d9cff3e4005a7a7685329",
+    "candidate12/backend-all.txt": "8a03539de6d58a2f2b8b2c10820ae5e5f53f60b8b0d4c5f42366815a692f2f08",
+    "acceptance-manifest.json": "6c054a84ff7223ced1518928dfc07dbf1e0204d7864a50011755a1fb729e8ef9"
+  }
+}

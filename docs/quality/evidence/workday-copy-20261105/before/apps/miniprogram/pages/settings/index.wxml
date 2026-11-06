@@ -1,0 +1,470 @@
+<view aria-hidden="{{gradeConfirmationVisible}}">
+<primary-nav></primary-nav>
+<view class="page settings-page">
+  <view class="pg-head">
+    <view class="head-intro">
+      <text class="pg-title">按你们的节奏来</text>
+    </view>
+    <view class="child-chip" wx:if="{{children.length}}" aria-role="button" aria-label="选择或管理学习档案" bindtap="openChildSheet">
+      <text class="ava">{{children[childIndex].avatar}}</text>
+      <text class="chip-nm trunc">{{children[childIndex].name}}</text>
+      <view class="chev"></view>
+    </view>
+  </view>
+
+  <view class="pk-notice err" wx:if="{{error}}">
+    <view class="ico ico-cloud-off-dan sm"></view>
+    <text class="n-txt">{{error}}。已经读到的设置还能继续看。</text>
+    <view class="ico ico-refresh-dan sm" aria-role="button" aria-label="重新加载设置" bindtap="load"></view>
+  </view>
+
+  <view class="pk-notice quiet mt2" wx:if="{{!canWrite}}">
+    <view class="ico ico-eye-mute sm"></view>
+    <text class="n-txt">你在这个家庭是只读成员，可以查看设置，改动需要管理员操作。</text>
+  </view>
+
+  <block wx:if="{{loading && !children.length}}">
+    <view class="sk card-sk mt3"></view>
+    <view class="sk card-sk"></view>
+  </block>
+
+  <view class="pk-empty" wx:elif="{{!children.length}}">
+    <view class="em"><view class="ico ico-sprout-pri lg"></view></view>
+    <text class="et">还没有学习档案</text>
+    <text class="ec">先给孩子建一个学习档案，就可以设置在学科目和课外活动，开始记录已学内容。</text>
+    <view class="ea">
+      <view class="btn-row one">
+        <view class="btn" wx:if="{{canWrite}}" aria-role="button" aria-label="建立学习档案" bindtap="addChild"><text>建立学习档案</text></view>
+        <view class="btn secondary" aria-role="button" aria-label="打开家庭与成员" bindtap="openFamily"><text>家庭与成员</text></view>
+      </view>
+    </view>
+    <view class="rowlist mt3">
+      <view class="rowitem" aria-role="button" aria-label="提醒设置" bindtap="openNotifications">
+        <view class="act-mark"><view class="ico ico-clock-pri sm"></view></view>
+        <view class="grow">
+          <text class="r-t">提醒设置</text>
+          <text class="r-s">家人申请、课前一小时、每晚复习</text>
+        </view>
+        <view class="chev right"></view>
+      </view>
+    </view>
+    <view class="rowlist mt3" wx:if="{{archivedChildren.length}}">
+      <view class="rowitem" wx:for="{{archivedChildren}}" wx:key="id" aria-role="button" aria-label="恢复{{item.name}}的档案" data-id="{{item.id}}" bindtap="editChild">
+        <view class="act-mark"><text class="am-txt">{{item.avatar}}</text></view>
+        <view class="grow">
+          <text class="r-t">{{item.label}}</text>
+          <text class="r-s">已归档</text>
+        </view>
+        <view class="chev right"></view>
+      </view>
+    </view>
+  </view>
+
+  <block wx:else>
+
+    <view class="pk-card pk-hero set-card settings-paper mt3">
+      <view class="card-head">
+        <view class="grow">
+          <text class="c-t">在学科目</text>
+        </view>
+        <image class="settings-card-art" wx:if="{{!learningArtFailed}}" src="/assets/illustrations/record-books.png" mode="aspectFit" aria-hidden="{{true}}" data-art="learning" binderror="onIllustrationError"></image>
+      </view>
+      <view class="act-list subject-list">
+        <view class="act-row" wx:for="{{baseLearning}}" wx:key="name" aria-role="{{canWrite ? 'button' : 'text'}}" aria-label="{{canWrite ? '管理' : ''}}{{item.name}}，{{item.selected ? '已加入' : '未加入'}}" data-kind="base" data-index="{{index}}" bindtap="openSubjectManager">
+          <view class="act-mark"><view class="ico ico-book-pri sm"></view></view>
+          <view class="grow"><text class="a-t">{{item.name}}</text><text class="a-s">{{item.selected ? '已加入' : '未加入'}}</text></view>
+          <view class="chev right" wx:if="{{canWrite}}"></view>
+        </view>
+        <view class="act-row" wx:for="{{addedLearning}}" wx:key="id" aria-role="{{item.canRemove && canWrite ? 'button' : 'text'}}" aria-label="{{item.canRemove && canWrite ? '管理' : ''}}{{item.name}}，已加入" data-id="{{item.id}}" bindtap="openSubjectManager">
+          <view class="act-mark"><view class="ico ico-book-pri sm"></view></view>
+          <view class="grow"><text class="a-t">{{item.name}}</text><text class="a-s">{{item.custom ? '自定义 · 已加入' : '已加入'}}</text></view>
+          <view class="chev right" wx:if="{{item.canRemove && canWrite}}"></view>
+        </view>
+      </view>
+      <view class="add-entry" wx:if="{{canWrite}}" data-type="learning" aria-role="button" aria-label="添加其他科目" bindtap="openCatalog">
+        <view class="ico ico-plus-pri sm"></view><text>添加其他科目</text>
+      </view>
+    </view>
+
+    <view class="pk-mask" wx:if="{{showSubjectManager}}" bindtap="closeSubjectManager"></view>
+    <view class="pk-sheet subject-sheet" wx:if="{{showSubjectManager}}">
+      <view class="handle"></view>
+      <view class="sheet-head"><text class="sheet-title grow">管理科目</text><button class="icon-btn subject-close" aria-label="关闭科目管理" disabled="{{subjectBusy}}" bindtap="closeSubjectManager"><view class="ico ico-close sm"></view></button></view>
+      <scroll-view class="sheet-body subject-manager-body" scroll-y>
+        <text class="subject-name">{{managedSubject.name}}</text>
+        <text class="subject-status">{{managedSubject.selected ? '已加入' : '未加入'}}</text>
+        <text class="subject-note">已有的学习记录会保留。移出后不再出现在选项里。</text>
+        <text class="err-text" wx:if="{{subjectError}}" aria-role="alert">{{subjectError}}</text>
+        <button class="btn {{managedSubject.selected ? 'secondary subject-remove' : 'primary'}} subject-change" loading="{{subjectBusy}}" disabled="{{subjectBusy || subjectConfirming}}" bindtap="changeManagedSubject">{{subjectBusy ? (managedSubject.selected ? '移出中…' : '加入中…') : (managedSubject.selected ? '移出此科目' : '加入此科目')}}</button>
+      </scroll-view>
+    </view>
+
+    <view class="pk-card pk-hero set-card settings-paper">
+      <view class="card-head">
+        <view class="grow">
+          <text class="c-t">课外活动</text>
+        </view>
+        <image class="settings-card-art" wx:if="{{!activityArtFailed}}" src="/assets/illustrations/settings-activity.png" mode="aspectFit" aria-hidden="{{true}}" data-art="activity" binderror="onIllustrationError"></image>
+      </view>
+      <view class="act-list" wx:if="{{addedActivities.length}}">
+        <view class="act-row" wx:for="{{addedActivities}}" wx:key="id" aria-role="button" aria-label="设置{{item.name}}的安排" data-index="{{index}}" bindtap="openActivitySchedule">
+          <view class="act-mark"><view class="ico {{item.iconClass}} sm"></view></view>
+          <view class="grow">
+            <text class="a-t trunc">{{item.name}}</text>
+            <text class="a-s">{{item.scheduleLabel}}</text>
+          </view>
+          <view class="chev right"></view>
+        </view>
+      </view>
+      <view class="inline-empty" wx:else>还没有添加课外活动</view>
+      <view class="add-entry" wx:if="{{canWrite}}" data-type="activity" aria-role="button" aria-label="添加课外活动" bindtap="openCatalog">
+        <view class="ico ico-plus-pri sm"></view><text>添加课外活动</text>
+      </view>
+    </view>
+
+    <view class="pk-card pk-hero set-card settings-paper daily-task-settings">
+      <view class="card-head"><view class="grow"><text class="c-t">每日任务</text><text class="c-s">每天重复 · 按自己的节奏</text></view><image class="settings-card-art" wx:if="{{!dailyArtFailed}}" src="/assets/illustrations/settings-daily.png" mode="aspectFit" aria-hidden="{{true}}" data-art="daily" binderror="onIllustrationError"></image></view>
+      <view class="act-list">
+      <view class="act-row daily-task-setting-row" wx:for="{{dailyTasks}}" wx:key="id" aria-role="{{canWrite ? 'button' : 'text'}}" aria-label="{{canWrite ? '编辑' : ''}}{{item.name}}，每天{{item.target_minutes}}分钟" data-id="{{item.id}}" bindtap="openDailyTaskForm">
+        <view class="act-mark"><view class="ico ico-clock-pri sm"></view></view>
+        <view class="grow daily-task-setting-copy"><text class="a-t">{{item.name}}</text><text class="a-s">每天 {{item.target_minutes}} 分钟</text></view>
+        <view class="chev right" wx:if="{{canWrite}}"></view>
+      </view>
+      </view>
+      <view class="inline-empty" wx:if="{{!dailyTasks.length}}">还没有每日任务</view>
+      <button class="add-entry daily-task-add" wx:if="{{canWrite && !showDailyTaskForm}}" disabled="{{loading || savingDailyTask || deletingDailyTask}}" bindtap="openDailyTaskCatalog"><view class="ico ico-plus-pri sm"></view><text>添加每日任务</text></button>
+    </view>
+
+    <view class="pk-mask" wx:if="{{showDailyTaskForm}}" bindtap="closeDailyTaskForm"></view>
+    <view class="pk-sheet" wx:if="{{showDailyTaskForm}}">
+      <view class="handle"></view>
+      <view class="sheet-head"><text class="sheet-title grow">{{dailyTaskId ? '编辑每日任务' : '添加每日任务'}}</text><view class="icon-btn" aria-role="button" aria-label="关闭每日任务表单" bindtap="closeDailyTaskForm"><view class="ico ico-close sm"></view></view></view>
+      <scroll-view class="sheet-body daily-task-form" scroll-y>
+        <view class="pk-field"><label class="lbl" for="daily-task-name">任务名称</label><input id="daily-task-name" class="pk-input" aria-label="任务名称，最多30个字" maxlength="30" value="{{dailyTaskName}}" disabled="{{savingDailyTask || deletingDailyTask}}" data-field="dailyTaskName" bindinput="setDailyTaskField" /></view>
+        <view class="pk-field"><label class="lbl" for="daily-task-minutes">目标时长（分钟）</label><input id="daily-task-minutes" class="pk-input" aria-label="目标时长，1至180整数分钟" type="number" maxlength="3" value="{{dailyTaskMinutes}}" disabled="{{savingDailyTask || deletingDailyTask}}" data-field="dailyTaskMinutes" bindinput="setDailyTaskField" /></view>
+        <view class="pk-notice err mt2" wx:if="{{dailyTaskError}}"><text class="n-txt">{{dailyTaskError}}</text></view>
+        <view class="daily-task-form-actions"><button class="btn" loading="{{savingDailyTask}}" disabled="{{loading || savingDailyTask || deletingDailyTask}}" bindtap="saveDailyTask">{{savingDailyTask ? '保存中…' : '保存任务'}}</button><button class="btn secondary" disabled="{{savingDailyTask || deletingDailyTask}}" bindtap="closeDailyTaskForm">取消</button></view>
+        <button class="btn secondary daily-task-delete" wx:if="{{dailyTaskId}}" loading="{{deletingDailyTask}}" disabled="{{loading || savingDailyTask || deletingDailyTask}}" bindtap="deleteDailyTask">删除此任务</button>
+        <text class="c-s">最多 20 项。目标时长不代表实际耗时。</text>
+      </scroll-view>
+    </view>
+
+    <view class="pk-card pk-hero set-card settings-paper">
+      <view class="card-head">
+        <view class="grow">
+          <text class="c-t">出行安排</text>
+          <text class="c-s">只显示在日程，不生成待办</text>
+        </view>
+        <image class="settings-card-art" wx:if="{{!travelArtFailed}}" src="/assets/illustrations/settings-travel.png" mode="aspectFit" aria-hidden="{{true}}" data-art="travel" binderror="onIllustrationError"></image>
+      </view>
+      <view class="act-list" wx:if="{{travelArrangements.length}}">
+        <view class="act-row" wx:for="{{travelArrangements}}" wx:key="id" aria-role="button" aria-label="编辑{{item.name}}出行安排" data-id="{{item.id}}" bindtap="openTravel">
+          <view class="act-mark"><text class="am-txt">{{item.marker}}</text></view>
+          <view class="grow">
+            <text class="a-t trunc">{{item.name}}</text>
+            <text class="a-s">{{item.scheduleLabel}}</text>
+          </view>
+          <view class="chev right"></view>
+        </view>
+      </view>
+      <view class="inline-empty" wx:else>还没有出行安排</view>
+      <view class="add-entry" wx:if="{{canWrite}}" aria-role="button" aria-label="添加出行安排" bindtap="openTravelCreate">
+        <view class="ico ico-plus-pri sm"></view><text>添加出行安排</text>
+      </view>
+    </view>
+
+    <view class="rowlist mt3">
+      <view class="rowitem" aria-role="button" aria-label="家庭与成员" bindtap="openFamily">
+        <view class="act-mark"><view class="ico ico-family-pri sm"></view></view>
+        <view class="grow">
+          <text class="r-t">家庭与成员</text>
+          <text class="r-s">邀请家人，一起记录与陪伴</text>
+        </view>
+        <text class="pill att" wx:if="{{requestsLabel}}">{{requestsLabel}}</text>
+        <view class="chev right"></view>
+      </view>
+      <view class="rowitem" wx:if="{{isManager}}" aria-role="button" aria-label="删除配置" bindtap="openDeleteSettings">
+        <view class="act-mark"><view class="ico ico-info-pri sm"></view></view>
+        <view class="grow">
+          <text class="r-t">删除配置</text>
+          <text class="r-s">清理孩子资料或当前家庭</text>
+        </view>
+        <view class="chev right"></view>
+      </view>
+      <view class="rowitem" aria-role="button" aria-label="提醒设置" bindtap="openNotifications">
+        <view class="act-mark"><view class="ico ico-clock-pri sm"></view></view>
+        <view class="grow">
+          <text class="r-t">提醒设置</text>
+          <text class="r-s">课前一小时、每晚复习、家人申请</text>
+        </view>
+        <view class="chev right"></view>
+      </view>
+      <view class="rowitem" aria-role="button" aria-label="关于知芽" bindtap="openAbout">
+        <view class="act-mark"><view class="ico ico-info-pri sm"></view></view>
+        <view class="grow">
+          <text class="r-t">关于知芽</text>
+          <text class="r-s">AI 只出草稿，确认权在家长手里</text>
+        </view>
+        <view class="chev right"></view>
+      </view>
+    </view>
+  </block>
+
+  <view class="safe-tail"></view>
+</view>
+
+<view class="pk-mask" wx:if="{{showTravelEditor}}" bindtap="closeTravelEditor"></view>
+<view class="pk-sheet travel-sheet" wx:if="{{showTravelEditor}}">
+  <view class="handle"></view>
+  <view class="sheet-head">
+    <view class="grow">
+      <text class="sheet-title">{{editingTravelId ? '编辑出行安排' : '新增出行安排'}}</text>
+    </view>
+    <view class="icon-btn" aria-role="button" aria-label="关闭" bindtap="closeTravelEditor"><view class="ico ico-close sm"></view></view>
+  </view>
+  <view class="sheet-body">
+    <view class="pk-field">
+      <text class="lbl">常用名称</text>
+      <view class="travel-presets">
+        <view class="travel-preset {{travelPreset === item ? 'on' : ''}}" wx:for="{{travelPresets}}" wx:key="*this" aria-role="button" aria-label="选择{{item}}" data-name="{{item}}" bindtap="chooseTravelPreset">{{item}}</view>
+      </view>
+    </view>
+    <view class="pk-field">
+      <text class="lbl">安排名称</text>
+      <input class="pk-input" value="{{travelName}}" maxlength="30" data-field="travelName" bindinput="setField" placeholder="例如：上学" placeholder-class="pk-ph" />
+    </view>
+    <view class="day-head">
+      <text class="lbl">每周哪几天</text>
+    </view>
+    <view class="wk-grid">
+      <view class="wk {{travelWeekdaySelected[index] ? 'on' : ''}}" wx:for="{{weekdayLabels}}" wx:key="*this" aria-role="button" aria-label="星期{{item}}" data-value="{{index}}" bindtap="toggleTravelWeekday">{{item}}</view>
+    </view>
+    <block wx:if="{{!travelPerDay}}">
+      <view class="time-row">
+        <view class="pk-field grow">
+          <text class="lbl">开始时间</text>
+          <picker mode="time" value="{{travelStartTime}}" data-field="travelStartTime" bindchange="setField">
+            <view class="pk-picker"><text class="tnum">{{travelStartTime}}</text><view class="chev"></view></view>
+          </picker>
+        </view>
+        <text class="time-dash">—</text>
+        <view class="pk-field grow">
+          <text class="lbl">结束时间</text>
+          <picker mode="time" value="{{travelEndTime}}" data-field="travelEndTime" bindchange="setField">
+            <view class="pk-picker {{travelEndError ? 'is-error' : ''}}"><text class="tnum">{{travelEndTime}}</text><view class="chev"></view></view>
+          </picker>
+        </view>
+      </view>
+    </block>
+    <view class="perday-list" wx:else>
+      <view class="perday-row" wx:for="{{travelDayRows}}" wx:key="weekday">
+        <text class="perday-day">{{item.label}}</text>
+        <picker class="perday-picker" mode="time" value="{{item.start}}" data-index="{{index}}" data-field="start" bindchange="setTravelDayTime">
+          <view class="pk-picker"><text class="tnum">{{item.start}}</text><view class="chev"></view></view>
+        </picker>
+        <text class="time-dash">—</text>
+        <picker class="perday-picker" mode="time" value="{{item.end}}" data-index="{{index}}" data-field="end" bindchange="setTravelDayTime">
+          <view class="pk-picker {{item.end <= item.start ? 'is-error' : ''}}"><text class="tnum">{{item.end}}</text><view class="chev"></view></view>
+        </picker>
+      </view>
+    </view>
+    <view class="perday-toggle" wx:if="{{travelWeekdays.length}}" aria-role="button" aria-label="{{travelPerDay ? '所有日期使用同一时间' : '不同日期时间不同'}}" bindtap="toggleTravelPerDay">
+      <text>{{travelPerDay ? '所有日期使用同一时间' : '不同日期时间不同？'}}</text>
+    </view>
+  </view>
+  <view class="sheet-foot">
+    <text class="err-text" wx:if="{{travelError}}">{{travelError}}</text>
+    <button class="btn" loading="{{savingTravel}}" disabled="{{savingTravel || deletingTravel || !canWrite}}" bindtap="saveTravel">{{savingTravel ? '保存中…' : '保存安排'}}</button>
+    <view class="danger-row" wx:if="{{editingTravelId && canWrite}}">
+      <view class="ico ico-trash-dan xs"></view>
+      <text class="danger-link" aria-role="button" aria-label="删除这项出行安排" bindtap="deleteTravel">{{deletingTravel ? '删除中…' : '删除这项安排'}}</text>
+    </view>
+  </view>
+</view>
+
+<view class="pk-mask" wx:if="{{showChildSheet}}" bindtap="closeChildSheet"></view>
+<view class="pk-sheet child-sheet" wx:if="{{showChildSheet}}">
+  <view class="handle"></view>
+  <view class="sheet-head">
+    <view class="grow">
+      <text class="sheet-title">学习档案</text>
+    </view>
+    <view class="icon-btn" aria-role="button" aria-label="关闭" bindtap="closeChildSheet"><view class="ico ico-close sm"></view></view>
+  </view>
+  <view class="sheet-body">
+    <view class="rowlist profile-list">
+      <view class="rowitem profile-row {{index === childIndex ? 'is-current' : ''}}" wx:for="{{children}}" wx:key="id" aria-role="button" aria-label="切换到{{item.name}}" data-index="{{index}}" bindtap="chooseChild">
+        <view class="act-mark"><text class="am-txt">{{item.avatar}}</text></view>
+        <view class="grow profile-copy">
+          <text class="r-t trunc">{{item.name}}</text>
+          <view class="profile-meta-line" wx:if="{{item.grade || index === childIndex}}">
+            <text class="profile-grade trunc" wx:if="{{item.grade}}">{{item.gradeLabel}}</text>
+            <text class="profile-current" wx:if="{{index === childIndex}}">{{item.grade ? '· 当前使用' : '当前使用'}}</text>
+          </view>
+        </view>
+        <view class="profile-edit-hit" wx:if="{{canWrite}}" aria-role="button" aria-label="编辑{{item.name}}的档案" data-id="{{item.id}}" catchtap="editChild">
+          <view class="ico ico-pen-mute sm"></view>
+        </view>
+      </view>
+      <view class="rowitem profile-add-row" wx:if="{{canWrite && canAddChild}}" aria-role="button" aria-label="新建学习档案" bindtap="addChild">
+        <view class="act-mark"><view class="ico ico-plus-pri sm"></view></view>
+        <view class="grow"><text class="r-t">新建学习档案</text></view>
+        <view class="chev right"></view>
+      </view>
+    </view>
+    <view class="profile-sheet-section" wx:if="{{canWrite && archivedChildren.length}}">
+      <text class="profile-sheet-label">已归档</text>
+      <view class="rowlist">
+        <view class="rowitem" wx:for="{{archivedChildren}}" wx:key="id" aria-role="button" aria-label="恢复{{item.name}}的档案" data-id="{{item.id}}" bindtap="editChild">
+          <view class="act-mark"><text class="am-txt">{{item.avatar}}</text></view>
+          <view class="grow"><text class="r-t">{{item.label}}</text></view>
+          <text class="profile-restore">去恢复</text>
+          <view class="chev right"></view>
+        </view>
+      </view>
+    </view>
+    <view class="help" wx:if="{{canWrite && !canAddChild}}">{{childLimitHint}}</view>
+  </view>
+</view>
+
+<view class="pk-mask" wx:if="{{showCatalog}}" bindtap="closeCatalog"></view>
+<view class="pk-mask" wx:if="{{showDailyTaskCatalog}}" bindtap="closeDailyTaskCatalog"></view>
+<view class="pk-sheet catalog-sheet" wx:if="{{showDailyTaskCatalog}}">
+  <view class="handle"></view>
+  <view class="sheet-head"><text class="sheet-title grow">添加每日任务</text><view class="icon-btn" aria-role="button" aria-label="关闭每日任务目录" bindtap="closeDailyTaskCatalog"><view class="ico ico-close sm"></view></view></view>
+  <scroll-view class="sheet-body" scroll-y>
+    <view class="act-row daily-task-candidate" wx:for="{{dailyTaskPresets}}" wx:key="name" aria-role="button" aria-label="{{item.name}}，建议{{item.minutes}}分钟，可调整" data-name="{{item.name}}" bindtap="openDailyTaskForm">
+      <view class="act-mark"><view class="ico ico-clock-pri sm"></view></view><view class="grow"><text class="a-t">{{item.name}}</text><text class="a-s">建议 {{item.minutes}} 分钟 · 可调整</text></view><view class="chev right"></view>
+    </view>
+    <view class="add-entry" aria-role="button" aria-label="添加自定义任务" bindtap="openDailyTaskForm"><view class="ico ico-plus-pri sm"></view><text>自定义任务</text></view>
+  </scroll-view>
+</view>
+<view class="pk-sheet catalog-sheet" wx:if="{{showCatalog}}">
+  <view class="handle"></view>
+  <view class="sheet-head">
+    <view class="grow">
+      <text class="sheet-title">{{catalogTitle}}</text>
+    </view>
+    <view class="icon-btn" aria-role="button" aria-label="关闭" bindtap="closeCatalog"><view class="ico ico-close sm"></view></view>
+  </view>
+  <view class="seg n2">
+    <view class="{{catalogMode === 'catalog' ? 'on' : ''}}" data-mode="catalog" bindtap="changeCatalogMode">从目录选择</view>
+    <view class="{{catalogMode === 'custom' ? 'on' : ''}}" data-mode="custom" bindtap="changeCatalogMode">自定义名称</view>
+  </view>
+  <scroll-view class="sheet-body cat-body" scroll-y wx:if="{{catalogMode === 'catalog'}}">
+    <view class="search-field">
+      <view class="ico ico-search-mute sm"></view>
+      <input class="search-input" value="{{catalogQuery}}" bindinput="filterCatalog" placeholder="搜索{{catalogWord}}" placeholder-class="pk-ph"/>
+    </view>
+    <view class="cat-grid">
+      <view class="cat-cell {{selectedCatalogName === item.name ? 'on' : ''}} {{item.added ? 'added' : ''}}" wx:for="{{catalogOptions}}" wx:key="name" aria-role="button" aria-label="{{item.name}}" data-index="{{index}}" bindtap="chooseCatalog">
+        <text class="c-name trunc">{{item.name}}</text>
+        <text class="c-state" wx:if="{{item.added}}">已添加</text>
+        <view class="ico ico-check-pri xs" wx:elif="{{selectedCatalogName === item.name}}"></view>
+        <view class="ico ico-plus-mute xs" wx:else></view>
+      </view>
+    </view>
+    <view class="pk-empty inline" wx:if="{{!catalogOptions.length}}">
+      <text class="et">没有找到这个名称</text>
+    </view>
+  </scroll-view>
+  <view class="sheet-body" wx:else>
+    <view class="pk-field">
+      <text class="lbl">{{catalogWord}}名称</text>
+      <input class="pk-input" value="{{customCatalogName}}" data-field="customCatalogName" bindinput="setField" placeholder="例如：{{catalogType === 'activity' ? '陶艺' : '自然观察'}}" placeholder-class="pk-ph" maxlength="30"/>
+    </view>
+  </view>
+  <view class="sheet-foot">
+    <text class="err-text" wx:if="{{catalogError}}">{{catalogError}}</text>
+    <button class="btn" loading="{{addingCatalog}}" disabled="{{addingCatalog || !canWrite || (!selectedCatalogName && !customCatalogName)}}" bindtap="addCatalog">{{addingCatalog ? '添加中…' : (selectedCatalogName ? '添加「' + selectedCatalogName + '」' : '添加' + catalogWord)}}</button>
+  </view>
+</view>
+
+<view class="pk-mask" wx:if="{{showSchedule}}" bindtap="closeSchedule"></view>
+<view class="pk-sheet activity-schedule-sheet" wx:if="{{showSchedule}}">
+  <view class="handle"></view>
+  <view class="sheet-head">
+    <view class="grow">
+      <text class="sheet-title">{{scheduleSubject.name}} · 安排</text>
+      <text class="sheet-sub" wx:if="{{!canWrite}}">仅可查看，请联系家庭管理员修改</text>
+    </view>
+    <view class="icon-btn" aria-role="button" aria-label="关闭" bindtap="closeSchedule"><view class="ico ico-close sm"></view></view>
+  </view>
+  <view class="sheet-body">
+    <view class="seg n3 schedule-mode">
+      <view class="{{!flexible && !workdayOnly ? 'on' : ''}}" aria-role="button" aria-label="指定星期{{!flexible && !workdayOnly ? '，已选择' : ''}}" aria-disabled="{{!canWrite || savingSchedule || scheduleConfirming}}" data-mode="fixed" bindtap="chooseScheduleMode">指定星期</view>
+      <view class="{{workdayOnly ? 'on' : ''}}" aria-role="button" aria-label="工作日{{workdayOnly ? '，已选择' : ''}}" aria-disabled="{{!canWrite || savingSchedule || scheduleConfirming}}" data-mode="workday" bindtap="chooseScheduleMode">工作日</view>
+      <view class="{{flexible ? 'on' : ''}}" aria-role="button" aria-label="时间不固定{{flexible ? '，已选择' : ''}}" aria-disabled="{{!canWrite || savingSchedule || scheduleConfirming}}" data-mode="flexible" bindtap="chooseScheduleMode">时间不固定</view>
+    </view>
+    <view class="pk-notice warn workday-rule" wx:if="{{workdayWarning}}" aria-live="polite"><text class="n-txt">{{workdayWarning}}</text></view>
+    <block wx:if="{{workdayOnly}}">
+      <view class="pk-notice quiet workday-rule"><text class="n-txt">按中国大陆法定安排，放假跳过，调休照常</text></view>
+      <view class="time-row">
+        <view class="pk-field grow"><text class="lbl">开始时间</text>
+          <picker mode="time" value="{{workdayStartTime}}" disabled="{{!canWrite || savingSchedule || scheduleConfirming}}" aria-label="工作日开始时间" data-field="workdayStartTime" bindchange="setField"><view class="pk-picker"><text>{{workdayStartTime}}</text><view class="chev"></view></view></picker>
+        </view>
+        <view class="pk-field grow"><text class="lbl">结束时间</text>
+          <picker mode="time" value="{{workdayEndTime}}" disabled="{{!canWrite || savingSchedule || scheduleConfirming}}" aria-label="工作日结束时间" data-field="workdayEndTime" bindchange="setField"><view class="pk-picker"><text>{{workdayEndTime}}</text><view class="chev"></view></view></picker>
+        </view>
+      </view>
+      <view class="pk-notice quiet sum-note"><text class="n-txt">{{scheduleSummary}}</text></view>
+    </block>
+    <block wx:elif="{{!flexible}}">
+      <view class="day-head">
+        <text class="lbl">每周哪几天</text>
+      </view>
+      <view class="wk-grid">
+        <view class="wk {{weekdaySelected[index] ? 'on' : ''}}" wx:for="{{weekdayLabels}}" wx:key="*this" aria-role="button" aria-label="星期{{item}}" data-value="{{index}}" bindtap="toggleWeekday">{{item}}</view>
+      </view>
+      <block wx:if="{{!perDay}}">
+        <view class="time-row">
+          <view class="pk-field grow">
+            <text class="lbl">开始时间</text>
+            <picker mode="time" value="{{startTime}}" data-field="startTime" bindchange="setField">
+              <view class="pk-picker"><text>{{startTime}}</text><view class="chev"></view></view>
+            </picker>
+          </view>
+          <text class="time-dash">—</text>
+          <view class="pk-field grow">
+            <text class="lbl">结束时间</text>
+            <picker mode="time" value="{{endTime}}" data-field="endTime" bindchange="setField">
+              <view class="pk-picker"><text>{{endTime}}</text><view class="chev"></view></view>
+            </picker>
+          </view>
+        </view>
+      </block>
+      <view class="perday-list" wx:else>
+        <view class="perday-row" wx:for="{{dayRows}}" wx:key="weekday">
+          <text class="perday-day">{{item.label}}</text>
+          <picker class="perday-picker" mode="time" value="{{item.start}}" data-index="{{index}}" data-field="start" bindchange="setDayTime">
+            <view class="pk-picker"><text>{{item.start}}</text><view class="chev"></view></view>
+          </picker>
+          <text class="time-dash">—</text>
+          <picker class="perday-picker" mode="time" value="{{item.end}}" data-index="{{index}}" data-field="end" bindchange="setDayTime">
+            <view class="pk-picker {{item.end <= item.start ? 'is-error' : ''}}"><text>{{item.end}}</text><view class="chev"></view></view>
+          </picker>
+        </view>
+      </view>
+      <view class="perday-toggle" wx:if="{{weekdays.length}}" aria-role="button" aria-label="{{perDay ? '所有日期使用同一时间' : '不同日期时间不同'}}" bindtap="toggleSchedulePerDay">
+        <text>{{perDay ? '所有日期使用同一时间' : '不同日期时间不同？'}}</text>
+      </view>
+      <view class="pk-notice quiet sum-note">
+        <text class="n-txt">{{scheduleSummary}}</text>
+      </view>
+    </block>
+    <view class="flex-note" wx:else>
+      <text class="fn-t">按实际参与情况记录</text>
+      <text class="fn-s">不生成固定日程，参加后随时可以记录这次练习。</text>
+    </view>
+  </view>
+  <view class="sheet-foot">
+    <text class="err-text" wx:if="{{scheduleError}}" aria-live="assertive">{{scheduleError}}</text>
+    <button class="btn" loading="{{savingSchedule}}" disabled="{{savingSchedule || scheduleConfirming || removingActivity || !canWrite}}" bindtap="saveSchedule">{{!canWrite ? '仅可查看' : savingSchedule ? '保存中…' : '保存安排'}}</button>
+    <view class="danger-row" wx:if="{{canWrite}}">
+      <view class="ico ico-trash-dan xs"></view>
+      <text class="danger-link" aria-role="button" aria-label="移除这项活动" bindtap="removeActivity">移除这项活动</text>
+    </view>
+  </view>
+</view>
+</view>
+<grade-confirmation id="grade-confirmation" view="{{gradeConfirmation}}" blocked="{{loading || showChildSheet || showDailyTaskForm || showDailyTaskCatalog || showSubjectManager || showCatalog || showSchedule || showTravelEditor || subjectBusy || subjectConfirming || savingDailyTask || deletingDailyTask || savingSchedule || removingActivity || savingTravel || deletingTravel}}" bindaction="onGradeConfirmation"></grade-confirmation>

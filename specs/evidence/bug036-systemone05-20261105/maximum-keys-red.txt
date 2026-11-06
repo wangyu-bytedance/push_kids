@@ -1,0 +1,190 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+__________ test_maximum_system_one_path_keeps_eighteen_temporary_keys __________
+
+client = <starlette.testclient.TestClient object at 0x10c9a3110>
+app = <fastapi.applications.FastAPI object at 0x10c8e0410>
+child = {'active': True, 'created_at': '2026-11-05T09:50:32.987992Z', 'daily_budget_minutes': 15, 'grade': '小学二年级', ...}
+family_headers = {'X-Family-ID': 'family-test-a'}
+tmp_path = PosixPath('/private/var/folders/hq/l74_1q417nbdffshwhtw79640000gn/T/pytest-of-bytedance/pytest-65/test_maximum_system_one_path_k0')
+
+    def test_maximum_system_one_path_keeps_eighteen_temporary_keys(client, app, child, family_headers, tmp_path):
+        import asyncio
+        from time import monotonic
+        from push_kids.agent_processing.contracts import AnalysisInput, ExistingKnowledgeContext
+        from push_kids.agent_processing.decision_contracts import DecisionAnswer
+        from push_kids.agent_processing.pipeline import StagedPipeline
+        from push_kids.agent_processing.telemetry import AnalysisTrace
+        from tests.integration.test_analysis_checkpoints import make_store
+        from tests.staged_analysis_fakes import MaximumStages
+        from tests.unit.test_system_one_workflow import DecisionFake
+    
+        class OneCorrection(DecisionFake):
+            reviews = 0
+            async def evaluate(self, questions, *args):
+                result = await super().evaluate(questions, *args)
+                if "summary" in questions:
+                    self.reviews += 1
+                    if self.reviews == 1:
+                        result["i0_source"] = DecisionAnswer(type="noul",noul=.1)
+                return result
+    
+        store = make_store(client,app,family_headers,child)
+        images=[]
+        for index in range(9):
+            path=tmp_path/f"{index}.png";path.write_bytes(f"synthetic-{index}".encode());images.append(path)
+        data=AnalysisInput(text="十以内加法",image_paths=images,existing_subjects=["数学"],existing_knowledge=[
+            ExistingKnowledgeContext(knowledge_id="old",subject_name="数学",name="十以内加法",category="计算",evidence="合成来源"),
+        ])
+        provider=MaximumStages();provider.decision_provider=OneCorrection()
+>       proposal=asyncio.run(StagedPipeline(provider,AnalysisTrace.disabled(),store).run(data,lambda _:[],monotonic()+10))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/integration/test_system_one_history.py:40: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../.local/share/uv/python/cpython-3.12.11-macos-aarch64-none/lib/python3.12/asyncio/runners.py:195: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+../../.local/share/uv/python/cpython-3.12.11-macos-aarch64-none/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../.local/share/uv/python/cpython-3.12.11-macos-aarch64-none/lib/python3.12/asyncio/base_events.py:691: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+apps/api/src/push_kids/agent_processing/pipeline.py:918: in run
+    reuse = await self._call(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <push_kids.agent_processing.pipeline.StagedPipeline object at 0x10d03efc0>
+stage = 'reuse', unit = 'reuse'
+instructions = '核验每个拟复用项：current为已经质量审查的本次知识，selected为实际将展示的历史知识。\n每个candidate和match组合恰好返回一次，只输出短编号、verdict、basis，不提供新名称，不改历史。\n确认范围/...图词汇属于同一字母学习：整理一个字母与相关词汇单元。\n   单独认读六词、另外只书写其中两词时，两个真实独立检查可以分别保留。\n8. 同一材料解释近反义的含义，给出热—烫、快—慢并练习运用：概念、辨析与运用在一次词间关系检查中整合。'
+payload = {'matches': [{'candidate': 'i0', 'current': {'direct_evidence': [{'confidence': 'high', 'detail': 'extract:m1', 'mater... 'match': 'h0', 'selected': {'evidence': '合成来源', 'evidence_complete': True, 'id': 'h0', 'kind': 'history_item', ...}}]}
+schema = <class 'push_kids.agent_processing.stage_contracts.ReuseReviewResult'>
+images = [], deadline = 281980.267043583
+validate = <function StagedPipeline.run.<locals>.validate_reuse at 0x10d05ad40>
+cache_input = None
+
+    async def _call(
+        self,
+        stage: str,
+        unit: str,
+        instructions: str,
+        payload: dict[str, Any],
+        schema: type[T],
+        images: list[tuple[str, Path]],
+        deadline: float,
+        validate: Callable[[T], None],
+        cache_input: object = None,
+    ) -> T:
+        if deadline <= monotonic():
+            raise StageFailure("local_deadline", stage=stage, unit=unit)
+        image_digests = [(alias, sha256(path.read_bytes()).hexdigest()) for alias, path in images]
+        expected_sources = payload.get("source_digests")
+        if expected_sources is not None and dict(image_digests) != expected_sources:
+            raise StageFailure("input", retryable=False, stage=stage, unit=unit)
+        digest = fingerprint(
+            {
+                "revision": PIPELINE_REVISION,
+                "parameters": self.provider.parameter_revision,
+                "payload": payload,
+                "context": cache_input,
+                "images": image_digests,
+            }
+        )
+        cached = self.checkpoints.get(unit, digest) if self.checkpoints else None
+        if cached is not None:
+            try:
+                value = schema.model_validate(cached)
+                validate(value)
+                if self._checkpoint_reusable(unit, value):
+                    self.trace.info(
+                        "analysis_stage_cache",
+                        stage=stage,
+                        unit=unit,
+                        revision=PIPELINE_REVISION,
+                        checkpoint_hit=True,
+                    )
+                    return value
+            except (ValueError, StageFailure):
+                pass
+        attempts = 1 if stage in {"review", "reuse"} else 2
+        for correction in range(attempts):
+            if deadline <= monotonic():
+                raise StageFailure("local_deadline", stage=stage, unit=unit)
+            if not isinstance(self.provider, DecisionWorkflow):
+                self._consume()
+            try:
+                async with asyncio.timeout(max(0.001, deadline - monotonic())):
+                    response = await self.provider.generate_stage(
+                        stage,
+                        instructions,
+                        payload,
+                        schema,
+                        images,
+                        deadline,
+                        self.trace,
+                    )
+                value = schema.model_validate(response.model_dump())
+                if (
+                    expected_sources is not None
+                    and {alias: sha256(path.read_bytes()).hexdigest() for alias, path in images}
+                    != expected_sources
+                ):
+                    raise StageFailure("input", retryable=False)
+                validate(value)
+                if self.checkpoints and self._checkpoint_reusable(unit, value):
+                    async with self._checkpoint_lock:
+                        await stage_io(
+                            partial(
+                                self.checkpoints.put,
+                                unit,
+                                digest,
+                                value.model_dump(),
+                                deadline=deadline,
+                            ),
+                            deadline,
+                        )
+                return value
+            except TimeoutError:
+                self.trace.warning(
+                    "analysis_stage_failed",
+                    stage=stage,
+                    unit=unit,
+                    revision=PIPELINE_REVISION,
+                    reason="local_deadline",
+                )
+                raise StageFailure("local_deadline", stage=stage, unit=unit) from None
+            except (ValidationError, StageFailure) as exc:
+                reason = exc.reason if isinstance(exc, StageFailure) else "validation"
+                diagnostics = (
+                    exc.diagnostics if isinstance(exc, StageFailure) else schema_diagnostics(exc)
+                )
+                self.trace.warning(
+                    "analysis_stage_failed",
+                    stage=stage,
+                    unit=unit,
+                    revision=PIPELINE_REVISION,
+                    reason=reason,
+                    validation_codes=diagnostics,
+                )
+                if correction or reason not in {"validation", "coverage"}:
+>                   raise StageFailure(
+                        reason,
+                        retryable=getattr(exc, "retryable", True),
+                        retry_after=getattr(exc, "retry_after", 0),
+                        stage=stage,
+                        unit=unit,
+                        diagnostics=diagnostics,
+                    ) from None
+E                   push_kids.agent_processing.failures.StageFailure: capacity
+
+apps/api/src/push_kids/agent_processing/pipeline.py:200: StageFailure
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /Users/bytedance/Documents/push_kids/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/integration/test_system_one_history.py::test_maximum_system_one_path_keeps_eighteen_temporary_keys
+1 failed, 1 warning in 0.58s

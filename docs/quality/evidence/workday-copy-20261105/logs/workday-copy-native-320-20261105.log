@@ -1,0 +1,8 @@
+settings/workday/320: GEOMETRY_PASS; FAIL: App.captureScreenshot timed out
+settings/coverage/320: GEOMETRY_PASS; NOT_RUN_AFTER_CAPTURE_FAILURE: App.captureScreenshot timed out
+calendar/create/320: GEOMETRY_PASS; NOT_RUN_AFTER_CAPTURE_FAILURE: App.captureScreenshot timed out
+calendar/edit/320: GEOMETRY_PASS; NOT_RUN_AFTER_CAPTURE_FAILURE: App.captureScreenshot timed out
+calendar/coverage/320: GEOMETRY_PASS; NOT_RUN_AFTER_CAPTURE_FAILURE: App.captureScreenshot timed out
+calendar/partial-coverage/320: GEOMETRY_PASS; NOT_RUN_AFTER_CAPTURE_FAILURE: App.captureScreenshot timed out
+today/coverage/320: GEOMETRY_PASS; NOT_RUN_AFTER_CAPTURE_FAILURE: App.captureScreenshot timed out
+today/partial-coverage/320: GEOMETRY_PASS; NOT_RUN_AFTER_CAPTURE_FAILURE: App.captureScreenshot timed out

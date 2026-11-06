@@ -1,0 +1,112 @@
+{
+  "captured_at": "2026-10-31T12:03:31.665333+00:00",
+  "result": "FAIL",
+  "problems": [
+    {
+      "path": "specs/README.md",
+      "problem": "spec_index_count_mismatch",
+      "directory": "active",
+      "count": 13
+    },
+    {
+      "path": "specs/README.md",
+      "problem": "spec_index_count_mismatch",
+      "directory": "completed",
+      "count": 106
+    },
+    {
+      "path": "specs/README.md",
+      "problem": "spec_index_count_mismatch",
+      "directory": "rejected",
+      "count": 13
+    }
+  ],
+  "checked_documents": [
+    "docs/deploy/README.md",
+    "docs/deploy/FRONTEND-RELEASE.md",
+    "docs/deploy/BACKEND-RELEASE.md",
+    "docs/deploy/releases/20261031-client-release-resume.md",
+    "docs/deploy/releases/20261031-client-upload-preparation.md",
+    "docs/deploy/releases/20261031-travel-diary-backend-compatibility.md",
+    "docs/domain/features/FEAT-001-push-kids-mvp.md",
+    "docs/domain/features/FEAT-012-child-photo-footprints.md",
+    "docs/domain/BEHAVIOR-CATALOG.md",
+    "docs/architecture/ARCHITECTURE.md",
+    "docs/design/frontend/FRONTEND-DESIGN.md",
+    "docs/design/frontend/FRONTEND-ENGINEERING-CONSTRAINTS.md",
+    "docs/design/frontend/ui/UI-001-parent-miniapp.md",
+    "docs/design/frontend/ui/UI-018-child-photo-footprints.md",
+    "docs/quality/TEST-STRATEGY.md",
+    "specs/README.md",
+    "specs/STATUS.md",
+    "specs/active/BUG-035-TRAVEL-DIARY-END-TO-END.md",
+    "specs/active/FEAT-012-TRAVEL-IMPORT-SIMPLIFICATION.md",
+    "specs/active/FEAT-012-TRAVEL-ENTRY-CLEANUP.md",
+    "specs/completed/OPS-20261031-RELEASE-STAGE-CACHE-TEST-MAINTENANCE.md",
+    "docs/quality/evidence/client-release-20261031/README.md",
+    "docs/quality/evidence/client-release-20261031/backend-authorized/test-maintenance01/README.md",
+    "docs/quality/evidence/client-release-20261031/native-current-matrix.md"
+  ],
+  "local_links_checked": 735,
+  "document_sha256": {
+    "docs/deploy/README.md": "1ec6c0565750c6051736ca86beed1dad3b302dff8486fe42c81dd78bee3b11b9",
+    "docs/deploy/FRONTEND-RELEASE.md": "30f3783b5101e27c30e69fdb5de777ef3040f0a04d2aa464a78e01da3b25d2ca",
+    "docs/deploy/BACKEND-RELEASE.md": "494acca9122d148fafa4ce7d11b0f6a450eb70529f057520fa078c2586a13a2c",
+    "docs/deploy/releases/20261031-client-release-resume.md": "de92774c47a749dd0a851e7f7ce08e6ea455c7aab92038f4f0f0712b9a35d229",
+    "docs/deploy/releases/20261031-client-upload-preparation.md": "fa538448dd1004baea9f35ad3f91d36b7642e8fe4c2939b3d613254ed7de2fe9",
+    "docs/deploy/releases/20261031-travel-diary-backend-compatibility.md": "ff42cbb88c9d950d43b9e0986ad70c5e142d7c6c5adc64cb8d1005247803df17",
+    "docs/domain/features/FEAT-001-push-kids-mvp.md": "0fc508af0694f87f7c3b5f375ff407ad4019f27803d2823453792923cab44f9b",
+    "docs/domain/features/FEAT-012-child-photo-footprints.md": "2fe66b6bbe24a957a06fe1b07ed5541ca372b8372b1d2651bc852c2015d44c21",
+    "docs/domain/BEHAVIOR-CATALOG.md": "67c93e37a0302629b65075e955ea9b3b2f7a7c9c858172b3ea5057d87d6b60f6",
+    "docs/architecture/ARCHITECTURE.md": "8068fd4cb67de7f0669c144729e7bda2f760fb4f886ed165e7916b3f0332c9b3",
+    "docs/design/frontend/FRONTEND-DESIGN.md": "4dae9a04eaf47eb279ee57e798188f7daf4223cda71fb5411b1b71df0daa3ec2",
+    "docs/design/frontend/FRONTEND-ENGINEERING-CONSTRAINTS.md": "8d2c6b2eea3d871fdcb9d4bd0af0b9e709a7d2f99ae19080690b99ade478ec28",
+    "docs/design/frontend/ui/UI-001-parent-miniapp.md": "486cb68ba310bcc3b15b6e088cc12358315af43ab29705eaa69a7ee2f2d8b74e",
+    "docs/design/frontend/ui/UI-018-child-photo-footprints.md": "28af6e983ebd669df7e19af47fe61020de707aeb6a1e22273da0d38016b9c33a",
+    "docs/quality/TEST-STRATEGY.md": "99f0455eca23c78f415faa3fc7b607f4f276d81a2f5488f2a666384f60a35e0f",
+    "specs/README.md": "030381b1d671fb0b1a7e5db95604dbe8d1df504a57e1b1e07fc53a33bca0e809",
+    "specs/STATUS.md": "076e50134470847ac68c719b7b630c960f7185deeef2ab3e0e07f8ed69632f71",
+    "specs/active/BUG-035-TRAVEL-DIARY-END-TO-END.md": "ff6b9a4a5aed183f2fda49127646df468d22f7f63b1d35bcab64f0c082e20563",
+    "specs/active/FEAT-012-TRAVEL-IMPORT-SIMPLIFICATION.md": "4b1995acdbcd16498455bacbc5bbc8c3eccbcd202c328cf5c0decd2e2a715988",
+    "specs/active/FEAT-012-TRAVEL-ENTRY-CLEANUP.md": "3d48aced980a2106d050376a45b3e98385a6ab09e22b825a555d475fc7740741",
+    "specs/completed/OPS-20261031-RELEASE-STAGE-CACHE-TEST-MAINTENANCE.md": "ae2d14a165be335543fad4a110df8c5190f7af41d11943dd5a3b006944bfd4ef",
+    "docs/quality/evidence/client-release-20261031/README.md": "197cce1ded7c675e171a49a9ac9f5d566a243734bc3511d156a4d35969683bc5",
+    "docs/quality/evidence/client-release-20261031/backend-authorized/test-maintenance01/README.md": "48d951acdb3fcb516ae9ffe83f3c162cf11f88fd21cb98aa893cde4a2fc104f2",
+    "docs/quality/evidence/client-release-20261031/native-current-matrix.md": "1f48d6985a535c130bff127344ae8a105682c771323e69aad155edc8932b589b"
+  },
+  "spec_counts": {
+    "active": 13,
+    "completed": 106,
+    "rejected": 13
+  },
+  "lifecycle": {
+    "specs/active/BUG-035-TRAVEL-DIARY-END-TO-END.md": "VERIFYING",
+    "specs/active/FEAT-012-TRAVEL-IMPORT-SIMPLIFICATION.md": "VERIFYING",
+    "specs/active/FEAT-012-TRAVEL-ENTRY-CLEANUP.md": "VERIFYING",
+    "specs/completed/OPS-20261031-RELEASE-STAGE-CACHE-TEST-MAINTENANCE.md": "DONE"
+  },
+  "frontend_files": 168,
+  "backend_payload_files": 154,
+  "manifest_sha256": {
+    "frontend": "04c6668a20a0f99622c78424b4d7c5ba07aadc1fd515f20a494e0e4cfcbb2adb",
+    "backend": "50a2ea9846fdfe9da13a5ae5b1b7f3ddd0e312d7f72b1961d5c2531060469c62"
+  },
+  "native_320_states": 14,
+  "native_existing_evidence_unchanged": true,
+  "collector_sha256": "056b5be0908b5491baf3feafc00f5b408c60035c41b8a381c4caa091f7144822",
+  "original_collector_sha256": "47c55050cc3b55344096a4664eb43d5e430be77a86af37669267991ec19797e3",
+  "production_source_changed": false,
+  "version_baseline": "0.1.16",
+  "uploaded": false,
+  "version_bumped": false,
+  "git_diff_check_exit_code": 0,
+  "pending": [
+    "039 directed real-AppID health and business smoke",
+    "real two-account family/photo-owner checks",
+    "native390x844",
+    "native430x932",
+    "applicable full actions and device/accessibility acceptance"
+  ],
+  "classification": "FAIL_CHECKER_FORMAT",
+  "diagnosis": "Actual directory counts were 13 active, 106 completed, 13 rejected. The checker did not accept the existing backtick after directory slash in specs/README.md. No index facts or required counts were changed."
+}

@@ -1,0 +1,253 @@
+{
+  "samples": [
+    {
+      "case": "real01",
+      "source_digest": "10c43cf73d03fc3d1c3907a6d61369958f6ab544073dbc2c230e7c5ecae2b648",
+      "images": 1,
+      "source": "photo",
+      "original_state": "cancelled",
+      "available": false,
+      "media_status": [
+        {
+          "available": false,
+          "code": "NoSuchKey",
+          "http_status": 404
+        }
+      ]
+    },
+    {
+      "case": "real02",
+      "source_digest": "1ea9e7db094d1977b3f74d17c184819557d26638e83c1909b9d6e2b028d9e396",
+      "images": 1,
+      "source": "photo",
+      "original_state": "confirmed",
+      "available": true,
+      "media_status": [
+        {
+          "available": true,
+          "code": "verified_existing"
+        }
+      ]
+    },
+    {
+      "case": "real03",
+      "source_digest": "48b3eb516e46fe83ad4989b62d72b1fce9ed722cbfeb8e208a223c35a4b26ed8",
+      "images": 2,
+      "source": "photo",
+      "original_state": "cancelled",
+      "available": false,
+      "media_status": [
+        {
+          "available": false,
+          "code": "NoSuchKey",
+          "http_status": 404
+        },
+        {
+          "available": false,
+          "code": "NoSuchKey",
+          "http_status": 404
+        }
+      ]
+    },
+    {
+      "case": "real04",
+      "source_digest": "b526d9d0de299acce634c470cf6c5024b7f3920eeecd9e28a9796f911718fc12",
+      "images": 1,
+      "source": "photo",
+      "original_state": "cancelled",
+      "available": false,
+      "media_status": [
+        {
+          "available": false,
+          "code": "NoSuchKey",
+          "http_status": 404
+        }
+      ]
+    },
+    {
+      "case": "real05",
+      "source_digest": "1f768b5ad608174f003602e3dbe6d5ad46bed0264d42303db26c98bcc3f085f4",
+      "images": 0,
+      "source": "manual",
+      "original_state": "confirmed",
+      "available": true,
+      "media_status": []
+    },
+    {
+      "case": "real06",
+      "source_digest": "88f3646dd90bf856dffb084dd31b08fc96b05429f6ae7677c52f9fdd12840923",
+      "images": 3,
+      "source": "photo",
+      "original_state": "confirmed",
+      "available": true,
+      "media_status": [
+        {
+          "available": true,
+          "code": "verified_existing"
+        },
+        {
+          "available": true,
+          "code": "verified_existing"
+        },
+        {
+          "available": true,
+          "code": "verified_existing"
+        }
+      ]
+    },
+    {
+      "case": "real07",
+      "source_digest": "b2c5c447be4d135dfa1838a6861a034a1c1ef3787490a97a1804c237806a0ff6",
+      "images": 0,
+      "source": "manual",
+      "original_state": "confirmed",
+      "available": true,
+      "media_status": []
+    },
+    {
+      "case": "real08",
+      "source_digest": "2733fde3bd391b587622d7dd082fa4b125c34ec4a5326820e08caa0bbead0540",
+      "images": 0,
+      "source": "manual",
+      "original_state": "confirmed",
+      "available": true,
+      "media_status": []
+    },
+    {
+      "case": "real09",
+      "source_digest": "b5f11836dc5a179a1952169aad1cbe665671165012ef21957fabb66e7303d2cb",
+      "images": 1,
+      "source": "photo",
+      "original_state": "confirmed",
+      "available": true,
+      "media_status": [
+        {
+          "available": true,
+          "code": "verified_existing"
+        }
+      ]
+    },
+    {
+      "case": "real10",
+      "source_digest": "246701b856f3ad0a770201bc4584d1d09db52fd7cbd7b62ee2d2812e9f95ff4c",
+      "images": 2,
+      "source": "photo",
+      "original_state": "confirmed",
+      "available": true,
+      "media_status": [
+        {
+          "available": true,
+          "code": "verified_existing"
+        },
+        {
+          "available": true,
+          "code": "verified"
+        }
+      ]
+    },
+    {
+      "case": "real11",
+      "source_digest": "245e8792f5a9672db9e95a03de415151b17f8644ff13961dbc5eeceda8fd7bc7",
+      "images": 1,
+      "source": "photo",
+      "original_state": "confirmed",
+      "available": true,
+      "media_status": [
+        {
+          "available": true,
+          "code": "verified"
+        }
+      ]
+    },
+    {
+      "case": "real12",
+      "source_digest": "504d1865e76ce194bce478fba45d9eb35067bd5aff9bb7e194aaffbdc49be3e5",
+      "images": 1,
+      "source": "photo",
+      "original_state": "confirmed",
+      "available": true,
+      "media_status": [
+        {
+          "available": true,
+          "code": "verified"
+        }
+      ]
+    },
+    {
+      "case": "real13",
+      "source_digest": "2880c543c51b90da4ce7d9ef71c8611c3fc286f8c960400739b913b295075004",
+      "images": 1,
+      "source": "photo",
+      "original_state": "confirmed",
+      "available": true,
+      "media_status": [
+        {
+          "available": true,
+          "code": "verified"
+        }
+      ]
+    },
+    {
+      "case": "real14",
+      "source_digest": "448b95d4d73ca584907c4328a7e626b55ea6a5ecc7eadd0ef719d05bc4386910",
+      "images": 1,
+      "source": "photo",
+      "original_state": "confirmed",
+      "available": true,
+      "media_status": [
+        {
+          "available": true,
+          "code": "verified"
+        }
+      ]
+    },
+    {
+      "case": "real15",
+      "source_digest": "72617c760517efece18775da03834bed4201f737f0d0175a87eefcff3ee976a9",
+      "images": 0,
+      "source": "manual",
+      "original_state": "confirmed",
+      "available": true,
+      "media_status": []
+    },
+    {
+      "case": "real16",
+      "source_digest": "e1ab1b161e3ae6c40135c4b6740b3c4311ab55fb46ecd69389c076b473234374",
+      "images": 0,
+      "source": "manual",
+      "original_state": "cancelled",
+      "available": true,
+      "media_status": []
+    },
+    {
+      "case": "real17",
+      "source_digest": "7e7c809aa6f24c938ac646f69cddb0ba8224d86642a4b2043b78e6f16ff3bcf1",
+      "images": 1,
+      "source": "photo",
+      "original_state": "confirmed",
+      "available": true,
+      "media_status": [
+        {
+          "available": true,
+          "code": "verified"
+        }
+      ]
+    },
+    {
+      "case": "real18",
+      "source_digest": "8be41289b69a93e868d2eb05492a4fed235528a5be8d2f38d3f8c592903df5d5",
+      "images": 1,
+      "source": "photo",
+      "original_state": "confirmed",
+      "available": true,
+      "media_status": [
+        {
+          "available": true,
+          "code": "verified"
+        }
+      ]
+    }
+  ],
+  "total": 18,
+  "available": 15
+}

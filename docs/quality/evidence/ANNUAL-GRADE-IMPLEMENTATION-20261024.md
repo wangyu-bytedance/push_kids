@@ -1,7 +1,7 @@
 # FEAT-013 本地实现与验证 — 2026-10-24
 
 - State: LOCAL_IMPLEMENTATION / VERIFYING / NOT_RELEASED
-- Approval: 用户“好的 按照这个方案落地”，批准[Spec02 / Architecture02 / DREV01](../../../specs/active/FEAT-013-ANNUAL-GRADE-PROMOTION.md)。
+- Approval: 用户“好的 按照这个方案落地”，批准[Spec02 / Architecture02 / DREV01](../../../specs/completed/FEAT-013-ANNUAL-GRADE-PROMOTION.md)。
 - Baseline HEAD: `82ca52775bc948f2a963a8f4ed614322d8859de8`；共享dirty工作区，无本任务commit。其他任务在同时修改工作区，全仓结果只代表该次命令观察，不代表其他任务完成。
 - Current feature: [FEAT-013](../../domain/features/FEAT-013-annual-grade-promotion.md)。
 - Release scope: [本地交付记录](../../deploy/releases/20261024-annual-grade-local.md)。
@@ -64,4 +64,4 @@ CUA在三尺寸实际打开/取消系统picker，AX均识别小班至九年级12
 
 本功能当前代码/文档已统一为“建议＋确认后生效”，不存在直接日期投影或初一封顶残留实现。另发现**既有文档差异**：BHV-025及FEAT-005旧段写“归档资料仍可编辑”，而实施前备份与当前update_child均要求在用（原require_active_child）。本任务沿批准Spec保持原active门禁，不把该历史文档差异扩成归档编辑行为修复，也不声称全仓历史文档零冲突；后续需在档案领域明确处理。
 
-[独立只读评审](grade-confirmation-20261024/independent-review.md)第三轮PASS，无剩余Blocker/Major。初轮发现恢复漏核对、报表筛选互斥及人工改级冲突恢复问题；第二轮发现归档/人工确认后的在途候选竞态；四项均修复并复核关闭。当前剩余门禁为真实iOS/Android、修复后原生端到端、可访问性及双家长旧端。Spec保留`specs/active/FEAT-013-ANNUAL-GRADE-PROMOTION.md`的`VERIFYING`，不满足DONE迁移条件。不重复请求已批准产品方案，不执行生产迁移/部署/上传。
+[独立只读评审](grade-confirmation-20261024/independent-review.md)第三轮PASS，无剩余Blocker/Major。初轮发现恢复漏核对、报表筛选互斥及人工改级冲突恢复问题；第二轮发现归档/人工确认后的在途候选竞态；四项均修复并复核关闭。当前剩余门禁为真实iOS/Android、修复后原生端到端、可访问性及双家长旧端。Spec保留`specs/completed/FEAT-013-ANNUAL-GRADE-PROMOTION.md`的`VERIFYING`，不满足DONE迁移条件。不重复请求已批准产品方案，不执行生产迁移/部署/上传。

@@ -1,0 +1,11 @@
+--- review02/apps/api/src/push_kids/agent_processing/prompt.py
++++ review03/apps/api/src/push_kids/agent_processing/prompt.py
+@@ -7,7 +7,7 @@
+     OUTPUT_RULES,
+ )
+ 
+-PROMPT_REVISION = "child-aware-history-agent-20261031-11"
++PROMPT_REVISION = "child-aware-history-agent-20261031-12"
+ 
+ _TRANSPORT_RULES = """
+ 你正在根据孩子的学习档案和本次材料，生成一份由家长编辑确认的学习/复习提案。

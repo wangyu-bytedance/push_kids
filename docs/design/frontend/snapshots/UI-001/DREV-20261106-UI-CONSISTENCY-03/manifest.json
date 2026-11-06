@@ -1,0 +1,191 @@
+{
+  "designRevision": "DREV-20261106-UI-CONSISTENCY-03",
+  "taskSpecRevision": "DESIGN-002-SPEC-03",
+  "approval": "PENDING_STYLE_SELECTION",
+  "generatedAt": "2026-11-06T07:54:50.234399+00:00",
+  "sources": [
+    {
+      "path": "docs/design/frontend/prototypes/DREV-20261106-UI-CONSISTENCY-03/FRONTEND-SPEC.md",
+      "sha256": "9050016c94499f139043c916a77bc4fae641b52e4bc9f93b6eec0738cff57c7c"
+    },
+    {
+      "path": "docs/design/frontend/prototypes/DREV-20261106-UI-CONSISTENCY-03/export.py",
+      "sha256": "47c86142b389f899508ae46c52cf7a47d64fafe58039409bc83a075f3b38a700"
+    },
+    {
+      "path": "docs/design/frontend/prototypes/DREV-20261106-UI-CONSISTENCY-03/index.html",
+      "sha256": "88a2be7ad1f552f1924d42432bef54600082e210e044dbe9ea1cef492ba36c64"
+    }
+  ],
+  "exports": [
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-03/style-a-320x568.png",
+      "style": "a",
+      "viewport": [
+        320,
+        568
+      ],
+      "sha256": "f1ac2dcea2982f8dc81c68761c3cf70376f4d90d7225e8907255ccb3ff6a9948"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-03/style-b-320x568.png",
+      "style": "b",
+      "viewport": [
+        320,
+        568
+      ],
+      "sha256": "17e9184e109ce1401a7e4c4854725c6827d511350f3a8699cef5bd4179323ae4"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-03/style-c-320x568.png",
+      "style": "c",
+      "viewport": [
+        320,
+        568
+      ],
+      "sha256": "b459657e0bd099f2a2db21b54097194acb2ea504287c52c32c3c792a47bbdac2"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-03/style-d-320x568.png",
+      "style": "d",
+      "viewport": [
+        320,
+        568
+      ],
+      "sha256": "84360f99562f41a7df92af0f7601a31d94f43d94ba560f5ef02372eb3142e969"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-03/style-e-320x568.png",
+      "style": "e",
+      "viewport": [
+        320,
+        568
+      ],
+      "sha256": "dfc9926aacd3f116ba02cd8e81aa93e9a5cde883e89da0e303be2e011fed2863"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-03/style-f-320x568.png",
+      "style": "f",
+      "viewport": [
+        320,
+        568
+      ],
+      "sha256": "5279009a16c94bac0f9066f3246dffa6afa9868a25cb7772c83329f170547ada"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-03/style-a-390x844.png",
+      "style": "a",
+      "viewport": [
+        390,
+        844
+      ],
+      "sha256": "5f7beb2e5be67da8e54477fc17f72bb233f3a5124420ac7560f8b29d0312899b"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-03/style-b-390x844.png",
+      "style": "b",
+      "viewport": [
+        390,
+        844
+      ],
+      "sha256": "a7b2acf32df467242363a418ba251eeb4a54ba1c4ca5a426ba47af9434116fec"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-03/style-c-390x844.png",
+      "style": "c",
+      "viewport": [
+        390,
+        844
+      ],
+      "sha256": "6b775f992d0b894fbd707c5dbd70847296852314546caf13102605bd22d78d73"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-03/style-d-390x844.png",
+      "style": "d",
+      "viewport": [
+        390,
+        844
+      ],
+      "sha256": "22f9ac747cc88b59ee3102af8d18fe32b4de7708cacdad40f7f4aa96319557ee"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-03/style-e-390x844.png",
+      "style": "e",
+      "viewport": [
+        390,
+        844
+      ],
+      "sha256": "2648f6f73141b708e8cd09241395505026155fd831515ee717acb32050a54d3a"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-03/style-f-390x844.png",
+      "style": "f",
+      "viewport": [
+        390,
+        844
+      ],
+      "sha256": "9ed49c1ff1c1c2b85e9830cb4d317f65cd4d1bdb37e36dc9b2037bf6285435f8"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-03/style-a-430x932.png",
+      "style": "a",
+      "viewport": [
+        430,
+        932
+      ],
+      "sha256": "c3f1f27ed01cb505a0418237d61fd18180f2caae39481f82ad3e617f1031b6ad"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-03/style-b-430x932.png",
+      "style": "b",
+      "viewport": [
+        430,
+        932
+      ],
+      "sha256": "cb5b37b804cdf50c2cdd09c6d77f48f6f1b4f536a108df7cde65e7e1295d8272"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-03/style-c-430x932.png",
+      "style": "c",
+      "viewport": [
+        430,
+        932
+      ],
+      "sha256": "678a1fe5fe0e30b856406fd330608f41228b390e8c123984d347a1eb3a711373"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-03/style-d-430x932.png",
+      "style": "d",
+      "viewport": [
+        430,
+        932
+      ],
+      "sha256": "cbdbb429a6e0347205952d531535fb4b62be3849707ff0264c1c74b21373e356"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-03/style-e-430x932.png",
+      "style": "e",
+      "viewport": [
+        430,
+        932
+      ],
+      "sha256": "114b31db1b634db858b21c74046610abff769e7e54614cece80b3069e5cd1b6b"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-03/style-f-430x932.png",
+      "style": "f",
+      "viewport": [
+        430,
+        932
+      ],
+      "sha256": "07fdc70070a36346db4f0f0f04177f9890a7f6dd34a981cf05045bd8c587f715"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-03/six-styles-board.png",
+      "kind": "comparison-board",
+      "sha256": "067f5754a17c2ec2426f2fbd188cb122ac0a1bb0b3f21a65e6913b26e23e1775"
+    }
+  ],
+  "verificationSha256": "9456a8a8aaced6d2a0fdde03f8211b8fe96fa282e6cdfc42622b39efb1f43a8c",
+  "contrastScreeningSha256": "78f24dd871a6ba16afea4de382608a1a0540d1e7b3eb1bc22f61163fd65f0ff9"
+}

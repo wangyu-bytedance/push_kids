@@ -185,6 +185,9 @@ class ReportingService:
             "activity_remaining_count": activity_remaining,
             "activity_suggestions": suggestions,
             "schedule_items": schedule,
+            "workday_calendar_warning": ActivitiesService.calendar_warning(
+                db, family_id, child_id, target
+            ),
         }
 
     @staticmethod

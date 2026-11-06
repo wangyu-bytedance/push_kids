@@ -2,7 +2,7 @@
 
 - Status: BACKEND_035_100_PERCENT / SCHEMA_0022_VERIFIED / LOCAL_CLIENT_READY / USER_ACCEPTANCE_PENDING。用户指定同库升级顺序已执行；035 normal/100%/1实例，用户已删除034，旧实例0，coverage=false。真实微信18项GET全部200，本地完整客户端已重开并进入旅行日记。
 - Scope: 用户明确选择当前全部代码，含通知续订、旅行日记、AI永久替代复习词条及已批准入口/文案。
-- Task: [运维Spec04执行记录](../../../specs/active/OPS-20261023-FULLSTACK-TEST-DEPLOYMENT.md)。原Spec02完整范围/备份批准保留；用户在同库并发风险说明后明确要求直接升级当前push_kids库（call_98faa5ae52df44ce902b9b30645c9670），取代停旧消费者前提。不新增业务代码或迁移设计；Spec03临时维护提案撤回并移至rejected，不再等待其批准。人工接管/删除及真实产品验收保持独立。
+- Task: [运维Spec04执行记录](../../../specs/completed/OPS-20261023-FULLSTACK-TEST-DEPLOYMENT.md)。原Spec02完整范围/备份批准保留；用户在同库并发风险说明后明确要求直接升级当前push_kids库（call_98faa5ae52df44ce902b9b30645c9670），取代停旧消费者前提。不新增业务代码或迁移设计；Spec03临时维护提案撤回并移至rejected，不再等待其批准。人工接管/删除及真实产品验收保持独立。
 - Git基线：`82ca52775bc948f2a963a8f4ed614322d8859de8`；完整未提交业务差异纳入冻结范围，无提交/推送。
 - Backend target: `wx5d2e0014690bf285 / prod-d2g14rwoycac6b45d / flask-ik19 / 8000`。
 - Before: 发布准备初始031 normal/100%，随后用户发布配置版034并删除031；迁移前034 normal/100%/1实例、coverage=false、公网关闭。MySQL5.7.18-cynos / Schema0019；After：10:55升级0022，035 normal，用户随后切到100%并删除034，真实微信健康/读取smoke通过；前端仅本地打开，未上传。
@@ -74,3 +74,7 @@ coverage=false不能阻止旧分析/删除worker、通知scheduler或HTTP请求�
 11:01:16–11:03:33 CST四次完整控制面快照跨136.753秒，035均normal/100%/1实例、旧实例均0；11:02/11:03库0022及在途/排队/可见其他事务0。[接管观察](../../quality/evidence/fullstack-release-20261024/handoff-observation.json)记录实际样本与限制：非连续事件流，应用日志仍TopicNotExist，不能宣称完整错误率/p95通过。现已到达后端全量及客户端本地可测试状态，用户写入/真实素材与产品验收仍开放。
 
 文档同步以实际Schema/云版本状态为准；Feature001/003/011/012、Behavior核对、Architecture、UI-018、主Spec、索引及发布/质量证据同步当前0022/035/本地打开事实。业务源码、API/UI合同、设计快照、FEC与测试策略本轮未改；全量前定向检查和真实产品验收未冒称通过。原Spec02批准保留，OPS Spec04在active/VERIFYING等待用户业务验收，Spec03撤回至rejected；产品Specs继续active/VERIFYING，BUG-031保持completed/DONE。后端100%接管与前端本地测试均不代表小程序已上传、体验、审核或正式发布。
+
+## 2026-10-26 开发完成归档
+
+按用户明确批准的[云端交付完成规则](../../../specs/completed/GOV-002-CLOUD-DELIVERY-DEVELOPMENT-COMPLETION.md)，本记录已交付范围对应的41份Spec已标开发DONE并迁completed，具体见[状态索引](../../../specs/STATUS.md)。原验收结果和发布阶段保留，未执行检查不改为PASS；本轮没有新部署/上传。BUG-035和旅行导入精简是此后本地增量，继续active。

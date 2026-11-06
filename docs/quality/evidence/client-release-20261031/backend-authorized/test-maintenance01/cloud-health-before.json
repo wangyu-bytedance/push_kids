@@ -1,0 +1,18 @@
+{
+  "at": "2026-10-31T11:08:28.117Z",
+  "transport": "real wx.cloud.callContainer",
+  "appid": "wx5d2e0014690bf285",
+  "environment": "prod-d2g14rwoycac6b45d",
+  "service": "flask-ik19",
+  "directed_version": "UNVERIFIED_SERVICE_ROUTING",
+  "health": {
+    "live": {
+      "status": 200,
+      "elapsed_ms": 89
+    },
+    "ready": {
+      "status": 200,
+      "elapsed_ms": 88
+    }
+  }
+}

@@ -3,6 +3,7 @@
 import os
 from concurrent.futures import ThreadPoolExecutor
 from threading import Barrier
+from time import monotonic, sleep
 from uuid import uuid4
 
 import pytest
@@ -32,7 +33,13 @@ def test_mysql_same_confirm_is_idempotent_under_overlap(tmp_path):
         cid = client.post("/api/v1/children", headers=h, json={"name": "合成测试"}).json()["id"]
         batch = create_batch(client, h, cid)
         photo = upload(client, h, cid, batch["photos"][0]["id"])
-        assert app.state.footprint_worker.process_one()
+        # MySQL DATETIME rounds fractional available_at; a freshly queued job
+        # can become due in the next second. Exercise the real worker without
+        # relying on the wall clock's fractional part.
+        deadline = monotonic() + 3
+        while not app.state.footprint_worker.process_one():
+            assert monotonic() < deadline, "new upload did not become due"
+            sleep(0.1)
         photo = get_photo(client, h, cid, photo["id"])
         gate = Barrier(2)
 

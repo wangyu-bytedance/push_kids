@@ -1,0 +1,24 @@
+{
+  "documents": 15,
+  "links_checked": 490,
+  "missing_links": [],
+  "snapshot_pairs": 18,
+  "hash_mismatches": [],
+  "fixed_denominator_and_revisions_passed": true,
+  "cleanup_absence_passed": true,
+  "spec_status_location": "VERIFYING/specs/active",
+  "code_document_contract_conflicts": "None in stated mechanism scope; generated-content deviations explicitly FAIL/PARTIAL",
+  "checks_not_run": [
+    "production business writes and durable retries",
+    "cloud deployment",
+    "release40 gate",
+    "frontend/native/device acceptance"
+  ],
+  "unresolved": [
+    "C1-C6/output violations and original PASS regressions",
+    "notification audit38->37 writer unverified",
+    "queue/total exact-expiry label",
+    "full Ruff unrelated line103characters"
+  ],
+  "final_source_matches_evaluated": true
+}

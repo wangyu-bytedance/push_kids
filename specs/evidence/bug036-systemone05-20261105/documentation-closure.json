@@ -1,0 +1,33 @@
+{
+  "source_manifest_match": true,
+  "local_markdown_links_missing": [],
+  "documents": {
+    "specs/active/BUG-036-SYSTEM-ONE-GENERATION.md": "188079713bcd0cf4affd7a44a2567bc4824d143fedc9c155d942e83c6d6b0a27",
+    "specs/evidence/EVD-20261105-BUG036-SYSTEMONE05.md": "47a829ca9dd6cf20f1c15680101ab957da642d83af504e847cbc1b928458a56a",
+    "specs/README.md": "0d4ed3b80e8e8e9aa7fca96fe81348aeef420623ce695ba526b2f2b2d01f5a95",
+    "specs/STATUS.md": "91cf326ebbc873845dbbf12ec731dd8748398bdf2ef89231c2151a4d853c8fe2",
+    "docs/architecture/ARCHITECTURE.md": "11fe558cf30eeab1b43203f40aedd10139dd1de85c8e4bc6c2d1526217b84d83",
+    "docs/domain/features/FEAT-001-push-kids-mvp.md": "3f68f3105ae249e76a1e36a4ef7cf126b677b4b0f857621c893d6427822b2be7",
+    "docs/domain/BEHAVIOR-CATALOG.md": "8835893bc419cf897b443f6f02fc59cbebe339d97fdae4616beac3e4c178de0e",
+    "docs/design/frontend/ui/UI-001-parent-miniapp.md": "eb951b83a01fc455601b5817ba59a6c4f2a94d4bf1f53ca9db197b91fac1c555",
+    "docs/quality/TEST-STRATEGY.md": "034ab2eb5fd640d904098b5750eadf51c312a1d6fd8dd02e6d56916fdd64da4a",
+    "docs/quality/issues/ISS-20261105-MATCH-UNCERTAINTY-CACHE.md": "00845b221ca3e3e901bb886a5dadd4c7fa1cd81548d834eb7f2117ff3c11808f",
+    "docs/quality/issues/ISS-20261031-KNOWLEDGE-GENERATION-CONTENT.md": "f9ce16cc4b287555cfd34405b3f3e0cbee2e99d6bd7247ee0207ed46173950b1",
+    "docs/quality/issues/README.md": "6075db5af7a139efe0261b67ba6789612e8f336602862ecfc58deb5c99f4cd92",
+    "docs/quality/regressions/REG-20261105-SYSTEM-ONE-DECISIONS.md": "cb10850cceab02bac0daa4646672351156ea054fe84a4ad2eab1f51604630cba",
+    "docs/quality/regressions/README.md": "9962a25525ed0328955e16a6344261ca377a77b0df79f1185a86da044a506b3e",
+    "docs/deploy/releases/20261105-system-one-local-verification.md": "af536292999b946c78171051fc63c24b079603d27070015aa9b1571c3f304868"
+  },
+  "spec_status": "VERIFYING",
+  "spec_location": "specs/active/BUG-036-SYSTEM-ONE-GENERATION.md",
+  "cloud_delivery": false,
+  "manual_code_document_conflict_check": "PASS: opt-in/flag-off shared cache validity; recent 40/900 ledger and MySQL hint; parent observed-before-supersede; 18-key/33-call bounds; actual test counts and failed model gates; baseline vs candidate/final differences; no cloud or human quality PASS",
+  "unverified": [
+    "independent code review",
+    "complete parent Q1-Q7 quality acceptance",
+    "original30+3 unavailable replay",
+    "maximum nine-image token/resource envelope",
+    "remaining optional MySQL cases and current full-schema drift check"
+  ],
+  "artifact_validation": "45 new-result rows; no original input/evidence/identity fields, images, or external scripts; fixed40 generated-result rows separate"
+}

@@ -1,23 +1,24 @@
 # FEAT-006 — 家庭资料清理与重新开始
 
+2026-10-26开发归档：已交付037后端/0.1.16客户端所覆盖的需求按用户批准规则标记开发DONE，验收缺项独立保留；后续BUG-035和旅行导入精简尚未交付，继续active。当前归档和待验入口见[Spec状态清单](../../../specs/STATUS.md)，依据为[治理Spec](../../../specs/completed/GOV-002-CLOUD-DELIVERY-DEVELOPMENT-COMPLETION.md)。本轮不改产品合同、测试结论、设计或发布阶段。
+
 2026-10-24运行证据revision LATEST-037-01：用户批准0022→0025维护窗口并确认备份/隔离恢复路径，代理未独立恢复；迁移完成，无降级/清库/合成业务写入，停用覆盖队列保留。获批CRUD readiness修复后037 normal/100%；实际CRUD默认结构检查及发布账号严格trigger检查分别PASS，不授予应用TRIGGER/admin，修复不重复DDL。真实删除/恢复与设备验收未执行，本轮读取smoke不关闭这些门禁。[本轮记录](../../deploy/releases/20261024-latest-backend-test-deployment.md)。
 
-- 2026-10-20本地兼容：单条知识删除仍仅删除所选知识及既有规划关联，覆盖关系不会联动删除或恢复其他词条。承接FK删除时SET NULL，旧项保留永久superseded；覆盖后台任务随所属Knowledge级联清理。全局发现游标仅内部遍历控制元数据，无学习内容。见[本轮证据](../../quality/evidence/AUTO-SUPERSEDED-REVIEW-20261020.md)，未部署。
+- 2026-10-20本地兼容：单条知识删除仍仅删除所选知识及既有规划关联，覆盖关系不会联动删除或恢复其他词条。承接FK删除时SET NULL，旧项保留永久superseded；覆盖后台任务随所属Knowledge级联清理。全局发现游标仅内部遍历控制元数据，无学习内容。见[原实施证据](../../quality/evidence/AUTO-SUPERSEDED-REVIEW-20261020.md)；该实现已由037交付，真实删除验收仍待补。
 
 
 - Feature ID: `FEAT-006`
 - Release gate policy: `SPEC-20261011-RISK-BASED-RELEASE-GATES-01` 已批准；只有经真实 MySQL 5.7 和旧/新版合同验证的纯增量、无既有数据改写迁移可免本次新增备份。数据回填、改写、删除、收缩或证据不足仍须备份；这不改变已发生的删除验收或既有备份保留事实。
-- Status: `DEPLOYED_PENDING_CLOUD_ACCEPTANCE`
-- Current-state revision: `FEAT-STATE-20260919-MYSQL57-WORKER-04-LOCAL`
+- Status: `DEVELOPMENT_DONE / DEPLOYED / CLOUD_ACCEPTANCE_PENDING`
+- Current-state revision: `FEAT-STATE-20261026-DATA-CLEANUP-05-DEVELOPMENT-DONE`
 - Owner: 产品负责人（用户）
 - Last verified: 2026-09-19
 - Authoritative implementation: `apps/api/src/push_kids/data_management/`、各 domain 的 `purge_data` 合同、Alembic `20260906_0007_durable_data_deletion` + `20260907_0009_notification_deletion_scope`、`apps/miniprogram/pages/data-cleanup/`
-- Active change Specs: `SPEC-20260906-DATA-CLEANUP-01` + `BUG-SPEC-20260907-22`
+- Applied change Specs: `SPEC-20260906-DATA-CLEANUP-01` + `BUG-SPEC-20260907-22`
 - UI current state: `UI-010-family-access`、`UI-015-child-profile`、`UI-016-data-cleanup`
 
 > 永久删除及无家庭重启流程已经实现并通过本地测试，通知数据集成修复已通过独立复核；生产 MySQL
-> 已升级到 `20260907_0009`，代码已部署为云托管灰度版本 `flask-ik19-015`，小程序开发版本 `0.1.4`
-> 已上传。真实云端删除 worker、私有媒体和真机证据尚未完成，因此不能把本 Feature 描述为已完成生产验收。
+> 最早于0009/015/0.1.4完成该范围交付，当前后端为037/Schema0025、客户端0.1.16已开发上传。真实云端删除 worker、私有媒体和真机证据尚未完成，因此不能把本 Feature 描述为已完成生产验收。
 
 ## Purpose and scope
 
@@ -25,11 +26,11 @@
 
 ## Current behavior
 
-- 2026-10-18本地owned-data增量revision `FEAT-STATE-20261018-FOOTPRINTS-PURGE-01`：删除编排先调用FootprintMediaCleanup按100条窗口清私有原件/展示图/缩略图及云预分配路径，再在既有事务调用FootprintsService.purge_data。孩子删除清照片/到访/批次/scope，保留家庭偏好和其他孩子；家庭删除连成员AI偏好一并清理。与worker共享家庭/孩子冻结合同，迟到任务不复活确认/删除状态。[足迹证据](../../quality/evidence/CHILD-FOOTPRINTS-IMPLEMENTATION-20261018.md)覆盖SQLite真实编排及兄弟档案保留；真实云对象/MySQL删除待验，未部署。
+- 2026-10-18本地owned-data增量revision `FEAT-STATE-20261018-FOOTPRINTS-PURGE-01`：删除编排先调用FootprintMediaCleanup按100条窗口清私有原件/展示图/缩略图及云预分配路径，再在既有事务调用FootprintsService.purge_data。孩子删除清照片/到访/批次/scope，保留家庭偏好和其他孩子；家庭删除连成员AI偏好一并清理。与worker共享家庭/孩子冻结合同，迟到任务不复活确认/删除状态。[足迹证据](../../quality/evidence/CHILD-FOOTPRINTS-IMPLEMENTATION-20261018.md)覆盖SQLite真实编排及兄弟档案保留；真实云对象/MySQL删除待验；对应实现已包含在后续037中。
 
 - 本地新增daily_tasks owned-data清理合同：同一事务先清除任务完成事实，再清除任务配置，随后删除孩子。
-  家庭清理覆盖所有孩子；孩子清理保留同家庭其他孩子任务。通过真实删除worker的SQLite测试，未部署；
-  关联 `specs/active/FEAT-010-DAILY-TASKS.md` 和 `docs/quality/evidence/DAILY-TASKS-20261012.md`。
+  家庭清理覆盖所有孩子；孩子清理保留同家庭其他孩子任务。通过真实删除worker的SQLite测试，对应实现已包含在后续037中；
+  关联 `specs/completed/FEAT-010-DAILY-TASKS.md` 和 `docs/quality/evidence/DAILY-TASKS-20261012.md`。
 - 设置页以中性入口“删除配置”承载两条危险操作；最终确认明确显示影响并要求输入当前孩子称呼或家庭名。
 - `POST /data-management/deletions/children/{child_id}` 与 `/family` 仅允许 verified active manager；家庭删除还要求只剩本人一名 active member。`Idempotency-Key` 支持安全重放，状态与 retry 通过 deletion-request API 查询。
 - 请求接受时先把目标置为 deleting；新的孩子学习/科目/活动/日程等写入被拒绝，删除 worker 通过数据库租约执行媒体清理和跨领域数据库 purge。失败按有界策略重排，耗尽后为可人工重试的 `failed`。
@@ -63,7 +64,7 @@ queued --lease--> running --success--> succeeded --30d--> pruned
 - 原有删除链已验证到 `20260913_0014`；当前单一 Alembic head 以迁移目录和
   `Database.expected_cloud_revision` 为准。BUG-028 本地新增 `20261006_0015_analysis_stages`，
   `learning.purge_data` 调用 agent_processing checkpoint owner 清除目标家庭/孩子临时DTO，之后才删除
-  job/submission；阶段保存与最终写回验证删除冻结。该本地变更尚未部署。
+  job/submission；阶段保存与最终写回验证删除冻结。该实现已包含在后续037中，真实云端删除验收仍待补。
 - 删除 Worker 在当前单实例 MySQL 5.7 拓扑中以有界、排序的普通 `FOR UPDATE` 事务领取一个请求；
   不使用 MySQL 8 才支持的 `SKIP LOCKED`。领取后的租约、重试、终态、审计与跨领域 purge 合同不变。
 

@@ -1,6 +1,6 @@
 # 今日按钮与编辑计划分页统一验证
 
-- Spec: `SPEC-20261014-ACTION-PAGER-CONSISTENCY-02`，`specs/active/FEAT-010-TODAY-ACTION-STYLE.md`，VERIFYING。
+- Spec: `SPEC-20261014-ACTION-PAGER-CONSISTENCY-02`，`specs/completed/FEAT-010-TODAY-ACTION-STYLE.md`，VERIFYING。
 - Design: `DREV-20261014-ACTION-PAGER-CONSISTENCY-02`；用户2026-10-15“落地”批准；批准SVG/PNG保持不变。
 - 实现：每日任务操作复用pill token、移除阴影；共享编辑计划分页使用专用三列grid，科目分页两列，显式禁用透明底和弱文字。未修改JS、API、游标、完成/撤销及权限。
 

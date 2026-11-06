@@ -1,0 +1,290 @@
+........................................................................ [  7%]
+........................................................................ [ 14%]
+........................................................................ [ 21%]
+........................................................................ [ 28%]
+.......F................................................................ [ 35%]
+........................................................................ [ 42%]
+........................................................................ [ 49%]
+........................................................................ [ 56%]
+........................................................................ [ 63%]
+...............................................................s........ [ 70%]
+....ssss................................................................ [ 77%]
+............................sssssss..................................... [ 84%]
+...ss.................s.s.s.s.s.sss...............ssssssssssssssss.sssss [ 91%]
+ssssssss..........ssss.s................................................ [ 99%]
+..........                                                               [100%]
+=================================== FAILURES ===================================
+_______________ test_request_bytes_match_real_sdk_transport_body _______________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10e699700>
+tmp_path = PosixPath('/private/var/folders/hq/l74_1q417nbdffshwhtw79640000gn/T/pytest-of-bytedance/pytest-76/test_request_bytes_match_real_0')
+
+    def test_request_bytes_match_real_sdk_transport_body(monkeypatch, tmp_path):
+        from openai import DefaultAsyncHttpxClient
+    
+        sent = []
+    
+        def transport(request):
+            sent.append(len(request.content))
+            return httpx.Response(
+                200,
+                json={
+                    "id": "synthetic-response",
+                    "object": "response",
+                    "created_at": 0,
+                    "status": "completed",
+                    "model": "synthetic",
+                    "output": [
+                        {
+                            "type": "message",
+                            "id": "synthetic-message",
+                            "status": "completed",
+                            "role": "assistant",
+                            "content": [
+                                {
+                                    "type": "output_text",
+                                    "annotations": [],
+                                    "text": json.dumps(
+                                        {
+                                            "decisions": [
+                                                {"candidate": "i0", "match": None, "uncertain": False}
+                                            ]
+                                        }
+                                    ),
+                                }
+                            ],
+                        }
+                    ],
+                },
+            )
+    
+        monkeypatch.setattr(
+            "push_kids.agent_processing.stage_provider.DefaultAsyncHttpxClient",
+            lambda **kwargs: DefaultAsyncHttpxClient(
+                transport=httpx.MockTransport(transport), **kwargs
+            ),
+            raising=False,
+        )
+        # The pre-repair adapter does not construct a client itself.
+        monkeypatch.setattr(
+            "openai._base_client.AsyncHttpxClientWrapper",
+            lambda **kwargs: DefaultAsyncHttpxClient(
+                transport=httpx.MockTransport(transport), **kwargs
+            ),
+        )
+        path = tmp_path / "synthetic.png"
+        path.write_bytes(b"synthetic-image")
+    
+        class Trace:
+            events = []
+    
+            def info(self, event, **fields):
+                self.events.append((event, fields))
+    
+        trace = Trace()
+>       asyncio.run(
+            StagedArkProvider(
+                Settings(ARK_API_KEY="synthetic", ARK_BASE_URL="https://example.invalid/v1")
+            ).generate_stage(
+                "review",
+                "中文说明",
+                {"parent_text": "仅供本地运输边界测试"},
+                MatchingResult,
+                [("m1", path)],
+                monotonic() + 3,
+                trace,
+            )
+        )
+
+tests/unit/test_stage_provider.py:411: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../.local/share/uv/python/cpython-3.12.11-macos-aarch64-none/lib/python3.12/asyncio/runners.py:195: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+../../.local/share/uv/python/cpython-3.12.11-macos-aarch64-none/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../.local/share/uv/python/cpython-3.12.11-macos-aarch64-none/lib/python3.12/asyncio/base_events.py:691: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <push_kids.agent_processing.stage_provider.StagedArkProvider object at 0x10d3d7f20>
+stage = 'review', instructions = '中文说明', payload = {'parent_text': '仅供本地运输边界测试'}
+schema = <class 'push_kids.agent_processing.stage_contracts.MatchingResult'>
+images = [('m1', PosixPath('/private/var/folders/hq/l74_1q417nbdffshwhtw79640000gn/T/pytest-of-bytedance/pytest-76/test_request_bytes_match_real_0/synthetic.png'))]
+deadline = 291026.846160333
+trace = <test_stage_provider.test_request_bytes_match_real_sdk_transport_body.<locals>.Trace object at 0x10e69a7e0>
+
+    async def generate_stage(
+        self,
+        stage: str,
+        instructions: str,
+        payload: dict[str, Any],
+        schema: type[BaseModel],
+        images: list[tuple[str, Path]],
+        deadline: float,
+        trace: AnalysisTrace,
+    ) -> BaseModel:
+        key = self.settings.ark_api_key
+        if not key:
+            raise StageFailure("config", retryable=False)
+        limit = 45 if stage in {"extract", "group"} else 30
+        started = monotonic()
+        if deadline <= started:
+            raise StageFailure("local_deadline")
+        payload_text = json.dumps(payload, ensure_ascii=False)
+        payload_bytes = len(payload_text.encode("utf-8"))
+        if payload_bytes > 512 * 1024 or len(images) > 9:
+            raise StageFailure("capacity", retryable=False)
+        if any(path.stat().st_size > self.settings.upload_max_bytes for _, path in images):
+            raise StageFailure("capacity", retryable=False)
+        acquired = False
+        try:
+            # Queueing consumes the absolute budget; the network limit starts at acquisition.
+            async with asyncio.timeout(deadline - started):
+                while not _REQUEST_SLOTS.acquire(blocking=False):
+                    await asyncio.sleep(0.01)
+                acquired = True
+                queued_ms = int((monotonic() - started) * 1000)
+                execution_deadline = min(deadline, monotonic() + limit)
+                if execution_deadline <= monotonic():
+                    raise StageFailure("local_deadline")
+                async with asyncio.timeout(execution_deadline - monotonic()):
+                    content: list[dict[str, Any]] = [{"type": "input_text", "text": payload_text}]
+                    image_bytes = 0
+                    for alias, path in images:
+                        mime = {
+                            ".jpg": "image/jpeg",
+                            ".jpeg": "image/jpeg",
+                            ".webp": "image/webp",
+                        }.get(path.suffix.lower(), "image/png")
+                        with path.open("rb") as source:
+                            raw = source.read(self.settings.upload_max_bytes + 1)
+                        if len(raw) > self.settings.upload_max_bytes:
+                            raise StageFailure("capacity", retryable=False)
+                        image_bytes += len(raw)
+                        content.extend(
+                            [
+                                {"type": "input_text", "text": f"材料短编号 {alias}"},
+                                {
+                                    "type": "input_image",
+                                    "image_url": f"data:{mime};base64,"
+                                    + base64.b64encode(raw).decode(),
+                                },
+                            ]
+                        )
+                        del raw
+                    request_bytes = 0
+    
+                    async def count_request(request: Any) -> None:
+                        nonlocal request_bytes
+                        request_bytes = len(request.content)
+    
+                    async with AsyncOpenAI(
+                        base_url=self.settings.ark_base_url,
+                        api_key=key.get_secret_value(),
+                        max_retries=0,
+                        timeout=max(0.001, execution_deadline - monotonic()),
+                        http_client=DefaultAsyncHttpxClient(
+                            event_hooks={"request": [count_request]}
+                        ),
+                    ) as client:
+                        request: Any = dict(
+                            model=self.model,
+                            instructions=instructions,
+                            input=[{"role": "user", "content": content}],
+                            store=False,
+                            max_output_tokens={
+                                "extract": 4096,
+                                "group": 4096,
+                                "merge": 8192,
+                                "review": 8192,
+                                "match": 2048,
+                                "reuse": 2048,
+                                "coverage": 4096,
+                            }[stage],
+                            extra_body={"thinking": {"type": "disabled"}},
+                            text={
+                                "format": {
+                                    "type": "json_schema",
+                                    "name": stage,
+                                    "strict": True,
+                                    "schema": schema.model_json_schema(),
+                                }
+                            },
+                        )
+                        response = await client.responses.create(**request)
+                usage = response.usage
+                trace.info(
+                    "analysis_stage_completed",
+                    stage=stage,
+                    duration_ms=int((monotonic() - started) * 1000),
+                    queue_ms=queued_ms,
+                    payload_bytes=payload_bytes,
+                    image_bytes=image_bytes,
+                    request_bytes=request_bytes,
+                    input_tokens=usage.input_tokens if usage else None,
+                    output_tokens=usage.output_tokens if usage else None,
+                    reasoning_tokens=(
+                        usage.output_tokens_details.reasoning_tokens
+                        if usage and usage.output_tokens_details
+                        else None
+                    ),
+                    status=response.status,
+                    request_id=getattr(response, "_request_id", None),
+                )
+                if response.status != "completed":
+                    raise StageFailure("incomplete")
+                try:
+                    return schema.model_validate_json(response.output_text)
+                except ValidationError as exc:
+                    raise StageFailure("validation", diagnostics=schema_diagnostics(exc)) from None
+                except ValueError:
+                    raise StageFailure(
+                        "validation", diagnostics=("stage.fields:json_invalid",)
+                    ) from None
+        except (TimeoutError, APITimeoutError):
+>           raise StageFailure(
+                "queue_deadline"
+                if not acquired
+                else "local_deadline"
+                if monotonic() >= deadline
+                else "provider_timeout"
+            ) from None
+E           push_kids.agent_processing.failures.StageFailure: local_deadline
+
+apps/api/src/push_kids/agent_processing/stage_provider.py:174: StageFailure
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /Users/bytedance/Documents/push_kids/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+tests/integration/test_child_profile_lifecycle_migration.py: 5 warnings
+tests/integration/test_china_workday_migration.py: 14 warnings
+tests/integration/test_footprints_migration.py: 7 warnings
+tests/integration/test_grade_confirmation_migration.py: 14 warnings
+tests/integration/test_migration_field_backfill.py: 26 warnings
+tests/integration/test_migration_multi_subject.py: 10 warnings
+tests/integration/test_notification_migration.py: 14 warnings
+tests/integration/test_notification_renewal_migration.py: 7 warnings
+  /Users/bytedance/Documents/push_kids/.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py:952: DeprecationWarning: The default datetime adapter is deprecated as of Python 3.12; see the sqlite3 documentation for suggested replacement recipes
+    cursor.execute(statement, parameters)
+
+tests/integration/test_china_workday_migration.py: 4 warnings
+tests/integration/test_daily_task_migration.py: 2 warnings
+tests/integration/test_fair_review_migration.py: 3 warnings
+tests/integration/test_footprints_migration.py: 4 warnings
+tests/integration/test_grade_confirmation_migration.py: 6 warnings
+tests/integration/test_migration_field_backfill.py: 1 warning
+tests/integration/test_notification_renewal_migration.py: 4 warnings
+tests/integration/test_supersession_migration.py: 2 warnings
+tests/integration/test_system_one_index_migration.py: 2 warnings
+tests/integration/test_today_learning_migrations.py: 2 warnings
+  /Users/bytedance/Documents/push_kids/.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py:952: DeprecationWarning: The default date adapter is deprecated as of Python 3.12; see the sqlite3 documentation for suggested replacement recipes
+    cursor.execute(statement, parameters)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/unit/test_stage_provider.py::test_request_bytes_match_real_sdk_transport_body
+1 failed, 961 passed, 56 skipped, 128 warnings in 170.22s (0:02:50)

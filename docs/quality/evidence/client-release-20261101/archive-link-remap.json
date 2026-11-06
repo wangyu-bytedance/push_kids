@@ -1,0 +1,33 @@
+{
+  "mechanical_change": "Archived three delivered Specs: mutable Markdown link/current path remap only",
+  "changed_documents": [
+    "docs/design/frontend/FRONTEND-DESIGN.md",
+    "docs/design/frontend/ui/UI-001-parent-miniapp.md",
+    "docs/design/frontend/ui/UI-018-child-photo-footprints.md",
+    "docs/quality/evidence/travel-diary-e2e-20261025/README.md",
+    "docs/quality/evidence/travel-import-simplification-20261025/README.md",
+    "docs/quality/evidence/travel-entry-cleanup-20261031/README.md",
+    "docs/quality/evidence/travel-entry-cleanup-20261031/HANDOFF.md",
+    "docs/deploy/releases/20261025-travel-import-simplification-local.md",
+    "docs/deploy/releases/20261031-travel-entry-cleanup-local.md",
+    "docs/deploy/releases/20261031-client-upload-preparation.md",
+    "docs/deploy/releases/20261025-travel-diary-e2e-local.md",
+    "docs/architecture/ARCHITECTURE.md",
+    "docs/domain/BEHAVIOR-CATALOG.md",
+    "docs/domain/features/FEAT-012-child-photo-footprints.md",
+    "specs/STATUS.md",
+    "specs/README.md",
+    "specs/evidence/EVD-20261031-TRAVEL-ENTRY-BASELINE.md",
+    "specs/evidence/EVD-20261031-TRAVEL-ENTRY-FINAL.md"
+  ],
+  "immutable_design_documents_preserved": [
+    "docs/design/frontend/snapshots/UI-018/DREV-20261025-TRAVEL-IMPORT-02/APPROVAL.md",
+    "docs/design/frontend/snapshots/UI-018/DREV-20261031-TRAVEL-ENTRY-CLEANUP-01/APPROVAL.md",
+    "docs/design/frontend/snapshots/UI-018/DREV-20261025-TRAVEL-DIARY-E2E-01/APPROVAL.md",
+    "docs/design/frontend/prototypes/DREV-20261025-TRAVEL-IMPORT-02/FRONTEND-SPEC.md",
+    "docs/design/frontend/prototypes/DREV-20261031-TRAVEL-ENTRY-CLEANUP-01/FRONTEND-SPEC.md",
+    "docs/design/frontend/prototypes/DREV-20261025-TRAVEL-DIARY-E2E-01/FRONTEND-SPEC.md"
+  ],
+  "production_files_changed": false,
+  "raw_evidence_json_logs_changed": false
+}

@@ -1,0 +1,44 @@
+{
+  "readonly": {
+    "readonly": 1,
+    "version": "5.7.18-cynos-2.1.14-log"
+  },
+  "timing": {
+    "server_now": "2026-10-31 19:16:59",
+    "server_utc": "2026-10-31 11:16:59"
+  },
+  "current_delivery_states": [
+    {
+      "state": "failed",
+      "n": 33,
+      "oldest": "2026-10-02 11:00:46",
+      "newest": "2026-10-17 01:04:54"
+    },
+    {
+      "state": "sent",
+      "n": 4,
+      "oldest": "2026-10-17 10:49:19",
+      "newest": "2026-10-18 11:02:37"
+    }
+  ],
+  "server_observability": [
+    {
+      "Variable_name": "binlog_format",
+      "Value": "ROW"
+    },
+    {
+      "Variable_name": "general_log",
+      "Value": "OFF"
+    },
+    {
+      "Variable_name": "log_bin",
+      "Value": "ON"
+    }
+  ],
+  "table_update": {
+    "TABLE_NAME": "notification_deliveries",
+    "UPDATE_TIME": "2026-10-31 19:07:32"
+  },
+  "task_connection_has_never_written": true,
+  "removed_row_or_writer_identified": false
+}

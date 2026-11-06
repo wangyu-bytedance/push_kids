@@ -1,0 +1,110 @@
+{
+  "nodes": {
+    ".footprints-page": [
+      {
+        "left": 0,
+        "right": 320,
+        "top": 125,
+        "bottom": 439,
+        "width": 320,
+        "height": 314,
+        "fontSize": "14px"
+      }
+    ],
+    ".fp-tabs": [
+      {
+        "left": 12,
+        "right": 308,
+        "top": 245,
+        "bottom": 293,
+        "width": 296,
+        "height": 48,
+        "fontSize": "14px"
+      }
+    ],
+    ".fp-tab": [
+      {
+        "left": 14,
+        "right": 111.328125,
+        "top": 247,
+        "bottom": 291,
+        "width": 97.328125,
+        "height": 44,
+        "fontSize": "14px"
+      },
+      {
+        "left": 111.328125,
+        "right": 208.65625,
+        "top": 247,
+        "bottom": 291,
+        "width": 97.328125,
+        "height": 44,
+        "fontSize": "14px"
+      },
+      {
+        "left": 208.65625,
+        "right": 305.984375,
+        "top": 247,
+        "bottom": 291,
+        "width": 97.328125,
+        "height": 44,
+        "fontSize": "14px"
+      }
+    ],
+    ".fp-more": [
+      {
+        "left": 264,
+        "right": 308,
+        "top": 182,
+        "bottom": 226,
+        "width": 44,
+        "height": 44,
+        "fontSize": "14px"
+      }
+    ],
+    ".fp-drafts": [],
+    ".fp-title": [],
+    ".fp-empty": [],
+    ".fp-import": [
+      {
+        "left": 12,
+        "right": 308,
+        "top": 313,
+        "bottom": 361,
+        "width": 296,
+        "height": 48,
+        "fontSize": "16px"
+      }
+    ],
+    ".fp-error": [],
+    ".fp-manual": [],
+    ".fp-text-button": [],
+    ".fp-notice": []
+  },
+  "scroll": {
+    "id": "",
+    "dataset": {},
+    "scrollLeft": 0,
+    "scrollTop": 0,
+    "scrollWidth": 320,
+    "scrollHeight": 568
+  },
+  "viewport": {
+    "width": 320,
+    "height": 568,
+    "screenHeight": 568,
+    "dpr": 2,
+    "baseLibrary": "3.16.2"
+  },
+  "sheet": "",
+  "canWrite": true,
+  "active": true,
+  "manualEntryRemoved": true,
+  "state": "loading",
+  "errors": [
+    "tab gap below 8px"
+  ],
+  "capturedAt": "2026-10-31T10:36:07.877Z",
+  "screenshotSha256": "78f0d7eec9ce38111c613e3513a6bcbf5805d7dc9ca8decc4a943d9f48f70e31",
+  "scope": "native synthetic offline embedded host only; not device or cloud acceptance"
+}

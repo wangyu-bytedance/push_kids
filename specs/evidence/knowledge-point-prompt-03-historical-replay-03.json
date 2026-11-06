@@ -1,0 +1,27 @@
+{
+  "model": "doubao-seed-2-1-pro-260628",
+  "pipeline_revision": "staged-20261031-06",
+  "sample_manifest": {
+    "case01": "e4207b9c2de70e7226d2029c03a7f65c577af7c0dc9f1c122a1c35d3a74beb6f"
+  },
+  "implementation": "d4997edad9dced5181bd3a84d7787fae334c41f767357cf20e6214728c05c950",
+  "observation_unit": "one pipeline attempt; no durable retries",
+  "scope": "read-only; no production writes; no current Todo state; lexical references only",
+  "results": [
+    {
+      "case": "case01",
+      "arm": "C",
+      "images": 0,
+      "original_failed": false,
+      "seconds": 3.61,
+      "requests": 1,
+      "input_tokens": 916,
+      "output_tokens": 70,
+      "reasoning_tokens": 0,
+      "success": false,
+      "reason": "coverage",
+      "code": "analysis_output_invalid",
+      "repeat": 1
+    }
+  ]
+}

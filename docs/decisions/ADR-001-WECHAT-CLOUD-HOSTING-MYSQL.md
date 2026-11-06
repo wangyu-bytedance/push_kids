@@ -5,7 +5,7 @@
 - Last reviewed: 2026-09-06
 - Decision owners: 产品负责人（用户）
 - Technical area: deployment, persistence, identity, media, asynchronous jobs
-- Related Spec: `specs/active/CLOUD-001-WECHAT-CLOUDBASE-STAGE1.md`
+- Related Spec: `specs/completed/CLOUD-001-WECHAT-CLOUDBASE-STAGE1.md`
 - Related ADRs: N/A
 - Supersedes: CLOUD-001 旧草案中的 CloudBase Document Database 目标
 

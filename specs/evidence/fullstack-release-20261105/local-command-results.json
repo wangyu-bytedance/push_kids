@@ -1,0 +1,105 @@
+{
+  "python": {
+    "command": [
+      "uv",
+      "run",
+      "pytest",
+      "tests/unit",
+      "tests/integration",
+      "tests/contract",
+      "-q"
+    ],
+    "exit_code": 1,
+    "seconds": 375.352
+  },
+  "frontend": {
+    "command": [
+      "npm",
+      "test"
+    ],
+    "exit_code": 0,
+    "seconds": 2.188
+  },
+  "lint": {
+    "command": [
+      "npm",
+      "run",
+      "lint:miniapp"
+    ],
+    "exit_code": 0,
+    "seconds": 1.213
+  },
+  "ruff": {
+    "command": [
+      "uv",
+      "run",
+      "ruff",
+      "check",
+      "."
+    ],
+    "exit_code": 0,
+    "seconds": 0.894
+  },
+  "format": {
+    "command": [
+      "uv",
+      "run",
+      "ruff",
+      "format",
+      "--check",
+      "."
+    ],
+    "exit_code": 0,
+    "seconds": 0.959
+  },
+  "mypy": {
+    "command": [
+      "uv",
+      "run",
+      "mypy",
+      "apps/api/src"
+    ],
+    "exit_code": 0,
+    "seconds": 4.511
+  },
+  "architecture": {
+    "command": [
+      "uv",
+      "run",
+      "python",
+      "tools/check_architecture.py"
+    ],
+    "exit_code": 0,
+    "seconds": 4.027
+  },
+  "design": {
+    "command": [
+      "uv",
+      "run",
+      "python",
+      "tools/validate_design_evidence.py",
+      "--check-current-policy"
+    ],
+    "exit_code": 0,
+    "seconds": 0.313
+  },
+  "miniapp": {
+    "command": [
+      "uv",
+      "run",
+      "python",
+      "tools/validate_miniprogram.py"
+    ],
+    "exit_code": 0,
+    "seconds": 0.612
+  },
+  "diff": {
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exit_code": 0,
+    "seconds": 0.133
+  }
+}

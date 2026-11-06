@@ -1,0 +1,43 @@
+import json
+import os
+import tempfile
+from pathlib import Path
+
+from alembic import command
+from alembic.autogenerate import compare_metadata
+from alembic.migration import MigrationContext
+from sqlalchemy import MetaData, create_engine
+
+from tests.integration.test_notification_migration import _config
+from push_kids.persistence.models import Base
+from push_kids.footprints import models as footprint_models  # noqa
+from push_kids.knowledge import learning_context  # noqa
+from push_kids.learning_suggestions import models as suggestion_models  # noqa
+
+with tempfile.TemporaryDirectory(prefix='workday-schema-audit-') as temporary:
+    url = f'sqlite:///{temporary}/audit.db'
+    os.environ['PUSH_KIDS_DATABASE_URL'] = url
+    config = _config(url)
+    command.upgrade(config, '20261024_0025')
+    old_metadata = MetaData()
+    for table in Base.metadata.sorted_tables:
+        table.to_metadata(old_metadata)
+    for table in ['activity_schedules', 'calendar_events']:
+        old_metadata.tables[table]._columns.remove(old_metadata.tables[table].c.workday_only)
+    engine = create_engine(url)
+    with engine.connect() as connection:
+        baseline = compare_metadata(MigrationContext.configure(connection, opts={'compare_type': True}), old_metadata)
+    command.upgrade(config, 'head')
+    with engine.connect() as connection:
+        target = compare_metadata(MigrationContext.configure(connection, opts={'compare_type': True}), Base.metadata)
+    result = {
+        'baseline_revision': '20261024_0025', 'target_revision': '20261105_0026',
+        'baseline_diff': [str(item) for item in baseline],
+        'target_diff': [str(item) for item in target],
+        'same_existing_drift': [str(item) for item in baseline] == [str(item) for item in target],
+        'workday_tables_drift': [str(item) for item in target if any(name in str(item) for name in ['activity_schedules', 'calendar_events'])],
+        'scope': 'isolated synthetic SQLite; previous metadata equals current minus two additive columns',
+    }
+    Path('docs/quality/evidence/china-workday-20261105/alembic-baseline-comparison.json').write_text(json.dumps(result, indent=2) + '\n')
+    print(json.dumps({'same_existing_drift': result['same_existing_drift'], 'baseline_count': len(baseline), 'target_count': len(target), 'workday_drift': result['workday_tables_drift']}))
+    engine.dispose()

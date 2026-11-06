@@ -1,0 +1,143 @@
+{
+  "at": "2026-11-01T16:25:24.863705+08:00",
+  "result": "PASS",
+  "problems": [],
+  "checked_documents": [
+    "docs/architecture/ARCHITECTURE.md",
+    "docs/deploy/releases/20261025-travel-diary-e2e-local.md",
+    "docs/deploy/releases/20261025-travel-import-simplification-local.md",
+    "docs/deploy/releases/20261031-client-upload-preparation.md",
+    "docs/deploy/releases/20261031-travel-diary-backend-compatibility.md",
+    "docs/deploy/releases/20261031-travel-entry-cleanup-local.md",
+    "docs/deploy/releases/20261101-client-0.1.17-upload.md",
+    "docs/deploy/releases/20261101-client-upload-attempt.md",
+    "docs/design/frontend/FRONTEND-DESIGN.md",
+    "docs/design/frontend/ui/UI-001-parent-miniapp.md",
+    "docs/design/frontend/ui/UI-018-child-photo-footprints.md",
+    "docs/domain/BEHAVIOR-CATALOG.md",
+    "docs/domain/features/FEAT-001-push-kids-mvp.md",
+    "docs/domain/features/FEAT-012-child-photo-footprints.md",
+    "docs/domain/features/README.md",
+    "docs/quality/TEST-STRATEGY.md",
+    "docs/quality/evidence/client-release-20261031/README.md",
+    "docs/quality/evidence/client-release-20261031/native-current-matrix.md",
+    "docs/quality/evidence/travel-diary-e2e-20261025/README.md",
+    "docs/quality/evidence/travel-entry-cleanup-20261031/HANDOFF.md",
+    "docs/quality/evidence/travel-entry-cleanup-20261031/README.md",
+    "docs/quality/evidence/travel-import-simplification-20261025/README.md",
+    "specs/README.md",
+    "specs/STATUS.md",
+    "specs/completed/BUG-035-TRAVEL-DIARY-END-TO-END.md",
+    "specs/completed/FEAT-012-TRAVEL-ENTRY-CLEANUP.md",
+    "specs/completed/FEAT-012-TRAVEL-IMPORT-SIMPLIFICATION.md",
+    "specs/evidence/EVD-20261031-TRAVEL-ENTRY-BASELINE.md",
+    "specs/evidence/EVD-20261031-TRAVEL-ENTRY-FINAL.md"
+  ],
+  "local_links_checked": 802,
+  "document_sha256": {
+    "docs/architecture/ARCHITECTURE.md": "8fd4cb300917654f885f7893c8897ad00172545a4d4c04831af9a51e3ae743af",
+    "docs/deploy/releases/20261025-travel-diary-e2e-local.md": "5af618e4444c9c03b60b68b3b7763ab7faa0577cd09b58b8be93627a8b0346f7",
+    "docs/deploy/releases/20261025-travel-import-simplification-local.md": "69cf29fc90fc043247c43f9d7b5210c7aa2669e2618950ca2281bf3070ffb26c",
+    "docs/deploy/releases/20261031-client-upload-preparation.md": "8c69cc4596ae08b870f0516f5993b0aec6f673d4c6c0e990fbc60a0c3939fc93",
+    "docs/deploy/releases/20261031-travel-diary-backend-compatibility.md": "4955b92012ab8dfb76addbb4d5a1c098755402ca53ef0edba9af0061af1f7832",
+    "docs/deploy/releases/20261031-travel-entry-cleanup-local.md": "299d609bdcb5b6b82133f0ce79f73f6db6dd8b8c0306a2a633161b78e38956c8",
+    "docs/deploy/releases/20261101-client-0.1.17-upload.md": "c786bc7bf6d6258aa0c6dbf8856ba3e309b238e194f941a1d2da230c0f1d9ff3",
+    "docs/deploy/releases/20261101-client-upload-attempt.md": "aaf2d19667cdcf0b0fdc92555e28c69d1568c760ed891c2ec3c945ec6961b4df",
+    "docs/design/frontend/FRONTEND-DESIGN.md": "5488c0b8de55237baafdfa100b310fb27e30e62d2c899d86f0d1b3ef1d6e42ba",
+    "docs/design/frontend/ui/UI-001-parent-miniapp.md": "e7cf6a263e159ebdc1846f20d31f4d376b3c210a896b1fafacf865975df8d0a4",
+    "docs/design/frontend/ui/UI-018-child-photo-footprints.md": "ea80053ee7a4889f447afd6acbc88daa5fcbdd3e6994cd69a37e70ab5ac81245",
+    "docs/domain/BEHAVIOR-CATALOG.md": "4c4eb2a83408a9ec93e8cb2ff8f0f49ab5f226d5e2f18ccc53b3b5b8825802fc",
+    "docs/domain/features/FEAT-001-push-kids-mvp.md": "1bedcf632367e5919a28891b2d46e3a3f259941de7a6ba3037b65a96138fde99",
+    "docs/domain/features/FEAT-012-child-photo-footprints.md": "7e153514fffcda4714fbd22f447386f2d270861198c97507f1d8f8fc463332b3",
+    "docs/domain/features/README.md": "993eb3e530edc1081e18e6e3ca9fd12d4242d27803e0a74b881d5011f321cc85",
+    "docs/quality/TEST-STRATEGY.md": "8d909ef93a88d74b8c861cbd3e6b75017a2d95762a75bba4e3d925a62c3db6b1",
+    "docs/quality/evidence/client-release-20261031/README.md": "6c3689076644b35c8c4ed016d33b7d908903eb1f0a987692ad4ae95d3d39307f",
+    "docs/quality/evidence/client-release-20261031/native-current-matrix.md": "fecf4333fb4f98895a4775ba04bcdd117715bc67e37cbccae39ffe190f188441",
+    "docs/quality/evidence/travel-diary-e2e-20261025/README.md": "6e66ed313f99f7613aa00da1bc4f1e6b7cb6000a811ef36c474d8e96868025c9",
+    "docs/quality/evidence/travel-entry-cleanup-20261031/HANDOFF.md": "d0f59c77cbcca0698bac2f863485da1dbd2c1645c29b3041eac28cd2ed1b3881",
+    "docs/quality/evidence/travel-entry-cleanup-20261031/README.md": "bfca9dbe59031c2c1de61939c33a16d40016f4f637a62d2c4cc3d3e6b1f6271e",
+    "docs/quality/evidence/travel-import-simplification-20261025/README.md": "974bbcf43c9dd23b6b312fb93bf1ce5bc7dd04dbda2c875300a791bffd181ca3",
+    "specs/README.md": "ee95d6863d1310e7a16e08c1725193a7844de00100b63f48d65dce9e90ad8073",
+    "specs/STATUS.md": "d3090880693da6884751a1cb3387682f8ecb4a2fa26da99879da8734ab6da405",
+    "specs/completed/BUG-035-TRAVEL-DIARY-END-TO-END.md": "1d972c2a1cfe5f0c01d24de4e4447e2f496e53d187fb40e42a58a59095b9096b",
+    "specs/completed/FEAT-012-TRAVEL-ENTRY-CLEANUP.md": "40c74f43577bd093b50ea261908611b3a90c80ab59ccffbfdfa77859abc243ac",
+    "specs/completed/FEAT-012-TRAVEL-IMPORT-SIMPLIFICATION.md": "d2ccb40cb46a6eb8971ad2b247c4e4c508d4ceff233acf95143ee39cccb4b760",
+    "specs/evidence/EVD-20261031-TRAVEL-ENTRY-BASELINE.md": "efa969cf7a7b6fd2c6deece66fa527283e6d27f5769a27e046fd66f877536d52",
+    "specs/evidence/EVD-20261031-TRAVEL-ENTRY-FINAL.md": "7aecfcf6843d03386ad5ba7896c0f26fd7ea94a0e83d720e904bc52ff8ada0f7"
+  },
+  "spec_counts": {
+    "active": 12,
+    "completed": 109,
+    "rejected": 13
+  },
+  "active_status_counts": {
+    "DRAFT": 2,
+    "READY_FOR_REVIEW": 7,
+    "VERIFYING": 1,
+    "APPROVED": 2
+  },
+  "lifecycles": {
+    "BUG-035-TRAVEL-DIARY-END-TO-END.md": "DONE",
+    "FEAT-012-TRAVEL-IMPORT-SIMPLIFICATION.md": "DONE",
+    "FEAT-012-TRAVEL-ENTRY-CLEANUP.md": "DONE"
+  },
+  "immutable_design_historical_link_map": [
+    {
+      "document": "docs/design/frontend/snapshots/UI-018/DREV-20261025-TRAVEL-IMPORT-02/APPROVAL.md",
+      "historical_spec": "active/FEAT-012-TRAVEL-IMPORT-SIMPLIFICATION.md",
+      "current_spec": "completed/FEAT-012-TRAVEL-IMPORT-SIMPLIFICATION.md"
+    },
+    {
+      "document": "docs/design/frontend/snapshots/UI-018/DREV-20261031-TRAVEL-ENTRY-CLEANUP-01/APPROVAL.md",
+      "historical_spec": "active/FEAT-012-TRAVEL-ENTRY-CLEANUP.md",
+      "current_spec": "completed/FEAT-012-TRAVEL-ENTRY-CLEANUP.md"
+    },
+    {
+      "document": "docs/design/frontend/snapshots/UI-018/DREV-20261025-TRAVEL-DIARY-E2E-01/APPROVAL.md",
+      "historical_spec": "active/BUG-035-TRAVEL-DIARY-END-TO-END.md",
+      "current_spec": "completed/BUG-035-TRAVEL-DIARY-END-TO-END.md"
+    },
+    {
+      "document": "docs/design/frontend/prototypes/DREV-20261025-TRAVEL-IMPORT-02/FRONTEND-SPEC.md",
+      "historical_spec": "active/FEAT-012-TRAVEL-IMPORT-SIMPLIFICATION.md",
+      "current_spec": "completed/FEAT-012-TRAVEL-IMPORT-SIMPLIFICATION.md"
+    },
+    {
+      "document": "docs/design/frontend/prototypes/DREV-20261031-TRAVEL-ENTRY-CLEANUP-01/FRONTEND-SPEC.md",
+      "historical_spec": "active/FEAT-012-TRAVEL-ENTRY-CLEANUP.md",
+      "current_spec": "completed/FEAT-012-TRAVEL-ENTRY-CLEANUP.md"
+    },
+    {
+      "document": "docs/design/frontend/prototypes/DREV-20261025-TRAVEL-DIARY-E2E-01/FRONTEND-SPEC.md",
+      "historical_spec": "active/BUG-035-TRAVEL-DIARY-END-TO-END.md",
+      "current_spec": "completed/BUG-035-TRAVEL-DIARY-END-TO-END.md"
+    }
+  ],
+  "upload": {
+    "version": "0.1.17",
+    "bytes": 1191019,
+    "files": 168,
+    "manifest_sha256": "04c6668a20a0f99622c78424b4d7c5ba07aadc1fd515f20a494e0e4cfcbb2adb"
+  },
+  "version_baseline": "0.1.17",
+  "operator_acceptance": "PASS_OPERATOR_CONFIRMED",
+  "native_states": 42,
+  "current_worktree_drift_excluded": [
+    "apps/miniprogram/pages/review-inventory/content.wxml",
+    "apps/miniprogram/pages/review-inventory/content.wxss"
+  ],
+  "git_diff_check": "PASS",
+  "conflict_audit": {
+    "current_release": "Uploaded0.1.17, travel three SpecsDONE/completed; old pending conclusions replaced or explicitly historical",
+    "scope": "Exact frozen168 files; parallelBUG037 worktree files preserved and excluded; BUG036 source excluded",
+    "acceptance": "User positive photo/account gate separate from agent health/native checks; device/content gaps retained",
+    "immutable_assets": "Approved design source/snapshot and raw historical evidence retained; old link mappings explicit",
+    "platform": "Development upload separate from experience, review and productionNOT_RUN"
+  },
+  "not_run_or_partial": [
+    "Real iOS/Android/keyboard/accessibility",
+    "Full content/EXIF/media-lifetime acceptance",
+    "Experience/review/production platform actions",
+    "Git commit/push"
+  ]
+}

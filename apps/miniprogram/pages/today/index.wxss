@@ -2,6 +2,7 @@
 .today-page { padding-top: 0; }
 .daily-task-card { padding: 0 28rpx; }
 .today-page .sec-bar { min-height: 44px; }
+.today-page .sec-bar .workday-status { font-size: 14px; color: var(--pk-ink-2); text-align: right; }
 .daily-task-row { display: flex; align-items: center; gap: 24rpx; padding: 24rpx 0; }
 .daily-task-row + .daily-task-row { border-top: var(--pk-border-soft); }
 .daily-task-copy { min-width: 0; }

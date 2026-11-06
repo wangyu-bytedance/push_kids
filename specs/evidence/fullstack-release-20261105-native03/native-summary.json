@@ -1,0 +1,351 @@
+{
+  "new_workday_node_png_pairs": 48,
+  "previous_copy": 24,
+  "previous_archive": 21,
+  "total_pairs": 93,
+  "not_independent_business_scenarios": true,
+  "visual_review": "three contact sheets observed; final device content requires operator acceptance",
+  "modal320": "AX and actual Cancel observed; screenshot showed underlay only",
+  "modal390": "prior AX/Cancel; visual still missing",
+  "modal430": "CUA actual full window screenshot observed with complete dialog text/buttons, then actual Cancel removed dialog nodes; no exported local modal PNG",
+  "remaining": "320/390 modal visual/archive, devices/accessibility and complete workday entry save/readback",
+  "current_cua_block": "Mac relocked before switching430 to390; user input requested",
+  "entries": [
+    {
+      "width": 320,
+      "host": "calendar",
+      "state": "coverage",
+      "node_sha256": "8043f9d1073942b01636336ab8876058cd82538ed799f995ec7ca13005994063",
+      "png_sha256": "8cd61530f461c860be7936f19c47f96db54f7d850985ec960544e0ac7dd12217"
+    },
+    {
+      "width": 320,
+      "host": "calendar",
+      "state": "create",
+      "node_sha256": "8f4b7f67e301439ae619c72f7835cc694fffb018fda3bcb5e0ed19c4b5f13fdb",
+      "png_sha256": "7a6f490ad29fd6e5c004e9ca6e3e830c7126f6b0022567e010225dc6af6b8b8f"
+    },
+    {
+      "width": 320,
+      "host": "calendar",
+      "state": "error",
+      "node_sha256": "7ff3ece9094e0b6513fa3ec3b90e44519873e56988a071b0ca06ffe6e7ab3f62",
+      "png_sha256": "ef062954c2f19077ebf00fdbd4051a362b4c648bddf7382253084de03469c5ba"
+    },
+    {
+      "width": 320,
+      "host": "calendar",
+      "state": "once",
+      "node_sha256": "11be81b5e2a84519d3ed00fb5c9569bd1685783c91e21400d938bc35d7bd886c",
+      "png_sha256": "fb99cb530132315abe479f50cfb30e8f2eb5bdd9c4141d476570abd083f987a2"
+    },
+    {
+      "width": 320,
+      "host": "calendar",
+      "state": "readonly",
+      "node_sha256": "33ec4f71b6353d59f814f4749013f51febee3355802aa959a851ed3fa9de3ece",
+      "png_sha256": "6cce544719ea8e6257e8279346d6e0a8284659b59825e243b204530742a7527c"
+    },
+    {
+      "width": 320,
+      "host": "calendar",
+      "state": "saving",
+      "node_sha256": "a9891044edd1b703207f5cf56b22419991bb39e73ccb761bc2126bc3a90049f3",
+      "png_sha256": "a64001ceeaa42baaaa54ec9b9fd0e34a7c6f03a243d4ae9a4beceef189bb4028"
+    },
+    {
+      "width": 320,
+      "host": "calendar",
+      "state": "weekly",
+      "node_sha256": "09d8ad429168dc7f44e564e3054c9be8d1a29454b7d40638bf249d1e8a6f7d72",
+      "png_sha256": "a4a3d297241d217ac713b81c4f38488ecb967eb147e4268a0d388f5922391a65"
+    },
+    {
+      "width": 320,
+      "host": "calendar",
+      "state": "workday",
+      "node_sha256": "26e78953707c19ec335b917a47b0b68177bd43a53f02ffb8c119f5b9da944cda",
+      "png_sha256": "bb3641e1de8307187ac3b5d29a46841ca3bb85f5f2158620f0add50cfb656d89"
+    },
+    {
+      "width": 320,
+      "host": "settings",
+      "state": "coverage",
+      "node_sha256": "2c0bfab4dd646e9c5474752f4fffc2b461b5c3275fb1f4d26f445060f28388ef",
+      "png_sha256": "f4af82c50c7e3c4f041030931f926907378af56cfce96872d2dbbe03242c9956"
+    },
+    {
+      "width": 320,
+      "host": "settings",
+      "state": "error",
+      "node_sha256": "58002b2628808106496e6376ee6ea85ccf6fd2e072cb5dd521692323cd2a5028",
+      "png_sha256": "31fe9a6d582ae8ac9d85c54f526698073ecf49a89b33d8c1be20b5df3e2e4718"
+    },
+    {
+      "width": 320,
+      "host": "settings",
+      "state": "flexible",
+      "node_sha256": "113424823fc81bb4b285f8bc1a3e8a66879c717a85c598c9c324223500593d10",
+      "png_sha256": "d673c689362ccdcf0724452c7bdd3f14914241432e45e54a03899f4c742bd2df"
+    },
+    {
+      "width": 320,
+      "host": "settings",
+      "state": "perday",
+      "node_sha256": "16c648004b441ef2fdd77711ae1378637aefc4c79369af192394cfaef5844022",
+      "png_sha256": "0cabcf2b4e52b68a25751115c548c0fb79c7822316d379937e703ea38f19d910"
+    },
+    {
+      "width": 320,
+      "host": "settings",
+      "state": "readonly",
+      "node_sha256": "3d4c59a323f38419053558b3abdb14c523e395bc841b4103f36353e4502d7ee3",
+      "png_sha256": "6f1407a217cb77a62fcfe92ef3f6796df7ed0b23594a22a110937cad4fed7241"
+    },
+    {
+      "width": 320,
+      "host": "settings",
+      "state": "saving",
+      "node_sha256": "a63af597437cac610ed301e8dd44df26c46be8564ce45ce2df5d45577ee65674",
+      "png_sha256": "2dc2e3908ec767710b7cf4a6b1a31bd49c3a7409c1237e33123bed947730130d"
+    },
+    {
+      "width": 320,
+      "host": "settings",
+      "state": "weekly",
+      "node_sha256": "d816a850e006f28b478ee9d23042b755aa254ae2494be739653add458883b411",
+      "png_sha256": "49aaebe8d955a9374e50f8ae0e91450e9e260e8e0ff701dd498433ab951247c8"
+    },
+    {
+      "width": 320,
+      "host": "settings",
+      "state": "workday",
+      "node_sha256": "6e4186524af4970b7434753419844f8c34a35e20f5a2dc0c1b3839e7fa726eb9",
+      "png_sha256": "f4af82c50c7e3c4f041030931f926907378af56cfce96872d2dbbe03242c9956"
+    },
+    {
+      "width": 390,
+      "host": "calendar",
+      "state": "coverage",
+      "node_sha256": "c1b2304dcad0b837106e61bfb39995eb287a61fe441927c4c5dae941b58b3c45",
+      "png_sha256": "ba4bb320fe784dffa276845481e8711e6e2748de8a6842f4f12ea264cdf6d77e"
+    },
+    {
+      "width": 390,
+      "host": "calendar",
+      "state": "create",
+      "node_sha256": "25d4f00190daf592c0c733733acaf877d697472b48acb79b591ea7a16d4b8d5f",
+      "png_sha256": "35a1b39032b1778e87308b1f32b910681cf99de5869c33c462ac9b40a89d3d81"
+    },
+    {
+      "width": 390,
+      "host": "calendar",
+      "state": "error",
+      "node_sha256": "5be963aaea4bf5874d38a61da93d10462db16f49948f4e84bbbb9add9f675cbb",
+      "png_sha256": "f574eb9b8ade8e73e8afc7e8d794b0b94a40465dc7c7ba7397596f217578cfdf"
+    },
+    {
+      "width": 390,
+      "host": "calendar",
+      "state": "once",
+      "node_sha256": "ada0e8c273c6e76151529d3866d6bece6287fb6987a821011613dd00cbd63322",
+      "png_sha256": "21428e819e9754252560b22f356f6e711fbbe1dfed06f1420cd80b8d59e28de3"
+    },
+    {
+      "width": 390,
+      "host": "calendar",
+      "state": "readonly",
+      "node_sha256": "9effafa21f6ebf4b816b1dfbe35be4ba6794f124b5525be129e585a60930e3cf",
+      "png_sha256": "66472aa3bdea5975cb53e48c9b439f896469f0c9fa7c2fe8a2bb1aef9c622120"
+    },
+    {
+      "width": 390,
+      "host": "calendar",
+      "state": "saving",
+      "node_sha256": "1170481995418a17b34a2d8b4154067af20d75b52a4cfbd93a7a909bc25432d0",
+      "png_sha256": "63abd93e4be86ba09ae5ce6007a7a993ac1b1f97726211dbf54136c98506ba0e"
+    },
+    {
+      "width": 390,
+      "host": "calendar",
+      "state": "weekly",
+      "node_sha256": "7dbdbb9f8e193b4d823ced7bbfdbc1b93b1db53a5456918907c854f40dbc8e58",
+      "png_sha256": "d94121d3d3ef9915d58003cd73a6dac061282283426d6fb20c2fc4bebef1bc05"
+    },
+    {
+      "width": 390,
+      "host": "calendar",
+      "state": "workday",
+      "node_sha256": "8fd14e9bb9ef595f44f7b0a194f7143cb047493c08c23432e07c363bd0807ad1",
+      "png_sha256": "5ae417b1743fedd6d3317800facf0241e00c57885b75e0f39a3d95b7e6151071"
+    },
+    {
+      "width": 390,
+      "host": "settings",
+      "state": "coverage",
+      "node_sha256": "5b97003d3822d2bcbb35bb09c7cedc99f5142a3561d08f764a147080dc0d539a",
+      "png_sha256": "f1dcd0fddfa78ab432d7a07b7c42c5f8e1c5cccd4966fc323ff17ea62474e55a"
+    },
+    {
+      "width": 390,
+      "host": "settings",
+      "state": "error",
+      "node_sha256": "6d4338b514abb8b30517e28fab2be50d4bb1cf66ab0b01d72aa02f0957f3a6c5",
+      "png_sha256": "02b89577746739a7702115bdf70e6a7516f6efa6663416c8515e5ccfb7fe9db5"
+    },
+    {
+      "width": 390,
+      "host": "settings",
+      "state": "flexible",
+      "node_sha256": "36dc844c595678c9126e09090eb56f71cfba2ffc1ba51da73d93c98e70ffc853",
+      "png_sha256": "ae2f842dff015e7bfeb801e1529529fcd1165c81eb17fbf7b7197211cfa49cac"
+    },
+    {
+      "width": 390,
+      "host": "settings",
+      "state": "perday",
+      "node_sha256": "9f67a3fd002f1960ba0184c58188703af62267fce015017b160485f040cf033a",
+      "png_sha256": "b72aca75eac00409b8b33cc1257920f506a599ee2e5aaa66a8cb5fe207525126"
+    },
+    {
+      "width": 390,
+      "host": "settings",
+      "state": "readonly",
+      "node_sha256": "d87ebdad359157dd7a91a35045dc5cea793cd206c90e872b367a1c9357768548",
+      "png_sha256": "40fc53aab537ca9b56856b97e839aad22fe17727083fb5f17ecfba141ff85fe1"
+    },
+    {
+      "width": 390,
+      "host": "settings",
+      "state": "saving",
+      "node_sha256": "d618f524e9df81773783e49e0250ad424bdffb2e93d8197f21d12f31197a09c0",
+      "png_sha256": "787c468a797158c744c49955e00b7e25fd7b239cbd49ffc2a508c3748c226065"
+    },
+    {
+      "width": 390,
+      "host": "settings",
+      "state": "weekly",
+      "node_sha256": "3e10b0d83dcbe789989e61f6dba124cfdd22a36332de84be5eacf4d243db7851",
+      "png_sha256": "63dd37ff327d27b69fd586486f89e24762592999f3113ab0d7829ec91877406b"
+    },
+    {
+      "width": 390,
+      "host": "settings",
+      "state": "workday",
+      "node_sha256": "78e7655b9851ea4f4cbf73043a4d17864fd52b0cf7dc87580fbbd31f8e17cee1",
+      "png_sha256": "f1dcd0fddfa78ab432d7a07b7c42c5f8e1c5cccd4966fc323ff17ea62474e55a"
+    },
+    {
+      "width": 430,
+      "host": "calendar",
+      "state": "coverage",
+      "node_sha256": "604c4af48afd77bb8837952a3731022f00e2fdf54589424322ba07f5214f47d8",
+      "png_sha256": "ee316fe60bf72c3389cd34bed3a5ea0c1bef2d362ff305e64e814b6306dcf041"
+    },
+    {
+      "width": 430,
+      "host": "calendar",
+      "state": "create",
+      "node_sha256": "5b90fdef6fc674c01e0402c9578e1c4a5ed11345bd899437d5eb10f0f0aa8497",
+      "png_sha256": "0aa3d12b141a6533358d88c40566a49d3ad6cb743cf2e88e93dae355f209be22"
+    },
+    {
+      "width": 430,
+      "host": "calendar",
+      "state": "error",
+      "node_sha256": "8b90553f6fc83696476e5169e1f48f5fa41711e47056a2b199d52cb23122dca1",
+      "png_sha256": "e49fd0b4658d91ad499595b57a06d773dbeef5f43624e01a76fad7c156c0930f"
+    },
+    {
+      "width": 430,
+      "host": "calendar",
+      "state": "once",
+      "node_sha256": "2c8dcb29fbc4271d083befb9d9cdcf94faaf327afefc568e7a719b2c598dcc80",
+      "png_sha256": "0b110bfdcb4fad4e74413f770f1f69b9b00867e5c6ae4f34111f6606a74f2ebc"
+    },
+    {
+      "width": 430,
+      "host": "calendar",
+      "state": "readonly",
+      "node_sha256": "d7adff85c618abd1645c68f8962ac8bf89f06c3513f8bf3cddfcffc9bf5a6dc0",
+      "png_sha256": "be885b9916abdbb9648c2b712a03d4470f474eae5fddf21a15832b316adbd5d4"
+    },
+    {
+      "width": 430,
+      "host": "calendar",
+      "state": "saving",
+      "node_sha256": "9c62d0b7f6270772d165c58bf61e251294561e94670433ef1722a3d52fdea9a0",
+      "png_sha256": "03be4610281c1663a033ec28679ee39e97d0ae6f6479bcd4f34b72fdaaa78ca6"
+    },
+    {
+      "width": 430,
+      "host": "calendar",
+      "state": "weekly",
+      "node_sha256": "935e9eb5b9a9d6e0ac526cbfbce526c30c478a13eea94a4afb0d922e0876b3e7",
+      "png_sha256": "772fe3ded80c226b9bd1755124e10dc55538761c950623af2e98c8d730e6e9f0"
+    },
+    {
+      "width": 430,
+      "host": "calendar",
+      "state": "workday",
+      "node_sha256": "31a8e3a6ff4b09fa88711a8b0b3d273c3c46ff58baba7224f52cd4792e42a64c",
+      "png_sha256": "ee316fe60bf72c3389cd34bed3a5ea0c1bef2d362ff305e64e814b6306dcf041"
+    },
+    {
+      "width": 430,
+      "host": "settings",
+      "state": "coverage",
+      "node_sha256": "8182593223ad3bef81997ed925fa8b7d2cd51121b8142155984d9c1b2ab1f1c3",
+      "png_sha256": "f752c4f01177235686b151d7be81bdd62a46fb58c2bfdcfcb314ce50b3a980b3"
+    },
+    {
+      "width": 430,
+      "host": "settings",
+      "state": "error",
+      "node_sha256": "6f5a76de682fe4a4bf1cab69b7a391e7af70cff1aabe76b9918750a42b0fdbd5",
+      "png_sha256": "147f8f684d3d239d4f1c0b1bf55a08d0fe0d1ecc089146104f0d3339ee28e127"
+    },
+    {
+      "width": 430,
+      "host": "settings",
+      "state": "flexible",
+      "node_sha256": "6dbfeeb47147f4756d7ee94a0959c4d7a8264da5f10db747164166a154749a91",
+      "png_sha256": "ec9042b1f64957f159ad24f8d69336815c401c9f6f4be837e2519af17b75b74d"
+    },
+    {
+      "width": 430,
+      "host": "settings",
+      "state": "perday",
+      "node_sha256": "84aa7d8e2385214f3be190dbb6bd994a57dfdbed826e56e6412ed630edbb1317",
+      "png_sha256": "9440fa3564f3a9df9382b9972925dd9e47b4f857faca948fc10c62f139b6dc4c"
+    },
+    {
+      "width": 430,
+      "host": "settings",
+      "state": "readonly",
+      "node_sha256": "9ab3ea863d9f417e1deb24e7d2678d5dce73671e2370decfb488443be4e0480a",
+      "png_sha256": "85f11afc820942f844e955dc97e992848a5b4a992151768f28548d918c12fd94"
+    },
+    {
+      "width": 430,
+      "host": "settings",
+      "state": "saving",
+      "node_sha256": "3e8f9104a7673557cc4011663d4a16a1d6c392805c17dcbd230093407e6200c4",
+      "png_sha256": "c0648daef7bbca7c0364bf3f2704d977d61cdf6d62add0adba06e878757c76bf"
+    },
+    {
+      "width": 430,
+      "host": "settings",
+      "state": "weekly",
+      "node_sha256": "154e66eddf37e43ca00090eb03dc8ca21c506a908f92d02f1bb10d81d76ac668",
+      "png_sha256": "c271721b402cffecd8f0641cf4d0fba82cffb18154e2da2e9aebbe6614c023b9"
+    },
+    {
+      "width": 430,
+      "host": "settings",
+      "state": "workday",
+      "node_sha256": "1d585b013a285551d38235e2c618962c1e3727b365d2e3fbf943b3d230d6ee96",
+      "png_sha256": "f752c4f01177235686b151d7be81bdd62a46fb58c2bfdcfcb314ce50b3a980b3"
+    }
+  ]
+}

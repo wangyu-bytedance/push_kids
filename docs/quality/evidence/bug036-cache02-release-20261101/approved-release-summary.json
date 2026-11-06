@@ -1,0 +1,113 @@
+{
+  "captured_at": "2026-11-01T18:44:03+08:00",
+  "spec_revision": "OPS-SPEC-20261101-BUG036-CACHE-DEPLOY-01",
+  "approval": "2026-11-01 user:批准 OPS 发布 Spec01，开始灰度部署",
+  "stage": "BLOCKED_PRE_DEPLOY_QUALITY_GATE",
+  "actual_backend_version": null,
+  "online_existing_version": "flask-ik19-039",
+  "new_cloud_version_created": false,
+  "traffic_modified": false,
+  "pipeline_revision": "staged-20261101-10",
+  "prompt_revision": "child-aware-history-agent-20261031-13",
+  "candidate_manifest_sha256": "a07c0bf32a85afa80c1d69485d0c7d203dca663dddf10cd26f2c88c5c68f612b",
+  "quality_gate": {
+    "status": "failed",
+    "case_count": 40,
+    "passed": 34,
+    "overall_rate": 0.85,
+    "end_to_end": {
+      "passed": 34,
+      "total": 40,
+      "rate": 0.85
+    },
+    "operational_failure_count": 0,
+    "operational_failure_codes": {},
+    "subject_rates": {
+      "语文": 0.6667,
+      "数学": 0.8,
+      "英语": 0.8667
+    },
+    "subject_semantic": {
+      "语文": {
+        "passed": 10,
+        "total": 15,
+        "rate": 0.6667
+      },
+      "数学": {
+        "passed": 12,
+        "total": 15,
+        "rate": 0.8
+      },
+      "英语": {
+        "passed": 13,
+        "total": 15,
+        "rate": 0.8667
+      }
+    },
+    "empty_pending_count": 0,
+    "remaining_pending_count": 0,
+    "formal_write_count": 0,
+    "failures": [
+      {
+        "case_id": "multi-01",
+        "code": "analysis_output_invalid",
+        "attempts": 3
+      },
+      {
+        "case_id": "zh-05",
+        "code": "analysis_output_invalid",
+        "attempts": 3
+      },
+      {
+        "case_id": "multi-02",
+        "code": "subject.mismatch",
+        "attempts": 1
+      },
+      {
+        "case_id": "zh-07",
+        "code": "analysis_output_invalid",
+        "attempts": 3
+      },
+      {
+        "case_id": "zh-09",
+        "code": "analysis_output_invalid",
+        "attempts": 3
+      },
+      {
+        "case_id": "multi-04",
+        "code": "analysis_output_invalid",
+        "attempts": 3
+      }
+    ],
+    "pipeline_revision": "staged-20261101-10",
+    "model": "doubao-seed-2-1-pro-260628"
+  },
+  "required": {
+    "overall_at_least": "38/40",
+    "each_subject_at_least": "90%"
+  },
+  "retained_artifacts": {
+    "approved-tools-red.log": "3c13ce9fcad2b51577413d0669eceb503925aedcdd7a754349594fac0b0ca608",
+    "workspace-ruff-approved.log": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18",
+    "workspace-format-approved.log": "98384e3012130f6ed6105a6845998aa70da2a47feddc21c0f4bdb4e5d788b90c",
+    "workspace-mypy-approved.log": "1e5d92f5641e1003b850e01073386c9ff2fbcc3b2bbb21b631965cad8cd01c87",
+    "workspace-architecture-approved.log": "7105715975112c0f75ea91c4858d4fc110bbb0f05180acc25d94100f1c5433a0",
+    "heads-approved.log": "3eee4df07156ec6626f80720d6c49c9c7025636391cf108a5367ab7fcf2f5e40",
+    "frontend-approved.log": "d907b84d5430e8537c88245b8c109ba9dc79fbb385436532f9a0987af665d652",
+    "frontend-lint-approved.log": "24b32519689678fd85380f570ed7344cf2b387a60da7b9140c54ad71386fb2d0",
+    "design-policy-approved.log": "3e7f019679cf8134faaed27cdec14279f3c58e06fb577fa0bc01f09ec761668a",
+    "miniprogram-approved.log": "2e5d42c4c9d74a71f7823a2cae3c6e18937c7628607dd877d7e6b2f9738a5bef",
+    "tools-verification.json": "9f78210e2edf87f181d7967e12271b3f84da2d40cee894c1eb6d9df0462f1ae5",
+    "runtime-preflight.json": "86725ab03a668b3afc0a888beb5ead49c76a5aae4f898d954c679d7c385d93ea",
+    "admin-schema-preflight.json": "6dcabfa8ff54d6f6af46e650f653919889c0bb043a787a85daa0d7774a565232",
+    "targeted-boundaries-approved.log": "9117fb50ce702fb0c6dfa7bab1d97396f7f84ff11bf837fb9e21f128c913c7ef",
+    "targeted-boundaries-approved-fixed.log": "49f673c624ea970ae349e907473da33e0d3813dc133d689cbc82ae386b93b35a",
+    "container-build-approved.log": "d366433e26c05f7562108d5a748ef464118958d5428274478befc51b14b08aee",
+    "live40.log": "f03f1e007b026290074599a0479401744f125d1dd8e5b56cb3d9a69873e9fbaf",
+    "live40-report.json": "3c28878552544a7c55dcef76c7d2f1b480124116bec72ed512f8b259f82f5b82",
+    "live40-run.json": "857a94b3a44a4f2217f3c8245565b8a0c9c65ac1b9801dc3db8b371a2a670955"
+  },
+  "production_data_reset": false,
+  "schema_modified": false,
+  "committed_or_pushed": false
+}

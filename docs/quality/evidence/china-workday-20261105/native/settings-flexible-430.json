@@ -1,0 +1,85 @@
+{
+  "route": "pages/settings/index",
+  "viewport": {
+    "width": 430,
+    "height": 932,
+    "screenHeight": 932
+  },
+  "nodes": [
+    {
+      "selector": ".pk-sheet",
+      "left": 0,
+      "right": 430,
+      "top": 448,
+      "bottom": 932,
+      "width": 430,
+      "height": 484,
+      "fontSize": "16px",
+      "lineHeight": "25.6px"
+    },
+    {
+      "selector": ".sheet-head",
+      "left": 20,
+      "right": 410,
+      "top": 472,
+      "bottom": 529,
+      "width": 390,
+      "height": 57,
+      "fontSize": "16px",
+      "lineHeight": "25.6px"
+    },
+    {
+      "selector": ".sheet-body",
+      "left": 20,
+      "right": 410,
+      "top": 529,
+      "bottom": 699,
+      "width": 390,
+      "height": 170,
+      "fontSize": "16px",
+      "lineHeight": "25.6px"
+    },
+    {
+      "selector": ".sheet-foot",
+      "left": 20,
+      "right": 410,
+      "top": 699,
+      "bottom": 821,
+      "width": 390,
+      "height": 122,
+      "fontSize": "16px",
+      "lineHeight": "25.6px"
+    },
+    {
+      "selector": ".schedule-mode",
+      "left": 20,
+      "right": 410,
+      "top": 529,
+      "bottom": 579,
+      "width": 390,
+      "height": 50,
+      "fontSize": "16px",
+      "lineHeight": "25.6px"
+    },
+    {
+      "selector": ".sheet-foot .btn",
+      "left": 20,
+      "right": 410,
+      "top": 712,
+      "bottom": 767,
+      "width": 390,
+      "height": 55,
+      "fontSize": "16px",
+      "lineHeight": "19.2px"
+    }
+  ],
+  "mode": {
+    "workday": false,
+    "flexible": true
+  },
+  "source": "native wx.createSelectorQuery; synthetic fixtures; production WXML/WXSS exact",
+  "errors": [],
+  "state": "flexible",
+  "host": "settings",
+  "screenshot_status": "NOT_RUN"
+}

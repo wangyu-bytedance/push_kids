@@ -1,0 +1,131 @@
+{
+  "nodes": {
+    ".footprints-page": [
+      {
+        "left": 0,
+        "right": 430,
+        "top": 171,
+        "bottom": 718,
+        "width": 430,
+        "height": 547,
+        "fontSize": "14px"
+      }
+    ],
+    ".fp-tabs": [
+      {
+        "left": 16,
+        "right": 414,
+        "top": 289,
+        "bottom": 339,
+        "width": 398,
+        "height": 50,
+        "fontSize": "14px"
+      }
+    ],
+    ".fp-tab": [
+      {
+        "left": 19,
+        "right": 149.65625,
+        "top": 292,
+        "bottom": 336,
+        "width": 130.65625,
+        "height": 44,
+        "fontSize": "14px"
+      },
+      {
+        "left": 149.65625,
+        "right": 280.3125,
+        "top": 292,
+        "bottom": 336,
+        "width": 130.65625,
+        "height": 44,
+        "fontSize": "14px"
+      },
+      {
+        "left": 280.3125,
+        "right": 410.96875,
+        "top": 292,
+        "bottom": 336,
+        "width": 130.65625,
+        "height": 44,
+        "fontSize": "14px"
+      }
+    ],
+    ".fp-more": [],
+    ".fp-drafts": [],
+    ".fp-title": [
+      {
+        "left": 160,
+        "right": 270,
+        "top": 529,
+        "bottom": 559,
+        "width": 110,
+        "height": 30,
+        "fontSize": "22px"
+      }
+    ],
+    ".fp-empty": [
+      {
+        "left": 16,
+        "right": 414,
+        "top": 339,
+        "bottom": 591,
+        "width": 398,
+        "height": 252,
+        "fontSize": "14px"
+      }
+    ],
+    ".fp-import": [],
+    ".fp-error": [],
+    ".fp-manual": [],
+    ".fp-text-button": [],
+    ".fp-notice": [
+      {
+        "left": 16,
+        "right": 414,
+        "top": 171,
+        "bottom": 217,
+        "width": 398,
+        "height": 46,
+        "fontSize": "14px"
+      }
+    ]
+  },
+  "scroll": {
+    "id": "",
+    "dataset": {},
+    "scrollLeft": 0,
+    "scrollTop": 0,
+    "scrollWidth": 430,
+    "scrollHeight": 932
+  },
+  "viewport": {
+    "width": 430,
+    "height": 932,
+    "screenHeight": 932,
+    "dpr": 3,
+    "baseLibrary": "3.16.2"
+  },
+  "sheet": "",
+  "canWrite": false,
+  "active": true,
+  "manualEntryRemoved": true,
+  "state": "viewer",
+  "errors": [],
+  "capturedAt": "2026-11-01T07:50:41.332Z",
+  "screenshotSha256": "83fe09e12b418272aa8c9f3fdaf53434cce526ab6095566964b83e617000aeb1",
+  "host": "embedded",
+  "expectedViewport": {
+    "width": 430,
+    "screenHeight": 932
+  },
+  "scope": "native synthetic offline 430x932 embedded current-production-wxml-wxss; not device or cloud acceptance",
+  "unchangedSegmentedTabs": {
+    "gapRequirement": "NOT_APPLICABLE_TO_CHANGED_ACTION_GROUP",
+    "reason": "Contiguous segmented control matches the unchanged approved baseline; this release removes entry controls and does not change tab geometry.",
+    "observedGaps": [
+      0,
+      0
+    ]
+  }
+}

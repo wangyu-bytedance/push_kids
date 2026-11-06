@@ -1,0 +1,33 @@
+{
+  "result": "PASS",
+  "original_sha256": "9bdaec483fa9f6cc65e7a46c3656e70f2304efd42ecab3fe362864afa8fd829f",
+  "v2_sha256": "37b2edb278d381702365f9a663e6a62407c7474677693b3e4cd52ee50a8646ac",
+  "only_semantic_diff": [
+    {
+      "case_id": "multi-04",
+      "field": "material"
+    }
+  ],
+  "unique_ids": 40,
+  "order_unchanged": true,
+  "single_subject": 36,
+  "multi_subject": 4,
+  "images": 30,
+  "text": 10,
+  "expected_subject_denominators": {
+    "语文": 15,
+    "数学": 15,
+    "英语": 15
+  },
+  "thresholds_unchanged": {
+    "overall": 0.95,
+    "each_subject": 0.9
+  },
+  "old_gate_retained": {
+    "passed": 37,
+    "total": 40,
+    "status": "FAIL"
+  },
+  "full_v2_runs": 1,
+  "diagnostics_do_not_replace_scores": true
+}

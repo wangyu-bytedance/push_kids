@@ -1,0 +1,93 @@
+FFFF.F                                                                   [100%]
+=================================== FAILURES ===================================
+_ test_single_source_context_gap_is_audited_without_discarding_supported_goal[False-text] _
+tests/unit/test_staged_analysis.py:618: in test_single_source_context_gap_is_audited_without_discarding_supported_goal
+    result = run_case(provider, data, search=lambda r: queries.append(r) or [])
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/unit/test_staged_analysis.py:31: in run_case
+    return asyncio.run(
+../../.local/share/uv/python/cpython-3.12.11-macos-aarch64-none/lib/python3.12/asyncio/runners.py:195: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+../../.local/share/uv/python/cpython-3.12.11-macos-aarch64-none/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../.local/share/uv/python/cpython-3.12.11-macos-aarch64-none/lib/python3.12/asyncio/base_events.py:691: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+apps/api/src/push_kids/agent_processing/pipeline.py:298: in run
+    raise StageFailure("coverage", stage="group", unit=alias)
+E   push_kids.agent_processing.failures.StageFailure: coverage
+_ test_single_source_context_gap_is_audited_without_discarding_supported_goal[False-photo] _
+tests/unit/test_staged_analysis.py:618: in test_single_source_context_gap_is_audited_without_discarding_supported_goal
+    result = run_case(provider, data, search=lambda r: queries.append(r) or [])
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/unit/test_staged_analysis.py:31: in run_case
+    return asyncio.run(
+../../.local/share/uv/python/cpython-3.12.11-macos-aarch64-none/lib/python3.12/asyncio/runners.py:195: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+../../.local/share/uv/python/cpython-3.12.11-macos-aarch64-none/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../.local/share/uv/python/cpython-3.12.11-macos-aarch64-none/lib/python3.12/asyncio/base_events.py:691: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+apps/api/src/push_kids/agent_processing/pipeline.py:298: in run
+    raise StageFailure("coverage", stage="group", unit=alias)
+E   push_kids.agent_processing.failures.StageFailure: coverage
+_ test_single_source_context_gap_is_audited_without_discarding_supported_goal[True-text] _
+tests/unit/test_staged_analysis.py:618: in test_single_source_context_gap_is_audited_without_discarding_supported_goal
+    result = run_case(provider, data, search=lambda r: queries.append(r) or [])
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/unit/test_staged_analysis.py:31: in run_case
+    return asyncio.run(
+../../.local/share/uv/python/cpython-3.12.11-macos-aarch64-none/lib/python3.12/asyncio/runners.py:195: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+../../.local/share/uv/python/cpython-3.12.11-macos-aarch64-none/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../.local/share/uv/python/cpython-3.12.11-macos-aarch64-none/lib/python3.12/asyncio/base_events.py:691: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+apps/api/src/push_kids/agent_processing/pipeline.py:298: in run
+    raise StageFailure("coverage", stage="group", unit=alias)
+E   push_kids.agent_processing.failures.StageFailure: coverage
+_ test_single_source_context_gap_is_audited_without_discarding_supported_goal[True-photo] _
+tests/unit/test_staged_analysis.py:618: in test_single_source_context_gap_is_audited_without_discarding_supported_goal
+    result = run_case(provider, data, search=lambda r: queries.append(r) or [])
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/unit/test_staged_analysis.py:31: in run_case
+    return asyncio.run(
+../../.local/share/uv/python/cpython-3.12.11-macos-aarch64-none/lib/python3.12/asyncio/runners.py:195: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+../../.local/share/uv/python/cpython-3.12.11-macos-aarch64-none/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../.local/share/uv/python/cpython-3.12.11-macos-aarch64-none/lib/python3.12/asyncio/base_events.py:691: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+apps/api/src/push_kids/agent_processing/pipeline.py:298: in run
+    raise StageFailure("coverage", stage="group", unit=alias)
+E   push_kids.agent_processing.failures.StageFailure: coverage
+______________ test_all_omitted_never_publishes_an_empty_proposal ______________
+tests/unit/test_staged_proposal_recovery.py:449: in test_all_omitted_never_publishes_an_empty_proposal
+    assert caught.value.retryable is False
+E   AssertionError: assert True is False
+E    +  where True = StageFailure('coverage').retryable
+E    +    where StageFailure('coverage') = <ExceptionInfo StageFailure('coverage') tblen=6>.value
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /Users/bytedance/Documents/push_kids/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/unit/test_staged_analysis.py::test_single_source_context_gap_is_audited_without_discarding_supported_goal[False-text]
+FAILED tests/unit/test_staged_analysis.py::test_single_source_context_gap_is_audited_without_discarding_supported_goal[False-photo]
+FAILED tests/unit/test_staged_analysis.py::test_single_source_context_gap_is_audited_without_discarding_supported_goal[True-text]
+FAILED tests/unit/test_staged_analysis.py::test_single_source_context_gap_is_audited_without_discarding_supported_goal[True-photo]
+FAILED tests/unit/test_staged_proposal_recovery.py::test_all_omitted_never_publishes_an_empty_proposal
+5 failed, 1 passed, 105 deselected, 1 warning in 0.44s

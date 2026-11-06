@@ -15,7 +15,7 @@
 
 当前任务没有发布授权，不能从这份记录推导部署或素材外发授权。后续遵循[发布总手册](../README.md)、后端/数据库和前端playbook；0020/0021均未验证的目标环境要先审查完整迁移链，不能只验0021。回滚保留新增数据与清理兼容，非空迁移拒绝drop表。
 
-2026-10-23后续本地增量：[标题入口Spec01](../../../specs/active/FEAT-012-RECORD-TYPE-SWITCHER.md)与[文案精简Spec01](../../../specs/active/FEAT-012-FOOTPRINTS-UI-COPY.md)已获批准并实施，记录Tab内切换学习记录/旅行日记，旅行控制器复用并简化重复文案。当前自动化/隔离原生结果见[本轮证据](../../quality/evidence/RECORD-TYPES-IMPLEMENTATION-20261023.md)，旧24态×3证据只作历史。未创建发布包/镜像、未上传或部署，各发布阶段保持NOT_RUN；完整真机、全球地图/供应商、MySQL等仍待验收。
+2026-10-23后续本地增量：[标题入口Spec01](../../../specs/completed/FEAT-012-RECORD-TYPE-SWITCHER.md)与[文案精简Spec01](../../../specs/completed/FEAT-012-FOOTPRINTS-UI-COPY.md)已获批准并实施，记录Tab内切换学习记录/旅行日记，旅行控制器复用并简化重复文案。当前自动化/隔离原生结果见[本轮证据](../../quality/evidence/RECORD-TYPES-IMPLEMENTATION-20261023.md)，旧24态×3证据只作历史。未创建发布包/镜像、未上传或部署，各发布阶段保持NOT_RUN；完整真机、全球地图/供应商、MySQL等仍待验收。
 
 ## 后续运行合同
 

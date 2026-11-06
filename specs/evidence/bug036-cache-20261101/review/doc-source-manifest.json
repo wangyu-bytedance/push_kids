@@ -1,0 +1,51 @@
+{
+  "sha256": {
+    "specs/active/BUG-036-CHECKPOINT-RETRY-STRATEGY.md": "5898b2ea3e97953dc2799299589ba4775f73c49f09e3167c3c284681b54d8cc1",
+    "specs/active/BUG-036-KNOWLEDGE-GENERATION-FINAL-PROPOSAL.md": "d833fc3c86fa9d878e95ea65c552350db761d287f7b562787a013a9bb8ea6252",
+    "docs/domain/features/FEAT-001-push-kids-mvp.md": "5eb8d4d7d7af11c1ec6928ccdccb5f954e0727006115c4162427ad96bc33e7cd",
+    "docs/domain/features/README.md": "be9b7094e61f17e8ebf1b5fa3b19833eee0a7ddbd873ab19f18e980dfc7328a5",
+    "docs/domain/BEHAVIOR-CATALOG.md": "5f036ef218c11ab001bc9057c843856d29beca1d6d14a736445028082f8a95a6",
+    "docs/architecture/ARCHITECTURE.md": "cbfe386a3c6e5450e4a33561f965fed55f839624bd6a897ed5137c9a3b65dd5a",
+    "docs/design/frontend/ui/UI-001-parent-miniapp.md": "9e855483b1d31806967f0c24071727bfd05e6e3bb6f3a709004b1ced54efad4c",
+    "docs/quality/TEST-STRATEGY.md": "71a7ca2434eba4f57679749e9b032f27a66a3248f7a05dc2f91d436c7c04d3cc",
+    "docs/deploy/releases/20261101-knowledge-cache-local.md": "13b7f8f306eb1ccaa9da2332068140cac446ba519a3a5cf4db96063f9b42c9b6",
+    "specs/README.md": "c31914f7a0cb9638729111f5dba82fa80f17dd02a432b35395268440ca4a3b7c",
+    "specs/STATUS.md": "5783903730f5fd8c57951e15a90228dde29e17a465b0e8843df8c9020002b5ab",
+    "specs/evidence/EVD-20261101-BUG036-CACHE02.md": "21336eaf6ef89d8f9425ddce9f377948a6faf0e28218daecffb35c1b9f092caf",
+    "docs/quality/issues/ISS-20261101-FINAL-REFUSAL-CACHE-RETRY.md": "1fa2afa8d3402b276b046348cafe06bcf5ec3e464ff41803c08c517fde0d4e12",
+    "docs/quality/regressions/REG-20261101-FINAL-REFUSAL-CACHE-RETRY.md": "af595959185254c38dbea762b4b0f0c4a2fd0bd54c8a180a6a8118793a0b4984",
+    "docs/quality/issues/README.md": "4ebca27186b99d8dbe8e2a190a1bf5dc4450874d8d01471620d57d7c6d2e7192",
+    "docs/quality/regressions/README.md": "95b1d8164c8a706374dd206147e230f61cc21c34958d13d02ee511b64ec1dd3a"
+  },
+  "missing_links": [],
+  "checked_links": 542,
+  "spec_counts": {
+    "active": {
+      "files": 12,
+      "statuses": {
+        "DRAFT": 2,
+        "READY_FOR_REVIEW": 7,
+        "VERIFYING": 3
+      }
+    },
+    "completed": {
+      "files": 109,
+      "statuses": {
+        "DONE": 105,
+        "UNPARSED": 1,
+        "DONE_WITH_EXTERNAL_RELEASE_GATES": 1,
+        "COMPLETED": 1,
+        "STAGE_COMPLETE": 1
+      }
+    },
+    "rejected": {
+      "files": 13,
+      "statuses": {
+        "REJECTED": 6,
+        "CANCELLED": 5,
+        "UNPARSED": 2
+      }
+    }
+  },
+  "source_manifest_matches": true
+}

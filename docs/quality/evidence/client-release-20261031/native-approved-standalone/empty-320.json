@@ -1,0 +1,137 @@
+{
+  "nodes": {
+    ".footprints-page": [
+      {
+        "left": 0,
+        "right": 320,
+        "top": 0,
+        "bottom": 522,
+        "width": 320,
+        "height": 522,
+        "fontSize": "14px"
+      }
+    ],
+    ".fp-tabs": [
+      {
+        "left": 12,
+        "right": 308,
+        "top": 122,
+        "bottom": 170,
+        "width": 296,
+        "height": 48,
+        "fontSize": "14px"
+      }
+    ],
+    ".fp-tab": [
+      {
+        "left": 14,
+        "right": 111.328125,
+        "top": 124,
+        "bottom": 168,
+        "width": 97.328125,
+        "height": 44,
+        "fontSize": "14px"
+      },
+      {
+        "left": 111.328125,
+        "right": 208.65625,
+        "top": 124,
+        "bottom": 168,
+        "width": 97.328125,
+        "height": 44,
+        "fontSize": "14px"
+      },
+      {
+        "left": 208.65625,
+        "right": 305.984375,
+        "top": 124,
+        "bottom": 168,
+        "width": 97.328125,
+        "height": 44,
+        "fontSize": "14px"
+      }
+    ],
+    ".fp-more": [
+      {
+        "left": 264,
+        "right": 308,
+        "top": 59,
+        "bottom": 103,
+        "width": 44,
+        "height": 44,
+        "fontSize": "14px"
+      }
+    ],
+    ".fp-drafts": [],
+    ".fp-title": [
+      {
+        "left": 105,
+        "right": 215,
+        "top": 360,
+        "bottom": 390,
+        "width": 110,
+        "height": 30,
+        "fontSize": "22px"
+      }
+    ],
+    ".fp-empty": [
+      {
+        "left": 12,
+        "right": 308,
+        "top": 170,
+        "bottom": 422,
+        "width": 296,
+        "height": 252,
+        "fontSize": "14px"
+      }
+    ],
+    ".fp-import": [
+      {
+        "left": 12,
+        "right": 308,
+        "top": 442,
+        "bottom": 490,
+        "width": 296,
+        "height": 48,
+        "fontSize": "16px"
+      }
+    ],
+    ".fp-error": [],
+    ".fp-manual": [],
+    ".fp-text-button": [],
+    ".fp-notice": []
+  },
+  "scroll": {
+    "id": "",
+    "dataset": {},
+    "scrollLeft": 0,
+    "scrollTop": 0,
+    "scrollWidth": 320,
+    "scrollHeight": 522
+  },
+  "viewport": {
+    "width": 320,
+    "height": 568,
+    "screenHeight": 568,
+    "dpr": 2,
+    "baseLibrary": "3.16.2"
+  },
+  "sheet": "",
+  "canWrite": true,
+  "active": true,
+  "manualEntryRemoved": true,
+  "state": "empty",
+  "errors": [],
+  "capturedAt": "2026-10-31T11:18:15.893Z",
+  "screenshotSha256": "57b19c8afdd10b7d29f8bfbcd32fec362f6648409991d5d0d25f2881d280603b",
+  "host": "standalone",
+  "scope": "native synthetic offline 320x568 host only; not device or cloud acceptance",
+  "unchangedSegmentedTabs": {
+    "gapRequirement": "NOT_APPLICABLE_TO_CHANGED_ACTION_GROUP",
+    "reason": "Contiguous segmented control matches the unchanged approved baseline; this release removes entry controls and does not change tab geometry.",
+    "observedGaps": [
+      0,
+      0
+    ]
+  }
+}

@@ -1,0 +1,217 @@
+FFFFFFFFF.                                                               [100%]
+=================================== FAILURES ===================================
+___________ test_system_one_uses_dedicated_protocol_and_question_ids ___________
+
+    def test_system_one_uses_dedicated_protocol_and_question_ids():
+>       provider = configured()
+                   ^^^^^^^^^^^^
+
+tests/unit/test_system_one_provider.py:34: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def configured():
+        provider = StagedArkProvider(
+            Settings(_env_file=None, ARK_API_KEY="synthetic", PUSH_KIDS_SYSTEM_ONE_ENABLED=True)
+        )
+        decision = getattr(provider, "decision_provider", None)
+>       assert decision is not None, "enabled workflow must own a dedicated decision protocol"
+E       AssertionError: enabled workflow must own a dedicated decision protocol
+E       assert None is not None
+
+tests/unit/test_system_one_provider.py:17: AssertionError
+_______________ test_invalid_answers_never_become_pass[answer0] ________________
+
+answer = {}, caplog = <_pytest.logging.LogCaptureFixture object at 0x10c5baed0>
+
+    @pytest.mark.parametrize("answer", [{}, {"q1": {"type": "noul", "noul": 2}}, {"q1": {"type": "noul", "noul": float("nan")}}, {"q1": {"type": "choice", "choice": "fake"}}])
+    def test_invalid_answers_never_become_pass(answer, caplog):
+>       provider = configured()
+                   ^^^^^^^^^^^^
+
+tests/unit/test_system_one_provider.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def configured():
+        provider = StagedArkProvider(
+            Settings(_env_file=None, ARK_API_KEY="synthetic", PUSH_KIDS_SYSTEM_ONE_ENABLED=True)
+        )
+        decision = getattr(provider, "decision_provider", None)
+>       assert decision is not None, "enabled workflow must own a dedicated decision protocol"
+E       AssertionError: enabled workflow must own a dedicated decision protocol
+E       assert None is not None
+
+tests/unit/test_system_one_provider.py:17: AssertionError
+_______________ test_invalid_answers_never_become_pass[answer1] ________________
+
+answer = {'q1': {'noul': 2, 'type': 'noul'}}
+caplog = <_pytest.logging.LogCaptureFixture object at 0x10c5bb5f0>
+
+    @pytest.mark.parametrize("answer", [{}, {"q1": {"type": "noul", "noul": 2}}, {"q1": {"type": "noul", "noul": float("nan")}}, {"q1": {"type": "choice", "choice": "fake"}}])
+    def test_invalid_answers_never_become_pass(answer, caplog):
+>       provider = configured()
+                   ^^^^^^^^^^^^
+
+tests/unit/test_system_one_provider.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def configured():
+        provider = StagedArkProvider(
+            Settings(_env_file=None, ARK_API_KEY="synthetic", PUSH_KIDS_SYSTEM_ONE_ENABLED=True)
+        )
+        decision = getattr(provider, "decision_provider", None)
+>       assert decision is not None, "enabled workflow must own a dedicated decision protocol"
+E       AssertionError: enabled workflow must own a dedicated decision protocol
+E       assert None is not None
+
+tests/unit/test_system_one_provider.py:17: AssertionError
+_______________ test_invalid_answers_never_become_pass[answer2] ________________
+
+answer = {'q1': {'noul': nan, 'type': 'noul'}}
+caplog = <_pytest.logging.LogCaptureFixture object at 0x10c5b9ac0>
+
+    @pytest.mark.parametrize("answer", [{}, {"q1": {"type": "noul", "noul": 2}}, {"q1": {"type": "noul", "noul": float("nan")}}, {"q1": {"type": "choice", "choice": "fake"}}])
+    def test_invalid_answers_never_become_pass(answer, caplog):
+>       provider = configured()
+                   ^^^^^^^^^^^^
+
+tests/unit/test_system_one_provider.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def configured():
+        provider = StagedArkProvider(
+            Settings(_env_file=None, ARK_API_KEY="synthetic", PUSH_KIDS_SYSTEM_ONE_ENABLED=True)
+        )
+        decision = getattr(provider, "decision_provider", None)
+>       assert decision is not None, "enabled workflow must own a dedicated decision protocol"
+E       AssertionError: enabled workflow must own a dedicated decision protocol
+E       assert None is not None
+
+tests/unit/test_system_one_provider.py:17: AssertionError
+_______________ test_invalid_answers_never_become_pass[answer3] ________________
+
+answer = {'q1': {'choice': 'fake', 'type': 'choice'}}
+caplog = <_pytest.logging.LogCaptureFixture object at 0x10c5baba0>
+
+    @pytest.mark.parametrize("answer", [{}, {"q1": {"type": "noul", "noul": 2}}, {"q1": {"type": "noul", "noul": float("nan")}}, {"q1": {"type": "choice", "choice": "fake"}}])
+    def test_invalid_answers_never_become_pass(answer, caplog):
+>       provider = configured()
+                   ^^^^^^^^^^^^
+
+tests/unit/test_system_one_provider.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def configured():
+        provider = StagedArkProvider(
+            Settings(_env_file=None, ARK_API_KEY="synthetic", PUSH_KIDS_SYSTEM_ONE_ENABLED=True)
+        )
+        decision = getattr(provider, "decision_provider", None)
+>       assert decision is not None, "enabled workflow must own a dedicated decision protocol"
+E       AssertionError: enabled workflow must own a dedicated decision protocol
+E       assert None is not None
+
+tests/unit/test_system_one_provider.py:17: AssertionError
+_______ test_errors_are_classified_without_retry_or_payload[400-config] ________
+
+status = 400, reason = 'config'
+
+    @pytest.mark.parametrize("status,reason", [(400, "config"), (401, "auth"), (429, "rate_limited"), (503, "provider_error")])
+    def test_errors_are_classified_without_retry_or_payload(status, reason):
+>       provider = configured()
+                   ^^^^^^^^^^^^
+
+tests/unit/test_system_one_provider.py:70: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def configured():
+        provider = StagedArkProvider(
+            Settings(_env_file=None, ARK_API_KEY="synthetic", PUSH_KIDS_SYSTEM_ONE_ENABLED=True)
+        )
+        decision = getattr(provider, "decision_provider", None)
+>       assert decision is not None, "enabled workflow must own a dedicated decision protocol"
+E       AssertionError: enabled workflow must own a dedicated decision protocol
+E       assert None is not None
+
+tests/unit/test_system_one_provider.py:17: AssertionError
+________ test_errors_are_classified_without_retry_or_payload[401-auth] _________
+
+status = 401, reason = 'auth'
+
+    @pytest.mark.parametrize("status,reason", [(400, "config"), (401, "auth"), (429, "rate_limited"), (503, "provider_error")])
+    def test_errors_are_classified_without_retry_or_payload(status, reason):
+>       provider = configured()
+                   ^^^^^^^^^^^^
+
+tests/unit/test_system_one_provider.py:70: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def configured():
+        provider = StagedArkProvider(
+            Settings(_env_file=None, ARK_API_KEY="synthetic", PUSH_KIDS_SYSTEM_ONE_ENABLED=True)
+        )
+        decision = getattr(provider, "decision_provider", None)
+>       assert decision is not None, "enabled workflow must own a dedicated decision protocol"
+E       AssertionError: enabled workflow must own a dedicated decision protocol
+E       assert None is not None
+
+tests/unit/test_system_one_provider.py:17: AssertionError
+____ test_errors_are_classified_without_retry_or_payload[429-rate_limited] _____
+
+status = 429, reason = 'rate_limited'
+
+    @pytest.mark.parametrize("status,reason", [(400, "config"), (401, "auth"), (429, "rate_limited"), (503, "provider_error")])
+    def test_errors_are_classified_without_retry_or_payload(status, reason):
+>       provider = configured()
+                   ^^^^^^^^^^^^
+
+tests/unit/test_system_one_provider.py:70: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def configured():
+        provider = StagedArkProvider(
+            Settings(_env_file=None, ARK_API_KEY="synthetic", PUSH_KIDS_SYSTEM_ONE_ENABLED=True)
+        )
+        decision = getattr(provider, "decision_provider", None)
+>       assert decision is not None, "enabled workflow must own a dedicated decision protocol"
+E       AssertionError: enabled workflow must own a dedicated decision protocol
+E       assert None is not None
+
+tests/unit/test_system_one_provider.py:17: AssertionError
+___ test_errors_are_classified_without_retry_or_payload[503-provider_error] ____
+
+status = 503, reason = 'provider_error'
+
+    @pytest.mark.parametrize("status,reason", [(400, "config"), (401, "auth"), (429, "rate_limited"), (503, "provider_error")])
+    def test_errors_are_classified_without_retry_or_payload(status, reason):
+>       provider = configured()
+                   ^^^^^^^^^^^^
+
+tests/unit/test_system_one_provider.py:70: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def configured():
+        provider = StagedArkProvider(
+            Settings(_env_file=None, ARK_API_KEY="synthetic", PUSH_KIDS_SYSTEM_ONE_ENABLED=True)
+        )
+        decision = getattr(provider, "decision_provider", None)
+>       assert decision is not None, "enabled workflow must own a dedicated decision protocol"
+E       AssertionError: enabled workflow must own a dedicated decision protocol
+E       assert None is not None
+
+tests/unit/test_system_one_provider.py:17: AssertionError
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /Users/bytedance/Documents/push_kids/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/unit/test_system_one_provider.py::test_system_one_uses_dedicated_protocol_and_question_ids
+FAILED tests/unit/test_system_one_provider.py::test_invalid_answers_never_become_pass[answer0]
+FAILED tests/unit/test_system_one_provider.py::test_invalid_answers_never_become_pass[answer1]
+FAILED tests/unit/test_system_one_provider.py::test_invalid_answers_never_become_pass[answer2]
+FAILED tests/unit/test_system_one_provider.py::test_invalid_answers_never_become_pass[answer3]
+FAILED tests/unit/test_system_one_provider.py::test_errors_are_classified_without_retry_or_payload[400-config]
+FAILED tests/unit/test_system_one_provider.py::test_errors_are_classified_without_retry_or_payload[401-auth]
+FAILED tests/unit/test_system_one_provider.py::test_errors_are_classified_without_retry_or_payload[429-rate_limited]
+FAILED tests/unit/test_system_one_provider.py::test_errors_are_classified_without_retry_or_payload[503-provider_error]
+9 failed, 1 passed, 1 warning in 0.09s

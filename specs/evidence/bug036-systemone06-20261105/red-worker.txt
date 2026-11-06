@@ -1,0 +1,82 @@
+FFF                                                                      [100%]
+=================================== FAILURES ===================================
+_ test_acceptance_outcomes_keep_proposal_pending_without_formal_writes[no_finding] _
+
+client = <starlette.testclient.TestClient object at 0x10a710c80>
+app = <fastapi.applications.FastAPI object at 0x10a83cf20>
+child = {'active': True, 'created_at': '2026-11-05T13:06:29.810833Z', 'daily_budget_minutes': 15, 'grade': '小学二年级', ...}
+family_headers = {'X-Family-ID': 'family-test-a'}, outcome = 'no_finding'
+
+    @pytest.mark.parametrize("outcome", ["no_finding", "needs_review", "unavailable"])
+    def test_acceptance_outcomes_keep_proposal_pending_without_formal_writes(
+        client, app, child, family_headers, outcome
+    ):
+        checker = AcceptanceFake(
+            failure=StageFailure("provider_timeout") if outcome == "unavailable" else None,
+            reject=outcome == "needs_review",
+        )
+        app.state.worker.provider.acceptance_provider = checker
+        job_id = add_jobs(app, child, family_headers, texts=("十以内加法",))[0]
+        assert app.state.worker.process_one()
+>       assert checker.calls == 1
+E       assert 0 == 1
+E        +  where 0 = <test_proposal_acceptance.AcceptanceFake object at 0x10aae9490>.calls
+
+tests/integration/test_proposal_acceptance.py:42: AssertionError
+_ test_acceptance_outcomes_keep_proposal_pending_without_formal_writes[needs_review] _
+
+client = <starlette.testclient.TestClient object at 0x10a83f380>
+app = <fastapi.applications.FastAPI object at 0x10a83f2c0>
+child = {'active': True, 'created_at': '2026-11-05T13:06:29.975247Z', 'daily_budget_minutes': 15, 'grade': '小学二年级', ...}
+family_headers = {'X-Family-ID': 'family-test-a'}, outcome = 'needs_review'
+
+    @pytest.mark.parametrize("outcome", ["no_finding", "needs_review", "unavailable"])
+    def test_acceptance_outcomes_keep_proposal_pending_without_formal_writes(
+        client, app, child, family_headers, outcome
+    ):
+        checker = AcceptanceFake(
+            failure=StageFailure("provider_timeout") if outcome == "unavailable" else None,
+            reject=outcome == "needs_review",
+        )
+        app.state.worker.provider.acceptance_provider = checker
+        job_id = add_jobs(app, child, family_headers, texts=("十以内加法",))[0]
+        assert app.state.worker.process_one()
+>       assert checker.calls == 1
+E       assert 0 == 1
+E        +  where 0 = <test_proposal_acceptance.AcceptanceFake object at 0x10a83f2f0>.calls
+
+tests/integration/test_proposal_acceptance.py:42: AssertionError
+_ test_acceptance_outcomes_keep_proposal_pending_without_formal_writes[unavailable] _
+
+client = <starlette.testclient.TestClient object at 0x10ade0bc0>
+app = <fastapi.applications.FastAPI object at 0x10ade2240>
+child = {'active': True, 'created_at': '2026-11-05T13:06:30.085787Z', 'daily_budget_minutes': 15, 'grade': '小学二年级', ...}
+family_headers = {'X-Family-ID': 'family-test-a'}, outcome = 'unavailable'
+
+    @pytest.mark.parametrize("outcome", ["no_finding", "needs_review", "unavailable"])
+    def test_acceptance_outcomes_keep_proposal_pending_without_formal_writes(
+        client, app, child, family_headers, outcome
+    ):
+        checker = AcceptanceFake(
+            failure=StageFailure("provider_timeout") if outcome == "unavailable" else None,
+            reject=outcome == "needs_review",
+        )
+        app.state.worker.provider.acceptance_provider = checker
+        job_id = add_jobs(app, child, family_headers, texts=("十以内加法",))[0]
+        assert app.state.worker.process_one()
+>       assert checker.calls == 1
+E       assert 0 == 1
+E        +  where 0 = <test_proposal_acceptance.AcceptanceFake object at 0x10aea6990>.calls
+
+tests/integration/test_proposal_acceptance.py:42: AssertionError
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /Users/bytedance/Documents/push_kids/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/integration/test_proposal_acceptance.py::test_acceptance_outcomes_keep_proposal_pending_without_formal_writes[no_finding]
+FAILED tests/integration/test_proposal_acceptance.py::test_acceptance_outcomes_keep_proposal_pending_without_formal_writes[needs_review]
+FAILED tests/integration/test_proposal_acceptance.py::test_acceptance_outcomes_keep_proposal_pending_without_formal_writes[unavailable]
+3 failed, 1 warning in 0.71s

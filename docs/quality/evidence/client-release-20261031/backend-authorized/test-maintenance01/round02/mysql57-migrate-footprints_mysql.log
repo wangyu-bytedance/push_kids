@@ -1,0 +1,27 @@
+INFO  [alembic.runtime.migration] Context impl MySQLImpl.
+INFO  [alembic.runtime.migration] Will assume non-transactional DDL.
+INFO  [alembic.runtime.migration] Running upgrade  -> 20260903_0001, cloud baseline
+INFO  [alembic.runtime.migration] Running upgrade 20260903_0001 -> 20260905_0002, family onboarding and membership
+INFO  [alembic.runtime.migration] Running upgrade 20260905_0002 -> 20260905_0003, todo source provenance, media order, recognition evidence and subject origin
+INFO  [alembic.runtime.migration] Running upgrade 20260905_0003 -> 20260906_0004, one submission may hold several subject records
+INFO  [alembic.runtime.migration] Running upgrade 20260906_0004 -> 20260906_0005, child profile lifecycle: archived children leave the switcher but keep their history
+INFO  [alembic.runtime.migration] Running upgrade 20260906_0005 -> 20260906_0006, child-scoped travel arrangements
+INFO  [alembic.runtime.migration] Running upgrade 20260906_0006 -> 20260906_0007, durable child and family data deletion
+INFO  [alembic.runtime.migration] Running upgrade 20260906_0007 -> 20260906_0008, notification channel: per-member reminder opt-in, encrypted receiver, grants and durable outbox
+INFO  [alembic.runtime.migration] Running upgrade 20260906_0008 -> 20260907_0009, track child ownership for notification deliveries
+INFO  [alembic.runtime.migration] Running upgrade 20260907_0009 -> 20260911_0010, weekday-specific activity and travel time slots
+INFO  [alembic.runtime.migration] Running upgrade 20260911_0010 -> 20260911_0011, add tenant-leading indexes for bounded read paths
+INFO  [alembic.runtime.migration] Running upgrade 20260911_0011 -> 20260913_0012, add durable batch feedback replay records
+INFO  [alembic.runtime.migration] Running upgrade 20260913_0012 -> 20260913_0013, add unified review projection, daily plans and history-search terms
+INFO  [alembic.runtime.migration] Running upgrade 20260913_0013 -> 20260913_0014, add active six-digit family invite codes
+INFO  [alembic.runtime.migration] Running upgrade 20260913_0014 -> 20261006_0015, Bounded temporary analysis stages, additive to 20260913_0014.
+INFO  [alembic.runtime.migration] Running upgrade 20261006_0015 -> 20261006_0016, Parent review inventory and one-shot manual scheduling.
+INFO  [alembic.runtime.migration] Running upgrade 20261006_0016 -> 20261007_0017, Add bounded fair-review queue projections; no historical review facts change.
+INFO  [alembic.runtime.migration] Running upgrade 20261007_0017 -> 20261007_0018, Install planning's indexed queue projection and transactional synchronization contract.
+INFO  [alembic.runtime.migration] Running upgrade 20261007_0018 -> 20261012_0019, Parent-configured daily tasks and Shanghai-day completion facts.
+INFO  [alembic.runtime.migration] Running upgrade 20261012_0019 -> 20261017_0020, Member completion cursors and idempotent notification grants (expand only).
+INFO  [alembic.runtime.migration] Running upgrade 20261017_0020 -> 20261018_0021, Independent parent-confirmed photo footprints (expand only, no historical backfill).
+INFO  [alembic.runtime.migration] Running upgrade 20261018_0021 -> 20261020_0022, Permanent review supersession and bounded coverage work.
+INFO  [alembic.runtime.migration] Running upgrade 20261020_0022 -> 20261024_0023, Conservative empty-day review snapshots and indexed opportunities.
+INFO  [alembic.runtime.migration] Running upgrade 20261024_0023 -> 20261024_0024, Reliable input clock and parent-approved suggestion workflow (additive).
+INFO  [alembic.runtime.migration] Running upgrade 20261024_0024 -> 20261024_0025, Shared child academic-year confirmation; preserve all existing formal grades.

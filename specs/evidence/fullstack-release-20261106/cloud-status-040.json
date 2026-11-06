@@ -1,0 +1,23 @@
+{
+  "observedAt": "2026-11-05T22:54:30.526Z",
+  "versions": [
+    {
+      "version": "flask-ik19-039",
+      "status": "normal",
+      "flow": 100,
+      "replicas": 1,
+      "remark": "travel-bug035-20261031-spec01-0576ac3-01",
+      "urlParamPresent": false,
+      "flowParamsType": "object"
+    },
+    {
+      "version": "flask-ik19-040",
+      "status": "normal",
+      "flow": 0,
+      "replicas": 1,
+      "remark": "ops01-20261106-c96b30d-0027",
+      "urlParamPresent": false,
+      "flowParamsType": "object"
+    }
+  ]
+}

@@ -1,0 +1,92 @@
+{
+  "on": {
+    "n": 45,
+    "first_success": 43,
+    "final_success": 43,
+    "final_rate": 95.556,
+    "attempts": 47,
+    "seconds_p50": 23.107,
+    "seconds_p95": 84.793,
+    "success_seconds_p50": 22.34,
+    "success_seconds_p95": 86.323,
+    "acceptance_outcomes": {
+      "needs_review": 15,
+      "no_finding": 28
+    },
+    "acceptance_ms_p50": 833.0,
+    "acceptance_ms_p95": 1713.9,
+    "valid_generation_attempts": 43,
+    "valid_generations_lost_after_acceptance": 0,
+    "facts_preserved": 43,
+    "failed_cases": [
+      {
+        "case": "real17",
+        "round": 2,
+        "reason": "quality",
+        "stage": "review",
+        "unit": "review1",
+        "attempts": 2
+      },
+      {
+        "case": "real10",
+        "round": 3,
+        "reason": "quality",
+        "stage": "review",
+        "unit": "review1",
+        "attempts": 2
+      }
+    ]
+  },
+  "off": {
+    "n": 45,
+    "first_success": 42,
+    "final_success": 42,
+    "final_rate": 93.333,
+    "attempts": 45,
+    "seconds_p50": 22.74,
+    "seconds_p95": 65.436,
+    "success_seconds_p50": 22.129,
+    "success_seconds_p95": 55.23,
+    "acceptance_outcomes": {
+      "disabled": 42
+    },
+    "acceptance_ms_p50": 0.0,
+    "acceptance_ms_p95": 0.0,
+    "valid_generation_attempts": 42,
+    "valid_generations_lost_after_acceptance": 0,
+    "facts_preserved": 42,
+    "failed_cases": [
+      {
+        "case": "real10",
+        "round": 2,
+        "reason": "quality",
+        "stage": "review",
+        "unit": "review1",
+        "attempts": 1
+      },
+      {
+        "case": "real06",
+        "round": 2,
+        "reason": "quality",
+        "stage": "review",
+        "unit": "review1",
+        "attempts": 1
+      },
+      {
+        "case": "real07",
+        "round": 3,
+        "reason": "quality",
+        "stage": "review",
+        "unit": "review1",
+        "attempts": 1
+      }
+    ]
+  },
+  "business_writes": 0,
+  "human_quality_review": "PENDING",
+  "material_count": 15,
+  "rounds": 3,
+  "unavailable_materials": 3,
+  "candidate_manifest_sha256": "349320d7078dbb059386cf3975b1f4c7bd3b6f56efd852fa3bf34f79d470883c",
+  "small_sample_limitation": "15 repeatedly sampled materials, not 45 independent inputs; no online or statistical noninferiority claim."
+}

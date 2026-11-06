@@ -1,0 +1,25 @@
+{
+  "verified_on": "2026-10-25 Asia/Shanghai",
+  "control_plane": {
+    "version": "flask-ik19-037",
+    "status": "normal",
+    "service_status": "normal",
+    "public_access": "closed",
+    "source": "wxcloud version:list and service:list"
+  },
+  "cloudMode": true,
+  "envMatches": true,
+  "serviceMatches": true,
+  "health": [
+    {
+      "path": "/health/live",
+      "status": 200,
+      "duration_ms": 142
+    },
+    {
+      "path": "/health/ready",
+      "status": 200,
+      "duration_ms": 98
+    }
+  ]
+}

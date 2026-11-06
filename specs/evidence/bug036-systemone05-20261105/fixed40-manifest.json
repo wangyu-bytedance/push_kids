@@ -1,0 +1,18 @@
+{
+  "pipeline_revision": "staged-20261101-13",
+  "prompt_revision": "child-aware-history-agent-20261101-16",
+  "source_sha256": {
+    "apps/api/src/push_kids/agent_processing/pipeline.py": "9acf9f744b7c2a3286023a93ffc8170edd33d42b1dd114bb1711d6b94a1b5d77",
+    "apps/api/src/push_kids/agent_processing/stage_contracts.py": "403819c248fe73ff73fcfa374ed2169254811c8ccb6a96646c8c1728d7ce9ac8",
+    "apps/api/src/push_kids/agent_processing/prompt.py": "c6a5b5ddc8e30951e900b5622e728e483117066cf06b278fa8628be995cadfaa",
+    "apps/api/src/push_kids/agent_processing/stage_provider.py": "dea2cf0872e785d24bc4da88e6b9d0dbe2aa3ad30c4d4c55cb1504211ff6e9a4",
+    "apps/api/src/push_kids/agent_processing/contracts.py": "cd38a3ddbcc429c72d29d2fe67073be6cb7b5fc353f2391bd8d7da4ade5b6bea",
+    "apps/api/src/push_kids/agent_processing/checkpoints.py": "45a0ce6401bc2780bf849fa7acec70a938f24fa77fde36c02afedae909e18e80",
+    "apps/api/src/push_kids/agent_processing/worker.py": "32f8cb9f7b4a7e181ae4227bbffadfa5f2c582c4cfabf02ae8528f7172cbc2b8",
+    "tools/evaluate_analysis_quality.py": "c603045b06d03836e4d16b6b9dcd998a0219c67afe700bd6d4c4bd7d85f79374",
+    "tests/fixtures/analysis_quality/cases.json": "9bdaec483fa9f6cc65e7a46c3656e70f2304efd42ecab3fe362864afa8fd829f"
+  },
+  "observation": "unmodified evaluate_analysis_quality main with pre-cancel DTO capture",
+  "production_connections": 0,
+  "source_unchanged": true
+}

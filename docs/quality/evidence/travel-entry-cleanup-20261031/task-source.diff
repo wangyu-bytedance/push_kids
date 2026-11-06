@@ -1,0 +1,165 @@
+--- baseline/apps/miniprogram/pages/footprints/index.wxml
++++ local/apps/miniprogram/pages/footprints/index.wxml
+@@ -19,13 +19,11 @@
+       <button class="fp-tab {{mode === 'lit' ? 'on' : ''}}" data-mode="lit" bindtap="changeMode" aria-pressed="{{mode === 'lit'}}" aria-label="地图点亮视图">地图点亮</button>
+     </view>
+     <button class="btn secondary fp-drafts" wx:if="{{canWrite && summary.drafts}}" bindtap="openDrafts">{{summary.drafts}} 张待核对</button>
+-    <button class="fp-text-button" wx:elif="{{canWrite}}" bindtap="openDrafts">查看待整理照片</button>
+     <view class="fp-notice" wx:if="{{summary.unlocated_photos}}">{{summary.unlocated_photos}} 张待补地点</view>
+     <view class="fp-timeline" wx:if="{{mode === 'timeline'}}">
+       <view class="fp-empty" wx:if="{{!loading && !visits.length}}">
+         <image class="fp-empty-image" src="/assets/illustrations/record-camera.png" mode="aspectFit" aria-hidden="{{true}}"></image>
+         <text class="fp-title">还没有足迹</text>
+-        <button wx:if="{{canWrite && child.active !== false}}" class="fp-text-button" bindtap="manualEntry">手动记录</button>
+       </view>
+       <view class="fp-visit" wx:for="{{visits}}" wx:key="id">
+         <view class="fp-date-label">{{item.local_date}}</view>
+@@ -70,7 +68,7 @@
+ 
+ <view class="fp-overlay" wx:if="{{sheet}}" style="bottom: {{keyboardHeight}}px;" catchtap="closeSheet">
+   <view class="fp-sheet {{sheet === 'settings' ? 'fp-settings' : sheet === 'uploading' || sheet === 'upload-error' ? 'fp-upload' : ''}}" style="max-height: calc(88vh - {{keyboardHeight}}px);" catchtap="noop" aria-role="dialog" aria-label="旅行日记操作面板">
+-    <view class="fp-sheet-head"><text class="fp-place-title">{{sheet === 'uploading' || sheet === 'upload-error' ? '导入照片' : sheet === 'settings' ? '足迹设置' : sheet === 'review' ? '核对照片' : sheet === 'confirm' ? '确认到访' : sheet === 'edit' ? (dateOnly ? '补充拍摄日期' : manual ? '手动记录到访' : batchEdit ? '批量修改' : '修改时间与地点') : sheet === 'place' ? '到访记录' : '照片与到访详情'}}</text><button class="fp-close" bindtap="closeSheet" disabled="{{saving || selecting}}" aria-label="关闭面板">×</button></view>
++    <view class="fp-sheet-head"><text class="fp-place-title">{{sheet === 'uploading' || sheet === 'upload-error' ? '导入照片' : sheet === 'settings' ? '足迹设置' : sheet === 'review' ? '核对照片' : sheet === 'confirm' ? '确认到访' : sheet === 'edit' ? (dateOnly ? '补充拍摄日期' : batchEdit ? '批量修改' : '修改时间与地点') : sheet === 'place' ? '到访记录' : '照片与到访详情'}}</text><button class="fp-close" bindtap="closeSheet" disabled="{{saving || selecting}}" aria-label="关闭面板">×</button></view>
+     <view class="fp-sheet-body" wx:if="{{sheet === 'settings'}}">
+       <view class="fp-error" wx:if="{{sheetError}}">{{sheetError}}</view>
+       <label class="fp-switch"><text class="fp-switch-label">AI 地点候选</text><switch checked="{{aiEnabled}}" bindchange="aiChange" color="#1F5B45"/></label>
+@@ -91,8 +89,8 @@
+         <image wx:if="{{editing.previewUrl}}" class="fp-edit-image" src="{{editing.previewUrl}}" mode="aspectFit" data-id="{{editing.id}}" data-region="editing" binderror="previewFailed" aria-label="正在核对的照片"></image>
+         <button wx:elif="{{editing.has_display}}" class="fp-text-button fp-full" bindtap="retryEditingPreview">重新读取照片预览</button>
+         <view class="fp-notice" wx:if="{{batchEdit}}">{{dateOnly ? '仅补充已选照片中缺失的日期，已有日期保持原样。' : '留空项不修改'}}</view>
+-        <view class="fp-field"><text class="fp-field-label">拍摄日期{{manual || dateOnly ? '（必填）' : ''}}</text><picker class="fp-picker" mode="date" value="{{form.local_date}}" data-field="local_date" bindchange="editField" disabled="{{saving || selecting}}"><view class="fp-input">{{form.local_date || '选择日期'}}</view></picker><text class="fp-field-error" wx:if="{{(manual || dateOnly) && !form.local_date && sheetError}}">请选择实际拍摄日期</text></view>
+-        <button wx:if="{{!manual && editing.state !== 'confirmed' && form.local_date}}" class="fp-text-button" data-field="local_date" bindtap="clearCaptureField">清除日期</button>
++        <view class="fp-field"><text class="fp-field-label">拍摄日期{{dateOnly ? '（必填）' : ''}}</text><picker class="fp-picker" mode="date" value="{{form.local_date}}" data-field="local_date" bindchange="editField" disabled="{{saving || selecting}}"><view class="fp-input">{{form.local_date || '选择日期'}}</view></picker><text class="fp-field-error" wx:if="{{dateOnly && !form.local_date && sheetError}}">请选择实际拍摄日期</text></view>
++        <button wx:if="{{editing.state !== 'confirmed' && form.local_date}}" class="fp-text-button" data-field="local_date" bindtap="clearCaptureField">清除日期</button>
+         <block wx:if="{{!dateOnly}}">
+         <view class="fp-field"><text class="fp-field-label">当地时刻（可选）</text><picker class="fp-picker" mode="time" value="{{form.local_time}}" data-field="local_time" bindchange="editField" disabled="{{saving || selecting}}"><view class="fp-input">{{form.local_time || '未填写'}}</view></picker></view>
+         <button wx:if="{{form.local_time}}" class="fp-text-button" data-field="local_time" bindtap="clearCaptureField">清除时间</button>
+@@ -116,7 +114,7 @@
+       <button class="btn fp-button fp-full {{saving ? 'is-disabled' : ''}}" wx:elif="{{sheet === 'settings'}}" bindtap="saveSettings" loading="{{saving}}" disabled="{{saving}}">保存设置</button>
+       <block wx:elif="{{sheet === 'review'}}"><button class="btn fp-button fp-full {{saving || !selectedCount ? 'is-disabled' : ''}}" bindtap="askConfirm" disabled="{{saving || !selectedCount}}">{{missingDateCount ? '补日期并继续（' + missingDateCount + ' 张）' : '确认选中的 ' + selectedCount + ' 条'}}</button><button class="fp-text-button fp-full" bindtap="uploadBatch" disabled="{{saving}}" wx:if="{{hasPendingUpload}}">{{saving ? '正在上传 ' + importProgress + '%' : '重试未完成上传'}}</button></block>
+       <block wx:elif="{{sheet === 'confirm'}}"><button class="btn fp-button fp-full {{saving ? 'is-disabled' : ''}}" bindtap="confirmSelected" loading="{{saving}}" disabled="{{saving}}">确认入档</button><button class="fp-text-button fp-full {{saving ? 'fp-disabled' : ''}}" bindtap="backToReview" disabled="{{saving}}">返回核对</button></block>
+-      <button class="btn fp-button fp-full {{saving || selecting || editConflict ? 'is-disabled' : ''}}" wx:elif="{{sheet === 'edit'}}" bindtap="saveEdit" loading="{{saving}}" disabled="{{saving || selecting || editConflict}}">{{dateOnly ? '保存日期并返回核对' : manual ? '保存待确认草稿' : '保存修改'}}</button>
++      <button class="btn fp-button fp-full {{saving || selecting || editConflict ? 'is-disabled' : ''}}" wx:elif="{{sheet === 'edit'}}" bindtap="saveEdit" loading="{{saving}}" disabled="{{saving || selecting || editConflict}}">{{dateOnly ? '保存日期并返回核对' : '保存修改'}}</button>
+       <button class="btn fp-button fp-full {{saving ? 'is-disabled' : ''}}" wx:elif="{{sheet === 'photo' && canWrite}}" bindtap="editFormal">修改日期和地点</button>
+     </view>
+   </view>
+--- baseline/apps/miniprogram/pages/footprints/photos.js
++++ local/apps/miniprogram/pages/footprints/photos.js
+@@ -8,7 +8,7 @@
+     if (!photo) return;
+     if (this.pollTimer) clearTimeout(this.pollTimer);
+     this.editCompleted = new Set();
+-    this.setData({ sheet: "edit", editing: photo, batchEdit: false, dateOnly: false, manual: false, editConflict: false,
++    this.setData({ sheet: "edit", editing: photo, batchEdit: false, dateOnly: false, editConflict: false,
+       form: editValues(photo), placeResults: photo.candidates || [], sheetError: "", returnSheet: "review" });
+     this.fillPreviews([photo], "editing");
+   },
+@@ -18,14 +18,8 @@
+     if (this.pollTimer) clearTimeout(this.pollTimer);
+     this.editCompleted = new Set();
+     this.editTargets = this.data.drafts.filter(photo => photo.selected && (dateOnly !== true || !photo.local_date)).map(photo => photo.id);
+-    this.setData({ sheet: "edit", editing: null, batchEdit: true, dateOnly: dateOnly === true, manual: false, editConflict: false,
++    this.setData({ sheet: "edit", editing: null, batchEdit: true, dateOnly: dateOnly === true, editConflict: false,
+       form: editValues({}), placeResults: [], sheetError: "", returnSheet: "review" });
+-  },
+-  manualEntry() {
+-    if (this.data.saving || this.data.selecting || !this.data.canWrite || !this.data.child || this.data.child.active === false) return;
+-    this.manualKey = api.newIdempotencyKey("footprint-manual");
+-    this.setData({ sheet: "edit", editing: null, batchEdit: false, dateOnly: false, manual: true, editConflict: false,
+-      form: editValues({}), sheetError: "", placeResults: [], returnSheet: "" });
+   },
+   editField(event) {
+     if (this.data.saving || this.data.selecting) return;
+@@ -41,7 +35,7 @@
+   clearCaptureField(event) {
+     const field = event.currentTarget.dataset.field;
+     if (this.data.saving || !["local_date", "local_time"].includes(field)) return;
+-    if (field === "local_date" && (this.data.manual || (this.data.editing || {}).state === "confirmed")) return;
++    if (field === "local_date" && (this.data.editing || {}).state === "confirmed") return;
+     this.setData({ form: { ...this.data.form, [field]: "", offset_minutes: null } });
+     this.editCompleted = new Set();
+   },
+@@ -80,27 +74,22 @@
+   },
+   async saveEdit() {
+     if (this.data.saving || this.data.selecting || this.data.editConflict) return;
+-    if ((this.data.dateOnly || this.data.manual || (this.data.editing && this.data.editing.state === "confirmed")) && !this.data.form.local_date) return this.setData({ sheetError: "请填写拍摄日期" });
++    if ((this.data.dateOnly || (this.data.editing && this.data.editing.state === "confirmed")) && !this.data.form.local_date) return this.setData({ sheetError: "请填写拍摄日期" });
+     const context = this.operationContext(); this.setData({ saving: true, sheetError: "" });
+     try {
+       const values = this.data.dateOnly ? { local_date: this.data.form.local_date } : correction(this.data.form, this.data.batchEdit);
+-      if (this.data.manual) {
+-        await api.request("/footprints/manual", { method: "POST", idempotencyKey: this.manualKey,
+-          data: { child_id: this.data.childId, ...values } });
+-      } else {
+-        const selected = this.data.batchEdit ? this.data.drafts.filter(photo => (this.editTargets || []).includes(photo.id)) : [this.data.editing];
+-        this.editCompleted ||= new Set();
+-        for (const photo of selected) {
+-          if (!this.operationCurrent(context)) return;
+-          if (this.editCompleted.has(photo.id)) continue;
+-          const updated = await api.request(`/footprints/photos/${photo.id}?${this.params()}`, {
+-            method: "PATCH", data: { version: photo.version, ...values }
+-          });
+-          if (!this.operationCurrent(context)) return;
+-          this.editCompleted.add(photo.id);
+-          this.setDrafts(this.data.drafts.map(row => row.id === photo.id ? { ...row, ...photoView(updated), selected: row.selected } : row));
+-          if (this.data.editing && this.data.editing.id === photo.id) this.setData({ editing: { ...this.data.editing, ...updated } });
+-        }
++      const selected = this.data.batchEdit ? this.data.drafts.filter(photo => (this.editTargets || []).includes(photo.id)) : [this.data.editing];
++      this.editCompleted ||= new Set();
++      for (const photo of selected) {
++        if (!this.operationCurrent(context)) return;
++        if (this.editCompleted.has(photo.id)) continue;
++        const updated = await api.request(`/footprints/photos/${photo.id}?${this.params()}`, {
++          method: "PATCH", data: { version: photo.version, ...values }
++        });
++        if (!this.operationCurrent(context)) return;
++        this.editCompleted.add(photo.id);
++        this.setDrafts(this.data.drafts.map(row => row.id === photo.id ? { ...row, ...photoView(updated), selected: row.selected } : row));
++        if (this.data.editing && this.data.editing.id === photo.id) this.setData({ editing: { ...this.data.editing, ...updated } });
+       }
+       if (!this.operationCurrent(context)) return;
+       const formal = this.data.editing && this.data.editing.state === "confirmed";
+@@ -194,7 +183,7 @@
+     if (!photo || !this.data.canWrite) return;
+     this.editCompleted = new Set();
+     this.setData({ sheet: "edit", editing: photo, dateOnly: false, editConflict: false, form: { ...editValues(photo),
+-      day_order: photo.day_order || 0, order_revision: photo.order_revision }, manual: false,
++      day_order: photo.day_order || 0, order_revision: photo.order_revision },
+       batchEdit: false, placeResults: [], sheetError: "", returnSheet: "photo" });
+     this.fillPreviews([photo], "editing");
+   },
+--- baseline/apps/miniprogram/pages/footprints/controller.js
++++ local/apps/miniprogram/pages/footprints/controller.js
+@@ -11,7 +11,7 @@
+     visits: [], nextCursor: null, summary: {}, loadingMore: false,
+     drafts: [], draftsCursor: null, selectedCount: 0, sheet: "", sheetError: "", saving: false,
+     aiEnabled: false, consented: false, importError: "", importProgress: 0, importCompleted: 0, importCount: 0, hasPendingUpload: false, selecting: false,
+-    form: {}, editing: null, batchEdit: false, dateOnly: false, missingDateCount: 0, manual: false, placeResults: [], editConflict: false,
++    form: {}, editing: null, batchEdit: false, dateOnly: false, missingDateCount: 0, placeResults: [], editConflict: false,
+     markers: [], mapMode: "auto", mapLatitude: 35, mapLongitude: 104, mapScale: 4,
+     mapData: {}, mapError: false, playback: [], playbackIndex: 0, playing: false,
+     playbackCursor: null, playbackRevision: null, currentPoint: null, polyline: [],
+--- baseline/tests/frontend/footprints.test.js
++++ local/tests/frontend/footprints.test.js
+@@ -412,9 +412,9 @@
+ 
+ test("archived and viewer profiles cannot start new intake", async () => {
+   const { page: p } = page();
+-  p.setData({ child: { active: false } }); await p.beginImport(); p.manualEntry();
++  p.setData({ child: { active: false } }); await p.beginImport();
+   assert.equal(p.data.sheet, "");
+-  p.setData({ child: { active: true }, canWrite: false }); await p.beginImport(); p.manualEntry();
++  p.setData({ child: { active: true }, canWrite: false }); await p.beginImport();
+   assert.equal(p.data.sheet, "");
+ });
+ 
+@@ -570,7 +570,7 @@
+   confirm = true; await p.showArchived();
+   assert.equal(p.data.childId, "archive"); assert.equal(p.data.archivedVisible, true);
+   assert.equal(p.data.child.active, false); assert.equal(p.pendingFiles, null); assert.equal(loads, 1);
+-  await p.beginImport(); p.manualEntry(); assert.equal(p.data.sheet, "");
++  await p.beginImport(); assert.equal(p.data.sheet, "");
+ });
+ 
+ test("every archived child is reachable through bounded native pages in either direction", async () => {

@@ -1,0 +1,15 @@
+{
+  "result": "PASS",
+  "frozen_manifest_sha256": "c96b30d102d2fff317865040bd8b65c419bbb1374689199c41bcebcd0b157f60",
+  "backend_whitelist_files": 160,
+  "backend_whitelist_bytes": 1607791,
+  "client_files": 168,
+  "client_source_bytes": 1244228,
+  "production_source_matches_spec06_and_frozen": 156,
+  "client_matches_current_workspace": 168,
+  "migration_sha256": {
+    "apps/api/migrations/versions/20261105_0026_china_workday_schedules.py": "760df4aefe85157236e6a5aa244c5ca6bf087db8fc78d19d85815f8a4f340db7",
+    "apps/api/migrations/versions/20261105_0027_recent_learning_history.py": "636ecc0d29947c365d76c2c18004b8d599644396fa36f330e9e624f7013901a0"
+  },
+  "unlisted_payload_files": 0
+}

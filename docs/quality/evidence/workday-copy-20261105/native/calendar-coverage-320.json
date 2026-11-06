@@ -1,0 +1,54 @@
+{
+  "route": "pages/calendar/index",
+  "viewport": {
+    "width": 320,
+    "height": 568,
+    "screenHeight": 568,
+    "pixelRatio": 2
+  },
+  "base_library": "3.17.4",
+  "nodes": [
+    {
+      "selector": ".workday-status",
+      "left": 15,
+      "right": 305,
+      "top": 368,
+      "bottom": 409,
+      "width": 290,
+      "height": 41,
+      "fontSize": "13px",
+      "lineHeight": "20.8px"
+    },
+    {
+      "selector": ".workday-status .n-txt",
+      "left": 27,
+      "right": 293,
+      "top": 378,
+      "bottom": 399,
+      "width": 266,
+      "height": 21,
+      "fontSize": "14px",
+      "lineHeight": "21.7px"
+    },
+    {
+      "selector": ".page",
+      "left": 0,
+      "right": 320,
+      "top": 0,
+      "bottom": 568,
+      "width": 320,
+      "height": 568,
+      "fontSize": "16px",
+      "lineHeight": "25.6px"
+    }
+  ],
+  "mode": {
+    "workday": true,
+    "weekly": false
+  },
+  "source": "native wx.createSelectorQuery; synthetic fixtures; production WXML/WXSS exact",
+  "errors": [],
+  "state": "coverage",
+  "host": "calendar",
+  "screenshot_status": "NOT_RUN_AFTER_CAPTURE_FAILURE: App.captureScreenshot timed out"
+}

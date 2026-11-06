@@ -1,0 +1,198 @@
+{
+  "date": "2026-11-05",
+  "stage": "RELEASE_GATE_FAILED",
+  "spec": "OPS-SPEC-20261105-FULLSTACK-UPDATE-01",
+  "spec_status": "READY_FOR_REVIEW",
+  "new_test_maintenance_approval": "PENDING",
+  "production_writes": 0,
+  "deployments": 0,
+  "uploads": 0,
+  "version_bumps": 0,
+  "current_delivery": {
+    "backend": "039 normal",
+    "database": "20261024_0025 readonly confirmed",
+    "client_upload_baseline": "0.1.17",
+    "PUBLIC": "closed"
+  },
+  "python": {
+    "passed": 987,
+    "skipped": 56,
+    "failed": 1,
+    "pytest_seconds": 288.45,
+    "launcher_wall_seconds": 375.352,
+    "failure": "test_stage_provider.py::test_request_bytes_match_real_sdk_transport_body / local_deadline",
+    "isolated": "FAIL"
+  },
+  "frontend": {
+    "passed": 359,
+    "skipped": 0,
+    "eslint": "PASS"
+  },
+  "statics": {
+    "lint": "PASS",
+    "ruff": "PASS",
+    "format": "PASS",
+    "mypy": "PASS",
+    "architecture": "PASS",
+    "design": "PASS",
+    "miniapp": "PASS",
+    "diff": "PASS"
+  },
+  "mysql": {
+    "server_version": "5.7.44",
+    "production_access": false,
+    "fresh_to_head_and_0025_to_head": "PASS upgrade/current/check",
+    "attempt01": {
+      "passed": 33,
+      "failed": 9,
+      "errors": 3,
+      "skipped": 3,
+      "cause": "private harness did not satisfy independent database, prefix and migration prerequisites"
+    },
+    "attempt02": {
+      "passed": 46,
+      "failed": 1,
+      "errors": 1,
+      "skipped": 0,
+      "failure": "obsolete expected head0025 versus actual0027",
+      "error": "private harness omitted today_learning_test_base creation"
+    },
+    "attempt03_today_only": {
+      "passed": 1,
+      "failed": 0,
+      "errors": 0,
+      "seconds": 5.81,
+      "harness_change": "create required base database"
+    },
+    "final_independent_objects": {
+      "passed": 47,
+      "failed": 1,
+      "files": 10,
+      "not_a_single_all_pass_run": true,
+      "does_not_cover_all_56_default_skips": true
+    },
+    "all_disposable_containers_removed": true
+  },
+  "fixed40": {
+    "status": "failed",
+    "case_count": 40,
+    "passed": 37,
+    "overall_rate": 0.925,
+    "end_to_end": {
+      "passed": 37,
+      "total": 40,
+      "rate": 0.925
+    },
+    "operational_failure_count": 0,
+    "operational_failure_codes": {},
+    "subject_rates": {
+      "语文": 0.9333,
+      "数学": 0.8667,
+      "英语": 0.8
+    },
+    "subject_semantic": {
+      "语文": {
+        "passed": 14,
+        "total": 15,
+        "rate": 0.9333
+      },
+      "数学": {
+        "passed": 13,
+        "total": 15,
+        "rate": 0.8667
+      },
+      "英语": {
+        "passed": 12,
+        "total": 15,
+        "rate": 0.8
+      }
+    },
+    "empty_pending_count": 0,
+    "remaining_pending_count": 0,
+    "formal_write_count": 0,
+    "failures": [
+      {
+        "case_id": "multi-02",
+        "code": "analysis_output_invalid",
+        "attempts": 1
+      },
+      {
+        "case_id": "en-08",
+        "code": "analysis_output_invalid",
+        "attempts": 1
+      },
+      {
+        "case_id": "multi-04",
+        "code": "subject.mismatch",
+        "attempts": 1
+      }
+    ],
+    "pipeline_revision": "staged-20261101-13",
+    "model": "doubao-seed-2-1-pro-260628"
+  },
+  "fixed40_nonempty_outputs": {
+    "count": 38,
+    "total": 40,
+    "method": "inferred from unchanged scoring contract: 2 analysis_output_invalid before proposal; 1 subject.mismatch after valid nonempty proposal",
+    "quality_gate_passed": 37,
+    "system_one_discarded_outputs": 0
+  },
+  "historical_real_material_replay": {
+    "qa_on": "43/45",
+    "qa_off": "42/45",
+    "sample": "15 materials x3",
+    "not_current_fixed40_or_online_or_parent_quality_rate": true
+  },
+  "preview": {
+    "result": "PASS",
+    "bytes": 1200319,
+    "upload": "NOT_RUN"
+  },
+  "container": {
+    "result": "PASS local test-mode contract only",
+    "uid": 10001,
+    "port": 8000,
+    "live_http": 200,
+    "ready_http": 200,
+    "sigterm_exit": 0,
+    "initial_harness_failure_preserved": true,
+    "cloud_mode_smoke": "NOT_RUN"
+  },
+  "package": {
+    "backend_files": 160,
+    "client_files": 168,
+    "manifest_sha256": "c96b30d102d2fff317865040bd8b65c419bbb1374689199c41bcebcd0b157f60",
+    "dryrun_zip_bytes": 510614,
+    "dryrun_zip_sha256": "f07c96ac468db772f9140a979da6bfc6e73854c3e843cdfd4746a72d240e4279",
+    "derived_zip_removed_from_payload": true
+  },
+  "native": {
+    "status": "PARTIAL",
+    "missing": "BUG033/workday screenshots and applicable actions/devices",
+    "this_attempt": "320 viewport RPC timeout; official auto reconnect still connection failure",
+    "preview_does_not_replace_native": true
+  },
+  "review": {
+    "verdict": "BLOCK",
+    "new_confirmed_deterministic_production_bugs": 0,
+    "findings": [
+      "RLS-001 tests fail",
+      "RLS-002 fixed40 fails",
+      "RLS-003 native incomplete"
+    ]
+  },
+  "migration_constraint": "039 strict0025 cannot serve on0027; backup/window and workday-aware0027 recovery required before production actions",
+  "sqlite_index_drift": "still open; isolated MySQL checks show no drift, production full index schema not verified",
+  "not_run": [
+    "production migration",
+    "new gray version",
+    "cloud-mode new-version smoke",
+    "traffic switch",
+    "official upload",
+    "experience selection",
+    "review submission",
+    "production release",
+    "parent case-by-case content acceptance"
+  ],
+  "raw_logs_private": "/private/tmp/push-kids-release-20261105"
+}

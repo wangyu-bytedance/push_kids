@@ -3,7 +3,7 @@
 - Date: 2026-10-24
 - Scope: SPEC-20261024-SUGGESTION-SHEET-REFINEMENT-01 / DREV-20261024-TODAY-LEARNING-02。
 - State at capture: DESIGN_ONLY / AWAITING_APPROVAL / NOT_IMPLEMENTED / NOT_RELEASED。以下描述设计阶段当时的状态；之后用户已批准并本地实施，当前事实见[实现证据](SUGGESTION-SHEET-IMPLEMENTATION-20261024.md)，不将此历史阶段的NOT_RUN作为当前结论。
-- Sources: [Task Spec](../../../specs/active/FEAT-004-SUGGESTION-SHEET-REFINEMENT.md)、[Frontend Spec](../../design/frontend/prototypes/DREV-20261024-TODAY-LEARNING-02/FRONTEND-SPEC.md)、[84张SHA清单](../../design/frontend/snapshots/UI-001/DREV-20261024-TODAY-LEARNING-02/APPROVAL.md)、[render-report.json](../../design/frontend/prototypes/DREV-20261024-TODAY-LEARNING-02/render-report.json)。
+- Sources: [Task Spec](../../../specs/completed/FEAT-004-SUGGESTION-SHEET-REFINEMENT.md)、[Frontend Spec](../../design/frontend/prototypes/DREV-20261024-TODAY-LEARNING-02/FRONTEND-SPEC.md)、[84张SHA清单](../../design/frontend/snapshots/UI-001/DREV-20261024-TODAY-LEARNING-02/APPROVAL.md)、[render-report.json](../../design/frontend/prototypes/DREV-20261024-TODAY-LEARNING-02/render-report.json)。
 
 ## 1. 实际执行
 

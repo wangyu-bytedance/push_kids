@@ -1,0 +1,944 @@
+--- baseline/apps/api/src/push_kids/agent_processing/pipeline.py
++++ apps/api/src/push_kids/agent_processing/pipeline.py
+@@ -75,6 +75,14 @@
+         self.calls = 0
+         self._checkpoint_lock = asyncio.Lock()
+ 
++    @staticmethod
++    def _checkpoint_reusable(unit: str, value: BaseModel) -> bool:
++        if unit == "review1" and isinstance(value, QualityReviewResult):
++            return value.passed
++        if unit == "reuse" and isinstance(value, ReuseReviewResult):
++            return all(decision.verdict != "uncertain" for decision in value.decisions)
++        return True
++
+     async def _call(
+         self,
+         stage: str,
+@@ -103,14 +111,15 @@
+             try:
+                 value = schema.model_validate(cached)
+                 validate(value)
+-                self.trace.info(
+-                    "analysis_stage_cache",
+-                    stage=stage,
+-                    unit=unit,
+-                    revision=PIPELINE_REVISION,
+-                    checkpoint_hit=True,
+-                )
+-                return value
++                if self._checkpoint_reusable(unit, value):
++                    self.trace.info(
++                        "analysis_stage_cache",
++                        stage=stage,
++                        unit=unit,
++                        revision=PIPELINE_REVISION,
++                        checkpoint_hit=True,
++                    )
++                    return value
+             except (ValueError, StageFailure):
+                 pass
+         attempts = 1 if stage in {"review", "reuse"} else 2
+@@ -133,7 +142,7 @@
+                     )
+                 value = schema.model_validate(response.model_dump())
+                 validate(value)
+-                if self.checkpoints:
++                if self.checkpoints and self._checkpoint_reusable(unit, value):
+                     async with self._checkpoint_lock:
+                         await stage_io(
+                             partial(
+@@ -462,7 +471,7 @@
+                     reason="quality",
+                     validation_codes=[f"quality.{issue.code}" for issue in quality.issues],
+                 )
+-                raise StageFailure("quality", stage="review", unit="review1")
++                raise StageFailure("quality", retryable=False, stage="review", unit="review1")
+         if not merged.items:
+             raise StageFailure("coverage", stage="review", unit="empty_proposal")
+ 
+@@ -696,7 +705,7 @@
+                         revision=PIPELINE_REVISION,
+                         reason="validation",
+                     )
+-                    raise StageFailure("validation", stage="reuse", unit="reuse")
++                    raise StageFailure("validation", retryable=False, stage="reuse", unit="reuse")
+                 if reuse_decision.verdict == "reject":
+                     decisions[reuse_decision.candidate].match = None
+         final: dict[str, list[ModelLearningItem]] = {s: [] for s in subjects}
+--- baseline/apps/api/src/push_kids/agent_processing/checkpoints.py
++++ apps/api/src/push_kids/agent_processing/checkpoints.py
+@@ -6,9 +6,10 @@
+ from datetime import datetime, timedelta
+ from hashlib import sha256
+ from time import monotonic
+-from typing import Any
++from typing import Any, cast
+ 
+ from sqlalchemy import delete, select
++from sqlalchemy.engine import CursorResult
+ from sqlalchemy.orm import Session
+ 
+ from push_kids.agent_processing.failures import StageFailure
+@@ -168,6 +169,21 @@
+         db.execute(query)
+ 
+ 
++def purge_decision_stages(db: Session, family_id: str, child_id: str, submission_id: str) -> int:
++    """Refresh only the fixed semantic branch within the caller's guarded transaction."""
++    result = db.execute(
++        delete(AnalysisStageResult).where(
++            AnalysisStageResult.family_id == family_id,
++            AnalysisStageResult.child_id == child_id,
++            AnalysisStageResult.submission_id == submission_id,
++            AnalysisStageResult.unit_key.in_(
++                ("merge", "merge-correction", "review0", "review1", "match", "reuse")
++            ),
++        )
++    )
++    return cast(CursorResult, result).rowcount
++
++
+ def expire_stages(database: Database) -> int:
+     with database.session_factory() as db:
+         rows = db.execute(
+--- baseline/apps/api/src/push_kids/agent_processing/worker.py
++++ apps/api/src/push_kids/agent_processing/worker.py
+@@ -11,7 +11,12 @@
+ from sqlalchemy import or_, select
+ from sqlalchemy.exc import SQLAlchemyError
+ 
+-from push_kids.agent_processing.checkpoints import StageCheckpoints, expire_stages, purge_stages
++from push_kids.agent_processing.checkpoints import (
++    StageCheckpoints,
++    expire_stages,
++    purge_decision_stages,
++    purge_stages,
++)
+ from push_kids.agent_processing.context import (
+     build_analysis_input,
+     material_fingerprint,
+@@ -25,6 +30,7 @@
+ )
+ from push_kids.agent_processing.failures import StageFailure
+ from push_kids.agent_processing.runner import AnalysisAgentRunner
++from push_kids.agent_processing.stage_contracts import PIPELINE_REVISION
+ from push_kids.agent_processing.telemetry import AnalysisTrace, safe_validation_codes
+ from push_kids.media.store import MediaStore, WeChatCloudMediaStore
+ from push_kids.persistence.models import (
+@@ -491,6 +497,23 @@
+                     submission.state = SubmissionState.failed.value
+                     submission.error_code = terminal_code
+                     submission.error_message = message
++                    if (
++                        isinstance(exc, StageFailure)
++                        and not exc.retryable
++                        and (exc.reason, exc.stage, exc.unit)
++                        in {("quality", "review", "review1"), ("validation", "reuse", "reuse")}
++                    ):
++                        cleanup_count = purge_decision_stages(
++                            db, family_id, child_id, str(submission.id)
++                        )
++                        trace.info(
++                            "analysis_stage_cleanup",
++                            stage=exc.stage,
++                            unit=exc.unit,
++                            cleanup_count=cleanup_count,
++                            reason=exc.reason,
++                            revision=PIPELINE_REVISION,
++                        )
+                 outcome = job.state
+                 db.commit()
+                 event = (
+--- baseline/apps/api/src/push_kids/agent_processing/stage_contracts.py
++++ apps/api/src/push_kids/agent_processing/stage_contracts.py
+@@ -8,7 +8,7 @@
+ 
+ from push_kids.agent_processing.contracts import DisplayKind, ReviewMethod
+ 
+-PIPELINE_REVISION = "staged-20261031-09"
++PIPELINE_REVISION = "staged-20261101-10"
+ 
+ 
+ class StageModel(BaseModel):
+--- baseline/apps/api/src/push_kids/learning/service.py
++++ apps/api/src/push_kids/learning/service.py
+@@ -12,7 +12,7 @@
+ from sqlalchemy.exc import IntegrityError
+ from sqlalchemy.orm import Session
+ 
+-from push_kids.agent_processing.checkpoints import purge_stages
++from push_kids.agent_processing.checkpoints import purge_decision_stages, purge_stages
+ from push_kids.agent_processing.contracts import (
+     MATERIAL_FINGERPRINT_KEY,
+     AnalysisOutputExhaustedError,
+@@ -954,10 +954,34 @@
+     @classmethod
+     def retry(cls, db: Session, family_id: str, submission_id: str) -> SubmissionView:
+         # Retry re-runs an existing failed submission; archiving does not freeze it (`BHV-025`).
+-        submission = cls._submission(db, family_id, submission_id)
++        scope = cls._submission(db, family_id, submission_id)
++        family = db.scalar(
++            select(Family)
++            .where(Family.id == family_id)
++            .with_for_update()
++            .execution_options(populate_existing=True)
++        )
++        child = db.scalar(
++            select(Child)
++            .where(Child.id == scope.child_id, Child.family_id == family_id)
++            .with_for_update()
++            .execution_options(populate_existing=True)
++        )
++        if (family is not None and family.status != "active") or child is None or child.deleting:
++            raise ConflictError("家庭或孩子正在删除，不能重试分析")
++        job = db.scalar(
++            select(AgentJob)
++            .where(
++                AgentJob.submission_id == submission_id,
++                AgentJob.family_id == family_id,
++            )
++            .with_for_update()
++            .execution_options(populate_existing=True)
++        )
++        submission = cls._submission(db, family_id, submission_id, for_update=True)
+         if submission.state != SubmissionState.failed.value:
+             raise ConflictError("只有失败的分析可以重试")
+-        job = db.scalar(select(AgentJob).where(AgentJob.submission_id == submission.id))
++        purge_decision_stages(db, family_id, str(child.id), submission_id)
+         if job is None:
+             job = AgentJob(family_id=family_id, submission_id=submission.id)
+             db.add(job)
+@@ -966,6 +990,7 @@
+             job.attempts = 0
+             job.available_at = utcnow()
+             job.error_message = None
++            job.lease_until = None
+         submission.state = SubmissionState.queued.value
+         submission.error_code = None
+         submission.error_message = None
+--- baseline/tests/unit/test_staged_proposal_recovery.py
++++ tests/unit/test_staged_proposal_recovery.py
+@@ -5,6 +5,7 @@
+ from time import monotonic
+ 
+ import pytest
++from push_kids.agent_processing.checkpoints import fingerprint
+ from push_kids.agent_processing.contracts import (
+     AnalysisInput,
+     ExistingKnowledgeContext,
+@@ -130,6 +131,7 @@
+     with pytest.raises(StageFailure) as caught:
+         run(provider, history_input())
+     assert (caught.value.stage, caught.value.unit) == ("reuse", "reuse")
++    assert caught.value.retryable is False
+     assert provider.reuse_count == 1
+ 
+ 
+@@ -297,8 +299,9 @@
+ def test_review_cannot_hide_supported_knowledge_in_omissions():
+     provider = TwoTargets(omit=True)
+     queried = []
+-    with pytest.raises(StageFailure, match="quality"):
++    with pytest.raises(StageFailure, match="quality") as caught:
+         run(provider, search=lambda r: queried.append(r) or [])
++    assert caught.value.retryable is False
+     assert provider.review_calls == 2 and queried == []
+     assert provider.review_payload["final_omissions"]["o0"]["members"] == ["c2"]
+ 
+@@ -497,3 +500,78 @@
+         4 if recover else 2
+     )
+     assert sum(count for (stage, _), count in provider.calls.items() if stage == "reuse") == 1
++
++
++@pytest.mark.parametrize("seeded", [False, True])
++@pytest.mark.parametrize(
++    "unit,verdict,reusable",
++    [
++        ("review0", False, True),
++        ("review1", False, False),
++        ("review1", True, True),
++        ("reuse", "uncertain", False),
++        ("reuse", "accept", True),
++        ("reuse", "reject", True),
++    ],
++)
++def test_stage_cache_distinguishes_recoverable_results_from_final_refusals(
++    seeded, unit, verdict, reusable
++):
++    from push_kids.agent_processing.stage_contracts import PIPELINE_REVISION
++
++    if unit == "reuse":
++        value = ReuseReviewResult(
++            decisions=[ReuseDecision(candidate="i0", match="h0", verdict=verdict, basis="范围不同")]
++        )
++        stage = "reuse"
++    else:
++        value = QualityReviewResult(
++            passed=verdict,
++            issues=[]
++            if verdict
++            else [QualityIssue(code="vague_name", items=["i0"], basis="范围不明")],
++        )
++        stage = "review"
++
++    class Checkpoints:
++        def __init__(self):
++            self.digest = fingerprint(
++                {
++                    "revision": PIPELINE_REVISION,
++                    "parameters": "test-1",
++                    "payload": {},
++                    "context": None,
++                    "images": [],
++                }
++            )
++            self.value = value.model_dump() if seeded else None
++            self.writes = []
++
++        def get(self, requested_unit, digest):
++            assert (requested_unit, digest) == (unit, self.digest)
++            return self.value
++
++        def put(self, requested_unit, digest, result, **kwargs):
++            assert (requested_unit, digest) == (unit, self.digest)
++            self.writes.append(result)
++            self.value = result
++
++    class Provider(StageFake):
++        async def generate_stage(self, *args):
++            self.calls["stage"] += 1
++            return value
++
++    store, provider = Checkpoints(), Provider()
++    pipeline = StagedPipeline(provider, AnalysisTrace.disabled(), store)
++    result = asyncio.run(
++        pipeline._call(stage, unit, "", {}, type(value), [], monotonic() + 10, lambda _: None)
++    )
++    assert result == value
++    assert provider.calls["stage"] == (0 if seeded and reusable else 1)
++    assert len(store.writes) == (1 if reusable and not seeded else 0)
++    second = asyncio.run(
++        pipeline._call(stage, unit, "", {}, type(value), [], monotonic() + 10, lambda _: None)
++    )
++    assert second == value
++    assert provider.calls["stage"] == (0 if seeded and reusable else 1) + (not reusable)
++    assert len(store.writes) == (1 if reusable and not seeded else 0)
+--- baseline/tests/unit/test_staged_analysis.py
++++ tests/unit/test_staged_analysis.py
+@@ -72,7 +72,7 @@
+         REVIEW_INSTRUCTIONS,
+     )
+ 
+-    assert PIPELINE_REVISION == "staged-20261031-09"
++    assert PIPELINE_REVISION == "staged-20261101-10"
+     for instructions in (
+         EXTRACT_INSTRUCTIONS,
+         MERGE_INSTRUCTIONS,
+--- baseline/tests/integration/test_analysis_checkpoints.py
++++ tests/integration/test_analysis_checkpoints.py
+@@ -15,6 +15,9 @@
+ from sqlalchemy import func, select
+ 
+ from tests.staged_analysis_fakes import StageFake
++
++DECISION_UNITS = {"merge", "merge-correction", "review0", "review1", "match", "reuse"}
++EXTRACTION_UNITS = {"t", "m1", "m9", "group0", "group1"}
+ 
+ 
+ def submit(client, headers, child):
+@@ -264,3 +267,292 @@
+     reused = StagedPipeline(MaximumStages(recover=True), AnalysisTrace.disabled(), store)
+     second = asyncio.run(reused.run(data, lambda _: [], monotonic() + 10))
+     assert len(second.todo_matches) == 1 and reused.calls == 0
++
++
++def seed_failed_stages(client, app, headers, child):
++    store = make_store(client, app, headers, child)
++    for unit in DECISION_UNITS | EXTRACTION_UNITS:
++        store.put(unit, "a" * 64, {"items": []})
++    with app.state.database.session_factory() as db:
++        db.get(AgentJob, store.job_id).state = "failed"
++        submission = db.get(LearningSubmission, store.submission_id)
++        submission.state = "failed"
++        submission.error_code, submission.error_message = "analysis_output_invalid", "safe failure"
++        db.commit()
++    return store
++
++
++def stage_keys(db, submission_id):
++    return set(
++        db.scalars(
++            select(AnalysisStageResult.unit_key).where(
++                AnalysisStageResult.submission_id == submission_id
++            )
++        )
++    )
++
++
++def test_explicit_retry_refreshes_only_own_semantic_branch(client, app, family_headers, child):
++    store = seed_failed_stages(client, app, family_headers, child)
++    sibling = seed_failed_stages(client, app, family_headers, child)
++    foreign = seed_failed_stages(
++        client,
++        app,
++        {"X-Family-ID": "foreign-family"},
++        {
++            "id": client.post(
++                "/api/v1/children",
++                headers={"X-Family-ID": "foreign-family"},
++                json={"name": "合成孩子"},
++            ).json()["id"]
++        },
++    )
++    with app.state.database.session_factory() as db:
++        for row in db.scalars(
++            select(AnalysisStageResult).where(
++                AnalysisStageResult.submission_id == store.submission_id,
++                AnalysisStageResult.unit_key.in_(DECISION_UNITS),
++            )
++        ):
++            row.revision = "staged-20261031-06"
++        db.commit()
++    response = client.post(
++        f"/api/v1/submissions/{store.submission_id}/retry",
++        headers={"X-Family-ID": "foreign-family"},
++    )
++    assert response.status_code == 404
++    response = client.post(
++        f"/api/v1/submissions/{store.submission_id}/retry", headers=family_headers
++    )
++    assert response.status_code == 200 and response.json()["state"] == "queued"
++    assert (
++        client.post(
++            f"/api/v1/submissions/{store.submission_id}/retry", headers=family_headers
++        ).status_code
++        == 409
++    )
++    with app.state.database.session_factory() as db:
++        assert stage_keys(db, store.submission_id) == EXTRACTION_UNITS
++        assert stage_keys(db, sibling.submission_id) == DECISION_UNITS | EXTRACTION_UNITS
++        assert stage_keys(db, foreign.submission_id) == DECISION_UNITS | EXTRACTION_UNITS
++        job = db.get(AgentJob, store.job_id)
++        assert job.state == "queued" and job.attempts == 0 and job.error_message is None
++        assert db.get(LearningSubmission, store.submission_id).error_code is None
++
++
++def test_retry_deletion_and_state_reset_roll_back_together(
++    client, app, family_headers, child, monkeypatch
++):
++    from push_kids.learning.service import LearningService
++    from sqlalchemy.exc import OperationalError
++
++    store = seed_failed_stages(client, app, family_headers, child)
++    with app.state.database.session_factory() as db:
++
++        def fail_commit():
++            raise OperationalError("synthetic commit", None, RuntimeError("synthetic"))
++
++        monkeypatch.setattr(db, "commit", fail_commit)
++        with pytest.raises(OperationalError):
++            LearningService.retry(db, store.family_id, store.submission_id)
++        db.rollback()
++    with app.state.database.session_factory() as db:
++        assert stage_keys(db, store.submission_id) == DECISION_UNITS | EXTRACTION_UNITS
++        assert db.get(AgentJob, store.job_id).state == "failed"
++        assert db.get(LearningSubmission, store.submission_id).state == "failed"
++
++
++@pytest.mark.parametrize("change", ["family", "child_deleting", "archived"])
++def test_retry_rechecks_scope_before_purging(client, app, family_headers, child, change):
++    from push_kids.persistence.models import Family
++
++    store = seed_failed_stages(client, app, family_headers, child)
++    with app.state.database.session_factory() as db:
++        if change == "family":
++            family = db.get(Family, store.family_id)
++            if family is None:
++                family = Family(id=store.family_id, display_name="合成家庭")
++                db.add(family)
++            family.status = "deleting"
++        else:
++            row = db.get(Child, store.child_id)
++            if change == "child_deleting":
++                row.deleting = True
++            else:
++                row.active = False
++        db.commit()
++    response = client.post(
++        f"/api/v1/submissions/{store.submission_id}/retry", headers=family_headers
++    )
++    assert response.status_code == (200 if change == "archived" else 409)
++    with app.state.database.session_factory() as db:
++        assert stage_keys(db, store.submission_id) == (
++            EXTRACTION_UNITS if change == "archived" else DECISION_UNITS | EXTRACTION_UNITS
++        )
++
++
++def test_final_quality_failure_stops_and_parent_retry_obtains_new_decisions(
++    client, app, family_headers, child
++):
++    sid = submit(client, family_headers, child)
++    provider = StageFake(review_failures=99)
++    app.state.worker.provider = provider
++    assert app.state.worker.process_one()
++    assert not app.state.worker.process_one()
++    with app.state.database.session_factory() as db:
++        job = db.scalar(select(AgentJob).where(AgentJob.submission_id == sid))
++        jid = job.id
++        assert job.state == "failed" and job.attempts == 1
++        assert db.get(LearningSubmission, sid).error_code == "analysis_output_invalid"
++        assert stage_keys(db, sid) == {"t"}
++    response = client.post(f"/api/v1/submissions/{sid}/retry", headers=family_headers)
++    assert response.status_code == 200
++    provider.review_failures = 0
++    assert app.state.worker.process_one()
++    with app.state.database.session_factory() as db:
++        assert db.get(AgentJob, jid).state == "succeeded"
++        assert db.get(LearningSubmission, sid).state == "pending_confirmation"
++        assert stage_keys(db, sid) == set()
++        assert db.scalar(select(func.count(LearningRecord.id))) == 0
++    assert provider.calls["extract", "t"] == 1
++    assert provider.calls["merge", "merge"] == 3
++    assert provider.review_calls == 3
++
++
++def test_first_review_refusal_survives_correction_transport_interruption(
++    client, app, family_headers, child
++):
++    class CorrectionTimeout(StageFake):
++        interrupted = False
++
++        async def generate_stage(self, stage, instructions, payload, *args):
++            if stage == "merge" and "review_issues" in payload and not self.interrupted:
++                self.interrupted = True
++                raise StageFailure("provider_timeout")
++            return await super().generate_stage(stage, instructions, payload, *args)
++
++    sid = submit(client, family_headers, child)
++    provider = CorrectionTimeout(review_failures=1)
++    app.state.worker.provider = provider
++    assert app.state.worker.process_one()
++    with app.state.database.session_factory() as db:
++        assert stage_keys(db, sid) == {"t", "merge", "review0"}
++        job = db.scalar(select(AgentJob).where(AgentJob.submission_id == sid))
++        assert job.state == "queued"
++        job.available_at = utcnow()
++        db.commit()
++    assert app.state.worker.process_one()
++    assert provider.calls["extract", "t"] == 1 and provider.review_calls == 2
++    assert provider.calls["merge", "merge"] == 2
++    with app.state.database.session_factory() as db:
++        assert db.get(LearningSubmission, sid).state == "pending_confirmation"
++
++
++@pytest.mark.parametrize("change", ["attempt", "lease", "cancel", "child_deleting"])
++def test_final_refusal_cannot_purge_after_lease_or_scope_changes(
++    client, app, family_headers, child, change
++):
++    sid = submit(client, family_headers, child)
++
++    class LateRefusal(StageFake):
++        async def generate_stage(self, stage, instructions, payload, *args):
++            if stage == "review" and "previous_review" in payload:
++                with app.state.database.session_factory() as db:
++                    job = db.scalar(select(AgentJob).where(AgentJob.submission_id == sid))
++                    if change == "attempt":
++                        job.attempts += 1
++                    elif change == "lease":
++                        job.lease_until = utcnow() - timedelta(seconds=1)
++                    elif change == "cancel":
++                        db.get(LearningSubmission, sid).state = "cancelled"
++                    else:
++                        db.get(Child, child["id"]).deleting = True
++                    db.commit()
++                raise StageFailure("quality", retryable=False, stage="review", unit="review1")
++            return await super().generate_stage(stage, instructions, payload, *args)
++
++    app.state.worker.provider = LateRefusal(review_failures=1)
++    assert app.state.worker.process_one()
++    with app.state.database.session_factory() as db:
++        assert stage_keys(db, sid) == {"t", "merge", "review0", "merge-correction"}
++        assert db.get(LearningSubmission, sid).state == (
++            "cancelled" if change == "cancel" else "analyzing"
++        )
++
++
++def test_terminal_cleanup_commit_failure_preserves_durable_lease_and_cache(
++    client, app, family_headers, child, monkeypatch
++):
++    from sqlalchemy.exc import OperationalError
++    from sqlalchemy.orm import Session
++
++    sid = submit(client, family_headers, child)
++    original_commit = Session.commit
++
++    def commit(session):
++        if any(
++            isinstance(row, AgentJob) and row.state == "failed"
++            for row in session.identity_map.values()
++        ):
++            raise OperationalError("synthetic terminal commit", None, RuntimeError("synthetic"))
++        return original_commit(session)
++
++    monkeypatch.setattr(Session, "commit", commit)
++    app.state.worker.provider = StageFake(review_failures=99)
++    with pytest.raises(OperationalError):
++        app.state.worker.process_one()
++    with app.state.database.session_factory() as db:
++        assert stage_keys(db, sid) == {"t", "merge", "review0", "merge-correction"}
++        job = db.scalar(select(AgentJob).where(AgentJob.submission_id == sid))
++        assert job.state == "running" and job.attempts == 1 and job.lease_until is not None
++        assert db.get(LearningSubmission, sid).state == "analyzing"
++
++
++def test_uncertain_reuse_stops_worker_and_cleans_only_semantic_stages(
++    client, app, family_headers, child
++):
++    from push_kids.knowledge.normalization import normalize_knowledge_name
++    from push_kids.persistence.models import Subject
++
++    with app.state.database.session_factory() as db:
++        subject = Subject(
++            family_id=family_headers["X-Family-ID"],
++            child_id=child["id"],
++            name="数学",
++            kind="learning",
++        )
++        db.add(subject)
++        db.flush()
++        db.add(
++            KnowledgeItem(
++                family_id=family_headers["X-Family-ID"],
++                child_id=child["id"],
++                subject_id=subject.id,
++                name="十以内加法",
++                normalized_name=normalize_knowledge_name("十以内加法"),
++                category="计算",
++                review_method="变式练习",
++                estimated_minutes=3,
++            )
++        )
++        db.commit()
++
++    class UncertainReuse(StageFake):
++        async def generate_stage(self, stage, instructions, payload, *args):
++            result = await super().generate_stage(stage, instructions, payload, *args)
++            if stage == "reuse":
++                for decision in result.decisions:
++                    decision.verdict, decision.basis = "uncertain", "复习范围不确定"
++            return result
++
++    sid = submit(client, family_headers, child)
++    app.state.worker.provider = UncertainReuse()
++    assert app.state.worker.process_one()
++    assert not app.state.worker.process_one()
++    with app.state.database.session_factory() as db:
++        job = db.scalar(select(AgentJob).where(AgentJob.submission_id == sid))
++        assert job.state == "failed" and job.attempts == 1
++        assert db.get(LearningSubmission, sid).error_code == "analysis_output_invalid"
++        assert stage_keys(db, sid) == {"t"}
++        assert db.scalar(select(func.count(KnowledgeItem.id))) == 1
++        assert db.scalar(select(func.count(LearningRecord.id))) == 0
+--- baseline/tests/integration/test_staged_mysql.py
++++ tests/integration/test_staged_mysql.py
+@@ -10,6 +10,7 @@
+ import pytest
+ from push_kids.agent_processing.checkpoints import StageCheckpoints
+ from push_kids.agent_processing.contracts import AnalysisProposal, KnowledgeProposal
++from push_kids.agent_processing.failures import StageFailure
+ from push_kids.agent_processing.worker import AnalysisWorker
+ from push_kids.learning.schemas import ConfirmSubmission
+ from push_kids.learning.service import LearningService
+@@ -19,13 +20,15 @@
+     AnalysisStageResult,
+     Child,
+     Family,
++    LearningRecord,
+     LearningSubmission,
+     Subject,
+ )
+ from push_kids.platform.config import Settings
+ from push_kids.platform.database import Database
++from push_kids.platform.errors import ConflictError, NotFoundError
+ from push_kids.platform.time import utcnow
+-from sqlalchemy import event, func, select, text
++from sqlalchemy import event, func, select, text, update
+ 
+ from tests.staged_analysis_fakes import StageFake
+ 
+@@ -195,3 +198,273 @@
+             == 0
+         )
+     database.engine.dispose()
++
++
++def failed_stage_store():
++    database, store = seed()
++    for unit in (
++        "t",
++        "group0",
++        "merge",
++        "merge-correction",
++        "review0",
++        "review1",
++        "match",
++        "reuse",
++    ):
++        store.put(unit, "a" * 64, {"items": []})
++    with database.session_factory() as db:
++        db.get(AgentJob, store.job_id).state = "failed"
++        db.get(LearningSubmission, store.submission_id).state = "failed"
++        db.commit()
++    return database, store
++
++
++def dispose_stage_fixture(database, store):
++    # Worker claims across families: do not leave this test's queued jobs for the next case.
++    with database.session_factory() as db:
++        db.execute(
++            update(AgentJob).where(AgentJob.family_id == store.family_id).values(state="cancelled")
++        )
++        db.commit()
++    database.engine.dispose()
++
++
++@pytest.mark.parametrize("missing_job", [False, True])
++def test_concurrent_explicit_retry_has_one_transition_and_preserves_extraction(missing_job):
++    database, store = failed_stage_store()
++    if missing_job:
++        # A legacy submission without a job retains the existing repair path.
++        with database.session_factory() as db:
++            db.query(AnalysisStageResult).filter(
++                AnalysisStageResult.job_id == store.job_id
++            ).delete()
++            db.delete(db.get(AgentJob, store.job_id))
++            db.commit()
++    together = threading.Barrier(2)
++    lock_order = {}
++
++    def before_cursor(conn, cursor, statement, parameters, context, executemany):
++        thread = threading.current_thread().name
++        if (
++            thread.startswith("retry-concurrency-")
++            and statement.startswith("SELECT")
++            and "FOR UPDATE" in statement
++        ):
++            for table in ("families", "children", "agent_jobs", "learning_submissions"):
++                if f"FROM {table}" in statement:
++                    lock_order.setdefault(thread, []).append(table)
++            if "FROM families" in statement:
++                together.wait(timeout=5)
++
++    def retry(index):
++        threading.current_thread().name = f"retry-concurrency-{index}"
++        with database.session_factory() as db:
++            try:
++                return LearningService.retry(db, store.family_id, store.submission_id).state
++            except ConflictError:
++                db.rollback()
++                return "conflict"
++
++    event.listen(database.engine, "before_cursor_execute", before_cursor)
++    try:
++        with ThreadPoolExecutor(max_workers=2) as pool:
++            outcomes = list(pool.map(retry, [0, 1]))
++        assert sorted(outcomes) == ["conflict", "queued"]
++        assert all(
++            order == ["families", "children", "agent_jobs", "learning_submissions"]
++            for order in lock_order.values()
++        )
++        assert len(lock_order) == 2
++        with database.session_factory() as db:
++            jobs = db.scalars(
++                select(AgentJob).where(
++                    AgentJob.family_id == store.family_id,
++                    AgentJob.submission_id == store.submission_id,
++                )
++            ).all()
++            assert len(jobs) == 1 and jobs[0].state == "queued" and jobs[0].attempts == 0
++            keys = set(
++                db.scalars(
++                    select(AnalysisStageResult.unit_key).where(
++                        AnalysisStageResult.family_id == store.family_id,
++                        AnalysisStageResult.submission_id == store.submission_id,
++                    )
++                )
++            )
++            assert keys == (set() if missing_job else {"t", "group0"})
++    finally:
++        event.remove(database.engine, "before_cursor_execute", before_cursor)
++        dispose_stage_fixture(database, store)
++
++
++def test_retry_and_late_checkpoint_use_same_locks_without_resurrecting_cache():
++    database, store = failed_stage_store()
++    at_job, continue_job, at_checkpoint = threading.Event(), threading.Event(), threading.Event()
++    lock_order = {}
++
++    def before_cursor(conn, cursor, statement, parameters, context, executemany):
++        thread = threading.current_thread().name
++        if thread in {"retry-lock-test", "late-checkpoint-test"} and "FOR UPDATE" in statement:
++            for table in ("families", "children", "agent_jobs", "learning_submissions"):
++                if f"FROM {table}" in statement:
++                    lock_order.setdefault(thread, []).append(table)
++            if thread == "retry-lock-test" and "FROM agent_jobs" in statement:
++                at_job.set()
++                assert continue_job.wait(5)
++            if thread == "late-checkpoint-test" and "FROM families" in statement:
++                at_checkpoint.set()
++
++    def retry():
++        threading.current_thread().name = "retry-lock-test"
++        with database.session_factory() as db:
++            return LearningService.retry(db, store.family_id, store.submission_id).state
++
++    def checkpoint():
++        threading.current_thread().name = "late-checkpoint-test"
++        with pytest.raises(StageFailure, match="lease_changed"):
++            store.put("review1", "b" * 64, {"passed": True, "issues": []})
++
++    event.listen(database.engine, "before_cursor_execute", before_cursor)
++    try:
++        with ThreadPoolExecutor(max_workers=2) as pool:
++            retried = pool.submit(retry)
++            assert at_job.wait(5)
++            late = pool.submit(checkpoint)
++            assert at_checkpoint.wait(5)
++            continue_job.set()
++            assert retried.result(timeout=5) == "queued"
++            late.result(timeout=5)
++        assert all(
++            order == ["families", "children", "agent_jobs", "learning_submissions"]
++            for order in lock_order.values()
++        )
++        with database.session_factory() as db:
++            assert set(
++                db.scalars(
++                    select(AnalysisStageResult.unit_key).where(
++                        AnalysisStageResult.submission_id == store.submission_id
++                    )
++                )
++            ) == {"t", "group0"}
++    finally:
++        continue_job.set()
++        event.remove(database.engine, "before_cursor_execute", before_cursor)
++        dispose_stage_fixture(database, store)
++
++
++def test_retry_purge_and_state_reset_rollback_on_mysql(monkeypatch):
++    from sqlalchemy.exc import OperationalError
++
++    database, store = failed_stage_store()
++    try:
++        with database.session_factory() as db:
++
++            def fail_commit():
++                assert db.get(LearningSubmission, store.submission_id).state == "queued"
++                assert set(
++                    db.scalars(
++                        select(AnalysisStageResult.unit_key).where(
++                            AnalysisStageResult.submission_id == store.submission_id
++                        )
++                    )
++                ) == {"t", "group0"}
++                raise OperationalError("synthetic commit", None, RuntimeError("synthetic"))
++
++            monkeypatch.setattr(db, "commit", fail_commit)
++            with pytest.raises(OperationalError):
++                LearningService.retry(db, store.family_id, store.submission_id)
++            db.rollback()
++        with database.session_factory() as db:
++            assert db.get(AgentJob, store.job_id).state == "failed"
++            assert db.get(LearningSubmission, store.submission_id).state == "failed"
++            assert (
++                db.scalar(
++                    select(func.count(AnalysisStageResult.id)).where(
++                        AnalysisStageResult.submission_id == store.submission_id
++                    )
++                )
++                == 8
++            )
++    finally:
++        dispose_stage_fixture(database, store)
++
++
++def test_retry_cannot_delete_other_family_or_submission_stages():
++    database, store = failed_stage_store()
++    foreign_database, foreign = failed_stage_store()
++    try:
++        with database.session_factory() as db:
++            with pytest.raises(NotFoundError):
++                LearningService.retry(db, foreign.family_id, store.submission_id)
++            db.rollback()
++            assert LearningService.retry(db, store.family_id, store.submission_id).state == "queued"
++        with database.session_factory() as db:
++            assert (
++                db.scalar(
++                    select(func.count(AnalysisStageResult.id)).where(
++                        AnalysisStageResult.submission_id == foreign.submission_id
++                    )
++                )
++                == 8
++            )
++            assert db.get(LearningSubmission, foreign.submission_id).state == "failed"
++            assert (
++                db.scalar(
++                    select(func.count(AnalysisStageResult.id)).where(
++                        AnalysisStageResult.submission_id == store.submission_id
++                    )
++                )
++                == 2
++            )
++    finally:
++        dispose_stage_fixture(database, store)
++        dispose_stage_fixture(foreign_database, foreign)
++
++
++def test_mysql_final_refusal_stops_and_explicit_retry_reuses_extraction(tmp_path):
++    database, store = seed()
++    provider = StageFake(review_failures=99)
++    worker = AnalysisWorker(database, provider, LocalMediaStore(tmp_path, 10 * 1024 * 1024))
++    try:
++        with database.session_factory() as db:
++            job = db.get(AgentJob, store.job_id)
++            job.state, job.attempts = "queued", 0
++            job.available_at = utcnow() - timedelta(days=3650)
++            db.get(LearningSubmission, store.submission_id).state = "queued"
++            db.commit()
++        assert worker.process_one()
++        assert not worker.process_one()
++        with database.session_factory() as db:
++            job = db.get(AgentJob, store.job_id)
++            assert job.state == "failed" and job.attempts == 1
++            assert (
++                db.get(LearningSubmission, store.submission_id).error_code
++                == "analysis_output_invalid"
++            )
++            assert set(
++                db.scalars(
++                    select(AnalysisStageResult.unit_key).where(
++                        AnalysisStageResult.submission_id == store.submission_id
++                    )
++                )
++            ) == {"t"}
++            LearningService.retry(db, store.family_id, store.submission_id)
++            job.available_at = utcnow() - timedelta(days=3650)
++            db.commit()
++        provider.review_failures = 0
++        assert worker.process_one()
++        assert provider.calls["extract", "t"] == 1 and provider.review_calls == 3
++        with database.session_factory() as db:
++            assert db.get(AgentJob, store.job_id).state == "succeeded"
++            assert db.get(LearningSubmission, store.submission_id).state == "pending_confirmation"
++            assert (
++                db.scalar(
++                    select(func.count(LearningRecord.id)).where(
++                        LearningRecord.family_id == store.family_id
++                    )
++                )
++                == 0
++            )
++    finally:
++        database.engine.dispose()

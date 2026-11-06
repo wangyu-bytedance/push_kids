@@ -1,0 +1,44 @@
+{
+  "kind": "synthetic_request_construction_not_live_sdk",
+  "parallel_requests": 2,
+  "images_per_request": 9,
+  "bytes_per_image": 10485760,
+  "seconds": 0.686,
+  "python_peak_allocated_bytes": 279687811,
+  "process_max_rss_bytes_macos": 359038976,
+  "events": [
+    {
+      "event": "analysis_stage_completed",
+      "stage": "review",
+      "duration_ms": 684,
+      "queue_ms": 0,
+      "payload_bytes": 69,
+      "image_bytes": 94371840,
+      "request_bytes": 125831293,
+      "input_tokens": null,
+      "output_tokens": null,
+      "reasoning_tokens": null,
+      "status": "completed",
+      "request_id": null
+    },
+    {
+      "event": "analysis_stage_completed",
+      "stage": "review",
+      "duration_ms": 311,
+      "queue_ms": 0,
+      "payload_bytes": 69,
+      "image_bytes": 94371840,
+      "request_bytes": 125831293,
+      "input_tokens": null,
+      "output_tokens": null,
+      "reasoning_tokens": null,
+      "status": "completed",
+      "request_id": null
+    }
+  ],
+  "external_requests": 0,
+  "limitations": [
+    "Synthetic bytes are not decoded images.",
+    "SDK serialization and live model memory are not measured."
+  ]
+}

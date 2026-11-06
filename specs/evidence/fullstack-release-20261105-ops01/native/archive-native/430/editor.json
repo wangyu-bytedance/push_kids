@@ -1,0 +1,74 @@
+{
+  "nodes": {
+    ".page": [
+      {
+        "left": 0,
+        "right": 430,
+        "top": 0,
+        "bottom": 632,
+        "width": 430,
+        "height": 632,
+        "fontSize": "16px",
+        "lineHeight": "25.6px",
+        "textAlign": "start",
+        "color": "rgb(34, 38, 31)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "overflow": "hidden auto"
+      }
+    ],
+    ".archive-card": [],
+    ".archive-row": [],
+    ".archive-copy": [],
+    ".archive-title": [],
+    ".archive-description": [],
+    ".archive-pending": [],
+    ".archive-row .chev": [],
+    ".form-foot .btn": [
+      {
+        "left": 20,
+        "right": 410,
+        "top": 401,
+        "bottom": 456,
+        "width": 390,
+        "height": 55,
+        "fontSize": "16px",
+        "lineHeight": "19.2px",
+        "textAlign": "start",
+        "color": "rgb(255, 253, 248)",
+        "backgroundColor": "rgb(31, 91, 69)",
+        "overflow": "visible"
+      }
+    ],
+    ".pk-notice.err": []
+  },
+  "scroll": {
+    "id": "",
+    "dataset": {},
+    "scrollLeft": 0,
+    "scrollTop": 0,
+    "scrollWidth": 430,
+    "scrollHeight": 834
+  },
+  "viewport": {
+    "width": 430,
+    "height": 932,
+    "screenHeight": 932,
+    "dpr": 3,
+    "fontScale": 15,
+    "baseLibrary": "3.17.4"
+  },
+  "data": {
+    "active": true,
+    "working": false,
+    "isManager": false,
+    "nameDraft": "合成孩子",
+    "unfinishedCount": 0,
+    "error": ""
+  },
+  "state": "editor",
+  "errors": [],
+  "capturedAt": "2026-11-05T14:50:27.911Z",
+  "screenshotSha256": "fa60481f8104b9aea5b6f8a8fb18533d6ad27d6f189ab582ad726472b85363a4",
+  "screenshotStatus": "CAPTURED",
+  "scope": "offline synthetic fixture; production WXML/WXSS; no physical device or cloud acceptance"
+}

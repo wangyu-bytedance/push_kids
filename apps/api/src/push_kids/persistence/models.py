@@ -498,6 +498,15 @@ class LearningRecord(Base):
 class KnowledgeItem(Base):
     __tablename__ = "knowledge_items"
     __table_args__ = (
+        Index(
+            "ix_knowledge_recent_subject",
+            "family_id",
+            "child_id",
+            "subject_id",
+            "review_status",
+            "created_at",
+            "id",
+        ),
         Index("ix_knowledge_status", "family_id", "child_id", "review_status", "subject_id", "id"),
         Index("ix_knowledge_discovery", "created_at", "id"),
         Index("ix_knowledge_covering", "superseded_by_knowledge_id"),
@@ -939,6 +948,7 @@ class ActivitySchedule(Base):
     child_id = Column(String(36), ForeignKey("children.id"), nullable=False, index=True)
     subject_id = Column(String(36), ForeignKey("subjects.id"), nullable=False, index=True)
     weekdays = Column(String(30), nullable=False, default="")
+    workday_only = Column(Boolean, nullable=False, default=False, server_default="0")
     time_text = Column(String(20), nullable=True)
     start_time = Column(Time, nullable=True)
     end_time = Column(Time, nullable=True)
@@ -983,6 +993,7 @@ class CalendarEvent(Base):
     end_time = Column(Time, nullable=False)
     kind = Column(String(20), nullable=False, default="other")
     repeat_weekly = Column(Boolean, nullable=False, default=False)
+    workday_only = Column(Boolean, nullable=False, default=False, server_default="0")
     active = Column(Boolean, nullable=False, default=True)
     created_at = Column(UTCDateTime(), nullable=False, default=utcnow)
     updated_at = Column(UTCDateTime(), nullable=False, default=utcnow, onupdate=utcnow)

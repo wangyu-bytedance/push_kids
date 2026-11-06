@@ -1,0 +1,71 @@
+{
+  "route": "pages/calendar/index",
+  "viewport": {
+    "width": 430,
+    "height": 932,
+    "screenHeight": 932,
+    "pixelRatio": 3
+  },
+  "base_library": "3.17.4",
+  "nodes": [
+    {
+      "selector": ".workday-status",
+      "left": 20,
+      "right": 410,
+      "top": 424,
+      "bottom": 476,
+      "width": 390,
+      "height": 52,
+      "fontSize": "13px",
+      "lineHeight": "20.8px"
+    },
+    {
+      "selector": ".workday-status .n-txt",
+      "left": 35,
+      "right": 395,
+      "top": 439.5,
+      "bottom": 460.5,
+      "width": 360,
+      "height": 21,
+      "fontSize": "14px",
+      "lineHeight": "21.7px"
+    },
+    {
+      "selector": ".tl-card",
+      "left": 86,
+      "right": 410,
+      "top": 476,
+      "bottom": 550,
+      "width": 324,
+      "height": 74,
+      "fontSize": "16px",
+      "lineHeight": "25.6px"
+    },
+    {
+      "selector": ".page",
+      "left": 0,
+      "right": 430,
+      "top": 0,
+      "bottom": 932,
+      "width": 430,
+      "height": 932,
+      "fontSize": "16px",
+      "lineHeight": "25.6px"
+    }
+  ],
+  "mode": {
+    "workday": true,
+    "weekly": false
+  },
+  "source": "native wx.createSelectorQuery; synthetic fixtures; production WXML/WXSS exact",
+  "errors": [
+    "wrong viewport",
+    "horizontal overflow: .workday-status",
+    "horizontal overflow: .workday-status .n-txt",
+    "horizontal overflow: .tl-card",
+    "horizontal overflow: .page"
+  ],
+  "state": "partial-coverage",
+  "host": "calendar",
+  "screenshot_status": "NOT_RUN_AFTER_CAPTURE_FAILURE: App.captureScreenshot timed out"
+}

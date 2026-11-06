@@ -1,0 +1,42 @@
+{
+  "date": "2026-11-01",
+  "scope": "Approved travel entry, offline synthetic project only",
+  "production_writes": 0,
+  "evidence_type": "Actual Computer Use actions plus native method/state checks",
+  "embedded": {
+    "view_clicks": {
+      "time": "PASS",
+      "playback": "PASS_MODE_VERIFIED_BY_NATIVE_METHOD",
+      "lit": "PASS",
+      "note": "The initial playback display-text expectation did not match the existing empty-state wording; no product change was made, native mode and mapError checks passed separately."
+    },
+    "draft_button": "PASS_OPEN_REVIEW_SHEET",
+    "close_review": "PASS",
+    "import_button": "PASS_OPEN_NATIVE_FILE_PICKER",
+    "picker_cancel": "PASS_IMPORT_BUTTON_RESTORED",
+    "cancel_tool_cell": 120,
+    "state_file_after_cancel": "NOT_CAPTURED_CONNECTION_CHANGED",
+    "learning_manual_input": "PASS_NATIVE_REAL_SET_FIELD",
+    "method_evidence": "native-methods-embedded02.json"
+  },
+  "standalone": {
+    "deep_link": "PASS_OFFICIAL_AUTOMATION",
+    "three_modes_and_drafts": "PASS_NATIVE_METHODS",
+    "import_button": "PASS_ACTUAL_COMPUTER_USE",
+    "picker_cancel": "PASS_IMPORT_BUTTON_RESTORED",
+    "cancel_tool_cell": 124,
+    "cancel_state_evidence": "native-actions-standalone-cancel.json",
+    "method_evidence": "native-methods-standalone01.json"
+  },
+  "probe_failure_preserved": {
+    "file": "native-methods-embedded01.json",
+    "classification": "FAIL_TEST_PROBE_HANDLER_NAME",
+    "reason": "Initial temporary probe looked for inputText; production WXML binds setField. Corrected probe used actual setField and verified text/hasText; production code unchanged."
+  },
+  "not_verified": [
+    "Real iOS/Android",
+    "Real keyboard, screen reader, large system font",
+    "Full real cloud photo confirmation and media lifetime",
+    "Two real families and non-owner smoke"
+  ]
+}

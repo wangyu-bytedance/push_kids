@@ -5,6 +5,8 @@ import re
 from dataclasses import dataclass
 from typing import Final
 
+from push_kids.agent_processing.failures import safe_stage_diagnostics
+
 logger = logging.getLogger("push_kids.analysis")
 
 _SAFE_FIELD_NAMES: Final = frozenset(
@@ -13,6 +15,9 @@ _SAFE_FIELD_NAMES: Final = frozenset(
         "stage",
         "unit",
         "queue_ms",
+        "payload_bytes",
+        "image_bytes",
+        "request_bytes",
         "input_tokens",
         "output_tokens",
         "reasoning_tokens",
@@ -63,6 +68,14 @@ _SAFE_CODES: Final = frozenset(
         "tool.arguments",
         "tool.batch_size",
         "tool.name",
+        "quality.exercise_not_knowledge",
+        "quality.missing_media_dependency",
+        "quality.ordinary_scene",
+        "quality.vague_name",
+        "quality.should_merge",
+        "quality.over_merged",
+        "quality.unsupported_by_evidence",
+        "quality.invalid_review_scope",
     }
 )
 
@@ -71,7 +84,7 @@ def safe_validation_codes(codes: list[str] | tuple[str, ...]) -> tuple[str, ...]
     """Return bounded static categories; never log model-provided paths or values."""
     result: list[str] = []
     for code in codes[:20]:
-        if code in _SAFE_CODES:
+        if code in _SAFE_CODES or safe_stage_diagnostics([code]):
             safe = code
         elif code.startswith("schema."):
             safe = "schema.fields"

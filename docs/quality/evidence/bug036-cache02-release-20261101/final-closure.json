@@ -1,0 +1,19 @@
+{
+  "status": "BLOCKED",
+  "deployment": "NOT_CREATED",
+  "quality_gate": "FAIL34/40",
+  "fixed_doc_findings": 2,
+  "unresolved_code_document_findings": 0,
+  "files": {
+    "specs/active/OPS-20261101-BUG036-CACHE02-DEPLOYMENT.md": "8770c0d3d88d65c976b871a6698a8279ab24a8795b105c3210d6d6f36aee9d6f",
+    "specs/evidence/EVD-20261101-BUG036-CACHE02-RELEASE-GATE.md": "deca8230b21471f4913c3bcd9f046fd411ce26d5e4a9d573fc000faf74135abe",
+    "docs/deploy/releases/20261101-knowledge-cache-gray-blocked.md": "0ea99e28694bb63ab9a3d7eaad9ccf88f39577a8edec17378da0d2cbf89a4623",
+    "docs/deploy/releases/20261101-knowledge-cache-local.md": "e87c7d828afad44defa3f801fdef04c50d71afb9cc9887e53c303952161c4856",
+    "docs/quality/TEST-STRATEGY.md": "2173aa4aef7b1601282c94e2e88f632ab7563f2d8d56e9409bdc894d45f6de88",
+    "specs/README.md": "c453f90d3698c976142e9ed4ee94e8ed52e90684d02ac26880958ccf4d03f57a",
+    "specs/STATUS.md": "1b42fdfc594f907f3f73f140014690d1cc289ab0e8228893857552a831e75a25",
+    "docs/quality/evidence/bug036-cache02-release-20261101/review/disposition.md": "9df8ea30b4fcca88eee9f15b0363706f28b5570f0a0669a02094a196f1bc9bc9"
+  },
+  "report_manifest_matches": true,
+  "missing_links": []
+}

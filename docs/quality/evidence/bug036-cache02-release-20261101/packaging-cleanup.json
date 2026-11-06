@@ -1,0 +1,26 @@
+{
+  "generated_files_removed": [
+    ".temp-runkit-1793527473030.zip",
+    ".mypy_cache",
+    ".ruff_cache"
+  ],
+  "rejected_first_dryrun_archive": [
+    {
+      "archive_sha256": "d912212b03de698102f354f385990a27119aab34e57328b67c44e4d757af6977",
+      "entries": 188,
+      "cache_entries": [
+        ".mypy_cache/",
+        ".mypy_cache/.gitignore",
+        ".mypy_cache/3.12/",
+        ".mypy_cache/3.12/cache.db",
+        ".mypy_cache/CACHEDIR.TAG",
+        ".mypy_cache/missing_stubs",
+        ".ruff_cache/",
+        ".ruff_cache/.gitignore",
+        ".ruff_cache/0.16.5/",
+        ".ruff_cache/0.16.5/10478399030738329",
+        ".ruff_cache/CACHEDIR.TAG"
+      ]
+    }
+  ]
+}

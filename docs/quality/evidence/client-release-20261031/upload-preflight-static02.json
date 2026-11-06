@@ -1,0 +1,41 @@
+{
+  "captured_at": "2026-10-31T12:00:37.033Z",
+  "scope": "Current candidate documentation and native collector preparation; production sources unchanged",
+  "result": "PASS",
+  "checks": [
+    {
+      "command": ".venv/bin/python tools/check_architecture.py",
+      "result": "PASS",
+      "exit_code": 0,
+      "output": "ARCHITECTURE_VALID policies=4 modules=151 (runtime/lazy DAG)\n",
+      "chunk_id": "00c475"
+    },
+    {
+      "command": ".venv/bin/python tools/validate_design_evidence.py --check-current-policy",
+      "result": "PASS",
+      "exit_code": 0,
+      "output": "DESIGN_EVIDENCE_VALID\n",
+      "chunk_id": "eb4d36"
+    },
+    {
+      "command": "git diff --check",
+      "result": "PASS",
+      "exit_code": 0,
+      "output": "",
+      "chunk_id": "2879c6"
+    },
+    {
+      "command": "node --check docs/quality/evidence/client-release-20261031/native-current-matrix-collector.js",
+      "result": "PASS",
+      "exit_code": 0,
+      "output": "",
+      "chunk_id": "256539"
+    }
+  ],
+  "backend_directed_http": "NOT_RUN",
+  "native390": "NOT_RUN",
+  "native430": "NOT_RUN",
+  "real_two_accounts": "NOT_RUN",
+  "uploaded": false,
+  "version_bumped": false
+}

@@ -1,0 +1,127 @@
+{
+  "nodes": {
+    ".inventory-page": [
+      {
+        "left": 35,
+        "right": 355,
+        "top": 993,
+        "bottom": 1420,
+        "width": 320,
+        "height": 427,
+        "display": "block",
+        "fontSize": "14px",
+        "lineHeight": "21px",
+        "textAlign": "start",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "paddingLeft": "0px",
+        "paddingRight": "0px",
+        "paddingTop": "12px",
+        "paddingBottom": "0px",
+        "borderRadius": "0px",
+        "boxShadow": "none"
+      }
+    ],
+    ".inventory-pagination:not(.subject-pager)": [],
+    ".inventory-pagination:not(.subject-pager) .inventory-page-button": [],
+    ".inventory-page-label": [
+      {
+        "left": 163,
+        "right": 227,
+        "top": 1388,
+        "bottom": 1408,
+        "width": 64,
+        "height": 20,
+        "display": "block",
+        "fontSize": "14px",
+        "lineHeight": "20px",
+        "textAlign": "center",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "paddingLeft": "0px",
+        "paddingRight": "0px",
+        "paddingTop": "0px",
+        "paddingBottom": "0px",
+        "borderRadius": "0px",
+        "boxShadow": "none"
+      }
+    ],
+    ".subject-pager": [],
+    ".subject-pager .inventory-page-button": [],
+    ".inventory-feedback": [],
+    ".inventory-feedback-text": [],
+    ".notice": [],
+    ".item-main": [
+      {
+        "left": 35,
+        "right": 303,
+        "top": 1240,
+        "bottom": 1345,
+        "width": 268,
+        "height": 105,
+        "display": "block",
+        "fontSize": "14px",
+        "lineHeight": "21px",
+        "textAlign": "start",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "paddingLeft": "0px",
+        "paddingRight": "0px",
+        "paddingTop": "0px",
+        "paddingBottom": "0px",
+        "borderRadius": "0px",
+        "boxShadow": "none"
+      }
+    ],
+    ".more": [
+      {
+        "left": 311,
+        "right": 355,
+        "top": 1240,
+        "bottom": 1284,
+        "width": 44,
+        "height": 44,
+        "disabled": false,
+        "display": "flex",
+        "fontSize": "12px",
+        "lineHeight": "18px",
+        "textAlign": "center",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "paddingLeft": "0px",
+        "paddingRight": "0px",
+        "paddingTop": "0px",
+        "paddingBottom": "0px",
+        "borderRadius": "12px",
+        "boxShadow": "none"
+      }
+    ],
+    ".action-menu": [],
+    ".error": [],
+    ".readonly": []
+  },
+  "scroll": {
+    "id": "",
+    "dataset": {},
+    "scrollLeft": 0,
+    "scrollTop": 0,
+    "scrollWidth": 390,
+    "scrollHeight": 1796
+  },
+  "viewport": {
+    "width": 390,
+    "height": 753,
+    "screenHeight": 844,
+    "dpr": 3,
+    "baseLibrary": "3.16.2"
+  },
+  "view": "subject",
+  "pageNumber": 1,
+  "loading": false,
+  "canWrite": true,
+  "notice": "",
+  "host": "embedded",
+  "state": "first",
+  "errors": [
+    "pagination nodes absent"
+  ],
+  "scope": "isolated synthetic data; real production WXML/WXSS; not physical device/cloud acceptance",
+  "screenshotSha256": "6f13072098514381eb975a3abfa10402b88e9ab89db40de5844e74571aab68d6",
+  "capturedAt": "2026-11-01T08:02:00.546Z"
+}

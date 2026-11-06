@@ -2,7 +2,7 @@
 
 - Date: 2026-10-24
 - State: LOCAL_IMPLEMENTATION / VERIFYING / NOT_UPLOADED / NOT_DEPLOYED。
-- Approval: 产品负责人针对明确列出的[Spec01](../../../specs/active/FEAT-004-SUGGESTION-SHEET-REFINEMENT.md)及[DREV02](../../design/frontend/prototypes/DREV-20261024-TODAY-LEARNING-02/FRONTEND-SPEC.md)回复「批准，按此实现」（call_989b0367f519481a9dc9b890f5ae9f1b）。先记录APPROVED再改原组件。
+- Approval: 产品负责人针对明确列出的[Spec01](../../../specs/completed/FEAT-004-SUGGESTION-SHEET-REFINEMENT.md)及[DREV02](../../design/frontend/prototypes/DREV-20261024-TODAY-LEARNING-02/FRONTEND-SPEC.md)回复「批准，按此实现」（call_989b0367f519481a9dc9b890f5ae9f1b）。先记录APPROVED再改原组件。
 - Workspace: main / `82ca52775bc948f2a963a8f4ed614322d8859de8`，共享未提交工作区；保留其他会话改动，无提交或推送。
 
 直接以具体学习标题作为弹层标题，科目/预计时间和简短AI标识紧随其后，删除原口号式头部及重复标题。确认全宽；编辑/换项等宽浅底边框，44px高、8px间隔；暂缓全宽居中弱化；图标关闭44px。沿用已有tokens、事件、事务与幂等；JS只增加busyAction展示标识。确认中显示“正在加入…”，禁用全组和关闭，失败保留提案/错误与重试键。无新资源、依赖、请求、接口或数据模型。
@@ -38,4 +38,4 @@
 
 以上当前正文与本次代码没有已知冲突，其他会话事实保留。后端全量、mypy及真实MySQL/模型未为此次纯呈现增量重跑，因为没有后端/SQL变动；主Spec04的真实MySQL5.7、内容适用、类目/隐私及独立实现Review等门禁仍保留。代表iOS/Android、实际键盘、读屏和系统大字体NOT_RUN；合成setter状态取证不能证明真实请求端到端或设备辅助功能。本次实现后独立只读复核尚未执行，自查不冒充独立评审。
 
-Spec最终状态为VERIFYING，位置`specs/active/FEAT-004-SUGGESTION-SHEET-REFINEMENT.md`。恢复条件为补齐设备、可访问性及独立复核证据，再评估DONE/迁移；无需重新批准已批准的Spec01/DREV02。两个业务开关仍默认false，没有上传、体验、提审或正式发布。
+Spec最终状态为VERIFYING，位置`specs/completed/FEAT-004-SUGGESTION-SHEET-REFINEMENT.md`。恢复条件为补齐设备、可访问性及独立复核证据，再评估DONE/迁移；无需重新批准已批准的Spec01/DREV02。两个业务开关仍默认false，没有上传、体验、提审或正式发布。

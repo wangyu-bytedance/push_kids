@@ -1,0 +1,231 @@
+........................................................................ [  7%]
+........................................................................ [ 14%]
+........................................................................ [ 21%]
+........................................................................ [ 29%]
+........................................................................ [ 36%]
+........................................................................ [ 43%]
+........................................................................ [ 51%]
+........................................................................ [ 58%]
+..........F............................................................. [ 65%]
+.............................................s............ssss.......... [ 72%]
+........................................................................ [ 80%]
+..........sssssss........................................ss............. [ 87%]
+....s.s.s.s.s.sss...............ssssssssssssssss.sssssssssssss.....s.... [ 94%]
+.............................................F.....                      [100%]
+=================================== FAILURES ===================================
+_______________ test_cloud_schema_guard_tracks_the_current_head ________________
+
+    def test_cloud_schema_guard_tracks_the_current_head() -> None:
+        """应用启动时的云 Schema 校验必须跟随最新 head，否则迁移完成后服务仍会拒绝启动。"""
+        config = _config("sqlite:///:memory:")
+        heads = ScriptDirectory.from_config(config).get_heads()
+>       assert heads == [Database.expected_cloud_revision]
+E       AssertionError: assert ['20261105_0027'] == ['20261105_0026']
+E         
+E         At index 0 diff: '20261105_0027' != '20261105_0026'
+E         Use -v to get more diff
+
+tests/integration/test_child_profile_lifecycle_migration.py:94: AssertionError
+___________ test_first_claimed_task_is_ready_during_analysis[False] ____________
+
+fut = <coroutine object Event.wait at 0x16ec5eb20>, timeout = 2
+
+    async def wait_for(fut, timeout):
+        """Wait for the single Future or coroutine to complete, with timeout.
+    
+        Coroutine will be wrapped in Task.
+    
+        Returns result of the Future or coroutine.  When a timeout occurs,
+        it cancels the task and raises TimeoutError.  To avoid the task
+        cancellation, wrap it in shield().
+    
+        If the wait is cancelled, the task is also cancelled.
+    
+        If the task suppresses the cancellation and returns a value instead,
+        that value is returned.
+    
+        This function is a coroutine.
+        """
+        # The special case for timeout <= 0 is for the following case:
+        #
+        # async def test_waitfor():
+        #     func_started = False
+        #
+        #     async def func():
+        #         nonlocal func_started
+        #         func_started = True
+        #
+        #     try:
+        #         await asyncio.wait_for(func(), 0)
+        #     except asyncio.TimeoutError:
+        #         assert not func_started
+        #     else:
+        #         assert False
+        #
+        # asyncio.run(test_waitfor())
+    
+    
+        if timeout is not None and timeout <= 0:
+            fut = ensure_future(fut)
+    
+            if fut.done():
+                return fut.result()
+    
+            await _cancel_and_wait(fut)
+            try:
+                return fut.result()
+            except exceptions.CancelledError as exc:
+                raise TimeoutError from exc
+    
+        async with timeouts.timeout(timeout):
+>           return await fut
+                   ^^^^^^^^^
+
+../../.local/share/uv/python/cpython-3.12.11-macos-aarch64-none/lib/python3.12/asyncio/tasks.py:520: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <asyncio.locks.Event object at 0x16da95220 [unset]>
+
+    async def wait(self):
+        """Block until the internal flag is true.
+    
+        If the internal flag is true on entry, return True
+        immediately.  Otherwise, block until another coroutine calls
+        set() to set the flag to true, then return True.
+        """
+        if self._value:
+            return True
+    
+        fut = self._get_loop().create_future()
+        self._waiters.append(fut)
+        try:
+>           await fut
+E           asyncio.exceptions.CancelledError
+
+../../.local/share/uv/python/cpython-3.12.11-macos-aarch64-none/lib/python3.12/asyncio/locks.py:212: CancelledError
+
+The above exception was the direct cause of the following exception:
+
+client = <starlette.testclient.TestClient object at 0x16da71e80>
+app = <fastapi.applications.FastAPI object at 0x170ac3e60>
+child = {'active': True, 'created_at': '2026-11-05T09:16:46.644118Z', 'daily_budget_minutes': 15, 'grade': '小学二年级', ...}
+family_headers = {'X-Family-ID': 'family-test-a'}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x16da94dd0>
+recovering = False
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize("recovering", [False, True])
+    async def test_first_claimed_task_is_ready_during_analysis(
+        client, app, child, family_headers, monkeypatch, recovering
+    ):
+        response = client.post(
+            "/api/v1/submissions",
+            headers=family_headers,
+            json={
+                "child_id": child["id"],
+                "occurred_at": utcnow().isoformat(),
+                "input_text": "数学分数",
+            },
+        )
+        assert response.status_code == 202
+        app.state.settings.run_worker = True
+        worker = app.state.worker
+        analyzing = asyncio.Event()
+        release = Event()
+        loop = asyncio.get_running_loop()
+        original = worker.provider.analyze_with_history
+        failed = False
+    
+        def analyze(data, search_history, *, max_turns):
+            loop.call_soon_threadsafe(analyzing.set)
+            if not release.wait(timeout=5):
+                raise TimeoutError("test analysis was not released")
+            return original(data, search_history, max_turns=max_turns)
+    
+        def inject(conn, cursor, statement, parameters, context, executemany):
+            nonlocal failed
+            if recovering and not failed and statement.startswith("SELECT agent_jobs"):
+                failed = True
+                raise OperationalError("synthetic claim failure", None, RuntimeError("private"))
+    
+        async def fast_wait(delay):
+            await asyncio.sleep(0)
+    
+        monkeypatch.setattr(worker.provider, "analyze_with_history", analyze)
+        monkeypatch.setattr(worker, "_wait", fast_wait)
+        event.listen(app.state.database.engine, "before_cursor_execute", inject)
+        try:
+            async with app.router.lifespan_context(app):
+                try:
+>                   await asyncio.wait_for(analyzing.wait(), 2)
+
+tests/contract/test_worker_readiness.py:135: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../.local/share/uv/python/cpython-3.12.11-macos-aarch64-none/lib/python3.12/asyncio/tasks.py:519: in wait_for
+    async with timeouts.timeout(timeout):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <Timeout [expired]>
+exc_type = <class 'asyncio.exceptions.CancelledError'>
+exc_val = CancelledError(), exc_tb = <traceback object at 0x16ed47b00>
+
+    async def __aexit__(
+        self,
+        exc_type: Optional[Type[BaseException]],
+        exc_val: Optional[BaseException],
+        exc_tb: Optional[TracebackType],
+    ) -> Optional[bool]:
+        assert self._state in (_State.ENTERED, _State.EXPIRING)
+    
+        if self._timeout_handler is not None:
+            self._timeout_handler.cancel()
+            self._timeout_handler = None
+    
+        if self._state is _State.EXPIRING:
+            self._state = _State.EXPIRED
+    
+            if self._task.uncancel() <= self._cancelling and exc_type is exceptions.CancelledError:
+                # Since there are no new cancel requests, we're
+                # handling this.
+>               raise TimeoutError from exc_val
+E               TimeoutError
+
+../../.local/share/uv/python/cpython-3.12.11-macos-aarch64-none/lib/python3.12/asyncio/timeouts.py:115: TimeoutError
+------------------------------ Captured log call -------------------------------
+WARNING  push_kids.worker:worker.py:137 worker_iteration_failed error_type=StaleDataError consecutive_failures=1
+WARNING  push_kids:app.py:102 notification_scheduler_exited error_type=RuntimeError
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /Users/bytedance/Documents/push_kids/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+tests/integration/test_child_profile_lifecycle_migration.py: 5 warnings
+tests/integration/test_china_workday_migration.py: 14 warnings
+tests/integration/test_footprints_migration.py: 7 warnings
+tests/integration/test_grade_confirmation_migration.py: 14 warnings
+tests/integration/test_migration_field_backfill.py: 26 warnings
+tests/integration/test_migration_multi_subject.py: 10 warnings
+tests/integration/test_notification_migration.py: 14 warnings
+tests/integration/test_notification_renewal_migration.py: 7 warnings
+tests/integration/test_system_one_history.py: 1 warning
+  /Users/bytedance/Documents/push_kids/.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py:952: DeprecationWarning: The default datetime adapter is deprecated as of Python 3.12; see the sqlite3 documentation for suggested replacement recipes
+    cursor.execute(statement, parameters)
+
+tests/integration/test_china_workday_migration.py: 4 warnings
+tests/integration/test_daily_task_migration.py: 2 warnings
+tests/integration/test_fair_review_migration.py: 3 warnings
+tests/integration/test_footprints_migration.py: 4 warnings
+tests/integration/test_grade_confirmation_migration.py: 6 warnings
+tests/integration/test_migration_field_backfill.py: 1 warning
+tests/integration/test_notification_renewal_migration.py: 4 warnings
+tests/integration/test_supersession_migration.py: 2 warnings
+tests/integration/test_today_learning_migrations.py: 2 warnings
+  /Users/bytedance/Documents/push_kids/.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py:952: DeprecationWarning: The default date adapter is deprecated as of Python 3.12; see the sqlite3 documentation for suggested replacement recipes
+    cursor.execute(statement, parameters)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/integration/test_child_profile_lifecycle_migration.py::test_cloud_schema_guard_tracks_the_current_head
+FAILED tests/contract/test_worker_readiness.py::test_first_claimed_task_is_ready_during_analysis[False]
+2 failed, 933 passed, 52 skipped, 127 warnings in 136.58s (0:02:16)

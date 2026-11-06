@@ -11,7 +11,7 @@ architecture-revision pointers.
 - `ARC-005`: external files and model output MUST be validated for type, size, shape, enum and length before persistence or rendering.
 - `ARC-006`: review dates MUST be created by `planning/domain.py`; model-proposed dates are ignored.
 - `ARC-007`: submission confirmation MUST atomically create formal record, occurrences and review items, and mark the submission confirmed.
-- `ARC-008`: retryable submission/job creation MUST use idempotency or duplicate detection; a running/succeeded job cannot be leased twice.
+- `ARC-008`: retryable submission/job creation MUST use idempotency or duplicate detection; a running/succeeded job cannot be leased twice. Define scope, duplicate response, concurrent duplicates and recovery at meaningful side-effect checkpoints. Sequential/concurrent retry and interruption tests MUST verify durable final state and absence of forbidden duplicate effects; a key alone does not prove crash safety.
 - `ARC-009`: job states are `queued`, `running`, `succeeded`, `failed`, `cancelled`; retries are bounded and errors omit secrets/raw child content.
 - `ARC-010`: secrets MUST come from environment variables. `.env`, media and local databases are ignored by Git.
 - `ARC-011`: public production deployment requires both (a) verified WeChat identity with public ingress rejecting
@@ -49,5 +49,42 @@ architecture-revision pointers.
 - `ARC-008 — Architecture decisions are reasoned and recorded`: boundary, deployment, data-owner, or extension changes MUST record chosen design, rejected alternatives, trade-offs, maintainability impact, and revisit conditions in an approved Spec/ADR.
 - `ARC-009 — Extensibility is explicit and bounded`: every variation axis MUST be classified open/closed/deferred; open points define registration, compatibility, isolation, resource, security, observability, test, deprecation, and removal rules.
 - `ARC-013 — Architecture confirmation before coding`: before initial production coding or a change to modules, shared abstractions, dependency direction, deployment topology, or extension points, the owner MUST approve the exact architecture/Spec revision.
+
+## TDD-supporting state and data constraints
+
+Governance revision: `ARCH-GOV-20261028-TDD-CODING-REVIEW-01`, approved under
+[GOV-003 Spec01](../../specs/completed/GOV-003-TDD-CODING-REVIEW-INCREMENTAL-MERGE.md).
+Runtime architecture and existing bounded-read, MySQL and frontend constraints remain unchanged.
+Earlier duplicated IDs are qualified by their section/title; new rules use unoccupied IDs.
+
+### ARC-017 — Mutable state ownership
+
+- **Rule**: Independent actors MUST isolate mutable state when shared authority is unnecessary.
+  Required shared state MUST have one explicit logical write authority enforced by the owning
+  service/command, actor/queue, or database transaction/version protocol. Retries and recovery
+  MUST preserve that authority; multiple physical instances may use the same protocol.
+- **Why**: Correct ownership/lifecycle before choosing serialization; locks must not conceal
+  unrelated actors sharing buffers, competing independent rules, or duplicate responsibility.
+- **Allowed**: Per-request/per-worker state, immutable shared values, existing owner service with
+  atomic/versioned commands. No new actor/queue/framework is required by this rule.
+- **Enforcement**: State/owner map and Review; changed paths require Spec-selected repeated,
+  concurrent and interruption/recovery tests. `tools/check_architecture.py` checks dependencies,
+  not the semantic correctness of mutable-state ownership.
+- **Exception/Owner**: An approved Spec/ADR states scope, invariant-preserving protocol, project
+  owner, verification and expiry/revisit condition; otherwise no unowned shared state is allowed.
+
+### ARC-018 — Validated domain states
+
+- **Rule**: Model data shapes and domain terms before branching. Parse external input once per
+  trust boundary into validated Schema/value objects; constructors and transitions preserve
+  invariants. Keep planning policy pure. Internal validated values do not replace authorization
+  or validation at a new trust boundary.
+- **Forbidden**: Unchecked casts/suppressed errors as fixes, repeated raw parsing throughout
+  policy, or ambiguous boolean/null combinations encoding illegal states.
+- **Enforcement**: Existing Pydantic/transport contracts and mypy as applicable; changed paths
+  need invalid-input/transition tests and domain-term Review. These are required verification
+  responsibilities, not a claim that every existing path has been re-audited.
+- **Exception/Owner**: An approved Spec/ADR records the project owner, reason, evidence and
+  expiry/revisit condition before relaxing a constraint.
 
 Exceptions require an approved Spec/ADR with owner, reason and expiry. There is no active external-design-tool evidence exception.

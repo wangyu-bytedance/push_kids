@@ -1,0 +1,300 @@
+{
+  "reviewer": "implementer direct source/final DTO inspection; not independent code review or parent approval",
+  "source_sha256": {
+    "apps/api/src/push_kids/agent_processing/pipeline.py": "2fb6f22239387d27d66fd2bbf21cbed7e34a1c9ebd2d76bd49539102dde6b69e",
+    "apps/api/src/push_kids/agent_processing/stage_contracts.py": "403819c248fe73ff73fcfa374ed2169254811c8ccb6a96646c8c1728d7ce9ac8",
+    "apps/api/src/push_kids/agent_processing/prompt.py": "c6a5b5ddc8e30951e900b5622e728e483117066cf06b278fa8628be995cadfaa",
+    "apps/api/src/push_kids/agent_processing/stage_provider.py": "e3a64018d101f8ded8eddfedb1413143bf31ad6f0224b89dddb5b3250e73972e",
+    "apps/api/src/push_kids/agent_processing/contracts.py": "7524e52c4ffbc27e1127d54bb7ac33f676165d8f303961374ad68b959df25564",
+    "apps/api/src/push_kids/agent_processing/checkpoints.py": "45a0ce6401bc2780bf849fa7acec70a938f24fa77fde36c02afedae909e18e80",
+    "apps/api/src/push_kids/agent_processing/worker.py": "32f8cb9f7b4a7e181ae4227bbffadfa5f2c582c4cfabf02ae8528f7172cbc2b8",
+    "tools/evaluate_analysis_quality.py": "c603045b06d03836e4d16b6b9dcd998a0219c67afe700bd6d4c4bd7d85f79374",
+    "tests/fixtures/analysis_quality/cases.json": "9bdaec483fa9f6cc65e7a46c3656e70f2304efd42ecab3fe362864afa8fd829f"
+  },
+  "results": [
+    {
+      "case": "zh-01",
+      "content_verdict": "PASS",
+      "issue_code": "pass",
+      "proposal_generated": true,
+      "attempts": 1
+    },
+    {
+      "case": "math-01",
+      "content_verdict": "PASS",
+      "issue_code": "pass",
+      "proposal_generated": true,
+      "attempts": 1
+    },
+    {
+      "case": "en-01",
+      "content_verdict": "PASS",
+      "issue_code": "pass",
+      "proposal_generated": true,
+      "attempts": 1
+    },
+    {
+      "case": "zh-02",
+      "content_verdict": "PASS",
+      "issue_code": "pass",
+      "proposal_generated": true,
+      "attempts": 1
+    },
+    {
+      "case": "math-02",
+      "content_verdict": "PASS",
+      "issue_code": "pass",
+      "proposal_generated": true,
+      "attempts": 1
+    },
+    {
+      "case": "en-02",
+      "content_verdict": "PASS",
+      "issue_code": "pass",
+      "proposal_generated": true,
+      "attempts": 1
+    },
+    {
+      "case": "zh-03",
+      "content_verdict": "PASS",
+      "issue_code": "pass",
+      "proposal_generated": true,
+      "attempts": 1
+    },
+    {
+      "case": "math-03",
+      "content_verdict": "PASS",
+      "issue_code": "pass",
+      "proposal_generated": true,
+      "attempts": 1
+    },
+    {
+      "case": "en-03",
+      "content_verdict": "PASS",
+      "issue_code": "pass",
+      "proposal_generated": true,
+      "attempts": 1
+    },
+    {
+      "case": "multi-01",
+      "content_verdict": "PASS",
+      "issue_code": "pass",
+      "proposal_generated": true,
+      "attempts": 1
+    },
+    {
+      "case": "zh-04",
+      "content_verdict": "PASS",
+      "issue_code": "pass",
+      "proposal_generated": true,
+      "attempts": 1
+    },
+    {
+      "case": "math-04",
+      "content_verdict": "PASS",
+      "issue_code": "pass",
+      "proposal_generated": true,
+      "attempts": 1
+    },
+    {
+      "case": "en-04",
+      "content_verdict": "PASS",
+      "issue_code": "pass",
+      "proposal_generated": true,
+      "attempts": 1
+    },
+    {
+      "case": "zh-05",
+      "content_verdict": "PASS",
+      "issue_code": "pass",
+      "proposal_generated": true,
+      "attempts": 1
+    },
+    {
+      "case": "math-05",
+      "content_verdict": "PASS",
+      "issue_code": "pass",
+      "proposal_generated": true,
+      "attempts": 1
+    },
+    {
+      "case": "en-05",
+      "content_verdict": "PASS",
+      "issue_code": "pass",
+      "proposal_generated": true,
+      "attempts": 1
+    },
+    {
+      "case": "zh-06",
+      "content_verdict": "PASS",
+      "issue_code": "pass",
+      "proposal_generated": true,
+      "attempts": 1
+    },
+    {
+      "case": "math-06",
+      "content_verdict": "PASS",
+      "issue_code": "pass",
+      "proposal_generated": true,
+      "attempts": 1
+    },
+    {
+      "case": "en-06",
+      "content_verdict": "PASS",
+      "issue_code": "pass",
+      "proposal_generated": true,
+      "attempts": 1
+    },
+    {
+      "case": "multi-02",
+      "content_verdict": "PASS",
+      "issue_code": "pass",
+      "proposal_generated": true,
+      "attempts": 1
+    },
+    {
+      "case": "zh-07",
+      "content_verdict": "PASS",
+      "issue_code": "pass",
+      "proposal_generated": true,
+      "attempts": 1
+    },
+    {
+      "case": "math-07",
+      "content_verdict": "PASS",
+      "issue_code": "pass",
+      "proposal_generated": true,
+      "attempts": 1
+    },
+    {
+      "case": "en-07",
+      "content_verdict": "PASS",
+      "issue_code": "pass",
+      "proposal_generated": true,
+      "attempts": 1
+    },
+    {
+      "case": "zh-08",
+      "content_verdict": "PASS",
+      "issue_code": "pass",
+      "proposal_generated": true,
+      "attempts": 1
+    },
+    {
+      "case": "math-08",
+      "content_verdict": "PASS",
+      "issue_code": "pass",
+      "proposal_generated": true,
+      "attempts": 1
+    },
+    {
+      "case": "en-08",
+      "content_verdict": "PASS",
+      "issue_code": "pass",
+      "proposal_generated": true,
+      "attempts": 1
+    },
+    {
+      "case": "zh-09",
+      "content_verdict": "PASS",
+      "issue_code": "pass",
+      "proposal_generated": true,
+      "attempts": 1
+    },
+    {
+      "case": "math-09",
+      "content_verdict": "PASS",
+      "issue_code": "pass",
+      "proposal_generated": true,
+      "attempts": 1
+    },
+    {
+      "case": "en-09",
+      "content_verdict": "FAIL",
+      "issue_code": "malformed_source_word",
+      "proposal_generated": true,
+      "attempts": 1
+    },
+    {
+      "case": "multi-03",
+      "content_verdict": "PASS",
+      "issue_code": "pass",
+      "proposal_generated": true,
+      "attempts": 1
+    },
+    {
+      "case": "zh-10",
+      "content_verdict": "PASS",
+      "issue_code": "pass",
+      "proposal_generated": true,
+      "attempts": 1
+    },
+    {
+      "case": "math-10",
+      "content_verdict": "PASS",
+      "issue_code": "pass",
+      "proposal_generated": true,
+      "attempts": 1
+    },
+    {
+      "case": "en-10",
+      "content_verdict": "PASS",
+      "issue_code": "pass",
+      "proposal_generated": true,
+      "attempts": 1
+    },
+    {
+      "case": "zh-11",
+      "content_verdict": "PASS",
+      "issue_code": "pass",
+      "proposal_generated": true,
+      "attempts": 1
+    },
+    {
+      "case": "math-11",
+      "content_verdict": "PASS",
+      "issue_code": "pass",
+      "proposal_generated": true,
+      "attempts": 1
+    },
+    {
+      "case": "en-11",
+      "content_verdict": "PASS",
+      "issue_code": "pass",
+      "proposal_generated": true,
+      "attempts": 1
+    },
+    {
+      "case": "zh-12",
+      "content_verdict": "PASS",
+      "issue_code": "pass",
+      "proposal_generated": true,
+      "attempts": 1
+    },
+    {
+      "case": "math-12",
+      "content_verdict": "PASS",
+      "issue_code": "pass",
+      "proposal_generated": true,
+      "attempts": 1
+    },
+    {
+      "case": "en-12",
+      "content_verdict": "PASS",
+      "issue_code": "pass",
+      "proposal_generated": true,
+      "attempts": 1
+    },
+    {
+      "case": "multi-04",
+      "content_verdict": "PARTIAL_SUPPORTED",
+      "issue_code": "supported_partial_missing_vocabulary",
+      "proposal_generated": true,
+      "attempts": 1
+    }
+  ],
+  "content_pass": 38,
+  "supported_partial": 1,
+  "content_fail": 1,
+  "parent_review": "PENDING"
+}

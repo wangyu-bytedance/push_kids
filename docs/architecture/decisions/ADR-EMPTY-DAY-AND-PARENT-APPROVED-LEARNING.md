@@ -3,7 +3,7 @@
 - Status: ACCEPTED / LOCAL_IMPLEMENTATION / RELEASE_GATES_OPEN
 - Date: 2026-10-24
 - Approved: 产品负责人「批准，按此实现」；两份Spec04、Architecture02/03和DREV-20261024-TODAY-LEARNING-01。
-- Scope: [复习Spec](../../../specs/active/FEAT-001-EMPTY-DAY-EARLY-REVIEW.md)、[建议Spec](../../../specs/active/FEAT-004-INCREMENTAL-LEARNING-PATH.md)。
+- Scope: [复习Spec](../../../specs/completed/FEAT-001-EMPTY-DAY-EARLY-REVIEW.md)、[建议Spec](../../../specs/completed/FEAT-004-INCREMENTAL-LEARNING-PATH.md)。
 
 复习只从已确认知识选择。planning的纯early_review政策固定3日窗口、80%原间隔、真实复习/安排冷却2日，首次复习不提前；确定性日期公式不变。迁移0023用每Review最多3条机会槽换取slot_on等值索引读取，避免大库存上扫描未来项。SQL与纯政策的边界有对照测试；显式early_projection提供scope内漂移检查和事务修复，普通GET不修复全表。自动queue_eligible_on等于due_date时是旧队列锚点；其他恢复日期仍为下限，任何家长预约都不提前。
 

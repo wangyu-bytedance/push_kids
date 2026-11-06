@@ -1,0 +1,532 @@
+const api = require("../../utils/api");
+const ui = require("../../utils/ui");
+const childContext = require("../../utils/child-context");
+const renewal = require("../../utils/notification-renewal");
+
+const WEEKDAYS = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
+const KIND_LABELS = { class: "课外活动", activity: "自主活动", other: "其他安排" };
+const DEFAULT_SECTIONS = { review: false, daily: false, learning: false, activity: false };
+const TODO_PREVIEW = 3;
+const RING_TICKS = 12;
+
+function canWriteToday() {
+  const context = getApp().globalData;
+  const member = context.currentMember;
+  return member ? ["manager", "editor"].includes(member.role) : !context.useCloud;
+}
+
+function dayLabel(iso) {
+  const parts = String(iso || "").split("-");
+  if (parts.length !== 3) return "";
+  const value = new Date(`${iso}T12:00:00`);
+  return `${Number(parts[1])} 月 ${Number(parts[2])} 日 ${WEEKDAYS[value.getDay()] || ""}`;
+}
+
+/* 安排环：12 个刻度只描述今天到期复习的构成（必做 / 有余力），不是完成率，也不是评价。
+   项数超过刻度数时按比例折算，中心数字始终是真实项数。 */
+function ringTicks(required, total) {
+  const sum = Math.max(0, Number(total) || 0);
+  const req = Math.min(Math.max(0, Number(required) || 0), sum);
+  let filled = Math.min(RING_TICKS, sum);
+  let reqTicks = req;
+  if (sum > RING_TICKS) {
+    filled = RING_TICKS;
+    reqTicks = req ? Math.max(1, Math.round((RING_TICKS * req) / sum)) : 0;
+  }
+  const ticks = [];
+  for (let index = 0; index < RING_TICKS; index += 1) {
+    let cls = "idle";
+    if (index < reqTicks) cls = "req";
+    else if (index < filled) cls = "opt";
+    ticks.push({ deg: Math.round((360 / RING_TICKS) * index), cls });
+  }
+  return ticks;
+}
+
+/* 默认状态取完整服务端计数；手动选择仅保留在本次浏览，不读旧 storage 偏好。 */
+function defaultSections(dashboard) {
+  return {
+    review: Number(dashboard.todo_count) > 0,
+    daily: !!(dashboard.daily_tasks && dashboard.daily_tasks.remaining_count > 0),
+    learning: Number(dashboard.daily_summary.record_count) > 0,
+    activity: Boolean(dashboard.workday_calendar_warning) || Number(dashboard.activity_remaining_count) > 0
+  };
+}
+
+/* Todo 超过 3 张折叠；「有余力再做」小标题挂在第一张可选卡上。 */
+function todoView(must, optional, expanded) {
+  const all = (must || []).concat(optional || []);
+  const shown = expanded ? all : all.slice(0, TODO_PREVIEW);
+  const loadedCount = all.reduce((sum, group) => sum + (group.items || []).length, 0);
+  const shownCount = shown.reduce((sum, group) => sum + (group.items || []).length, 0);
+  return {
+    cards: shown.map((group, index) => ({
+      ...group,
+      first_optional: !!group.optional && (index === 0 || !shown[index - 1].optional)
+    })),
+    hidden: Math.max(0, loadedCount - shownCount)
+  };
+}
+
+function mergeTodoGroups(current, incoming) {
+  const result = (current || []).map((group) => ({ ...group, items: [...(group.items || [])] }));
+  const byId = Object.fromEntries(result.map((group) => [group.id, group]));
+  (incoming || []).forEach((group) => {
+    const existing = byId[group.id];
+    if (!existing) {
+      const added = { ...group, items: [...(group.items || [])] };
+      byId[group.id] = added;
+      result.push(added);
+      return;
+    }
+    const ids = new Set(existing.items.map((item) => item.review_id));
+    const additions = (group.items || []).filter((item) => !ids.has(item.review_id));
+    existing.items.push(...additions);
+    existing.estimated_minutes += additions.length ? Number(group.estimated_minutes) || 0 : 0;
+  });
+  return result;
+}
+
+/* 新后端把“今天真正要做的集合”固定在 review_selection；这里仅做字段适配，
+   不从全量到期 Todo 补入内容，也不在客户端重新排期。 */
+function stableReviewPlan(dashboard) {
+  const selection = dashboard && dashboard.review_selection;
+  if (!selection || !Array.isArray(selection.sessions)) return null;
+  const groups = selection.sessions.map((session) => {
+    const methods = Array.from(new Set((session.items || []).map((item) => item.review_method).filter(Boolean)));
+    return {
+      ...session,
+      optional: false,
+      review_method: methods.length === 1 ? methods[0] : "按提示复习",
+      estimated_minutes: Number(session.estimated_minutes) || 0,
+      items: session.items || []
+    };
+  });
+  return {
+    groups,
+    selectedCount: Number(selection.selected_count) || 0,
+    selectedMinutes: Number(selection.selected_minutes) || 0,
+    plannedCount: Number(selection.planned_count) || 0,
+    backlogCount: Number(selection.backlog_count) || 0,
+    completedCount: Number(selection.today_feedback_count) || 0
+  };
+}
+
+Page({
+  onGradeConfirmation(event) {
+    const flow = getApp().gradeConfirmation;
+    if (flow) return flow.handle(this, event.detail);
+  },
+  data: {
+    gradeConfirmation: null, gradeConfirmationVisible: false,
+    loading: true, error: "", children: [], childIndex: 0, childId: "", dashboard: null,
+    sections: { ...DEFAULT_SECTIONS }, reviewReturn: null, reviewGroupId: "",
+    reviewFocusText: "", dayLabel: "",
+    hero: { required: 0, optional: 0, total: 0, minutes: 0, note: "", ticks: [] },
+    stablePlan: false, planCompleted: false,
+    todoCards: [], hiddenTodoCount: 0, todosExpanded: false, loadingMoreTodos: false,
+    showChildSheet: false, multiChild: false, canAddChild: true,
+    showSourceSheet: false, sourceSheet: null,
+    canWrite: false, deleteTarget: null, deleting: false, deleteError: "",
+    dailyTaskPendingId: "", dailyTaskError: "",
+    showRenewalGuide: false, renewalGuideSaving: false, showLearningSheet: false,
+    sectionMeta: { review: "", daily: "", learning: "", activity: "" }
+  },
+  onShow() {
+    if (this.renewalController) this.renewalController.show();
+    this.manualSections = {};
+    this.resetDailyTaskRequest();
+    this.setData({ canWrite: canWriteToday() });
+    const tabBar = this.getTabBar && this.getTabBar();
+    if (tabBar) tabBar.setData({ selected: 0 });
+    this.load();
+  },
+  onHide() {
+    this.closeSourceSheet();
+    const learning = this.selectComponent && this.selectComponent("#today-learning");
+    if (learning) learning.hide();
+    if (this.data.showRenewalGuide && this.renewalController) {
+      // 离开说明等同暂不开启；网络失败不伪造已保存的选择。
+      this.renewalController.setChoice(false).catch(() => {});
+    }
+    if (this.renewalController) this.renewalController.hide();
+    this.setRenewalGuide(false);
+    this.resetDelete();
+    this.loadGeneration = (this.loadGeneration || 0) + 1;
+    this.resetDailyTaskRequest();
+  },
+  onUnload() { this.onHide(); },
+  learningModal(event) {
+    const open = !!event.detail.open;
+    this.setData({ showLearningSheet: open });
+    const bar = this.getTabBar && this.getTabBar();
+    if (bar) bar.setData({ recordOverlayVisible: open });
+  },
+  learningRecorded() { this.load(); },
+  async onPullDownRefresh() {
+    this.manualSections = {};
+    await this.load();
+    if (wx.stopPullDownRefresh) wx.stopPullDownRefresh();
+  },
+  async load() {
+    const generation = (this.loadGeneration || 0) + 1;
+    this.loadGeneration = generation;
+    this.setData({ loading: true, error: "", loadingMoreTodos: false });
+    try {
+      const app = getApp();
+      if (app.globalData.useCloud && !app.globalData.currentMember) await app.refreshBootstrap();
+      if (generation !== this.loadGeneration) return;
+      this.setData({ canWrite: canWriteToday() });
+      if (app.globalData.currentMember && app.globalData.currentMember.id && this.data.canWrite) {
+        if (!this.renewalController) this.renewalController = renewal.createController();
+        this.renewalController.refresh().catch(() => {});
+      }
+      const profiles = await api.request("/children");
+      if (generation !== this.loadGeneration) return;
+      const selection = childContext.syncSelection(app, profiles);
+      const children = selection.children;
+      const canAddChild = childContext.canAddChild(profiles);
+      if (!children.length) {
+        this.resetDailyTaskRequest();
+        this.manualSections = {};
+        this.setData({ loading: false, children, dashboard: null, childId: "", multiChild: false,
+          canAddChild });
+        return;
+      }
+      const childIndex = selection.childIndex;
+      const childId = selection.childId;
+      if (childId !== this.data.childId) {
+        this.manualSections = {};
+        this.resetDailyTaskRequest();
+        this.setData({ childId, dashboard: null, sections: { ...DEFAULT_SECTIONS } });
+      }
+      const [dashboard, subjects] = await Promise.all([
+        api.request(`/children/${childId}/dashboard`, { capabilities: "empty-day-v1" }),
+        api.request(`/children/${childId}/subjects`)
+      ]);
+      if (generation !== this.loadGeneration) return;
+      dashboard.daily_tasks = dashboard.daily_tasks || { day: dashboard.day, items: [], total_count: 0, remaining_count: 0 };
+      dashboard.workday_warning_text = dashboard.workday_calendar_warning
+        ? `工作日数据待更新：当前仅覆盖至 ${dashboard.workday_calendar_warning.coverage_end}，超出范围的安排暂不显示，也不会发送提醒。` : "";
+      const activitiesByName = Object.fromEntries(subjects.filter((item) => item.kind === "activity" && item.active).map((item) => [item.name, item.id]));
+      dashboard.schedule_items = dashboard.schedule_items.map((item) => ({ ...item, subject_id: item.subject_id || activitiesByName[item.name] || "",
+        kind_label: KIND_LABELS[item.kind] || "其他安排",
+        time_text: `${item.start_time}–${item.end_time}${item.workday_only ? " · 工作日" : item.repeat_weekly ? " · 每周重复" : ""}`,
+        action_text: item.completed ? "查看或补充记录" : item.past ? "补记这次练习" : "记录这次练习" }));
+      dashboard.daily_summary.subjects = dashboard.daily_summary.subjects.map((item) => ({ ...item, summary_text: item.summaries.join("；"),
+        subject_class: ui.subjectClass(item.subject_name), subject_mark: ui.subjectMark(item.subject_name) }));
+      const plan = stableReviewPlan(dashboard);
+      if (plan) {
+        dashboard.todo_groups = plan.groups;
+        dashboard.todo_count = plan.selectedCount;
+        dashboard.required_todo_count = plan.selectedCount;
+        dashboard.estimated_minutes = plan.selectedMinutes;
+        dashboard.todo_next_cursor = null;
+        dashboard.todo_remaining_count = 0;
+      }
+      dashboard.must_todo_groups = dashboard.todo_groups.filter((item) => !item.optional);
+      dashboard.optional_todo_groups = dashboard.todo_groups.filter((item) => item.optional);
+      const scheduledSubjects = new Set(dashboard.schedule_items.map((item) => item.subject_id).filter(Boolean));
+      dashboard.optional_activity_suggestions = dashboard.activity_suggestions.filter((item) => item.suggested && !scheduledSubjects.has(item.subject_id));
+      dashboard.is_empty = !dashboard.workday_warning_text && !dashboard.todo_groups.length && !dashboard.daily_summary.record_count && !dashboard.schedule_items.length && !dashboard.optional_activity_suggestions.length;
+      dashboard.show_guide = !dashboard.todo_groups.length && !(plan && plan.plannedCount)
+        && !dashboard.daily_summary.record_count && !dashboard.next_review;
+      dashboard.activity_count = dashboard.schedule_items.length + dashboard.optional_activity_suggestions.length;
+      const view = todoView(dashboard.must_todo_groups, dashboard.optional_todo_groups, this.data.todosExpanded);
+      const remoteTodoCount = Number(dashboard.todo_remaining_count) || 0;
+      const sectionScope = `${app.globalData.familyId || ""}:${childId}:${dashboard.day}`;
+      if (this.sectionScope !== sectionScope) this.manualSections = {};
+      this.sectionScope = sectionScope;
+      const sections = { ...defaultSections(dashboard), ...this.manualSections };
+      const planCompleted = !!(plan && plan.plannedCount > 0 && plan.selectedCount === 0);
+      const planNote = !planCompleted && dashboard.review_selection
+        && dashboard.review_selection.coverage_limited
+        ? "本次预算未能覆盖所有待复习科目。" : "";
+      const reviewMeta = dashboard.todo_count
+        ? `${plan ? "今天安排" : "今天"} ${dashboard.todo_count} 项 · 约 ${dashboard.estimated_minutes} 分钟`
+        : (planCompleted
+          ? `今天 ${plan.completedCount} 项已完成`
+          : "今天 0 项");
+      this.setData({ loading: false, children, childIndex, childId, dashboard,
+        multiChild: selection.multiChild, canAddChild,
+        dayLabel: dayLabel(dashboard.day),
+        hero: {
+          required: dashboard.required_todo_count || 0,
+          optional: Math.max(0, (dashboard.todo_count || 0) - (dashboard.required_todo_count || 0)),
+          total: dashboard.todo_count || 0,
+          ticks: ringTicks(dashboard.required_todo_count, dashboard.todo_count),
+          minutes: dashboard.estimated_minutes || 0,
+          note: plan ? planNote : (dashboard.todo_count > dashboard.required_todo_count
+            ? `其中 ${dashboard.todo_count - dashboard.required_todo_count} 项是可选的 · 都是之前确认过的学习内容`
+            : "都是之前确认过的学习内容")
+        },
+        stablePlan: !!plan, planCompleted,
+        sections,
+        sectionMeta: {
+          review: reviewMeta,
+          daily: dashboard.daily_tasks.total_count
+            ? `${dashboard.daily_tasks.total_count - dashboard.daily_tasks.remaining_count} / ${dashboard.daily_tasks.total_count} 已完成`
+            : "还未设置",
+          learning: `已确认 ${dashboard.daily_summary.record_count} 条`,
+          activity: dashboard.workday_calendar_warning ? "数据待更新" : `${dashboard.activity_count} 项`
+        },
+        todoCards: view.cards, hiddenTodoCount: view.hidden + remoteTodoCount,
+        loadingMoreTodos: false });
+      if (app.setTabBadge) app.setTabBadge("records", dashboard.pending_confirmation_count);
+      const back = app.globalData.reviewReturn;
+      if (back && back.childId === childId) {
+        const ids = new Set(back.reviewIds);
+        const target = dashboard.todo_groups.find((group) => group.items.some((item) => ids.has(item.review_id)));
+        this.setData({ reviewReturn: back, reviewGroupId: target ? target.id : "", "sections.review": true,
+          reviewFocusText: target ? "已定位这条学习记录的到期复习" : "这条记录当前没有待完成的到期复习" });
+        if (target) this.expandTodos();
+        delete app.globalData.reviewReturn;
+        if (target && wx.pageScrollTo) wx.pageScrollTo({ selector: `#todo-group-${target.id}`, duration: 0 });
+      } else if (this.data.reviewReturn && this.data.reviewReturn.childId !== childId) {
+        this.setData({ reviewReturn: null, reviewGroupId: "", reviewFocusText: "" });
+      }
+    } catch (error) {
+      if (generation !== this.loadGeneration) return;
+      /* 出错时保留已加载到的内容，只在顶部加一条可重试的说明。 */
+      this.setData({ loading: false, error: error.message });
+    }
+  },
+  toggleSection(event) {
+    const section = event.currentTarget.dataset.section;
+    if (!Object.prototype.hasOwnProperty.call(DEFAULT_SECTIONS, section)) return;
+    const sections = { ...this.data.sections, [section]: !this.data.sections[section] };
+    this.manualSections = { ...this.manualSections, [section]: sections[section] };
+    this.setData({ sections });
+  },
+  resetDailyTaskRequest() {
+    this.dailyTaskGeneration = (this.dailyTaskGeneration || 0) + 1;
+    this.setData({ dailyTaskPendingId: "", dailyTaskError: "" });
+  },
+  async toggleDailyTask(event) {
+    if (!this.data.canWrite || this.data.loading || this.data.dailyTaskPendingId) return;
+    const childId = this.data.childId;
+    const familyId = getApp().globalData.familyId;
+    const taskId = event.currentTarget.dataset.id;
+    const task = this.data.dashboard.daily_tasks.items.find((item) => item.id === taskId);
+    if (!task) return;
+    const generation = (this.dailyTaskGeneration || 0) + 1;
+    this.dailyTaskGeneration = generation;
+    const current = () => generation === this.dailyTaskGeneration
+      && childId === this.data.childId && familyId === getApp().globalData.familyId;
+    this.setData({ dailyTaskPendingId: taskId, dailyTaskError: "" });
+    try {
+      const result = await api.request(`/children/${childId}/daily-tasks/${taskId}/today-completion`, {
+        method: "PUT", data: { completed: !task.completed }
+      });
+      if (!current()) return;
+      this.setData({ dailyTaskPendingId: "" });
+      if (result.day !== this.data.dashboard.day) {
+        await this.load();
+        return;
+      }
+      const dashboard = { ...this.data.dashboard, daily_tasks: result };
+      this.setData({ dashboard, sections: { ...defaultSections(dashboard), ...this.manualSections },
+        "sectionMeta.daily": `${result.total_count - result.remaining_count} / ${result.total_count} 已完成` });
+      wx.showToast({ title: task.completed ? "已撤销" : "已完成", icon: "success" });
+    } catch (error) {
+      if (!current()) return;
+      this.setData({ dailyTaskPendingId: "", dailyTaskError: error.message || "未能保存，请重试" });
+    }
+  },
+  async expandTodos() {
+    const dashboard = this.data.dashboard;
+    if (!dashboard || this.data.loadingMoreTodos) return;
+    const view = todoView(dashboard.must_todo_groups, dashboard.optional_todo_groups, true);
+    this.setData({ todosExpanded: true, todoCards: view.cards,
+      hiddenTodoCount: view.hidden + (Number(dashboard.todo_remaining_count) || 0) });
+    if (!dashboard.todo_next_cursor) return;
+    const generation = this.loadGeneration;
+    const childId = this.data.childId;
+    const cursor = dashboard.todo_next_cursor;
+    this.setData({ loadingMoreTodos: true });
+    try {
+      const day = encodeURIComponent(dashboard.day || "");
+      const page = await api.request(`/children/${childId}/todos?day=${day}&limit=50&cursor=${encodeURIComponent(cursor)}`);
+      if (generation !== this.loadGeneration || childId !== this.data.childId
+          || !this.data.dashboard || this.data.dashboard.todo_next_cursor !== cursor) return;
+      const groups = mergeTodoGroups(this.data.dashboard.todo_groups, page.groups);
+      const must = groups.filter((item) => !item.optional);
+      const optional = groups.filter((item) => item.optional);
+      const nextView = todoView(must, optional, true);
+      this.setData({
+        "dashboard.todo_groups": groups,
+        "dashboard.must_todo_groups": must,
+        "dashboard.optional_todo_groups": optional,
+        "dashboard.todo_next_cursor": page.next_cursor || null,
+        "dashboard.todo_remaining_count": Number(page.remaining_count) || 0,
+        todoCards: nextView.cards,
+        hiddenTodoCount: nextView.hidden + (Number(page.remaining_count) || 0),
+        loadingMoreTodos: false
+      });
+    } catch (error) {
+      if (generation === this.loadGeneration && childId === this.data.childId) {
+        this.setData({ loadingMoreTodos: false, error: error.message });
+      }
+    }
+  },
+  openReviewSource(event) {
+    const submissionId = event.currentTarget.dataset.submissionId;
+    if (submissionId) wx.navigateTo({ url: `/pages/record-detail/index?id=${submissionId}` });
+  },
+  openSourceSheet(event) {
+    if (this.data.deleting) return;
+    this.resetDelete();
+    const item = event.detail || {};
+    if (!item.sourceSubmissionId) return;
+    this.setData({
+      showChildSheet: false,
+      showSourceSheet: true,
+      sourceSheet: {
+        reviewId: item.reviewId,
+        knowledgeName: item.name,
+        summary: item.sourceSummary,
+        submissionId: item.sourceSubmissionId,
+        imageIndex: item.sourceImageIndex,
+        dateLabel: item.sourceDateLabel
+      }
+    });
+  },
+  closeSourceSheet() {
+    if (!this.data.showSourceSheet && !this.data.sourceSheet) return;
+    this.setData({ showSourceSheet: false, sourceSheet: null });
+  },
+  resetDelete() {
+    this.deleteGeneration = (this.deleteGeneration || 0) + 1;
+    this.setData({ deleteTarget: null, deleting: false, deleteError: "" });
+  },
+  openDelete(event) {
+    const item = event.detail || {};
+    if (!this.data.canWrite || !item.knowledgeId || this.data.deleting) return;
+    this.closeSourceSheet();
+    this.resetDelete();
+    this.setData({ deleteTarget: { knowledgeId: item.knowledgeId, name: item.name, childId: this.data.childId } });
+  },
+  cancelDelete() { if (!this.data.deleting) this.resetDelete(); },
+  async confirmDelete() {
+    const target = this.data.deleteTarget;
+    if (!this.data.canWrite || !target || this.data.deleting || target.childId !== this.data.childId) return;
+    const generation = this.deleteGeneration;
+    this.setData({ deleting: true, deleteError: "" });
+    try {
+      await api.request(`/children/${encodeURIComponent(target.childId)}/knowledge/${encodeURIComponent(target.knowledgeId)}`, { method: "DELETE" });
+      if (generation !== this.deleteGeneration || target.childId !== this.data.childId) return;
+      this.resetDelete();
+      wx.showToast({ title: "已删除", icon: "success" });
+      await this.load();
+    } catch (error) {
+      if (generation !== this.deleteGeneration || target.childId !== this.data.childId) return;
+      this.setData({ deleting: false, deleteError: error.message || "删除失败，请重试" });
+    }
+  },
+  openChildSheet() { if (this.data.children.length) this.setData({ showChildSheet: true }); },
+  closeChildSheet() { this.setData({ showChildSheet: false }); },
+  addChild() {
+    this.setData({ showChildSheet: false });
+    wx.navigateTo({ url: "/pages/child-edit/index?mode=create" });
+  },
+  async chooseChild(event) {
+    this.resetDelete();
+    this.resetDailyTaskRequest();
+    const childIndex = Number(event.currentTarget.dataset.index);
+    const childId = this.data.children[childIndex].id;
+    getApp().selectChild(childId);
+    this.setData({ childIndex, childId, dashboard: null, sections: { ...DEFAULT_SECTIONS }, showChildSheet: false, showSourceSheet: false,
+      sourceSheet: null, todosExpanded: false });
+    await this.load();
+  },
+  async changeChild(event) {
+    this.resetDelete();
+    this.resetDailyTaskRequest();
+    const childIndex = Number(event.detail.value);
+    const childId = this.data.children[childIndex].id;
+    getApp().selectChild(childId);
+    this.setData({ childIndex, childId, dashboard: null, sections: { ...DEFAULT_SECTIONS }, showSourceSheet: false, sourceSheet: null });
+    await this.load();
+  },
+  recordLearning() { getApp().globalData.recordIntent = { childId: this.data.childId, view: "new" }; wx.switchTab({ url: "/pages/records/index" }); },
+  addSchedule() { getApp().globalData.openCalendarCreate = true; wx.switchTab({ url: "/pages/calendar/index" }); },
+  openCalendar() { wx.switchTab({ url: "/pages/calendar/index" }); },
+  openPending() { getApp().globalData.historyIntent = { childId: this.data.childId, view: "history", status: "pending" }; wx.switchTab({ url: "/pages/reports/index" }); },
+  openLearningHistory(event) {
+    const filters = { from: this.data.dashboard.day, to: this.data.dashboard.day };
+    if (event.currentTarget.dataset.id) filters.subject_id = event.currentTarget.dataset.id;
+    getApp().globalData.historyIntent = { childId: this.data.childId, view: "history", status: "confirmed",
+      filters };
+    wx.switchTab({ url: "/pages/reports/index" });
+  },
+  returnToRecord() {
+    if (!this.data.reviewReturn || this.data.reviewReturn.childId !== this.data.childId) return;
+    wx.navigateTo({ url: `/pages/submission/confirm?id=${this.data.reviewReturn.submissionId}` });
+  },
+  openSettings() { wx.switchTab({ url: "/pages/settings/index" }); },
+  openActivity(event) { wx.navigateTo({ url: `/pages/activity/edit?subjectId=${event.currentTarget.dataset.subjectId}` }); },
+  async feedback(event) {
+    const { reviewId, action } = event.detail;
+    if (!this.data.canWrite || !this.data.dashboard) return;
+    // 同步点击链：在任何反馈网络请求/await之前尝试；失败不阻断复习。
+    if (action === "complete" && this.renewalController) this.renewalController.complete();
+    const renewalScope = `${getApp().globalData.familyId || ""}:${(getApp().globalData.currentMember || {}).id || ""}:${this.data.childId}`;
+    this.feedbackRetryKeys = this.feedbackRetryKeys || {};
+    const intent = `${reviewId}:${action}`;
+    const idempotencyKey = this.feedbackRetryKeys[intent] || api.newIdempotencyKey("feedback");
+    const previous = this.data.dashboard;
+    const groups = previous.todo_groups
+      .map((group) => ({ ...group, items: group.items.filter((item) => item.review_id !== reviewId) }))
+      .filter((group) => group.items.length);
+    const must = groups.filter((item) => !item.optional);
+    const optional = groups.filter((item) => item.optional);
+    const view = todoView(must, optional, this.data.todosExpanded);
+    this.setData({
+      "dashboard.todo_groups": groups,
+      "dashboard.must_todo_groups": must,
+      "dashboard.optional_todo_groups": optional,
+      todoCards: view.cards,
+      hiddenTodoCount: view.hidden + (Number(previous.todo_remaining_count) || 0)
+    });
+    try {
+      await api.request(`/reviews/${reviewId}/feedback`, { method: "POST", data: { action }, idempotencyKey });
+      delete this.feedbackRetryKeys[intent];
+      wx.showToast({ title: action === "complete" ? "已完成" : "计划已调整", icon: "success" });
+      await this.load();
+      if (action === "complete" && this.renewalController) {
+        this.renewalController.refresh().then(() => {
+          if (renewalScope === `${getApp().globalData.familyId || ""}:${(getApp().globalData.currentMember || {}).id || ""}:${this.data.childId}`
+            && this.renewalController.guideReady()) this.setRenewalGuide(true);
+        }).catch(() => {});
+      }
+    } catch (error) {
+      this.feedbackRetryKeys[intent] = idempotencyKey;
+      const rollback = todoView(previous.must_todo_groups, previous.optional_todo_groups, this.data.todosExpanded);
+      this.setData({ dashboard: previous, todoCards: rollback.cards,
+        hiddenTodoCount: rollback.hidden + (Number(previous.todo_remaining_count) || 0) });
+      wx.showToast({ title: `${error.message}·刚才那条没保存成功`, icon: "none" });
+    }
+  },
+  setRenewalGuide(visible) {
+    const bar = this.getTabBar && this.getTabBar();
+    if (bar) bar.setData({ renewalGuideVisible: visible });
+    this.setData({ showRenewalGuide: visible });
+  },
+  enableRenewal() {
+    if (!this.renewalController || !this.renewalController.enableFromGuide()) {
+      if (this.renewalController) this.renewalController.refresh().catch(() => {});
+      return;
+    }
+    this.setRenewalGuide(false);
+  },
+  async declineRenewal() {
+    if (!this.renewalController || this.data.renewalGuideSaving) return;
+    this.setData({ renewalGuideSaving: true });
+    try {
+      await this.renewalController.setChoice(false);
+      this.setRenewalGuide(false);
+    } catch {
+      // 未确认服务端选择不伪造成功；说明保留，允许再次操作。
+    } finally { this.setData({ renewalGuideSaving: false }); }
+  }
+});

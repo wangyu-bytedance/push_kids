@@ -1,0 +1,2314 @@
+[
+  {
+    "case": "real02",
+    "path": "on",
+    "round": 1,
+    "success": true,
+    "first_success": true,
+    "seconds": 38.648,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 37.684,
+        "seconds": 38.648
+      }
+    ],
+    "acceptance_outcome": "needs_review",
+    "acceptance_ms": 964,
+    "finding_count": 1,
+    "facts_preserved": true,
+    "calls": 6
+  },
+  {
+    "case": "real02",
+    "path": "off",
+    "round": 1,
+    "success": true,
+    "first_success": true,
+    "seconds": 40.368,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 40.368,
+        "seconds": 40.368
+      }
+    ],
+    "acceptance_outcome": "disabled",
+    "acceptance_ms": 0,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 5
+  },
+  {
+    "case": "real05",
+    "path": "off",
+    "round": 1,
+    "success": true,
+    "first_success": true,
+    "seconds": 19.187,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 19.187,
+        "seconds": 19.187
+      }
+    ],
+    "acceptance_outcome": "disabled",
+    "acceptance_ms": 0,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 5
+  },
+  {
+    "case": "real05",
+    "path": "on",
+    "round": 1,
+    "success": true,
+    "first_success": true,
+    "seconds": 15.408,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 14.896,
+        "seconds": 15.408
+      }
+    ],
+    "acceptance_outcome": "no_finding",
+    "acceptance_ms": 512,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 6
+  },
+  {
+    "case": "real06",
+    "path": "on",
+    "round": 1,
+    "success": true,
+    "first_success": true,
+    "seconds": 92.043,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 90.547,
+        "seconds": 92.043
+      }
+    ],
+    "acceptance_outcome": "no_finding",
+    "acceptance_ms": 1496,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 8
+  },
+  {
+    "case": "real06",
+    "path": "off",
+    "round": 1,
+    "success": true,
+    "first_success": true,
+    "seconds": 84.515,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 84.515,
+        "seconds": 84.515
+      }
+    ],
+    "acceptance_outcome": "disabled",
+    "acceptance_ms": 0,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 7
+  },
+  {
+    "case": "real07",
+    "path": "off",
+    "round": 1,
+    "success": true,
+    "first_success": true,
+    "seconds": 26.507,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 26.507,
+        "seconds": 26.507
+      }
+    ],
+    "acceptance_outcome": "disabled",
+    "acceptance_ms": 0,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 5
+  },
+  {
+    "case": "real07",
+    "path": "on",
+    "round": 1,
+    "success": true,
+    "first_success": true,
+    "seconds": 24.201,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 23.593,
+        "seconds": 24.201
+      }
+    ],
+    "acceptance_outcome": "needs_review",
+    "acceptance_ms": 607,
+    "finding_count": 2,
+    "facts_preserved": true,
+    "calls": 6
+  },
+  {
+    "case": "real08",
+    "path": "on",
+    "round": 1,
+    "success": true,
+    "first_success": true,
+    "seconds": 14.587,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 14.221,
+        "seconds": 14.587
+      }
+    ],
+    "acceptance_outcome": "no_finding",
+    "acceptance_ms": 365,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 6
+  },
+  {
+    "case": "real08",
+    "path": "off",
+    "round": 1,
+    "success": true,
+    "first_success": true,
+    "seconds": 13.251,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 13.251,
+        "seconds": 13.251
+      }
+    ],
+    "acceptance_outcome": "disabled",
+    "acceptance_ms": 0,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 5
+  },
+  {
+    "case": "real09",
+    "path": "off",
+    "round": 1,
+    "success": true,
+    "first_success": true,
+    "seconds": 17.694,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 17.694,
+        "seconds": 17.694
+      }
+    ],
+    "acceptance_outcome": "disabled",
+    "acceptance_ms": 0,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 5
+  },
+  {
+    "case": "real09",
+    "path": "on",
+    "round": 1,
+    "success": true,
+    "first_success": true,
+    "seconds": 21.352,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 20.587,
+        "seconds": 21.352
+      }
+    ],
+    "acceptance_outcome": "no_finding",
+    "acceptance_ms": 765,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 6
+  },
+  {
+    "case": "real10",
+    "path": "on",
+    "round": 1,
+    "success": true,
+    "first_success": true,
+    "seconds": 38.343,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 37.346,
+        "seconds": 38.343
+      }
+    ],
+    "acceptance_outcome": "needs_review",
+    "acceptance_ms": 996,
+    "finding_count": 3,
+    "facts_preserved": true,
+    "calls": 7
+  },
+  {
+    "case": "real10",
+    "path": "off",
+    "round": 1,
+    "success": true,
+    "first_success": true,
+    "seconds": 39.481,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 39.481,
+        "seconds": 39.481
+      }
+    ],
+    "acceptance_outcome": "disabled",
+    "acceptance_ms": 0,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 6
+  },
+  {
+    "case": "real11",
+    "path": "off",
+    "round": 1,
+    "success": true,
+    "first_success": true,
+    "seconds": 35.886,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 35.886,
+        "seconds": 35.886
+      }
+    ],
+    "acceptance_outcome": "disabled",
+    "acceptance_ms": 0,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 5
+  },
+  {
+    "case": "real11",
+    "path": "on",
+    "round": 1,
+    "success": true,
+    "first_success": true,
+    "seconds": 45.405,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 43.681,
+        "seconds": 45.405
+      }
+    ],
+    "acceptance_outcome": "no_finding",
+    "acceptance_ms": 1723,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 6
+  },
+  {
+    "case": "real12",
+    "path": "on",
+    "round": 1,
+    "success": true,
+    "first_success": true,
+    "seconds": 20.996,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 20.227,
+        "seconds": 20.995
+      }
+    ],
+    "acceptance_outcome": "no_finding",
+    "acceptance_ms": 768,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 6
+  },
+  {
+    "case": "real12",
+    "path": "off",
+    "round": 1,
+    "success": true,
+    "first_success": true,
+    "seconds": 19.117,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 19.117,
+        "seconds": 19.117
+      }
+    ],
+    "acceptance_outcome": "disabled",
+    "acceptance_ms": 0,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 5
+  },
+  {
+    "case": "real13",
+    "path": "off",
+    "round": 1,
+    "success": true,
+    "first_success": true,
+    "seconds": 24.682,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 24.682,
+        "seconds": 24.682
+      }
+    ],
+    "acceptance_outcome": "disabled",
+    "acceptance_ms": 0,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 5
+  },
+  {
+    "case": "real13",
+    "path": "on",
+    "round": 1,
+    "success": true,
+    "first_success": true,
+    "seconds": 22.34,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 21.442,
+        "seconds": 22.34
+      }
+    ],
+    "acceptance_outcome": "no_finding",
+    "acceptance_ms": 897,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 6
+  },
+  {
+    "case": "real14",
+    "path": "on",
+    "round": 1,
+    "success": true,
+    "first_success": true,
+    "seconds": 17.5,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 16.524,
+        "seconds": 17.5
+      }
+    ],
+    "acceptance_outcome": "no_finding",
+    "acceptance_ms": 975,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 5
+  },
+  {
+    "case": "real14",
+    "path": "off",
+    "round": 1,
+    "success": true,
+    "first_success": true,
+    "seconds": 16.644,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 16.644,
+        "seconds": 16.644
+      }
+    ],
+    "acceptance_outcome": "disabled",
+    "acceptance_ms": 0,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 5
+  },
+  {
+    "case": "real15",
+    "path": "off",
+    "round": 1,
+    "success": true,
+    "first_success": true,
+    "seconds": 11.695,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 11.695,
+        "seconds": 11.695
+      }
+    ],
+    "acceptance_outcome": "disabled",
+    "acceptance_ms": 0,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 5
+  },
+  {
+    "case": "real15",
+    "path": "on",
+    "round": 1,
+    "success": true,
+    "first_success": true,
+    "seconds": 12.811,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 12.33,
+        "seconds": 12.811
+      }
+    ],
+    "acceptance_outcome": "no_finding",
+    "acceptance_ms": 481,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 6
+  },
+  {
+    "case": "real16",
+    "path": "on",
+    "round": 1,
+    "success": true,
+    "first_success": true,
+    "seconds": 17.703,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 17.316,
+        "seconds": 17.703
+      }
+    ],
+    "acceptance_outcome": "no_finding",
+    "acceptance_ms": 386,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 6
+  },
+  {
+    "case": "real16",
+    "path": "off",
+    "round": 1,
+    "success": true,
+    "first_success": true,
+    "seconds": 17.526,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 17.526,
+        "seconds": 17.526
+      }
+    ],
+    "acceptance_outcome": "disabled",
+    "acceptance_ms": 0,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 5
+  },
+  {
+    "case": "real17",
+    "path": "off",
+    "round": 1,
+    "success": true,
+    "first_success": true,
+    "seconds": 55.564,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 55.564,
+        "seconds": 55.564
+      }
+    ],
+    "acceptance_outcome": "disabled",
+    "acceptance_ms": 0,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 5
+  },
+  {
+    "case": "real17",
+    "path": "on",
+    "round": 1,
+    "success": true,
+    "first_success": true,
+    "seconds": 53.524,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 52.476,
+        "seconds": 53.523
+      }
+    ],
+    "acceptance_outcome": "no_finding",
+    "acceptance_ms": 1047,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 7
+  },
+  {
+    "case": "real18",
+    "path": "on",
+    "round": 1,
+    "success": true,
+    "first_success": true,
+    "seconds": 23.356,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 22.433,
+        "seconds": 23.356
+      }
+    ],
+    "acceptance_outcome": "no_finding",
+    "acceptance_ms": 922,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 7
+  },
+  {
+    "case": "real18",
+    "path": "off",
+    "round": 1,
+    "success": true,
+    "first_success": true,
+    "seconds": 22.186,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 22.186,
+        "seconds": 22.186
+      }
+    ],
+    "acceptance_outcome": "disabled",
+    "acceptance_ms": 0,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 5
+  },
+  {
+    "case": "real09",
+    "path": "off",
+    "round": 2,
+    "success": true,
+    "first_success": true,
+    "seconds": 20.66,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 20.66,
+        "seconds": 20.66
+      }
+    ],
+    "acceptance_outcome": "disabled",
+    "acceptance_ms": 0,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 5
+  },
+  {
+    "case": "real09",
+    "path": "on",
+    "round": 2,
+    "success": true,
+    "first_success": true,
+    "seconds": 23.107,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 21.318,
+        "seconds": 23.107
+      }
+    ],
+    "acceptance_outcome": "no_finding",
+    "acceptance_ms": 1789,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 6
+  },
+  {
+    "case": "real10",
+    "path": "on",
+    "round": 2,
+    "success": true,
+    "first_success": true,
+    "seconds": 40.343,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 39.244,
+        "seconds": 40.343
+      }
+    ],
+    "acceptance_outcome": "needs_review",
+    "acceptance_ms": 1098,
+    "finding_count": 3,
+    "facts_preserved": true,
+    "calls": 7
+  },
+  {
+    "case": "real10",
+    "path": "off",
+    "round": 2,
+    "success": false,
+    "first_success": false,
+    "seconds": 41.58,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": false,
+        "acceptance_started": false,
+        "acceptance_returned": false,
+        "facts_preserved": null,
+        "success": false,
+        "failure_phase": "generation",
+        "seconds": 41.58,
+        "reason": "quality",
+        "code": "analysis_output_invalid",
+        "retryable": false,
+        "stage": "review",
+        "unit": "review1",
+        "error_type": "StageFailure"
+      }
+    ],
+    "acceptance_outcome": null,
+    "acceptance_ms": null,
+    "finding_count": null,
+    "facts_preserved": null,
+    "calls": 6
+  },
+  {
+    "case": "real11",
+    "path": "off",
+    "round": 2,
+    "success": true,
+    "first_success": true,
+    "seconds": 30.922,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 30.922,
+        "seconds": 30.922
+      }
+    ],
+    "acceptance_outcome": "disabled",
+    "acceptance_ms": 0,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 5
+  },
+  {
+    "case": "real11",
+    "path": "on",
+    "round": 2,
+    "success": true,
+    "first_success": true,
+    "seconds": 33.386,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 32.59,
+        "seconds": 33.386
+      }
+    ],
+    "acceptance_outcome": "no_finding",
+    "acceptance_ms": 795,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 6
+  },
+  {
+    "case": "real12",
+    "path": "on",
+    "round": 2,
+    "success": true,
+    "first_success": true,
+    "seconds": 38.857,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 38.023,
+        "seconds": 38.857
+      }
+    ],
+    "acceptance_outcome": "no_finding",
+    "acceptance_ms": 833,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 8
+  },
+  {
+    "case": "real12",
+    "path": "off",
+    "round": 2,
+    "success": true,
+    "first_success": true,
+    "seconds": 23.697,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 23.697,
+        "seconds": 23.697
+      }
+    ],
+    "acceptance_outcome": "disabled",
+    "acceptance_ms": 0,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 5
+  },
+  {
+    "case": "real13",
+    "path": "off",
+    "round": 2,
+    "success": true,
+    "first_success": true,
+    "seconds": 22.74,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 22.74,
+        "seconds": 22.74
+      }
+    ],
+    "acceptance_outcome": "disabled",
+    "acceptance_ms": 0,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 5
+  },
+  {
+    "case": "real13",
+    "path": "on",
+    "round": 2,
+    "success": true,
+    "first_success": true,
+    "seconds": 25.733,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 24.844,
+        "seconds": 25.733
+      }
+    ],
+    "acceptance_outcome": "no_finding",
+    "acceptance_ms": 889,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 6
+  },
+  {
+    "case": "real14",
+    "path": "on",
+    "round": 2,
+    "success": true,
+    "first_success": true,
+    "seconds": 16.067,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 15.119,
+        "seconds": 16.067
+      }
+    ],
+    "acceptance_outcome": "no_finding",
+    "acceptance_ms": 947,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 6
+  },
+  {
+    "case": "real14",
+    "path": "off",
+    "round": 2,
+    "success": true,
+    "first_success": true,
+    "seconds": 15.167,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 15.167,
+        "seconds": 15.167
+      }
+    ],
+    "acceptance_outcome": "disabled",
+    "acceptance_ms": 0,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 4
+  },
+  {
+    "case": "real15",
+    "path": "off",
+    "round": 2,
+    "success": true,
+    "first_success": true,
+    "seconds": 12.038,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 12.038,
+        "seconds": 12.038
+      }
+    ],
+    "acceptance_outcome": "disabled",
+    "acceptance_ms": 0,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 5
+  },
+  {
+    "case": "real15",
+    "path": "on",
+    "round": 2,
+    "success": true,
+    "first_success": true,
+    "seconds": 11.028,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 10.544,
+        "seconds": 11.028
+      }
+    ],
+    "acceptance_outcome": "no_finding",
+    "acceptance_ms": 483,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 6
+  },
+  {
+    "case": "real16",
+    "path": "on",
+    "round": 2,
+    "success": true,
+    "first_success": true,
+    "seconds": 17.377,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 16.985,
+        "seconds": 17.377
+      }
+    ],
+    "acceptance_outcome": "no_finding",
+    "acceptance_ms": 391,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 6
+  },
+  {
+    "case": "real16",
+    "path": "off",
+    "round": 2,
+    "success": true,
+    "first_success": true,
+    "seconds": 17.032,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 17.031,
+        "seconds": 17.032
+      }
+    ],
+    "acceptance_outcome": "disabled",
+    "acceptance_ms": 0,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 5
+  },
+  {
+    "case": "real17",
+    "path": "off",
+    "round": 2,
+    "success": true,
+    "first_success": true,
+    "seconds": 39.886,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 39.885,
+        "seconds": 39.886
+      }
+    ],
+    "acceptance_outcome": "disabled",
+    "acceptance_ms": 0,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 5
+  },
+  {
+    "case": "real17",
+    "path": "on",
+    "round": 2,
+    "success": false,
+    "first_success": false,
+    "seconds": 54.776,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": false,
+        "acceptance_started": false,
+        "acceptance_returned": false,
+        "facts_preserved": null,
+        "success": false,
+        "failure_phase": "generation",
+        "seconds": 51.614,
+        "reason": "validation",
+        "code": "analysis_output_invalid",
+        "retryable": true,
+        "stage": "review",
+        "unit": "review1",
+        "error_type": "StageFailure"
+      },
+      {
+        "attempt": 2,
+        "generation_succeeded": false,
+        "acceptance_started": false,
+        "acceptance_returned": false,
+        "facts_preserved": null,
+        "success": false,
+        "failure_phase": "generation",
+        "seconds": 3.161,
+        "reason": "quality",
+        "code": "analysis_output_invalid",
+        "retryable": false,
+        "stage": "review",
+        "unit": "review1",
+        "error_type": "StageFailure"
+      }
+    ],
+    "acceptance_outcome": null,
+    "acceptance_ms": null,
+    "finding_count": null,
+    "facts_preserved": null,
+    "calls": 6
+  },
+  {
+    "case": "real18",
+    "path": "on",
+    "round": 2,
+    "success": true,
+    "first_success": true,
+    "seconds": 16.768,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 15.856,
+        "seconds": 16.768
+      }
+    ],
+    "acceptance_outcome": "needs_review",
+    "acceptance_ms": 912,
+    "finding_count": 1,
+    "facts_preserved": true,
+    "calls": 6
+  },
+  {
+    "case": "real18",
+    "path": "off",
+    "round": 2,
+    "success": true,
+    "first_success": true,
+    "seconds": 22.072,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 22.071,
+        "seconds": 22.072
+      }
+    ],
+    "acceptance_outcome": "disabled",
+    "acceptance_ms": 0,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 5
+  },
+  {
+    "case": "real02",
+    "path": "off",
+    "round": 2,
+    "success": true,
+    "first_success": true,
+    "seconds": 26.103,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 26.102,
+        "seconds": 26.103
+      }
+    ],
+    "acceptance_outcome": "disabled",
+    "acceptance_ms": 0,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 5
+  },
+  {
+    "case": "real02",
+    "path": "on",
+    "round": 2,
+    "success": true,
+    "first_success": true,
+    "seconds": 52.497,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 51.61,
+        "seconds": 52.497
+      }
+    ],
+    "acceptance_outcome": "needs_review",
+    "acceptance_ms": 886,
+    "finding_count": 1,
+    "facts_preserved": true,
+    "calls": 8
+  },
+  {
+    "case": "real05",
+    "path": "on",
+    "round": 2,
+    "success": true,
+    "first_success": true,
+    "seconds": 19.284,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 18.741,
+        "seconds": 19.284
+      }
+    ],
+    "acceptance_outcome": "no_finding",
+    "acceptance_ms": 542,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 6
+  },
+  {
+    "case": "real05",
+    "path": "off",
+    "round": 2,
+    "success": true,
+    "first_success": true,
+    "seconds": 16.04,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 16.04,
+        "seconds": 16.04
+      }
+    ],
+    "acceptance_outcome": "disabled",
+    "acceptance_ms": 0,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 5
+  },
+  {
+    "case": "real06",
+    "path": "off",
+    "round": 2,
+    "success": false,
+    "first_success": false,
+    "seconds": 67.904,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": false,
+        "acceptance_started": false,
+        "acceptance_returned": false,
+        "facts_preserved": null,
+        "success": false,
+        "failure_phase": "generation",
+        "seconds": 67.904,
+        "reason": "quality",
+        "code": "analysis_output_invalid",
+        "retryable": false,
+        "stage": "review",
+        "unit": "review1",
+        "error_type": "StageFailure"
+      }
+    ],
+    "acceptance_outcome": null,
+    "acceptance_ms": null,
+    "finding_count": null,
+    "facts_preserved": null,
+    "calls": 7
+  },
+  {
+    "case": "real06",
+    "path": "on",
+    "round": 2,
+    "success": true,
+    "first_success": true,
+    "seconds": 89.852,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 88.219,
+        "seconds": 89.852
+      }
+    ],
+    "acceptance_outcome": "needs_review",
+    "acceptance_ms": 1632,
+    "finding_count": 1,
+    "facts_preserved": true,
+    "calls": 7
+  },
+  {
+    "case": "real07",
+    "path": "on",
+    "round": 2,
+    "success": true,
+    "first_success": true,
+    "seconds": 23.539,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 22.999,
+        "seconds": 23.539
+      }
+    ],
+    "acceptance_outcome": "needs_review",
+    "acceptance_ms": 539,
+    "finding_count": 3,
+    "facts_preserved": true,
+    "calls": 6
+  },
+  {
+    "case": "real07",
+    "path": "off",
+    "round": 2,
+    "success": true,
+    "first_success": true,
+    "seconds": 30.474,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 30.474,
+        "seconds": 30.474
+      }
+    ],
+    "acceptance_outcome": "disabled",
+    "acceptance_ms": 0,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 7
+  },
+  {
+    "case": "real08",
+    "path": "off",
+    "round": 2,
+    "success": true,
+    "first_success": true,
+    "seconds": 13.099,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 13.098,
+        "seconds": 13.099
+      }
+    ],
+    "acceptance_outcome": "disabled",
+    "acceptance_ms": 0,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 5
+  },
+  {
+    "case": "real08",
+    "path": "on",
+    "round": 2,
+    "success": true,
+    "first_success": true,
+    "seconds": 13.926,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 13.58,
+        "seconds": 13.926
+      }
+    ],
+    "acceptance_outcome": "no_finding",
+    "acceptance_ms": 346,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 6
+  },
+  {
+    "case": "real14",
+    "path": "on",
+    "round": 3,
+    "success": true,
+    "first_success": true,
+    "seconds": 25.87,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 25.164,
+        "seconds": 25.87
+      }
+    ],
+    "acceptance_outcome": "needs_review",
+    "acceptance_ms": 705,
+    "finding_count": 2,
+    "facts_preserved": true,
+    "calls": 7
+  },
+  {
+    "case": "real14",
+    "path": "off",
+    "round": 3,
+    "success": true,
+    "first_success": true,
+    "seconds": 15.373,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 15.373,
+        "seconds": 15.373
+      }
+    ],
+    "acceptance_outcome": "disabled",
+    "acceptance_ms": 0,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 5
+  },
+  {
+    "case": "real15",
+    "path": "off",
+    "round": 3,
+    "success": true,
+    "first_success": true,
+    "seconds": 12.659,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 12.659,
+        "seconds": 12.659
+      }
+    ],
+    "acceptance_outcome": "disabled",
+    "acceptance_ms": 0,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 5
+  },
+  {
+    "case": "real15",
+    "path": "on",
+    "round": 3,
+    "success": true,
+    "first_success": true,
+    "seconds": 11.114,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 10.641,
+        "seconds": 11.114
+      }
+    ],
+    "acceptance_outcome": "needs_review",
+    "acceptance_ms": 472,
+    "finding_count": 1,
+    "facts_preserved": true,
+    "calls": 6
+  },
+  {
+    "case": "real16",
+    "path": "on",
+    "round": 3,
+    "success": true,
+    "first_success": true,
+    "seconds": 19.618,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 19.175,
+        "seconds": 19.618
+      }
+    ],
+    "acceptance_outcome": "no_finding",
+    "acceptance_ms": 443,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 6
+  },
+  {
+    "case": "real16",
+    "path": "off",
+    "round": 3,
+    "success": true,
+    "first_success": true,
+    "seconds": 17.795,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 17.795,
+        "seconds": 17.795
+      }
+    ],
+    "acceptance_outcome": "disabled",
+    "acceptance_ms": 0,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 5
+  },
+  {
+    "case": "real17",
+    "path": "off",
+    "round": 3,
+    "success": true,
+    "first_success": true,
+    "seconds": 48.892,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 48.892,
+        "seconds": 48.892
+      }
+    ],
+    "acceptance_outcome": "disabled",
+    "acceptance_ms": 0,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 5
+  },
+  {
+    "case": "real17",
+    "path": "on",
+    "round": 3,
+    "success": true,
+    "first_success": true,
+    "seconds": 54.567,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 53.283,
+        "seconds": 54.567
+      }
+    ],
+    "acceptance_outcome": "no_finding",
+    "acceptance_ms": 1283,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 6
+  },
+  {
+    "case": "real18",
+    "path": "on",
+    "round": 3,
+    "success": true,
+    "first_success": true,
+    "seconds": 17.609,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 16.703,
+        "seconds": 17.609
+      }
+    ],
+    "acceptance_outcome": "no_finding",
+    "acceptance_ms": 905,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 6
+  },
+  {
+    "case": "real18",
+    "path": "off",
+    "round": 3,
+    "success": true,
+    "first_success": true,
+    "seconds": 19.889,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 19.889,
+        "seconds": 19.889
+      }
+    ],
+    "acceptance_outcome": "disabled",
+    "acceptance_ms": 0,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 5
+  },
+  {
+    "case": "real02",
+    "path": "off",
+    "round": 3,
+    "success": true,
+    "first_success": true,
+    "seconds": 36.758,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 36.757,
+        "seconds": 36.758
+      }
+    ],
+    "acceptance_outcome": "disabled",
+    "acceptance_ms": 0,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 5
+  },
+  {
+    "case": "real02",
+    "path": "on",
+    "round": 3,
+    "success": true,
+    "first_success": true,
+    "seconds": 36.327,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 35.561,
+        "seconds": 36.327
+      }
+    ],
+    "acceptance_outcome": "no_finding",
+    "acceptance_ms": 766,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 6
+  },
+  {
+    "case": "real05",
+    "path": "on",
+    "round": 3,
+    "success": true,
+    "first_success": true,
+    "seconds": 14.902,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 14.538,
+        "seconds": 14.902
+      }
+    ],
+    "acceptance_outcome": "needs_review",
+    "acceptance_ms": 364,
+    "finding_count": 1,
+    "facts_preserved": true,
+    "calls": 6
+  },
+  {
+    "case": "real05",
+    "path": "off",
+    "round": 3,
+    "success": true,
+    "first_success": true,
+    "seconds": 17.219,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 17.219,
+        "seconds": 17.219
+      }
+    ],
+    "acceptance_outcome": "disabled",
+    "acceptance_ms": 0,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 5
+  },
+  {
+    "case": "real06",
+    "path": "off",
+    "round": 3,
+    "success": true,
+    "first_success": true,
+    "seconds": 70.252,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 70.252,
+        "seconds": 70.252
+      }
+    ],
+    "acceptance_outcome": "disabled",
+    "acceptance_ms": 0,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 7
+  },
+  {
+    "case": "real06",
+    "path": "on",
+    "round": 3,
+    "success": true,
+    "first_success": true,
+    "seconds": 92.832,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 90.903,
+        "seconds": 92.832
+      }
+    ],
+    "acceptance_outcome": "no_finding",
+    "acceptance_ms": 1928,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 8
+  },
+  {
+    "case": "real07",
+    "path": "on",
+    "round": 3,
+    "success": true,
+    "first_success": true,
+    "seconds": 16.173,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 15.535,
+        "seconds": 16.173
+      }
+    ],
+    "acceptance_outcome": "needs_review",
+    "acceptance_ms": 638,
+    "finding_count": 5,
+    "facts_preserved": true,
+    "calls": 6
+  },
+  {
+    "case": "real07",
+    "path": "off",
+    "round": 3,
+    "success": false,
+    "first_success": false,
+    "seconds": 25.823,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": false,
+        "acceptance_started": false,
+        "acceptance_returned": false,
+        "facts_preserved": null,
+        "success": false,
+        "failure_phase": "generation",
+        "seconds": 25.823,
+        "reason": "quality",
+        "code": "analysis_output_invalid",
+        "retryable": false,
+        "stage": "review",
+        "unit": "review1",
+        "error_type": "StageFailure"
+      }
+    ],
+    "acceptance_outcome": null,
+    "acceptance_ms": null,
+    "finding_count": null,
+    "facts_preserved": null,
+    "calls": 5
+  },
+  {
+    "case": "real08",
+    "path": "off",
+    "round": 3,
+    "success": true,
+    "first_success": true,
+    "seconds": 13.097,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 13.097,
+        "seconds": 13.097
+      }
+    ],
+    "acceptance_outcome": "disabled",
+    "acceptance_ms": 0,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 5
+  },
+  {
+    "case": "real08",
+    "path": "on",
+    "round": 3,
+    "success": true,
+    "first_success": true,
+    "seconds": 15.58,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 14.946,
+        "seconds": 15.58
+      }
+    ],
+    "acceptance_outcome": "no_finding",
+    "acceptance_ms": 634,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 6
+  },
+  {
+    "case": "real09",
+    "path": "on",
+    "round": 3,
+    "success": true,
+    "first_success": true,
+    "seconds": 21.769,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 20.933,
+        "seconds": 21.769
+      }
+    ],
+    "acceptance_outcome": "needs_review",
+    "acceptance_ms": 836,
+    "finding_count": 1,
+    "facts_preserved": true,
+    "calls": 6
+  },
+  {
+    "case": "real09",
+    "path": "off",
+    "round": 3,
+    "success": true,
+    "first_success": true,
+    "seconds": 23.307,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 23.307,
+        "seconds": 23.307
+      }
+    ],
+    "acceptance_outcome": "disabled",
+    "acceptance_ms": 0,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 5
+  },
+  {
+    "case": "real10",
+    "path": "off",
+    "round": 3,
+    "success": true,
+    "first_success": true,
+    "seconds": 41.131,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 41.131,
+        "seconds": 41.131
+      }
+    ],
+    "acceptance_outcome": "disabled",
+    "acceptance_ms": 0,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 8
+  },
+  {
+    "case": "real10",
+    "path": "on",
+    "round": 3,
+    "success": false,
+    "first_success": false,
+    "seconds": 64.556,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": false,
+        "acceptance_started": false,
+        "acceptance_returned": false,
+        "facts_preserved": null,
+        "success": false,
+        "failure_phase": "generation",
+        "seconds": 49.955,
+        "reason": "validation",
+        "code": "analysis_output_invalid",
+        "retryable": true,
+        "stage": "merge",
+        "unit": "merge-correction",
+        "error_type": "StageFailure"
+      },
+      {
+        "attempt": 2,
+        "generation_succeeded": false,
+        "acceptance_started": false,
+        "acceptance_returned": false,
+        "facts_preserved": null,
+        "success": false,
+        "failure_phase": "generation",
+        "seconds": 14.602,
+        "reason": "quality",
+        "code": "analysis_output_invalid",
+        "retryable": false,
+        "stage": "review",
+        "unit": "review1",
+        "error_type": "StageFailure"
+      }
+    ],
+    "acceptance_outcome": null,
+    "acceptance_ms": null,
+    "finding_count": null,
+    "facts_preserved": null,
+    "calls": 8
+  },
+  {
+    "case": "real11",
+    "path": "on",
+    "round": 3,
+    "success": true,
+    "first_success": true,
+    "seconds": 39.839,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 38.994,
+        "seconds": 39.839
+      }
+    ],
+    "acceptance_outcome": "needs_review",
+    "acceptance_ms": 844,
+    "finding_count": 1,
+    "facts_preserved": true,
+    "calls": 6
+  },
+  {
+    "case": "real11",
+    "path": "off",
+    "round": 3,
+    "success": true,
+    "first_success": true,
+    "seconds": 32.062,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 32.062,
+        "seconds": 32.062
+      }
+    ],
+    "acceptance_outcome": "disabled",
+    "acceptance_ms": 0,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 5
+  },
+  {
+    "case": "real12",
+    "path": "off",
+    "round": 3,
+    "success": true,
+    "first_success": true,
+    "seconds": 17.963,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 17.963,
+        "seconds": 17.963
+      }
+    ],
+    "acceptance_outcome": "disabled",
+    "acceptance_ms": 0,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 5
+  },
+  {
+    "case": "real12",
+    "path": "on",
+    "round": 3,
+    "success": true,
+    "first_success": true,
+    "seconds": 20.083,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 19.282,
+        "seconds": 20.083
+      }
+    ],
+    "acceptance_outcome": "no_finding",
+    "acceptance_ms": 800,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 6
+  },
+  {
+    "case": "real13",
+    "path": "on",
+    "round": 3,
+    "success": true,
+    "first_success": true,
+    "seconds": 26.496,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 25.469,
+        "seconds": 26.496
+      }
+    ],
+    "acceptance_outcome": "needs_review",
+    "acceptance_ms": 1026,
+    "finding_count": 1,
+    "facts_preserved": true,
+    "calls": 6
+  },
+  {
+    "case": "real13",
+    "path": "off",
+    "round": 3,
+    "success": true,
+    "first_success": true,
+    "seconds": 25.98,
+    "attempts": [
+      {
+        "attempt": 1,
+        "generation_succeeded": true,
+        "acceptance_started": true,
+        "acceptance_returned": true,
+        "facts_preserved": true,
+        "success": true,
+        "generation_seconds": 25.98,
+        "seconds": 25.98
+      }
+    ],
+    "acceptance_outcome": "disabled",
+    "acceptance_ms": 0,
+    "finding_count": 0,
+    "facts_preserved": true,
+    "calls": 5
+  }
+]

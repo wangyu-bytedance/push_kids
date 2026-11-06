@@ -1,0 +1,179 @@
+{
+  "nodes": {
+    ".page": [
+      {
+        "left": 0,
+        "right": 430,
+        "top": 0,
+        "bottom": 783,
+        "width": 430,
+        "height": 783,
+        "fontSize": "16px",
+        "lineHeight": "25.6px",
+        "textAlign": "start",
+        "color": "rgb(34, 38, 31)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "overflow": "hidden auto"
+      }
+    ],
+    ".archive-card": [
+      {
+        "left": 20,
+        "right": 410,
+        "top": 448,
+        "bottom": 534,
+        "width": 390,
+        "height": 86,
+        "fontSize": "16px",
+        "lineHeight": "25.6px",
+        "textAlign": "start",
+        "color": "rgb(34, 38, 31)",
+        "backgroundColor": "rgb(255, 253, 248)",
+        "overflow": "visible"
+      }
+    ],
+    ".archive-row": [
+      {
+        "left": 21,
+        "right": 409,
+        "top": 449,
+        "bottom": 533,
+        "width": 388,
+        "height": 84,
+        "fontSize": "16px",
+        "lineHeight": "25.6px",
+        "textAlign": "left",
+        "color": "rgb(34, 38, 31)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "overflow": "visible"
+      }
+    ],
+    ".archive-copy": [
+      {
+        "left": 37,
+        "right": 205,
+        "top": 466.5,
+        "bottom": 515.5,
+        "width": 168,
+        "height": 49,
+        "fontSize": "16px",
+        "lineHeight": "25.6px",
+        "textAlign": "left",
+        "color": "rgb(34, 38, 31)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "overflow": "visible"
+      }
+    ],
+    ".archive-title": [
+      {
+        "left": 37,
+        "right": 205,
+        "top": 466.5,
+        "bottom": 490.5,
+        "width": 168,
+        "height": 24,
+        "fontSize": "17px",
+        "lineHeight": "24.65px",
+        "textAlign": "left",
+        "color": "rgb(34, 38, 31)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "overflow": "visible"
+      }
+    ],
+    ".archive-description": [
+      {
+        "left": 37,
+        "right": 205,
+        "top": 494.5,
+        "bottom": 515.5,
+        "width": 168,
+        "height": 21,
+        "fontSize": "14px",
+        "lineHeight": "21px",
+        "textAlign": "left",
+        "color": "rgb(70, 78, 67)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "overflow": "visible"
+      }
+    ],
+    ".archive-pending": [],
+    ".archive-row .chev": [
+      {
+        "left": 381.13604736328125,
+        "right": 393.86395263671875,
+        "top": 484.63604736328125,
+        "bottom": 497.36395263671875,
+        "width": 12.7279052734375,
+        "height": 12.7279052734375,
+        "fontSize": "16px",
+        "lineHeight": "25.6px",
+        "textAlign": "left",
+        "color": "rgb(34, 38, 31)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "overflow": "visible"
+      }
+    ],
+    ".form-foot .btn": [
+      {
+        "left": 20,
+        "right": 410,
+        "top": 552,
+        "bottom": 607,
+        "width": 390,
+        "height": 55,
+        "fontSize": "16px",
+        "lineHeight": "19.2px",
+        "textAlign": "start",
+        "color": "rgb(255, 253, 248)",
+        "backgroundColor": "rgb(31, 91, 69)",
+        "overflow": "visible"
+      }
+    ],
+    ".pk-notice.err": [
+      {
+        "left": 20,
+        "right": 410,
+        "top": 13,
+        "bottom": 65,
+        "width": 390,
+        "height": 52,
+        "fontSize": "13px",
+        "lineHeight": "20.8px",
+        "textAlign": "start",
+        "color": "rgb(70, 78, 67)",
+        "backgroundColor": "rgb(247, 232, 226)",
+        "overflow": "visible"
+      }
+    ]
+  },
+  "scroll": {
+    "id": "",
+    "dataset": {},
+    "scrollLeft": 0,
+    "scrollTop": 0,
+    "scrollWidth": 430,
+    "scrollHeight": 834
+  },
+  "viewport": {
+    "width": 430,
+    "height": 932,
+    "screenHeight": 932,
+    "dpr": 3,
+    "fontScale": 15,
+    "baseLibrary": "3.17.4"
+  },
+  "data": {
+    "active": true,
+    "working": false,
+    "isManager": true,
+    "nameDraft": "合成孩子",
+    "unfinishedCount": 0,
+    "error": "合成错误：暂时无法归档，请稍后重试。"
+  },
+  "state": "error",
+  "errors": [],
+  "capturedAt": "2026-11-05T06:26:41.309Z",
+  "screenshotSha256": null,
+  "screenshotStatus": "NOT_RUN_AFTER_RPC_TIMEOUT",
+  "scope": "offline synthetic fixture; production WXML/WXSS; no physical device or cloud acceptance"
+}

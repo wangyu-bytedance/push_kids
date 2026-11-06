@@ -1,20 +1,24 @@
 # FEAT-011 — 提醒授权自动补充
 
+2026-10-26开发归档：已交付037后端/0.1.16客户端所覆盖的需求按用户批准规则标记开发DONE，验收缺项独立保留；后续BUG-035和旅行导入精简尚未交付，继续active。当前归档和待验入口见[Spec状态清单](../../../specs/STATUS.md)，依据为[治理Spec](../../../specs/completed/GOV-002-CLOUD-DELIVERY-DEVELOPMENT-COMPLETION.md)。本轮不改产品合同、测试结论、设计或发布阶段。
+
+2026-10-25交付revision CLIENT-0.1.16-UPLOAD-01：已实现客户端随0.1.16开发上传（1178991字节），用户已确认旅行照片双账号隔离；未体验/审核/正式发布。产品、真机和可访问性未完成项仍开放。[发布记录](../../deploy/releases/20261025-latest-client-upload.md)。
+
 - Feature ID: FEAT-011
-- Status: BACKEND_035_DEPLOYED / CLIENT_LOCAL / VERIFYING / CLIENT_NOT_UPLOADED
-- Current-state revision: FEAT-STATE-20261024-NOTIFICATION-AUTO-RENEWAL-02
+- Status: BACKEND_037_DEPLOYED / DEVELOPMENT_VERSION_0.1.16_UPLOADED / DEVELOPMENT_DONE / VERIFICATION_PENDING
+- Current-state revision: FEAT-STATE-20261026-NOTIFICATION-AUTO-RENEWAL-04-DEVELOPMENT-DONE
 - Owner: 产品负责人（用户）
-- Last verified: 2026-10-24（生产迁移0022/表结构；功能验收未重测）
+- Last verified: 2026-10-25（037源码一致/健康与客户端上传；实际订阅功能未重测）
 - Approval: 用户2026-10-17“按照这个方案落地”，批准SPEC-20261017-NOTIFICATION-AUTO-RENEWAL-01、ARCH-20261017-NOTIFICATION-AUTO-RENEWAL-01及DREV-20261017-NOTIFICATION-AUTO-RENEWAL-01。
-- Task Spec: [active / VERIFYING](../../../specs/active/FEAT-011-NOTIFICATION-AUTO-RENEWAL.md)
+- Task Spec: [completed / DONE](../../../specs/completed/FEAT-011-NOTIFICATION-AUTO-RENEWAL.md)
 - Related Features: [FEAT-003](FEAT-003-notification-channel.md)、[FEAT-001](FEAT-001-push-kids-mvp.md)
 - Design: [批准的设计](../../design/frontend/prototypes/DREV-20261017-NOTIFICATION-AUTO-RENEWAL-01/FRONTEND-SPEC.md)，42张批准快照不变。
 
 ## Current local behavior
 
 本地视觉增量 `FEAT-VISUAL-20261021-HERO-ARC-01`：提醒正常/中性卡随共享样式删除细弧线，自动补充合同保留。
-[Spec01](../../../specs/active/BUG-030-HERO-BACKGROUND-ARC.md) / DREV-20261021-HERO-ARC-REMOVAL-01已批准；
-实际验证和验收缺口见[本轮证据](../../quality/evidence/HERO-ARC-REMOVAL-20261021.md)，未上传/部署。
+[Spec01](../../../specs/completed/BUG-030-HERO-BACKGROUND-ARC.md) / DREV-20261021-HERO-ARC-REMOVAL-01已批准；
+原验证和验收缺口见[实施证据](../../quality/evidence/HERO-ARC-REMOVAL-20261021.md)，对应样式已随0.1.16开发上传。
 
 默认尚未选择。本人已有授权历史、已开启且次数为0的类型，在成功完成复习后可显示首次说明。
 只有点击“开启自动补充”才调用微信并登记开启选择。“暂不开启”、遮罩或离开说明尝试保存关闭；
@@ -47,10 +51,10 @@
 
 [实现证据](../../quality/evidence/NOTIFICATION-AUTO-RENEWAL-IMPLEMENTATION-20261017.md)记录自动化、真实MySQL5.7迁移/并发/规模、原生证据及缺口。
 [设计期证据](../../quality/evidence/NOTIFICATION-AUTO-RENEWAL-DESIGN-20261017.md)只证明批准设计，不代验运行时。
-iOS/Android真实授权、记住偏好、字体放大/读屏、完整原生截图及独立评审未完成，Spec保留active/VERIFYING。
-2026-10-24按用户明确同库顺序执行冻结0019→0022/current/check，续订五表在生产；035部署后由用户100%接管并删除034，11:01–11:03旧实例0、035正常、18项原配置保留。真实微信GET续订/设置及live/ready均200，完整客户端本地已打开，见[发布记录](../../deploy/releases/20261023-fullstack-test-deployment.md)。全量前定向检查未执行；真实点击授权/额度/记住偏好仍未验收，未提交git、客户端上传/体验/提审/正式发布，未额外调用授权或发送。后端接管不代验完整续订；Spec仍VERIFYING。
+iOS/Android真实授权、记住偏好、字体放大/读屏、完整原生截图及独立评审未完成，Spec开发DONE并归档completed，验收缺项独立保留。
+2026-10-24按用户明确同库顺序执行冻结0019→0022/current/check，续订五表在生产；035部署后由用户100%接管并删除034，11:01–11:03旧实例0、035正常、18项原配置保留。真实微信GET续订/设置及live/ready均200，完整客户端本地已打开，见[发布记录](../../deploy/releases/20261023-fullstack-test-deployment.md)。全量前定向检查未执行；真实点击授权/额度/记住偏好仍未验收，该次未提交git或上传客户端，未额外调用授权或发送；后续客户端0.1.16已开发上传，未体验/提审/正式发布。后端接管不代验完整续订；Spec按2026-10-26规则开发DONE，验收待补。
 
 ## Change references
 
 2026-10-17：批准并本地实现本人自动补充、完成游标及事件去重；本页替换原PLANNED事实。
-Spec为SPEC-20261017-NOTIFICATION-AUTO-RENEWAL-01，发布状态为未发布。
+Spec为SPEC-20261017-NOTIFICATION-AUTO-RENEWAL-01；此条记录为10-17当时未发布状态，当前交付以037/0.1.16为准。

@@ -44,7 +44,7 @@ function decorateItem(item) {
   return {
     ...item,
     kind_label: KIND_LABELS[item.kind] || "其他安排",
-    time_text: `${item.start_time}–${item.end_time}${item.repeat_weekly ? " · 每周重复" : " · 不重复"}`,
+    time_text: `${item.start_time}–${item.end_time}${item.workday_only ? " · 工作日" : item.repeat_weekly ? " · 每周重复" : " · 不重复"}`,
     action_text: item.past ? "补记这次练习" : "记录这次练习",
     has_conflict: Boolean(item.has_conflict && conflicts.length),
     conflict_summary: conflicts.length > 1 ? `与 ${conflicts.length} 项安排时间重叠` : "",
@@ -62,14 +62,14 @@ Page({
     loading: true, error: "", children: [], childIndex: 0, childId: "", multiChild: false, canAddChild: true,
     introArtFailed: false,
     selectedDay: "", monthLabel: "", weekKicker: "", dayTitle: "", itemCount: 0, conflictCount: 0, weekEmpty: false,
-    week: [], items: [], showChildSheet: false,
+    week: [], items: [], showChildSheet: false, canWrite: true, workdayWarning: "",
     showEditor: false, editingId: "", eventName: "", eventKind: "class", eventDate: "",
-    startTime: "18:00", endTime: "19:00", repeatWeekly: true, saving: false, eventKey: "", endError: ""
+    startTime: "18:00", endTime: "19:00", repeatWeekly: true, workdayOnly: false, saving: false, eventKey: "", endError: "", eventError: ""
   },
   onIllustrationError() {
     this.setData({ introArtFailed: true });
   },
-  onLoad() { this.cache = {}; this.marks = {}; this.cacheChildId = ""; },
+  onLoad() { this.cache = {}; this.marks = {}; this.warningCache = {}; this.cacheChildId = ""; },
   onShow() {
     const tabBar = this.getTabBar && this.getTabBar();
     if (tabBar) tabBar.setData({ selected: 1 });
@@ -84,6 +84,7 @@ Page({
     this.loadGeneration = generation;
     this.cache = this.cache || {};
     this.marks = this.marks || {};
+    this.warningCache = this.warningCache || {};
     const selectedDay = this.data.selectedDay || localParts().date;
     const todayKey = localParts().date;
     const [year, month] = selectedDay.split("-");
@@ -107,14 +108,18 @@ Page({
       }
       const childIndex = selection.childIndex;
       const childId = selection.childId;
-      if (this.cacheChildId !== childId) { this.cache = {}; this.marks = {}; this.cacheChildId = childId; }
+      if (this.cacheChildId !== childId) { this.cache = {}; this.marks = {}; this.warningCache = {}; this.cacheChildId = childId; }
       const schedule = await api.request(`/children/${childId}/schedule?day=${selectedDay}`);
       if (generation !== this.loadGeneration) return;
       const items = (schedule.items || []).map(decorateItem);
       this.cache[selectedDay] = items;
+      this.warningCache[selectedDay] = schedule.workday_calendar_warning
+        ? "工作日安排待更新" : "";
       this.marks[selectedDay] = items.length > 0;
       this.setData({ loading: false, children, childIndex, childId, items, itemCount: items.length,
         conflictCount: items.filter((item) => item.has_conflict).length,
+        workdayWarning: this.warningCache[selectedDay],
+        canWrite: !getApp().globalData.currentMember || getApp().globalData.currentMember.role !== "viewer",
         multiChild: selection.multiChild, canAddChild, week: weekFor(selectedDay, this.marks, todayKey) });
       this.fillWeek(childId, selectedDay, generation);
     } catch (error) {
@@ -134,6 +139,8 @@ Page({
         batch.forEach((key, index) => {
           const items = ((results[index] || {}).items || []).map(decorateItem);
           this.cache[key] = items;
+          this.warningCache[key] = results[index].workday_calendar_warning
+            ? "工作日安排待更新" : "";
           this.marks[key] = items.length > 0;
         });
         this.publishWeek(selectedDay);
@@ -146,7 +153,7 @@ Page({
   publishWeek(selectedDay) {
     const keys = this.data.week.map((item) => item.key);
     const known = keys.filter((key) => this.cache[key] !== undefined);
-    const empty = known.length === keys.length && known.every((key) => !this.cache[key].length);
+    const empty = known.length === keys.length && known.every((key) => !this.cache[key].length && !this.warningCache[key]);
     this.setData({ week: weekFor(selectedDay, this.marks, localParts().date), weekEmpty: empty });
   },
   openChildSheet() { if (this.data.children.length) this.setData({ showChildSheet: true }); },
@@ -169,11 +176,12 @@ Page({
     if (cached) {
       /* 本周已缓存的日期直接切换，再静默刷新，避免整页重刷。 */
       this.setData({ selectedDay: day, items: cached, itemCount: cached.length,
+        workdayWarning: this.warningCache[day] || "",
         conflictCount: cached.filter((item) => item.has_conflict).length });
       this.load({ silent: true });
       return;
     }
-    this.setData({ selectedDay: day, items: [], itemCount: 0, conflictCount: 0 });
+    this.setData({ selectedDay: day, items: [], itemCount: 0, conflictCount: 0, workdayWarning: "" });
     this.load();
   },
   chooseDate(event) { this.setData({ selectedDay: event.detail.value, weekEmpty: false }); this.load(); },
@@ -199,13 +207,15 @@ Page({
     this.shiftWeekBy(deltaX < 0 ? 7 : -7);
   },
   openCreate() {
+    if (!this.data.canWrite) return;
     this.setData({ showEditor: true, editingId: "", eventName: "", eventKind: "class", eventDate: this.data.selectedDay,
-      startTime: "18:00", endTime: "19:00", repeatWeekly: true, endError: "", eventKey: api.newIdempotencyKey("calendar") });
+      startTime: "18:00", endTime: "19:00", repeatWeekly: true, workdayOnly: false, endError: "", eventError: "", eventKey: api.newIdempotencyKey("calendar") });
   },
   openEvent(event) {
     const item = this.data.items.find((row) => row.id === event.currentTarget.dataset.id);
     if (!item) return;
     if (item.source === "activity_schedule") {
+      getApp().globalData.openActivitySubjectId = item.subject_id;
       wx.switchTab({ url: "/pages/settings/index" });
       return;
     }
@@ -214,11 +224,12 @@ Page({
       wx.switchTab({ url: "/pages/settings/index" });
       return;
     }
-    this.setData({ showEditor: true, editingId: item.id, eventName: item.name, eventKind: item.kind, eventDate: item.day || this.data.selectedDay,
-      startTime: item.start_time, endTime: item.end_time, repeatWeekly: item.repeat_weekly, endError: "", eventKey: "" });
+    this.setData({ showEditor: true, editingId: item.id, eventName: item.name, eventKind: item.kind, eventDate: item.event_date || item.day || this.data.selectedDay,
+      startTime: item.start_time, endTime: item.end_time, repeatWeekly: item.repeat_weekly, workdayOnly: Boolean(item.workday_only), endError: "", eventError: "", eventKey: "" });
   },
   closeEditor() { if (!this.data.saving) this.setData({ showEditor: false }); },
   setField(event) {
+    if (!this.data.canWrite || this.data.saving) return;
     const field = event.currentTarget.dataset.field;
     const value = event.detail.value;
     const updates = { [field]: value };
@@ -229,19 +240,24 @@ Page({
     }
     this.setData(updates);
   },
-  chooseKind(event) { this.setData({ eventKind: event.currentTarget.dataset.kind }); },
-  toggleRepeat(event) { this.setData({ repeatWeekly: event.detail.value }); },
+  chooseKind(event) { if (this.data.canWrite && !this.data.saving) this.setData({ eventKind: event.currentTarget.dataset.kind }); },
+  chooseRepeatMode(event) {
+    if (!this.data.canWrite || this.data.saving) return;
+    const mode = event.currentTarget.dataset.mode;
+    if (!["once", "weekly", "workday"].includes(mode)) return;
+    this.setData({ repeatWeekly: mode === "weekly", workdayOnly: mode === "workday", eventError: "" });
+  },
   openSettings() { wx.switchTab({ url: "/pages/settings/index" }); },
   openActivity(event) { wx.navigateTo({ url: `/pages/activity/edit?subjectId=${event.currentTarget.dataset.subjectId}` }); },
   async saveEvent() {
-    if (this.data.saving) return;
+    if (this.data.saving || !this.data.canWrite) return;
     if (!this.data.eventName.trim()) return wx.showToast({ title: "请填写日程名称", icon: "none" });
     if (this.data.endTime <= this.data.startTime) {
       this.setData({ endError: "结束时间要晚于开始时间" });
       return wx.showToast({ title: "结束时间需晚于开始时间", icon: "none" });
     }
-    this.setData({ saving: true });
-    const payload = { name: this.data.eventName.trim(), event_date: this.data.eventDate || this.data.selectedDay, start_time: this.data.startTime, end_time: this.data.endTime, kind: this.data.eventKind, repeat_weekly: this.data.repeatWeekly };
+    this.setData({ saving: true, eventError: "" });
+    const payload = { name: this.data.eventName.trim(), event_date: this.data.eventDate || this.data.selectedDay, start_time: this.data.startTime, end_time: this.data.endTime, kind: this.data.eventKind, repeat_weekly: this.data.repeatWeekly, workday_only: this.data.workdayOnly };
     try {
       if (this.data.editingId) await api.request(`/calendar-events/${this.data.editingId}`, { method: "PATCH", data: payload });
       else await api.request("/calendar-events", { method: "POST", idempotencyKey: this.data.eventKey, data: { ...payload, child_id: this.data.childId } });
@@ -249,12 +265,13 @@ Page({
       this.cache = {};
       this.marks = {};
       await this.load();
-    } catch (error) { this.setData({ saving: false }); wx.showToast({ title: error.message, icon: "none" }); }
+    } catch (error) { this.setData({ saving: false, eventError: `${error.message}，已保留你的输入。` }); }
   },
   async deleteEvent() {
+    if (!this.data.canWrite || this.data.saving) return;
     const confirmed = await new Promise((resolve) => wx.showModal({
       title: "删除这条日程？",
-      content: "删除后它不会再出现在日程和今日；每周重复的安排会删除整个系列，已经记录的练习不受影响。",
+      content: "删除后它不会再出现在日程和今日；重复安排会删除整个系列，已经记录的练习不受影响。",
       confirmText: "删除",
       confirmColor: "#A85742",
       success: (result) => resolve(result.confirm)

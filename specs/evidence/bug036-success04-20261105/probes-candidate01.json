@@ -1,0 +1,303 @@
+{
+  "pipeline_revision": "staged-20261101-13",
+  "prompt_revision": "child-aware-history-agent-20261101-16",
+  "model": "doubao-seed-2-1-pro-260628",
+  "source_sha256": {
+    "pipeline.py": "2fb6f22239387d27d66fd2bbf21cbed7e34a1c9ebd2d76bd49539102dde6b69e",
+    "stage_contracts.py": "cbec5b7e7d11ef4b56759f13d9e7ab3521b6b82bd7aae1131f89403907f5decd",
+    "prompt.py": "c6a5b5ddc8e30951e900b5622e728e483117066cf06b278fa8628be995cadfaa",
+    "stage_provider.py": "e3a64018d101f8ded8eddfedb1413143bf31ad6f0224b89dddb5b3250e73972e",
+    "contracts.py": "7524e52c4ffbc27e1127d54bb7ac33f676165d8f303961374ad68b959df25564",
+    "checkpoints.py": "45a0ce6401bc2780bf849fa7acec70a938f24fa77fde36c02afedae909e18e80"
+  },
+  "results": [
+    {
+      "case": "probe-zh-04",
+      "source_digest": null,
+      "available": true,
+      "success": true,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 13.56
+        }
+      ],
+      "seconds": 13.56,
+      "calls": 4,
+      "new_points": 1,
+      "history_matches": 0,
+      "input_tokens": 18841,
+      "output_tokens": 377,
+      "subjects": [
+        "\u8bed\u6587"
+      ]
+    },
+    {
+      "case": "probe-multi-01",
+      "source_digest": null,
+      "available": true,
+      "success": true,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 14.8
+        }
+      ],
+      "seconds": 14.8,
+      "calls": 4,
+      "new_points": 1,
+      "history_matches": 0,
+      "input_tokens": 15078,
+      "output_tokens": 355,
+      "subjects": [
+        "\u6570\u5b66"
+      ]
+    },
+    {
+      "case": "probe-zh-05",
+      "source_digest": null,
+      "available": true,
+      "success": true,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 15.72
+        }
+      ],
+      "seconds": 15.72,
+      "calls": 4,
+      "new_points": 1,
+      "history_matches": 0,
+      "input_tokens": 18834,
+      "output_tokens": 266,
+      "subjects": [
+        "\u8bed\u6587"
+      ]
+    },
+    {
+      "case": "probe-multi-02",
+      "source_digest": null,
+      "available": true,
+      "success": true,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 14.79
+        }
+      ],
+      "seconds": 14.79,
+      "calls": 4,
+      "new_points": 2,
+      "history_matches": 0,
+      "input_tokens": 15188,
+      "output_tokens": 384,
+      "subjects": [
+        "\u6570\u5b66",
+        "\u82f1\u8bed"
+      ]
+    },
+    {
+      "case": "probe-zh-07",
+      "source_digest": null,
+      "available": true,
+      "success": true,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 11.71
+        }
+      ],
+      "seconds": 11.71,
+      "calls": 4,
+      "new_points": 1,
+      "history_matches": 0,
+      "input_tokens": 18866,
+      "output_tokens": 276,
+      "subjects": [
+        "\u8bed\u6587"
+      ]
+    },
+    {
+      "case": "probe-en-12",
+      "source_digest": null,
+      "available": true,
+      "success": true,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 10.69
+        }
+      ],
+      "seconds": 10.69,
+      "calls": 4,
+      "new_points": 1,
+      "history_matches": 0,
+      "input_tokens": 14918,
+      "output_tokens": 361,
+      "subjects": [
+        "\u82f1\u8bed"
+      ]
+    },
+    {
+      "case": "probe-zh-09",
+      "source_digest": null,
+      "available": true,
+      "success": false,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": false,
+          "seconds": 22.53,
+          "code": "analysis_output_invalid",
+          "reason": "quality",
+          "retryable": false,
+          "stage": "review",
+          "unit": "review1",
+          "diagnostics": []
+        }
+      ],
+      "seconds": 22.53,
+      "calls": 5,
+      "new_points": 0,
+      "history_matches": 0,
+      "input_tokens": 27342,
+      "output_tokens": 609,
+      "subjects": []
+    },
+    {
+      "case": "boundary-1",
+      "source_digest": null,
+      "available": true,
+      "success": true,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 10.27
+        }
+      ],
+      "seconds": 10.27,
+      "calls": 4,
+      "new_points": 1,
+      "history_matches": 0,
+      "input_tokens": 14889,
+      "output_tokens": 245,
+      "subjects": [
+        "\u8bed\u6587"
+      ]
+    },
+    {
+      "case": "boundary-2",
+      "source_digest": null,
+      "available": true,
+      "success": false,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": false,
+          "seconds": 8.93,
+          "code": "analysis_output_invalid",
+          "reason": "coverage",
+          "retryable": false,
+          "stage": "review",
+          "unit": "empty_proposal",
+          "diagnostics": []
+        }
+      ],
+      "seconds": 8.93,
+      "calls": 3,
+      "new_points": 0,
+      "history_matches": 0,
+      "input_tokens": 11553,
+      "output_tokens": 178,
+      "subjects": []
+    },
+    {
+      "case": "probe-multi-04",
+      "source_digest": null,
+      "available": true,
+      "success": true,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 23.37
+        }
+      ],
+      "seconds": 23.37,
+      "calls": 6,
+      "new_points": 3,
+      "history_matches": 0,
+      "input_tokens": 25262,
+      "output_tokens": 1065,
+      "subjects": [
+        "\u6570\u5b66",
+        "\u82f1\u8bed",
+        "\u8bed\u6587"
+      ]
+    },
+    {
+      "case": "boundary-3",
+      "source_digest": null,
+      "available": true,
+      "success": false,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": false,
+          "seconds": 11.39,
+          "code": "analysis_output_invalid",
+          "reason": "coverage",
+          "retryable": true,
+          "stage": "merge",
+          "unit": "merge",
+          "diagnostics": []
+        }
+      ],
+      "seconds": 11.39,
+      "calls": 3,
+      "new_points": 0,
+      "history_matches": 0,
+      "input_tokens": 11888,
+      "output_tokens": 308,
+      "subjects": []
+    },
+    {
+      "case": "boundary-4",
+      "source_digest": null,
+      "available": true,
+      "success": false,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": false,
+          "seconds": 10.1,
+          "code": "analysis_output_invalid",
+          "reason": "coverage",
+          "retryable": false,
+          "stage": "review",
+          "unit": "empty_proposal",
+          "diagnostics": []
+        }
+      ],
+      "seconds": 10.1,
+      "calls": 3,
+      "new_points": 0,
+      "history_matches": 0,
+      "input_tokens": 11683,
+      "output_tokens": 325,
+      "subjects": []
+    }
+  ],
+  "business_writes": 0,
+  "max_attempts": 1,
+  "checkpoint_mode": "bounded_memory",
+  "context_limitation": "original-time filtering with current historical names/index; unversioned Todo state omitted",
+  "source_unchanged": true
+}

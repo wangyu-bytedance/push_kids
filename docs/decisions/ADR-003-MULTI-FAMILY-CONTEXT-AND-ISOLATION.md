@@ -1,16 +1,21 @@
 # ADR-003: 多家庭上下文、兼容迁移与隔离门禁
 
-- Status: PROPOSED
+- Status: REJECTED — product scope cancelled before adoption
 - Date: 2026-09-11
+- Closed at: 2026-11-05；产品负责人当前会话“这个spec可以关闭了，不需要这个功能。”
 - Decision owners: 产品负责人（用户）
 - Technical area: identity / tenancy / persistence / Mini Program context
-- Related Spec: `specs/active/FEAT-002-MULTI-FAMILY-CHILD-TENANT-ISOLATION.md` revision `SPEC-20260911-MULTI-FAMILY-06`
+- Related Spec: [CANCELLED Spec](../../specs/rejected/FEAT-002-MULTI-FAMILY-CHILD-TENANT-ISOLATION.md) revision `SPEC-20260911-MULTI-FAMILY-06`
 - Related ADRs: `ADR-001-WECHAT-CLOUD-HOSTING-MYSQL.md`
 - Supersedes: N/A
 
 ## 1. Decision
 
-We will model a trusted WeChat actor as having multiple family-scoped memberships, resolve every business request from
+2026-11-05 closure: the product owner removed multi-family access from scope. Retain the existing one-active-family
+model (Option D), family-wide roles and current family/child isolation. This ADR was never adopted; the remaining
+design, rollout and validation sections preserve the rejected proposal and do not authorize implementation.
+
+The rejected proposal would model a trusted WeChat actor as having multiple family-scoped memberships, resolve every business request from
 trusted actor plus an untrusted `X-Selected-Family-ID`, and keep child selection subordinate to the verified family.
 The existing single-family data remains in place. S1–S4 may run behind a staging-only feature flag, but public enablement
 and the phrase “database-enforced complete isolation” require S5 composite constraints and S6 migration/cloud evidence.
@@ -163,6 +168,6 @@ Owner for revisit: 产品负责人（用户）
 
 ## 10. Approval
 
-- Approved by: pending
-- Approval date: pending
-- Dissent/concerns retained: pending
+- Approved by: N/A — proposal rejected before adoption
+- Closure decision: 产品负责人，2026-11-05，当前会话明确取消关联 Spec。
+- Reopening: 仅在用户明确重新提出多家庭需求并批准新 Spec/ADR 修订后重新评估；原待验项不作通过。

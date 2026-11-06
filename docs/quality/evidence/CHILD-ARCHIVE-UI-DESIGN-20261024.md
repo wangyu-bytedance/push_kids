@@ -1,7 +1,7 @@
 # 档案归档区设计准备 — 2026-10-24
 
 - State: DESIGN_ONLY / AWAITING_APPROVAL / NOT_IMPLEMENTED
-- Task: [BUG-033 Spec01](../../../specs/active/BUG-033-CHILD-ARCHIVE-UI.md)，active/READY_FOR_REVIEW。
+- Task: [BUG-033 Spec01](../../../specs/completed/BUG-033-CHILD-ARCHIVE-UI.md)，active/READY_FOR_REVIEW。
 - Design: [DREV-20261024-CHILD-ARCHIVE-01](../../design/frontend/prototypes/DREV-20261024-CHILD-ARCHIVE-01/FRONTEND-SPEC.md)。
 - Source: [自包含HTML](../../design/frontend/prototypes/DREV-20261024-CHILD-ARCHIVE-01/index.html)，SHA `b52125179caf4d795ed9da701f5e5bca12bc400ac73a9e99160051b89aa5f576`。
 - Exports/SHA: [21张清单](../../design/frontend/snapshots/UI-015/DREV-20261024-CHILD-ARCHIVE-01/APPROVAL.md)，AWAITING_APPROVAL。

@@ -1,0 +1,1166 @@
+{
+  "designRevision": "DREV-20261106-UI-CONSISTENCY-01",
+  "specRevision": "DESIGN-002-SPEC-01",
+  "approvalStatus": "PENDING_REVIEW",
+  "generatedAt": "2026-11-06T06:30:50.643742+00:00",
+  "sourceOfTruth": "editable local HTML",
+  "viewports": [
+    [
+      320,
+      568
+    ],
+    [
+      390,
+      844
+    ],
+    [
+      430,
+      932
+    ]
+  ],
+  "data": "synthetic examples; no real child photos or family information",
+  "nativeAcceptance": "NOT_RUN",
+  "sources": [
+    {
+      "path": "docs/design/frontend/prototypes/DREV-20261106-UI-CONSISTENCY-01/FRONTEND-SPEC.md",
+      "sha256": "5d7db9cce2df98e29a8f5e3f6f13ebba4ed02f435834b6a3ba543b89082cc95f"
+    },
+    {
+      "path": "docs/design/frontend/prototypes/DREV-20261106-UI-CONSISTENCY-01/export.py",
+      "sha256": "6807103ec21355d4c8aa8e325de6e1993aa232dd173a88069125c996b8af5945"
+    },
+    {
+      "path": "docs/design/frontend/prototypes/DREV-20261106-UI-CONSISTENCY-01/index.html",
+      "sha256": "e45716d2c599ebe9bdf61759c5d771c424b48ae8cceb9d30c92ec37571d7f845"
+    }
+  ],
+  "files": [
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/settings-320x568.png",
+      "scene": "settings",
+      "viewport": [
+        320,
+        568
+      ],
+      "sha256": "fb5bc7dd28c89cc791093835cfe9604f1191a88eb77b9d8ed67457a012f0004f"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/settings-routines-320x568.png",
+      "scene": "settings-routines",
+      "viewport": [
+        320,
+        568
+      ],
+      "sha256": "6e70b317a57af5a4929726cbbde591972c3b73ed57761946e9967ec00bbdb180"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/today-320x568.png",
+      "scene": "today",
+      "viewport": [
+        320,
+        568
+      ],
+      "sha256": "c1d392fdbcb22ae3804c70ece022568f36468d81b1001d92c839465cee768d64"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/calendar-320x568.png",
+      "scene": "calendar",
+      "viewport": [
+        320,
+        568
+      ],
+      "sha256": "248f9a619317dc216959a5cf170963a35a857803b33195c7cec1978e32487558"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/records-320x568.png",
+      "scene": "records",
+      "viewport": [
+        320,
+        568
+      ],
+      "sha256": "dd5b8748a732ae3284b7014bfc3fff7e56895b7ee27fc193d95aa6de000514fd"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/travel-320x568.png",
+      "scene": "travel",
+      "viewport": [
+        320,
+        568
+      ],
+      "sha256": "7251f72cb69fd0e5257cf893ca6d675f07e5d195b12fe8a90290fd7eb28b2ec4"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/reports-320x568.png",
+      "scene": "reports",
+      "viewport": [
+        320,
+        568
+      ],
+      "sha256": "ae2a461aea6885793097c4a53a8afcb1f962a71155473878a076d0dec887933a"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/review-inventory-320x568.png",
+      "scene": "review-inventory",
+      "viewport": [
+        320,
+        568
+      ],
+      "sha256": "18c102348d7844c0c907f1c6caa6af94c341a54653cc61ccf0dea0adc6e5094e"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/confirm-320x568.png",
+      "scene": "confirm",
+      "viewport": [
+        320,
+        568
+      ],
+      "sha256": "7ff4817a81e48ea9172392e956e6938f72f652585e005ad9fdbe1a70ea2185b4"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/record-detail-320x568.png",
+      "scene": "record-detail",
+      "viewport": [
+        320,
+        568
+      ],
+      "sha256": "2ebfbb2326d8ed1ce75858b5c4a1f71f5e47eff65eb265f5f0e817a97fd395c2"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/activity-320x568.png",
+      "scene": "activity",
+      "viewport": [
+        320,
+        568
+      ],
+      "sha256": "830931f006d450fec0a27ff60800bbaf6ce268b3545341acab81c6064ad9b3f9"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/activity-schedule-320x568.png",
+      "scene": "activity-schedule",
+      "viewport": [
+        320,
+        568
+      ],
+      "sha256": "0064813254635de260e6c165244d763b50f66689ed7a1b92709a8dedfa65a6f2"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/manual-confirm-320x568.png",
+      "scene": "manual-confirm",
+      "viewport": [
+        320,
+        568
+      ],
+      "sha256": "8b910e41517c6c74b2442d2ad004203b0efe0460201878aa9f11053335eae109"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/daily-form-320x568.png",
+      "scene": "daily-form",
+      "viewport": [
+        320,
+        568
+      ],
+      "sha256": "9bec0a4f6debac95f5305a26b0a21c52b80ee50908b391047ad143c2f8d35b86"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/travel-plan-320x568.png",
+      "scene": "travel-plan",
+      "viewport": [
+        320,
+        568
+      ],
+      "sha256": "d57307f992a09ad64b7ed3c063238c2b5f92b80d15e7942d78203bd0fe18e75b"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/travel-review-320x568.png",
+      "scene": "travel-review",
+      "viewport": [
+        320,
+        568
+      ],
+      "sha256": "5852ea1d4d597867e7b674c37a1ae3380f3ec18e4f68f7c1c5965ea20d67f9af"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/child-320x568.png",
+      "scene": "child",
+      "viewport": [
+        320,
+        568
+      ],
+      "sha256": "4bcf0841abf9ab8bdcec3c554ff138f94f64f15c807cb4fa229be0e62afea63e"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/child-switch-320x568.png",
+      "scene": "child-switch",
+      "viewport": [
+        320,
+        568
+      ],
+      "sha256": "77f9c56a86218a621acb72b99907f27e47d61d1afe2b6165f33137bb7f44972b"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/grade-320x568.png",
+      "scene": "grade",
+      "viewport": [
+        320,
+        568
+      ],
+      "sha256": "12285940c74f3684bbabbd2464d8b31d6a27226079ec1c5834faf1241f63f6c3"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/family-onboarding-320x568.png",
+      "scene": "family-onboarding",
+      "viewport": [
+        320,
+        568
+      ],
+      "sha256": "eb6f2294e14b235d7fa89c5c1d179780fe601907547c2517423ba6e0c7c4a4b6"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/family-create-320x568.png",
+      "scene": "family-create",
+      "viewport": [
+        320,
+        568
+      ],
+      "sha256": "29fdd2979163be81e9ecc1239149ec5725173c9b6983884f7c09d9b18573107b"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/family-join-320x568.png",
+      "scene": "family-join",
+      "viewport": [
+        320,
+        568
+      ],
+      "sha256": "468dcd11098a698b415018900fae329bcd7faedd8a2d99118997bf9cab97f781"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/family-preview-320x568.png",
+      "scene": "family-preview",
+      "viewport": [
+        320,
+        568
+      ],
+      "sha256": "8d31c4ddca703de52ee682f6e5924b7cb5ebbd2478d23276f7ab543950e4fbec"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/join-pending-320x568.png",
+      "scene": "join-pending",
+      "viewport": [
+        320,
+        568
+      ],
+      "sha256": "83cb0c683acf811270aebed31eca20912e9fff4698b38589265ba1ae1fcef63e"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/family-members-320x568.png",
+      "scene": "family-members",
+      "viewport": [
+        320,
+        568
+      ],
+      "sha256": "84eef33fb4481d63bad4c688080467d51456632ff98dd5cebe602f920d573485"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/family-requests-320x568.png",
+      "scene": "family-requests",
+      "viewport": [
+        320,
+        568
+      ],
+      "sha256": "3c8ee85b94e2584f010168690c5bafc7f84fa9b9ab8a913f11e513ad0ba83439"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/notifications-320x568.png",
+      "scene": "notifications",
+      "viewport": [
+        320,
+        568
+      ],
+      "sha256": "0cd7f6307d93d0ab685933a25a18ef7914296f6e7ba5273684c9e52a62bc93ba"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/delete-settings-320x568.png",
+      "scene": "delete-settings",
+      "viewport": [
+        320,
+        568
+      ],
+      "sha256": "9ff81523b3e50d480a1a62a3c31db44c486ef03a1a4a3eb99c39d36deb024152"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/unsaved-320x568.png",
+      "scene": "unsaved",
+      "viewport": [
+        320,
+        568
+      ],
+      "sha256": "a733070023f884296056e9cb99ddba8926ca42a6afc14f0fb4d4b669fff7cda9"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/confirm-error-320x568.png",
+      "scene": "confirm-error",
+      "viewport": [
+        320,
+        568
+      ],
+      "sha256": "06178ad16fb0f806e2cc0bd98ee937e531539d292a37a65e0923009b57c24ebc"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/processing-320x568.png",
+      "scene": "processing",
+      "viewport": [
+        320,
+        568
+      ],
+      "sha256": "20c37413ae2c44f752b45f17cee4d27b5d38b7f481ff50334c0ef767ef8eb467"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/empty-320x568.png",
+      "scene": "empty",
+      "viewport": [
+        320,
+        568
+      ],
+      "sha256": "3ccc0b3016b38fb5492597ffe25a4f5f376ac6f6c658276b1fb73978f576bd7d"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/error-320x568.png",
+      "scene": "error",
+      "viewport": [
+        320,
+        568
+      ],
+      "sha256": "efe1fef31a38cb6425c19998d15cfcaa1b7f032d7ec1e495afb42e25a5ea6a28"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/permission-320x568.png",
+      "scene": "permission",
+      "viewport": [
+        320,
+        568
+      ],
+      "sha256": "8373061a4942d7bff57492d66eeb900a80aa2138835da350b14aeb5f580399ef"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/notifications-unavailable-320x568.png",
+      "scene": "notifications-unavailable",
+      "viewport": [
+        320,
+        568
+      ],
+      "sha256": "7fb6681932e3550796536c1d30b18a3cd679243e230aac15f16882c78fed8d91"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/channel-unavailable-320x568.png",
+      "scene": "channel-unavailable",
+      "viewport": [
+        320,
+        568
+      ],
+      "sha256": "61246a2118a27086db44370760c4aaf6bc15b1e07246a8b5bd81d665a97afeb0"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/delete-confirm-320x568.png",
+      "scene": "delete-confirm",
+      "viewport": [
+        320,
+        568
+      ],
+      "sha256": "bdea96330c3ee842789a0fe2ef77808dd939021bf48c8e9a8dce988b169f8038"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/saved-320x568.png",
+      "scene": "saved",
+      "viewport": [
+        320,
+        568
+      ],
+      "sha256": "4d6c64068479b074b5e6c974fab495775090e609d5b5de3ab1aa79071148dddc"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/loading-320x568.png",
+      "scene": "loading",
+      "viewport": [
+        320,
+        568
+      ],
+      "sha256": "2b1b7081aac710887d396046a812fcad29b26b5f33b9f407a73b6cbd587196c3"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/settings-390x844.png",
+      "scene": "settings",
+      "viewport": [
+        390,
+        844
+      ],
+      "sha256": "a5d647d9049934ca951d717312e439a38e455d6e5e50fbe9832a27519bc9f6b7"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/settings-routines-390x844.png",
+      "scene": "settings-routines",
+      "viewport": [
+        390,
+        844
+      ],
+      "sha256": "d403d2b9268be83478293c822092d8e5b60b40c30383702c86c162cf3807db72"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/today-390x844.png",
+      "scene": "today",
+      "viewport": [
+        390,
+        844
+      ],
+      "sha256": "fca5f3fc90109fd74d928e7d3cbaf1ee9913a859ab9f8bb2f0e10aa678f6a68c"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/calendar-390x844.png",
+      "scene": "calendar",
+      "viewport": [
+        390,
+        844
+      ],
+      "sha256": "310fc91c3298c4e5970525a76b8044e2202368a14cad5a8eb638a143aed322f9"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/records-390x844.png",
+      "scene": "records",
+      "viewport": [
+        390,
+        844
+      ],
+      "sha256": "d555ea81470b46ff54531e669063e97ea6718231f16ff1fd6e36bc321c8f5b66"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/travel-390x844.png",
+      "scene": "travel",
+      "viewport": [
+        390,
+        844
+      ],
+      "sha256": "eab9204cba4d0c5fecd272cd0ca6eee69b981c7afdf2252a6b83cd5cef4923be"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/reports-390x844.png",
+      "scene": "reports",
+      "viewport": [
+        390,
+        844
+      ],
+      "sha256": "59c0dbad82ef7df6ab9d5b72826efea85f14fc893be097f53986b1ba8693ad7d"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/review-inventory-390x844.png",
+      "scene": "review-inventory",
+      "viewport": [
+        390,
+        844
+      ],
+      "sha256": "d0bf6e45be853ef74173b00b5b08cb3cfd922b441edef4c55ab221d3973c8507"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/confirm-390x844.png",
+      "scene": "confirm",
+      "viewport": [
+        390,
+        844
+      ],
+      "sha256": "572b949a15fa69d0879eda922d3bcfa212279e81b1a851b0929bf6c7bde79fea"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/record-detail-390x844.png",
+      "scene": "record-detail",
+      "viewport": [
+        390,
+        844
+      ],
+      "sha256": "6aa95d91d7c2e2eb0170eb9caddced62eedc4dc9067be6e1229237da6debf731"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/activity-390x844.png",
+      "scene": "activity",
+      "viewport": [
+        390,
+        844
+      ],
+      "sha256": "05a5ebab60e3ada9aa254e7886fb72705d25f9c3912f53c64b649805bae61dad"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/activity-schedule-390x844.png",
+      "scene": "activity-schedule",
+      "viewport": [
+        390,
+        844
+      ],
+      "sha256": "2e1ff1418fbe32699dfceafc7ac7c50ee2503c6e88c686594567a22936e176c6"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/manual-confirm-390x844.png",
+      "scene": "manual-confirm",
+      "viewport": [
+        390,
+        844
+      ],
+      "sha256": "84cf05c2b4c7aace2606ce134c3e1d33b905f559cb4ca5c6d0c27ef23192a654"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/daily-form-390x844.png",
+      "scene": "daily-form",
+      "viewport": [
+        390,
+        844
+      ],
+      "sha256": "2a64163be1adcb880abae5e0bf62188fda43a8020f7e81bc129f47c6535c748e"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/travel-plan-390x844.png",
+      "scene": "travel-plan",
+      "viewport": [
+        390,
+        844
+      ],
+      "sha256": "e39ded50e64ff4fbafba95649682601c2654aa4f209cfbde65e5425e8e700b22"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/travel-review-390x844.png",
+      "scene": "travel-review",
+      "viewport": [
+        390,
+        844
+      ],
+      "sha256": "db43fba46b93e95ebb9e119ea71c4b1282416ddcb7e936306741092bc8518978"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/child-390x844.png",
+      "scene": "child",
+      "viewport": [
+        390,
+        844
+      ],
+      "sha256": "5676ece3e4b03d76c2d65b2bbb735e95f54edb5000dfa602518b11de033ecdc7"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/child-switch-390x844.png",
+      "scene": "child-switch",
+      "viewport": [
+        390,
+        844
+      ],
+      "sha256": "b533ba52c09c79905acc9c45bc78fd43f4a5c30e8e9f7488b39e66d5928063c7"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/grade-390x844.png",
+      "scene": "grade",
+      "viewport": [
+        390,
+        844
+      ],
+      "sha256": "cf07836b04ba06ff3b22948ae0e5c4ae4e586398e4b44766b519ba61c0cc9ca7"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/family-onboarding-390x844.png",
+      "scene": "family-onboarding",
+      "viewport": [
+        390,
+        844
+      ],
+      "sha256": "2a4b8fefbd474c907ed77a2b38e7127b746c218ba34497224e33217ef5ef5e8a"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/family-create-390x844.png",
+      "scene": "family-create",
+      "viewport": [
+        390,
+        844
+      ],
+      "sha256": "95a6ca1357d1f0caf0428399b45b8e8d4ece8f8d0e65be6fa620733af3ebdc5d"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/family-join-390x844.png",
+      "scene": "family-join",
+      "viewport": [
+        390,
+        844
+      ],
+      "sha256": "ad480e15d7b3de154ac7887a72b67feebcd9550dfcc953bbfed12c7c76c8beda"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/family-preview-390x844.png",
+      "scene": "family-preview",
+      "viewport": [
+        390,
+        844
+      ],
+      "sha256": "827a99bd1cc01703a555ef1e4d2e323e2ff8440bc90ec76b13bd2c4e639ad1c7"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/join-pending-390x844.png",
+      "scene": "join-pending",
+      "viewport": [
+        390,
+        844
+      ],
+      "sha256": "b6ba20721014f3071e7e03ded45ad024ed50d1dab8f58fd5547947c7f703ffb0"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/family-members-390x844.png",
+      "scene": "family-members",
+      "viewport": [
+        390,
+        844
+      ],
+      "sha256": "3d2790db0708f7785b623d4c1969c9cba8fd7559533774417bccb0f491a31506"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/family-requests-390x844.png",
+      "scene": "family-requests",
+      "viewport": [
+        390,
+        844
+      ],
+      "sha256": "8f2f28c0f9d6d1ea19d6fa573fe2cdcac60679b12d9b7223776a7f5b40e21b15"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/notifications-390x844.png",
+      "scene": "notifications",
+      "viewport": [
+        390,
+        844
+      ],
+      "sha256": "6b6209747a1d4a6e3a64bb05cda3d510364b581bf8e8caa5757a79e87e62d3bf"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/delete-settings-390x844.png",
+      "scene": "delete-settings",
+      "viewport": [
+        390,
+        844
+      ],
+      "sha256": "62b5d5c5bebe121362eacb65f6b6234deeb5c226ae99cae36df923778df11c2c"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/unsaved-390x844.png",
+      "scene": "unsaved",
+      "viewport": [
+        390,
+        844
+      ],
+      "sha256": "f4be313cf34f12d9f9cab9006937c996979b3d74997a6416996a219693295b6d"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/confirm-error-390x844.png",
+      "scene": "confirm-error",
+      "viewport": [
+        390,
+        844
+      ],
+      "sha256": "fce0dc665bdf63a477d67c7e72946b50bea2aeb4a46ffccd4f71a40dacc5b59f"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/processing-390x844.png",
+      "scene": "processing",
+      "viewport": [
+        390,
+        844
+      ],
+      "sha256": "9873616ae652ff99991c9bf96465d58e107b5d821f17bc3829ddfe9e0f83a4f1"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/empty-390x844.png",
+      "scene": "empty",
+      "viewport": [
+        390,
+        844
+      ],
+      "sha256": "e408f16e26bd8bd1933d012e829ba00ccbbf7e183582ab4ce6d28ba4728a176d"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/error-390x844.png",
+      "scene": "error",
+      "viewport": [
+        390,
+        844
+      ],
+      "sha256": "3e7e2b353b4f7449edbb0c455b71eed48cba9ce2c41388d2be9ba9d70fa81eb7"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/permission-390x844.png",
+      "scene": "permission",
+      "viewport": [
+        390,
+        844
+      ],
+      "sha256": "1c43549d3052b1e3eb7516d047ce3f9ffa71c5fc97fe9cbd37a822014c5795e3"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/notifications-unavailable-390x844.png",
+      "scene": "notifications-unavailable",
+      "viewport": [
+        390,
+        844
+      ],
+      "sha256": "04722a03cf53d8d7546067f7ba4aa2b625cc716059c88dea211e162313542adf"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/channel-unavailable-390x844.png",
+      "scene": "channel-unavailable",
+      "viewport": [
+        390,
+        844
+      ],
+      "sha256": "875b8417944d82fe8c6aa1616873fc98b0ab3488717f027f76edd747f1a16f6f"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/delete-confirm-390x844.png",
+      "scene": "delete-confirm",
+      "viewport": [
+        390,
+        844
+      ],
+      "sha256": "dde3949d034ee9423c4affed26dd5a02c35c131d4dd0fb99322da6dc49b38ab7"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/saved-390x844.png",
+      "scene": "saved",
+      "viewport": [
+        390,
+        844
+      ],
+      "sha256": "48c30fb55c122942efc33ee28b231c64791cc612ba4648c219bbc05b3c1d4350"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/loading-390x844.png",
+      "scene": "loading",
+      "viewport": [
+        390,
+        844
+      ],
+      "sha256": "488f0a6710df83f451cb341e1fe9d3a814adb55ed9daf77582308f77357da26b"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/settings-430x932.png",
+      "scene": "settings",
+      "viewport": [
+        430,
+        932
+      ],
+      "sha256": "b13fe3880bdb0c31c6fcaf2adbb5ce4b53e7363341ed38462a467629e3ab4996"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/settings-routines-430x932.png",
+      "scene": "settings-routines",
+      "viewport": [
+        430,
+        932
+      ],
+      "sha256": "b5e4e1a59d84b05efc2e11686f303e117278245e4819902e93b2c8040aeec58a"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/today-430x932.png",
+      "scene": "today",
+      "viewport": [
+        430,
+        932
+      ],
+      "sha256": "8490982763fa1f782f81c1518cb304cbc346df1926d4bbe9c743b6baf7909aa0"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/calendar-430x932.png",
+      "scene": "calendar",
+      "viewport": [
+        430,
+        932
+      ],
+      "sha256": "cc9f55115929c68577c51cbe51ab04843689672336e70c361e36d1290899c700"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/records-430x932.png",
+      "scene": "records",
+      "viewport": [
+        430,
+        932
+      ],
+      "sha256": "084b8a2e6a764d3eb01b4902b351e900be59e153d11d1c6defe03f8ba92da490"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/travel-430x932.png",
+      "scene": "travel",
+      "viewport": [
+        430,
+        932
+      ],
+      "sha256": "6a51812d4bc711d8144805b788f70721d5b47cb8c8d0ae9178ed89a1dfc56291"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/reports-430x932.png",
+      "scene": "reports",
+      "viewport": [
+        430,
+        932
+      ],
+      "sha256": "e26f2858706d63b6b7d00d17fa31bdeac0b9755ee97c8a9a47af597948b67169"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/review-inventory-430x932.png",
+      "scene": "review-inventory",
+      "viewport": [
+        430,
+        932
+      ],
+      "sha256": "ee3646f7777c8da974abffd97f8583d6a40c8d0a974d05f577bea616d282aa08"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/confirm-430x932.png",
+      "scene": "confirm",
+      "viewport": [
+        430,
+        932
+      ],
+      "sha256": "cab31ee5c11833b61cbab823726eb68fe844b9aae541c4e5471cf523b163d522"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/record-detail-430x932.png",
+      "scene": "record-detail",
+      "viewport": [
+        430,
+        932
+      ],
+      "sha256": "59ca2961c27c5d50f38451a9681824fdba988fabd4404a7c78bc930f016ec48e"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/activity-430x932.png",
+      "scene": "activity",
+      "viewport": [
+        430,
+        932
+      ],
+      "sha256": "3b669ed7844377f5e1bd70c0303f566bd7c47428302ca6589bfa3910a2540489"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/activity-schedule-430x932.png",
+      "scene": "activity-schedule",
+      "viewport": [
+        430,
+        932
+      ],
+      "sha256": "83fd7d57384650b9002a26f401c0b41fbefa6b84a19202582e89baa3d7df7399"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/manual-confirm-430x932.png",
+      "scene": "manual-confirm",
+      "viewport": [
+        430,
+        932
+      ],
+      "sha256": "236d5767a9f516d2a87ead52af56f737b0443f1eece640360e5e37a95aa3ddfc"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/daily-form-430x932.png",
+      "scene": "daily-form",
+      "viewport": [
+        430,
+        932
+      ],
+      "sha256": "19ef5534f432b9fba95ea810aaa6501ff87b0969c699960ee2834c3f0a781692"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/travel-plan-430x932.png",
+      "scene": "travel-plan",
+      "viewport": [
+        430,
+        932
+      ],
+      "sha256": "5d94ee961ecffcc4c3d46be19b2104f548bf36e926cc7466d575d4ba7573c6f2"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/travel-review-430x932.png",
+      "scene": "travel-review",
+      "viewport": [
+        430,
+        932
+      ],
+      "sha256": "adae8f337678e08a0e92be7a210cbceca46f92e9374038e5cd058adc39d89efc"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/child-430x932.png",
+      "scene": "child",
+      "viewport": [
+        430,
+        932
+      ],
+      "sha256": "fc1b592813d3584c9a48ddc755918f2caa2848ba018262bca34c7ac6212cebda"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/child-switch-430x932.png",
+      "scene": "child-switch",
+      "viewport": [
+        430,
+        932
+      ],
+      "sha256": "8234ad73aa7f103bd41e53a87ff134e91c47aca8268eb0d699560f4693987ae1"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/grade-430x932.png",
+      "scene": "grade",
+      "viewport": [
+        430,
+        932
+      ],
+      "sha256": "70734867d8deee749240ebb7f804612f945106c81f01c009d5af9db611052ded"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/family-onboarding-430x932.png",
+      "scene": "family-onboarding",
+      "viewport": [
+        430,
+        932
+      ],
+      "sha256": "644fc7858898233f06293a75b9614f99cd11403e59799ea962378c375fc1dc7c"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/family-create-430x932.png",
+      "scene": "family-create",
+      "viewport": [
+        430,
+        932
+      ],
+      "sha256": "519793736c0c132ead04465533fa18116ff1e38e9dd7faaa118aa3277d7e26e4"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/family-join-430x932.png",
+      "scene": "family-join",
+      "viewport": [
+        430,
+        932
+      ],
+      "sha256": "36a7b59083c649a4aefb9bee0362d54c6415ca9fb4e8d1bff63db73d5c16abd8"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/family-preview-430x932.png",
+      "scene": "family-preview",
+      "viewport": [
+        430,
+        932
+      ],
+      "sha256": "437e673af3b70363e7dcdef654e3a6020d8a527d2a3dbb5ae3aa4d6bc1e94849"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/join-pending-430x932.png",
+      "scene": "join-pending",
+      "viewport": [
+        430,
+        932
+      ],
+      "sha256": "ca78f976ba911ea4e666f77e40d21e43b60ae2970a84ce10bf163ce24ffac669"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/family-members-430x932.png",
+      "scene": "family-members",
+      "viewport": [
+        430,
+        932
+      ],
+      "sha256": "107cce18586772befd6fb2e8e7708bbfa1b5df96653b5a32eb25b1d0386c5c25"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/family-requests-430x932.png",
+      "scene": "family-requests",
+      "viewport": [
+        430,
+        932
+      ],
+      "sha256": "bc8859595c45dc5a0dba9b749138408aff93c4deb690472b78f67e5ed6dcc20a"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/notifications-430x932.png",
+      "scene": "notifications",
+      "viewport": [
+        430,
+        932
+      ],
+      "sha256": "8d03b14050d761663fe81d8aa5d18ec20f127e0ba99b36e5afd3469e26d939dd"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/delete-settings-430x932.png",
+      "scene": "delete-settings",
+      "viewport": [
+        430,
+        932
+      ],
+      "sha256": "e6dd867d50b7f345bea536c913291d1ab5af4d28e0b593735f8dd9820362c2ee"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/unsaved-430x932.png",
+      "scene": "unsaved",
+      "viewport": [
+        430,
+        932
+      ],
+      "sha256": "934591d3fe2a28c11abad176fcc5914dbfccd65778a5e7406b60c7b61bb47162"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/confirm-error-430x932.png",
+      "scene": "confirm-error",
+      "viewport": [
+        430,
+        932
+      ],
+      "sha256": "5b6bdacbe4f7d6b0c5a584757e39d919c13667880e3b05d40b3f9dd2f9d770e3"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/processing-430x932.png",
+      "scene": "processing",
+      "viewport": [
+        430,
+        932
+      ],
+      "sha256": "68ff0d567822915bda162e33acf21f826ce4e01a82222300e025fe6dc524c536"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/empty-430x932.png",
+      "scene": "empty",
+      "viewport": [
+        430,
+        932
+      ],
+      "sha256": "c586c6f051e55d98def7f2d1a1b8675beb2768e2093c92768e50b91c4ef401e6"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/error-430x932.png",
+      "scene": "error",
+      "viewport": [
+        430,
+        932
+      ],
+      "sha256": "ad843d8b9e889fba3562efeebd6e63f9f8a1eed3565bcbad2ed61160b2c6f5eb"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/permission-430x932.png",
+      "scene": "permission",
+      "viewport": [
+        430,
+        932
+      ],
+      "sha256": "151174ef7877eb7e420303fabe119aecda886786e5bc6876886cb77157eff25f"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/notifications-unavailable-430x932.png",
+      "scene": "notifications-unavailable",
+      "viewport": [
+        430,
+        932
+      ],
+      "sha256": "d20137f788a94ba74fffed396ae1edb34e6f50ccb3fb7d9fb3115cd1d92c026a"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/channel-unavailable-430x932.png",
+      "scene": "channel-unavailable",
+      "viewport": [
+        430,
+        932
+      ],
+      "sha256": "da8afad9248f640f186f38f6eeb0d912bbcc13edf025b722ccda78f9a3d5b302"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/delete-confirm-430x932.png",
+      "scene": "delete-confirm",
+      "viewport": [
+        430,
+        932
+      ],
+      "sha256": "1f1125dc9b2740a2e5307183be57c01f7a95983f2a9420bfd06e6566f308471f"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/saved-430x932.png",
+      "scene": "saved",
+      "viewport": [
+        430,
+        932
+      ],
+      "sha256": "b02b4eb3136ff8ecfda0f94f8b00e957ac6fde6b794a76dba9a51c372012b8d0"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/loading-430x932.png",
+      "scene": "loading",
+      "viewport": [
+        430,
+        932
+      ],
+      "sha256": "a89b131ba83e97c178e811c586bf7947a8687c3d6b190a2d56ed6cf533532d9d"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/gallery-1440.png",
+      "kind": "review-gallery",
+      "sha256": "cab212c53f4a37329b3609ba9ba5b80032be020f702a7663d2556b50ed56a909"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/board-01-settings.png",
+      "kind": "review-board",
+      "sha256": "7520d737adbbd65ad796699490f3a77bab3b545b8a2a770b5c49f32415396815"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/board-02-main.png",
+      "kind": "review-board",
+      "sha256": "2a4e8aae3b00d89f704439c80ffac686cb6c93b5ef5f22ac2237faffc8ad33a4"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/board-03-learning.png",
+      "kind": "review-board",
+      "sha256": "7c7279fded5669f9049d6edaed38bdb7f77229e8a0a526607b3103fa4e05fbf9"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/board-04-travel.png",
+      "kind": "review-board",
+      "sha256": "0f91efd418b387bd1eaa5fb4c6b81d15dda82b097cc3ddb5facba8f71696848b"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/board-05-family.png",
+      "kind": "review-board",
+      "sha256": "3f585630c7a2409cf6286e1912c222096a47e18dfefa8d4e144c4135d702ad3f"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/board-06-boundaries.png",
+      "kind": "review-board",
+      "sha256": "e1b937cb4eb6d26476cf1f9abf5aca871fa16db76e6519ef329607127b8b36b7"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/board-07-access.png",
+      "kind": "review-board",
+      "sha256": "fc435c8e597f4bb9e6cfe0c8b483450c76252bfc0f5b6ccd2c2031f02237c0d0"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/board-08-states.png",
+      "kind": "review-board",
+      "sha256": "4eff134173ea8ea511049e9edfa7eb0877484cfe18949de8823ad84c411aed5b"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/board-09-forms.png",
+      "kind": "review-board",
+      "sha256": "f747579bb350e91376a2bf76fa3670ee336a9ab7d3b1cfd2693ada6e98cef249"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/board-10-selectors.png",
+      "kind": "review-board",
+      "sha256": "fc110d53015158a452e27b9d14712e919e53bbcacef5f38914f9a5e268931be2"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/board-11-join.png",
+      "kind": "review-board",
+      "sha256": "ec02b700fb40caf27db9c408a9de07d41632250eb8c21486130b81fac4526110"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/board-12-permissions.png",
+      "kind": "review-board",
+      "sha256": "7e197d987da9ba03c4570d11f219c0de80e4cd107af6d66dc7db2f086c4f8252"
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/board-13-lifecycle.png",
+      "kind": "review-board",
+      "sha256": "f25f4308609b25e2ea173f272e5f26e0a39d18e89a1f296a875e3d52cb0c7afb"
+    }
+  ],
+  "verification": {
+    "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-01/verification.json",
+    "sha256": "66ec84802cd7d1f0492a21d231cc79d4837dad74b0d5c0e2ad3fc1ec60417108"
+  }
+}

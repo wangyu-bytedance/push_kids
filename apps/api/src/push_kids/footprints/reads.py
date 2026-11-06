@@ -177,7 +177,11 @@ class FootprintReads:
         }
 
     @staticmethod
-    def photos(db, family, child_id, visit_id, cursor=None, limit=20):
+    def photos(db, family, child_id, visit_id, cursor=None, limit=20, focus_photo_id=None):
+        if not 1 <= limit <= 50:
+            raise ValueError("每页照片数量需在1至50之间")
+        if cursor and focus_photo_id:
+            raise ValueError("定位照片与分页不能同时使用")
         access.guard(db, family, child_id)
         revision = _revision(db, family, child_id)
         scope = _cursor_scope(family, child_id, "photos", None, None, revision, visit_id)
@@ -188,24 +192,66 @@ class FootprintReads:
         )
         if not visit:
             raise NotFoundError("没有找到这次到访")
-        query = select(Photo).where(
-            Photo.family_id == family,
-            Photo.child_id == child_id,
-            Photo.visit_id == visit_id,
-            Photo.state == "confirmed",
+        query = (
+            select(Photo)
+            .with_hint(Photo, "FORCE INDEX (ix_footprint_photo_gallery)", dialect_name="mysql")
+            .where(
+                Photo.family_id == family,
+                Photo.child_id == child_id,
+                Photo.visit_id == visit_id,
+                Photo.state == "confirmed",
+            )
         )
-        if cursor:
+        backwards = False
+        if focus_photo_id:
+            if not db.scalar(query.with_only_columns(Photo.id).where(Photo.id == focus_photo_id)):
+                raise NotFoundError("没有找到这张到访照片，请刷新后重试")
+            query = query.where(Photo.id >= focus_photo_id)
+        elif cursor:
             anchor = decode_cursor(cursor, scope)
-            query = query.where(Photo.id > str(anchor["id"]))
-        rows = list(db.scalars(query.order_by(Photo.id).limit(limit + 1)))
+            direction = anchor.get("direction", "after")
+            if (
+                not isinstance(anchor.get("id"), str)
+                or not 1 <= len(anchor["id"]) <= 36
+                or direction not in ("before", "after")
+            ):
+                raise ValueError("分页已失效，请刷新列表")
+            backwards = direction == "before"
+            query = query.where(
+                Photo.id < str(anchor["id"]) if backwards else Photo.id > str(anchor["id"])
+            )
+        rows = list(
+            db.scalars(query.order_by(Photo.id.desc() if backwards else Photo.id).limit(limit + 1))
+        )
         more, rows = len(rows) > limit, rows[:limit]
+        if backwards:
+            rows.reverse()
+        # One indexed existence probe finds the other edge. Never count or load
+        # the album to locate a thumbnail, including a focus deep in its history.
+        other_edge = bool(rows) and db.scalar(
+            select(Photo.id)
+            .with_hint(Photo, "FORCE INDEX (ix_footprint_photo_gallery)", dialect_name="mysql")
+            .where(
+                Photo.family_id == family,
+                Photo.child_id == child_id,
+                Photo.visit_id == visit_id,
+                Photo.state == "confirmed",
+                Photo.id > rows[-1].id if backwards else Photo.id < rows[0].id,
+            )
+            .limit(1)
+        )
         return {
             "items": [
                 {**view(row), "day_order": visit.day_order, "order_revision": revision}
                 for row in rows
             ],
             "revision": revision,
-            "next_cursor": encode_cursor(scope, {"id": rows[-1].id}) if more else None,
+            "next_cursor": encode_cursor(scope, {"id": rows[-1].id})
+            if rows and (other_edge if backwards else more)
+            else None,
+            "previous_cursor": encode_cursor(scope, {"id": rows[0].id, "direction": "before"})
+            if rows and (more if backwards else other_edge)
+            else None,
         }
 
     @staticmethod

@@ -1,0 +1,25 @@
+{
+  "result": "PASS",
+  "documents": 21,
+  "local_links": 663,
+  "missing_targets": 0,
+  "spec_counts": {
+    "active": 14,
+    "completed": 109,
+    "rejected": 19
+  },
+  "active_status": {
+    "VERIFYING": 9,
+    "BLOCKED": 2,
+    "READY_FOR_REVIEW": 3
+  },
+  "git_diff_check": "PASS",
+  "reviewed_unchanged_contracts": [
+    "Architecture",
+    "Behavior Catalog",
+    "API",
+    "approved DREV/FEC manifests"
+  ],
+  "new_code_document_conflicts": 0,
+  "quality_and_native_cloud_gaps_preserved": true
+}

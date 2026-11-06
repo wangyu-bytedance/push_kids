@@ -1,0 +1,32 @@
+{
+  "tests/unit/test_stage_provider.py": {
+    "before_sha256": "b21d514294decc5c2be3a3732db45b0a07bf89a16ccf382cbbcaa367ee723ba6",
+    "after_sha256": "ef41dfe0095215346fa2920ecfad8b8e44fb254bf5dda39f533cb0c7364c5e7a",
+    "diff": [
+      "--- tests/unit/test_stage_provider.py before\n",
+      "+++ tests/unit/test_stage_provider.py after\n",
+      "@@ -418,5 +418,5 @@\n",
+      "             MatchingResult,",
+      "             [(\"m1\", path)],",
+      "-            monotonic() + 3,",
+      "+            monotonic() + 30,",
+      "             trace,",
+      "         )"
+    ]
+  },
+  "tests/integration/test_supersession_mysql.py": {
+    "before_sha256": "26945ae98a7abd6c21e21e4a905f591d681b4260d8e737cdee0a98c674f0b055",
+    "after_sha256": "6763d9635556c61d2f44f9d0dfee0a27296be886572d2fa7f2b32189f2ee1104",
+    "diff": [
+      "--- tests/integration/test_supersession_mysql.py before\n",
+      "+++ tests/integration/test_supersession_mysql.py after\n",
+      "@@ -279,5 +279,5 @@\n",
+      "         command.upgrade(config, \"head\")",
+      "         with engine.connect() as db:",
+      "-            assert db.scalar(text(\"SELECT version_num FROM alembic_version\")) == \"20261024_0025\"",
+      "+            assert db.scalar(text(\"SELECT version_num FROM alembic_version\")) == \"20261105_0027\"",
+      "             assert db.scalar(text(\"SELECT COUNT(*) FROM knowledge_items\")) == 0",
+      "         assert \"review_status\" in {"
+    ]
+  }
+}

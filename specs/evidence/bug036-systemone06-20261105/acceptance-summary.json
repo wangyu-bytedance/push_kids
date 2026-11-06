@@ -1,0 +1,38 @@
+{
+  "n": 58,
+  "groups": {
+    "baseline": {
+      "n": 43,
+      "outcomes": {
+        "no_finding": 35,
+        "needs_review": 8
+      },
+      "facts_preserved": 43,
+      "binary_correct": 0,
+      "label_correct": 0
+    },
+    "known_bad": {
+      "n": 3,
+      "outcomes": {
+        "no_finding": 2,
+        "needs_review": 1
+      },
+      "facts_preserved": 3,
+      "binary_correct": 1,
+      "label_correct": 0
+    },
+    "synthetic": {
+      "n": 12,
+      "outcomes": {
+        "no_finding": 5,
+        "needs_review": 7
+      },
+      "facts_preserved": 12,
+      "binary_correct": 11,
+      "label_correct": 11
+    }
+  },
+  "business_writes": 0,
+  "pro_calls": 0,
+  "human_review": "PENDING"
+}

@@ -1,0 +1,143 @@
+{
+  "route": "pages/calendar/index",
+  "viewport": {
+    "width": 390,
+    "height": 844,
+    "screenHeight": 844,
+    "pixelRatio": 3
+  },
+  "base_library": "3.17.4",
+  "nodes": [
+    {
+      "selector": ".pk-sheet",
+      "left": 0,
+      "right": 390,
+      "top": 162,
+      "bottom": 844,
+      "width": 390,
+      "height": 682,
+      "fontSize": "16px",
+      "lineHeight": "25.6px"
+    },
+    {
+      "selector": ".sheet-head",
+      "left": 18,
+      "right": 372,
+      "top": 184,
+      "bottom": 240,
+      "width": 354,
+      "height": 56,
+      "fontSize": "16px",
+      "lineHeight": "25.6px"
+    },
+    {
+      "selector": ".sheet-body",
+      "left": 18,
+      "right": 372,
+      "top": 240,
+      "bottom": 679,
+      "width": 354,
+      "height": 439,
+      "fontSize": "16px",
+      "lineHeight": "25.6px"
+    },
+    {
+      "selector": ".sheet-foot",
+      "left": 18,
+      "right": 372,
+      "top": 679,
+      "bottom": 740,
+      "width": 354,
+      "height": 61,
+      "fontSize": "16px",
+      "lineHeight": "25.6px"
+    },
+    {
+      "selector": ".repeat-mode",
+      "left": 18,
+      "right": 372,
+      "top": 357,
+      "bottom": 407,
+      "width": 354,
+      "height": 50,
+      "fontSize": "16px",
+      "lineHeight": "25.6px"
+    },
+    {
+      "selector": ".sheet-foot .btn",
+      "left": 18,
+      "right": 372,
+      "top": 691,
+      "bottom": 740,
+      "width": 354,
+      "height": 49,
+      "fontSize": "16px",
+      "lineHeight": "19.2px"
+    },
+    {
+      "selector": ".pk-picker",
+      "left": 18,
+      "right": 372,
+      "top": 541,
+      "bottom": 589,
+      "width": 354,
+      "height": 48,
+      "fontSize": "15px",
+      "lineHeight": "22.5px"
+    },
+    {
+      "selector": ".pk-picker",
+      "left": 18,
+      "right": 178,
+      "top": 631,
+      "bottom": 679,
+      "width": 160,
+      "height": 48,
+      "fontSize": "15px",
+      "lineHeight": "22.5px"
+    },
+    {
+      "selector": ".pk-picker",
+      "left": 212,
+      "right": 372,
+      "top": 631,
+      "bottom": 679,
+      "width": 160,
+      "height": 48,
+      "fontSize": "15px",
+      "lineHeight": "22.5px"
+    },
+    {
+      "selector": ".pk-empty",
+      "left": 18,
+      "right": 372,
+      "top": 394,
+      "bottom": 487,
+      "width": 354,
+      "height": 93,
+      "fontSize": "16px",
+      "lineHeight": "25.6px"
+    },
+    {
+      "selector": ".page",
+      "left": 0,
+      "right": 390,
+      "top": 0,
+      "bottom": 844,
+      "width": 390,
+      "height": 844,
+      "fontSize": "16px",
+      "lineHeight": "25.6px"
+    }
+  ],
+  "mode": {
+    "workday": true,
+    "weekly": false
+  },
+  "source": "native wx.createSelectorQuery; synthetic fixtures; production WXML/WXSS exact",
+  "errors": [],
+  "state": "create",
+  "host": "calendar",
+  "screenshot_status": "CAPTURED_REQUIRES_VISUAL_REVIEW",
+  "screenshot_sha256": "20efbe7d939de11da0fd46528cca1d4dc3e1ee4ee59945e43e9f10697c5b98f8"
+}

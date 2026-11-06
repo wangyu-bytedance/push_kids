@@ -1,0 +1,276 @@
+{
+  "designRevision": "DREV-20261106-UI-CONSISTENCY-03",
+  "scope": "Settings only: six independent visual candidates; no native acceptance",
+  "viewports": [
+    [
+      320,
+      568
+    ],
+    [
+      390,
+      844
+    ],
+    [
+      430,
+      932
+    ]
+  ],
+  "checks": [
+    {
+      "style": "a",
+      "viewport": [
+        320,
+        568
+      ],
+      "shortControls": [],
+      "horizontalOverflow": false,
+      "addButtonsConsistent": true,
+      "dailyAddVisible": false,
+      "bodyScrollWidth": 320
+    },
+    {
+      "style": "b",
+      "viewport": [
+        320,
+        568
+      ],
+      "shortControls": [],
+      "horizontalOverflow": false,
+      "addButtonsConsistent": true,
+      "dailyAddVisible": false,
+      "bodyScrollWidth": 320
+    },
+    {
+      "style": "c",
+      "viewport": [
+        320,
+        568
+      ],
+      "shortControls": [],
+      "horizontalOverflow": false,
+      "addButtonsConsistent": true,
+      "dailyAddVisible": false,
+      "bodyScrollWidth": 320
+    },
+    {
+      "style": "d",
+      "viewport": [
+        320,
+        568
+      ],
+      "shortControls": [],
+      "horizontalOverflow": false,
+      "addButtonsConsistent": true,
+      "dailyAddVisible": false,
+      "bodyScrollWidth": 320
+    },
+    {
+      "style": "e",
+      "viewport": [
+        320,
+        568
+      ],
+      "shortControls": [],
+      "horizontalOverflow": false,
+      "addButtonsConsistent": true,
+      "dailyAddVisible": false,
+      "bodyScrollWidth": 320
+    },
+    {
+      "style": "f",
+      "viewport": [
+        320,
+        568
+      ],
+      "shortControls": [],
+      "horizontalOverflow": false,
+      "addButtonsConsistent": true,
+      "dailyAddVisible": false,
+      "bodyScrollWidth": 320
+    },
+    {
+      "style": "a",
+      "viewport": [
+        390,
+        844
+      ],
+      "shortControls": [],
+      "horizontalOverflow": false,
+      "addButtonsConsistent": true,
+      "dailyAddVisible": true,
+      "bodyScrollWidth": 390
+    },
+    {
+      "style": "b",
+      "viewport": [
+        390,
+        844
+      ],
+      "shortControls": [],
+      "horizontalOverflow": false,
+      "addButtonsConsistent": true,
+      "dailyAddVisible": true,
+      "bodyScrollWidth": 390
+    },
+    {
+      "style": "c",
+      "viewport": [
+        390,
+        844
+      ],
+      "shortControls": [],
+      "horizontalOverflow": false,
+      "addButtonsConsistent": true,
+      "dailyAddVisible": true,
+      "bodyScrollWidth": 390
+    },
+    {
+      "style": "d",
+      "viewport": [
+        390,
+        844
+      ],
+      "shortControls": [],
+      "horizontalOverflow": false,
+      "addButtonsConsistent": true,
+      "dailyAddVisible": true,
+      "bodyScrollWidth": 390
+    },
+    {
+      "style": "e",
+      "viewport": [
+        390,
+        844
+      ],
+      "shortControls": [],
+      "horizontalOverflow": false,
+      "addButtonsConsistent": true,
+      "dailyAddVisible": true,
+      "bodyScrollWidth": 390
+    },
+    {
+      "style": "f",
+      "viewport": [
+        390,
+        844
+      ],
+      "shortControls": [],
+      "horizontalOverflow": false,
+      "addButtonsConsistent": true,
+      "dailyAddVisible": true,
+      "bodyScrollWidth": 390
+    },
+    {
+      "style": "a",
+      "viewport": [
+        430,
+        932
+      ],
+      "shortControls": [],
+      "horizontalOverflow": false,
+      "addButtonsConsistent": true,
+      "dailyAddVisible": true,
+      "bodyScrollWidth": 430
+    },
+    {
+      "style": "b",
+      "viewport": [
+        430,
+        932
+      ],
+      "shortControls": [],
+      "horizontalOverflow": false,
+      "addButtonsConsistent": true,
+      "dailyAddVisible": true,
+      "bodyScrollWidth": 430
+    },
+    {
+      "style": "c",
+      "viewport": [
+        430,
+        932
+      ],
+      "shortControls": [],
+      "horizontalOverflow": false,
+      "addButtonsConsistent": true,
+      "dailyAddVisible": true,
+      "bodyScrollWidth": 430
+    },
+    {
+      "style": "d",
+      "viewport": [
+        430,
+        932
+      ],
+      "shortControls": [],
+      "horizontalOverflow": false,
+      "addButtonsConsistent": true,
+      "dailyAddVisible": true,
+      "bodyScrollWidth": 430
+    },
+    {
+      "style": "e",
+      "viewport": [
+        430,
+        932
+      ],
+      "shortControls": [],
+      "horizontalOverflow": false,
+      "addButtonsConsistent": true,
+      "dailyAddVisible": true,
+      "bodyScrollWidth": 430
+    },
+    {
+      "style": "f",
+      "viewport": [
+        430,
+        932
+      ],
+      "shortControls": [],
+      "horizontalOverflow": false,
+      "addButtonsConsistent": true,
+      "dailyAddVisible": true,
+      "bodyScrollWidth": 430
+    }
+  ],
+  "javascriptErrors": [],
+  "externalRequests": [],
+  "interactions": [
+    {
+      "style": "a",
+      "previewFeedback": true,
+      "managementReachable": true,
+      "selectedTab": "设置"
+    },
+    {
+      "style": "b",
+      "previewFeedback": true,
+      "managementReachable": true,
+      "selectedTab": "设置"
+    },
+    {
+      "style": "c",
+      "previewFeedback": true,
+      "managementReachable": true,
+      "selectedTab": "设置"
+    },
+    {
+      "style": "d",
+      "previewFeedback": true,
+      "managementReachable": true,
+      "selectedTab": "设置"
+    },
+    {
+      "style": "e",
+      "previewFeedback": true,
+      "managementReachable": true,
+      "selectedTab": "设置"
+    },
+    {
+      "style": "f",
+      "previewFeedback": true,
+      "managementReachable": true,
+      "selectedTab": "设置"
+    }
+  ]
+}

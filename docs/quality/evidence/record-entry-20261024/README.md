@@ -2,7 +2,7 @@
 
 - Date: 2026-10-24
 - Status: LOCAL_IMPLEMENTATION / VERIFYING / NOT_UPLOADED
-- Task: [BUG-032 Spec05](../../../../specs/active/BUG-032-RECORD-ENTRY-CONTEXT.md)，用户「可以」已批准，不再等待实施授权。
+- Task: [BUG-032 Spec05](../../../../specs/completed/BUG-032-RECORD-ENTRY-CONTEXT.md)，用户「可以」已批准，不再等待实施授权。
 - Design: [DREV-20261024-RECORD-ENTRY-01](../../../design/frontend/prototypes/DREV-20261024-RECORD-ENTRY-01/FRONTEND-SPEC.md)，批准HTML与30张导出SHA冻结。
 - Release: [本地交付状态](../../../deploy/releases/20261024-record-entry-local.md)。
 
@@ -61,4 +61,4 @@ Spec01–04历史候选分别验证21/21/27/27张HTML；04的160px卡片已被�
 
 [收尾核对](closure-audit.json)记录当时313项测试、51态SHA/尺寸及完整客户端导航。后续只读复核新增CR-001（P1 BLOCK）：满100条“下一组”在途时打开照片，返回会清理其预览，无写入反例已复现。该历史313项/51态未覆盖此时序。随后在BUG-032已批准TP04/TP10范围修复，已加载/在途照片预览及失效请求失败回归通过，最终331项前端全过，见[独立保存的新源/证据](../footprints-minimal-20261024/README.md)。本目录旧implementation-final和51图只保留原范围；不改写成当前diff通过。修复未冒充独立复审或完整交付。
 
-Spec最终保留`specs/active/BUG-032-RECORD-ENTRY-CONTEXT.md`，Status VERIFYING。恢复条件是补齐实际点击/系统picker、iOS/Android字体/读屏/真实选图和独立review，并由家长完成产品验收；未全部通过不标DONE、不移动completed。
+Spec最终保留`specs/completed/BUG-032-RECORD-ENTRY-CONTEXT.md`，Status VERIFYING。恢复条件是补齐实际点击/系统picker、iOS/Android字体/读屏/真实选图和独立review，并由家长完成产品验收；未全部通过不标DONE、不移动completed。

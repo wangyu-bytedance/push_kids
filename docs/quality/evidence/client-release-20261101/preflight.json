@@ -1,0 +1,58 @@
+{
+  "date": "2026-11-01",
+  "authorization": "后端已经部署完成，前端提交",
+  "commit": "0576ac30464908154c624effed41df6dfa3110cc",
+  "source_manifest_sha256": "04c6668a20a0f99622c78424b4d7c5ba07aadc1fd515f20a494e0e4cfcbb2adb",
+  "frontend_files": 168,
+  "source_audit": {
+    "result": "PASS",
+    "changed_files": [],
+    "command_id": "2f6a325796caed1fcdca8f3bd848a508"
+  },
+  "version": {
+    "baseline": "0.1.16",
+    "computed_next": "0.1.17",
+    "command": "npm run --silent release:version:next",
+    "command_id": "e2662e21dbf51e65dbfd53e38a3f5c7e",
+    "upload_attempted": false,
+    "bumped": false
+  },
+  "islogin": {
+    "command_id": "f123b47be80f04a4ea208aefda097f26",
+    "exit_code": 0,
+    "login": false,
+    "http_port": 51419,
+    "result": "FAIL_AUTHENTICATION"
+  },
+  "native_automation": {
+    "command_id": "d4a8b7ac52fef5c35f4ee93edde02d77",
+    "exit_code": 0,
+    "sdk_error_code": 10,
+    "message": "需要重新登录",
+    "result": "FAIL_AUTHENTICATION",
+    "project": "/private/tmp/push-kids-travel-diary-native-20261025"
+  },
+  "static_checks": {
+    "command_id": "b8a1a87b81a7a8ef04cdc815328009c8",
+    "exit_code": 0,
+    "architecture": "ARCHITECTURE_VALID policies=4 modules=151 (runtime/lazy DAG)",
+    "design": "DESIGN_EVIDENCE_VALID",
+    "miniprogram": "MINIPROGRAM_VALID pages=17 source_bytes=1233761",
+    "git_diff_check": "PASS"
+  },
+  "existing_unchanged_source_checks": {
+    "frontend_tests": "349 PASS on2026-10-31",
+    "eslint": "PASS on2026-10-31",
+    "preview": "1191019 bytes on2026-10-31",
+    "rerun": false,
+    "reason": "All168 frozen source files remain identical"
+  },
+  "production_source_changed": false,
+  "stage": "BACKEND039_NORMAL100_FRONTEND_UPLOAD_BLOCKED_LOGIN",
+  "not_run": [
+    "Current authenticated real wx.cloud.callContainer health and focus/pagination",
+    "New focus two real accounts and non-owner checks",
+    "390x844/430x932 native matrix and full actions/device/accessibility",
+    "Frontend upload, version bump, experience, review, production"
+  ]
+}

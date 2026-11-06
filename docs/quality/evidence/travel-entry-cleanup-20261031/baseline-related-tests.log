@@ -1,0 +1,376 @@
+TAP version 13
+# Subtest: album return survives hide/show but rejects a changed family or detached component
+ok 1 - album return survives hide/show but rejects a changed family or detached component
+  ---
+  duration_ms: 19.379458
+  type: 'test'
+  ...
+# Subtest: editing and date completion keep selection, latest versions and known dates
+ok 2 - editing and date completion keep selection, latest versions and known dates
+  ---
+  duration_ms: 3.258375
+  type: 'test'
+  ...
+# Subtest: partial batch edit retries only unfinished photos without losing form or updated versions
+ok 3 - partial batch edit retries only unfinished photos without losing form or updated versions
+  ---
+  duration_ms: 2.664708
+  type: 'test'
+  ...
+# Subtest: resume restores draft previews and processing polling while preserving unsaved edits
+ok 4 - resume restores draft previews and processing polling while preserving unsaved edits
+  ---
+  duration_ms: 3.672208
+  type: 'test'
+  ...
+# Subtest: focused gallery requests the clicked photo and follows server backward cursors
+ok 5 - focused gallery requests the clicked photo and follows server backward cursors
+  ---
+  duration_ms: 2.4745
+  type: 'test'
+  ...
+# Subtest: partial confirmation removes successful batches and preserves retryable selection
+ok 6 - partial confirmation removes successful batches and preserves retryable selection
+  ---
+  duration_ms: 2.721917
+  type: 'test'
+  ...
+# Subtest: native location return keeps edits and background mutation completes without a stuck busy flag
+ok 7 - native location return keeps edits and background mutation completes without a stuck busy flag
+  ---
+  duration_ms: 2.533083
+  type: 'test'
+  ...
+# Subtest: version conflict refresh preserves form and retries the latest version only after explicit recovery
+ok 8 - version conflict refresh preserves form and retries the latest version only after explicit recovery
+  ---
+  duration_ms: 1.970083
+  type: 'test'
+  ...
+# Subtest: two-file upload retry reuses its batch and skips the successfully received photo
+ok 9 - two-file upload retry reuses its batch and skips the successfully received photo
+  ---
+  duration_ms: 2.074834
+  type: 'test'
+  ...
+# Subtest: late gallery response after close or a new visit cannot replace the visible photo
+ok 10 - late gallery response after close or a new visit cannot replace the visible photo
+  ---
+  duration_ms: 3.125416
+  type: 'test'
+  ...
+# Subtest: unknown capture date and timezone stay unknown
+ok 11 - unknown capture date and timezone stay unknown
+  ---
+  duration_ms: 0.385084
+  type: 'test'
+  ...
+# Subtest: timeline shows confirmed capture minutes without guessing unknown or manual media
+ok 12 - timeline shows confirmed capture minutes without guessing unknown or manual media
+  ---
+  duration_ms: 0.535333
+  type: 'test'
+  ...
+# Subtest: timeline initial, appended and replaced windows retain server order and capture labels
+ok 13 - timeline initial, appended and replaced windows retain server order and capture labels
+  ---
+  duration_ms: 2.008416
+  type: 'test'
+  ...
+# Subtest: unavailable private thumbnail preserves dated capture labels and the detail path
+ok 14 - unavailable private thumbnail preserves dated capture labels and the detail path
+  ---
+  duration_ms: 1.765833
+  type: 'test'
+  ...
+# Subtest: draft capture fields can be cleared but formal dates remain required
+ok 15 - draft capture fields can be cleared but formal dates remain required
+  ---
+  duration_ms: 2.039208
+  type: 'test'
+  ...
+# Subtest: draft paging stops first-page polling and preserves selected rows
+ok 16 - draft paging stops first-page polling and preserves selected rows
+  ---
+  duration_ms: 2.067583
+  type: 'test'
+  ...
+# Subtest: confirmation blocks missing date and keeps only selected versions
+ok 17 - confirmation blocks missing date and keeps only selected versions
+  ---
+  duration_ms: 1.918792
+  type: 'test'
+  ...
+# Subtest: playback changes the native camera overseas and pauses on hide
+ok 18 - playback changes the native camera overseas and pauses on hide
+  ---
+  duration_ms: 1.859792
+  type: 'test'
+  ...
+# Subtest: late child response cannot overwrite another child's view
+ok 19 - late child response cannot overwrite another child's view
+  ---
+  duration_ms: 1.889625
+  type: 'test'
+  ...
+# Subtest: all footprint reads use the current child's complete history, even with obsolete date state
+ok 20 - all footprint reads use the current child's complete history, even with obsolete date state
+  ---
+  duration_ms: 5.211625
+  type: 'test'
+  ...
+# Subtest: timeline traverses beyond 100 using bounded windows, explicit replacement and retryable cursors
+ok 21 - timeline traverses beyond 100 using bounded windows, explicit replacement and retryable cursors
+  ---
+  duration_ms: 1.945
+  type: 'test'
+  ...
+# Subtest: timeline appends only the remaining capacity within its current window
+ok 22 - timeline appends only the remaining capacity within its current window
+  ---
+  duration_ms: 1.616208
+  type: 'test'
+  ...
+# Subtest: place visits replace a full window, reset its scroll anchor and retry the same cursor on failure
+ok 23 - place visits replace a full window, reset its scroll anchor and retry the same cursor on failure
+  ---
+  duration_ms: 2.01775
+  type: 'test'
+  ...
+# Subtest: a replaced timeline discards late preview files and stops requesting the old window
+ok 24 - a replaced timeline discards late preview files and stops requesting the old window
+  ---
+  duration_ms: 4.124209
+  type: 'test'
+  ...
+# Subtest: archived and viewer profiles cannot start new intake
+ok 25 - archived and viewer profiles cannot start new intake
+  ---
+  duration_ms: 1.797917
+  type: 'test'
+  ...
+# Subtest: import opens the original album directly, blocks reentry and cancellation makes no writes
+ok 26 - import opens the original album directly, blocks reentry and cancellation makes no writes
+  ---
+  duration_ms: 1.726542
+  type: 'test'
+  ...
+# Subtest: selected photos import without changing either AI preference value
+ok 27 - selected photos import without changing either AI preference value
+  ---
+  duration_ms: 3.167417
+  type: 'test'
+  ...
+# Subtest: album cancel/failure restores previews in either hide/show return order and can retry
+ok 28 - album cancel/failure restores previews in either hide/show return order and can retry
+  ---
+  duration_ms: 8.419792
+  type: 'test'
+  ...
+# Subtest: gallery uses bounded pages and can return to the previous page
+ok 29 - gallery uses bounded pages and can return to the previous page
+  ---
+  duration_ms: 1.615542
+  type: 'test'
+  ...
+# Subtest: edit failure preserves values and unsaved close respects cancellation
+ok 30 - edit failure preserves values and unsaved close respects cancellation
+  ---
+  duration_ms: 1.740291
+  type: 'test'
+  ...
+# Subtest: first-file upload failure retains a retryable batch
+ok 31 - first-file upload failure retains a retryable batch
+  ---
+  duration_ms: 1.836708
+  type: 'test'
+  ...
+# Subtest: footprint actions follow permission and archive availability without one-item menus
+ok 32 - footprint actions follow permission and archive availability without one-item menus
+  ---
+  duration_ms: 6.561292
+  type: 'test'
+  ...
+# Subtest: native action cancellation and a late selection leave context untouched
+ok 33 - native action cancellation and a late selection leave context untouched
+  ---
+  duration_ms: 1.660958
+  type: 'test'
+  ...
+# Subtest: archived selection cancellation preserves the current child and unsaved input
+ok 34 - archived selection cancellation preserves the current child and unsaved input
+  ---
+  duration_ms: 1.509959
+  type: 'test'
+  ...
+# Subtest: archived selection uses the existing discard guard before changing children
+ok 35 - archived selection uses the existing discard guard before changing children
+  ---
+  duration_ms: 1.901792
+  type: 'test'
+  ...
+# Subtest: every archived child is reachable through bounded native pages in either direction
+ok 36 - every archived child is reachable through bounded native pages in either direction
+  ---
+  duration_ms: 4.498041
+  type: 'test'
+  ...
+# Subtest: profile loading derives archive availability and permission denial removes it
+ok 37 - profile loading derives archive availability and permission denial removes it
+  ---
+  duration_ms: 2.22675
+  type: 'test'
+  ...
+# Subtest: settings failure keeps the chosen value and retry saves the same preference
+ok 38 - settings failure keeps the chosen value and retry saves the same preference
+  ---
+  duration_ms: 2.951917
+  type: 'test'
+  ...
+# Subtest: settings save restores released thumbnails when returning before completion
+ok 39 - settings save restores released thumbnails when returning before completion
+  ---
+  duration_ms: 5.364459
+  type: 'test'
+  ...
+# Subtest: settings save restores released thumbnails when returning after completion
+ok 40 - settings save restores released thumbnails when returning after completion
+  ---
+  duration_ms: 2.02775
+  type: 'test'
+  ...
+# Subtest: late timeline window preserves loaded photo sheet previews
+ok 41 - late timeline window preserves loaded photo sheet previews
+  ---
+  duration_ms: 1.702666
+  type: 'test'
+  ...
+# Subtest: late timeline window preserves pending photo sheet previews
+ok 42 - late timeline window preserves pending photo sheet previews
+  ---
+  duration_ms: 1.701167
+  type: 'test'
+  ...
+# Subtest: superseding a timeline request resets busy state and ignores its late failure
+ok 43 - superseding a timeline request resets busy state and ignores its late failure
+  ---
+  duration_ms: 1.77075
+  type: 'test'
+  ...
+# Subtest: manual form handles failed AI, retains full original text and filters activities
+ok 44 - manual form handles failed AI, retains full original text and filters activities
+  ---
+  duration_ms: 6.388584
+  type: 'test'
+  ...
+# Subtest: manual save bypasses analysis, blocks duplicate click and retains form on failure
+ok 45 - manual save bypasses analysis, blocks duplicate click and retains form on failure
+  ---
+  duration_ms: 2.352625
+  type: 'test'
+  ...
+# Subtest: editing a matched concept or moving its subject clears the old identity
+ok 46 - editing a matched concept or moving its subject clears the old identity
+  ---
+  duration_ms: 3.155833
+  type: 'test'
+  ...
+# Subtest: recordLearning uses the real entry, learning load and intent consumption after travel
+ok 47 - recordLearning uses the real entry, learning load and intent consumption after travel
+  ---
+  duration_ms: 11.899875
+  type: 'test'
+  ...
+# Subtest: goRecord uses the real entry, learning load and intent consumption after travel
+ok 48 - goRecord uses the real entry, learning load and intent consumption after travel
+  ---
+  duration_ms: 5.799292
+  type: 'test'
+  ...
+# Subtest: a new learning entry resumes after a stale leave guard finishes
+ok 49 - a new learning entry resumes after a stale leave guard finishes
+  ---
+  duration_ms: 4.612417
+  type: 'test'
+  ...
+# Subtest: type round trip preserves the complete unsent learning form and original child
+ok 50 - type round trip preserves the complete unsent learning form and original child
+  ---
+  duration_ms: 2.653042
+  type: 'test'
+  ...
+# Subtest: upload, cancelled travel edits and unknown types cannot switch the record domain
+ok 51 - upload, cancelled travel edits and unknown types cannot switch the record domain
+  ---
+  duration_ms: 2.435958
+  type: 'test'
+  ...
+# Subtest: a pending leave confirmation cannot switch after the page hides
+ok 52 - a pending leave confirmation cannot switch after the page hides
+  ---
+  duration_ms: 3.681792
+  type: 'test'
+  ...
+# Subtest: late learning reads and polling stop when entering travel; travel owns refresh and paging
+ok 53 - late learning reads and polling stop when entering travel; travel owns refresh and paging
+  ---
+  duration_ms: 2.770833
+  type: 'test'
+  ...
+# Subtest: embedded and standalone footprints share methods, with isolated controller state and cleanup
+ok 54 - embedded and standalone footprints share methods, with isolated controller state and cleanup
+  ---
+  duration_ms: 4.888375
+  type: 'test'
+  ...
+# Subtest: detaching travel while import creation waits prevents late upload
+ok 55 - detaching travel while import creation waits prevents late upload
+  ---
+  duration_ms: 3.306417
+  type: 'test'
+  ...
+# Subtest: explicit learning intents leave travel through its guard; ordinary tab returns stay travel
+ok 56 - explicit learning intents leave travel through its guard; ordinary tab returns stay travel
+  ---
+  duration_ms: 3.148208
+  type: 'test'
+  ...
+# Subtest: selecting an older archived profile keeps the visible picker aligned to that child
+ok 57 - selecting an older archived profile keeps the visible picker aligned to that child
+  ---
+  duration_ms: 2.229417
+  type: 'test'
+  ...
+# Subtest: an upload remains protected across backgrounding until its outstanding request terminates
+ok 58 - an upload remains protected across backgrounding until its outstanding request terminates
+  ---
+  duration_ms: 2.421542
+  type: 'test'
+  ...
+# Subtest: type dropdown keeps the tab bar visible; photo sheets hide it until close or page departure
+ok 59 - type dropdown keeps the tab bar visible; photo sheets hide it until close or page departure
+  ---
+  duration_ms: 2.479583
+  type: 'test'
+  ...
+# Subtest: a cancelled current leave guard closes the menu and never retries the pending intent
+ok 60 - a cancelled current leave guard closes the menu and never retries the pending intent
+  ---
+  duration_ms: 2.637042
+  type: 'test'
+  ...
+# Subtest: travel child labels retain archive context while gaining the shared avatar
+ok 61 - travel child labels retain archive context while gaining the shared avatar
+  ---
+  duration_ms: 2.054875
+  type: 'test'
+  ...
+1..61
+# tests 61
+# suites 0
+# pass 61
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 175.344959

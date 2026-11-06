@@ -1,0 +1,34 @@
+[
+  {
+    "id": "OPS-CROSS-DOC-001",
+    "title": "已修正：Final acceptance HTML no longer matches its report manifest",
+    "file": "output/bug036-cache02-final-acceptance/report-manifest.json",
+    "start_line": 4,
+    "end_line": 4,
+    "severity": "P2",
+    "category": "BUSINESS_SEMANTICS",
+    "confidence": 10,
+    "rationale": "已由获授权文档owner同步修正并执行最终manifest/链接核验；原独立发现保留在cross.jsonl，处置见disposition.md。发布仍NOT_READY。原发现：The current report manifest binds bug036-cache02-final-acceptance.html to SHA-256 b3ea3da0a2fc76734c33ae241e74953bbf2e93da3ec825b1e0677326c69b0424, but independent read-only hashing twice confirms the current HTML is dbf460d40d8bf9dfd01088fc4bd487bb361f22346dc6e0c1262519074a7d049d. The other 31 declared report files match. Consuming this manifest cannot authenticate the final report bytes; this is a confirmed document/evidence binding error, not a payload defect or a claim that the page fails to render.",
+    "suggestion": "The authorized documentation owner should finish the intended report and attachment snapshot, then regenerate its exact manifest binding. Preserve explicitly historical evidence and do not relabel old rendering evidence as validation of the changed HTML.",
+    "repository_severity": "MINOR",
+    "origin": "introduced_document_closure",
+    "disposition": "fixed",
+    "owner": "OPS release/documentation coordinator"
+  },
+  {
+    "id": "OPS-CROSS-DOC-002",
+    "title": "已修正：Current OPS test results retain a superseded lint blocker",
+    "file": "specs/active/OPS-20261101-BUG036-CACHE02-DEPLOYMENT.md",
+    "start_line": 152,
+    "end_line": 154,
+    "severity": "P2",
+    "category": "BUSINESS_SEMANTICS",
+    "confidence": 10,
+    "rationale": "已由获授权文档owner同步修正并执行最终manifest/链接核验；原独立发现保留在cross.jsonl，处置见disposition.md。发布仍NOT_READY。原发现：In the same current-result table, TP-R03 still states that seven whole-workspace E501/format failures remain blocking, while TP-R05 records the approved maintenance and whole-workspace Ruff/format865 PASS. The retained approved logs, current EVD and stop record support the latter. The stale row is not labeled as a historical run and makes the current outstanding gate set internally contradictory. Related current preparation wording remains in TEST-STRATEGY.md:10 and knowledge-cache-local.md:7-10; unlike explicitly historical group reports, these must distinguish the earlier observation from the current state. This is a document-only defect; fixed40 FAIL remains the real release stop.",
+    "suggestion": "Reconcile TP-R03 with TP-R05 in the current body, retain the seven original errors under their historical execution scope, and similarly label or update the affected preparation statements. Refresh or explicitly date the HTML's old in-progress attachment snapshots without modifying immutable payload/design evidence or asserting unrun acceptance.",
+    "repository_severity": "MINOR",
+    "origin": "introduced_document_closure_residue",
+    "disposition": "fixed",
+    "owner": "OPS release/documentation coordinator"
+  }
+]

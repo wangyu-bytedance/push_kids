@@ -3,7 +3,7 @@
 - Subject: SPEC-20261024-SUGGESTION-TITLE-LIMIT-01 / Architecture01 / DREV-20261024-TODAY-LEARNING-04。
 - State at capture: READY_FOR_REVIEW / AWAITING_APPROVAL；以下保留批准前设计阶段事实，不是当前实现状态。随后用户在call_39aaa3dd3cdf4a52b2bfc9c4d862ee58明确批准Spec01/Architecture01/DREV04；当前本地实现、原生结果与缺口见[实现证据](SUGGESTION-TITLE-IMPLEMENTATION-20261024.md)。
 - Source SHA-256: `6ebbac1c69481fc5d5d09376f6bde689e6be2a5e678b0e61a0a9dfcf3008a754`。
-- [Spec](../../../specs/active/FEAT-004-SUGGESTION-TITLE-LIMIT.md) · [设计说明](../../design/frontend/prototypes/DREV-20261024-TODAY-LEARNING-04/FRONTEND-SPEC.md) · [33张SHA清单](../../design/frontend/snapshots/UI-001/DREV-20261024-TODAY-LEARNING-04/APPROVAL.md) · [机器报告](../../design/frontend/prototypes/DREV-20261024-TODAY-LEARNING-04/render-report.json)。
+- [Spec](../../../specs/completed/FEAT-004-SUGGESTION-TITLE-LIMIT.md) · [设计说明](../../design/frontend/prototypes/DREV-20261024-TODAY-LEARNING-04/FRONTEND-SPEC.md) · [33张SHA清单](../../design/frontend/snapshots/UI-001/DREV-20261024-TODAY-LEARNING-04/APPROVAL.md) · [机器报告](../../design/frontend/prototypes/DREV-20261024-TODAY-LEARNING-04/render-report.json)。
 
 ## 实际检查
 
@@ -41,4 +41,4 @@
 
 Feature、UI current-state、前端设计与Spec索引只登记待批准候选；既有120字生产事实、Architecture/BHV045/测试和发布记录未改为20字。当前没有代码与新事实冲突，也没有把前一轮327项前端/81组原生作为本修订通过。
 
-Spec保留`specs/active/FEAT-004-SUGGESTION-TITLE-LIMIT.md`，状态READY_FOR_REVIEW；等待具体Spec01（含Architecture01）与DREV04批准。批准后再完成生产回归、三视口原生和设备/可访问性、独立复核及事实合并；不满足全部门禁不标DONE。未提交、上传、部署、迁移、批量改写或改变功能开关。
+Spec保留`specs/completed/FEAT-004-SUGGESTION-TITLE-LIMIT.md`，状态READY_FOR_REVIEW；等待具体Spec01（含Architecture01）与DREV04批准。批准后再完成生产回归、三视口原生和设备/可访问性、独立复核及事实合并；不满足全部门禁不标DONE。未提交、上传、部署、迁移、批量改写或改变功能开关。

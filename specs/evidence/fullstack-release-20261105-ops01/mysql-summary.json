@@ -1,0 +1,99 @@
+{
+  "image": "public.ecr.aws/docker/library/mysql:5.7",
+  "production_access": false,
+  "server_version": "5.7.44",
+  "fresh-upgrade": {
+    "exit_code": 0
+  },
+  "fresh-current": {
+    "exit_code": 0
+  },
+  "fresh-check": {
+    "exit_code": 0
+  },
+  "upgrade25-baseline": {
+    "exit_code": 0
+  },
+  "upgrade25-head": {
+    "exit_code": 0
+  },
+  "upgrade25-current": {
+    "exit_code": 0
+  },
+  "upgrade25-check": {
+    "exit_code": 0
+  },
+  "tests": [
+    {
+      "exit_code": 0,
+      "path": "tests/integration/test_footprints_mysql.py"
+    },
+    {
+      "exit_code": 0,
+      "path": "tests/integration/test_grade_confirmation_mysql.py"
+    },
+    {
+      "exit_code": 0,
+      "path": "tests/integration/test_mysql_runtime.py"
+    },
+    {
+      "exit_code": 0,
+      "path": "tests/integration/test_notification_renewal_mysql.py"
+    },
+    {
+      "exit_code": 0,
+      "path": "tests/integration/test_review_schedule_mysql.py"
+    },
+    {
+      "exit_code": 0,
+      "path": "tests/integration/test_schema_readiness_mysql.py"
+    },
+    {
+      "exit_code": 0,
+      "path": "tests/integration/test_staged_mysql.py"
+    },
+    {
+      "exit_code": 0,
+      "path": "tests/integration/test_supersession_mysql.py"
+    },
+    {
+      "exit_code": 0,
+      "path": "tests/integration/test_system_one_mysql.py"
+    },
+    {
+      "exit_code": 0,
+      "path": "tests/integration/test_today_learning_mysql.py"
+    }
+  ],
+  "grade_release_0-head": {
+    "exit_code": 0
+  },
+  "grade_release_1-head": {
+    "exit_code": 0
+  },
+  "grade_release_2-head": {
+    "exit_code": 0
+  },
+  "grade_release_3-head": {
+    "exit_code": 0
+  },
+  "grade_release_4-head": {
+    "exit_code": 0
+  },
+  "grade_release_5-head": {
+    "exit_code": 0
+  },
+  "grade_release_6-head": {
+    "exit_code": 0
+  },
+  "grade_release_7-head": {
+    "exit_code": 0
+  },
+  "grade_release_8-head": {
+    "exit_code": 0
+  },
+  "grade_release_9-head": {
+    "exit_code": 0
+  },
+  "container_removed": true
+}

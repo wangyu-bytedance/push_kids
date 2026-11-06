@@ -1,0 +1,214 @@
+FFFFFFF                                                                  [100%]
+=================================== FAILURES ===================================
+____________ test_provider_rejects_source_capacity_before_sdk[text] ____________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10d231400>
+tmp_path = PosixPath('/private/var/folders/hq/l74_1q417nbdffshwhtw79640000gn/T/pytest-of-bytedance/pytest-90/test_provider_rejects_source_c0')
+oversized = 'text'
+
+    @pytest.mark.parametrize("oversized", ["text", "image", "count"])
+    def test_provider_rejects_source_capacity_before_sdk(monkeypatch, tmp_path, oversized):
+        state = install_client(monkeypatch)
+        path = tmp_path / "page.png"
+        path.write_bytes(b"x" * (33 if oversized == "image" else 1))
+        provider = StagedArkProvider(Settings(ARK_API_KEY="synthetic", upload_max_bytes=32))
+        images = [(f"m{index + 1}", path) for index in range(10 if oversized == "count" else 1)]
+        payload = {"text": "界" * 175000} if oversized == "text" else {}
+>       with pytest.raises(StageFailure, match="capacity"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'push_kids.agent_processing.failures.StageFailure'>
+
+tests/unit/test_stage_provider.py:298: Failed
+___________ test_provider_rejects_source_capacity_before_sdk[image] ____________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10d28f920>
+tmp_path = PosixPath('/private/var/folders/hq/l74_1q417nbdffshwhtw79640000gn/T/pytest-of-bytedance/pytest-90/test_provider_rejects_source_c1')
+oversized = 'image'
+
+    @pytest.mark.parametrize("oversized", ["text", "image", "count"])
+    def test_provider_rejects_source_capacity_before_sdk(monkeypatch, tmp_path, oversized):
+        state = install_client(monkeypatch)
+        path = tmp_path / "page.png"
+        path.write_bytes(b"x" * (33 if oversized == "image" else 1))
+        provider = StagedArkProvider(Settings(ARK_API_KEY="synthetic", upload_max_bytes=32))
+        images = [(f"m{index + 1}", path) for index in range(10 if oversized == "count" else 1)]
+        payload = {"text": "界" * 175000} if oversized == "text" else {}
+>       with pytest.raises(StageFailure, match="capacity"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'push_kids.agent_processing.failures.StageFailure'>
+
+tests/unit/test_stage_provider.py:298: Failed
+___________ test_provider_rejects_source_capacity_before_sdk[count] ____________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10d28f200>
+tmp_path = PosixPath('/private/var/folders/hq/l74_1q417nbdffshwhtw79640000gn/T/pytest-of-bytedance/pytest-90/test_provider_rejects_source_c2')
+oversized = 'count'
+
+    @pytest.mark.parametrize("oversized", ["text", "image", "count"])
+    def test_provider_rejects_source_capacity_before_sdk(monkeypatch, tmp_path, oversized):
+        state = install_client(monkeypatch)
+        path = tmp_path / "page.png"
+        path.write_bytes(b"x" * (33 if oversized == "image" else 1))
+        provider = StagedArkProvider(Settings(ARK_API_KEY="synthetic", upload_max_bytes=32))
+        images = [(f"m{index + 1}", path) for index in range(10 if oversized == "count" else 1)]
+        payload = {"text": "界" * 175000} if oversized == "text" else {}
+>       with pytest.raises(StageFailure, match="capacity"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'push_kids.agent_processing.failures.StageFailure'>
+
+tests/unit/test_stage_provider.py:298: Failed
+___________ test_source_request_records_byte_counts_without_content ____________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10d231640>
+tmp_path = PosixPath('/private/var/folders/hq/l74_1q417nbdffshwhtw79640000gn/T/pytest-of-bytedance/pytest-90/test_source_request_records_by0')
+
+    def test_source_request_records_byte_counts_without_content(monkeypatch, tmp_path):
+        state = install_client(monkeypatch)
+        path = tmp_path / "page.png"
+        path.write_bytes(b"synthetic-image")
+    
+        class Trace:
+            def __init__(self):
+                self.events = []
+    
+            def info(self, event, **fields):
+                self.events.append((event, fields))
+    
+        trace = Trace()
+        payload = {"parent_text": "private-child-sentinel"}
+        asyncio.run(StagedArkProvider(Settings(ARK_API_KEY="synthetic")).generate_stage(
+            "review", "instructions", payload, MatchingResult, [("m1", path)],
+            monotonic() + 2, trace,
+        ))
+        completed = dict(trace.events)["analysis_stage_completed"]
+>       assert completed["payload_bytes"] == len(json.dumps(payload, ensure_ascii=False).encode())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'payload_bytes'
+
+tests/unit/test_stage_provider.py:327: KeyError
+__ test_consolidated_byte_budget_applies_without_and_with_checkpoints[False] ___
+
+cached = False
+
+    @pytest.mark.parametrize("cached", [False, True])
+    def test_consolidated_byte_budget_applies_without_and_with_checkpoints(cached):
+        class LargeResult(StageFake):
+            async def generate_stage(self, stage, *args, **kwargs):
+                value = await super().generate_stage(stage, *args, **kwargs)
+                if stage == "merge":
+                    value.uncertainties = ["界" * 23000]
+                return value
+    
+        class Store:
+            def get(self, *args):
+                return None
+    
+            def put(self, unit, digest, value, **kwargs):
+                assert unit != "merge"
+    
+        pipeline = StagedPipeline(LargeResult(), AnalysisTrace.disabled(), Store() if cached else None)
+        with pytest.raises(StageFailure) as caught:
+            asyncio.run(pipeline.run(
+                AnalysisInput(text="十以内加法", existing_subjects=["数学"]),
+                lambda _: [], monotonic() + 10,
+            ))
+>       assert caught.value.diagnostics == ("stage.fields:byte_limit",)
+E       AssertionError: assert () == ('stage.fields:byte_limit',)
+E         
+E         Right contains one more item: 'stage.fields:byte_limit'
+E         
+E         Full diff:
+E         + ()
+E         - (
+E         -     'stage.fields:byte_limit',
+E         - )
+
+tests/unit/test_staged_analysis.py:217: AssertionError
+___ test_consolidated_byte_budget_applies_without_and_with_checkpoints[True] ___
+
+cached = True
+
+    @pytest.mark.parametrize("cached", [False, True])
+    def test_consolidated_byte_budget_applies_without_and_with_checkpoints(cached):
+        class LargeResult(StageFake):
+            async def generate_stage(self, stage, *args, **kwargs):
+                value = await super().generate_stage(stage, *args, **kwargs)
+                if stage == "merge":
+                    value.uncertainties = ["界" * 23000]
+                return value
+    
+        class Store:
+            def get(self, *args):
+                return None
+    
+            def put(self, unit, digest, value, **kwargs):
+                assert unit != "merge"
+    
+        pipeline = StagedPipeline(LargeResult(), AnalysisTrace.disabled(), Store() if cached else None)
+        with pytest.raises(StageFailure) as caught:
+            asyncio.run(pipeline.run(
+                AnalysisInput(text="十以内加法", existing_subjects=["数学"]),
+                lambda _: [], monotonic() + 10,
+            ))
+>       assert caught.value.diagnostics == ("stage.fields:byte_limit",)
+E       AssertionError: assert () == ('stage.fields:byte_limit',)
+E         
+E         Right contains one more item: 'stage.fields:byte_limit'
+E         
+E         Full diff:
+E         + ()
+E         - (
+E         -     'stage.fields:byte_limit',
+E         - )
+
+tests/unit/test_staged_analysis.py:217: AssertionError
+____________ test_changed_source_bytes_are_rejected_before_proposal ____________
+
+tmp_path = PosixPath('/private/var/folders/hq/l74_1q417nbdffshwhtw79640000gn/T/pytest-of-bytedance/pytest-90/test_changed_source_bytes_are_0')
+
+    def test_changed_source_bytes_are_rejected_before_proposal(tmp_path):
+        class ChangedSource(StageFake):
+            async def generate_stage(self, stage, instructions, payload, schema, images, *args):
+                value = await super().generate_stage(stage, instructions, payload, schema, images, *args)
+                if stage == "review":
+                    images[0][1].write_bytes(b"changed original")
+                return value
+    
+        image = tmp_path / "page.png"
+        image.write_bytes(b"original")
+>       with pytest.raises(StageFailure) as caught:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'push_kids.agent_processing.failures.StageFailure'>
+
+tests/unit/test_staged_analysis.py:231: Failed
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /Users/bytedance/Documents/push_kids/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/unit/test_stage_provider.py::test_provider_rejects_source_capacity_before_sdk[text] - Failed: DID NOT RAISE <class 'push_kids.agent_processing.failures.StageFailure'>
+FAILED tests/unit/test_stage_provider.py::test_provider_rejects_source_capacity_before_sdk[image] - Failed: DID NOT RAISE <class 'push_kids.agent_processing.failures.StageFailure'>
+FAILED tests/unit/test_stage_provider.py::test_provider_rejects_source_capacity_before_sdk[count] - Failed: DID NOT RAISE <class 'push_kids.agent_processing.failures.StageFailure'>
+FAILED tests/unit/test_stage_provider.py::test_source_request_records_byte_counts_without_content - KeyError: 'payload_bytes'
+FAILED tests/unit/test_staged_analysis.py::test_consolidated_byte_budget_applies_without_and_with_checkpoints[False] - AssertionError: assert () == ('stage.fields:byte_limit',)
+  
+  Right contains one more item: 'stage.fields:byte_limit'
+  
+  Full diff:
+  + ()
+  - (
+  -     'stage.fields:byte_limit',
+  - )
+FAILED tests/unit/test_staged_analysis.py::test_consolidated_byte_budget_applies_without_and_with_checkpoints[True] - AssertionError: assert () == ('stage.fields:byte_limit',)
+  
+  Right contains one more item: 'stage.fields:byte_limit'
+  
+  Full diff:
+  + ()
+  - (
+  -     'stage.fields:byte_limit',
+  - )
+FAILED tests/unit/test_staged_analysis.py::test_changed_source_bytes_are_rejected_before_proposal - Failed: DID NOT RAISE <class 'push_kids.agent_processing.failures.StageFailure'>
+7 failed, 59 deselected, 1 warning in 0.34s

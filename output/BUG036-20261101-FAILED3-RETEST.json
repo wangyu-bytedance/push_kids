@@ -1,0 +1,799 @@
+{
+  "evidence_id": "EVD-20261101-BUG036-FAILED3",
+  "observed_at": "2026-11-01T15:46:43.466460+08:00",
+  "authorized_scope": "three exact original failed sources; read-only reproduction; strategy documentation",
+  "tested_revision": "staged-20261031-09",
+  "tested_prompt": "child-aware-history-agent-20261031-13",
+  "proposed_cache_spec": "BUG-SPEC-20261101-KNOWLEDGE-CACHE-02",
+  "cache_implementation_status": "NOT_IMPLEMENTED_AWAITING_REVISION_APPROVAL",
+  "model": "doubao-seed-2-1-pro-260628",
+  "parameters": {
+    "cases": 3,
+    "complete_original_images": 6,
+    "case_concurrency": 2,
+    "request_concurrency": 2,
+    "attempts_per_source": 1,
+    "deadline_seconds": 270,
+    "durable_checkpoints": false
+  },
+  "scope_limits": "same family/child/subject, created before source; frozen current index and names; unversioned Todo omitted",
+  "source_sha256": {
+    "pipeline.py": "fd4c17b5bca2d2dd6289f06a98b49c5050ab77d45250bde0cdbe3527d07e0221",
+    "stage_provider.py": "541aa016674b35e215eee052f23bc04e00d09164995f9e169d15c65fedc125e1",
+    "stage_contracts.py": "e616952181fff6eebee1a3d21c5a16c157fe351dc0681d50ce42eeb498803179",
+    "contracts.py": "7524e52c4ffbc27e1127d54bb7ac33f676165d8f303961374ad68b959df25564",
+    "history_search.py": "951cfbefa128f782e4a4f53035a3e2ca2d3c51c5c554cd89665af6bd3b22c265",
+    "coverage.py": "44f3f6340b6fcc20367efe7dedd3d311e246acc282bd02d8ea742b6ef6c0aaf4",
+    "failures.py": "73167af67d45a1fad12b127804b29f2c799ebdc1242f61fdccb1387061600bdc",
+    "telemetry.py": "c19ebc6d7bcfa7de61364e4aa7fa75710e8a3547296c401a60a981ee3dbcb7db",
+    "checkpoints.py": "621c5c593c407b9c624f6cca2b55a58a20e940f72fc167b2ea4a2be82a160ec3",
+    "prompt.py": "61152c25593aee2665a6ae59bb489e90b9b031bc48df69a24892e82fea242823"
+  },
+  "source_unchanged_at_generation_end": true,
+  "results": [
+    {
+      "case": "failed01",
+      "source_digest": "48b3eb516e46fe83ad4989b62d72b1fce9ed722cbfeb8e208a223c35a4b26ed8",
+      "images": [
+        {
+          "index": 1,
+          "bytes": 463418,
+          "sha256": "530a0e25c06762929f2a0f1ad65933ae826bda07863a814b20c3d88c336d1ab8"
+        },
+        {
+          "index": 2,
+          "bytes": 399353,
+          "sha256": "18cb7631ccba56ce52d8ee09dc4703036ed8e646587a4efd2c16d07373b7aa99"
+        }
+      ],
+      "sampling_subject": "original_failed_photo",
+      "attempts": 1,
+      "success": true,
+      "new_points": 2,
+      "history_matches": 0,
+      "subjects": [
+        "语文"
+      ],
+      "seconds": 37.7,
+      "provider_calls": 9,
+      "history_queries": 2,
+      "quality_reviews": 2,
+      "quality_corrections": 1,
+      "input_tokens": 38322,
+      "output_tokens": 1775,
+      "job_ref": "c88cacdd86",
+      "original_state": "failed",
+      "original_attempts": 3,
+      "original_review": {
+        "review0": {
+          "passed": false,
+          "issue_codes": [
+            "should_merge"
+          ],
+          "pipeline_revision": "staged-20261031-06"
+        },
+        "review1": {
+          "passed": false,
+          "issue_codes": [
+            "should_merge"
+          ],
+          "pipeline_revision": "staged-20261031-06"
+        }
+      },
+      "new_reviews": [
+        {
+          "passed": false,
+          "issue_codes": [
+            "unsupported_by_evidence"
+          ]
+        },
+        {
+          "passed": true,
+          "issue_codes": []
+        }
+      ],
+      "safe_diagnostics": [],
+      "session_verdict": "PASS",
+      "content_issue_categories": []
+    },
+    {
+      "case": "failed02",
+      "source_digest": "b526d9d0de299acce634c470cf6c5024b7f3920eeecd9e28a9796f911718fc12",
+      "images": [
+        {
+          "index": 1,
+          "bytes": 619657,
+          "sha256": "87aef481fdbf36ffffdb9e00d812bf17da3930383cda51f227729480c331c0fd"
+        }
+      ],
+      "sampling_subject": "original_failed_photo",
+      "attempts": 1,
+      "success": false,
+      "failure_code": "analysis_output_invalid",
+      "failure_reason": "validation",
+      "failure_stage": "merge",
+      "failure_unit": "merge-correction",
+      "seconds": 58.92,
+      "provider_calls": 5,
+      "history_queries": 0,
+      "quality_reviews": 1,
+      "quality_corrections": 2,
+      "input_tokens": 21705,
+      "output_tokens": 2859,
+      "job_ref": "b3e82df25a",
+      "original_state": "failed",
+      "original_attempts": 3,
+      "original_review": {
+        "review0": {
+          "passed": false,
+          "issue_codes": [
+            "should_merge"
+          ],
+          "pipeline_revision": "staged-20261031-06"
+        },
+        "review1": {
+          "passed": false,
+          "issue_codes": [
+            "over_merged",
+            "vague_name"
+          ],
+          "pipeline_revision": "staged-20261031-06"
+        }
+      },
+      "new_reviews": [
+        {
+          "passed": false,
+          "issue_codes": [
+            "should_merge"
+          ]
+        }
+      ],
+      "safe_diagnostics": [
+        "stage.items.0.name:string_too_long"
+      ],
+      "session_verdict": "NO_OUTPUT",
+      "content_issue_categories": [
+        "schema_name_length_after_merge"
+      ]
+    },
+    {
+      "case": "failed03",
+      "source_digest": "88f3646dd90bf856dffb084dd31b08fc96b05429f6ae7677c52f9fdd12840923",
+      "images": [
+        {
+          "index": 1,
+          "bytes": 468087,
+          "sha256": "4fd9881faff700ab13c908170a6db8091fcff1f32e70cfbe85073f9ea6282ff6"
+        },
+        {
+          "index": 2,
+          "bytes": 443262,
+          "sha256": "313dab116b59f323606422fb2bf4b2c7ae9ff42013ffb040e9a29e375d1cbae0"
+        },
+        {
+          "index": 3,
+          "bytes": 469514,
+          "sha256": "9a9588857f6ca4dfaffc73a4b3f10bae1428eb25529ba4d7dad9d8f0e2a49fd1"
+        }
+      ],
+      "sampling_subject": "original_failed_photo",
+      "attempts": 1,
+      "success": true,
+      "new_points": 5,
+      "history_matches": 0,
+      "subjects": [
+        "语文"
+      ],
+      "seconds": 77.19,
+      "provider_calls": 8,
+      "history_queries": 5,
+      "quality_reviews": 1,
+      "quality_corrections": 0,
+      "input_tokens": 55092,
+      "output_tokens": 4061,
+      "job_ref": "31912018e2",
+      "original_state": "failed",
+      "original_attempts": 3,
+      "original_review": {
+        "review0": {
+          "passed": false,
+          "issue_codes": [
+            "should_merge"
+          ],
+          "pipeline_revision": "staged-20261031-06"
+        },
+        "review1": {
+          "passed": false,
+          "issue_codes": [
+            "over_merged"
+          ],
+          "pipeline_revision": "staged-20261031-06"
+        }
+      },
+      "new_reviews": [
+        {
+          "passed": true,
+          "issue_codes": []
+        }
+      ],
+      "safe_diagnostics": [],
+      "session_verdict": "FAIL",
+      "content_issue_categories": [
+        "incorrect_knowledge_classification",
+        "learning_role_evidence_insufficient"
+      ]
+    }
+  ],
+  "summary": {
+    "proposals": 2,
+    "session_verdicts": {
+      "PASS": 1,
+      "NO_OUTPUT": 1,
+      "FAIL": 1
+    },
+    "provider_calls": 22,
+    "input_tokens": 115119,
+    "output_tokens": 8695
+  },
+  "audit": {
+    "scope": "61 authorized-family business tables plus related media and schema",
+    "before_readonly": 1,
+    "after_readonly": 1,
+    "tables": 61,
+    "all_fingerprints_equal": true,
+    "changed_tables": [],
+    "before_tables": {
+      "activity_records": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "activity_schedules": {
+        "count": 11,
+        "sha256": "a6228668a51d57b8bfe2cb2d578e777945f1c1139be8ed9f7875ae1ad231279c"
+      },
+      "activity_schedule_slots": {
+        "count": 14,
+        "sha256": "d696abaed6109b5642c3efe5a45e53dc3683be0917153f93cce68c92800a0883"
+      },
+      "agent_jobs": {
+        "count": 128,
+        "sha256": "eb6d993ba50629bb35eabf8f8255c29e47bdb139b91a746f56fc56a257f91c85"
+      },
+      "analysis_stage_results": {
+        "count": 18,
+        "sha256": "c1d00d1ef11164cdb473a31e1b6858bd606599169d8aa26c30809babd106dedb"
+      },
+      "calendar_events": {
+        "count": 2,
+        "sha256": "9846f69208a37b9ddc96260f7c37aac883823db50537858339f307a1dbd190db"
+      },
+      "calendar_event_requests": {
+        "count": 2,
+        "sha256": "37deaf0c3cd91df25e460b12b53bbc656caf4cff6d1000bf35c637016cd10f97"
+      },
+      "children": {
+        "count": 2,
+        "sha256": "1e5ef30661a816dfd5973ffabd08d3aae0c9143ffcb42bc4c3633b5033dc0809"
+      },
+      "daily_review_plans": {
+        "count": 97,
+        "sha256": "8d3694b344dc602f16dee3a12c107fcb0eac474133b0c27adfa675483f773c26"
+      },
+      "daily_review_plan_items": {
+        "count": 637,
+        "sha256": "fd2d047f02d3c657e6647db3f184b1953b1dc84698bb490570ac4d29f44f2279"
+      },
+      "daily_tasks": {
+        "count": 3,
+        "sha256": "b86308cab250ae311d51a24d21e2cabc6de732741151bba1c765ea195e207f7f"
+      },
+      "daily_task_completions": {
+        "count": 1,
+        "sha256": "afbe4993fb456c7a981f68e6bc6b8406780899780aed0b1f820d31ff26b5712a"
+      },
+      "deletion_requests": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "family_audit_events": {
+        "count": 12,
+        "sha256": "86a646e92886a5cef3b98cbdf1e4326d2adf73dfb59e650471eac31361a87c9e"
+      },
+      "family_invites": {
+        "count": 5,
+        "sha256": "f8571461ba526b112d748deb3c84f8262d719ea475f527488ec8a3d93e9ef614"
+      },
+      "family_join_requests": {
+        "count": 2,
+        "sha256": "f530b8f95462d2c4b5505f781819d9c0e4cddc1092b4f6aa1242e3b25c41931e"
+      },
+      "family_members": {
+        "count": 3,
+        "sha256": "0fc33a5e729217788e90a4ff36f4710d99a4c85ce146fe3c8d049a18c0f3d3fb"
+      },
+      "footprint_imports": {
+        "count": 1,
+        "sha256": "ad8b80e4ec0d1ec930a92eff640d0e87971354341f3981a66c759797f477bd47"
+      },
+      "footprint_photos": {
+        "count": 3,
+        "sha256": "2a47529d85867002cfe056ee784350ef6335a20fe9e05dc80c8adb848486ea46"
+      },
+      "footprint_preferences": {
+        "count": 1,
+        "sha256": "d223b4b1f33c4c3c1c69fd86396fe64afd03cb2f279571e5b1e349544891f26d"
+      },
+      "footprint_scopes": {
+        "count": 1,
+        "sha256": "f2bda3f931c8351ac1ba21c71a4e2960a52437deb3aad0fa23b58b347085b29c"
+      },
+      "footprint_visits": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "knowledge_coverage_jobs": {
+        "count": 74,
+        "sha256": "00098a84fc743231b5e58b39cd97eeb10bdb74bc4ad11b5392c682eb2cb6ebc4"
+      },
+      "knowledge_input_clocks": {
+        "count": 2,
+        "sha256": "ebd0ca15ad7abbb5b31ad44d0fe00b79068f0ce55df93b47d02bc7726c0fa8c5"
+      },
+      "knowledge_items": {
+        "count": 264,
+        "sha256": "5100d48937f163bdc5bf87196e50ac2969c81c6e2cbd32571e56147827784e9c"
+      },
+      "knowledge_occurrences": {
+        "count": 264,
+        "sha256": "e38f9eed2b4deef91f7d0c2ec6697967e19c413eabdf5908784593bd3f3666f7"
+      },
+      "knowledge_search_terms": {
+        "count": 7214,
+        "sha256": "c2b1fac3cac48c0f394f7fd470937d6023896a211da385bc73dbca5a4e90e315"
+      },
+      "learning_records": {
+        "count": 120,
+        "sha256": "8cbd5937e25a354a339e90aa9bec1573c4de7792951b7c932c563ea7a199ea40"
+      },
+      "learning_submissions": {
+        "count": 128,
+        "sha256": "8737a93339717f0164ec4ee85644551fb9e678796d3204fe4ba71b97bd12dfff"
+      },
+      "learning_suggestions": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "learning_suggestion_jobs": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "learning_suggestion_prompt_days": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "learning_suggestion_states": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "media_objects": {
+        "count": 206,
+        "sha256": "df87ed406813dd1907af0f73fa9df949a8fa00134aed000b452439d53e624596"
+      },
+      "notification_deliveries": {
+        "count": 37,
+        "sha256": "7b20fb7e84225ecbc7f373945dff063039f679ef6c5aac14e43c6bb09492c418"
+      },
+      "notification_destinations": {
+        "count": 1,
+        "sha256": "7ed5b337ec61fb85711570d322c2babd45762b9c35a4015c699f421101929e95"
+      },
+      "notification_grant_attempts": {
+        "count": 8,
+        "sha256": "e7ab655a6b37ae47a6f927b92f56cf3ebd128ad8e882a17421740e3929214f83"
+      },
+      "notification_preferences": {
+        "count": 1,
+        "sha256": "fac26bdbe763cdab670e5bfd37a2c13cc00b3bce1a4a006fd75ada6d54ced5eb"
+      },
+      "notification_renewal_preferences": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "notification_renewal_states": {
+        "count": 2,
+        "sha256": "5ae4fe57f3c4b232535de4a43ab978596a719c96600049b368e0785b4f94b4f6"
+      },
+      "notification_subscriptions": {
+        "count": 2,
+        "sha256": "f9840454cf9a0f65be7b9399c5399be6ac7c4a8911937643219cf116ec160a4c"
+      },
+      "review_early_slots": {
+        "count": 250,
+        "sha256": "9459e64de915051be20d5f9a686d4bd32a3f76b41a7bcf272e9da2dd78fa5ed9"
+      },
+      "review_feedback": {
+        "count": 462,
+        "sha256": "c1d4c7bb625b6c775853afb031239186fe225051a6961690fe64f042e6a78709"
+      },
+      "review_feedback_batch_requests": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "review_feedback_requests": {
+        "count": 390,
+        "sha256": "436faa4ce5330591a11caa205da3128685cb2d3ff788f7b77a16ac9853514da3"
+      },
+      "review_items": {
+        "count": 264,
+        "sha256": "ff6c21d7cf8570c3d809d1decd494d708d5a1eaf782674f6919c67bd744596dd"
+      },
+      "review_member_completion_progress": {
+        "count": 3,
+        "sha256": "a8c1bba8354c632de3f862b17f61814f8636c99612916461e53b7ed6c9850f41"
+      },
+      "review_member_completion_receipts": {
+        "count": 51,
+        "sha256": "eadb73c8cb4a9e4abce1f638f3ad6a26ed16de9f0fead603dca37af78b71e2e6"
+      },
+      "review_queue_entries": {
+        "count": 264,
+        "sha256": "67ce8d3ddbc1924dbdf79087d514a614ac3f14222e2d0801cd59d470ae9b91e6"
+      },
+      "review_schedule_changes": {
+        "count": 2,
+        "sha256": "a14b70897f5da554e72d779d3036d0f3020cc1f8f37dcabb1386e159131e50c5"
+      },
+      "review_schedule_overrides": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "study_tasks": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "study_task_records": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "study_task_record_intents": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "subjects": {
+        "count": 18,
+        "sha256": "7310cf2e0137cda1545e3ddda6bb1e08011cb052c13028f76267c454c3f3ab20"
+      },
+      "submission_requests": {
+        "count": 128,
+        "sha256": "50450cdf47e1a0aee203d2507275eb83b0d411b3617338b546f16ab78a3f52b7"
+      },
+      "travel_arrangements": {
+        "count": 4,
+        "sha256": "ccbd6716b82bedbac1b340c10cca62b4951ad3a7306c08a7850c05695346a738"
+      },
+      "travel_arrangement_requests": {
+        "count": 4,
+        "sha256": "c2e896d550c5b930de7f5335feeadf154376af9ea99a63af4654c28c1f20d3de"
+      },
+      "travel_arrangement_slots": {
+        "count": 20,
+        "sha256": "b2796384f3a15e7b3b8b89ccb2736b4d2134fcc41242f6a7abe689b1d4051a5f"
+      },
+      "wechat_actor_bindings": {
+        "count": 3,
+        "sha256": "e11f07d11b089dd90e68daff352a51c10d88547f7d33bdb248d4d78fd1c427d6"
+      },
+      "submission_media": {
+        "count": 205,
+        "sha256": "d3b469e9376e550487f37208a351227b8023c8994be07e05df4f10a4437788fe"
+      },
+      "schema": [
+        "20261024_0025"
+      ]
+    },
+    "after_tables": {
+      "activity_records": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "activity_schedules": {
+        "count": 11,
+        "sha256": "a6228668a51d57b8bfe2cb2d578e777945f1c1139be8ed9f7875ae1ad231279c"
+      },
+      "activity_schedule_slots": {
+        "count": 14,
+        "sha256": "d696abaed6109b5642c3efe5a45e53dc3683be0917153f93cce68c92800a0883"
+      },
+      "agent_jobs": {
+        "count": 128,
+        "sha256": "eb6d993ba50629bb35eabf8f8255c29e47bdb139b91a746f56fc56a257f91c85"
+      },
+      "analysis_stage_results": {
+        "count": 18,
+        "sha256": "c1d00d1ef11164cdb473a31e1b6858bd606599169d8aa26c30809babd106dedb"
+      },
+      "calendar_events": {
+        "count": 2,
+        "sha256": "9846f69208a37b9ddc96260f7c37aac883823db50537858339f307a1dbd190db"
+      },
+      "calendar_event_requests": {
+        "count": 2,
+        "sha256": "37deaf0c3cd91df25e460b12b53bbc656caf4cff6d1000bf35c637016cd10f97"
+      },
+      "children": {
+        "count": 2,
+        "sha256": "1e5ef30661a816dfd5973ffabd08d3aae0c9143ffcb42bc4c3633b5033dc0809"
+      },
+      "daily_review_plans": {
+        "count": 97,
+        "sha256": "8d3694b344dc602f16dee3a12c107fcb0eac474133b0c27adfa675483f773c26"
+      },
+      "daily_review_plan_items": {
+        "count": 637,
+        "sha256": "fd2d047f02d3c657e6647db3f184b1953b1dc84698bb490570ac4d29f44f2279"
+      },
+      "daily_tasks": {
+        "count": 3,
+        "sha256": "b86308cab250ae311d51a24d21e2cabc6de732741151bba1c765ea195e207f7f"
+      },
+      "daily_task_completions": {
+        "count": 1,
+        "sha256": "afbe4993fb456c7a981f68e6bc6b8406780899780aed0b1f820d31ff26b5712a"
+      },
+      "deletion_requests": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "family_audit_events": {
+        "count": 12,
+        "sha256": "86a646e92886a5cef3b98cbdf1e4326d2adf73dfb59e650471eac31361a87c9e"
+      },
+      "family_invites": {
+        "count": 5,
+        "sha256": "f8571461ba526b112d748deb3c84f8262d719ea475f527488ec8a3d93e9ef614"
+      },
+      "family_join_requests": {
+        "count": 2,
+        "sha256": "f530b8f95462d2c4b5505f781819d9c0e4cddc1092b4f6aa1242e3b25c41931e"
+      },
+      "family_members": {
+        "count": 3,
+        "sha256": "0fc33a5e729217788e90a4ff36f4710d99a4c85ce146fe3c8d049a18c0f3d3fb"
+      },
+      "footprint_imports": {
+        "count": 1,
+        "sha256": "ad8b80e4ec0d1ec930a92eff640d0e87971354341f3981a66c759797f477bd47"
+      },
+      "footprint_photos": {
+        "count": 3,
+        "sha256": "2a47529d85867002cfe056ee784350ef6335a20fe9e05dc80c8adb848486ea46"
+      },
+      "footprint_preferences": {
+        "count": 1,
+        "sha256": "d223b4b1f33c4c3c1c69fd86396fe64afd03cb2f279571e5b1e349544891f26d"
+      },
+      "footprint_scopes": {
+        "count": 1,
+        "sha256": "f2bda3f931c8351ac1ba21c71a4e2960a52437deb3aad0fa23b58b347085b29c"
+      },
+      "footprint_visits": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "knowledge_coverage_jobs": {
+        "count": 74,
+        "sha256": "00098a84fc743231b5e58b39cd97eeb10bdb74bc4ad11b5392c682eb2cb6ebc4"
+      },
+      "knowledge_input_clocks": {
+        "count": 2,
+        "sha256": "ebd0ca15ad7abbb5b31ad44d0fe00b79068f0ce55df93b47d02bc7726c0fa8c5"
+      },
+      "knowledge_items": {
+        "count": 264,
+        "sha256": "5100d48937f163bdc5bf87196e50ac2969c81c6e2cbd32571e56147827784e9c"
+      },
+      "knowledge_occurrences": {
+        "count": 264,
+        "sha256": "e38f9eed2b4deef91f7d0c2ec6697967e19c413eabdf5908784593bd3f3666f7"
+      },
+      "knowledge_search_terms": {
+        "count": 7214,
+        "sha256": "c2b1fac3cac48c0f394f7fd470937d6023896a211da385bc73dbca5a4e90e315"
+      },
+      "learning_records": {
+        "count": 120,
+        "sha256": "8cbd5937e25a354a339e90aa9bec1573c4de7792951b7c932c563ea7a199ea40"
+      },
+      "learning_submissions": {
+        "count": 128,
+        "sha256": "8737a93339717f0164ec4ee85644551fb9e678796d3204fe4ba71b97bd12dfff"
+      },
+      "learning_suggestions": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "learning_suggestion_jobs": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "learning_suggestion_prompt_days": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "learning_suggestion_states": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "media_objects": {
+        "count": 206,
+        "sha256": "df87ed406813dd1907af0f73fa9df949a8fa00134aed000b452439d53e624596"
+      },
+      "notification_deliveries": {
+        "count": 37,
+        "sha256": "7b20fb7e84225ecbc7f373945dff063039f679ef6c5aac14e43c6bb09492c418"
+      },
+      "notification_destinations": {
+        "count": 1,
+        "sha256": "7ed5b337ec61fb85711570d322c2babd45762b9c35a4015c699f421101929e95"
+      },
+      "notification_grant_attempts": {
+        "count": 8,
+        "sha256": "e7ab655a6b37ae47a6f927b92f56cf3ebd128ad8e882a17421740e3929214f83"
+      },
+      "notification_preferences": {
+        "count": 1,
+        "sha256": "fac26bdbe763cdab670e5bfd37a2c13cc00b3bce1a4a006fd75ada6d54ced5eb"
+      },
+      "notification_renewal_preferences": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "notification_renewal_states": {
+        "count": 2,
+        "sha256": "5ae4fe57f3c4b232535de4a43ab978596a719c96600049b368e0785b4f94b4f6"
+      },
+      "notification_subscriptions": {
+        "count": 2,
+        "sha256": "f9840454cf9a0f65be7b9399c5399be6ac7c4a8911937643219cf116ec160a4c"
+      },
+      "review_early_slots": {
+        "count": 250,
+        "sha256": "9459e64de915051be20d5f9a686d4bd32a3f76b41a7bcf272e9da2dd78fa5ed9"
+      },
+      "review_feedback": {
+        "count": 462,
+        "sha256": "c1d4c7bb625b6c775853afb031239186fe225051a6961690fe64f042e6a78709"
+      },
+      "review_feedback_batch_requests": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "review_feedback_requests": {
+        "count": 390,
+        "sha256": "436faa4ce5330591a11caa205da3128685cb2d3ff788f7b77a16ac9853514da3"
+      },
+      "review_items": {
+        "count": 264,
+        "sha256": "ff6c21d7cf8570c3d809d1decd494d708d5a1eaf782674f6919c67bd744596dd"
+      },
+      "review_member_completion_progress": {
+        "count": 3,
+        "sha256": "a8c1bba8354c632de3f862b17f61814f8636c99612916461e53b7ed6c9850f41"
+      },
+      "review_member_completion_receipts": {
+        "count": 51,
+        "sha256": "eadb73c8cb4a9e4abce1f638f3ad6a26ed16de9f0fead603dca37af78b71e2e6"
+      },
+      "review_queue_entries": {
+        "count": 264,
+        "sha256": "67ce8d3ddbc1924dbdf79087d514a614ac3f14222e2d0801cd59d470ae9b91e6"
+      },
+      "review_schedule_changes": {
+        "count": 2,
+        "sha256": "a14b70897f5da554e72d779d3036d0f3020cc1f8f37dcabb1386e159131e50c5"
+      },
+      "review_schedule_overrides": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "study_tasks": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "study_task_records": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "study_task_record_intents": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "subjects": {
+        "count": 18,
+        "sha256": "7310cf2e0137cda1545e3ddda6bb1e08011cb052c13028f76267c454c3f3ab20"
+      },
+      "submission_requests": {
+        "count": 128,
+        "sha256": "50450cdf47e1a0aee203d2507275eb83b0d411b3617338b546f16ab78a3f52b7"
+      },
+      "travel_arrangements": {
+        "count": 4,
+        "sha256": "ccbd6716b82bedbac1b340c10cca62b4951ad3a7306c08a7850c05695346a738"
+      },
+      "travel_arrangement_requests": {
+        "count": 4,
+        "sha256": "c2e896d550c5b930de7f5335feeadf154376af9ea99a63af4654c28c1f20d3de"
+      },
+      "travel_arrangement_slots": {
+        "count": 20,
+        "sha256": "b2796384f3a15e7b3b8b89ccb2736b4d2134fcc41242f6a7abe689b1d4051a5f"
+      },
+      "wechat_actor_bindings": {
+        "count": 3,
+        "sha256": "e11f07d11b089dd90e68daff352a51c10d88547f7d33bdb248d4d78fd1c427d6"
+      },
+      "submission_media": {
+        "count": 205,
+        "sha256": "d3b469e9376e550487f37208a351227b8023c8994be07e05df4f10a4437788fe"
+      },
+      "schema": [
+        "20261024_0025"
+      ]
+    },
+    "schema": [
+      "20261024_0025"
+    ],
+    "observed_at": "2026-11-01T15:47:18.099985+08:00"
+  },
+  "test_side_effects": {
+    "database_writes": 0,
+    "worker_instances": 0,
+    "checkpoint_writes": 0,
+    "business_posts": 0,
+    "uploads": 0,
+    "formal_confirmations": 0,
+    "production_task_resets": 0
+  },
+  "checks_not_run": [
+    "cache_revision_implementation",
+    "durable_retry_checkpoint_regressions",
+    "full_backend_suite_for_cache_diff",
+    "independent_cache_code_review",
+    "deployment",
+    "production_retry"
+  ],
+  "export_check": {
+    "known_identity_and_runtime_secret_scan": "PASS",
+    "raw_payloads_exported": false,
+    "original_images_exported": false
+  },
+  "cleanup": {
+    "status": "PASS",
+    "private_root_absent": true,
+    "files_removed": 19,
+    "bytes_removed": 4051238,
+    "completed_at": "2026-11-01T15:51:22.202651+08:00"
+  },
+  "documentation_checks": {
+    "checked_documents": 6,
+    "local_links_checked": 366,
+    "missing_links": [],
+    "spec_counts": {
+      "active": 15,
+      "completed": 106,
+      "rejected": 13
+    },
+    "active_statuses": {
+      "DRAFT": 2,
+      "READY_FOR_REVIEW": 8,
+      "VERIFYING": 4,
+      "APPROVED": 1
+    },
+    "current_generation_source_matches_tested": true,
+    "private_material_cleaned": true,
+    "candidate_spec_has_four_design_views": true,
+    "candidate_placeholder_free": true,
+    "code_document_reconciliation": "candidate policy explicitly not implemented; current09/13 evidence retained; observed semantic failures preserved",
+    "production_and_test_changes_by_this_task": 0
+  }
+}

@@ -8,7 +8,7 @@
 - User confirmation: 用户于2026-10-24回复`call_03070dc082b34cb39ef36113c56aeaca`：「批准该测试修订，验证后继续部署」，明确批准本Spec01。
 - Affected Features: FEAT-001永久替代状态、FEAT-013年级保护（仅回归）
 - Current-state: `docs/domain/features/FEAT-001-push-kids-mvp.md`、`FEAT-013-annual-grade-promotion.md`；只合并本轮测试事实
-- Context: [已批准OPS Spec01](../active/OPS-20261024-LATEST-BACKEND-TEST-DEPLOYMENT.md)
+- Context: [已批准OPS Spec01](OPS-20261024-LATEST-BACKEND-TEST-DEPLOYMENT.md)
 
 ## 1. 症状、根因与预期
 

@@ -1,0 +1,50 @@
+{
+  "documents": 18,
+  "local_links_checked": 657,
+  "missing_links": [
+    {
+      "file": "docs/domain/BEHAVIOR-CATALOG.md",
+      "target": "../../specs/evidence/EVD-20261105-BUG033-IMPLEMENTATION.md"
+    }
+  ],
+  "source_manifest_files": 16,
+  "source_sha_mismatches": [],
+  "active_spec_status_counts": {
+    "READY_FOR_REVIEW": 6,
+    "DRAFT": 1,
+    "VERIFYING": 5,
+    "BLOCKED": 1,
+    "APPROVED": 1
+  },
+  "spec_status": "VERIFYING",
+  "spec_location": "specs/active/BUG-036-FIXED40-SUCCESS-REPAIR.md",
+  "cloud_delivery": "NOT_DEPLOYED",
+  "code_doc_conflict_check": "current13/16 owner/rules/terminal state; old12/15 and10/13 explicitly historical; match uncertainty remaining defect tracked; no frontend/API/Schema changes",
+  "document_sha256": {
+    "docs/domain/features/FEAT-001-push-kids-mvp.md": "6ce01602a91db0aae54e72307b0cd225721565595378917e654d316df93188bc",
+    "docs/domain/BEHAVIOR-CATALOG.md": "3dcabfbfdbf418ca8d75ddd9ba081b709d6a503717c935a931d9a1c672619aec",
+    "docs/architecture/ARCHITECTURE.md": "944d052ab5acf6d1ff96849c4e5c5a452af32531783166a84179e8c584072950",
+    "docs/design/frontend/ui/UI-001-parent-miniapp.md": "e53eedbdea2aa9a388f628a371c0a69088901317f3cef9c5b720b24013befd35",
+    "docs/quality/TEST-STRATEGY.md": "41a696a19fbd568e486b3b93f0e0189f6afd92c68de15cccfa4b5aad37c50913",
+    "specs/README.md": "c97fd55e43d867257c6d7c257508e36d310b10420258cb83a84201eed6e5d91e",
+    "specs/STATUS.md": "283fec98a53a290c3e40971b4d26e246108e9deb1e2749ed95fc1e9ae9a40e94",
+    "docs/quality/issues/ISS-20261031-KNOWLEDGE-GENERATION-CONTENT.md": "bbc17b89c8bdd98f59c29cf3fde40fc6671324077706e1591e9c43f2a077d6c7",
+    "docs/quality/regressions/README.md": "9b4682d962fd4bf22a364cff340eb3374cb0b714ac6f9f02c0215c5717706c55",
+    "specs/active/BUG-036-KNOWLEDGE-GENERATION-FINAL-PROPOSAL.md": "d5983ae6b497ec6b85337518155e7e087b7b94cb491d522dab1ac1d34ee27915",
+    "specs/active/BUG-036-CHECKPOINT-RETRY-STRATEGY.md": "e28c33e0013216b4d002219d0c5918e6edee91440063c617b68a7bd2f5d3c32f",
+    "specs/active/BUG-036-SOURCE-GROUNDED-CONTENT-REPAIR.md": "6d0a44ba7015db2a7465392edf9bcd00e7f39a909707e18209ceb2c0f7f954ef",
+    "specs/active/BUG-036-FIXED40-SUCCESS-REPAIR.md": "95cd642f954541ad491c3fac13c9aea72f08d167d3d4d95976b27da4f3602cc9",
+    "specs/evidence/EVD-20261105-BUG036-SUCCESS04.md": "0443a974a1bd46a043926d5db8629560deaf7b6196b471292a496ba60910e839",
+    "docs/deploy/releases/20261105-knowledge-success04-local.md": "a44b8715ca70c7364c9a3ba008f6cdaa794fc8b2d83d9ce6acc0d51df4eb5ac0",
+    "docs/quality/regressions/REG-20261105-SINGLE-SOURCE-AUDIT.md": "1099d0d24aab653194b620af72f62ec2934015d3d93144fc21a92c9181a6e97f",
+    "docs/quality/issues/ISS-20261105-MATCH-UNCERTAINTY-CACHE.md": "b82f44f1ea468e8ed48a175e4315e8b90b466ddddf6c14d63451eaaaf02ffd22",
+    "docs/quality/issues/README.md": "0b268fdffc52f27d792e36c5d29763260bc1c38c557c4ceb4da96c4e1b86c18a"
+  },
+  "in_scope_missing_links": [],
+  "parallel_in_progress_missing_links": [
+    {
+      "file": "docs/domain/BEHAVIOR-CATALOG.md",
+      "target": "../../specs/evidence/EVD-20261105-BUG033-IMPLEMENTATION.md"
+    }
+  ]
+}

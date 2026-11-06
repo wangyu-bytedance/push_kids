@@ -1,0 +1,302 @@
+{
+  "pipeline_revision": "staged-20261101-13",
+  "prompt_revision": "child-aware-history-agent-20261101-16",
+  "model": "doubao-seed-2-1-pro-260628",
+  "source_sha256": {
+    "pipeline.py": "2fb6f22239387d27d66fd2bbf21cbed7e34a1c9ebd2d76bd49539102dde6b69e",
+    "stage_contracts.py": "403819c248fe73ff73fcfa374ed2169254811c8ccb6a96646c8c1728d7ce9ac8",
+    "prompt.py": "c6a5b5ddc8e30951e900b5622e728e483117066cf06b278fa8628be995cadfaa",
+    "stage_provider.py": "e3a64018d101f8ded8eddfedb1413143bf31ad6f0224b89dddb5b3250e73972e",
+    "contracts.py": "7524e52c4ffbc27e1127d54bb7ac33f676165d8f303961374ad68b959df25564",
+    "checkpoints.py": "45a0ce6401bc2780bf849fa7acec70a938f24fa77fde36c02afedae909e18e80"
+  },
+  "results": [
+    {
+      "case": "probe-zh-04",
+      "source_digest": null,
+      "available": true,
+      "success": true,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 16.38
+        }
+      ],
+      "seconds": 16.38,
+      "calls": 4,
+      "new_points": 1,
+      "history_matches": 0,
+      "input_tokens": 19580,
+      "output_tokens": 370,
+      "subjects": [
+        "语文"
+      ]
+    },
+    {
+      "case": "probe-multi-01",
+      "source_digest": null,
+      "available": true,
+      "success": true,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 17.58
+        }
+      ],
+      "seconds": 17.58,
+      "calls": 4,
+      "new_points": 2,
+      "history_matches": 0,
+      "input_tokens": 15913,
+      "output_tokens": 544,
+      "subjects": [
+        "数学",
+        "语文"
+      ]
+    },
+    {
+      "case": "probe-zh-05",
+      "source_digest": null,
+      "available": true,
+      "success": true,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 11.7
+        }
+      ],
+      "seconds": 11.7,
+      "calls": 4,
+      "new_points": 1,
+      "history_matches": 0,
+      "input_tokens": 19560,
+      "output_tokens": 259,
+      "subjects": [
+        "语文"
+      ]
+    },
+    {
+      "case": "probe-multi-02",
+      "source_digest": null,
+      "available": true,
+      "success": false,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": false,
+          "seconds": 23.05,
+          "code": "analysis_output_invalid",
+          "reason": "quality",
+          "retryable": false,
+          "stage": "review",
+          "unit": "review1",
+          "diagnostics": []
+        }
+      ],
+      "seconds": 23.05,
+      "calls": 5,
+      "new_points": 0,
+      "history_matches": 0,
+      "input_tokens": 22382,
+      "output_tokens": 889,
+      "subjects": []
+    },
+    {
+      "case": "probe-zh-07",
+      "source_digest": null,
+      "available": true,
+      "success": true,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 13.87
+        }
+      ],
+      "seconds": 13.87,
+      "calls": 4,
+      "new_points": 1,
+      "history_matches": 0,
+      "input_tokens": 19615,
+      "output_tokens": 388,
+      "subjects": [
+        "语文"
+      ]
+    },
+    {
+      "case": "probe-zh-09",
+      "source_digest": null,
+      "available": true,
+      "success": true,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 11.35
+        }
+      ],
+      "seconds": 11.35,
+      "calls": 4,
+      "new_points": 1,
+      "history_matches": 0,
+      "input_tokens": 19582,
+      "output_tokens": 277,
+      "subjects": [
+        "语文"
+      ]
+    },
+    {
+      "case": "probe-en-12",
+      "source_digest": null,
+      "available": true,
+      "success": true,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 13.62
+        }
+      ],
+      "seconds": 13.62,
+      "calls": 4,
+      "new_points": 1,
+      "history_matches": 0,
+      "input_tokens": 15735,
+      "output_tokens": 462,
+      "subjects": [
+        "英语"
+      ]
+    },
+    {
+      "case": "boundary-1",
+      "source_digest": null,
+      "available": true,
+      "success": true,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 9.56
+        }
+      ],
+      "seconds": 9.56,
+      "calls": 4,
+      "new_points": 1,
+      "history_matches": 0,
+      "input_tokens": 15629,
+      "output_tokens": 286,
+      "subjects": [
+        "语文"
+      ]
+    },
+    {
+      "case": "probe-multi-04",
+      "source_digest": null,
+      "available": true,
+      "success": true,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 27.8
+        }
+      ],
+      "seconds": 27.8,
+      "calls": 6,
+      "new_points": 2,
+      "history_matches": 0,
+      "input_tokens": 26394,
+      "output_tokens": 1045,
+      "subjects": [
+        "数学",
+        "语文"
+      ]
+    },
+    {
+      "case": "boundary-2",
+      "source_digest": null,
+      "available": true,
+      "success": false,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": false,
+          "seconds": 15.46,
+          "code": "analysis_output_invalid",
+          "reason": "coverage",
+          "retryable": false,
+          "stage": "review",
+          "unit": "empty_proposal",
+          "diagnostics": []
+        }
+      ],
+      "seconds": 15.46,
+      "calls": 4,
+      "new_points": 0,
+      "history_matches": 0,
+      "input_tokens": 16614,
+      "output_tokens": 425,
+      "subjects": []
+    },
+    {
+      "case": "boundary-4",
+      "source_digest": null,
+      "available": true,
+      "success": false,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": false,
+          "seconds": 11.2,
+          "code": "analysis_output_invalid",
+          "reason": "coverage",
+          "retryable": false,
+          "stage": "review",
+          "unit": "empty_proposal",
+          "diagnostics": []
+        }
+      ],
+      "seconds": 11.2,
+      "calls": 3,
+      "new_points": 0,
+      "history_matches": 0,
+      "input_tokens": 12248,
+      "output_tokens": 284,
+      "subjects": []
+    },
+    {
+      "case": "boundary-3",
+      "source_digest": null,
+      "available": true,
+      "success": false,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": false,
+          "seconds": 14.58,
+          "code": "analysis_output_invalid",
+          "reason": "coverage",
+          "retryable": true,
+          "stage": "merge",
+          "unit": "merge",
+          "diagnostics": []
+        }
+      ],
+      "seconds": 14.58,
+      "calls": 3,
+      "new_points": 0,
+      "history_matches": 0,
+      "input_tokens": 12422,
+      "output_tokens": 456,
+      "subjects": []
+    }
+  ],
+  "business_writes": 0,
+  "max_attempts": 1,
+  "checkpoint_mode": "bounded_memory",
+  "context_limitation": "original-time filtering with current historical names/index; unversioned Todo state omitted",
+  "source_unchanged": true
+}

@@ -1,0 +1,197 @@
+<view aria-hidden="{{gradeConfirmationVisible}}">
+<primary-nav></primary-nav>
+<view class="page calendar-page">
+  <view class="pg-head pk-hero calendar-intro">
+    <view class="calendar-intro-copy">
+      <text class="pg-title">这一周，心里有数</text>
+      <text class="pg-context">{{weekKicker}}</text>
+      <view class="child-chip {{multiChild ? '' : 'single'}}" wx:if="{{children.length}}" aria-role="button" aria-label="切换孩子" bindtap="openChildSheet">
+        <text class="ava">{{children[childIndex].avatar}}</text>
+        <text class="chip-nm">{{children[childIndex].name}}</text>
+        <view class="chev" wx:if="{{multiChild}}"></view>
+      </view>
+    </view>
+    <image class="calendar-intro-art" wx:if="{{!introArtFailed}}" src="/assets/illustrations/calendar-still-life.png" mode="aspectFit"
+      aria-hidden="{{true}}" binderror="onIllustrationError"></image>
+  </view>
+
+  <view class="pk-notice err mt2" wx:if="{{error}}">
+    <view class="ico ico-cloud-off-dan sm"></view>
+    <text class="n-txt">{{error}}。已经加载到的安排还能继续看。</text>
+    <view class="ico ico-refresh-dan sm" aria-role="button" aria-label="重试" bindtap="load"></view>
+  </view>
+
+  <view class="pk-empty" wx:if="{{!loading && !children.length}}">
+    <view class="em"><view class="ico ico-sprout-pri lg"></view></view>
+    <text class="et">还没有学习档案</text>
+    <text class="ec">先在设置里建好孩子的学习档案，之后才能安排课外活动和其他日程。</text>
+    <view class="ea"><view class="btn" aria-role="button" aria-label="前往设置" bindtap="openSettings">前往设置</view></view>
+  </view>
+
+  <block wx:else>
+    <view class="pk-card tight mt2" bindtouchstart="weekTouchStart" bindtouchend="weekTouchEnd">
+      <view class="wk-nav">
+        <view class="icon-btn" aria-role="button" aria-label="上一周" data-offset="-7" bindtap="shiftWeek"><view class="chev left"></view></view>
+        <picker class="wk-picker" mode="date" value="{{selectedDay}}" bindchange="chooseDate">
+          <view class="wk-month">{{monthLabel}}</view>
+        </picker>
+        <view class="icon-btn" aria-role="button" aria-label="下一周" data-offset="7" bindtap="shiftWeek"><view class="chev right"></view></view>
+      </view>
+      <view class="week">
+        <view class="wd {{item.key === selectedDay ? 'on' : ''}} {{item.today && item.key !== selectedDay ? 'today' : ''}} {{item.dim ? 'dim' : ''}}"
+          wx:for="{{week}}" wx:key="key" aria-role="button" aria-label="选择这一天" data-day="{{item.key}}" bindtap="chooseDay">
+          <text class="w">{{item.weekday}}</text>
+          <text class="d">{{item.day}}</text>
+          <view class="m {{item.marked ? '' : 'void'}}"></view>
+        </view>
+      </view>
+    </view>
+
+    <view class="day-bar">
+      <text class="day-title">{{dayTitle}}</text>
+      <text class="day-count">{{itemCount}} 项安排</text>
+    </view>
+
+    <view class="calendar-conflict-summary" wx:if="{{conflictCount}}" aria-label="{{conflictCount}}项安排存在时间冲突">
+      <view class="conflict-dot"></view>
+      <text>{{conflictCount}} 项存在时间冲突，请核对安排</text>
+    </view>
+    <view class="pk-notice warn workday-rule" wx:if="{{workdayWarning}}" aria-live="polite"><text class="n-txt">{{workdayWarning}}</text></view>
+
+    <block wx:if="{{loading && !items.length}}">
+      <view class="sk card-sk"></view>
+      <view class="sk card-sk"></view>
+    </block>
+
+    <view class="tl" wx:elif="{{items.length}}">
+      <view class="tl-item {{item.past ? 'past' : ''}} {{item.has_conflict ? 'conflict' : ''}}" wx:for="{{items}}" wx:key="id" aria-role="button" aria-label="{{item.has_conflict ? '时间冲突，' : ''}}{{item.name}}，{{item.time_text}}" data-id="{{item.id}}" bindtap="openEvent">
+        <text class="tl-time tnum">{{item.start_time}}</text>
+        <view class="tl-node"></view>
+        <view class="tl-card {{item.kind === 'class' ? 'accent' : ''}} {{item.has_conflict ? 'conflict-card' : ''}}">
+          <view class="flex between">
+            <text class="tl-name">{{item.name}}</text>
+            <view class="pill {{item.has_conflict ? 'danger-outline' : 'neutral'}}">{{item.has_conflict ? '时间冲突' : (item.past ? '已结束' : item.kind_label)}}</view>
+          </view>
+          <text class="tl-sub">{{item.time_text}} · {{item.kind_label}}</text>
+          <view class="conflict-detail" wx:if="{{item.has_conflict}}">
+            <view class="ico ico-info-dan xs"></view>
+            <view class="conflict-copy">
+              <text class="conflict-summary" wx:if="{{item.conflict_summary}}">{{item.conflict_summary}}，请逐项核对：</text>
+              <text class="conflict-line" wx:for="{{item.conflict_lines}}" wx:for-item="conflictLine" wx:key="*this">{{conflictLine}}</text>
+            </view>
+          </view>
+          <view class="link-btn" wx:if="{{item.subject_id}}" aria-role="button" aria-label="{{item.action_text}}" data-subject-id="{{item.subject_id}}" catchtap="openActivity">
+            <text>{{item.action_text}}</text><view class="chev right pri"></view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="pk-empty" wx:elif="{{weekEmpty}}">
+      <view class="em"><view class="ico ico-calendar-pri lg"></view></view>
+      <text class="et">这一周还没有安排</text>
+      <text class="ec">在设置里配置固定时间后，每周都会自动出现在这里。</text>
+      <view class="ea"><view class="btn secondary" aria-role="button" aria-label="去设置固定时间" bindtap="openSettings">去设置固定时间</view></view>
+    </view>
+
+    <view class="pk-empty inline" wx:else>
+      <text class="et">{{workdayWarning ? '本日的工作日安排暂不可用' : '这天还没有安排'}}</text>
+      <text class="ec">固定的课外活动和出行会自动出现在这里。</text>
+    </view>
+
+    <view class="pk-fab" wx:if="{{canWrite}}" aria-role="button" aria-label="加日程" bindtap="openCreate">
+      <view class="ico ico-plus-inv sm"></view><text>加日程</text>
+    </view>
+  </block>
+</view>
+
+<view class="pk-mask" wx:if="{{showChildSheet}}" bindtap="closeChildSheet"></view>
+<view class="pk-sheet child-sheet" wx:if="{{showChildSheet}}">
+  <view class="handle"></view>
+  <view class="sheet-head">
+    <view class="grow">
+      <text class="sheet-title">选择孩子</text>
+    </view>
+    <view class="icon-btn" aria-role="button" aria-label="关闭" bindtap="closeChildSheet"><view class="ico ico-close sm"></view></view>
+  </view>
+  <view class="sheet-body">
+    <view class="rowlist">
+      <view class="rowitem {{index === childIndex ? 'on' : ''}}" wx:for="{{children}}" wx:key="id" aria-role="button" aria-label="切换到这个孩子" data-index="{{index}}" bindtap="chooseChild">
+        <text class="ava-lg">{{item.avatar}}</text>
+        <view class="grow"><text class="r-t">{{item.label}}</text></view>
+        <view class="ico ico-check-pri sm" wx:if="{{index === childIndex}}"></view>
+      </view>
+    </view>
+    <view class="add-entry" wx:if="{{canAddChild}}" aria-role="button" aria-label="添加孩子" bindtap="addChild">
+      <view class="ico ico-plus-pri sm"></view><text>添加孩子</text>
+    </view>
+  </view>
+</view>
+
+<view class="pk-mask" wx:if="{{showEditor}}" bindtap="closeEditor"></view>
+<view class="pk-sheet editor-sheet" wx:if="{{showEditor}}">
+  <view class="handle"></view>
+  <view class="sheet-head">
+    <view class="grow">
+      <text class="sheet-title">{{editingId ? '编辑日程' : '新建日程'}}</text>
+      <text class="sheet-sub" wx:if="{{editingId && repeatWeekly}}">修改会作用于整个每周系列</text>
+      <text class="sheet-sub" wx:if="{{editingId && workdayOnly}}">修改会作用于整个工作日系列</text>
+      <text class="sheet-sub" wx:if="{{!canWrite}}">仅可查看，请联系家庭管理员修改</text>
+    </view>
+    <view class="icon-btn" aria-role="button" aria-label="关闭" bindtap="closeEditor"><view class="ico ico-close sm"></view></view>
+  </view>
+  <view class="sheet-body">
+    <view class="pk-field">
+      <text class="lbl">日程名称</text>
+      <input class="pk-input" disabled="{{!canWrite || saving}}" value="{{eventName}}" placeholder="例如：乒乓球" placeholder-class="pk-ph" aria-label="日程名称" data-field="eventName" bindinput="setField" />
+    </view>
+    <view class="pk-field">
+      <text class="lbl">重复</text>
+      <view class="seg n3 repeat-mode">
+        <view class="{{!repeatWeekly && !workdayOnly ? 'on' : ''}}" aria-role="button" aria-label="不重复{{!repeatWeekly && !workdayOnly ? '，已选择' : ''}}" aria-disabled="{{!canWrite || saving}}" data-mode="once" bindtap="chooseRepeatMode">不重复</view>
+        <view class="{{repeatWeekly ? 'on' : ''}}" aria-role="button" aria-label="每周{{repeatWeekly ? '，已选择' : ''}}" aria-disabled="{{!canWrite || saving}}" data-mode="weekly" bindtap="chooseRepeatMode">每周</view>
+        <view class="{{workdayOnly ? 'on' : ''}}" aria-role="button" aria-label="工作日{{workdayOnly ? '，已选择' : ''}}" aria-disabled="{{!canWrite || saving}}" data-mode="workday" bindtap="chooseRepeatMode">工作日</view>
+      </view>
+      <view class="pk-notice quiet workday-rule" wx:if="{{workdayOnly}}"><text class="n-txt">按中国大陆法定安排，放假跳过，调休照常</text></view>
+      <view class="pk-notice warn workday-rule" wx:if="{{workdayWarning}}" aria-live="polite"><text class="n-txt">{{workdayWarning}}</text></view>
+    </view>
+    <view class="pk-field">
+      <text class="lbl">类型</text>
+      <view class="seg n3">
+        <view class="{{eventKind === 'class' ? 'on' : ''}}" data-kind="class" bindtap="chooseKind">课外活动</view>
+        <view class="{{eventKind === 'activity' ? 'on' : ''}}" data-kind="activity" bindtap="chooseKind">自主活动</view>
+        <view class="{{eventKind === 'other' ? 'on' : ''}}" data-kind="other" bindtap="chooseKind">其他安排</view>
+      </view>
+    </view>
+    <view class="pk-field">
+      <text class="lbl">{{workdayOnly ? '起始日期' : '日期'}}</text>
+      <picker mode="date" value="{{eventDate}}" disabled="{{!canWrite || saving}}" aria-label="{{workdayOnly ? '起始日期' : '日期'}}" data-field="eventDate" bindchange="setField">
+        <view class="pk-picker"><text class="tnum">{{eventDate}}</text><view class="chev"></view></view>
+      </picker>
+    </view>
+    <view class="pk-field">
+      <text class="lbl">时间</text>
+      <view class="time-row">
+        <picker class="grow" mode="time" value="{{startTime}}" disabled="{{!canWrite || saving}}" aria-label="开始时间" data-field="startTime" bindchange="setField">
+          <view class="pk-picker"><text class="tnum">{{startTime}}</text><view class="chev"></view></view>
+        </picker>
+        <text class="time-to">至</text>
+        <picker class="grow" mode="time" value="{{endTime}}" disabled="{{!canWrite || saving}}" aria-label="结束时间" data-field="endTime" bindchange="setField">
+          <view class="pk-picker {{endError ? 'is-error' : ''}}"><text class="tnum">{{endTime}}</text><view class="chev"></view></view>
+        </picker>
+      </view>
+      <text class="err-text" wx:if="{{endError}}">{{endError}}</text>
+    </view>
+  </view>
+  <view class="sheet-foot">
+    <text class="err-text" wx:if="{{eventError}}" aria-live="assertive">{{eventError}}</text>
+    <button class="btn" loading="{{saving}}" disabled="{{saving || !canWrite}}" bindtap="saveEvent">{{!canWrite ? '仅可查看' : saving ? '保存中…' : editingId ? '保存修改' : '创建日程'}}</button>
+    <view class="del-row" wx:if="{{editingId && canWrite}}">
+      <view class="link-btn del-link" aria-role="button" aria-label="删除日程" bindtap="deleteEvent">
+        <view class="ico ico-trash-dan sm"></view><text>删除这条日程</text>
+      </view>
+    </view>
+  </view>
+</view>
+</view>
+<grade-confirmation id="grade-confirmation" view="{{gradeConfirmation}}" blocked="{{loading || showChildSheet || showEditor || saving}}" bindaction="onGradeConfirmation"></grade-confirmation>

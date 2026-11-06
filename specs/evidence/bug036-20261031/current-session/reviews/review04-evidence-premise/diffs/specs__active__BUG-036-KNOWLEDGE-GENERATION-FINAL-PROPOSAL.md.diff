@@ -1,0 +1,64 @@
+--- review03/specs/active/BUG-036-KNOWLEDGE-GENERATION-FINAL-PROPOSAL.md
++++ review04/specs/active/BUG-036-KNOWLEDGE-GENERATION-FINAL-PROPOSAL.md
+@@ -12,9 +12,10 @@
+ - Proposed architecture revision: `ARCH-20261031-KNOWLEDGE-GENERATION-01`
+ - Proposed prompt revision: `KNOWLEDGE-PROMPT-20261031-04`；[完整规则草案及末尾示例](../evidence/KNOWLEDGE-PROMPT-04-DRAFT-20261031.md)。
+ - Proposed implementation revisions: `PIPELINE_REVISION=staged-20261031-07`、`PROMPT_REVISION=child-aware-history-agent-20261031-11`；Provider 参数指纹加入队列/执行预算及新的 review 输出预算。
+-- Local implemented revisions: `staged-20261031-07` / `child-aware-history-agent-20261031-11`；[本轮机制与审查证据](../evidence/EVD-20261031-BUG036-IMPLEMENTATION.md)。832 passed/46条件skip；同一30条重测进行中，不据此宣称内容验收通过。
+-- TP-005/010反馈后的同批准范围提示细化：首个07版本的30条中24条产出、原13条无输出10条恢复，但Pp/配套词汇拆分导致原PASS回退，内容仍未验收。根据已批准C1–C6和AC-005，继续明确同一实际目标优于页码/题型/粗枚举、部分可辨内容、有限序列范围和短basis，末尾增加2个规则校准例，不更改产品合同、DTO、调用/缓存预算或测试标准。实际实施版本增至`staged-20261031-08` / `child-aware-history-agent-20261031-12`以使旧缓存失效；首30结果不覆盖，末轮再固定同30复测。
+-- User confirmation: APPROVED — Product owner，2026-10-31，当前会话用户消息“批准”，明确回应上一轮“批准 BUG-036 Spec01（含 Prompt04）”；批准 `BUG-SPEC-20261031-KNOWLEDGE-GENERATION-01`、`ARCH-20261031-KNOWLEDGE-GENERATION-01` 和 `KNOWLEDGE-PROMPT-20261031-04` 的当前版本。仅授权本地实施及零写入验证，发布与存量业务数据修改不在范围内。
++- Local implemented revisions: 当前`staged-20261031-09` / `child-aware-history-agent-20261031-13`验证中；07机制实现及两个08同批准规则复测分别留证。[机制与审查证据](../evidence/EVD-20261031-BUG036-IMPLEMENTATION.md)保留原适用版本；[既有08同30评测](../../dist/knowledge-generation-evaluation-20261031-prompt04/revision08/evaluation-30.md)25输出/9严格PASS，当前会话另一次08复测20输出，其失败不被25输出结果替换。09证据完成前不借用08测试或内容结论。
++- 新假设与有界实验：反证包括圈画被误当唯一教学证据、辨读选项漏失、宽活动省略被前后反判、同编号同code重复issue及共享成员合并未完整执行。09/13仅明确AC-001/002/005既有证据与审查规则，不改DTO、公开行为、模块边界、18/33调用、18缓存或原验收条件。实验预算为一次同30源完整复测、6个合成边界及一轮新假设范围的独立增量审查；不自动追加下一轮。此前三轮审查与各版本评测均保留。
++- TP-005/010反馈后的同批准范围提示细化：首个07版本的30条中24条产出、原13条无输出10条恢复；首轮内容核对为13PASS/10FAIL/1PARTIAL/5NO_OUTPUT/1INSUFFICIENT_MATERIAL（摘要错误使case02初判PASS在收尾核对时改为FAIL），原PASS的case25遗漏字母回退。Pp/配套词汇是否同一检查目标按共同规则验证，不以该项的另一份初判替换完整证据。根据已批准C1–C6和AC-005，明确同一实际目标优于页码/题型/粗枚举、部分可辨内容、有限序列范围和短basis，末尾增加2个规则校准例，不更改产品合同、DTO、调用/缓存预算或测试标准。实施版本增至`staged-20261031-08` / `child-aware-history-agent-20261031-12`使旧缓存失效；[首轮07报告](../../dist/knowledge-generation-evaluation-20261031-prompt04/revision07/evaluation-30.md)保留，末轮固定同30复测。
++- User confirmation: APPROVED — Product owner，2026-10-31，当前会话用户消息“批准 BUG-036 Spec01（含 Prompt04） 按照这个完成开发任务”；批准 `BUG-SPEC-20261031-KNOWLEDGE-GENERATION-01`、`ARCH-20261031-KNOWLEDGE-GENERATION-01` 和 `KNOWLEDGE-PROMPT-20261031-04` 的当前版本。仅授权本地实施及零写入验证，发布与存量业务数据修改不在范围内。
+ - Affected Feature IDs: `FEAT-001`
+ - Feature current-state documents: [FEAT-001](../../docs/domain/features/FEAT-001-push-kids-mvp.md)
+ - Feature baseline revision: `FEAT-STATE-20261026-DEVELOPMENT-DONE-04`，包含 2026-10-31 Spec03 已交付的增量说明。
+@@ -28,7 +29,7 @@
+ - Affected UI IDs / UI current-state documents: N/A，上述原因不触发前端实现门禁。
+ - Frontend baseline / FEC / Design Revision / design source / SHA-256 / viewport exports / approval manifest: N/A，无前端设计或工程变更。
+ - Frontend quality verification / deviations / merge owner: N/A，无该端变更；不得把后端内容评测当成真机或可访问性验收。
+-- Approved Task Spec revision: `BUG-SPEC-20261031-KNOWLEDGE-GENERATION-01`，Product owner，2026-10-31，当前会话“批准”。
++- Approved Task Spec revision: `BUG-SPEC-20261031-KNOWLEDGE-GENERATION-01`，Product owner，2026-10-31，当前会话“批准 BUG-036 Spec01（含 Prompt04） 按照这个完成开发任务”。
+ - Approved Design Revision: N/A
+ - External design dependency: none
+ 
+@@ -273,15 +274,15 @@
+ | TP-001 | 原材料同名过长、非法字段/引用、一次纠正成功/二次失败 | unit | PASS：先Red后Green，单页两次上限、同原材料/证据、未知5000位数字字段安全；见EVD |
+ | TP-002 | 请求先排队再执行、整体 deadline、取消、最大并发 2 | unit | 执行预算/取消/资源PASS；排队与绝对到期同时发生时标签仍可能local_deadline，分类PARTIAL，未发现早到期或槽泄露 |
+ | TP-003 | 支持的知识＋UI/未知媒体省略；非法省略/全省略拒绝 | unit | PASS：完整账本、审查省略、全省略拒绝、合法知识不得隐藏；语义正确率仍由真实素材评测 |
+-| TP-004 | 同 alias纠正、无关项不可漂移、审查有界与省略复查 | unit | PASS：同i/o→members输入、保留无关项、第二次失败无草稿；真实模型的分合一致性仍待内容结论 |
+-| TP-005 | 同领域相关整合、真实对象/技能、缺范围与手写歧义、few-shot末尾 | contract + session semantic | 同规则覆盖 positive/negative/holdout，不以字符串存在证明语义；NOT_RUN |
+-| TP-006 | 历史范围/规则/技能不等价、明确等价、旧坏名称、uncertain | unit + contract | 机制PASS：accept保留身份、reject/null保留已审查新目标、同名亦生效、uncertain拒绝、非法引用拒绝；真实语义待同30结论 |
++| TP-004 | 同 alias纠正、无关项不可漂移、审查有界与省略复查 | unit | 机制PASS：同i/o→members输入、保留无关项、第二次失败无草稿；真实语义仍出现分合不一致，不能外推全部内容PASS |
++| TP-005 | 同领域相关整合、真实对象/技能、缺范围与手写歧义、few-shot末尾 | contract + session semantic | FAIL：合同/合成边界通过，6holdout独立PASS（含正确拒绝）；同30仍有粒度、范围、题型场景、摘要与字形问题；正负例和真实失败分别留证 |
++| TP-006 | 历史范围/规则/技能不等价、明确等价、旧坏名称、uncertain | unit + contract | 机制PASS：accept保留身份、reject/null保留已审查新目标、同名亦生效、uncertain拒绝、非法引用拒绝；本轮1个真实复用项及2个历史边界holdout通过，不外推全部历史正确率；case16未到history |
+ | TP-007 | 正常18/最坏33调用、18 cache key、20查询/100结果/512KiB输入 | unit/integration | PASS：18/33实际调用、18 cache全命中0调用、19拒绝、字节与100结果/20查询边界、360跨科目合法输入 |
+ | TP-008 | `UV_CACHE_DIR=/private/tmp/push-kids-uv-cache uv run --no-sync pytest tests/unit tests/integration tests/contract -q` | local | PASS：832 passed/46环境条件skip，全部SQLite隔离测试；旧例子断言首fail及修正复验分别记录 |
+-| TP-009 | `UV_CACHE_DIR=/private/tmp/push-kids-uv-cache uv run --no-sync ruff check .`；同环境 `ruff format --check .`、`mypy apps/api/src`、`python tools/check_architecture.py` | static | 本轮目标lint、format794、mypy151、DAG151 PASS；全仓Ruff FAIL于未改旅行工具103字符行，未冒称全仓PASS |
+-| TP-010 | 原 30 source digest、同 Doubao参数/2-case并发、当前 session判断 | real source/Doubao | 原6 PASS无回退，原13无输出逐案结论，同分母报告质量；NOT_RUN |
+-| TP-011 | READ ONLY 前后61表行数/指纹；无DB生成、清理原图/身份快照 | production read only | 零业务写入及真实cleanup；本轮诊断完成记录见排查证据，修复后的重测仍NOT_RUN |
+-| TP-012 | 只读 Review、实际diff对应文档正文/版本/状态/引用核对 | review/docs | 与新源码版本绑定，未执行项和交付阶段不冒充PASS；NOT_RUN |
++| TP-009 | `UV_CACHE_DIR=/private/tmp/push-kids-uv-cache uv run --no-sync ruff check .`；同环境 `ruff format --check .`、`mypy apps/api/src`、`python tools/check_architecture.py` | static | 当前08目标lint、format796、mypy151、DAG4/151 PASS；全仓Ruff重跑仍FAIL于无关旅行工具103字符行，未修改或冒称全仓PASS |
++| TP-010 | 原 30 source digest、同 Doubao参数/2-case并发、当前 session判断 | real source/Doubao | FAIL：原来源30/68图一致、全部尝试完成；08为25输出/9严格PASS/16FAIL/4NO_OUTPUT/1材料不足；原13无输出10条恢复输出，原6PASS中的18/25回退。case03/14/16质量拒绝、29两次merge名称过长、11合理缺材料；07首轮不覆盖 |
++| TP-011 | READ ONLY 前后61表行数/指纹；无DB生成、清理原图/身份快照 | production read only | PASS：07与08前后各61表行数/内容指纹相同，零业务写入/POST/checkpoint；清理实际完成证据见safe evidence cleanup.json，不把正确拒绝计生成通过 |
++| TP-012 | 只读 Review、实际diff对应文档正文/版本/状态/引用核对 | review/docs | PASS stated scope：Review01原5问题已修复，独立Review02/跨组无新确认发现；08两文件delta直接Review03，当前832/46及源码SHA绑定；Feature/BHV/Architecture/Test/Spec/ISS/REG/EVD/索引同步，UI/API/Schema/云发布N/A |
+ 
+ 发布固定 40-case、真实 callContainer写入、原生/真机及云部署：本次范围 N/A/NOT_RUN，30 条内容回放不替代发布门禁或用户正式确认。
+ 
+@@ -292,8 +293,10 @@
+ - [x] 已明确权威模块、必要文件、边界、预算、替换与不变量。
+ - [x] 通用提示正文与末尾 few-shot 可直接审阅。
+ - [x] 已查阅 Feature、Behavior、Architecture、测试与开发规范；完成设计内部一致性核对。
+-- [x] 具体 Spec/Architecture revision 获用户批准，2026-10-31 当前会话“批准”，含 Prompt04。
+-- [ ] 生产实施、诚实 Red/Green、所有 required points、相同30重测和独立 Review。
+-- [ ] 验证后同步冲突正文、版本与链接；按实际云交付证据判断 DONE/completed。
+-
+-当前结论是“Spec01、Architecture01 和 Prompt04 已批准，实施及验证进行中”。本轮存量数据修改、部署和正式验收均未发生；本增量尚无匹配源码的云交付证据，保留 active。Owner 按本 revision 完成实施和验证；若取消，记录原因并移至 rejected。
++- [x] 具体 Spec/Architecture revision 获用户批准，2026-10-31 当前会话“批准 BUG-036 Spec01（含 Prompt04） 按照这个完成开发任务”。
++- [x] 本地生产源码实施、诚实 Red/Baseline/Green、相同30两版重测及独立Review；各required点实际结果分别记录。
++- [ ] 所有required点通过：TP-005/010内容FAIL、TP-002标签PARTIAL、全仓Ruff无关失败仍保留。
++- [x] 已验证事实合并正文/版本/引用；内容问题另列open，机制REG active。
++- [ ] 有匹配本增量源码的云交付证据；当前本地-only，未满足DONE/completed迁移条件。
++
++当前结论：批准范围的本地机制已实现和验证，真实素材内容验收失败。Spec保留`VERIFYING`于`specs/active/`，不宣称整项完成。当前08源码和私有材料清理有版本证据；无部署、业务数据修订或正式确认。恢复条件：按失败内容形成具体后续修复范围，改变提示/流程/预算合同前批准对应revision；再以固定来源和原PASS不回退验证。未来云交付仍执行发布门禁，旧038不覆盖本增量。

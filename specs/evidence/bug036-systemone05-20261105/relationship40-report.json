@@ -1,0 +1,374 @@
+[
+  {
+    "case": "eq01",
+    "expected": "equivalent",
+    "actual": "equivalent",
+    "pass": true,
+    "seconds": 6.019,
+    "calls": 3,
+    "error": null
+  },
+  {
+    "case": "eq02",
+    "expected": "equivalent",
+    "actual": "equivalent",
+    "pass": true,
+    "seconds": 4.196,
+    "calls": 3,
+    "error": null
+  },
+  {
+    "case": "eq03",
+    "expected": "equivalent",
+    "actual": null,
+    "pass": false,
+    "seconds": 1.015,
+    "calls": 1,
+    "error": null
+  },
+  {
+    "case": "eq04",
+    "expected": "equivalent",
+    "actual": "equivalent",
+    "pass": true,
+    "seconds": 0.694,
+    "calls": 1,
+    "error": null
+  },
+  {
+    "case": "eq05",
+    "expected": "equivalent",
+    "actual": "equivalent",
+    "pass": true,
+    "seconds": 3.772,
+    "calls": 3,
+    "error": null
+  },
+  {
+    "case": "eq06",
+    "expected": "equivalent",
+    "actual": "equivalent",
+    "pass": true,
+    "seconds": 0.669,
+    "calls": 1,
+    "error": null
+  },
+  {
+    "case": "eq07",
+    "expected": "equivalent",
+    "actual": null,
+    "pass": false,
+    "seconds": 4.741,
+    "calls": 3,
+    "error": null
+  },
+  {
+    "case": "eq08",
+    "expected": "equivalent",
+    "actual": "equivalent",
+    "pass": true,
+    "seconds": 3.668,
+    "calls": 3,
+    "error": null
+  },
+  {
+    "case": "eq09",
+    "expected": "equivalent",
+    "actual": "equivalent",
+    "pass": true,
+    "seconds": 0.687,
+    "calls": 1,
+    "error": null
+  },
+  {
+    "case": "eq10",
+    "expected": "equivalent",
+    "actual": "equivalent",
+    "pass": true,
+    "seconds": 0.367,
+    "calls": 1,
+    "error": null
+  },
+  {
+    "case": "co01",
+    "expected": "covers",
+    "actual": "covers",
+    "pass": true,
+    "seconds": 0.733,
+    "calls": 1,
+    "error": null
+  },
+  {
+    "case": "co02",
+    "expected": "covers",
+    "actual": "covers",
+    "pass": true,
+    "seconds": 0.979,
+    "calls": 1,
+    "error": null
+  },
+  {
+    "case": "co03",
+    "expected": "covers",
+    "actual": "covers",
+    "pass": true,
+    "seconds": 0.678,
+    "calls": 1,
+    "error": null
+  },
+  {
+    "case": "co04",
+    "expected": "covers",
+    "actual": "covers",
+    "pass": true,
+    "seconds": 0.802,
+    "calls": 1,
+    "error": null
+  },
+  {
+    "case": "co05",
+    "expected": "covers",
+    "actual": "covers",
+    "pass": true,
+    "seconds": 0.735,
+    "calls": 1,
+    "error": null
+  },
+  {
+    "case": "co06",
+    "expected": "covers",
+    "actual": "covers",
+    "pass": true,
+    "seconds": 0.438,
+    "calls": 1,
+    "error": null
+  },
+  {
+    "case": "co07",
+    "expected": "covers",
+    "actual": null,
+    "pass": false,
+    "seconds": 0.419,
+    "calls": 1,
+    "error": null
+  },
+  {
+    "case": "co08",
+    "expected": "covers",
+    "actual": "covers",
+    "pass": true,
+    "seconds": 0.563,
+    "calls": 1,
+    "error": null
+  },
+  {
+    "case": "co09",
+    "expected": "covers",
+    "actual": "covers",
+    "pass": true,
+    "seconds": 2.269,
+    "calls": 1,
+    "error": null
+  },
+  {
+    "case": "co10",
+    "expected": "covers",
+    "actual": "covers",
+    "pass": true,
+    "seconds": 0.432,
+    "calls": 1,
+    "error": null
+  },
+  {
+    "case": "no01",
+    "expected": null,
+    "actual": null,
+    "pass": true,
+    "seconds": 0.853,
+    "calls": 1,
+    "error": null
+  },
+  {
+    "case": "no02",
+    "expected": null,
+    "actual": null,
+    "pass": true,
+    "seconds": 0.846,
+    "calls": 1,
+    "error": null
+  },
+  {
+    "case": "no03",
+    "expected": null,
+    "actual": null,
+    "pass": true,
+    "seconds": 0.809,
+    "calls": 1,
+    "error": null
+  },
+  {
+    "case": "no04",
+    "expected": null,
+    "actual": null,
+    "pass": true,
+    "seconds": 0.911,
+    "calls": 1,
+    "error": null
+  },
+  {
+    "case": "no05",
+    "expected": null,
+    "actual": null,
+    "pass": true,
+    "seconds": 0.688,
+    "calls": 1,
+    "error": null
+  },
+  {
+    "case": "no06",
+    "expected": null,
+    "actual": null,
+    "pass": true,
+    "seconds": 0.399,
+    "calls": 1,
+    "error": null
+  },
+  {
+    "case": "no07",
+    "expected": null,
+    "actual": null,
+    "pass": true,
+    "seconds": 0.399,
+    "calls": 1,
+    "error": null
+  },
+  {
+    "case": "no08",
+    "expected": null,
+    "actual": null,
+    "pass": true,
+    "seconds": 0.662,
+    "calls": 1,
+    "error": null
+  },
+  {
+    "case": "no09",
+    "expected": null,
+    "actual": null,
+    "pass": true,
+    "seconds": 0.913,
+    "calls": 1,
+    "error": null
+  },
+  {
+    "case": "no10",
+    "expected": null,
+    "actual": null,
+    "pass": true,
+    "seconds": 0.441,
+    "calls": 1,
+    "error": null
+  },
+  {
+    "case": "un01",
+    "expected": null,
+    "actual": null,
+    "pass": true,
+    "seconds": 3.835,
+    "calls": 3,
+    "error": {
+      "type": "StageFailure",
+      "reason": "quality",
+      "unit": "identity_uncertain"
+    }
+  },
+  {
+    "case": "un02",
+    "expected": null,
+    "actual": null,
+    "pass": true,
+    "seconds": 0.681,
+    "calls": 1,
+    "error": null
+  },
+  {
+    "case": "un03",
+    "expected": null,
+    "actual": null,
+    "pass": true,
+    "seconds": 0.734,
+    "calls": 1,
+    "error": null
+  },
+  {
+    "case": "un04",
+    "expected": null,
+    "actual": null,
+    "pass": true,
+    "seconds": 0.377,
+    "calls": 1,
+    "error": null
+  },
+  {
+    "case": "un05",
+    "expected": null,
+    "actual": null,
+    "pass": true,
+    "seconds": 4.147,
+    "calls": 3,
+    "error": {
+      "type": "StageFailure",
+      "reason": "quality",
+      "unit": "identity_uncertain"
+    }
+  },
+  {
+    "case": "un06",
+    "expected": null,
+    "actual": null,
+    "pass": true,
+    "seconds": 0.381,
+    "calls": 1,
+    "error": null
+  },
+  {
+    "case": "un07",
+    "expected": null,
+    "actual": null,
+    "pass": true,
+    "seconds": 0.824,
+    "calls": 1,
+    "error": null
+  },
+  {
+    "case": "un08",
+    "expected": null,
+    "actual": null,
+    "pass": true,
+    "seconds": 3.997,
+    "calls": 3,
+    "error": {
+      "type": "StageFailure",
+      "reason": "quality",
+      "unit": "identity_uncertain"
+    }
+  },
+  {
+    "case": "un09",
+    "expected": null,
+    "actual": null,
+    "pass": true,
+    "seconds": 0.438,
+    "calls": 1,
+    "error": null
+  },
+  {
+    "case": "un10",
+    "expected": null,
+    "actual": null,
+    "pass": true,
+    "seconds": 0.677,
+    "calls": 1,
+    "error": null
+  }
+]

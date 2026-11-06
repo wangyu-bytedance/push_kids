@@ -1,0 +1,28 @@
+{
+  "checked_at": "2026-11-01T22:39:16+08:00",
+  "source_files": 153,
+  "source_drift": [],
+  "evidence_files": 6,
+  "evidence_drift": [],
+  "complete_task_documents": 3,
+  "task_local_reference_count": 14,
+  "missing_references": [],
+  "spec_counts": {
+    "active": 15,
+    "completed": 109,
+    "rejected": 13
+  },
+  "active_states": {
+    "DRAFT": 2,
+    "READY_FOR_REVIEW": 8,
+    "VERIFYING": 4,
+    "BLOCKED": 1
+  },
+  "secret_or_raw_image_matches": 0,
+  "git_diff_check_exit": 0,
+  "production_code_edited": false,
+  "test_files_edited": false,
+  "source_material": "fixed synthetic fixtures only; temporary rendered images removed",
+  "implementation": "not_started_awaiting_spec04_approval",
+  "backend_static_native_cloud_checks": "not_run_no_implementation_change"
+}

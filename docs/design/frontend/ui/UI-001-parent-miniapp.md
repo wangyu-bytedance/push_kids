@@ -1,47 +1,83 @@
 # UI-001 — 家长端微信小程序
 
-2026-10-24旅行局部增量，revision UI-STATE-20261025-FOOTPRINTS-TIMELINE-02：[BUG-034 Spec01/Architecture01](../../../../specs/active/BUG-034-FOOTPRINTS-CONTROLS-TIMELINE.md)及DREV01获批本地实施，内嵌旅行页复用学习btn/seg胶囊与原日期倒序/游标，照片显示HH:mm/时刻未知，手动无伪图。records协调、学习输入/明确学习意图及五Tab合同不改。335项/320与390及430原生54组和390实际点击通过，2026-10-25补齐430，真机/用户验收开放；[本轮证据](../../../quality/evidence/footprints-timeline-20261024/README.md)，未上传。
+2026-11-06当前交付revision `UI-RELEASE-20261106-040-0.1.18-01`：[发布报告](../../../deploy/releases/20261106-fullstack-040-client-0.1.18.md)记录040 normal/100%、Schema0027，客户端0.1.18官方上传1,200,417字节并bump；尚未设体验版、提审或正式发布。93组原生状态节点/PNG保持；320/390确认框CUA视觉和取消已补，430原证据保持。工作日两处实际HTTP保存/回填、摘要及来源跳转经原生AX观察PASS；合成SQLite及私有三文件配置例外独立记录，设备/可访问性仍NOT_RUN。固定40 v2自动40/40不等于家长内容通过，原37/40 FAIL保持。当前批准DREV不变，后续平台和设备验收独立。
+
+2026-11-05辅助验收后端合同revision `UI-STATE-20261105-SYSTEM-ONE-03`：[Spec06](../../../../specs/completed/BUG-036-SYSTEM-ONE-ACCEPTANCE.md)获批本地实现。原Pro生成后，Lite疑点按条目合并到既有proposal.uncertainties；不可用/跳过也只加人工核对提示。原条目、证据及历史关联保留，所有草稿仍由家长编辑/删除/确认，不显示自动合格或自动入库。内部_quality_acceptance不进入公开提案。Spec05分类/关系新路由已清退，旧覆盖草稿仅兼容读取。本任务不改页面、组件、表单、样式、DREV/FEC或视口矩阵；现有原生页面兼容性检查与未运行项在[本轮EVD](../../../../specs/evidence/EVD-20261105-BUG036-SYSTEMONE06.md)单列，不以静态检查冒充原生验收。后端合同已由040交付，内容由家长独立review；不新增前端结构。
+
+2026-11-05工作日revision `UI-STATE-20261105-WORKDAY-COPY-03`：用户批准[备注减法Spec01](../../../../specs/completed/FEAT-001-WORKDAY-COPY-CLEANUP.md)及[DREV03](../prototypes/DREV-20261105-WORKDAY-03/FRONTEND-SPEC.md)后，活动/日程编辑表单只保留原模式、字段、必要系列修改后果及操作，删除法定规则/覆盖年份两种备注，设置仍有时间摘要。日程真实缺覆盖在结果区显示一次“工作日安排待更新”，今日在活动分区原状态位置显示同一短状态；其他已知日程继续展示，未知无内容不另渲染空态或空正文容器。短状态14px，原控件/关闭/保存/移除44px下限保持。三模式、逐日草稿、转换确认、起始日、活动来源定位、只读/保存中/失败恢复继续沿用DREV02。DREV03源与24张HTML导出冻结；[当前EVD](../../../../specs/evidence/EVD-20261105-WORKDAY-COPY-01.md)单独记录本次自动化/原生/设备边界，DREV02的359/48历史证据不代验。本增量已由0.1.18上传，Spec DONE/completed，设备/可访问性待验。
+
+2026-11-05后端合同revision `UI-STATE-20261105-KNOWLEDGE-SUCCESS-01`：[Spec04](../../../../specs/completed/BUG-036-FIXED40-SUCCESS-REPAIR.md)获批准，本地13/16修正单份来源核验、技能/对象边界与空结果终态。草稿字段、明确retry、家长确认和页面/组件/样式/交互/DREV/FEC/视口矩阵保持，新原生/真机验收N/A；040已覆盖本后端增量，Spec DONE/completed。[本轮EVD](../../../../specs/evidence/EVD-20261105-BUG036-SUCCESS04.md)与私有真实材料报告供家长review，生成成功不等于内容通过。
+
+2026-11-01缓存OPS批准后发布结果：[灰度停止记录](../../../deploy/releases/20261101-knowledge-cache-gray-blocked.md)。
+两份验证工具只作格式维护、无生产UI改动，349前端/ESLint/设计policy/17页检查通过；
+冻结10/13 fixed40质量34/40FAIL，未创建GRAY，当时线上仍039/100%；当前040由独立全栈OPS交付继承实现，旧候选不能冒称已部署。
+OPS BLOCKED/active；本任务没有前端upload、DREV更新或新原生/真机验收，既有UI状态和独立BUG-037证据保持。
+
+2026-11-01后端内容/缓存历史基线：[内容Spec03](../../../../specs/completed/BUG-036-SOURCE-GROUNDED-CONTENT-REPAIR.md)本地12/15继承[缓存Spec02](../../../../specs/completed/BUG-036-CHECKPOINT-RETRY-STRATEGY.md)政策。最终质量否决或历史复用不确定立即失败；家长从原重试入口明确触发后刷新合并/审查/历史语义并保留有效提取。原图及完整输出参与后端核验，草稿仍展示原公开证据/置信度字段，不新增页面或交互。组件、表单、样式、DREV/FEC和视口矩阵无本任务变更，未执行新原生/设备验收。该轮评测时无后端云交付，当前合同已由040继承交付；[12证据](../../../../specs/evidence/EVD-20261101-BUG036-CONTENT03-ACCEPTANCE.md)原30严格9PASS＋1正确拒绝、补充0/3、边界7/10，内容FAIL及资源/审计PARTIAL独立保留，不补记UI或设备通过。
+
+当前旅行入口revision `UI-STATE-20261101-TRAVEL-ENTRY-CLEANUP-08-CLIENT-UPLOADED`：[入口Spec01/Architecture01/DREV01](../../../../specs/completed/FEAT-012-TRAVEL-ENTRY-CLEANUP.md)共享删除两入口，实际草稿/历史/学习手动保持。168份冻结客户端0.1.17已官方上传1,191,019字节并bump；42组原生/局部动作/微信健康保持自动证据，用户本轮确认照片回看/分页与双家庭非owner门禁。旅行三Spec DONE/completed，设备/内容缺项及体验/提审/正式发布NOT_RUN独立；BUG-037工作区两份页脚修改未入此包。[当前上传](../../../deploy/releases/20261101-client-0.1.17-upload.md)为实际阶段。
+
+编辑计划当前已上传revision `UI-STATE-20261101-REPORT-FOOTER-TIPS-03-NATIVE`：
+[BUG-037 Spec01](../../../../specs/completed/BUG-037-REPORT-FOOTER-TIPS.md)与
+[DREV01](../prototypes/DREV-20261101-REPORT-FOOTER-TIPS-01/FRONTEND-SPEC.md)已获明确批准并实现。
+共享条目分页为Flex同排等宽按钮、64px居中页码和8px两侧间距；科目目录双列等宽。
+禁用透明底/细描边，≥44px热区、14px文字；删除/预算提示迁移专用view/text，
+左右16px、上下12px内边距，14px/21px左对齐、单行垂直居中，完整文案和礼貌播报保留。
+349项/静态与原430双宿主16组方法/状态/尾部检查PASS；
+用户解锁后的齐套03包含320/390/430双宿主144组PNG/节点，0几何失败、逐图解码/SHA匹配；
+真实触摸/设备/大字/读屏NOT_RUN，官方无线真机码已生成，等待手机扫码。
+本Spec168份冻结生产源＋两份批准替换的官方preview成功1,192,127字节，手机未连接/未扫码。
+原分页掉行未在基线复现，提示padding=0已复现；现由0.1.18上传，Spec DONE/completed。
+当前几何和边界见[齐套03](../../../quality/evidence/REPORT-FOOTER-TIPS-NATIVE-COMPLETE-20261101.md)，原01/02保持历史结果，模拟器/HTML不抵扣真机验收。
+
+2026-10-26开发归档（历史；旅行三项2026-11-01交付见本页当前正文）：已交付037后端/0.1.16客户端所覆盖的需求按用户批准规则标记开发DONE，验收缺项独立保留；后续BUG-035和旅行导入精简尚未交付，继续active。当前归档和待验入口见[Spec状态清单](../../../../specs/STATUS.md)，依据为[治理Spec](../../../../specs/completed/GOV-002-CLOUD-DELIVERY-DEVELOPMENT-COMPLETION.md)。本轮不改产品合同、测试结论、设计或发布阶段。
+
+当前旅行导入revision `UI-STATE-20261025-TRAVEL-DIRECT-IMPORT-01`获批实现已随0.1.17开发上传，Spec DONE/completed；直接相册/取消零写/选择忙态保护、上传实际进度/重试与AI仅已有设置保持。原349项/15组原生及430实际导入证据保留，本轮两宿主真实取消恢复另验，五Tab/学习合同不变。设备/EXIF/完整内容缺项见[原证据](../../../quality/evidence/travel-import-simplification-20261025/README.md)。
+
+旅行BUG-035：[Spec01/Architecture01/DREV01](../../../../specs/completed/BUG-035-TRAVEL-DIARY-END-TO-END.md)获批并实施，records仍通过既有公开合同保护选图/选点/保存，学习输入和五Tab保持。2026-10-25的347前端/42组原生/430隔离动作、设置恢复及真实六六三草稿/城市“大连”/未知日期/0正式、重试和409结果保留原范围；[原证据](../../../quality/evidence/travel-diary-e2e-20261025/README.md)。该修复已由039/0.1.17交付，当前完整包为040/0.1.18；真实日期/正式确认、新focus定向云、真机/可访问性仍待补。此前UI-DELIVERY-0.1.16-01已开发上传，未体验/提审/正式发布，不含本修复。
+
+2026-10-24旅行局部增量，revision UI-STATE-20261025-FOOTPRINTS-TIMELINE-02：[BUG-034 Spec01/Architecture01](../../../../specs/completed/BUG-034-FOOTPRINTS-CONTROLS-TIMELINE.md)及DREV01获批本地实施，内嵌旅行页复用学习btn/seg胶囊与原日期倒序/游标，照片显示HH:mm/时刻未知，手动无伪图。records协调、学习输入/明确学习意图及五Tab合同不改。335项/320与390及430原生54组和390实际点击通过，2026-10-25补齐430，真机/用户验收开放；[本轮证据](../../../quality/evidence/footprints-timeline-20261024/README.md)，已随0.1.16开发上传。
 
 2026-10-24运行证据revision LATEST-037-01：Schema0025、获批CRUD readiness修复后的037 normal/100%，完整真实AppID本地客户端已打开，useCloud/env/service正确；20项真实微信GET全200，含新年级/建议读取。用户正式写入、真机和内容验收未执行；本轮前端源码/设计未改、未上传，下述UI原生/设备验收保持原边界。[本轮记录](../../../deploy/releases/20261024-latest-backend-test-deployment.md)。
 
-- 2026-10-24标题约束，revision `UI-STATE-20261024-SUGGESTION-TITLE-04`：用户明确批准[Title Limit Spec01 / Architecture01](../../../../specs/active/FEAT-004-SUGGESTION-TITLE-LIMIT.md)/[DREV04](../prototypes/DREV-20261024-TODAY-LEARNING-04/FRONTEND-SPEC.md)，已本地实现。新生成/重新编辑标题trim后1–20码点、无内部换行；编辑显示n/20和14px字段错误，超限保留输入、定位标题、零PATCH。保留DREV02/03字体、按钮及布局，旧120字完整读取/审批/待学记录/删除兼容，重新编辑须精简；maxlength=120仅为输入防护。33张批准导出冻结；前端332项、三视口39态原生节点/截图及独立复核通过，[本轮证据](../../../quality/evidence/SUGGESTION-TITLE-IMPLEMENTATION-20261024.md)列明真机/实际键盘/读屏/系统大字体缺口。Spec active/VERIFYING，未上传部署。
+- 2026-10-24标题约束，revision `UI-STATE-20261024-SUGGESTION-TITLE-04`：用户明确批准[Title Limit Spec01 / Architecture01](../../../../specs/completed/FEAT-004-SUGGESTION-TITLE-LIMIT.md)/[DREV04](../prototypes/DREV-20261024-TODAY-LEARNING-04/FRONTEND-SPEC.md)，已本地实现。新生成/重新编辑标题trim后1–20码点、无内部换行；编辑显示n/20和14px字段错误，超限保留输入、定位标题、零PATCH。保留DREV02/03字体、按钮及布局，旧120字完整读取/审批/待学记录/删除兼容，重新编辑须精简；maxlength=120仅为输入防护。33张批准导出冻结；前端332项、三视口39态原生节点/截图及独立复核通过，[本轮证据](../../../quality/evidence/SUGGESTION-TITLE-IMPLEMENTATION-20261024.md)列明真机/实际键盘/读屏/系统大字体缺口。Spec completed/DONE（验收待补），实施时未上传；现已随0.1.16开发上传，未体验/审核/正式发布。
 
-- 2026-10-24旅行减法，revision `UI-STATE-20261024-FOOTPRINTS-MINIMAL-02`：用户明确批准Spec01/DREV01，内嵌/原足迹页共享精简实现；重复身份标题及常驻次要入口删除，统计右侧44px更多进原生菜单；设置正文随单开关收高。工程文案附加条款已合并；最终331项前端、三尺寸27态原生及430实际菜单操作通过，[当前原生/设备边界](../../../quality/evidence/footprints-minimal-20261024/README.md)独立记录，不复用旧51组。Spec active/VERIFYING，未上传部署。
+- 2026-10-24旅行减法，revision `UI-STATE-20261024-FOOTPRINTS-MINIMAL-02`：用户明确批准Spec01/DREV01，内嵌/原足迹页共享精简实现；重复身份标题及常驻次要入口删除，统计右侧44px更多进原生菜单；设置正文随单开关收高。工程文案附加条款已合并；最终331项前端、三尺寸27态原生及430实际菜单操作通过，[当前原生/设备边界](../../../quality/evidence/footprints-minimal-20261024/README.md)独立记录，不复用旧51组。Spec开发DONE并归档，验收待补，实施时未上传；现已随0.1.16开发上传，未体验/审核/正式发布。
 
-- 2026-10-24今日学习卡片，revision `UI-STATE-20261024-TODAY-CARD-03`：[Visibility Spec01](../../../../specs/active/FEAT-004-TODAY-CARD-VISIBILITY.md)/[DREV03](../prototypes/DREV-20261024-TODAY-LEARNING-03/FRONTEND-SPEC.md)已明确批准并本地实现，VERIFYING。没有内容/进行中或恢复操作时整个区域隐藏且不占位；组件继续挂载。实际建议/待学使用17px衬线分区标题、16px复习卡标题、14px正文及胶囊按钮，去掉口号；任务优先、viewer只读任务，进度/失败/删除恢复有入口，网络失败保留重试。63张批准设计导出冻结；当前前端327项及320/390/430三视口81组原生通过，真实设备/可访问性与独立复核待补，详见[本轮证据](../../../quality/evidence/TODAY-CARD-IMPLEMENTATION-20261024.md)。该卡片范围未改DREV02弹层；当前标题合同另由DREV04覆盖，历史45组不能冒充新卡片取证。
+- 2026-10-24今日学习卡片，revision `UI-STATE-20261024-TODAY-CARD-03`：[Visibility Spec01](../../../../specs/completed/FEAT-004-TODAY-CARD-VISIBILITY.md)/[DREV03](../prototypes/DREV-20261024-TODAY-LEARNING-03/FRONTEND-SPEC.md)已明确批准并本地实现，VERIFYING。没有内容/进行中或恢复操作时整个区域隐藏且不占位；组件继续挂载。实际建议/待学使用17px衬线分区标题、16px复习卡标题、14px正文及胶囊按钮，去掉口号；任务优先、viewer只读任务，进度/失败/删除恢复有入口，网络失败保留重试。63张批准设计导出冻结；当前前端327项及320/390/430三视口81组原生通过，真实设备/可访问性与独立复核待补，详见[本轮证据](../../../quality/evidence/TODAY-CARD-IMPLEMENTATION-20261024.md)。该卡片范围未改DREV02弹层；当前标题合同另由DREV04覆盖，历史45组不能冒充新卡片取证。
 
-- 2026-10-24当前年级弹窗，revision `UI-STATE-20261024-ANNUAL-GRADE-05`：[精简Spec01](../../../../specs/active/FEAT-013-GRADE-DIALOG-SIMPLIFICATION.md) / [DREV02](../prototypes/DREV-20261024-ANNUAL-GRADE-PROMOTION-02/FRONTEND-SPEC.md)获用户“继续”批准并本地实现，只保留孩子名标题、年级选择和并排“稍后 / 确认”。错误/冲突按需显示一行提示，保存中全组禁用，最新态只展示正式年级与“继续”。选择只改草稿，全部会话/共享/并发规则保持；最终327项前端/53项定向、三尺寸51组原生及实际选级/重试/稍后通过，真实设备/可访问性及全业务原生端到端边界见[本轮证据](../../../quality/evidence/GRADE-DIALOG-SIMPLIFICATION-IMPLEMENTATION-20261024.md)。33张批准设计导出冻结；旧DREV01弹窗呈现由本增量替代，档案表单不变，未上传部署。
+- 2026-10-24当前年级弹窗，revision `UI-STATE-20261024-ANNUAL-GRADE-05`：[精简Spec01](../../../../specs/completed/FEAT-013-GRADE-DIALOG-SIMPLIFICATION.md) / [DREV02](../prototypes/DREV-20261024-ANNUAL-GRADE-PROMOTION-02/FRONTEND-SPEC.md)获用户“继续”批准并本地实现，只保留孩子名标题、年级选择和并排“稍后 / 确认”。错误/冲突按需显示一行提示，保存中全组禁用，最新态只展示正式年级与“继续”。选择只改草稿，全部会话/共享/并发规则保持；最终327项前端/53项定向、三尺寸51组原生及实际选级/重试/稍后通过，真实设备/可访问性及全业务原生端到端边界见[本轮证据](../../../quality/evidence/GRADE-DIALOG-SIMPLIFICATION-IMPLEMENTATION-20261024.md)。33张批准设计导出冻结；旧DREV01弹窗呈现由本增量替代，档案表单不变，实施时未上传；现已随0.1.16开发上传，未体验/审核/正式发布。
 
-- 2026-10-24建议弹层，revision `UI-STATE-20261024-SUGGESTION-SHEET-02`：[Spec01](../../../../specs/active/FEAT-004-SUGGESTION-SHEET-REFINEMENT.md) / [DREV02](../prototypes/DREV-20261024-TODAY-LEARNING-02/FRONTEND-SPEC.md)已批准并本地实现。直接显示具体标题、科目/预计时间和简短AI标识；主确认独占一行，编辑/换项44px等宽并排且间隔8px，暂缓全宽居中。提交等待全组/关闭禁用，失败保留内容可同键重试；超过60字的完整标题/元信息在30vh区域滚动，关闭和底部固定。84张设计导出与三视口45组原生几何分别通过，真机、实际键盘/读屏/系统大字体待验。旧DREV01仅本次范围标记Superseded by，源/快照不改，详见[实现证据](../../../quality/evidence/SUGGESTION-SHEET-IMPLEMENTATION-20261024.md)。
+- 2026-10-24建议弹层，revision `UI-STATE-20261024-SUGGESTION-SHEET-02`：[Spec01](../../../../specs/completed/FEAT-004-SUGGESTION-SHEET-REFINEMENT.md) / [DREV02](../prototypes/DREV-20261024-TODAY-LEARNING-02/FRONTEND-SPEC.md)已批准并本地实现。直接显示具体标题、科目/预计时间和简短AI标识；主确认独占一行，编辑/换项44px等宽并排且间隔8px，暂缓全宽居中。提交等待全组/关闭禁用，失败保留内容可同键重试；超过60字的完整标题/元信息在30vh区域滚动，关闭和底部固定。84张设计导出与三视口45组原生几何分别通过，真机、实际键盘/读屏/系统大字体待验。旧DREV01仅本次范围标记Superseded by，源/快照不改，详见[实现证据](../../../quality/evidence/SUGGESTION-SHEET-IMPLEMENTATION-20261024.md)。
 
-- 2026-10-24今日本地增量：两份Spec04及`DREV-20261024-TODAY-LEARNING-01`已批准，建议弹层呈现由上方DREV02替代。`components/today-learning`位于今日摘要后、复习前，展示单项提案、编辑/换项/今日暂缓、家长批准待学、删除后重生、实际文字/时间及部分/完成；采纳不写已学事实。viewer可读已批准任务且无写入口。Todo提前项显示原计划日期，跳过保留原日期；未知selection_kind禁反馈。弹层隐藏背景导航；加载、年级核对、孩子/来源/续订/删除弹层期间不消费学习建议自动提示。切孩子/家庭/角色或离页作废迟到回调并停止有界轮询。原DREV01的390十二态是历史证据；当前建议相关三视口45组见上方，今日完整26态、复习组合、键盘/读屏和真机仍待补。默认关闭、未上传部署，详见[本轮证据](../../../quality/evidence/TODAY-LEARNING-IMPLEMENTATION-20261024.md)。
+- 2026-10-24今日本地增量：两份Spec04及`DREV-20261024-TODAY-LEARNING-01`已批准，建议弹层呈现由上方DREV02替代。`components/today-learning`位于今日摘要后、复习前，展示单项提案、编辑/换项/今日暂缓、家长批准待学、删除后重生、实际文字/时间及部分/完成；采纳不写已学事实。viewer可读已批准任务且无写入口。Todo提前项显示原计划日期，跳过保留原日期；未知selection_kind禁反馈。弹层隐藏背景导航；加载、年级核对、孩子/来源/续订/删除弹层期间不消费学习建议自动提示。切孩子/家庭/角色或离页作废迟到回调并停止有界轮询。原DREV01的390十二态是历史证据；当前建议相关三视口45组见上方，今日完整26态、复习组合、键盘/读屏和真机仍待补。默认关闭、实施时未上传；现已随0.1.16开发上传，未体验/审核/正式发布，详见[本轮证据](../../../quality/evidence/TODAY-LEARNING-IMPLEMENTATION-20261024.md)。
 
-- 2026-10-24本地年级确认，revision `UI-STATE-20261024-ANNUAL-GRADE-03`：[Spec02 / Architecture02](../../../../specs/active/FEAT-013-ANNUAL-GRADE-PROMOTION.md)及[DREV01](../prototypes/DREV-20261024-ANNUAL-GRADE-PROMOTION-01/FRONTEND-SPEC.md)获用户“好的 按照这个方案落地”批准。五Tab承载同一独立弹窗，当前孩子优先、不切全局孩子；前台会话去重，稍后继续下一位，原生picker改级、提交防重、失败保留、冲突读取最新，已有弹层/输入（含报表筛选）时等待。恢复在用档案安全刷新，归档/确认失效旧在途候选。显示时背景aria-hidden且导航隐藏，关闭恢复。宿主通知经微任务发送，按钮用局部样式覆盖平台默认缩宽。313项前端及定向53项、独立评审通过；[本轮证据](../../../quality/evidence/ANNUAL-GRADE-IMPLEMENTATION-20261024.md)记录三视口51组呈现及三尺寸picker/档案检查，修复后原生端到端、真机与可访问性待补，Spec active/VERIFYING，未上传或部署。
+- 2026-10-24本地年级确认，revision `UI-STATE-20261024-ANNUAL-GRADE-03`：[Spec02 / Architecture02](../../../../specs/completed/FEAT-013-ANNUAL-GRADE-PROMOTION.md)及[DREV01](../prototypes/DREV-20261024-ANNUAL-GRADE-PROMOTION-01/FRONTEND-SPEC.md)获用户“好的 按照这个方案落地”批准。五Tab承载同一独立弹窗，当前孩子优先、不切全局孩子；前台会话去重，稍后继续下一位，原生picker改级、提交防重、失败保留、冲突读取最新，已有弹层/输入（含报表筛选）时等待。恢复在用档案安全刷新，归档/确认失效旧在途候选。显示时背景aria-hidden且导航隐藏，关闭恢复。宿主通知经微任务发送，按钮用局部样式覆盖平台默认缩宽。313项前端及定向53项、独立评审通过；[本轮证据](../../../quality/evidence/ANNUAL-GRADE-IMPLEMENTATION-20261024.md)记录三视口51组呈现及三尺寸picker/档案检查，修复后原生端到端、真机与可访问性待补，Spec completed/DONE（验收待补），实施时未上传；现已随0.1.16开发上传，未体验/审核/正式发布。
 
-- 2026-10-24当前记录入口，revision `UI-STATE-20261024-RECORD-ENTRY-01`：`BUG-SPEC-20261024-RECORD-ENTRY-05 / DREV-20261024-RECORD-ENTRY-01`获用户「可以」批准并本地实现。保留品牌和五Tab，标题下方200px/两项48px菜单，外部点击/滚动/离页收起；菜单不隐藏Tab，旅行照片/编辑面板仍隐藏Tab。右侧复用纸色child-chip、首字头像和细箭头，单孩子无箭头、长名整块换行。明确学习入口通过原保护回学习并续接跨代意图，普通Tab保留类型和未提交学习表单。旅行移除日期筛选，默认全部并有界续看，导入改内容下方唯一48px普通按钮。详见[UI-018](UI-018-child-photo-footprints.md)和[本轮验证](../../../quality/evidence/record-entry-20261024/README.md)；历史87份不抵扣当前diff。Spec active/VERIFYING，真机未验收，未上传部署。
+- 2026-10-24当前记录入口，revision `UI-STATE-20261024-RECORD-ENTRY-01`：`BUG-SPEC-20261024-RECORD-ENTRY-05 / DREV-20261024-RECORD-ENTRY-01`获用户「可以」批准并本地实现。保留品牌和五Tab，标题下方200px/两项48px菜单，外部点击/滚动/离页收起；菜单不隐藏Tab，旅行照片/编辑面板仍隐藏Tab。右侧复用纸色child-chip、首字头像和细箭头，单孩子无箭头、长名整块换行。明确学习入口通过原保护回学习并续接跨代意图，普通Tab保留类型和未提交学习表单。旅行移除日期筛选，默认全部并有界续看，导入改内容下方唯一48px普通按钮。详见[UI-018](UI-018-child-photo-footprints.md)和[本轮验证](../../../quality/evidence/record-entry-20261024/README.md)；历史87份不抵扣当前diff。Spec开发DONE并归档，验收待补，真机未验收，实施时未上传；现已随0.1.16开发上传，未体验/审核/正式发布。
 
-- 2026-10-20本地增量，revision `UI-STATE-20261020-SUPERSEDED-REVIEW-01-LOCAL`：Spec02及[DREV01](../prototypes/DREV-20261020-SUPERSEDED-REVIEW-01/FRONTEND-SPEC.md)获用户批准并实现；[21张设计导出与SHA清单](../snapshots/UI-001/DREV-20261020-SUPERSEDED-REVIEW-01/APPROVAL.md)保持冻结。复习目录独立页和报表内嵌共享「参与复习 / 已替代」筛选，默认normal；切换清空分页/过滤并隔离迟到响应。已替代项只看科目/次数、真实历史、承接关系和原学习记录；菜单仅删除，只读无管理动作，无恢复或联动删除。前端265项通过；完整原生三视口/截图及iOS/Android验收待补，HTML不抵扣。未上传，见[本轮证据](../../../quality/evidence/AUTO-SUPERSEDED-REVIEW-20261020.md)。
+- 2026-10-20本地增量，revision `UI-STATE-20261020-SUPERSEDED-REVIEW-01-LOCAL`：Spec02及[DREV01](../prototypes/DREV-20261020-SUPERSEDED-REVIEW-01/FRONTEND-SPEC.md)获用户批准并实现；[21张设计导出与SHA清单](../snapshots/UI-001/DREV-20261020-SUPERSEDED-REVIEW-01/APPROVAL.md)保持冻结。复习目录独立页和报表内嵌共享「参与复习 / 已替代」筛选，默认normal；切换清空分页/过滤并隔离迟到响应。已替代项只看科目/次数、真实历史、承接关系和原学习记录；菜单仅删除，只读无管理动作，无恢复或联动删除。前端265项通过；完整原生三视口/截图及iOS/Android验收待补，HTML不抵扣。对应界面已随0.1.16开发上传，见[本轮证据](../../../quality/evidence/AUTO-SUPERSEDED-REVIEW-20261020.md)。
 
 - 2026-10-18历史增量，revision `UI-STATE-20261018-PHOTO-FOOTPRINTS-01`：当时使用“孩子足迹”提示条跳转，现被2026-10-23标题切换入口替代；全归档仍可进入旅行并显式查看归档孩子。导入/核对/三视图合同见[UI-018](UI-018-child-photo-footprints.md)。Spec04/Architecture03已获实施批准，DREV01冻结；完整验收未完成，未上传/部署。下方条目保留各自历史增量状态。
 
-- 2026-10-17本地增量：`SPEC-20261017-NOTIFICATION-AUTO-RENEWAL-01 / DREV-20261017-NOTIFICATION-AUTO-RENEWAL-01`获用户“按照这个方案落地”批准并实现。今日成功complete后可显示首次说明，只有显式开启才启用；遮罩/离开说明尝试保存暂不开启。面板显示时隐藏底部导航并标记背景aria-hidden，关闭恢复导航；自动授权结果不额外Toast。只在点击同步链尝试新鲜候选，失败独立于复习保存。代码与设计的本次增量见[实现证据](../../../quality/evidence/NOTIFICATION-AUTO-RENEWAL-IMPLEMENTATION-20261017.md)，真机/读屏及独立评审未完成，未上传或部署；当前revision为UI-STATE-20261017-NOTIFICATION-AUTO-RENEWAL-01。
+- 2026-10-17本地增量：`SPEC-20261017-NOTIFICATION-AUTO-RENEWAL-01 / DREV-20261017-NOTIFICATION-AUTO-RENEWAL-01`获用户“按照这个方案落地”批准并实现。今日成功complete后可显示首次说明，只有显式开启才启用；遮罩/离开说明尝试保存暂不开启。面板显示时隐藏底部导航并标记背景aria-hidden，关闭恢复导航；自动授权结果不额外Toast。只在点击同步链尝试新鲜候选，失败独立于复习保存。代码与设计的本次增量见[实现证据](../../../quality/evidence/NOTIFICATION-AUTO-RENEWAL-IMPLEMENTATION-20261017.md)，真机/读屏及独立评审未完成，实施时未上传；现已随0.1.16开发上传，未体验/审核/正式发布；当前revision为UI-STATE-20261017-NOTIFICATION-AUTO-RENEWAL-01。
 
 - 2026-10-16服务端复习保序修复：`BUG-SPEC-20261016-REVIEW-SUBJECT-ORDER-01`已实现，冻结镜像HTTP回归通过；原计划反馈后仍按原科目顺序展示，空科目组才消失。灰度031已normal但0%流量，定向smoke/全量待人工完成；旧030仍100%。小程序代码/设计未改，FDB/FEC及批准快照保持；前端244项通过，无新原生/真机验收。见[证据](../../../quality/evidence/REVIEW-SUBJECT-ORDER-20261016.md)与[发布记录](../../../deploy/releases/20261016-review-subject-order-backend.md)。
 
-- 2026-10-15学科管理最新增量：SPEC-20261014-SUBJECT-MANAGEMENT-01 / DREV-20261014-SUBJECT-MANAGEMENT-01已批准并本地实现。学科行以整行箭头打开管理半屏，底部“移出此科目”经确认才生效，移出保留学习记录；未加入基础科目面板显示“加入此科目”。只读及受限项无操作箭头；错误保留面板可重试。替代旧行尾加入/移出按钮及基础科目无确认的操作。未上传/发布；当前验证见 [本轮证据](../../../quality/evidence/SUBJECT-MANAGEMENT-20261015.md)。
+- 2026-10-15学科管理最新增量：SPEC-20261014-SUBJECT-MANAGEMENT-01 / DREV-20261014-SUBJECT-MANAGEMENT-01已批准并本地实现。学科行以整行箭头打开管理半屏，底部“移出此科目”经确认才生效，移出保留学习记录；未加入基础科目面板显示“加入此科目”。只读及受限项无操作箭头；错误保留面板可重试。替代旧行尾加入/移出按钮及基础科目无确认的操作。已随0.1.16开发上传，开发DONE；当前验证见 [本轮证据](../../../quality/evidence/SUBJECT-MANAGEMENT-20261015.md)。
 
-- 2026-10-15本地按钮/分页：SPEC-20261014-ACTION-PAGER-CONSISTENCY-02 / DREV-20261014-ACTION-PAGER-CONSISTENCY-02批准并实现。每日任务完成/撤销为无阴影胶囊；编辑计划独立页和报表内嵌共享三列分页，科目双列，禁用透明底。243项测试及静态通过；430宽原生11态部分验证，320/390、内嵌、截图和真机待补。尚未上传，Spec active/VERIFYING。证据docs/quality/evidence/ACTION-PAGER-CONSISTENCY-20261015.md。
+- 2026-10-15历史按钮/分页：SPEC-20261014-ACTION-PAGER-CONSISTENCY-02 / DREV-20261014-ACTION-PAGER-CONSISTENCY-02当时实现每日任务完成/撤销无阴影胶囊及编辑计划三列Grid、科目双列和透明禁用。每日任务范围继续有效；当前编辑计划分页由上方BUG-037本地Flex接管。原243项/430原生11态部分验证及当时缺项保持历史结果；0.1.16已开发上传、原Spec DONE/completed，不能作为BUG-037云交付。证据docs/quality/evidence/ACTION-PAGER-CONSISTENCY-20261015.md。
 
 - 2026-10-13最新设置增量：SPEC-20261013-SETTINGS-CONSISTENCY-01 / DREV-20261013-SETTINGS-CONSISTENCY-01批准并实现；在学科目统一活动式单列行；每日任务独立书本/时钟装饰、整行编辑、添加候选半屏，预设需保存。取代科目三列、任务常驻预设/独立编辑/内联表单描述。239项测试、静态/设计/架构与430原生八态通过；源码5837d59随0.1.15开发上传成功（1027271字节），未体验/提审/正式发布；320/390原生、完整截图、真机待验收。证据docs/quality/evidence/SETTINGS-CONSISTENCY-20261013.md。
 
-- 2026-10-13背景全面接入：设置科目/活动/出行不同插画与纸面背景；每日任务同款背景和列表、紧随活动之后；报表顶部成长记录插画和统一卡片背景。Spec SPEC-20261013-CARD-BACKGROUNDS-01 / Design DREV-20261013-CARD-BACKGROUNDS-01。238测试、静态校验及1017670字节CLI预览包通过，三视口HTML仅辅助；原生/真机/用户验收待补，未发布。证据docs/quality/evidence/CARD-BACKGROUNDS-20261013.md；本增量取代上文“设置/报表背景未接入”的历史事实。
+- 2026-10-13背景全面接入：设置科目/活动/出行不同插画与纸面背景；每日任务同款背景和列表、紧随活动之后；报表顶部成长记录插画和统一卡片背景。Spec SPEC-20261013-CARD-BACKGROUNDS-01 / Design DREV-20261013-CARD-BACKGROUNDS-01。238测试、静态校验及1017670字节CLI预览包通过，三视口HTML仅辅助；原生/真机/用户验收待补，已随0.1.16开发上传。证据docs/quality/evidence/CARD-BACKGROUNDS-20261013.md；本增量取代上文“设置/报表背景未接入”的历史事实。
 
 - 2026-10-13报表展开区本地增量：`SPEC-20261013-REPORT-PANELS-01 / DREV-20261013-REPORT-PANELS-01` 已批准并实现；历史平铺分隔、计划明确「调整」、顶部与底部收起，两区独立展开。外层继承统一pk-card背景，不覆盖并行卡片美化。236项测试及三视口36态原生数字几何通过；完整截图、字体放大及真机待补；已随0.1.14开发上传，未设体验版/正式版。证据：`docs/quality/evidence/REPORT-PANELS-20261013.md`。
 
 - 2026-10-13历史视觉增量：记录标题卡书本插画、空上传相机插画及日程台历插画使用统一纸面渐变；Design `DREV-20261013-RECORD-CALENDAR-ILLUSTRATIONS-01` 已批准。2026-10-23记录装饰标题卡被标题类型切换替代，空上传相机和日程插画继续保留。历史233项测试及验收范围见 `docs/quality/evidence/RECORD-CALENDAR-ILLUSTRATIONS-20261013.md`，不代验本次修改。
 
-- Status: `CURRENT / VOICE_INPUT_LOCAL_VERIFIED / MICROPHONE_PRIVACY_DECLARATION_BLOCKED / DEVELOPMENT_VERSION_0.1.15_UPLOADED / ACTION_PAGER_LOCAL_VERIFYING / NATIVE_VIEWPORT_MATRIX_INCOMPLETE`
-- Release status: 最新开发上传为`0.1.15`（1027271字节，源码5837d59），包含每日任务、背景插画、报表布局及设置一致性；未设体验版/审核/正式版。本轮按钮/分页修改仅本地实现。2026-10-13生产Schema已升级0019、后端030已全量模式发布且normal，真实小程序设置依赖及每日任务等13项读取接口200。原生全部状态/真机验收仍待完成。上传证据：`docs/deploy/releases/20261013-settings-consistency-frontend.md`；后端证据：`docs/deploy/releases/20261013-fullstack-diff.md`；0.1.13/0.1.14为历史开发上传。
+- Status: `CURRENT / BACKEND_040_NORMAL_100_PERCENT / DEVELOPMENT_VERSION_0.1.18_UPLOADED / VERIFICATION_PENDING`
+- Release status: 当前040 normal/100%、Schema0027、PUBLIC关闭；客户端0.1.18官方上传1,200,417字节并bump。BUG-033/037、工作日与备注减法匹配交付并DONE；[当前证据](../../../deploy/releases/20261106-fullstack-040-client-0.1.18.md)分别记录原生主路径、设备/内容缺项。尚未设体验版、提审或正式发布。
 - Related Feature: `FEAT-001`
 - Local report disclosures: `SPEC-20261011-REPORT-DISCLOSURES-01 / DREV-20261011-REPORT-DISCLOSURES-01` 已获用户批准并本地实现。
   报表科目统计后依次为「历史记录」「编辑计划」两张默认收起的卡，课外活动投入在其后；展开分别复用完整有界历史和条目清单，互不覆盖。原独立条目页标题同步改为「编辑计划」；记录页保留新增及待处理入口，历史列表移出。12张设计快照及SHA、前端自动化和三视口四状态微信原生数字几何已通过；开发版本 `0.1.13` 已上传，iOS/Android真机未验收，未设体验版/正式版。证据：`docs/quality/evidence/REPORT-DISCLOSURES-20261011.md`、`docs/deploy/releases/20261011-report-disclosures-frontend.md`。
@@ -56,26 +92,26 @@
 - Historical grouped-card revision superseded locally by the 2026-10-10 redesign: `SPEC-20261007-REVIEW-GROUP-CARDS-05 / DREV-20261007-REVIEW-GROUP-CARDS-01` 曾获用户批准并在本地小程序实现。
   时间/科目/次数视图将当前有界页按科目聚合为可折叠组卡；条目右侧固定 44×44px 的“…”就近打开操作菜单，指定次数仅在用户输入后显示具体数字。
   筛选用日期两列、科目和次数三列的等宽按钮，第四个科目按同列宽度换行。320×568、390×844、430×932 微信原生数字矩形共 12 组（含菜单）审计通过；320/430 原生截图和390 CUA模拟器画面已人工检查。
-  前端 207 passed、静态检查通过；新版 DREV 快照仍为 AWAITING_EXPORT，iOS/Android 真机未验收，尚未部署此本地修订。详见 `specs/active/FEAT-001-REVIEW-INVENTORY-GROUPED-CARDS.md`。
+  前端 207 passed、静态检查通过；新版 DREV 快照仍为 AWAITING_EXPORT，iOS/Android真机未验收；该分组版曾随中间客户端交付，当前由后续获批重设计接管。详见 `specs/completed/FEAT-001-REVIEW-INVENTORY-GROUPED-CARDS.md`。
 - Fair-review local revision: `DREV-20261007-FAIR-REVIEW-01 / SPEC-20261007-FAIR-REVIEW-01` 已获批准。
   今日移除策略说明和等待总数；条目分别显示建议复习日/家长安排日期和今日已安排/等待安排等状态。
   旧API显示“计划日期/安排状态待更新”；200项前端测试及静态检查通过，39张设计导出及hash通过。
-  本地微信preview通过，669664字节，未上传开发/体验/正式版；原生三视口及iOS/Android待用户验收。
-  后端性能修复通过，生产迁移尚未执行。证据：`docs/quality/evidence/FAIR-REVIEW-PROJECTION-20261007.md`。
+  原实施阶段微信preview通过，669664字节；对应策略/界面现已随037/0.1.16交付，未体验/审核/正式发布。
+  后端性能修复与相关迁移已交付；原生三视口及iOS/Android待用户验收。证据：`docs/quality/evidence/FAIR-REVIEW-PROJECTION-20261007.md`。
   下文旧“到期”条目日期展示由本地本修订替代。
 - Baseline: `FDB-20260913-04`
 - Engineering contract: `FEC-20261007-NATIVE-GEOMETRY-02`
 - Design revision: `DREV-20261001-RECORD-VOICE-INLINE-03`（记录页紧凑输入框内嵌麦克风；仅本地验证）
-- Current-state revision: `UI-STATE-20261006-REVIEW-MANAGEMENT-03-LOCAL`
+- Current-state revision: `UI-STATE-20261031-TRAVEL-ENTRY-CLEANUP-03-RELEASE-VERIFY`
 - Review management design/spec: `DREV-20261006-REVIEW-MANAGEMENT-03 / SPEC-20261006-REVIEW-MANAGEMENT-03`，
-  用户于2026-10-06“落地并实现”批准；原生页面已本地实现，未发布。DREV03导出/原生三视口/真机尚未验收。
+  用户于2026-10-06“落地并实现”批准；原生页面已随0.1.16开发上传，开发DONE；DREV03导出/原生三视口/真机尚未验收。
   新页`pages/review-inventory/index`从报表区间前进入；单科目录无“全部”，与日期一致的下划线选择。
   次数全部/0/1/2/3直接选择；指定次数数字弹层确定才应用、取消保留，非法值留在表单内。
   条目显示实际次数/最近复习/到期，调整菜单提高/降低优先级，红色删除需确认；viewer/归档只读。
   翻页替换至多50行；科目目录后页刷新或调整后保留当前科目。
   云bootstrap后确定权限，家庭/孩子切换清除旧行并丢弃迟到响应。验证见`docs/quality/evidence/REVIEW-MANAGEMENT-20261006.md`。
-- Today design revision: `DREV-20261006-SOURCE-DELETE-01`，用户于2026-10-06批准；本地实现，未发布。
-- Today Spec: `specs/active/FEAT-001-PRECISE-SOURCE-AND-KNOWLEDGE-DELETION.md`
+- Today design revision: `DREV-20261006-SOURCE-DELETE-01`，用户于2026-10-06批准；实现已随037/0.1.16交付，完整验收待补。
+- Today Spec: `specs/completed/FEAT-001-PRECISE-SOURCE-AND-KNOWLEDGE-DELETION.md`
   revision `SPEC-20261006-SOURCE-DELETE-02`；原生三视口及iOS/Android验收尚未完成。
 - Related Spec: `specs/completed/BUG-025-REVIEW-ONLY-CONFIRM-SUBJECT.md` revision `BUG-SPEC-20260919-REVIEW-ONLY-CONFIRM-01`
   （前序：`specs/completed/BUG-023-TODAY-REVIEW-SOURCE-MATERIAL.md` revision `BUG-SPEC-20260919-REVIEW-SOURCE-01`；
@@ -186,7 +222,7 @@
 - 设置页每日任务提供阅读、跳绳、练字、户外运动快捷候选，以及自定义、编辑、删除。
   名称1～30字符、时长1～180整数分钟、每孩子最多20项；候选不自动保存，失败保留输入，pending禁止重复提交。
   今日提供完成/撤销及完成数，viewer只读；请求失败保留事实。设计源与审批manifest见对应DREV目录，
-  三视口基础原生证据见 `docs/quality/evidence/daily-tasks-20261012/`；完整状态矩阵和真机键盘待补，未部署。
+  三视口基础原生证据见 `docs/quality/evidence/daily-tasks-20261012/`；完整状态矩阵和真机键盘待补；对应实现已随037/0.1.16交付。
 - 设置页有在用孩子时不在主内容重复展示学习档案列表；右上角孩子胶囊始终可打开统一档案面板，
   档案行以姓名/年级两级信息为主，“当前使用”为次级文字；可写成员通过透明 88rpx 铅笔点击区编辑，
   新增是列表末尾动作行，归档恢复与上限说明保持独立。viewer 只显示切换；无在用孩子时继续由页面
@@ -210,7 +246,7 @@
   行为不变。
 - Todo 的主观反馈在卡片内展开，选项旁写明对复习安排的影响；文案与服务端确定性策略一一对应
   （reinforce = 退一步、明天再出现；partial = 下一轮间隔取一半；defer = 普通到期项同一步明天再出现，提前安排项保留原到期日）。
-- 日程卡点击编辑；重复日程 MVP 修改整个系列。结束时间早于当前时刻后统一灰显。
+- 日程卡点击编辑；每周/工作日重复日程修改整个对应系列，工作日日期为系列起始日。活动来源回设置定位安排。结束时间早于当前时刻后统一灰显。
 - 设置页是出行安排的唯一写入口；日程点击出行会回到设置并定位该项。出行不进入今日。
   日程中任意明确时段相交时，冲突双方以危险色、文字原因、冲突对象和重叠分钟数共同提示；端点相接不冲突。
 - 报表范围切换会重新请求 7/30/100 天数据并回到第1屏；100天在组件内部按30/30/30/10左右分页，页面根容器不横向移动。
@@ -234,7 +270,7 @@
   可多选的星期格有选中态，分页由 swiper 圆点表达。因此不再出现「点击切换」「可多选」
   「左右滑动查看」「可下钻」「点击可查看原图」「打开可以修改资料或归档」这类提示。
   必须保留的说明是：确认才入档、照片仅供核对不用于展示分享、出行只显示在日程不生成待办、
-  编辑重复日程会作用于整个每周系列。
+  编辑重复日程会作用于整个每周或工作日系列。工作日的法定判定是排期规则，不再作为编辑表单备注；真实缺覆盖仅在受影响结果显示一次短状态。
 - 出行安排的边界只在设置页出行卡片副标题声明一次（「只显示在日程，不生成待办」），
   新增/编辑半屏不再重复同一句话。
 - 报表紧迫度图用色块图例（「数字：当天待复习」「已全部通过」）替代原来的三行阅读说明，
@@ -245,11 +281,11 @@
 当前视觉系统是 PKDS-2.0「纸 · 芽」，可见合同见 `DREV-20260906-PKDS-03`。
 
 共享背景增量revision `UI-VISUAL-20261021-HERO-ARC-01`：已按获批
-[BUG-SPEC-20261021-HERO-ARC-01](../../../../specs/active/BUG-030-HERO-BACKGROUND-ARC.md) /
+[BUG-SPEC-20261021-HERO-ARC-01](../../../../specs/completed/BUG-030-HERO-BACKGROUND-ARC.md) /
 [DREV-20261021-HERO-ARC-REMOVAL-01](../prototypes/DREV-20261021-HERO-ARC-REMOVAL-01/FRONTEND-SPEC.md)
 在本地删除今日正常/引导、日程、记录、报表及设置四张共享卡片右下角的细弧线。
 原纸面渐变、插画、控件与交互保留；本轮验证与验收缺口见[质量证据](../../../quality/evidence/HERO-ARC-REMOVAL-20261021.md)。
-本增量未上传或发布，其他任务的历史状态不变。
+本增量已随0.1.16开发上传并开发DONE；未体验/审核/正式发布，原验收缺项独立保留。
 
 方向是暖白纸面 `#FAF7F0`（卡片 `#FFFDF8`）、松绿主色 `#1F5B45`、嫩芽成长色 `#7FA65C`、
 提醒赭石 `#A9762A`、异常陶土 `#A85742`。阴影大而淡，卡片像纸叠在纸上；标题使用衬线族
@@ -313,7 +349,7 @@ PKDS-2.0 相对 PKDS-1.0 的可见变化：
 | lint | ESLint | passed |
 | WeChat DevTools | registered AppID preview + local authorization | 语音修订 preview 634.8 KB / 650045 bytes 通过、未上传；记录页与框内麦克风已渲染；授权返回 `errno 112 / api scope is not declared in the privacy agreement`，等待管理员补充隐私声明 |
 | changed-sheet approximate viewports | `dist/ui-preview/settings-sheet*-vp*.html` | sheet/viewer/limit 的 320/390/430 共 9 个 HTML fixture 已生成；PNG 因缺少 Playwright Chromium executable 未运行，不替代原生几何 |
-| WeChat platform API audit | `WECHAT-MINIPROGRAM-API-BASELINE.md` | compatibility/error-recovery changes proposed; not implemented |
+| WeChat platform API audit | `WECHAT-MINIPROGRAM-API-BASELINE.md` | historical BUG-004 compatibility/error-recovery proposal REJECTED by the user on 2026-11-05; no implementation or acceptance claimed |
 
 The accepted HTML version remains a design-history artifact. It is not loaded by the Mini Program and does
 not provide runtime data.
@@ -334,9 +370,8 @@ iPhone 12/13 (Pro)、390×844、DPR 3、SDK 3.16.2 下采集今日、日程、�
 
 Cloud transport and upload wrappers have automated coverage, but real `callContainer`、storage owner rule、
 camera authorization、weak-network resume and iOS/Android evidence are not claimed. They are mandatory before
-the experience build is accepted. The repository does not yet retain a minimum base-library setting or capability
-guards for `callContainer`、`uploadFile` and `chooseMedia`; media permission failures, safe platform error
-classification and cancelable uploads are tracked by `BUG-SPEC-20260905-02` and remain unimplemented.
+the experience build is accepted. The separate minimum-version, capability, permission, error and upload-recovery
+proposal [BUG-004](../../../../specs/rejected/BUG-004-WECHAT-MINIPROGRAM-API-COMPATIBILITY.md) was rejected by the user on 2026-11-05 and is no longer pending implementation. This closure adds no runtime or device-acceptance evidence.
 
 ## Change references
 
@@ -519,7 +554,7 @@ classification and cancelable uploads are tracked by `BUG-SPEC-20260905-02` and 
 - 2026-09-03 — `CLOUD-SPEC-20260903-03`: switched the non-visible network/media infrastructure to
   callContainer and private cloud direct upload without changing the approved visual design.
 - 2026-09-05 — `WX-API-BASELINE-20260905-01 / BUG-SPEC-20260905-02`: audited the used `wx.*` APIs and
-  proposed minimum-version, capability, permission, error and upload-recovery hardening; implementation pending approval.
+  proposed minimum-version, capability, permission, error and upload-recovery hardening; the user rejected this proposal on 2026-11-05. See [closure](../../../../specs/rejected/BUG-004-WECHAT-MINIPROGRAM-API-COMPATIBILITY.md).
 - 2026-09-05 — `BUG-SPEC-20260905-05 / DREV-20260905-P2-01`: P2 上传恢复、待处理分页、证据提示；
   当前可执行页面逻辑已验证，真实设备/视口验收待家庭绑定测试环境。
 - 2026-09-05 — `BUG-SPEC-20260905-07 / DREV-20260905-AI-01`: 人工兜底、关联已有知识与重复材料

@@ -1,0 +1,19 @@
+{
+  "baseline_revision": "20261024_0025",
+  "target_revision": "20261105_0026",
+  "baseline_diff": [
+    "('add_index', Index('ix_learning_records_child_id', Column('child_id', String(length=36), table=<learning_records>, nullable=False)))",
+    "('add_index', Index('ix_learning_records_family_id', Column('family_id', String(length=80), table=<learning_records>, nullable=False)))",
+    "('add_index', Index('ix_learning_records_occurred_at', Column('occurred_at', UTCDateTime(), table=<learning_records>, nullable=False)))",
+    "('add_index', Index('ix_learning_records_subject_id', Column('subject_id', String(length=36), table=<learning_records>, nullable=False)))"
+  ],
+  "target_diff": [
+    "('add_index', Index('ix_learning_records_child_id', Column('child_id', String(length=36), table=<learning_records>, nullable=False)))",
+    "('add_index', Index('ix_learning_records_family_id', Column('family_id', String(length=80), table=<learning_records>, nullable=False)))",
+    "('add_index', Index('ix_learning_records_occurred_at', Column('occurred_at', UTCDateTime(), table=<learning_records>, nullable=False)))",
+    "('add_index', Index('ix_learning_records_subject_id', Column('subject_id', String(length=36), table=<learning_records>, nullable=False)))"
+  ],
+  "same_existing_drift": true,
+  "workday_tables_drift": [],
+  "scope": "isolated synthetic SQLite; previous metadata equals current minus two additive columns"
+}

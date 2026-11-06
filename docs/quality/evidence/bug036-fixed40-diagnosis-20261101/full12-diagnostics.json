@@ -1,0 +1,1453 @@
+{
+  "mode": "full12",
+  "started_at": "2026-11-01T22:16:32+08:00",
+  "finished_at": "2026-11-01T22:25:37+08:00",
+  "source_mutation": false,
+  "production_connection": false,
+  "original_scoring_and_retries": true,
+  "events": [
+    {
+      "case": "zh-01",
+      "stage": "extract",
+      "schema": "MaterialResult",
+      "item_count": 1,
+      "subjects": [
+        "zh"
+      ],
+      "needs_context": false,
+      "material_status": "content"
+    },
+    {
+      "case": "zh-01",
+      "stage": "merge",
+      "schema": "ConsolidatedResult",
+      "item_count": 1,
+      "subjects": [
+        "zh"
+      ],
+      "omissions": []
+    },
+    {
+      "case": "zh-01",
+      "stage": "review",
+      "schema": "QualityReviewResult",
+      "passed": true,
+      "issue_codes": []
+    },
+    {
+      "case": "zh-01",
+      "stage": "match",
+      "schema": "MatchingResult"
+    },
+    {
+      "case": "math-01",
+      "stage": "extract",
+      "schema": "MaterialResult",
+      "item_count": 1,
+      "subjects": [
+        "math"
+      ],
+      "needs_context": false,
+      "material_status": "content"
+    },
+    {
+      "case": "math-01",
+      "stage": "merge",
+      "schema": "ConsolidatedResult",
+      "item_count": 1,
+      "subjects": [
+        "math"
+      ],
+      "omissions": []
+    },
+    {
+      "case": "math-01",
+      "stage": "review",
+      "schema": "QualityReviewResult",
+      "passed": true,
+      "issue_codes": []
+    },
+    {
+      "case": "math-01",
+      "stage": "match",
+      "schema": "MatchingResult"
+    },
+    {
+      "case": "en-01",
+      "stage": "extract",
+      "schema": "MaterialResult",
+      "item_count": 1,
+      "subjects": [
+        "en"
+      ],
+      "needs_context": false,
+      "material_status": "content"
+    },
+    {
+      "case": "en-01",
+      "stage": "merge",
+      "schema": "ConsolidatedResult",
+      "item_count": 1,
+      "subjects": [
+        "en"
+      ],
+      "omissions": []
+    },
+    {
+      "case": "en-01",
+      "stage": "review",
+      "schema": "QualityReviewResult",
+      "passed": true,
+      "issue_codes": []
+    },
+    {
+      "case": "en-01",
+      "stage": "match",
+      "schema": "MatchingResult"
+    },
+    {
+      "case": "zh-02",
+      "stage": "extract",
+      "schema": "MaterialResult",
+      "item_count": 1,
+      "subjects": [
+        "zh"
+      ],
+      "needs_context": false,
+      "material_status": "content"
+    },
+    {
+      "case": "zh-02",
+      "stage": "merge",
+      "schema": "ConsolidatedResult",
+      "item_count": 1,
+      "subjects": [
+        "zh"
+      ],
+      "omissions": []
+    },
+    {
+      "case": "zh-02",
+      "stage": "review",
+      "schema": "QualityReviewResult",
+      "passed": true,
+      "issue_codes": []
+    },
+    {
+      "case": "zh-02",
+      "stage": "match",
+      "schema": "MatchingResult"
+    },
+    {
+      "case": "math-02",
+      "stage": "extract",
+      "schema": "MaterialResult",
+      "item_count": 1,
+      "subjects": [
+        "math"
+      ],
+      "needs_context": false,
+      "material_status": "content"
+    },
+    {
+      "case": "math-02",
+      "stage": "merge",
+      "schema": "ConsolidatedResult",
+      "item_count": 1,
+      "subjects": [
+        "math"
+      ],
+      "omissions": []
+    },
+    {
+      "case": "math-02",
+      "stage": "review",
+      "schema": "QualityReviewResult",
+      "passed": true,
+      "issue_codes": []
+    },
+    {
+      "case": "math-02",
+      "stage": "match",
+      "schema": "MatchingResult"
+    },
+    {
+      "case": "en-02",
+      "stage": "extract",
+      "schema": "MaterialResult",
+      "item_count": 1,
+      "subjects": [
+        "en"
+      ],
+      "needs_context": false,
+      "material_status": "content"
+    },
+    {
+      "case": "en-02",
+      "stage": "merge",
+      "schema": "ConsolidatedResult",
+      "item_count": 1,
+      "subjects": [
+        "en"
+      ],
+      "omissions": []
+    },
+    {
+      "case": "en-02",
+      "stage": "review",
+      "schema": "QualityReviewResult",
+      "passed": true,
+      "issue_codes": []
+    },
+    {
+      "case": "en-02",
+      "stage": "match",
+      "schema": "MatchingResult"
+    },
+    {
+      "case": "zh-03",
+      "stage": "extract",
+      "schema": "MaterialResult",
+      "item_count": 1,
+      "subjects": [
+        "zh"
+      ],
+      "needs_context": false,
+      "material_status": "content"
+    },
+    {
+      "case": "zh-03",
+      "stage": "merge",
+      "schema": "ConsolidatedResult",
+      "item_count": 1,
+      "subjects": [
+        "zh"
+      ],
+      "omissions": []
+    },
+    {
+      "case": "zh-03",
+      "stage": "review",
+      "schema": "QualityReviewResult",
+      "passed": true,
+      "issue_codes": []
+    },
+    {
+      "case": "zh-03",
+      "stage": "match",
+      "schema": "MatchingResult"
+    },
+    {
+      "case": "math-03",
+      "stage": "extract",
+      "schema": "MaterialResult",
+      "item_count": 1,
+      "subjects": [
+        "math"
+      ],
+      "needs_context": false,
+      "material_status": "content"
+    },
+    {
+      "case": "math-03",
+      "stage": "merge",
+      "schema": "ConsolidatedResult",
+      "item_count": 1,
+      "subjects": [
+        "math"
+      ],
+      "omissions": []
+    },
+    {
+      "case": "math-03",
+      "stage": "review",
+      "schema": "QualityReviewResult",
+      "passed": false,
+      "issue_codes": [
+        "exercise_not_knowledge"
+      ]
+    },
+    {
+      "case": "math-03",
+      "stage": "merge",
+      "schema": "ConsolidatedResult",
+      "item_count": 1,
+      "subjects": [
+        "math"
+      ],
+      "omissions": []
+    },
+    {
+      "case": "math-03",
+      "stage": "review",
+      "schema": "QualityReviewResult",
+      "passed": true,
+      "issue_codes": []
+    },
+    {
+      "case": "math-03",
+      "stage": "match",
+      "schema": "MatchingResult",
+      "reason": "provider_timeout",
+      "diagnostics": []
+    },
+    {
+      "case": "math-03",
+      "phase": "pipeline_failure",
+      "stage": "match",
+      "unit": "match",
+      "reason": "provider_timeout",
+      "diagnostics": []
+    },
+    {
+      "case": "math-03",
+      "stage": "match",
+      "schema": "MatchingResult"
+    },
+    {
+      "case": "en-03",
+      "stage": "extract",
+      "schema": "MaterialResult",
+      "item_count": 1,
+      "subjects": [
+        "en"
+      ],
+      "needs_context": false,
+      "material_status": "content"
+    },
+    {
+      "case": "en-03",
+      "stage": "merge",
+      "schema": "ConsolidatedResult",
+      "item_count": 1,
+      "subjects": [
+        "en"
+      ],
+      "omissions": []
+    },
+    {
+      "case": "en-03",
+      "stage": "review",
+      "schema": "QualityReviewResult",
+      "passed": true,
+      "issue_codes": []
+    },
+    {
+      "case": "en-03",
+      "stage": "match",
+      "schema": "MatchingResult"
+    },
+    {
+      "case": "multi-01",
+      "stage": "extract",
+      "schema": "MaterialResult",
+      "item_count": 0,
+      "subjects": [],
+      "needs_context": false,
+      "material_status": "non_learning"
+    },
+    {
+      "case": "multi-01",
+      "stage": "merge",
+      "schema": "ConsolidatedResult",
+      "item_count": 0,
+      "subjects": [],
+      "omissions": []
+    },
+    {
+      "case": "multi-01",
+      "stage": "review",
+      "schema": "QualityReviewResult",
+      "passed": true,
+      "issue_codes": []
+    },
+    {
+      "case": "multi-01",
+      "phase": "pipeline_failure",
+      "stage": "review",
+      "unit": "empty_proposal",
+      "reason": "coverage",
+      "diagnostics": []
+    },
+    {
+      "case": "multi-01",
+      "phase": "pipeline_failure",
+      "stage": "review",
+      "unit": "empty_proposal",
+      "reason": "coverage",
+      "diagnostics": []
+    },
+    {
+      "case": "multi-01",
+      "phase": "pipeline_failure",
+      "stage": "review",
+      "unit": "empty_proposal",
+      "reason": "coverage",
+      "diagnostics": []
+    },
+    {
+      "case": "zh-04",
+      "stage": "extract",
+      "schema": "MaterialResult",
+      "item_count": 1,
+      "subjects": [
+        "zh"
+      ],
+      "needs_context": false,
+      "material_status": "content"
+    },
+    {
+      "case": "zh-04",
+      "stage": "merge",
+      "schema": "ConsolidatedResult",
+      "item_count": 1,
+      "subjects": [
+        "zh"
+      ],
+      "omissions": []
+    },
+    {
+      "case": "zh-04",
+      "stage": "review",
+      "schema": "QualityReviewResult",
+      "passed": false,
+      "issue_codes": [
+        "exercise_not_knowledge"
+      ]
+    },
+    {
+      "case": "zh-04",
+      "stage": "merge",
+      "schema": "ConsolidatedResult",
+      "item_count": 1,
+      "subjects": [
+        "zh"
+      ],
+      "omissions": []
+    },
+    {
+      "case": "zh-04",
+      "stage": "review",
+      "schema": "QualityReviewResult",
+      "passed": false,
+      "issue_codes": [
+        "vague_name"
+      ]
+    },
+    {
+      "case": "zh-04",
+      "phase": "pipeline_failure",
+      "stage": "review",
+      "unit": "review1",
+      "reason": "quality",
+      "diagnostics": []
+    },
+    {
+      "case": "math-04",
+      "stage": "extract",
+      "schema": "MaterialResult",
+      "item_count": 1,
+      "subjects": [
+        "math"
+      ],
+      "needs_context": false,
+      "material_status": "content"
+    },
+    {
+      "case": "math-04",
+      "stage": "merge",
+      "schema": "ConsolidatedResult",
+      "item_count": 1,
+      "subjects": [
+        "math"
+      ],
+      "omissions": []
+    },
+    {
+      "case": "math-04",
+      "stage": "review",
+      "schema": "QualityReviewResult",
+      "passed": true,
+      "issue_codes": []
+    },
+    {
+      "case": "math-04",
+      "stage": "match",
+      "schema": "MatchingResult"
+    },
+    {
+      "case": "en-04",
+      "stage": "extract",
+      "schema": "MaterialResult",
+      "item_count": 1,
+      "subjects": [
+        "en"
+      ],
+      "needs_context": false,
+      "material_status": "content"
+    },
+    {
+      "case": "en-04",
+      "stage": "merge",
+      "schema": "ConsolidatedResult",
+      "item_count": 1,
+      "subjects": [
+        "en"
+      ],
+      "omissions": []
+    },
+    {
+      "case": "en-04",
+      "stage": "review",
+      "schema": "QualityReviewResult",
+      "passed": true,
+      "issue_codes": []
+    },
+    {
+      "case": "en-04",
+      "stage": "match",
+      "schema": "MatchingResult"
+    },
+    {
+      "case": "zh-05",
+      "stage": "extract",
+      "schema": "MaterialResult",
+      "item_count": 0,
+      "subjects": [],
+      "needs_context": true,
+      "material_status": "content"
+    },
+    {
+      "case": "zh-05",
+      "phase": "pipeline_failure",
+      "stage": "group",
+      "unit": "m1",
+      "reason": "coverage",
+      "diagnostics": []
+    },
+    {
+      "case": "zh-05",
+      "phase": "pipeline_failure",
+      "stage": "group",
+      "unit": "m1",
+      "reason": "coverage",
+      "diagnostics": []
+    },
+    {
+      "case": "zh-05",
+      "phase": "pipeline_failure",
+      "stage": "group",
+      "unit": "m1",
+      "reason": "coverage",
+      "diagnostics": []
+    },
+    {
+      "case": "math-05",
+      "stage": "extract",
+      "schema": "MaterialResult",
+      "item_count": 1,
+      "subjects": [
+        "math"
+      ],
+      "needs_context": false,
+      "material_status": "content"
+    },
+    {
+      "case": "math-05",
+      "stage": "merge",
+      "schema": "ConsolidatedResult",
+      "item_count": 1,
+      "subjects": [
+        "math"
+      ],
+      "omissions": []
+    },
+    {
+      "case": "math-05",
+      "stage": "review",
+      "schema": "QualityReviewResult",
+      "passed": true,
+      "issue_codes": []
+    },
+    {
+      "case": "math-05",
+      "stage": "match",
+      "schema": "MatchingResult"
+    },
+    {
+      "case": "en-05",
+      "stage": "extract",
+      "schema": "MaterialResult",
+      "item_count": 1,
+      "subjects": [
+        "en"
+      ],
+      "needs_context": false,
+      "material_status": "content"
+    },
+    {
+      "case": "en-05",
+      "stage": "merge",
+      "schema": "ConsolidatedResult",
+      "item_count": 1,
+      "subjects": [
+        "en"
+      ],
+      "omissions": []
+    },
+    {
+      "case": "en-05",
+      "stage": "review",
+      "schema": "QualityReviewResult",
+      "passed": true,
+      "issue_codes": []
+    },
+    {
+      "case": "en-05",
+      "stage": "match",
+      "schema": "MatchingResult"
+    },
+    {
+      "case": "zh-06",
+      "stage": "extract",
+      "schema": "MaterialResult",
+      "item_count": 1,
+      "subjects": [
+        "zh"
+      ],
+      "needs_context": false,
+      "material_status": "content"
+    },
+    {
+      "case": "zh-06",
+      "stage": "merge",
+      "schema": "ConsolidatedResult",
+      "item_count": 1,
+      "subjects": [
+        "zh"
+      ],
+      "omissions": []
+    },
+    {
+      "case": "zh-06",
+      "stage": "review",
+      "schema": "QualityReviewResult",
+      "passed": true,
+      "issue_codes": []
+    },
+    {
+      "case": "zh-06",
+      "stage": "match",
+      "schema": "MatchingResult"
+    },
+    {
+      "case": "math-06",
+      "stage": "extract",
+      "schema": "MaterialResult",
+      "item_count": 1,
+      "subjects": [
+        "math"
+      ],
+      "needs_context": false,
+      "material_status": "content"
+    },
+    {
+      "case": "math-06",
+      "stage": "merge",
+      "schema": "ConsolidatedResult",
+      "item_count": 1,
+      "subjects": [
+        "math"
+      ],
+      "omissions": []
+    },
+    {
+      "case": "math-06",
+      "stage": "review",
+      "schema": "QualityReviewResult",
+      "passed": true,
+      "issue_codes": []
+    },
+    {
+      "case": "math-06",
+      "stage": "match",
+      "schema": "MatchingResult"
+    },
+    {
+      "case": "en-06",
+      "stage": "extract",
+      "schema": "MaterialResult",
+      "item_count": 1,
+      "subjects": [
+        "en"
+      ],
+      "needs_context": false,
+      "material_status": "content"
+    },
+    {
+      "case": "en-06",
+      "stage": "merge",
+      "schema": "ConsolidatedResult",
+      "item_count": 1,
+      "subjects": [
+        "en"
+      ],
+      "omissions": []
+    },
+    {
+      "case": "en-06",
+      "stage": "review",
+      "schema": "QualityReviewResult",
+      "passed": true,
+      "issue_codes": []
+    },
+    {
+      "case": "en-06",
+      "stage": "match",
+      "schema": "MatchingResult"
+    },
+    {
+      "case": "multi-02",
+      "stage": "extract",
+      "schema": "MaterialResult",
+      "item_count": 2,
+      "subjects": [
+        "en",
+        "math"
+      ],
+      "needs_context": false,
+      "material_status": "content"
+    },
+    {
+      "case": "multi-02",
+      "stage": "merge",
+      "schema": "ConsolidatedResult",
+      "item_count": 2,
+      "subjects": [
+        "en",
+        "math"
+      ],
+      "omissions": []
+    },
+    {
+      "case": "multi-02",
+      "stage": "review",
+      "schema": "QualityReviewResult",
+      "passed": true,
+      "issue_codes": []
+    },
+    {
+      "case": "multi-02",
+      "stage": "match",
+      "schema": "MatchingResult"
+    },
+    {
+      "case": "zh-07",
+      "stage": "extract",
+      "schema": "MaterialResult",
+      "item_count": 0,
+      "subjects": [],
+      "needs_context": true,
+      "material_status": "content"
+    },
+    {
+      "case": "zh-07",
+      "phase": "pipeline_failure",
+      "stage": "group",
+      "unit": "m1",
+      "reason": "coverage",
+      "diagnostics": []
+    },
+    {
+      "case": "zh-07",
+      "phase": "pipeline_failure",
+      "stage": "group",
+      "unit": "m1",
+      "reason": "coverage",
+      "diagnostics": []
+    },
+    {
+      "case": "zh-07",
+      "phase": "pipeline_failure",
+      "stage": "group",
+      "unit": "m1",
+      "reason": "coverage",
+      "diagnostics": []
+    },
+    {
+      "case": "math-07",
+      "stage": "extract",
+      "schema": "MaterialResult",
+      "item_count": 1,
+      "subjects": [
+        "math"
+      ],
+      "needs_context": false,
+      "material_status": "content"
+    },
+    {
+      "case": "math-07",
+      "stage": "merge",
+      "schema": "ConsolidatedResult",
+      "item_count": 1,
+      "subjects": [
+        "math"
+      ],
+      "omissions": []
+    },
+    {
+      "case": "math-07",
+      "stage": "review",
+      "schema": "QualityReviewResult",
+      "passed": true,
+      "issue_codes": []
+    },
+    {
+      "case": "math-07",
+      "stage": "match",
+      "schema": "MatchingResult"
+    },
+    {
+      "case": "en-07",
+      "stage": "extract",
+      "schema": "MaterialResult",
+      "item_count": 1,
+      "subjects": [
+        "en"
+      ],
+      "needs_context": false,
+      "material_status": "content"
+    },
+    {
+      "case": "en-07",
+      "stage": "merge",
+      "schema": "ConsolidatedResult",
+      "item_count": 1,
+      "subjects": [
+        "en"
+      ],
+      "omissions": []
+    },
+    {
+      "case": "en-07",
+      "stage": "review",
+      "schema": "QualityReviewResult",
+      "passed": true,
+      "issue_codes": []
+    },
+    {
+      "case": "en-07",
+      "stage": "match",
+      "schema": "MatchingResult"
+    },
+    {
+      "case": "zh-08",
+      "stage": "extract",
+      "schema": "MaterialResult",
+      "item_count": 1,
+      "subjects": [
+        "zh"
+      ],
+      "needs_context": false,
+      "material_status": "content"
+    },
+    {
+      "case": "zh-08",
+      "stage": "merge",
+      "schema": "ConsolidatedResult",
+      "item_count": 1,
+      "subjects": [
+        "zh"
+      ],
+      "omissions": []
+    },
+    {
+      "case": "zh-08",
+      "stage": "review",
+      "schema": "QualityReviewResult",
+      "passed": true,
+      "issue_codes": []
+    },
+    {
+      "case": "zh-08",
+      "stage": "match",
+      "schema": "MatchingResult"
+    },
+    {
+      "case": "math-08",
+      "stage": "extract",
+      "schema": "MaterialResult",
+      "item_count": 1,
+      "subjects": [
+        "math"
+      ],
+      "needs_context": false,
+      "material_status": "content"
+    },
+    {
+      "case": "math-08",
+      "stage": "merge",
+      "schema": "ConsolidatedResult",
+      "item_count": 1,
+      "subjects": [
+        "math"
+      ],
+      "omissions": []
+    },
+    {
+      "case": "math-08",
+      "stage": "review",
+      "schema": "QualityReviewResult",
+      "passed": true,
+      "issue_codes": []
+    },
+    {
+      "case": "math-08",
+      "stage": "match",
+      "schema": "MatchingResult"
+    },
+    {
+      "case": "en-08",
+      "stage": "extract",
+      "schema": "MaterialResult",
+      "item_count": 1,
+      "subjects": [
+        "en"
+      ],
+      "needs_context": false,
+      "material_status": "content"
+    },
+    {
+      "case": "en-08",
+      "stage": "merge",
+      "schema": "ConsolidatedResult",
+      "item_count": 1,
+      "subjects": [
+        "en"
+      ],
+      "omissions": []
+    },
+    {
+      "case": "en-08",
+      "stage": "review",
+      "schema": "QualityReviewResult",
+      "passed": true,
+      "issue_codes": []
+    },
+    {
+      "case": "en-08",
+      "stage": "match",
+      "schema": "MatchingResult"
+    },
+    {
+      "case": "zh-09",
+      "stage": "extract",
+      "schema": "MaterialResult",
+      "item_count": 0,
+      "subjects": [],
+      "needs_context": true,
+      "material_status": "content"
+    },
+    {
+      "case": "zh-09",
+      "phase": "pipeline_failure",
+      "stage": "group",
+      "unit": "m1",
+      "reason": "coverage",
+      "diagnostics": []
+    },
+    {
+      "case": "zh-09",
+      "phase": "pipeline_failure",
+      "stage": "group",
+      "unit": "m1",
+      "reason": "coverage",
+      "diagnostics": []
+    },
+    {
+      "case": "zh-09",
+      "phase": "pipeline_failure",
+      "stage": "group",
+      "unit": "m1",
+      "reason": "coverage",
+      "diagnostics": []
+    },
+    {
+      "case": "math-09",
+      "stage": "extract",
+      "schema": "MaterialResult",
+      "item_count": 1,
+      "subjects": [
+        "math"
+      ],
+      "needs_context": false,
+      "material_status": "content"
+    },
+    {
+      "case": "math-09",
+      "stage": "merge",
+      "schema": "ConsolidatedResult",
+      "item_count": 1,
+      "subjects": [
+        "math"
+      ],
+      "omissions": []
+    },
+    {
+      "case": "math-09",
+      "stage": "review",
+      "schema": "QualityReviewResult",
+      "passed": true,
+      "issue_codes": []
+    },
+    {
+      "case": "math-09",
+      "stage": "match",
+      "schema": "MatchingResult"
+    },
+    {
+      "case": "en-09",
+      "stage": "extract",
+      "schema": "MaterialResult",
+      "item_count": 1,
+      "subjects": [
+        "en"
+      ],
+      "needs_context": false,
+      "material_status": "content"
+    },
+    {
+      "case": "en-09",
+      "stage": "merge",
+      "schema": "ConsolidatedResult",
+      "item_count": 1,
+      "subjects": [
+        "en"
+      ],
+      "omissions": []
+    },
+    {
+      "case": "en-09",
+      "stage": "review",
+      "schema": "QualityReviewResult",
+      "passed": true,
+      "issue_codes": []
+    },
+    {
+      "case": "en-09",
+      "stage": "match",
+      "schema": "MatchingResult"
+    },
+    {
+      "case": "multi-03",
+      "stage": "extract",
+      "schema": "MaterialResult",
+      "item_count": 2,
+      "subjects": [
+        "en",
+        "zh"
+      ],
+      "needs_context": false,
+      "material_status": "content"
+    },
+    {
+      "case": "multi-03",
+      "stage": "merge",
+      "schema": "ConsolidatedResult",
+      "item_count": 2,
+      "subjects": [
+        "en",
+        "zh"
+      ],
+      "omissions": []
+    },
+    {
+      "case": "multi-03",
+      "stage": "review",
+      "schema": "QualityReviewResult",
+      "passed": true,
+      "issue_codes": []
+    },
+    {
+      "case": "multi-03",
+      "stage": "match",
+      "schema": "MatchingResult"
+    },
+    {
+      "case": "zh-10",
+      "stage": "extract",
+      "schema": "MaterialResult",
+      "item_count": 1,
+      "subjects": [
+        "zh"
+      ],
+      "needs_context": false,
+      "material_status": "content"
+    },
+    {
+      "case": "zh-10",
+      "stage": "merge",
+      "schema": "ConsolidatedResult",
+      "item_count": 1,
+      "subjects": [
+        "zh"
+      ],
+      "omissions": []
+    },
+    {
+      "case": "zh-10",
+      "stage": "review",
+      "schema": "QualityReviewResult",
+      "passed": true,
+      "issue_codes": []
+    },
+    {
+      "case": "zh-10",
+      "stage": "match",
+      "schema": "MatchingResult"
+    },
+    {
+      "case": "math-10",
+      "stage": "extract",
+      "schema": "MaterialResult",
+      "item_count": 1,
+      "subjects": [
+        "math"
+      ],
+      "needs_context": false,
+      "material_status": "content"
+    },
+    {
+      "case": "math-10",
+      "stage": "merge",
+      "schema": "ConsolidatedResult",
+      "item_count": 1,
+      "subjects": [
+        "math"
+      ],
+      "omissions": []
+    },
+    {
+      "case": "math-10",
+      "stage": "review",
+      "schema": "QualityReviewResult",
+      "passed": false,
+      "issue_codes": [
+        "unsupported_by_evidence",
+        "unsupported_by_evidence"
+      ]
+    },
+    {
+      "case": "math-10",
+      "stage": "merge",
+      "schema": "ConsolidatedResult",
+      "item_count": 1,
+      "subjects": [
+        "math"
+      ],
+      "omissions": []
+    },
+    {
+      "case": "math-10",
+      "stage": "review",
+      "schema": "QualityReviewResult",
+      "passed": true,
+      "issue_codes": []
+    },
+    {
+      "case": "math-10",
+      "stage": "match",
+      "schema": "MatchingResult"
+    },
+    {
+      "case": "en-10",
+      "stage": "extract",
+      "schema": "MaterialResult",
+      "item_count": 1,
+      "subjects": [
+        "en"
+      ],
+      "needs_context": false,
+      "material_status": "content"
+    },
+    {
+      "case": "en-10",
+      "stage": "merge",
+      "schema": "ConsolidatedResult",
+      "item_count": 1,
+      "subjects": [
+        "en"
+      ],
+      "omissions": []
+    },
+    {
+      "case": "en-10",
+      "stage": "review",
+      "schema": "QualityReviewResult",
+      "passed": true,
+      "issue_codes": []
+    },
+    {
+      "case": "en-10",
+      "stage": "match",
+      "schema": "MatchingResult"
+    },
+    {
+      "case": "zh-11",
+      "stage": "extract",
+      "schema": "MaterialResult",
+      "item_count": 1,
+      "subjects": [
+        "zh"
+      ],
+      "needs_context": false,
+      "material_status": "content"
+    },
+    {
+      "case": "zh-11",
+      "stage": "merge",
+      "schema": "ConsolidatedResult",
+      "item_count": 1,
+      "subjects": [
+        "zh"
+      ],
+      "omissions": []
+    },
+    {
+      "case": "zh-11",
+      "stage": "review",
+      "schema": "QualityReviewResult",
+      "passed": true,
+      "issue_codes": []
+    },
+    {
+      "case": "zh-11",
+      "stage": "match",
+      "schema": "MatchingResult"
+    },
+    {
+      "case": "math-11",
+      "stage": "extract",
+      "schema": "MaterialResult",
+      "item_count": 1,
+      "subjects": [
+        "math"
+      ],
+      "needs_context": false,
+      "material_status": "content"
+    },
+    {
+      "case": "math-11",
+      "stage": "merge",
+      "schema": "ConsolidatedResult",
+      "item_count": 1,
+      "subjects": [
+        "math"
+      ],
+      "omissions": []
+    },
+    {
+      "case": "math-11",
+      "stage": "review",
+      "schema": "QualityReviewResult",
+      "passed": true,
+      "issue_codes": []
+    },
+    {
+      "case": "math-11",
+      "stage": "match",
+      "schema": "MatchingResult"
+    },
+    {
+      "case": "en-11",
+      "stage": "extract",
+      "schema": "MaterialResult",
+      "item_count": 1,
+      "subjects": [
+        "en"
+      ],
+      "needs_context": false,
+      "material_status": "content"
+    },
+    {
+      "case": "en-11",
+      "stage": "merge",
+      "schema": "ConsolidatedResult",
+      "item_count": 1,
+      "subjects": [
+        "en"
+      ],
+      "omissions": []
+    },
+    {
+      "case": "en-11",
+      "stage": "review",
+      "schema": "QualityReviewResult",
+      "passed": true,
+      "issue_codes": []
+    },
+    {
+      "case": "en-11",
+      "stage": "match",
+      "schema": "MatchingResult"
+    },
+    {
+      "case": "zh-12",
+      "stage": "extract",
+      "schema": "MaterialResult",
+      "item_count": 1,
+      "subjects": [
+        "zh"
+      ],
+      "needs_context": false,
+      "material_status": "content"
+    },
+    {
+      "case": "zh-12",
+      "stage": "merge",
+      "schema": "ConsolidatedResult",
+      "item_count": 1,
+      "subjects": [
+        "zh"
+      ],
+      "omissions": []
+    },
+    {
+      "case": "zh-12",
+      "stage": "review",
+      "schema": "QualityReviewResult",
+      "passed": true,
+      "issue_codes": []
+    },
+    {
+      "case": "zh-12",
+      "stage": "match",
+      "schema": "MatchingResult"
+    },
+    {
+      "case": "math-12",
+      "stage": "extract",
+      "schema": "MaterialResult",
+      "item_count": 1,
+      "subjects": [
+        "math"
+      ],
+      "needs_context": false,
+      "material_status": "content"
+    },
+    {
+      "case": "math-12",
+      "stage": "merge",
+      "schema": "ConsolidatedResult",
+      "item_count": 1,
+      "subjects": [
+        "math"
+      ],
+      "omissions": []
+    },
+    {
+      "case": "math-12",
+      "stage": "review",
+      "schema": "QualityReviewResult",
+      "passed": true,
+      "issue_codes": []
+    },
+    {
+      "case": "math-12",
+      "stage": "match",
+      "schema": "MatchingResult"
+    },
+    {
+      "case": "en-12",
+      "stage": "extract",
+      "schema": "MaterialResult",
+      "item_count": 1,
+      "subjects": [
+        "en"
+      ],
+      "needs_context": false,
+      "material_status": "content"
+    },
+    {
+      "case": "en-12",
+      "stage": "merge",
+      "schema": "ConsolidatedResult",
+      "item_count": 1,
+      "subjects": [
+        "en"
+      ],
+      "omissions": []
+    },
+    {
+      "case": "en-12",
+      "stage": "review",
+      "schema": "QualityReviewResult",
+      "passed": false,
+      "issue_codes": [
+        "vague_name"
+      ]
+    },
+    {
+      "case": "en-12",
+      "stage": "merge",
+      "schema": "ConsolidatedResult",
+      "item_count": 1,
+      "subjects": [
+        "en"
+      ],
+      "omissions": []
+    },
+    {
+      "case": "en-12",
+      "stage": "review",
+      "schema": "QualityReviewResult",
+      "passed": false,
+      "issue_codes": [
+        "vague_name"
+      ]
+    },
+    {
+      "case": "en-12",
+      "phase": "pipeline_failure",
+      "stage": "review",
+      "unit": "review1",
+      "reason": "quality",
+      "diagnostics": []
+    },
+    {
+      "case": "multi-04",
+      "stage": "extract",
+      "schema": "MaterialResult",
+      "item_count": 0,
+      "subjects": [],
+      "needs_context": true,
+      "material_status": "content"
+    },
+    {
+      "case": "multi-04",
+      "phase": "pipeline_failure",
+      "stage": "group",
+      "unit": "t",
+      "reason": "coverage",
+      "diagnostics": []
+    },
+    {
+      "case": "multi-04",
+      "phase": "pipeline_failure",
+      "stage": "group",
+      "unit": "t",
+      "reason": "coverage",
+      "diagnostics": []
+    },
+    {
+      "case": "multi-04",
+      "phase": "pipeline_failure",
+      "stage": "group",
+      "unit": "t",
+      "reason": "coverage",
+      "diagnostics": []
+    }
+  ],
+  "diagnostic_results": [],
+  "exit_code": 1
+}

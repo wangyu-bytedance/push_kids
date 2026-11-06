@@ -1,0 +1,11 @@
+--- review03/tests/unit/test_staged_analysis.py
++++ review04/tests/unit/test_staged_analysis.py
+@@ -72,7 +72,7 @@
+         REVIEW_INSTRUCTIONS,
+     )
+ 
+-    assert PIPELINE_REVISION == "staged-20261031-08"
++    assert PIPELINE_REVISION == "staged-20261031-09"
+     for instructions in (
+         EXTRACT_INSTRUCTIONS,
+         MERGE_INSTRUCTIONS,

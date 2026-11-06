@@ -1,0 +1,70 @@
+TAP version 13
+# Subtest: activity workday hydrates and saves uniform time without weekday slots
+ok 1 - activity workday hydrates and saves uniform time without weekday slots
+  ---
+  duration_ms: 4.7075
+  type: 'test'
+  ...
+# Subtest: switching modes preserves unsaved per-day draft and confirms saved heterogenous replacement
+ok 2 - switching modes preserves unsaved per-day draft and confirms saved heterogenous replacement
+  ---
+  duration_ms: 1.545083
+  type: 'test'
+  ...
+# Subtest: activity workday validation, readonly, duplicate save and failure recovery
+ok 3 - activity workday validation, readonly, duplicate save and failure recovery
+  ---
+  duration_ms: 1.547833
+  type: 'test'
+  ...
+# Subtest: calendar workday roundtrip keeps series start date and exclusive repeat flags
+ok 4 - calendar workday roundtrip keeps series start date and exclusive repeat flags
+  ---
+  duration_ms: 2.808166
+  type: 'test'
+  ...
+# Subtest: calendar activity source opens its own settings editor
+ok 5 - calendar activity source opens its own settings editor
+  ---
+  duration_ms: 1.689667
+  type: 'test'
+  ...
+# Subtest: calendar readonly blocks changes; failed writes retain mode, time and inline error
+ok 6 - calendar readonly blocks changes; failed writes retain mode, time and inline error
+  ---
+  duration_ms: 1.76875
+  type: 'test'
+  ...
+# Subtest: closing a heterogeneous replacement confirmation cannot submit its stale draft
+ok 7 - closing a heterogeneous replacement confirmation cannot submit its stale draft
+  ---
+  duration_ms: 1.843541
+  type: 'test'
+  ...
+# Subtest: returning to weekday mode submits the original distinct slots with explicit workday false
+ok 8 - returning to weekday mode submits the original distinct slots with explicit workday false
+  ---
+  duration_ms: 1.151208
+  type: 'test'
+  ...
+# Subtest: coverage warning survives cached day selection and avoids false whole-week empty
+ok 9 - coverage warning survives cached day selection and avoids false whole-week empty
+  ---
+  duration_ms: 2.936125
+  type: 'test'
+  ...
+# Subtest: Today exposes unsupported workday data and expands its activity warning
+ok 10 - Today exposes unsupported workday data and expands its activity warning
+  ---
+  duration_ms: 2.359042
+  type: 'test'
+  ...
+1..10
+# tests 10
+# suites 0
+# pass 10
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 73.489375

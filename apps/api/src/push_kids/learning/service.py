@@ -12,7 +12,7 @@ from sqlalchemy import delete, func, select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
-from push_kids.agent_processing.checkpoints import purge_stages
+from push_kids.agent_processing.checkpoints import purge_decision_stages, purge_stages
 from push_kids.agent_processing.contracts import (
     MATERIAL_FINGERPRINT_KEY,
     AnalysisOutputExhaustedError,
@@ -954,10 +954,34 @@ class LearningService:
     @classmethod
     def retry(cls, db: Session, family_id: str, submission_id: str) -> SubmissionView:
         # Retry re-runs an existing failed submission; archiving does not freeze it (`BHV-025`).
-        submission = cls._submission(db, family_id, submission_id)
+        scope = cls._submission(db, family_id, submission_id)
+        family = db.scalar(
+            select(Family)
+            .where(Family.id == family_id)
+            .with_for_update()
+            .execution_options(populate_existing=True)
+        )
+        child = db.scalar(
+            select(Child)
+            .where(Child.id == scope.child_id, Child.family_id == family_id)
+            .with_for_update()
+            .execution_options(populate_existing=True)
+        )
+        if (family is not None and family.status != "active") or child is None or child.deleting:
+            raise ConflictError("家庭或孩子正在删除，不能重试分析")
+        job = db.scalar(
+            select(AgentJob)
+            .where(
+                AgentJob.submission_id == submission_id,
+                AgentJob.family_id == family_id,
+            )
+            .with_for_update()
+            .execution_options(populate_existing=True)
+        )
+        submission = cls._submission(db, family_id, submission_id, for_update=True)
         if submission.state != SubmissionState.failed.value:
             raise ConflictError("只有失败的分析可以重试")
-        job = db.scalar(select(AgentJob).where(AgentJob.submission_id == submission.id))
+        purge_decision_stages(db, family_id, str(child.id), submission_id)
         if job is None:
             job = AgentJob(family_id=family_id, submission_id=submission.id)
             db.add(job)
@@ -966,6 +990,7 @@ class LearningService:
             job.attempts = 0
             job.available_at = utcnow()
             job.error_message = None
+            job.lease_until = None
         submission.state = SubmissionState.queued.value
         submission.error_code = None
         submission.error_message = None
@@ -1249,7 +1274,12 @@ class LearningService:
             )
         if not data.manual_entry and coverage_enabled:
             apply_confirmed_coverage(
-                db, family_id, str(submission.child_id), stored_proposal, coverage_confirmed
+                db,
+                family_id,
+                str(submission.child_id),
+                stored_proposal,
+                coverage_confirmed,
+                reviewed_on=reviewed_on,
             )
         data.proposal.coverage_matches = []
         if data.manual_entry:

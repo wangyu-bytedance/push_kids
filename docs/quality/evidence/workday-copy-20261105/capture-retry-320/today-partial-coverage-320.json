@@ -1,0 +1,68 @@
+{
+  "route": "pages/today/index",
+  "viewport": {
+    "width": 430,
+    "height": 932,
+    "screenHeight": 932,
+    "pixelRatio": 3
+  },
+  "base_library": "3.17.4",
+  "nodes": [
+    {
+      "selector": ".workday-status",
+      "left": 100.609375,
+      "right": 390,
+      "top": 614,
+      "bottom": 636,
+      "width": 289.390625,
+      "height": 22,
+      "fontSize": "14px",
+      "lineHeight": "22.4px"
+    },
+    {
+      "selector": ".sec-body",
+      "left": 20,
+      "right": 410,
+      "top": 661,
+      "bottom": 748,
+      "width": 390,
+      "height": 87,
+      "fontSize": "16px",
+      "lineHeight": "25.6px"
+    },
+    {
+      "selector": ".tl-card",
+      "left": 86,
+      "right": 410,
+      "top": 661,
+      "bottom": 735,
+      "width": 324,
+      "height": 74,
+      "fontSize": "16px",
+      "lineHeight": "25.6px"
+    },
+    {
+      "selector": ".page",
+      "left": 0,
+      "right": 430,
+      "top": 94,
+      "bottom": 868,
+      "width": 430,
+      "height": 774,
+      "fontSize": "16px",
+      "lineHeight": "25.6px"
+    }
+  ],
+  "mode": {},
+  "source": "native wx.createSelectorQuery; synthetic fixtures; production WXML/WXSS exact",
+  "errors": [
+    "wrong viewport",
+    "horizontal overflow: .workday-status",
+    "horizontal overflow: .sec-body",
+    "horizontal overflow: .tl-card",
+    "horizontal overflow: .page"
+  ],
+  "state": "partial-coverage",
+  "host": "today",
+  "screenshot_status": "NOT_RUN_AFTER_CAPTURE_FAILURE: App.captureScreenshot timed out"
+}

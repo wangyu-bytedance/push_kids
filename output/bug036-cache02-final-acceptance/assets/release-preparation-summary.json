@@ -1,0 +1,42 @@
+{
+  "captured_at": "2026-11-01T18:13:17+08:00",
+  "stage": "FROZEN_CANDIDATE_PREPARED_NOT_DEPLOYED",
+  "actual_backend_version": null,
+  "candidate": "dist/release-20261101-bug036-cache02-01",
+  "manifest_sha256": "a07c0bf32a85afa80c1d69485d0c7d203dca663dddf10cd26f2c88c5c68f612b",
+  "payload_files": 154,
+  "payload_bytes": 1551631,
+  "approved_changed_files": 10,
+  "pipeline_revision": "staged-20261101-10",
+  "prompt_revision": "child-aware-history-agent-20261031-13",
+  "unknown_payload_files": [],
+  "checks": {
+    "payload-ruff.log": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18",
+    "payload-format.log": "16006ccc54d042d314cab75dd45b99fd6bc649a8eef755d9c74562102b097290",
+    "payload-mypy.log": "3b1669994344850e03dd6f3581a1cca3a79f8a8d6ef16d2a96dd0c7b0e58ab69",
+    "candidate-architecture.log": "7105715975112c0f75ea91c4858d4fc110bbb0f05180acc25d94100f1c5433a0",
+    "candidate-backend-first.log": "68fd7166132b49e2314a1b21ea9eb05fecec920f946fd6cc830130f281ef70da",
+    "candidate-fixture-recheck.log": "0affb012b3133ae7c558c32de449cecbb360981aa11c0b1483675dbd363723b6",
+    "candidate-backend.log": "6ae121d85f00cac0eeb6f636e12cb5e6b0c51c1393b21d1f905ad921304010ec",
+    "workspace-ruff.log": "3c13ce9fcad2b51577413d0669eceb503925aedcdd7a754349594fac0b0ca608",
+    "workspace-format.log": "e44f8e454165bd1977a7cca9983083de856fea9fef21535b7f638c70c7bc88d7",
+    "dry-run.log": "44ce3e55543404a60886b31b05563b7352c4fc6e3b5fdb53b9d586e7e9db871a",
+    "candidate-mysql-migration.log": "ea9ede948cbb2d98bd2721e9202e1ce3b4f80cc070cd2c56427e6735ecf85f10",
+    "candidate-mysql-current.log": "70a0b1f2306647ce8fb231ba03fffd21ec6c5ed69f0774557540463a6c27e7f3",
+    "candidate-mysql-schema.log": "be6b87f3901568e2a15962040adf1b689cf7eb2c3e6eb2f6616fb0ad3c8e9a3a",
+    "candidate-mysql-staged.log": "ea3f73b3de8ca3ba1274b5babcc4cea2d32f969f1830c0e3c2c5ef8b90b9d007",
+    "candidate-mysql-summary.json": "eb894f778766253069c5a48fb8e6b6cae1270f458756706f4b73cb4ad317e96f",
+    "container-build.log": "f7ec2cc3032873dda24564d4d378ff5a3e8184a005902d13116e0a12e37b2129"
+  },
+  "backend_summary": "857 passed, 52 skipped, 108 warnings in 111.59s (0:01:51)",
+  "mysql": {
+    "scope": "frozen cache02 candidate only, synthetic disposable schema",
+    "charset": "utf8mb4",
+    "mysql_version": "5.7.18-cynos-2.1.14-log",
+    "migration": 0,
+    "current": 0,
+    "schema": 0,
+    "staged": 0,
+    "disposed": true
+  }
+}

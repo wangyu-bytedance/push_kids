@@ -1,0 +1,78 @@
+{
+  "date": "2026-11-01",
+  "authorization": "我已登录微信开发者工具，请继续操作",
+  "stage": "LOGIN_PREVIEW_NATIVE_PASS_UPLOAD_BLOCKED_BUSINESS_ACCOUNT_SMOKE",
+  "login": {
+    "result": "PASS",
+    "official_response": {"login": true},
+    "command_ids": ["28a91659366d5a9bd4f3ce2198cad980", "c49442488f7897846f6a2ef237fc344d"],
+    "first_resumed_false": "8d4431728537168f28f72da031793583",
+    "current_http_port": 28158,
+    "note": "User login became effective after first observation; no authentication bypass"
+  },
+  "preview": {
+    "result": "PASS",
+    "command_id": "ad781f4b921fe926f296468ee8acf80d",
+    "exit_code": 0,
+    "compiled_bytes": 1191019,
+    "project": "dist/client-release-20261031-0.1.17/project",
+    "appid": "wx5d2e0014690bf285",
+    "receipt": "preview-resumed-info.json",
+    "qr": "preview-resumed-qr.png",
+    "initial_connection_failure": {
+      "command_id": "125cdfa067c574e4330bb906dc129359",
+      "exit_code": 255,
+      "classification": "FAIL_ENVIRONMENT_DEVTOOLS_RESTARTED_BY_PARALLEL_WORK",
+      "message": "wait IDE port timeout",
+      "resolution": "Observed current official instance and used28158 without stopping unrelated project"
+    }
+  },
+  "cloud": {
+    "control_plane": "039 normal/100%/1, PUBLIC absent, MINIAPP/OA",
+    "health": "PASS_REAL_WECHAT_LIVE_READY200",
+    "tested_real_accounts": 1,
+    "focus_validation": "PASS_422_OVERLENGTH_404_UNKNOWN_VISIT",
+    "confirmed_photo_available": false,
+    "positive_focus_pagination": "NOT_RUN",
+    "two_families_non_owner": "NOT_RUN",
+    "writes": 0,
+    "evidence": "cloud-smoke-resumed02.json"
+  },
+  "native": {
+    "result": "PASS_GEOMETRY",
+    "total_states": 42,
+    "new_states": 28,
+    "actual_viewports": ["320x568", "390x844", "430x932"],
+    "hosts": ["standalone", "embedded"],
+    "commands": ["bc25f440c32671ea62208a5fc5c9d942", "954a028ee0d405f1ae460cda215821f2"],
+    "matrix_evidence": "native-matrix-resumed.json",
+    "method_and_computer_use_evidence": "resumed-ui-actions.json",
+    "device_accessibility": "NOT_RUN"
+  },
+  "source": {
+    "files": 168,
+    "manifest_sha256": "04c6668a20a0f99622c78424b4d7c5ba07aadc1fd515f20a494e0e4cfcbb2adb",
+    "matches_frozen": true,
+    "latest_audit_command_id": "95a73f98db0cc4cfc471197810b4bdd2",
+    "production_changed": false,
+    "unrelated_tasks": "BUG036 local and BUG037 excluded from frozen upload candidate"
+  },
+  "version": {
+    "released_baseline": "0.1.16",
+    "candidate": "0.1.17",
+    "upload_attempted": false,
+    "bumped": false
+  },
+  "remaining_gate": "docs/deploy/FRONTEND-RELEASE.md section2: new focus business path and two real family/photo-owner smoke",
+  "final_static_checks": {
+    "command_id": "e72813092165628dd91a4a9de152a82e",
+    "exit_code": 0,
+    "architecture": "ARCHITECTURE_VALID policies=4 modules=151 (runtime/lazy DAG)",
+    "design": "DESIGN_EVIDENCE_VALID",
+    "miniprogram": "MINIPROGRAM_VALID pages=17 source_bytes=1233761",
+    "git_diff_check": "PASS",
+    "document_closure": "resumed-closure.json",
+    "local_links_checked": 715
+  },
+  "git_commit_push": "NOT_RUN"
+}

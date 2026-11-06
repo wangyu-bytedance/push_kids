@@ -1,17 +1,17 @@
 # UI-014 — 家庭与孩子上下文切换
 
-- Status: `PROPOSED / NOT IMPLEMENTED`
+- Status: `CANCELLED / NOT IMPLEMENTED`
 - Related Feature: `FEAT-002`
-- Related Spec: `SPEC-20260911-MULTI-FAMILY-06`
+- Related Spec: [CANCELLED / SPEC-20260911-MULTI-FAMILY-06](../../../../specs/rejected/FEAT-002-MULTI-FAMILY-CHILD-TENANT-ISOLATION.md)
+- Closure: 2026-11-05，产品负责人当前会话明确“这个spec可以关闭了，不需要这个功能。”
 - Baseline: `FDB-20260906-03`（PKDS-2.0「纸 · 芽」）
 - Engineering contract: 实现前读取最新 approved FEC
-- Design revision: `DREV-20260906-MULTI-FAMILY-02`（PROPOSED）
+- Design revision: `DREV-20260906-MULTI-FAMILY-02`（CANCELLED，未批准/实施）
 - Last reviewed artifact date: 2026-09-06
 - Editable design source / approval snapshot: `PENDING`
 - Waiver: `none`
 
-> 本文是审批草案，不是当前实现。当前小程序只支持单 active family，家庭内孩子档案管理由
-> UI-015 提供。没有 repository-native editable source、approval snapshot 和 Spec 明确批准前不得实现。
+> 本文保留已取消的历史设计草案，不再等待审批或列为当前发布门禁。当前小程序只支持单 active family，家庭内孩子档案管理由 UI-015 提供，已有家庭/孩子隔离继续有效。下列交互与验收矩阵均未实施；重新启动须另立明确 Spec/Design Revision 并重新批准。
 
 ## Design intent
 
@@ -96,6 +96,8 @@ stateDiagram-v2
 - 不新增品牌色、字体、装饰图片或平行的孩子档案组件。
 
 ## Approval gate
+
+以下为取消前的历史清单，2026-11-05起不再推进；取消不等于这些检查通过。
 
 - [ ] `SPEC-20260911-MULTI-FAMILY-06` approved。
 - [ ] repository-native source 和 `DREV-20260906-MULTI-FAMILY-02` approval snapshot approved。

@@ -1,18 +1,22 @@
 # FEAT-013 — 学年升年级建议与家长共享确认
 
+2026-10-26开发归档：已交付037后端/0.1.16客户端所覆盖的需求按用户批准规则标记开发DONE，验收缺项独立保留；后续BUG-035和旅行导入精简尚未交付，继续active。当前归档和待验入口见[Spec状态清单](../../../specs/STATUS.md)，依据为[治理Spec](../../../specs/completed/GOV-002-CLOUD-DELIVERY-DEVELOPMENT-COMPLETION.md)。本轮不改产品合同、测试结论、设计或发布阶段。
+
+2026-10-25交付revision CLIENT-0.1.16-UPLOAD-01：已实现客户端随0.1.16开发上传（1178991字节），用户已确认旅行照片双账号隔离；未体验/审核/正式发布。产品、真机和可访问性未完成项仍开放。[发布记录](../../deploy/releases/20261025-latest-client-upload.md)。
+
 - Feature ID: `FEAT-013`
-- Status: `SCHEMA_0025_MIGRATED / BACKEND_037_NORMAL_100_PERCENT / CLIENT_LOCAL / VERIFYING`
-- Current-state revision: `FEAT-STATE-20261024-ANNUAL-GRADE-DEPLOY-10`
+- Status: `SCHEMA_0025_MIGRATED / BACKEND_037_NORMAL_100_PERCENT / DEVELOPMENT_VERSION_0.1.16_UPLOADED / DEVELOPMENT_DONE / VERIFICATION_PENDING`
+- Current-state revision: `FEAT-STATE-20261026-ANNUAL-GRADE-DEVELOPMENT-DONE-12`
 - Owner: 产品负责人（用户）
-- Last updated: 2026-10-24
-- Task Spec: [Spec02 / Architecture02](../../../specs/active/FEAT-013-ANNUAL-GRADE-PROMOTION.md)，用户“好的 按照这个方案落地”批准，当前VERIFYING。
+- Last updated: 2026-10-26
+- Task Spec: [Spec02 / Architecture02](../../../specs/completed/FEAT-013-ANNUAL-GRADE-PROMOTION.md)，用户“好的 按照这个方案落地”批准，开发DONE、验收待补。
 - Verification: [本轮证据与未验收项](../../quality/evidence/ANNUAL-GRADE-IMPLEMENTATION-20261024.md)。
 
 2026-10-24发布回归：MySQL5.7.44年级4项及SQLite年级/永久替代迁移4项通过；历史永久替代测试改用独占0022库后13项通过，0025保护未放松。[本轮发布验证](../../quality/evidence/latest-backend-release-20261024/README.md)不代替产品/设备验收。
 
-生产0025已迁移，旧年级不变、未伪造学年确认；CRUD启动校验Spec01/Architecture01获批并验证，修复后的037 normal/100%，实际微信年级候选GET200。036失败保留；035 0%且不能在0025重启。客户端只在本地，用户年级确认/原生端到端与设备门禁未全部满足，不代表完整产品验收通过。实际阶段见[本轮发布记录](../../deploy/releases/20261024-latest-backend-test-deployment.md)。
+生产0025已迁移，旧年级不变、未伪造学年确认；CRUD启动校验Spec01/Architecture01获批并验证，修复后的037 normal/100%，实际微信年级候选GET200。036失败保留；035 0%且不能在0025重启。客户端已随0.1.16开发上传、未体验/正式发布；用户年级确认/原生端到端与设备门禁未全部满足，不代表完整产品验收通过。实际阶段见[本轮发布记录](../../deploy/releases/20261024-latest-backend-test-deployment.md)。
 
-当前呈现增量：[年级弹窗精简Spec01](../../../specs/active/FEAT-013-GRADE-DIALOG-SIMPLIFICATION.md)与[DREV02](../../design/frontend/prototypes/DREV-20261024-ANNUAL-GRADE-PROMOTION-02/FRONTEND-SPEC.md)于2026-10-24获用户“继续”批准并本地实现，只保留孩子名标题、picker和并排操作，必要时显示简短恢复提示。最终全前端327项、定向53项、三尺寸51组原生及实际选级/失败重试/稍后通过；真实设备/可访问性及全业务原生端到端边界见[实施证据](../../quality/evidence/GRADE-DIALOG-SIMPLIFICATION-IMPLEMENTATION-20261024.md)。主Spec02领域规则不变。
+当前呈现增量：[年级弹窗精简Spec01](../../../specs/completed/FEAT-013-GRADE-DIALOG-SIMPLIFICATION.md)与[DREV02](../../design/frontend/prototypes/DREV-20261024-ANNUAL-GRADE-PROMOTION-02/FRONTEND-SPEC.md)于2026-10-24获用户“继续”批准并本地实现，只保留孩子名标题、picker和并排操作，必要时显示简短恢复提示。最终全前端327项、定向53项、三尺寸51组原生及实际选级/失败重试/稍后通过；真实设备/可访问性及全业务原生端到端边界见[实施证据](../../quality/evidence/GRADE-DIALOG-SIMPLIFICATION-IMPLEMENTATION-20261024.md)。主Spec02领域规则不变。
 
 ## Current user/system behavior
 
@@ -43,11 +47,11 @@ children拥有纯grade_policy和grade_confirmation用例，现有profile service
 - 规则/API/迁移/并发/规模/前端会话自动化已执行，具体命令和结果见[证据](../../quality/evidence/ANNUAL-GRADE-IMPLEMENTATION-20261024.md)。
 - 当前弹窗采用[DREV02/33张批准导出](../../design/frontend/snapshots/UI-015/DREV-20261024-ANNUAL-GRADE-PROMOTION-02/APPROVAL.md)；[DREV01/57张冻结导出](../../design/frontend/snapshots/UI-015/DREV-20261024-ANNUAL-GRADE-PROMOTION-01/APPROVAL.md)保留初版呈现与档案表单事实，仅追加弹窗范围Superseded by指针。两轮HTML均不证明原生/设备验收。
 - 解锁后已在官方开发者工具采集320×568、390×844、430×932各17态节点/截图、三尺寸档案九年级/保存控件与系统picker打开/取消；320错误提示已实际滚动核验完整可读。修正按钮默认缩宽、同步宿主通知递归及320档案保存按钮不足44px。随后修复恢复/互斥/冲突/在途竞态，前端313项及定向53项通过，[独立只读评审](../../quality/evidence/grade-confirmation-20261024/independent-review.md)PASS。修复后原生端到端、字体放大/读屏、iOS/Android和双家长旧端仍待验收，不能用合成呈现替代真实设备。
-- 本任务未提交、推送、生产迁移、部署或上传。工作区0025不代表线上Schema升级；生产阶段以既有发布记录为准。Spec保持active/VERIFYING，不满足DONE门禁。
+- 本任务对应Schema0025及后端037已交付，客户端包含在0.1.16开发上传中；主Spec与弹窗精简Spec按用户2026-10-26规则开发DONE并归档completed。上述未执行的原生/真机/可访问性验收继续保留，不记为PASS。本次只更新文档，未再次部署或上传。
 
 ## Change References
 
 | Date | Final current-state change | Spec | Verification / release |
 |---|---|---|---|
-| 2026-10-24 | DREV02局部精简：孩子名标题、单picker、并排操作与行内恢复提示，保留全部确认业务规则 | [精简Spec01](../../../specs/active/FEAT-013-GRADE-DIALOG-SIMPLIFICATION.md) | [实施证据](../../quality/evidence/GRADE-DIALOG-SIMPLIFICATION-IMPLEMENTATION-20261024.md)；327/53项及三尺寸51组、实际局部交互通过，真实设备/可访问性待齐，未发布 |
-| 2026-10-24 | Q1–Q18收敛并批准Spec02/Architecture02/DREV01；本地实现确定性建议、共享确认、独立会话弹窗与显式人工定级；原生呈现及四项独立评审修复 | [Spec02](../../../specs/active/FEAT-013-ANNUAL-GRADE-PROMOTION.md) | [实施证据](../../quality/evidence/ANNUAL-GRADE-IMPLEMENTATION-20261024.md)；独立review通过，原生端到端/设备验收待补，未发布 |
+| 2026-10-24 | DREV02局部精简：孩子名标题、单picker、并排操作与行内恢复提示，保留全部确认业务规则 | [精简Spec01](../../../specs/completed/FEAT-013-GRADE-DIALOG-SIMPLIFICATION.md) | [实施证据](../../quality/evidence/GRADE-DIALOG-SIMPLIFICATION-IMPLEMENTATION-20261024.md)；327/53项及三尺寸51组、实际局部交互通过，真实设备/可访问性待齐，未发布 |
+| 2026-10-24 | Q1–Q18收敛并批准Spec02/Architecture02/DREV01；本地实现确定性建议、共享确认、独立会话弹窗与显式人工定级；原生呈现及四项独立评审修复 | [Spec02](../../../specs/completed/FEAT-013-ANNUAL-GRADE-PROMOTION.md) | [实施证据](../../quality/evidence/ANNUAL-GRADE-IMPLEMENTATION-20261024.md)；独立review通过，原生端到端/设备验收待补，未发布 |

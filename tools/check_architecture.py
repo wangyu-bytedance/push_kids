@@ -74,6 +74,7 @@ def dependency_violations(graph: dict[str, set[str]]) -> list[str]:
 def main() -> None:
     policy_files = [
         SOURCE / "planning" / "domain.py",
+        SOURCE / "activities" / "workday.py",
         SOURCE / "knowledge" / "normalization.py",
         SOURCE / "notifications" / "domain.py",
         SOURCE / "footprints" / "policies.py",

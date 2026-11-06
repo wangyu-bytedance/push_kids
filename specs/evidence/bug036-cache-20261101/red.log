@@ -1,0 +1,624 @@
+.....F........F...........FF..FF...............F.FFFF.....F              [100%]
+=================================== FAILURES ===================================
+_________________ test_uncertain_reuse_never_falls_back_to_new _________________
+
+    def test_uncertain_reuse_never_falls_back_to_new():
+        provider = HistoryReview("uncertain")
+        with pytest.raises(StageFailure) as caught:
+            run(provider, history_input())
+        assert (caught.value.stage, caught.value.unit) == ("reuse", "reuse")
+>       assert caught.value.retryable is False
+E       AssertionError: assert True is False
+E        +  where True = StageFailure('validation').retryable
+E        +    where StageFailure('validation') = <ExceptionInfo StageFailure('validation') tblen=6>.value
+
+tests/unit/test_staged_proposal_recovery.py:134: AssertionError
+___________ test_review_cannot_hide_supported_knowledge_in_omissions ___________
+
+    def test_review_cannot_hide_supported_knowledge_in_omissions():
+        provider = TwoTargets(omit=True)
+        queried = []
+        with pytest.raises(StageFailure, match="quality") as caught:
+            run(provider, search=lambda r: queried.append(r) or [])
+>       assert caught.value.retryable is False
+E       AssertionError: assert True is False
+E        +  where True = StageFailure('quality').retryable
+E        +    where StageFailure('quality') = <ExceptionInfo StageFailure('quality') tblen=6>.value
+
+tests/unit/test_staged_proposal_recovery.py:304: AssertionError
+_ test_stage_cache_distinguishes_recoverable_results_from_final_refusals[review1-False-False-False] _
+
+seeded = False, unit = 'review1', verdict = False, reusable = False
+
+    @pytest.mark.parametrize("seeded", [False, True])
+    @pytest.mark.parametrize(
+        "unit,verdict,reusable",
+        [
+            ("review0", False, True),
+            ("review1", False, False),
+            ("review1", True, True),
+            ("reuse", "uncertain", False),
+            ("reuse", "accept", True),
+            ("reuse", "reject", True),
+        ],
+    )
+    def test_stage_cache_distinguishes_recoverable_results_from_final_refusals(
+        seeded, unit, verdict, reusable
+    ):
+        from push_kids.agent_processing.stage_contracts import PIPELINE_REVISION
+    
+        if unit == "reuse":
+            value = ReuseReviewResult(
+                decisions=[ReuseDecision(candidate="i0", match="h0", verdict=verdict, basis="范围不同")]
+            )
+            stage = "reuse"
+        else:
+            value = QualityReviewResult(
+                passed=verdict,
+                issues=[] if verdict else [QualityIssue(code="vague_name", items=["i0"], basis="范围不明")],
+            )
+            stage = "review"
+    
+        class Checkpoints:
+            def __init__(self):
+                self.digest = fingerprint(
+                    {"revision": PIPELINE_REVISION, "parameters": "test-1",
+                     "payload": {}, "context": None, "images": []}
+                )
+                self.value = value.model_dump() if seeded else None
+                self.writes = []
+    
+            def get(self, requested_unit, digest):
+                assert (requested_unit, digest) == (unit, self.digest)
+                return self.value
+    
+            def put(self, requested_unit, digest, result, **kwargs):
+                assert (requested_unit, digest) == (unit, self.digest)
+                self.writes.append(result)
+                self.value = result
+    
+        class Provider(StageFake):
+            async def generate_stage(self, *args):
+                self.calls["stage"] += 1
+                return value
+    
+        store, provider = Checkpoints(), Provider()
+        pipeline = StagedPipeline(provider, AnalysisTrace.disabled(), store)
+        result = asyncio.run(
+            pipeline._call(stage, unit, "", {}, type(value), [], monotonic() + 10, lambda _: None)
+        )
+        assert result == value
+        assert provider.calls["stage"] == (0 if seeded and reusable else 1)
+>       assert len(store.writes) == (1 if reusable and not seeded else 0)
+E       AssertionError: assert 1 == 0
+E        +  where 1 = len([{'issues': [{'basis': '范围不明', 'code': 'vague_name', 'items': ['i0']}], 'passed': False}])
+E        +    where [{'issues': [{'basis': '范围不明', 'code': 'vague_name', 'items': ['i0']}], 'passed': False}] = <test_staged_proposal_recovery.test_stage_cache_distinguishes_recoverable_results_from_final_refusals.<locals>.Checkpoints object at 0x10c96ffe0>.writes
+
+tests/unit/test_staged_proposal_recovery.py:564: AssertionError
+_ test_stage_cache_distinguishes_recoverable_results_from_final_refusals[review1-False-False-True] _
+
+seeded = True, unit = 'review1', verdict = False, reusable = False
+
+    @pytest.mark.parametrize("seeded", [False, True])
+    @pytest.mark.parametrize(
+        "unit,verdict,reusable",
+        [
+            ("review0", False, True),
+            ("review1", False, False),
+            ("review1", True, True),
+            ("reuse", "uncertain", False),
+            ("reuse", "accept", True),
+            ("reuse", "reject", True),
+        ],
+    )
+    def test_stage_cache_distinguishes_recoverable_results_from_final_refusals(
+        seeded, unit, verdict, reusable
+    ):
+        from push_kids.agent_processing.stage_contracts import PIPELINE_REVISION
+    
+        if unit == "reuse":
+            value = ReuseReviewResult(
+                decisions=[ReuseDecision(candidate="i0", match="h0", verdict=verdict, basis="范围不同")]
+            )
+            stage = "reuse"
+        else:
+            value = QualityReviewResult(
+                passed=verdict,
+                issues=[] if verdict else [QualityIssue(code="vague_name", items=["i0"], basis="范围不明")],
+            )
+            stage = "review"
+    
+        class Checkpoints:
+            def __init__(self):
+                self.digest = fingerprint(
+                    {"revision": PIPELINE_REVISION, "parameters": "test-1",
+                     "payload": {}, "context": None, "images": []}
+                )
+                self.value = value.model_dump() if seeded else None
+                self.writes = []
+    
+            def get(self, requested_unit, digest):
+                assert (requested_unit, digest) == (unit, self.digest)
+                return self.value
+    
+            def put(self, requested_unit, digest, result, **kwargs):
+                assert (requested_unit, digest) == (unit, self.digest)
+                self.writes.append(result)
+                self.value = result
+    
+        class Provider(StageFake):
+            async def generate_stage(self, *args):
+                self.calls["stage"] += 1
+                return value
+    
+        store, provider = Checkpoints(), Provider()
+        pipeline = StagedPipeline(provider, AnalysisTrace.disabled(), store)
+        result = asyncio.run(
+            pipeline._call(stage, unit, "", {}, type(value), [], monotonic() + 10, lambda _: None)
+        )
+        assert result == value
+>       assert provider.calls["stage"] == (0 if seeded and reusable else 1)
+E       assert 0 == 1
+
+tests/unit/test_staged_proposal_recovery.py:563: AssertionError
+_ test_stage_cache_distinguishes_recoverable_results_from_final_refusals[reuse-uncertain-False-False] _
+
+seeded = False, unit = 'reuse', verdict = 'uncertain', reusable = False
+
+    @pytest.mark.parametrize("seeded", [False, True])
+    @pytest.mark.parametrize(
+        "unit,verdict,reusable",
+        [
+            ("review0", False, True),
+            ("review1", False, False),
+            ("review1", True, True),
+            ("reuse", "uncertain", False),
+            ("reuse", "accept", True),
+            ("reuse", "reject", True),
+        ],
+    )
+    def test_stage_cache_distinguishes_recoverable_results_from_final_refusals(
+        seeded, unit, verdict, reusable
+    ):
+        from push_kids.agent_processing.stage_contracts import PIPELINE_REVISION
+    
+        if unit == "reuse":
+            value = ReuseReviewResult(
+                decisions=[ReuseDecision(candidate="i0", match="h0", verdict=verdict, basis="范围不同")]
+            )
+            stage = "reuse"
+        else:
+            value = QualityReviewResult(
+                passed=verdict,
+                issues=[] if verdict else [QualityIssue(code="vague_name", items=["i0"], basis="范围不明")],
+            )
+            stage = "review"
+    
+        class Checkpoints:
+            def __init__(self):
+                self.digest = fingerprint(
+                    {"revision": PIPELINE_REVISION, "parameters": "test-1",
+                     "payload": {}, "context": None, "images": []}
+                )
+                self.value = value.model_dump() if seeded else None
+                self.writes = []
+    
+            def get(self, requested_unit, digest):
+                assert (requested_unit, digest) == (unit, self.digest)
+                return self.value
+    
+            def put(self, requested_unit, digest, result, **kwargs):
+                assert (requested_unit, digest) == (unit, self.digest)
+                self.writes.append(result)
+                self.value = result
+    
+        class Provider(StageFake):
+            async def generate_stage(self, *args):
+                self.calls["stage"] += 1
+                return value
+    
+        store, provider = Checkpoints(), Provider()
+        pipeline = StagedPipeline(provider, AnalysisTrace.disabled(), store)
+        result = asyncio.run(
+            pipeline._call(stage, unit, "", {}, type(value), [], monotonic() + 10, lambda _: None)
+        )
+        assert result == value
+        assert provider.calls["stage"] == (0 if seeded and reusable else 1)
+>       assert len(store.writes) == (1 if reusable and not seeded else 0)
+E       AssertionError: assert 1 == 0
+E        +  where 1 = len([{'decisions': [{'basis': '范围不同', 'candidate': 'i0', 'match': 'h0', 'verdict': 'uncertain'}]}])
+E        +    where [{'decisions': [{'basis': '范围不同', 'candidate': 'i0', 'match': 'h0', 'verdict': 'uncertain'}]}] = <test_staged_proposal_recovery.test_stage_cache_distinguishes_recoverable_results_from_final_refusals.<locals>.Checkpoints object at 0x10c9e3680>.writes
+
+tests/unit/test_staged_proposal_recovery.py:564: AssertionError
+_ test_stage_cache_distinguishes_recoverable_results_from_final_refusals[reuse-uncertain-False-True] _
+
+seeded = True, unit = 'reuse', verdict = 'uncertain', reusable = False
+
+    @pytest.mark.parametrize("seeded", [False, True])
+    @pytest.mark.parametrize(
+        "unit,verdict,reusable",
+        [
+            ("review0", False, True),
+            ("review1", False, False),
+            ("review1", True, True),
+            ("reuse", "uncertain", False),
+            ("reuse", "accept", True),
+            ("reuse", "reject", True),
+        ],
+    )
+    def test_stage_cache_distinguishes_recoverable_results_from_final_refusals(
+        seeded, unit, verdict, reusable
+    ):
+        from push_kids.agent_processing.stage_contracts import PIPELINE_REVISION
+    
+        if unit == "reuse":
+            value = ReuseReviewResult(
+                decisions=[ReuseDecision(candidate="i0", match="h0", verdict=verdict, basis="范围不同")]
+            )
+            stage = "reuse"
+        else:
+            value = QualityReviewResult(
+                passed=verdict,
+                issues=[] if verdict else [QualityIssue(code="vague_name", items=["i0"], basis="范围不明")],
+            )
+            stage = "review"
+    
+        class Checkpoints:
+            def __init__(self):
+                self.digest = fingerprint(
+                    {"revision": PIPELINE_REVISION, "parameters": "test-1",
+                     "payload": {}, "context": None, "images": []}
+                )
+                self.value = value.model_dump() if seeded else None
+                self.writes = []
+    
+            def get(self, requested_unit, digest):
+                assert (requested_unit, digest) == (unit, self.digest)
+                return self.value
+    
+            def put(self, requested_unit, digest, result, **kwargs):
+                assert (requested_unit, digest) == (unit, self.digest)
+                self.writes.append(result)
+                self.value = result
+    
+        class Provider(StageFake):
+            async def generate_stage(self, *args):
+                self.calls["stage"] += 1
+                return value
+    
+        store, provider = Checkpoints(), Provider()
+        pipeline = StagedPipeline(provider, AnalysisTrace.disabled(), store)
+        result = asyncio.run(
+            pipeline._call(stage, unit, "", {}, type(value), [], monotonic() + 10, lambda _: None)
+        )
+        assert result == value
+>       assert provider.calls["stage"] == (0 if seeded and reusable else 1)
+E       assert 0 == 1
+
+tests/unit/test_staged_proposal_recovery.py:563: AssertionError
+____________ test_explicit_retry_refreshes_only_own_semantic_branch ____________
+
+client = <starlette.testclient.TestClient object at 0x10ec258b0>
+app = <fastapi.applications.FastAPI object at 0x10eb50f20>
+family_headers = {'X-Family-ID': 'family-test-a'}
+child = {'active': True, 'created_at': '2026-11-01T08:09:03.763747Z', 'daily_budget_minutes': 15, 'grade': '小学二年级', ...}
+
+    def test_explicit_retry_refreshes_only_own_semantic_branch(client, app, family_headers, child):
+        store = seed_failed_stages(client, app, family_headers, child)
+        sibling = seed_failed_stages(client, app, family_headers, child)
+        foreign = seed_failed_stages(client, app, {"X-Family-ID": "foreign-family"}, {
+            "id": client.post("/api/v1/children", headers={"X-Family-ID": "foreign-family"},
+                              json={"name": "合成孩子"}).json()["id"]
+        })
+        response = client.post(
+            f"/api/v1/submissions/{store.submission_id}/retry",
+            headers={"X-Family-ID": "foreign-family"},
+        )
+        assert response.status_code == 404
+        response = client.post(
+            f"/api/v1/submissions/{store.submission_id}/retry", headers=family_headers
+        )
+        assert response.status_code == 200 and response.json()["state"] == "queued"
+        assert client.post(
+            f"/api/v1/submissions/{store.submission_id}/retry", headers=family_headers
+        ).status_code == 409
+        with app.state.database.session_factory() as db:
+>           assert stage_keys(db, store.submission_id) == EXTRACTION_UNITS
+E           AssertionError: assert {'group0', 'g... 'merge', ...} == {'group0', 'g...1', 'm9', 't'}
+E             
+E             Extra items in the left set:
+E             'match'
+E             'merge'
+E             'review0'
+E             'review1'
+E             'reuse'
+E             'merge-correction'
+E             
+E             Full diff:
+E               {
+E                   'group0',
+E                   'group1',
+E                   'm1',
+E                   'm9',
+E             +     'match',
+E             +     'merge',
+E             +     'merge-correction',
+E             +     'reuse',
+E             +     'review0',
+E             +     'review1',
+E                   't',
+E               }
+
+tests/integration/test_analysis_checkpoints.py:313: AssertionError
+_______________ test_retry_rechecks_scope_before_purging[family] _______________
+
+client = <starlette.testclient.TestClient object at 0x10f235550>
+app = <fastapi.applications.FastAPI object at 0x10f171070>
+family_headers = {'X-Family-ID': 'family-test-a'}
+child = {'active': True, 'created_at': '2026-11-01T08:09:04.263376Z', 'daily_budget_minutes': 15, 'grade': '小学二年级', ...}
+change = 'family'
+
+    @pytest.mark.parametrize("change", ["family", "child_deleting", "archived"])
+    def test_retry_rechecks_scope_before_purging(client, app, family_headers, child, change):
+        from push_kids.persistence.models import Family
+    
+        store = seed_failed_stages(client, app, family_headers, child)
+        with app.state.database.session_factory() as db:
+            if change == "family":
+                family = db.get(Family, store.family_id)
+                if family is None:
+                    family = Family(id=store.family_id, display_name="合成家庭")
+                    db.add(family)
+                family.status = "deleting"
+            else:
+                row = db.get(Child, store.child_id)
+                if change == "child_deleting":
+                    row.deleting = True
+                else:
+                    row.active = False
+            db.commit()
+        response = client.post(
+            f"/api/v1/submissions/{store.submission_id}/retry", headers=family_headers
+        )
+>       assert response.status_code == (200 if change == "archived" else 409)
+E       assert 200 == 409
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/integration/test_analysis_checkpoints.py:363: AssertionError
+___________ test_retry_rechecks_scope_before_purging[child_deleting] ___________
+
+client = <starlette.testclient.TestClient object at 0x10f5da330>
+app = <fastapi.applications.FastAPI object at 0x10f36fb60>
+family_headers = {'X-Family-ID': 'family-test-a'}
+child = {'active': True, 'created_at': '2026-11-01T08:09:04.421048Z', 'daily_budget_minutes': 15, 'grade': '小学二年级', ...}
+change = 'child_deleting'
+
+    @pytest.mark.parametrize("change", ["family", "child_deleting", "archived"])
+    def test_retry_rechecks_scope_before_purging(client, app, family_headers, child, change):
+        from push_kids.persistence.models import Family
+    
+        store = seed_failed_stages(client, app, family_headers, child)
+        with app.state.database.session_factory() as db:
+            if change == "family":
+                family = db.get(Family, store.family_id)
+                if family is None:
+                    family = Family(id=store.family_id, display_name="合成家庭")
+                    db.add(family)
+                family.status = "deleting"
+            else:
+                row = db.get(Child, store.child_id)
+                if change == "child_deleting":
+                    row.deleting = True
+                else:
+                    row.active = False
+            db.commit()
+        response = client.post(
+            f"/api/v1/submissions/{store.submission_id}/retry", headers=family_headers
+        )
+>       assert response.status_code == (200 if change == "archived" else 409)
+E       assert 200 == 409
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/integration/test_analysis_checkpoints.py:363: AssertionError
+______________ test_retry_rechecks_scope_before_purging[archived] ______________
+
+client = <starlette.testclient.TestClient object at 0x10f7245c0>
+app = <fastapi.applications.FastAPI object at 0x10f695760>
+family_headers = {'X-Family-ID': 'family-test-a'}
+child = {'active': True, 'created_at': '2026-11-01T08:09:04.573470Z', 'daily_budget_minutes': 15, 'grade': '小学二年级', ...}
+change = 'archived'
+
+    @pytest.mark.parametrize("change", ["family", "child_deleting", "archived"])
+    def test_retry_rechecks_scope_before_purging(client, app, family_headers, child, change):
+        from push_kids.persistence.models import Family
+    
+        store = seed_failed_stages(client, app, family_headers, child)
+        with app.state.database.session_factory() as db:
+            if change == "family":
+                family = db.get(Family, store.family_id)
+                if family is None:
+                    family = Family(id=store.family_id, display_name="合成家庭")
+                    db.add(family)
+                family.status = "deleting"
+            else:
+                row = db.get(Child, store.child_id)
+                if change == "child_deleting":
+                    row.deleting = True
+                else:
+                    row.active = False
+            db.commit()
+        response = client.post(
+            f"/api/v1/submissions/{store.submission_id}/retry", headers=family_headers
+        )
+        assert response.status_code == (200 if change == "archived" else 409)
+        with app.state.database.session_factory() as db:
+>           assert stage_keys(db, store.submission_id) == (
+                EXTRACTION_UNITS if change == "archived" else DECISION_UNITS | EXTRACTION_UNITS
+            )
+E           AssertionError: assert {'group0', 'g... 'merge', ...} == {'group0', 'g...1', 'm9', 't'}
+E             
+E             Extra items in the left set:
+E             'match'
+E             'merge'
+E             'review0'
+E             'review1'
+E             'reuse'
+E             'merge-correction'
+E             
+E             Full diff:
+E               {
+E                   'group0',
+E                   'group1',
+E                   'm1',
+E                   'm9',
+E             +     'match',
+E             +     'merge',
+E             +     'merge-correction',
+E             +     'reuse',
+E             +     'review0',
+E             +     'review1',
+E                   't',
+E               }
+
+tests/integration/test_analysis_checkpoints.py:365: AssertionError
+___ test_final_quality_failure_stops_and_parent_retry_obtains_new_decisions ____
+
+client = <starlette.testclient.TestClient object at 0x10fb73260>
+app = <fastapi.applications.FastAPI object at 0x10f9a1fa0>
+family_headers = {'X-Family-ID': 'family-test-a'}
+child = {'active': True, 'created_at': '2026-11-01T08:09:04.722640Z', 'daily_budget_minutes': 15, 'grade': '小学二年级', ...}
+
+    def test_final_quality_failure_stops_and_parent_retry_obtains_new_decisions(
+        client, app, family_headers, child
+    ):
+        sid = submit(client, family_headers, child)
+        provider = StageFake(review_failures=99)
+        app.state.worker.provider = provider
+        assert app.state.worker.process_one()
+        assert not app.state.worker.process_one()
+        with app.state.database.session_factory() as db:
+            job = db.scalar(select(AgentJob).where(AgentJob.submission_id == sid))
+            jid = job.id
+>           assert job.state == "failed" and job.attempts == 1
+E           AssertionError: assert ('queued' == 'failed'
+E             
+E             - failed
+E             + queued)
+
+tests/integration/test_analysis_checkpoints.py:381: AssertionError
+------------------------------ Captured log call -------------------------------
+WARNING  push_kids.analysis:telemetry.py:138 analysis_stage_failed job_id=13f39fe5-96fc-4f6f-8853-e6cdbc519a40 attempt=1 reason=quality revision=staged-20261031-09 stage=review unit=review1 validation_codes=quality.vague_name
+WARNING  push_kids.worker:worker.py:463 analysis_job_failed job_id=13f39fe5-96fc-4f6f-8853-e6cdbc519a40 attempt=1 max_attempts=3 stage=provider error_type=StageFailure
+WARNING  push_kids.worker:worker.py:501 analysis_job_requeued job_id=13f39fe5-96fc-4f6f-8853-e6cdbc519a40 attempt=1 max_attempts=3 stage=provider retryable=1 reason=quality error_code=analysis_output_invalid
+____ test_terminal_cleanup_commit_failure_preserves_durable_lease_and_cache ____
+
+client = <starlette.testclient.TestClient object at 0x111042ba0>
+app = <fastapi.applications.FastAPI object at 0x110d7f5c0>
+family_headers = {'X-Family-ID': 'family-test-a'}
+child = {'active': True, 'created_at': '2026-11-01T08:09:05.971853Z', 'daily_budget_minutes': 15, 'grade': '小学二年级', ...}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x1111bf770>
+
+    def test_terminal_cleanup_commit_failure_preserves_durable_lease_and_cache(
+        client, app, family_headers, child, monkeypatch
+    ):
+        from sqlalchemy.exc import OperationalError
+        from sqlalchemy.orm import Session
+    
+        sid = submit(client, family_headers, child)
+        original_commit = Session.commit
+    
+        def commit(session):
+            if any(isinstance(row, AgentJob) and row.state == "failed" for row in session.dirty):
+                raise OperationalError("synthetic terminal commit", None, RuntimeError("synthetic"))
+            return original_commit(session)
+    
+        monkeypatch.setattr(Session, "commit", commit)
+        app.state.worker.provider = StageFake(review_failures=99)
+>       with pytest.raises(OperationalError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'sqlalchemy.exc.OperationalError'>
+
+tests/integration/test_analysis_checkpoints.py:475: Failed
+------------------------------ Captured log call -------------------------------
+WARNING  push_kids.analysis:telemetry.py:138 analysis_stage_failed job_id=f97cde7e-b13d-46bf-906c-6c20194b6b6e attempt=1 reason=quality revision=staged-20261031-09 stage=review unit=review1 validation_codes=quality.vague_name
+WARNING  push_kids.worker:worker.py:463 analysis_job_failed job_id=f97cde7e-b13d-46bf-906c-6c20194b6b6e attempt=1 max_attempts=3 stage=provider error_type=StageFailure
+WARNING  push_kids.worker:worker.py:501 analysis_job_requeued job_id=f97cde7e-b13d-46bf-906c-6c20194b6b6e attempt=1 max_attempts=3 stage=provider retryable=1 reason=quality error_code=analysis_output_invalid
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /Users/bytedance/Documents/push_kids/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/unit/test_staged_proposal_recovery.py::test_uncertain_reuse_never_falls_back_to_new - AssertionError: assert True is False
+ +  where True = StageFailure('validation').retryable
+ +    where StageFailure('validation') = <ExceptionInfo StageFailure('validation') tblen=6>.value
+FAILED tests/unit/test_staged_proposal_recovery.py::test_review_cannot_hide_supported_knowledge_in_omissions - AssertionError: assert True is False
+ +  where True = StageFailure('quality').retryable
+ +    where StageFailure('quality') = <ExceptionInfo StageFailure('quality') tblen=6>.value
+FAILED tests/unit/test_staged_proposal_recovery.py::test_stage_cache_distinguishes_recoverable_results_from_final_refusals[review1-False-False-False] - AssertionError: assert 1 == 0
+ +  where 1 = len([{'issues': [{'basis': '范围不明', 'code': 'vague_name', 'items': ['i0']}], 'passed': False}])
+ +    where [{'issues': [{'basis': '范围不明', 'code': 'vague_name', 'items': ['i0']}], 'passed': False}] = <test_staged_proposal_recovery.test_stage_cache_distinguishes_recoverable_results_from_final_refusals.<locals>.Checkpoints object at 0x10c96ffe0>.writes
+FAILED tests/unit/test_staged_proposal_recovery.py::test_stage_cache_distinguishes_recoverable_results_from_final_refusals[review1-False-False-True] - assert 0 == 1
+FAILED tests/unit/test_staged_proposal_recovery.py::test_stage_cache_distinguishes_recoverable_results_from_final_refusals[reuse-uncertain-False-False] - AssertionError: assert 1 == 0
+ +  where 1 = len([{'decisions': [{'basis': '范围不同', 'candidate': 'i0', 'match': 'h0', 'verdict': 'uncertain'}]}])
+ +    where [{'decisions': [{'basis': '范围不同', 'candidate': 'i0', 'match': 'h0', 'verdict': 'uncertain'}]}] = <test_staged_proposal_recovery.test_stage_cache_distinguishes_recoverable_results_from_final_refusals.<locals>.Checkpoints object at 0x10c9e3680>.writes
+FAILED tests/unit/test_staged_proposal_recovery.py::test_stage_cache_distinguishes_recoverable_results_from_final_refusals[reuse-uncertain-False-True] - assert 0 == 1
+FAILED tests/integration/test_analysis_checkpoints.py::test_explicit_retry_refreshes_only_own_semantic_branch - AssertionError: assert {'group0', 'g... 'merge', ...} == {'group0', 'g...1', 'm9', 't'}
+  
+  Extra items in the left set:
+  'match'
+  'merge'
+  'review0'
+  'review1'
+  'reuse'
+  'merge-correction'
+  
+  Full diff:
+    {
+        'group0',
+        'group1',
+        'm1',
+        'm9',
+  +     'match',
+  +     'merge',
+  +     'merge-correction',
+  +     'reuse',
+  +     'review0',
+  +     'review1',
+        't',
+    }
+FAILED tests/integration/test_analysis_checkpoints.py::test_retry_rechecks_scope_before_purging[family] - assert 200 == 409
+ +  where 200 = <Response [200 OK]>.status_code
+FAILED tests/integration/test_analysis_checkpoints.py::test_retry_rechecks_scope_before_purging[child_deleting] - assert 200 == 409
+ +  where 200 = <Response [200 OK]>.status_code
+FAILED tests/integration/test_analysis_checkpoints.py::test_retry_rechecks_scope_before_purging[archived] - AssertionError: assert {'group0', 'g... 'merge', ...} == {'group0', 'g...1', 'm9', 't'}
+  
+  Extra items in the left set:
+  'match'
+  'merge'
+  'review0'
+  'review1'
+  'reuse'
+  'merge-correction'
+  
+  Full diff:
+    {
+        'group0',
+        'group1',
+        'm1',
+        'm9',
+  +     'match',
+  +     'merge',
+  +     'merge-correction',
+  +     'reuse',
+  +     'review0',
+  +     'review1',
+        't',
+    }
+FAILED tests/integration/test_analysis_checkpoints.py::test_final_quality_failure_stops_and_parent_retry_obtains_new_decisions - AssertionError: assert ('queued' == 'failed'
+  
+  - failed
+  + queued)
+FAILED tests/integration/test_analysis_checkpoints.py::test_terminal_cleanup_commit_failure_preserves_durable_lease_and_cache - Failed: DID NOT RAISE <class 'sqlalchemy.exc.OperationalError'>
+12 failed, 47 passed, 1 warning in 6.36s

@@ -1,14 +1,16 @@
 # FEAT-003 — 通知消息通道
 
-- 2026-10-20本地排期兼容：复习摘要重新计算的未复习量排除永久已替代知识，保留既有人工预约的一次例外。无额外替代通知，不改变模板/授权/投递规则；见[替代状态证据](../../quality/evidence/AUTO-SUPERSEDED-REVIEW-20261020.md)，未部署。
+当前工作日兼容revision `FEAT-STATE-20261106-NOTIFICATION-WORKDAY-05`：获批[工作日Spec02](../../../specs/completed/FEAT-001-CHINA-WORKDAY-SCHEDULES.md)由activities统一计算有效日期和时段，既有通知planner继续消费其公开occurrence合同。法定假期和覆盖外工作日项不入队，调休周末按有效时段提醒一次；一次/每周旧规则、去重、授权、加密接收者和发送渠道保持。真实planner队列测试通过，未发送真实微信提醒；该兼容代码已由040交付，[本轮证据](../../quality/evidence/china-workday-20261105/README.md)独立于历史通知交付。
+
+- 2026-10-20本地排期兼容：复习摘要重新计算的未复习量排除永久已替代知识，保留既有人工预约的一次例外。无额外替代通知，不改变模板/授权/投递规则；见[替代状态证据](../../quality/evidence/AUTO-SUPERSEDED-REVIEW-20261020.md)，对应实现现已在037中交付，原验收范围不变。
 
 - Design governance revision: `DOC-SPEC-20261013-02-01`；[门禁同步记录](../../../specs/completed/DOC-002-MARKDOWN-STATE-RECONCILIATION.md)，仅修订设计证据政策，不改变实现/发布状态。
 
 - Feature ID: `FEAT-003`
-- Status: `BACKEND_035_DEPLOYED / RENEWAL_CLIENT_LOCAL / VERIFYING`
-- Current-state revision: `FEAT-STATE-20261024-NOTIFICATION-SCHEMA-0022 / AUTO-RENEWAL-VERIFYING-02`
+- Status: `WORKDAY_INCREMENT_040_DELIVERED / BASE_NOTIFICATION_DEVELOPMENT_DONE / VERIFICATION_PENDING`
+- Current-state revision: `FEAT-STATE-20261106-NOTIFICATION-WORKDAY-05`
 - Owner: 产品负责人（用户）
-- Last verified: 2026-10-24（生产0020–0022迁移/结构核验；真实通知收件证据仍为10-17，不冒称本轮重测）
+- Last verified: 2026-11-06（040/0027结构、17触发器及双投影核验；工作日planner合成队列测试沿用11-05，真实收件仍为10-17，本次未发送消息）
 - Authoritative implementation: `apps/api/src/push_kids/notifications/`、通知持久化模型、
   Alembic `20260906_0008_notification_channel` + `20260907_0009_notification_deletion_scope`、`apps/miniprogram/pages/notifications/`、
   `apps/miniprogram/utils/notifications.js`、`apps/miniprogram/utils/notification-renewal.js`、`tools/notification_config.py`
@@ -38,7 +40,7 @@
 
 ## Purpose and scope
 
-2026-10-24当前部署阶段：[OPS Spec04](../../../specs/active/OPS-20261023-FULLSTACK-TEST-DEPLOYMENT.md)按用户指定同库顺序完成生产0022/current/check与结构/队列核验，续订五表存在。035部署后用户100%接管并删除034，旧实例0；通知秘密与18项原配置均保留，coverage=false。真实微信GET通知设置/renewal均200，完整客户端本地已打开。未重新申请授权、补发历史失败通知或创建测试消息，真实续订/各类收件仍待用户验收；全量前定向检查未执行。上述031叙述限定10-17的历史观察，当前见[发布记录](../../deploy/releases/20261023-fullstack-test-deployment.md)。
+2026-10-24当前部署阶段：[OPS Spec04](../../../specs/completed/OPS-20261023-FULLSTACK-TEST-DEPLOYMENT.md)按用户指定同库顺序完成生产0022/current/check与结构/队列核验，续订五表存在。035部署后用户100%接管并删除034，旧实例0；通知秘密与18项原配置均保留，coverage=false。真实微信GET通知设置/renewal均200，完整客户端本地已打开。未重新申请授权、补发历史失败通知或创建测试消息，真实续订/各类收件仍待用户验收；全量前定向检查未执行。上述031叙述限定10-17的历史观察，当前见[发布记录](../../deploy/releases/20261023-fullstack-test-deployment.md)。
 
 给家庭提供一条可信的尽力而为消息通道，承载三类消息：家人加入申请（发给管理员）、
 日程开始前一小时提醒（发给全家，说明哪个孩子、几点、做什么）、每天 19:00 的未复习摘要（发给全家）。
@@ -47,12 +49,12 @@
 ## Current user/system behavior
 
 本地视觉增量 `FEAT-VISUAL-20261021-HERO-ARC-01`：提醒状态卡随共享样式删除细弧线，通道、授权和发送行为不变。
-[Spec01](../../../specs/active/BUG-030-HERO-BACKGROUND-ARC.md) / DREV-20261021-HERO-ARC-REMOVAL-01已批准；
-验证范围见[质量证据](../../quality/evidence/HERO-ARC-REMOVAL-20261021.md)，未部署/上传。
+[Spec01](../../../specs/completed/BUG-030-HERO-BACKGROUND-ARC.md) / DREV-20261021-HERO-ARC-REMOVAL-01已批准；
+原验证范围见[质量证据](../../quality/evidence/HERO-ARC-REMOVAL-20261021.md)，对应样式已随0.1.16开发上传。
 
 - 成员级偏好：三类提醒各有独立开关，`member_application` 仅管理员可见可改；其余类型成员可自己改。
 - 微信授权：新本地客户端先预备`grant-attempts`，在点击同步链调用微信，再按原事件ID幂等登记真实结果；只有accept增加额度。旧`POST /notifications/subscriptions`仍兼容，旧格式本身没有事件去重。
-  长期额度为`-1`，一次性每次同意增加1次，发完置`expired`。本地自动补充能力见[FEAT-011](FEAT-011-notification-auto-renewal.md)，未部署。
+  长期额度为`-1`，一次性每次同意增加1次，发完置`expired`。自动补充能力见[FEAT-011](FEAT-011-notification-auto-renewal.md)，对应实现已随037/0.1.16交付，实际授权验收待补。
 - 通道不可用（未配置渠道、缺密钥、缺模板）时，设置接口如实回报 `available=false` 与原因，
   并拒绝收下授权（404），不制造「已开启但收不到」的假象。
 - 接收标识（OpenID）AES-GCM 加密存储，带密钥版本，无明文列、无索引；解密失败落
@@ -90,11 +92,11 @@
   用与运行时相同的解析器校验模板并检查密钥长度；它从不打印既有密钥，也不联网访问微信。
 - 尚不存在：早间摘要、其他渠道、通知内的 AI 文案、站内消息中心。
 
-### Local renewal integration (not deployed)
+### Renewal integration（已交付，验收待补）
 
-用户2026-10-17批准`SPEC-20261017-NOTIFICATION-AUTO-RENEWAL-01`及架构/DREV。notifications新增本人选择CAS、逐类型当前模板证明与冷却、60秒授权租约及事件去重；读取planning公开完成游标，不反向依赖。失败仅恢复原事件；未决结果不从getSetting猜额度。默认unseen，首次显式开启；明确关闭停止。新增`20261017_0020`五表迁移仅本地/隔离MySQL5.7验证，线上Schema及031未改。维护扫描失效离开成员选择和租约；家庭删除清理新增本域表，孩子receipt由planning清理，游标不回退。
+用户2026-10-17批准`SPEC-20261017-NOTIFICATION-AUTO-RENEWAL-01`及架构/DREV。notifications新增本人选择CAS、逐类型当前模板证明与冷却、60秒授权租约及事件去重；读取planning公开完成游标，不反向依赖。失败仅恢复原事件；未决结果不从getSetting猜额度。默认unseen，首次显式开启；明确关闭停止。新增`20261017_0020`五表已经随后续生产迁移交付，当前后端037/Schema0025、客户端0.1.16已开发上传；原本地/隔离MySQL验证保留其日期与范围。维护扫描失效离开成员选择和租约；家庭删除清理新增本域表，孩子receipt由planning清理，游标不回退。
 
-本次代码及文档核对、自动化和缺失验收见[实现证据](../../quality/evidence/NOTIFICATION-AUTO-RENEWAL-IMPLEMENTATION-20261017.md)。原有云端单条收件不是本次续期验收；真机和独立评审待补，Spec active/VERIFYING。
+本次代码及文档核对、自动化和缺失验收见[实现证据](../../quality/evidence/NOTIFICATION-AUTO-RENEWAL-IMPLEMENTATION-20261017.md)。后续迁移和037/0.1.16交付已经完成，续订Spec按用户2026-10-26规则开发DONE并归档；原有云端单条收件不是本次续期验收，真机和独立评审待补。
 
 ## Current behavior matrix
 

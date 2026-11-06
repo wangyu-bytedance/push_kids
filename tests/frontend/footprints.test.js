@@ -3,6 +3,7 @@ const assert = require("node:assert/strict");
 const { loadPage } = require("./harness");
 
 const event = (dataset, value) => ({ currentTarget: { dataset }, detail: { value } });
+const tick = () => new Promise((resolve) => setImmediate(resolve));
 function page(request = async () => ({}), options = {}) {
   const loaded = loadPage("pages/footprints/index.js", request, {
     ...options, api: { removePreview() {}, downloadPreview: async () => "/tmp/synthetic-preview", ...(options.api || {}) }
@@ -12,6 +13,176 @@ function page(request = async () => ({}), options = {}) {
   loaded.page.setData({ childId: "child", child: { id: "child", active: true }, loading: false });
   return loaded;
 }
+
+test("album return survives hide/show but rejects a changed family or detached component", async () => {
+  for (const change of ["none", "family", "member", "child", "unload"]) {
+    let pick, imported = 0;
+    const { page: p, app } = page(async (url) => {
+      if (url.startsWith("/children")) return [{ id: "child", active: true }];
+      if (url.includes("/visits?")) return { items: [] };
+      return {};
+    }, { wx: { chooseMedia({ success }) { pick = success; } } });
+    p.uploadBatch = async () => { imported++; };
+    const selection = p.beginImport(); await tick();
+    p.onHide();
+    if (change === "family") app.globalData.familyId = "another";
+    if (change === "member") app.globalData.currentMember = { id: "another" };
+    if (change === "child") p.setData({ childId: "another" });
+    if (change === "unload") p.onUnload(); else { p.onShow(); await tick(); }
+    pick({ tempFiles: [{ tempFilePath: "/tmp/synthetic-a" }] }); await selection;
+    assert.equal(imported, change === "none" ? 1 : 0, change);
+  }
+});
+
+test("editing and date completion keep selection, latest versions and known dates", async () => {
+  const rows = [{ id: "a", version: 1, selected: true, has_display: true },
+    { id: "b", version: 2, selected: true, local_date: "2020-01-02", has_display: true }];
+  const calls = [];
+  const { page: p } = page(async (url, options) => {
+    calls.push({ url, options });
+    if (options && options.method === "PATCH") return { ...rows[0], version: 2, local_date: "2020-01-01" };
+    if (url.includes("/drafts?")) return { items: [{ ...rows[0], version: 2, local_date: "2020-01-01" }, rows[1]] };
+    return {};
+  });
+  p.setData({ sheet: "review", drafts: rows, selectedCount: 2 });
+  p.askConfirm(); assert.equal(p.data.sheet, "edit"); assert.equal(p.data.dateOnly, true);
+  p.editField(event({ field: "local_date" }, "2020-01-01")); await p.saveEdit();
+  assert.equal(calls.filter(c => c.options?.method === "PATCH").length, 1);
+  assert.equal(p.data.selectedCount, 2); assert.ok(p.data.drafts.every(d => d.selected));
+  assert.equal(p.data.drafts[0].version, 2); assert.equal(p.data.drafts[1].local_date, "2020-01-02");
+  p.askConfirm(); assert.equal(p.data.sheet, "confirm");
+});
+
+test("partial batch edit retries only unfinished photos without losing form or updated versions", async () => {
+  let fail = true; const patched = [];
+  const { page: p } = page(async (url, options) => {
+    if (options?.method === "PATCH") {
+      const id = url.includes("/a?") ? "a" : "b"; patched.push(id);
+      if (id === "b" && fail) throw Error("暂时不可用");
+      return { id, version: 2, local_date: "2020-01-01", selected: true };
+    }
+    return { items: ["a", "b"].map(id => ({ id, version: 2, local_date: "2020-01-01" })) };
+  });
+  p.setData({ sheet: "review", drafts: ["a", "b"].map(id => ({ id, version: 1, selected: true })), selectedCount: 2 });
+  p.batchEdit(); p.editField(event({ field: "local_date" }, "2020-01-01")); await p.saveEdit();
+  assert.equal(p.data.sheet, "edit"); assert.equal(p.data.form.local_date, "2020-01-01");
+  assert.equal(p.data.drafts[0].version, 2);
+  fail = false; await p.saveEdit(); assert.deepEqual(patched, ["a", "b", "b"]);
+  assert.equal(p.data.selectedCount, 2);
+});
+
+test("resume restores draft previews and processing polling while preserving unsaved edits", async () => {
+  const { page: p, timers } = page(async (url) => {
+    if (url.startsWith("/children")) return [{ id: "child", active: true }];
+    if (url.includes("/drafts?")) return { items: [{ id: "a", version: 2, job_state: "queued", has_display: true }] };
+    if (url.includes("/visits?")) return { items: [] };
+    return {};
+  });
+  p.setData({ sheet: "review", drafts: [{ id: "a", selected: true, job_state: "queued", previewUrl: "/tmp/old" }] });
+  p.pollDrafts(); p.onHide(); p.onShow(); await tick(); await tick();
+  assert.equal(p.data.drafts[0].selected, true); assert.notEqual(p.data.drafts[0].previewUrl, "/tmp/old");
+  assert.equal(timers.size, 1);
+  p.editDraft(event({ id: "a" })); p.editField(event({ field: "city" }, "未保存城市"));
+  p.onHide(); p.onShow(); await tick();
+  assert.equal(p.data.sheet, "edit"); assert.equal(p.data.form.city, "未保存城市");
+});
+
+test("focused gallery requests the clicked photo and follows server backward cursors", async () => {
+  const calls = [];
+  const { page: p } = page(async url => {
+    calls.push(url);
+    return url.includes("cursor=before") ? { items: [{ id: "previous" }], previous_cursor: null, next_cursor: "after" }
+      : { items: [{ id: "clicked" }], previous_cursor: "before", next_cursor: null };
+  });
+  await p.openVisit(event({ id: "visit", photoId: "clicked" }));
+  assert.match(calls[0], /focus_photo_id=clicked/); assert.equal(p.data.editing.id, "clicked");
+  assert.equal(p.data.hasPreviousPhotoPage, true);
+  await p.nextPhoto(event({ delta: -1 })); assert.match(calls[1], /cursor=before/);
+  assert.equal(p.data.editing.id, "previous"); assert.equal(p.data.hasPreviousPhotoPage, false);
+});
+
+test("partial confirmation removes successful batches and preserves retryable selection", async () => {
+  let fail = true; const confirmed = [];
+  const { page: p } = page(async (url) => {
+    if (url.includes("/confirm?")) {
+      const id = url.includes("/one/") ? "one" : "two"; confirmed.push(id);
+      if (id === "two" && fail) throw Error("网络失败");
+      return { confirmed: [{ id: "a" }] };
+    }
+    if (url.includes("/visits?")) return { items: [] };
+    return {};
+  });
+  p.setData({ sheet: "confirm", drafts: [{ id: "a", import_id: "one", selected: true, version: 1 },
+    { id: "b", import_id: "two", selected: true, version: 1 }], selectedCount: 2 });
+  await p.confirmSelected(); assert.equal(p.data.selectedCount, 1);
+  assert.equal(p.data.drafts[0].id, "b");
+  fail = false; await p.confirmSelected(); assert.deepEqual(confirmed, ["one", "two", "two"]);
+});
+
+test("native location return keeps edits and background mutation completes without a stuck busy flag", async () => {
+  let location, finish;
+  const { page: p } = page((url, options) => options?.method === "PATCH"
+    ? new Promise(resolve => { finish = resolve; }) : Promise.resolve({ items: [] }),
+  { wx: { chooseLocation(value) { location = value; } } });
+  p.setData({ sheet: "edit", editing: { id: "a", version: 1 }, form: { city: "大连" } });
+  p.choosePlace(); p.onHide(); await p.onShow();
+  location.success({ name: "合成测试地点", latitude: 39, longitude: 121 }); location.complete();
+  assert.equal(p.data.form.city, "大连"); assert.equal(p.data.form.place_name, "合成测试地点");
+  assert.equal(p.data.selecting, false);
+  const saving = p.saveEdit(); p.onHide();
+  finish({ id: "a", version: 2 }); await saving;
+  assert.equal(p.data.saving, false); assert.equal(p.data.sheet, "review");
+});
+
+test("version conflict refresh preserves form and retries the latest version only after explicit recovery", async () => {
+  const patches = []; let conflict = true;
+  const { page: p } = page(async (url, options) => {
+    if (options?.method === "PATCH") {
+      patches.push(options.data.version);
+      if (conflict) throw Object.assign(Error("版本冲突"), { statusCode: 409 });
+      return { id: "a", version: 4 };
+    }
+    if (url.includes("/photos/a?")) return { id: "a", version: 3, place_name: "另一位家长的地点" };
+    return { items: [] };
+  });
+  p.setData({ sheet: "edit", editing: { id: "a", version: 1 }, form: { city: "大连" } });
+  await p.saveEdit(); assert.equal(p.data.editConflict, true);
+  await p.saveEdit(); assert.equal(patches.length, 1);
+  await p.refreshEditVersions(); assert.equal(p.data.form.city, "大连");
+  assert.equal(p.data.editing.version, 3); conflict = false;
+  await p.saveEdit(); assert.deepEqual(patches, [1, 3]);
+});
+
+test("two-file upload retry reuses its batch and skips the successfully received photo", async () => {
+  const uploaded = [], keys = []; let fail = true;
+  const { page: p } = page(async (url, options) => {
+    if (url === "/footprints/imports") {
+      keys.push(options.idempotencyKey);
+      return { id: "batch", photos: [{ id: "a", received_at: uploaded.includes("a") ? "received" : null }, { id: "b" }] };
+    }
+    return { items: [] };
+  }, { api: { uploadFootprint: async id => { uploaded.push(id); if (id === "b" && fail) throw Error("中途断网"); } },
+    wx: { getFileInfo({ success }) { success({ size: 100 }); }, getImageInfo({ success }) { success({ type: "jpg" }); } } });
+  p.pendingFiles = ["synthetic-a", "synthetic-b"]; p.pendingBatchKey = "stable";
+  p.setData({ hasPendingUpload: true }); await p.uploadBatch();
+  assert.equal(p.data.hasPendingUpload, true); assert.equal(p.data.sheet, "upload-error");
+  assert.equal(p.data.importCompleted, 1); assert.equal(p.data.importCount, 2);
+  fail = false; await p.uploadBatch();
+  assert.deepEqual(uploaded, ["a", "b", "b"]); assert.deepEqual(keys, ["stable", "stable"]);
+  assert.equal(p.data.hasPendingUpload, false); assert.equal(p.data.saving, false);
+});
+
+test("late gallery response after close or a new visit cannot replace the visible photo", async () => {
+  const finishes = [];
+  const { page: p } = page(() => new Promise(resolve => finishes.push(resolve)));
+  const old = p.openVisit(event({ id: "old" })), current = p.openVisit(event({ id: "current" }));
+  finishes[1]({ items: [{ id: "current-photo" }] }); await current;
+  finishes[0]({ items: [{ id: "old-photo" }] }); await old;
+  assert.equal(p.data.editing.id, "current-photo");
+  const closed = p.openVisit(event({ id: "closed" })); p.setData({ sheet: "" });
+  finishes[2]({ items: [{ id: "late" }] }); await closed;
+  assert.equal(p.data.sheet, ""); assert.equal(p.data.photoList.length, 0);
+});
 
 test("unknown capture date and timezone stay unknown", () => {
   const { exports: presentation } = loadPage("pages/footprints/presentation.js", () => {});
@@ -115,9 +286,10 @@ test("confirmation blocks missing date and keeps only selected versions", async 
   const calls = [];
   const { page: p } = page(async (url, options) => { calls.push({ url, options }); return {}; });
   p.refresh = async () => {};
-  p.setData({ drafts: [{ id: "a", import_id: "batch", selected: true, version: 3, has_display: true }] });
+  p.setDrafts([{ id: "a", import_id: "batch", selected: true, version: 3, has_display: true }]);
   p.askConfirm();
-  assert.match(p.data.sheetError, /拍摄日期/);
+  assert.equal(p.data.sheet, "edit"); assert.equal(p.data.dateOnly, true);
+  await p.saveEdit(); assert.match(p.data.sheetError, /拍摄日期/); assert.equal(calls.length, 0);
   p.data.drafts[0].local_date = "2024-01-01";
   p.askConfirm();
   assert.equal(p.data.sheet, "confirm");
@@ -240,31 +412,74 @@ test("a replaced timeline discards late preview files and stops requesting the o
 
 test("archived and viewer profiles cannot start new intake", async () => {
   const { page: p } = page();
-  p.setData({ child: { active: false } }); await p.beginImport(); p.manualEntry();
+  p.setData({ child: { active: false } }); await p.beginImport();
   assert.equal(p.data.sheet, "");
-  p.setData({ child: { active: true }, canWrite: false }); await p.beginImport(); p.manualEntry();
+  p.setData({ child: { active: true }, canWrite: false }); await p.beginImport();
   assert.equal(p.data.sheet, "");
 });
 
-test("the import entry waits for active saving; consent and album cancellation create no footprint facts", async () => {
-  const calls = []; let picks = 0;
+test("import opens the original album directly, blocks reentry and cancellation makes no writes", async () => {
+  const calls = []; let picks = 0, cancel;
   const { page: p } = page(async (url, options) => { calls.push({ url, options }); return {}; }, {
-    wx: { chooseMedia({ fail }) { picks++; fail({ errMsg: "chooseMedia:fail cancel" }); } }
+    wx: { chooseMedia(options) { picks++; cancel = options.fail;
+      assert.deepEqual(Array.from(options.sizeType), ["original"]);
+      assert.deepEqual(Array.from(options.sourceType), ["album"]);
+    } }
   });
   p.setData({ saving: true }); await p.beginImport(); assert.equal(p.data.sheet, "");
-  p.setData({ saving: false }); await p.beginImport();
-  assert.equal(p.data.sheet, "consent"); assert.equal(p.data.photoConsent, false); assert.equal(calls.length, 0);
-  await p.choosePhotos(); assert.equal(picks, 0); assert.equal(calls.length, 0);
-  p.consentChange({ detail: { value: ["photos"] } }); await p.choosePhotos();
+  p.setData({ saving: false, mode: "lit" }); const pending = p.beginImport();
+  assert.equal(picks, 1); assert.equal(p.data.sheet, ""); assert.equal(p.data.selecting, true);
+  await p.beginImport(); assert.equal(picks, 1); assert.equal(calls.length, 0);
+  cancel({ errMsg: "chooseMedia:fail cancel" }); await pending;
   assert.equal(picks, 1); assert.equal(p.data.hasPendingUpload, false); assert.equal(p.pendingFiles, undefined);
-  assert.ok(calls.every(({ url }) => url === "/footprints/preferences"));
-  assert.equal(p.data.sheet, "consent"); assert.match(p.data.sheetError, /取消/);
+  assert.equal(calls.length, 0); assert.equal(p.data.mode, "lit");
+  assert.equal(p.data.sheet, ""); assert.equal(p.data.error, ""); assert.equal(p.data.selecting, false);
+});
+
+test("selected photos import without changing either AI preference value", async () => {
+  for (const enabled of [false, true]) {
+    const writes = [];
+    const { page: p } = page(async (url, options) => {
+      if (options?.method) writes.push({ url, data: options.data });
+      if (url === "/footprints/imports") return { id: "batch", photos: [{ id: "a" }] };
+      return { items: [] };
+    }, { wx: { chooseMedia({ success }) { success({ tempFiles: [{ tempFilePath: "synthetic-a" }] }); },
+      getFileInfo({ success }) { success({ size: 100 }); }, getImageInfo({ success }) { success({ type: "jpg" }); } },
+    api: { uploadFootprint: async () => {} } });
+    p.setData({ aiEnabled: enabled }); await p.beginImport();
+    assert.equal(p.data.aiEnabled, enabled); assert.equal(writes.length, 1);
+    assert.equal(writes[0].url, "/footprints/imports"); assert.equal(writes[0].data.consented, true);
+    assert.equal(p.data.sheet, "review"); assert.equal(p.data.hasPendingUpload, false);
+  }
+});
+
+test("album cancel/failure restores previews in either hide/show return order and can retry", async () => {
+  for (const cancelled of [false, true]) for (const returnBeforeFinished of [false, true]) {
+    let picker; const writes = [];
+    const { page: p } = page(async (url, options) => {
+      if (options?.method) writes.push(url);
+      if (url.startsWith("/children")) return [{ id: "child", active: true }];
+      if (url.includes("/visits?")) return { items: [{ id: "visit", photos: [{ id: "a", has_display: true }] }] };
+      return {};
+    }, { wx: { chooseMedia(options) { picker = options; } } });
+    p.loadedContext = p.contextKey();
+    p.setData({ visits: [{ id: "visit", photos: [{ id: "a", has_display: true, previewUrl: "/tmp/old" }] }] });
+    const pending = p.beginImport(); p.onHide(); if (returnBeforeFinished) await p.onShow();
+    picker.fail({ errMsg: cancelled ? "chooseMedia:fail cancel" : "chooseMedia:fail denied" }); await pending;
+    if (!returnBeforeFinished) await p.onShow(); await tick();
+    assert.ok(p.data.visits[0].photos[0].previewUrl); assert.equal(p.data.selecting, false);
+    assert.equal(writes.length, 0); assert.equal(p.data.sheet, "");
+    assert.equal(Boolean(p.data.importError), !cancelled);
+    if (!cancelled) assert.match(p.data.importError, /相册/);
+    const retry = p.beginImport(); assert.equal(p.data.selecting, true);
+    picker.fail({ errMsg: "chooseMedia:fail cancel" }); await retry;
+  }
 });
 
 test("gallery uses bounded pages and can return to the previous page", async () => {
   const { page: p } = page(async (url) => url.includes("cursor=next")
-    ? { items: [{ id: "second" }], next_cursor: null }
-    : { items: [{ id: "first" }], next_cursor: "next" });
+    ? { items: [{ id: "second" }], next_cursor: null, previous_cursor: "before" }
+    : { items: [{ id: "first" }], next_cursor: "next", previous_cursor: null });
   await p.openVisit(event({ id: "visit" }));
   await p.nextPhoto(event({ delta: 1 }));
   assert.equal(p.data.editing.id, "second");
@@ -297,7 +512,7 @@ test("first-file upload failure retains a retryable batch", async () => {
   assert.equal(p.data.hasPendingUpload, true);
   assert.equal(p.data.importProgress, 0);
   assert.equal(p.pendingBatchKey, "stable-key");
-  assert.equal(p.data.sheet, "review");
+  assert.equal(p.data.sheet, "upload-error");
 });
 
 test("footprint actions follow permission and archive availability without one-item menus", async () => {
@@ -355,7 +570,7 @@ test("archived selection uses the existing discard guard before changing childre
   confirm = true; await p.showArchived();
   assert.equal(p.data.childId, "archive"); assert.equal(p.data.archivedVisible, true);
   assert.equal(p.data.child.active, false); assert.equal(p.pendingFiles, null); assert.equal(loads, 1);
-  await p.beginImport(); p.manualEntry(); assert.equal(p.data.sheet, "");
+  await p.beginImport(); assert.equal(p.data.sheet, "");
 });
 
 test("every archived child is reachable through bounded native pages in either direction", async () => {
@@ -395,6 +610,25 @@ test("settings failure keeps the chosen value and retry saves the same preferenc
   fail = false; await p.saveSettings();
   assert.equal(p.data.sheet, ""); assert.equal(p.data.aiEnabled, true);
   assert.equal(calls.length, 2); assert.deepEqual(calls[0], calls[1]);
+});
+
+for (const returnBeforeSaved of [true, false]) test(`settings save restores released thumbnails when returning ${returnBeforeSaved ? "before" : "after"} completion`, async () => {
+  let finish, profileReads = 0;
+  const { page: p } = page(async (url, options) => {
+    if (options?.method === "PATCH") return new Promise(resolve => { finish = resolve; });
+    if (url.startsWith("/children")) { profileReads++; return [{ id: "child", active: true }]; }
+    if (url.includes("/visits?")) return { items: [{ id: "visit", photos: [{ id: "photo", has_display: true }] }] };
+    return {};
+  });
+  p.setData({ sheet: "settings", visits: [{ id: "visit", photos: [{ id: "photo", has_display: true, previewUrl: "/tmp/old" }] }] });
+  const saving = p.saveSettings(); p.onHide();
+  if (returnBeforeSaved) await p.onShow();
+  finish({}); await saving;
+  if (!returnBeforeSaved) await p.onShow();
+  await tick();
+  assert.equal(p.data.sheet, ""); assert.equal(p.data.saving, false);
+  assert.equal(profileReads, 1);
+  assert.equal(p.data.visits[0].photos[0].previewUrl, "/tmp/synthetic-preview");
 });
 
 for (const pendingDownload of [false, true]) test(`late timeline window preserves ${pendingDownload ? "pending" : "loaded"} photo sheet previews`, async () => {

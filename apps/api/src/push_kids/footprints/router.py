@@ -222,8 +222,11 @@ def visit_photos(
     db: DB,
     cursor: Cursor = None,
     limit: PageSize = 20,
+    focus_photo_id: Annotated[str | None, Query(min_length=1, max_length=36)] = None,
 ):
-    return FootprintReads.photos(db, context.family_id, child_id, visit_id, cursor, limit)
+    return FootprintReads.photos(
+        db, context.family_id, child_id, visit_id, cursor, limit, focus_photo_id
+    )
 
 
 @router.get("/summary")

@@ -1,0 +1,3663 @@
+{
+  "design_revision": "DREV-20261101-REPORT-FOOTER-TIPS-01",
+  "source_sha256": "cbc393766dc06c42bae3771849a9bf7f915ae93173d62a0ba8de0a74de0d33ff",
+  "capture_count": 54,
+  "failures": [],
+  "note": "Chromium design exports, not WeChat native geometry or device acceptance",
+  "captures": [
+    {
+      "file": "embedded-first-320x568.png",
+      "host": "embedded",
+      "state": "first",
+      "viewport": "320x568",
+      "sha256": "22a283704d5ebdee0e0784a84d82a17ee580f07fdafe698c8cadb57a0e9a79b8",
+      "audit": {
+        "viewport": [
+          320,
+          568
+        ],
+        "documentWidth": 320,
+        "contentWidth": 320,
+        "contentScrollWidth": 320,
+        "pager": {
+          "left": 35,
+          "top": 211.3125,
+          "right": 285,
+          "bottom": 255.3125,
+          "width": 250,
+          "height": 44
+        },
+        "buttons": [
+          {
+            "left": 35,
+            "top": 211.3125,
+            "right": 120,
+            "bottom": 255.3125,
+            "width": 85,
+            "height": 44,
+            "disabled": true,
+            "fontSize": 14,
+            "background": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "left": 200,
+            "top": 211.3125,
+            "right": 285,
+            "bottom": 255.3125,
+            "width": 85,
+            "height": 44,
+            "disabled": false,
+            "fontSize": 14,
+            "background": "rgb(228, 237, 230)"
+          }
+        ],
+        "label": {
+          "left": 128,
+          "top": 211.3125,
+          "right": 192,
+          "bottom": 255.3125,
+          "width": 64,
+          "height": 44
+        },
+        "notice": null,
+        "subject": null,
+        "imageCount": 0
+      },
+      "errors": [],
+      "runtime_errors": [],
+      "external_requests": []
+    },
+    {
+      "file": "embedded-middle-320x568.png",
+      "host": "embedded",
+      "state": "middle",
+      "viewport": "320x568",
+      "sha256": "27debd81a4ee748b547bcf18dbd6f2af608817b248a3c205eaa7b04b96b73a46",
+      "audit": {
+        "viewport": [
+          320,
+          568
+        ],
+        "documentWidth": 320,
+        "contentWidth": 320,
+        "contentScrollWidth": 320,
+        "pager": {
+          "left": 35,
+          "top": 211.3125,
+          "right": 285,
+          "bottom": 255.3125,
+          "width": 250,
+          "height": 44
+        },
+        "buttons": [
+          {
+            "left": 35,
+            "top": 211.3125,
+            "right": 120,
+            "bottom": 255.3125,
+            "width": 85,
+            "height": 44,
+            "disabled": false,
+            "fontSize": 14,
+            "background": "rgb(228, 237, 230)"
+          },
+          {
+            "left": 200,
+            "top": 211.3125,
+            "right": 285,
+            "bottom": 255.3125,
+            "width": 85,
+            "height": 44,
+            "disabled": false,
+            "fontSize": 14,
+            "background": "rgb(228, 237, 230)"
+          }
+        ],
+        "label": {
+          "left": 128,
+          "top": 211.3125,
+          "right": 192,
+          "bottom": 255.3125,
+          "width": 64,
+          "height": 44
+        },
+        "notice": null,
+        "subject": null,
+        "imageCount": 0
+      },
+      "errors": [],
+      "runtime_errors": [],
+      "external_requests": []
+    },
+    {
+      "file": "embedded-last-320x568.png",
+      "host": "embedded",
+      "state": "last",
+      "viewport": "320x568",
+      "sha256": "decc8d15f8c91787af82966868a41a028e37bf91ab6a66c2aae795165697cac2",
+      "audit": {
+        "viewport": [
+          320,
+          568
+        ],
+        "documentWidth": 320,
+        "contentWidth": 320,
+        "contentScrollWidth": 320,
+        "pager": {
+          "left": 35,
+          "top": 211.3125,
+          "right": 285,
+          "bottom": 255.3125,
+          "width": 250,
+          "height": 44
+        },
+        "buttons": [
+          {
+            "left": 35,
+            "top": 211.3125,
+            "right": 120,
+            "bottom": 255.3125,
+            "width": 85,
+            "height": 44,
+            "disabled": false,
+            "fontSize": 14,
+            "background": "rgb(228, 237, 230)"
+          },
+          {
+            "left": 200,
+            "top": 211.3125,
+            "right": 285,
+            "bottom": 255.3125,
+            "width": 85,
+            "height": 44,
+            "disabled": true,
+            "fontSize": 14,
+            "background": "rgba(0, 0, 0, 0)"
+          }
+        ],
+        "label": {
+          "left": 128,
+          "top": 211.3125,
+          "right": 192,
+          "bottom": 255.3125,
+          "width": 64,
+          "height": 44
+        },
+        "notice": null,
+        "subject": null,
+        "imageCount": 0
+      },
+      "errors": [],
+      "runtime_errors": [],
+      "external_requests": []
+    },
+    {
+      "file": "embedded-loading-320x568.png",
+      "host": "embedded",
+      "state": "loading",
+      "viewport": "320x568",
+      "sha256": "b5cffa0b979b0b4257e0ac4b4695e3e739f2e460258cd35390a0149521e4c4b3",
+      "audit": {
+        "viewport": [
+          320,
+          568
+        ],
+        "documentWidth": 320,
+        "contentWidth": 320,
+        "contentScrollWidth": 320,
+        "pager": {
+          "left": 35,
+          "top": 211.3125,
+          "right": 285,
+          "bottom": 255.3125,
+          "width": 250,
+          "height": 44
+        },
+        "buttons": [
+          {
+            "left": 35,
+            "top": 211.3125,
+            "right": 120,
+            "bottom": 255.3125,
+            "width": 85,
+            "height": 44,
+            "disabled": true,
+            "fontSize": 14,
+            "background": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "left": 200,
+            "top": 211.3125,
+            "right": 285,
+            "bottom": 255.3125,
+            "width": 85,
+            "height": 44,
+            "disabled": true,
+            "fontSize": 14,
+            "background": "rgba(0, 0, 0, 0)"
+          }
+        ],
+        "label": {
+          "left": 128,
+          "top": 211.3125,
+          "right": 192,
+          "bottom": 255.3125,
+          "width": 64,
+          "height": 44
+        },
+        "notice": null,
+        "subject": null,
+        "imageCount": 0
+      },
+      "errors": [],
+      "runtime_errors": [],
+      "external_requests": []
+    },
+    {
+      "file": "embedded-deleted-320x568.png",
+      "host": "embedded",
+      "state": "deleted",
+      "viewport": "320x568",
+      "sha256": "5425ed53953d714e2828af62b219ec2a00825ebe756b1436a4b10b71a5a7a783",
+      "audit": {
+        "viewport": [
+          320,
+          568
+        ],
+        "documentWidth": 320,
+        "contentWidth": 320,
+        "contentScrollWidth": 320,
+        "pager": {
+          "left": 35,
+          "top": 446.3125,
+          "right": 285,
+          "bottom": 490.3125,
+          "width": 250,
+          "height": 44
+        },
+        "buttons": [
+          {
+            "left": 35,
+            "top": 446.3125,
+            "right": 120,
+            "bottom": 490.3125,
+            "width": 85,
+            "height": 44,
+            "disabled": true,
+            "fontSize": 14,
+            "background": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "left": 200,
+            "top": 446.3125,
+            "right": 285,
+            "bottom": 490.3125,
+            "width": 85,
+            "height": 44,
+            "disabled": false,
+            "fontSize": 14,
+            "background": "rgb(228, 237, 230)"
+          }
+        ],
+        "label": {
+          "left": 128,
+          "top": 446.3125,
+          "right": 192,
+          "bottom": 490.3125,
+          "width": 64,
+          "height": 44
+        },
+        "notice": {
+          "left": 35,
+          "top": 70,
+          "right": 285,
+          "bottom": 117,
+          "width": 250,
+          "height": 47,
+          "text": {
+            "left": 52,
+            "top": 83,
+            "right": 268,
+            "bottom": 104,
+            "width": 216,
+            "height": 21
+          },
+          "textAlign": "left",
+          "fontSize": 14
+        },
+        "subject": null,
+        "imageCount": 0
+      },
+      "errors": [],
+      "runtime_errors": [],
+      "external_requests": []
+    },
+    {
+      "file": "embedded-long-notice-320x568.png",
+      "host": "embedded",
+      "state": "long-notice",
+      "viewport": "320x568",
+      "sha256": "6660eb07c719f767b69f1115c6ff4ea68fc867be589872c7c95a373a41616c46",
+      "audit": {
+        "viewport": [
+          320,
+          568
+        ],
+        "documentWidth": 320,
+        "contentWidth": 320,
+        "contentScrollWidth": 320,
+        "pager": {
+          "left": 35,
+          "top": 467.3125,
+          "right": 285,
+          "bottom": 511.3125,
+          "width": 250,
+          "height": 44
+        },
+        "buttons": [
+          {
+            "left": 35,
+            "top": 467.3125,
+            "right": 120,
+            "bottom": 511.3125,
+            "width": 85,
+            "height": 44,
+            "disabled": true,
+            "fontSize": 14,
+            "background": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "left": 200,
+            "top": 467.3125,
+            "right": 285,
+            "bottom": 511.3125,
+            "width": 85,
+            "height": 44,
+            "disabled": false,
+            "fontSize": 14,
+            "background": "rgb(228, 237, 230)"
+          }
+        ],
+        "label": {
+          "left": 128,
+          "top": 467.3125,
+          "right": 192,
+          "bottom": 511.3125,
+          "width": 64,
+          "height": 44
+        },
+        "notice": {
+          "left": 35,
+          "top": 70,
+          "right": 285,
+          "bottom": 138,
+          "width": 250,
+          "height": 68,
+          "text": {
+            "left": 52,
+            "top": 83,
+            "right": 268,
+            "bottom": 125,
+            "width": 216,
+            "height": 42
+          },
+          "textAlign": "left",
+          "fontSize": 14
+        },
+        "subject": null,
+        "imageCount": 0
+      },
+      "errors": [],
+      "runtime_errors": [],
+      "external_requests": []
+    },
+    {
+      "file": "embedded-long-page-320x568.png",
+      "host": "embedded",
+      "state": "long-page",
+      "viewport": "320x568",
+      "sha256": "1dc2e49556aae7d73b596ea03c7a3abfc8e76841b42b661bcd3d3fca9f6611bb",
+      "audit": {
+        "viewport": [
+          320,
+          568
+        ],
+        "documentWidth": 320,
+        "contentWidth": 320,
+        "contentScrollWidth": 320,
+        "pager": {
+          "left": 35,
+          "top": 195.3125,
+          "right": 285,
+          "bottom": 255.3125,
+          "width": 250,
+          "height": 60
+        },
+        "buttons": [
+          {
+            "left": 35,
+            "top": 195.3125,
+            "right": 120,
+            "bottom": 255.3125,
+            "width": 85,
+            "height": 60,
+            "disabled": false,
+            "fontSize": 14,
+            "background": "rgb(228, 237, 230)"
+          },
+          {
+            "left": 200,
+            "top": 195.3125,
+            "right": 285,
+            "bottom": 255.3125,
+            "width": 85,
+            "height": 60,
+            "disabled": false,
+            "fontSize": 14,
+            "background": "rgb(228, 237, 230)"
+          }
+        ],
+        "label": {
+          "left": 128,
+          "top": 195.3125,
+          "right": 192,
+          "bottom": 255.3125,
+          "width": 64,
+          "height": 60
+        },
+        "notice": null,
+        "subject": null,
+        "imageCount": 0
+      },
+      "errors": [],
+      "runtime_errors": [],
+      "external_requests": []
+    },
+    {
+      "file": "embedded-subject-menu-320x568.png",
+      "host": "embedded",
+      "state": "subject-menu",
+      "viewport": "320x568",
+      "sha256": "af8d8e171afdc30b71d51b2a3b5206d97294ac7572411bad9230b4f9eed67694",
+      "audit": {
+        "viewport": [
+          320,
+          568
+        ],
+        "documentWidth": 320,
+        "contentWidth": 320,
+        "contentScrollWidth": 320,
+        "pager": {
+          "left": 35,
+          "top": 593.3125,
+          "right": 285,
+          "bottom": 637.3125,
+          "width": 250,
+          "height": 44
+        },
+        "buttons": [
+          {
+            "left": 35,
+            "top": 593.3125,
+            "right": 120,
+            "bottom": 637.3125,
+            "width": 85,
+            "height": 44,
+            "disabled": true,
+            "fontSize": 14,
+            "background": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "left": 200,
+            "top": 593.3125,
+            "right": 285,
+            "bottom": 637.3125,
+            "width": 85,
+            "height": 44,
+            "disabled": false,
+            "fontSize": 14,
+            "background": "rgb(228, 237, 230)"
+          }
+        ],
+        "label": {
+          "left": 128,
+          "top": 593.3125,
+          "right": 192,
+          "bottom": 637.3125,
+          "width": 64,
+          "height": 44
+        },
+        "notice": null,
+        "subject": [
+          {
+            "left": 40,
+            "top": 211,
+            "right": 156,
+            "bottom": 255,
+            "width": 116,
+            "height": 44
+          },
+          {
+            "left": 164,
+            "top": 211,
+            "right": 280,
+            "bottom": 255,
+            "width": 116,
+            "height": 44
+          }
+        ],
+        "imageCount": 0
+      },
+      "errors": [],
+      "runtime_errors": [],
+      "external_requests": []
+    },
+    {
+      "file": "embedded-action-menu-320x568.png",
+      "host": "embedded",
+      "state": "action-menu",
+      "viewport": "320x568",
+      "sha256": "96fae07b7e165176a2a358d74932bcffc50e67c4987b9fcadf353496dbdaafb5",
+      "audit": {
+        "viewport": [
+          320,
+          568
+        ],
+        "documentWidth": 320,
+        "contentWidth": 320,
+        "contentScrollWidth": 320,
+        "pager": {
+          "left": 35,
+          "top": 728.3125,
+          "right": 285,
+          "bottom": 772.3125,
+          "width": 250,
+          "height": 44
+        },
+        "buttons": [
+          {
+            "left": 35,
+            "top": 728.3125,
+            "right": 120,
+            "bottom": 772.3125,
+            "width": 85,
+            "height": 44,
+            "disabled": true,
+            "fontSize": 14,
+            "background": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "left": 200,
+            "top": 728.3125,
+            "right": 285,
+            "bottom": 772.3125,
+            "width": 85,
+            "height": 44,
+            "disabled": false,
+            "fontSize": 14,
+            "background": "rgb(228, 237, 230)"
+          }
+        ],
+        "label": {
+          "left": 128,
+          "top": 728.3125,
+          "right": 192,
+          "bottom": 772.3125,
+          "width": 64,
+          "height": 44
+        },
+        "notice": null,
+        "subject": null,
+        "imageCount": 0
+      },
+      "errors": [],
+      "runtime_errors": [],
+      "external_requests": []
+    },
+    {
+      "file": "embedded-first-390x844.png",
+      "host": "embedded",
+      "state": "first",
+      "viewport": "390x844",
+      "sha256": "758627e15b27af37d9bdf8e70b380fc07f7438a8b5e243595b770553df7e5667",
+      "audit": {
+        "viewport": [
+          390,
+          844
+        ],
+        "documentWidth": 390,
+        "contentWidth": 390,
+        "contentScrollWidth": 390,
+        "pager": {
+          "left": 35,
+          "top": 486.625,
+          "right": 355,
+          "bottom": 530.625,
+          "width": 320,
+          "height": 44
+        },
+        "buttons": [
+          {
+            "left": 35,
+            "top": 486.625,
+            "right": 155,
+            "bottom": 530.625,
+            "width": 120,
+            "height": 44,
+            "disabled": true,
+            "fontSize": 14,
+            "background": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "left": 235,
+            "top": 486.625,
+            "right": 355,
+            "bottom": 530.625,
+            "width": 120,
+            "height": 44,
+            "disabled": false,
+            "fontSize": 14,
+            "background": "rgb(228, 237, 230)"
+          }
+        ],
+        "label": {
+          "left": 163,
+          "top": 486.625,
+          "right": 227,
+          "bottom": 530.625,
+          "width": 64,
+          "height": 44
+        },
+        "notice": null,
+        "subject": null,
+        "imageCount": 0
+      },
+      "errors": [],
+      "runtime_errors": [],
+      "external_requests": []
+    },
+    {
+      "file": "embedded-middle-390x844.png",
+      "host": "embedded",
+      "state": "middle",
+      "viewport": "390x844",
+      "sha256": "d3afcf18afb46946d98628fe214a41110e79f8a0cddcfbb533bd4404f7f07ed5",
+      "audit": {
+        "viewport": [
+          390,
+          844
+        ],
+        "documentWidth": 390,
+        "contentWidth": 390,
+        "contentScrollWidth": 390,
+        "pager": {
+          "left": 35,
+          "top": 486.625,
+          "right": 355,
+          "bottom": 530.625,
+          "width": 320,
+          "height": 44
+        },
+        "buttons": [
+          {
+            "left": 35,
+            "top": 486.625,
+            "right": 155,
+            "bottom": 530.625,
+            "width": 120,
+            "height": 44,
+            "disabled": false,
+            "fontSize": 14,
+            "background": "rgb(228, 237, 230)"
+          },
+          {
+            "left": 235,
+            "top": 486.625,
+            "right": 355,
+            "bottom": 530.625,
+            "width": 120,
+            "height": 44,
+            "disabled": false,
+            "fontSize": 14,
+            "background": "rgb(228, 237, 230)"
+          }
+        ],
+        "label": {
+          "left": 163,
+          "top": 486.625,
+          "right": 227,
+          "bottom": 530.625,
+          "width": 64,
+          "height": 44
+        },
+        "notice": null,
+        "subject": null,
+        "imageCount": 0
+      },
+      "errors": [],
+      "runtime_errors": [],
+      "external_requests": []
+    },
+    {
+      "file": "embedded-last-390x844.png",
+      "host": "embedded",
+      "state": "last",
+      "viewport": "390x844",
+      "sha256": "562050f6d41a58d004f2ec7517083363b3543325df738e96eabe2cde5f537353",
+      "audit": {
+        "viewport": [
+          390,
+          844
+        ],
+        "documentWidth": 390,
+        "contentWidth": 390,
+        "contentScrollWidth": 390,
+        "pager": {
+          "left": 35,
+          "top": 486.625,
+          "right": 355,
+          "bottom": 530.625,
+          "width": 320,
+          "height": 44
+        },
+        "buttons": [
+          {
+            "left": 35,
+            "top": 486.625,
+            "right": 155,
+            "bottom": 530.625,
+            "width": 120,
+            "height": 44,
+            "disabled": false,
+            "fontSize": 14,
+            "background": "rgb(228, 237, 230)"
+          },
+          {
+            "left": 235,
+            "top": 486.625,
+            "right": 355,
+            "bottom": 530.625,
+            "width": 120,
+            "height": 44,
+            "disabled": true,
+            "fontSize": 14,
+            "background": "rgba(0, 0, 0, 0)"
+          }
+        ],
+        "label": {
+          "left": 163,
+          "top": 486.625,
+          "right": 227,
+          "bottom": 530.625,
+          "width": 64,
+          "height": 44
+        },
+        "notice": null,
+        "subject": null,
+        "imageCount": 0
+      },
+      "errors": [],
+      "runtime_errors": [],
+      "external_requests": []
+    },
+    {
+      "file": "embedded-loading-390x844.png",
+      "host": "embedded",
+      "state": "loading",
+      "viewport": "390x844",
+      "sha256": "46b87c797ded7c4a9e0262cada9669431c584e9dd521d8bf8c5ac4f11a5daf4b",
+      "audit": {
+        "viewport": [
+          390,
+          844
+        ],
+        "documentWidth": 390,
+        "contentWidth": 390,
+        "contentScrollWidth": 390,
+        "pager": {
+          "left": 35,
+          "top": 486.625,
+          "right": 355,
+          "bottom": 530.625,
+          "width": 320,
+          "height": 44
+        },
+        "buttons": [
+          {
+            "left": 35,
+            "top": 486.625,
+            "right": 155,
+            "bottom": 530.625,
+            "width": 120,
+            "height": 44,
+            "disabled": true,
+            "fontSize": 14,
+            "background": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "left": 235,
+            "top": 486.625,
+            "right": 355,
+            "bottom": 530.625,
+            "width": 120,
+            "height": 44,
+            "disabled": true,
+            "fontSize": 14,
+            "background": "rgba(0, 0, 0, 0)"
+          }
+        ],
+        "label": {
+          "left": 163,
+          "top": 486.625,
+          "right": 227,
+          "bottom": 530.625,
+          "width": 64,
+          "height": 44
+        },
+        "notice": null,
+        "subject": null,
+        "imageCount": 0
+      },
+      "errors": [],
+      "runtime_errors": [],
+      "external_requests": []
+    },
+    {
+      "file": "embedded-deleted-390x844.png",
+      "host": "embedded",
+      "state": "deleted",
+      "viewport": "390x844",
+      "sha256": "053706788d4704518cbbd274446fb4b04d762f6f322885dae6cb36a61f6f46ea",
+      "audit": {
+        "viewport": [
+          390,
+          844
+        ],
+        "documentWidth": 390,
+        "contentWidth": 390,
+        "contentScrollWidth": 390,
+        "pager": {
+          "left": 35,
+          "top": 641.625,
+          "right": 355,
+          "bottom": 685.625,
+          "width": 320,
+          "height": 44
+        },
+        "buttons": [
+          {
+            "left": 35,
+            "top": 641.625,
+            "right": 155,
+            "bottom": 685.625,
+            "width": 120,
+            "height": 44,
+            "disabled": true,
+            "fontSize": 14,
+            "background": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "left": 235,
+            "top": 641.625,
+            "right": 355,
+            "bottom": 685.625,
+            "width": 120,
+            "height": 44,
+            "disabled": false,
+            "fontSize": 14,
+            "background": "rgb(228, 237, 230)"
+          }
+        ],
+        "label": {
+          "left": 163,
+          "top": 641.625,
+          "right": 227,
+          "bottom": 685.625,
+          "width": 64,
+          "height": 44
+        },
+        "notice": {
+          "left": 35,
+          "top": 287,
+          "right": 355,
+          "bottom": 334,
+          "width": 320,
+          "height": 47,
+          "text": {
+            "left": 52,
+            "top": 300,
+            "right": 338,
+            "bottom": 321,
+            "width": 286,
+            "height": 21
+          },
+          "textAlign": "left",
+          "fontSize": 14
+        },
+        "subject": null,
+        "imageCount": 0
+      },
+      "errors": [],
+      "runtime_errors": [],
+      "external_requests": []
+    },
+    {
+      "file": "embedded-long-notice-390x844.png",
+      "host": "embedded",
+      "state": "long-notice",
+      "viewport": "390x844",
+      "sha256": "b2a168f5afdd6370fc51819126be8826eca7c02fa3d0995188666a4ceaf1d0b6",
+      "audit": {
+        "viewport": [
+          390,
+          844
+        ],
+        "documentWidth": 390,
+        "contentWidth": 390,
+        "contentScrollWidth": 390,
+        "pager": {
+          "left": 35,
+          "top": 662.625,
+          "right": 355,
+          "bottom": 706.625,
+          "width": 320,
+          "height": 44
+        },
+        "buttons": [
+          {
+            "left": 35,
+            "top": 662.625,
+            "right": 155,
+            "bottom": 706.625,
+            "width": 120,
+            "height": 44,
+            "disabled": true,
+            "fontSize": 14,
+            "background": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "left": 235,
+            "top": 662.625,
+            "right": 355,
+            "bottom": 706.625,
+            "width": 120,
+            "height": 44,
+            "disabled": false,
+            "fontSize": 14,
+            "background": "rgb(228, 237, 230)"
+          }
+        ],
+        "label": {
+          "left": 163,
+          "top": 662.625,
+          "right": 227,
+          "bottom": 706.625,
+          "width": 64,
+          "height": 44
+        },
+        "notice": {
+          "left": 35,
+          "top": 287,
+          "right": 355,
+          "bottom": 355,
+          "width": 320,
+          "height": 68,
+          "text": {
+            "left": 52,
+            "top": 300,
+            "right": 338,
+            "bottom": 342,
+            "width": 286,
+            "height": 42
+          },
+          "textAlign": "left",
+          "fontSize": 14
+        },
+        "subject": null,
+        "imageCount": 0
+      },
+      "errors": [],
+      "runtime_errors": [],
+      "external_requests": []
+    },
+    {
+      "file": "embedded-long-page-390x844.png",
+      "host": "embedded",
+      "state": "long-page",
+      "viewport": "390x844",
+      "sha256": "ad73cfea3f8d87f8a566ef1d4f991f510272d695908ecc8bd7a32447da68079c",
+      "audit": {
+        "viewport": [
+          390,
+          844
+        ],
+        "documentWidth": 390,
+        "contentWidth": 390,
+        "contentScrollWidth": 390,
+        "pager": {
+          "left": 35,
+          "top": 470.625,
+          "right": 355,
+          "bottom": 530.625,
+          "width": 320,
+          "height": 60
+        },
+        "buttons": [
+          {
+            "left": 35,
+            "top": 470.625,
+            "right": 155,
+            "bottom": 530.625,
+            "width": 120,
+            "height": 60,
+            "disabled": false,
+            "fontSize": 14,
+            "background": "rgb(228, 237, 230)"
+          },
+          {
+            "left": 235,
+            "top": 470.625,
+            "right": 355,
+            "bottom": 530.625,
+            "width": 120,
+            "height": 60,
+            "disabled": false,
+            "fontSize": 14,
+            "background": "rgb(228, 237, 230)"
+          }
+        ],
+        "label": {
+          "left": 163,
+          "top": 470.625,
+          "right": 227,
+          "bottom": 530.625,
+          "width": 64,
+          "height": 60
+        },
+        "notice": null,
+        "subject": null,
+        "imageCount": 0
+      },
+      "errors": [],
+      "runtime_errors": [],
+      "external_requests": []
+    },
+    {
+      "file": "embedded-subject-menu-390x844.png",
+      "host": "embedded",
+      "state": "subject-menu",
+      "viewport": "390x844",
+      "sha256": "cab3cf2c920198e377e7d2bb5c1472d7cc60ca50f023074f4c4f62b3fb623486",
+      "audit": {
+        "viewport": [
+          390,
+          844
+        ],
+        "documentWidth": 390,
+        "contentWidth": 390,
+        "contentScrollWidth": 390,
+        "pager": {
+          "left": 35,
+          "top": 784.625,
+          "right": 355,
+          "bottom": 828.625,
+          "width": 320,
+          "height": 44
+        },
+        "buttons": [
+          {
+            "left": 35,
+            "top": 784.625,
+            "right": 155,
+            "bottom": 828.625,
+            "width": 120,
+            "height": 44,
+            "disabled": true,
+            "fontSize": 14,
+            "background": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "left": 235,
+            "top": 784.625,
+            "right": 355,
+            "bottom": 828.625,
+            "width": 120,
+            "height": 44,
+            "disabled": false,
+            "fontSize": 14,
+            "background": "rgb(228, 237, 230)"
+          }
+        ],
+        "label": {
+          "left": 163,
+          "top": 784.625,
+          "right": 227,
+          "bottom": 828.625,
+          "width": 64,
+          "height": 44
+        },
+        "notice": null,
+        "subject": [
+          {
+            "left": 40,
+            "top": 424,
+            "right": 191,
+            "bottom": 468,
+            "width": 151,
+            "height": 44
+          },
+          {
+            "left": 199,
+            "top": 424,
+            "right": 350,
+            "bottom": 468,
+            "width": 151,
+            "height": 44
+          }
+        ],
+        "imageCount": 0
+      },
+      "errors": [],
+      "runtime_errors": [],
+      "external_requests": []
+    },
+    {
+      "file": "embedded-action-menu-390x844.png",
+      "host": "embedded",
+      "state": "action-menu",
+      "viewport": "390x844",
+      "sha256": "eba1fb63ae823ad383e13f5476e978755c5989db7cf905b4d92bf0b409e84133",
+      "audit": {
+        "viewport": [
+          390,
+          844
+        ],
+        "documentWidth": 390,
+        "contentWidth": 390,
+        "contentScrollWidth": 390,
+        "pager": {
+          "left": 35,
+          "top": 732.625,
+          "right": 355,
+          "bottom": 776.625,
+          "width": 320,
+          "height": 44
+        },
+        "buttons": [
+          {
+            "left": 35,
+            "top": 732.625,
+            "right": 155,
+            "bottom": 776.625,
+            "width": 120,
+            "height": 44,
+            "disabled": true,
+            "fontSize": 14,
+            "background": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "left": 235,
+            "top": 732.625,
+            "right": 355,
+            "bottom": 776.625,
+            "width": 120,
+            "height": 44,
+            "disabled": false,
+            "fontSize": 14,
+            "background": "rgb(228, 237, 230)"
+          }
+        ],
+        "label": {
+          "left": 163,
+          "top": 732.625,
+          "right": 227,
+          "bottom": 776.625,
+          "width": 64,
+          "height": 44
+        },
+        "notice": null,
+        "subject": null,
+        "imageCount": 0
+      },
+      "errors": [],
+      "runtime_errors": [],
+      "external_requests": []
+    },
+    {
+      "file": "embedded-first-430x932.png",
+      "host": "embedded",
+      "state": "first",
+      "viewport": "430x932",
+      "sha256": "3dcc8bdc48f4521f681d8a8334a0ee539e07c705f813a79ceb7272502b108008",
+      "audit": {
+        "viewport": [
+          430,
+          932
+        ],
+        "documentWidth": 430,
+        "contentWidth": 430,
+        "contentScrollWidth": 430,
+        "pager": {
+          "left": 35,
+          "top": 574.625,
+          "right": 395,
+          "bottom": 618.625,
+          "width": 360,
+          "height": 44
+        },
+        "buttons": [
+          {
+            "left": 35,
+            "top": 574.625,
+            "right": 175,
+            "bottom": 618.625,
+            "width": 140,
+            "height": 44,
+            "disabled": true,
+            "fontSize": 14,
+            "background": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "left": 255,
+            "top": 574.625,
+            "right": 395,
+            "bottom": 618.625,
+            "width": 140,
+            "height": 44,
+            "disabled": false,
+            "fontSize": 14,
+            "background": "rgb(228, 237, 230)"
+          }
+        ],
+        "label": {
+          "left": 183,
+          "top": 574.625,
+          "right": 247,
+          "bottom": 618.625,
+          "width": 64,
+          "height": 44
+        },
+        "notice": null,
+        "subject": null,
+        "imageCount": 0
+      },
+      "errors": [],
+      "runtime_errors": [],
+      "external_requests": []
+    },
+    {
+      "file": "embedded-middle-430x932.png",
+      "host": "embedded",
+      "state": "middle",
+      "viewport": "430x932",
+      "sha256": "cedddfd6818fa965bab9ca39d79ace639dc9ca469c8f56ab941c2c1119c8be93",
+      "audit": {
+        "viewport": [
+          430,
+          932
+        ],
+        "documentWidth": 430,
+        "contentWidth": 430,
+        "contentScrollWidth": 430,
+        "pager": {
+          "left": 35,
+          "top": 574.625,
+          "right": 395,
+          "bottom": 618.625,
+          "width": 360,
+          "height": 44
+        },
+        "buttons": [
+          {
+            "left": 35,
+            "top": 574.625,
+            "right": 175,
+            "bottom": 618.625,
+            "width": 140,
+            "height": 44,
+            "disabled": false,
+            "fontSize": 14,
+            "background": "rgb(228, 237, 230)"
+          },
+          {
+            "left": 255,
+            "top": 574.625,
+            "right": 395,
+            "bottom": 618.625,
+            "width": 140,
+            "height": 44,
+            "disabled": false,
+            "fontSize": 14,
+            "background": "rgb(228, 237, 230)"
+          }
+        ],
+        "label": {
+          "left": 183,
+          "top": 574.625,
+          "right": 247,
+          "bottom": 618.625,
+          "width": 64,
+          "height": 44
+        },
+        "notice": null,
+        "subject": null,
+        "imageCount": 0
+      },
+      "errors": [],
+      "runtime_errors": [],
+      "external_requests": []
+    },
+    {
+      "file": "embedded-last-430x932.png",
+      "host": "embedded",
+      "state": "last",
+      "viewport": "430x932",
+      "sha256": "a64c4e563fb5ea81f102a09f65b2c4038d30b9af24f0a2267c20af5e2f807946",
+      "audit": {
+        "viewport": [
+          430,
+          932
+        ],
+        "documentWidth": 430,
+        "contentWidth": 430,
+        "contentScrollWidth": 430,
+        "pager": {
+          "left": 35,
+          "top": 574.625,
+          "right": 395,
+          "bottom": 618.625,
+          "width": 360,
+          "height": 44
+        },
+        "buttons": [
+          {
+            "left": 35,
+            "top": 574.625,
+            "right": 175,
+            "bottom": 618.625,
+            "width": 140,
+            "height": 44,
+            "disabled": false,
+            "fontSize": 14,
+            "background": "rgb(228, 237, 230)"
+          },
+          {
+            "left": 255,
+            "top": 574.625,
+            "right": 395,
+            "bottom": 618.625,
+            "width": 140,
+            "height": 44,
+            "disabled": true,
+            "fontSize": 14,
+            "background": "rgba(0, 0, 0, 0)"
+          }
+        ],
+        "label": {
+          "left": 183,
+          "top": 574.625,
+          "right": 247,
+          "bottom": 618.625,
+          "width": 64,
+          "height": 44
+        },
+        "notice": null,
+        "subject": null,
+        "imageCount": 0
+      },
+      "errors": [],
+      "runtime_errors": [],
+      "external_requests": []
+    },
+    {
+      "file": "embedded-loading-430x932.png",
+      "host": "embedded",
+      "state": "loading",
+      "viewport": "430x932",
+      "sha256": "0b99070d0abb643546f94068ca60e38ead8437e07c0b68ed193e2034313eb5db",
+      "audit": {
+        "viewport": [
+          430,
+          932
+        ],
+        "documentWidth": 430,
+        "contentWidth": 430,
+        "contentScrollWidth": 430,
+        "pager": {
+          "left": 35,
+          "top": 574.625,
+          "right": 395,
+          "bottom": 618.625,
+          "width": 360,
+          "height": 44
+        },
+        "buttons": [
+          {
+            "left": 35,
+            "top": 574.625,
+            "right": 175,
+            "bottom": 618.625,
+            "width": 140,
+            "height": 44,
+            "disabled": true,
+            "fontSize": 14,
+            "background": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "left": 255,
+            "top": 574.625,
+            "right": 395,
+            "bottom": 618.625,
+            "width": 140,
+            "height": 44,
+            "disabled": true,
+            "fontSize": 14,
+            "background": "rgba(0, 0, 0, 0)"
+          }
+        ],
+        "label": {
+          "left": 183,
+          "top": 574.625,
+          "right": 247,
+          "bottom": 618.625,
+          "width": 64,
+          "height": 44
+        },
+        "notice": null,
+        "subject": null,
+        "imageCount": 0
+      },
+      "errors": [],
+      "runtime_errors": [],
+      "external_requests": []
+    },
+    {
+      "file": "embedded-deleted-430x932.png",
+      "host": "embedded",
+      "state": "deleted",
+      "viewport": "430x932",
+      "sha256": "a2ed6c2ef20b447880ffd83f895b6dc8436314d604aa60da3110bfa9fbce1eb7",
+      "audit": {
+        "viewport": [
+          430,
+          932
+        ],
+        "documentWidth": 430,
+        "contentWidth": 430,
+        "contentScrollWidth": 430,
+        "pager": {
+          "left": 35,
+          "top": 641.625,
+          "right": 395,
+          "bottom": 685.625,
+          "width": 360,
+          "height": 44
+        },
+        "buttons": [
+          {
+            "left": 35,
+            "top": 641.625,
+            "right": 175,
+            "bottom": 685.625,
+            "width": 140,
+            "height": 44,
+            "disabled": true,
+            "fontSize": 14,
+            "background": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "left": 255,
+            "top": 641.625,
+            "right": 395,
+            "bottom": 685.625,
+            "width": 140,
+            "height": 44,
+            "disabled": false,
+            "fontSize": 14,
+            "background": "rgb(228, 237, 230)"
+          }
+        ],
+        "label": {
+          "left": 183,
+          "top": 641.625,
+          "right": 247,
+          "bottom": 685.625,
+          "width": 64,
+          "height": 44
+        },
+        "notice": {
+          "left": 35,
+          "top": 287,
+          "right": 395,
+          "bottom": 334,
+          "width": 360,
+          "height": 47,
+          "text": {
+            "left": 52,
+            "top": 300,
+            "right": 378,
+            "bottom": 321,
+            "width": 326,
+            "height": 21
+          },
+          "textAlign": "left",
+          "fontSize": 14
+        },
+        "subject": null,
+        "imageCount": 0
+      },
+      "errors": [],
+      "runtime_errors": [],
+      "external_requests": []
+    },
+    {
+      "file": "embedded-long-notice-430x932.png",
+      "host": "embedded",
+      "state": "long-notice",
+      "viewport": "430x932",
+      "sha256": "4439fb58380af0ea716f2bdc5b539ccc3113d43cec8d05a3a0015703cf4962a2",
+      "audit": {
+        "viewport": [
+          430,
+          932
+        ],
+        "documentWidth": 430,
+        "contentWidth": 430,
+        "contentScrollWidth": 430,
+        "pager": {
+          "left": 35,
+          "top": 662.625,
+          "right": 395,
+          "bottom": 706.625,
+          "width": 360,
+          "height": 44
+        },
+        "buttons": [
+          {
+            "left": 35,
+            "top": 662.625,
+            "right": 175,
+            "bottom": 706.625,
+            "width": 140,
+            "height": 44,
+            "disabled": true,
+            "fontSize": 14,
+            "background": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "left": 255,
+            "top": 662.625,
+            "right": 395,
+            "bottom": 706.625,
+            "width": 140,
+            "height": 44,
+            "disabled": false,
+            "fontSize": 14,
+            "background": "rgb(228, 237, 230)"
+          }
+        ],
+        "label": {
+          "left": 183,
+          "top": 662.625,
+          "right": 247,
+          "bottom": 706.625,
+          "width": 64,
+          "height": 44
+        },
+        "notice": {
+          "left": 35,
+          "top": 287,
+          "right": 395,
+          "bottom": 355,
+          "width": 360,
+          "height": 68,
+          "text": {
+            "left": 52,
+            "top": 300,
+            "right": 378,
+            "bottom": 342,
+            "width": 326,
+            "height": 42
+          },
+          "textAlign": "left",
+          "fontSize": 14
+        },
+        "subject": null,
+        "imageCount": 0
+      },
+      "errors": [],
+      "runtime_errors": [],
+      "external_requests": []
+    },
+    {
+      "file": "embedded-long-page-430x932.png",
+      "host": "embedded",
+      "state": "long-page",
+      "viewport": "430x932",
+      "sha256": "e19904efe109e4f4f7694c364015dbc57ea2b81e28fd0e16c993b135f057a2db",
+      "audit": {
+        "viewport": [
+          430,
+          932
+        ],
+        "documentWidth": 430,
+        "contentWidth": 430,
+        "contentScrollWidth": 430,
+        "pager": {
+          "left": 35,
+          "top": 558.625,
+          "right": 395,
+          "bottom": 618.625,
+          "width": 360,
+          "height": 60
+        },
+        "buttons": [
+          {
+            "left": 35,
+            "top": 558.625,
+            "right": 175,
+            "bottom": 618.625,
+            "width": 140,
+            "height": 60,
+            "disabled": false,
+            "fontSize": 14,
+            "background": "rgb(228, 237, 230)"
+          },
+          {
+            "left": 255,
+            "top": 558.625,
+            "right": 395,
+            "bottom": 618.625,
+            "width": 140,
+            "height": 60,
+            "disabled": false,
+            "fontSize": 14,
+            "background": "rgb(228, 237, 230)"
+          }
+        ],
+        "label": {
+          "left": 183,
+          "top": 558.625,
+          "right": 247,
+          "bottom": 618.625,
+          "width": 64,
+          "height": 60
+        },
+        "notice": null,
+        "subject": null,
+        "imageCount": 0
+      },
+      "errors": [],
+      "runtime_errors": [],
+      "external_requests": []
+    },
+    {
+      "file": "embedded-subject-menu-430x932.png",
+      "host": "embedded",
+      "state": "subject-menu",
+      "viewport": "430x932",
+      "sha256": "5d0d5aab8b73f0f6eba4c14b7d075b95c624a4906cd68d1b30caa67deaedff74",
+      "audit": {
+        "viewport": [
+          430,
+          932
+        ],
+        "documentWidth": 430,
+        "contentWidth": 430,
+        "contentScrollWidth": 430,
+        "pager": {
+          "left": 35,
+          "top": 784.625,
+          "right": 395,
+          "bottom": 828.625,
+          "width": 360,
+          "height": 44
+        },
+        "buttons": [
+          {
+            "left": 35,
+            "top": 784.625,
+            "right": 175,
+            "bottom": 828.625,
+            "width": 140,
+            "height": 44,
+            "disabled": true,
+            "fontSize": 14,
+            "background": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "left": 255,
+            "top": 784.625,
+            "right": 395,
+            "bottom": 828.625,
+            "width": 140,
+            "height": 44,
+            "disabled": false,
+            "fontSize": 14,
+            "background": "rgb(228, 237, 230)"
+          }
+        ],
+        "label": {
+          "left": 183,
+          "top": 784.625,
+          "right": 247,
+          "bottom": 828.625,
+          "width": 64,
+          "height": 44
+        },
+        "notice": null,
+        "subject": [
+          {
+            "left": 40,
+            "top": 424,
+            "right": 211,
+            "bottom": 468,
+            "width": 171,
+            "height": 44
+          },
+          {
+            "left": 219,
+            "top": 424,
+            "right": 390,
+            "bottom": 468,
+            "width": 171,
+            "height": 44
+          }
+        ],
+        "imageCount": 0
+      },
+      "errors": [],
+      "runtime_errors": [],
+      "external_requests": []
+    },
+    {
+      "file": "embedded-action-menu-430x932.png",
+      "host": "embedded",
+      "state": "action-menu",
+      "viewport": "430x932",
+      "sha256": "82366e292dd1929523be24bd04517f2b721c3e28bbe75cc743b2532d89113f07",
+      "audit": {
+        "viewport": [
+          430,
+          932
+        ],
+        "documentWidth": 430,
+        "contentWidth": 430,
+        "contentScrollWidth": 430,
+        "pager": {
+          "left": 35,
+          "top": 732.625,
+          "right": 395,
+          "bottom": 776.625,
+          "width": 360,
+          "height": 44
+        },
+        "buttons": [
+          {
+            "left": 35,
+            "top": 732.625,
+            "right": 175,
+            "bottom": 776.625,
+            "width": 140,
+            "height": 44,
+            "disabled": true,
+            "fontSize": 14,
+            "background": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "left": 255,
+            "top": 732.625,
+            "right": 395,
+            "bottom": 776.625,
+            "width": 140,
+            "height": 44,
+            "disabled": false,
+            "fontSize": 14,
+            "background": "rgb(228, 237, 230)"
+          }
+        ],
+        "label": {
+          "left": 183,
+          "top": 732.625,
+          "right": 247,
+          "bottom": 776.625,
+          "width": 64,
+          "height": 44
+        },
+        "notice": null,
+        "subject": null,
+        "imageCount": 0
+      },
+      "errors": [],
+      "runtime_errors": [],
+      "external_requests": []
+    },
+    {
+      "file": "standalone-first-320x568.png",
+      "host": "standalone",
+      "state": "first",
+      "viewport": "320x568",
+      "sha256": "8c349ee0bc480ea5127430ceac8aa861be7046825facddde990fa98ba18b447e",
+      "audit": {
+        "viewport": [
+          320,
+          568
+        ],
+        "documentWidth": 320,
+        "contentWidth": 320,
+        "contentScrollWidth": 320,
+        "pager": {
+          "left": 18,
+          "top": 476.125,
+          "right": 302,
+          "bottom": 520.125,
+          "width": 284,
+          "height": 44
+        },
+        "buttons": [
+          {
+            "left": 18,
+            "top": 476.125,
+            "right": 120,
+            "bottom": 520.125,
+            "width": 102,
+            "height": 44,
+            "disabled": true,
+            "fontSize": 14,
+            "background": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "left": 200,
+            "top": 476.125,
+            "right": 302,
+            "bottom": 520.125,
+            "width": 102,
+            "height": 44,
+            "disabled": false,
+            "fontSize": 14,
+            "background": "rgb(228, 237, 230)"
+          }
+        ],
+        "label": {
+          "left": 128,
+          "top": 476.125,
+          "right": 192,
+          "bottom": 520.125,
+          "width": 64,
+          "height": 44
+        },
+        "notice": null,
+        "subject": null,
+        "imageCount": 0
+      },
+      "errors": [],
+      "runtime_errors": [],
+      "external_requests": []
+    },
+    {
+      "file": "standalone-middle-320x568.png",
+      "host": "standalone",
+      "state": "middle",
+      "viewport": "320x568",
+      "sha256": "b44ad2e4c53f5b3c0f635bbb671689c619e9bbeb3f647f12ff9ba927fda1fefc",
+      "audit": {
+        "viewport": [
+          320,
+          568
+        ],
+        "documentWidth": 320,
+        "contentWidth": 320,
+        "contentScrollWidth": 320,
+        "pager": {
+          "left": 18,
+          "top": 476.125,
+          "right": 302,
+          "bottom": 520.125,
+          "width": 284,
+          "height": 44
+        },
+        "buttons": [
+          {
+            "left": 18,
+            "top": 476.125,
+            "right": 120,
+            "bottom": 520.125,
+            "width": 102,
+            "height": 44,
+            "disabled": false,
+            "fontSize": 14,
+            "background": "rgb(228, 237, 230)"
+          },
+          {
+            "left": 200,
+            "top": 476.125,
+            "right": 302,
+            "bottom": 520.125,
+            "width": 102,
+            "height": 44,
+            "disabled": false,
+            "fontSize": 14,
+            "background": "rgb(228, 237, 230)"
+          }
+        ],
+        "label": {
+          "left": 128,
+          "top": 476.125,
+          "right": 192,
+          "bottom": 520.125,
+          "width": 64,
+          "height": 44
+        },
+        "notice": null,
+        "subject": null,
+        "imageCount": 0
+      },
+      "errors": [],
+      "runtime_errors": [],
+      "external_requests": []
+    },
+    {
+      "file": "standalone-last-320x568.png",
+      "host": "standalone",
+      "state": "last",
+      "viewport": "320x568",
+      "sha256": "baff2f8057f3822ca26b8d8362a0a5cbb3015b36d1f6f27e0d2c2a3f4477cc09",
+      "audit": {
+        "viewport": [
+          320,
+          568
+        ],
+        "documentWidth": 320,
+        "contentWidth": 320,
+        "contentScrollWidth": 320,
+        "pager": {
+          "left": 18,
+          "top": 476.125,
+          "right": 302,
+          "bottom": 520.125,
+          "width": 284,
+          "height": 44
+        },
+        "buttons": [
+          {
+            "left": 18,
+            "top": 476.125,
+            "right": 120,
+            "bottom": 520.125,
+            "width": 102,
+            "height": 44,
+            "disabled": false,
+            "fontSize": 14,
+            "background": "rgb(228, 237, 230)"
+          },
+          {
+            "left": 200,
+            "top": 476.125,
+            "right": 302,
+            "bottom": 520.125,
+            "width": 102,
+            "height": 44,
+            "disabled": true,
+            "fontSize": 14,
+            "background": "rgba(0, 0, 0, 0)"
+          }
+        ],
+        "label": {
+          "left": 128,
+          "top": 476.125,
+          "right": 192,
+          "bottom": 520.125,
+          "width": 64,
+          "height": 44
+        },
+        "notice": null,
+        "subject": null,
+        "imageCount": 0
+      },
+      "errors": [],
+      "runtime_errors": [],
+      "external_requests": []
+    },
+    {
+      "file": "standalone-loading-320x568.png",
+      "host": "standalone",
+      "state": "loading",
+      "viewport": "320x568",
+      "sha256": "0500dcff4ac39efc68ff5d7a7a89a1f630b355656067a7b29ad43f421ec171a1",
+      "audit": {
+        "viewport": [
+          320,
+          568
+        ],
+        "documentWidth": 320,
+        "contentWidth": 320,
+        "contentScrollWidth": 320,
+        "pager": {
+          "left": 18,
+          "top": 476.125,
+          "right": 302,
+          "bottom": 520.125,
+          "width": 284,
+          "height": 44
+        },
+        "buttons": [
+          {
+            "left": 18,
+            "top": 476.125,
+            "right": 120,
+            "bottom": 520.125,
+            "width": 102,
+            "height": 44,
+            "disabled": true,
+            "fontSize": 14,
+            "background": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "left": 200,
+            "top": 476.125,
+            "right": 302,
+            "bottom": 520.125,
+            "width": 102,
+            "height": 44,
+            "disabled": true,
+            "fontSize": 14,
+            "background": "rgba(0, 0, 0, 0)"
+          }
+        ],
+        "label": {
+          "left": 128,
+          "top": 476.125,
+          "right": 192,
+          "bottom": 520.125,
+          "width": 64,
+          "height": 44
+        },
+        "notice": null,
+        "subject": null,
+        "imageCount": 0
+      },
+      "errors": [],
+      "runtime_errors": [],
+      "external_requests": []
+    },
+    {
+      "file": "standalone-deleted-320x568.png",
+      "host": "standalone",
+      "state": "deleted",
+      "viewport": "320x568",
+      "sha256": "5a118014ac280f41b10c7fd971f4df7facf5c2371a3f5627402933a0cea8f200",
+      "audit": {
+        "viewport": [
+          320,
+          568
+        ],
+        "documentWidth": 320,
+        "contentWidth": 320,
+        "contentScrollWidth": 320,
+        "pager": {
+          "left": 18,
+          "top": 476.125,
+          "right": 302,
+          "bottom": 520.125,
+          "width": 284,
+          "height": 44
+        },
+        "buttons": [
+          {
+            "left": 18,
+            "top": 476.125,
+            "right": 120,
+            "bottom": 520.125,
+            "width": 102,
+            "height": 44,
+            "disabled": true,
+            "fontSize": 14,
+            "background": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "left": 200,
+            "top": 476.125,
+            "right": 302,
+            "bottom": 520.125,
+            "width": 102,
+            "height": 44,
+            "disabled": false,
+            "fontSize": 14,
+            "background": "rgb(228, 237, 230)"
+          }
+        ],
+        "label": {
+          "left": 128,
+          "top": 476.125,
+          "right": 192,
+          "bottom": 520.125,
+          "width": 64,
+          "height": 44
+        },
+        "notice": {
+          "left": 18,
+          "top": 75,
+          "right": 302,
+          "bottom": 122,
+          "width": 284,
+          "height": 47,
+          "text": {
+            "left": 35,
+            "top": 88,
+            "right": 285,
+            "bottom": 109,
+            "width": 250,
+            "height": 21
+          },
+          "textAlign": "left",
+          "fontSize": 14
+        },
+        "subject": null,
+        "imageCount": 0
+      },
+      "errors": [],
+      "runtime_errors": [],
+      "external_requests": []
+    },
+    {
+      "file": "standalone-long-notice-320x568.png",
+      "host": "standalone",
+      "state": "long-notice",
+      "viewport": "320x568",
+      "sha256": "69f46d1763037f34fef7f526313f098338cce2bbc4146738d84ef9664593ac03",
+      "audit": {
+        "viewport": [
+          320,
+          568
+        ],
+        "documentWidth": 320,
+        "contentWidth": 320,
+        "contentScrollWidth": 320,
+        "pager": {
+          "left": 18,
+          "top": 492.125,
+          "right": 302,
+          "bottom": 536.125,
+          "width": 284,
+          "height": 44
+        },
+        "buttons": [
+          {
+            "left": 18,
+            "top": 492.125,
+            "right": 120,
+            "bottom": 536.125,
+            "width": 102,
+            "height": 44,
+            "disabled": true,
+            "fontSize": 14,
+            "background": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "left": 200,
+            "top": 492.125,
+            "right": 302,
+            "bottom": 536.125,
+            "width": 102,
+            "height": 44,
+            "disabled": false,
+            "fontSize": 14,
+            "background": "rgb(228, 237, 230)"
+          }
+        ],
+        "label": {
+          "left": 128,
+          "top": 492.125,
+          "right": 192,
+          "bottom": 536.125,
+          "width": 64,
+          "height": 44
+        },
+        "notice": {
+          "left": 18,
+          "top": 70,
+          "right": 302,
+          "bottom": 138,
+          "width": 284,
+          "height": 68,
+          "text": {
+            "left": 35,
+            "top": 83,
+            "right": 285,
+            "bottom": 125,
+            "width": 250,
+            "height": 42
+          },
+          "textAlign": "left",
+          "fontSize": 14
+        },
+        "subject": null,
+        "imageCount": 0
+      },
+      "errors": [],
+      "runtime_errors": [],
+      "external_requests": []
+    },
+    {
+      "file": "standalone-long-page-320x568.png",
+      "host": "standalone",
+      "state": "long-page",
+      "viewport": "320x568",
+      "sha256": "076b57d2a8efca6513affb33a6ed1861429d5e47bfb5be0aa0072860b71bc265",
+      "audit": {
+        "viewport": [
+          320,
+          568
+        ],
+        "documentWidth": 320,
+        "contentWidth": 320,
+        "contentScrollWidth": 320,
+        "pager": {
+          "left": 18,
+          "top": 460.125,
+          "right": 302,
+          "bottom": 520.125,
+          "width": 284,
+          "height": 60
+        },
+        "buttons": [
+          {
+            "left": 18,
+            "top": 460.125,
+            "right": 120,
+            "bottom": 520.125,
+            "width": 102,
+            "height": 60,
+            "disabled": false,
+            "fontSize": 14,
+            "background": "rgb(228, 237, 230)"
+          },
+          {
+            "left": 200,
+            "top": 460.125,
+            "right": 302,
+            "bottom": 520.125,
+            "width": 102,
+            "height": 60,
+            "disabled": false,
+            "fontSize": 14,
+            "background": "rgb(228, 237, 230)"
+          }
+        ],
+        "label": {
+          "left": 128,
+          "top": 460.125,
+          "right": 192,
+          "bottom": 520.125,
+          "width": 64,
+          "height": 60
+        },
+        "notice": null,
+        "subject": null,
+        "imageCount": 0
+      },
+      "errors": [],
+      "runtime_errors": [],
+      "external_requests": []
+    },
+    {
+      "file": "standalone-subject-menu-320x568.png",
+      "host": "standalone",
+      "state": "subject-menu",
+      "viewport": "320x568",
+      "sha256": "8e8fa0c287e53a75b60d9b3267e765df1ea16806fa393e87be83ef889dddc462",
+      "audit": {
+        "viewport": [
+          320,
+          568
+        ],
+        "documentWidth": 320,
+        "contentWidth": 320,
+        "contentScrollWidth": 320,
+        "pager": {
+          "left": 18,
+          "top": 618.125,
+          "right": 302,
+          "bottom": 662.125,
+          "width": 284,
+          "height": 44
+        },
+        "buttons": [
+          {
+            "left": 18,
+            "top": 618.125,
+            "right": 120,
+            "bottom": 662.125,
+            "width": 102,
+            "height": 44,
+            "disabled": true,
+            "fontSize": 14,
+            "background": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "left": 200,
+            "top": 618.125,
+            "right": 302,
+            "bottom": 662.125,
+            "width": 102,
+            "height": 44,
+            "disabled": false,
+            "fontSize": 14,
+            "background": "rgb(228, 237, 230)"
+          }
+        ],
+        "label": {
+          "left": 128,
+          "top": 618.125,
+          "right": 192,
+          "bottom": 662.125,
+          "width": 64,
+          "height": 44
+        },
+        "notice": null,
+        "subject": [
+          {
+            "left": 23,
+            "top": 211,
+            "right": 156,
+            "bottom": 255,
+            "width": 133,
+            "height": 44
+          },
+          {
+            "left": 164,
+            "top": 211,
+            "right": 297,
+            "bottom": 255,
+            "width": 133,
+            "height": 44
+          }
+        ],
+        "imageCount": 0
+      },
+      "errors": [],
+      "runtime_errors": [],
+      "external_requests": []
+    },
+    {
+      "file": "standalone-action-menu-320x568.png",
+      "host": "standalone",
+      "state": "action-menu",
+      "viewport": "320x568",
+      "sha256": "9cb1ddd83fae8e9505b4ef77dbfed676c38e8eccb8dd34932f60e00e8eb49aa5",
+      "audit": {
+        "viewport": [
+          320,
+          568
+        ],
+        "documentWidth": 320,
+        "contentWidth": 320,
+        "contentScrollWidth": 320,
+        "pager": {
+          "left": 18,
+          "top": 655.125,
+          "right": 302,
+          "bottom": 699.125,
+          "width": 284,
+          "height": 44
+        },
+        "buttons": [
+          {
+            "left": 18,
+            "top": 655.125,
+            "right": 120,
+            "bottom": 699.125,
+            "width": 102,
+            "height": 44,
+            "disabled": true,
+            "fontSize": 14,
+            "background": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "left": 200,
+            "top": 655.125,
+            "right": 302,
+            "bottom": 699.125,
+            "width": 102,
+            "height": 44,
+            "disabled": false,
+            "fontSize": 14,
+            "background": "rgb(228, 237, 230)"
+          }
+        ],
+        "label": {
+          "left": 128,
+          "top": 655.125,
+          "right": 192,
+          "bottom": 699.125,
+          "width": 64,
+          "height": 44
+        },
+        "notice": null,
+        "subject": null,
+        "imageCount": 0
+      },
+      "errors": [],
+      "runtime_errors": [],
+      "external_requests": []
+    },
+    {
+      "file": "standalone-first-390x844.png",
+      "host": "standalone",
+      "state": "first",
+      "viewport": "390x844",
+      "sha256": "d1a40928c1208745dcafad7d8bc6a82fe6ea2708002b816fcf5a5bfa634e0fca",
+      "audit": {
+        "viewport": [
+          390,
+          844
+        ],
+        "documentWidth": 390,
+        "contentWidth": 390,
+        "contentScrollWidth": 390,
+        "pager": {
+          "left": 18,
+          "top": 518.875,
+          "right": 372,
+          "bottom": 562.875,
+          "width": 354,
+          "height": 44
+        },
+        "buttons": [
+          {
+            "left": 18,
+            "top": 518.875,
+            "right": 155,
+            "bottom": 562.875,
+            "width": 137,
+            "height": 44,
+            "disabled": true,
+            "fontSize": 14,
+            "background": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "left": 235,
+            "top": 518.875,
+            "right": 372,
+            "bottom": 562.875,
+            "width": 137,
+            "height": 44,
+            "disabled": false,
+            "fontSize": 14,
+            "background": "rgb(228, 237, 230)"
+          }
+        ],
+        "label": {
+          "left": 163,
+          "top": 518.875,
+          "right": 227,
+          "bottom": 562.875,
+          "width": 64,
+          "height": 44
+        },
+        "notice": null,
+        "subject": null,
+        "imageCount": 0
+      },
+      "errors": [],
+      "runtime_errors": [],
+      "external_requests": []
+    },
+    {
+      "file": "standalone-middle-390x844.png",
+      "host": "standalone",
+      "state": "middle",
+      "viewport": "390x844",
+      "sha256": "37bbb4ddeb219ed6e8b9b99f90024a9f372c3b0781d38842ecb4b740b6ec09c8",
+      "audit": {
+        "viewport": [
+          390,
+          844
+        ],
+        "documentWidth": 390,
+        "contentWidth": 390,
+        "contentScrollWidth": 390,
+        "pager": {
+          "left": 18,
+          "top": 518.875,
+          "right": 372,
+          "bottom": 562.875,
+          "width": 354,
+          "height": 44
+        },
+        "buttons": [
+          {
+            "left": 18,
+            "top": 518.875,
+            "right": 155,
+            "bottom": 562.875,
+            "width": 137,
+            "height": 44,
+            "disabled": false,
+            "fontSize": 14,
+            "background": "rgb(228, 237, 230)"
+          },
+          {
+            "left": 235,
+            "top": 518.875,
+            "right": 372,
+            "bottom": 562.875,
+            "width": 137,
+            "height": 44,
+            "disabled": false,
+            "fontSize": 14,
+            "background": "rgb(228, 237, 230)"
+          }
+        ],
+        "label": {
+          "left": 163,
+          "top": 518.875,
+          "right": 227,
+          "bottom": 562.875,
+          "width": 64,
+          "height": 44
+        },
+        "notice": null,
+        "subject": null,
+        "imageCount": 0
+      },
+      "errors": [],
+      "runtime_errors": [],
+      "external_requests": []
+    },
+    {
+      "file": "standalone-last-390x844.png",
+      "host": "standalone",
+      "state": "last",
+      "viewport": "390x844",
+      "sha256": "6d6f6315a48410c49678ae58e2b1a39bceacd9f598612758587b3aa5bd558424",
+      "audit": {
+        "viewport": [
+          390,
+          844
+        ],
+        "documentWidth": 390,
+        "contentWidth": 390,
+        "contentScrollWidth": 390,
+        "pager": {
+          "left": 18,
+          "top": 518.875,
+          "right": 372,
+          "bottom": 562.875,
+          "width": 354,
+          "height": 44
+        },
+        "buttons": [
+          {
+            "left": 18,
+            "top": 518.875,
+            "right": 155,
+            "bottom": 562.875,
+            "width": 137,
+            "height": 44,
+            "disabled": false,
+            "fontSize": 14,
+            "background": "rgb(228, 237, 230)"
+          },
+          {
+            "left": 235,
+            "top": 518.875,
+            "right": 372,
+            "bottom": 562.875,
+            "width": 137,
+            "height": 44,
+            "disabled": true,
+            "fontSize": 14,
+            "background": "rgba(0, 0, 0, 0)"
+          }
+        ],
+        "label": {
+          "left": 163,
+          "top": 518.875,
+          "right": 227,
+          "bottom": 562.875,
+          "width": 64,
+          "height": 44
+        },
+        "notice": null,
+        "subject": null,
+        "imageCount": 0
+      },
+      "errors": [],
+      "runtime_errors": [],
+      "external_requests": []
+    },
+    {
+      "file": "standalone-loading-390x844.png",
+      "host": "standalone",
+      "state": "loading",
+      "viewport": "390x844",
+      "sha256": "190d36c791f7658ab1d7c11e8b201608e5e528f94b2f88c4652f2662fe7defb2",
+      "audit": {
+        "viewport": [
+          390,
+          844
+        ],
+        "documentWidth": 390,
+        "contentWidth": 390,
+        "contentScrollWidth": 390,
+        "pager": {
+          "left": 18,
+          "top": 518.875,
+          "right": 372,
+          "bottom": 562.875,
+          "width": 354,
+          "height": 44
+        },
+        "buttons": [
+          {
+            "left": 18,
+            "top": 518.875,
+            "right": 155,
+            "bottom": 562.875,
+            "width": 137,
+            "height": 44,
+            "disabled": true,
+            "fontSize": 14,
+            "background": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "left": 235,
+            "top": 518.875,
+            "right": 372,
+            "bottom": 562.875,
+            "width": 137,
+            "height": 44,
+            "disabled": true,
+            "fontSize": 14,
+            "background": "rgba(0, 0, 0, 0)"
+          }
+        ],
+        "label": {
+          "left": 163,
+          "top": 518.875,
+          "right": 227,
+          "bottom": 562.875,
+          "width": 64,
+          "height": 44
+        },
+        "notice": null,
+        "subject": null,
+        "imageCount": 0
+      },
+      "errors": [],
+      "runtime_errors": [],
+      "external_requests": []
+    },
+    {
+      "file": "standalone-deleted-390x844.png",
+      "host": "standalone",
+      "state": "deleted",
+      "viewport": "390x844",
+      "sha256": "e2b38e0aee92a260798ab98b749e7d547815723d1a049ae693797b8fd20c27c9",
+      "audit": {
+        "viewport": [
+          390,
+          844
+        ],
+        "documentWidth": 390,
+        "contentWidth": 390,
+        "contentScrollWidth": 390,
+        "pager": {
+          "left": 18,
+          "top": 577.875,
+          "right": 372,
+          "bottom": 621.875,
+          "width": 354,
+          "height": 44
+        },
+        "buttons": [
+          {
+            "left": 18,
+            "top": 577.875,
+            "right": 155,
+            "bottom": 621.875,
+            "width": 137,
+            "height": 44,
+            "disabled": true,
+            "fontSize": 14,
+            "background": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "left": 235,
+            "top": 577.875,
+            "right": 372,
+            "bottom": 621.875,
+            "width": 137,
+            "height": 44,
+            "disabled": false,
+            "fontSize": 14,
+            "background": "rgb(228, 237, 230)"
+          }
+        ],
+        "label": {
+          "left": 163,
+          "top": 577.875,
+          "right": 227,
+          "bottom": 621.875,
+          "width": 64,
+          "height": 44
+        },
+        "notice": {
+          "left": 18,
+          "top": 200,
+          "right": 372,
+          "bottom": 247,
+          "width": 354,
+          "height": 47,
+          "text": {
+            "left": 35,
+            "top": 213,
+            "right": 355,
+            "bottom": 234,
+            "width": 320,
+            "height": 21
+          },
+          "textAlign": "left",
+          "fontSize": 14
+        },
+        "subject": null,
+        "imageCount": 0
+      },
+      "errors": [],
+      "runtime_errors": [],
+      "external_requests": []
+    },
+    {
+      "file": "standalone-long-notice-390x844.png",
+      "host": "standalone",
+      "state": "long-notice",
+      "viewport": "390x844",
+      "sha256": "b69ec66e4c954c9e992f191c12e2319e7807a0088c1902326d50e7d66bb85912",
+      "audit": {
+        "viewport": [
+          390,
+          844
+        ],
+        "documentWidth": 390,
+        "contentWidth": 390,
+        "contentScrollWidth": 390,
+        "pager": {
+          "left": 18,
+          "top": 598.875,
+          "right": 372,
+          "bottom": 642.875,
+          "width": 354,
+          "height": 44
+        },
+        "buttons": [
+          {
+            "left": 18,
+            "top": 598.875,
+            "right": 155,
+            "bottom": 642.875,
+            "width": 137,
+            "height": 44,
+            "disabled": true,
+            "fontSize": 14,
+            "background": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "left": 235,
+            "top": 598.875,
+            "right": 372,
+            "bottom": 642.875,
+            "width": 137,
+            "height": 44,
+            "disabled": false,
+            "fontSize": 14,
+            "background": "rgb(228, 237, 230)"
+          }
+        ],
+        "label": {
+          "left": 163,
+          "top": 598.875,
+          "right": 227,
+          "bottom": 642.875,
+          "width": 64,
+          "height": 44
+        },
+        "notice": {
+          "left": 18,
+          "top": 200,
+          "right": 372,
+          "bottom": 268,
+          "width": 354,
+          "height": 68,
+          "text": {
+            "left": 35,
+            "top": 213,
+            "right": 355,
+            "bottom": 255,
+            "width": 320,
+            "height": 42
+          },
+          "textAlign": "left",
+          "fontSize": 14
+        },
+        "subject": null,
+        "imageCount": 0
+      },
+      "errors": [],
+      "runtime_errors": [],
+      "external_requests": []
+    },
+    {
+      "file": "standalone-long-page-390x844.png",
+      "host": "standalone",
+      "state": "long-page",
+      "viewport": "390x844",
+      "sha256": "24f38a0f22eb0c91cd3f8db9e50ebc43b5772d3cfc6c530f92a823f0b9d6eee4",
+      "audit": {
+        "viewport": [
+          390,
+          844
+        ],
+        "documentWidth": 390,
+        "contentWidth": 390,
+        "contentScrollWidth": 390,
+        "pager": {
+          "left": 18,
+          "top": 518.875,
+          "right": 372,
+          "bottom": 578.875,
+          "width": 354,
+          "height": 60
+        },
+        "buttons": [
+          {
+            "left": 18,
+            "top": 518.875,
+            "right": 155,
+            "bottom": 578.875,
+            "width": 137,
+            "height": 60,
+            "disabled": false,
+            "fontSize": 14,
+            "background": "rgb(228, 237, 230)"
+          },
+          {
+            "left": 235,
+            "top": 518.875,
+            "right": 372,
+            "bottom": 578.875,
+            "width": 137,
+            "height": 60,
+            "disabled": false,
+            "fontSize": 14,
+            "background": "rgb(228, 237, 230)"
+          }
+        ],
+        "label": {
+          "left": 163,
+          "top": 518.875,
+          "right": 227,
+          "bottom": 578.875,
+          "width": 64,
+          "height": 60
+        },
+        "notice": null,
+        "subject": null,
+        "imageCount": 0
+      },
+      "errors": [],
+      "runtime_errors": [],
+      "external_requests": []
+    },
+    {
+      "file": "standalone-subject-menu-390x844.png",
+      "host": "standalone",
+      "state": "subject-menu",
+      "viewport": "390x844",
+      "sha256": "324d05c598509a1c0cf847385aa3b2a953e2649a40e728d81fc5de7328c09979",
+      "audit": {
+        "viewport": [
+          390,
+          844
+        ],
+        "documentWidth": 390,
+        "contentWidth": 390,
+        "contentScrollWidth": 390,
+        "pager": {
+          "left": 18,
+          "top": 720.875,
+          "right": 372,
+          "bottom": 764.875,
+          "width": 354,
+          "height": 44
+        },
+        "buttons": [
+          {
+            "left": 18,
+            "top": 720.875,
+            "right": 155,
+            "bottom": 764.875,
+            "width": 137,
+            "height": 44,
+            "disabled": true,
+            "fontSize": 14,
+            "background": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "left": 235,
+            "top": 720.875,
+            "right": 372,
+            "bottom": 764.875,
+            "width": 137,
+            "height": 44,
+            "disabled": false,
+            "fontSize": 14,
+            "background": "rgb(228, 237, 230)"
+          }
+        ],
+        "label": {
+          "left": 163,
+          "top": 720.875,
+          "right": 227,
+          "bottom": 764.875,
+          "width": 64,
+          "height": 44
+        },
+        "notice": null,
+        "subject": [
+          {
+            "left": 23,
+            "top": 337,
+            "right": 191,
+            "bottom": 381,
+            "width": 168,
+            "height": 44
+          },
+          {
+            "left": 199,
+            "top": 337,
+            "right": 367,
+            "bottom": 381,
+            "width": 168,
+            "height": 44
+          }
+        ],
+        "imageCount": 0
+      },
+      "errors": [],
+      "runtime_errors": [],
+      "external_requests": []
+    },
+    {
+      "file": "standalone-action-menu-390x844.png",
+      "host": "standalone",
+      "state": "action-menu",
+      "viewport": "390x844",
+      "sha256": "5fe4ce9c826c1a31c97b5edaee23496f5761405cc3ca2e12deeac1d5187d23bf",
+      "audit": {
+        "viewport": [
+          390,
+          844
+        ],
+        "documentWidth": 390,
+        "contentWidth": 390,
+        "contentScrollWidth": 390,
+        "pager": {
+          "left": 18,
+          "top": 668.875,
+          "right": 372,
+          "bottom": 712.875,
+          "width": 354,
+          "height": 44
+        },
+        "buttons": [
+          {
+            "left": 18,
+            "top": 668.875,
+            "right": 155,
+            "bottom": 712.875,
+            "width": 137,
+            "height": 44,
+            "disabled": true,
+            "fontSize": 14,
+            "background": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "left": 235,
+            "top": 668.875,
+            "right": 372,
+            "bottom": 712.875,
+            "width": 137,
+            "height": 44,
+            "disabled": false,
+            "fontSize": 14,
+            "background": "rgb(228, 237, 230)"
+          }
+        ],
+        "label": {
+          "left": 163,
+          "top": 668.875,
+          "right": 227,
+          "bottom": 712.875,
+          "width": 64,
+          "height": 44
+        },
+        "notice": null,
+        "subject": null,
+        "imageCount": 0
+      },
+      "errors": [],
+      "runtime_errors": [],
+      "external_requests": []
+    },
+    {
+      "file": "standalone-first-430x932.png",
+      "host": "standalone",
+      "state": "first",
+      "viewport": "430x932",
+      "sha256": "fdc89a1c25c932053f7716538b1d436aa91adf9f9eebf776832f413a420361e1",
+      "audit": {
+        "viewport": [
+          430,
+          932
+        ],
+        "documentWidth": 430,
+        "contentWidth": 430,
+        "contentScrollWidth": 430,
+        "pager": {
+          "left": 18,
+          "top": 518.875,
+          "right": 412,
+          "bottom": 562.875,
+          "width": 394,
+          "height": 44
+        },
+        "buttons": [
+          {
+            "left": 18,
+            "top": 518.875,
+            "right": 175,
+            "bottom": 562.875,
+            "width": 157,
+            "height": 44,
+            "disabled": true,
+            "fontSize": 14,
+            "background": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "left": 255,
+            "top": 518.875,
+            "right": 412,
+            "bottom": 562.875,
+            "width": 157,
+            "height": 44,
+            "disabled": false,
+            "fontSize": 14,
+            "background": "rgb(228, 237, 230)"
+          }
+        ],
+        "label": {
+          "left": 183,
+          "top": 518.875,
+          "right": 247,
+          "bottom": 562.875,
+          "width": 64,
+          "height": 44
+        },
+        "notice": null,
+        "subject": null,
+        "imageCount": 0
+      },
+      "errors": [],
+      "runtime_errors": [],
+      "external_requests": []
+    },
+    {
+      "file": "standalone-middle-430x932.png",
+      "host": "standalone",
+      "state": "middle",
+      "viewport": "430x932",
+      "sha256": "649fb707acb2055778b573b0cc4d0423624ba6f8b9e0d44cbf5c6c5e61a97f15",
+      "audit": {
+        "viewport": [
+          430,
+          932
+        ],
+        "documentWidth": 430,
+        "contentWidth": 430,
+        "contentScrollWidth": 430,
+        "pager": {
+          "left": 18,
+          "top": 518.875,
+          "right": 412,
+          "bottom": 562.875,
+          "width": 394,
+          "height": 44
+        },
+        "buttons": [
+          {
+            "left": 18,
+            "top": 518.875,
+            "right": 175,
+            "bottom": 562.875,
+            "width": 157,
+            "height": 44,
+            "disabled": false,
+            "fontSize": 14,
+            "background": "rgb(228, 237, 230)"
+          },
+          {
+            "left": 255,
+            "top": 518.875,
+            "right": 412,
+            "bottom": 562.875,
+            "width": 157,
+            "height": 44,
+            "disabled": false,
+            "fontSize": 14,
+            "background": "rgb(228, 237, 230)"
+          }
+        ],
+        "label": {
+          "left": 183,
+          "top": 518.875,
+          "right": 247,
+          "bottom": 562.875,
+          "width": 64,
+          "height": 44
+        },
+        "notice": null,
+        "subject": null,
+        "imageCount": 0
+      },
+      "errors": [],
+      "runtime_errors": [],
+      "external_requests": []
+    },
+    {
+      "file": "standalone-last-430x932.png",
+      "host": "standalone",
+      "state": "last",
+      "viewport": "430x932",
+      "sha256": "b917b13fa1020e606c2835b9aa2f13b46351c30ad3f3948cafd49065c8f092ab",
+      "audit": {
+        "viewport": [
+          430,
+          932
+        ],
+        "documentWidth": 430,
+        "contentWidth": 430,
+        "contentScrollWidth": 430,
+        "pager": {
+          "left": 18,
+          "top": 518.875,
+          "right": 412,
+          "bottom": 562.875,
+          "width": 394,
+          "height": 44
+        },
+        "buttons": [
+          {
+            "left": 18,
+            "top": 518.875,
+            "right": 175,
+            "bottom": 562.875,
+            "width": 157,
+            "height": 44,
+            "disabled": false,
+            "fontSize": 14,
+            "background": "rgb(228, 237, 230)"
+          },
+          {
+            "left": 255,
+            "top": 518.875,
+            "right": 412,
+            "bottom": 562.875,
+            "width": 157,
+            "height": 44,
+            "disabled": true,
+            "fontSize": 14,
+            "background": "rgba(0, 0, 0, 0)"
+          }
+        ],
+        "label": {
+          "left": 183,
+          "top": 518.875,
+          "right": 247,
+          "bottom": 562.875,
+          "width": 64,
+          "height": 44
+        },
+        "notice": null,
+        "subject": null,
+        "imageCount": 0
+      },
+      "errors": [],
+      "runtime_errors": [],
+      "external_requests": []
+    },
+    {
+      "file": "standalone-loading-430x932.png",
+      "host": "standalone",
+      "state": "loading",
+      "viewport": "430x932",
+      "sha256": "f54e7b6b75be93240c6646b65e27cfe0bb961c7d142811f94eb4b92a7bed7fa1",
+      "audit": {
+        "viewport": [
+          430,
+          932
+        ],
+        "documentWidth": 430,
+        "contentWidth": 430,
+        "contentScrollWidth": 430,
+        "pager": {
+          "left": 18,
+          "top": 518.875,
+          "right": 412,
+          "bottom": 562.875,
+          "width": 394,
+          "height": 44
+        },
+        "buttons": [
+          {
+            "left": 18,
+            "top": 518.875,
+            "right": 175,
+            "bottom": 562.875,
+            "width": 157,
+            "height": 44,
+            "disabled": true,
+            "fontSize": 14,
+            "background": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "left": 255,
+            "top": 518.875,
+            "right": 412,
+            "bottom": 562.875,
+            "width": 157,
+            "height": 44,
+            "disabled": true,
+            "fontSize": 14,
+            "background": "rgba(0, 0, 0, 0)"
+          }
+        ],
+        "label": {
+          "left": 183,
+          "top": 518.875,
+          "right": 247,
+          "bottom": 562.875,
+          "width": 64,
+          "height": 44
+        },
+        "notice": null,
+        "subject": null,
+        "imageCount": 0
+      },
+      "errors": [],
+      "runtime_errors": [],
+      "external_requests": []
+    },
+    {
+      "file": "standalone-deleted-430x932.png",
+      "host": "standalone",
+      "state": "deleted",
+      "viewport": "430x932",
+      "sha256": "56f1f1c8625dd946a02a654244013932526156684cae2aaa4a544f7d15ab1172",
+      "audit": {
+        "viewport": [
+          430,
+          932
+        ],
+        "documentWidth": 430,
+        "contentWidth": 430,
+        "contentScrollWidth": 430,
+        "pager": {
+          "left": 18,
+          "top": 577.875,
+          "right": 412,
+          "bottom": 621.875,
+          "width": 394,
+          "height": 44
+        },
+        "buttons": [
+          {
+            "left": 18,
+            "top": 577.875,
+            "right": 175,
+            "bottom": 621.875,
+            "width": 157,
+            "height": 44,
+            "disabled": true,
+            "fontSize": 14,
+            "background": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "left": 255,
+            "top": 577.875,
+            "right": 412,
+            "bottom": 621.875,
+            "width": 157,
+            "height": 44,
+            "disabled": false,
+            "fontSize": 14,
+            "background": "rgb(228, 237, 230)"
+          }
+        ],
+        "label": {
+          "left": 183,
+          "top": 577.875,
+          "right": 247,
+          "bottom": 621.875,
+          "width": 64,
+          "height": 44
+        },
+        "notice": {
+          "left": 18,
+          "top": 200,
+          "right": 412,
+          "bottom": 247,
+          "width": 394,
+          "height": 47,
+          "text": {
+            "left": 35,
+            "top": 213,
+            "right": 395,
+            "bottom": 234,
+            "width": 360,
+            "height": 21
+          },
+          "textAlign": "left",
+          "fontSize": 14
+        },
+        "subject": null,
+        "imageCount": 0
+      },
+      "errors": [],
+      "runtime_errors": [],
+      "external_requests": []
+    },
+    {
+      "file": "standalone-long-notice-430x932.png",
+      "host": "standalone",
+      "state": "long-notice",
+      "viewport": "430x932",
+      "sha256": "d5698d11a38e9d0ec5322e5d91b85abcbe744cc98e7e55ef59bfcf89bc048f71",
+      "audit": {
+        "viewport": [
+          430,
+          932
+        ],
+        "documentWidth": 430,
+        "contentWidth": 430,
+        "contentScrollWidth": 430,
+        "pager": {
+          "left": 18,
+          "top": 598.875,
+          "right": 412,
+          "bottom": 642.875,
+          "width": 394,
+          "height": 44
+        },
+        "buttons": [
+          {
+            "left": 18,
+            "top": 598.875,
+            "right": 175,
+            "bottom": 642.875,
+            "width": 157,
+            "height": 44,
+            "disabled": true,
+            "fontSize": 14,
+            "background": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "left": 255,
+            "top": 598.875,
+            "right": 412,
+            "bottom": 642.875,
+            "width": 157,
+            "height": 44,
+            "disabled": false,
+            "fontSize": 14,
+            "background": "rgb(228, 237, 230)"
+          }
+        ],
+        "label": {
+          "left": 183,
+          "top": 598.875,
+          "right": 247,
+          "bottom": 642.875,
+          "width": 64,
+          "height": 44
+        },
+        "notice": {
+          "left": 18,
+          "top": 200,
+          "right": 412,
+          "bottom": 268,
+          "width": 394,
+          "height": 68,
+          "text": {
+            "left": 35,
+            "top": 213,
+            "right": 395,
+            "bottom": 255,
+            "width": 360,
+            "height": 42
+          },
+          "textAlign": "left",
+          "fontSize": 14
+        },
+        "subject": null,
+        "imageCount": 0
+      },
+      "errors": [],
+      "runtime_errors": [],
+      "external_requests": []
+    },
+    {
+      "file": "standalone-long-page-430x932.png",
+      "host": "standalone",
+      "state": "long-page",
+      "viewport": "430x932",
+      "sha256": "3812b55275415c6d02790237979c53d5e51a8c26b2aef4e8c0bec80842c7946c",
+      "audit": {
+        "viewport": [
+          430,
+          932
+        ],
+        "documentWidth": 430,
+        "contentWidth": 430,
+        "contentScrollWidth": 430,
+        "pager": {
+          "left": 18,
+          "top": 518.875,
+          "right": 412,
+          "bottom": 578.875,
+          "width": 394,
+          "height": 60
+        },
+        "buttons": [
+          {
+            "left": 18,
+            "top": 518.875,
+            "right": 175,
+            "bottom": 578.875,
+            "width": 157,
+            "height": 60,
+            "disabled": false,
+            "fontSize": 14,
+            "background": "rgb(228, 237, 230)"
+          },
+          {
+            "left": 255,
+            "top": 518.875,
+            "right": 412,
+            "bottom": 578.875,
+            "width": 157,
+            "height": 60,
+            "disabled": false,
+            "fontSize": 14,
+            "background": "rgb(228, 237, 230)"
+          }
+        ],
+        "label": {
+          "left": 183,
+          "top": 518.875,
+          "right": 247,
+          "bottom": 578.875,
+          "width": 64,
+          "height": 60
+        },
+        "notice": null,
+        "subject": null,
+        "imageCount": 0
+      },
+      "errors": [],
+      "runtime_errors": [],
+      "external_requests": []
+    },
+    {
+      "file": "standalone-subject-menu-430x932.png",
+      "host": "standalone",
+      "state": "subject-menu",
+      "viewport": "430x932",
+      "sha256": "ae559f4267b4d849c66adb32762981700024d64e80d18767a971623997b364f6",
+      "audit": {
+        "viewport": [
+          430,
+          932
+        ],
+        "documentWidth": 430,
+        "contentWidth": 430,
+        "contentScrollWidth": 430,
+        "pager": {
+          "left": 18,
+          "top": 720.875,
+          "right": 412,
+          "bottom": 764.875,
+          "width": 394,
+          "height": 44
+        },
+        "buttons": [
+          {
+            "left": 18,
+            "top": 720.875,
+            "right": 175,
+            "bottom": 764.875,
+            "width": 157,
+            "height": 44,
+            "disabled": true,
+            "fontSize": 14,
+            "background": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "left": 255,
+            "top": 720.875,
+            "right": 412,
+            "bottom": 764.875,
+            "width": 157,
+            "height": 44,
+            "disabled": false,
+            "fontSize": 14,
+            "background": "rgb(228, 237, 230)"
+          }
+        ],
+        "label": {
+          "left": 183,
+          "top": 720.875,
+          "right": 247,
+          "bottom": 764.875,
+          "width": 64,
+          "height": 44
+        },
+        "notice": null,
+        "subject": [
+          {
+            "left": 23,
+            "top": 337,
+            "right": 211,
+            "bottom": 381,
+            "width": 188,
+            "height": 44
+          },
+          {
+            "left": 219,
+            "top": 337,
+            "right": 407,
+            "bottom": 381,
+            "width": 188,
+            "height": 44
+          }
+        ],
+        "imageCount": 0
+      },
+      "errors": [],
+      "runtime_errors": [],
+      "external_requests": []
+    },
+    {
+      "file": "standalone-action-menu-430x932.png",
+      "host": "standalone",
+      "state": "action-menu",
+      "viewport": "430x932",
+      "sha256": "2a791acc53a99f528c5a05ab3920911c28ad260696ef2a7f65b8eed5a9b1b01d",
+      "audit": {
+        "viewport": [
+          430,
+          932
+        ],
+        "documentWidth": 430,
+        "contentWidth": 430,
+        "contentScrollWidth": 430,
+        "pager": {
+          "left": 18,
+          "top": 668.875,
+          "right": 412,
+          "bottom": 712.875,
+          "width": 394,
+          "height": 44
+        },
+        "buttons": [
+          {
+            "left": 18,
+            "top": 668.875,
+            "right": 175,
+            "bottom": 712.875,
+            "width": 157,
+            "height": 44,
+            "disabled": true,
+            "fontSize": 14,
+            "background": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "left": 255,
+            "top": 668.875,
+            "right": 412,
+            "bottom": 712.875,
+            "width": 157,
+            "height": 44,
+            "disabled": false,
+            "fontSize": 14,
+            "background": "rgb(228, 237, 230)"
+          }
+        ],
+        "label": {
+          "left": 183,
+          "top": 668.875,
+          "right": 247,
+          "bottom": 712.875,
+          "width": 64,
+          "height": 44
+        },
+        "notice": null,
+        "subject": null,
+        "imageCount": 0
+      },
+      "errors": [],
+      "runtime_errors": [],
+      "external_requests": []
+    }
+  ]
+}

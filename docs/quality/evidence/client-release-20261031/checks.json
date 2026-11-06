@@ -1,0 +1,115 @@
+{
+  "verified_on": "2026-10-31 Asia/Shanghai",
+  "git_commit": "0576ac30464908154c624effed41df6dfa3110cc",
+  "tools": {
+    "node": "v22.22.0",
+    "npm": "10.9.4",
+    "python": "3.12.11",
+    "wxcloud": "2.3.3"
+  },
+  "checks": [
+    {
+      "key": "npm-install",
+      "command": "npm install --ignore-scripts --offline --no-audit --no-fund --cache /private/tmp/push-kids-client-release-20261031-npm-cache",
+      "exit_code": 0,
+      "result": "PASS",
+      "log": "npm-install.log"
+    },
+    {
+      "key": "frontend-tests",
+      "command": "npm test",
+      "exit_code": 0,
+      "result": "PASS",
+      "log": "frontend-tests.log",
+      "summary": "  duration_ms: 0.618542\n  type: 'test'\n  ...\n1..349\n# tests 349\n# suites 0\n# pass 349\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 1479.177333\n"
+    },
+    {
+      "key": "eslint",
+      "command": "npm run lint:miniapp",
+      "exit_code": 0,
+      "result": "PASS",
+      "log": "eslint.log",
+      "summary": "\n> push-kids-workspace@0.1.0 lint:miniapp\n> eslint apps/miniprogram tests/frontend --ext .js\n\n"
+    },
+    {
+      "key": "miniprogram",
+      "command": "npm run check:miniapp",
+      "exit_code": 0,
+      "result": "PASS",
+      "log": "miniprogram.log",
+      "summary": "\n> push-kids-workspace@0.1.0 check:miniapp\n> python3 tools/validate_miniprogram.py\n\nMINIPROGRAM_VALID pages=17 source_bytes=1233761\n"
+    },
+    {
+      "key": "architecture",
+      "command": "UV_CACHE_DIR=/private/tmp/push-kids-client-release-20261031-uv-cache uv run python tools/check_architecture.py",
+      "exit_code": 0,
+      "result": "PASS",
+      "log": "architecture.log",
+      "summary": "ARCHITECTURE_VALID policies=4 modules=151 (runtime/lazy DAG)\n"
+    },
+    {
+      "key": "design",
+      "command": "UV_CACHE_DIR=/private/tmp/push-kids-client-release-20261031-uv-cache uv run python tools/validate_design_evidence.py --check-current-policy",
+      "exit_code": 0,
+      "result": "PASS",
+      "log": "design.log",
+      "summary": "DESIGN_EVIDENCE_VALID\n"
+    },
+    {
+      "key": "backend-candidate-footprints",
+      "command": "PYTHONPATH=/Users/bytedance/Documents/push_kids/dist/client-release-20261031-0.1.17/backend-compatibility-candidate/apps/api/src .venv/bin/python -m pytest -o pythonpath=. tests/integration/test_footprints.py tests/performance/test_footprints_reads.py -k 'not mysql' -q",
+      "exit_code": 0,
+      "result": "PASS",
+      "log": "backend-candidate-footprints.log",
+      "summary": ".....................                                                    [100%]\n=============================== warnings summary ===============================\n.venv/lib/python3.12/site-packages/fastapi/testclient.py:1\n  /Users/bytedance/Documents/push_kids/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.\n    from starlette.testclient import TestClient as TestClient  # noqa\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n21 passed, 2 deselected, 1 warning in 9.85s\n"
+    },
+    {
+      "key": "backend-candidate-ruff",
+      "command": ".venv/bin/ruff check /Users/bytedance/Documents/push_kids/dist/client-release-20261031-0.1.17/backend-compatibility-candidate/apps/api/src",
+      "exit_code": 0,
+      "result": "PASS",
+      "log": "backend-candidate-ruff.log",
+      "summary": "All checks passed!\n"
+    },
+    {
+      "key": "backend-candidate-format",
+      "command": ".venv/bin/ruff format --check /Users/bytedance/Documents/push_kids/dist/client-release-20261031-0.1.17/backend-compatibility-candidate/apps/api/src",
+      "exit_code": 0,
+      "result": "PASS",
+      "log": "backend-candidate-format.log",
+      "summary": "150 files already formatted\n"
+    },
+    {
+      "key": "backend-candidate-mypy",
+      "command": ".venv/bin/mypy /Users/bytedance/Documents/push_kids/dist/client-release-20261031-0.1.17/backend-compatibility-candidate/apps/api/src",
+      "exit_code": 0,
+      "result": "PASS",
+      "log": "backend-candidate-mypy.log",
+      "summary": "apps/api/src/push_kids/footprints/reads.py:159: note: By default the bodies of untyped functions are not checked, consider using --check-untyped-defs  [annotation-unchecked]\nSuccess: no issues found in 150 source files\n"
+    }
+  ],
+  "native_cli": {
+    "command": "/Applications/wechatwebdevtools.app/Contents/MacOS/cli islogin --project /Users/bytedance/Documents/push_kids/apps/miniprogram --lang zh",
+    "exit_code": 255,
+    "result": "FAIL_ENVIRONMENT",
+    "error": "EPERM writing Developer Tools Default/.cli outside the writable workspace; no login-status response"
+  },
+  "parent_acceptance": {
+    "result": "PASS_OPERATOR_CONFIRMED_LOCAL_EFFECT",
+    "operator": "产品负责人（用户）",
+    "message_reference": "2026-10-31 current conversation user message 当前效果OK 上传前端准备发布",
+    "scope": "Overall local effect accepted; no explicit viewport/device/path-matrix claims"
+  },
+  "gates": {
+    "backend_compatibility": "FAIL_CURRENT_CLOUD_MISSING_FOCUS_CONTRACT",
+    "runtime_health": "NOT_RUN",
+    "preview_and_packaged_size": "NOT_RUN",
+    "current_native_three_viewports": "NOT_RUN",
+    "real_dual_account_owner_smoke": "NOT_RUN_FOR_NEW_BACKEND_QUERY; previous 0.1.16 acceptance retained as baseline only",
+    "mysql_exact_candidate": "NOT_RUN: isolated MySQL cases explicitly deselected; no DB credential lookup",
+    "backend_full_suite_container_and_dry_run": "NOT_RUN: deployment is a separate required action; candidate has only scoped local/static verification"
+  },
+  "cloud_mutations": false,
+  "uploaded": false,
+  "version_bumped": false
+}

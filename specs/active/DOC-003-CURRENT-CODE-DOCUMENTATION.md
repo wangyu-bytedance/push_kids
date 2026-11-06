@@ -10,6 +10,18 @@
 - Feature current-state documents: `docs/domain/features/`；当前基线为文件实际内容与 git HEAD `ca41351`，保留已有文档工作区变更。
 - Feature merge owner: Codex
 
+## 必要性复核（2026-11-05）
+
+本文是修正文档的任务方案，不是产品原始文档。本轮按用户“检查其这部分内容的必要性，如果没有必要可以删除”进行定向核对，发现原任务仍有实际价值，保留`READY_FOR_REVIEW / active`：
+
+| 仍存在的缺口 | 本轮核对证据 |
+|---|---|
+| README仍称首次使用必须由开发者通过后台命令建档 | [README](../../README.md)的本地启动段落；[设置页](../../apps/miniprogram/pages/settings/index.js)已有新建档案入口，[建档页](../../apps/miniprogram/pages/child-edit/index.js)调用`POST /children`，[FEAT-005](../../docs/domain/features/FEAT-005-multi-child-profiles.md)已记录家长建档流程。 |
+| 出行现状只列星期集合与统一起止时间，遗漏逐日时段合同 | [FEAT-007](../../docs/domain/features/FEAT-007-travel-arrangements.md)当前行为与[Travel Schema](../../apps/api/src/push_kids/travel/schemas.py)的`time_slots`、旧字段兼容分支对照。 |
+| 原计划补充的逐日时段独立现状仍缺失 | `docs/domain/features/FEAT-009-weekday-specific-times.md`当前不存在；相关代码存在，不把缺文档误判成未实现功能。 |
+
+本轮仅确认保留必要的文档修正任务，未执行原TP-001～005的全范围修订，也未将本次复核当作具体实施批准。原表中其他2026-10-13问题须在实施前重新核对，不能按旧报告直接批量改写；无需删除现有README、Feature或架构文档。
+
 ## 1. Problem and outcome
 
 工程当前文档存在旧实现描述、漏记能力、旧 revision 与发布状态矛盾。以当前工作区生产代码证明本地行为/接口/架构，以已有可追溯发布与验收记录证明外部状态；不通过改文档批准现有代码的审批缺口。
@@ -66,5 +78,5 @@
 
 ## 7. Verification and completion
 
-- Verification: NOT_RUN；目前仅完成读取与范围准备，尚未执行文档事实修订。
+- Verification: 2026-11-05必要性复核已执行，确认上述三项仍存在；原TP-001～005的全范围修订与验证仍为NOT_RUN，尚未修改目标文档事实。此次文档/索引检查见[状态清单](../STATUS.md)。
 - Completion gate: 上述TP全部记录结果、当前文档合并并引用本Spec、diff审查、迁移与引用修复。

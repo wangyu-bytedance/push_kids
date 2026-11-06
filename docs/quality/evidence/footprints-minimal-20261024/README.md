@@ -3,7 +3,7 @@
 - Date: 2026-10-24
 - Status: LOCAL_IMPLEMENTATION / VERIFYING / NOT_UPLOADED
 - Approval: 用户针对call_3e246df48da4467983d023b06a443aeb回复“批准 Spec01 + DREV01，按此实施并合并 UI 规范”；实施前已将批准写入Spec与清单。
-- Spec: [SPEC-20261024-FOOTPRINTS-MINIMAL-UI-01](../../../../specs/active/FEAT-012-FOOTPRINTS-MINIMAL-UI.md)，active/VERIFYING。
+- Spec: [SPEC-20261024-FOOTPRINTS-MINIMAL-UI-01](../../../../specs/completed/FEAT-012-FOOTPRINTS-MINIMAL-UI.md)，active/VERIFYING。
 - Design: [DREV-20261024-FOOTPRINTS-MINIMAL-01](../../../design/frontend/prototypes/DREV-20261024-FOOTPRINTS-MINIMAL-01/FRONTEND-SPEC.md)；源和24张批准设计导出冻结。
 - Release: [本地阶段](../../../deploy/releases/20261024-footprints-minimal-local.md)。
 

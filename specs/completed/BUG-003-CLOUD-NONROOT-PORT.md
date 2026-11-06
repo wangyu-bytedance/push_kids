@@ -233,7 +233,7 @@ flowchart LR
 | `deploy/cloudbase/README.md` | modify | 修正发布端口说明 | 防止操作者恢复错误配置 |
 | `docs/operations/WECHAT-CLOUD-HOSTING.md` | modify | 运维基线、验收证据与排障更新为 8000 | 修正长期事实 |
 | `docs/quality/TEST-STRATEGY.md` | modify | 容器策略改为非 root + 8000 | 使测试策略表达真实契约 |
-| `specs/active/CLOUD-001-WECHAT-CLOUDBASE-STAGE1.md` | modify | 记录 BUG-003 修订、替换 port 80 陈述并更新 TP-008 | 让父 Spec 不与已知云事实冲突 |
+| `specs/completed/CLOUD-001-WECHAT-CLOUDBASE-STAGE1.md` | modify | 记录 BUG-003 修订、替换 port 80 陈述并更新 TP-008 | 让父 Spec 不与已知云事实冲突 |
 | `tests/contract/test_container_runtime_contract.py` | add | 检查非 root、非特权端口及 Docker/Compose/CloudBase 一致性 | 为根因增加可失败的回归保护 |
 | `docs/domain/features/FEAT-001-push-kids-mvp.md` | modify after verification | 合并已验证的容器契约与 Change Reference | 维持 Feature 当前事实源 |
 | `dist/push-kids-cloud-20260905.zip` | replace generated artifact | 重新打包已修正的 Dockerfile 和 CloudBase 端口配置 | 防止控制台上传旧 80 端口发布包 |

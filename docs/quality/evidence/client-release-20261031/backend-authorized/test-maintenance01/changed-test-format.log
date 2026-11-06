@@ -1,0 +1,14 @@
+unformatted: File would be reformatted
+   --> tests/integration/test_staged_mysql.py:161:17
+    |
+160 |         assert {row.unit_key for row in rows} == {"t", "merge", "review0"}
+    -         assert {
+    -             (row.family_id, row.child_id, row.submission_id, row.job_id) for row in rows
+    -         } == {(store.family_id, store.child_id, store.submission_id, store.job_id)}
+161 +         assert {(row.family_id, row.child_id, row.submission_id, row.job_id) for row in rows} == {
+162 +             (store.family_id, store.child_id, store.submission_id, store.job_id)
+163 +         }
+164 |         job = db.get(AgentJob, store.job_id)
+    |
+
+1 file would be reformatted

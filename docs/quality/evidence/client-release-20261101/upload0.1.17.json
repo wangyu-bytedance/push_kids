@@ -1,0 +1,49 @@
+{
+  "started_at": "2026-11-01T16:15:00.868787+08:00",
+  "finished_at": "2026-11-01T16:15:08.470511+08:00",
+  "command": [
+    "/Applications/wechatwebdevtools.app/Contents/MacOS/cli",
+    "upload",
+    "--port",
+    "28158",
+    "--project",
+    "/Users/bytedance/Documents/push_kids/dist/client-release-20261031-0.1.17/project",
+    "--version",
+    "0.1.17",
+    "--desc",
+    "精简旅行日记入口，优化照片导入与核对恢复，修复照片精确回看",
+    "--info-output",
+    "/Users/bytedance/Documents/push_kids/docs/quality/evidence/client-release-20261101/upload0.1.17-info.json",
+    "--lang",
+    "zh"
+  ],
+  "exit_code": 0,
+  "result": "PASS_UPLOAD",
+  "candidate_version": "0.1.17",
+  "description": "精简旅行日记入口，优化照片导入与核对恢复，修复照片精确回看",
+  "appid": "wx5d2e0014690bf285",
+  "project": "/Users/bytedance/Documents/push_kids/dist/client-release-20261031-0.1.17/project",
+  "source_manifest_sha256": "04c6668a20a0f99622c78424b4d7c5ba07aadc1fd515f20a494e0e4cfcbb2adb",
+  "files": 168,
+  "current_worktree_drift_excluded": [
+    "apps/miniprogram/pages/review-inventory/content.wxml",
+    "apps/miniprogram/pages/review-inventory/content.wxss"
+  ],
+  "operator_acceptance": "operator-acceptance.json",
+  "info_exists": true,
+  "receipt": {
+    "size": {
+      "total": 1191019,
+      "packages": [
+        {
+          "name": "TOTAL",
+          "size": 1191019
+        }
+      ]
+    }
+  },
+  "baseline_before": "0.1.16",
+  "version_bumped": true,
+  "experience_review_production": "NOT_RUN",
+  "baseline_after": "0.1.17"
+}

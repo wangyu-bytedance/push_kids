@@ -1,0 +1,42 @@
+{
+  "base": "0576ac30464908154c624effed41df6dfa3110cc",
+  "spec_revision": "BUG-SPEC-20261024-CHILD-ARCHIVE-UI-01",
+  "source_sha256": {
+    "apps/miniprogram/pages/child-edit/index.js": "42d8e787a67846a5a055f9117c5bd270176f9df803df1c015e0d86a83e3e87a1",
+    "apps/miniprogram/pages/child-edit/index.wxml": "6a75026d8f9a7a75e084192056442c3e432d7197b7ba56c87aa9a15863d0abd2",
+    "apps/miniprogram/pages/child-edit/index.wxss": "a5d122a94113c4010ac75caf2fae50a83c04661ca7fbd4e1031fd06b1feb7df1",
+    "tests/frontend/child-profiles.test.js": "d012783278d78a85182cbd697f24400e4b6602e82f92337602b97420f97b0eb7",
+    "tests/frontend/grade-confirmation.test.js": "cf3077506034c9604f52b168a13aab97cb0eedf8cf94cacb86e1bc63f6bcdeaf"
+  },
+  "fixture": "offline synthetic; WXML/WXSS exact bytes; JS exact after stripping one fixture-only setData method",
+  "design_export_count": 21,
+  "native_geometry_counts": {
+    "320": 7,
+    "390": 7,
+    "430": 7
+  },
+  "native_geometry_sha256": {
+    "native/320/error.json": "479e679785fc9c17f929dd7c177e7c8c5174a5af2fe9c1a3bfce823a90933d2b",
+    "native/320/unfinished.json": "1db4d1fb94d0aa6ad049314200083de87ec37d24020cc5acd714fe8eae27f550",
+    "native/320/active.json": "0168a44ded504101ca56976b33e00c09b3c3d37db3b09f968d1fc6733898ebfe",
+    "native/320/editor.json": "b2dfcf954c4c67c5644438bbc4ad32d3d1cabe1b16df6404eacacd2ae211b181",
+    "native/320/restoring.json": "d667977c9874fe8633d26cd5b79248bbbaee5fd00661b84f93abf6edf46ec922",
+    "native/320/archived.json": "d12c5ed19e8b9e9943492bc9473d424c3d1baf2db7d93647ebaf54a946da3613",
+    "native/320/working.json": "2858ee0abddbe59558da4d06c688efac87b247bd12d8cffa5d6794cc9a82902e",
+    "native/390/error.json": "3da52498126b21e60286c8a58dc37f2ffbe8d6c56bad4a371fb670daee746468",
+    "native/390/unfinished.json": "b64a9ec0be8dc33b69927c919026a93be782e2e372320e141e3867921057b6fc",
+    "native/390/active.json": "617ce813297b4329fe710f141b95469117961829a02f1f8a572cec17d9fb060b",
+    "native/390/editor.json": "5c4e972bf267544bdf93542c6190c70f0321627310355047369f7824b9f983bd",
+    "native/390/restoring.json": "d50d7229ac43f42b76d867f1d7c5152ceaa551b990e0628a2c288ab58cebe886",
+    "native/390/archived.json": "612d8becf6a4f0a0279651190a3fe6d133ad01c00fb762a09fb0a7f4fdeb7aa4",
+    "native/390/working.json": "0be73a2eaab89494fcc9c129cf6a42cd34c6639b87a9546a546a922b5a8756de",
+    "native/430/error.json": "833dea9a09dfd46ffd30987c8bcd710f3bf17bc6102a16325e8c3b1e4bbdbb54",
+    "native/430/unfinished.json": "8a98ef87f2775d4dc647ed21ba01019bbfb4b6ab992c75fbf5b83b0e3f35b221",
+    "native/430/active.json": "14d05add31a45321d64f648cd2c6aa6a265f0143235d1ff06b16ce05a5b51d13",
+    "native/430/editor.json": "624bdab7a3387a70adeef503411e62d40fbdb69cffef0aa18e28eb87380acb68",
+    "native/430/restoring.json": "7887ef34db8f6005d5bfa7a345b58ea1c3e0f801dd5dd2418fa1b1ae2cc56231",
+    "native/430/archived.json": "3c8085656eb7e86c61d8c1157855581fdc08d6f1fe0a0ade7e57afbbd9d41376",
+    "native/430/working.json": "a0a980924980479e600e6837f3acf318a2f9344b9f7a4f05699e975d391d7a94"
+  },
+  "native_screenshots": "NOT_RUN_AFTER_RPC_TIMEOUT"
+}

@@ -1,0 +1,16 @@
+{
+  "focused": "25 passed, 1 warning in 9.35s",
+  "python": "988 passed, 56 skipped, 128 warnings in 193.68s (0:03:13)",
+  "mysql": {
+    "mysql-test_footprints_mysql.log": "1 passed, 1 warning in 1.57s",
+    "mysql-test_grade_confirmation_mysql.log": "4 passed, 1 warning in 8.71s",
+    "mysql-test_mysql_runtime.log": "7 passed, 1 warning in 21.29s",
+    "mysql-test_notification_renewal_mysql.log": "2 passed, 1 warning in 15.19s",
+    "mysql-test_review_schedule_mysql.log": "2 passed, 1 warning in 2.10s",
+    "mysql-test_schema_readiness_mysql.log": "6 passed, 1 warning in 6.10s",
+    "mysql-test_staged_mysql.log": "8 passed, 1 warning in 2.04s",
+    "mysql-test_supersession_mysql.log": "13 passed, 1 warning in 78.95s (0:01:18)",
+    "mysql-test_system_one_mysql.log": "4 passed, 1 warning in 24.45s",
+    "mysql-test_today_learning_mysql.log": "1 passed, 1 warning in 7.57s"
+  }
+}

@@ -1,0 +1,782 @@
+"""Fixed extraction, consolidation and history matching with recoverable stage DTOs."""
+
+from __future__ import annotations
+
+import asyncio
+import json
+from collections.abc import Callable
+from functools import partial
+from hashlib import sha256
+from pathlib import Path
+from time import monotonic
+from typing import Any, Protocol, TypeVar
+
+from pydantic import BaseModel, ValidationError
+
+from push_kids.agent_processing.checkpoints import StageCheckpoints, fingerprint
+from push_kids.agent_processing.contracts import (
+    AnalysisInput,
+    AnalysisProposal,
+    ModelAnalysisResult,
+    ModelEvidenceReference,
+    ModelLearningItem,
+    _has_runtime_uncertainty,
+    _model_summary_errors,
+    explicit_same_day_review,
+)
+from push_kids.agent_processing.coverage import propose_coverage
+from push_kids.agent_processing.failures import StageFailure, schema_diagnostics
+from push_kids.agent_processing.history_search import HistorySearchRequest
+from push_kids.agent_processing.stage_contracts import (
+    EXTRACT_INSTRUCTIONS,
+    MATCH_INSTRUCTIONS,
+    MERGE_INSTRUCTIONS,
+    PIPELINE_REVISION,
+    REUSE_INSTRUCTIONS,
+    REVIEW_INSTRUCTIONS,
+    ConsolidatedResult,
+    ExtractedPoint,
+    MatchingResult,
+    MaterialResult,
+    QualityReviewResult,
+    ReuseReviewResult,
+)
+from push_kids.agent_processing.stage_io import stage_io
+from push_kids.agent_processing.telemetry import AnalysisTrace
+from push_kids.knowledge.normalization import normalize_knowledge_name
+
+T = TypeVar("T", bound=BaseModel)
+
+
+class StageProvider(Protocol):
+    concurrency: int
+    parameter_revision: str
+
+    async def generate_stage(
+        self,
+        stage: str,
+        instructions: str,
+        payload: dict[str, Any],
+        schema: type[BaseModel],
+        images: list[tuple[str, Path]],
+        deadline: float,
+        trace: AnalysisTrace,
+    ) -> BaseModel: ...
+
+
+class StagedPipeline:
+    def __init__(
+        self,
+        provider: StageProvider,
+        trace: AnalysisTrace,
+        checkpoints: StageCheckpoints | None = None,
+    ):
+        self.provider, self.trace, self.checkpoints = provider, trace, checkpoints
+        self.calls = 0
+        self._checkpoint_lock = asyncio.Lock()
+
+    async def _call(
+        self,
+        stage: str,
+        unit: str,
+        instructions: str,
+        payload: dict[str, Any],
+        schema: type[T],
+        images: list[tuple[str, Path]],
+        deadline: float,
+        validate: Callable[[T], None],
+        cache_input: object = None,
+    ) -> T:
+        if deadline <= monotonic():
+            raise StageFailure("local_deadline", stage=stage, unit=unit)
+        digest = fingerprint(
+            {
+                "revision": PIPELINE_REVISION,
+                "parameters": self.provider.parameter_revision,
+                "payload": payload,
+                "context": cache_input,
+                "images": [(alias, sha256(p.read_bytes()).hexdigest()) for alias, p in images],
+            }
+        )
+        cached = self.checkpoints.get(unit, digest) if self.checkpoints else None
+        if cached is not None:
+            try:
+                value = schema.model_validate(cached)
+                validate(value)
+                self.trace.info(
+                    "analysis_stage_cache",
+                    stage=stage,
+                    unit=unit,
+                    revision=PIPELINE_REVISION,
+                    checkpoint_hit=True,
+                )
+                return value
+            except (ValueError, StageFailure):
+                pass
+        attempts = 1 if stage in {"review", "reuse"} else 2
+        for correction in range(attempts):
+            if deadline <= monotonic():
+                raise StageFailure("local_deadline", stage=stage, unit=unit)
+            if self.calls >= 33:
+                raise StageFailure("capacity", retryable=False, stage=stage, unit=unit)
+            self.calls += 1
+            try:
+                async with asyncio.timeout(max(0.001, deadline - monotonic())):
+                    response = await self.provider.generate_stage(
+                        stage,
+                        instructions,
+                        payload,
+                        schema,
+                        images,
+                        deadline,
+                        self.trace,
+                    )
+                value = schema.model_validate(response.model_dump())
+                validate(value)
+                if self.checkpoints:
+                    async with self._checkpoint_lock:
+                        await stage_io(
+                            partial(
+                                self.checkpoints.put,
+                                unit,
+                                digest,
+                                value.model_dump(),
+                                deadline=deadline,
+                            ),
+                            deadline,
+                        )
+                return value
+            except TimeoutError:
+                self.trace.warning(
+                    "analysis_stage_failed",
+                    stage=stage,
+                    unit=unit,
+                    revision=PIPELINE_REVISION,
+                    reason="local_deadline",
+                )
+                raise StageFailure("local_deadline", stage=stage, unit=unit) from None
+            except (ValidationError, StageFailure) as exc:
+                reason = exc.reason if isinstance(exc, StageFailure) else "validation"
+                diagnostics = (
+                    exc.diagnostics if isinstance(exc, StageFailure) else schema_diagnostics(exc)
+                )
+                self.trace.warning(
+                    "analysis_stage_failed",
+                    stage=stage,
+                    unit=unit,
+                    revision=PIPELINE_REVISION,
+                    reason=reason,
+                    validation_codes=diagnostics,
+                )
+                if correction or reason not in {"validation", "coverage"}:
+                    raise StageFailure(
+                        reason,
+                        retryable=getattr(exc, "retryable", True),
+                        retry_after=getattr(exc, "retry_after", 0),
+                        stage=stage,
+                        unit=unit,
+                        diagnostics=diagnostics,
+                    ) from None
+                payload = {
+                    **payload,
+                    "correction": {
+                        "reason": reason,
+                        "diagnostics": list(diagnostics),
+                        "requirement": (
+                            "重读相同材料并返回完整有效对象；仅修正结构或引用约束，"
+                            "不补造或截断学习对象。"
+                        ),
+                    },
+                }
+        raise StageFailure("validation", stage=stage, unit=unit)
+
+    @staticmethod
+    def _validate_material(value: MaterialResult, aliases: set[str], subjects: set[str]) -> None:
+        if value.status == "unreadable":
+            raise StageFailure("unreadable")
+        if (value.status == "content" and not value.items and not value.needs_context) or (
+            value.status != "content" and (value.items or value.needs_context)
+        ):
+            raise StageFailure("coverage")
+        for index, item in enumerate(value.items):
+            if item.subject not in subjects:
+                raise StageFailure(
+                    "validation", diagnostics=(f"stage.items.{index}.subject:reference",)
+                )
+            if not set(item.materials) <= aliases or len(item.materials) != len(
+                set(item.materials)
+            ):
+                raise StageFailure(
+                    "validation", diagnostics=(f"stage.items.{index}.materials:reference",)
+                )
+            if not item.name.strip() or not item.evidence.strip():
+                raise StageFailure("validation")
+
+    async def run(
+        self,
+        data: AnalysisInput,
+        search: Callable[[HistorySearchRequest], list[dict]],
+        deadline: float,
+    ) -> AnalysisProposal:
+        self.calls = 0
+        subjects = set(data.allowed_analysis_subjects())
+        if not subjects or len(data.image_paths) > 9 or not (data.image_paths or data.text):
+            raise StageFailure("input", retryable=False)
+        materials: dict[str, Path] = {}
+        hashes: set[str] = set()
+        for index, path in enumerate(data.image_paths, 1):
+            digest = sha256(path.read_bytes()).hexdigest()
+            if digest not in hashes:
+                materials[f"m{index}"] = path
+                hashes.add(digest)
+        common = {"subjects": sorted(subjects), "grade": data.grade, "parent_text": data.text}
+        semaphore = asyncio.Semaphore(self.provider.concurrency)
+        extraction_deadline = min(deadline, monotonic() + 180)
+
+        async def extract(alias: str, path: Path | None) -> tuple[str, MaterialResult]:
+            async with semaphore:
+                aliases = {alias}
+                result = await self._call(
+                    "extract",
+                    alias,
+                    EXTRACT_INSTRUCTIONS,
+                    {**common, "materials": [alias]},
+                    MaterialResult,
+                    [(alias, path)] if path is not None else [],
+                    extraction_deadline,
+                    lambda value: self._validate_material(value, aliases, subjects),
+                )
+                return alias, result
+
+        tasks = [asyncio.create_task(extract(a, p)) for a, p in materials.items()]
+        if data.text and data.text.strip():
+            tasks.append(asyncio.create_task(extract("t", None)))
+        try:
+            # Keep independent successful units even when another fails.
+            results = await asyncio.gather(*tasks, return_exceptions=True)
+        except BaseException:
+            for task in tasks:
+                task.cancel()
+            await asyncio.gather(*tasks, return_exceptions=True)
+            raise
+        for result in results:
+            if isinstance(result, BaseException):
+                raise result
+        extracted = dict(result for result in results if isinstance(result, tuple))
+        pending = [a for a, r in extracted.items() if r.needs_context]
+        groups: list[set[str]] = []
+        ordered = list(materials)
+        for alias in pending:
+            if alias == "t":
+                group = set(ordered[:3]) | {"t"}
+            else:
+                index = ordered.index(alias)
+                group = set(ordered[max(0, index - 1) : index + 2])
+                if "t" in extracted:
+                    group.add("t")
+            if len(group - {"t"}) > 3 or len(group) < 2:
+                raise StageFailure("coverage", stage="group", unit=alias)
+            if not any(group <= existing for existing in groups):
+                groups.append(group)
+        if len(groups) > 2:
+            raise StageFailure("capacity", stage="group", unit="groups")
+        for index, group in enumerate(groups):
+
+            def validate_group(value: MaterialResult, aliases: set[str] = group) -> None:
+                self._validate_material(value, aliases, subjects)
+                if value.needs_context:
+                    raise StageFailure("coverage")
+                unresolved = {a for a in aliases if extracted[a].needs_context}
+                covered = {a for item in value.items for a in item.materials}
+                if not unresolved <= covered:
+                    raise StageFailure("coverage")
+
+            enriched = await self._call(
+                "group",
+                f"group{index}",
+                EXTRACT_INSTRUCTIONS,
+                {
+                    **common,
+                    "materials": sorted(group),
+                    "required_materials": sorted(a for a in group if extracted[a].needs_context),
+                    "excerpts": {a: extracted[a].excerpt for a in group},
+                },
+                MaterialResult,
+                [(a, materials[a]) for a in sorted(group) if a in materials],
+                extraction_deadline,
+                validate_group,
+            )
+            # Keep already identified units; consolidation accounts for all candidates.
+            extracted[f"group{index}"] = enriched
+        candidates: dict[str, ExtractedPoint] = {}
+        seen: set[str] = set()
+        for material_result in extracted.values():
+            for extracted_item in material_result.items:
+                digest = fingerprint(extracted_item.model_dump())
+                if digest not in seen:
+                    seen.add(digest)
+                    candidates[f"c{len(candidates) + 1}"] = extracted_item
+        if not candidates or len(candidates) > 200:
+            raise StageFailure(
+                "coverage" if not candidates else "capacity", stage="extract", unit="materials"
+            )
+
+        def validate_merge(value: ConsolidatedResult) -> None:
+            if _model_summary_errors(value.summary) or _has_runtime_uncertainty(
+                value.uncertainties
+            ):
+                raise StageFailure("validation")
+            members = [m for item in value.items for m in item.members] + [
+                m for omission in value.omissions for m in omission.members
+            ]
+            identities = [
+                (item.subject, normalize_knowledge_name(item.name)) for item in value.items
+            ]
+            if len(identities) != len(set(identities)):
+                raise StageFailure("validation")
+            if len(members) != len(set(members)) or set(members) != set(candidates):
+                raise StageFailure("coverage")
+            for item in value.items:
+                if (
+                    not normalize_knowledge_name(item.name)
+                    or not item.category.strip()
+                    or not item.review_method.strip()
+                ):
+                    raise StageFailure("validation")
+                if any(candidates[m].subject != item.subject for m in item.members):
+                    raise StageFailure("validation")
+            if any(not omission.basis.strip() for omission in value.omissions):
+                raise StageFailure("validation", diagnostics=("stage.omissions.basis:blank",))
+
+        candidate_payload = {k: v.model_dump() for k, v in candidates.items()}
+
+        def review_items(value: ConsolidatedResult) -> dict[str, Any]:
+            return {f"i{index}": item.model_dump() for index, item in enumerate(value.items)}
+
+        def review_omissions(value: ConsolidatedResult) -> dict[str, Any]:
+            return {f"o{index}": item.model_dump() for index, item in enumerate(value.omissions)}
+
+        merged = await self._call(
+            "merge",
+            "merge",
+            MERGE_INSTRUCTIONS,
+            {"candidates": candidate_payload},
+            ConsolidatedResult,
+            [],
+            deadline,
+            validate_merge,
+        )
+
+        async def review_quality(
+            value: ConsolidatedResult, *, unit: str, previous_review: dict[str, Any] | None = None
+        ) -> QualityReviewResult:
+            aliases = review_items(value).keys() | review_omissions(value).keys()
+
+            def validate_review(review: QualityReviewResult) -> None:
+                if review.passed != (not review.issues):
+                    raise StageFailure("validation")
+                identities: set[tuple[str, tuple[str, ...]]] = set()
+                for issue in review.issues:
+                    if len(issue.items) != len(set(issue.items)) or not set(issue.items) <= aliases:
+                        raise StageFailure("validation")
+                    if not issue.basis.strip():
+                        raise StageFailure("validation", diagnostics=("stage.issues.basis:blank",))
+                    identity = (issue.code, tuple(sorted(issue.items)))
+                    if identity in identities:
+                        raise StageFailure("validation")
+                    identities.add(identity)
+
+            return await self._call(
+                "review",
+                unit,
+                REVIEW_INSTRUCTIONS,
+                {
+                    "candidates": candidate_payload,
+                    "final_items": review_items(value),
+                    "final_omissions": review_omissions(value),
+                    **({"previous_review": previous_review} if previous_review else {}),
+                },
+                QualityReviewResult,
+                [],
+                deadline,
+                validate_review,
+            )
+
+        quality = await review_quality(merged, unit="review0")
+        if not quality.passed:
+            previous_items, previous_omissions = review_items(merged), review_omissions(merged)
+            previous = {**previous_items, **previous_omissions}
+            affected = {
+                member
+                for issue in quality.issues
+                for alias in issue.items
+                for member in previous[alias]["members"]
+            }
+
+            def validate_correction(value: ConsolidatedResult) -> None:
+                validate_merge(value)
+                updated = [*review_items(value).values(), *review_omissions(value).values()]
+                for old in previous.values():
+                    if set(old["members"]) & affected:
+                        continue
+                    new = next(
+                        (item for item in updated if set(item["members"]) == set(old["members"])),
+                        None,
+                    )
+                    if new is None or {k: v for k, v in old.items() if k != "members"} != {
+                        k: v for k, v in new.items() if k != "members"
+                    }:
+                        raise StageFailure("validation", diagnostics=("stage.members:reference",))
+
+            issues = [issue.model_dump() for issue in quality.issues]
+            previous_review = {
+                "previous_items": previous_items,
+                "previous_omissions": previous_omissions,
+                "issues": issues,
+            }
+            merged = await self._call(
+                "merge",
+                "merge-correction",
+                MERGE_INSTRUCTIONS,
+                {
+                    "candidates": candidate_payload,
+                    "previous_items": previous_items,
+                    "previous_omissions": previous_omissions,
+                    "review_issues": issues,
+                    "correction_requirement": (
+                        "按相同编号的review_issues定位成员，只纠正受影响范围；每个candidate进入知识或省略账本一次。"
+                    ),
+                },
+                ConsolidatedResult,
+                [],
+                deadline,
+                validate_correction,
+            )
+            quality = await review_quality(merged, unit="review1", previous_review=previous_review)
+            if not quality.passed:
+                self.trace.warning(
+                    "analysis_stage_failed",
+                    stage="review",
+                    unit="review1",
+                    revision=PIPELINE_REVISION,
+                    reason="quality",
+                    validation_codes=[f"quality.{issue.code}" for issue in quality.issues],
+                )
+                raise StageFailure("quality", stage="review", unit="review1")
+        if not merged.items:
+            raise StageFailure("coverage", stage="review", unit="empty_proposal")
+
+        # Owner executes every required query; the model cannot skip or alter it.
+        options: dict[str, dict[str, Any]] = {}
+        option_facts: dict[str, dict[str, Any]] = {}
+        option_aliases: dict[tuple[str, str | None, str | None], str] = {}
+        decision_inputs = []
+        history_calls = 0
+
+        async def query_history(request: HistorySearchRequest) -> None:
+            nonlocal history_calls
+            if history_calls >= 20:
+                raise StageFailure("capacity", stage="match", unit="history_queries")
+            history_calls += 1
+            await stage_io(partial(search, request), deadline)
+            if len({known.knowledge_id for known in data.existing_knowledge}) > 100:
+                raise StageFailure("capacity", stage="match", unit="history_results")
+
+        def current_facts(item) -> dict[str, Any]:
+            return {
+                "subject": item.subject,
+                "name": item.name,
+                "review_method": item.review_method,
+                "direct_evidence": [
+                    {
+                        "materials": candidates[member].materials,
+                        "detail": candidates[member].evidence,
+                        "confidence": candidates[member].confidence,
+                    }
+                    for member in item.members
+                ],
+            }
+
+        def register_option(kind: str, name: str, value) -> str:
+            identity = (kind, value.knowledge_id, getattr(value, "review_id", None))
+            if identity not in option_aliases:
+                if len(option_aliases) >= 420:
+                    raise StageFailure("capacity", stage="match", unit="history_options")
+                alias = {"same_day": "s", "today_review": "t", "history_item": "h"}[kind] + str(
+                    len(option_aliases)
+                )
+                context = next(
+                    (k for k in data.existing_knowledge if k.knowledge_id == value.knowledge_id),
+                    None,
+                )
+                evidence = context.evidence if context else getattr(value, "evidence", None) or ""
+                option_aliases[identity] = alias
+                option_facts[alias] = {
+                    "id": alias,
+                    "kind": kind,
+                    "subject": value.subject_name,
+                    "name": name,
+                    "review_method": context.review_method if context else "",
+                    "evidence": evidence[:4000],
+                    "evidence_complete": bool(evidence)
+                    and len(evidence) <= 4000
+                    and (context.coverage_evidence_complete if context else False),
+                }
+            return option_aliases[identity]
+
+        def bound_history_payload(payload: dict[str, Any], histories: list[dict[str, Any]]) -> None:
+            # Never truncate the current learning target; explicitly mark reduced history evidence.
+            while len(json.dumps(payload, ensure_ascii=False).encode()) > 512 * 1024:
+                longest = max(histories, key=lambda item: len(item["evidence"]), default=None)
+                if longest is None or not longest["evidence"]:
+                    raise StageFailure("capacity", stage="match", unit="history_payload")
+                longest["evidence"] = longest["evidence"][: len(longest["evidence"]) // 2]
+                longest["evidence_complete"] = False
+
+        for index, item in enumerate(merged.items):
+            request = HistorySearchRequest(
+                candidate_key=item.name,
+                subject_name=item.subject,
+                keywords=(item.name[:40],),
+            )
+            await query_history(request)
+            candidate_options: dict[str, Any] = {}
+            for known in data.same_day_learning:
+                if known.subject_name == item.subject:
+                    option_alias = register_option("same_day", known.name, known)
+                    candidate_options[option_alias] = {
+                        "kind": "same_day",
+                        "name": known.name,
+                        "value": known,
+                    }
+            for known_review in data.review_candidates().values():
+                if known_review.subject_name == item.subject:
+                    option_alias = register_option(
+                        known_review.match_kind, known_review.knowledge_name, known_review
+                    )
+                    candidate_options[option_alias] = {
+                        "kind": known_review.match_kind,
+                        "name": known_review.knowledge_name,
+                        "value": known_review,
+                    }
+            if len(candidate_options) > 320:
+                raise StageFailure("capacity")
+            alias = f"i{index}"
+            options[alias] = candidate_options
+            decision_inputs.append(
+                {
+                    "candidate": alias,
+                    **current_facts(item),
+                    "options": list(candidate_options),
+                }
+            )
+
+        def validate_matches(value: MatchingResult) -> None:
+            aliases = [d.candidate for d in value.decisions]
+            if len(aliases) != len(set(aliases)) or set(aliases) != set(options):
+                raise StageFailure("coverage")
+            for choice in value.decisions:
+                if choice.match is not None and choice.match not in options[choice.candidate]:
+                    raise StageFailure("validation")
+
+        matching_payload = {"candidates": decision_inputs, "options": option_facts}
+        bound_history_payload(matching_payload, list(option_facts.values()))
+        matched = await self._call(
+            "match",
+            "match",
+            MATCH_INSTRUCTIONS,
+            matching_payload,
+            MatchingResult,
+            [],
+            deadline,
+            validate_matches,
+            cache_input={
+                k: {a: v["value"].model_dump() for a, v in choices.items()}
+                for k, choices in options.items()
+            },
+        )
+        if any(choice.uncertain for choice in matched.decisions):
+            raise StageFailure("validation", stage="match", unit="match")
+        decisions = {d.candidate: d for d in matched.decisions}
+        # An explicit same-day review may need an ID lookup. Validate the name it
+        # actually resolves to before accepting it, rather than the earlier snapshot.
+        if explicit_same_day_review(data.text):
+            for decision in matched.decisions:
+                choice = options[decision.candidate].get(decision.match or "")
+                if choice is None or choice["kind"] != "same_day":
+                    continue
+                knowledge_id = choice["value"].knowledge_id
+                resolved = next(
+                    (
+                        r
+                        for r in data.review_candidates().values()
+                        if r.knowledge_id == knowledge_id
+                    ),
+                    None,
+                )
+                if resolved is None:
+                    item = merged.items[int(decision.candidate[1:])]
+                    await query_history(
+                        HistorySearchRequest(
+                            candidate_key=item.name,
+                            subject_name=item.subject,
+                            keywords=(item.name[:40],),
+                            knowledge_id=knowledge_id,
+                        )
+                    )
+                    resolved = next(
+                        (
+                            r
+                            for r in data.review_candidates().values()
+                            if r.knowledge_id == knowledge_id
+                        ),
+                        None,
+                    )
+                if resolved is None or resolved.subject_name != choice["value"].subject_name:
+                    raise StageFailure("validation", stage="match", unit="same_day_identity")
+                resolved_match_alias = decision.match
+                assert resolved_match_alias is not None
+                resolved_alias = register_option(
+                    resolved.match_kind, resolved.knowledge_name, resolved
+                )
+                options[decision.candidate][resolved_match_alias] = {
+                    "kind": resolved.match_kind,
+                    "name": resolved.knowledge_name,
+                    "value": resolved,
+                }
+                option_facts[resolved_match_alias] = {
+                    **option_facts[resolved_alias],
+                    "id": resolved_match_alias,
+                }
+        selected = {d.candidate: d.match for d in matched.decisions if d.match is not None}
+        if selected:
+            reuse_payload: dict[str, Any] = {
+                "matches": [
+                    {
+                        "candidate": alias,
+                        "match": match,
+                        "current": current_facts(merged.items[int(alias[1:])]),
+                        "selected": option_facts[match],
+                    }
+                    for alias, match in selected.items()
+                ]
+            }
+            bound_history_payload(
+                reuse_payload, [row["selected"] for row in reuse_payload["matches"]]
+            )
+
+            def validate_reuse(value: ReuseReviewResult) -> None:
+                aliases = [decision.candidate for decision in value.decisions]
+                if len(aliases) != len(set(aliases)) or set(aliases) != set(selected):
+                    raise StageFailure("coverage")
+                for decision in value.decisions:
+                    if decision.match != selected[decision.candidate]:
+                        raise StageFailure("validation")
+                    if decision.verdict != "accept" and not decision.basis.strip():
+                        raise StageFailure(
+                            "validation", diagnostics=("stage.decisions.basis:blank",)
+                        )
+
+            reuse = await self._call(
+                "reuse",
+                "reuse",
+                REUSE_INSTRUCTIONS,
+                reuse_payload,
+                ReuseReviewResult,
+                [],
+                deadline,
+                validate_reuse,
+            )
+            for reuse_decision in reuse.decisions:
+                if reuse_decision.verdict == "uncertain":
+                    self.trace.warning(
+                        "analysis_stage_failed",
+                        stage="reuse",
+                        unit="reuse",
+                        revision=PIPELINE_REVISION,
+                        reason="validation",
+                    )
+                    raise StageFailure("validation", stage="reuse", unit="reuse")
+                if reuse_decision.verdict == "reject":
+                    decisions[reuse_decision.candidate].match = None
+        final: dict[str, list[ModelLearningItem]] = {s: [] for s in subjects}
+        uncertainties = list(merged.uncertainties)
+        for index, item in enumerate(merged.items):
+            alias = f"i{index}"
+            decision = decisions[alias]
+            chosen = options[alias].get(decision.match or "")
+            if chosen and chosen["kind"] == "same_day":
+                uncertainties.append(f"{item.name}当天已确认，已省略重复材料。")
+                continue
+            evidence: list[ModelEvidenceReference] = []
+            confidence = "high"
+            for member in item.members:
+                point = candidates[member]
+                if point.confidence == "low" or confidence == "low":
+                    confidence = "low"
+                elif point.confidence == "medium":
+                    confidence = "medium"
+                for source in point.materials:
+                    ref = ModelEvidenceReference(
+                        source="parent_text" if source == "t" else "image",
+                        image_index=None if source == "t" else int(source[1:]),
+                        detail=point.evidence,
+                    )
+                    if ref not in evidence:
+                        evidence.append(ref)
+            if len(evidence) > 20:
+                raise StageFailure("capacity")
+            matched_review = chosen["value"] if chosen else None
+            final[item.subject].append(
+                ModelLearningItem(
+                    kind=chosen["kind"] if chosen else "new",
+                    name=matched_review.knowledge_name if matched_review else item.name,
+                    review_id=matched_review.review_id if matched_review else None,
+                    existing_knowledge_id=matched_review.knowledge_id if matched_review else None,
+                    category=item.category,
+                    display_kind=item.display_kind,
+                    review_method=item.review_method,
+                    estimated_minutes=item.estimated_minutes,
+                    direct_evidence=evidence,
+                    context_used=[],
+                    confidence=confidence,
+                )
+            )
+        # Distinct extracted names can resolve to one canonical history item. Preserve
+        # every source before the public validator deduplicates review identities.
+        for subject, items in final.items():
+            unique: dict[tuple[str, str], ModelLearningItem] = {}
+            for assembled in items:
+                key = (
+                    assembled.kind,
+                    assembled.existing_knowledge_id or normalize_knowledge_name(assembled.name),
+                )
+                if key not in unique:
+                    unique[key] = assembled
+                else:
+                    kept = unique[key]
+                    kept.direct_evidence.extend(
+                        e for e in assembled.direct_evidence if e not in kept.direct_evidence
+                    )
+                    if len(kept.direct_evidence) > 20:
+                        raise StageFailure("capacity")
+            final[subject] = list(unique.values())
+        proposal = data.validate_model_result(
+            ModelAnalysisResult(
+                summary=merged.summary,
+                source="图片记录" if materials else "手动记录",
+                subjects=final,
+                uncertainties=uncertainties[:20],
+            ),
+            # This is an internal server-owned decision, never a model/transport field.
+            # A name collision cannot overturn reviewed non-equivalence or null matching.
+            verified_new_keys=frozenset(
+                (item.subject, normalize_knowledge_name(item.name))
+                for index, item in enumerate(merged.items)
+                if decisions[f"i{index}"].match is None
+            ),
+        )
+        await propose_coverage(
+            self.provider, proposal, data.existing_knowledge, deadline, self.trace
+        )
+        return proposal

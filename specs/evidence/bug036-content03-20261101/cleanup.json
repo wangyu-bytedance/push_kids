@@ -1,0 +1,12 @@
+{
+  "revision": "CLEANUP-20261101-BUG036-CONTENT03-12-01",
+  "scope": "Only task-owned private directory",
+  "removed_files": 244,
+  "removed_directories_including_root": 17,
+  "removed_bytes": 52081821,
+  "retained_private_source_or_response_files": 0,
+  "source_sha_check": "33 sources /74 images PASS before cleanup",
+  "privacy_audit_sha256": "a4e7f28d1c4dc3ca50e8beab7cff93adbf93ba6e7f27e04ee9d0ee1b132407ba",
+  "status": "PASS",
+  "task_private_directory_exists": false
+}

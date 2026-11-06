@@ -40,13 +40,13 @@
     <text class="count-error" wx:if="{{countError}}" aria-live="polite">{{countError}}</text>
     <button class="inventory-button count-cancel" bindtap="closeCount">取消</button>
   </view>
-  <text class="notice" wx:if="{{notice}}" aria-live="polite">{{notice}}</text>
+  <view class="inventory-feedback" wx:if="{{notice}}" aria-live="polite"><text class="inventory-feedback-text">{{notice}}</text></view>
   <view class="error" wx:if="{{error}}"><text>{{error}}</text><button class="inventory-button" bindtap="retry">{{conflict ? '重新加载' : '重试'}}</button></view>
   <view class="loading" wx:if="{{loading && !loaded}}"><view class="sk"></view><view class="sk"></view><text class="muted">正在读取编辑计划…</text></view>
   <block wx:if="{{loaded}}">
     <view class="result-head" wx:if="{{items.length}}"><text class="result-title" wx:if="{{view === 'time'}}">预计 {{total}} 项</text><text class="result-title" wx:else>{{total}} 个知识条目</text><text class="muted" wx:if="{{view === 'time'}}">约 {{minutes}} 分钟</text><text class="muted" wx:elif="{{view === 'subject'}}">按复习次数排序</text><text class="muted" wx:if="{{loading}}">正在更新…</text></view>
     <text class="muted result-explain" wx:if="{{items.length && view === 'time'}}">实际安排会随今天的复习反馈更新</text>
-    <text class="notice" wx:if="{{view === 'time' && overBudget}}">手动安排已保留，比日常 {{budget}} 分钟预算多 {{overBudget}} 分钟。</text>
+    <view class="inventory-feedback" wx:if="{{view === 'time' && overBudget}}"><text class="inventory-feedback-text">手动安排已保留，比日常 {{budget}} 分钟预算多 {{overBudget}} 分钟。</text></view>
       <text class="muted readonly" wx:if="{{!canWrite}}">{{embedded ? '当前为只读，可查看条目和安排，无法调整计划。' : '当前为只读，可查看条目和安排。'}}</text>
     <view class="group {{view === 'subject' ? 'flat' : ''}} {{group.expanded ? 'open' : ''}} {{actionMenuGroup === group.key ? 'menu-open' : ''}}" wx:for="{{groups}}" wx:for-item="group" wx:key="key">
       <view class="group-toggle" wx:if="{{view !== 'subject'}}" aria-role="button" aria-label="{{group.name}}，本页{{group.entries.length}}项，{{group.expanded ? '收起' : '展开'}}" aria-expanded="{{group.expanded}}" data-key="{{group.key}}" catchtap="toggleGroup">

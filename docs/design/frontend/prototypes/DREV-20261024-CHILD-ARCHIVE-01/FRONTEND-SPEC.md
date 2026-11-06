@@ -1,7 +1,7 @@
 # UI-015 — 归档操作精简候选
 
-- Status: AWAITING_APPROVAL
-- Task: [BUG-033 / Spec01](../../../../../specs/active/BUG-033-CHILD-ARCHIVE-UI.md)
+- Status: APPROVED
+- Task: [BUG-033 / Spec01](../../../../../specs/completed/BUG-033-CHILD-ARCHIVE-UI.md)
 - Design Revision: `DREV-20261024-CHILD-ARCHIVE-01`
 - Baseline/FEC: `FDB-20260913-04` / `FEC-20261007-NATIVE-GEOMETRY-02`，沿用已批准版本。
 - Source: [index.html](index.html)，自包含，无远程资源、业务调用或真实儿童数据。
@@ -34,4 +34,4 @@
 
 ## Approval and scope
 
-需批准 `BUG-SPEC-20261024-CHILD-ARCHIVE-UI-01 + DREV-20261024-CHILD-ARCHIVE-01`；当前不改生产页面。批准年级设计的源及57导出保持原字节，新候选仅在批准后替代档案状态卡的局部视觉。无架构边界或数据协议变更。
+用户于2026-11-05当前会话展示PNG并明确请求Spec01+DREV01审批后回复“批准”，批准 `BUG-SPEC-20261024-CHILD-ARCHIVE-UI-01 + DREV-20261024-CHILD-ARCHIVE-01`。本源及21张导出冻结；年级设计的源及57导出保持原字节，本修订只替代档案状态卡的局部视觉。无架构边界或数据协议变更。

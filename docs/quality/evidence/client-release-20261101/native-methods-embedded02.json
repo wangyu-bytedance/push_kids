@@ -1,0 +1,43 @@
+{
+  "at": "2026-11-01T08:07:30.274Z",
+  "action": "native-methods-embedded",
+  "host": "embedded",
+  "offline": true,
+  "checks": [
+    {
+      "action": "changeMode",
+      "mode": "playback",
+      "pass": true
+    },
+    {
+      "action": "changeMode",
+      "mode": "lit",
+      "pass": true
+    },
+    {
+      "action": "changeMode",
+      "mode": "timeline",
+      "pass": true
+    },
+    {
+      "action": "openDrafts",
+      "pass": true
+    },
+    {
+      "action": "closeSheet",
+      "pass": true
+    },
+    {
+      "action": "deletedManualCreationPath",
+      "pass": true
+    },
+    {
+      "action": "returnToLearningManualInput",
+      "pass": true
+    }
+  ],
+  "result": "PASS",
+  "evidence_level": "Native real methods on offline synthetic transport; CUA actions recorded separately",
+  "production_writes": 0,
+  "device_accessibility": "NOT_RUN"
+}

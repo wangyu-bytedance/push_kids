@@ -6,9 +6,10 @@ import json
 from datetime import datetime, timedelta
 from hashlib import sha256
 from time import monotonic
-from typing import Any
+from typing import Any, cast
 
 from sqlalchemy import delete, select
+from sqlalchemy.engine import CursorResult
 from sqlalchemy.orm import Session
 
 from push_kids.agent_processing.failures import StageFailure
@@ -50,9 +51,9 @@ class StageCheckpoints:
                     AnalysisStageResult.family_id == family_id,
                     AnalysisStageResult.job_id == job_id,
                 )
-                .limit(15)
+                .limit(19)
             ).all()
-            if len(rows) > 14:
+            if len(rows) > 18:
                 raise StageFailure("capacity", retryable=False)
             self.rows = {r.unit_key: r for r in rows}
 
@@ -130,11 +131,15 @@ class StageCheckpoints:
                     AnalysisStageResult.family_id == self.family_id,
                     AnalysisStageResult.job_id == self.job_id,
                 )
-                .limit(15)
+                .limit(19)
             ).all()
             existing = next((r for r in rows if r.unit_key == unit), None)
             size = sum(len((r.payload or "").encode()) for r in rows if r.unit_key != unit)
-            if len(rows) >= 14 and existing is None or size + len(payload.encode()) > 512 * 1024:
+            if (
+                len(rows) > 18
+                or (len(rows) >= 18 and existing is None)
+                or size + len(payload.encode()) > 512 * 1024
+            ):
                 raise StageFailure("capacity", retryable=False)
             row = existing or AnalysisStageResult(
                 family_id=self.family_id,
@@ -162,6 +167,21 @@ def purge_stages(
         query = query.where(AnalysisStageResult.submission_id == submission_id)
     with db.no_autoflush:
         db.execute(query)
+
+
+def purge_decision_stages(db: Session, family_id: str, child_id: str, submission_id: str) -> int:
+    """Refresh only the fixed semantic branch within the caller's guarded transaction."""
+    result = db.execute(
+        delete(AnalysisStageResult).where(
+            AnalysisStageResult.family_id == family_id,
+            AnalysisStageResult.child_id == child_id,
+            AnalysisStageResult.submission_id == submission_id,
+            AnalysisStageResult.unit_key.in_(
+                ("classify", "merge", "merge-correction", "review0", "review1", "match", "reuse")
+            ),
+        )
+    )
+    return cast(CursorResult, result).rowcount
 
 
 def expire_stages(database: Database) -> int:

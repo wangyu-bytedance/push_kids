@@ -1,15 +1,25 @@
 # Feature Current-State Directory
 
-本地新增当前能力：[FEAT-004两日无新增的单项学习建议](FEAT-004-daily-learning-suggestions.md)，Spec04/DREV01已批准并实现，建议弹层按另批Spec01/DREV02精简，今日卡片按Visibility Spec01/DREV03隐藏空区并统一风格（revision06-LOCAL）；默认关闭、VERIFYING。[FEAT-001](FEAT-001-push-kids-mvp.md)同步空白日少量提前复习。自动化和缺口见[主功能证据](../../quality/evidence/TODAY-LEARNING-IMPLEMENTATION-20261024.md)、[弹层证据](../../quality/evidence/SUGGESTION-SHEET-IMPLEMENTATION-20261024.md)及[卡片证据](../../quality/evidence/TODAY-CARD-IMPLEMENTATION-20261024.md)，不代表已发布。
+2026-11-06：[FEAT-001](FEAT-001-push-kids-mvp.md)、[FEAT-003](FEAT-003-notification-channel.md)、[FEAT-005](FEAT-005-multi-child-profiles.md)对应工作日、通知投影兼容、生成/验收、归档和页脚实现已由[040/0.1.18](../../deploy/releases/20261106-fullstack-040-client-0.1.18.md)交付。11份Spec开发DONE归档，设备/内容和后续平台阶段独立；旧10/13候选OPS仍BLOCKED，不能借新版本伪写旧候选部署。
+
+2026-11-05：[FEAT-002当前范围](FEAT-002-family-collaboration.md)继续保留已交付家庭协作、家庭内多孩子及服务端隔离；用户明确取消[多家庭访问与切换Spec](../../../specs/rejected/FEAT-002-MULTI-FAMILY-CHILD-TENANT-ISOLATION.md)，关联提案已关闭，不再作为待发布功能。
+
+[FEAT-005归档区](FEAT-005-multi-child-profiles.md)：已批准整行归档/恢复及集中确认文案由0.1.18交付。三视口21状态及确认框视觉/取消完成，真实业务和设备/可访问性缺项保持。
+
+[FEAT-001知识生成当前状态](FEAT-001-push-kids-mvp.md)：040继承原来源/完整提案核验、正式证据owner、局部纠正、缓存02和成功率04，Pro形成产物后由System One提供辅助人工核对。固定40 v2单轮40/40；原内容失败及家长review PENDING保持，线上成功率尚未测量。
+
+当前开发归档：GOV-002按匹配云交付认定DONE；2026-11-01旅行三Spec由039后端/0.1.17客户端覆盖，DONE/completed，设备/内容验收缺项独立。历史037/0.1.16仅覆盖原范围；当前归档与待验见[STATUS](../../../specs/STATUS.md)及[治理Spec](../../../specs/completed/GOV-002-CLOUD-DELIVERY-DEVELOPMENT-COMPLETION.md)。
+
+已交付能力：[FEAT-004两日无新增的单项学习建议](FEAT-004-daily-learning-suggestions.md)，Spec04/DREV01已批准并实现，建议弹层按另批Spec01/DREV02精简，今日卡片按Visibility Spec01/DREV03隐藏空区并统一风格（revision06-LOCAL）；默认关闭、开发DONE，验收待补。[FEAT-001](FEAT-001-push-kids-mvp.md)同步空白日少量提前复习。自动化和缺口见[主功能证据](../../quality/evidence/TODAY-LEARNING-IMPLEMENTATION-20261024.md)、[弹层证据](../../quality/evidence/SUGGESTION-SHEET-IMPLEMENTATION-20261024.md)及[卡片证据](../../quality/evidence/TODAY-CARD-IMPLEMENTATION-20261024.md)，对应实现已随037/0.1.16交付，尚未完成体验/审核/正式发布。
 
 ## Purpose
 
-新增本地实现：[FEAT-013 — 学年升年级建议与家长共享确认](FEAT-013-annual-grade-promotion.md)，`LOCAL_IMPLEMENTATION / VERIFYING / NOT_RELEASED`；[Spec02](../../../specs/active/FEAT-013-ANNUAL-GRADE-PROMOTION.md)及Architecture02/DREV01已获用户批准，当前弹窗由另批[精简Spec01/DREV02](../../../specs/active/FEAT-013-GRADE-DIALOG-SIMPLIFICATION.md)收敛为单标题/选择与并排操作。建议与正式级隔离、孩子学年共享、独立串行弹窗和显式人工定级保持；[主任务证据](../../quality/evidence/ANNUAL-GRADE-IMPLEMENTATION-20261024.md)与[精简实施证据](../../quality/evidence/GRADE-DIALOG-SIMPLIFICATION-IMPLEMENTATION-20261024.md)分别记录采集时事实，真实设备、原生端到端和可访问性待验，不代表已发布。
+已交付实现：[FEAT-013 — 学年升年级建议与家长共享确认](FEAT-013-annual-grade-promotion.md)，`DEVELOPMENT_DONE / BACKEND_037_DEPLOYED / CLIENT_0.1.16_UPLOADED / VERIFICATION_PENDING`；[Spec02](../../../specs/completed/FEAT-013-ANNUAL-GRADE-PROMOTION.md)及Architecture02/DREV01已获用户批准，当前弹窗由另批[精简Spec01/DREV02](../../../specs/completed/FEAT-013-GRADE-DIALOG-SIMPLIFICATION.md)收敛为单标题/选择与并排操作。建议与正式级隔离、孩子学年共享、独立串行弹窗和显式人工定级保持；[主任务证据](../../quality/evidence/ANNUAL-GRADE-IMPLEMENTATION-20261024.md)与[精简实施证据](../../quality/evidence/GRADE-DIALOG-SIMPLIFICATION-IMPLEMENTATION-20261024.md)分别记录采集时事实，真实设备、原生端到端和可访问性待验；已开发交付，未体验/审核/正式发布。
 
-新增本地实现：[FEAT-012 — 孩子照片足迹](FEAT-012-child-photo-footprints.md)，`LOCAL_IMPLEMENTATION / VERIFYING / NOT_RELEASED`。Spec04/Architecture03实现导入、家长确认和三视图；2026-10-23按获批入口Spec01和文案Spec01新增记录Tab标题切换“学习记录 / 旅行日记”及提示精简。当前验证见[本轮证据](../../quality/evidence/RECORD-TYPES-IMPLEMENTATION-20261023.md)，完整原生/真机、设计差异、真实全球底图、MySQL5.7及AI/选图素材评估仍待验收。
+已交付[FEAT-012](FEAT-012-child-photo-footprints.md)：主产品旧范围037/0.1.16及旅行三增量039/0.1.17分别开发DONE。最新入口删除零草稿/空态手动创建，实际草稿核对/导入/历史保持；本轮官方upload1,191,019字节成功，三尺寸双宿主42组原生/局部动作与用户正向回看/双账号门禁通过。设备/可访问性、全球地图和素材质量缺项独立，[上传报告](../../deploy/releases/20261101-client-0.1.17-upload.md)与[原实施证据](../../quality/evidence/travel-entry-cleanup-20261031/README.md)不混为完整验收。
 
-本地实现入口：[FEAT-011 — 提醒授权自动补充](FEAT-011-notification-auto-renewal.md)，`LOCAL_IMPLEMENTED / VERIFYING / NOT_RELEASED`。
-Spec/架构/DREV已获批准；本人完成游标、逐类冷却、授权事件去重和前端已接入；真机与独立评审待补，线上未改变。
+已交付入口：[FEAT-011 — 提醒授权自动补充](FEAT-011-notification-auto-renewal.md)，`DEVELOPMENT_DONE / BACKEND_037_DEPLOYED / CLIENT_0.1.16_UPLOADED / VERIFICATION_PENDING`。
+Spec/架构/DREV已获批准；本人完成游标、逐类冷却、授权事件去重和前端已接入；真机与独立评审待补，开发交付不等于这些验收通过。
 
 `docs/domain/features/` 是功能当前状态的权威入口，用于回答：
 
@@ -167,7 +177,7 @@ Change References 推荐格式：
 
 ## Completion gate
 
-涉及 Feature 的任务不能标记 `DONE`，除非：
+开发DONE按AGENTS及GOV-SPEC-20261026-CLOUD-DELIVERY-DONE-01管理：已云端交付范围可开发归档，未验收项独立保留。以下是必须同步的事实和引用检查，不把产品验收待补改为开发未完成：
 
 - [ ] Feature ID 和当前状态文档已解析。
 - [ ] 当前 Feature 正文已合并最终事实，而非追加冲突说明。

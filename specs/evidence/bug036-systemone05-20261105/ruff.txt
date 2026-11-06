@@ -1,0 +1,64 @@
+E501 Line too long (104 > 100)
+   --> apps/api/src/push_kids/agent_processing/decision_workflow.py:417:101
+    |
+415 |                 # Confirmation's legacy name/category identity cannot represent two
+416 |                 # non-equivalent facts with one name. Do not silently reuse that row.
+417 |                 raise StageFailure("quality", retryable=False, stage="match", unit="identity_collision")
+    |                                                                                                     ^^^^
+418 |             decisions.append(
+419 |                 MatchDecision(
+    |
+
+I001 [*] Import block is un-sorted or un-formatted
+  --> apps/api/src/push_kids/agent_processing/stage_provider.py:3:1
+   |
+ 1 |   """Ark structured calls with absolute deadlines and a process-wide request bound."""
+ 2 |
+ 3 | / from __future__ import annotations
+ 4 | |
+ 5 | | import asyncio
+ 6 | | import base64
+ 7 | | import json
+ 8 | | from pathlib import Path
+ 9 | | from time import monotonic
+10 | | from typing import Any
+11 | |
+12 | | from openai import (
+13 | |     APIConnectionError,
+14 | |     APIStatusError,
+15 | |     APITimeoutError,
+16 | |     AsyncOpenAI,
+17 | |     DefaultAsyncHttpxClient,
+18 | | )
+19 | | from pydantic import BaseModel, ValidationError
+20 | |
+21 | | from push_kids.agent_processing.contracts import AnalysisCapabilityError
+22 | | from push_kids.agent_processing.failures import StageFailure, schema_diagnostics
+23 | | from push_kids.agent_processing.request_limits import REQUEST_SLOTS as _REQUEST_SLOTS
+24 | | from push_kids.agent_processing.system_one_provider import SystemOneDecisionProvider
+25 | | from push_kids.agent_processing.telemetry import AnalysisTrace
+26 | | from push_kids.platform.config import Settings
+   | |______________________________________________^
+27 |
+28 |   class StagedArkProvider:
+   |
+help: Organize imports
+   |
+27 |
+28 +
+29 | class StagedArkProvider:
+   |
+
+E501 Line too long (109 > 100)
+  --> apps/api/src/push_kids/agent_processing/stage_provider.py:35:101
+   |
+33 |         self.coverage_enabled = settings.coverage_enabled
+34 |         self.model = settings.ark_model
+35 |         self.decision_provider = SystemOneDecisionProvider(settings) if settings.system_one_enabled else None
+   |                                                                                                     ^^^^^^^^^
+36 |         self.concurrency = settings.analysis_concurrency
+37 |         self.parameter_revision = (
+   |
+
+Found 3 errors.
+[*] 1 fixable with the `--fix` option.

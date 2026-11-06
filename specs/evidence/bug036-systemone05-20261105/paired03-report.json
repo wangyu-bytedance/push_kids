@@ -1,0 +1,2168 @@
+{
+  "status": "COMPLETE",
+  "summary": {
+    "old": {
+      "n": 45,
+      "first_success": 36,
+      "final_success": 43,
+      "p50_seconds": 34.782,
+      "p95_seconds": 77.964,
+      "max_seconds": 149.194,
+      "successful_p50_seconds": 34.761,
+      "successful_p95_seconds": 77.964,
+      "harness_errors": 0,
+      "returned_input_tokens": 1367309,
+      "returned_output_tokens": 66074,
+      "completed_provider_responses": 253,
+      "failure_reasons": {
+        "quality": 2
+      },
+      "success_without_recorded_correction": 32
+    },
+    "new": {
+      "n": 45,
+      "first_success": 36,
+      "final_success": 37,
+      "p50_seconds": 26.64,
+      "p95_seconds": 61.361,
+      "max_seconds": 131.053,
+      "successful_p50_seconds": 25.215,
+      "successful_p95_seconds": 61.052,
+      "harness_errors": 0,
+      "returned_input_tokens": 1675799,
+      "returned_output_tokens": 43416,
+      "completed_provider_responses": 287,
+      "failure_reasons": {
+        "quality": 7,
+        "provider_timeout": 1
+      },
+      "success_without_recorded_correction": 31
+    }
+  },
+  "by_round": {
+    "1": {
+      "old": {
+        "n": 15,
+        "first_success": 12,
+        "final_success": 14,
+        "p50_seconds": 35.832,
+        "p95_seconds": 77.964,
+        "max_seconds": 77.964,
+        "successful_p50_seconds": 26.713,
+        "successful_p95_seconds": 77.964,
+        "harness_errors": 0,
+        "returned_input_tokens": 471897,
+        "returned_output_tokens": 23201,
+        "completed_provider_responses": 86,
+        "failure_reasons": {
+          "quality": 1
+        }
+      },
+      "new": {
+        "n": 15,
+        "first_success": 13,
+        "final_success": 13,
+        "p50_seconds": 24.062,
+        "p95_seconds": 61.361,
+        "max_seconds": 61.361,
+        "successful_p50_seconds": 24.062,
+        "successful_p95_seconds": 61.361,
+        "harness_errors": 0,
+        "returned_input_tokens": 600033,
+        "returned_output_tokens": 15164,
+        "completed_provider_responses": 100,
+        "failure_reasons": {
+          "quality": 2
+        }
+      }
+    },
+    "2": {
+      "old": {
+        "n": 15,
+        "first_success": 11,
+        "final_success": 15,
+        "p50_seconds": 34.024,
+        "p95_seconds": 149.194,
+        "max_seconds": 149.194,
+        "successful_p50_seconds": 34.024,
+        "successful_p95_seconds": 149.194,
+        "harness_errors": 0,
+        "returned_input_tokens": 467691,
+        "returned_output_tokens": 22387,
+        "completed_provider_responses": 86,
+        "failure_reasons": {}
+      },
+      "new": {
+        "n": 15,
+        "first_success": 12,
+        "final_success": 12,
+        "p50_seconds": 26.862,
+        "p95_seconds": 75.058,
+        "max_seconds": 75.058,
+        "successful_p50_seconds": 25.215,
+        "successful_p95_seconds": 48.833,
+        "harness_errors": 0,
+        "returned_input_tokens": 566094,
+        "returned_output_tokens": 15675,
+        "completed_provider_responses": 97,
+        "failure_reasons": {
+          "quality": 3
+        }
+      }
+    },
+    "3": {
+      "old": {
+        "n": 15,
+        "first_success": 13,
+        "final_success": 14,
+        "p50_seconds": 37.741,
+        "p95_seconds": 129.168,
+        "max_seconds": 129.168,
+        "successful_p50_seconds": 34.761,
+        "successful_p95_seconds": 129.168,
+        "harness_errors": 0,
+        "returned_input_tokens": 427721,
+        "returned_output_tokens": 20486,
+        "completed_provider_responses": 81,
+        "failure_reasons": {
+          "quality": 1
+        }
+      },
+      "new": {
+        "n": 15,
+        "first_success": 11,
+        "final_success": 12,
+        "p50_seconds": 28.3,
+        "p95_seconds": 131.053,
+        "max_seconds": 131.053,
+        "successful_p50_seconds": 22.146,
+        "successful_p95_seconds": 61.052,
+        "harness_errors": 0,
+        "returned_input_tokens": 509672,
+        "returned_output_tokens": 12577,
+        "completed_provider_responses": 90,
+        "failure_reasons": {
+          "quality": 2,
+          "provider_timeout": 1
+        }
+      }
+    }
+  },
+  "unreplayable_originals": [
+    "real01",
+    "real03",
+    "real04"
+  ],
+  "frozen_source_unchanged": true,
+  "percentile_method": "nearest rank; all terminal requests including failures; success-only separately reported",
+  "usage_limitation": "Only returned usage and completed responses; timeout usage/calls may be absent. Not a billing total.",
+  "parent_content_review": "PENDING",
+  "business_writes": 0,
+  "rows": [
+    {
+      "case": "real02",
+      "success": true,
+      "first_success": true,
+      "seconds": 30.137,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 30.137
+        }
+      ],
+      "input_tokens": 52522,
+      "output_tokens": 943,
+      "calls": 7,
+      "path": "new",
+      "round": 1
+    },
+    {
+      "case": "real02",
+      "success": true,
+      "first_success": true,
+      "seconds": 77.754,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 77.754
+        }
+      ],
+      "input_tokens": 47385,
+      "output_tokens": 2993,
+      "calls": 7,
+      "path": "old",
+      "round": 1
+    },
+    {
+      "case": "real05",
+      "success": true,
+      "first_success": true,
+      "seconds": 25.27,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 25.27
+        }
+      ],
+      "input_tokens": 20317,
+      "output_tokens": 695,
+      "calls": 5,
+      "path": "old",
+      "round": 1
+    },
+    {
+      "case": "real05",
+      "success": true,
+      "first_success": true,
+      "seconds": 18.75,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 18.75
+        }
+      ],
+      "input_tokens": 28478,
+      "output_tokens": 342,
+      "calls": 6,
+      "path": "new",
+      "round": 1
+    },
+    {
+      "case": "real06",
+      "success": true,
+      "first_success": true,
+      "seconds": 61.361,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 61.361
+        }
+      ],
+      "input_tokens": 107287,
+      "output_tokens": 3081,
+      "calls": 10,
+      "path": "new",
+      "round": 1
+    },
+    {
+      "case": "real06",
+      "success": true,
+      "first_success": true,
+      "seconds": 77.964,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 77.964
+        }
+      ],
+      "input_tokens": 62088,
+      "output_tokens": 4320,
+      "calls": 7,
+      "path": "old",
+      "round": 1
+    },
+    {
+      "case": "real07",
+      "success": true,
+      "first_success": false,
+      "seconds": 37.357,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": false,
+          "seconds": 18.649,
+          "reason": "validation",
+          "code": "analysis_output_invalid",
+          "retryable": true,
+          "stage": "match",
+          "unit": "match",
+          "class": "StageFailure",
+          "diagnostics": []
+        },
+        {
+          "attempt": 2,
+          "success": false,
+          "seconds": 2.438,
+          "reason": "validation",
+          "code": "analysis_output_invalid",
+          "retryable": true,
+          "stage": "match",
+          "unit": "match",
+          "class": "StageFailure",
+          "diagnostics": []
+        },
+        {
+          "attempt": 3,
+          "success": true,
+          "seconds": 16.269
+        }
+      ],
+      "input_tokens": 33043,
+      "output_tokens": 1646,
+      "calls": 7,
+      "path": "old",
+      "round": 1
+    },
+    {
+      "case": "real07",
+      "success": false,
+      "first_success": false,
+      "seconds": 19.339,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": false,
+          "seconds": 19.339,
+          "reason": "quality",
+          "code": "analysis_output_invalid",
+          "retryable": false,
+          "stage": "review",
+          "unit": "review1",
+          "class": "StageFailure",
+          "diagnostics": []
+        }
+      ],
+      "input_tokens": 17518,
+      "output_tokens": 755,
+      "calls": 6,
+      "path": "new",
+      "round": 1
+    },
+    {
+      "case": "real08",
+      "success": true,
+      "first_success": true,
+      "seconds": 13.449,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 13.449
+        }
+      ],
+      "input_tokens": 24726,
+      "output_tokens": 327,
+      "calls": 5,
+      "path": "new",
+      "round": 1
+    },
+    {
+      "case": "real08",
+      "success": true,
+      "first_success": true,
+      "seconds": 18.415,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 18.415
+        }
+      ],
+      "input_tokens": 17729,
+      "output_tokens": 534,
+      "calls": 5,
+      "path": "old",
+      "round": 1
+    },
+    {
+      "case": "real09",
+      "success": true,
+      "first_success": true,
+      "seconds": 26.713,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 26.713
+        }
+      ],
+      "input_tokens": 24422,
+      "output_tokens": 661,
+      "calls": 5,
+      "path": "old",
+      "round": 1
+    },
+    {
+      "case": "real09",
+      "success": true,
+      "first_success": true,
+      "seconds": 35.091,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 35.091
+        }
+      ],
+      "input_tokens": 38557,
+      "output_tokens": 1009,
+      "calls": 7,
+      "path": "new",
+      "round": 1
+    },
+    {
+      "case": "real10",
+      "success": true,
+      "first_success": true,
+      "seconds": 43.632,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 43.632
+        }
+      ],
+      "input_tokens": 70972,
+      "output_tokens": 1491,
+      "calls": 10,
+      "path": "new",
+      "round": 1
+    },
+    {
+      "case": "real10",
+      "success": false,
+      "first_success": false,
+      "seconds": 63.543,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": false,
+          "seconds": 34.168,
+          "reason": "validation",
+          "code": "analysis_output_invalid",
+          "retryable": true,
+          "stage": "review",
+          "unit": "review0",
+          "class": "StageFailure",
+          "diagnostics": []
+        },
+        {
+          "attempt": 2,
+          "success": false,
+          "seconds": 29.374,
+          "reason": "quality",
+          "code": "analysis_output_invalid",
+          "retryable": false,
+          "stage": "review",
+          "unit": "review1",
+          "class": "StageFailure",
+          "diagnostics": []
+        }
+      ],
+      "input_tokens": 49272,
+      "output_tokens": 2262,
+      "calls": 7,
+      "path": "old",
+      "round": 1
+    },
+    {
+      "case": "real11",
+      "success": true,
+      "first_success": true,
+      "seconds": 46.994,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 46.994
+        }
+      ],
+      "input_tokens": 28238,
+      "output_tokens": 1848,
+      "calls": 5,
+      "path": "old",
+      "round": 1
+    },
+    {
+      "case": "real11",
+      "success": true,
+      "first_success": true,
+      "seconds": 52.217,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 52.217
+        }
+      ],
+      "input_tokens": 75434,
+      "output_tokens": 1867,
+      "calls": 9,
+      "path": "new",
+      "round": 1
+    },
+    {
+      "case": "real12",
+      "success": true,
+      "first_success": true,
+      "seconds": 24.062,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 24.062
+        }
+      ],
+      "input_tokens": 32975,
+      "output_tokens": 434,
+      "calls": 6,
+      "path": "new",
+      "round": 1
+    },
+    {
+      "case": "real12",
+      "success": true,
+      "first_success": false,
+      "seconds": 60.952,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": false,
+          "seconds": 29.036,
+          "reason": "validation",
+          "code": "analysis_output_invalid",
+          "retryable": true,
+          "stage": "review",
+          "unit": "review0",
+          "class": "StageFailure",
+          "diagnostics": []
+        },
+        {
+          "attempt": 2,
+          "success": true,
+          "seconds": 31.916
+        }
+      ],
+      "input_tokens": 45661,
+      "output_tokens": 1619,
+      "calls": 8,
+      "path": "old",
+      "round": 1
+    },
+    {
+      "case": "real13",
+      "success": true,
+      "first_success": true,
+      "seconds": 35.832,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 35.832
+        }
+      ],
+      "input_tokens": 22396,
+      "output_tokens": 1133,
+      "calls": 5,
+      "path": "old",
+      "round": 1
+    },
+    {
+      "case": "real13",
+      "success": true,
+      "first_success": true,
+      "seconds": 26.64,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 26.639
+        }
+      ],
+      "input_tokens": 17539,
+      "output_tokens": 741,
+      "calls": 5,
+      "path": "new",
+      "round": 1
+    },
+    {
+      "case": "real14",
+      "success": true,
+      "first_success": true,
+      "seconds": 17.862,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 17.862
+        }
+      ],
+      "input_tokens": 19504,
+      "output_tokens": 536,
+      "calls": 5,
+      "path": "new",
+      "round": 1
+    },
+    {
+      "case": "real14",
+      "success": true,
+      "first_success": true,
+      "seconds": 20.882,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 20.882
+        }
+      ],
+      "input_tokens": 20030,
+      "output_tokens": 480,
+      "calls": 4,
+      "path": "old",
+      "round": 1
+    },
+    {
+      "case": "real15",
+      "success": true,
+      "first_success": true,
+      "seconds": 17.758,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 17.758
+        }
+      ],
+      "input_tokens": 16983,
+      "output_tokens": 443,
+      "calls": 5,
+      "path": "old",
+      "round": 1
+    },
+    {
+      "case": "real15",
+      "success": true,
+      "first_success": true,
+      "seconds": 12.884,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 12.884
+        }
+      ],
+      "input_tokens": 26172,
+      "output_tokens": 287,
+      "calls": 6,
+      "path": "new",
+      "round": 1
+    },
+    {
+      "case": "real16",
+      "success": true,
+      "first_success": true,
+      "seconds": 12.089,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 12.089
+        }
+      ],
+      "input_tokens": 29137,
+      "output_tokens": 229,
+      "calls": 6,
+      "path": "new",
+      "round": 1
+    },
+    {
+      "case": "real16",
+      "success": true,
+      "first_success": true,
+      "seconds": 21.234,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 21.234
+        }
+      ],
+      "input_tokens": 19416,
+      "output_tokens": 564,
+      "calls": 5,
+      "path": "old",
+      "round": 1
+    },
+    {
+      "case": "real17",
+      "success": true,
+      "first_success": true,
+      "seconds": 63.197,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 63.197
+        }
+      ],
+      "input_tokens": 42440,
+      "output_tokens": 3273,
+      "calls": 6,
+      "path": "old",
+      "round": 1
+    },
+    {
+      "case": "real17",
+      "success": false,
+      "first_success": false,
+      "seconds": 54.771,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": false,
+          "seconds": 54.771,
+          "reason": "quality",
+          "code": "analysis_output_invalid",
+          "retryable": false,
+          "stage": "review",
+          "unit": "review1",
+          "class": "StageFailure",
+          "diagnostics": []
+        }
+      ],
+      "input_tokens": 29050,
+      "output_tokens": 2637,
+      "calls": 6,
+      "path": "new",
+      "round": 1
+    },
+    {
+      "case": "real18",
+      "success": true,
+      "first_success": true,
+      "seconds": 19.966,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 19.966
+        }
+      ],
+      "input_tokens": 30162,
+      "output_tokens": 485,
+      "calls": 6,
+      "path": "new",
+      "round": 1
+    },
+    {
+      "case": "real18",
+      "success": true,
+      "first_success": true,
+      "seconds": 26.458,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 26.458
+        }
+      ],
+      "input_tokens": 22477,
+      "output_tokens": 730,
+      "calls": 5,
+      "path": "old",
+      "round": 1
+    },
+    {
+      "case": "real09",
+      "success": true,
+      "first_success": true,
+      "seconds": 34.024,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 34.024
+        }
+      ],
+      "input_tokens": 21511,
+      "output_tokens": 626,
+      "calls": 5,
+      "path": "old",
+      "round": 2
+    },
+    {
+      "case": "real09",
+      "success": true,
+      "first_success": true,
+      "seconds": 26.862,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 26.862
+        }
+      ],
+      "input_tokens": 28842,
+      "output_tokens": 461,
+      "calls": 5,
+      "path": "new",
+      "round": 2
+    },
+    {
+      "case": "real10",
+      "success": false,
+      "first_success": false,
+      "seconds": 46.374,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": false,
+          "seconds": 46.374,
+          "reason": "quality",
+          "code": "analysis_output_invalid",
+          "retryable": false,
+          "stage": "review",
+          "unit": "review1",
+          "class": "StageFailure",
+          "diagnostics": []
+        }
+      ],
+      "input_tokens": 36037,
+      "output_tokens": 1721,
+      "calls": 7,
+      "path": "new",
+      "round": 2
+    },
+    {
+      "case": "real10",
+      "success": true,
+      "first_success": false,
+      "seconds": 73.275,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": false,
+          "seconds": 31.456,
+          "reason": "validation",
+          "code": "analysis_output_invalid",
+          "retryable": true,
+          "stage": "review",
+          "unit": "review0",
+          "class": "StageFailure",
+          "diagnostics": []
+        },
+        {
+          "attempt": 2,
+          "success": true,
+          "seconds": 41.818
+        }
+      ],
+      "input_tokens": 64136,
+      "output_tokens": 2762,
+      "calls": 9,
+      "path": "old",
+      "round": 2
+    },
+    {
+      "case": "real11",
+      "success": true,
+      "first_success": true,
+      "seconds": 60.498,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 60.498
+        }
+      ],
+      "input_tokens": 47935,
+      "output_tokens": 2766,
+      "calls": 8,
+      "path": "old",
+      "round": 2
+    },
+    {
+      "case": "real11",
+      "success": true,
+      "first_success": true,
+      "seconds": 43.33,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 43.33
+        }
+      ],
+      "input_tokens": 75480,
+      "output_tokens": 1801,
+      "calls": 9,
+      "path": "new",
+      "round": 2
+    },
+    {
+      "case": "real12",
+      "success": true,
+      "first_success": true,
+      "seconds": 19.681,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 19.681
+        }
+      ],
+      "input_tokens": 32829,
+      "output_tokens": 494,
+      "calls": 6,
+      "path": "new",
+      "round": 2
+    },
+    {
+      "case": "real12",
+      "success": true,
+      "first_success": true,
+      "seconds": 27.564,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 27.564
+        }
+      ],
+      "input_tokens": 25498,
+      "output_tokens": 738,
+      "calls": 5,
+      "path": "old",
+      "round": 2
+    },
+    {
+      "case": "real13",
+      "success": true,
+      "first_success": true,
+      "seconds": 29.437,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 29.437
+        }
+      ],
+      "input_tokens": 22213,
+      "output_tokens": 798,
+      "calls": 5,
+      "path": "old",
+      "round": 2
+    },
+    {
+      "case": "real13",
+      "success": true,
+      "first_success": true,
+      "seconds": 27.012,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 27.012
+        }
+      ],
+      "input_tokens": 17497,
+      "output_tokens": 872,
+      "calls": 5,
+      "path": "new",
+      "round": 2
+    },
+    {
+      "case": "real14",
+      "success": false,
+      "first_success": false,
+      "seconds": 35.781,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": false,
+          "seconds": 35.781,
+          "reason": "quality",
+          "code": "analysis_output_invalid",
+          "retryable": false,
+          "stage": "review",
+          "unit": "review1",
+          "class": "StageFailure",
+          "diagnostics": []
+        }
+      ],
+      "input_tokens": 28379,
+      "output_tokens": 1094,
+      "calls": 7,
+      "path": "new",
+      "round": 2
+    },
+    {
+      "case": "real14",
+      "success": true,
+      "first_success": false,
+      "seconds": 32.148,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": false,
+          "seconds": 25.64,
+          "reason": "validation",
+          "code": "analysis_output_invalid",
+          "retryable": true,
+          "stage": "review",
+          "unit": "review0",
+          "class": "StageFailure",
+          "diagnostics": []
+        },
+        {
+          "attempt": 2,
+          "success": true,
+          "seconds": 6.508
+        }
+      ],
+      "input_tokens": 26269,
+      "output_tokens": 850,
+      "calls": 5,
+      "path": "old",
+      "round": 2
+    },
+    {
+      "case": "real15",
+      "success": true,
+      "first_success": true,
+      "seconds": 17.587,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 17.587
+        }
+      ],
+      "input_tokens": 17623,
+      "output_tokens": 517,
+      "calls": 5,
+      "path": "old",
+      "round": 2
+    },
+    {
+      "case": "real15",
+      "success": true,
+      "first_success": true,
+      "seconds": 14.266,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 14.266
+        }
+      ],
+      "input_tokens": 26189,
+      "output_tokens": 295,
+      "calls": 6,
+      "path": "new",
+      "round": 2
+    },
+    {
+      "case": "real16",
+      "success": true,
+      "first_success": true,
+      "seconds": 13.402,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 13.402
+        }
+      ],
+      "input_tokens": 29560,
+      "output_tokens": 282,
+      "calls": 6,
+      "path": "new",
+      "round": 2
+    },
+    {
+      "case": "real16",
+      "success": true,
+      "first_success": true,
+      "seconds": 25.304,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 25.304
+        }
+      ],
+      "input_tokens": 22053,
+      "output_tokens": 760,
+      "calls": 5,
+      "path": "old",
+      "round": 2
+    },
+    {
+      "case": "real17",
+      "success": true,
+      "first_success": true,
+      "seconds": 58.778,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 58.778
+        }
+      ],
+      "input_tokens": 33334,
+      "output_tokens": 2729,
+      "calls": 5,
+      "path": "old",
+      "round": 2
+    },
+    {
+      "case": "real17",
+      "success": true,
+      "first_success": true,
+      "seconds": 48.833,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 48.833
+        }
+      ],
+      "input_tokens": 68469,
+      "output_tokens": 1937,
+      "calls": 8,
+      "path": "new",
+      "round": 2
+    },
+    {
+      "case": "real18",
+      "success": true,
+      "first_success": true,
+      "seconds": 23.045,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 23.045
+        }
+      ],
+      "input_tokens": 30660,
+      "output_tokens": 528,
+      "calls": 6,
+      "path": "new",
+      "round": 2
+    },
+    {
+      "case": "real18",
+      "success": true,
+      "first_success": true,
+      "seconds": 37.914,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 37.914
+        }
+      ],
+      "input_tokens": 25259,
+      "output_tokens": 906,
+      "calls": 5,
+      "path": "old",
+      "round": 2
+    },
+    {
+      "case": "real02",
+      "success": true,
+      "first_success": true,
+      "seconds": 43.107,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 43.107
+        }
+      ],
+      "input_tokens": 30342,
+      "output_tokens": 1885,
+      "calls": 5,
+      "path": "old",
+      "round": 2
+    },
+    {
+      "case": "real02",
+      "success": true,
+      "first_success": true,
+      "seconds": 28.811,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 28.811
+        }
+      ],
+      "input_tokens": 31769,
+      "output_tokens": 948,
+      "calls": 6,
+      "path": "new",
+      "round": 2
+    },
+    {
+      "case": "real05",
+      "success": true,
+      "first_success": true,
+      "seconds": 17.083,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 17.083
+        }
+      ],
+      "input_tokens": 29540,
+      "output_tokens": 241,
+      "calls": 6,
+      "path": "new",
+      "round": 2
+    },
+    {
+      "case": "real05",
+      "success": true,
+      "first_success": true,
+      "seconds": 26.419,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 26.419
+        }
+      ],
+      "input_tokens": 20619,
+      "output_tokens": 699,
+      "calls": 5,
+      "path": "old",
+      "round": 2
+    },
+    {
+      "case": "real06",
+      "success": true,
+      "first_success": false,
+      "seconds": 149.194,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": false,
+          "seconds": 51.791,
+          "reason": "provider_timeout",
+          "code": "analysis_failed",
+          "retryable": true,
+          "stage": "merge",
+          "unit": "merge",
+          "class": "StageFailure",
+          "diagnostics": []
+        },
+        {
+          "attempt": 2,
+          "success": false,
+          "seconds": 30.058,
+          "reason": "provider_timeout",
+          "code": "analysis_failed",
+          "retryable": true,
+          "stage": "merge",
+          "unit": "merge",
+          "class": "StageFailure",
+          "diagnostics": []
+        },
+        {
+          "attempt": 3,
+          "success": true,
+          "seconds": 67.341
+        }
+      ],
+      "input_tokens": 69177,
+      "output_tokens": 4792,
+      "calls": 8,
+      "path": "old",
+      "round": 2
+    },
+    {
+      "case": "real06",
+      "success": false,
+      "first_success": false,
+      "seconds": 75.058,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": false,
+          "seconds": 75.058,
+          "reason": "quality",
+          "code": "analysis_output_invalid",
+          "retryable": false,
+          "stage": "review",
+          "unit": "review1",
+          "class": "StageFailure",
+          "diagnostics": []
+        }
+      ],
+      "input_tokens": 52450,
+      "output_tokens": 4037,
+      "calls": 8,
+      "path": "new",
+      "round": 2
+    },
+    {
+      "case": "real07",
+      "success": true,
+      "first_success": true,
+      "seconds": 25.603,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 25.603
+        }
+      ],
+      "input_tokens": 53671,
+      "output_tokens": 743,
+      "calls": 7,
+      "path": "new",
+      "round": 2
+    },
+    {
+      "case": "real07",
+      "success": true,
+      "first_success": false,
+      "seconds": 34.782,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": false,
+          "seconds": 23.9,
+          "reason": "validation",
+          "code": "analysis_output_invalid",
+          "retryable": true,
+          "stage": "match",
+          "unit": "match",
+          "class": "StageFailure",
+          "diagnostics": []
+        },
+        {
+          "attempt": 2,
+          "success": true,
+          "seconds": 10.881
+        }
+      ],
+      "input_tokens": 24013,
+      "output_tokens": 1051,
+      "calls": 6,
+      "path": "old",
+      "round": 2
+    },
+    {
+      "case": "real08",
+      "success": true,
+      "first_success": true,
+      "seconds": 32.389,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 32.389
+        }
+      ],
+      "input_tokens": 17709,
+      "output_tokens": 508,
+      "calls": 5,
+      "path": "old",
+      "round": 2
+    },
+    {
+      "case": "real08",
+      "success": true,
+      "first_success": true,
+      "seconds": 25.215,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 25.214
+        }
+      ],
+      "input_tokens": 24722,
+      "output_tokens": 221,
+      "calls": 5,
+      "path": "new",
+      "round": 2
+    },
+    {
+      "case": "real14",
+      "success": false,
+      "first_success": false,
+      "seconds": 36.714,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": false,
+          "seconds": 36.714,
+          "reason": "quality",
+          "code": "analysis_output_invalid",
+          "retryable": false,
+          "stage": "review",
+          "unit": "review1",
+          "class": "StageFailure",
+          "diagnostics": []
+        }
+      ],
+      "input_tokens": 28919,
+      "output_tokens": 1246,
+      "calls": 7,
+      "path": "new",
+      "round": 3
+    },
+    {
+      "case": "real14",
+      "success": true,
+      "first_success": true,
+      "seconds": 23.409,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 23.409
+        }
+      ],
+      "input_tokens": 20150,
+      "output_tokens": 671,
+      "calls": 4,
+      "path": "old",
+      "round": 3
+    },
+    {
+      "case": "real15",
+      "success": true,
+      "first_success": true,
+      "seconds": 18.567,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 18.567
+        }
+      ],
+      "input_tokens": 16973,
+      "output_tokens": 332,
+      "calls": 5,
+      "path": "old",
+      "round": 3
+    },
+    {
+      "case": "real15",
+      "success": true,
+      "first_success": true,
+      "seconds": 12.2,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 12.2
+        }
+      ],
+      "input_tokens": 26189,
+      "output_tokens": 252,
+      "calls": 6,
+      "path": "new",
+      "round": 3
+    },
+    {
+      "case": "real16",
+      "success": true,
+      "first_success": true,
+      "seconds": 12.771,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 12.771
+        }
+      ],
+      "input_tokens": 29172,
+      "output_tokens": 235,
+      "calls": 6,
+      "path": "new",
+      "round": 3
+    },
+    {
+      "case": "real16",
+      "success": true,
+      "first_success": true,
+      "seconds": 23.409,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 23.409
+        }
+      ],
+      "input_tokens": 21552,
+      "output_tokens": 743,
+      "calls": 5,
+      "path": "old",
+      "round": 3
+    },
+    {
+      "case": "real17",
+      "success": true,
+      "first_success": true,
+      "seconds": 53.559,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 53.559
+        }
+      ],
+      "input_tokens": 33884,
+      "output_tokens": 2524,
+      "calls": 5,
+      "path": "old",
+      "round": 3
+    },
+    {
+      "case": "real17",
+      "success": true,
+      "first_success": true,
+      "seconds": 34.125,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 34.125
+        }
+      ],
+      "input_tokens": 61177,
+      "output_tokens": 1380,
+      "calls": 7,
+      "path": "new",
+      "round": 3
+    },
+    {
+      "case": "real18",
+      "success": true,
+      "first_success": true,
+      "seconds": 22.146,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 22.146
+        }
+      ],
+      "input_tokens": 30591,
+      "output_tokens": 493,
+      "calls": 6,
+      "path": "new",
+      "round": 3
+    },
+    {
+      "case": "real18",
+      "success": true,
+      "first_success": true,
+      "seconds": 27.066,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 27.066
+        }
+      ],
+      "input_tokens": 21775,
+      "output_tokens": 700,
+      "calls": 5,
+      "path": "old",
+      "round": 3
+    },
+    {
+      "case": "real02",
+      "success": true,
+      "first_success": true,
+      "seconds": 65.668,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 65.668
+        }
+      ],
+      "input_tokens": 43666,
+      "output_tokens": 2812,
+      "calls": 7,
+      "path": "old",
+      "round": 3
+    },
+    {
+      "case": "real02",
+      "success": true,
+      "first_success": true,
+      "seconds": 36.974,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 36.974
+        }
+      ],
+      "input_tokens": 49458,
+      "output_tokens": 1209,
+      "calls": 7,
+      "path": "new",
+      "round": 3
+    },
+    {
+      "case": "real05",
+      "success": true,
+      "first_success": true,
+      "seconds": 16.852,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 16.852
+        }
+      ],
+      "input_tokens": 28483,
+      "output_tokens": 347,
+      "calls": 6,
+      "path": "new",
+      "round": 3
+    },
+    {
+      "case": "real05",
+      "success": true,
+      "first_success": true,
+      "seconds": 24.262,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 24.262
+        }
+      ],
+      "input_tokens": 20313,
+      "output_tokens": 644,
+      "calls": 5,
+      "path": "old",
+      "round": 3
+    },
+    {
+      "case": "real06",
+      "success": true,
+      "first_success": false,
+      "seconds": 129.168,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": false,
+          "seconds": 61.671,
+          "reason": "provider_timeout",
+          "code": "analysis_failed",
+          "retryable": true,
+          "stage": "merge",
+          "unit": "merge",
+          "class": "StageFailure",
+          "diagnostics": []
+        },
+        {
+          "attempt": 2,
+          "success": true,
+          "seconds": 67.496
+        }
+      ],
+      "input_tokens": 59857,
+      "output_tokens": 4256,
+      "calls": 7,
+      "path": "old",
+      "round": 3
+    },
+    {
+      "case": "real06",
+      "success": false,
+      "first_success": false,
+      "seconds": 131.053,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": false,
+          "seconds": 70.925,
+          "reason": "provider_timeout",
+          "code": "analysis_failed",
+          "retryable": true,
+          "stage": "merge",
+          "unit": "merge",
+          "class": "StageFailure",
+          "diagnostics": []
+        },
+        {
+          "attempt": 2,
+          "success": false,
+          "seconds": 30.048,
+          "reason": "provider_timeout",
+          "code": "analysis_failed",
+          "retryable": true,
+          "stage": "merge",
+          "unit": "merge",
+          "class": "StageFailure",
+          "diagnostics": []
+        },
+        {
+          "attempt": 3,
+          "success": false,
+          "seconds": 30.078,
+          "reason": "provider_timeout",
+          "code": "analysis_failed",
+          "retryable": true,
+          "stage": "merge",
+          "unit": "merge",
+          "class": "StageFailure",
+          "diagnostics": []
+        }
+      ],
+      "input_tokens": 16307,
+      "output_tokens": 1539,
+      "calls": 4,
+      "path": "new",
+      "round": 3
+    },
+    {
+      "case": "real07",
+      "success": true,
+      "first_success": true,
+      "seconds": 14.037,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 14.037
+        }
+      ],
+      "input_tokens": 24764,
+      "output_tokens": 399,
+      "calls": 5,
+      "path": "new",
+      "round": 3
+    },
+    {
+      "case": "real07",
+      "success": true,
+      "first_success": true,
+      "seconds": 42.468,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 42.468
+        }
+      ],
+      "input_tokens": 30929,
+      "output_tokens": 1419,
+      "calls": 7,
+      "path": "old",
+      "round": 3
+    },
+    {
+      "case": "real08",
+      "success": true,
+      "first_success": true,
+      "seconds": 37.741,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 37.74
+        }
+      ],
+      "input_tokens": 17741,
+      "output_tokens": 462,
+      "calls": 5,
+      "path": "old",
+      "round": 3
+    },
+    {
+      "case": "real08",
+      "success": true,
+      "first_success": true,
+      "seconds": 25.875,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 25.875
+        }
+      ],
+      "input_tokens": 24705,
+      "output_tokens": 211,
+      "calls": 5,
+      "path": "new",
+      "round": 3
+    },
+    {
+      "case": "real09",
+      "success": true,
+      "first_success": true,
+      "seconds": 18.669,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 18.669
+        }
+      ],
+      "input_tokens": 28905,
+      "output_tokens": 494,
+      "calls": 5,
+      "path": "new",
+      "round": 3
+    },
+    {
+      "case": "real09",
+      "success": true,
+      "first_success": true,
+      "seconds": 28.605,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 28.605
+        }
+      ],
+      "input_tokens": 21362,
+      "output_tokens": 413,
+      "calls": 5,
+      "path": "old",
+      "round": 3
+    },
+    {
+      "case": "real10",
+      "success": false,
+      "first_success": false,
+      "seconds": 48.494,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": false,
+          "seconds": 48.494,
+          "reason": "quality",
+          "code": "analysis_output_invalid",
+          "retryable": false,
+          "stage": "review",
+          "unit": "review1",
+          "class": "StageFailure",
+          "diagnostics": []
+        }
+      ],
+      "input_tokens": 40675,
+      "output_tokens": 1751,
+      "calls": 6,
+      "path": "old",
+      "round": 3
+    },
+    {
+      "case": "real10",
+      "success": false,
+      "first_success": false,
+      "seconds": 60.443,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": false,
+          "seconds": 60.443,
+          "reason": "quality",
+          "code": "analysis_output_invalid",
+          "retryable": false,
+          "stage": "review",
+          "unit": "review1",
+          "class": "StageFailure",
+          "diagnostics": []
+        }
+      ],
+      "input_tokens": 42472,
+      "output_tokens": 2176,
+      "calls": 8,
+      "path": "new",
+      "round": 3
+    },
+    {
+      "case": "real11",
+      "success": true,
+      "first_success": true,
+      "seconds": 32.355,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 32.354
+        }
+      ],
+      "input_tokens": 68032,
+      "output_tokens": 1197,
+      "calls": 7,
+      "path": "new",
+      "round": 3
+    },
+    {
+      "case": "real11",
+      "success": true,
+      "first_success": true,
+      "seconds": 45.692,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 45.692
+        }
+      ],
+      "input_tokens": 30488,
+      "output_tokens": 2115,
+      "calls": 5,
+      "path": "old",
+      "round": 3
+    },
+    {
+      "case": "real12",
+      "success": true,
+      "first_success": true,
+      "seconds": 34.761,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 34.761
+        }
+      ],
+      "input_tokens": 26678,
+      "output_tokens": 928,
+      "calls": 5,
+      "path": "old",
+      "round": 3
+    },
+    {
+      "case": "real12",
+      "success": true,
+      "first_success": true,
+      "seconds": 28.3,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 28.3
+        }
+      ],
+      "input_tokens": 33060,
+      "output_tokens": 559,
+      "calls": 6,
+      "path": "new",
+      "round": 3
+    },
+    {
+      "case": "real13",
+      "success": true,
+      "first_success": false,
+      "seconds": 61.052,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": false,
+          "seconds": 45.964,
+          "reason": "provider_timeout",
+          "code": "analysis_failed",
+          "retryable": true,
+          "stage": "merge",
+          "unit": "merge",
+          "class": "StageFailure",
+          "diagnostics": []
+        },
+        {
+          "attempt": 2,
+          "success": true,
+          "seconds": 15.088
+        }
+      ],
+      "input_tokens": 17438,
+      "output_tokens": 840,
+      "calls": 5,
+      "path": "new",
+      "round": 3
+    },
+    {
+      "case": "real13",
+      "success": true,
+      "first_success": true,
+      "seconds": 40.021,
+      "attempts": [
+        {
+          "attempt": 1,
+          "success": true,
+          "seconds": 40.021
+        }
+      ],
+      "input_tokens": 21678,
+      "output_tokens": 716,
+      "calls": 5,
+      "path": "old",
+      "round": 3
+    }
+  ],
+  "confirmed_content_failures": {
+    "outputs": 3,
+    "case_aliases": [
+      "real10",
+      "real18"
+    ],
+    "scope": "source-faithful naming; remaining outputs are not marked human PASS; real18 round3 uses neutral wording and is not counted as a title failure"
+  },
+  "source_coverage": {
+    "available": 15,
+    "total": 18
+  },
+  "download_seconds": "NOT_RUN: reused private cached originals; no download during timed generation",
+  "by_material_shape": {
+    "manual": {
+      "old": {
+        "n": 15,
+        "first_success": 13,
+        "final_success": 15,
+        "p50_seconds": 25.27,
+        "p95_seconds": 42.468,
+        "max_seconds": 42.468,
+        "successful_p50_seconds": 25.27,
+        "successful_p95_seconds": 42.468,
+        "harness_errors": 0,
+        "returned_input_tokens": 317013,
+        "returned_output_tokens": 11017,
+        "completed_provider_responses": 80,
+        "failure_reasons": {}
+      },
+      "new": {
+        "n": 15,
+        "first_success": 14,
+        "final_success": 14,
+        "p50_seconds": 14.266,
+        "p95_seconds": 25.875,
+        "max_seconds": 25.875,
+        "successful_p50_seconds": 14.037,
+        "successful_p95_seconds": 25.875,
+        "harness_errors": 0,
+        "returned_input_tokens": 423026,
+        "returned_output_tokens": 5166,
+        "completed_provider_responses": 87,
+        "failure_reasons": {
+          "quality": 1
+        }
+      }
+    },
+    "single_image": {
+      "old": {
+        "n": 24,
+        "first_success": 22,
+        "final_success": 24,
+        "p50_seconds": 35.832,
+        "p95_seconds": 65.668,
+        "max_seconds": 77.754,
+        "successful_p50_seconds": 35.832,
+        "successful_p95_seconds": 65.668,
+        "harness_errors": 0,
+        "returned_input_tokens": 705091,
+        "returned_output_tokens": 34914,
+        "completed_provider_responses": 129,
+        "failure_reasons": {}
+      },
+      "new": {
+        "n": 24,
+        "first_success": 20,
+        "final_success": 21,
+        "p50_seconds": 28.811,
+        "p95_seconds": 54.771,
+        "max_seconds": 61.052,
+        "successful_p50_seconds": 28.3,
+        "successful_p95_seconds": 52.217,
+        "harness_errors": 0,
+        "returned_input_tokens": 927248,
+        "returned_output_tokens": 24205,
+        "completed_provider_responses": 153,
+        "failure_reasons": {
+          "quality": 3
+        }
+      }
+    },
+    "multi_image": {
+      "old": {
+        "n": 6,
+        "first_success": 1,
+        "final_success": 4,
+        "p50_seconds": 73.275,
+        "p95_seconds": 149.194,
+        "max_seconds": 149.194,
+        "successful_p50_seconds": 77.964,
+        "successful_p95_seconds": 149.194,
+        "harness_errors": 0,
+        "returned_input_tokens": 345205,
+        "returned_output_tokens": 20143,
+        "completed_provider_responses": 44,
+        "failure_reasons": {
+          "quality": 2
+        }
+      },
+      "new": {
+        "n": 6,
+        "first_success": 2,
+        "final_success": 2,
+        "p50_seconds": 60.443,
+        "p95_seconds": 131.053,
+        "max_seconds": 131.053,
+        "successful_p50_seconds": 43.632,
+        "successful_p95_seconds": 61.361,
+        "harness_errors": 0,
+        "returned_input_tokens": 325525,
+        "returned_output_tokens": 14045,
+        "completed_provider_responses": 47,
+        "failure_reasons": {
+          "quality": 3,
+          "provider_timeout": 1
+        }
+      }
+    }
+  },
+  "completed_fallback_observations": {
+    "old": 0,
+    "new": 0
+  },
+  "both_successful_pairs": {
+    "n": 36,
+    "old": {
+      "n": 36,
+      "first_success": 34,
+      "final_success": 36,
+      "p50_seconds": 32.389,
+      "p95_seconds": 77.754,
+      "max_seconds": 77.964,
+      "successful_p50_seconds": 32.389,
+      "successful_p95_seconds": 77.754,
+      "harness_errors": 0,
+      "returned_input_tokens": 962290,
+      "returned_output_tokens": 43811,
+      "completed_provider_responses": 194,
+      "failure_reasons": {}
+    },
+    "new": {
+      "n": 36,
+      "first_success": 35,
+      "final_success": 36,
+      "p50_seconds": 24.062,
+      "p95_seconds": 61.052,
+      "max_seconds": 61.361,
+      "successful_p50_seconds": 24.062,
+      "successful_p95_seconds": 61.052,
+      "harness_errors": 0,
+      "returned_input_tokens": 1353695,
+      "returned_output_tokens": 26720,
+      "completed_provider_responses": 224,
+      "failure_reasons": {}
+    },
+    "new_faster": 33,
+    "median_paired_speed_reduction": 0.27446784547809433
+  }
+}

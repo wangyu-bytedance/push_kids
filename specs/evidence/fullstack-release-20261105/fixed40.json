@@ -1,0 +1,57 @@
+{
+  "status": "failed",
+  "case_count": 40,
+  "passed": 37,
+  "overall_rate": 0.925,
+  "end_to_end": {
+    "passed": 37,
+    "total": 40,
+    "rate": 0.925
+  },
+  "operational_failure_count": 0,
+  "operational_failure_codes": {},
+  "subject_rates": {
+    "语文": 0.9333,
+    "数学": 0.8667,
+    "英语": 0.8
+  },
+  "subject_semantic": {
+    "语文": {
+      "passed": 14,
+      "total": 15,
+      "rate": 0.9333
+    },
+    "数学": {
+      "passed": 13,
+      "total": 15,
+      "rate": 0.8667
+    },
+    "英语": {
+      "passed": 12,
+      "total": 15,
+      "rate": 0.8
+    }
+  },
+  "empty_pending_count": 0,
+  "remaining_pending_count": 0,
+  "formal_write_count": 0,
+  "failures": [
+    {
+      "case_id": "multi-02",
+      "code": "analysis_output_invalid",
+      "attempts": 1
+    },
+    {
+      "case_id": "en-08",
+      "code": "analysis_output_invalid",
+      "attempts": 1
+    },
+    {
+      "case_id": "multi-04",
+      "code": "subject.mismatch",
+      "attempts": 1
+    }
+  ],
+  "pipeline_revision": "staged-20261101-13",
+  "model": "doubao-seed-2-1-pro-260628"
+}

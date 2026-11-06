@@ -1,0 +1,36 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_______ test_hidden_activity_does_not_claim_calendar_coverage_is_missing _______
+
+client = <starlette.testclient.TestClient object at 0x10bdc1730>
+family_headers = {'X-Family-ID': 'family-test-a'}
+child = {'active': True, 'created_at': '2026-11-05T07:08:26.883682Z', 'daily_budget_minutes': 15, 'grade': '小学二年级', ...}
+
+    def test_hidden_activity_does_not_claim_calendar_coverage_is_missing(client, family_headers, child):
+        payload = activity(client, family_headers, child)
+        assert client.post(
+            "/api/v1/activity-schedules", headers=family_headers, json=payload
+        ).status_code == 201
+        assert schedule(client, family_headers, child, "2027-01-04")["workday_calendar_warning"]
+        assert client.patch(
+            f"/api/v1/subjects/{payload['subject_id']}",
+            headers=family_headers,
+            json={"active": False},
+        ).status_code == 200
+        result = schedule(client, family_headers, child, "2027-01-04")
+        assert result["items"] == []
+>       assert result["workday_calendar_warning"] is None
+E       AssertionError: assert {'code': 'workday_calendar_coverage_missing', 'coverage_end': '2026-12-31'} is None
+
+tests/integration/test_china_workday_schedules.py:233: AssertionError
+------------------------------ Captured log call -------------------------------
+WARNING  push_kids.activities.service:service.py:80 workday_calendar_coverage_missing
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /Users/bytedance/Documents/push_kids/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/integration/test_china_workday_schedules.py::test_hidden_activity_does_not_claim_calendar_coverage_is_missing
+1 failed, 10 deselected, 1 warning in 0.43s

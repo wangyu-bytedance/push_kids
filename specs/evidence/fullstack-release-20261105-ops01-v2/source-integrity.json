@@ -1,0 +1,16 @@
+{
+  "result": "PASS",
+  "production_changed": false,
+  "backend_files_unchanged": 160,
+  "client_files_unchanged": 168,
+  "critical_sha256": {
+    "tests/fixtures/analysis_quality/cases.json": "9bdaec483fa9f6cc65e7a46c3656e70f2304efd42ecab3fe362864afa8fd829f",
+    "tools/evaluate_analysis_quality.py": "c603045b06d03836e4d16b6b9dcd998a0219c67afe700bd6d4c4bd7d85f79374",
+    "apps/api/src/push_kids/agent_processing/stage_contracts.py": "403819c248fe73ff73fcfa374ed2169254811c8ccb6a96646c8c1728d7ce9ac8",
+    "apps/api/src/push_kids/agent_processing/pipeline.py": "6ad87661638b7e273f5a09c6e413828e828473a3343b34a1d5720544bddd36b1",
+    "apps/api/src/push_kids/agent_processing/worker.py": "dfd9180ea473dbf6c482d2bc37e6324131d48c22ec6d61bbd8c7811176a0435c",
+    "apps/api/migrations/versions/20261105_0026_china_workday_schedules.py": "760df4aefe85157236e6a5aa244c5ca6bf087db8fc78d19d85815f8a4f340db7",
+    "apps/api/migrations/versions/20261105_0027_recent_learning_history.py": "636ecc0d29947c365d76c2c18004b8d599644396fa36f330e9e624f7013901a0"
+  },
+  "frozen_manifest_sha256": "c96b30d102d2fff317865040bd8b65c419bbb1374689199c41bcebcd0b157f60"
+}

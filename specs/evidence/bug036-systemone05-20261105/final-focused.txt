@@ -1,0 +1,54 @@
+..F...................                                                   [100%]
+=================================== FAILURES ===================================
+_ test_same_name_partial_relation_cannot_silently_reuse_confirmation_identity __
+
+    def test_same_name_partial_relation_cannot_silently_reuse_confirmation_identity():
+        from push_kids.agent_processing.failures import StageFailure
+    
+        provider = StageFake()
+        provider.decision_provider = DecisionFake(relation="partial")
+        data = AnalysisInput(
+            text="十以内加法",
+            existing_subjects=["数学"],
+            existing_knowledge=[
+                ExistingKnowledgeContext(
+                    knowledge_id="old",
+                    subject_name="数学",
+                    name="十以内加法",
+                    category="知识",
+                    review_method="不同技能",
+                    evidence="合成的不同技能",
+                ),
+            ],
+        )
+        with pytest.raises(StageFailure) as failure:
+            asyncio.run(
+                StagedPipeline(provider, AnalysisTrace.disabled()).run(
+                    data, lambda request: [], monotonic() + 5
+                )
+            )
+>       assert failure.value.unit == "identity_collision" and not failure.value.retryable
+E       AssertionError: assert ('match' == 'identity_collision'
+E         
+E         - identity_collision
+E         + match)
+
+tests/unit/test_system_one_workflow.py:106: AssertionError
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /Users/bytedance/Documents/push_kids/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+tests/integration/test_system_one_history.py::test_recent_history_is_scoped_normal_asof_and_uses_bounded_index
+  /Users/bytedance/Documents/push_kids/.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py:952: DeprecationWarning: The default datetime adapter is deprecated as of Python 3.12; see the sqlite3 documentation for suggested replacement recipes
+    cursor.execute(statement, parameters)
+
+tests/integration/test_system_one_index_migration.py::test_recent_subject_index_upgrade_and_downgrade_preserve_prior_head
+tests/integration/test_system_one_index_migration.py::test_recent_subject_index_upgrade_and_downgrade_preserve_prior_head
+  /Users/bytedance/Documents/push_kids/.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py:952: DeprecationWarning: The default date adapter is deprecated as of Python 3.12; see the sqlite3 documentation for suggested replacement recipes
+    cursor.execute(statement, parameters)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/unit/test_system_one_workflow.py::test_same_name_partial_relation_cannot_silently_reuse_confirmation_identity
+1 failed, 21 passed, 4 warnings in 4.12s

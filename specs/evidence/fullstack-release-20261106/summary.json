@@ -1,0 +1,35 @@
+{
+  "spec_revision": "OPS-SPEC-20261105-FULLSTACK-UPDATE-01",
+  "manifest_sha256": "c96b30d102d2fff317865040bd8b65c419bbb1374689199c41bcebcd0b157f60",
+  "backend": "040_NORMAL_100_PERCENT",
+  "schema": "20261105_0027",
+  "client": {
+    "version": "0.1.18",
+    "upload": "PASS_OFFICIAL_CLI",
+    "upload_process_exit_code": 0,
+    "uploaded_at_utc": "2026-11-06T01:31:29.999551+00:00",
+    "size": 1200417,
+    "preview_size": 1200319,
+    "baseline_after": "0.1.18",
+    "experience": "NOT_CONFIGURED_BY_AGENT",
+    "review": "NOT_SUBMITTED_BY_AGENT",
+    "production": "NOT_PUBLISHED_BY_AGENT"
+  },
+  "full_release": "Pre-mutation read already 040=100%; no duplicate release mutation",
+  "approval": [
+    "批准 OPS Spec01",
+    "批准固定40材料 Spec07",
+    "已完成数据库发布前备份，窗口确认",
+    "不用配置 直接发布"
+  ],
+  "gray_account_probe": "NOT_RUN_USER_EXPLICITLY_SKIPPED",
+  "parent_content_review": "PENDING",
+  "online_generation_success_rate": "NOT_MEASURED",
+  "backup_retention": "NOT_RUN_BROWSER_SITE_POLICY_BLOCKED",
+  "new_application_code_changes": 0,
+  "schema_ddl": "EXECUTED_0025_TO_0027",
+  "production_business_writes_by_agent": 0,
+  "local_native_synthetic_writes": "activity schedule and calendar event only",
+  "physical_devices_accessibility": "NOT_RUN",
+  "historical_failures_preserved": true
+}

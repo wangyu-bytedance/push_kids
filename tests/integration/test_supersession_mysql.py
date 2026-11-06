@@ -278,7 +278,7 @@ def test_mysql_guarded_downgrade_and_reupgrade(monkeypatch):
         }
         command.upgrade(config, "head")
         with engine.connect() as db:
-            assert db.scalar(text("SELECT version_num FROM alembic_version")) == "20261024_0025"
+            assert db.scalar(text("SELECT version_num FROM alembic_version")) == "20261105_0027"
             assert db.scalar(text("SELECT COUNT(*) FROM knowledge_items")) == 0
         assert "review_status" in {
             column["name"] for column in inspect(engine).get_columns("knowledge_items")

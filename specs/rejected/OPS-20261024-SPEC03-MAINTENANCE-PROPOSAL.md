@@ -2,7 +2,7 @@
 
 - Template: `specs/_templates/BUGFIX-SPEC.md`（运维交付，非产品修复）
 - Status: REJECTED
-- Disposition: 2026-10-24用户明确选择直接升级当前push_kids库，再启动新版、由其删除034；本临时维护桥接提案撤回，未批准、未实现、未部署。当前执行见[OPS Spec04](../active/OPS-20261023-FULLSTACK-TEST-DEPLOYMENT.md)。以下保留提案历史，不代表当前执行要求。
+- Disposition: 2026-10-24用户明确选择直接升级当前push_kids库，再启动新版、由其删除034；本临时维护桥接提案撤回，未批准、未实现、未部署。当前执行见[OPS Spec04](../completed/OPS-20261023-FULLSTACK-TEST-DEPLOYMENT.md)。以下保留提案历史，不代表当前执行要求。
 - Risk: R3（生产 Schema、永久复习状态、后台任务）
 - Owner / Reviewer: 产品负责人（用户）
 - Implementer: Codex

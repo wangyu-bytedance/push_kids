@@ -1,17 +1,19 @@
 # FEAT-007 — 出行安排
 
+2026-10-26开发归档：已交付037后端/0.1.16客户端所覆盖的需求按用户批准规则标记开发DONE，验收缺项独立保留；后续BUG-035和旅行导入精简尚未交付，继续active。当前归档和待验入口见[Spec状态清单](../../../specs/STATUS.md)，依据为[治理Spec](../../../specs/completed/GOV-002-CLOUD-DELIVERY-DEVELOPMENT-COMPLETION.md)。本轮不改产品合同、测试结论、设计或发布阶段。
+
 - Feature ID: `FEAT-007`
 - 2026-10-13设置卡片背景接入：书包路线插画、纸面渐变，出行配置行为不变。SPEC-20261013-CARD-BACKGROUNDS-01，证据docs/quality/evidence/CARD-BACKGROUNDS-20261013.md，原生验收待补。
 - Local visual update (2026-10-13): 日程页标题卡接入台历纸艺插画，出行数据与冲突行为保持原合同。Spec `SPEC-20261013-RECORD-CALENDAR-ILLUSTRATIONS-01`；原生验收待补，证据 `docs/quality/evidence/RECORD-CALENDAR-ILLUSTRATIONS-20261013.md`。
-- Status: `CURRENT_LOCAL / AUTOMATION_PASSED / NATIVE_ACCEPTANCE_PENDING`
-- Current-state revision: `FEAT-STATE-20260906-03-LOCAL`
+- Status: `DEVELOPMENT_DONE / BACKEND_037_DEPLOYED / CLIENT_0.1.16_UPLOADED / NATIVE_ACCEPTANCE_PENDING`
+- Current-state revision: `FEAT-STATE-20261026-04-DEVELOPMENT-DONE`
 - Owner: 产品负责人（用户）
 - Last verified: 2026-09-06
 - Authoritative implementation: `apps/api/src/push_kids/travel/`、`apps/api/src/push_kids/activities/conflicts.py`、`apps/miniprogram/pages/{settings,calendar}/`
 - Applied Spec: `specs/completed/FEAT-007-TRAVEL-ARRANGEMENTS.md` revision `SPEC-20260906-TRAVEL-02`
 
-> 本 Feature 已在当前本地工作树实现并通过自动化验证；尚未上传微信小程序、部署后端或完成
-> 320/390/430 原生视口与 iOS/Android 真机验收。
+> 本 Feature 对应实现已随后端037正常部署、客户端0.1.16开发上传，按用户规则开发DONE。
+> 原320/390/430原生视口与iOS/Android真机验收缺项独立保留，未设体验版/审核/正式发布。
 
 ## Purpose and scope
 
@@ -27,9 +29,9 @@
 ## Current local behavior
 
 本地视觉增量 `FEAT-VISUAL-20261021-HERO-ARC-01`：设置出行卡与日程标题卡随共享样式删除细弧线，
-插画、出行与冲突合同保留。[Spec01](../../../specs/active/BUG-030-HERO-BACKGROUND-ARC.md) /
+插画、出行与冲突合同保留。[Spec01](../../../specs/completed/BUG-030-HERO-BACKGROUND-ARC.md) /
 DREV-20261021-HERO-ARC-REMOVAL-01已批准；[本轮证据](../../quality/evidence/HERO-ARC-REMOVAL-20261021.md)
-记录真实验证与验收缺口，未上传/发布。
+记录当次验证与验收缺口；该样式已随0.1.16开发上传，未体验/审核/正式发布。
 
 - 设置页按当前孩子新增“出行安排”卡，可新增、编辑、停用/删除每周重复时段。
 - 每项包含名称、星期集合、开始时间和结束时间；上学、放学、接送是快捷名称而非封闭枚举。
@@ -52,14 +54,14 @@ DREV-20261021-HERO-ARC-REMOVAL-01已批准；[本轮证据](../../quality/eviden
 - Candidate design: `docs/design/frontend/prototypes/DREV-20260906-TRAVEL-01/index.html`.
 - Baseline/engineering: `FDB-20260906-02 / FEC-20260906-04`.
 - Repository-native approval manifest: pending per UI-017；当前按 `GOV-SPEC-LOCAL-DESIGN-EVIDENCE-20260913-01` 使用可编辑 HTML、视口/状态导出与匹配 SHA-256 清单。
-- `SPEC-20260906-TRAVEL-02`、`DREV-20260906-TRAVEL-01`、全部日程项冲突范围、20 项总上限已由用户于 2026-09-06 批准；实现与验证进行中。
+- `SPEC-20260906-TRAVEL-02`、`DREV-20260906-TRAVEL-01`、全部日程项冲突范围、20 项总上限已由用户于 2026-09-06 批准；开发实现已交付，完整原生/设备验收待补。
 
 ## Quality and release status
 
 - Design governance revision: `DOC-SPEC-20261013-02-01`；[门禁同步记录](../../../specs/completed/DOC-002-MARKDOWN-STATE-RECONCILIATION.md)，仅修订设计证据政策，不改变实现/发布状态。
 
 - Spec/Design approval: approved by the user on 2026-09-06, including all-calendar-source conflicts; historical tool waiver does not define the current design gate.
-- Production code/migration: implemented locally. Backend/frontend automation passed; local runtime deployment, cloud release and Mini Program upload were not run.
+- Production code/migration: delivered in backend037 and client0.1.16 development upload. Original automation evidence retains its date and scope; native/device acceptance is still pending.
 - Required visible evidence after implementation: 320×568, 390×844, 430×932 for normal/conflict/form/error/read-only states.
 
 ## Change references

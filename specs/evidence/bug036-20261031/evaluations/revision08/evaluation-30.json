@@ -1,0 +1,1235 @@
+{
+  "date": "2026-10-31",
+  "spec_revision": "BUG-SPEC-20261031-KNOWLEDGE-GENERATION-01",
+  "design_prompt_revision": "KNOWLEDGE-PROMPT-20261031-04",
+  "pipeline_revision": "staged-20261031-08",
+  "model": "doubao-seed-2-1-pro-260628",
+  "judge": "当前会话模型逐条核对原材料；未调用外部judge API",
+  "rubric": {
+    "C1": "名称表达知识或技能，剥离纯答题动作",
+    "C2": "忠于原素材；不猜缺失音视频、文字、范围或答案；歧义明确保留",
+    "C3": "抽象普通故事场景，同时保留真正的词汇、诗文和学科对象",
+    "C4": "名称明确具体字词、规则或范围，可独立复习",
+    "C5": "合并同领域相关碎片；不同科目及独立复习动作允许分开",
+    "C6": "历史复用要求同科目、同核心目标、兼容范围与复习动作"
+  },
+  "source_sha256": {
+    "pipeline.py": "fd4c17b5bca2d2dd6289f06a98b49c5050ab77d45250bde0cdbe3527d07e0221",
+    "stage_provider.py": "541aa016674b35e215eee052f23bc04e00d09164995f9e169d15c65fedc125e1",
+    "stage_contracts.py": "e9ad60dc39520423da3b2f9857f3dec5ea89c379a0b9bd9d62b5b53a2bb68a7e",
+    "contracts.py": "7524e52c4ffbc27e1127d54bb7ac33f676165d8f303961374ad68b959df25564",
+    "history_search.py": "951cfbefa128f782e4a4f53035a3e2ca2d3c51c5c554cd89665af6bd3b22c265",
+    "coverage.py": "44f3f6340b6fcc20367efe7dedd3d311e246acc282bd02d8ea742b6ef6c0aaf4",
+    "failures.py": "73167af67d45a1fad12b127804b29f2c799ebdc1242f61fdccb1387061600bdc",
+    "telemetry.py": "c19ebc6d7bcfa7de61364e4aa7fa75710e8a3547296c401a60a981ee3dbcb7db",
+    "checkpoints.py": "621c5c593c407b9c624f6cca2b55a58a20e940f72fc167b2ea4a2be82a160ec3",
+    "prompt.py": "cbeee804ce78ad21a55d223583a74386531640a8562ba3c78f397ebb16e33cf7"
+  },
+  "source_unchanged_during_run": true,
+  "completed_at": "2026-10-31T18:46:52.831274+08:00",
+  "fixed_original_source_digests_equal": true,
+  "raw_digest_manifest_sha256": "e8c30dad9a2bcd7ff3b860c9725b04855fc97186153415b3d55d942961c2f155",
+  "scope": {
+    "case_concurrency": 2,
+    "one_attempt_per_source": true,
+    "original_images_integrity_checked": 68,
+    "no_database_connection_in_generation": true,
+    "business_api_posts": 0,
+    "database_writes": 0,
+    "checkpoint_writes": 0,
+    "historical_scope": "same family,child,subject; created before original submission; current historical names and index; no unversioned present-day Todo state",
+    "no_failure_replacement": true
+  },
+  "original06_summary": {
+    "cases": 30,
+    "generated": 17,
+    "output_rate": 0.5666666666666667,
+    "strict_pass": 6,
+    "strict_pass_rate": 0.2,
+    "strict_pass_given_output": 0.35294117647058826,
+    "semantic_fail": 10,
+    "needs_parent_check": 1,
+    "no_output": 13,
+    "failure_reasons": {
+      "local_deadline": 3,
+      "quality": 9,
+      "validation": 1
+    },
+    "provider_calls": 178,
+    "new_points": 44,
+    "history_matches": 8,
+    "published_units": 52,
+    "doubao_quality_review_calls": 38,
+    "quality_corrections": 12,
+    "correction_returned_output": 3,
+    "correction_returned_output_and_session_pass": 1,
+    "latency_median_seconds": 31.695,
+    "latency_p95_nearest_rank_seconds": 76.52,
+    "max_successful_request_queue_ms": 25666,
+    "input_tokens": 335054,
+    "output_tokens": 41409,
+    "per_sampling_subject": [
+      {
+        "sampling_subject": "语文",
+        "samples": 10,
+        "generated": 6,
+        "passed": 3,
+        "failed": 3,
+        "partial": 0,
+        "no_output": 4
+      },
+      {
+        "sampling_subject": "数学",
+        "samples": 10,
+        "generated": 6,
+        "passed": 1,
+        "failed": 5,
+        "partial": 0,
+        "no_output": 4
+      },
+      {
+        "sampling_subject": "英语",
+        "samples": 10,
+        "generated": 5,
+        "passed": 2,
+        "failed": 2,
+        "partial": 1,
+        "no_output": 5
+      }
+    ]
+  },
+  "summary": {
+    "sample_count": 30,
+    "generated": 25,
+    "strict_pass": 9,
+    "status_counts": {
+      "PASS": 9,
+      "FAIL": 16,
+      "NO_OUTPUT": 4,
+      "INSUFFICIENT_MATERIAL": 1
+    },
+    "output_rate": 0.8333333333333334,
+    "strict_pass_rate": 0.3,
+    "original_no_output_count": 13,
+    "original_no_output_now_generated": 10,
+    "original_pass_regressions": [
+      "case18",
+      "case25"
+    ],
+    "failure_reasons": {
+      "quality": 3,
+      "coverage": 1,
+      "validation": 1
+    },
+    "latency_median_seconds": 35.5,
+    "latency_p95_nearest_rank_seconds": 113.42,
+    "max_seconds": 132.96,
+    "provider_calls": 207,
+    "input_tokens": 780424,
+    "output_tokens": 51041,
+    "quality_reviews": 39,
+    "quality_corrections": 11,
+    "new_points": 89,
+    "history_matches": 1
+  },
+  "cases": [
+    {
+      "case": "case01",
+      "images": 0,
+      "sampling_subject": "语文",
+      "attempts": 1,
+      "success": true,
+      "new_points": 1,
+      "history_matches": 0,
+      "seconds": 15.48,
+      "provider_calls": 5,
+      "history_queries": 1,
+      "quality_reviews": 1,
+      "quality_corrections": 0,
+      "input_tokens": 13624,
+      "output_tokens": 446,
+      "status": "PASS",
+      "failed_criteria": [],
+      "contract_violations": [],
+      "judgment": "完整具体的汉字听写单元，与家长文字一致。",
+      "original_status": "PASS"
+    },
+    {
+      "case": "case02",
+      "images": 6,
+      "sampling_subject": "语文",
+      "attempts": 1,
+      "success": true,
+      "new_points": 10,
+      "history_matches": 1,
+      "seconds": 132.96,
+      "provider_calls": 14,
+      "history_queries": 11,
+      "quality_reviews": 2,
+      "quality_corrections": 1,
+      "input_tokens": 61430,
+      "output_tokens": 3903,
+      "status": "FAIL",
+      "failed_criteria": [
+        "C5"
+      ],
+      "contract_violations": [],
+      "judgment": "事实摘要已修复，但同组声母认读与对应拼读仍拆成相邻单元；本次范围、书写和古诗已有具体证据，整批粒度未达标。",
+      "original_status": "NO_OUTPUT"
+    },
+    {
+      "case": "case03",
+      "images": 5,
+      "sampling_subject": "语文",
+      "attempts": 1,
+      "success": false,
+      "failure_code": "analysis_output_invalid",
+      "failure_reason": "quality",
+      "failure_stage": "review",
+      "failure_unit": "review1",
+      "seconds": 42.82,
+      "provider_calls": 9,
+      "history_queries": 0,
+      "quality_reviews": 2,
+      "quality_corrections": 1,
+      "input_tokens": 34164,
+      "output_tokens": 2261,
+      "status": "NO_OUTPUT",
+      "failed_criteria": [
+        "C5"
+      ],
+      "contract_violations": [],
+      "judgment": "素材充分，review1仍质量拒绝；保留失败，不计为材料不足。",
+      "original_status": "NO_OUTPUT"
+    },
+    {
+      "case": "case04",
+      "images": 4,
+      "sampling_subject": "语文",
+      "attempts": 1,
+      "success": true,
+      "new_points": 2,
+      "history_matches": 0,
+      "seconds": 40.28,
+      "provider_calls": 8,
+      "history_queries": 2,
+      "quality_reviews": 1,
+      "quality_corrections": 0,
+      "input_tokens": 28889,
+      "output_tokens": 1614,
+      "status": "FAIL",
+      "failed_criteria": [
+        "C4"
+      ],
+      "contract_violations": [],
+      "judgment": "概念和应用已整合，但名称中的常见词对仍未写明具体对象；仅依据教材中词对证据不能让该词汇范围脱离原材料独立复习。",
+      "original_status": "FAIL"
+    },
+    {
+      "case": "case05",
+      "images": 3,
+      "sampling_subject": "语文",
+      "attempts": 1,
+      "success": true,
+      "new_points": 7,
+      "history_matches": 0,
+      "seconds": 78.67,
+      "provider_calls": 7,
+      "history_queries": 7,
+      "quality_reviews": 1,
+      "quality_corrections": 0,
+      "input_tokens": 38618,
+      "output_tokens": 3633,
+      "status": "FAIL",
+      "failed_criteria": [
+        "C1"
+      ],
+      "contract_violations": [],
+      "judgment": "两科范围完整，历史未误覆盖；但不等式单元仍以括号里最大能填几命名，保留纯填空布局而未提炼满足不等式的取值条件。",
+      "original_status": "FAIL"
+    },
+    {
+      "case": "case06",
+      "images": 2,
+      "sampling_subject": "语文",
+      "attempts": 1,
+      "success": true,
+      "new_points": 6,
+      "history_matches": 0,
+      "seconds": 70.37,
+      "provider_calls": 7,
+      "history_queries": 6,
+      "quality_reviews": 1,
+      "quality_corrections": 0,
+      "input_tokens": 25316,
+      "output_tokens": 1766,
+      "status": "FAIL",
+      "failed_criteria": [
+        "C1",
+        "C4"
+      ],
+      "contract_violations": [],
+      "judgment": "由十项降为六项，普通故事名称改善；词语运用仍以选词填空命名且缺完整动词对象范围，整批未达到可独立复习标准。",
+      "original_status": "NO_OUTPUT"
+    },
+    {
+      "case": "case07",
+      "images": 1,
+      "sampling_subject": "语文",
+      "attempts": 1,
+      "success": true,
+      "new_points": 3,
+      "history_matches": 0,
+      "seconds": 42.49,
+      "provider_calls": 7,
+      "history_queries": 3,
+      "quality_reviews": 2,
+      "quality_corrections": 1,
+      "input_tokens": 32588,
+      "output_tokens": 2304,
+      "status": "FAIL",
+      "failed_criteria": [
+        "C5"
+      ],
+      "contract_violations": [],
+      "judgment": "全部词和诗文保留，但同一书写词表按田字格与括号布局拆成两个单元；没有独立技能证据，重现按作答容器拆分。",
+      "original_status": "NO_OUTPUT"
+    },
+    {
+      "case": "case08",
+      "images": 1,
+      "sampling_subject": "语文",
+      "attempts": 1,
+      "success": true,
+      "new_points": 1,
+      "history_matches": 0,
+      "seconds": 14.42,
+      "provider_calls": 4,
+      "history_queries": 1,
+      "quality_reviews": 1,
+      "quality_corrections": 0,
+      "input_tokens": 11930,
+      "output_tokens": 615,
+      "status": "PASS",
+      "failed_criteria": [],
+      "contract_violations": [],
+      "judgment": "同一诗篇的诵读、大意、体裁与押韵整合，原图支持全部范围，原PASS保持。",
+      "original_status": "PASS"
+    },
+    {
+      "case": "case09",
+      "images": 3,
+      "sampling_subject": "语文",
+      "attempts": 1,
+      "success": true,
+      "new_points": 2,
+      "history_matches": 0,
+      "seconds": 49.31,
+      "provider_calls": 10,
+      "history_queries": 2,
+      "quality_reviews": 2,
+      "quality_corrections": 1,
+      "input_tokens": 34383,
+      "output_tokens": 1689,
+      "status": "FAIL",
+      "failed_criteria": [
+        "C4"
+      ],
+      "contract_violations": [
+        "summary.exclusion_clause"
+      ],
+      "judgment": "原不可读页恢复且没有补造数字范围，但拼音及八词对象用相关/等词语泛化，摘要还暴露省略过程；对象范围和事实摘要合同未通过。",
+      "original_status": "FAIL"
+    },
+    {
+      "case": "case10",
+      "images": 1,
+      "sampling_subject": "语文",
+      "attempts": 1,
+      "success": true,
+      "new_points": 1,
+      "history_matches": 0,
+      "seconds": 13.95,
+      "provider_calls": 5,
+      "history_queries": 1,
+      "quality_reviews": 1,
+      "quality_corrections": 0,
+      "input_tokens": 13047,
+      "output_tokens": 408,
+      "status": "PASS",
+      "failed_criteria": [],
+      "contract_violations": [],
+      "judgment": "四个字的书写范围完整具体，网格只是承载书写训练，未拆成多个相同目标；原PASS保持。",
+      "original_status": "PASS"
+    },
+    {
+      "case": "case11",
+      "images": 0,
+      "sampling_subject": "数学",
+      "attempts": 1,
+      "success": false,
+      "failure_code": "analysis_output_invalid",
+      "failure_reason": "coverage",
+      "failure_stage": "group",
+      "failure_unit": "t",
+      "seconds": 3.36,
+      "provider_calls": 1,
+      "history_queries": 0,
+      "quality_reviews": 0,
+      "quality_corrections": 0,
+      "input_tokens": 2411,
+      "output_tokens": 55,
+      "status": "INSUFFICIENT_MATERIAL",
+      "failed_criteria": [],
+      "contract_violations": [],
+      "judgment": "只有笼统运算标题，缺具体运算和对象；合理拒绝，仍计入30分母，不计生成通过。",
+      "original_status": "FAIL"
+    },
+    {
+      "case": "case12",
+      "images": 6,
+      "sampling_subject": "数学",
+      "attempts": 1,
+      "success": true,
+      "new_points": 10,
+      "history_matches": 0,
+      "seconds": 62.38,
+      "provider_calls": 11,
+      "history_queries": 10,
+      "quality_reviews": 1,
+      "quality_corrections": 0,
+      "input_tokens": 40493,
+      "output_tokens": 3764,
+      "status": "FAIL",
+      "failed_criteria": [
+        "C1",
+        "C3",
+        "C5"
+      ],
+      "contract_violations": [],
+      "judgment": "数的分合仍跨页拆成三个重叠单元，名称保留填空与圈画布局，等量代换仍包含普通水果场景；输出完整但整批质量未通过。",
+      "original_status": "NO_OUTPUT"
+    },
+    {
+      "case": "case13",
+      "images": 4,
+      "sampling_subject": "数学",
+      "attempts": 1,
+      "success": true,
+      "new_points": 7,
+      "history_matches": 0,
+      "seconds": 113.42,
+      "provider_calls": 11,
+      "history_queries": 7,
+      "quality_reviews": 2,
+      "quality_corrections": 1,
+      "input_tokens": 63133,
+      "output_tokens": 5625,
+      "status": "FAIL",
+      "failed_criteria": [
+        "C1",
+        "C5"
+      ],
+      "contract_violations": [],
+      "judgment": "由十二项降为七项，但同域混合计算与对应应用仍分散，重叠数图及一图四式布局仍进入名称；不能仅按项数减少判通过。",
+      "original_status": "NO_OUTPUT"
+    },
+    {
+      "case": "case14",
+      "images": 3,
+      "sampling_subject": "数学",
+      "attempts": 1,
+      "success": false,
+      "failure_code": "analysis_output_invalid",
+      "failure_reason": "quality",
+      "failure_stage": "review",
+      "failure_unit": "review1",
+      "seconds": 30.45,
+      "provider_calls": 7,
+      "history_queries": 0,
+      "quality_reviews": 2,
+      "quality_corrections": 1,
+      "input_tokens": 23717,
+      "output_tokens": 914,
+      "status": "NO_OUTPUT",
+      "failed_criteria": [
+        "C5"
+      ],
+      "contract_violations": [],
+      "judgment": "界面省略合法，数学已有证据部分仍在review1质量拒绝，尚未恢复。",
+      "original_status": "NO_OUTPUT"
+    },
+    {
+      "case": "case15",
+      "images": 2,
+      "sampling_subject": "数学",
+      "attempts": 1,
+      "success": true,
+      "new_points": 10,
+      "history_matches": 0,
+      "seconds": 95.32,
+      "provider_calls": 9,
+      "history_queries": 10,
+      "quality_reviews": 2,
+      "quality_corrections": 1,
+      "input_tokens": 37905,
+      "output_tokens": 3400,
+      "status": "FAIL",
+      "failed_criteria": [
+        "C1",
+        "C2",
+        "C5"
+      ],
+      "contract_violations": [],
+      "judgment": "十个新项摘要却称十一个，范围和粒度仍按练习碎片组织，名称保留填数、方框等布局；具体错误排序虽提示核对，不使整批达标。",
+      "original_status": "FAIL"
+    },
+    {
+      "case": "case16",
+      "images": 1,
+      "sampling_subject": "数学",
+      "attempts": 1,
+      "success": false,
+      "failure_code": "analysis_output_invalid",
+      "failure_reason": "quality",
+      "failure_stage": "review",
+      "failure_unit": "review1",
+      "seconds": 32.35,
+      "provider_calls": 5,
+      "history_queries": 0,
+      "quality_reviews": 2,
+      "quality_corrections": 1,
+      "input_tokens": 16455,
+      "output_tokens": 972,
+      "status": "NO_OUTPUT",
+      "failed_criteria": [
+        "C5"
+      ],
+      "contract_violations": [],
+      "judgment": "首轮review结构长度错误未复发，但review1质量拒绝，仍没有最终提案；未到历史阶段，不能据此证明原历史范围问题在该样本通过。",
+      "original_status": "FAIL"
+    },
+    {
+      "case": "case17",
+      "images": 2,
+      "sampling_subject": "数学",
+      "attempts": 1,
+      "success": true,
+      "new_points": 3,
+      "history_matches": 0,
+      "seconds": 37.37,
+      "provider_calls": 6,
+      "history_queries": 3,
+      "quality_reviews": 1,
+      "quality_corrections": 0,
+      "input_tokens": 17745,
+      "output_tokens": 1572,
+      "status": "FAIL",
+      "failed_criteria": [
+        "C3"
+      ],
+      "contract_violations": [],
+      "judgment": "运算与诗文具体完整；普通年龄故事继续进入两步加减应用名称，未提炼与例题包装无关的数量关系。",
+      "original_status": "NO_OUTPUT"
+    },
+    {
+      "case": "case18",
+      "images": 2,
+      "sampling_subject": "数学",
+      "attempts": 1,
+      "success": true,
+      "new_points": 3,
+      "history_matches": 0,
+      "seconds": 26.21,
+      "provider_calls": 6,
+      "history_queries": 3,
+      "quality_reviews": 1,
+      "quality_corrections": 0,
+      "input_tokens": 17056,
+      "output_tokens": 816,
+      "status": "FAIL",
+      "failed_criteria": [
+        "C1"
+      ],
+      "contract_violations": [],
+      "judgment": "英语对象忠实且独立书写范围合理；数学名称仍以看图列算式代替求和/求剩余的数量关系，原PASS回退。",
+      "original_status": "PASS"
+    },
+    {
+      "case": "case19",
+      "images": 0,
+      "sampling_subject": "数学",
+      "attempts": 1,
+      "success": true,
+      "new_points": 1,
+      "history_matches": 0,
+      "seconds": 17.5,
+      "provider_calls": 5,
+      "history_queries": 1,
+      "quality_reviews": 1,
+      "quality_corrections": 0,
+      "input_tokens": 11558,
+      "output_tokens": 275,
+      "status": "PASS",
+      "failed_criteria": [],
+      "contract_violations": [],
+      "judgment": "具体递增相邻差规律忠实于家长文字，未复用固定步长历史或输出答案。",
+      "original_status": "FAIL"
+    },
+    {
+      "case": "case20",
+      "images": 1,
+      "sampling_subject": "数学",
+      "attempts": 1,
+      "success": true,
+      "new_points": 1,
+      "history_matches": 0,
+      "seconds": 24.16,
+      "provider_calls": 4,
+      "history_queries": 1,
+      "quality_reviews": 1,
+      "quality_corrections": 0,
+      "input_tokens": 12620,
+      "output_tokens": 848,
+      "status": "PASS",
+      "failed_criteria": [],
+      "contract_violations": [],
+      "judgment": "线段辨认与计数合为共同目标，图形范围有证据，未按题目/图形布局拆分。",
+      "original_status": "FAIL"
+    },
+    {
+      "case": "case21",
+      "images": 5,
+      "sampling_subject": "英语",
+      "attempts": 1,
+      "success": true,
+      "new_points": 2,
+      "history_matches": 0,
+      "seconds": 73.08,
+      "provider_calls": 10,
+      "history_queries": 2,
+      "quality_reviews": 1,
+      "quality_corrections": 0,
+      "input_tokens": 41849,
+      "output_tokens": 2500,
+      "status": "FAIL",
+      "failed_criteria": [
+        "C4"
+      ],
+      "contract_violations": [],
+      "judgment": "已恢复输出并按阅读目标去重，但家庭主题单元以称谓和描述词统称具体词表，未明确完整对象范围；恢复输出不等于内容通过。",
+      "original_status": "NO_OUTPUT"
+    },
+    {
+      "case": "case22",
+      "images": 3,
+      "sampling_subject": "英语",
+      "attempts": 1,
+      "success": true,
+      "new_points": 3,
+      "history_matches": 0,
+      "seconds": 60.11,
+      "provider_calls": 9,
+      "history_queries": 3,
+      "quality_reviews": 2,
+      "quality_corrections": 1,
+      "input_tokens": 33569,
+      "output_tokens": 2039,
+      "status": "PASS",
+      "failed_criteria": [],
+      "contract_violations": [],
+      "judgment": "两组词汇完整具体，相关语法疑问、简答和活动表达整合；原图对象与证据一致，无缺媒体推断。",
+      "original_status": "NO_OUTPUT"
+    },
+    {
+      "case": "case23",
+      "images": 2,
+      "sampling_subject": "英语",
+      "attempts": 1,
+      "success": true,
+      "new_points": 3,
+      "history_matches": 0,
+      "seconds": 44.01,
+      "provider_calls": 6,
+      "history_queries": 3,
+      "quality_reviews": 1,
+      "quality_corrections": 0,
+      "input_tokens": 28264,
+      "output_tokens": 2181,
+      "status": "FAIL",
+      "failed_criteria": [
+        "C1",
+        "C4"
+      ],
+      "contract_violations": [],
+      "judgment": "语法粒度和历史范围改善，但词义辨析单元仍无具体词表，语法名称仍含填空作答方式；整批不通过。",
+      "original_status": "FAIL"
+    },
+    {
+      "case": "case24",
+      "images": 1,
+      "sampling_subject": "英语",
+      "attempts": 1,
+      "success": true,
+      "new_points": 1,
+      "history_matches": 0,
+      "seconds": 16.64,
+      "provider_calls": 5,
+      "history_queries": 1,
+      "quality_reviews": 1,
+      "quality_corrections": 0,
+      "input_tokens": 15372,
+      "output_tokens": 540,
+      "status": "PASS",
+      "failed_criteria": [],
+      "contract_violations": [],
+      "judgment": "同一字母与配套三个词汇整合，具体范围和书写证据完整，原PASS保持。",
+      "original_status": "PASS"
+    },
+    {
+      "case": "case25",
+      "images": 1,
+      "sampling_subject": "英语",
+      "attempts": 1,
+      "success": true,
+      "new_points": 1,
+      "history_matches": 0,
+      "seconds": 13.8,
+      "provider_calls": 4,
+      "history_queries": 1,
+      "quality_reviews": 1,
+      "quality_corrections": 0,
+      "input_tokens": 11806,
+      "output_tokens": 405,
+      "status": "FAIL",
+      "failed_criteria": [
+        "C2"
+      ],
+      "contract_violations": [],
+      "judgment": "原图完整A-Z，输出仅22字母，遗漏I、J、U、Z；泛指方向核对未交代这四个可辨对象缺口，原PASS仍回退。",
+      "original_status": "PASS"
+    },
+    {
+      "case": "case26",
+      "images": 3,
+      "sampling_subject": "英语",
+      "attempts": 1,
+      "success": true,
+      "new_points": 4,
+      "history_matches": 0,
+      "seconds": 56.84,
+      "provider_calls": 9,
+      "history_queries": 4,
+      "quality_reviews": 2,
+      "quality_corrections": 1,
+      "input_tokens": 33473,
+      "output_tokens": 2359,
+      "status": "PASS",
+      "failed_criteria": [],
+      "contract_violations": [],
+      "judgment": "数量10的计数、分组、数序已合并；英语词表、自我介绍及具体物品问答具有直接教学证据且范围明确。",
+      "original_status": "NO_OUTPUT"
+    },
+    {
+      "case": "case27",
+      "images": 1,
+      "sampling_subject": "英语",
+      "attempts": 1,
+      "success": true,
+      "new_points": 2,
+      "history_matches": 0,
+      "seconds": 33.63,
+      "provider_calls": 7,
+      "history_queries": 2,
+      "quality_reviews": 2,
+      "quality_corrections": 1,
+      "input_tokens": 22235,
+      "output_tokens": 1306,
+      "status": "FAIL",
+      "failed_criteria": [],
+      "contract_violations": [
+        "summary.exclusion_clause"
+      ],
+      "judgment": "六词与阅读目标忠实，跨科数学推断已撤销；摘要仍写无数学教学证据的排除说明，违反既有事实摘要合同。内容C1–C6改善，但整批合同未通过。",
+      "original_status": "NO_OUTPUT"
+    },
+    {
+      "case": "case28",
+      "images": 3,
+      "sampling_subject": "英语",
+      "attempts": 1,
+      "success": true,
+      "new_points": 3,
+      "history_matches": 0,
+      "seconds": 30.35,
+      "provider_calls": 8,
+      "history_queries": 3,
+      "quality_reviews": 1,
+      "quality_corrections": 0,
+      "input_tokens": 31712,
+      "output_tokens": 1513,
+      "status": "PASS",
+      "failed_criteria": [],
+      "contract_violations": [],
+      "judgment": "汉字、四字词和英文词集合完整具体，真实对象未被宽主题历史覆盖。",
+      "original_status": "FAIL"
+    },
+    {
+      "case": "case29",
+      "images": 1,
+      "sampling_subject": "英语",
+      "attempts": 1,
+      "success": false,
+      "failure_code": "analysis_output_invalid",
+      "failure_reason": "validation",
+      "failure_stage": "merge",
+      "failure_unit": "merge",
+      "seconds": 16.5,
+      "provider_calls": 3,
+      "history_queries": 0,
+      "quality_reviews": 0,
+      "quality_corrections": 0,
+      "input_tokens": 9431,
+      "output_tokens": 543,
+      "status": "NO_OUTPUT",
+      "failed_criteria": [],
+      "contract_violations": [],
+      "judgment": "首次及有界纠正后的merge名称均超过120字符，safe code为stage.items.0.name:string_too_long；已实际尝试一次结构恢复，仍安全终止。",
+      "original_status": "NO_OUTPUT"
+    },
+    {
+      "case": "case30",
+      "images": 1,
+      "sampling_subject": "英语",
+      "attempts": 1,
+      "success": true,
+      "new_points": 2,
+      "history_matches": 0,
+      "seconds": 20.07,
+      "provider_calls": 5,
+      "history_queries": 2,
+      "quality_reviews": 1,
+      "quality_corrections": 0,
+      "input_tokens": 15631,
+      "output_tokens": 775,
+      "status": "FAIL",
+      "failed_criteria": [
+        "C2"
+      ],
+      "contract_violations": [],
+      "judgment": "中文浪仍被确定写成狼；置信度已降低，但泛指字形和标记核对没有定位这个错误对象，不能据此判忠实识别。",
+      "original_status": "PARTIAL"
+    }
+  ],
+  "holdouts": [
+    {
+      "case": "holdout01",
+      "expected_boundary": "one precise supported antonym unit; no one-entry-per-word",
+      "input_is_synthetic": true,
+      "excluded_from_thirty": true,
+      "database_writes": 0,
+      "success": true,
+      "seconds": 14.02,
+      "calls": 4,
+      "status": "PASS",
+      "judgment": "三组反义词完整合成一个明确单元。"
+    },
+    {
+      "case": "holdout02",
+      "expected_boundary": "two subjects; same triangle object definition and recognition merged",
+      "input_is_synthetic": true,
+      "excluded_from_thirty": true,
+      "database_writes": 0,
+      "success": true,
+      "seconds": 11.04,
+      "calls": 4,
+      "status": "PASS",
+      "judgment": "英语词与数学分科，三角形特征与辨认整合。"
+    },
+    {
+      "case": "holdout03",
+      "expected_boundary": "keep exact cat/dog writing, omit unknown media; no invented listening target",
+      "input_is_synthetic": true,
+      "excluded_from_thirty": true,
+      "database_writes": 0,
+      "success": true,
+      "seconds": 10.1,
+      "calls": 4,
+      "status": "PASS",
+      "judgment": "具体书写词汇保留，未补造音频目标。"
+    },
+    {
+      "case": "holdout04",
+      "expected_boundary": "reject fixed-step history and keep directly stated varying differences",
+      "input_is_synthetic": true,
+      "excluded_from_thirty": true,
+      "database_writes": 0,
+      "success": true,
+      "seconds": 11.4,
+      "calls": 5,
+      "status": "PASS",
+      "judgment": "递增差规律未复用固定步长历史。"
+    },
+    {
+      "case": "holdout05",
+      "expected_boundary": "do not reuse recognition-only identity for actual writing skill",
+      "input_is_synthetic": true,
+      "excluded_from_thirty": true,
+      "database_writes": 0,
+      "success": true,
+      "seconds": 10.03,
+      "calls": 5,
+      "status": "PASS",
+      "judgment": "实际听写未复用仅认读历史。"
+    },
+    {
+      "case": "holdout06",
+      "expected_boundary": "honest rejection of unspecified objects, no invented textbook or placeholder",
+      "input_is_synthetic": true,
+      "excluded_from_thirty": true,
+      "database_writes": 0,
+      "success": false,
+      "reason": "coverage",
+      "stage": "group",
+      "unit": "t",
+      "seconds": 2.53,
+      "calls": 1,
+      "status": "PASS",
+      "judgment": "对象不足的单元标题诚实拒绝，不计生成通过。"
+    }
+  ],
+  "database_audit": {
+    "readonly": {
+      "readonly": 1,
+      "version": "5.7.18-cynos-2.1.14-log"
+    },
+    "changed_tables": [],
+    "all_fingerprints_equal": true,
+    "test_business_posts": 0,
+    "test_database_writes": 0,
+    "test_checkpoints": 0,
+    "observed_at": "2026-10-31T18:47:23.578657+08:00",
+    "audit_table_count": 61,
+    "tables": {
+      "activity_records": {
+        "before_count": 0,
+        "after_count": 0,
+        "equal": true
+      },
+      "activity_schedules": {
+        "before_count": 11,
+        "after_count": 11,
+        "equal": true
+      },
+      "activity_schedule_slots": {
+        "before_count": 14,
+        "after_count": 14,
+        "equal": true
+      },
+      "agent_jobs": {
+        "before_count": 118,
+        "after_count": 118,
+        "equal": true
+      },
+      "analysis_stage_results": {
+        "before_count": 0,
+        "after_count": 0,
+        "equal": true
+      },
+      "calendar_events": {
+        "before_count": 2,
+        "after_count": 2,
+        "equal": true
+      },
+      "calendar_event_requests": {
+        "before_count": 2,
+        "after_count": 2,
+        "equal": true
+      },
+      "children": {
+        "before_count": 2,
+        "after_count": 2,
+        "equal": true
+      },
+      "daily_review_plans": {
+        "before_count": 95,
+        "after_count": 95,
+        "equal": true
+      },
+      "daily_review_plan_items": {
+        "before_count": 618,
+        "after_count": 618,
+        "equal": true
+      },
+      "daily_tasks": {
+        "before_count": 3,
+        "after_count": 3,
+        "equal": true
+      },
+      "daily_task_completions": {
+        "before_count": 1,
+        "after_count": 1,
+        "equal": true
+      },
+      "deletion_requests": {
+        "before_count": 0,
+        "after_count": 0,
+        "equal": true
+      },
+      "family_audit_events": {
+        "before_count": 12,
+        "after_count": 12,
+        "equal": true
+      },
+      "family_invites": {
+        "before_count": 5,
+        "after_count": 5,
+        "equal": true
+      },
+      "family_join_requests": {
+        "before_count": 2,
+        "after_count": 2,
+        "equal": true
+      },
+      "family_members": {
+        "before_count": 3,
+        "after_count": 3,
+        "equal": true
+      },
+      "footprint_imports": {
+        "before_count": 1,
+        "after_count": 1,
+        "equal": true
+      },
+      "footprint_photos": {
+        "before_count": 3,
+        "after_count": 3,
+        "equal": true
+      },
+      "footprint_preferences": {
+        "before_count": 1,
+        "after_count": 1,
+        "equal": true
+      },
+      "footprint_scopes": {
+        "before_count": 1,
+        "after_count": 1,
+        "equal": true
+      },
+      "footprint_visits": {
+        "before_count": 0,
+        "after_count": 0,
+        "equal": true
+      },
+      "knowledge_coverage_jobs": {
+        "before_count": 68,
+        "after_count": 68,
+        "equal": true
+      },
+      "knowledge_input_clocks": {
+        "before_count": 2,
+        "after_count": 2,
+        "equal": true
+      },
+      "knowledge_items": {
+        "before_count": 259,
+        "after_count": 259,
+        "equal": true
+      },
+      "knowledge_occurrences": {
+        "before_count": 259,
+        "after_count": 259,
+        "equal": true
+      },
+      "knowledge_search_terms": {
+        "before_count": 7066,
+        "after_count": 7066,
+        "equal": true
+      },
+      "learning_records": {
+        "before_count": 115,
+        "after_count": 115,
+        "equal": true
+      },
+      "learning_submissions": {
+        "before_count": 118,
+        "after_count": 118,
+        "equal": true
+      },
+      "learning_suggestions": {
+        "before_count": 0,
+        "after_count": 0,
+        "equal": true
+      },
+      "learning_suggestion_jobs": {
+        "before_count": 0,
+        "after_count": 0,
+        "equal": true
+      },
+      "learning_suggestion_prompt_days": {
+        "before_count": 0,
+        "after_count": 0,
+        "equal": true
+      },
+      "learning_suggestion_states": {
+        "before_count": 0,
+        "after_count": 0,
+        "equal": true
+      },
+      "media_objects": {
+        "before_count": 195,
+        "after_count": 195,
+        "equal": true
+      },
+      "notification_deliveries": {
+        "before_count": 38,
+        "after_count": 38,
+        "equal": true
+      },
+      "notification_destinations": {
+        "before_count": 1,
+        "after_count": 1,
+        "equal": true
+      },
+      "notification_grant_attempts": {
+        "before_count": 8,
+        "after_count": 8,
+        "equal": true
+      },
+      "notification_preferences": {
+        "before_count": 1,
+        "after_count": 1,
+        "equal": true
+      },
+      "notification_renewal_preferences": {
+        "before_count": 0,
+        "after_count": 0,
+        "equal": true
+      },
+      "notification_renewal_states": {
+        "before_count": 2,
+        "after_count": 2,
+        "equal": true
+      },
+      "notification_subscriptions": {
+        "before_count": 2,
+        "after_count": 2,
+        "equal": true
+      },
+      "review_early_slots": {
+        "before_count": 257,
+        "after_count": 257,
+        "equal": true
+      },
+      "review_feedback": {
+        "before_count": 462,
+        "after_count": 462,
+        "equal": true
+      },
+      "review_feedback_batch_requests": {
+        "before_count": 0,
+        "after_count": 0,
+        "equal": true
+      },
+      "review_feedback_requests": {
+        "before_count": 391,
+        "after_count": 391,
+        "equal": true
+      },
+      "review_items": {
+        "before_count": 259,
+        "after_count": 259,
+        "equal": true
+      },
+      "review_member_completion_progress": {
+        "before_count": 3,
+        "after_count": 3,
+        "equal": true
+      },
+      "review_member_completion_receipts": {
+        "before_count": 51,
+        "after_count": 51,
+        "equal": true
+      },
+      "review_queue_entries": {
+        "before_count": 259,
+        "after_count": 259,
+        "equal": true
+      },
+      "review_schedule_changes": {
+        "before_count": 2,
+        "after_count": 2,
+        "equal": true
+      },
+      "review_schedule_overrides": {
+        "before_count": 0,
+        "after_count": 0,
+        "equal": true
+      },
+      "study_tasks": {
+        "before_count": 0,
+        "after_count": 0,
+        "equal": true
+      },
+      "study_task_records": {
+        "before_count": 0,
+        "after_count": 0,
+        "equal": true
+      },
+      "study_task_record_intents": {
+        "before_count": 0,
+        "after_count": 0,
+        "equal": true
+      },
+      "subjects": {
+        "before_count": 18,
+        "after_count": 18,
+        "equal": true
+      },
+      "submission_requests": {
+        "before_count": 118,
+        "after_count": 118,
+        "equal": true
+      },
+      "travel_arrangements": {
+        "before_count": 4,
+        "after_count": 4,
+        "equal": true
+      },
+      "travel_arrangement_requests": {
+        "before_count": 4,
+        "after_count": 4,
+        "equal": true
+      },
+      "travel_arrangement_slots": {
+        "before_count": 20,
+        "after_count": 20,
+        "equal": true
+      },
+      "wechat_actor_bindings": {
+        "before_count": 3,
+        "after_count": 3,
+        "equal": true
+      },
+      "submission_media": {
+        "before_count": 194,
+        "after_count": 194,
+        "equal": true
+      }
+    },
+    "before_artifact_sha256": "8ab357607f6a876e7a50a541a0ecff3ee22d924f0447898da09f1914c34d3706",
+    "after_artifact_sha256": "0888c9be5605deef3ed0f718b625464af1308f9efe3608dd7b33306abbcb3a19"
+  },
+  "privacy": {
+    "exported": "case aliases, curated judgments, counts, timing, safe codes and source hashes",
+    "not_exported": "raw model stages, family/child/source identities, images, URLs, keys",
+    "private_cleanup": "pending"
+  },
+  "acceptance": {
+    "AC-008": "FAIL",
+    "TP-002_error_label": "PARTIAL",
+    "cloud_delivery": "NOT_RUN",
+    "spec_lifecycle": "VERIFYING/active"
+  },
+  "original06_artifact_sha256": "f903d1f9978b5e8b216d7b5b4e19257f9a93d5ba73597c38198c5091d68e58e1"
+}

@@ -2,10 +2,10 @@
 
 - Date: 2026-10-24
 - State: LOCAL_IMPLEMENTATION / VERIFYING / NOT_UPLOADED / NOT_DEPLOYED
-- Authorization: 用户“好的 按照这个方案落地”，批准[Spec02、Architecture02、DREV01](../../../specs/active/FEAT-013-ANNUAL-GRADE-PROMOTION.md)。
+- Authorization: 用户“好的 按照这个方案落地”，批准[Spec02、Architecture02、DREV01](../../../specs/completed/FEAT-013-ANNUAL-GRADE-PROMOTION.md)。
 - Evidence: [本轮验证](../../quality/evidence/ANNUAL-GRADE-IMPLEMENTATION-20261024.md)。
 
-2026-10-24前端局部增量：[精简Spec01](../../../specs/active/FEAT-013-GRADE-DIALOG-SIMPLIFICATION.md) / DREV02获用户“继续”批准，已在原年级组件实现单标题/选择、并排操作和行内短提示。最终327项前端/53项定向、三尺寸51组原生及实际选级/重试/稍后通过；真实设备/可访问性及全业务原生端到端边界见[精简实施证据](../../quality/evidence/GRADE-DIALOG-SIMPLIFICATION-IMPLEMENTATION-20261024.md)。该增量不改API、Schema、后端版本或四类平台发布状态；仍为本地VERIFYING，未上传部署。下文313项和旧原生采集是DREV01/主任务证据，不抵扣新布局。
+2026-10-24前端局部增量：[精简Spec01](../../../specs/completed/FEAT-013-GRADE-DIALOG-SIMPLIFICATION.md) / DREV02获用户“继续”批准，已在原年级组件实现单标题/选择、并排操作和行内短提示。最终327项前端/53项定向、三尺寸51组原生及实际选级/重试/稍后通过；真实设备/可访问性及全业务原生端到端边界见[精简实施证据](../../quality/evidence/GRADE-DIALOG-SIMPLIFICATION-IMPLEMENTATION-20261024.md)。该增量不改API、Schema、后端版本或四类平台发布状态；仍为本地VERIFYING，未上传部署。下文313项和旧原生采集是DREV01/主任务证据，不抵扣新布局。
 
 本轮没有提交、推送、生产DDL、云端部署、上传、体验版、提审或正式发布。现有生产版本/Schema与其他任务的发布记录不因本地实现改变。
 

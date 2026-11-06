@@ -1,0 +1,111 @@
+...F.                                                                    [100%]
+=================================== FAILURES ===================================
+____________ test_skewed_fifty_thousand_photo_read_budget[mysql-1] _____________
+
+read_case = (<fastapi.applications.FastAPI object at 0x113827ef0>, {'active': True, 'created_at': '2026-10-31T10:42:01.927876Z', 'daily_budget_minutes': 15, 'grade': '小学一年级', ...})
+visit_count = 1
+
+    @pytest.mark.parametrize("visit_count", [1, 1000])
+    def test_skewed_fifty_thousand_photo_read_budget(read_case, visit_count):
+        app, child = read_case
+        database = app.state.database
+        family, cid, now = "family-test-a", child["id"], utcnow()
+        scope = {"family_id": family, "child_id": cid}
+        with database.session_factory() as db:
+            db.execute(
+                insert(FootprintImport),
+                [
+                    {
+                        **scope,
+                        "id": f"batch-{i}",
+                        "member_id": "local",
+                        "request_key": f"key-{i}",
+                        "request_fingerprint": "synthetic",
+                        "slot_count": 20,
+                    }
+                    for i in range(2500)
+                ],
+            )
+            db.execute(
+                insert(FootprintVisit),
+                [
+                    {
+                        **scope,
+                        "id": f"visit-{i}",
+                        "local_date": date(2020, 1, 1) + timedelta(days=i),
+                        "place_key": f"place-{i}",
+                        "place_name": "合成地点",
+                        "country": "中国",
+                        "city": "合成城市",
+                        "latitude": 39.9 + i * 0.00001,
+                        "longitude": 116.4,
+                        "coordinate_system": "gcj02",
+                        "sort_time": "12:00:00",
+                        "sort_created_at": now,
+                    }
+                    for i in range(visit_count)
+                ],
+            )
+            db.execute(
+                insert(FootprintPhoto),
+                [
+                    {
+                        **scope,
+                        "id": f"photo-{i:06d}",
+                        "import_id": f"batch-{i // 20}",
+                        "visit_id": f"visit-{i % visit_count}",
+                        "ordinal": i % 20,
+                        "state": "confirmed",
+                        "ticket_expires_at": now,
+                        "upload_path": "synthetic",
+                        "derived_ready": True,
+                        "local_date": date(2020, 1, 1),
+                        "confirmed_at": now,
+                    }
+                    for i in range(50000)
+                ],
+            )
+            # Deliberately adversarial rows reference a visible visit. Neither another
+            # tenant's photo nor a deleted photo may displace its first four previews.
+            for label, photo_family, state in (
+                ("foreign", "another-family", "confirmed"),
+                ("deleted", family, "deleted"),
+            ):
+                db.execute(
+                    insert(FootprintPhoto).values(
+                        **{**scope, "family_id": photo_family},
+                        id=f"hidden-{label}",
+                        import_id="batch-0",
+                        visit_id=f"visit-{visit_count - 1}",
+                        ordinal=-1,
+                        state=state,
+                        ticket_expires_at=now,
+                        upload_path="synthetic",
+                    )
+                )
+            db.commit()
+        queries = []
+    
+        def record(_connection, _cursor, statement, params, _context, _many):
+            queries.append((statement, params))
+    
+        event.listen(database.engine, "before_cursor_execute", record)
+        tracemalloc.start()
+        try:
+            with database.session_factory() as db:
+                started = perf_counter()
+                result = FootprintReads.visits(db, family, cid, limit=50)
+                elapsed = perf_counter() - started
+                assert len(queries) <= 5
+>               assert elapsed < 0.5, f"timeline took {elapsed:.3f}s"
+E               AssertionError: timeline took 0.521s
+E               assert 0.5208156250009779 < 0.5
+
+tests/performance/test_footprints_reads.py:170: AssertionError
+=============================== warnings summary ===============================
+../../../Users/<redacted>/Documents/push_kids/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /Users/<redacted>/Documents/push_kids/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+1 failed, 4 passed, 1 warning in 31.70s

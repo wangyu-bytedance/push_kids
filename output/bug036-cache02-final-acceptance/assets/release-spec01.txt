@@ -1,0 +1,176 @@
+# OPS — BUG-036 缓存10/13后端灰度交付
+
+- Status: BLOCKED
+- Spec revision: `OPS-SPEC-20261101-BUG036-CACHE-DEPLOY-01`
+- Release design revision: `OPS-ARCH-20261101-BUG036-CACHE-DEPLOY-01`
+- Risk: R2，生产云托管版本、后台任务和运行配置。
+- Owner / Implementer / Reviewer: 产品负责人 / TRAE / 批准后独立只读核验。
+- Affected Feature: [FEAT-001](../../docs/domain/features/FEAT-001-push-kids-mvp.md)，基线`FEAT-STATE-20261101-KNOWLEDGE-CACHE-08`。
+- Parent implementation: [缓存Spec02](BUG-036-CHECKPOINT-RETRY-STRATEGY.md)与[生成Spec01](BUG-036-KNOWLEDGE-GENERATION-FINAL-PROPOSAL.md)均已批准；本任务不修改其生产逻辑。
+- User request: 2026-11-01“更新版本号及发布记录，将状态正式标记为已部署”，随后明确批准具体发布修订。
+- Approval: APPROVED — Product owner，2026-11-01，当前会话用户原话“批准 OPS 发布 Spec01，开始灰度部署”，批准`OPS-SPEC-20261101-BUG036-CACHE-DEPLOY-01`及`OPS-ARCH-20261101-BUG036-CACHE-DEPLOY-01`，含两份工具格式维护和全部适用门禁通过后的GRAY创建。全量切流、秘密配置改写、生产重置及Git提交仍不在范围内；不跳过检查或平台人工门禁。
+- Release target: `prod-d2g14rwoycac6b45d` / `flask-ik19` / GRAY / 8000；PUBLIC保持关闭。
+- Actual cloud version: 仍为`flask-ik19-039`；新版本号由成功发布返回，未预写040或“已部署”。
+- Proposed unique remark: `push-kids-20261101-cache02-01-0576ac3`。
+- Candidate: `dist/release-20261101-bug036-cache02-01`，154payload / 150Python源，具体SHA/字节见[候选manifest](../../docs/quality/evidence/bug036-cache02-release-20261101/candidate-manifest.json)。
+- Pipeline / prompt: 冻结`staged-20261101-10` / `child-aware-history-agent-20261031-13`。并行内容Spec03的11/14不得进入该候选。
+- Current stop reason: 批准后固定40-case发布门禁实际FAIL，34/40＝85%低于38/40，语文/数学/英语66.7%/80%/86.7%低于各科90%；正式写0。未创建灰度版本、未切流，仍039。[门禁EVD](../evidence/EVD-20261101-BUG036-CACHE02-RELEASE-GATE.md)保留原失败、批准、维护与实际结果。
+
+## 1. 目标、现状及范围
+
+实际部署一个包含已批准缓存10/13的新不可变后端版本，云端normal并核对包/镜像/版本后再记录
+“已部署”。依据GOV-002，覆盖范围的开发Spec设DONE迁completed，验收结果与流量阶段分开保留。
+当前039来源为staged06；不能只改版本文字或用旧版本替新实现归档。
+
+在范围内：
+
+1. 使用039精确154文件基线，叠加已批准生成/缓存10文件，不改变公共DTO、Schema、任务预算或生产逻辑。
+2. 完成发布检查、运行账号及管理员严格Schema核验、独占MySQL事务回归、容器、模型发布门禁、dry-run和包扫描。
+3. 两份发布验证脚本仅作格式维护：`tools/prepare_travel_diary_native.py`与
+   `docs/quality/evidence/report-footer-tips-20261101/prepare-native.py`；Python自动格式，
+   JS字符串必要换行均保持原合成API语义。只修已确认E501/格式，不执行原生脚本或覆盖批准设计产物。
+4. 按发布手册创建GRAY并核对normal、版本号、源/镜像、运行配置和PUBLIC关闭；云业务smoke/HTTP流量与后台Worker分别验证。
+5. 同步真实版本、发布记录、Spec生命周期、Feature/Behavior/Architecture/测试与最终验收报告。
+
+范围外：生产数据清理/缓存批量重置/学习确认、DDL迁移、秘密配置改写、前端上传/bump、
+全量切流、体验/审核/正式发布、Git提交/推送、内容Spec03实现或生产发布。
+小程序版本仍0.1.17；不能为后端发布改小程序版本号。
+
+## 2. 设计与取舍
+
+推荐在通过必需检查和明确批准后发布该冻结10/13候选。现有配置保持；若后台拓扑/配置门禁无法
+满足，停止创建版本，按既有人工约定核验，不能用0%HTTP流量声称Worker无生产副作用。
+
+| 选择 | 收益 | 代价 / 判断 |
+|---|---|---|
+| 冻结10/13，仅发布已批准范围 | 缓存修复可独立交付，不混入并行代码 | 仍须通过40-case和灰度后台/运行配置门禁；真实09内容FAIL独立保留 |
+| 等内容Spec03完成后联合发布 | 可同时解决内容反证 | 发布范围/版本/验证要新revision；本次不自动选择 |
+| 从06单独回移缓存补丁 | 发布包差异更小 | 属于新的未批准运行基线与兼容修订，不能冒充本Spec02实现，不选 |
+| 仅改状态和手工版本号 | 无 | 缺实际云交付证据，违反当前事实与归档合同，拒绝 |
+
+前端影响、UI/DREV/FEC/视口：N/A，本任务没有产品前端改动。
+API/Schema/架构模块边界/扩展点：不变；以下视图描述既有发布链路，不引入生产抽象。
+
+### Link/call graph
+
+```text
+已交付039 manifest + 已批准10文件 → 最小候选154文件/SHA
+  → 精确回归/静态/独占MySQL/容器/40-case/运行Schema
+  → dry-run + 确认表 → wxcloud GRAY deploy
+  → 官方version/service normal + 发布包对应 → 实际版本号/已部署
+  → matched Spec DONE归档，剩余验收独立保留
+```
+
+### Sequence
+
+```mermaid
+sequenceDiagram
+    participant O as 发布负责人
+    participant A as 执行者
+    participant G as 必需检查
+    participant C as 微信云托管
+    O->>A: 批准OPS发布Spec01
+    A->>G: 冻结范围与全部必需验证
+    alt 必需检查失败或运行配置门禁未完成
+        G-->>A: FAIL/NOT_RUN及证据
+        A-->>O: 停止部署，保留039与真实状态
+    else 全部适用门禁通过
+        A->>C: dry-run及核对确认表后GRAY部署
+        C-->>A: 实际不可变版本号
+        A->>C: version/service/配置与对应源码核验
+        A-->>O: 已部署版本、流量/Worker/验收边界
+    end
+```
+
+### State
+
+```mermaid
+stateDiagram-v2
+    [*] --> FrozenCandidate
+    FrozenCandidate --> AwaitingApproval
+    AwaitingApproval --> Preflight: 本Spec01明确批准
+    Preflight --> Blocked: 任一必需检查失败/缺门禁
+    Blocked --> Preflight: 批准范围内修复并复验
+    Preflight --> GrayCreating: 检查通过及确认表正确
+    GrayCreating --> DeliveryFailed: deploy_failed
+    GrayCreating --> Deployed: 新版本normal且源码对应
+    Deployed --> DoneArchived: matched scope开发DONE
+    Deployed --> ManualTrafficGate: 灰度验收后人工全量
+```
+
+### Architecture / ownership
+
+```mermaid
+flowchart LR
+    B[039冻结基线] --> P[白名单候选154文件]
+    S[已批准生成与缓存10文件] --> P
+    P --> V[隔离验证与发布门禁]
+    V --> C[云托管不可变版本]
+    C --> W[进程内Worker]
+    C --> H[微信HTTP入口]
+    C --> D[(生产Schema0025)]
+    C --> E[实际版本及验收证据]
+    E --> R[发布记录与Spec归档]
+```
+
+## 3. 预期文件、操作及恢复
+
+| 文件/资源 | 操作 | 目的 |
+|---|---|---|
+| 候选10生产源 | 只复制获批源；不改逻辑 | 对应Spec01＋缓存Spec02实际实现 |
+| 两份验证脚本 | 格式/字符串换行维护 | 修复已确认全库lint/format阻碍 |
+| `docs/deploy/releases/20261101-knowledge-cache-*.md` | 更新 | 准确区分候选/创建/normal/流量阶段 |
+| 缓存及父Spec、Spec索引 | matched cloud后DONE/move | 按用户批准GOV-002归档；无交付不迁 |
+| Feature/Behavior/Architecture/UI影响说明/测试证据 | 事实更新 | 本地/云端/内容验收分离，无矛盾当前正文 |
+| 最终验收HTML及附件 | 版本化更新 | 实际版本/manifest/检查/剩余验收 |
+| 生产数据/Schema/秘密/客户端版本 | 不修改 | 本次无授权也无必要 |
+
+回退点为实际存在且兼容的039；不把已不存在038称为可用回退。
+Schema0025不变，无迁移/新增备份门禁N/A；平台既有恢复能力保持。
+若创建失败不切流；若发布后出现任务/隐私/Schema/健康问题，停止放量并按手册由管理员回退。
+不能在云WebShell改源码或重置业务数据。
+
+## 4. 验收及必须检查
+
+AC-R01：候选154文件与清单逐项匹配，只有10份获批差异；不包含内容03、前端、测试、
+秘密、儿童图或离线维护库。真实发布确认表所有字段正确。
+
+AC-R02：每项适用发布门禁真实运行并通过；旧通过仅在完整对象hash一致时限定复用，
+源码变化重新冻结和验证；全部FAIL/NOT_RUN原样保留。
+
+AC-R03：云端返回实际新版本，normal且服务normal、PUBLIC关闭，发布包/镜像对应10/13。
+只有AC-R03成立才写已部署/实际版本号并执行matched范围DONE迁移。
+
+AC-R04：HTTP0%和Worker生产任务消费分别记录。当前bootstrap默认run_worker=true，
+同数据库Worker不受HTTP流量比例约束；须在创建前核验完整质量/后台任务安全和当前运行配置。
+不能通过未批run_worker设置或拓扑更改规避发布门禁。
+
+| 测试点 | 命令 / 范围 | 当前结果 |
+|---|---|---|
+| TP-R01 | 039manifest＋批准范围＋secret scan＋154清单 | PASS_PREPARATION：候选冻结，实际部署NOT_RUN |
+| TP-R02 | 精确候选完整`pytest tests/unit tests/integration tests/contract -q` | PASS：857/52默认skip，111.59s；首轮缺前端读取夹具856/1FAIL保留，补齐后原例1PASS再全量。150payload源一致，另1离线维护模块仅工具测试 |
+| TP-R03 | payload150 `ruff check`、`format --check`、mypy | PASS，精确生产源；原全库7E501/格式失败已由获批工具维护修正，批准后Ruff/format865PASS见TP-R05。真正发布停止原因是TP-R09质量FAIL，容器等缺门禁独立保留 |
+| TP-R04 | 架构图 / planning纯策略 / dependency DAG | PASS_PREPARATION：验证树4政策/151（含测试用离线模块），非生产新增模块 |
+| TP-R05 | 全库工具修订前后Ruff/format；JS字符串语法/确定性行为保持 | PASS：原7E501保留，批准后全库Ruff/format865通过；两工具AST/JS引号内容等价、前后syntax通过，未执行原生脚本 |
+| TP-R06 | 独占MySQL5.7迁移head/current/check与retry/lease/tenant/claim | 候选新utf8mb4库迁移/current/checkPASS，8缓存事务专项/0skipPASS并销毁；其他运行/claim相关门禁仍独立 |
+| TP-R07 | 管理员严格Schema及实际运行CRUD账号ready、无DDL | PASS_READONLY：管理员trigger严格核验、实际039账号使用冻结候选Schema/SELECT1及grants无DDL，0025，秘密只在私有子进程 |
+| TP-R08 | Docker构建、UID10001、8000/live/ready、SIGTERM0及secret scan | NOT_RUN_INCOMPLETE：批准后arm64构建已开始下载依赖；TP-R09质量FAIL后停止本任务构建，未生成运行结果，不能记录容器验收PASS |
+| TP-R09 | 固定40-case live Ark（≥38/40，各科≥90%，零空/正式写） | FAIL：34/40，85%；各科66.7%/80%/86.7%，0基础设施失败，empty/pending/formal0；实际exit1，停止部署且不替换失败分母 |
+| TP-R10 | `npm test`/ESLint/设计当前policy/miniprogram校验 | PASS：依赖同步、349前端、ESLint、current-policy、17页校验实际执行；未上传前端或更新客户端版本 |
+| TP-R11 | dry-run、确认表、上传包、版本normal、实际包/配置 | 干净dry-run155文件SHA已通过；实际确认表/GRAY/normal NOT_RUN：TP-R09失败后停止，新版本未生成，配置未修改 |
+| TP-R12 | 真实微信定向健康、重试/取消/恢复、灰度指标/Worker与流量 | NOT_RUN，平台人工门禁保留 |
+| TP-R13 | 版本记录/报告/Feature/Behavior/Architecture/Spec迁移/引用/内容缺项 | 已同步灰度前停止/质量FAIL；两组及cross为0代码/包缺陷，cross发现2项P2文档问题（报告manifest时点漂移、旧lint措辞），已同步最终摘要/结果并核验，原发现保留；无交付不DONE |
+
+## 5. 当前交付准备与批准条件
+
+本Spec是具体可审阅发布方案。已冻结候选并开始隔离验证；新版本号未生成。
+完整后端结果、10文件列表、manifest和失败检查见[发布准备记录](../../docs/deploy/releases/20261101-knowledge-cache-release-preparation.md)。
+批准后工具维护/全库静态和运行账号核验通过，固定40例模型门禁真实FAIL；
+Docker构建与独立Review仍分别记录。未创建实际GRAY，不能标已部署。
+
+`OPS-SPEC-20261101-BUG036-CACHE-DEPLOY-01`已由用户明确批准，包含上述两份工具格式维护及
+全部适用门禁通过后创建GRAY。批准不等于跳过任何检查或全量切流；实际平台人工操作仍按发布手册。
+开发完成云交付、内容验收、灰度/全量/前端平台阶段分别记录，原内容FAIL不改为PASS。
+本发布任务尚无云交付，因实际发布必需质量门禁失败记BLOCKED/active。
+恢复条件为对应获批内容/质量修复、重新冻结实际发布版本并重跑门禁，不能越过FAIL或静默用11/14替10/13；
+取消后按理由rejected，不能把未部署改成DONE。

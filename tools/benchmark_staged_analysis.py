@@ -187,6 +187,8 @@ def snapshot(job_id, count, directory):
     manifest = directory / "downloads.json"
     manifest.write_text(json.dumps(downloads), encoding="utf-8")
     os.chmod(manifest, 0o600)
+    if not downloads:
+        return cases
     result = subprocess.run(
         ["node", str(ROOT / "tools/download_replay_media.cjs"), str(manifest)],
         capture_output=True,

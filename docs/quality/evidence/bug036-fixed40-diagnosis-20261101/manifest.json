@@ -1,0 +1,112 @@
+{
+  "result": {
+    "status": "failed",
+    "case_count": 40,
+    "passed": 33,
+    "overall_rate": 0.825,
+    "end_to_end": {
+      "passed": 33,
+      "total": 40,
+      "rate": 0.825
+    },
+    "operational_failure_count": 0,
+    "operational_failure_codes": {},
+    "subject_rates": {
+      "语文": 0.6,
+      "数学": 0.8667,
+      "英语": 0.8667
+    },
+    "subject_semantic": {
+      "语文": {
+        "passed": 9,
+        "total": 15,
+        "rate": 0.6
+      },
+      "数学": {
+        "passed": 13,
+        "total": 15,
+        "rate": 0.8667
+      },
+      "英语": {
+        "passed": 13,
+        "total": 15,
+        "rate": 0.8667
+      }
+    },
+    "empty_pending_count": 0,
+    "remaining_pending_count": 0,
+    "formal_write_count": 0,
+    "failures": [
+      {
+        "case_id": "multi-01",
+        "code": "analysis_output_invalid",
+        "attempts": 3
+      },
+      {
+        "case_id": "zh-04",
+        "code": "analysis_output_invalid",
+        "attempts": 1
+      },
+      {
+        "case_id": "zh-05",
+        "code": "analysis_output_invalid",
+        "attempts": 3
+      },
+      {
+        "case_id": "zh-07",
+        "code": "analysis_output_invalid",
+        "attempts": 3
+      },
+      {
+        "case_id": "zh-09",
+        "code": "analysis_output_invalid",
+        "attempts": 3
+      },
+      {
+        "case_id": "en-12",
+        "code": "analysis_output_invalid",
+        "attempts": 1
+      },
+      {
+        "case_id": "multi-04",
+        "code": "analysis_output_invalid",
+        "attempts": 3
+      }
+    ],
+    "pipeline_revision": "staged-20261101-12",
+    "model": "doubao-seed-2-1-pro-260628"
+  },
+  "sources": 153,
+  "fixture_unchanged": true,
+  "scoring_tool_unchanged": true,
+  "production_code_edited": false,
+  "tests_edited": false,
+  "production_connection": false,
+  "raw_responses_or_images_published": false,
+  "files": {
+    "snapshot-manifest.json": {
+      "sha256": "2ad23c2f5519fedcd921701fe62c4db4638c61b15c278a3ed469f54d785e1bc4",
+      "bytes": 18895
+    },
+    "original6.log": {
+      "sha256": "5af2acc4096f1559f1938b90a6601795c33d5e0651974dd9640fe5ab87173b82",
+      "bytes": 510
+    },
+    "original6-diagnostics.json": {
+      "sha256": "3127233be11742880478fb02618eda1542b4a44858fbb1e8fb2e7db435521e4c",
+      "bytes": 5585
+    },
+    "full12.log": {
+      "sha256": "4a49bdf000af2f2ebee53af56e1a740747f23fd781c80493f6b3688d3d84ddce",
+      "bytes": 8123
+    },
+    "full12-report.json": {
+      "sha256": "f18963688aad7726cdf44ca761c9a5cd708548f2660cb5939c48b0975a063cf2",
+      "bytes": 1039
+    },
+    "full12-diagnostics.json": {
+      "sha256": "4821568c2620e579210228cae09627adadf4bd9aa8911a9e48f0bc690ff5e19a",
+      "bytes": 29247
+    }
+  }
+}

@@ -1,0 +1,142 @@
+{
+  "route": "pages/calendar/index",
+  "viewport": {
+    "width": 430,
+    "height": 932,
+    "screenHeight": 932,
+    "pixelRatio": 3
+  },
+  "base_library": "3.17.4",
+  "nodes": [
+    {
+      "selector": ".pk-sheet",
+      "left": 0,
+      "right": 430,
+      "top": 216,
+      "bottom": 932,
+      "width": 430,
+      "height": 716,
+      "fontSize": "16px",
+      "lineHeight": "25.6px"
+    },
+    {
+      "selector": ".sheet-head",
+      "left": 20,
+      "right": 410,
+      "top": 240,
+      "bottom": 297,
+      "width": 390,
+      "height": 57,
+      "fontSize": "16px",
+      "lineHeight": "25.6px"
+    },
+    {
+      "selector": ".sheet-body",
+      "left": 20,
+      "right": 410,
+      "top": 297,
+      "bottom": 753,
+      "width": 390,
+      "height": 456,
+      "fontSize": "16px",
+      "lineHeight": "25.6px"
+    },
+    {
+      "selector": ".sheet-foot",
+      "left": 20,
+      "right": 410,
+      "top": 753,
+      "bottom": 821,
+      "width": 390,
+      "height": 68,
+      "fontSize": "16px",
+      "lineHeight": "25.6px"
+    },
+    {
+      "selector": ".repeat-mode",
+      "left": 20,
+      "right": 410,
+      "top": 421,
+      "bottom": 471,
+      "width": 390,
+      "height": 50,
+      "fontSize": "16px",
+      "lineHeight": "25.6px"
+    },
+    {
+      "selector": ".sheet-foot .btn",
+      "left": 20,
+      "right": 410,
+      "top": 766,
+      "bottom": 821,
+      "width": 390,
+      "height": 55,
+      "fontSize": "16px",
+      "lineHeight": "19.2px"
+    },
+    {
+      "selector": ".pk-picker",
+      "left": 20,
+      "right": 410,
+      "top": 609,
+      "bottom": 659,
+      "width": 390,
+      "height": 50,
+      "fontSize": "15px",
+      "lineHeight": "22.5px"
+    },
+    {
+      "selector": ".pk-picker",
+      "left": 20,
+      "right": 197,
+      "top": 703,
+      "bottom": 753,
+      "width": 177,
+      "height": 50,
+      "fontSize": "15px",
+      "lineHeight": "22.5px"
+    },
+    {
+      "selector": ".pk-picker",
+      "left": 233,
+      "right": 410,
+      "top": 703,
+      "bottom": 753,
+      "width": 177,
+      "height": 50,
+      "fontSize": "15px",
+      "lineHeight": "22.5px"
+    },
+    {
+      "selector": ".pk-empty",
+      "left": 20,
+      "right": 410,
+      "top": 518,
+      "bottom": 618,
+      "width": 390,
+      "height": 100,
+      "fontSize": "16px",
+      "lineHeight": "25.6px"
+    },
+    {
+      "selector": ".page",
+      "left": 0,
+      "right": 430,
+      "top": 94,
+      "bottom": 1026,
+      "width": 430,
+      "height": 932,
+      "fontSize": "16px",
+      "lineHeight": "25.6px"
+    }
+  ],
+  "mode": {
+    "workday": true,
+    "weekly": false
+  },
+  "source": "native wx.createSelectorQuery; synthetic fixtures; production WXML/WXSS exact",
+  "errors": [],
+  "state": "create",
+  "host": "calendar",
+  "screenshot_status": "NOT_RUN_AFTER_CAPTURE_FAILURE: App.captureScreenshot timed out"
+}

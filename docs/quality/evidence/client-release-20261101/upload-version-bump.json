@@ -1,0 +1,8 @@
+{
+  "at": "2026-11-01T16:15:08.667181+08:00",
+  "command": "npm run --silent release:version:bump",
+  "result": "PASS",
+  "baseline_before": "0.1.16",
+  "baseline_after": "0.1.17",
+  "upload_evidence": "upload0.1.17.json"
+}

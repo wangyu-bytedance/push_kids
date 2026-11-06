@@ -1,0 +1,29 @@
+{
+  "observedAt": "2026-11-06T01:31:02.807Z",
+  "nativeState": {
+    "id": "1",
+    "result": {
+      "result": {
+        "route": "pages/calendar/index",
+        "editor": true,
+        "name": "合成工作日阅读",
+        "workday": true,
+        "start": "20:10",
+        "end": "20:40",
+        "date": "2026-11-06",
+        "transport": {
+          "cloud": false,
+          "base": "http://127.0.0.1:18016/api/v1"
+        }
+      }
+    }
+  },
+  "observations": {
+    "activitySave": "CUA actual save, summary 工作日18:10–19:10",
+    "activityRefill": "CUA reopen workday selected18:10–19:10",
+    "sourceJump": "CUA calendar activity -> settings workday sheet",
+    "calendarSave": "CUA actual create;2items;workday20:10–20:40",
+    "calendarRefill": "CUA reopen edit workday selected20:10–20:40"
+  },
+  "scope": "Frozen production Pages and API utils; local SQLite synthetic tenant; config/app plugins/project settings private overrides; no production writes; state transitions observed via CUA AX; screenshot RPC failed, no new pixels claimed"
+}

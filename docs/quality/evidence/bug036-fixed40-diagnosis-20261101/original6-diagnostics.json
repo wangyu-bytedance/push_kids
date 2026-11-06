@@ -1,0 +1,278 @@
+{
+  "mode": "original6",
+  "started_at": "2026-11-01T22:16:32+08:00",
+  "finished_at": "2026-11-01T22:17:37+08:00",
+  "source_mutation": false,
+  "production_connection": false,
+  "original_scoring_and_retries": true,
+  "events": [
+    {
+      "case": "zh-05",
+      "stage": "extract",
+      "schema": "MaterialResult",
+      "item_count": 0,
+      "subjects": [],
+      "needs_context": true,
+      "material_status": "content"
+    },
+    {
+      "case": "zh-05",
+      "phase": "pipeline_failure",
+      "stage": "group",
+      "unit": "m1",
+      "reason": "coverage",
+      "diagnostics": []
+    },
+    {
+      "case": "zh-07",
+      "stage": "extract",
+      "schema": "MaterialResult",
+      "item_count": 1,
+      "subjects": [
+        "zh"
+      ],
+      "needs_context": false,
+      "material_status": "content"
+    },
+    {
+      "case": "zh-07",
+      "stage": "merge",
+      "schema": "ConsolidatedResult",
+      "item_count": 1,
+      "subjects": [
+        "zh"
+      ],
+      "omissions": []
+    },
+    {
+      "case": "zh-07",
+      "stage": "review",
+      "schema": "QualityReviewResult",
+      "passed": false,
+      "issue_codes": [
+        "exercise_not_knowledge"
+      ]
+    },
+    {
+      "case": "zh-07",
+      "stage": "merge",
+      "schema": "ConsolidatedResult",
+      "item_count": 1,
+      "subjects": [
+        "zh"
+      ],
+      "omissions": []
+    },
+    {
+      "case": "zh-07",
+      "stage": "review",
+      "schema": "QualityReviewResult",
+      "passed": false,
+      "issue_codes": [
+        "exercise_not_knowledge"
+      ]
+    },
+    {
+      "case": "zh-07",
+      "phase": "pipeline_failure",
+      "stage": "review",
+      "unit": "review1",
+      "reason": "quality",
+      "diagnostics": []
+    },
+    {
+      "case": "zh-09",
+      "stage": "extract",
+      "schema": "MaterialResult",
+      "item_count": 1,
+      "subjects": [
+        "zh"
+      ],
+      "needs_context": false,
+      "material_status": "content"
+    },
+    {
+      "case": "zh-09",
+      "stage": "merge",
+      "schema": "ConsolidatedResult",
+      "item_count": 1,
+      "subjects": [
+        "zh"
+      ],
+      "omissions": []
+    },
+    {
+      "case": "zh-09",
+      "stage": "review",
+      "schema": "QualityReviewResult",
+      "passed": true,
+      "issue_codes": []
+    },
+    {
+      "case": "zh-09",
+      "stage": "match",
+      "schema": "MatchingResult"
+    },
+    {
+      "case": "multi-01",
+      "stage": "extract",
+      "schema": "MaterialResult",
+      "item_count": 2,
+      "subjects": [
+        "math",
+        "zh"
+      ],
+      "needs_context": true,
+      "material_status": "content"
+    },
+    {
+      "case": "multi-01",
+      "phase": "pipeline_failure",
+      "stage": "group",
+      "unit": "t",
+      "reason": "coverage",
+      "diagnostics": []
+    },
+    {
+      "case": "multi-02",
+      "stage": "extract",
+      "schema": "MaterialResult",
+      "item_count": 2,
+      "subjects": [
+        "en",
+        "math"
+      ],
+      "needs_context": false,
+      "material_status": "content"
+    },
+    {
+      "case": "multi-02",
+      "stage": "merge",
+      "schema": "ConsolidatedResult",
+      "item_count": 2,
+      "subjects": [
+        "en",
+        "math"
+      ],
+      "omissions": []
+    },
+    {
+      "case": "multi-02",
+      "stage": "review",
+      "schema": "QualityReviewResult",
+      "passed": false,
+      "issue_codes": [
+        "vague_name"
+      ]
+    },
+    {
+      "case": "multi-02",
+      "stage": "merge",
+      "schema": "ConsolidatedResult",
+      "item_count": 1,
+      "subjects": [
+        "en"
+      ],
+      "omissions": [
+        "indeterminate_object"
+      ]
+    },
+    {
+      "case": "multi-02",
+      "stage": "review",
+      "schema": "QualityReviewResult",
+      "passed": true,
+      "issue_codes": []
+    },
+    {
+      "case": "multi-02",
+      "stage": "match",
+      "schema": "MatchingResult"
+    },
+    {
+      "case": "multi-04",
+      "stage": "extract",
+      "schema": "MaterialResult",
+      "item_count": 3,
+      "subjects": [
+        "en",
+        "math",
+        "zh"
+      ],
+      "needs_context": false,
+      "material_status": "content"
+    },
+    {
+      "case": "multi-04",
+      "stage": "merge",
+      "schema": "ConsolidatedResult",
+      "item_count": 0,
+      "subjects": [],
+      "omissions": [
+        "indeterminate_object",
+        "indeterminate_object",
+        "indeterminate_object"
+      ]
+    },
+    {
+      "case": "multi-04",
+      "stage": "review",
+      "schema": "QualityReviewResult",
+      "passed": true,
+      "issue_codes": []
+    },
+    {
+      "case": "multi-04",
+      "phase": "pipeline_failure",
+      "stage": "review",
+      "unit": "empty_proposal",
+      "reason": "coverage",
+      "diagnostics": []
+    }
+  ],
+  "diagnostic_results": [
+    {
+      "case": "zh-05",
+      "reason": "coverage",
+      "stage": "group",
+      "unit": "m1",
+      "diagnostics": []
+    },
+    {
+      "case": "zh-07",
+      "reason": "quality",
+      "stage": "review",
+      "unit": "review1",
+      "diagnostics": []
+    },
+    {
+      "case": "zh-09",
+      "score": null,
+      "subjects": [
+        "zh"
+      ]
+    },
+    {
+      "case": "multi-01",
+      "reason": "coverage",
+      "stage": "group",
+      "unit": "t",
+      "diagnostics": []
+    },
+    {
+      "case": "multi-02",
+      "score": "subject.mismatch",
+      "subjects": [
+        "en"
+      ]
+    },
+    {
+      "case": "multi-04",
+      "reason": "coverage",
+      "stage": "review",
+      "unit": "empty_proposal",
+      "diagnostics": []
+    }
+  ],
+  "exit_code": 0
+}

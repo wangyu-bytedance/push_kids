@@ -1,0 +1,80 @@
+probe_case_start case=zh-01
+probe_case_start case=math-01
+probe_case_start case=en-01
+probe_case_start case=zh-02
+probe_case_start case=math-02
+probe_case_start case=en-02
+probe_case_start case=zh-03
+probe_case_start case=math-03
+analysis_stage_failed job_id=3bd4aba3-16f7-4c37-abd9-07f344629cf8 attempt=1 reason=provider_timeout revision=staged-20261101-12 stage=match unit=match validation_codes=none
+analysis_job_failed job_id=3bd4aba3-16f7-4c37-abd9-07f344629cf8 attempt=1 max_attempts=3 stage=provider error_type=StageFailure
+analysis_job_requeued job_id=3bd4aba3-16f7-4c37-abd9-07f344629cf8 attempt=1 max_attempts=3 stage=provider retryable=1 reason=provider_timeout error_code=analysis_failed
+probe_case_start case=en-03
+probe_case_start case=multi-01
+analysis_job_failed job_id=5b11fc03-5c76-4bc8-ad3a-e6e842be343a attempt=1 max_attempts=3 stage=provider error_type=StageFailure
+analysis_job_requeued job_id=5b11fc03-5c76-4bc8-ad3a-e6e842be343a attempt=1 max_attempts=3 stage=provider retryable=1 reason=coverage error_code=analysis_output_invalid
+analysis_job_failed job_id=5b11fc03-5c76-4bc8-ad3a-e6e842be343a attempt=2 max_attempts=3 stage=provider error_type=StageFailure
+analysis_job_requeued job_id=5b11fc03-5c76-4bc8-ad3a-e6e842be343a attempt=2 max_attempts=3 stage=provider retryable=1 reason=coverage error_code=analysis_output_invalid
+analysis_job_failed job_id=5b11fc03-5c76-4bc8-ad3a-e6e842be343a attempt=3 max_attempts=3 stage=provider error_type=StageFailure
+analysis_job_terminal_failed job_id=5b11fc03-5c76-4bc8-ad3a-e6e842be343a attempt=3 max_attempts=3 stage=provider retryable=1 reason=coverage error_code=analysis_output_invalid
+probe_case_start case=zh-04
+analysis_stage_failed job_id=28d4daa8-540d-4e4e-a280-cdd723a21534 attempt=1 reason=quality revision=staged-20261101-12 stage=review unit=review1 validation_codes=quality.vague_name
+analysis_job_failed job_id=28d4daa8-540d-4e4e-a280-cdd723a21534 attempt=1 max_attempts=3 stage=provider error_type=StageFailure
+analysis_job_terminal_failed job_id=28d4daa8-540d-4e4e-a280-cdd723a21534 attempt=1 max_attempts=3 stage=provider retryable=0 reason=quality error_code=analysis_output_invalid
+probe_case_start case=math-04
+probe_case_start case=en-04
+probe_case_start case=zh-05
+analysis_job_failed job_id=5b2be720-315a-4a7b-8a84-f68d0c265b77 attempt=1 max_attempts=3 stage=provider error_type=StageFailure
+analysis_job_requeued job_id=5b2be720-315a-4a7b-8a84-f68d0c265b77 attempt=1 max_attempts=3 stage=provider retryable=1 reason=coverage error_code=analysis_output_invalid
+analysis_job_failed job_id=5b2be720-315a-4a7b-8a84-f68d0c265b77 attempt=2 max_attempts=3 stage=provider error_type=StageFailure
+analysis_job_requeued job_id=5b2be720-315a-4a7b-8a84-f68d0c265b77 attempt=2 max_attempts=3 stage=provider retryable=1 reason=coverage error_code=analysis_output_invalid
+analysis_job_failed job_id=5b2be720-315a-4a7b-8a84-f68d0c265b77 attempt=3 max_attempts=3 stage=provider error_type=StageFailure
+analysis_job_terminal_failed job_id=5b2be720-315a-4a7b-8a84-f68d0c265b77 attempt=3 max_attempts=3 stage=provider retryable=1 reason=coverage error_code=analysis_output_invalid
+probe_case_start case=math-05
+probe_case_start case=en-05
+probe_case_start case=zh-06
+probe_case_start case=math-06
+probe_case_start case=en-06
+probe_case_start case=multi-02
+probe_case_start case=zh-07
+analysis_job_failed job_id=ec0f40f7-6d32-4f1d-9646-6f514ab3655c attempt=1 max_attempts=3 stage=provider error_type=StageFailure
+analysis_job_requeued job_id=ec0f40f7-6d32-4f1d-9646-6f514ab3655c attempt=1 max_attempts=3 stage=provider retryable=1 reason=coverage error_code=analysis_output_invalid
+analysis_job_failed job_id=ec0f40f7-6d32-4f1d-9646-6f514ab3655c attempt=2 max_attempts=3 stage=provider error_type=StageFailure
+analysis_job_requeued job_id=ec0f40f7-6d32-4f1d-9646-6f514ab3655c attempt=2 max_attempts=3 stage=provider retryable=1 reason=coverage error_code=analysis_output_invalid
+analysis_job_failed job_id=ec0f40f7-6d32-4f1d-9646-6f514ab3655c attempt=3 max_attempts=3 stage=provider error_type=StageFailure
+analysis_job_terminal_failed job_id=ec0f40f7-6d32-4f1d-9646-6f514ab3655c attempt=3 max_attempts=3 stage=provider retryable=1 reason=coverage error_code=analysis_output_invalid
+probe_case_start case=math-07
+probe_case_start case=en-07
+probe_case_start case=zh-08
+probe_case_start case=math-08
+probe_case_start case=en-08
+probe_case_start case=zh-09
+analysis_job_failed job_id=8c31cf3d-c4cc-4c78-a06b-37b298cbd849 attempt=1 max_attempts=3 stage=provider error_type=StageFailure
+analysis_job_requeued job_id=8c31cf3d-c4cc-4c78-a06b-37b298cbd849 attempt=1 max_attempts=3 stage=provider retryable=1 reason=coverage error_code=analysis_output_invalid
+analysis_job_failed job_id=8c31cf3d-c4cc-4c78-a06b-37b298cbd849 attempt=2 max_attempts=3 stage=provider error_type=StageFailure
+analysis_job_requeued job_id=8c31cf3d-c4cc-4c78-a06b-37b298cbd849 attempt=2 max_attempts=3 stage=provider retryable=1 reason=coverage error_code=analysis_output_invalid
+analysis_job_failed job_id=8c31cf3d-c4cc-4c78-a06b-37b298cbd849 attempt=3 max_attempts=3 stage=provider error_type=StageFailure
+analysis_job_terminal_failed job_id=8c31cf3d-c4cc-4c78-a06b-37b298cbd849 attempt=3 max_attempts=3 stage=provider retryable=1 reason=coverage error_code=analysis_output_invalid
+probe_case_start case=math-09
+probe_case_start case=en-09
+probe_case_start case=multi-03
+probe_case_start case=zh-10
+probe_case_start case=math-10
+probe_case_start case=en-10
+probe_case_start case=zh-11
+probe_case_start case=math-11
+probe_case_start case=en-11
+probe_case_start case=zh-12
+probe_case_start case=math-12
+probe_case_start case=en-12
+analysis_stage_failed job_id=b03ba59c-da20-4a8a-a2e8-13a767183a1f attempt=1 reason=quality revision=staged-20261101-12 stage=review unit=review1 validation_codes=quality.vague_name
+analysis_job_failed job_id=b03ba59c-da20-4a8a-a2e8-13a767183a1f attempt=1 max_attempts=3 stage=provider error_type=StageFailure
+analysis_job_terminal_failed job_id=b03ba59c-da20-4a8a-a2e8-13a767183a1f attempt=1 max_attempts=3 stage=provider retryable=0 reason=quality error_code=analysis_output_invalid
+probe_case_start case=multi-04
+analysis_job_failed job_id=c5f8f6f0-1c08-4e0a-870d-08b83b5c74ea attempt=1 max_attempts=3 stage=provider error_type=StageFailure
+analysis_job_requeued job_id=c5f8f6f0-1c08-4e0a-870d-08b83b5c74ea attempt=1 max_attempts=3 stage=provider retryable=1 reason=coverage error_code=analysis_output_invalid
+analysis_job_failed job_id=c5f8f6f0-1c08-4e0a-870d-08b83b5c74ea attempt=2 max_attempts=3 stage=provider error_type=StageFailure
+analysis_job_requeued job_id=c5f8f6f0-1c08-4e0a-870d-08b83b5c74ea attempt=2 max_attempts=3 stage=provider retryable=1 reason=coverage error_code=analysis_output_invalid
+analysis_job_failed job_id=c5f8f6f0-1c08-4e0a-870d-08b83b5c74ea attempt=3 max_attempts=3 stage=provider error_type=StageFailure
+analysis_job_terminal_failed job_id=c5f8f6f0-1c08-4e0a-870d-08b83b5c74ea attempt=3 max_attempts=3 stage=provider retryable=1 reason=coverage error_code=analysis_output_invalid
+{"status":"failed","case_count":40,"passed":33,"overall_rate":0.825,"end_to_end":{"passed":33,"total":40,"rate":0.825},"operational_failure_count":0,"operational_failure_codes":{},"subject_rates":{"语文":0.6,"数学":0.8667,"英语":0.8667},"subject_semantic":{"语文":{"passed":9,"total":15,"rate":0.6},"数学":{"passed":13,"total":15,"rate":0.8667},"英语":{"passed":13,"total":15,"rate":0.8667}},"empty_pending_count":0,"remaining_pending_count":0,"formal_write_count":0,"failures":[{"case_id":"multi-01","code":"analysis_output_invalid","attempts":3},{"case_id":"zh-04","code":"analysis_output_invalid","attempts":1},{"case_id":"zh-05","code":"analysis_output_invalid","attempts":3},{"case_id":"zh-07","code":"analysis_output_invalid","attempts":3},{"case_id":"zh-09","code":"analysis_output_invalid","attempts":3},{"case_id":"en-12","code":"analysis_output_invalid","attempts":1},{"case_id":"multi-04","code":"analysis_output_invalid","attempts":3}],"pipeline_revision":"staged-20261101-12","model":"doubao-seed-2-1-pro-260628"}

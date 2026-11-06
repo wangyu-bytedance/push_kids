@@ -1,0 +1,14 @@
+{
+  "result": "PASS",
+  "image": "push-kids:bug035-compat-20261031-01",
+  "uid": 10001,
+  "port": 8000,
+  "health": {
+    "live": 200,
+    "ready": 200
+  },
+  "sigterm_exit": 0,
+  "runtime_source_files": 150,
+  "runtime_matches_payload": true,
+  "runtime_mode": "local disposable SQLite/test provider; not cloud business smoke"
+}

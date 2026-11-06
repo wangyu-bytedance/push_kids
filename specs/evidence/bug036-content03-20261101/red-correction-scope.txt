@@ -1,0 +1,1721 @@
+FF.FFFFF                                                                 [100%]
+=================================== FAILURES ===================================
+_______ test_metadata_correction_changes_only_summary_and_uncertainties ________
+
+    def test_metadata_correction_changes_only_summary_and_uncertainties():
+>       result = run(ScopedCorrection(target="q"))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_staged_proposal_recovery.py:315: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_staged_proposal_recovery.py:36: in run
+    return asyncio.run(
+../../.local/share/uv/python/cpython-3.12.11-macos-aarch64-none/lib/python3.12/asyncio/runners.py:195: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+../../.local/share/uv/python/cpython-3.12.11-macos-aarch64-none/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../.local/share/uv/python/cpython-3.12.11-macos-aarch64-none/lib/python3.12/asyncio/base_events.py:691: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <push_kids.agent_processing.pipeline.StagedPipeline object at 0x10cb8c2c0>
+data = AnalysisInput(occurred_at=None, grade=None, text='十以内加法', image_paths=[], todo_candidates=[], existing_subjects=['数学'], analysis_subjects=[], recent_learning=[], existing_knowledge=[], same_day_learning=[])
+search = <function run.<locals>.<lambda> at 0x10cfe3880>
+deadline = 163895.770306666
+
+    async def run(
+        self,
+        data: AnalysisInput,
+        search: Callable[[HistorySearchRequest], list[dict]],
+        deadline: float,
+    ) -> AnalysisProposal:
+        self.calls = 0
+        subjects = set(data.allowed_analysis_subjects())
+        if not subjects or len(data.image_paths) > 9 or not (data.image_paths or data.text):
+            raise StageFailure("input", retryable=False)
+        materials: dict[str, Path] = {}
+        hashes: set[str] = set()
+        for index, path in enumerate(data.image_paths, 1):
+            digest = sha256(path.read_bytes()).hexdigest()
+            if digest not in hashes:
+                materials[f"m{index}"] = path
+                hashes.add(digest)
+        common = {"subjects": sorted(subjects), "grade": data.grade, "parent_text": data.text}
+        semaphore = asyncio.Semaphore(self.provider.concurrency)
+        extraction_deadline = min(deadline, monotonic() + 180)
+    
+        async def extract(alias: str, path: Path | None) -> tuple[str, MaterialResult]:
+            async with semaphore:
+                aliases = {alias}
+                result = await self._call(
+                    "extract",
+                    alias,
+                    EXTRACT_INSTRUCTIONS,
+                    {**common, "materials": [alias]},
+                    MaterialResult,
+                    [(alias, path)] if path is not None else [],
+                    extraction_deadline,
+                    lambda value: self._validate_material(value, aliases, subjects),
+                )
+                return alias, result
+    
+        tasks = [asyncio.create_task(extract(a, p)) for a, p in materials.items()]
+        if data.text and data.text.strip():
+            tasks.append(asyncio.create_task(extract("t", None)))
+        try:
+            # Keep independent successful units even when another fails.
+            results = await asyncio.gather(*tasks, return_exceptions=True)
+        except BaseException:
+            for task in tasks:
+                task.cancel()
+            await asyncio.gather(*tasks, return_exceptions=True)
+            raise
+        for result in results:
+            if isinstance(result, BaseException):
+                raise result
+        extracted = dict(result for result in results if isinstance(result, tuple))
+        pending = [a for a, r in extracted.items() if r.needs_context]
+        groups: list[set[str]] = []
+        ordered = list(materials)
+        for alias in pending:
+            if alias == "t":
+                group = set(ordered[:3]) | {"t"}
+            else:
+                index = ordered.index(alias)
+                group = set(ordered[max(0, index - 1) : index + 2])
+                if "t" in extracted:
+                    group.add("t")
+            if len(group - {"t"}) > 3 or len(group) < 2:
+                raise StageFailure("coverage", stage="group", unit=alias)
+            if not any(group <= existing for existing in groups):
+                groups.append(group)
+        if len(groups) > 2:
+            raise StageFailure("capacity", stage="group", unit="groups")
+        for index, group in enumerate(groups):
+    
+            def validate_group(value: MaterialResult, aliases: set[str] = group) -> None:
+                self._validate_material(value, aliases, subjects)
+                if value.needs_context:
+                    raise StageFailure("coverage")
+                unresolved = {a for a in aliases if extracted[a].needs_context}
+                covered = {a for item in value.items for a in item.materials}
+                if not unresolved <= covered:
+                    raise StageFailure("coverage")
+    
+            enriched = await self._call(
+                "group",
+                f"group{index}",
+                EXTRACT_INSTRUCTIONS,
+                {
+                    **common,
+                    "materials": sorted(group),
+                    "required_materials": sorted(a for a in group if extracted[a].needs_context),
+                    "excerpts": {a: extracted[a].excerpt for a in group},
+                },
+                MaterialResult,
+                [(a, materials[a]) for a in sorted(group) if a in materials],
+                extraction_deadline,
+                validate_group,
+            )
+            # Keep already identified units; consolidation accounts for all candidates.
+            extracted[f"group{index}"] = enriched
+        candidates: dict[str, ExtractedPoint] = {}
+        seen: set[str] = set()
+        for material_result in extracted.values():
+            for extracted_item in material_result.items:
+                digest = fingerprint(extracted_item.model_dump())
+                if digest not in seen:
+                    seen.add(digest)
+                    candidates[f"c{len(candidates) + 1}"] = extracted_item
+        if len(candidates) > 200:
+            raise StageFailure("capacity", stage="extract", unit="materials")
+        source_aliases = set(materials) | ({"t"} if "t" in extracted else set())
+    
+        def validate_merge(value: ConsolidatedResult) -> None:
+            if len(value.model_dump_json().encode("utf-8")) > CONSOLIDATED_MAX_BYTES:
+                raise StageFailure("validation", diagnostics=("stage.fields:byte_limit",))
+            if _model_summary_errors(value.summary) or _has_runtime_uncertainty(
+                value.uncertainties
+            ):
+                raise StageFailure("validation")
+            members = [m for item in value.items for m in item.members] + [
+                m for omission in value.omissions for m in omission.members
+            ]
+            identities = [
+                (item.subject, normalize_knowledge_name(item.name)) for item in value.items
+            ]
+            if len(identities) != len(set(identities)):
+                raise StageFailure("validation")
+            if len(members) != len(set(members)) or set(members) != set(candidates):
+                raise StageFailure("coverage")
+            evidence = {entry.key: entry for entry in value.evidence}
+            if len(evidence) != len(value.evidence) or any(
+                entry.material not in source_aliases or not entry.detail.strip()
+                for entry in value.evidence
+            ):
+                raise StageFailure("validation", diagnostics=("stage.evidence:reference",))
+            for item in value.items:
+                if (
+                    not normalize_knowledge_name(item.name)
+                    or not item.category.strip()
+                    or not item.review_method.strip()
+                ):
+                    raise StageFailure("validation")
+                if (
+                    item.subject not in subjects
+                    or len(item.evidence_keys) != len(set(item.evidence_keys))
+                    or not set(item.evidence_keys) <= evidence.keys()
+                ):
+                    raise StageFailure("validation", diagnostics=("stage.items:reference",))
+            if any(not omission.basis.strip() for omission in value.omissions):
+                raise StageFailure("validation", diagnostics=("stage.omissions.basis:blank",))
+            checks = {check.material: check for check in value.source_checks}
+            if len(checks) != len(value.source_checks) or checks.keys() != source_aliases:
+                raise StageFailure("coverage", diagnostics=("stage.source_checks:reference",))
+            for material, check in checks.items():
+                actual = {
+                    f"i{index}"
+                    for index, item in enumerate(value.items)
+                    if any(evidence[key].material == material for key in item.evidence_keys)
+                }
+                if (
+                    not check.basis.strip()
+                    or len(check.item_aliases) != len(set(check.item_aliases))
+                    or set(check.item_aliases) != actual
+                    or (check.disposition == "covered") != bool(actual)
+                ):
+                    raise StageFailure("validation", diagnostics=("stage.source_checks:reference",))
+    
+        candidate_payload = {k: v.model_dump() for k, v in candidates.items()}
+        source_payload = {
+            **common,
+            "materials": list(materials) + (["t"] if "t" in extracted else []),
+            "excerpts": {a: result.excerpt for a, result in extracted.items()},
+        }
+        source_images = list(materials.items())
+    
+        def review_items(value: ConsolidatedResult) -> dict[str, Any]:
+            return {f"i{index}": item.model_dump() for index, item in enumerate(value.items)}
+    
+        def review_omissions(value: ConsolidatedResult) -> dict[str, Any]:
+            return {f"o{index}": item.model_dump() for index, item in enumerate(value.omissions)}
+    
+        merged = await self._call(
+            "merge",
+            "merge",
+            MERGE_INSTRUCTIONS,
+            {**source_payload, "candidates": candidate_payload},
+            ConsolidatedResult,
+            source_images,
+            deadline,
+            validate_merge,
+        )
+    
+        async def review_quality(
+            value: ConsolidatedResult, *, unit: str, previous_review: dict[str, Any] | None = None
+        ) -> QualityReviewResult:
+            item_aliases = review_items(value).keys()
+            aliases = item_aliases | review_omissions(value).keys() | source_aliases | {"q"}
+    
+            def validate_review(review: QualityReviewResult) -> None:
+                if review.passed != (not review.issues):
+                    raise StageFailure("validation")
+                identities: set[tuple[str, tuple[str, ...]]] = set()
+                for issue in review.issues:
+                    if len(issue.items) != len(set(issue.items)) or not set(issue.items) <= aliases:
+                        raise StageFailure("validation")
+                    if not issue.basis.strip():
+                        raise StageFailure("validation", diagnostics=("stage.issues.basis:blank",))
+                    if issue.code == "should_merge" and (
+                        len(issue.items) < 2 or not set(issue.items) <= item_aliases
+                    ):
+                        raise StageFailure("validation", diagnostics=("stage.issues.items:reference",))
+                    if issue.code == "over_merged" and not set(issue.items) <= item_aliases:
+                        raise StageFailure("validation", diagnostics=("stage.issues.items:reference",))
+                    identity = (issue.code, tuple(sorted(issue.items)))
+                    if identity in identities:
+                        raise StageFailure("validation")
+                    identities.add(identity)
+    
+            return await self._call(
+                "review",
+                unit,
+                REVIEW_INSTRUCTIONS,
+                {
+                    **source_payload,
+                    "candidates": candidate_payload,
+                    "summary": value.summary,
+                    "uncertainties": value.uncertainties,
+                    "evidence": [entry.model_dump() for entry in value.evidence],
+                    "source_checks": [check.model_dump() for check in value.source_checks],
+                    "final_items": review_items(value),
+                    "final_omissions": review_omissions(value),
+                    **({"previous_review": previous_review} if previous_review else {}),
+                },
+                QualityReviewResult,
+                source_images,
+                deadline,
+                validate_review,
+            )
+    
+        quality = await review_quality(merged, unit="review0")
+        if not quality.passed:
+            previous_items, previous_omissions = review_items(merged), review_omissions(merged)
+            previous = {**previous_items, **previous_omissions}
+            affected = {
+                member
+                for issue in quality.issues
+                for alias in issue.items
+>               for member in previous[alias]["members"]
+                              ^^^^^^^^^^^^^^^
+            }
+E           KeyError: 'q'
+
+apps/api/src/push_kids/agent_processing/pipeline.py:466: KeyError
+_______ test_correction_preserves_unaffected_items_and_evidence[item-q] ________
+
+target = 'q', drift = 'item'
+
+    @pytest.mark.parametrize("target", ["q", "i1"])
+    @pytest.mark.parametrize("drift", ["item", "evidence"])
+    def test_correction_preserves_unaffected_items_and_evidence(target, drift):
+        with pytest.raises(StageFailure) as caught:
+>           run(ScopedCorrection(target=target, drift=drift))
+
+tests/unit/test_staged_proposal_recovery.py:324: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_staged_proposal_recovery.py:36: in run
+    return asyncio.run(
+../../.local/share/uv/python/cpython-3.12.11-macos-aarch64-none/lib/python3.12/asyncio/runners.py:195: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+../../.local/share/uv/python/cpython-3.12.11-macos-aarch64-none/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../.local/share/uv/python/cpython-3.12.11-macos-aarch64-none/lib/python3.12/asyncio/base_events.py:691: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <push_kids.agent_processing.pipeline.StagedPipeline object at 0x10cc205f0>
+data = AnalysisInput(occurred_at=None, grade=None, text='十以内加法', image_paths=[], todo_candidates=[], existing_subjects=['数学'], analysis_subjects=[], recent_learning=[], existing_knowledge=[], same_day_learning=[])
+search = <function run.<locals>.<lambda> at 0x10cf1f880>
+deadline = 163895.851700541
+
+    async def run(
+        self,
+        data: AnalysisInput,
+        search: Callable[[HistorySearchRequest], list[dict]],
+        deadline: float,
+    ) -> AnalysisProposal:
+        self.calls = 0
+        subjects = set(data.allowed_analysis_subjects())
+        if not subjects or len(data.image_paths) > 9 or not (data.image_paths or data.text):
+            raise StageFailure("input", retryable=False)
+        materials: dict[str, Path] = {}
+        hashes: set[str] = set()
+        for index, path in enumerate(data.image_paths, 1):
+            digest = sha256(path.read_bytes()).hexdigest()
+            if digest not in hashes:
+                materials[f"m{index}"] = path
+                hashes.add(digest)
+        common = {"subjects": sorted(subjects), "grade": data.grade, "parent_text": data.text}
+        semaphore = asyncio.Semaphore(self.provider.concurrency)
+        extraction_deadline = min(deadline, monotonic() + 180)
+    
+        async def extract(alias: str, path: Path | None) -> tuple[str, MaterialResult]:
+            async with semaphore:
+                aliases = {alias}
+                result = await self._call(
+                    "extract",
+                    alias,
+                    EXTRACT_INSTRUCTIONS,
+                    {**common, "materials": [alias]},
+                    MaterialResult,
+                    [(alias, path)] if path is not None else [],
+                    extraction_deadline,
+                    lambda value: self._validate_material(value, aliases, subjects),
+                )
+                return alias, result
+    
+        tasks = [asyncio.create_task(extract(a, p)) for a, p in materials.items()]
+        if data.text and data.text.strip():
+            tasks.append(asyncio.create_task(extract("t", None)))
+        try:
+            # Keep independent successful units even when another fails.
+            results = await asyncio.gather(*tasks, return_exceptions=True)
+        except BaseException:
+            for task in tasks:
+                task.cancel()
+            await asyncio.gather(*tasks, return_exceptions=True)
+            raise
+        for result in results:
+            if isinstance(result, BaseException):
+                raise result
+        extracted = dict(result for result in results if isinstance(result, tuple))
+        pending = [a for a, r in extracted.items() if r.needs_context]
+        groups: list[set[str]] = []
+        ordered = list(materials)
+        for alias in pending:
+            if alias == "t":
+                group = set(ordered[:3]) | {"t"}
+            else:
+                index = ordered.index(alias)
+                group = set(ordered[max(0, index - 1) : index + 2])
+                if "t" in extracted:
+                    group.add("t")
+            if len(group - {"t"}) > 3 or len(group) < 2:
+                raise StageFailure("coverage", stage="group", unit=alias)
+            if not any(group <= existing for existing in groups):
+                groups.append(group)
+        if len(groups) > 2:
+            raise StageFailure("capacity", stage="group", unit="groups")
+        for index, group in enumerate(groups):
+    
+            def validate_group(value: MaterialResult, aliases: set[str] = group) -> None:
+                self._validate_material(value, aliases, subjects)
+                if value.needs_context:
+                    raise StageFailure("coverage")
+                unresolved = {a for a in aliases if extracted[a].needs_context}
+                covered = {a for item in value.items for a in item.materials}
+                if not unresolved <= covered:
+                    raise StageFailure("coverage")
+    
+            enriched = await self._call(
+                "group",
+                f"group{index}",
+                EXTRACT_INSTRUCTIONS,
+                {
+                    **common,
+                    "materials": sorted(group),
+                    "required_materials": sorted(a for a in group if extracted[a].needs_context),
+                    "excerpts": {a: extracted[a].excerpt for a in group},
+                },
+                MaterialResult,
+                [(a, materials[a]) for a in sorted(group) if a in materials],
+                extraction_deadline,
+                validate_group,
+            )
+            # Keep already identified units; consolidation accounts for all candidates.
+            extracted[f"group{index}"] = enriched
+        candidates: dict[str, ExtractedPoint] = {}
+        seen: set[str] = set()
+        for material_result in extracted.values():
+            for extracted_item in material_result.items:
+                digest = fingerprint(extracted_item.model_dump())
+                if digest not in seen:
+                    seen.add(digest)
+                    candidates[f"c{len(candidates) + 1}"] = extracted_item
+        if len(candidates) > 200:
+            raise StageFailure("capacity", stage="extract", unit="materials")
+        source_aliases = set(materials) | ({"t"} if "t" in extracted else set())
+    
+        def validate_merge(value: ConsolidatedResult) -> None:
+            if len(value.model_dump_json().encode("utf-8")) > CONSOLIDATED_MAX_BYTES:
+                raise StageFailure("validation", diagnostics=("stage.fields:byte_limit",))
+            if _model_summary_errors(value.summary) or _has_runtime_uncertainty(
+                value.uncertainties
+            ):
+                raise StageFailure("validation")
+            members = [m for item in value.items for m in item.members] + [
+                m for omission in value.omissions for m in omission.members
+            ]
+            identities = [
+                (item.subject, normalize_knowledge_name(item.name)) for item in value.items
+            ]
+            if len(identities) != len(set(identities)):
+                raise StageFailure("validation")
+            if len(members) != len(set(members)) or set(members) != set(candidates):
+                raise StageFailure("coverage")
+            evidence = {entry.key: entry for entry in value.evidence}
+            if len(evidence) != len(value.evidence) or any(
+                entry.material not in source_aliases or not entry.detail.strip()
+                for entry in value.evidence
+            ):
+                raise StageFailure("validation", diagnostics=("stage.evidence:reference",))
+            for item in value.items:
+                if (
+                    not normalize_knowledge_name(item.name)
+                    or not item.category.strip()
+                    or not item.review_method.strip()
+                ):
+                    raise StageFailure("validation")
+                if (
+                    item.subject not in subjects
+                    or len(item.evidence_keys) != len(set(item.evidence_keys))
+                    or not set(item.evidence_keys) <= evidence.keys()
+                ):
+                    raise StageFailure("validation", diagnostics=("stage.items:reference",))
+            if any(not omission.basis.strip() for omission in value.omissions):
+                raise StageFailure("validation", diagnostics=("stage.omissions.basis:blank",))
+            checks = {check.material: check for check in value.source_checks}
+            if len(checks) != len(value.source_checks) or checks.keys() != source_aliases:
+                raise StageFailure("coverage", diagnostics=("stage.source_checks:reference",))
+            for material, check in checks.items():
+                actual = {
+                    f"i{index}"
+                    for index, item in enumerate(value.items)
+                    if any(evidence[key].material == material for key in item.evidence_keys)
+                }
+                if (
+                    not check.basis.strip()
+                    or len(check.item_aliases) != len(set(check.item_aliases))
+                    or set(check.item_aliases) != actual
+                    or (check.disposition == "covered") != bool(actual)
+                ):
+                    raise StageFailure("validation", diagnostics=("stage.source_checks:reference",))
+    
+        candidate_payload = {k: v.model_dump() for k, v in candidates.items()}
+        source_payload = {
+            **common,
+            "materials": list(materials) + (["t"] if "t" in extracted else []),
+            "excerpts": {a: result.excerpt for a, result in extracted.items()},
+        }
+        source_images = list(materials.items())
+    
+        def review_items(value: ConsolidatedResult) -> dict[str, Any]:
+            return {f"i{index}": item.model_dump() for index, item in enumerate(value.items)}
+    
+        def review_omissions(value: ConsolidatedResult) -> dict[str, Any]:
+            return {f"o{index}": item.model_dump() for index, item in enumerate(value.omissions)}
+    
+        merged = await self._call(
+            "merge",
+            "merge",
+            MERGE_INSTRUCTIONS,
+            {**source_payload, "candidates": candidate_payload},
+            ConsolidatedResult,
+            source_images,
+            deadline,
+            validate_merge,
+        )
+    
+        async def review_quality(
+            value: ConsolidatedResult, *, unit: str, previous_review: dict[str, Any] | None = None
+        ) -> QualityReviewResult:
+            item_aliases = review_items(value).keys()
+            aliases = item_aliases | review_omissions(value).keys() | source_aliases | {"q"}
+    
+            def validate_review(review: QualityReviewResult) -> None:
+                if review.passed != (not review.issues):
+                    raise StageFailure("validation")
+                identities: set[tuple[str, tuple[str, ...]]] = set()
+                for issue in review.issues:
+                    if len(issue.items) != len(set(issue.items)) or not set(issue.items) <= aliases:
+                        raise StageFailure("validation")
+                    if not issue.basis.strip():
+                        raise StageFailure("validation", diagnostics=("stage.issues.basis:blank",))
+                    if issue.code == "should_merge" and (
+                        len(issue.items) < 2 or not set(issue.items) <= item_aliases
+                    ):
+                        raise StageFailure("validation", diagnostics=("stage.issues.items:reference",))
+                    if issue.code == "over_merged" and not set(issue.items) <= item_aliases:
+                        raise StageFailure("validation", diagnostics=("stage.issues.items:reference",))
+                    identity = (issue.code, tuple(sorted(issue.items)))
+                    if identity in identities:
+                        raise StageFailure("validation")
+                    identities.add(identity)
+    
+            return await self._call(
+                "review",
+                unit,
+                REVIEW_INSTRUCTIONS,
+                {
+                    **source_payload,
+                    "candidates": candidate_payload,
+                    "summary": value.summary,
+                    "uncertainties": value.uncertainties,
+                    "evidence": [entry.model_dump() for entry in value.evidence],
+                    "source_checks": [check.model_dump() for check in value.source_checks],
+                    "final_items": review_items(value),
+                    "final_omissions": review_omissions(value),
+                    **({"previous_review": previous_review} if previous_review else {}),
+                },
+                QualityReviewResult,
+                source_images,
+                deadline,
+                validate_review,
+            )
+    
+        quality = await review_quality(merged, unit="review0")
+        if not quality.passed:
+            previous_items, previous_omissions = review_items(merged), review_omissions(merged)
+            previous = {**previous_items, **previous_omissions}
+            affected = {
+                member
+                for issue in quality.issues
+                for alias in issue.items
+>               for member in previous[alias]["members"]
+                              ^^^^^^^^^^^^^^^
+            }
+E           KeyError: 'q'
+
+apps/api/src/push_kids/agent_processing/pipeline.py:466: KeyError
+_____ test_correction_preserves_unaffected_items_and_evidence[evidence-q] ______
+
+target = 'q', drift = 'evidence'
+
+    @pytest.mark.parametrize("target", ["q", "i1"])
+    @pytest.mark.parametrize("drift", ["item", "evidence"])
+    def test_correction_preserves_unaffected_items_and_evidence(target, drift):
+        with pytest.raises(StageFailure) as caught:
+>           run(ScopedCorrection(target=target, drift=drift))
+
+tests/unit/test_staged_proposal_recovery.py:324: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_staged_proposal_recovery.py:36: in run
+    return asyncio.run(
+../../.local/share/uv/python/cpython-3.12.11-macos-aarch64-none/lib/python3.12/asyncio/runners.py:195: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+../../.local/share/uv/python/cpython-3.12.11-macos-aarch64-none/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../.local/share/uv/python/cpython-3.12.11-macos-aarch64-none/lib/python3.12/asyncio/base_events.py:691: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <push_kids.agent_processing.pipeline.StagedPipeline object at 0x10cc22f00>
+data = AnalysisInput(occurred_at=None, grade=None, text='十以内加法', image_paths=[], todo_candidates=[], existing_subjects=['数学'], analysis_subjects=[], recent_learning=[], existing_knowledge=[], same_day_learning=[])
+search = <function run.<locals>.<lambda> at 0x10cea0360>
+deadline = 163895.886068833
+
+    async def run(
+        self,
+        data: AnalysisInput,
+        search: Callable[[HistorySearchRequest], list[dict]],
+        deadline: float,
+    ) -> AnalysisProposal:
+        self.calls = 0
+        subjects = set(data.allowed_analysis_subjects())
+        if not subjects or len(data.image_paths) > 9 or not (data.image_paths or data.text):
+            raise StageFailure("input", retryable=False)
+        materials: dict[str, Path] = {}
+        hashes: set[str] = set()
+        for index, path in enumerate(data.image_paths, 1):
+            digest = sha256(path.read_bytes()).hexdigest()
+            if digest not in hashes:
+                materials[f"m{index}"] = path
+                hashes.add(digest)
+        common = {"subjects": sorted(subjects), "grade": data.grade, "parent_text": data.text}
+        semaphore = asyncio.Semaphore(self.provider.concurrency)
+        extraction_deadline = min(deadline, monotonic() + 180)
+    
+        async def extract(alias: str, path: Path | None) -> tuple[str, MaterialResult]:
+            async with semaphore:
+                aliases = {alias}
+                result = await self._call(
+                    "extract",
+                    alias,
+                    EXTRACT_INSTRUCTIONS,
+                    {**common, "materials": [alias]},
+                    MaterialResult,
+                    [(alias, path)] if path is not None else [],
+                    extraction_deadline,
+                    lambda value: self._validate_material(value, aliases, subjects),
+                )
+                return alias, result
+    
+        tasks = [asyncio.create_task(extract(a, p)) for a, p in materials.items()]
+        if data.text and data.text.strip():
+            tasks.append(asyncio.create_task(extract("t", None)))
+        try:
+            # Keep independent successful units even when another fails.
+            results = await asyncio.gather(*tasks, return_exceptions=True)
+        except BaseException:
+            for task in tasks:
+                task.cancel()
+            await asyncio.gather(*tasks, return_exceptions=True)
+            raise
+        for result in results:
+            if isinstance(result, BaseException):
+                raise result
+        extracted = dict(result for result in results if isinstance(result, tuple))
+        pending = [a for a, r in extracted.items() if r.needs_context]
+        groups: list[set[str]] = []
+        ordered = list(materials)
+        for alias in pending:
+            if alias == "t":
+                group = set(ordered[:3]) | {"t"}
+            else:
+                index = ordered.index(alias)
+                group = set(ordered[max(0, index - 1) : index + 2])
+                if "t" in extracted:
+                    group.add("t")
+            if len(group - {"t"}) > 3 or len(group) < 2:
+                raise StageFailure("coverage", stage="group", unit=alias)
+            if not any(group <= existing for existing in groups):
+                groups.append(group)
+        if len(groups) > 2:
+            raise StageFailure("capacity", stage="group", unit="groups")
+        for index, group in enumerate(groups):
+    
+            def validate_group(value: MaterialResult, aliases: set[str] = group) -> None:
+                self._validate_material(value, aliases, subjects)
+                if value.needs_context:
+                    raise StageFailure("coverage")
+                unresolved = {a for a in aliases if extracted[a].needs_context}
+                covered = {a for item in value.items for a in item.materials}
+                if not unresolved <= covered:
+                    raise StageFailure("coverage")
+    
+            enriched = await self._call(
+                "group",
+                f"group{index}",
+                EXTRACT_INSTRUCTIONS,
+                {
+                    **common,
+                    "materials": sorted(group),
+                    "required_materials": sorted(a for a in group if extracted[a].needs_context),
+                    "excerpts": {a: extracted[a].excerpt for a in group},
+                },
+                MaterialResult,
+                [(a, materials[a]) for a in sorted(group) if a in materials],
+                extraction_deadline,
+                validate_group,
+            )
+            # Keep already identified units; consolidation accounts for all candidates.
+            extracted[f"group{index}"] = enriched
+        candidates: dict[str, ExtractedPoint] = {}
+        seen: set[str] = set()
+        for material_result in extracted.values():
+            for extracted_item in material_result.items:
+                digest = fingerprint(extracted_item.model_dump())
+                if digest not in seen:
+                    seen.add(digest)
+                    candidates[f"c{len(candidates) + 1}"] = extracted_item
+        if len(candidates) > 200:
+            raise StageFailure("capacity", stage="extract", unit="materials")
+        source_aliases = set(materials) | ({"t"} if "t" in extracted else set())
+    
+        def validate_merge(value: ConsolidatedResult) -> None:
+            if len(value.model_dump_json().encode("utf-8")) > CONSOLIDATED_MAX_BYTES:
+                raise StageFailure("validation", diagnostics=("stage.fields:byte_limit",))
+            if _model_summary_errors(value.summary) or _has_runtime_uncertainty(
+                value.uncertainties
+            ):
+                raise StageFailure("validation")
+            members = [m for item in value.items for m in item.members] + [
+                m for omission in value.omissions for m in omission.members
+            ]
+            identities = [
+                (item.subject, normalize_knowledge_name(item.name)) for item in value.items
+            ]
+            if len(identities) != len(set(identities)):
+                raise StageFailure("validation")
+            if len(members) != len(set(members)) or set(members) != set(candidates):
+                raise StageFailure("coverage")
+            evidence = {entry.key: entry for entry in value.evidence}
+            if len(evidence) != len(value.evidence) or any(
+                entry.material not in source_aliases or not entry.detail.strip()
+                for entry in value.evidence
+            ):
+                raise StageFailure("validation", diagnostics=("stage.evidence:reference",))
+            for item in value.items:
+                if (
+                    not normalize_knowledge_name(item.name)
+                    or not item.category.strip()
+                    or not item.review_method.strip()
+                ):
+                    raise StageFailure("validation")
+                if (
+                    item.subject not in subjects
+                    or len(item.evidence_keys) != len(set(item.evidence_keys))
+                    or not set(item.evidence_keys) <= evidence.keys()
+                ):
+                    raise StageFailure("validation", diagnostics=("stage.items:reference",))
+            if any(not omission.basis.strip() for omission in value.omissions):
+                raise StageFailure("validation", diagnostics=("stage.omissions.basis:blank",))
+            checks = {check.material: check for check in value.source_checks}
+            if len(checks) != len(value.source_checks) or checks.keys() != source_aliases:
+                raise StageFailure("coverage", diagnostics=("stage.source_checks:reference",))
+            for material, check in checks.items():
+                actual = {
+                    f"i{index}"
+                    for index, item in enumerate(value.items)
+                    if any(evidence[key].material == material for key in item.evidence_keys)
+                }
+                if (
+                    not check.basis.strip()
+                    or len(check.item_aliases) != len(set(check.item_aliases))
+                    or set(check.item_aliases) != actual
+                    or (check.disposition == "covered") != bool(actual)
+                ):
+                    raise StageFailure("validation", diagnostics=("stage.source_checks:reference",))
+    
+        candidate_payload = {k: v.model_dump() for k, v in candidates.items()}
+        source_payload = {
+            **common,
+            "materials": list(materials) + (["t"] if "t" in extracted else []),
+            "excerpts": {a: result.excerpt for a, result in extracted.items()},
+        }
+        source_images = list(materials.items())
+    
+        def review_items(value: ConsolidatedResult) -> dict[str, Any]:
+            return {f"i{index}": item.model_dump() for index, item in enumerate(value.items)}
+    
+        def review_omissions(value: ConsolidatedResult) -> dict[str, Any]:
+            return {f"o{index}": item.model_dump() for index, item in enumerate(value.omissions)}
+    
+        merged = await self._call(
+            "merge",
+            "merge",
+            MERGE_INSTRUCTIONS,
+            {**source_payload, "candidates": candidate_payload},
+            ConsolidatedResult,
+            source_images,
+            deadline,
+            validate_merge,
+        )
+    
+        async def review_quality(
+            value: ConsolidatedResult, *, unit: str, previous_review: dict[str, Any] | None = None
+        ) -> QualityReviewResult:
+            item_aliases = review_items(value).keys()
+            aliases = item_aliases | review_omissions(value).keys() | source_aliases | {"q"}
+    
+            def validate_review(review: QualityReviewResult) -> None:
+                if review.passed != (not review.issues):
+                    raise StageFailure("validation")
+                identities: set[tuple[str, tuple[str, ...]]] = set()
+                for issue in review.issues:
+                    if len(issue.items) != len(set(issue.items)) or not set(issue.items) <= aliases:
+                        raise StageFailure("validation")
+                    if not issue.basis.strip():
+                        raise StageFailure("validation", diagnostics=("stage.issues.basis:blank",))
+                    if issue.code == "should_merge" and (
+                        len(issue.items) < 2 or not set(issue.items) <= item_aliases
+                    ):
+                        raise StageFailure("validation", diagnostics=("stage.issues.items:reference",))
+                    if issue.code == "over_merged" and not set(issue.items) <= item_aliases:
+                        raise StageFailure("validation", diagnostics=("stage.issues.items:reference",))
+                    identity = (issue.code, tuple(sorted(issue.items)))
+                    if identity in identities:
+                        raise StageFailure("validation")
+                    identities.add(identity)
+    
+            return await self._call(
+                "review",
+                unit,
+                REVIEW_INSTRUCTIONS,
+                {
+                    **source_payload,
+                    "candidates": candidate_payload,
+                    "summary": value.summary,
+                    "uncertainties": value.uncertainties,
+                    "evidence": [entry.model_dump() for entry in value.evidence],
+                    "source_checks": [check.model_dump() for check in value.source_checks],
+                    "final_items": review_items(value),
+                    "final_omissions": review_omissions(value),
+                    **({"previous_review": previous_review} if previous_review else {}),
+                },
+                QualityReviewResult,
+                source_images,
+                deadline,
+                validate_review,
+            )
+    
+        quality = await review_quality(merged, unit="review0")
+        if not quality.passed:
+            previous_items, previous_omissions = review_items(merged), review_omissions(merged)
+            previous = {**previous_items, **previous_omissions}
+            affected = {
+                member
+                for issue in quality.issues
+                for alias in issue.items
+>               for member in previous[alias]["members"]
+                              ^^^^^^^^^^^^^^^
+            }
+E           KeyError: 'q'
+
+apps/api/src/push_kids/agent_processing/pipeline.py:466: KeyError
+_____ test_correction_preserves_unaffected_items_and_evidence[evidence-i1] _____
+
+target = 'i1', drift = 'evidence'
+
+    @pytest.mark.parametrize("target", ["q", "i1"])
+    @pytest.mark.parametrize("drift", ["item", "evidence"])
+    def test_correction_preserves_unaffected_items_and_evidence(target, drift):
+>       with pytest.raises(StageFailure) as caught:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'push_kids.agent_processing.failures.StageFailure'>
+
+tests/unit/test_staged_proposal_recovery.py:323: Failed
+________ test_material_issue_cannot_change_another_sources_target[None] ________
+
+tmp_path = PosixPath('/private/var/folders/hq/l74_1q417nbdffshwhtw79640000gn/T/pytest-of-bytedance/pytest-88/test_material_issue_cannot_cha0')
+drift = None
+
+    @pytest.mark.parametrize("drift", [None, "item", "evidence"])
+    def test_material_issue_cannot_change_another_sources_target(tmp_path, drift):
+        images = [tmp_path / "one.png", tmp_path / "two.png"]
+        for index, path in enumerate(images):
+            path.write_bytes(f"source-{index}".encode())
+        data = AnalysisInput(image_paths=images, existing_subjects=["数学"])
+        provider = ScopedCorrection(target="m2", drift=drift)
+        if drift:
+            with pytest.raises(StageFailure) as caught:
+                run(provider, data)
+            assert caught.value.reason == "validation" and caught.value.stage == "merge"
+        else:
+>           assert len(run(provider, data).knowledge_points) == 2
+                       ^^^^^^^^^^^^^^^^^^^
+
+tests/unit/test_staged_proposal_recovery.py:340: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_staged_proposal_recovery.py:36: in run
+    return asyncio.run(
+../../.local/share/uv/python/cpython-3.12.11-macos-aarch64-none/lib/python3.12/asyncio/runners.py:195: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+../../.local/share/uv/python/cpython-3.12.11-macos-aarch64-none/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../.local/share/uv/python/cpython-3.12.11-macos-aarch64-none/lib/python3.12/asyncio/base_events.py:691: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <push_kids.agent_processing.pipeline.StagedPipeline object at 0x10cc4f1d0>
+data = AnalysisInput(occurred_at=None, grade=None, text=None, image_paths=[PosixPath('/private/var/folders/hq/l74_1q417nbdffs...es=[], existing_subjects=['数学'], analysis_subjects=[], recent_learning=[], existing_knowledge=[], same_day_learning=[])
+search = <function run.<locals>.<lambda> at 0x10af7b240>
+deadline = 163895.958504541
+
+    async def run(
+        self,
+        data: AnalysisInput,
+        search: Callable[[HistorySearchRequest], list[dict]],
+        deadline: float,
+    ) -> AnalysisProposal:
+        self.calls = 0
+        subjects = set(data.allowed_analysis_subjects())
+        if not subjects or len(data.image_paths) > 9 or not (data.image_paths or data.text):
+            raise StageFailure("input", retryable=False)
+        materials: dict[str, Path] = {}
+        hashes: set[str] = set()
+        for index, path in enumerate(data.image_paths, 1):
+            digest = sha256(path.read_bytes()).hexdigest()
+            if digest not in hashes:
+                materials[f"m{index}"] = path
+                hashes.add(digest)
+        common = {"subjects": sorted(subjects), "grade": data.grade, "parent_text": data.text}
+        semaphore = asyncio.Semaphore(self.provider.concurrency)
+        extraction_deadline = min(deadline, monotonic() + 180)
+    
+        async def extract(alias: str, path: Path | None) -> tuple[str, MaterialResult]:
+            async with semaphore:
+                aliases = {alias}
+                result = await self._call(
+                    "extract",
+                    alias,
+                    EXTRACT_INSTRUCTIONS,
+                    {**common, "materials": [alias]},
+                    MaterialResult,
+                    [(alias, path)] if path is not None else [],
+                    extraction_deadline,
+                    lambda value: self._validate_material(value, aliases, subjects),
+                )
+                return alias, result
+    
+        tasks = [asyncio.create_task(extract(a, p)) for a, p in materials.items()]
+        if data.text and data.text.strip():
+            tasks.append(asyncio.create_task(extract("t", None)))
+        try:
+            # Keep independent successful units even when another fails.
+            results = await asyncio.gather(*tasks, return_exceptions=True)
+        except BaseException:
+            for task in tasks:
+                task.cancel()
+            await asyncio.gather(*tasks, return_exceptions=True)
+            raise
+        for result in results:
+            if isinstance(result, BaseException):
+                raise result
+        extracted = dict(result for result in results if isinstance(result, tuple))
+        pending = [a for a, r in extracted.items() if r.needs_context]
+        groups: list[set[str]] = []
+        ordered = list(materials)
+        for alias in pending:
+            if alias == "t":
+                group = set(ordered[:3]) | {"t"}
+            else:
+                index = ordered.index(alias)
+                group = set(ordered[max(0, index - 1) : index + 2])
+                if "t" in extracted:
+                    group.add("t")
+            if len(group - {"t"}) > 3 or len(group) < 2:
+                raise StageFailure("coverage", stage="group", unit=alias)
+            if not any(group <= existing for existing in groups):
+                groups.append(group)
+        if len(groups) > 2:
+            raise StageFailure("capacity", stage="group", unit="groups")
+        for index, group in enumerate(groups):
+    
+            def validate_group(value: MaterialResult, aliases: set[str] = group) -> None:
+                self._validate_material(value, aliases, subjects)
+                if value.needs_context:
+                    raise StageFailure("coverage")
+                unresolved = {a for a in aliases if extracted[a].needs_context}
+                covered = {a for item in value.items for a in item.materials}
+                if not unresolved <= covered:
+                    raise StageFailure("coverage")
+    
+            enriched = await self._call(
+                "group",
+                f"group{index}",
+                EXTRACT_INSTRUCTIONS,
+                {
+                    **common,
+                    "materials": sorted(group),
+                    "required_materials": sorted(a for a in group if extracted[a].needs_context),
+                    "excerpts": {a: extracted[a].excerpt for a in group},
+                },
+                MaterialResult,
+                [(a, materials[a]) for a in sorted(group) if a in materials],
+                extraction_deadline,
+                validate_group,
+            )
+            # Keep already identified units; consolidation accounts for all candidates.
+            extracted[f"group{index}"] = enriched
+        candidates: dict[str, ExtractedPoint] = {}
+        seen: set[str] = set()
+        for material_result in extracted.values():
+            for extracted_item in material_result.items:
+                digest = fingerprint(extracted_item.model_dump())
+                if digest not in seen:
+                    seen.add(digest)
+                    candidates[f"c{len(candidates) + 1}"] = extracted_item
+        if len(candidates) > 200:
+            raise StageFailure("capacity", stage="extract", unit="materials")
+        source_aliases = set(materials) | ({"t"} if "t" in extracted else set())
+    
+        def validate_merge(value: ConsolidatedResult) -> None:
+            if len(value.model_dump_json().encode("utf-8")) > CONSOLIDATED_MAX_BYTES:
+                raise StageFailure("validation", diagnostics=("stage.fields:byte_limit",))
+            if _model_summary_errors(value.summary) or _has_runtime_uncertainty(
+                value.uncertainties
+            ):
+                raise StageFailure("validation")
+            members = [m for item in value.items for m in item.members] + [
+                m for omission in value.omissions for m in omission.members
+            ]
+            identities = [
+                (item.subject, normalize_knowledge_name(item.name)) for item in value.items
+            ]
+            if len(identities) != len(set(identities)):
+                raise StageFailure("validation")
+            if len(members) != len(set(members)) or set(members) != set(candidates):
+                raise StageFailure("coverage")
+            evidence = {entry.key: entry for entry in value.evidence}
+            if len(evidence) != len(value.evidence) or any(
+                entry.material not in source_aliases or not entry.detail.strip()
+                for entry in value.evidence
+            ):
+                raise StageFailure("validation", diagnostics=("stage.evidence:reference",))
+            for item in value.items:
+                if (
+                    not normalize_knowledge_name(item.name)
+                    or not item.category.strip()
+                    or not item.review_method.strip()
+                ):
+                    raise StageFailure("validation")
+                if (
+                    item.subject not in subjects
+                    or len(item.evidence_keys) != len(set(item.evidence_keys))
+                    or not set(item.evidence_keys) <= evidence.keys()
+                ):
+                    raise StageFailure("validation", diagnostics=("stage.items:reference",))
+            if any(not omission.basis.strip() for omission in value.omissions):
+                raise StageFailure("validation", diagnostics=("stage.omissions.basis:blank",))
+            checks = {check.material: check for check in value.source_checks}
+            if len(checks) != len(value.source_checks) or checks.keys() != source_aliases:
+                raise StageFailure("coverage", diagnostics=("stage.source_checks:reference",))
+            for material, check in checks.items():
+                actual = {
+                    f"i{index}"
+                    for index, item in enumerate(value.items)
+                    if any(evidence[key].material == material for key in item.evidence_keys)
+                }
+                if (
+                    not check.basis.strip()
+                    or len(check.item_aliases) != len(set(check.item_aliases))
+                    or set(check.item_aliases) != actual
+                    or (check.disposition == "covered") != bool(actual)
+                ):
+                    raise StageFailure("validation", diagnostics=("stage.source_checks:reference",))
+    
+        candidate_payload = {k: v.model_dump() for k, v in candidates.items()}
+        source_payload = {
+            **common,
+            "materials": list(materials) + (["t"] if "t" in extracted else []),
+            "excerpts": {a: result.excerpt for a, result in extracted.items()},
+        }
+        source_images = list(materials.items())
+    
+        def review_items(value: ConsolidatedResult) -> dict[str, Any]:
+            return {f"i{index}": item.model_dump() for index, item in enumerate(value.items)}
+    
+        def review_omissions(value: ConsolidatedResult) -> dict[str, Any]:
+            return {f"o{index}": item.model_dump() for index, item in enumerate(value.omissions)}
+    
+        merged = await self._call(
+            "merge",
+            "merge",
+            MERGE_INSTRUCTIONS,
+            {**source_payload, "candidates": candidate_payload},
+            ConsolidatedResult,
+            source_images,
+            deadline,
+            validate_merge,
+        )
+    
+        async def review_quality(
+            value: ConsolidatedResult, *, unit: str, previous_review: dict[str, Any] | None = None
+        ) -> QualityReviewResult:
+            item_aliases = review_items(value).keys()
+            aliases = item_aliases | review_omissions(value).keys() | source_aliases | {"q"}
+    
+            def validate_review(review: QualityReviewResult) -> None:
+                if review.passed != (not review.issues):
+                    raise StageFailure("validation")
+                identities: set[tuple[str, tuple[str, ...]]] = set()
+                for issue in review.issues:
+                    if len(issue.items) != len(set(issue.items)) or not set(issue.items) <= aliases:
+                        raise StageFailure("validation")
+                    if not issue.basis.strip():
+                        raise StageFailure("validation", diagnostics=("stage.issues.basis:blank",))
+                    if issue.code == "should_merge" and (
+                        len(issue.items) < 2 or not set(issue.items) <= item_aliases
+                    ):
+                        raise StageFailure("validation", diagnostics=("stage.issues.items:reference",))
+                    if issue.code == "over_merged" and not set(issue.items) <= item_aliases:
+                        raise StageFailure("validation", diagnostics=("stage.issues.items:reference",))
+                    identity = (issue.code, tuple(sorted(issue.items)))
+                    if identity in identities:
+                        raise StageFailure("validation")
+                    identities.add(identity)
+    
+            return await self._call(
+                "review",
+                unit,
+                REVIEW_INSTRUCTIONS,
+                {
+                    **source_payload,
+                    "candidates": candidate_payload,
+                    "summary": value.summary,
+                    "uncertainties": value.uncertainties,
+                    "evidence": [entry.model_dump() for entry in value.evidence],
+                    "source_checks": [check.model_dump() for check in value.source_checks],
+                    "final_items": review_items(value),
+                    "final_omissions": review_omissions(value),
+                    **({"previous_review": previous_review} if previous_review else {}),
+                },
+                QualityReviewResult,
+                source_images,
+                deadline,
+                validate_review,
+            )
+    
+        quality = await review_quality(merged, unit="review0")
+        if not quality.passed:
+            previous_items, previous_omissions = review_items(merged), review_omissions(merged)
+            previous = {**previous_items, **previous_omissions}
+            affected = {
+                member
+                for issue in quality.issues
+                for alias in issue.items
+>               for member in previous[alias]["members"]
+                              ^^^^^^^^^^^^^^^
+            }
+E           KeyError: 'm2'
+
+apps/api/src/push_kids/agent_processing/pipeline.py:466: KeyError
+________ test_material_issue_cannot_change_another_sources_target[item] ________
+
+tmp_path = PosixPath('/private/var/folders/hq/l74_1q417nbdffshwhtw79640000gn/T/pytest-of-bytedance/pytest-88/test_material_issue_cannot_cha1')
+drift = 'item'
+
+    @pytest.mark.parametrize("drift", [None, "item", "evidence"])
+    def test_material_issue_cannot_change_another_sources_target(tmp_path, drift):
+        images = [tmp_path / "one.png", tmp_path / "two.png"]
+        for index, path in enumerate(images):
+            path.write_bytes(f"source-{index}".encode())
+        data = AnalysisInput(image_paths=images, existing_subjects=["数学"])
+        provider = ScopedCorrection(target="m2", drift=drift)
+        if drift:
+            with pytest.raises(StageFailure) as caught:
+>               run(provider, data)
+
+tests/unit/test_staged_proposal_recovery.py:337: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_staged_proposal_recovery.py:36: in run
+    return asyncio.run(
+../../.local/share/uv/python/cpython-3.12.11-macos-aarch64-none/lib/python3.12/asyncio/runners.py:195: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+../../.local/share/uv/python/cpython-3.12.11-macos-aarch64-none/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../.local/share/uv/python/cpython-3.12.11-macos-aarch64-none/lib/python3.12/asyncio/base_events.py:691: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <push_kids.agent_processing.pipeline.StagedPipeline object at 0x10cc4f380>
+data = AnalysisInput(occurred_at=None, grade=None, text=None, image_paths=[PosixPath('/private/var/folders/hq/l74_1q417nbdffs...es=[], existing_subjects=['数学'], analysis_subjects=[], recent_learning=[], existing_knowledge=[], same_day_learning=[])
+search = <function run.<locals>.<lambda> at 0x10cfe32e0>
+deadline = 163896.071517875
+
+    async def run(
+        self,
+        data: AnalysisInput,
+        search: Callable[[HistorySearchRequest], list[dict]],
+        deadline: float,
+    ) -> AnalysisProposal:
+        self.calls = 0
+        subjects = set(data.allowed_analysis_subjects())
+        if not subjects or len(data.image_paths) > 9 or not (data.image_paths or data.text):
+            raise StageFailure("input", retryable=False)
+        materials: dict[str, Path] = {}
+        hashes: set[str] = set()
+        for index, path in enumerate(data.image_paths, 1):
+            digest = sha256(path.read_bytes()).hexdigest()
+            if digest not in hashes:
+                materials[f"m{index}"] = path
+                hashes.add(digest)
+        common = {"subjects": sorted(subjects), "grade": data.grade, "parent_text": data.text}
+        semaphore = asyncio.Semaphore(self.provider.concurrency)
+        extraction_deadline = min(deadline, monotonic() + 180)
+    
+        async def extract(alias: str, path: Path | None) -> tuple[str, MaterialResult]:
+            async with semaphore:
+                aliases = {alias}
+                result = await self._call(
+                    "extract",
+                    alias,
+                    EXTRACT_INSTRUCTIONS,
+                    {**common, "materials": [alias]},
+                    MaterialResult,
+                    [(alias, path)] if path is not None else [],
+                    extraction_deadline,
+                    lambda value: self._validate_material(value, aliases, subjects),
+                )
+                return alias, result
+    
+        tasks = [asyncio.create_task(extract(a, p)) for a, p in materials.items()]
+        if data.text and data.text.strip():
+            tasks.append(asyncio.create_task(extract("t", None)))
+        try:
+            # Keep independent successful units even when another fails.
+            results = await asyncio.gather(*tasks, return_exceptions=True)
+        except BaseException:
+            for task in tasks:
+                task.cancel()
+            await asyncio.gather(*tasks, return_exceptions=True)
+            raise
+        for result in results:
+            if isinstance(result, BaseException):
+                raise result
+        extracted = dict(result for result in results if isinstance(result, tuple))
+        pending = [a for a, r in extracted.items() if r.needs_context]
+        groups: list[set[str]] = []
+        ordered = list(materials)
+        for alias in pending:
+            if alias == "t":
+                group = set(ordered[:3]) | {"t"}
+            else:
+                index = ordered.index(alias)
+                group = set(ordered[max(0, index - 1) : index + 2])
+                if "t" in extracted:
+                    group.add("t")
+            if len(group - {"t"}) > 3 or len(group) < 2:
+                raise StageFailure("coverage", stage="group", unit=alias)
+            if not any(group <= existing for existing in groups):
+                groups.append(group)
+        if len(groups) > 2:
+            raise StageFailure("capacity", stage="group", unit="groups")
+        for index, group in enumerate(groups):
+    
+            def validate_group(value: MaterialResult, aliases: set[str] = group) -> None:
+                self._validate_material(value, aliases, subjects)
+                if value.needs_context:
+                    raise StageFailure("coverage")
+                unresolved = {a for a in aliases if extracted[a].needs_context}
+                covered = {a for item in value.items for a in item.materials}
+                if not unresolved <= covered:
+                    raise StageFailure("coverage")
+    
+            enriched = await self._call(
+                "group",
+                f"group{index}",
+                EXTRACT_INSTRUCTIONS,
+                {
+                    **common,
+                    "materials": sorted(group),
+                    "required_materials": sorted(a for a in group if extracted[a].needs_context),
+                    "excerpts": {a: extracted[a].excerpt for a in group},
+                },
+                MaterialResult,
+                [(a, materials[a]) for a in sorted(group) if a in materials],
+                extraction_deadline,
+                validate_group,
+            )
+            # Keep already identified units; consolidation accounts for all candidates.
+            extracted[f"group{index}"] = enriched
+        candidates: dict[str, ExtractedPoint] = {}
+        seen: set[str] = set()
+        for material_result in extracted.values():
+            for extracted_item in material_result.items:
+                digest = fingerprint(extracted_item.model_dump())
+                if digest not in seen:
+                    seen.add(digest)
+                    candidates[f"c{len(candidates) + 1}"] = extracted_item
+        if len(candidates) > 200:
+            raise StageFailure("capacity", stage="extract", unit="materials")
+        source_aliases = set(materials) | ({"t"} if "t" in extracted else set())
+    
+        def validate_merge(value: ConsolidatedResult) -> None:
+            if len(value.model_dump_json().encode("utf-8")) > CONSOLIDATED_MAX_BYTES:
+                raise StageFailure("validation", diagnostics=("stage.fields:byte_limit",))
+            if _model_summary_errors(value.summary) or _has_runtime_uncertainty(
+                value.uncertainties
+            ):
+                raise StageFailure("validation")
+            members = [m for item in value.items for m in item.members] + [
+                m for omission in value.omissions for m in omission.members
+            ]
+            identities = [
+                (item.subject, normalize_knowledge_name(item.name)) for item in value.items
+            ]
+            if len(identities) != len(set(identities)):
+                raise StageFailure("validation")
+            if len(members) != len(set(members)) or set(members) != set(candidates):
+                raise StageFailure("coverage")
+            evidence = {entry.key: entry for entry in value.evidence}
+            if len(evidence) != len(value.evidence) or any(
+                entry.material not in source_aliases or not entry.detail.strip()
+                for entry in value.evidence
+            ):
+                raise StageFailure("validation", diagnostics=("stage.evidence:reference",))
+            for item in value.items:
+                if (
+                    not normalize_knowledge_name(item.name)
+                    or not item.category.strip()
+                    or not item.review_method.strip()
+                ):
+                    raise StageFailure("validation")
+                if (
+                    item.subject not in subjects
+                    or len(item.evidence_keys) != len(set(item.evidence_keys))
+                    or not set(item.evidence_keys) <= evidence.keys()
+                ):
+                    raise StageFailure("validation", diagnostics=("stage.items:reference",))
+            if any(not omission.basis.strip() for omission in value.omissions):
+                raise StageFailure("validation", diagnostics=("stage.omissions.basis:blank",))
+            checks = {check.material: check for check in value.source_checks}
+            if len(checks) != len(value.source_checks) or checks.keys() != source_aliases:
+                raise StageFailure("coverage", diagnostics=("stage.source_checks:reference",))
+            for material, check in checks.items():
+                actual = {
+                    f"i{index}"
+                    for index, item in enumerate(value.items)
+                    if any(evidence[key].material == material for key in item.evidence_keys)
+                }
+                if (
+                    not check.basis.strip()
+                    or len(check.item_aliases) != len(set(check.item_aliases))
+                    or set(check.item_aliases) != actual
+                    or (check.disposition == "covered") != bool(actual)
+                ):
+                    raise StageFailure("validation", diagnostics=("stage.source_checks:reference",))
+    
+        candidate_payload = {k: v.model_dump() for k, v in candidates.items()}
+        source_payload = {
+            **common,
+            "materials": list(materials) + (["t"] if "t" in extracted else []),
+            "excerpts": {a: result.excerpt for a, result in extracted.items()},
+        }
+        source_images = list(materials.items())
+    
+        def review_items(value: ConsolidatedResult) -> dict[str, Any]:
+            return {f"i{index}": item.model_dump() for index, item in enumerate(value.items)}
+    
+        def review_omissions(value: ConsolidatedResult) -> dict[str, Any]:
+            return {f"o{index}": item.model_dump() for index, item in enumerate(value.omissions)}
+    
+        merged = await self._call(
+            "merge",
+            "merge",
+            MERGE_INSTRUCTIONS,
+            {**source_payload, "candidates": candidate_payload},
+            ConsolidatedResult,
+            source_images,
+            deadline,
+            validate_merge,
+        )
+    
+        async def review_quality(
+            value: ConsolidatedResult, *, unit: str, previous_review: dict[str, Any] | None = None
+        ) -> QualityReviewResult:
+            item_aliases = review_items(value).keys()
+            aliases = item_aliases | review_omissions(value).keys() | source_aliases | {"q"}
+    
+            def validate_review(review: QualityReviewResult) -> None:
+                if review.passed != (not review.issues):
+                    raise StageFailure("validation")
+                identities: set[tuple[str, tuple[str, ...]]] = set()
+                for issue in review.issues:
+                    if len(issue.items) != len(set(issue.items)) or not set(issue.items) <= aliases:
+                        raise StageFailure("validation")
+                    if not issue.basis.strip():
+                        raise StageFailure("validation", diagnostics=("stage.issues.basis:blank",))
+                    if issue.code == "should_merge" and (
+                        len(issue.items) < 2 or not set(issue.items) <= item_aliases
+                    ):
+                        raise StageFailure("validation", diagnostics=("stage.issues.items:reference",))
+                    if issue.code == "over_merged" and not set(issue.items) <= item_aliases:
+                        raise StageFailure("validation", diagnostics=("stage.issues.items:reference",))
+                    identity = (issue.code, tuple(sorted(issue.items)))
+                    if identity in identities:
+                        raise StageFailure("validation")
+                    identities.add(identity)
+    
+            return await self._call(
+                "review",
+                unit,
+                REVIEW_INSTRUCTIONS,
+                {
+                    **source_payload,
+                    "candidates": candidate_payload,
+                    "summary": value.summary,
+                    "uncertainties": value.uncertainties,
+                    "evidence": [entry.model_dump() for entry in value.evidence],
+                    "source_checks": [check.model_dump() for check in value.source_checks],
+                    "final_items": review_items(value),
+                    "final_omissions": review_omissions(value),
+                    **({"previous_review": previous_review} if previous_review else {}),
+                },
+                QualityReviewResult,
+                source_images,
+                deadline,
+                validate_review,
+            )
+    
+        quality = await review_quality(merged, unit="review0")
+        if not quality.passed:
+            previous_items, previous_omissions = review_items(merged), review_omissions(merged)
+            previous = {**previous_items, **previous_omissions}
+            affected = {
+                member
+                for issue in quality.issues
+                for alias in issue.items
+>               for member in previous[alias]["members"]
+                              ^^^^^^^^^^^^^^^
+            }
+E           KeyError: 'm2'
+
+apps/api/src/push_kids/agent_processing/pipeline.py:466: KeyError
+______ test_material_issue_cannot_change_another_sources_target[evidence] ______
+
+tmp_path = PosixPath('/private/var/folders/hq/l74_1q417nbdffshwhtw79640000gn/T/pytest-of-bytedance/pytest-88/test_material_issue_cannot_cha2')
+drift = 'evidence'
+
+    @pytest.mark.parametrize("drift", [None, "item", "evidence"])
+    def test_material_issue_cannot_change_another_sources_target(tmp_path, drift):
+        images = [tmp_path / "one.png", tmp_path / "two.png"]
+        for index, path in enumerate(images):
+            path.write_bytes(f"source-{index}".encode())
+        data = AnalysisInput(image_paths=images, existing_subjects=["数学"])
+        provider = ScopedCorrection(target="m2", drift=drift)
+        if drift:
+            with pytest.raises(StageFailure) as caught:
+>               run(provider, data)
+
+tests/unit/test_staged_proposal_recovery.py:337: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_staged_proposal_recovery.py:36: in run
+    return asyncio.run(
+../../.local/share/uv/python/cpython-3.12.11-macos-aarch64-none/lib/python3.12/asyncio/runners.py:195: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+../../.local/share/uv/python/cpython-3.12.11-macos-aarch64-none/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../.local/share/uv/python/cpython-3.12.11-macos-aarch64-none/lib/python3.12/asyncio/base_events.py:691: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <push_kids.agent_processing.pipeline.StagedPipeline object at 0x10cc793d0>
+data = AnalysisInput(occurred_at=None, grade=None, text=None, image_paths=[PosixPath('/private/var/folders/hq/l74_1q417nbdffs...es=[], existing_subjects=['数学'], analysis_subjects=[], recent_learning=[], existing_knowledge=[], same_day_learning=[])
+search = <function run.<locals>.<lambda> at 0x10cea1620>
+deadline = 163896.171191166
+
+    async def run(
+        self,
+        data: AnalysisInput,
+        search: Callable[[HistorySearchRequest], list[dict]],
+        deadline: float,
+    ) -> AnalysisProposal:
+        self.calls = 0
+        subjects = set(data.allowed_analysis_subjects())
+        if not subjects or len(data.image_paths) > 9 or not (data.image_paths or data.text):
+            raise StageFailure("input", retryable=False)
+        materials: dict[str, Path] = {}
+        hashes: set[str] = set()
+        for index, path in enumerate(data.image_paths, 1):
+            digest = sha256(path.read_bytes()).hexdigest()
+            if digest not in hashes:
+                materials[f"m{index}"] = path
+                hashes.add(digest)
+        common = {"subjects": sorted(subjects), "grade": data.grade, "parent_text": data.text}
+        semaphore = asyncio.Semaphore(self.provider.concurrency)
+        extraction_deadline = min(deadline, monotonic() + 180)
+    
+        async def extract(alias: str, path: Path | None) -> tuple[str, MaterialResult]:
+            async with semaphore:
+                aliases = {alias}
+                result = await self._call(
+                    "extract",
+                    alias,
+                    EXTRACT_INSTRUCTIONS,
+                    {**common, "materials": [alias]},
+                    MaterialResult,
+                    [(alias, path)] if path is not None else [],
+                    extraction_deadline,
+                    lambda value: self._validate_material(value, aliases, subjects),
+                )
+                return alias, result
+    
+        tasks = [asyncio.create_task(extract(a, p)) for a, p in materials.items()]
+        if data.text and data.text.strip():
+            tasks.append(asyncio.create_task(extract("t", None)))
+        try:
+            # Keep independent successful units even when another fails.
+            results = await asyncio.gather(*tasks, return_exceptions=True)
+        except BaseException:
+            for task in tasks:
+                task.cancel()
+            await asyncio.gather(*tasks, return_exceptions=True)
+            raise
+        for result in results:
+            if isinstance(result, BaseException):
+                raise result
+        extracted = dict(result for result in results if isinstance(result, tuple))
+        pending = [a for a, r in extracted.items() if r.needs_context]
+        groups: list[set[str]] = []
+        ordered = list(materials)
+        for alias in pending:
+            if alias == "t":
+                group = set(ordered[:3]) | {"t"}
+            else:
+                index = ordered.index(alias)
+                group = set(ordered[max(0, index - 1) : index + 2])
+                if "t" in extracted:
+                    group.add("t")
+            if len(group - {"t"}) > 3 or len(group) < 2:
+                raise StageFailure("coverage", stage="group", unit=alias)
+            if not any(group <= existing for existing in groups):
+                groups.append(group)
+        if len(groups) > 2:
+            raise StageFailure("capacity", stage="group", unit="groups")
+        for index, group in enumerate(groups):
+    
+            def validate_group(value: MaterialResult, aliases: set[str] = group) -> None:
+                self._validate_material(value, aliases, subjects)
+                if value.needs_context:
+                    raise StageFailure("coverage")
+                unresolved = {a for a in aliases if extracted[a].needs_context}
+                covered = {a for item in value.items for a in item.materials}
+                if not unresolved <= covered:
+                    raise StageFailure("coverage")
+    
+            enriched = await self._call(
+                "group",
+                f"group{index}",
+                EXTRACT_INSTRUCTIONS,
+                {
+                    **common,
+                    "materials": sorted(group),
+                    "required_materials": sorted(a for a in group if extracted[a].needs_context),
+                    "excerpts": {a: extracted[a].excerpt for a in group},
+                },
+                MaterialResult,
+                [(a, materials[a]) for a in sorted(group) if a in materials],
+                extraction_deadline,
+                validate_group,
+            )
+            # Keep already identified units; consolidation accounts for all candidates.
+            extracted[f"group{index}"] = enriched
+        candidates: dict[str, ExtractedPoint] = {}
+        seen: set[str] = set()
+        for material_result in extracted.values():
+            for extracted_item in material_result.items:
+                digest = fingerprint(extracted_item.model_dump())
+                if digest not in seen:
+                    seen.add(digest)
+                    candidates[f"c{len(candidates) + 1}"] = extracted_item
+        if len(candidates) > 200:
+            raise StageFailure("capacity", stage="extract", unit="materials")
+        source_aliases = set(materials) | ({"t"} if "t" in extracted else set())
+    
+        def validate_merge(value: ConsolidatedResult) -> None:
+            if len(value.model_dump_json().encode("utf-8")) > CONSOLIDATED_MAX_BYTES:
+                raise StageFailure("validation", diagnostics=("stage.fields:byte_limit",))
+            if _model_summary_errors(value.summary) or _has_runtime_uncertainty(
+                value.uncertainties
+            ):
+                raise StageFailure("validation")
+            members = [m for item in value.items for m in item.members] + [
+                m for omission in value.omissions for m in omission.members
+            ]
+            identities = [
+                (item.subject, normalize_knowledge_name(item.name)) for item in value.items
+            ]
+            if len(identities) != len(set(identities)):
+                raise StageFailure("validation")
+            if len(members) != len(set(members)) or set(members) != set(candidates):
+                raise StageFailure("coverage")
+            evidence = {entry.key: entry for entry in value.evidence}
+            if len(evidence) != len(value.evidence) or any(
+                entry.material not in source_aliases or not entry.detail.strip()
+                for entry in value.evidence
+            ):
+                raise StageFailure("validation", diagnostics=("stage.evidence:reference",))
+            for item in value.items:
+                if (
+                    not normalize_knowledge_name(item.name)
+                    or not item.category.strip()
+                    or not item.review_method.strip()
+                ):
+                    raise StageFailure("validation")
+                if (
+                    item.subject not in subjects
+                    or len(item.evidence_keys) != len(set(item.evidence_keys))
+                    or not set(item.evidence_keys) <= evidence.keys()
+                ):
+                    raise StageFailure("validation", diagnostics=("stage.items:reference",))
+            if any(not omission.basis.strip() for omission in value.omissions):
+                raise StageFailure("validation", diagnostics=("stage.omissions.basis:blank",))
+            checks = {check.material: check for check in value.source_checks}
+            if len(checks) != len(value.source_checks) or checks.keys() != source_aliases:
+                raise StageFailure("coverage", diagnostics=("stage.source_checks:reference",))
+            for material, check in checks.items():
+                actual = {
+                    f"i{index}"
+                    for index, item in enumerate(value.items)
+                    if any(evidence[key].material == material for key in item.evidence_keys)
+                }
+                if (
+                    not check.basis.strip()
+                    or len(check.item_aliases) != len(set(check.item_aliases))
+                    or set(check.item_aliases) != actual
+                    or (check.disposition == "covered") != bool(actual)
+                ):
+                    raise StageFailure("validation", diagnostics=("stage.source_checks:reference",))
+    
+        candidate_payload = {k: v.model_dump() for k, v in candidates.items()}
+        source_payload = {
+            **common,
+            "materials": list(materials) + (["t"] if "t" in extracted else []),
+            "excerpts": {a: result.excerpt for a, result in extracted.items()},
+        }
+        source_images = list(materials.items())
+    
+        def review_items(value: ConsolidatedResult) -> dict[str, Any]:
+            return {f"i{index}": item.model_dump() for index, item in enumerate(value.items)}
+    
+        def review_omissions(value: ConsolidatedResult) -> dict[str, Any]:
+            return {f"o{index}": item.model_dump() for index, item in enumerate(value.omissions)}
+    
+        merged = await self._call(
+            "merge",
+            "merge",
+            MERGE_INSTRUCTIONS,
+            {**source_payload, "candidates": candidate_payload},
+            ConsolidatedResult,
+            source_images,
+            deadline,
+            validate_merge,
+        )
+    
+        async def review_quality(
+            value: ConsolidatedResult, *, unit: str, previous_review: dict[str, Any] | None = None
+        ) -> QualityReviewResult:
+            item_aliases = review_items(value).keys()
+            aliases = item_aliases | review_omissions(value).keys() | source_aliases | {"q"}
+    
+            def validate_review(review: QualityReviewResult) -> None:
+                if review.passed != (not review.issues):
+                    raise StageFailure("validation")
+                identities: set[tuple[str, tuple[str, ...]]] = set()
+                for issue in review.issues:
+                    if len(issue.items) != len(set(issue.items)) or not set(issue.items) <= aliases:
+                        raise StageFailure("validation")
+                    if not issue.basis.strip():
+                        raise StageFailure("validation", diagnostics=("stage.issues.basis:blank",))
+                    if issue.code == "should_merge" and (
+                        len(issue.items) < 2 or not set(issue.items) <= item_aliases
+                    ):
+                        raise StageFailure("validation", diagnostics=("stage.issues.items:reference",))
+                    if issue.code == "over_merged" and not set(issue.items) <= item_aliases:
+                        raise StageFailure("validation", diagnostics=("stage.issues.items:reference",))
+                    identity = (issue.code, tuple(sorted(issue.items)))
+                    if identity in identities:
+                        raise StageFailure("validation")
+                    identities.add(identity)
+    
+            return await self._call(
+                "review",
+                unit,
+                REVIEW_INSTRUCTIONS,
+                {
+                    **source_payload,
+                    "candidates": candidate_payload,
+                    "summary": value.summary,
+                    "uncertainties": value.uncertainties,
+                    "evidence": [entry.model_dump() for entry in value.evidence],
+                    "source_checks": [check.model_dump() for check in value.source_checks],
+                    "final_items": review_items(value),
+                    "final_omissions": review_omissions(value),
+                    **({"previous_review": previous_review} if previous_review else {}),
+                },
+                QualityReviewResult,
+                source_images,
+                deadline,
+                validate_review,
+            )
+    
+        quality = await review_quality(merged, unit="review0")
+        if not quality.passed:
+            previous_items, previous_omissions = review_items(merged), review_omissions(merged)
+            previous = {**previous_items, **previous_omissions}
+            affected = {
+                member
+                for issue in quality.issues
+                for alias in issue.items
+>               for member in previous[alias]["members"]
+                              ^^^^^^^^^^^^^^^
+            }
+E           KeyError: 'm2'
+
+apps/api/src/push_kids/agent_processing/pipeline.py:466: KeyError
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /Users/bytedance/Documents/push_kids/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/unit/test_staged_proposal_recovery.py::test_metadata_correction_changes_only_summary_and_uncertainties - KeyError: 'q'
+FAILED tests/unit/test_staged_proposal_recovery.py::test_correction_preserves_unaffected_items_and_evidence[item-q] - KeyError: 'q'
+FAILED tests/unit/test_staged_proposal_recovery.py::test_correction_preserves_unaffected_items_and_evidence[evidence-q] - KeyError: 'q'
+FAILED tests/unit/test_staged_proposal_recovery.py::test_correction_preserves_unaffected_items_and_evidence[evidence-i1] - Failed: DID NOT RAISE <class 'push_kids.agent_processing.failures.StageFailure'>
+FAILED tests/unit/test_staged_proposal_recovery.py::test_material_issue_cannot_change_another_sources_target[None] - KeyError: 'm2'
+FAILED tests/unit/test_staged_proposal_recovery.py::test_material_issue_cannot_change_another_sources_target[item] - KeyError: 'm2'
+FAILED tests/unit/test_staged_proposal_recovery.py::test_material_issue_cannot_change_another_sources_target[evidence] - KeyError: 'm2'
+7 failed, 1 passed, 36 deselected, 1 warning in 0.55s

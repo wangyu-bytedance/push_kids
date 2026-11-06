@@ -1,7 +1,7 @@
 # 学习建议标题约束 — 实现与验收
 
 - Date / State: 2026-10-24 / LOCAL_IMPLEMENTATION / VERIFYING / DEFAULT_OFF / NOT_RELEASED。
-- Approval: 用户针对call_39aaa3dd3cdf4a52b2bfc9c4d862ee58回复「批准，按此实现」，明确批准[Spec01 / Architecture01](../../../specs/active/FEAT-004-SUGGESTION-TITLE-LIMIT.md)及[DREV04](../../design/frontend/prototypes/DREV-20261024-TODAY-LEARNING-04/FRONTEND-SPEC.md)，先记录批准再修改生产源码。
+- Approval: 用户针对call_39aaa3dd3cdf4a52b2bfc9c4d862ee58回复「批准，按此实现」，明确批准[Spec01 / Architecture01](../../../specs/completed/FEAT-004-SUGGESTION-TITLE-LIMIT.md)及[DREV04](../../design/frontend/prototypes/DREV-20261024-TODAY-LEARNING-04/FRONTEND-SPEC.md)，先记录批准再修改生产源码。
 - Baseline: main / `82ca52775bc948f2a963a8f4ed614322d8859de8`，共享未提交工作区。相关文件此前即未跟踪，git diff不包含其全部变化；[设计阶段7份SHA](SUGGESTION-TITLE-DESIGN-20261024.md)与[最终21份源码SHA](suggestion-title-20261024/implementation-source-manifest.json)界定本次版本，不将其他任务修改归属本标题任务。
 
 新生成和家长重新编辑标题为trim后1–20个Unicode码点，无内部CR/LF/U+2028/U+2029；非BMP按1。prompt建议6–16字，活动动作/对象放标题，步骤和理由放原独立字段。统一合同位于agent_processing，Provider输出和持久化前再验证、PATCH Edit共用；非法模型结果沿既有最多3次有界尝试，不新增模型修复调用。
@@ -55,4 +55,4 @@ CR-001（P2/non-block）发现失败重试测试始终返回fixture-key，同键
 
 最终复算39份PNG/节点SHA、21份实现与测试源码、3份共享样式均匹配；15份收尾文档的223个本地链接目标存在，Spec仅在active/VERIFYING，git diff --check通过。前序卡片/弹层Spec已加明确标题增量引用和历史120字边界；无本次代码与当前正文冲突。
 
-Spec最终位置为`specs/active/FEAT-004-SUGGESTION-TITLE-LIMIT.md`、VERIFYING，completed无同名副本。尚缺TP-007代表iOS/Android、实际软键盘/读屏/大字体验收，取得环境后继续；当前无需新增设计批准。主功能及卡片其他开放门禁不被本次独立标题复核覆盖。没有提交、推送、上传、部署、生产写入或开关修改。
+Spec最终位置为`specs/completed/FEAT-004-SUGGESTION-TITLE-LIMIT.md`、VERIFYING，completed无同名副本。尚缺TP-007代表iOS/Android、实际软键盘/读屏/大字体验收，取得环境后继续；当前无需新增设计批准。主功能及卡片其他开放门禁不被本次独立标题复核覆盖。没有提交、推送、上传、部署、生产写入或开关修改。

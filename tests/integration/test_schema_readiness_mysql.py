@@ -114,7 +114,10 @@ def test_runtime_still_rejects_wrong_revision(readiness_databases):
             crud.verify_cloud_schema()
     finally:
         with admin.engine.begin() as db:
-            db.execute(text("UPDATE alembic_version SET version_num='20261024_0025'"))
+            db.execute(
+                text("UPDATE alembic_version SET version_num=:revision"),
+                {"revision": Database.expected_cloud_revision},
+            )
 
 
 @pytest.mark.parametrize("missing", ["table", "column", "index"])

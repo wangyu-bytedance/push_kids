@@ -1,0 +1,16 @@
+{
+  "files": {
+    "acceptance01/manifest.private.json": "f9fdd7006cbc78d41f5fba36ca866a9b9e0623b06e4d8fcc847eabf5adaf8240",
+    "acceptance01/metrics.private.json": "48de86704a97f19a964c2ee7b6817f37c8d3c2c5e34cb95a77abbed6f799908e",
+    "acceptance02-diagnostic/manifest.private.json": "9205c95bdacf3039181e8de2579b3b7a62140028ab9fdbcfcc247a862d6fe88f",
+    "acceptance02-diagnostic/metrics.private.json": "c1be5f297d234e173fdf0fff767443649d1423eaf87c7c744099db7575d319cb",
+    "acceptance_only.py": "c6169cc44f8f2717ddeb823760d77185e00662e40d02d1e6147afa17b5e87504",
+    "acceptance_diagnostic.py": "df6777109af9326a074d9d588ff99786063c12c87e2e545180fda92c496f6b11"
+  },
+  "first_pass_source_hashes": {
+    "apps/api/src/push_kids/agent_processing/decision_workflow.py": "d85978fe0ed5e1f7eb3701c60dda919d4573ec4f0cd7748d39734a060c2440e8",
+    "apps/api/src/push_kids/agent_processing/system_one_provider.py": "1d809cd19a1d102a864b7fd01d70916e04b944de274a916ebfe2693473749ce2",
+    "apps/api/src/push_kids/agent_processing/decision_contracts.py": "3b3e979e99ee49d0e3e735cafc69c9173e7a2ed4ad47b3efddbe8a42e90732d1"
+  },
+  "safe_metrics_sha256": "eacc9e2060020c6a57828d5494e78f512f996076db49ad258e92a239b405a211"
+}

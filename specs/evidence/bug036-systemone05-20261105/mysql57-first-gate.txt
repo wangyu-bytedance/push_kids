@@ -1,0 +1,71 @@
+F............                                                            [100%]
+=================================== FAILURES ===================================
+_______ test_recent_history_mysql_large_inventory_and_actual_query_plan ________
+
+app = <fastapi.applications.FastAPI object at 0x10ac4a240>
+child = {'active': True, 'created_at': '2026-11-05T10:07:19.440523Z', 'daily_budget_minutes': 15, 'grade': '小学二年级', ...}
+family_headers = {'X-Family-ID': 'family-test-a'}
+
+    def test_recent_history_mysql_large_inventory_and_actual_query_plan(app, child, family_headers):
+        family, cid, as_of = family_headers["X-Family-ID"], child["id"], utcnow()
+        engine = app.state.database.engine
+        with engine.connect() as connection:
+            assert str(connection.scalar(text("SELECT VERSION()"))).startswith("5.7.")
+        names = [f"合成学科{i:02}" for i in range(20)]
+        expected = set()
+        with app.state.database.session_factory() as db:
+            for subject_index, name in enumerate(names):
+                subject = Subject(family_id=family, child_id=cid, name=name, kind="learning")
+                db.add(subject)
+                db.flush()
+                rows = []
+                for index in range(2500):
+                    kid = f"{subject_index:02}{index:030}"
+                    rows.append(
+                        {
+                            "id": kid,
+                            "family_id": family,
+                            "child_id": cid,
+                            "subject_id": subject.id,
+                            "name": f"合成知识{index}",
+                            "normalized_name": f"合成知识{index}",
+                            "created_at": as_of + timedelta(days=1) if index == 2499 else as_of,
+                            "review_status": "superseded" if index == 2498 else "normal",
+                        }
+                    )
+                    if 2458 <= index <= 2497:
+                        expected.add(kid)
+                db.execute(KnowledgeItem.__table__.insert(), rows)
+            db.commit()
+            statements = []
+    
+            def capture(conn, cursor, statement, parameters, context, executemany):
+                statements.append((statement, parameters))
+    
+            event.listen(engine, "before_cursor_execute", capture)
+            try:
+                result = recent_history_items(
+                    db, family_id=family, child_id=cid, subjects=names, as_of=as_of
+                )
+            finally:
+                event.remove(engine, "before_cursor_execute", capture)
+            assert len(result) == 800
+            assert {item.knowledge_id for item in result} == expected
+            assert len(statements) == 11
+            for statement, parameters in statements[1:]:
+                plan = db.connection().exec_driver_sql("EXPLAIN " + statement, parameters).mappings()
+                branches = [row for row in plan if row["key"] == "ix_knowledge_recent_subject"]
+>               assert len(branches) == 2
+E               AssertionError: assert 1 == 2
+E                +  where 1 = len([{'id': 5, 'select_type': 'DERIVED', 'table': 'knowledge_items', 'partitions': None, 'type': 'ref', 'possible_keys': '...key_len': '696', 'ref': 'const,const,const,const', 'rows': 4408, 'filtered': 5.0, 'Extra': 'Using where; Using index'}])
+
+tests/integration/test_system_one_mysql.py:78: AssertionError
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /Users/bytedance/Documents/push_kids/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/integration/test_system_one_mysql.py::test_recent_history_mysql_large_inventory_and_actual_query_plan
+1 failed, 12 passed, 1 warning in 29.69s

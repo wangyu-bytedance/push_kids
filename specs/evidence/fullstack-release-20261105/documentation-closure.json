@@ -1,0 +1,21 @@
+{
+  "result": "PASS",
+  "documents": 15,
+  "local_links": 555,
+  "missing_targets": 0,
+  "spec_counts": {
+    "active": 13,
+    "completed": 109,
+    "rejected": 19
+  },
+  "git_diff_check": "PASS",
+  "current_code_document_conflict_check": "No new conflict found; historical results distinguished from current failed gates",
+  "product_code_changed_this_release_task": false,
+  "test_code_changed_this_release_task": false,
+  "approved_design_sources_changed": false,
+  "not_verified": [
+    "parent quality acceptance",
+    "complete native/screenshots/device acceptance",
+    "new cloud delivery"
+  ]
+}

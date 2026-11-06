@@ -1,0 +1,30 @@
+{
+  "mode": "local-test-container-contract",
+  "production_access": false,
+  "uid": "10001",
+  "live": {
+    "http": 200,
+    "response": {
+      "status": "ok"
+    }
+  },
+  "ready": {
+    "http": 200,
+    "response": {
+      "status": "ready"
+    }
+  },
+  "image_id": "sha256:826aa9df11b3cb524448f350218f3f778598239447768181e90b99817e6b9d67",
+  "image_env_names": [
+    "PATH",
+    "LANG",
+    "GPG_KEY",
+    "PYTHON_VERSION",
+    "PYTHON_SHA256",
+    "PYTHONPATH"
+  ],
+  "stop_exit": 0,
+  "container_exit": 0,
+  "result": "PASS",
+  "container_removed": true
+}

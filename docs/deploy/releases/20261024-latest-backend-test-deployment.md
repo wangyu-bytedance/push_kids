@@ -1,7 +1,9 @@
 # 2026-10-24 最新后端部署与本地客户端测试
 
+2026-10-25后续客户端交付：当前150份后端源码/依赖仍匹配037冻结02，live/ready200；用户另行授权后客户端0.1.16已开发上传，未体验/审核/正式发布。[后续记录](20261025-latest-client-upload.md)。下文2026-10-24本地客户端/未上传描述保留原执行时点。
+
 - Current stage: `SCHEMA_0025_VERIFIED / BACKEND_037_NORMAL_100_PERCENT / WECHAT_READ_SMOKE_PASS / LOCAL_USER_TEST_READY`
-- Scope: [已批准OPS Spec01](../../../specs/active/OPS-20261024-LATEST-BACKEND-TEST-DEPLOYMENT.md)；用户要求检查全部代码、部署最新服务端、完整客户端本地测试。
+- Scope: [已批准OPS Spec01](../../../specs/completed/OPS-20261024-LATEST-BACKEND-TEST-DEPLOYMENT.md)；用户要求检查全部代码、部署最新服务端、完整客户端本地测试。
 - Commit: `26714b997465fd2d1d9199f45ed931bd85c39405`。检查开始时为82ca527+已暂存增量，期间用户另一个操作提交全部增量；代理没有提交/推送。冻结01时工作区干净；冻结02另包含已批准CRUD readiness单文件生产修复，source diff及两包SHA见下方，测试/文档不混入运行包。
 - Target: `wx5d2e0014690bf285 / prod-d2g14rwoycac6b45d / flask-ik19 / 8000`。
 - Actual production: 22:35:45–22:35:51 CST生产0022→`20261024_0025`迁移与admin结构/投影核验通过。036因CRUD readiness缺陷deploy_failed/0%；获批修复后的037于22:55:57 normal，22:56:57官方观察已由用户调至100%/1实例，035为0%/1实例，036仍失败。035不能在0025上重启，不是回滚目标。MINIAPP/OA入口、PUBLIC关闭，18项配置继承035/基础配置，资源0.25CPU/0.5GiB/min0/max5。代理未切流。
@@ -61,7 +63,7 @@ CLI dry-run在冻结目录额外留下`.temp-runkit-1792848084600.zip`，因此�
 
 生产预检首次脚本误用不存在的footprint_import_jobs表，1146且未执行DDL；改为真实footprint_photos.job_state。随后核实覆盖队列23条queued、0 running；服务基础配置和唯一运行035均coverage=false，新旧worker在claim前返回，迁移不涉及该表，因此保留停用队列、不清lease/任务，要求其他任务与事务为0继续。两次预检失败证据保留，不冒充生产代码失败或清空队列。
 
-## 文档与生命周期
+## 历史文档与生命周期（当次执行口径）
 
 本轮同步OPS批准与备份、两项获批修订、Spec索引、FEAT-001/004/005/006/013、Behavior、Architecture、UI-001/015阶段与测试策略，按实际diff核对无业务/API/UI合同变化；启动权限检查合同已合并正文与发布必需门禁，批准设计快照不变。历史测试隔离Spec已DONE并迁completed；OPS与CRUD修复Spec留active/VERIFYING，部署/自动化/读取smoke通过，等待用户本地业务验收，恢复条件为反馈实际测试结果。其他产品Spec的设备/内容缺口保持独立。
 
@@ -75,7 +77,7 @@ CLI确认表AppID/env/service/GRAY/Dockerfile/./8000/唯一备注均正确后输
 
 原`P1 BLOCK`，现`FIXED / CLOUD_READ_SMOKE_PASS`；位置`platform/database.py::verify_cloud_schema`，lifespan与ready均调用。管理员可见9个early触发器，但036实际CRUD账号同库只读探针可见0，原样冻结代码抛出「数据库提前复习投影触发器不完整」。首次本地访问内网endpoint不可达；经现有管理endpoint、同一应用账号复测成功连接0025并复现。证据[runtime-account-schema-attempt02.json](../../quality/evidence/latest-backend-release-20261024/runtime-account-schema-attempt02.json)。036健康探针connection refused仅是未监听的现象，不能单凭该报错判定端口或OOM；037同端口/资源正常并通过live/ready。
 
-MySQL5.7要求TRIGGER权限才显示元数据，运行账户CRUD-only的约定不应因此扩权。用户在call_f5deed23a40b43f2b50e7ec67901bf90明确批准[具体Spec01/Architecture01](../../../specs/active/BUG-CRUD-SCHEMA-READINESS.md)，已仅修改Database.verify_cloud_schema：默认检查revision/必需表字段索引，显式verify_triggers=True供发布账号严格核验；新增只读发布工具和权限回归。未给应用扩权、未改migration/领域/客户端、未重复0025迁移。036失败证据保留；新包02的037已normal/100%，真实微信20项GET通过；用户写入/设备验收未执行。
+MySQL5.7要求TRIGGER权限才显示元数据，运行账户CRUD-only的约定不应因此扩权。用户在call_f5deed23a40b43f2b50e7ec67901bf90明确批准[具体Spec01/Architecture01](../../../specs/completed/BUG-CRUD-SCHEMA-READINESS.md)，已仅修改Database.verify_cloud_schema：默认检查revision/必需表字段索引，显式verify_triggers=True供发布账号严格核验；新增只读发布工具和权限回归。未给应用扩权、未改migration/领域/客户端、未重复0025迁移。036失败证据保留；新包02的037已normal/100%，真实微信20项GET通过；用户写入/设备验收未执行。
 
 自动审批曾拒绝独立“读取并持久化未知云端构建/进程日志摘要”探针，理由是未知日志可能含敏感运行信息；该命令未执行，也未绕行。改用只读控制面固定配置字段与同库应用账号固定Schema探针完成定位，后者已获自动审批执行；没有未知日志内容落盘，本次无需用户额外授权日志读取。
 
@@ -101,3 +103,7 @@ MySQL5.7要求TRIGGER权限才显示元数据，运行账户CRUD-only的约定�
 22:56:57–23:00:57控制面观察跨度239.699秒，037始终normal/100%/1，035 0%/1与036失败0%/1保留，未擅自删除/重启。23:01:43真实微信末次live200（2735ms）、ready200（108ms）；观察是离散采样，不代表完整时段持续指标或无瞬时错误。见[接管观察](../../quality/evidence/latest-backend-release-20261024/handoff-observation-037.json)。
 
 23:01:48同库只读聚合复核：agent/deletion/footprint/suggestion queued或running均0，notification sending0，coverage running0、暂停queued23保留，其他事务0、Schema0025。见[接管后任务](../../quality/evidence/latest-backend-release-20261024/post-handoff-jobs-037.json)；不将单次计数当作完整queue age/5xx/429监控。最终DAG150、git diff --check及本轮20份Markdown的261个本地链接检查通过。业务/UI合同与代码无冲突；启动权限合同已更新，用户测试尚未代验。
+
+## 2026-10-26 开发完成归档
+
+按用户明确批准的[云端交付完成规则](../../../specs/completed/GOV-002-CLOUD-DELIVERY-DEVELOPMENT-COMPLETION.md)，本记录已交付范围对应的41份Spec已标开发DONE并迁completed，具体见[状态索引](../../../specs/STATUS.md)。原验收结果和发布阶段保留，未执行检查不改为PASS；本轮没有新部署/上传。BUG-035和旅行导入精简是此后本地增量，继续active。

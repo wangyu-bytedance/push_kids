@@ -87,7 +87,7 @@ Page({
     this.setData({
       unfinishedCount: count,
       unfinishedHint: count
-        ? `还有 ${count} 条记录在分析中或等着确认。归档不会丢掉它们，确认和复习反馈仍然可以完成，但归档后这个档案不在切换列表里，建议先处理完再归档。`
+        ? `还有 ${count} 条记录待处理，归档后仍可继续完成。`
         : ""
     });
   },
@@ -168,11 +168,11 @@ Page({
   async archive() {
     if (this.data.working) return;
     const unfinished = this.data.unfinishedCount
-      ? `当前还有 ${this.data.unfinishedCount} 条记录在分析中或等着确认，归档不会丢掉它们，但建议先处理完。`
+      ? `还有 ${this.data.unfinishedCount} 条记录待处理，归档后仍可完成确认和复习反馈。`
       : "";
     const confirmed = await new Promise((resolve) => wx.showModal({
       title: `归档「${this.data.nameDraft}」？`,
-      content: `归档后这个孩子不再出现在切换列表里，也不能再新增记录；已有的学习记录、复习安排和报表都会保留，随时可以恢复。${unfinished}`,
+      content: `归档后从孩子列表隐藏，不能新增记录。历史记录和报表保留，随时可恢复。${unfinished}`,
       confirmText: "归档",
       confirmColor: "#A85742",
       success: (result) => resolve(result.confirm)

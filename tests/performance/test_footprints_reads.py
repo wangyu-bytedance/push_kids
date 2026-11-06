@@ -211,6 +211,42 @@ def test_skewed_fifty_thousand_photo_read_budget(read_case, visit_count):
                 assert joined[0]["key"] == "PRIMARY" and joined[0]["type"] == "eq_ref"
             else:
                 assert "ix_footprint_photo_visit" in str(plan)
+            # Exact thumbnail lookup at row 40k, then both directions. Each
+            # operation has constant queries and retains only one <=20 row page.
+            gallery_queries = []
+            gallery = {}
+            for values in [{"focus_photo_id": "photo-040000"}, "previous", "next"]:
+                queries.clear()
+                if values == "previous":
+                    values = {"cursor": gallery["previous_cursor"]}
+                elif values == "next":
+                    values = {"cursor": gallery["next_cursor"]}
+                started = perf_counter()
+                gallery = FootprintReads.photos(db, family, cid, "visit-0", **values)
+                assert perf_counter() - started < 0.5
+                assert len(queries) <= 6 and 0 < len(gallery["items"]) <= 20
+                assert len(json.dumps(jsonable_encoder(gallery)).encode()) < 64 * 1024
+                gallery_queries.extend(queries)
+            assert gallery["items"][0]["id"] == "photo-040000"
+            for sql, params in gallery_queries:
+                if "FROM footprint_photos" not in sql or "ORDER BY" not in sql:
+                    continue
+                gallery_plan = list(
+                    db.connection().exec_driver_sql(prefix + sql, params).mappings()
+                )
+                if dialect == "mysql":
+                    assert all(
+                        row["key"] == "ix_footprint_photo_gallery"
+                        and row["type"] in {"ref", "range"}
+                        for row in gallery_plan
+                    ), gallery_plan
+                    assert all(
+                        "filesort" not in (row["Extra"] or "").lower() for row in gallery_plan
+                    )
+                else:
+                    assert "ix_footprint_photo_gallery" in str(gallery_plan)
+            _, gallery_peak = tracemalloc.get_traced_memory()
+            assert gallery_peak < 16 * 1024 * 1024
             queries.clear()
             if visit_count > 50:
                 second = FootprintReads.visits(

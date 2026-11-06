@@ -40,4 +40,4 @@ Docker旧后端进程残留、无engine socket；本轮重启后恢复29.1.2引�
 
 ## 文档与生命周期
 
-已同步FEAT-001、BHV-006、Architecture与UI-001相关正文及引用，明确031 normal但0%及030仍100%；BUG Spec保留`specs/active/BUG-029-REVIEW-SUBJECT-ORDER.md`，VERIFYING。Lint chore四项门禁通过，DONE并迁移completed。逐项核对实际diff与相关当前正文无冲突；定向smoke/指标/共存/全量待发布负责人完成后只读核验，再决定BUG Spec的DONE迁移。代码完成或版本normal不等同完整验收完成。
+已同步FEAT-001、BHV-006、Architecture与UI-001相关正文及引用，明确031 normal但0%及030仍100%；BUG Spec保留`specs/completed/BUG-029-REVIEW-SUBJECT-ORDER.md`，VERIFYING。Lint chore四项门禁通过，DONE并迁移completed。逐项核对实际diff与相关当前正文无冲突；定向smoke/指标/共存/全量待发布负责人完成后只读核验，再决定BUG Spec的DONE迁移。代码完成或版本normal不等同完整验收完成。

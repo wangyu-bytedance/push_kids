@@ -1,0 +1,12 @@
+E501 Line too long (103 > 100)
+  --> tools/prepare_travel_diary_native.py:36:101
+   |
+34 |     return {...batch,photos:rows.map(p=>({...p}))};
+35 |   }
+36 |   if(url==='/footprints/preferences'&&options.method==='PATCH'){aiEnabled=data.ai_enabled;return data;}
+   |                                                                                                     ^^^
+37 |   if(url==='/footprints/preferences')return {ai_enabled:aiEnabled,consented:true};
+38 |   if(url.startsWith('/footprints/drafts?'))return {items:rows.map(p=>({...p})),next_cursor:null};
+   |
+
+Found 1 error.

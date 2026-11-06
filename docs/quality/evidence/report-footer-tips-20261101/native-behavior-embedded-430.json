@@ -1,0 +1,368 @@
+{
+  "status": "PASS",
+  "scope": "isolated read-only synthetic API; real production controller/WXML/WXSS",
+  "mechanism": "official App.callFunction invokes existing native controller methods; no simulated touch",
+  "host": "embedded",
+  "viewport": "430x932",
+  "states": [
+    {
+      "name": "reload-first",
+      "pageNumber": 1,
+      "loading": false,
+      "error": "",
+      "notice": "",
+      "ids": [
+        "page1"
+      ],
+      "nextCursor": "cursor2",
+      "calls": 1,
+      "buttons": [
+        {
+          "left": 39,
+          "right": 175,
+          "top": 1693,
+          "bottom": 1739,
+          "disabled": true
+        },
+        {
+          "left": 255,
+          "right": 391,
+          "top": 1693,
+          "bottom": 1739,
+          "disabled": false
+        }
+      ],
+      "more": [
+        {
+          "id": "more-page1",
+          "dataset": {
+            "id": "page1"
+          },
+          "left": 347,
+          "right": 391,
+          "top": 1599,
+          "bottom": 1643,
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "readonly": [],
+      "feedback": [],
+      "width": 430
+    },
+    {
+      "name": "loading",
+      "pageNumber": 1,
+      "loading": true,
+      "error": "",
+      "notice": "",
+      "ids": [
+        "page1"
+      ],
+      "nextCursor": "cursor2",
+      "calls": 1,
+      "buttons": [
+        {
+          "left": 39,
+          "right": 175,
+          "top": 1693,
+          "bottom": 1739,
+          "disabled": true
+        },
+        {
+          "left": 255,
+          "right": 391,
+          "top": 1693,
+          "bottom": 1739,
+          "disabled": true
+        }
+      ],
+      "more": [
+        {
+          "id": "more-page1",
+          "dataset": {
+            "id": "page1"
+          },
+          "left": 347,
+          "right": 391,
+          "top": 1599,
+          "bottom": 1643,
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "readonly": [],
+      "feedback": [],
+      "width": 430
+    },
+    {
+      "name": "next-replaces-first",
+      "pageNumber": 2,
+      "loading": false,
+      "error": "",
+      "notice": "",
+      "ids": [
+        "page2"
+      ],
+      "nextCursor": "cursor3",
+      "calls": 1,
+      "buttons": [
+        {
+          "left": 39,
+          "right": 175,
+          "top": 1693,
+          "bottom": 1739,
+          "disabled": false
+        },
+        {
+          "left": 255,
+          "right": 391,
+          "top": 1693,
+          "bottom": 1739,
+          "disabled": false
+        }
+      ],
+      "more": [
+        {
+          "id": "more-page2",
+          "dataset": {
+            "id": "page2"
+          },
+          "left": 347,
+          "right": 391,
+          "top": 1599,
+          "bottom": 1643,
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "readonly": [],
+      "feedback": [],
+      "width": 430
+    },
+    {
+      "name": "failure-preserves-current-page",
+      "pageNumber": 2,
+      "loading": false,
+      "error": "合成读取失败",
+      "notice": "",
+      "ids": [
+        "page2"
+      ],
+      "nextCursor": "cursor3",
+      "calls": 1,
+      "buttons": [
+        {
+          "left": 39,
+          "right": 175,
+          "top": 1770,
+          "bottom": 1816,
+          "disabled": false
+        },
+        {
+          "left": 255,
+          "right": 391,
+          "top": 1770,
+          "bottom": 1816,
+          "disabled": false
+        }
+      ],
+      "more": [
+        {
+          "id": "more-page2",
+          "dataset": {
+            "id": "page2"
+          },
+          "left": 347,
+          "right": 391,
+          "top": 1676,
+          "bottom": 1720,
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "readonly": [],
+      "feedback": [],
+      "width": 430
+    },
+    {
+      "name": "retry-current-page",
+      "pageNumber": 2,
+      "loading": false,
+      "error": "",
+      "notice": "",
+      "ids": [
+        "page2-retry"
+      ],
+      "nextCursor": "cursor3",
+      "calls": 1,
+      "buttons": [
+        {
+          "left": 39,
+          "right": 175,
+          "top": 1693,
+          "bottom": 1739,
+          "disabled": false
+        },
+        {
+          "left": 255,
+          "right": 391,
+          "top": 1693,
+          "bottom": 1739,
+          "disabled": false
+        }
+      ],
+      "more": [
+        {
+          "id": "more-page2-retry",
+          "dataset": {
+            "id": "page2-retry"
+          },
+          "left": 347,
+          "right": 391,
+          "top": 1599,
+          "bottom": 1643,
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "readonly": [],
+      "feedback": [],
+      "width": 430
+    },
+    {
+      "name": "back-to-first",
+      "pageNumber": 1,
+      "loading": false,
+      "error": "",
+      "notice": "",
+      "ids": [
+        "page1-reload"
+      ],
+      "nextCursor": "cursor2",
+      "calls": 1,
+      "buttons": [
+        {
+          "left": 39,
+          "right": 175,
+          "top": 1693,
+          "bottom": 1739,
+          "disabled": true
+        },
+        {
+          "left": 255,
+          "right": 391,
+          "top": 1693,
+          "bottom": 1739,
+          "disabled": false
+        }
+      ],
+      "more": [
+        {
+          "id": "more-page1-reload",
+          "dataset": {
+            "id": "page1-reload"
+          },
+          "left": 347,
+          "right": 391,
+          "top": 1599,
+          "bottom": 1643,
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "readonly": [],
+      "feedback": [],
+      "width": 430
+    },
+    {
+      "name": "readonly",
+      "pageNumber": 1,
+      "loading": false,
+      "error": "",
+      "notice": "",
+      "ids": [
+        "page1-reload"
+      ],
+      "nextCursor": "cursor2",
+      "calls": 1,
+      "buttons": [
+        {
+          "left": 39,
+          "right": 175,
+          "top": 1750,
+          "bottom": 1796,
+          "disabled": true
+        },
+        {
+          "left": 255,
+          "right": 391,
+          "top": 1750,
+          "bottom": 1796,
+          "disabled": false
+        }
+      ],
+      "more": [],
+      "readonly": [
+        {
+          "id": "",
+          "dataset": {},
+          "left": 39,
+          "right": 391,
+          "top": 1538,
+          "bottom": 1583,
+          "width": 352,
+          "height": 45
+        }
+      ],
+      "feedback": [],
+      "width": 430
+    },
+    {
+      "name": "footer-clearance",
+      "pagers": [
+        {
+          "id": "",
+          "dataset": {},
+          "left": 39,
+          "right": 391,
+          "top": 488,
+          "bottom": 534,
+          "width": 352,
+          "height": 46
+        }
+      ],
+      "footers": [
+        {
+          "id": "",
+          "dataset": {},
+          "left": 39,
+          "right": 391,
+          "top": 550,
+          "bottom": 612,
+          "width": 352,
+          "height": 62
+        }
+      ],
+      "tabbars": [
+        {
+          "id": "",
+          "dataset": {},
+          "left": 0,
+          "right": 430,
+          "top": 837,
+          "bottom": 932,
+          "width": 430,
+          "height": 95
+        }
+      ],
+      "viewport": {
+        "width": 430,
+        "height": 834
+      }
+    }
+  ],
+  "capturedAt": "2026-11-01T08:31:54.917Z",
+  "physicalDeviceStatus": "NOT_RUN",
+  "tapStatus": "NOT_RUN"
+}

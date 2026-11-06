@@ -50,29 +50,22 @@
       </view>
     </view>
 
-    <view class="pk-card form-card" wx:if="{{mode === 'edit' && isManager}}">
-      <view class="card-head">
-        <view class="grow">
-          <text class="c-t">档案状态</text>
-          <text class="c-s">归档和恢复都不会删除任何记录</text>
+    <view class="pk-card archive-card" wx:if="{{mode === 'edit' && isManager}}">
+      <view class="archive-row" wx:if="{{active}}" aria-role="button" aria-label="{{working ? '正在归档' : '归档档案'}}" aria-disabled="{{working}}" bindtap="archive">
+        <view class="archive-copy">
+          <text class="archive-title">{{working ? '正在归档…' : '归档档案'}}</text>
+          <text class="archive-description">保留全部记录，随时可恢复</text>
         </view>
+        <view class="chev right" wx:if="{{!working}}" aria-hidden="true"></view>
       </view>
-      <view class="danger-zone" wx:if="{{active}}">
-        <text class="danger-copy">归档后这个孩子不再出现在切换列表，也不能新增记录，报表和历史仍然可以查看。</text>
-        <view class="pk-notice quiet" wx:if="{{unfinishedHint}}">
-          <view class="ico ico-info-pri sm"></view>
-          <text class="n-txt">{{unfinishedHint}}</text>
+      <view class="archive-row" wx:else aria-role="button" aria-label="{{working ? '正在恢复' : '恢复档案'}}" aria-disabled="{{working}}" bindtap="restore">
+        <view class="archive-copy">
+          <text class="archive-title">{{working ? '正在恢复…' : '恢复档案'}}</text>
+          <text class="archive-description">重新加入孩子列表，继续记录</text>
         </view>
-        <view class="link-btn danger-link" aria-role="button" aria-label="归档这个档案" aria-disabled="{{working}}" bindtap="archive">
-          <view class="ico ico-trash-dan sm"></view><text>{{working ? '处理中…' : '归档这个档案'}}</text>
-        </view>
+        <view class="chev right" wx:if="{{!working}}" aria-hidden="true"></view>
       </view>
-      <view class="danger-zone" wx:else>
-        <text class="danger-copy">恢复后这个孩子会重新出现在切换列表里，可以继续记录。</text>
-        <view class="link-btn" aria-role="button" aria-label="恢复这个档案" aria-disabled="{{working}}" bindtap="restore">
-          <view class="ico ico-refresh-pri sm"></view><text>{{working ? '处理中…' : '恢复这个档案'}}</text>
-        </view>
-      </view>
+      <text class="archive-pending" wx:if="{{active && unfinishedHint}}">{{unfinishedHint}}</text>
     </view>
 
     <view class="form-foot">

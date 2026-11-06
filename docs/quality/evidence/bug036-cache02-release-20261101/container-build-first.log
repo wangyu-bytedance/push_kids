@@ -1,0 +1,18 @@
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 546B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/python:3.12-slim
+#2 ERROR: failed to copy: httpReadSeeker: failed open: failed to do request: Get "https://registry-1.docker.io/v2/library/python/manifests/sha256:e8a38829209aea82774882e5157e1f7c3e8c8393ff53a697b3580896e57f345c": context deadline exceeded
+------
+ > [internal] load metadata for docker.io/library/python:3.12-slim:
+------
+Dockerfile:1
+--------------------
+   1 | >>> FROM python:3.12-slim
+   2 |     WORKDIR /app
+   3 |     COPY pyproject.toml uv.lock* ./
+--------------------
+ERROR: failed to build: failed to solve: DeadlineExceeded: python:3.12-slim: failed to resolve source metadata for docker.io/library/python:3.12-slim: failed to copy: httpReadSeeker: failed open: failed to do request: Get "https://registry-1.docker.io/v2/library/python/manifests/sha256:e8a38829209aea82774882e5157e1f7c3e8c8393ff53a697b3580896e57f345c": context deadline exceeded

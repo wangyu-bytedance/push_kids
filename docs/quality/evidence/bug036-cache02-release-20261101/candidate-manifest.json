@@ -1,0 +1,811 @@
+{
+  "stage": "FROZEN_CANDIDATE_NOT_DEPLOYED",
+  "created_at": "2026-11-01T17:57:39+08:00",
+  "target": {
+    "environment": "prod-d2g14rwoycac6b45d",
+    "service": "flask-ik19",
+    "release_type": "GRAY"
+  },
+  "source_backend": "flask-ik19-039",
+  "specs": [
+    "BUG-SPEC-20261031-KNOWLEDGE-GENERATION-01",
+    "BUG-SPEC-20261101-KNOWLEDGE-CACHE-02"
+  ],
+  "pipeline_revision": "staged-20261101-10",
+  "prompt_revision": "child-aware-history-agent-20261031-13",
+  "actual_backend_version": null,
+  "suggested_unique_remark": "push-kids-20261101-cache02-01-0576ac3",
+  "source_commit": "0576ac30464908154c624effed41df6dfa3110cc",
+  "changes_from039": {
+    "apps/api/src/push_kids/agent_processing/checkpoints.py": "45a0ce6401bc2780bf849fa7acec70a938f24fa77fde36c02afedae909e18e80",
+    "apps/api/src/push_kids/agent_processing/contracts.py": "7524e52c4ffbc27e1127d54bb7ac33f676165d8f303961374ad68b959df25564",
+    "apps/api/src/push_kids/agent_processing/failures.py": "73167af67d45a1fad12b127804b29f2c799ebdc1242f61fdccb1387061600bdc",
+    "apps/api/src/push_kids/agent_processing/pipeline.py": "d14bb5682a75d9bd734e039f110b5a46de0c081b6b3537c95307f5a666b3c4ac",
+    "apps/api/src/push_kids/agent_processing/prompt.py": "61152c25593aee2665a6ae59bb489e90b9b031bc48df69a24892e82fea242823",
+    "apps/api/src/push_kids/agent_processing/stage_contracts.py": "056cd0eb6bde33429c6eb56c9f9b11c7a96237671a6378046490ca2c18df6e6a",
+    "apps/api/src/push_kids/agent_processing/stage_provider.py": "541aa016674b35e215eee052f23bc04e00d09164995f9e169d15c65fedc125e1",
+    "apps/api/src/push_kids/agent_processing/telemetry.py": "c19ebc6d7bcfa7de61364e4aa7fa75710e8a3547296c401a60a981ee3dbcb7db",
+    "apps/api/src/push_kids/agent_processing/worker.py": "32f8cb9f7b4a7e181ae4227bbffadfa5f2c582c4cfabf02ae8528f7172cbc2b8",
+    "apps/api/src/push_kids/learning/service.py": "c0d3e595a7b9b6b947b5ad1bf38931d2988a484e985c959ad97c39b587766e27"
+  },
+  "schema_change": false,
+  "runtime_configuration_change": false,
+  "excluded": [
+    "BUG-036 CONTENT03 staged11/prompt14",
+    "BUG-037 frontend",
+    "offline knowledge maintenance",
+    "production data reset"
+  ],
+  "files": [
+    {
+      "path": "Dockerfile",
+      "bytes": 507,
+      "sha256": "45f1dd74126c54acd6437ec50fa54fe1066134aa6084ab0e38d0801880528c75"
+    },
+    {
+      "path": "apps/api/src/push_kids/__init__.py",
+      "bytes": 25,
+      "sha256": "3f4213c17943c5d73deb4481bec6ad6a7e968293fa8061b40dd2aade3d4be075"
+    },
+    {
+      "path": "apps/api/src/push_kids/activities/__init__.py",
+      "bytes": 47,
+      "sha256": "7f3d326a43cf218ff2a3466486e9d71dc1dc0325a3ebf01b16bba04a6858a45f"
+    },
+    {
+      "path": "apps/api/src/push_kids/activities/capacity.py",
+      "bytes": 2270,
+      "sha256": "bf563dc4219aff4316ba070806f5882fcf1e018970e39df81e6e3fb7036ed48d"
+    },
+    {
+      "path": "apps/api/src/push_kids/activities/conflicts.py",
+      "bytes": 1643,
+      "sha256": "439308bdff5e62eb636cd13ee6edcb73c5f44e194c59b2f7055f4b5fd8e34ca9"
+    },
+    {
+      "path": "apps/api/src/push_kids/activities/router.py",
+      "bytes": 5515,
+      "sha256": "df500afe609a1968d378ffff865e662625f7762275c09250b2e53088eaed1d36"
+    },
+    {
+      "path": "apps/api/src/push_kids/activities/schemas.py",
+      "bytes": 6325,
+      "sha256": "437cdfc10dff495291c872d8cb58fd26fbb39b0074875deb110add129355628e"
+    },
+    {
+      "path": "apps/api/src/push_kids/activities/service.py",
+      "bytes": 34438,
+      "sha256": "eee107d7b369f220d6003afcd42b8465b8e150d7eb116f91710bf11562d21e2e"
+    },
+    {
+      "path": "apps/api/src/push_kids/activities/weekly_slots.py",
+      "bytes": 2107,
+      "sha256": "0aa6647889e469f3ebe19c7e6859f28e9a8d713861c6eb0f1743a8925e518655"
+    },
+    {
+      "path": "apps/api/src/push_kids/agent_processing/__init__.py",
+      "bytes": 38,
+      "sha256": "bb467324b04347b116d61e032e9ef09bbc900bbcf17fe797f5b824e6a2d3d234"
+    },
+    {
+      "path": "apps/api/src/push_kids/agent_processing/checkpoints.py",
+      "bytes": 7516,
+      "sha256": "45a0ce6401bc2780bf849fa7acec70a938f24fa77fde36c02afedae909e18e80"
+    },
+    {
+      "path": "apps/api/src/push_kids/agent_processing/context.py",
+      "bytes": 5531,
+      "sha256": "76000ff78bbd00a1fdb92036929879217bc74685e75886af2b0c11576546b869"
+    },
+    {
+      "path": "apps/api/src/push_kids/agent_processing/contracts.py",
+      "bytes": 28430,
+      "sha256": "7524e52c4ffbc27e1127d54bb7ac33f676165d8f303961374ad68b959df25564"
+    },
+    {
+      "path": "apps/api/src/push_kids/agent_processing/coverage.py",
+      "bytes": 4673,
+      "sha256": "44f3f6340b6fcc20367efe7dedd3d311e246acc282bd02d8ea742b6ef6c0aaf4"
+    },
+    {
+      "path": "apps/api/src/push_kids/agent_processing/coverage_jobs.py",
+      "bytes": 865,
+      "sha256": "dca8d3b1b0029548a19aa1d9a533528e076c0743384f0ed5855c9ea78fa619f0"
+    },
+    {
+      "path": "apps/api/src/push_kids/agent_processing/coverage_worker.py",
+      "bytes": 11204,
+      "sha256": "643d95483ffd7bad1a4c1d874d620c9dc6d5ba77f0cf2c024f49c799732b8191"
+    },
+    {
+      "path": "apps/api/src/push_kids/agent_processing/failures.py",
+      "bytes": 3390,
+      "sha256": "73167af67d45a1fad12b127804b29f2c799ebdc1242f61fdccb1387061600bdc"
+    },
+    {
+      "path": "apps/api/src/push_kids/agent_processing/footprint_provider.py",
+      "bytes": 3382,
+      "sha256": "1a85caae80956f100386b2a4fb0b43d09c8609b031bdfd9a3a6938bd1540119f"
+    },
+    {
+      "path": "apps/api/src/push_kids/agent_processing/history_search.py",
+      "bytes": 10170,
+      "sha256": "951cfbefa128f782e4a4f53035a3e2ca2d3c51c5c554cd89665af6bd3b22c265"
+    },
+    {
+      "path": "apps/api/src/push_kids/agent_processing/pipeline.py",
+      "bytes": 35100,
+      "sha256": "d14bb5682a75d9bd734e039f110b5a46de0c081b6b3537c95307f5a666b3c4ac"
+    },
+    {
+      "path": "apps/api/src/push_kids/agent_processing/presentation.py",
+      "bytes": 1617,
+      "sha256": "b1949cc139a25503b5236717096311cab86d9f069813fdef832af1a2b03ac50a"
+    },
+    {
+      "path": "apps/api/src/push_kids/agent_processing/prompt.py",
+      "bytes": 5119,
+      "sha256": "61152c25593aee2665a6ae59bb489e90b9b031bc48df69a24892e82fea242823"
+    },
+    {
+      "path": "apps/api/src/push_kids/agent_processing/providers.py",
+      "bytes": 39348,
+      "sha256": "67dda674bdebba1f8c37dae29c72d231c46cad5dcafb3af0ee35393153937bca"
+    },
+    {
+      "path": "apps/api/src/push_kids/agent_processing/runner.py",
+      "bytes": 5379,
+      "sha256": "78a16f4d94ede7d292eb43a01f59533c992d1d98d6f6aeaa22c2fb8821408b75"
+    },
+    {
+      "path": "apps/api/src/push_kids/agent_processing/stage_contracts.py",
+      "bytes": 20003,
+      "sha256": "056cd0eb6bde33429c6eb56c9f9b11c7a96237671a6378046490ca2c18df6e6a"
+    },
+    {
+      "path": "apps/api/src/push_kids/agent_processing/stage_io.py",
+      "bytes": 1699,
+      "sha256": "1b27b9cf4d5bf53887449ba30ec35d658bfb08ae43fb51bca7a9118c3cf20f4e"
+    },
+    {
+      "path": "apps/api/src/push_kids/agent_processing/stage_provider.py",
+      "bytes": 7608,
+      "sha256": "541aa016674b35e215eee052f23bc04e00d09164995f9e169d15c65fedc125e1"
+    },
+    {
+      "path": "apps/api/src/push_kids/agent_processing/subject_routing.py",
+      "bytes": 8518,
+      "sha256": "fb0e4096b7308edc5f47a8157fdf4bdf7feac20400a4193c836e7ca828297db0"
+    },
+    {
+      "path": "apps/api/src/push_kids/agent_processing/suggestion_contracts.py",
+      "bytes": 1004,
+      "sha256": "917ac3d40133976c42466bf126aed0dbcf5aaf7831df5e97885cae771ef86c1b"
+    },
+    {
+      "path": "apps/api/src/push_kids/agent_processing/suggestion_provider.py",
+      "bytes": 3885,
+      "sha256": "ed9fa86f6e4c557fd50c378d70bf36e98363bfa4a14049805a389eb51a8b4810"
+    },
+    {
+      "path": "apps/api/src/push_kids/agent_processing/telemetry.py",
+      "bytes": 4258,
+      "sha256": "c19ebc6d7bcfa7de61364e4aa7fa75710e8a3547296c401a60a981ee3dbcb7db"
+    },
+    {
+      "path": "apps/api/src/push_kids/agent_processing/worker.py",
+      "bytes": 23993,
+      "sha256": "32f8cb9f7b4a7e181ae4227bbffadfa5f2c582c4cfabf02ae8528f7172cbc2b8"
+    },
+    {
+      "path": "apps/api/src/push_kids/bootstrap/__init__.py",
+      "bytes": 36,
+      "sha256": "465e34c6b3ba1f64f264a3d2657027bb86ddb8373b6912b578e2769026bf9adb"
+    },
+    {
+      "path": "apps/api/src/push_kids/bootstrap/app.py",
+      "bytes": 13787,
+      "sha256": "d4247d2c6271a4ad5aa5a60f04ac626e5935384c063e850449e2c6ca0a0f3fe7"
+    },
+    {
+      "path": "apps/api/src/push_kids/children/__init__.py",
+      "bytes": 36,
+      "sha256": "d01b1425b505e82c0abd7cb821b80f31fedc8ba6f4622262811c6578543b5c5a"
+    },
+    {
+      "path": "apps/api/src/push_kids/children/grade_confirmation.py",
+      "bytes": 5810,
+      "sha256": "1a8bf6c7a420e34ab9084a9d6b2fa44edc30342b704eb3009d2d5304d14420f7"
+    },
+    {
+      "path": "apps/api/src/push_kids/children/grade_policy.py",
+      "bytes": 1822,
+      "sha256": "8c86d69abee28b11155e577c55c4ed0523030c5b753a14a94ae3ecb51eb4ca81"
+    },
+    {
+      "path": "apps/api/src/push_kids/children/router.py",
+      "bytes": 3767,
+      "sha256": "7a0365e6ceff37b737d40364edb9c2b90e0bc7415464f830bece0be1f73adc3b"
+    },
+    {
+      "path": "apps/api/src/push_kids/children/schemas.py",
+      "bytes": 3014,
+      "sha256": "6f9117784f28a44ce205b650ee3cded248b1213f8f86c6fdbe8d13bf8fe60bf5"
+    },
+    {
+      "path": "apps/api/src/push_kids/children/service.py",
+      "bytes": 14394,
+      "sha256": "703c90b0f973a48ce4a294f4a2c567b8b42103849086b7ffaf03165b2b304abd"
+    },
+    {
+      "path": "apps/api/src/push_kids/daily_tasks/__init__.py",
+      "bytes": 80,
+      "sha256": "f8d952eb52ccd41706ff6db414a2c96701f4a6045515c45273cd1da73a9ec70f"
+    },
+    {
+      "path": "apps/api/src/push_kids/daily_tasks/router.py",
+      "bytes": 1851,
+      "sha256": "a1900486b8627abeae750c55f143efaa34c72777624f981720da05f83b25e215"
+    },
+    {
+      "path": "apps/api/src/push_kids/daily_tasks/schemas.py",
+      "bytes": 1604,
+      "sha256": "0678edc4f1777c655d3c91b7c0f3bdf67bf03cb745d0c73a4435f2c57d42021f"
+    },
+    {
+      "path": "apps/api/src/push_kids/daily_tasks/service.py",
+      "bytes": 7938,
+      "sha256": "83554f2c3b888aff2284b808c733b0d4864c053ec05e2cbadcb93a027cbf64f8"
+    },
+    {
+      "path": "apps/api/src/push_kids/data_management/__init__.py",
+      "bytes": 55,
+      "sha256": "fec60533a4fcc55cb7e4f521cb5c60a4f7d142a597b202f3ba5d5cbc866d3c2d"
+    },
+    {
+      "path": "apps/api/src/push_kids/data_management/router.py",
+      "bytes": 2818,
+      "sha256": "f0bfdf303b5bd8d1f917eb430b749cb2b25e9f333d0cc7ccb17c822c3cf1f065"
+    },
+    {
+      "path": "apps/api/src/push_kids/data_management/schemas.py",
+      "bytes": 624,
+      "sha256": "86e8b4864a08b362dbbf379be6824d1f51a2f9ad59c534f44473e9614d27876d"
+    },
+    {
+      "path": "apps/api/src/push_kids/data_management/service.py",
+      "bytes": 9150,
+      "sha256": "1e1788658e648e1b3524584b9c0e3b5b5f3963ee2c78cf37a284c09a1c8ab579"
+    },
+    {
+      "path": "apps/api/src/push_kids/data_management/worker.py",
+      "bytes": 10851,
+      "sha256": "b05d9b4b736cf92f335ce453eea5ab108c1649564dca2feb38f6cae4f0d96486"
+    },
+    {
+      "path": "apps/api/src/push_kids/families/__init__.py",
+      "bytes": 62,
+      "sha256": "dcd8703200bdd8a66dd752fd0d66abf0090ba780457dee667e9d13df7aef13dd"
+    },
+    {
+      "path": "apps/api/src/push_kids/families/domain.py",
+      "bytes": 252,
+      "sha256": "470752b7272082370743afa75f7f73c6aa8c20d3f1cd9a54b769a472536c42d8"
+    },
+    {
+      "path": "apps/api/src/push_kids/families/rate_limit.py",
+      "bytes": 1576,
+      "sha256": "08a1a2fa6319df72895a4e5aae5760881b3dfb0304b95fb2e512f686c642f745"
+    },
+    {
+      "path": "apps/api/src/push_kids/families/repository.py",
+      "bytes": 2624,
+      "sha256": "7aa28dbe6cb1a92afb1c1e32316047435db926f2dea074a958ae350b3e21dfe5"
+    },
+    {
+      "path": "apps/api/src/push_kids/families/router.py",
+      "bytes": 5884,
+      "sha256": "d55668b9317715f8732bcf9f674f919d67d47822ca05d714d678096a8edfe446"
+    },
+    {
+      "path": "apps/api/src/push_kids/families/schemas.py",
+      "bytes": 2776,
+      "sha256": "491b4bb22a88ac66e562706fdc8c623f839ff7f96c8dbb06c8f0d0e1ab38302f"
+    },
+    {
+      "path": "apps/api/src/push_kids/families/service.py",
+      "bytes": 35833,
+      "sha256": "2578fed60ae9c1b3927460d2aa8ae9d239018ea099e82b7d7f60ec40549a8220"
+    },
+    {
+      "path": "apps/api/src/push_kids/footprints/__init__.py",
+      "bytes": 78,
+      "sha256": "bc65bd633ba54b20035bb3390199d53c79a4faabe78b82151c50b7064838b903"
+    },
+    {
+      "path": "apps/api/src/push_kids/footprints/access.py",
+      "bytes": 2567,
+      "sha256": "a9166a10bb4138cc68b60edcac1ac1e38de8fae648ee2f5c48ef3a166e97d718"
+    },
+    {
+      "path": "apps/api/src/push_kids/footprints/imports.py",
+      "bytes": 9190,
+      "sha256": "e595977c51bdd68e359b6d965ad273412fab67aa6ba98e52dee3a11a1fa23e93"
+    },
+    {
+      "path": "apps/api/src/push_kids/footprints/map_provider.py",
+      "bytes": 3139,
+      "sha256": "165efcf6e288e17818b42e9d812c3b2f19acc88c8054ff2d8f3dcf4d8880dfd2"
+    },
+    {
+      "path": "apps/api/src/push_kids/footprints/media_lifecycle.py",
+      "bytes": 1147,
+      "sha256": "73cdcf952f2ed58e1ce8eec9f5b72c39363a12fb0e63fd5f551cee96c8bf520d"
+    },
+    {
+      "path": "apps/api/src/push_kids/footprints/media_service.py",
+      "bytes": 1530,
+      "sha256": "42cef00fe4f7134df60e06efb6232f88d5e980603fdc50338597fb672924300f"
+    },
+    {
+      "path": "apps/api/src/push_kids/footprints/metadata.py",
+      "bytes": 5316,
+      "sha256": "7183aeec1932f08b47d36038537319c4a51983f3123ee748e294199e19076e2a"
+    },
+    {
+      "path": "apps/api/src/push_kids/footprints/models.py",
+      "bytes": 6326,
+      "sha256": "0e97653dbc0fa9221b9f2fd335b1f77c20d85b4d349b968d8d098e5c2b5a30c7"
+    },
+    {
+      "path": "apps/api/src/push_kids/footprints/policies.py",
+      "bytes": 1175,
+      "sha256": "01d7414f7a33abde5197cfb8cdb4ea7256f6ee566a0e90a98b369d38f417e9b5"
+    },
+    {
+      "path": "apps/api/src/push_kids/footprints/reads.py",
+      "bytes": 19481,
+      "sha256": "eee208494d419076b80e38e8cb4cb595ce1fa81eea576f157e875d85c6530d88"
+    },
+    {
+      "path": "apps/api/src/push_kids/footprints/router.py",
+      "bytes": 8994,
+      "sha256": "c108604f6e92d74acf1b0593a22221ee02ca7f619f2d466dcb59f55fbf1a60fe"
+    },
+    {
+      "path": "apps/api/src/push_kids/footprints/schemas.py",
+      "bytes": 3869,
+      "sha256": "4695d0021cb2da9b58c2d7ec8f808201022597d790b0877c8a31e6089da49ee9"
+    },
+    {
+      "path": "apps/api/src/push_kids/footprints/service.py",
+      "bytes": 14197,
+      "sha256": "64aa382e9cd40aab3fb4d8db94ee2c53e56d564aa7b4915c7e532d690346be17"
+    },
+    {
+      "path": "apps/api/src/push_kids/footprints/worker.py",
+      "bytes": 14246,
+      "sha256": "5862edf3abf336ff66e9c528ea74574a1f8dfe86c787dae7108973717bb6106e"
+    },
+    {
+      "path": "apps/api/src/push_kids/knowledge/__init__.py",
+      "bytes": 35,
+      "sha256": "438f6df18faeec37db1c8b7b6c576856074446b92988415e0da1b1de2d92b8d5"
+    },
+    {
+      "path": "apps/api/src/push_kids/knowledge/coverage_snapshot.py",
+      "bytes": 617,
+      "sha256": "6a6affe83ad211f471629a34c9d75a67f47a898c9f6d257fa0ffb456b465c3b5"
+    },
+    {
+      "path": "apps/api/src/push_kids/knowledge/learning_context.py",
+      "bytes": 4179,
+      "sha256": "fa94f39dbc78156cc46b7a69d09f5c54ff237c543c3174fb94cdf27833225d53"
+    },
+    {
+      "path": "apps/api/src/push_kids/knowledge/normalization.py",
+      "bytes": 245,
+      "sha256": "d0a3a44a0f37187f3f3a93d31d11b1fa69f56c98850d25b7acb3711d022a72c2"
+    },
+    {
+      "path": "apps/api/src/push_kids/knowledge/supersession.py",
+      "bytes": 1907,
+      "sha256": "2c1a12367e716beb7078a9cf5db9eb1b5a1cca5a21b30fdc8d68f2b5318be8be"
+    },
+    {
+      "path": "apps/api/src/push_kids/learning/__init__.py",
+      "bytes": 37,
+      "sha256": "9f4534836174853ca8f5acf993d7fc2010af6122a8af13deb53fe82e3c44759e"
+    },
+    {
+      "path": "apps/api/src/push_kids/learning/confirmation_query.py",
+      "bytes": 1895,
+      "sha256": "243e11306b6385413dfdee1383d27161a099f40c545aa3348fb548ff8f430f95"
+    },
+    {
+      "path": "apps/api/src/push_kids/learning/coverage.py",
+      "bytes": 2465,
+      "sha256": "fad070b826ef32ea93d844a6232bd4c55580557f41a228572878e9842af09cf5"
+    },
+    {
+      "path": "apps/api/src/push_kids/learning/history.py",
+      "bytes": 16610,
+      "sha256": "928180d0f44bd2c4d38dff187cacd5ae205744947a85e82e390a4d2ab7e988de"
+    },
+    {
+      "path": "apps/api/src/push_kids/learning/media_router.py",
+      "bytes": 2546,
+      "sha256": "2822e769178dc38532d65fb4b083ffca22635dbe95ceea9706d40c4fd64915a8"
+    },
+    {
+      "path": "apps/api/src/push_kids/learning/router.py",
+      "bytes": 8193,
+      "sha256": "b477355be89ca423c59d6bd07ad9977f8b5a91828f222269ddd4459ac622c9de"
+    },
+    {
+      "path": "apps/api/src/push_kids/learning/schemas.py",
+      "bytes": 4035,
+      "sha256": "ce9b74023f1417d5922033738cf0da125bd4a9c6e42a1914fe3704a1676ef5de"
+    },
+    {
+      "path": "apps/api/src/push_kids/learning/service.py",
+      "bytes": 64652,
+      "sha256": "c0d3e595a7b9b6b947b5ad1bf38931d2988a484e985c959ad97c39b587766e27"
+    },
+    {
+      "path": "apps/api/src/push_kids/learning_suggestions/__init__.py",
+      "bytes": 88,
+      "sha256": "b86e549887e7e91acd8bcb6f67a1a21ac8df711812b535831183b148a2bbef0f"
+    },
+    {
+      "path": "apps/api/src/push_kids/learning_suggestions/generation.py",
+      "bytes": 9382,
+      "sha256": "86d79d78f6fa4cdad0e5cd2a37556f141e20a3bc3e69cbb7ffd14fb40725094b"
+    },
+    {
+      "path": "apps/api/src/push_kids/learning_suggestions/models.py",
+      "bytes": 6777,
+      "sha256": "d9b7de624df8d0a2ac6a423ad4406254b7d5f445530b2856ee82139f70c37ca5"
+    },
+    {
+      "path": "apps/api/src/push_kids/learning_suggestions/policy.py",
+      "bytes": 953,
+      "sha256": "5a71dcf479f8d170d8e8b05790be1f82612542bd089ab14f5ac421ec32b9f61f"
+    },
+    {
+      "path": "apps/api/src/push_kids/learning_suggestions/queries.py",
+      "bytes": 5517,
+      "sha256": "002e47c9ea1fb0a4b220c00f4acb6c7e5e0a1b624ea67097f455e5e18682809a"
+    },
+    {
+      "path": "apps/api/src/push_kids/learning_suggestions/recording.py",
+      "bytes": 6433,
+      "sha256": "76f05c8014ff205d171af502fb544437ad618b9fccfc7944d6e291c775ec85c8"
+    },
+    {
+      "path": "apps/api/src/push_kids/learning_suggestions/router.py",
+      "bytes": 4230,
+      "sha256": "63727490cc4041fa74128608fc928aa12efb7005a528b73e0c2d25e40d708639"
+    },
+    {
+      "path": "apps/api/src/push_kids/learning_suggestions/schemas.py",
+      "bytes": 1043,
+      "sha256": "25ae8ad9e4e6462c27b1833692cc9ff16d7367701ec61c54f264f26c0c97f131"
+    },
+    {
+      "path": "apps/api/src/push_kids/learning_suggestions/service.py",
+      "bytes": 11377,
+      "sha256": "cd0373512c0d532a4d2090b6a7eef1fe0699a4ec58a727accafac717a57199e6"
+    },
+    {
+      "path": "apps/api/src/push_kids/learning_suggestions/worker.py",
+      "bytes": 10230,
+      "sha256": "d57fd5ddcd6d82e3831b06512e9db3f127760f255462bacd8252ef4d3bd4c3e7"
+    },
+    {
+      "path": "apps/api/src/push_kids/media/__init__.py",
+      "bytes": 33,
+      "sha256": "b186832432b35ee41605d83fd0c11df354c0fb65608d431b6c88b0dd8a780e5e"
+    },
+    {
+      "path": "apps/api/src/push_kids/media/cleanup.py",
+      "bytes": 1383,
+      "sha256": "98654b597d77f1ab153fa54d2204985310b189c2f4576444fc58f55d10e8f1fc"
+    },
+    {
+      "path": "apps/api/src/push_kids/media/preview_limit.py",
+      "bytes": 1117,
+      "sha256": "79494962e585f554c38d667365c361538ec5a68cc33f342470b0cc1dd86e4b38"
+    },
+    {
+      "path": "apps/api/src/push_kids/media/store.py",
+      "bytes": 11704,
+      "sha256": "31d4c27348f1e0a7da862f5a0d07276cc90c3bcecd94d171727013cf4fa9040a"
+    },
+    {
+      "path": "apps/api/src/push_kids/notifications/__init__.py",
+      "bytes": 35,
+      "sha256": "5384bfdb2df380b6557cc7a71d16891415bccaa87699406e236f752c6415389f"
+    },
+    {
+      "path": "apps/api/src/push_kids/notifications/destinations.py",
+      "bytes": 2126,
+      "sha256": "a7a28f58911d3466a3b9e2ff7cdfb5cd7d2fad5987838e569ee640c3e42f7c56"
+    },
+    {
+      "path": "apps/api/src/push_kids/notifications/domain.py",
+      "bytes": 8923,
+      "sha256": "5e076e15449893da0544e3fbbb8d94f4d4623f0e9f407436a6290064d61a0bf3"
+    },
+    {
+      "path": "apps/api/src/push_kids/notifications/outbox.py",
+      "bytes": 7987,
+      "sha256": "5eff8b5ea5be3867f97678215ac58020636eb9e6436952b6e77d9d14705a304b"
+    },
+    {
+      "path": "apps/api/src/push_kids/notifications/planner.py",
+      "bytes": 9086,
+      "sha256": "eb6037249e2cacd02a52b31d7b42ccbfe7c968e9e8be305c1db5a67438fd6cd9"
+    },
+    {
+      "path": "apps/api/src/push_kids/notifications/providers.py",
+      "bytes": 5576,
+      "sha256": "f1ef6a63003936784e3af9446cfb9a63155fbed7ae2407a2e14c528146fd7058"
+    },
+    {
+      "path": "apps/api/src/push_kids/notifications/renewal_policy.py",
+      "bytes": 1097,
+      "sha256": "f23c2d0d5787ab26901dd67cee31548a08648501892f1a0744b96d85e44b6f52"
+    },
+    {
+      "path": "apps/api/src/push_kids/notifications/renewal_service.py",
+      "bytes": 17924,
+      "sha256": "85d007d8f3890f56332133439c376aef9f20c9960c87bcb71bd47243e07032fa"
+    },
+    {
+      "path": "apps/api/src/push_kids/notifications/router.py",
+      "bytes": 5123,
+      "sha256": "4e539d9ecc2b1563e280ef96249ac2a5373c8770e890f601b5c5e3d6995f64bb"
+    },
+    {
+      "path": "apps/api/src/push_kids/notifications/scheduler.py",
+      "bytes": 3597,
+      "sha256": "c8de45a2e42317869eb6aef3e7da5a096d91b72e7a977cff06aefecb0258a153"
+    },
+    {
+      "path": "apps/api/src/push_kids/notifications/schemas.py",
+      "bytes": 3484,
+      "sha256": "654ba01fcad32cf7f89b26f9de2b7ae13a364912dc2484569059ed5bace630eb"
+    },
+    {
+      "path": "apps/api/src/push_kids/notifications/service.py",
+      "bytes": 33091,
+      "sha256": "08deb1b06ae1deacc72bb68d5867e523372f9279c9df42f947c33d191eda9e05"
+    },
+    {
+      "path": "apps/api/src/push_kids/notifications/templates.py",
+      "bytes": 3740,
+      "sha256": "737233dbe5c4cd574c3e7e234423603e799e5cdc8684ac08d7865d46d8e393ff"
+    },
+    {
+      "path": "apps/api/src/push_kids/persistence/__init__.py",
+      "bytes": 36,
+      "sha256": "7b4126ac015176bded2fa6aa081f109d139805436f808102bea48d3765796c60"
+    },
+    {
+      "path": "apps/api/src/push_kids/persistence/early_review_slots_v1.py",
+      "bytes": 5925,
+      "sha256": "338432ad70d64b7f968e7eadeb4d1a73505c8232c416d4618da82e86f871d07b"
+    },
+    {
+      "path": "apps/api/src/push_kids/persistence/models.py",
+      "bytes": 54237,
+      "sha256": "515f5549a8a6b9a2b290089603e1b705980aef672667a882262956233375d02d"
+    },
+    {
+      "path": "apps/api/src/push_kids/persistence/review_queue_v1.py",
+      "bytes": 5506,
+      "sha256": "5e8216ee90d73df7232983d56c61170bea0a6b859e472eaa3cb8fa56b2bccdd5"
+    },
+    {
+      "path": "apps/api/src/push_kids/persistence/review_queue_v2.py",
+      "bytes": 5626,
+      "sha256": "e403a5101ecffac455e9cbcff1ddec0e2cf7d51378b4460719bfb0565a48e4d9"
+    },
+    {
+      "path": "apps/api/src/push_kids/persistence/types.py",
+      "bytes": 776,
+      "sha256": "d350a0785c6bd90b5b52412aba7b32ce57488d15e626838af013a4e9f2d69641"
+    },
+    {
+      "path": "apps/api/src/push_kids/planning/__init__.py",
+      "bytes": 37,
+      "sha256": "82c6efab67421562308fb21fa972182eac23a3ce75c67679e20a4855681c2920"
+    },
+    {
+      "path": "apps/api/src/push_kids/planning/completion_progress.py",
+      "bytes": 2859,
+      "sha256": "635a948e443d7af613fd8825388804443ff7e63ae0611acacdd45b1c97c9d56d"
+    },
+    {
+      "path": "apps/api/src/push_kids/planning/deletion.py",
+      "bytes": 5683,
+      "sha256": "050b4969ce802347be8ae8fb84bb02c6d4c8f640a8ef9562173c12f754893631"
+    },
+    {
+      "path": "apps/api/src/push_kids/planning/domain.py",
+      "bytes": 4783,
+      "sha256": "f41e66dd0604169db11784a17c1e85e21f4460380ba7749649e744db57d41d11"
+    },
+    {
+      "path": "apps/api/src/push_kids/planning/early_candidates.py",
+      "bytes": 4860,
+      "sha256": "b4b4d709ac997839fc40ec7b94d4c706e0419fbbb646efdfaf0316512f44c923"
+    },
+    {
+      "path": "apps/api/src/push_kids/planning/early_projection.py",
+      "bytes": 2016,
+      "sha256": "7c9882d60cb4139cf9f07045cbbfaa787379fa81f49a6f253cf75fcad7dd3bc6"
+    },
+    {
+      "path": "apps/api/src/push_kids/planning/early_review.py",
+      "bytes": 897,
+      "sha256": "06b5a4ad532a6beb3415eef98203c38c9adc2db4df1c2e82d3bca30ec6ef4c84"
+    },
+    {
+      "path": "apps/api/src/push_kids/planning/eligibility.py",
+      "bytes": 591,
+      "sha256": "8b9132157b73bbb41e93d42ebfe8fdc0ee1e4af421b250a25f989060c4b06589"
+    },
+    {
+      "path": "apps/api/src/push_kids/planning/inventory.py",
+      "bytes": 17934,
+      "sha256": "0cbb44bf447f977d0dfe7aa4c4a3a4d3332daf614f58a9f993dba3c31270789b"
+    },
+    {
+      "path": "apps/api/src/push_kids/planning/plan_candidates.py",
+      "bytes": 7799,
+      "sha256": "d8d68e89870cfd4da9ba448164b73a4c0fb5cee97a458be8c3496b5f43b629ba"
+    },
+    {
+      "path": "apps/api/src/push_kids/planning/policies.py",
+      "bytes": 6708,
+      "sha256": "a66ee39161afac2596948453094046e97a03ce6b5f2bf3a6a2bc02c9d0848f32"
+    },
+    {
+      "path": "apps/api/src/push_kids/planning/queue_projection.py",
+      "bytes": 2313,
+      "sha256": "bd62f1f29692a4dda32847ecf13fcd0b6b4a2d0fea266296765073455943464f"
+    },
+    {
+      "path": "apps/api/src/push_kids/planning/queue_state.py",
+      "bytes": 2388,
+      "sha256": "86f2f93cb168b17a9c4c276e5ad0d54eaa2e93e8502d58cff16a569668345fb7"
+    },
+    {
+      "path": "apps/api/src/push_kids/planning/router.py",
+      "bytes": 6403,
+      "sha256": "47d863c50a489ed13cfb20b553a7911bbb109510c422e85a18607cae23175bc3"
+    },
+    {
+      "path": "apps/api/src/push_kids/planning/scheduling.py",
+      "bytes": 15160,
+      "sha256": "0bdad9a0837bd0c133d0f8c17f3699f35de83e34f773f7f966070bd77e27c1ae"
+    },
+    {
+      "path": "apps/api/src/push_kids/planning/schemas.py",
+      "bytes": 890,
+      "sha256": "1ba4846cd0e522e32b6781e69e73c6cd35c5b24f3c23ff33df7e512c03bd2405"
+    },
+    {
+      "path": "apps/api/src/push_kids/planning/selection.py",
+      "bytes": 4332,
+      "sha256": "6bdf40b78f12041713a3bbe7c4483b65d878dd0e4e0dfa3807015d2f0246c100"
+    },
+    {
+      "path": "apps/api/src/push_kids/planning/service.py",
+      "bytes": 71085,
+      "sha256": "3a99244a4c5bd9996a4681eea96e6a1d72bce495c9b90e20d2f312317493cef6"
+    },
+    {
+      "path": "apps/api/src/push_kids/planning/supersession.py",
+      "bytes": 1484,
+      "sha256": "fb7240ccbae8145e216239bc360758480fb2e2608f577dd83d6fa80e17cf5aec"
+    },
+    {
+      "path": "apps/api/src/push_kids/platform/__init__.py",
+      "bytes": 30,
+      "sha256": "1e0301aa0e4aa41645bc3926d6d08695458f7ffa6105f10ce51c1be25798ae82"
+    },
+    {
+      "path": "apps/api/src/push_kids/platform/config.py",
+      "bytes": 7457,
+      "sha256": "877240242f6720d576ad0f3fbea7fa6ca690a620954080064d3d07e1a6aa6d09"
+    },
+    {
+      "path": "apps/api/src/push_kids/platform/context.py",
+      "bytes": 8125,
+      "sha256": "aab91763fc9995e8fee4a7eeb09f43c70885d29497dd179a97e48fd8051dfa85"
+    },
+    {
+      "path": "apps/api/src/push_kids/platform/database.py",
+      "bytes": 23233,
+      "sha256": "9531366d406a982d384fe1b85f53712a998fdac6dfb1c9eb362ca29a061acd9c"
+    },
+    {
+      "path": "apps/api/src/push_kids/platform/dependencies.py",
+      "bytes": 480,
+      "sha256": "184072e6207ef3af94f2245d498b56c8109c1a6491f59270342ef34d4696c3ad"
+    },
+    {
+      "path": "apps/api/src/push_kids/platform/errors.py",
+      "bytes": 1113,
+      "sha256": "8312f7c44e95594d1766fafa7d753122dfb0ac52ab692077f55ddb88736ce0a6"
+    },
+    {
+      "path": "apps/api/src/push_kids/platform/pagination.py",
+      "bytes": 1696,
+      "sha256": "23816dc902c7625813626ff80771bee4a94ae779653194e4572b8c3b13ebe2db"
+    },
+    {
+      "path": "apps/api/src/push_kids/platform/time.py",
+      "bytes": 659,
+      "sha256": "610f5ad8773d76c8b8ddf6cfaaa1f92fa4defbf44e5477be3c5c3f7c5d7e6250"
+    },
+    {
+      "path": "apps/api/src/push_kids/reporting/__init__.py",
+      "bytes": 43,
+      "sha256": "6446e694057f94282ad00ce722054cbc68d6191ee126018a7cc98f2d3eb2a6ac"
+    },
+    {
+      "path": "apps/api/src/push_kids/reporting/router.py",
+      "bytes": 4044,
+      "sha256": "00e5418712625451d7407dfb7b79b99e17b88b73f91d7a0c63871d1c69de7635"
+    },
+    {
+      "path": "apps/api/src/push_kids/reporting/service.py",
+      "bytes": 22563,
+      "sha256": "26ae438cbae0e7008c00f7a45d6e5b721fa44743ce482734b1f536dcb7b988c6"
+    },
+    {
+      "path": "apps/api/src/push_kids/reporting/trends.py",
+      "bytes": 2530,
+      "sha256": "8d2cf6c24d06975893b1bd898e3a34819b733a17c1c7e497f234f67016c383c7"
+    },
+    {
+      "path": "apps/api/src/push_kids/travel/__init__.py",
+      "bytes": 50,
+      "sha256": "310a404b454f587b5d2d7905d9d90047b311fa11d82af2b4424e5107e7b3616e"
+    },
+    {
+      "path": "apps/api/src/push_kids/travel/router.py",
+      "bytes": 2968,
+      "sha256": "8de6ad43f01e98ad4360237f48924cd9d3a9169b6ab962f172c9b3b7327ede93"
+    },
+    {
+      "path": "apps/api/src/push_kids/travel/schemas.py",
+      "bytes": 5361,
+      "sha256": "00f48f6ca1b9dea216a2751cccccd9d2950fea0d41a5abb02031b3d381ddf6df"
+    },
+    {
+      "path": "apps/api/src/push_kids/travel/service.py",
+      "bytes": 12729,
+      "sha256": "f92fc43d95d9c97fa9007a351f82ceb92913c6890fcd5efa12808b0829f312fb"
+    },
+    {
+      "path": "pyproject.toml",
+      "bytes": 1218,
+      "sha256": "cc0f8da752b212b2e5807eb8da472573986430460c46289fd92a872d14536c26"
+    },
+    {
+      "path": "uv.lock",
+      "bytes": 443900,
+      "sha256": "29f84b7eb4951ada6b3d7a5fe232e2ab2118c746466df36917559953df66e415"
+    },
+    {
+      "path": "wxcloud.config.json",
+      "bytes": 126,
+      "sha256": "97e2b2558b40d94d68f68a4a9a030e155e393d4ef810581b028698c633d63596"
+    }
+  ]
+}

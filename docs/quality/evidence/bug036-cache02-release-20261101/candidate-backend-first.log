@@ -1,0 +1,229 @@
+........................................................................ [  7%]
+........................................................................ [ 15%]
+........................................................................ [ 23%]
+........................................................................ [ 31%]
+........................................................................ [ 39%]
+........................................................................ [ 47%]
+........................................................................ [ 55%]
+........................................................................ [ 63%]
+...........................................s............ssss............ [ 71%]
+........................................................................ [ 79%]
+........sssssss........................................ss..............F [ 87%]
+..s.s.s.s.s.sss...............ssssssssssssssss.sssssssssssss.s.......... [ 95%]
+.............................................                            [100%]
+=================================== FAILURES ===================================
+___________ test_numbered_photos_remain_bound_to_original_submission ___________
+
+client = <starlette.testclient.TestClient object at 0x13f36cd70>
+app = <fastapi.applications.FastAPI object at 0x1495736e0>
+family_headers = {'X-Family-ID': 'family-test-a'}
+child = {'active': True, 'created_at': '2026-11-01T10:00:00.546944Z', 'daily_budget_minutes': 15, 'grade': '小学二年级', ...}
+
+    def test_numbered_photos_remain_bound_to_original_submission(client, app, family_headers, child):
+        app.state.worker.provider = NumberedProvider()
+        confirmed = []
+        for label in ("数学，加法", "数学，减法"):
+            created = client.post(
+                "/api/v1/submissions/upload",
+                headers=family_headers,
+                data={
+                    "child_id": child["id"],
+                    "occurred_at": (utcnow() - timedelta(days=4)).isoformat(),
+                    "input_text": label,
+                },
+                files=[
+                    ("files", (f"page-{i}.png", PNG + label.encode() + bytes([i]), "image/png"))
+                    for i in range(3)
+                ],
+            )
+            assert created.status_code == 202, created.text
+            sid = created.json()["id"]
+            assert app.state.worker.process_one()
+            submission = client.get(f"/api/v1/submissions/{sid}", headers=family_headers).json()
+            assert submission["state"] == "pending_confirmation", submission
+            assert (
+                submission["proposal"]["knowledge_points"][0]["direct_evidence"][1]["image_index"] == 2
+            )
+            result = client.post(
+                f"/api/v1/submissions/{sid}/confirm",
+                headers=family_headers,
+                json={"proposal": submission["proposal"]},
+            )
+            assert result.status_code == 200, result.text
+            confirmed.append((sid, result.json()["review_item_ids"]))
+        items = _todo_items(client, family_headers, child["id"])
+        media_ids = []
+        for sid, reviews in confirmed:
+            selected = [i for i in items if i["review_id"] in reviews]
+            assert selected and all(
+                i["source_submission_id"] == sid and i["source_image_index"] == 2 for i in selected
+            )
+            response = client.get(
+                f"/api/v1/children/{child['id']}/history/{sid}", headers=family_headers
+            )
+            assert response.status_code == 200
+            detail = response.json()
+            assert [m["index"] for m in detail["media"]] == [1, 2, 3]
+            media_ids.append(detail["media"][1]["id"])
+            # Feed real HTTP projections into the shipped component, across both numbered batches.
+>           subprocess.run(
+                [
+                    "node",
+                    "-e",
+                    r"""
+    const fs = require('node:fs'), vm = require('node:vm'), assert = require('node:assert/strict');
+    const { item, detail, childId } = JSON.parse(fs.readFileSync(0, 'utf8'));
+    const calls = [], downloads = [], previews = [];
+    let component;
+    const api = {
+      async request(url) { calls.push(url); return url.includes('/history/') ? detail : { url }; },
+      async downloadPreview(value) { downloads.push(value.url); return 'private-preview'; },
+      removePreview() {}
+    };
+    const source = fs.readFileSync('apps/miniprogram/components/submission-materials/index.js', 'utf8');
+    vm.runInNewContext(source, {
+      Component(value) { component = value; }, require() { return api; },
+      wx: { previewImage(value) { previews.push(value); } }
+    });
+    const instance = { ...component.methods, data: { ...component.data, childId,
+      submissionId: item.source_submission_id,
+      highlightIndex: item.source_image_index, exactSource: true } };
+    instance.setData = updates => Object.entries(updates).forEach(([key, value]) => {
+      const parts = key.replace(/\[(\d+)\]/g, '.$1').split('.'); let target = instance.data;
+      for (const part of parts.slice(0, -1)) target = target[part]; target[parts.at(-1)] = value;
+    });
+    (async () => {
+      await instance.load();
+      assert.equal(instance.data.media.length, 1);
+      assert.equal(instance.data.media[0].id, detail.media[1].id);
+      assert.equal(instance.data.text, '');
+      await instance.preview({ currentTarget: { dataset: { id: detail.media[1].id } } });
+      assert.equal(calls.length, 3);
+      for (const url of calls.slice(1)) {
+        const mediaPath = `/submissions/${item.source_submission_id}/media/${detail.media[1].id}`;
+        assert.equal(url, `${mediaPath}/preview?child_id=${childId}`);
+      }
+      assert.equal(downloads.length, 2);
+      assert.deepEqual(Array.from(previews[0].urls), ['private-preview']);
+    })().catch(error => { console.error(error); process.exitCode = 1; });
+    """,
+                ],
+                input=json.dumps({"item": selected[0], "detail": detail, "childId": child["id"]}),
+                text=True,
+                capture_output=True,
+                check=True,
+                timeout=10,
+            )
+
+tests/integration/test_precise_source.py:76: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+input = '{"item": {"review_id": "17f6787d-0073-4c4f-ad73-5d324d5511aa", "knowledge_name": "\\u6570\\u5b66", "due_date": "2026-...73", "index": 3, "content_type": "image/png", "available": true}]}, "childId": "0e778d67-dbc3-4c30-9143-9f1c9331276f"}'
+capture_output = True, timeout = 10, check = True
+popenargs = (['node', '-e', "\nconst fs = require('node:fs'), vm = require('node:vm'), assert = require('node:assert/strict');\nco...m(previews[0].urls), ['private-preview']);\n})().catch(error => { console.error(error); process.exitCode = 1; });\n"],)
+kwargs = {'stderr': -1, 'stdin': -1, 'stdout': -1, 'text': True}
+process = <Popen: returncode: 1 args: ['node', '-e', "\nconst fs = require('node:fs'),...>
+stdout = ''
+stderr = "node:fs:440\n    return binding.readFileUtf8(path, stringToFlags(options.flag));\n                   ^\n\nError: ENOE...NT',\n  syscall: 'open',\n  path: 'apps/miniprogram/components/submission-materials/index.js'\n}\n\nNode.js v22.22.0\n"
+retcode = 1
+
+    def run(*popenargs,
+            input=None, capture_output=False, timeout=None, check=False, **kwargs):
+        """Run command with arguments and return a CompletedProcess instance.
+    
+        The returned instance will have attributes args, returncode, stdout and
+        stderr. By default, stdout and stderr are not captured, and those attributes
+        will be None. Pass stdout=PIPE and/or stderr=PIPE in order to capture them,
+        or pass capture_output=True to capture both.
+    
+        If check is True and the exit code was non-zero, it raises a
+        CalledProcessError. The CalledProcessError object will have the return code
+        in the returncode attribute, and output & stderr attributes if those streams
+        were captured.
+    
+        If timeout (seconds) is given and the process takes too long,
+         a TimeoutExpired exception will be raised.
+    
+        There is an optional argument "input", allowing you to
+        pass bytes or a string to the subprocess's stdin.  If you use this argument
+        you may not also use the Popen constructor's "stdin" argument, as
+        it will be used internally.
+    
+        By default, all communication is in bytes, and therefore any "input" should
+        be bytes, and the stdout and stderr will be bytes. If in text mode, any
+        "input" should be a string, and stdout and stderr will be strings decoded
+        according to locale encoding, or by "encoding" if set. Text mode is
+        triggered by setting any of text, encoding, errors or universal_newlines.
+    
+        The other arguments are the same as for the Popen constructor.
+        """
+        if input is not None:
+            if kwargs.get('stdin') is not None:
+                raise ValueError('stdin and input arguments may not both be used.')
+            kwargs['stdin'] = PIPE
+    
+        if capture_output:
+            if kwargs.get('stdout') is not None or kwargs.get('stderr') is not None:
+                raise ValueError('stdout and stderr arguments may not be used '
+                                 'with capture_output.')
+            kwargs['stdout'] = PIPE
+            kwargs['stderr'] = PIPE
+    
+        with Popen(*popenargs, **kwargs) as process:
+            try:
+                stdout, stderr = process.communicate(input, timeout=timeout)
+            except TimeoutExpired as exc:
+                process.kill()
+                if _mswindows:
+                    # Windows accumulates the output in a single blocking
+                    # read() call run on child threads, with the timeout
+                    # being done in a join() on those threads.  communicate()
+                    # _after_ kill() is required to collect that and add it
+                    # to the exception.
+                    exc.stdout, exc.stderr = process.communicate()
+                else:
+                    # POSIX _communicate already populated the output so
+                    # far into the TimeoutExpired exception.
+                    process.wait()
+                raise
+            except:  # Including KeyboardInterrupt, communicate handled that.
+                process.kill()
+                # We don't call process.wait() as .__exit__ does that for us.
+                raise
+            retcode = process.poll()
+            if check and retcode:
+>               raise CalledProcessError(retcode, process.args,
+                                         output=stdout, stderr=stderr)
+E               subprocess.CalledProcessError: Command '['node', '-e', "\nconst fs = require('node:fs'), vm = require('node:vm'), assert = require('node:assert/strict');\nconst { item, detail, childId } = JSON.parse(fs.readFileSync(0, 'utf8'));\nconst calls = [], downloads = [], previews = [];\nlet component;\nconst api = {\n  async request(url) { calls.push(url); return url.includes('/history/') ? detail : { url }; },\n  async downloadPreview(value) { downloads.push(value.url); return 'private-preview'; },\n  removePreview() {}\n};\nconst source = fs.readFileSync('apps/miniprogram/components/submission-materials/index.js', 'utf8');\nvm.runInNewContext(source, {\n  Component(value) { component = value; }, require() { return api; },\n  wx: { previewImage(value) { previews.push(value); } }\n});\nconst instance = { ...component.methods, data: { ...component.data, childId,\n  submissionId: item.source_submission_id,\n  highlightIndex: item.source_image_index, exactSource: true } };\ninstance.setData = updates => Object.entries(updates).forEach(([key, value]) => {\n  const parts = key.replace(/\\[(\\d+)\\]/g, '.$1').split('.'); let target = instance.data;\n  for (const part of parts.slice(0, -1)) target = target[part]; target[parts.at(-1)] = value;\n});\n(async () => {\n  await instance.load();\n  assert.equal(instance.data.media.length, 1);\n  assert.equal(instance.data.media[0].id, detail.media[1].id);\n  assert.equal(instance.data.text, '');\n  await instance.preview({ currentTarget: { dataset: { id: detail.media[1].id } } });\n  assert.equal(calls.length, 3);\n  for (const url of calls.slice(1)) {\n    const mediaPath = `/submissions/${item.source_submission_id}/media/${detail.media[1].id}`;\n    assert.equal(url, `${mediaPath}/preview?child_id=${childId}`);\n  }\n  assert.equal(downloads.length, 2);\n  assert.deepEqual(Array.from(previews[0].urls), ['private-preview']);\n})().catch(error => { console.error(error); process.exitCode = 1; });\n"]' returned non-zero exit status 1.
+
+/Users/bytedance/.local/share/uv/python/cpython-3.12.11-macos-aarch64-none/lib/python3.12/subprocess.py:571: CalledProcessError
+=============================== warnings summary ===============================
+../../../../Users/bytedance/Documents/push_kids/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /Users/bytedance/Documents/push_kids/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+tests/integration/test_child_profile_lifecycle_migration.py: 5 warnings
+tests/integration/test_footprints_migration.py: 7 warnings
+tests/integration/test_grade_confirmation_migration.py: 14 warnings
+tests/integration/test_migration_field_backfill.py: 26 warnings
+tests/integration/test_migration_multi_subject.py: 10 warnings
+tests/integration/test_notification_migration.py: 14 warnings
+tests/integration/test_notification_renewal_migration.py: 7 warnings
+  /Users/bytedance/Documents/push_kids/.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py:952: DeprecationWarning: The default datetime adapter is deprecated as of Python 3.12; see the sqlite3 documentation for suggested replacement recipes
+    cursor.execute(statement, parameters)
+
+tests/integration/test_daily_task_migration.py: 2 warnings
+tests/integration/test_fair_review_migration.py: 3 warnings
+tests/integration/test_footprints_migration.py: 4 warnings
+tests/integration/test_grade_confirmation_migration.py: 6 warnings
+tests/integration/test_migration_field_backfill.py: 1 warning
+tests/integration/test_notification_renewal_migration.py: 4 warnings
+tests/integration/test_supersession_migration.py: 2 warnings
+tests/integration/test_today_learning_migrations.py: 2 warnings
+  /Users/bytedance/Documents/push_kids/.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py:952: DeprecationWarning: The default date adapter is deprecated as of Python 3.12; see the sqlite3 documentation for suggested replacement recipes
+    cursor.execute(statement, parameters)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/integration/test_precise_source.py::test_numbered_photos_remain_bound_to_original_submission - subprocess.CalledProcessError: Command '['node', '-e', "\nconst fs = require('node:fs'), vm = require('node:vm'), assert = require('node:assert/strict');\nconst { item, detail, childId } = JSON.parse(fs.readFileSync(0, 'utf8'));\nconst calls = [], downloads = [], previews = [];\nlet component;\nconst api = {\n  async request(url) { calls.push(url); return url.includes('/history/') ? detail : { url }; },\n  async downloadPreview(value) { downloads.push(value.url); return 'private-preview'; },\n  removePreview() {}\n};\nconst source = fs.readFileSync('apps/miniprogram/components/submission-materials/index.js', 'utf8');\nvm.runInNewContext(source, {\n  Component(value) { component = value; }, require() { return api; },\n  wx: { previewImage(value) { previews.push(value); } }\n});\nconst instance = { ...component.methods, data: { ...component.data, childId,\n  submissionId: item.source_submission_id,\n  highlightIndex: item.source_image_index, exactSource: true } };\ninstance.setData = updates => Object.entries(updates).forEach(([key, value]) => {\n  const parts = key.replace(/\\[(\\d+)\\]/g, '.$1').split('.'); let target = instance.data;\n  for (const part of parts.slice(0, -1)) target = target[part]; target[parts.at(-1)] = value;\n});\n(async () => {\n  await instance.load();\n  assert.equal(instance.data.media.length, 1);\n  assert.equal(instance.data.media[0].id, detail.media[1].id);\n  assert.equal(instance.data.text, '');\n  await instance.preview({ currentTarget: { dataset: { id: detail.media[1].id } } });\n  assert.equal(calls.length, 3);\n  for (const url of calls.slice(1)) {\n    const mediaPath = `/submissions/${item.source_submission_id}/media/${detail.media[1].id}`;\n    assert.equal(url, `${mediaPath}/preview?child_id=${childId}`);\n  }\n  assert.equal(downloads.length, 2);\n  assert.deepEqual(Array.from(previews[0].urls), ['private-preview']);\n})().catch(error => { console.error(error); process.exitCode = 1; });\n"]' returned non-zero exit status 1.
+1 failed, 856 passed, 52 skipped, 108 warnings in 109.20s (0:01:49)

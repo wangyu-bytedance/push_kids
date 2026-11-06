@@ -1,6 +1,6 @@
 # 年级弹窗精简 · 设计准备证据 · 2026-10-24
 
-- Task: [Spec01](../../../specs/active/FEAT-013-GRADE-DIALOG-SIMPLIFICATION.md)，创建本证据时READY_FOR_REVIEW，后获用户“继续”批准，当前VERIFYING。
+- Task: [Spec01](../../../specs/completed/FEAT-013-GRADE-DIALOG-SIMPLIFICATION.md)，创建本证据时READY_FOR_REVIEW，后获用户“继续”批准，当前VERIFYING。
 - Design: [DREV02](../../design/frontend/prototypes/DREV-20261024-ANNUAL-GRADE-PROMOTION-02/FRONTEND-SPEC.md)，创建本证据时AWAITING_APPROVAL，后获批准并冻结。
 - Design-preparation baseline: 主[FEAT-013](../../domain/features/FEAT-013-annual-grade-promotion.md)当时为DREV01本地实现/VERIFYING；设计准备阶段无业务代码修改。后续实现与原生当前事实见[实施证据](GRADE-DIALOG-SIMPLIFICATION-IMPLEMENTATION-20261024.md)。
 - Scope: “孩子名的年级”＋一个picker＋并排“稍后 / 确认”；必要恢复态仅一行提示。无新业务语义。
@@ -26,7 +26,7 @@
 - Behavior Catalog、Architecture：业务确认、owner、调用/依赖方向不变，本轮只核对而不增加新事实。工程预算、服务端权限/CAS/队列不变。
 - Test evidence：本文件只登记当前设计diff；此前313项前端、DREV01原生节点和真实MySQL证据均不冒充本候选的实施验证。
 - Release docs：没有上传/体验/审核/正式发布变化，无新发布记录。原档案归档区BUG-033候选继续独立待批准。
-- 设计准备时Spec01处于`specs/active/FEAT-013-GRADE-DIALOG-SIMPLIFICATION.md`，READY_FOR_REVIEW；当时尚未批准和实施，不能DONE或迁completed。现在已批准并本地实现、处于VERIFYING，当前验收以实施证据为准。主年级Spec02继续active/VERIFYING。
+- 设计准备时Spec01处于`specs/completed/FEAT-013-GRADE-DIALOG-SIMPLIFICATION.md`，READY_FOR_REVIEW；当时尚未批准和实施，不能DONE或迁completed。现在已批准并本地实现、处于VERIFYING，当前验收以实施证据为准。主年级Spec02继续active/VERIFYING。
 
 当时新增候选与生产文档的状态有明确区分，无因设计准备引入的代码/文档事实冲突。UI-015原有“锁屏阻断、未采集”与随后已采集段落的差异，已在本次获批实施范围中按证据澄清；具体新布局原生/设备门禁以精简实施证据为准。
 

@@ -1,0 +1,120 @@
+{
+  "method": "implementer compared all 13 available photos, 5 manual inputs and 13 validated final proposals; not parent approval or independent code review",
+  "results": [
+    {
+      "case": "real01",
+      "status": "MATERIAL_MISSING",
+      "issue_code": "original_media_404",
+      "parent_review": "PENDING"
+    },
+    {
+      "case": "real02",
+      "status": "REVIEW_NOTES",
+      "issue_code": "review_granularity",
+      "parent_review": "PENDING"
+    },
+    {
+      "case": "real03",
+      "status": "MATERIAL_MISSING",
+      "issue_code": "original_media_404",
+      "parent_review": "PENDING"
+    },
+    {
+      "case": "real04",
+      "status": "MATERIAL_MISSING",
+      "issue_code": "original_media_404",
+      "parent_review": "PENDING"
+    },
+    {
+      "case": "real05",
+      "status": "NO_CONFIRMED_ISSUE",
+      "issue_code": "none",
+      "parent_review": "PENDING"
+    },
+    {
+      "case": "real06",
+      "status": "NO_OUTPUT",
+      "issue_code": "quality_final_refusal",
+      "parent_review": "PENDING"
+    },
+    {
+      "case": "real07",
+      "status": "NO_OUTPUT",
+      "issue_code": "cached_match_uncertainty",
+      "parent_review": "PENDING"
+    },
+    {
+      "case": "real08",
+      "status": "NO_CONFIRMED_ISSUE",
+      "issue_code": "none",
+      "parent_review": "PENDING"
+    },
+    {
+      "case": "real09",
+      "status": "NO_CONFIRMED_ISSUE",
+      "issue_code": "none",
+      "parent_review": "PENDING"
+    },
+    {
+      "case": "real10",
+      "status": "NEEDS_REVISION",
+      "issue_code": "source_completion_as_observation",
+      "parent_review": "PENDING"
+    },
+    {
+      "case": "real11",
+      "status": "REVIEW_NOTES",
+      "issue_code": "review_granularity",
+      "parent_review": "PENDING"
+    },
+    {
+      "case": "real12",
+      "status": "REVIEW_NOTES",
+      "issue_code": "review_summary_scope",
+      "parent_review": "PENDING"
+    },
+    {
+      "case": "real13",
+      "status": "REVIEW_NOTES",
+      "issue_code": "review_granularity",
+      "parent_review": "PENDING"
+    },
+    {
+      "case": "real14",
+      "status": "NO_CONFIRMED_ISSUE",
+      "issue_code": "none",
+      "parent_review": "PENDING"
+    },
+    {
+      "case": "real15",
+      "status": "NO_CONFIRMED_ISSUE",
+      "issue_code": "none",
+      "parent_review": "PENDING"
+    },
+    {
+      "case": "real16",
+      "status": "NO_CONFIRMED_ISSUE",
+      "issue_code": "none",
+      "parent_review": "PENDING"
+    },
+    {
+      "case": "real17",
+      "status": "NO_CONFIRMED_ISSUE",
+      "issue_code": "none",
+      "parent_review": "PENDING"
+    },
+    {
+      "case": "real18",
+      "status": "NEEDS_REVISION",
+      "issue_code": "unsourced_work_title",
+      "parent_review": "PENDING"
+    }
+  ],
+  "generated": 13,
+  "needs_revision": 2,
+  "review_notes": 4,
+  "no_confirmed_issue": 7,
+  "no_output": 2,
+  "material_missing": 3,
+  "quality_acceptance": "PENDING_PARENT_REVIEW"
+}

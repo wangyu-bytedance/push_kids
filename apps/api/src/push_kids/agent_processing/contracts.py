@@ -209,7 +209,13 @@ class AnalysisFailureDisposition:
 def analysis_failure_disposition(exc: Exception) -> AnalysisFailureDisposition:
     """Classify failures without inspecting provider text or coupling policy to inheritance."""
     if isinstance(exc, StageFailure):
-        output_failure = exc.reason in {"validation", "coverage", "unreadable", "capacity"}
+        output_failure = exc.reason in {
+            "validation",
+            "coverage",
+            "unreadable",
+            "capacity",
+            "quality",
+        }
         return AnalysisFailureDisposition(
             retryable=exc.retryable,
             code="analysis_output_invalid" if output_failure else "analysis_failed",
@@ -276,6 +282,8 @@ class CoverageMatch(BaseModel):
     point_fingerprint: str = Field(max_length=64)
     old_knowledge_id: str = Field(max_length=36)
     old_fingerprint: str = Field(max_length=64)
+    decision_revision: str | None = Field(default=None, max_length=64)
+    review_state_version: int | None = Field(default=None, ge=0)
 
 
 class AnalysisProposal(BaseModel):
@@ -328,7 +336,12 @@ class AnalysisInput(BaseModel):
         }
         return schema
 
-    def validate_model_result(self, result: ModelAnalysisResult) -> AnalysisProposal:
+    def validate_model_result(
+        self,
+        result: ModelAnalysisResult,
+        *,
+        verified_new_keys: frozenset[tuple[str, str]] = frozenset(),
+    ) -> AnalysisProposal:
         """Validate references/invariants, then expose the compatible editable proposal."""
         allowed_subjects = self.allowed_analysis_subjects()
         if set(result.subjects) != set(allowed_subjects):
@@ -416,7 +429,7 @@ class AnalysisInput(BaseModel):
                     continue
                 if item.review_id is not None:
                     errors.append("new.review_id")
-                if key in same_day:
+                if key in same_day and key not in verified_new_keys:
                     continue
                 existing = knowledge.get(item.existing_knowledge_id or "")
                 if item.existing_knowledge_id is not None and existing is None:
@@ -429,7 +442,7 @@ class AnalysisInput(BaseModel):
                 ):
                     errors.append("knowledge.reference")
                     continue
-                if key in historical:
+                if key in historical and key not in verified_new_keys:
                     if len(uncertainties) < 20:
                         uncertainties.append(
                             f"{subject_name}“{item.name}”是已有知识，未作为新学条目输出。"

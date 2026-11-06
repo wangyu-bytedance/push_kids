@@ -20,7 +20,7 @@ from push_kids.platform.config import Settings
 
 
 class Database:
-    expected_cloud_revision = "20261024_0025"
+    expected_cloud_revision = "20261105_0027"
 
     _local_read_indexes = {
         "ix_learning_submissions_family_child_state_created_id",
@@ -175,6 +175,8 @@ class Database:
                 raise RuntimeError("数据库 Schema 未迁移到当前版本")
             schema = inspect(connection)
             required = {
+                "activity_schedules": {"workday_only"},
+                "calendar_events": {"workday_only"},
                 "review_early_slots": {"slot_on", "priority_key"},
                 "daily_review_plans": {"materialization_state", "evaluated_inventory_revision"},
                 "daily_review_plan_items": {
@@ -233,6 +235,9 @@ class Database:
             return
         columns = {item["name"] for item in inspect(self.engine).get_columns("activity_schedules")}
         statements = {
+            "workday_only": (
+                "ALTER TABLE activity_schedules ADD COLUMN workday_only BOOLEAN DEFAULT 0 NOT NULL"
+            ),
             "start_time": "ALTER TABLE activity_schedules ADD COLUMN start_time TIME",
             "end_time": "ALTER TABLE activity_schedules ADD COLUMN end_time TIME",
             "created_at": (
@@ -248,6 +253,14 @@ class Database:
             for name, statement in statements.items():
                 if name not in columns:
                     connection.execute(text(statement))
+            event_columns = {c["name"] for c in inspect(connection).get_columns("calendar_events")}
+            if "workday_only" not in event_columns:
+                connection.execute(
+                    text(
+                        "ALTER TABLE calendar_events ADD COLUMN "
+                        "workday_only BOOLEAN DEFAULT 0 NOT NULL"
+                    )
+                )
         subject_columns = {item["name"] for item in inspect(self.engine).get_columns("subjects")}
         if "active" not in subject_columns:
             with self.engine.begin() as connection:
@@ -393,7 +406,8 @@ class Database:
                 text(
                     "SELECT id, family_id, child_id, weekdays, start_time, end_time "
                     "FROM activity_schedules AS parent "
-                    "WHERE NOT EXISTS (SELECT 1 FROM activity_schedule_slots AS slot "
+                    "WHERE parent.workday_only = 0 AND NOT EXISTS "
+                    "(SELECT 1 FROM activity_schedule_slots AS slot "
                     "WHERE slot.schedule_id = parent.id)"
                 )
             ).mappings()

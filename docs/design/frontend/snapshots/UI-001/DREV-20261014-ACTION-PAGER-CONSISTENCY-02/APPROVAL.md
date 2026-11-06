@@ -12,6 +12,7 @@
 - Approval evidence: 用户在修订02方案展示后回复“落地”，同时批准具体Spec与Design Revision。
 - Approved by: 用户
 - Approved at: 2026-10-15
+- Superseded by: DREV-20261101-REPORT-FOOTER-TIPS-01（用户2026-11-01批准Spec01 + DREV01；仅编辑计划条目/科目分页同排Flex、按钮和页码几何范围，当前为本地实现；每日任务按钮和其余范围继续有效）
 
 ## Export manifest
 

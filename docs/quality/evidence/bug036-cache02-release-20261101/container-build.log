@@ -1,0 +1,6 @@
+DEPRECATED: The legacy builder is deprecated and will be removed in a future release.
+            BuildKit is currently disabled; enable it by removing the DOCKER_BUILDKIT=0
+            environment-variable.
+
+time="2026-11-01T18:12:18+08:00" level=error msg="Can't add file /Users/bytedance/Documents/push_kids/dist/release-20261101-bug036-cache02-01/Dockerfile to tar: io: read/write on closed pipe"
+time="2026-11-01T18:12:18+08:00" level=error msg="Can't close tar writer: io: read/write on closed pipe"

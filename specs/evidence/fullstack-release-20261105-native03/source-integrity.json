@@ -1,0 +1,20 @@
+{
+  "unchanged_backend": 160,
+  "unchanged_client": 168,
+  "frozen_manifest_sha256": "c96b30d102d2fff317865040bd8b65c419bbb1374689199c41bcebcd0b157f60",
+  "production_changed": false,
+  "prior_evidence": [
+    {
+      "folder": "fullstack-release-20261105-ops01",
+      "entries": 90,
+      "manifest_sha256": "6222b9ae31cbb99127e56566c41fff3456143a6a2a08a8282240169f2b99cab3",
+      "unchanged": true
+    },
+    {
+      "folder": "fullstack-release-20261105-ops01-v2",
+      "entries": 24,
+      "manifest_sha256": "ffeb1b5d850ca82b31eb2e221923d4dc17eab79f2b02ae60a4e98470c5915ebb",
+      "unchanged": true
+    }
+  ]
+}

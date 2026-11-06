@@ -56,6 +56,7 @@
       <view class="conflict-dot"></view>
       <text>{{conflictCount}} 项存在时间冲突，请核对安排</text>
     </view>
+    <view class="pk-notice warn workday-status" wx:if="{{workdayWarning}}" aria-live="polite"><text class="n-txt">{{workdayWarning}}</text></view>
 
     <block wx:if="{{loading && !items.length}}">
       <view class="sk card-sk"></view>
@@ -93,12 +94,12 @@
       <view class="ea"><view class="btn secondary" aria-role="button" aria-label="去设置固定时间" bindtap="openSettings">去设置固定时间</view></view>
     </view>
 
-    <view class="pk-empty inline" wx:else>
+    <view class="pk-empty inline" wx:elif="{{!workdayWarning}}">
       <text class="et">这天还没有安排</text>
       <text class="ec">固定的课外活动和出行会自动出现在这里。</text>
     </view>
 
-    <view class="pk-fab" aria-role="button" aria-label="加日程" bindtap="openCreate">
+    <view class="pk-fab" wx:if="{{canWrite}}" aria-role="button" aria-label="加日程" bindtap="openCreate">
       <view class="ico ico-plus-inv sm"></view><text>加日程</text>
     </view>
   </block>
@@ -134,13 +135,23 @@
     <view class="grow">
       <text class="sheet-title">{{editingId ? '编辑日程' : '新建日程'}}</text>
       <text class="sheet-sub" wx:if="{{editingId && repeatWeekly}}">修改会作用于整个每周系列</text>
+      <text class="sheet-sub" wx:if="{{editingId && workdayOnly}}">修改会作用于整个工作日系列</text>
+      <text class="sheet-sub" wx:if="{{!canWrite}}">仅可查看，请联系家庭管理员修改</text>
     </view>
     <view class="icon-btn" aria-role="button" aria-label="关闭" bindtap="closeEditor"><view class="ico ico-close sm"></view></view>
   </view>
   <view class="sheet-body">
     <view class="pk-field">
       <text class="lbl">日程名称</text>
-      <input class="pk-input" value="{{eventName}}" placeholder="例如：乒乓球" placeholder-class="pk-ph" data-field="eventName" bindinput="setField" />
+      <input class="pk-input" disabled="{{!canWrite || saving}}" value="{{eventName}}" placeholder="例如：乒乓球" placeholder-class="pk-ph" aria-label="日程名称" data-field="eventName" bindinput="setField" />
+    </view>
+    <view class="pk-field">
+      <text class="lbl">重复</text>
+      <view class="seg n3 repeat-mode">
+        <view class="{{!repeatWeekly && !workdayOnly ? 'on' : ''}}" aria-role="button" aria-label="不重复{{!repeatWeekly && !workdayOnly ? '，已选择' : ''}}" aria-disabled="{{!canWrite || saving}}" data-mode="once" bindtap="chooseRepeatMode">不重复</view>
+        <view class="{{repeatWeekly ? 'on' : ''}}" aria-role="button" aria-label="每周{{repeatWeekly ? '，已选择' : ''}}" aria-disabled="{{!canWrite || saving}}" data-mode="weekly" bindtap="chooseRepeatMode">每周</view>
+        <view class="{{workdayOnly ? 'on' : ''}}" aria-role="button" aria-label="工作日{{workdayOnly ? '，已选择' : ''}}" aria-disabled="{{!canWrite || saving}}" data-mode="workday" bindtap="chooseRepeatMode">工作日</view>
+      </view>
     </view>
     <view class="pk-field">
       <text class="lbl">类型</text>
@@ -151,36 +162,29 @@
       </view>
     </view>
     <view class="pk-field">
-      <text class="lbl">日期</text>
-      <picker mode="date" value="{{eventDate}}" data-field="eventDate" bindchange="setField">
+      <text class="lbl">{{workdayOnly ? '起始日期' : '日期'}}</text>
+      <picker mode="date" value="{{eventDate}}" disabled="{{!canWrite || saving}}" aria-label="{{workdayOnly ? '起始日期' : '日期'}}" data-field="eventDate" bindchange="setField">
         <view class="pk-picker"><text class="tnum">{{eventDate}}</text><view class="chev"></view></view>
       </picker>
     </view>
     <view class="pk-field">
       <text class="lbl">时间</text>
       <view class="time-row">
-        <picker class="grow" mode="time" value="{{startTime}}" data-field="startTime" bindchange="setField">
+        <picker class="grow" mode="time" value="{{startTime}}" disabled="{{!canWrite || saving}}" aria-label="开始时间" data-field="startTime" bindchange="setField">
           <view class="pk-picker"><text class="tnum">{{startTime}}</text><view class="chev"></view></view>
         </picker>
         <text class="time-to">至</text>
-        <picker class="grow" mode="time" value="{{endTime}}" data-field="endTime" bindchange="setField">
+        <picker class="grow" mode="time" value="{{endTime}}" disabled="{{!canWrite || saving}}" aria-label="结束时间" data-field="endTime" bindchange="setField">
           <view class="pk-picker {{endError ? 'is-error' : ''}}"><text class="tnum">{{endTime}}</text><view class="chev"></view></view>
         </picker>
       </view>
       <text class="err-text" wx:if="{{endError}}">{{endError}}</text>
     </view>
-    <view class="rowlist repeat-card">
-      <view class="rowitem">
-        <view class="grow">
-          <text class="r-t">每周重复</text>
-        </view>
-        <switch checked="{{repeatWeekly}}" color="#1F5B45" bindchange="toggleRepeat" />
-      </view>
-    </view>
   </view>
   <view class="sheet-foot">
-    <button class="btn" loading="{{saving}}" bindtap="saveEvent">{{editingId ? '保存修改' : '创建日程'}}</button>
-    <view class="del-row" wx:if="{{editingId}}">
+    <text class="err-text" wx:if="{{eventError}}" aria-live="assertive">{{eventError}}</text>
+    <button class="btn" loading="{{saving}}" disabled="{{saving || !canWrite}}" bindtap="saveEvent">{{!canWrite ? '仅可查看' : saving ? '保存中…' : editingId ? '保存修改' : '创建日程'}}</button>
+    <view class="del-row" wx:if="{{editingId && canWrite}}">
       <view class="link-btn del-link" aria-role="button" aria-label="删除日程" bindtap="deleteEvent">
         <view class="ico ico-trash-dan sm"></view><text>删除这条日程</text>
       </view>

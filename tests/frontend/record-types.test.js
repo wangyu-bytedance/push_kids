@@ -146,15 +146,16 @@ test("embedded and standalone footprints share methods, with isolated controller
   assert.equal(timers.size, 0); assert.equal(c.hidden, true);
 });
 
-test("late consent persistence cannot open the album after travel is removed", async () => {
-  let finish, opened = 0;
+test("detaching travel while import creation waits prevents late upload", async () => {
+  let finish, uploaded = 0;
   const { page: p } = loadPage("pages/footprints/index.js", () => new Promise((resolve) => { finish = resolve; }), {
-    wx: { chooseMedia() { opened++; } }, api: { removePreview() {} }
+    wx: { chooseMedia({ success }) { success({ tempFiles: [{ tempFilePath: "synthetic-a" }] }); } },
+    api: { removePreview() {}, uploadFootprint: async () => { uploaded++; } }
   });
-  p.sequence = 1; p.hidden = false; p.setData({ photoConsent: true });
-  const pending = p.choosePhotos();
-  p.onHide(); finish({}); await pending;
-  assert.equal(opened, 0);
+  p.sequence = 1; p.hidden = false; p.setData({ childId: "child", child: { id: "child", active: true } });
+  const pending = p.beginImport(); await tick();
+  p.onUnload(); finish({ id: "batch", photos: [{ id: "a" }] }); await pending;
+  assert.equal(uploaded, 0);
 });
 
 test("explicit learning intents leave travel through its guard; ordinary tab returns stay travel", async () => {

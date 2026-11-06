@@ -1,0 +1,129 @@
+{
+  "route": "pages/settings/index",
+  "viewport": {
+    "width": 320,
+    "height": 568,
+    "screenHeight": 568
+  },
+  "nodes": [
+    {
+      "selector": ".pk-sheet",
+      "left": 0,
+      "right": 320,
+      "top": 87,
+      "bottom": 568,
+      "width": 320,
+      "height": 481,
+      "fontSize": "16px",
+      "lineHeight": "25.6px"
+    },
+    {
+      "selector": ".sheet-head",
+      "left": 15,
+      "right": 305,
+      "top": 104,
+      "bottom": 158,
+      "width": 290,
+      "height": 54,
+      "fontSize": "16px",
+      "lineHeight": "25.6px"
+    },
+    {
+      "selector": ".sheet-body",
+      "left": 15,
+      "right": 305,
+      "top": 158,
+      "bottom": 385,
+      "width": 290,
+      "height": 227,
+      "fontSize": "16px",
+      "lineHeight": "25.6px"
+    },
+    {
+      "selector": ".sheet-foot",
+      "left": 15,
+      "right": 305,
+      "top": 385,
+      "bottom": 511,
+      "width": 290,
+      "height": 126,
+      "fontSize": "16px",
+      "lineHeight": "25.6px"
+    },
+    {
+      "selector": ".schedule-mode",
+      "left": 15,
+      "right": 305,
+      "top": 158,
+      "bottom": 206,
+      "width": 290,
+      "height": 48,
+      "fontSize": "16px",
+      "lineHeight": "25.6px"
+    },
+    {
+      "selector": ".sheet-foot .btn",
+      "left": 15,
+      "right": 305,
+      "top": 420,
+      "bottom": 464,
+      "width": 290,
+      "height": 44,
+      "fontSize": "16px",
+      "lineHeight": "19.2px"
+    },
+    {
+      "selector": ".pk-picker",
+      "left": 15,
+      "right": 157,
+      "top": 290,
+      "bottom": 334,
+      "width": 142,
+      "height": 44,
+      "fontSize": "15px",
+      "lineHeight": "22.5px"
+    },
+    {
+      "selector": ".pk-picker",
+      "left": 163,
+      "right": 305,
+      "top": 290,
+      "bottom": 334,
+      "width": 142,
+      "height": 44,
+      "fontSize": "15px",
+      "lineHeight": "22.5px"
+    },
+    {
+      "selector": ".workday-rule .n-txt",
+      "left": 27,
+      "right": 293,
+      "top": 232,
+      "bottom": 253,
+      "width": 266,
+      "height": 21,
+      "fontSize": "14px",
+      "lineHeight": "21.7px"
+    },
+    {
+      "selector": ".err-text",
+      "left": 15,
+      "right": 243,
+      "top": 401,
+      "bottom": 416,
+      "width": 228,
+      "height": 15,
+      "fontSize": "12px",
+      "lineHeight": "19.2px"
+    }
+  ],
+  "mode": {
+    "workday": true,
+    "flexible": false
+  },
+  "source": "native wx.createSelectorQuery; synthetic fixtures; production WXML/WXSS exact",
+  "errors": [],
+  "state": "error",
+  "host": "settings",
+  "screenshot_status": "NOT_RUN"
+}

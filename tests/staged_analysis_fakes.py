@@ -5,27 +5,92 @@ from collections import Counter
 
 from push_kids.agent_processing.failures import StageFailure
 from push_kids.agent_processing.stage_contracts import (
+    AuditedEvidence,
     ConsolidatedResult,
     ExtractedPoint,
     MatchDecision,
     MatchingResult,
     MaterialResult,
     MergedPoint,
+    QualityIssue,
+    QualityReviewResult,
+    ReuseDecision,
+    ReuseReviewResult,
+    SourceCheck,
 )
+
+
+def audited_consolidation(payload, *, items, summary, omissions=None, uncertainties=None):
+    """Attach bounded source references to synthetic protocol fixtures."""
+    directory = {}
+    entries = []
+    for item in items:
+        facts = [
+            payload["candidates"][member]
+            for member in item.members
+            if member in payload["candidates"]
+        ]
+        pairs = [
+            (material, point["evidence"]) for point in facts for material in point["materials"]
+        ] or [(material, "根据两组数量求总数") for material in payload["materials"]]
+        keys = []
+        for material, detail in pairs:
+            identity = (material, detail)
+            if identity not in directory:
+                key = f"e{len(entries)}"
+                directory[identity] = key
+                entries.append(AuditedEvidence(key=key, material=material, detail=detail))
+            if directory[identity] not in keys:
+                keys.append(directory[identity])
+        item.evidence_keys = keys
+    checks = []
+    by_key = {entry.key: entry for entry in entries}
+    for material in payload["materials"]:
+        aliases = [
+            f"i{index}"
+            for index, item in enumerate(items)
+            if any(by_key[key].material == material for key in item.evidence_keys)
+        ]
+        checks.append(
+            SourceCheck(
+                material=material,
+                disposition="covered" if aliases else "indeterminate",
+                item_aliases=aliases,
+                basis="合成来源核验",
+            )
+        )
+    return ConsolidatedResult(
+        summary=summary,
+        items=items,
+        omissions=omissions or [],
+        uncertainties=uncertainties or [],
+        evidence=entries,
+        source_checks=checks,
+    )
 
 
 class StageFake:
     concurrency = 2
     parameter_revision = "test-1"
 
-    def __init__(self, *, fail_unit=None, fail_stage=None, broken=None, needs_context=False):
+    def __init__(
+        self,
+        *,
+        fail_unit=None,
+        fail_stage=None,
+        broken=None,
+        needs_context=False,
+        review_failures=0,
+    ):
         self.calls = Counter()
         self.fail_unit, self.fail_stage = fail_unit, fail_stage
         self.broken, self.needs_context = broken, needs_context
+        self.review_failures = review_failures
+        self.review_calls = 0
         self.active = self.max_active = 0
 
     async def generate_stage(self, stage, instructions, payload, schema, images, deadline, trace):
-        unit = payload.get("materials", [stage])[0]
+        unit = payload["materials"][0] if stage in {"extract", "group"} else stage
         self.calls[stage, unit] += 1
         self.active += 1
         self.max_active = max(self.max_active, self.active)
@@ -52,20 +117,47 @@ class StageFake:
                 members = list(payload["candidates"])
                 if self.broken == "coverage":
                     members = members[:-1]
-                return ConsolidatedResult(
+                return audited_consolidation(
+                    payload,
                     summary="未涉及语文内容" if self.broken == "summary" else "练习十以内加法",
                     uncertainties=[],
+                    omissions=[],
                     items=[
                         MergedPoint(
-                            members=members or ["invented"],
+                            members=members,
                             subject="数学",
                             name="十以内加法",
                             category="计算",
                             display_kind="arithmetic",
                             review_method="变式练习",
                             estimated_minutes=3,
+                            evidence_keys=["e0"],
+                            confidence="high",
                         )
                     ],
+                )
+            if stage == "review":
+                self.review_calls += 1
+                failed = self.review_calls <= self.review_failures
+                return QualityReviewResult(
+                    passed=not failed,
+                    issues=(
+                        [QualityIssue(code="vague_name", items=["i0"], basis="缺少明确运算范围")]
+                        if failed
+                        else []
+                    ),
+                )
+            if stage == "reuse":
+                return ReuseReviewResult(
+                    decisions=[
+                        ReuseDecision(
+                            candidate=row["candidate"],
+                            match=row["match"],
+                            verdict="accept",
+                            basis="",
+                        )
+                        for row in payload["matches"]
+                    ]
                 )
             return MatchingResult(
                 decisions=[
@@ -74,7 +166,12 @@ class StageFake:
                         match="h999"
                         if self.broken == "reference"
                         else next(
-                            (o["id"] for o in row["options"] if o["name"] == row["name"]), None
+                            (
+                                alias
+                                for alias in row["options"]
+                                if payload["options"][alias]["name"] == row["name"]
+                            ),
+                            None,
                         ),
                         uncertain=self.broken == "uncertain",
                     )
@@ -83,3 +180,97 @@ class StageFake:
             )
         finally:
             self.active -= 1
+
+
+class MaximumStages(StageFake):
+    """Nine images, text, two context groups and one semantic correction."""
+
+    def __init__(self, *, recover=False):
+        super().__init__()
+        self.recover = recover
+        self.positions = Counter()
+
+    async def generate_stage(self, stage, instructions, payload, schema, images, deadline, trace):
+        position = (
+            stage,
+            tuple(payload.get("materials", [])),
+            bool(payload.get("review_issues")),
+        )
+        self.positions[position] += 1
+        self.calls[stage, position] += 1
+        if (
+            self.recover
+            and stage in {"extract", "group", "merge", "match"}
+            and self.positions[position] == 1
+        ):
+            raise StageFailure("validation")
+        if stage in {"extract", "group"}:
+            aliases = payload["materials"]
+            item_groups = (
+                [aliases]
+                if stage == "extract"
+                else [
+                    [alias for alias in aliases if alias != "t"],
+                    ["t"],
+                ]
+            )
+            return MaterialResult(
+                status="content",
+                needs_context=stage == "extract" and aliases[0] in {"m2", "m8"},
+                excerpt="相邻页补充" if stage == "extract" and aliases[0] in {"m2", "m8"} else "",
+                items=[
+                    ExtractedPoint(
+                        subject="数学",
+                        name="十以内加法",
+                        evidence=stage + ":" + ",".join(group),
+                        materials=group,
+                        confidence="high",
+                    )
+                    for group in item_groups
+                    if group
+                ],
+            )
+        if stage == "merge":
+            return audited_consolidation(
+                payload,
+                summary="整理十以内加法",
+                omissions=[],
+                uncertainties=[],
+                items=[
+                    MergedPoint(
+                        members=list(payload["candidates"]),
+                        subject="数学",
+                        name="十以内加法",
+                        category="计算",
+                        display_kind="arithmetic",
+                        review_method="变式练习",
+                        estimated_minutes=2,
+                        evidence_keys=["e0"],
+                        confidence="high",
+                    )
+                ],
+            )
+        if stage == "review":
+            self.review_calls += 1
+            return QualityReviewResult(
+                passed=self.review_calls > 1,
+                issues=[]
+                if self.review_calls > 1
+                else [QualityIssue(code="vague_name", items=["i0"], basis="规则表达需要纠正")],
+            )
+        if stage == "match":
+            return MatchingResult(
+                decisions=[MatchDecision(candidate="i0", match="h0", uncertain=False)]
+            )
+        if stage == "reuse":
+            return ReuseReviewResult(
+                decisions=[
+                    ReuseDecision(
+                        candidate="i0",
+                        match="h0",
+                        verdict="accept",
+                        basis="",
+                    )
+                ]
+            )
+        raise AssertionError("unexpected stage")

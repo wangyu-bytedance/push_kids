@@ -143,7 +143,7 @@ sequenceDiagram
 - Behavior IDs: `docs/domain/BEHAVIOR-CATALOG.md` 家庭开通与孩子选择相关条目
 - API/event/schema: `GET/POST /children`、`PATCH /children/{id}`、`POST /families`
 - Runtime evidence: 基线 `uv run pytest tests/unit tests/integration tests/contract -q` → 155 passed, 2 skipped；`npm test` → 59 pass
-- Related ADRs/incidents: `specs/active/FEAT-002-MULTI-FAMILY-CHILD-TENANT-ISOLATION.md`（已记载「一家庭多孩子；保持当前设计」）
+- Related ADRs/incidents: [多家庭历史提案](../rejected/FEAT-002-MULTI-FAMILY-CHILD-TENANT-ISOLATION.md)（已记载「一家庭多孩子；保持当前设计」；该扩展2026-11-05已取消，现有多孩子能力保持有效）
 
 ## 3. Target behavior
 

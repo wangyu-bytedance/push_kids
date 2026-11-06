@@ -1,0 +1,389 @@
+FF                                                                       [100%]
+=================================== FAILURES ===================================
+_ test_final_evidence_and_subject_come_from_audited_source_not_candidate[False] _
+
+empty_candidates = False
+
+    @pytest.mark.parametrize("empty_candidates", [False, True])
+    def test_final_evidence_and_subject_come_from_audited_source_not_candidate(empty_candidates):
+        from pydantic import BaseModel
+    
+        class AuditedMerge(BaseModel):
+            summary: str
+            items: list[dict]
+            omissions: list[dict]
+            uncertainties: list[str]
+            evidence: list[dict]
+            source_checks: list[dict]
+    
+        class SourceCorrection(StageFake):
+            async def generate_stage(self, stage, instructions, payload, *args):
+                value = await super().generate_stage(stage, instructions, payload, *args)
+                if stage == "extract":
+                    if empty_candidates:
+                        value.status, value.items = "non_learning", []
+                    else:
+                        value.items[0].evidence = "未经核验的数学误读"
+                if stage == "merge":
+                    item = value.items[0].model_dump()
+                    item.update(
+                        members=list(payload["candidates"]),
+                        subject="英语",
+                        name="英语字母Tt的认读",
+                        category="字母",
+                        display_kind="word",
+                        review_method="主动回忆",
+                        evidence_keys=["e0"],
+                        confidence="medium",
+                    )
+                    return AuditedMerge(
+                        summary="认读英语字母Tt",
+                        items=[item],
+                        omissions=[],
+                        uncertainties=["字母笔画需家长核对"],
+                        evidence=[{"key": "e0", "material": "t", "detail": "原文字明确给出字母Tt"}],
+                        source_checks=[
+                            {"material": "t", "disposition": "covered", "item_aliases": ["i0"], "basis": "明确字母对象"}
+                        ],
+                    )
+                if stage == "review":
+                    self.audited = payload
+                if stage == "match":
+                    self.match_payload = payload
+                return value
+    
+        provider = SourceCorrection()
+>       result = run_case(
+            provider, AnalysisInput(text="英语字母Tt", existing_subjects=["数学", "英语"])
+        )
+
+tests/unit/test_staged_analysis.py:185: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_staged_analysis.py:32: in run_case
+    return asyncio.run(
+../../.local/share/uv/python/cpython-3.12.11-macos-aarch64-none/lib/python3.12/asyncio/runners.py:195: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+../../.local/share/uv/python/cpython-3.12.11-macos-aarch64-none/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../.local/share/uv/python/cpython-3.12.11-macos-aarch64-none/lib/python3.12/asyncio/base_events.py:691: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+apps/api/src/push_kids/agent_processing/pipeline.py:374: in run
+    merged = await self._call(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <push_kids.agent_processing.pipeline.StagedPipeline object at 0x10a618860>
+stage = 'merge', unit = 'merge'
+instructions = '本阶段汇总给定候选，不读历史、不输出数据库ID、不补造内容。\n新提案整合允许同一知识域相关细节组成同一复习单元；历史严格等价是另一个任务，不能用于阻止这里的整合。\n每个候选短编号恰好出现在items的一个members组，或omi...图词汇属于同一字母学习：整理一个字母与相关词汇单元。\n   单独认读六词、另外只书写其中两词时，两个真实独立检查可以分别保留。\n8. 同一材料解释近反义的含义，给出热—烫、快—慢并练习运用：概念、辨析与运用在一次词间关系检查中整合。'
+payload = {'candidates': {'c1': {'confidence': 'high', 'evidence': '未经核验的数学误读', 'materials': ['t'], 'name': '十以内加法', ...}}, 'cor...on': 'validation', 'requirement': '重读相同材料并返回完整有效对象；仅修正结构或引用约束，不补造或截断学习对象。'}, 'excerpts': {'t': ''}, 'grade': None, ...}
+schema = <class 'push_kids.agent_processing.stage_contracts.ConsolidatedResult'>
+images = [], deadline = 163731.476733708
+validate = <function StagedPipeline.run.<locals>.validate_merge at 0x10a97f420>
+cache_input = None
+
+    async def _call(
+        self,
+        stage: str,
+        unit: str,
+        instructions: str,
+        payload: dict[str, Any],
+        schema: type[T],
+        images: list[tuple[str, Path]],
+        deadline: float,
+        validate: Callable[[T], None],
+        cache_input: object = None,
+    ) -> T:
+        if deadline <= monotonic():
+            raise StageFailure("local_deadline", stage=stage, unit=unit)
+        digest = fingerprint(
+            {
+                "revision": PIPELINE_REVISION,
+                "parameters": self.provider.parameter_revision,
+                "payload": payload,
+                "context": cache_input,
+                "images": [(alias, sha256(p.read_bytes()).hexdigest()) for alias, p in images],
+            }
+        )
+        cached = self.checkpoints.get(unit, digest) if self.checkpoints else None
+        if cached is not None:
+            try:
+                value = schema.model_validate(cached)
+                validate(value)
+                if self._checkpoint_reusable(unit, value):
+                    self.trace.info(
+                        "analysis_stage_cache",
+                        stage=stage,
+                        unit=unit,
+                        revision=PIPELINE_REVISION,
+                        checkpoint_hit=True,
+                    )
+                    return value
+            except (ValueError, StageFailure):
+                pass
+        attempts = 1 if stage in {"review", "reuse"} else 2
+        for correction in range(attempts):
+            if deadline <= monotonic():
+                raise StageFailure("local_deadline", stage=stage, unit=unit)
+            if self.calls >= 33:
+                raise StageFailure("capacity", retryable=False, stage=stage, unit=unit)
+            self.calls += 1
+            try:
+                async with asyncio.timeout(max(0.001, deadline - monotonic())):
+                    response = await self.provider.generate_stage(
+                        stage,
+                        instructions,
+                        payload,
+                        schema,
+                        images,
+                        deadline,
+                        self.trace,
+                    )
+                value = schema.model_validate(response.model_dump())
+                validate(value)
+                if self.checkpoints and self._checkpoint_reusable(unit, value):
+                    async with self._checkpoint_lock:
+                        await stage_io(
+                            partial(
+                                self.checkpoints.put,
+                                unit,
+                                digest,
+                                value.model_dump(),
+                                deadline=deadline,
+                            ),
+                            deadline,
+                        )
+                return value
+            except TimeoutError:
+                self.trace.warning(
+                    "analysis_stage_failed",
+                    stage=stage,
+                    unit=unit,
+                    revision=PIPELINE_REVISION,
+                    reason="local_deadline",
+                )
+                raise StageFailure("local_deadline", stage=stage, unit=unit) from None
+            except (ValidationError, StageFailure) as exc:
+                reason = exc.reason if isinstance(exc, StageFailure) else "validation"
+                diagnostics = (
+                    exc.diagnostics if isinstance(exc, StageFailure) else schema_diagnostics(exc)
+                )
+                self.trace.warning(
+                    "analysis_stage_failed",
+                    stage=stage,
+                    unit=unit,
+                    revision=PIPELINE_REVISION,
+                    reason=reason,
+                    validation_codes=diagnostics,
+                )
+                if correction or reason not in {"validation", "coverage"}:
+>                   raise StageFailure(
+                        reason,
+                        retryable=getattr(exc, "retryable", True),
+                        retry_after=getattr(exc, "retry_after", 0),
+                        stage=stage,
+                        unit=unit,
+                        diagnostics=diagnostics,
+                    ) from None
+E                   push_kids.agent_processing.failures.StageFailure: validation
+
+apps/api/src/push_kids/agent_processing/pipeline.py:181: StageFailure
+_ test_final_evidence_and_subject_come_from_audited_source_not_candidate[True] _
+
+empty_candidates = True
+
+    @pytest.mark.parametrize("empty_candidates", [False, True])
+    def test_final_evidence_and_subject_come_from_audited_source_not_candidate(empty_candidates):
+        from pydantic import BaseModel
+    
+        class AuditedMerge(BaseModel):
+            summary: str
+            items: list[dict]
+            omissions: list[dict]
+            uncertainties: list[str]
+            evidence: list[dict]
+            source_checks: list[dict]
+    
+        class SourceCorrection(StageFake):
+            async def generate_stage(self, stage, instructions, payload, *args):
+                value = await super().generate_stage(stage, instructions, payload, *args)
+                if stage == "extract":
+                    if empty_candidates:
+                        value.status, value.items = "non_learning", []
+                    else:
+                        value.items[0].evidence = "未经核验的数学误读"
+                if stage == "merge":
+                    item = value.items[0].model_dump()
+                    item.update(
+                        members=list(payload["candidates"]),
+                        subject="英语",
+                        name="英语字母Tt的认读",
+                        category="字母",
+                        display_kind="word",
+                        review_method="主动回忆",
+                        evidence_keys=["e0"],
+                        confidence="medium",
+                    )
+                    return AuditedMerge(
+                        summary="认读英语字母Tt",
+                        items=[item],
+                        omissions=[],
+                        uncertainties=["字母笔画需家长核对"],
+                        evidence=[{"key": "e0", "material": "t", "detail": "原文字明确给出字母Tt"}],
+                        source_checks=[
+                            {"material": "t", "disposition": "covered", "item_aliases": ["i0"], "basis": "明确字母对象"}
+                        ],
+                    )
+                if stage == "review":
+                    self.audited = payload
+                if stage == "match":
+                    self.match_payload = payload
+                return value
+    
+        provider = SourceCorrection()
+>       result = run_case(
+            provider, AnalysisInput(text="英语字母Tt", existing_subjects=["数学", "英语"])
+        )
+
+tests/unit/test_staged_analysis.py:185: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/unit/test_staged_analysis.py:32: in run_case
+    return asyncio.run(
+../../.local/share/uv/python/cpython-3.12.11-macos-aarch64-none/lib/python3.12/asyncio/runners.py:195: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+../../.local/share/uv/python/cpython-3.12.11-macos-aarch64-none/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../.local/share/uv/python/cpython-3.12.11-macos-aarch64-none/lib/python3.12/asyncio/base_events.py:691: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <push_kids.agent_processing.pipeline.StagedPipeline object at 0x10a6c8890>
+data = AnalysisInput(occurred_at=None, grade=None, text='英语字母Tt', image_paths=[], todo_candidates=[], existing_subjects=['数学', '英语'], analysis_subjects=[], recent_learning=[], existing_knowledge=[], same_day_learning=[])
+search = <function run_case.<locals>.<lambda> at 0x10a8eade0>
+deadline = 163731.57073925
+
+    async def run(
+        self,
+        data: AnalysisInput,
+        search: Callable[[HistorySearchRequest], list[dict]],
+        deadline: float,
+    ) -> AnalysisProposal:
+        self.calls = 0
+        subjects = set(data.allowed_analysis_subjects())
+        if not subjects or len(data.image_paths) > 9 or not (data.image_paths or data.text):
+            raise StageFailure("input", retryable=False)
+        materials: dict[str, Path] = {}
+        hashes: set[str] = set()
+        for index, path in enumerate(data.image_paths, 1):
+            digest = sha256(path.read_bytes()).hexdigest()
+            if digest not in hashes:
+                materials[f"m{index}"] = path
+                hashes.add(digest)
+        common = {"subjects": sorted(subjects), "grade": data.grade, "parent_text": data.text}
+        semaphore = asyncio.Semaphore(self.provider.concurrency)
+        extraction_deadline = min(deadline, monotonic() + 180)
+    
+        async def extract(alias: str, path: Path | None) -> tuple[str, MaterialResult]:
+            async with semaphore:
+                aliases = {alias}
+                result = await self._call(
+                    "extract",
+                    alias,
+                    EXTRACT_INSTRUCTIONS,
+                    {**common, "materials": [alias]},
+                    MaterialResult,
+                    [(alias, path)] if path is not None else [],
+                    extraction_deadline,
+                    lambda value: self._validate_material(value, aliases, subjects),
+                )
+                return alias, result
+    
+        tasks = [asyncio.create_task(extract(a, p)) for a, p in materials.items()]
+        if data.text and data.text.strip():
+            tasks.append(asyncio.create_task(extract("t", None)))
+        try:
+            # Keep independent successful units even when another fails.
+            results = await asyncio.gather(*tasks, return_exceptions=True)
+        except BaseException:
+            for task in tasks:
+                task.cancel()
+            await asyncio.gather(*tasks, return_exceptions=True)
+            raise
+        for result in results:
+            if isinstance(result, BaseException):
+                raise result
+        extracted = dict(result for result in results if isinstance(result, tuple))
+        pending = [a for a, r in extracted.items() if r.needs_context]
+        groups: list[set[str]] = []
+        ordered = list(materials)
+        for alias in pending:
+            if alias == "t":
+                group = set(ordered[:3]) | {"t"}
+            else:
+                index = ordered.index(alias)
+                group = set(ordered[max(0, index - 1) : index + 2])
+                if "t" in extracted:
+                    group.add("t")
+            if len(group - {"t"}) > 3 or len(group) < 2:
+                raise StageFailure("coverage", stage="group", unit=alias)
+            if not any(group <= existing for existing in groups):
+                groups.append(group)
+        if len(groups) > 2:
+            raise StageFailure("capacity", stage="group", unit="groups")
+        for index, group in enumerate(groups):
+    
+            def validate_group(value: MaterialResult, aliases: set[str] = group) -> None:
+                self._validate_material(value, aliases, subjects)
+                if value.needs_context:
+                    raise StageFailure("coverage")
+                unresolved = {a for a in aliases if extracted[a].needs_context}
+                covered = {a for item in value.items for a in item.materials}
+                if not unresolved <= covered:
+                    raise StageFailure("coverage")
+    
+            enriched = await self._call(
+                "group",
+                f"group{index}",
+                EXTRACT_INSTRUCTIONS,
+                {
+                    **common,
+                    "materials": sorted(group),
+                    "required_materials": sorted(a for a in group if extracted[a].needs_context),
+                    "excerpts": {a: extracted[a].excerpt for a in group},
+                },
+                MaterialResult,
+                [(a, materials[a]) for a in sorted(group) if a in materials],
+                extraction_deadline,
+                validate_group,
+            )
+            # Keep already identified units; consolidation accounts for all candidates.
+            extracted[f"group{index}"] = enriched
+        candidates: dict[str, ExtractedPoint] = {}
+        seen: set[str] = set()
+        for material_result in extracted.values():
+            for extracted_item in material_result.items:
+                digest = fingerprint(extracted_item.model_dump())
+                if digest not in seen:
+                    seen.add(digest)
+                    candidates[f"c{len(candidates) + 1}"] = extracted_item
+        if not candidates or len(candidates) > 200:
+>           raise StageFailure(
+                "coverage" if not candidates else "capacity", stage="extract", unit="materials"
+            )
+E           push_kids.agent_processing.failures.StageFailure: coverage
+
+apps/api/src/push_kids/agent_processing/pipeline.py:329: StageFailure
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /Users/bytedance/Documents/push_kids/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/unit/test_staged_analysis.py::test_final_evidence_and_subject_come_from_audited_source_not_candidate[False] - push_kids.agent_processing.failures.StageFailure: validation
+FAILED tests/unit/test_staged_analysis.py::test_final_evidence_and_subject_come_from_audited_source_not_candidate[True] - push_kids.agent_processing.failures.StageFailure: coverage
+2 failed, 37 deselected, 1 warning in 0.19s

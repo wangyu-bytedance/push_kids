@@ -9,6 +9,9 @@
 - Baseline: `[target branch/commit]`
 - Review mode: read-only / manual + tools
 - Validation executed by reviewer: `[commands or not run]`
+- Review policy / revision: `[root REVIEW.md + explicitly declared module rules]`
+- Review round / previous report: `[1/2/3 + path; further rounds need hypothesis/scope/budget]`
+- Applicable historical ISS / REG: `[IDs/paths or none with reason]`
 
 ## 1. Verdict
 
@@ -18,6 +21,9 @@
 - **Minors**: `[count]`
 - **Review confidence**: high / medium / low
 - **Confidence limits**: `[missing environment/context/tests]`
+
+Start with the confirmed finding count; if none, state “0 confirmed findings”
+and the unverified scope. Unverified suspicions are not confirmed defects.
 
 ## 2. Reviewed scope
 
@@ -69,6 +75,34 @@ Review the Feature document as a current-state snapshot. It must independently
 describe the final behavior without requiring readers to concatenate historical
 Specs.
 
+### Documentation validity and shared understanding
+
+Select by affected behavior/contracts, including unchanged Markdown. Verify
+current facts and approved intent; a newer commit does not automatically win.
+
+| Document/section | Contract and applicable version | Code/test/runtime and decision evidence | Conclusion | Update / Owner / ISS |
+|---|---|---|---|---|
+| `[Feature/Behavior/Architecture/ADR/API/README/runbook/rules/Spec/test policy]` | `[claim + scope]` | `[immutable revision/evidence]` | aligned/stale/conflicting/missing/ambiguous/not_verified | `[action or reasoned N/A]` |
+
+- Missing/unverified documents and impact:
+- Can a new reader explain current behavior, boundaries, rationale and validation?:
+- Original/source and current references verified?:
+
+### Human decisions for document ambiguities
+
+Apply root REVIEW section 7 and the repository template
+`docs/quality/issues/DOC-AMBIGUITY-TEMPLATE.md`. A read-only reviewer supplies
+the packet to the authorized coordinator instead of writing an ISS.
+
+- Original/current full SHA/link (or UNCOMMITTED + base + full snapshot hash),
+  PR/MR, Spec/revision, submitter and identity source, statements/scope/evidence:
+- Missing history and searches attempted (do not invent identity or Spec):
+- Recommended unified behavior/terms/documents, code/test changes, alternatives/risks:
+- ISS / exact decision requested / paused dependent scope:
+- Decision maker, answer/reference/date and approved scope/revision:
+- pending/answered/applied/verified; applied revision and doc-review EVD:
+- Re-review and closure evidence (an answer alone does not close an issue):
+
 ## Frontend design alignment
 
 - Frontend impact: `[yes/no]`
@@ -106,6 +140,18 @@ process BLOCKER.
 ## 4. Findings
 
 Only report actionable issues with a concrete failure scenario or policy violation.
+
+Use stable finding IDs across rounds, verify triggers/callers/existing defenses,
+and distinguish introduced/pre-existing from severity. Record dispositions and
+evidence; recurring/manual/production findings link ISS/REG as appropriate.
+
+| Finding ID | Severity / origin | Evidence / verification | Disposition | Reason / Owner / follow-up | ISS / REG |
+|---|---|---|---|---|---|
+| `[stable ID]` | `[BLOCKER/MAJOR/MINOR/NOTE + introduced/pre-existing]` | `[path:line + case]` | fixed/false_positive/intentional/deferred | `[decision/evidence]` | `[IDs or N/A]` |
+
+Unresolved BLOCKER/MAJOR findings prevent a passing local verification/release
+verdict. Preserve GOV-002's separate development-DONE archival rule for already
+delivered scope; unresolved verification is still unresolved.
 
 ### BLOCKER — `[title]`
 
@@ -194,6 +240,19 @@ Missing evidence:
 
 - `[TODO]`
 
+### Coding-discipline evidence
+
+| Slice / test point | Red cause or pre-refactor Baseline + revision | Green evidence + revision | Post-refactor behavior evidence | Exception / risk / Owner |
+|---|---|---|---|---|
+| `[slice/TP]` | `[expected behavioral failure / baseline / reasoned N/A]` | `[command/result/version]` | `[same contract/regression evidence]` | `[none or record]` |
+
+- A compiler/dependency/fixture failure is not Red; refactors preserve baseline.
+- Check causal repairs and changed paths, rather than guards hiding crashes.
+  Repeated failed repairs need premise/state/actor-ownership evidence.
+- Read the project's quality-tool policy: actual tool/version/scope/budget,
+  reports and missing checks; similarity/uncovered data does not prove duplicate
+  semantics/dead code, and a successful tool exit does not prove acceptance.
+
 ## 8. Architecture audit
 
 | Rule | Status | Evidence |
@@ -245,6 +304,10 @@ Do not inherit “pass” from the implementation report without checking the ev
 
 ## 10. Residual risk and re-review
 
+- Changed/affected scope since prior round; stable IDs fixed/reopened/resolved:
+- Same-class bugs checked elsewhere:
+- Round cap / premise reconsideration / next scope and budget:
+- New commits/snapshots requiring fresh validation/approval:
 - Residual risks if merged:
 - Required fixes before re-review:
 - Areas to re-review after fixes:

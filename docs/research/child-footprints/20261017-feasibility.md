@@ -4,7 +4,7 @@
 - 结论：**建议立项，按“照片足迹相册”实现；三种视图共用一份经家长确认的到访记录。**
 - 调研范围：现有原生微信小程序、全球照片足迹与按主要轨迹自适应；单张/多张导入、时间与地点提取、时间线、回放、点亮。用户在grill第一轮明确全球为首版目标。
 - 交付性质：文档调研与已确认交互设计；Q19用户“认可，评审收敛”，生产实施另批。没有运行原图上传实验、模型测评、地图接口或真机验收，没有新增生产实现。
-- 关联：[Feature 规划状态](../../domain/features/FEAT-012-child-photo-footprints.md)、[候选 Feature Spec](../../../specs/active/FEAT-012-CHILD-PHOTO-FOOTPRINTS.md)、[grill review](20261017-grill-review.md)、[已确认交互稿](../../design/frontend/prototypes/DREV-20261017-CHILD-PHOTO-FOOTPRINTS-01/index.html)。
+- 关联：[Feature 规划状态](../../domain/features/FEAT-012-child-photo-footprints.md)、[候选 Feature Spec](../../../specs/completed/FEAT-012-CHILD-PHOTO-FOOTPRINTS.md)、[grill review](20261017-grill-review.md)、[已确认交互稿](../../design/frontend/prototypes/DREV-20261017-CHILD-PHOTO-FOOTPRINTS-01/index.html)。
 
 ## 1. 决策结论
 

@@ -1,0 +1,24 @@
+{
+  "spec_revision": "BUG-SPEC-20261101-KNOWLEDGE-CACHE-02",
+  "sha256": {
+    "apps/api/src/push_kids/agent_processing/pipeline.py": "fd4c17b5bca2d2dd6289f06a98b49c5050ab77d45250bde0cdbe3527d07e0221",
+    "apps/api/src/push_kids/agent_processing/checkpoints.py": "621c5c593c407b9c624f6cca2b55a58a20e940f72fc167b2ea4a2be82a160ec3",
+    "apps/api/src/push_kids/agent_processing/worker.py": "e17228b806e5d2b4b541c051d479d80ec48bf85c4c6e058a783d1127583d8677",
+    "apps/api/src/push_kids/agent_processing/stage_contracts.py": "e616952181fff6eebee1a3d21c5a16c157fe351dc0681d50ce42eeb498803179",
+    "apps/api/src/push_kids/agent_processing/prompt.py": "61152c25593aee2665a6ae59bb489e90b9b031bc48df69a24892e82fea242823",
+    "apps/api/src/push_kids/learning/service.py": "aa3775ea57c2b7ba3c80b54a9ddead513e02505aecf18e1a926e66e5e46db2ba",
+    "tests/unit/test_staged_proposal_recovery.py": "15fe37bffd9cfa9337b8ad4b952a88188edd95de20dc764457941d2dd42f175e",
+    "tests/integration/test_analysis_checkpoints.py": "3ec8187e178959f3e4741db33d010edc1eacaa9273280c69b7c55244f8c4aad1",
+    "tests/integration/test_staged_mysql.py": "b7ed69c1f4d060311f679f61474322ceb561281bbda7de32e6c97be54ed5acbd",
+    "tests/integration/test_worker_resilience.py": "918a1ea53f716b021efb3d8b2445aa596f22a31dd18bdf9847d0ab32125c744c",
+    "tests/staged_analysis_fakes.py": "93ed32a815259c915482a4e7b51b7b8540d0987da96b07414dfb20706cf56a02",
+    "docs/domain/features/FEAT-001-push-kids-mvp.md": "7c8ec8570c3138e7a4fc115ff421934fb478a52e5ffd4d47eed4096d96b004a2",
+    "docs/domain/BEHAVIOR-CATALOG.md": "1b093d87ce7fbf51a853e3bfa0d9df1b59ca7b451aa392eb2592f1936857bf92",
+    "docs/architecture/ARCHITECTURE.md": "675d4520227c682e6aae74074de454bf9df3c5be59c5a880d791ea5e1da81388",
+    "docs/quality/TEST-STRATEGY.md": "0306459c87514d8b99db0124029106f255f3a06d228e7e3c58d3e13b5005d7ef",
+    "specs/active/BUG-036-CHECKPOINT-RETRY-STRATEGY.md": "40f56121791294e8d9cd117b3178b534b9e9e5abb38d029ac9aa4b955355717a",
+    "specs/active/BUG-036-KNOWLEDGE-GENERATION-FINAL-PROPOSAL.md": "ca831122e992d1c5e9c2ece5b40c3d38ab308246aef59c89951be40601928968",
+    "specs/README.md": "883b7f1cb6119f0f3b6f1f8fdc359d0e7460324d297bdfd8db9ebf8b47b4dd00",
+    "specs/STATUS.md": "6cd176defd4205e44b8499d4ed3f5048b2effa4bbbb900b79fcac8a5b03b469e"
+  }
+}

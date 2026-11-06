@@ -1,0 +1,16 @@
+{
+  "base": "0576ac304649 plus pre-task snapshot",
+  "spec": "BUG-SPEC-20261101-KNOWLEDGE-CACHE-02",
+  "sha256": {
+    "apps/api/src/push_kids/agent_processing/pipeline.py": "d14bb5682a75d9bd734e039f110b5a46de0c081b6b3537c95307f5a666b3c4ac",
+    "apps/api/src/push_kids/agent_processing/checkpoints.py": "45a0ce6401bc2780bf849fa7acec70a938f24fa77fde36c02afedae909e18e80",
+    "apps/api/src/push_kids/agent_processing/worker.py": "32f8cb9f7b4a7e181ae4227bbffadfa5f2c582c4cfabf02ae8528f7172cbc2b8",
+    "apps/api/src/push_kids/agent_processing/stage_contracts.py": "056cd0eb6bde33429c6eb56c9f9b11c7a96237671a6378046490ca2c18df6e6a",
+    "apps/api/src/push_kids/learning/service.py": "c0d3e595a7b9b6b947b5ad1bf38931d2988a484e985c959ad97c39b587766e27",
+    "tests/unit/test_staged_proposal_recovery.py": "0251062bcea8b109990737f9b487d436e4cda3f04382fae2f44876e3efb5a313",
+    "tests/unit/test_staged_analysis.py": "8bb19e2cd44a257f8ccfab25451d6fc947ef9600b1426db5ef1b181778606bbb",
+    "tests/integration/test_analysis_checkpoints.py": "2d7c739e6047cc4dbb80fe1ca9424b0b6ed31edbc200fa861ac25ff89fe4c1db",
+    "tests/integration/test_staged_mysql.py": "67e39c6e78c7a3e3cafa5adcc93f277c36ba9793fe85c7aea589570838fbf896"
+  },
+  "changed_lines": 756
+}

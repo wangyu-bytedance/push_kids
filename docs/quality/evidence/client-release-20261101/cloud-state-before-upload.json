@@ -1,0 +1,93 @@
+{
+  "at": "2026-11-01T08:14:59.978Z",
+  "service": "flask-ik19",
+  "environment": "prod-d2g14rwoycac6b45d",
+  "access_types": [
+    "OA",
+    "MINIAPP"
+  ],
+  "versions": [
+    {
+      "version": "flask-ik19-021",
+      "status": "normal",
+      "created": "2026-09-13 14:24:56",
+      "updated": "2026-09-13 19:37:03",
+      "flow_ratio": 0,
+      "current_replicas": 0,
+      "remark": "SPEC-UNIFIED-REVIEW-20260913-02 88ab2093d6b2 unified review agent"
+    },
+    {
+      "version": "flask-ik19-022",
+      "status": "normal",
+      "created": "2026-09-13 19:07:47",
+      "updated": "2026-09-19 17:55:38",
+      "flow_ratio": 0,
+      "current_replicas": 0,
+      "remark": "push-kids-20260913-019-bug015-88ab209"
+    },
+    {
+      "version": "flask-ik19-023",
+      "status": "normal",
+      "created": "2026-09-19 17:23:46",
+      "updated": "2026-09-22 22:27:20",
+      "flow_ratio": 0,
+      "current_replicas": 0,
+      "remark": "push-kids-20260919-023-f4bd997"
+    },
+    {
+      "version": "flask-ik19-024",
+      "status": "normal",
+      "created": "2026-09-22 21:57:18",
+      "updated": "2026-10-07 16:16:51",
+      "flow_ratio": 0,
+      "current_replicas": 0,
+      "remark": "push-kids-20260922-bug026-5397a82"
+    },
+    {
+      "version": "flask-ik19-025",
+      "status": "normal",
+      "created": "2026-09-26 11:26:59",
+      "updated": "2026-10-07 17:55:29",
+      "flow_ratio": 0,
+      "current_replicas": 0,
+      "remark": "push-kids-20260926-bug027-b3db219"
+    },
+    {
+      "version": "flask-ik19-026",
+      "status": "normal",
+      "created": "2026-10-07 17:30:53",
+      "updated": "2026-10-07 18:13:10",
+      "flow_ratio": 0,
+      "current_replicas": 0,
+      "remark": "push-kids-20261007-fair02-bridge-b3db219"
+    },
+    {
+      "version": "flask-ik19-035",
+      "status": "normal",
+      "created": "2026-10-24 10:55:54",
+      "updated": "2026-10-24 23:16:52",
+      "flow_ratio": 0,
+      "current_replicas": 0,
+      "remark": "full-20261024-bug031-ops04-01"
+    },
+    {
+      "version": "flask-ik19-036",
+      "status": "deploy_failed",
+      "created": "2026-10-24 22:36:16",
+      "updated": "2026-10-24 23:10:00",
+      "flow_ratio": 0,
+      "current_replicas": 0,
+      "remark": "latest-20261024-0025-01-26714b9"
+    },
+    {
+      "version": "flask-ik19-039",
+      "status": "normal",
+      "created": "2026-10-31 19:15:02",
+      "updated": "2026-10-31 19:18:08",
+      "flow_ratio": 100,
+      "current_replicas": 1,
+      "remark": "travel-bug035-20261031-spec01-0576ac3-01"
+    }
+  ],
+  "writes": 0
+}

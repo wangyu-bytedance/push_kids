@@ -1,0 +1,195 @@
+--- a/apps/miniprogram/pages/settings/index.js
++++ b/apps/miniprogram/pages/settings/index.js
+@@ -130,7 +130,7 @@
+     weekdayLabels: WEEKDAY_LABELS,
+     weekdays: [], weekdaySelected: [false, false, false, false, false, false, false],
+     startTime: "18:00", endTime: "19:00", flexible: false, scheduleSummary: "请选择至少一天",
+-    workdayOnly: false, workdayStartTime: "18:00", workdayEndTime: "19:00", workdayWarning: "",
++    workdayOnly: false, workdayStartTime: "18:00", workdayEndTime: "19:00",
+     scheduleHadDifferentTimes: false, scheduleConfirming: false,
+     perDay: false, dayRows: [], scheduleGroups: [],
+     savingSchedule: false, scheduleError: "", removingActivity: false,
+@@ -255,8 +255,6 @@
+       this.setData({ loading: false, ...shared, childIndex: selection.childIndex, childId,
+         subjects, baseLearning, addedLearning, addedActivities,
+         travelArrangements, dailyTasks,
+-        workdayWarning: scheduleData.workday_calendar_warning
+-          ? `工作日数据待更新：当前仅覆盖至 ${scheduleData.workday_calendar_warning.coverage_end}，超出范围的安排暂不显示，也不会发送提醒。` : "",
+         pendingRequests, requestsLabel: pendingRequests ? `${pendingRequests} 份申请` : "" });
+     } catch (error) {
+       /* 弱网时保留已加载的科目与活动，只在顶部给一条可重试的说明。 */
+--- a/apps/miniprogram/pages/settings/index.wxml
++++ b/apps/miniprogram/pages/settings/index.wxml
+@@ -396,9 +396,7 @@
+       <view class="{{workdayOnly ? 'on' : ''}}" aria-role="button" aria-label="工作日{{workdayOnly ? '，已选择' : ''}}" aria-disabled="{{!canWrite || savingSchedule || scheduleConfirming}}" data-mode="workday" bindtap="chooseScheduleMode">工作日</view>
+       <view class="{{flexible ? 'on' : ''}}" aria-role="button" aria-label="时间不固定{{flexible ? '，已选择' : ''}}" aria-disabled="{{!canWrite || savingSchedule || scheduleConfirming}}" data-mode="flexible" bindtap="chooseScheduleMode">时间不固定</view>
+     </view>
+-    <view class="pk-notice warn workday-rule" wx:if="{{workdayWarning}}" aria-live="polite"><text class="n-txt">{{workdayWarning}}</text></view>
+     <block wx:if="{{workdayOnly}}">
+-      <view class="pk-notice quiet workday-rule"><text class="n-txt">按中国大陆法定安排，放假跳过，调休照常</text></view>
+       <view class="time-row">
+         <view class="pk-field grow"><text class="lbl">开始时间</text>
+           <picker mode="time" value="{{workdayStartTime}}" disabled="{{!canWrite || savingSchedule || scheduleConfirming}}" aria-label="工作日开始时间" data-field="workdayStartTime" bindchange="setField"><view class="pk-picker"><text>{{workdayStartTime}}</text><view class="chev"></view></view></picker>
+--- a/apps/miniprogram/pages/settings/index.wxss
++++ b/apps/miniprogram/pages/settings/index.wxss
+@@ -343,7 +343,6 @@
+ /* Approved DREV-20261105-WORKDAY-02: new mode controls use CSS px at every viewport. */
+ .activity-schedule-sheet .schedule-mode { margin-bottom: 16px; }
+ .activity-schedule-sheet .schedule-mode > view { min-height: 44px; font-size: 14px; }
+-.activity-schedule-sheet .workday-rule .n-txt { font-size: 14px; line-height: 1.55; }
+ .activity-schedule-sheet .pk-picker { min-height: 44px; box-sizing: border-box; }
+ .activity-schedule-sheet .sheet-foot .btn { width: 100%; min-height: 44px; }
+ .activity-schedule-sheet .sheet-head .icon-btn { width: 44px; height: 44px; min-height: 44px; flex: none; }
+--- a/apps/miniprogram/pages/calendar/index.js
++++ b/apps/miniprogram/pages/calendar/index.js
+@@ -114,7 +114,7 @@
+       const items = (schedule.items || []).map(decorateItem);
+       this.cache[selectedDay] = items;
+       this.warningCache[selectedDay] = schedule.workday_calendar_warning
+-        ? `工作日数据待更新：当前仅覆盖至 ${schedule.workday_calendar_warning.coverage_end}，超出范围的安排暂不显示，也不会发送提醒。` : "";
++        ? "工作日安排待更新" : "";
+       this.marks[selectedDay] = items.length > 0;
+       this.setData({ loading: false, children, childIndex, childId, items, itemCount: items.length,
+         conflictCount: items.filter((item) => item.has_conflict).length,
+@@ -140,7 +140,7 @@
+           const items = ((results[index] || {}).items || []).map(decorateItem);
+           this.cache[key] = items;
+           this.warningCache[key] = results[index].workday_calendar_warning
+-            ? `工作日数据待更新：当前仅覆盖至 ${results[index].workday_calendar_warning.coverage_end}，超出范围的安排暂不显示，也不会发送提醒。` : "";
++            ? "工作日安排待更新" : "";
+           this.marks[key] = items.length > 0;
+         });
+         this.publishWeek(selectedDay);
+--- a/apps/miniprogram/pages/calendar/index.wxml
++++ b/apps/miniprogram/pages/calendar/index.wxml
+@@ -56,7 +56,7 @@
+       <view class="conflict-dot"></view>
+       <text>{{conflictCount}} 项存在时间冲突，请核对安排</text>
+     </view>
+-    <view class="pk-notice warn workday-rule" wx:if="{{workdayWarning}}" aria-live="polite"><text class="n-txt">{{workdayWarning}}</text></view>
++    <view class="pk-notice warn workday-status" wx:if="{{workdayWarning}}" aria-live="polite"><text class="n-txt">{{workdayWarning}}</text></view>
+ 
+     <block wx:if="{{loading && !items.length}}">
+       <view class="sk card-sk"></view>
+@@ -94,8 +94,8 @@
+       <view class="ea"><view class="btn secondary" aria-role="button" aria-label="去设置固定时间" bindtap="openSettings">去设置固定时间</view></view>
+     </view>
+ 
+-    <view class="pk-empty inline" wx:else>
+-      <text class="et">{{workdayWarning ? '本日的工作日安排暂不可用' : '这天还没有安排'}}</text>
++    <view class="pk-empty inline" wx:elif="{{!workdayWarning}}">
++      <text class="et">这天还没有安排</text>
+       <text class="ec">固定的课外活动和出行会自动出现在这里。</text>
+     </view>
+ 
+@@ -152,8 +152,6 @@
+         <view class="{{repeatWeekly ? 'on' : ''}}" aria-role="button" aria-label="每周{{repeatWeekly ? '，已选择' : ''}}" aria-disabled="{{!canWrite || saving}}" data-mode="weekly" bindtap="chooseRepeatMode">每周</view>
+         <view class="{{workdayOnly ? 'on' : ''}}" aria-role="button" aria-label="工作日{{workdayOnly ? '，已选择' : ''}}" aria-disabled="{{!canWrite || saving}}" data-mode="workday" bindtap="chooseRepeatMode">工作日</view>
+       </view>
+-      <view class="pk-notice quiet workday-rule" wx:if="{{workdayOnly}}"><text class="n-txt">按中国大陆法定安排，放假跳过，调休照常</text></view>
+-      <view class="pk-notice warn workday-rule" wx:if="{{workdayWarning}}" aria-live="polite"><text class="n-txt">{{workdayWarning}}</text></view>
+     </view>
+     <view class="pk-field">
+       <text class="lbl">类型</text>
+--- a/apps/miniprogram/pages/calendar/index.wxss
++++ b/apps/miniprogram/pages/calendar/index.wxss
+@@ -87,5 +87,5 @@
+ .editor-sheet .sheet-head .icon-btn { width: 44px; height: 44px; min-height: 44px; flex: none; }
+ .editor-sheet .del-link { min-height: 44px; }
+ .editor-sheet .sheet-sub, .editor-sheet .lbl { font-size: 14px; }
+-.workday-rule .n-txt { font-size: 14px; line-height: 1.55; }
++.workday-status .n-txt { font-size: 14px; line-height: 1.55; }
+ .editor-sheet .seg > view[aria-disabled="true"] { opacity: .5; }
+--- a/apps/miniprogram/pages/today/index.js
++++ b/apps/miniprogram/pages/today/index.js
+@@ -206,8 +206,6 @@
+       ]);
+       if (generation !== this.loadGeneration) return;
+       dashboard.daily_tasks = dashboard.daily_tasks || { day: dashboard.day, items: [], total_count: 0, remaining_count: 0 };
+-      dashboard.workday_warning_text = dashboard.workday_calendar_warning
+-        ? `工作日数据待更新：当前仅覆盖至 ${dashboard.workday_calendar_warning.coverage_end}，超出范围的安排暂不显示，也不会发送提醒。` : "";
+       const activitiesByName = Object.fromEntries(subjects.filter((item) => item.kind === "activity" && item.active).map((item) => [item.name, item.id]));
+       dashboard.schedule_items = dashboard.schedule_items.map((item) => ({ ...item, subject_id: item.subject_id || activitiesByName[item.name] || "",
+         kind_label: KIND_LABELS[item.kind] || "其他安排",
+@@ -228,7 +226,7 @@
+       dashboard.optional_todo_groups = dashboard.todo_groups.filter((item) => item.optional);
+       const scheduledSubjects = new Set(dashboard.schedule_items.map((item) => item.subject_id).filter(Boolean));
+       dashboard.optional_activity_suggestions = dashboard.activity_suggestions.filter((item) => item.suggested && !scheduledSubjects.has(item.subject_id));
+-      dashboard.is_empty = !dashboard.workday_warning_text && !dashboard.todo_groups.length && !dashboard.daily_summary.record_count && !dashboard.schedule_items.length && !dashboard.optional_activity_suggestions.length;
++      dashboard.is_empty = !dashboard.workday_calendar_warning && !dashboard.todo_groups.length && !dashboard.daily_summary.record_count && !dashboard.schedule_items.length && !dashboard.optional_activity_suggestions.length;
+       dashboard.show_guide = !dashboard.todo_groups.length && !(plan && plan.plannedCount)
+         && !dashboard.daily_summary.record_count && !dashboard.next_review;
+       dashboard.activity_count = dashboard.schedule_items.length + dashboard.optional_activity_suggestions.length;
+@@ -268,7 +266,7 @@
+             ? `${dashboard.daily_tasks.total_count - dashboard.daily_tasks.remaining_count} / ${dashboard.daily_tasks.total_count} 已完成`
+             : "还未设置",
+           learning: `已确认 ${dashboard.daily_summary.record_count} 条`,
+-          activity: dashboard.workday_calendar_warning ? "数据待更新" : `${dashboard.activity_count} 项`
++          activity: dashboard.workday_calendar_warning ? "工作日安排待更新" : `${dashboard.activity_count} 项`
+         },
+         todoCards: view.cards, hiddenTodoCount: view.hidden + remoteTodoCount,
+         loadingMoreTodos: false });
+--- a/apps/miniprogram/pages/today/index.wxml
++++ b/apps/miniprogram/pages/today/index.wxml
+@@ -167,12 +167,11 @@
+ 
+     <view class="sec" aria-hidden="{{showLearningSheet}}">
+       <view class="sec-bar" aria-role="button" aria-label="展开或收起课外活动" data-section="activity" bindtap="toggleSection">
+-        <text class="s-t">课外活动</text><text class="s-m">{{sectionMeta.activity}}</text>
++        <text class="s-t">课外活动</text><text class="s-m {{dashboard.workday_calendar_warning ? 'workday-status' : ''}}" aria-live="polite">{{sectionMeta.activity}}</text>
+         <view class="chev {{sections.activity ? 'up' : ''}}"></view>
+       </view>
+       <view class="sec-rule"></view>
+-      <view class="sec-body" wx:if="{{sections.activity}}">
+-        <view class="pk-notice warn" wx:if="{{dashboard.workday_warning_text}}" aria-live="polite"><text class="n-txt">{{dashboard.workday_warning_text}}</text></view>
++      <view class="sec-body" wx:if="{{sections.activity && (dashboard.activity_count || !dashboard.workday_calendar_warning)}}">
+         <view class="tl" wx:if="{{dashboard.activity_count}}">
+           <view class="tl-item {{item.past ? 'past' : ''}}" wx:for="{{dashboard.schedule_items}}" wx:key="id">
+             <text class="tl-time tnum">{{item.start_time}}</text>
+@@ -202,8 +201,7 @@
+           </view>
+         </view>
+         <view class="pk-empty inline" wx:else>
+-          <block wx:if="{{dashboard.workday_warning_text}}"><text class="et">今天的工作日安排暂不可用</text></block>
+-          <block wx:else><text class="et">今天没有活动安排</text></block>
++          <text class="et">今天没有活动安排</text>
+         </view>
+       </view>
+     </view>
+--- a/apps/miniprogram/pages/today/index.wxss
++++ b/apps/miniprogram/pages/today/index.wxss
+@@ -2,6 +2,7 @@
+ .today-page { padding-top: 0; }
+ .daily-task-card { padding: 0 28rpx; }
+ .today-page .sec-bar { min-height: 44px; }
++.today-page .sec-bar .workday-status { font-size: 14px; color: var(--pk-ink-2); text-align: right; }
+ .daily-task-row { display: flex; align-items: center; gap: 24rpx; padding: 24rpx 0; }
+ .daily-task-row + .daily-task-row { border-top: var(--pk-border-soft); }
+ .daily-task-copy { min-width: 0; }
+--- a/tests/frontend/workday-schedules.test.js
++++ b/tests/frontend/workday-schedules.test.js
+@@ -156,11 +156,11 @@
+   page.onLoad();
+   page.data.selectedDay = "2027-01-04";
+   await page.load();
+-  assert.match(page.data.workdayWarning, /2026/);
++  assert.ok(page.data.workdayWarning);
+   await page.fillWeek("child", "2027-01-04", page.loadGeneration);
+   assert.equal(page.data.weekEmpty, false);
+   page.chooseDay(tap({ day: "2027-01-05" }));
+-  assert.match(page.data.workdayWarning, /2026/);
++  assert.ok(page.data.workdayWarning);
+ });
+ 
+ test("Today exposes unsupported workday data and expands its activity warning", async () => {
+@@ -176,8 +176,8 @@
+     throw new Error(`Unexpected path: ${path}`);
+   });
+   await page.load();
+-  assert.match(page.data.dashboard.workday_warning_text, /2026/);
++  assert.equal(page.data.dashboard.workday_calendar_warning.code, "workday_calendar_coverage_missing");
+   assert.equal(page.data.sections.activity, true);
+-  assert.equal(page.data.sectionMeta.activity, "数据待更新");
++  assert.ok(page.data.sectionMeta.activity);
+   assert.equal(page.data.dashboard.is_empty, false);
+ });

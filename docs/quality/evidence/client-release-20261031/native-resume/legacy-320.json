@@ -1,0 +1,130 @@
+{
+  "nodes": {
+    ".footprints-page": [
+      {
+        "left": 0,
+        "right": 320,
+        "top": 76,
+        "bottom": 568,
+        "width": 320,
+        "height": 492,
+        "fontSize": "14px"
+      }
+    ],
+    ".fp-tabs": [
+      {
+        "left": 12,
+        "right": 308,
+        "top": 142,
+        "bottom": 190,
+        "width": 296,
+        "height": 48,
+        "fontSize": "14px"
+      }
+    ],
+    ".fp-tab": [
+      {
+        "left": 14,
+        "right": 111.328125,
+        "top": 144,
+        "bottom": 188,
+        "width": 97.328125,
+        "height": 44,
+        "fontSize": "14px"
+      },
+      {
+        "left": 111.328125,
+        "right": 208.65625,
+        "top": 144,
+        "bottom": 188,
+        "width": 97.328125,
+        "height": 44,
+        "fontSize": "14px"
+      },
+      {
+        "left": 208.65625,
+        "right": 305.984375,
+        "top": 144,
+        "bottom": 188,
+        "width": 97.328125,
+        "height": 44,
+        "fontSize": "14px"
+      }
+    ],
+    ".fp-more": [
+      {
+        "left": 264,
+        "right": 308,
+        "top": 79,
+        "bottom": 123,
+        "width": 44,
+        "height": 44,
+        "fontSize": "14px"
+      }
+    ],
+    ".fp-drafts": [],
+    ".fp-title": [],
+    ".fp-empty": [],
+    ".fp-import": [
+      {
+        "left": 12,
+        "right": 308,
+        "top": 442,
+        "bottom": 490,
+        "width": 296,
+        "height": 48,
+        "fontSize": "16px"
+      }
+    ],
+    ".fp-error": [],
+    ".fp-manual": [
+      {
+        "left": 38,
+        "right": 295,
+        "top": 315,
+        "bottom": 365,
+        "width": 257,
+        "height": 50,
+        "fontSize": "14px"
+      }
+    ],
+    ".fp-text-button": [
+      {
+        "left": 38,
+        "right": 295,
+        "top": 365,
+        "bottom": 409,
+        "width": 257,
+        "height": 44,
+        "fontSize": "14px"
+      }
+    ],
+    ".fp-notice": []
+  },
+  "scroll": {
+    "id": "",
+    "dataset": {},
+    "scrollLeft": 0,
+    "scrollTop": 49,
+    "scrollWidth": 320,
+    "scrollHeight": 617
+  },
+  "viewport": {
+    "width": 320,
+    "height": 568,
+    "screenHeight": 568,
+    "dpr": 2,
+    "baseLibrary": "3.16.2"
+  },
+  "sheet": "",
+  "canWrite": true,
+  "active": true,
+  "manualEntryRemoved": true,
+  "state": "legacy",
+  "errors": [
+    "tab gap below 8px"
+  ],
+  "capturedAt": "2026-10-31T10:36:07.755Z",
+  "screenshotSha256": "24e04b12e0b67a50ebe889fcdfa1270839d98fbc58868cc10035721a1f5f3062",
+  "scope": "native synthetic offline embedded host only; not device or cloud acceptance"
+}

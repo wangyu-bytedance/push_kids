@@ -1,0 +1,63 @@
+{
+  "route": "pages/today/index",
+  "viewport": {
+    "width": 320,
+    "height": 568,
+    "screenHeight": 568,
+    "pixelRatio": 2
+  },
+  "base_library": "3.17.4",
+  "nodes": [
+    {
+      "selector": ".workday-status",
+      "left": 91.609375,
+      "right": 292,
+      "top": 387,
+      "bottom": 409,
+      "width": 200.390625,
+      "height": 22,
+      "fontSize": "14px",
+      "lineHeight": "22.4px"
+    },
+    {
+      "selector": ".sec-body",
+      "left": 15,
+      "right": 305,
+      "top": 431,
+      "bottom": 504,
+      "width": 290,
+      "height": 73,
+      "fontSize": "16px",
+      "lineHeight": "25.6px"
+    },
+    {
+      "selector": ".tl-card",
+      "left": 64,
+      "right": 305,
+      "top": 431,
+      "bottom": 494,
+      "width": 241,
+      "height": 63,
+      "fontSize": "16px",
+      "lineHeight": "25.6px"
+    },
+    {
+      "selector": ".page",
+      "left": 0,
+      "right": 320,
+      "top": -56,
+      "bottom": 568,
+      "width": 320,
+      "height": 624,
+      "fontSize": "16px",
+      "lineHeight": "25.6px"
+    }
+  ],
+  "mode": {},
+  "source": "native wx.createSelectorQuery; synthetic fixtures; production WXML/WXSS exact",
+  "errors": [],
+  "state": "partial-coverage",
+  "host": "today",
+  "screenshot_status": "CAPTURED_REQUIRES_VISUAL_REVIEW",
+  "screenshot_sha256": "5801601106318d3d38a98356f20d8e265163b9b9fca73a16f387e631384cfcae"
+}

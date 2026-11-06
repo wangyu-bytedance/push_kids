@@ -1,0 +1,34 @@
+{
+  "results": [
+    {
+      "file": "test_footprints_mysql.py",
+      "result": "PASS"
+    },
+    {
+      "file": "test_schema_readiness_mysql.py",
+      "result": "PASS"
+    },
+    {
+      "file": "test_grade_confirmation_mysql.py",
+      "result": "PASS"
+    },
+    {
+      "file": "test_notification_renewal_mysql.py",
+      "result": "PASS"
+    },
+    {
+      "file": "test_review_schedule_mysql.py",
+      "result": "PASS"
+    },
+    {
+      "file": "test_mysql_runtime.py",
+      "result": "PASS"
+    },
+    {
+      "file": "test_staged_mysql.py",
+      "result": "FAIL"
+    }
+  ],
+  "production_database_used": false,
+  "each_module_has_separate_utf8mb4_database": true
+}

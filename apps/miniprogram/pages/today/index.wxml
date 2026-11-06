@@ -167,11 +167,11 @@
 
     <view class="sec" aria-hidden="{{showLearningSheet}}">
       <view class="sec-bar" aria-role="button" aria-label="展开或收起课外活动" data-section="activity" bindtap="toggleSection">
-        <text class="s-t">课外活动</text><text class="s-m">{{sectionMeta.activity}}</text>
+        <text class="s-t">课外活动</text><text class="s-m {{dashboard.workday_calendar_warning ? 'workday-status' : ''}}" aria-live="polite">{{sectionMeta.activity}}</text>
         <view class="chev {{sections.activity ? 'up' : ''}}"></view>
       </view>
       <view class="sec-rule"></view>
-      <view class="sec-body" wx:if="{{sections.activity}}">
+      <view class="sec-body" wx:if="{{sections.activity && (dashboard.activity_count || !dashboard.workday_calendar_warning)}}">
         <view class="tl" wx:if="{{dashboard.activity_count}}">
           <view class="tl-item {{item.past ? 'past' : ''}}" wx:for="{{dashboard.schedule_items}}" wx:key="id">
             <text class="tl-time tnum">{{item.start_time}}</text>

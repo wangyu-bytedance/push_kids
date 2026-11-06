@@ -1,12 +1,13 @@
 # 微信小程序平台 API 基线与改造清单
 
-- Status: `CURRENT_AUDIT / PARTIAL_IMPLEMENTATION`
-- Revision: `WX-API-BASELINE-20261001-02`
+- Status: `CURRENT_AUDIT / BUG004_PROPOSAL_REJECTED`
+- Revision: `WX-API-BASELINE-20261105-03-CLOSURE`
 - Applies to: `apps/miniprogram`
 - Related Feature/UI: `FEAT-001` / `UI-001`
 - Related engineering contract: `FEC-20260830-01`
-- Proposed implementation Spec: `BUG-SPEC-20260905-02`
+- Historical implementation proposal: [BUG-004](../../../specs/rejected/BUG-004-WECHAT-MINIPROGRAM-API-COMPATIBILITY.md)，用户于2026-11-05明确REJECTED，不再待实施。
 - Last audited: 2026-10-01（新增 WechatSI、隐私和麦克风权限的本地实现审计；真机兼容矩阵未执行）
+- Lifecycle update: 2026-11-05，仅关闭BUG-004关联待办，未重做API或真机兼容审计。
 
 本文只收录当前产品实际使用或近期改造需要使用的微信小程序 API。官方
 [小程序 API 总索引](https://developers.weixin.qq.com/miniprogram/dev/api/) 是参数、最低基础库、
@@ -51,7 +52,9 @@ WechatSI 当前按官方示例声明 `version=0.3.1`、`provider=wx069ba97219f66
 价格、SLA 或音频留存承诺，因此本地代码完成不等于平台可用或永久免费；目标 AppID 必须在 preview
 前核验插件准入、当前版本/条款和隐私指引。业务后端不接收原始音频、临时路径或插件响应。
 
-## 3. 当前需要改造的代码
+## 3. 历史改造提案（BUG-004已拒绝）
+
+下列P0/P1/P2是原提案的优先级，随BUG-004拒绝而关闭，不再作为待办或新增发布门禁；已批准的其他功能、工程规则与发布验收要求继续按其现行文档执行。
 
 ### P0 — 体验版验收前必须完成
 
@@ -118,5 +121,5 @@ WechatSI 当前按官方示例声明 `version=0.3.1`、`provider=wx069ba97219f66
 | `TP-API-008` | iOS、Android、DevTools 在 320×568、390×844、430×932 的相关状态证据 |
 | `TP-API-009` | 首次隐私/麦克风授权后不自动开录；拒绝、上滑取消、touchcancel、60 秒、通话/后台/弱网可恢复 |
 
-以上改造会影响兼容提示、权限失败、表单错误和上传取消等可见状态。开始编码前必须批准
-`BUG-SPEC-20260905-02`；如新增可见布局或交互超出现有设计契约，还需批准对应 Design Revision。
+以上保留历史审计与测试点，不代表本轮已经实施或验收。BUG-004已拒绝；未来若有新的平台兼容需求，
+按新的具体Spec与相关设计批准范围处理。

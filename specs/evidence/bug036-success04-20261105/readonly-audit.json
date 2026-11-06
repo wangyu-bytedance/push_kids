@@ -1,0 +1,17 @@
+{
+  "readonly_before": {
+    "readonly": 1,
+    "version": "5.7.18-cynos-2.1.14-log"
+  },
+  "readonly_after": {
+    "readonly": 1,
+    "version": "5.7.18-cynos-2.1.14-log"
+  },
+  "entries": 62,
+  "equal_entries": 62,
+  "differences": {},
+  "generator_database_connections": 0,
+  "generator_business_posts": 0,
+  "test_writes_to_production": 0,
+  "attribution": "No generator DB client or business API; any observed concurrent changes are not attributed without evidence."
+}

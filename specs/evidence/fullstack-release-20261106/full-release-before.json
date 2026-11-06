@@ -1,0 +1,68 @@
+{
+  "observedAt": "2026-11-05T23:01:43.343Z",
+  "versions": [
+    {
+      "version": "flask-ik19-021",
+      "status": "normal",
+      "flow": 0,
+      "replicas": 0,
+      "remark": "SPEC-UNIFIED-REVIEW-20260913-02 88ab2093d6b2 unified review agent"
+    },
+    {
+      "version": "flask-ik19-022",
+      "status": "normal",
+      "flow": 0,
+      "replicas": 0,
+      "remark": "push-kids-20260913-019-bug015-88ab209"
+    },
+    {
+      "version": "flask-ik19-023",
+      "status": "normal",
+      "flow": 0,
+      "replicas": 0,
+      "remark": "push-kids-20260919-023-f4bd997"
+    },
+    {
+      "version": "flask-ik19-024",
+      "status": "normal",
+      "flow": 0,
+      "replicas": 0,
+      "remark": "push-kids-20260922-bug026-5397a82"
+    },
+    {
+      "version": "flask-ik19-025",
+      "status": "normal",
+      "flow": 0,
+      "replicas": 0,
+      "remark": "push-kids-20260926-bug027-b3db219"
+    },
+    {
+      "version": "flask-ik19-026",
+      "status": "normal",
+      "flow": 0,
+      "replicas": 0,
+      "remark": "push-kids-20261007-fair02-bridge-b3db219"
+    },
+    {
+      "version": "flask-ik19-035",
+      "status": "normal",
+      "flow": 0,
+      "replicas": 0,
+      "remark": "full-20261024-bug031-ops04-01"
+    },
+    {
+      "version": "flask-ik19-036",
+      "status": "deploy_failed",
+      "flow": 0,
+      "replicas": 0,
+      "remark": "latest-20261024-0025-01-26714b9"
+    },
+    {
+      "version": "flask-ik19-040",
+      "status": "normal",
+      "flow": 100,
+      "replicas": 1,
+      "remark": "ops01-20261106-c96b30d-0027"
+    }
+  ]
+}

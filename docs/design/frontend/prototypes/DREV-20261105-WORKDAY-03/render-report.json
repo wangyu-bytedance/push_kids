@@ -1,0 +1,199 @@
+{
+  "source_sha256": "be311a79258763a40eb590f6e5bb7fa71ca37d18c06eab30a9ff1cf90878ff3f",
+  "exports": [
+    {
+      "state": "settings-workday",
+      "viewport": [
+        320,
+        568
+      ],
+      "status": "PASS"
+    },
+    {
+      "state": "settings-coverage",
+      "viewport": [
+        320,
+        568
+      ],
+      "status": "PASS"
+    },
+    {
+      "state": "calendar-create",
+      "viewport": [
+        320,
+        568
+      ],
+      "status": "PASS"
+    },
+    {
+      "state": "calendar-edit",
+      "viewport": [
+        320,
+        568
+      ],
+      "status": "PASS"
+    },
+    {
+      "state": "calendar-coverage",
+      "viewport": [
+        320,
+        568
+      ],
+      "status": "PASS"
+    },
+    {
+      "state": "calendar-partial-coverage",
+      "viewport": [
+        320,
+        568
+      ],
+      "status": "PASS"
+    },
+    {
+      "state": "today-coverage",
+      "viewport": [
+        320,
+        568
+      ],
+      "status": "PASS"
+    },
+    {
+      "state": "today-partial-coverage",
+      "viewport": [
+        320,
+        568
+      ],
+      "status": "PASS"
+    },
+    {
+      "state": "settings-workday",
+      "viewport": [
+        390,
+        844
+      ],
+      "status": "PASS"
+    },
+    {
+      "state": "settings-coverage",
+      "viewport": [
+        390,
+        844
+      ],
+      "status": "PASS"
+    },
+    {
+      "state": "calendar-create",
+      "viewport": [
+        390,
+        844
+      ],
+      "status": "PASS"
+    },
+    {
+      "state": "calendar-edit",
+      "viewport": [
+        390,
+        844
+      ],
+      "status": "PASS"
+    },
+    {
+      "state": "calendar-coverage",
+      "viewport": [
+        390,
+        844
+      ],
+      "status": "PASS"
+    },
+    {
+      "state": "calendar-partial-coverage",
+      "viewport": [
+        390,
+        844
+      ],
+      "status": "PASS"
+    },
+    {
+      "state": "today-coverage",
+      "viewport": [
+        390,
+        844
+      ],
+      "status": "PASS"
+    },
+    {
+      "state": "today-partial-coverage",
+      "viewport": [
+        390,
+        844
+      ],
+      "status": "PASS"
+    },
+    {
+      "state": "settings-workday",
+      "viewport": [
+        430,
+        932
+      ],
+      "status": "PASS"
+    },
+    {
+      "state": "settings-coverage",
+      "viewport": [
+        430,
+        932
+      ],
+      "status": "PASS"
+    },
+    {
+      "state": "calendar-create",
+      "viewport": [
+        430,
+        932
+      ],
+      "status": "PASS"
+    },
+    {
+      "state": "calendar-edit",
+      "viewport": [
+        430,
+        932
+      ],
+      "status": "PASS"
+    },
+    {
+      "state": "calendar-coverage",
+      "viewport": [
+        430,
+        932
+      ],
+      "status": "PASS"
+    },
+    {
+      "state": "calendar-partial-coverage",
+      "viewport": [
+        430,
+        932
+      ],
+      "status": "PASS"
+    },
+    {
+      "state": "today-coverage",
+      "viewport": [
+        430,
+        932
+      ],
+      "status": "PASS"
+    },
+    {
+      "state": "today-partial-coverage",
+      "viewport": [
+        430,
+        932
+      ],
+      "status": "PASS"
+    }
+  ],
+  "interactions": "PASS: form fields retained, redundant rule absent, close/focus",
+  "native_acceptance": "NOT_RUN"
+}

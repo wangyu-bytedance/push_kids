@@ -19,6 +19,7 @@ from push_kids.activities.service import ActivitiesService
 from push_kids.activities.weekly_slots import has_weekly_time_slots_capability
 from push_kids.platform.context import family_id
 from push_kids.platform.dependencies import get_db
+from push_kids.platform.time import local_date
 
 router = APIRouter(tags=["activities"])
 
@@ -50,7 +51,10 @@ def list_schedules(
     return {
         "items": [
             ActivitiesService.view(db, item, client_supports_slots=supports_slots) for item in items
-        ]
+        ],
+        "workday_calendar_warning": ActivitiesService.calendar_warning(
+            db, family, child_id, local_date()
+        ),
     }
 
 
@@ -124,7 +128,11 @@ def schedule_for_day(
     db: Annotated[Session, Depends(get_db)],
 ):
     items = ActivitiesService.events_for_day(db, family, child_id, day, include_travel=True)
-    return {"day": day.isoformat(), "items": items}
+    return {
+        "day": day.isoformat(),
+        "items": items,
+        "workday_calendar_warning": ActivitiesService.calendar_warning(db, family, child_id, day),
+    }
 
 
 @router.post("/activity-records", response_model=ActivityRecordView, status_code=201)

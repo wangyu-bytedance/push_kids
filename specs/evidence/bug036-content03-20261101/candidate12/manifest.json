@@ -1,0 +1,101 @@
+{
+  "pipeline_revision": "staged-20261101-12",
+  "prompt_revision": "child-aware-history-agent-20261101-15",
+  "approval_baseline": "staged-20261101-10/child-aware-history-agent-20261031-13",
+  "files": {
+    "apps/api/src/push_kids/agent_processing/pipeline.py": {
+      "baseline_sha256": "d14bb5682a75d9bd734e039f110b5a46de0c081b6b3537c95307f5a666b3c4ac",
+      "revision11_sha256": "b6b958d0300ad0a6f3ee825ef95fa9d3756e782e1a63306a5d40696b99441b78",
+      "current_sha256": "017be7497fc8c6515259183975ed845bbc798ddc347aff48ee160a57f14c9373",
+      "baseline_snapshot": "../baseline__apps__api__src__push_kids__agent_processing__pipeline.py.txt",
+      "revision11_snapshot": "../current__apps__api__src__push_kids__agent_processing__pipeline.py.txt",
+      "current_snapshot": "current__apps__api__src__push_kids__agent_processing__pipeline.py.txt"
+    },
+    "apps/api/src/push_kids/agent_processing/stage_contracts.py": {
+      "baseline_sha256": "056cd0eb6bde33429c6eb56c9f9b11c7a96237671a6378046490ca2c18df6e6a",
+      "revision11_sha256": "b23d6ab0aaf67784e4e4701dbdc65db9b45c25a8722f2b5d984d475932670a64",
+      "current_sha256": "18de2d80fddb1707a160f1827008dcf5cef941529bcfdd6d670095229bb44f94",
+      "baseline_snapshot": "../baseline__apps__api__src__push_kids__agent_processing__stage_contracts.py.txt",
+      "revision11_snapshot": "../current__apps__api__src__push_kids__agent_processing__stage_contracts.py.txt",
+      "current_snapshot": "current__apps__api__src__push_kids__agent_processing__stage_contracts.py.txt"
+    },
+    "apps/api/src/push_kids/agent_processing/stage_provider.py": {
+      "baseline_sha256": "541aa016674b35e215eee052f23bc04e00d09164995f9e169d15c65fedc125e1",
+      "revision11_sha256": "445c404669cc2da604782e5790c1d94d18cf370a4aec26cb9c90cd7f281f2f93",
+      "current_sha256": "e3a64018d101f8ded8eddfedb1413143bf31ad6f0224b89dddb5b3250e73972e",
+      "baseline_snapshot": "../baseline__apps__api__src__push_kids__agent_processing__stage_provider.py.txt",
+      "revision11_snapshot": "../current__apps__api__src__push_kids__agent_processing__stage_provider.py.txt",
+      "current_snapshot": "current__apps__api__src__push_kids__agent_processing__stage_provider.py.txt"
+    },
+    "apps/api/src/push_kids/agent_processing/prompt.py": {
+      "baseline_sha256": "61152c25593aee2665a6ae59bb489e90b9b031bc48df69a24892e82fea242823",
+      "revision11_sha256": "fae31796c8ed305c17934f86f41b737315d314b75db498182ecf62927a050441",
+      "current_sha256": "d8658104bc9e2e65090e2a9221fb030bcb8a56d35d299607841238906124a77c",
+      "baseline_snapshot": "../baseline__apps__api__src__push_kids__agent_processing__prompt.py.txt",
+      "revision11_snapshot": "../current__apps__api__src__push_kids__agent_processing__prompt.py.txt",
+      "current_snapshot": "current__apps__api__src__push_kids__agent_processing__prompt.py.txt"
+    },
+    "apps/api/src/push_kids/agent_processing/failures.py": {
+      "baseline_sha256": "73167af67d45a1fad12b127804b29f2c799ebdc1242f61fdccb1387061600bdc",
+      "revision11_sha256": "3b7a4c1ba9b788c5916fceedceed76611ca22e78789fce1184a1dc3509dabdd4",
+      "current_sha256": "3b7a4c1ba9b788c5916fceedceed76611ca22e78789fce1184a1dc3509dabdd4",
+      "baseline_snapshot": "../baseline__apps__api__src__push_kids__agent_processing__failures.py.txt",
+      "revision11_snapshot": "../current__apps__api__src__push_kids__agent_processing__failures.py.txt",
+      "current_snapshot": "current__apps__api__src__push_kids__agent_processing__failures.py.txt"
+    },
+    "apps/api/src/push_kids/agent_processing/telemetry.py": {
+      "baseline_sha256": "c19ebc6d7bcfa7de61364e4aa7fa75710e8a3547296c401a60a981ee3dbcb7db",
+      "revision11_sha256": "8cdb0ffc8fd59b7c00551a1a41defc7e76544c2bddd8ec368b35af25a0e8ab4a",
+      "current_sha256": "8cdb0ffc8fd59b7c00551a1a41defc7e76544c2bddd8ec368b35af25a0e8ab4a",
+      "baseline_snapshot": "../baseline__apps__api__src__push_kids__agent_processing__telemetry.py.txt",
+      "revision11_snapshot": "../current__apps__api__src__push_kids__agent_processing__telemetry.py.txt",
+      "current_snapshot": "current__apps__api__src__push_kids__agent_processing__telemetry.py.txt"
+    },
+    "tests/staged_analysis_fakes.py": {
+      "baseline_sha256": "93ed32a815259c915482a4e7b51b7b8540d0987da96b07414dfb20706cf56a02",
+      "revision11_sha256": "33a4720bf34f0c3d6be2238bf030578bf12873e585c406da37bbd625f9796320",
+      "current_sha256": "33a4720bf34f0c3d6be2238bf030578bf12873e585c406da37bbd625f9796320",
+      "baseline_snapshot": "../baseline__tests__staged_analysis_fakes.py.txt",
+      "revision11_snapshot": "../current__tests__staged_analysis_fakes.py.txt",
+      "current_snapshot": "current__tests__staged_analysis_fakes.py.txt"
+    },
+    "tests/unit/test_staged_analysis.py": {
+      "baseline_sha256": "8bb19e2cd44a257f8ccfab25451d6fc947ef9600b1426db5ef1b181778606bbb",
+      "revision11_sha256": "6d8225ffb919a30e2dc42d8523d18fb9f3e7fa2c0e6fa4e850ed21577fd771e7",
+      "current_sha256": "2807aa68da42aa9ed5056a8fb17e1176205712a79632446c71e712f7d617bf61",
+      "baseline_snapshot": "../baseline__tests__unit__test_staged_analysis.py.txt",
+      "revision11_snapshot": "../current__tests__unit__test_staged_analysis.py.txt",
+      "current_snapshot": "current__tests__unit__test_staged_analysis.py.txt"
+    },
+    "tests/unit/test_staged_proposal_recovery.py": {
+      "baseline_sha256": "0251062bcea8b109990737f9b487d436e4cda3f04382fae2f44876e3efb5a313",
+      "revision11_sha256": "a126b4ffe7bc16ef1ed644b3cf1d4c7b3e2bf8a68e7f29a54a27b732ed9dc72b",
+      "current_sha256": "4d801d8dc2813c95cdcd7a476de7c2fbd0ee83948aa268a8fe0fe596883a73d2",
+      "baseline_snapshot": "../baseline__tests__unit__test_staged_proposal_recovery.py.txt",
+      "revision11_snapshot": "../current__tests__unit__test_staged_proposal_recovery.py.txt",
+      "current_snapshot": "current__tests__unit__test_staged_proposal_recovery.py.txt"
+    },
+    "tests/unit/test_stage_provider.py": {
+      "baseline_sha256": "60d8385fb1eb36d6d9d8df6aeb1a3007b607af2852850fc07c5de6bff2314c98",
+      "revision11_sha256": "5ea991ec8bd17234fb49d56a63c75f989e1be2c3ab346f3dfd567714bdffddb1",
+      "current_sha256": "b21d514294decc5c2be3a3732db45b0a07bf89a16ccf382cbbcaa367ee723ba6",
+      "baseline_snapshot": "../baseline__tests__unit__test_stage_provider.py.txt",
+      "revision11_snapshot": "../current__tests__unit__test_stage_provider.py.txt",
+      "current_snapshot": "current__tests__unit__test_stage_provider.py.txt"
+    },
+    "tests/unit/test_provider_evidence.py": {
+      "baseline_sha256": "2e90a983dbb990800f21631370ec83bff6ee9ef3298283b30549a72e9e2ae204",
+      "revision11_sha256": "6d198109d0f76c54a253b287bbc0b33823ba81c8eb5181d6569b540142d4c0be",
+      "current_sha256": "922b9fa463bea58826de7610e1a1e11a4dbd60367ca33c0b62e2b15a21f5551e",
+      "baseline_snapshot": "../baseline__tests__unit__test_provider_evidence.py.txt",
+      "revision11_snapshot": "../current__tests__unit__test_provider_evidence.py.txt",
+      "current_snapshot": "current__tests__unit__test_provider_evidence.py.txt"
+    }
+  },
+  "checks": {
+    "content03.diff": "cad794278199f16a7e88576e04dae0e090f946a40db0bad7197d53fab3bad590",
+    "review-increment.diff": "f4b83b64318427e0d45515e8ec463f97b5b904c782fac2ea657ca64efabc4a63",
+    "red-review-findings.txt": "1595b4299917e8706e708309d197e3f24d766309dedb1c2b90a858d08fcc44db",
+    "green-review-findings.txt": "f36b35b4e1125213de08919977210935cacf49cb76100ac5235795dd0222a213"
+  }
+}

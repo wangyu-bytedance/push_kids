@@ -1,11 +1,11 @@
 # FEAT-002 — 家庭协作与孩子授权
 
-- 2026-10-24本地年级确认增量：沿用bound家庭及manager/editor权限，每孩子学年确认全家共享，viewer无可操作候选。App前台/后台会话与bootstrap接线在身份变化时失效旧窗口和迟到响应，人工确认/归档清理缓存并失效旧在途候选，恢复后安全刷新。家庭关系、成员角色和邀请流程不变；[FEAT-013](FEAT-013-annual-grade-promotion.md)拥有业务规则，[本轮证据](../../quality/evidence/ANNUAL-GRADE-IMPLEMENTATION-20261024.md)记录真API双家长权限/隔离、前端竞态自动化及独立评审PASS；真机双账号未验收，未部署。
+- 2026-10-24本地年级确认增量：沿用bound家庭及manager/editor权限，每孩子学年确认全家共享，viewer无可操作候选。App前台/后台会话与bootstrap接线在身份变化时失效旧窗口和迟到响应，人工确认/归档清理缓存并失效旧在途候选，恢复后安全刷新。家庭关系、成员角色和邀请流程不变；[FEAT-013](FEAT-013-annual-grade-promotion.md)拥有业务规则，[本轮证据](../../quality/evidence/ANNUAL-GRADE-IMPLEMENTATION-20261024.md)记录真API双家长权限/隔离、前端竞态自动化及独立评审PASS；真机双账号未验收；对应实现现已随037/0.1.16交付，未体验/审核/正式发布。
 
 - Feature ID: `FEAT-002`
 - Release gate policy: `SPEC-20261011-RISK-BASED-RELEASE-GATES-01` 已批准；身份、账号绑定、家庭成员/角色/邀请、租户权限或图片归属发生变化时，双账号隔离与 owner 验收仍是当次发布阻断项。其他发布不重复执行，但不能把未执行记为 `PASS`；本 Feature 未完成的角色生命周期验收状态不变。
-- Status: `IMPLEMENTING`
-- Current-state revision: `FEAT-STATE-20260913-BUG015-SIX-DIGIT-INVITE`
+- Status: `APPROVED_SCOPE_DELIVERED / VERIFICATION_PENDING / MULTI_FAMILY_CANCELLED`
+- Current-state revision: `FEAT-STATE-20261105-FAMILY-SCOPE-CLOSURE-03`
 - Owner: 产品负责人（用户）
 - Last verified: 2026-09-13
 - Authoritative implementation: `apps/api/src/push_kids/families/`, family persistence models,
@@ -15,7 +15,8 @@
   `specs/completed/BUG-015-SIX-DIGIT-FAMILY-INVITE-CODE.md` revision `BUG-SPEC-20260913-19`
 
 > 本文只说明当前事实与已批准边界。家庭创建、邀请、申请、审批和成员角色已经在工作区实现并
-> 完成本地 SQLite/MySQL 验证，但尚未迁移或部署到微信云托管；因此不能描述为线上可用。
+> 完成本地SQLite/MySQL验证，当前已随037/0.1.16交付；已批准Spec开发完成，完整角色/设备验收待补。
+> 多家庭访问与切换提案已于2026-11-05由用户明确取消，见[取消归档](../../../specs/rejected/FEAT-002-MULTI-FAMILY-CHILD-TENANT-ISOLATION.md)。当前仍为每个微信账号一个 active family，家庭内支持多孩子，服务端家庭/孩子隔离继续有效；该取消范围不再作为待发布能力。其他既有验收缺项与独立归属需求保持各自状态。
 
 ## Purpose and scope
 
@@ -25,8 +26,8 @@
 ## Current user/system behavior
 
 本地视觉增量 `FEAT-VISUAL-20261021-HERO-ARC-01`：家庭邀请卡随共享样式删除细弧线，权限与邀请行为不变。
-[Spec01](../../../specs/active/BUG-030-HERO-BACKGROUND-ARC.md) / DREV-20261021-HERO-ARC-REMOVAL-01已批准；
-验收范围见[质量证据](../../quality/evidence/HERO-ARC-REMOVAL-20261021.md)，仅本地实现，未上传/发布。
+[Spec01](../../../specs/completed/BUG-030-HERO-BACKGROUND-ARC.md) / DREV-20261021-HERO-ARC-REMOVAL-01已批准；
+验收范围见[质量证据](../../quality/evidence/HERO-ARC-REMOVAL-20261021.md)，对应样式已随0.1.16开发上传，完整验收仍待补。
 
 - 2026-10-18本地集成，增量revision `FEAT-STATE-20261018-FOOTPRINTS-SCOPE-01`：FEAT-012所有API沿用可信成员/家庭边界，viewer仅可读，AI同意按family/member存储，上传票据绑定原上传者。新增公开scope锁/后台eligibility合同供足迹worker调用，不改角色定义；本地验证见[足迹证据](../../quality/evidence/CHILD-FOOTPRINTS-IMPLEMENTATION-20261018.md)，真实双账号/私有云媒体验收待补，未发布。
 
@@ -47,7 +48,7 @@
 - 成员管理接口无条件拒绝自移除；客户端本人详情不提供移除或角色修改。有效邀请列表不返回 token
   或邀请码。申请提交后另行生成六位纯数字“申请核验码”，只供申请双方核对，不作为加入凭证。
 - 当前学习/活动记录没有可信的上传人、监督人、确认人和编辑版本归属。
-- FEAT-001 云身份链路的真实双 actor、owner/metaid 与公网拒绝验收已完成；FEAT-002 家庭协作迁移、
+- FEAT-001云身份链路的既有双actor、owner/metaid与公网拒绝证据保留原范围；FEAT-002相关迁移已随后续版本交付。
   完整角色生命周期与共享多实例限流验收尚未完成，公开发布仍被阻断。
 
 ## Current behavior matrix
@@ -55,7 +56,7 @@
 | Capability | Current status | Evidence |
 |---|---|---|
 | create child in local workspace | available in FEAT-001 | children API + Mini Program settings |
-| controlled cloud actor binding | implemented locally | `platform/context.py` + active membership；cloud rollout pending |
+| controlled cloud actor binding | implemented locally | `platform/context.py` + active membership；037已交付，完整业务验收待补 |
 | verified collaboration identity/roles | implemented locally | family models/service + role integration tests |
 | family member list | implemented locally | members API + Mini Program page |
 | six-digit code/share/apply/approve | implemented locally | dual-credential invite/request APIs + Mini Program pages |
@@ -86,7 +87,8 @@ tokens are stored in plaintext. Cloud MySQL still remains on the previous revisi
 - Current runtime adapters: FastAPI + MySQL/private cloud media for cloud staging, SQLite/local media for dev/test;
   one in-process Worker instance.
 - Implemented module: `families` plus a narrow evolution of the existing cloud actor context. The first release keeps
-  one active family per actor and family-wide roles; multi-family and per-child grants remain explicitly deferred.
+  one active family per actor and family-wide roles; multi-family access is cancelled by the product owner on
+  2026-11-05, while per-child grants remain explicitly deferred.
 - The earlier single-host SQLite production target is superseded by `ARCH-TARGET-20260903-06` for FEAT-001.
   FEAT-002 must be revised against the cloud runtime before implementation.
 
@@ -126,11 +128,14 @@ tokens are stored in plaintext. Cloud MySQL still remains on the previous revisi
 ## Source index
 
 - Applied Spec: `specs/completed/FEAT-002-USER-FAMILY-BINDING.md`
+- Cancelled extension: [多家庭访问与隔离](../../../specs/rejected/FEAT-002-MULTI-FAMILY-CHILD-TENANT-ISOLATION.md)；关联 ADR-003 为 REJECTED，未采用。
 - Current architecture: `docs/architecture/ARCHITECTURE.md`
 - Deployment runbook: `docs/DEPLOYMENT.md`
 - Existing feature: `docs/domain/features/FEAT-001-push-kids-mvp.md`
 
 ## Change References
+
+- 2026-11-05 — 用户“这个spec可以关闭了，不需要这个功能。”取消`SPEC-20260911-MULTI-FAMILY-06`整体提案，移入`specs/rejected/`；多家庭切换及附带退出/建档/数据库加固不再列为该任务待交付项。当前家庭协作、多孩子、角色与服务端隔离保持既有实现；无生产代码、数据或发布变化。
 
 - 2026-09-13 — `BUG-SPEC-20260913-19 / DREV-20260913-FAMILY-INVITE-CODE-01`（BUG-015）：
   manager 创建邀请后可显示/复制六位家庭邀请码，申请人可手输该码预览并提交；微信分享长 token 保持兼容。

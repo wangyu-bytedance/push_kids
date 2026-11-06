@@ -1,0 +1,296 @@
+{
+  "report_id": "ACCEPTANCE-20261101-BUG036-CACHE02-01",
+  "captured_at": "2026-11-01T17:21:43+08:00",
+  "spec_revision": "BUG-SPEC-20261101-KNOWLEDGE-CACHE-02",
+  "environment": "prod-d2g14rwoycac6b45d",
+  "service": "flask-ik19",
+  "deployment_status": "NOT_VERIFIED",
+  "development_status": "VERIFYING",
+  "acceptance_status": "PARTIAL",
+  "cloud_queries": {
+    "versions": {
+      "command": [
+        "wxcloud",
+        "version:list",
+        "-e",
+        "prod-d2g14rwoycac6b45d",
+        "-s",
+        "flask-ik19"
+      ],
+      "exit_code": 0
+    },
+    "services": {
+      "command": [
+        "wxcloud",
+        "service:list",
+        "-e",
+        "prod-d2g14rwoycac6b45d"
+      ],
+      "exit_code": 0
+    }
+  },
+  "versions": [
+    {
+      "name": "flask-ik19-021",
+      "status": "normal",
+      "created_at": "2026-09-13 14:24:56",
+      "updated_at": "2026-09-13 19:37:03"
+    },
+    {
+      "name": "flask-ik19-022",
+      "status": "normal",
+      "created_at": "2026-09-13 19:07:47",
+      "updated_at": "2026-09-19 17:55:38"
+    },
+    {
+      "name": "flask-ik19-023",
+      "status": "normal",
+      "created_at": "2026-09-19 17:23:46",
+      "updated_at": "2026-09-22 22:27:20"
+    },
+    {
+      "name": "flask-ik19-024",
+      "status": "normal",
+      "created_at": "2026-09-22 21:57:18",
+      "updated_at": "2026-10-07 16:16:51"
+    },
+    {
+      "name": "flask-ik19-025",
+      "status": "normal",
+      "created_at": "2026-09-26 11:26:59",
+      "updated_at": "2026-10-07 17:55:29"
+    },
+    {
+      "name": "flask-ik19-026",
+      "status": "normal",
+      "created_at": "2026-10-07 17:30:53",
+      "updated_at": "2026-10-07 18:13:10"
+    },
+    {
+      "name": "flask-ik19-035",
+      "status": "normal",
+      "created_at": "2026-10-24 10:55:54",
+      "updated_at": "2026-10-24 23:16:52"
+    },
+    {
+      "name": "flask-ik19-036",
+      "status": "deploy_failed",
+      "created_at": "2026-10-24 22:36:16",
+      "updated_at": "2026-10-24 23:10:00"
+    },
+    {
+      "name": "flask-ik19-039",
+      "status": "normal",
+      "created_at": "2026-10-31 19:15:02",
+      "updated_at": "2026-10-31 19:18:08"
+    }
+  ],
+  "latest_returned_version": {
+    "name": "flask-ik19-039",
+    "status": "normal",
+    "created_at": "2026-10-31 19:15:02",
+    "updated_at": "2026-10-31 19:18:08"
+  },
+  "service_normal": true,
+  "public_closed": true,
+  "local_pipeline": "staged-20261101-10",
+  "local_prompt": "child-aware-history-agent-20261031-13",
+  "source_sha256": {
+    "apps/api/src/push_kids/agent_processing/pipeline.py": "d14bb5682a75d9bd734e039f110b5a46de0c081b6b3537c95307f5a666b3c4ac",
+    "apps/api/src/push_kids/agent_processing/checkpoints.py": "45a0ce6401bc2780bf849fa7acec70a938f24fa77fde36c02afedae909e18e80",
+    "apps/api/src/push_kids/agent_processing/worker.py": "32f8cb9f7b4a7e181ae4227bbffadfa5f2c582c4cfabf02ae8528f7172cbc2b8",
+    "apps/api/src/push_kids/agent_processing/stage_contracts.py": "056cd0eb6bde33429c6eb56c9f9b11c7a96237671a6378046490ca2c18df6e6a",
+    "apps/api/src/push_kids/learning/service.py": "c0d3e595a7b9b6b947b5ad1bf38931d2988a484e985c959ad97c39b587766e27",
+    "tests/unit/test_staged_proposal_recovery.py": "0251062bcea8b109990737f9b487d436e4cda3f04382fae2f44876e3efb5a313",
+    "tests/unit/test_staged_analysis.py": "8bb19e2cd44a257f8ccfab25451d6fc947ef9600b1426db5ef1b181778606bbb",
+    "tests/integration/test_analysis_checkpoints.py": "2d7c739e6047cc4dbb80fe1ca9424b0b6ed31edbc200fa861ac25ff89fe4c1db",
+    "tests/integration/test_staged_mysql.py": "67e39c6e78c7a3e3cafa5adcc93f277c36ba9793fe85c7aea589570838fbf896"
+  },
+  "source_manifest_matches": true,
+  "candidate_manifest_format": [
+    "stage",
+    "source_backend",
+    "scope",
+    "files",
+    "changes_from038",
+    "schema_change",
+    "deployment_authorized",
+    "excluded"
+  ],
+  "known_039_payload_pipeline": "staged-20261031-06",
+  "known_039_source_differences": [
+    "apps/api/src/push_kids/agent_processing/pipeline.py",
+    "apps/api/src/push_kids/agent_processing/checkpoints.py",
+    "apps/api/src/push_kids/agent_processing/worker.py",
+    "apps/api/src/push_kids/agent_processing/stage_contracts.py",
+    "apps/api/src/push_kids/learning/service.py"
+  ],
+  "scope_match_039": false,
+  "traffic_rechecked": false,
+  "cloud_runtime_revision_directly_read": false,
+  "production_jobs_or_cache_modified": false,
+  "report_run_tests": false,
+  "historical_checks": {
+    "red": {
+      "passed": 47,
+      "failed": 12,
+      "expected_failure": true
+    },
+    "focused": {
+      "passed": 116,
+      "failed": 0
+    },
+    "full_backend": {
+      "passed": 857,
+      "failed": 0,
+      "skipped": 52
+    },
+    "mysql57": {
+      "passed": 8,
+      "failed": 0,
+      "skipped": 0,
+      "isolated": true
+    },
+    "review": {
+      "confirmed_code": 0,
+      "confirmed_documentation": 1,
+      "fixed": 1,
+      "unresolved": 0
+    },
+    "original_three": {
+      "content_pass": 1,
+      "content_fail": 1,
+      "no_output": 1,
+      "outputs": 2,
+      "images": 6
+    }
+  },
+  "ruff-current": {
+    "result": "FAIL",
+    "scope": "repository",
+    "rechecked": true,
+    "errors": 7
+  },
+  "format-current": {
+    "result": "FAIL",
+    "scope": "repository",
+    "rechecked": true,
+    "unformatted_files": 1
+  },
+  "known_039_payload_manifest_matches": true,
+  "known_039_payload_files": 154,
+  "latest_approved_release": {
+    "captured_at": "2026-11-01T18:40:20+08:00",
+    "spec_revision": "OPS-SPEC-20261101-BUG036-CACHE-DEPLOY-01",
+    "approval": "2026-11-01 user:批准 OPS 发布 Spec01，开始灰度部署",
+    "stage": "BLOCKED_PRE_DEPLOY_QUALITY_GATE",
+    "actual_backend_version": null,
+    "online_existing_version": "flask-ik19-039",
+    "new_cloud_version_created": false,
+    "traffic_modified": false,
+    "pipeline_revision": "staged-20261101-10",
+    "prompt_revision": "child-aware-history-agent-20261031-13",
+    "candidate_manifest_sha256": "a07c0bf32a85afa80c1d69485d0c7d203dca663dddf10cd26f2c88c5c68f612b",
+    "quality_gate": {
+      "status": "failed",
+      "case_count": 40,
+      "passed": 34,
+      "overall_rate": 0.85,
+      "end_to_end": {
+        "passed": 34,
+        "total": 40,
+        "rate": 0.85
+      },
+      "operational_failure_count": 0,
+      "operational_failure_codes": {},
+      "subject_rates": {
+        "语文": 0.6667,
+        "数学": 0.8,
+        "英语": 0.8667
+      },
+      "subject_semantic": {
+        "语文": {
+          "passed": 10,
+          "total": 15,
+          "rate": 0.6667
+        },
+        "数学": {
+          "passed": 12,
+          "total": 15,
+          "rate": 0.8
+        },
+        "英语": {
+          "passed": 13,
+          "total": 15,
+          "rate": 0.8667
+        }
+      },
+      "empty_pending_count": 0,
+      "remaining_pending_count": 0,
+      "formal_write_count": 0,
+      "failures": [
+        {
+          "case_id": "multi-01",
+          "code": "analysis_output_invalid",
+          "attempts": 3
+        },
+        {
+          "case_id": "zh-05",
+          "code": "analysis_output_invalid",
+          "attempts": 3
+        },
+        {
+          "case_id": "multi-02",
+          "code": "subject.mismatch",
+          "attempts": 1
+        },
+        {
+          "case_id": "zh-07",
+          "code": "analysis_output_invalid",
+          "attempts": 3
+        },
+        {
+          "case_id": "zh-09",
+          "code": "analysis_output_invalid",
+          "attempts": 3
+        },
+        {
+          "case_id": "multi-04",
+          "code": "analysis_output_invalid",
+          "attempts": 3
+        }
+      ],
+      "pipeline_revision": "staged-20261101-10",
+      "model": "doubao-seed-2-1-pro-260628"
+    },
+    "required": {
+      "overall_at_least": "38/40",
+      "each_subject_at_least": "90%"
+    },
+    "retained_artifacts": {
+      "approved-tools-red.log": "3c13ce9fcad2b51577413d0669eceb503925aedcdd7a754349594fac0b0ca608",
+      "workspace-ruff-approved.log": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18",
+      "workspace-format-approved.log": "98384e3012130f6ed6105a6845998aa70da2a47feddc21c0f4bdb4e5d788b90c",
+      "workspace-mypy-approved.log": "1e5d92f5641e1003b850e01073386c9ff2fbcc3b2bbb21b631965cad8cd01c87",
+      "workspace-architecture-approved.log": "7105715975112c0f75ea91c4858d4fc110bbb0f05180acc25d94100f1c5433a0",
+      "heads-approved.log": "3eee4df07156ec6626f80720d6c49c9c7025636391cf108a5367ab7fcf2f5e40",
+      "frontend-approved.log": "d907b84d5430e8537c88245b8c109ba9dc79fbb385436532f9a0987af665d652",
+      "frontend-lint-approved.log": "24b32519689678fd85380f570ed7344cf2b387a60da7b9140c54ad71386fb2d0",
+      "design-policy-approved.log": "3e7f019679cf8134faaed27cdec14279f3c58e06fb577fa0bc01f09ec761668a",
+      "miniprogram-approved.log": "2e5d42c4c9d74a71f7823a2cae3c6e18937c7628607dd877d7e6b2f9738a5bef",
+      "tools-verification.json": "9f78210e2edf87f181d7967e12271b3f84da2d40cee894c1eb6d9df0462f1ae5",
+      "runtime-preflight.json": "86725ab03a668b3afc0a888beb5ead49c76a5aae4f898d954c679d7c385d93ea",
+      "admin-schema-preflight.json": "6dcabfa8ff54d6f6af46e650f653919889c0bb043a787a85daa0d7774a565232",
+      "targeted-boundaries-approved.log": "9117fb50ce702fb0c6dfa7bab1d97396f7f84ff11bf837fb9e21f128c913c7ef",
+      "targeted-boundaries-approved-fixed.log": "49f673c624ea970ae349e907473da33e0d3813dc133d689cbc82ae386b93b35a",
+      "container-build-approved.log": "037493a617f61790a6c76531ac4a58b9e1f55828daddca49ce2c503ee7bd3de8",
+      "live40.log": "f03f1e007b026290074599a0479401744f125d1dd8e5b56cb3d9a69873e9fbaf",
+      "live40-report.json": "3c28878552544a7c55dcef76c7d2f1b480124116bec72ed512f8b259f82f5b82",
+      "live40-run.json": "857a94b3a44a4f2217f3c8245565b8a0c9c65ac1b9801dc3db8b371a2a670955"
+    },
+    "production_data_reset": false,
+    "schema_modified": false,
+    "committed_or_pushed": false
+  },
+  "scope_note": "captured_at及source_sha为原17:21冻结10/13证据；最新OPS门禁FAIL在latest_approved_release，不充作活动12/15源码核验"
+}

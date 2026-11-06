@@ -1,0 +1,1222 @@
+{
+  "scope": "HTML design preview only; not native Mini Program acceptance",
+  "viewportCount": 3,
+  "sceneCount": 39,
+  "renderCount": 117,
+  "runtimeErrors": [],
+  "geometryFailures": [],
+  "interactions": [
+    {
+      "case": "collapse section",
+      "pass": true
+    },
+    {
+      "case": "quick duration updates input",
+      "pass": true
+    },
+    {
+      "case": "dirty exit asks before leaving",
+      "pass": true
+    },
+    {
+      "case": "continue editing preserves value",
+      "pass": true
+    },
+    {
+      "case": "discard returns to settings",
+      "pass": true
+    },
+    {
+      "case": "field error scrolled above footer",
+      "pass": true
+    },
+    {
+      "case": "clear disabled before full name",
+      "pass": true
+    },
+    {
+      "case": "full name enables demo confirmation",
+      "pass": true
+    },
+    {
+      "case": "child selector opens",
+      "pass": true
+    },
+    {
+      "case": "gallery selects scene and exact viewport",
+      "pass": true
+    }
+  ],
+  "checks": [
+    {
+      "scene": "settings",
+      "viewport": [
+        320,
+        568
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "settings-routines",
+      "viewport": [
+        320,
+        568
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "today",
+      "viewport": [
+        320,
+        568
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "calendar",
+      "viewport": [
+        320,
+        568
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "records",
+      "viewport": [
+        320,
+        568
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "travel",
+      "viewport": [
+        320,
+        568
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "reports",
+      "viewport": [
+        320,
+        568
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "review-inventory",
+      "viewport": [
+        320,
+        568
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "confirm",
+      "viewport": [
+        320,
+        568
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "record-detail",
+      "viewport": [
+        320,
+        568
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "activity",
+      "viewport": [
+        320,
+        568
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "activity-schedule",
+      "viewport": [
+        320,
+        568
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "manual-confirm",
+      "viewport": [
+        320,
+        568
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "daily-form",
+      "viewport": [
+        320,
+        568
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "travel-plan",
+      "viewport": [
+        320,
+        568
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "travel-review",
+      "viewport": [
+        320,
+        568
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "child",
+      "viewport": [
+        320,
+        568
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "child-switch",
+      "viewport": [
+        320,
+        568
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "grade",
+      "viewport": [
+        320,
+        568
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "family-onboarding",
+      "viewport": [
+        320,
+        568
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "family-create",
+      "viewport": [
+        320,
+        568
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "family-join",
+      "viewport": [
+        320,
+        568
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "family-preview",
+      "viewport": [
+        320,
+        568
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "join-pending",
+      "viewport": [
+        320,
+        568
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "family-members",
+      "viewport": [
+        320,
+        568
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "family-requests",
+      "viewport": [
+        320,
+        568
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "notifications",
+      "viewport": [
+        320,
+        568
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "delete-settings",
+      "viewport": [
+        320,
+        568
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "unsaved",
+      "viewport": [
+        320,
+        568
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "confirm-error",
+      "viewport": [
+        320,
+        568
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "processing",
+      "viewport": [
+        320,
+        568
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "empty",
+      "viewport": [
+        320,
+        568
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "error",
+      "viewport": [
+        320,
+        568
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "permission",
+      "viewport": [
+        320,
+        568
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "notifications-unavailable",
+      "viewport": [
+        320,
+        568
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "channel-unavailable",
+      "viewport": [
+        320,
+        568
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "delete-confirm",
+      "viewport": [
+        320,
+        568
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "saved",
+      "viewport": [
+        320,
+        568
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "loading",
+      "viewport": [
+        320,
+        568
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "settings",
+      "viewport": [
+        390,
+        844
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "settings-routines",
+      "viewport": [
+        390,
+        844
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "today",
+      "viewport": [
+        390,
+        844
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "calendar",
+      "viewport": [
+        390,
+        844
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "records",
+      "viewport": [
+        390,
+        844
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "travel",
+      "viewport": [
+        390,
+        844
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "reports",
+      "viewport": [
+        390,
+        844
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "review-inventory",
+      "viewport": [
+        390,
+        844
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "confirm",
+      "viewport": [
+        390,
+        844
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "record-detail",
+      "viewport": [
+        390,
+        844
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "activity",
+      "viewport": [
+        390,
+        844
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "activity-schedule",
+      "viewport": [
+        390,
+        844
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "manual-confirm",
+      "viewport": [
+        390,
+        844
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "daily-form",
+      "viewport": [
+        390,
+        844
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "travel-plan",
+      "viewport": [
+        390,
+        844
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "travel-review",
+      "viewport": [
+        390,
+        844
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "child",
+      "viewport": [
+        390,
+        844
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "child-switch",
+      "viewport": [
+        390,
+        844
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "grade",
+      "viewport": [
+        390,
+        844
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "family-onboarding",
+      "viewport": [
+        390,
+        844
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "family-create",
+      "viewport": [
+        390,
+        844
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "family-join",
+      "viewport": [
+        390,
+        844
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "family-preview",
+      "viewport": [
+        390,
+        844
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "join-pending",
+      "viewport": [
+        390,
+        844
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "family-members",
+      "viewport": [
+        390,
+        844
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "family-requests",
+      "viewport": [
+        390,
+        844
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "notifications",
+      "viewport": [
+        390,
+        844
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "delete-settings",
+      "viewport": [
+        390,
+        844
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "unsaved",
+      "viewport": [
+        390,
+        844
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "confirm-error",
+      "viewport": [
+        390,
+        844
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "processing",
+      "viewport": [
+        390,
+        844
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "empty",
+      "viewport": [
+        390,
+        844
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "error",
+      "viewport": [
+        390,
+        844
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "permission",
+      "viewport": [
+        390,
+        844
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "notifications-unavailable",
+      "viewport": [
+        390,
+        844
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "channel-unavailable",
+      "viewport": [
+        390,
+        844
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "delete-confirm",
+      "viewport": [
+        390,
+        844
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "saved",
+      "viewport": [
+        390,
+        844
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "loading",
+      "viewport": [
+        390,
+        844
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "settings",
+      "viewport": [
+        430,
+        932
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "settings-routines",
+      "viewport": [
+        430,
+        932
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "today",
+      "viewport": [
+        430,
+        932
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "calendar",
+      "viewport": [
+        430,
+        932
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "records",
+      "viewport": [
+        430,
+        932
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "travel",
+      "viewport": [
+        430,
+        932
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "reports",
+      "viewport": [
+        430,
+        932
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "review-inventory",
+      "viewport": [
+        430,
+        932
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "confirm",
+      "viewport": [
+        430,
+        932
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "record-detail",
+      "viewport": [
+        430,
+        932
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "activity",
+      "viewport": [
+        430,
+        932
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "activity-schedule",
+      "viewport": [
+        430,
+        932
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "manual-confirm",
+      "viewport": [
+        430,
+        932
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "daily-form",
+      "viewport": [
+        430,
+        932
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "travel-plan",
+      "viewport": [
+        430,
+        932
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "travel-review",
+      "viewport": [
+        430,
+        932
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "child",
+      "viewport": [
+        430,
+        932
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "child-switch",
+      "viewport": [
+        430,
+        932
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "grade",
+      "viewport": [
+        430,
+        932
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "family-onboarding",
+      "viewport": [
+        430,
+        932
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "family-create",
+      "viewport": [
+        430,
+        932
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "family-join",
+      "viewport": [
+        430,
+        932
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "family-preview",
+      "viewport": [
+        430,
+        932
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "join-pending",
+      "viewport": [
+        430,
+        932
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "family-members",
+      "viewport": [
+        430,
+        932
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "family-requests",
+      "viewport": [
+        430,
+        932
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "notifications",
+      "viewport": [
+        430,
+        932
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "delete-settings",
+      "viewport": [
+        430,
+        932
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "unsaved",
+      "viewport": [
+        430,
+        932
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "confirm-error",
+      "viewport": [
+        430,
+        932
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "processing",
+      "viewport": [
+        430,
+        932
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "empty",
+      "viewport": [
+        430,
+        932
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "error",
+      "viewport": [
+        430,
+        932
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "permission",
+      "viewport": [
+        430,
+        932
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "notifications-unavailable",
+      "viewport": [
+        430,
+        932
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "channel-unavailable",
+      "viewport": [
+        430,
+        932
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "delete-confirm",
+      "viewport": [
+        430,
+        932
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "saved",
+      "viewport": [
+        430,
+        932
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    },
+    {
+      "scene": "loading",
+      "viewport": [
+        430,
+        932
+      ],
+      "horizontalOverflow": false,
+      "shortControls": [],
+      "spilling": []
+    }
+  ]
+}

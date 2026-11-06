@@ -1,0 +1,104 @@
+{
+  "spec_revision": "SPEC-20261031-TRAVEL-ENTRY-CLEANUP-01",
+  "architecture_revision": "ARCH-20261031-TRAVEL-ENTRY-CLEANUP-01",
+  "design_revision": "DREV-20261031-TRAVEL-ENTRY-CLEANUP-01",
+  "base": "0576ac30464908154c624effed41df6dfa3110cc",
+  "tools": {
+    "node": "v22.22.0",
+    "python": "Python 3.12.11"
+  },
+  "checks": [
+    {
+      "test_point": "TP02",
+      "command": "node --test tests/frontend/footprints.test.js tests/frontend/record-types.test.js tests/frontend/manual-analysis.test.js",
+      "result": "PASS",
+      "details": "61 passed; 0 failed; 0 skipped; pre-edit baseline"
+    },
+    {
+      "test_point": "TP02",
+      "command": "npm test",
+      "result": "PASS",
+      "details": {
+        "tests": 349,
+        "pass": 349,
+        "fail": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "test_point": "TP03",
+      "command": "npm run lint:miniapp",
+      "result": "PASS",
+      "details": "exit 0"
+    },
+    {
+      "test_point": "TP03",
+      "command": "UV_CACHE_DIR=/private/tmp/push-kids-entry-uv-cache uv run python tools/validate_miniprogram.py",
+      "result": "PASS",
+      "details": "MINIPROGRAM_VALID pages=17 source_bytes=1233761"
+    },
+    {
+      "test_point": "TP03",
+      "command": "UV_CACHE_DIR=/private/tmp/push-kids-entry-uv-cache uv run python tools/check_architecture.py",
+      "result": "PASS",
+      "details": "ARCHITECTURE_VALID policies=4 modules=151 (runtime/lazy DAG)"
+    },
+    {
+      "test_point": "TP01/TP03",
+      "command": "UV_CACHE_DIR=/private/tmp/push-kids-entry-uv-cache uv run python tools/validate_design_evidence.py --manifest docs/design/frontend/snapshots/UI-018/DREV-20261031-TRAVEL-ENTRY-CLEANUP-01/APPROVAL.md --check-current-policy",
+      "result": "PASS",
+      "details": "DESIGN_EVIDENCE_VALID; no allow-pending"
+    },
+    {
+      "test_point": "TP05",
+      "command": "/Applications/wechatwebdevtools.app/Contents/MacOS/cli open --project /Users/bytedance/Documents/push_kids/apps/miniprogram --lang zh",
+      "result": "FAIL_ENVIRONMENT",
+      "details": "exit 255; EPERM opening DevTools per-user Default/.cli cache; no native compilation verified"
+    },
+    {
+      "test_point": "TP04",
+      "command": "Native 7 states x 320x568/390x844/430x932 geometry capture",
+      "result": "NOT_RUN",
+      "details": "DevTools initialization blocked by sandbox"
+    },
+    {
+      "test_point": "TP05",
+      "command": "Native embedded/standalone navigation, import cancellation, draft recovery, learning manual journey",
+      "result": "NOT_RUN",
+      "details": "DevTools initialization blocked by sandbox; user test remains pending"
+    },
+    {
+      "test_point": "TP05",
+      "command": "/Applications/wechatwebdevtools.app/Contents/MacOS/cli open --project /Users/bytedance/Documents/push_kids/apps/miniprogram --lang zh --port 32564",
+      "result": "FAIL_ENVIRONMENT",
+      "details": "Same initialization EPERM opening Default/.cli; exit 255. Do not repeat this path."
+    },
+    {
+      "test_point": "TP05",
+      "command": "lsof -nP -iTCP -sTCP:LISTEN and bounded readonly loopback IDE service probe",
+      "result": "NOT_VERIFIED",
+      "details": "Existing WeChat processes detected; no successful App.getCurrentPage response from existing WS candidate. No simulator compile or business interaction evidence."
+    },
+    {
+      "test_point": "TP03/TP06",
+      "command": "UV_CACHE_DIR=/private/tmp/push-kids-entry-uv-cache uv run python tools/validate_design_evidence.py --check-current-policy",
+      "result": "PASS",
+      "details": "DESIGN_EVIDENCE_VALID after documentation updates; explicit task manifest checked separately"
+    },
+    {
+      "test_point": "TP05",
+      "command": "deskflow ls",
+      "result": "NOT_RUN",
+      "details": "DeskFlow script discovery unavailable: command not found (exit127); no desktop script executed"
+    },
+    {
+      "test_point": "TP03/TP06",
+      "command": "UV_CACHE_DIR=/private/tmp/push-kids-entry-uv-cache uv run python tools/check_architecture.py",
+      "result": "PASS",
+      "details": "ARCHITECTURE_VALID policies=4 modules=151 after concurrent backend edits; source-current-at-closure.json records this separate current snapshot, not backend behavioral acceptance"
+    }
+  ],
+  "cloud_data_mutations": 0,
+  "native_compilation": "NOT_RUN",
+  "cloud_delivery": "NOT_UPLOADED_NOT_DEPLOYED"
+}

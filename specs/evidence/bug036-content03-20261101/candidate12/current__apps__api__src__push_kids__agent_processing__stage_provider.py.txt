@@ -1,0 +1,203 @@
+"""Ark structured calls with absolute deadlines and a process-wide request bound."""
+
+from __future__ import annotations
+
+import asyncio
+import base64
+import json
+import threading
+from pathlib import Path
+from time import monotonic
+from typing import Any
+
+from openai import (
+    APIConnectionError,
+    APIStatusError,
+    APITimeoutError,
+    AsyncOpenAI,
+    DefaultAsyncHttpxClient,
+)
+from pydantic import BaseModel, ValidationError
+
+from push_kids.agent_processing.contracts import AnalysisCapabilityError
+from push_kids.agent_processing.failures import StageFailure, schema_diagnostics
+from push_kids.agent_processing.telemetry import AnalysisTrace
+from push_kids.platform.config import Settings
+
+_REQUEST_SLOTS = threading.BoundedSemaphore(2)
+
+
+class StagedArkProvider:
+    """No DB ownership; every request is stateless and returns a validated DTO."""
+
+    def __init__(self, settings: Settings):
+        self.settings = settings
+        self.coverage_enabled = settings.coverage_enabled
+        self.model = settings.ark_model
+        self.concurrency = settings.analysis_concurrency
+        self.parameter_revision = (
+            f"{self.model}:disabled:4096:8192:"
+            "review8192:match2048:reuse2048:queue-deadline:execute45-30"
+        )
+
+    async def generate_stage(
+        self,
+        stage: str,
+        instructions: str,
+        payload: dict[str, Any],
+        schema: type[BaseModel],
+        images: list[tuple[str, Path]],
+        deadline: float,
+        trace: AnalysisTrace,
+    ) -> BaseModel:
+        key = self.settings.ark_api_key
+        if not key:
+            raise StageFailure("config", retryable=False)
+        limit = 45 if stage in {"extract", "group"} else 30
+        started = monotonic()
+        if deadline <= started:
+            raise StageFailure("local_deadline")
+        payload_text = json.dumps(payload, ensure_ascii=False)
+        payload_bytes = len(payload_text.encode("utf-8"))
+        if payload_bytes > 512 * 1024 or len(images) > 9:
+            raise StageFailure("capacity", retryable=False)
+        if any(path.stat().st_size > self.settings.upload_max_bytes for _, path in images):
+            raise StageFailure("capacity", retryable=False)
+        acquired = False
+        try:
+            # Queueing consumes the absolute budget; the network limit starts at acquisition.
+            async with asyncio.timeout(deadline - started):
+                while not _REQUEST_SLOTS.acquire(blocking=False):
+                    await asyncio.sleep(0.01)
+                acquired = True
+                queued_ms = int((monotonic() - started) * 1000)
+                execution_deadline = min(deadline, monotonic() + limit)
+                if execution_deadline <= monotonic():
+                    raise StageFailure("local_deadline")
+                async with asyncio.timeout(execution_deadline - monotonic()):
+                    content: list[dict[str, Any]] = [{"type": "input_text", "text": payload_text}]
+                    image_bytes = 0
+                    for alias, path in images:
+                        mime = {
+                            ".jpg": "image/jpeg",
+                            ".jpeg": "image/jpeg",
+                            ".webp": "image/webp",
+                        }.get(path.suffix.lower(), "image/png")
+                        with path.open("rb") as source:
+                            raw = source.read(self.settings.upload_max_bytes + 1)
+                        if len(raw) > self.settings.upload_max_bytes:
+                            raise StageFailure("capacity", retryable=False)
+                        image_bytes += len(raw)
+                        content.extend(
+                            [
+                                {"type": "input_text", "text": f"材料短编号 {alias}"},
+                                {
+                                    "type": "input_image",
+                                    "image_url": f"data:{mime};base64,"
+                                    + base64.b64encode(raw).decode(),
+                                },
+                            ]
+                        )
+                        del raw
+                    request_bytes = 0
+
+                    async def count_request(request: Any) -> None:
+                        nonlocal request_bytes
+                        request_bytes = len(request.content)
+
+                    async with AsyncOpenAI(
+                        base_url=self.settings.ark_base_url,
+                        api_key=key.get_secret_value(),
+                        max_retries=0,
+                        timeout=max(0.001, execution_deadline - monotonic()),
+                        http_client=DefaultAsyncHttpxClient(
+                            event_hooks={"request": [count_request]}
+                        ),
+                    ) as client:
+                        request: Any = dict(
+                            model=self.model,
+                            instructions=instructions,
+                            input=[{"role": "user", "content": content}],
+                            store=False,
+                            max_output_tokens={
+                                "extract": 4096,
+                                "group": 4096,
+                                "merge": 8192,
+                                "review": 8192,
+                                "match": 2048,
+                                "reuse": 2048,
+                                "coverage": 4096,
+                            }[stage],
+                            extra_body={"thinking": {"type": "disabled"}},
+                            text={
+                                "format": {
+                                    "type": "json_schema",
+                                    "name": stage,
+                                    "strict": True,
+                                    "schema": schema.model_json_schema(),
+                                }
+                            },
+                        )
+                        response = await client.responses.create(**request)
+                usage = response.usage
+                trace.info(
+                    "analysis_stage_completed",
+                    stage=stage,
+                    duration_ms=int((monotonic() - started) * 1000),
+                    queue_ms=queued_ms,
+                    payload_bytes=payload_bytes,
+                    image_bytes=image_bytes,
+                    request_bytes=request_bytes,
+                    input_tokens=usage.input_tokens if usage else None,
+                    output_tokens=usage.output_tokens if usage else None,
+                    reasoning_tokens=(
+                        usage.output_tokens_details.reasoning_tokens
+                        if usage and usage.output_tokens_details
+                        else None
+                    ),
+                    status=response.status,
+                    request_id=getattr(response, "_request_id", None),
+                )
+                if response.status != "completed":
+                    raise StageFailure("incomplete")
+                try:
+                    return schema.model_validate_json(response.output_text)
+                except ValidationError as exc:
+                    raise StageFailure("validation", diagnostics=schema_diagnostics(exc)) from None
+                except ValueError:
+                    raise StageFailure(
+                        "validation", diagnostics=("stage.fields:json_invalid",)
+                    ) from None
+        except (TimeoutError, APITimeoutError):
+            raise StageFailure(
+                "queue_deadline"
+                if not acquired
+                else "local_deadline"
+                if monotonic() >= deadline
+                else "provider_timeout"
+            ) from None
+        except APIStatusError as exc:
+            status = exc.status_code
+            if status == 400:
+                # Preserve the existing public structured-output capability contract.
+                raise AnalysisCapabilityError() from None
+            reason = (
+                "rate_limited"
+                if status == 429
+                else "auth"
+                if status in {401, 403}
+                else "provider_error"
+                if status >= 500
+                else "config"
+            )
+            raw_retry = exc.response.headers.get("retry-after", "0")
+            retry = int(raw_retry) if raw_retry.isdigit() else 0
+            trace.warning("analysis_stage_failed", stage=stage, reason=reason, http_status=status)
+            raise StageFailure(
+                reason, retryable=status == 429 or status >= 500, retry_after=retry
+            ) from None
+        except APIConnectionError:
+            raise StageFailure("network") from None
+        finally:
+            if acquired:
+                _REQUEST_SLOTS.release()

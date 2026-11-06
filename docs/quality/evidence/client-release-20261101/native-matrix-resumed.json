@@ -1,0 +1,708 @@
+{
+  "at": "2026-11-01T16:10:21.661211+08:00",
+  "result": "PASS",
+  "errors": [],
+  "source": {
+    "scope": "offline synthetic transport, geometry/scroll bindings only in copy",
+    "source_sha256": {
+      "pages/footprints/controller.js": "bc3df707ea0e3999cf0666c5f2652e87f7ad8bc8d09f2937905b9b5fc90658a8",
+      "pages/footprints/imports.js": "c2501d9159426b3a11825f2c6f4f173a0edd779bed85eeaa440d98a06e66d7f9",
+      "pages/footprints/photos.js": "967cf1fbe4f53f668ce8d7ea9b837d2add99494c635210b001c0dbf621ee9ade",
+      "pages/footprints/presentation.js": "436908ddf87c0f2bfddff9462ee12d3bc0397276402d89ad25ee8b2d07c9e62f",
+      "pages/footprints/embedded.js": "6b34d0c1170527a85c55eb1e881030d1fa3d9ab092b053a64351791abb435e87",
+      "pages/footprints/index.wxml": "7e880159f4bd97439e147ef56bae1fb81b70d6a741c63e6f3b1160e7773474fe",
+      "pages/footprints/index.wxss": "90b70f8037381ab3d54d5fe60f1f8b61ffae38a46369474f14762b18610876d3"
+    }
+  },
+  "groups": [
+    {
+      "host": "standalone",
+      "width": 320,
+      "screenHeight": 568,
+      "checks": [
+        {
+          "state": "archived",
+          "result": "PASS",
+          "json": "docs/quality/evidence/client-release-20261031/native-approved-standalone/archived-320.json",
+          "json_sha256": "d5d634c243dc5cdeefe63b5ed53eb40b3ca0f3f5898884a7a05a22a5b596a9a7",
+          "png_sha256": "5cdc963e64f2bd60f026e58dab23d7ea65f888f184838b58368f08877cf2c827",
+          "captured_at": "2026-10-31T11:18:16.691Z",
+          "viewport": {
+            "width": 320,
+            "height": 568,
+            "screenHeight": 568,
+            "dpr": 2,
+            "baseLibrary": "3.16.2"
+          }
+        },
+        {
+          "state": "drafts",
+          "result": "PASS",
+          "json": "docs/quality/evidence/client-release-20261031/native-approved-standalone/drafts-320.json",
+          "json_sha256": "b58f8da8168ea012fff636245d05e9a17d0501b20c72aa6b1de4bfea473231c3",
+          "png_sha256": "2e7cf8d779dcb89d0446eb34dcf409a0b4410d48ada65c59e5ae8c5665b97e54",
+          "captured_at": "2026-10-31T11:18:16.038Z",
+          "viewport": {
+            "width": 320,
+            "height": 568,
+            "screenHeight": 568,
+            "dpr": 2,
+            "baseLibrary": "3.16.2"
+          }
+        },
+        {
+          "state": "empty",
+          "result": "PASS",
+          "json": "docs/quality/evidence/client-release-20261031/native-approved-standalone/empty-320.json",
+          "json_sha256": "534b43b543fea634b7eb6ef4f3f896ff342a66c38c5a0255154191872c73d149",
+          "png_sha256": "57b19c8afdd10b7d29f8bfbcd32fec362f6648409991d5d0d25f2881d280603b",
+          "captured_at": "2026-10-31T11:18:15.893Z",
+          "viewport": {
+            "width": 320,
+            "height": 568,
+            "screenHeight": 568,
+            "dpr": 2,
+            "baseLibrary": "3.16.2"
+          }
+        },
+        {
+          "state": "error",
+          "result": "PASS",
+          "json": "docs/quality/evidence/client-release-20261031/native-approved-standalone/error-320.json",
+          "json_sha256": "7142c8fd19a8033438ccbb09c80a21bc53311c15fb5dbe35d21e2c51e960c7d8",
+          "png_sha256": "5e98fcbe1ef8ada4663ae8c2d8d5faea1d526b19755bc5592e22419278433b94",
+          "captured_at": "2026-10-31T11:18:16.420Z",
+          "viewport": {
+            "width": 320,
+            "height": 568,
+            "screenHeight": 568,
+            "dpr": 2,
+            "baseLibrary": "3.16.2"
+          }
+        },
+        {
+          "state": "legacy",
+          "result": "PASS",
+          "json": "docs/quality/evidence/client-release-20261031/native-approved-standalone/legacy-320.json",
+          "json_sha256": "d64f1d5713db156ad393f50602689a0c535b837a27e5fe08ac1d01971b04161e",
+          "png_sha256": "d8b99626e5bab6453cf110cddfc789ce0454ab4c6d343c81d06daa19c0d38995",
+          "captured_at": "2026-10-31T11:18:16.175Z",
+          "viewport": {
+            "width": 320,
+            "height": 568,
+            "screenHeight": 568,
+            "dpr": 2,
+            "baseLibrary": "3.16.2"
+          }
+        },
+        {
+          "state": "loading",
+          "result": "PASS",
+          "json": "docs/quality/evidence/client-release-20261031/native-approved-standalone/loading-320.json",
+          "json_sha256": "4a474969aea3aa979e9db28120b5c28e3274cdb4c66b34fa2d1a6debe084cfc9",
+          "png_sha256": "d4cb0fc7f9ba9a0070df398895586a1e6499ef27b04398bc96a13609a7ee5b8e",
+          "captured_at": "2026-10-31T11:18:16.294Z",
+          "viewport": {
+            "width": 320,
+            "height": 568,
+            "screenHeight": 568,
+            "dpr": 2,
+            "baseLibrary": "3.16.2"
+          }
+        },
+        {
+          "state": "viewer",
+          "result": "PASS",
+          "json": "docs/quality/evidence/client-release-20261031/native-approved-standalone/viewer-320.json",
+          "json_sha256": "b152f64193287fca5c9f134b0b11d2c48a274edab338684acfa94672fe0b8db9",
+          "png_sha256": "d88e1c12aa252c4f212046877da5f1d08326aef731ab2744f855b992921d9463",
+          "captured_at": "2026-10-31T11:18:16.541Z",
+          "viewport": {
+            "width": 320,
+            "height": 568,
+            "screenHeight": 568,
+            "dpr": 2,
+            "baseLibrary": "3.16.2"
+          }
+        }
+      ]
+    },
+    {
+      "host": "embedded",
+      "width": 320,
+      "screenHeight": 568,
+      "checks": [
+        {
+          "state": "archived",
+          "result": "PASS",
+          "json": "docs/quality/evidence/client-release-20261031/native-approved-embedded/archived-320.json",
+          "json_sha256": "e47adcf2e5b39badb5f6d7b4801a8bdaed0a9f4889ddeab106ee8751a3380f60",
+          "png_sha256": "3d23917d94e4245bdae6dc52e30b205fac951a11d866a1e5b0d2a577a1b1b20e",
+          "captured_at": "2026-10-31T11:18:17.876Z",
+          "viewport": {
+            "width": 320,
+            "height": 568,
+            "screenHeight": 568,
+            "dpr": 2,
+            "baseLibrary": "3.16.2"
+          }
+        },
+        {
+          "state": "drafts",
+          "result": "PASS",
+          "json": "docs/quality/evidence/client-release-20261031/native-approved-embedded/drafts-320.json",
+          "json_sha256": "9608f259e3f5147e55cfc458997dc0cfdddd40e4155542ece44a3c7d37cc3e04",
+          "png_sha256": "c3bb25e67d90cabbef3eea7b049b5ff2f664a6f629f6ed2a8fb47fe343c8e4b7",
+          "captured_at": "2026-10-31T11:18:17.262Z",
+          "viewport": {
+            "width": 320,
+            "height": 568,
+            "screenHeight": 568,
+            "dpr": 2,
+            "baseLibrary": "3.16.2"
+          }
+        },
+        {
+          "state": "empty",
+          "result": "PASS",
+          "json": "docs/quality/evidence/client-release-20261031/native-approved-embedded/empty-320.json",
+          "json_sha256": "b938dcd2f5d2443223efe5f442a245440ad401dcc30b5b57063ca0f4a73d864a",
+          "png_sha256": "86aa7ef68084fc38f21118f78dc9c7098ae28206fe214149c4a94387354211b3",
+          "captured_at": "2026-10-31T11:18:17.134Z",
+          "viewport": {
+            "width": 320,
+            "height": 568,
+            "screenHeight": 568,
+            "dpr": 2,
+            "baseLibrary": "3.16.2"
+          }
+        },
+        {
+          "state": "error",
+          "result": "PASS",
+          "json": "docs/quality/evidence/client-release-20261031/native-approved-embedded/error-320.json",
+          "json_sha256": "a301ea3b16d153cc26701e874f9160937a065c24b866b79ab8f7f35d2c1feb1f",
+          "png_sha256": "9a31b5244912cd0caa8ab413839be2427117fbda0f23f8898d90f0b4a60371db",
+          "captured_at": "2026-10-31T11:18:17.623Z",
+          "viewport": {
+            "width": 320,
+            "height": 568,
+            "screenHeight": 568,
+            "dpr": 2,
+            "baseLibrary": "3.16.2"
+          }
+        },
+        {
+          "state": "legacy",
+          "result": "PASS",
+          "json": "docs/quality/evidence/client-release-20261031/native-approved-embedded/legacy-320.json",
+          "json_sha256": "254cce089d8c88c8172770de8139b51b70d3ec0fa4247409d1b8ca794f54b7fb",
+          "png_sha256": "bf08d11fa073f6e82bc4e42263f253e8dbdb6220cfb3c500b6d90e06900908ef",
+          "captured_at": "2026-10-31T11:18:17.378Z",
+          "viewport": {
+            "width": 320,
+            "height": 568,
+            "screenHeight": 568,
+            "dpr": 2,
+            "baseLibrary": "3.16.2"
+          }
+        },
+        {
+          "state": "loading",
+          "result": "PASS",
+          "json": "docs/quality/evidence/client-release-20261031/native-approved-embedded/loading-320.json",
+          "json_sha256": "fc8af92d8e9a48ce0430cbc572abec221dbcf4f690dc7684703a98159d4c7e5b",
+          "png_sha256": "b5ef57b5404c339df3757b38438fc4b41a0c47b34ce9579b2a5b430f0195aab2",
+          "captured_at": "2026-10-31T11:18:17.495Z",
+          "viewport": {
+            "width": 320,
+            "height": 568,
+            "screenHeight": 568,
+            "dpr": 2,
+            "baseLibrary": "3.16.2"
+          }
+        },
+        {
+          "state": "viewer",
+          "result": "PASS",
+          "json": "docs/quality/evidence/client-release-20261031/native-approved-embedded/viewer-320.json",
+          "json_sha256": "2d9424cce843e058a86cc43d6c3ef7271c230cf4d2471596a47bac01c3a023b5",
+          "png_sha256": "8ab1b43ddb64f0483611c11b365939037c3f2dba2dff7435cfd990e1b62f0fbd",
+          "captured_at": "2026-10-31T11:18:17.753Z",
+          "viewport": {
+            "width": 320,
+            "height": 568,
+            "screenHeight": 568,
+            "dpr": 2,
+            "baseLibrary": "3.16.2"
+          }
+        }
+      ]
+    },
+    {
+      "host": "standalone",
+      "width": 390,
+      "screenHeight": 844,
+      "checks": [
+        {
+          "state": "archived",
+          "result": "PASS",
+          "json": "docs/quality/evidence/client-release-20261031/native-approved-390-standalone/archived-390.json",
+          "json_sha256": "35725eae086d8638567e7d0d2fcc8f6152d53f24d5c4792396afc112d0b9bea3",
+          "png_sha256": "bce78423801a160376be358738540e352a3bc24dbb756d4560e6543ab50726f6",
+          "captured_at": "2026-11-01T07:50:01.762Z",
+          "viewport": {
+            "width": 390,
+            "height": 844,
+            "screenHeight": 844,
+            "dpr": 3,
+            "baseLibrary": "3.16.2"
+          }
+        },
+        {
+          "state": "drafts",
+          "result": "PASS",
+          "json": "docs/quality/evidence/client-release-20261031/native-approved-390-standalone/drafts-390.json",
+          "json_sha256": "9001f2f7776cb7416bb4ff857f4803e6cac09ec331237000d1280c7dcdd13b71",
+          "png_sha256": "9af7b1cbcdb8572182be597cc459eac4a4a946a72414dec9fe099df70beb890a",
+          "captured_at": "2026-11-01T07:50:01.044Z",
+          "viewport": {
+            "width": 390,
+            "height": 844,
+            "screenHeight": 844,
+            "dpr": 3,
+            "baseLibrary": "3.16.2"
+          }
+        },
+        {
+          "state": "empty",
+          "result": "PASS",
+          "json": "docs/quality/evidence/client-release-20261031/native-approved-390-standalone/empty-390.json",
+          "json_sha256": "daa9c1c42a74b74072fc0b7b8477764db8add8aeff87ae45ca472280506c0ddc",
+          "png_sha256": "59cc27a70d6d1857aed16868c5ac3eefec46281ef68ddfb42e42d73ae020051b",
+          "captured_at": "2026-11-01T07:50:00.887Z",
+          "viewport": {
+            "width": 390,
+            "height": 844,
+            "screenHeight": 844,
+            "dpr": 3,
+            "baseLibrary": "3.16.2"
+          }
+        },
+        {
+          "state": "error",
+          "result": "PASS",
+          "json": "docs/quality/evidence/client-release-20261031/native-approved-390-standalone/error-390.json",
+          "json_sha256": "efa482754748e963f5844b13aa2ff543b855eb65e40d2ec5c1fae2f95e2f80dd",
+          "png_sha256": "6aa8464cd830bc1e240429c1080b56c6e19e3408595c5a900a2628b38464970c",
+          "captured_at": "2026-11-01T07:50:01.483Z",
+          "viewport": {
+            "width": 390,
+            "height": 844,
+            "screenHeight": 844,
+            "dpr": 3,
+            "baseLibrary": "3.16.2"
+          }
+        },
+        {
+          "state": "legacy",
+          "result": "PASS",
+          "json": "docs/quality/evidence/client-release-20261031/native-approved-390-standalone/legacy-390.json",
+          "json_sha256": "6f84c6adca8b69d29b012c58f5154c772c6d5eec232259d611fdde3cfe1243d0",
+          "png_sha256": "fff713c2c7fa2d43e675c1276a0b748e74577aa534b800f28fb5afcb1c26cfee",
+          "captured_at": "2026-11-01T07:50:01.201Z",
+          "viewport": {
+            "width": 390,
+            "height": 844,
+            "screenHeight": 844,
+            "dpr": 3,
+            "baseLibrary": "3.16.2"
+          }
+        },
+        {
+          "state": "loading",
+          "result": "PASS",
+          "json": "docs/quality/evidence/client-release-20261031/native-approved-390-standalone/loading-390.json",
+          "json_sha256": "0ddf93eee0a0440112e053d943413eab63f6af27cc38833240ef226934b78511",
+          "png_sha256": "f3334341615b883efa2713b7e67429cf831606da93d9c4b8930364105ca48b58",
+          "captured_at": "2026-11-01T07:50:01.333Z",
+          "viewport": {
+            "width": 390,
+            "height": 844,
+            "screenHeight": 844,
+            "dpr": 3,
+            "baseLibrary": "3.16.2"
+          }
+        },
+        {
+          "state": "viewer",
+          "result": "PASS",
+          "json": "docs/quality/evidence/client-release-20261031/native-approved-390-standalone/viewer-390.json",
+          "json_sha256": "4d4051948a811cae799fa9e0db01f34b403c5057d032272664bd2f626d3583d6",
+          "png_sha256": "0b36c4bde1688b1954eb44204c1c5cf52ca8f91795e27ffba249384f45604bab",
+          "captured_at": "2026-11-01T07:50:01.622Z",
+          "viewport": {
+            "width": 390,
+            "height": 844,
+            "screenHeight": 844,
+            "dpr": 3,
+            "baseLibrary": "3.16.2"
+          }
+        }
+      ]
+    },
+    {
+      "host": "embedded",
+      "width": 390,
+      "screenHeight": 844,
+      "checks": [
+        {
+          "state": "archived",
+          "result": "PASS",
+          "json": "docs/quality/evidence/client-release-20261031/native-approved-390-embedded/archived-390.json",
+          "json_sha256": "8cd09e6bde2c674e71daafcf4898f44bff580511be79e59b9de91cc06f049f23",
+          "png_sha256": "68532c1eb9a36adc15373c47ea2d5871d4558dc28042702ef18e5afa66158431",
+          "captured_at": "2026-11-01T07:50:03.074Z",
+          "viewport": {
+            "width": 390,
+            "height": 844,
+            "screenHeight": 844,
+            "dpr": 3,
+            "baseLibrary": "3.16.2"
+          }
+        },
+        {
+          "state": "drafts",
+          "result": "PASS",
+          "json": "docs/quality/evidence/client-release-20261031/native-approved-390-embedded/drafts-390.json",
+          "json_sha256": "4130587b534df6468065c207f662fc1003c4e772ddd597d3451164e5e32e5342",
+          "png_sha256": "06ccde20c7b41f5f18486d7c470321abee64b301c7006921391b67e798ddef31",
+          "captured_at": "2026-11-01T07:50:02.373Z",
+          "viewport": {
+            "width": 390,
+            "height": 844,
+            "screenHeight": 844,
+            "dpr": 3,
+            "baseLibrary": "3.16.2"
+          }
+        },
+        {
+          "state": "empty",
+          "result": "PASS",
+          "json": "docs/quality/evidence/client-release-20261031/native-approved-390-embedded/empty-390.json",
+          "json_sha256": "a8028c96b25934885401dadee43c0aeefb5f660447d8de5c9531978cb6b379c4",
+          "png_sha256": "e17e41d156942fb4d54c16d0f5c7aebc8633da2ad7fa2da39b40decde9a4cb2c",
+          "captured_at": "2026-11-01T07:50:02.205Z",
+          "viewport": {
+            "width": 390,
+            "height": 844,
+            "screenHeight": 844,
+            "dpr": 3,
+            "baseLibrary": "3.16.2"
+          }
+        },
+        {
+          "state": "error",
+          "result": "PASS",
+          "json": "docs/quality/evidence/client-release-20261031/native-approved-390-embedded/error-390.json",
+          "json_sha256": "df1b6f8d2d6e6a9d0dbd6d2cbe746d379107e69caf961c2048118c330400f9c2",
+          "png_sha256": "8a1f7ddb95fab78c721e346aff747cba68ed6e3c88516c48efe3f2a2e6cad899",
+          "captured_at": "2026-11-01T07:50:02.794Z",
+          "viewport": {
+            "width": 390,
+            "height": 844,
+            "screenHeight": 844,
+            "dpr": 3,
+            "baseLibrary": "3.16.2"
+          }
+        },
+        {
+          "state": "legacy",
+          "result": "PASS",
+          "json": "docs/quality/evidence/client-release-20261031/native-approved-390-embedded/legacy-390.json",
+          "json_sha256": "7e756d792d2080c51978f2946b493a844924f0bde3f45efa9f6ecc6d8104c865",
+          "png_sha256": "f313130473fb932e809c6f5414dfa05bfcbb629278630abea738ee4c5bbb6206",
+          "captured_at": "2026-11-01T07:50:02.522Z",
+          "viewport": {
+            "width": 390,
+            "height": 844,
+            "screenHeight": 844,
+            "dpr": 3,
+            "baseLibrary": "3.16.2"
+          }
+        },
+        {
+          "state": "loading",
+          "result": "PASS",
+          "json": "docs/quality/evidence/client-release-20261031/native-approved-390-embedded/loading-390.json",
+          "json_sha256": "5a19beebd8fa39c4ef1809c5531848953b5aaedb25b56a6cdc1539c9d98fb343",
+          "png_sha256": "f3c6e6d479a39ed24d26da9e9a966a452d6527fffc2eb386d39298802ace5b08",
+          "captured_at": "2026-11-01T07:50:02.656Z",
+          "viewport": {
+            "width": 390,
+            "height": 844,
+            "screenHeight": 844,
+            "dpr": 3,
+            "baseLibrary": "3.16.2"
+          }
+        },
+        {
+          "state": "viewer",
+          "result": "PASS",
+          "json": "docs/quality/evidence/client-release-20261031/native-approved-390-embedded/viewer-390.json",
+          "json_sha256": "0122c184578d0b32b23a058eef33c7e85b151401eee0c40fe576329f24562f89",
+          "png_sha256": "df8404a494c9305f34e7906d3b5feffa3b964f1669193d36685f7de5c0bf2bce",
+          "captured_at": "2026-11-01T07:50:02.940Z",
+          "viewport": {
+            "width": 390,
+            "height": 844,
+            "screenHeight": 844,
+            "dpr": 3,
+            "baseLibrary": "3.16.2"
+          }
+        }
+      ]
+    },
+    {
+      "host": "standalone",
+      "width": 430,
+      "screenHeight": 932,
+      "checks": [
+        {
+          "state": "archived",
+          "result": "PASS",
+          "json": "docs/quality/evidence/client-release-20261031/native-approved-430-standalone/archived-430.json",
+          "json_sha256": "fdacad7df56f7489ddab2221ed0868be173329141985a5e21e5afb0437c752cc",
+          "png_sha256": "95bc167efbb8e9ef326942d89785a293d88583ff125463ff352321a41b75be47",
+          "captured_at": "2026-11-01T07:50:40.117Z",
+          "viewport": {
+            "width": 430,
+            "height": 932,
+            "screenHeight": 932,
+            "dpr": 3,
+            "baseLibrary": "3.16.2"
+          }
+        },
+        {
+          "state": "drafts",
+          "result": "PASS",
+          "json": "docs/quality/evidence/client-release-20261031/native-approved-430-standalone/drafts-430.json",
+          "json_sha256": "daa10ac9d1ae3664303406f3affb5a96126c51d48cbc15fa9a99df9254351c3d",
+          "png_sha256": "f0441e66a3fa1b74fb943a8ebafd418f5440950460f736b181eb936698d5e715",
+          "captured_at": "2026-11-01T07:50:39.372Z",
+          "viewport": {
+            "width": 430,
+            "height": 932,
+            "screenHeight": 932,
+            "dpr": 3,
+            "baseLibrary": "3.16.2"
+          }
+        },
+        {
+          "state": "empty",
+          "result": "PASS",
+          "json": "docs/quality/evidence/client-release-20261031/native-approved-430-standalone/empty-430.json",
+          "json_sha256": "b44f48de87b532af5bd1eb7c2563f0a220e7e84f5191b0a6de2b0143678a46f6",
+          "png_sha256": "7691b636fee829d2f404b51531fb286fbd90053b37d09ffa4518c9648fd0a907",
+          "captured_at": "2026-11-01T07:50:39.211Z",
+          "viewport": {
+            "width": 430,
+            "height": 932,
+            "screenHeight": 932,
+            "dpr": 3,
+            "baseLibrary": "3.16.2"
+          }
+        },
+        {
+          "state": "error",
+          "result": "PASS",
+          "json": "docs/quality/evidence/client-release-20261031/native-approved-430-standalone/error-430.json",
+          "json_sha256": "cf003d39e15dbe8938bf70eddf4c227d52579fcbbc17fb1375120a39267ed524",
+          "png_sha256": "81770ec66a945a0821cd4be3c1991e6f31fe35916a78d8fe83a8eb6733fef3f1",
+          "captured_at": "2026-11-01T07:50:39.828Z",
+          "viewport": {
+            "width": 430,
+            "height": 932,
+            "screenHeight": 932,
+            "dpr": 3,
+            "baseLibrary": "3.16.2"
+          }
+        },
+        {
+          "state": "legacy",
+          "result": "PASS",
+          "json": "docs/quality/evidence/client-release-20261031/native-approved-430-standalone/legacy-430.json",
+          "json_sha256": "4be7cb74710c02b576f3c0221cab060fa58b35cc22cd56a76c79a3ee158fd0e7",
+          "png_sha256": "4817e53d2d4a2ea0af442fc87eb7ce38cfe3c26d10fa408a220f341012688b12",
+          "captured_at": "2026-11-01T07:50:39.546Z",
+          "viewport": {
+            "width": 430,
+            "height": 932,
+            "screenHeight": 932,
+            "dpr": 3,
+            "baseLibrary": "3.16.2"
+          }
+        },
+        {
+          "state": "loading",
+          "result": "PASS",
+          "json": "docs/quality/evidence/client-release-20261031/native-approved-430-standalone/loading-430.json",
+          "json_sha256": "c5cf5b28bad9cd38c1f92c55c065ee23b7067b30f3b7cf2fa403d26ee55f7a25",
+          "png_sha256": "5145734f475c09724515d0f62d8e5c2e67e4cb642e302740632dacecaf48b289",
+          "captured_at": "2026-11-01T07:50:39.684Z",
+          "viewport": {
+            "width": 430,
+            "height": 932,
+            "screenHeight": 932,
+            "dpr": 3,
+            "baseLibrary": "3.16.2"
+          }
+        },
+        {
+          "state": "viewer",
+          "result": "PASS",
+          "json": "docs/quality/evidence/client-release-20261031/native-approved-430-standalone/viewer-430.json",
+          "json_sha256": "1d45c84cd31bbf0f09efd165d0e9a6023f26b54169500549bf124c0981e224f4",
+          "png_sha256": "eae6c9d2e495d20df55c502e97eeff63bf16d1812b6f9827038b4c6f610f1de0",
+          "captured_at": "2026-11-01T07:50:39.970Z",
+          "viewport": {
+            "width": 430,
+            "height": 932,
+            "screenHeight": 932,
+            "dpr": 3,
+            "baseLibrary": "3.16.2"
+          }
+        }
+      ]
+    },
+    {
+      "host": "embedded",
+      "width": 430,
+      "screenHeight": 932,
+      "checks": [
+        {
+          "state": "archived",
+          "result": "PASS",
+          "json": "docs/quality/evidence/client-release-20261031/native-approved-430-embedded/archived-430.json",
+          "json_sha256": "3945f579dbc5243249161d2aaa2d47004881217f523cc8f6974fa3c97470ba50",
+          "png_sha256": "87d04e40e54fabf6b3472bc26bb9160aa4b68136bc33051b9c8d1373ce39c419",
+          "captured_at": "2026-11-01T07:50:41.481Z",
+          "viewport": {
+            "width": 430,
+            "height": 932,
+            "screenHeight": 932,
+            "dpr": 3,
+            "baseLibrary": "3.16.2"
+          }
+        },
+        {
+          "state": "drafts",
+          "result": "PASS",
+          "json": "docs/quality/evidence/client-release-20261031/native-approved-430-embedded/drafts-430.json",
+          "json_sha256": "c2dac7c9c41542377973864c6cd27aef7466c8ede85793844a83a972d8192f44",
+          "png_sha256": "bdde1dbd34899c497848573a74af7a752a6eebdebe70579bf854e06bed0ed52f",
+          "captured_at": "2026-11-01T07:50:40.734Z",
+          "viewport": {
+            "width": 430,
+            "height": 932,
+            "screenHeight": 932,
+            "dpr": 3,
+            "baseLibrary": "3.16.2"
+          }
+        },
+        {
+          "state": "empty",
+          "result": "PASS",
+          "json": "docs/quality/evidence/client-release-20261031/native-approved-430-embedded/empty-430.json",
+          "json_sha256": "98723db9620d358013efd8978734edda9155e76d1d7fd81a716fa29c5b3e3f3c",
+          "png_sha256": "627f8b99a8e4e20197422c05f84ded736165f8daf87917cd2e17a12070b4885d",
+          "captured_at": "2026-11-01T07:50:40.573Z",
+          "viewport": {
+            "width": 430,
+            "height": 932,
+            "screenHeight": 932,
+            "dpr": 3,
+            "baseLibrary": "3.16.2"
+          }
+        },
+        {
+          "state": "error",
+          "result": "PASS",
+          "json": "docs/quality/evidence/client-release-20261031/native-approved-430-embedded/error-430.json",
+          "json_sha256": "67ae8d474ac9c54c96901d94a1acd896ed71130e8058899412bba99398de4e98",
+          "png_sha256": "0e78c6e8aaab32d2c2aad37be76c25e2d196a7bd7b9029041d228cb9344509fb",
+          "captured_at": "2026-11-01T07:50:41.183Z",
+          "viewport": {
+            "width": 430,
+            "height": 932,
+            "screenHeight": 932,
+            "dpr": 3,
+            "baseLibrary": "3.16.2"
+          }
+        },
+        {
+          "state": "legacy",
+          "result": "PASS",
+          "json": "docs/quality/evidence/client-release-20261031/native-approved-430-embedded/legacy-430.json",
+          "json_sha256": "7577c691026666dc9ac061c7172db1b74997031754b8bd61f3a7628f524120c9",
+          "png_sha256": "ce11532a5c63ee92c479ba2d0791fe821df9f79ad169d6adbbfe531aba5aa54f",
+          "captured_at": "2026-11-01T07:50:40.899Z",
+          "viewport": {
+            "width": 430,
+            "height": 932,
+            "screenHeight": 932,
+            "dpr": 3,
+            "baseLibrary": "3.16.2"
+          }
+        },
+        {
+          "state": "loading",
+          "result": "PASS",
+          "json": "docs/quality/evidence/client-release-20261031/native-approved-430-embedded/loading-430.json",
+          "json_sha256": "62a0260b4df942b08a9aebf4e7196e354b0d04ac4b5347c78a552ef49bd08cb3",
+          "png_sha256": "ba43fdfbdbbd978472884ffb9277dd40904d618b34bb65eb15b5a22a818764d1",
+          "captured_at": "2026-11-01T07:50:41.032Z",
+          "viewport": {
+            "width": 430,
+            "height": 932,
+            "screenHeight": 932,
+            "dpr": 3,
+            "baseLibrary": "3.16.2"
+          }
+        },
+        {
+          "state": "viewer",
+          "result": "PASS",
+          "json": "docs/quality/evidence/client-release-20261031/native-approved-430-embedded/viewer-430.json",
+          "json_sha256": "6246b0c16c1eb5e233d2759b75bf104823dac96969504e70931208f5d39c2c2e",
+          "png_sha256": "83fe09e12b418272aa8c9f3fdaf53434cce526ab6095566964b83e617000aeb1",
+          "captured_at": "2026-11-01T07:50:41.332Z",
+          "viewport": {
+            "width": 430,
+            "height": 932,
+            "screenHeight": 932,
+            "dpr": 3,
+            "baseLibrary": "3.16.2"
+          }
+        }
+      ]
+    }
+  ],
+  "total_native_states": 42,
+  "new_native_states": 28,
+  "production_source_changed": false,
+  "official_devtools": "Stable2.01.2510290",
+  "actual_device_selection": [
+    "iPhone12/13 Pro390x844",
+    "iPhone14 Pro Max430x932"
+  ],
+  "system_info_mocked": false,
+  "scope": "Offline synthetic native geometry with actual node rectangles and matching PNG",
+  "not_verified": [
+    "real iOS/Android",
+    "screen reader",
+    "large system font",
+    "real keyboard",
+    "real cloud business/account smoke"
+  ]
+}

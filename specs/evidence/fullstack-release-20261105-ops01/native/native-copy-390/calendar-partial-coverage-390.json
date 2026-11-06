@@ -1,0 +1,66 @@
+{
+  "route": "pages/calendar/index",
+  "viewport": {
+    "width": 390,
+    "height": 844,
+    "screenHeight": 844,
+    "pixelRatio": 3
+  },
+  "base_library": "3.17.4",
+  "nodes": [
+    {
+      "selector": ".workday-status",
+      "left": 18,
+      "right": 372,
+      "top": 394,
+      "bottom": 441,
+      "width": 354,
+      "height": 47,
+      "fontSize": "13px",
+      "lineHeight": "20.8px"
+    },
+    {
+      "selector": ".workday-status .n-txt",
+      "left": 32,
+      "right": 358,
+      "top": 407,
+      "bottom": 428,
+      "width": 326,
+      "height": 21,
+      "fontSize": "14px",
+      "lineHeight": "21.7px"
+    },
+    {
+      "selector": ".tl-card",
+      "left": 78,
+      "right": 372,
+      "top": 441,
+      "bottom": 510,
+      "width": 294,
+      "height": 69,
+      "fontSize": "16px",
+      "lineHeight": "25.6px"
+    },
+    {
+      "selector": ".page",
+      "left": 0,
+      "right": 390,
+      "top": 0,
+      "bottom": 844,
+      "width": 390,
+      "height": 844,
+      "fontSize": "16px",
+      "lineHeight": "25.6px"
+    }
+  ],
+  "mode": {
+    "workday": true,
+    "weekly": false
+  },
+  "source": "native wx.createSelectorQuery; synthetic fixtures; production WXML/WXSS exact",
+  "errors": [],
+  "state": "partial-coverage",
+  "host": "calendar",
+  "screenshot_status": "CAPTURED_REQUIRES_VISUAL_REVIEW",
+  "screenshot_sha256": "0e06bb3f24f07ef20972883db56eb6c2781cd76d357fb6b8d5dd17e76a32ce94"
+}

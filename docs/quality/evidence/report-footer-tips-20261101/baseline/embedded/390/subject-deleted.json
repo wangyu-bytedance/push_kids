@@ -1,0 +1,208 @@
+{
+  "nodes": {
+    ".inventory-page": [
+      {
+        "left": 35,
+        "right": 355,
+        "top": -17,
+        "bottom": 468,
+        "width": 320,
+        "height": 485,
+        "display": "block",
+        "fontSize": "14px",
+        "lineHeight": "21px",
+        "textAlign": "start",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "paddingLeft": "0px",
+        "paddingRight": "0px",
+        "paddingTop": "12px",
+        "paddingBottom": "0px",
+        "borderRadius": "0px",
+        "boxShadow": "none"
+      }
+    ],
+    ".inventory-pagination": [
+      {
+        "left": 35,
+        "right": 355,
+        "top": 424,
+        "bottom": 468,
+        "width": 320,
+        "height": 44,
+        "display": "grid",
+        "fontSize": "14px",
+        "lineHeight": "21px",
+        "textAlign": "start",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "paddingLeft": "0px",
+        "paddingRight": "0px",
+        "paddingTop": "0px",
+        "paddingBottom": "0px",
+        "borderRadius": "0px",
+        "boxShadow": "none"
+      }
+    ],
+    ".inventory-page-button": [
+      {
+        "left": 35,
+        "right": 155,
+        "top": 424,
+        "bottom": 468,
+        "width": 120,
+        "height": 44,
+        "disabled": true,
+        "display": "block",
+        "fontSize": "14px",
+        "lineHeight": "24px",
+        "textAlign": "center",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "paddingLeft": "4px",
+        "paddingRight": "4px",
+        "paddingTop": "10px",
+        "paddingBottom": "10px",
+        "borderRadius": "12px",
+        "boxShadow": "none"
+      },
+      {
+        "left": 235,
+        "right": 355,
+        "top": 424,
+        "bottom": 468,
+        "width": 120,
+        "height": 44,
+        "disabled": false,
+        "display": "block",
+        "fontSize": "14px",
+        "lineHeight": "24px",
+        "textAlign": "center",
+        "backgroundColor": "rgb(228, 237, 230)",
+        "paddingLeft": "4px",
+        "paddingRight": "4px",
+        "paddingTop": "10px",
+        "paddingBottom": "10px",
+        "borderRadius": "12px",
+        "boxShadow": "none"
+      }
+    ],
+    ".inventory-page-label": [
+      {
+        "left": 163,
+        "right": 227,
+        "top": 436,
+        "bottom": 456,
+        "width": 64,
+        "height": 20,
+        "display": "block",
+        "fontSize": "14px",
+        "lineHeight": "20px",
+        "textAlign": "center",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "paddingLeft": "0px",
+        "paddingRight": "0px",
+        "paddingTop": "0px",
+        "paddingBottom": "0px",
+        "borderRadius": "0px",
+        "boxShadow": "none"
+      }
+    ],
+    ".subject-pager": [],
+    ".subject-pager .inventory-page-button": [],
+    ".inventory-feedback": [],
+    ".inventory-feedback-text": [],
+    ".notice": [
+      {
+        "left": 35,
+        "right": 355,
+        "top": 184,
+        "bottom": 230,
+        "width": 320,
+        "height": 46,
+        "display": "block",
+        "fontSize": "13px",
+        "lineHeight": "20.8px",
+        "textAlign": "start",
+        "backgroundColor": "rgb(248, 239, 220)",
+        "paddingLeft": "0px",
+        "paddingRight": "0px",
+        "paddingTop": "12px",
+        "paddingBottom": "12px",
+        "borderRadius": "16px",
+        "boxShadow": "none"
+      }
+    ],
+    ".item-main": [
+      {
+        "left": 35,
+        "right": 303,
+        "top": 288,
+        "bottom": 393,
+        "width": 268,
+        "height": 105,
+        "display": "block",
+        "fontSize": "14px",
+        "lineHeight": "21px",
+        "textAlign": "start",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "paddingLeft": "0px",
+        "paddingRight": "0px",
+        "paddingTop": "0px",
+        "paddingBottom": "0px",
+        "borderRadius": "0px",
+        "boxShadow": "none"
+      }
+    ],
+    ".more": [
+      {
+        "left": 311,
+        "right": 355,
+        "top": 288,
+        "bottom": 332,
+        "width": 44,
+        "height": 44,
+        "disabled": false,
+        "display": "flex",
+        "fontSize": "12px",
+        "lineHeight": "18px",
+        "textAlign": "center",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "paddingLeft": "0px",
+        "paddingRight": "0px",
+        "paddingTop": "0px",
+        "paddingBottom": "0px",
+        "borderRadius": "12px",
+        "boxShadow": "none"
+      }
+    ],
+    ".action-menu": [],
+    ".error": [],
+    ".readonly": []
+  },
+  "scroll": {
+    "id": "",
+    "dataset": {},
+    "scrollLeft": 0,
+    "scrollTop": 1010,
+    "scrollWidth": 390,
+    "scrollHeight": 1854
+  },
+  "viewport": {
+    "width": 390,
+    "height": 753,
+    "screenHeight": 844,
+    "dpr": 3,
+    "baseLibrary": "3.16.2"
+  },
+  "view": "subject",
+  "pageNumber": 1,
+  "loading": false,
+  "canWrite": true,
+  "notice": "条目和相关复习历史、计划已删除",
+  "host": "embedded",
+  "state": "deleted",
+  "errors": [
+    "dedicated feedback nodes absent"
+  ],
+  "scope": "isolated synthetic data; real production WXML/WXSS; not physical device/cloud acceptance",
+  "screenshotSha256": "e48520e77c1a4fbb4c49a1b3774adf4a66a28b29828ccc49971f1adce43730be",
+  "capturedAt": "2026-11-01T08:07:31.191Z"
+}

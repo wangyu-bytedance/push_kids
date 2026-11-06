@@ -14,6 +14,8 @@
   - Enforced frontend engineering rules and budgets: `docs/design/frontend/FRONTEND-ENGINEERING-CONSTRAINTS.md`
   - Current frontend UI state: `docs/design/frontend/ui/`
   - Test policy: `docs/quality/TEST-STRATEGY.md`
+  - Development and coding: `docs/ai/DEVELOPMENT-PROTOCOL.md`, `docs/ai/CODING-CONSTRAINTS.md`
+  - Review policy: `REVIEW.md`; issue learning: `docs/quality/issues/`; replay contracts: `docs/quality/regressions/`
   - Release workflow and human-operation gates: `docs/deploy/`
   - Task intent and acceptance: `specs/`
 
@@ -33,6 +35,11 @@ uv run uvicorn push_kids.bootstrap.app:create_app --factory --app-dir apps/api/s
 ```
 
 Never claim a check passed unless it ran. Record skipped checks and the reason.
+
+Read the development protocol and coding constraints before implementation, and `REVIEW.md` before review.
+Use the protocol's honest Red/Baseline branches and versioned evidence; a passing test alone does not prove
+correct design, necessary changes, proper placement, or documentation consistency. Preserve project-specific
+frontend and release gates. Maintenance follows `docs/ai/MAINTENANCE-PLAYBOOK.md`.
 
 ## Release workflow
 
@@ -84,13 +91,20 @@ For every request that changes behavior, APIs, data, architecture, tests, or doc
 3. Wait for explicit user confirmation of the specific Spec revision before production implementation. A user instruction to build, implement, fix, or proceed **according to a named Spec** is approval of that Spec's current revision: record it in the approval block (approver, date, message reference) and set the Spec `Status` to `APPROVED` before coding. A bare "可以/继续/OK" counts only when it maps unambiguously to one Spec revision.
 4. Implement only approved scope, run every required test point, and record pass/fail/not-run evidence.
 5. Merge verified final facts into Feature/UI current-state documents and check architecture cleanliness before completion.
-6. On finishing, evaluate the Spec's lifecycle status and relocate it — do not leave finished work in `specs/active/`. When the completion gate passes, set `Status: DONE` and move the file to `specs/completed/`; if the task was cancelled or rejected, record the reason and move it to `specs/rejected/`. A Spec stays in `active/` only while it is genuinely `DRAFT`/`READY_FOR_REVIEW`/`APPROVED`/`IMPLEMENTING`/`VERIFYING`/`BLOCKED`.
+6. On finishing, evaluate the Spec's lifecycle status and relocate it — do not leave finished work in `specs/active/`. Under the user-approved 2026-10-26 rule, verified cloud delivery of the corresponding implemented scope establishes development completion: set `Status: DONE` and move it to `specs/completed/`. Record incomplete acceptance separately with its actual result and follow-up conditions. If cancelled or rejected, record the reason and move it to `specs/rejected/`. A Spec stays in `active/` only while its development is genuinely unfinished or its scope has not been delivered.
+
+### Development completion and acceptance
+
+- 用户于2026-10-26明确要求：“如果已经发布到云端就认为需求已经开发完成，你来更新”。`DONE`表示需求开发完成，验收状态与发布阶段独立记录。
+- 云端交付证据须覆盖该Spec实际实现的范围和版本：后端正常部署或微信小程序开发版本成功上传均可作为对应端的交付证据；涉及两端时分别核对。仅本地实现、构建、preview、dry-run或部署失败不满足。旧包不覆盖的后续增量继续留active。
+- 已交付Spec的真机、业务、内容、可访问性或评审缺项保留真实PASS/PARTIAL/NOT_RUN/FAIL及后续条件，不再阻止开发DONE归档；这不把未验收项改成通过，不追认缺失的设计/实施批准。
+- 未来发布仍执行既有必需检查和人工门禁；已上传、体验版、审核与正式发布继续严格区分。依据见`specs/completed/GOV-002-CLOUD-DELIVERY-DEVELOPMENT-COMPLETION.md`。
 
 ### Mandatory documentation closure after every code change
 
 - 每次完成代码修改，必须按实际 diff 核对受影响的 Feature、Behavior Catalog、Architecture、UI current-state、Spec、测试证据与发布文档。逐项检查代码和当前文档是否冲突；不能只追加新说明而保留相互矛盾的当前正文。
 - 更新已验证事实对应的正文、状态、revision、变更引用和证据；明确区分本地实现、自动化通过、原生/真机验收、上传、体验、审核和正式发布。未执行检查不得写成通过，历史证据不得冒充当前 diff 的验证。
-- 每次收尾都必须检查 Spec 状态和存放位置：完成门禁通过才设为 DONE 并迁移到 specs/completed/；取消/拒绝应记录理由并迁移到 specs/rejected/；未完成则保留 specs/active/，记录缺失验收、阻塞原因和恢复条件。代码完成本身不等于验收完成。
+- 每次收尾都必须检查 Spec 状态和存放位置：按上述云端交付规则确认开发完成后设为 DONE 并迁移到 specs/completed/，未完成验收独立保留；取消/拒绝应记录理由并迁移到 specs/rejected/；未交付的开发任务留在 specs/active/，记录缺失交付、验收和恢复条件。开发完成本身不等于验收完成。
 - 迁移文档后同步修复索引和引用，检查目标路径存在；已批准设计快照保持不可变，只按既有规则添加 Superseded by 指针。
 - 完成回复必须说明已同步的文档、Spec 最终状态/位置、代码与文档冲突核对结果，以及尚未验证或需要批准的事项。发现超出已批准范围的事实修订时先形成明确 Spec revision，不得静默扩展实现或用文档掩盖代码偏差。
 

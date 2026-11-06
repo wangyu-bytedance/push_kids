@@ -1,0 +1,19 @@
+{
+  "kind": "OUTPUT_SAMPLE_ONLY",
+  "replacement_gate": false,
+  "formal_write_count": 0,
+  "remaining_pending_count": 0,
+  "cases": [
+    {
+      "case_id": "multi-04",
+      "failure_code": null,
+      "seconds": 21.071,
+      "subjects": [
+        "数学",
+        "英语",
+        "语文"
+      ],
+      "item_count": 3
+    }
+  ]
+}

@@ -1,39 +1,84 @@
 # FEAT-001 — 家庭学习持续跟进系统 MVP
 
-2026-10-24旅行控件增量：[BUG-034 Spec01/Architecture01](../../../specs/active/BUG-034-FOOTPRINTS-CONTROLS-TIMELINE.md)及DREV01获用户批准并本地实现。旅行组件/独立Page复用学习btn/seg胶囊，时间线保留日期倒序/分页并展示确认时刻，manual不造图；学习表单/入口及回放合同不改。335项及320/390/430各18原生态共54组、390实际点击通过，2026-10-25补齐430，设备/用户验收开放；[本轮证据](../../quality/evidence/footprints-timeline-20261024/README.md)，未上传部署。
+2026-11-06当前交付revision `FEAT-RELEASE-20261106-040-0.1.18-01`：[发布报告](../../deploy/releases/20261106-fullstack-040-client-0.1.18.md)绑定冻结160/168份源及manifest SHA。040 normal/100%、Schema0027，客户端0.1.18官方上传1,200,417字节并bump；尚未设体验版、提审或正式发布。生产升级0025→0027、严格Schema/17触发器/投影/实际CRUD与微信七路读取通过。93组原生状态节点/PNG保持；320/390确认框CUA视觉和取消已补，430原证据保持。工作日两处实际HTTP保存/回填、摘要及来源跳转经原生AX观察PASS；合成SQLite及私有三文件配置例外独立记录，设备/可访问性仍NOT_RUN。固定40 v2唯一完整单轮40/40、三科各15/15、零empty/pending/formal，原v1 37/40 FAIL及历史43/45保持；家长内容PENDING，不能称线上成功率100%。对应11份Spec开发DONE归档，旧10/13发布尝试仍BLOCKED；备份保留数量尚待管理员核对。
+
+当前辅助验收revision `FEAT-STATE-20261106-SYSTEM-ONE-15`：[Spec06 / Architecture06](../../../specs/completed/BUG-036-SYSTEM-ONE-ACCEPTANCE.md)获用户明确批准并本地实现。启闭均使用原13/16 Pro生成、审查、历史检索/等价核验及100历史项上限；Lite仅在有效产物形成后提供来源、学科、范围、粒度、复习方式及完整性核对意见。同条目意见合并到既有uncertainties，未报问题也必须家长确认；所有验收结果均不修改学习条目/证据/关联，不自动重生成，不创建正式学习或复习事实。超时、错误、超容量和预算不足保留原产物并提示人工核对。现有人工录入和旧草稿确认保持。
+040的`PUSH_KIDS_SYSTEM_ONE_ENABLED`沿默认true且仅代表辅助验收；平台既有秘密配置保持。一次验收总计≤5秒、≤2外呼/256问题，每片≤128问题/96KiB文字/9图、响应流≤64KiB，和Pro共享2请求槽；不得挤占租约30秒写回预留。Worker在事务外执行外部调用，写回时重核family/child删除冻结、lease/attempt及提交状态；归档按FEAT-005继续允许已有任务完成。共享match uncertain缓存修复保留。新验收元数据只存服务端草稿JSON且不进入公开确认字段。真实同期成功率、旧产物保持、内容待家长review和实际检查见[本轮EVD](../../../specs/evidence/EVD-20261105-BUG036-SYSTEMONE06.md)。已由040匹配交付，Spec DONE/completed，家长验收独立保留。
+被替代的Spec05分类/最近40池/关系判定/硬验收纠正路由已清退；原36/40、关系召回85%、新37/45对旧43/45及3份命名内容FAIL保留在[历史EVD](../../../specs/evidence/EVD-20261105-BUG036-SYSTEMONE05.md)，不冒充本次成功率。0027迁移链及旧server-owned覆盖快照兼容保留；只读计数仅证明评估家庭0份此类草稿，未证明全库清零。兼容Owner为agent_processing/learning维护者，2026-11-12复查，须全租户有效旧草稿清零证据及兼容回归后移除；不据此改变原覆盖确认含义。
+
+Spec06当前15份真实材料×3轮×启闭的90次只读对照：开启首轮/最终43/45＝95.6%，同期关闭42/45＝93.3%；43有效产物均保留、0因验收丢弃，28未报问题/15建议核对。开启总耗时p50/p95=23.107/84.793秒，验收自身0.833/1.714秒；不是线上队列延迟或独立45材料。实际58份既有产物/回归验收全部保持事实；known命名定位0/3仍漏检，合成二分类11/12有1误报。家长内容PENDING，不称28无疑点为合格。当前988 Python通过/56条件skip、隔离MySQL12、前端359及静态/独立Review通过；SDK运输测试早期deadline失败保留，设备及线上生成效果未验；040真实微信读取smoke另见当前发布记录。
+
+当前工作日revision `FEAT-STATE-20261106-WORKDAY-COPY-04`：[Spec02/Architecture02](../../../specs/completed/FEAT-001-CHINA-WORKDAY-SCHEDULES.md)和DREV02实现的三模式与离线日期政策保持：设置“指定星期/工作日/时间不固定”，日程“不重复/每周/工作日”；false兼容旧星期规则，true统一起止时间，法定放假跳过、周末调休照常，日程起始日期为含首日下界。日程/今日/建议/冲突/提醒仍共用activities，不改记忆曲线、出行、逐日草稿、失败恢复或只读权限。用户随后批准[备注减法Spec01 / DREV03](../../../specs/completed/FEAT-001-WORKDAY-COPY-CLEANUP.md)，已删除两处编辑表单的法定规则和覆盖年份备注；真实缺覆盖只在日程结果或今日活动分区显示一次“工作日安排待更新”，保留其他已知内容且不宣称可靠空日。通用文案正文已同步；数据自动获取仅[研究](../../research/china-workday/20261105-automatic-updates.md)，没有配置任务。当前呈现证据见[本轮EVD](../../../specs/evidence/EVD-20261105-WORKDAY-COPY-01.md)；[原后端及迁移证据](../../quality/evidence/china-workday-20261105/README.md)仍绑定Spec02，不冒充本次前端验证。0026/0027已落生产，040/0.1.18覆盖两个工作日增量，均DONE/completed；原生实际保存/回填/摘要/来源跳转通过，设备和真实提醒仍待验。
+
+2026-11-05本地知识生成revision `FEAT-STATE-20261105-KNOWLEDGE-SUCCESS-12`：用户明确批准[成功率Spec04 / Architecture04 / Prompt06](../../../specs/completed/BUG-036-FIXED40-SUCCESS-REPAIR.md)，实现为`staged-20261101-13` / `child-aware-history-agent-20261101-16`。明示的核心技能不要求补造练习实例；识字/词表等对象学习仍须具体对象。单份可读材料needs_context不再在构组处整单早退，而将未解来源交给原merge/review核验；审查后无目标为不可自动重试的`coverage / review / empty_proposal`。原证据、历史等价、局部纠正、缓存02和资源预算保持。
+本轮固定40和固定18条近期真实提交独立验收，真实材料完整15条、3条已取消提交原图404；首轮/最终产出与家长内容review分别记录于[本轮EVD](../../../specs/evidence/EVD-20261105-BUG036-SUCCESS04.md)。本增量已由040交付，Spec DONE/completed；内容验收仍PENDING。12/15旧40的33/40 FAIL及历史真实30+3内容FAIL保持原结论，不被本轮结果覆盖。
+
+历史10/13候选灰度发布：[OPS发布Spec01](../../../specs/active/OPS-20261101-BUG036-CACHE02-DEPLOYMENT.md)已明确批准，
+冻结候选的40例实际34/40＝85%、三科均未到90%，发布门禁FAIL，现BLOCKED/active。
+获批工具维护、全库静态/前端349/运行Schema等检查通过，但不抵消质量失败；该旧候选未创建GRAY；当前040由独立全栈OPS交付，不能冒称旧候选部署。
+[停止记录](../../deploy/releases/20261101-knowledge-cache-gray-blocked.md)保留全部case和恢复条件。活动内容Spec03 12/15独立，不混入该10/13候选；不记已部署。
+
+2026-11-01知识生成历史基线revision `FEAT-STATE-20261101-KNOWLEDGE-CONTENT-11`：[BUG-036内容Spec03 / Architecture03 / Prompt05](../../../specs/completed/BUG-036-SOURCE-GROUNDED-CONTENT-REPAIR.md)获“批准 BUG-036 内容 Spec03（含 Architecture03、Prompt05）”并本地实施`staged-20261101-12` / `child-aware-history-agent-20261101-15`。merge/correction/两次review收到原图、原文字和完整提案；正式evidence目录、最终置信度和逐素材source_checks经验证后用于历史核验及公开装配。提取只作线索；合法科目误读、空候选可在完整原来源核验中纠正。item来源以正式证据为准，不让已纠正的旧候选来源扩大素材局部纠正范围；q仅改摘要/核对文案，i/o限定目标，无关目标/e编号/内容保持。64KiB合并DTO、512KiB文本和9图上传上限保持，Provider有界读取并在HTTPX运输边界记录请求body字节数。缓存02终态、明确retry/事务、公开API和排期不变。[12验收EVD](../../../specs/evidence/EVD-20261101-BUG036-CONTENT03-ACCEPTANCE.md)保留两项独立审查修复、第二轮0新确认问题、166专项/896全量PASS及52条件skip。固定原30为20产出/10内容PASS/9严格PASS＋1正确缺材料拒绝，原六PASS回退3份；补充0/3严格PASS、边界7/10，内容验收FAIL。资源与51/61表指纹审计PARTIAL，10表变化归因未证；历史11/14的163/893及旧内容FAIL不改标。该轮评测时未交付；合同已由040继承交付，Spec DONE/completed，原FAIL不重标。
+
+2026-11-01缓存验收原17:21报告revision `ACCEPTANCE-20261101-BUG036-CACHE02-01`保留本地机制PASS、云039不覆盖10/13及当时9源SHA一致。最新[最终报告](../../quality/evidence/BUG036-CACHE02-FINAL-ACCEPTANCE-20261101.md)增加批准后40例发布门禁34/40FAIL、工具/静态修复通过及灰度未创建；活动源已由独立内容03更新，旧9源只绑定冻结10/13候选。当时缓存/父Spec仍VERIFYING；当前继承实现已由040交付并DONE，旧候选OPS仍BLOCKED，未手动重置生产缓存，原内容失败不重标。
+
+2026-11-01知识缓存基线revision `FEAT-STATE-20261101-KNOWLEDGE-CACHE-08`：[BUG-036 Spec02 / Architecture02](../../../specs/completed/BUG-036-CHECKPOINT-RETRY-STRATEGY.md)当轮实现为`staged-20261101-10` / `child-aware-history-agent-20261031-13`，其恢复政策由当前13/16继续保持。首审否决可恢复并进入唯一纠正；最终复审否决或历史reuse不确定不读写可复用缓存，立即终态失败。Worker通过scope/lease检查后同失败事务清语义阶段；家长明确retry按family→child→job→submission锁顺序重查failed，只删本提交merge/correction/review/match/reuse，保留有效提取/group，原Job重置次数并排队；回滚一同恢复。当轮116项专项、全量857PASS/52条件skip及独占utf8mb4 MySQL5.7迁移/Schema/8项通过见[缓存EVD](../../../specs/evidence/EVD-20261101-BUG036-CACHE02.md)，不能重标为12/15结果。公开DTO、家长确认、排期、18键/33调用及TTL预算保持，当前已由040继承交付；未手动修改生产缓存。[原三份六图09/13复测](../../../output/BUG036-20261101-FAILED3-RETEST.md)的2产出/1内容PASS/1FAIL/1NO_OUTPUT、61表一致仍是历史内容证据；本轮12/15补充3为2产出/1内容PASS/0严格PASS，分别记录。
+
+2026-11-01旅行交付revision `FEAT-RELEASE-20261101-0.1.17-UPLOAD-01`：用户确认039照片回看/前后分页与双账号非owner门禁PASS_OPERATOR_CONFIRMED后，168份冻结客户端0.1.17于16:15:08官方上传成功，包体1,191,019字节，基准已bump0.1.17。039 normal/100%/1、微信健康200与三尺寸双宿主42组原生/局部动作证据分别保持；三项旅行Spec开发DONE/completed。设备/内容缺项及体验/审核/正式发布NOT_RUN独立保留；BUG-036/037并行增量不在此包。[本轮上传记录](../../deploy/releases/20261101-client-0.1.17-upload.md)为当前状态。
+
+2026-11-01编辑计划本地revision `FEAT-STATE-20261101-REPORT-FOOTER-TIPS-03-NATIVE`：
+[BUG-037 Spec01/DREV01](../../../specs/completed/BUG-037-REPORT-FOOTER-TIPS.md)已获“批准 Spec01 + DREV01”并实现。
+独立页/报表内嵌共享Flex分页，左右按钮等宽、页码64px居中、两侧8px；
+删除和预算提示使用专用view/text，16px水平/12px垂直内边距、14px左对齐文字。
+替代当前编辑计划三列Grid与局部通用notice覆盖；筛选、动作、API、权限和五Tab合同保持。
+349项/静态和原430双宿主16组方法/状态/尾部检查PASS；
+齐套03包含320/390/430双宿主144组PNG/节点、解码/SHA PASS；实际触摸/设备/大字/读屏待补。
+本Spec168份冻结生产源＋两份批准替换的官方preview成功1,192,127字节；
+旧无线真机码未扫码；本页脚增量现已随0.1.18上传，Spec DONE/completed，设备/内容验收仍待补。
+[齐套03证据](../../quality/evidence/REPORT-FOOTER-TIPS-NATIVE-COMPLETE-20261101.md)独立记录设备/模拟器和preview/upload阶段。
+
+2026-10-31知识点内容验证基线：获批[BUG-036 Spec01、Architecture01、Prompt04](../../../specs/completed/BUG-036-KNOWLEDGE-GENERATION-FINAL-PROPOSAL.md)的该轮生成revision为`staged-20261031-09` / `child-aware-history-agent-20261031-13`。完整候选/省略账本、同编号纠正、拿槽后执行预算、局部结构恢复与实际历史名/范围/技能核验保持；09明确教材教学证据、完整辨读对象、独立读写范围及审查去重，不改DTO/调用/缓存预算。该轮832项后端通过、46条件skip，独立增量审查无新增确认缺陷。[同30源/68原图报告](../../../dist/knowledge-generation-evaluation-20261031-prompt04/session-evaluation/evaluation-30.md)：26产出、C1–C6内容12通过、含输出合同完整10通过；原13无输出12恢复，原PASS18/25仍回退。两个质量拒绝、一个提取超时、一个材料不足保留，六个holdout5通过/1失败，内容验收FAIL。该回放零DB/业务POST/草稿/Job/cache/上传；08当前会话61表一致，09为60/61，通知投递38→37的并发变化来源未证明，不写全表不变PASS。源码、测试、审查与清理分别见[09EVD](../../../specs/evidence/EVD-20261031-BUG036-PROMPT09.md)；早期07/08报告保留原结果，exact-expiry分类仍PARTIAL。该轮评测时未部署；继承实现现已由040交付，父Spec DONE/completed，历史失败保持。
+
+2026-10-31此前已交付范围：`SPEC-20261031-KNOWLEDGE-POINT-PROMPT-02/03`的`staged-20261031-06` / `child-aware-history-agent-20261031-10`由不可变灰度后端038交付并达到normal；Schema0025不变。前轮只读控制平面曾确认038 normal/100%、PUBLIC关闭；当前BUG-036未重查或执行发布/定向业务smoke，100%历史观测不追认旧smoke。此前历史文字3/4结果与793pass/46skip保留原范围。此前存量清理的243条Knowledge、243 Occurrence、112 LearningRecord、455 ReviewFeedback为当次快照，15条改名/30条替代及9条待材料保留当次结果；当前回放只读盘点259 Knowledge/259 Occurrence/115 LearningRecord/462 ReviewFeedback，前后一致，不将历史计数作为当前规模或本轮修复证据。[历史生成证据](../../quality/evidence/KNOWLEDGE-POINT-PROMPT-03-20261031.md)、[历史清理证据](../../quality/evidence/HISTORICAL-KNOWLEDGE-CLEANUP-20261031.md)、[038发布记录](../../deploy/releases/20261031-knowledge-prompt-backend.md)。
+
+2026-10-26开发归档（历史；旅行三项2026-11-01交付见本页当前正文）：已交付037后端/0.1.16客户端所覆盖的需求按用户批准规则标记开发DONE，验收缺项独立保留；后续BUG-035和旅行导入精简尚未交付，继续active。当前归档和待验入口见[Spec状态清单](../../../specs/STATUS.md)，依据为[治理Spec](../../../specs/completed/GOV-002-CLOUD-DELIVERY-DEVELOPMENT-COMPLETION.md)。本轮不改产品合同、测试结论、设计或发布阶段。
+
+2026-10-25交付revision CLIENT-0.1.16-UPLOAD-01：已实现客户端随0.1.16开发上传（1178991字节），用户已确认旅行照片双账号隔离；未体验/审核/正式发布。产品、真机和可访问性未完成项仍开放。[发布记录](../../deploy/releases/20261025-latest-client-upload.md)。
+
+2026-10-24旅行控件增量：[BUG-034 Spec01/Architecture01](../../../specs/completed/BUG-034-FOOTPRINTS-CONTROLS-TIMELINE.md)及DREV01获用户批准并本地实现。旅行组件/独立Page复用学习btn/seg胶囊，时间线保留日期倒序/分页并展示确认时刻，manual不造图；学习表单/入口及回放合同不改。335项及320/390/430各18原生态共54组、390实际点击通过，2026-10-25补齐430，设备/用户验收开放；[本轮证据](../../quality/evidence/footprints-timeline-20261024/README.md)，实施时未上传；现已随0.1.16开发上传，未体验/审核/正式发布。
 
 2026-10-24发布回归：历史MySQL测试隔离及CRUD readiness两项Spec获批并验证，生产迁移保护/领域行为不改。应用不查无权限的trigger元数据，发布账号仍严格检查；后端780、相关MySQL26、原前端332及冻结02/容器门禁通过。生产Schema0025，037 normal/100%/1（用户人工接管）、035 0%，036失败保留。真实本地客户端20项GET均200，包含新年级/建议读取；真实业务写入和设备/内容验收待用户测试。035不能在0025重启。[本轮证据](../../quality/evidence/latest-backend-release-20261024/README.md)保留历史失败和各阶段。
 
-- 2026-10-24旅行界面减法：用户明确批准足迹精简Spec01/DREV01，记录Tab旅行组件及原足迹页共享实现去掉重复身份标题、收起次要操作、设置只留开关和保存。最终331项前端、三尺寸27态原生及430实际菜单操作通过，CR-001在已批准迟到保护范围修复；UI文案要求已并入工程规范。原学习入口/表单及确认合同不变；[当前证据](../../quality/evidence/footprints-minimal-20261024/README.md)区分本地原生与真机待验，未上传部署。
+- 2026-10-24旅行界面减法：用户明确批准足迹精简Spec01/DREV01，记录Tab旅行组件及原足迹页共享实现去掉重复身份标题、收起次要操作、设置只留开关和保存。最终331项前端、三尺寸27态原生及430实际菜单操作通过，CR-001在已批准迟到保护范围修复；UI文案要求已并入工程规范。原学习入口/表单及确认合同不变；[当前证据](../../quality/evidence/footprints-minimal-20261024/README.md)区分本地原生与真机待验，实施时未上传；现已随0.1.16开发上传，未体验/审核/正式发布。
 
-- 2026-10-24年级确认本地增量：五Tab新增共享宿主，已有弹层/上传/未保存输入时等待，包含报表筛选表单；学习、复习和AI消费者仍只读取正式grade。年度建议确认只写children，不创建学习记录、Review或Todo；[FEAT-013证据](../../quality/evidence/ANNUAL-GRADE-IMPLEMENTATION-20261024.md)含零副作用、原API/启动/看板回归、三尺寸呈现及独立评审PASS。后端037/0025已部署且候选读取通过；客户端仍本地，原生端到端、设备与可访问性验收待补。
+- 2026-10-24年级确认本地增量：五Tab新增共享宿主，已有弹层/上传/未保存输入时等待，包含报表筛选表单；学习、复习和AI消费者仍只读取正式grade。年度建议确认只写children，不创建学习记录、Review或Todo；[FEAT-013证据](../../quality/evidence/ANNUAL-GRADE-IMPLEMENTATION-20261024.md)含零副作用、原API/启动/看板回归、三尺寸呈现及独立评审PASS。后端037/0025已部署且候选读取通过；客户端已随0.1.16开发上传，原生端到端、设备与可访问性验收待补。
 
-- 2026-10-24今日增量：两份Spec04、Architecture02/03与`DREV-20261024-TODAY-LEARNING-01`已获用户「批准，按此实现」。空白日先处理自然到期；没有到期才从符合3日/80%/2日条件的已复习知识中提前少量安排，≤10分钟且不超孩子预算，原日期不变。只有初始`provisional_empty`可因正式库存代次变化重判，处理过的计划和旧计划不补排。另见[FEAT-004](FEAT-004-daily-learning-suggestions.md)的两完整自然日无新增建议→家长批准待学→实际确认入档。两开关仍关闭；0023/0024随0025落生产库，代码在037 normal/100%中、读取smoke通过；前端未上传、两能力未启用，完整验收仍VERIFYING；[实现证据](../../quality/evidence/TODAY-LEARNING-IMPLEMENTATION-20261024.md)与本轮发布阶段分开。
+- 2026-10-24今日增量：两份Spec04、Architecture02/03与`DREV-20261024-TODAY-LEARNING-01`已获用户「批准，按此实现」。空白日先处理自然到期；没有到期才从符合3日/80%/2日条件的已复习知识中提前少量安排，≤10分钟且不超孩子预算，原日期不变。只有初始`provisional_empty`可因正式库存代次变化重判，处理过的计划和旧计划不补排。另见[FEAT-004](FEAT-004-daily-learning-suggestions.md)的两完整自然日无新增建议→家长批准待学→实际确认入档。两开关仍关闭；0023/0024随0025落生产库，代码在037 normal/100%中、读取smoke通过；前端已随0.1.16开发上传、两能力仍未启用，开发DONE，完整验收仍待补；[实现证据](../../quality/evidence/TODAY-LEARNING-IMPLEMENTATION-20261024.md)与本轮发布阶段分开。
 
-- 2026-10-24记录入口本地增量：用户批准`BUG-SPEC-20261024-RECORD-ENTRY-05 / DREV-20261024-RECORD-ENTRY-01`后，记录标题改为顶部两项下拉，右侧复用纸色孩子chip；类型菜单保留Tab，旅行照片/编辑面板仍隐藏Tab。普通Tab记住类型，未提交学习表单/幂等键/滚动保留；今日与报表明确学习入口经原离开保护切回学习，修复旧确认跨代结束未续接新学习意图的问题。旅行默认全部已确认足迹，删除日期筛选；列表按最多100条窗口续看，导入是内容下方48px普通按钮，权限/同意/人工/确认合同保持。替代10-23入口的对应外观与筛选描述，详见[本轮验证边界](../../quality/evidence/record-entry-20261024/README.md)。本增量未上传或部署，真机验收待补。
+- 2026-10-24记录入口本地增量：用户批准`BUG-SPEC-20261024-RECORD-ENTRY-05 / DREV-20261024-RECORD-ENTRY-01`后，记录标题改为顶部两项下拉，右侧复用纸色孩子chip；类型菜单保留Tab，旅行照片/编辑面板仍隐藏Tab。普通Tab记住类型，未提交学习表单/幂等键/滚动保留；今日与报表明确学习入口经原离开保护切回学习，修复旧确认跨代结束未续接新学习意图的问题。旅行默认全部已确认足迹，删除日期筛选；列表按最多100条窗口续看，导入是内容下方48px普通按钮，权限/同意/人工/确认合同保持。替代10-23入口的对应外观与筛选描述，详见[本轮验证边界](../../quality/evidence/record-entry-20261024/README.md)。本增量实施时未上传；现已随0.1.16开发上传，未体验/审核/正式发布，真机验收待补。
 
-- 2026-10-20本地前后端增量：`SPEC-20261020-AUTO-SUPERSEDED-REVIEW-02`与`DREV-20261020-SUPERSEDED-REVIEW-01`已批准并实现；AI在原学习确认后自动应用单项完整覆盖，旧词条永久停止自动排期，历史不合并、不删除、不伪造。存量任务使用持久游标及租约；既有人工预约保留一次。独立页及报表内嵌默认「参与复习」，支持「已替代」筛选、承接关系与原学习记录，菜单仅删除。自动化通过，完整原生/真机验收待补，未部署。见[实现与验收边界](../../quality/evidence/AUTO-SUPERSEDED-REVIEW-20261020.md)。
+- 2026-10-20本地前后端增量：`SPEC-20261020-AUTO-SUPERSEDED-REVIEW-02`与`DREV-20261020-SUPERSEDED-REVIEW-01`已批准并实现；AI在原学习确认后自动应用单项完整覆盖，旧词条永久停止自动排期，历史不合并、不删除、不伪造。存量任务使用持久游标及租约；既有人工预约保留一次。独立页及报表内嵌默认「参与复习」，支持「已替代」筛选、承接关系与原学习记录，菜单仅删除。自动化通过，已随037/0.1.16交付并开发DONE，完整原生/真机验收待补。见[实现与验收边界](../../quality/evidence/AUTO-SUPERSEDED-REVIEW-20261020.md)。
 
-- 2026-10-17本地复习完成协作：已批准并实现`SPEC-20261017-NOTIFICATION-AUTO-RENEWAL-01`。仅可信本人成功的手动complete在原反馈事务内新增去重完成游标；今日点击同步尝试已准备好的本人授权，首次说明须显式开启。复习结果、科目顺序和日期政策不变，每日任务不触发。真机及独立评审待补，未上传/部署。当前能力见[FEAT-011](FEAT-011-notification-auto-renewal.md)和[实现证据](../../quality/evidence/NOTIFICATION-AUTO-RENEWAL-IMPLEMENTATION-20261017.md)；此增量不代表线上发布。
+- 2026-10-17本地复习完成协作：已批准并实现`SPEC-20261017-NOTIFICATION-AUTO-RENEWAL-01`。仅可信本人成功的手动complete在原反馈事务内新增去重完成游标；今日点击同步尝试已准备好的本人授权，首次说明须显式开启。复习结果、科目顺序和日期政策不变，每日任务不触发。真机及独立评审待补，已随037/0.1.16交付。当前能力见[FEAT-011](FEAT-011-notification-auto-renewal.md)和[实现证据](../../quality/evidence/NOTIFICATION-AUTO-RENEWAL-IMPLEMENTATION-20261017.md)；开发交付不代表完整验收或正式发布。
 
 - 2026-10-17通知受控验收：已批准`OPS-SPEC-20261017-NOTIFICATION-SINGLE-EVENT-SMOKE-05`及家庭接收范围；经既有API创建1条临时非重复日程0F58（201），原通知调度使当前账号投递sent/ok（18:49:19 CST），随后仅停用该日程（204）并确认当日日程中匹配数0。用户随后明确确认微信“已收到”（call_5b80efd7f9504c4ca286e2df7e031c75），补齐该账号本次实际收件证据。未改日程/学习/复习合同、代码或发布状态；不代验其他成员。见[证据](../../quality/evidence/NOTIFICATION-HTTP-DIAGNOSIS-20261017.md)。
 
 - 2026-10-16复习科目保序修复：`BUG-SPEC-20261016-REVIEW-SUBJECT-ORDER-01`已批准并实现，反馈后仍按原计划各科最早ordinal展示；全组无待复习项才移除空组。后端518 passed/19 skipped、前端244 passed，补充MySQL18项及冻结容器检查通过。当次历史阶段为031 normal/0%、030 100%，当次定向smoke与全量人工门禁未留验收证据；2026-10-24只读复核当前031 normal/100%，不据此补写当次smoke PASS。见[历史发布](../../deploy/releases/20261016-review-subject-order-backend.md)、[验证证据](../../quality/evidence/REVIEW-SUBJECT-ORDER-20261016.md)及[当前部署准备](../../deploy/releases/20261023-fullstack-test-deployment.md)。
 
-- 2026-10-15学科管理本地增量：SPEC-20261014-SUBJECT-MANAGEMENT-01 / DREV-20261014-SUBJECT-MANAGEMENT-01已批准并实现。学科行统一箭头进入管理面板，移出位于面板底部；基础三科与可移出自定义科目均二次确认，已有学习记录保留。未加入基础科目仍可加入，其他科目沿用 canRemove 限制；只读无写入口，失败留面板重试，切孩子/离页丢弃迟到回调。取代原学科行尾直接加入/移出入口，未上传/发布。验收与未执行项见 [本轮证据](../../quality/evidence/SUBJECT-MANAGEMENT-20261015.md)，Spec 保留 VERIFYING。
+- 2026-10-15学科管理本地增量：SPEC-20261014-SUBJECT-MANAGEMENT-01 / DREV-20261014-SUBJECT-MANAGEMENT-01已批准并实现。学科行统一箭头进入管理面板，移出位于面板底部；基础三科与可移出自定义科目均二次确认，已有学习记录保留。未加入基础科目仍可加入，其他科目沿用 canRemove 限制；只读无写入口，失败留面板重试，切孩子/离页丢弃迟到回调。取代原学科行尾直接加入/移出入口，已随0.1.16开发上传。验收与未执行项见 [本轮证据](../../quality/evidence/SUBJECT-MANAGEMENT-20261015.md)，Spec开发DONE并归档，验收待补。
 
-- 2026-10-15本地按钮与分页增量：SPEC-20261014-ACTION-PAGER-CONSISTENCY-02 / DREV-20261014-ACTION-PAGER-CONSISTENCY-02已批准并实现；每日任务无阴影胶囊，编辑计划共享分页固定三列、科目两列及显式禁用。243项前端测试和静态检查通过；430宽11态原生部分验证，完整三视口/内嵌/截图/真机待补，Spec为active/VERIFYING。本增量未上传；既有最新开发上传基线0.1.15（5837d59）。详见docs/quality/evidence/ACTION-PAGER-CONSISTENCY-20261015.md。
+- 2026-10-15历史按钮与分页增量：SPEC-20261014-ACTION-PAGER-CONSISTENCY-02 / DREV-20261014-ACTION-PAGER-CONSISTENCY-02当时实现每日任务无阴影胶囊、编辑计划三列Grid及科目两列/显式禁用。每日任务范围继续有效；编辑计划分页当前由上方BUG-037/DREV-20261101-REPORT-FOOTER-TIPS-01的本地Flex接管。原243项/430宽11态部分原生证据与当时缺项保持历史结果；旧增量随0.1.16开发上传，Spec DONE/completed，未体验/审核/正式发布，不覆盖BUG-037。详见docs/quality/evidence/ACTION-PAGER-CONSISTENCY-20261015.md。
 
-- 2026-10-13设置最新增量：SPEC-20261013-SETTINGS-CONSISTENCY-01 / DREV-20261013-SETTINGS-CONSISTENCY-01批准并实现；在学科目改活动同款单列行，保留原加入/移出限制。每日任务同款行、独立背景及候选/编辑半屏。239项测试、静态及430原生八态通过；源码5837d59随0.1.15开发上传成功（1027271字节），未体验/提审/正式发布；320/390原生、完整截图、真机待验收。详见docs/quality/evidence/SETTINGS-CONSISTENCY-20261013.md，任务VERIFYING。
+- 2026-10-13设置最新增量：SPEC-20261013-SETTINGS-CONSISTENCY-01 / DREV-20261013-SETTINGS-CONSISTENCY-01批准并实现；在学科目改活动同款单列行，保留原加入/移出限制。每日任务同款行、独立背景及候选/编辑半屏。239项测试、静态及430原生八态通过；源码5837d59随0.1.15开发上传成功（1027271字节），未体验/提审/正式发布；320/390原生、完整截图、真机待验收。详见docs/quality/evidence/SETTINGS-CONSISTENCY-20261013.md，任务开发DONE，验收待补。
 
 - Design governance revision: `DOC-SPEC-20261013-02-01`；[门禁同步记录](../../../specs/completed/DOC-002-MARKDOWN-STATE-RECONCILIATION.md)，仅修订设计证据政策，不改变实现/发布状态。
 
 - Local report panel refinement: `SPEC-20261013-REPORT-PANELS-01 / DREV-20261013-REPORT-PANELS-01` 已获用户批准并本地实现。历史和编辑计划统一展开容器，明确展开/收起及调整入口；查询与计划策略不变，外层背景由统一卡片样式负责。236项前端测试、三视口36态原生数字几何及静态校验通过；已随0.1.14开发上传，完整截图、字体放大与真机验收待补。证据：`docs/quality/evidence/REPORT-PANELS-20261013.md`。
 
 - Status: `CURRENT`
-- 当前发布状态：037 normal/100%、Schema0025，真实微信20项读取通过，当前生产写路径/真实照片/多账号/完整原生真机待用户验收；全量前定向smoke未执行，用户接管后才做读取检查。完整客户端本地打开，最新开发上传仍0.1.15（5837d59），本次未上传。10:55的035/0022与18项读取属于[早间历史发布](../../deploy/releases/20261023-fullstack-test-deployment.md)，本轮以[037记录](../../deploy/releases/20261024-latest-backend-test-deployment.md)为准，未沿用旧证据。
+- 当前发布状态以[040/0.1.18交付记录](../../deploy/releases/20261106-fullstack-040-client-0.1.18.md)为准，生产Schema0027、PUBLIC关闭；实际开放类型MINIAPP+OA。037/038/039和0.1.16/0.1.17均是历史交付；后续验收与体验/审核/正式发布独立。
 - Local complete card backgrounds: SPEC-20261013-CARD-BACKGROUNDS-01已按用户明确指令本地实现，设置三块插画、每日任务同款卡片与新位置、报表背景均已接入；238测试和CLI预览通过，已随0.1.14开发上传，原生/真机/用户验收待补。证据docs/quality/evidence/CARD-BACKGROUNDS-20261013.md，未设体验版/正式版。
-- Local illustrations: `SPEC-20261013-RECORD-CALENDAR-ILLUSTRATIONS-01 / DREV-20261013-RECORD-CALENDAR-ILLUSTRATIONS-01` 已获用户批准并本地实现；记录/日程使用不同纸艺插画，原业务不变。233项前端测试及静态校验通过；原生三视口、真机及预览包预算待验证，未发布。证据：`docs/quality/evidence/RECORD-CALENDAR-ILLUSTRATIONS-20261013.md`。
+- Local illustrations: `SPEC-20261013-RECORD-CALENDAR-ILLUSTRATIONS-01 / DREV-20261013-RECORD-CALENDAR-ILLUSTRATIONS-01` 已获用户批准并本地实现；记录/日程使用不同纸艺插画，原业务不变。233项前端测试及静态校验通过；原生三视口、真机及预览包预算保留原待验事实；对应插画已随0.1.16开发上传。证据：`docs/quality/evidence/RECORD-CALENDAR-ILLUSTRATIONS-20261013.md`。
 - Local daily tasks: `SPEC-20261012-DAILY-TASKS-01 / DREV-20261012-DAILY-TASKS-01` 已获用户批准并实现前后端。
   设置可配置孩子的每日任务和分钟，今日复习安排下方完成/撤销；四区块空或全完成默认收起，有剩余展开，学习记录非空展开。
   具体当前事实见 `FEAT-010-daily-tasks.md`；本地验证记录 `docs/quality/evidence/DAILY-TASKS-20261012.md`，生产0019/030及读取smoke见`docs/deploy/releases/20261013-fullstack-diff.md`。隔离MySQL验证通过，完整原生/真机及生产写路径验收待补。
@@ -49,24 +94,24 @@
   证据：`docs/quality/evidence/ACTIVITY-WEEKDAY-ORDER-20261010.md`。
 - Historical review-inventory presentation superseded locally by the 2026-10-10 redesign: `SPEC-20261007-REVIEW-GROUP-CARDS-05` 曾获用户批准并在本地实现。
   复习条目目录按当前有界页的科目分组、可折叠；条目“…”菜单沿用既有调整/删除接口，筛选仍使用服务端原有日期、科目、精确次数条件。
-  本修订只改变客户端呈现及交互，不改变复习计数、排期或反馈语义。三视口原生数字几何和前端测试已通过；设计快照和真机验收仍待完成，未部署。
+  本修订只改变客户端呈现及交互，不改变复习计数、排期或反馈语义。三视口原生数字几何和前端测试已通过；原设计快照和真机缺项仍保留；旧分组版曾随中间客户端交付，当前呈现由后续获批重设计接管。
 - Local fair-review implementation: `SPEC-20261007-FAIR-REVIEW-01` 已批准并实现科目覆盖、首次/再次机会和实际计划日等待优先。
   预约优先、真实反馈计数与当日快照保持原合同；日期与安排状态分开。补充修订02已批准并实现事务性索引投影，
   最终5万条MySQL查询最大163ms；独立审查未发现剩余代码阻断项。旧业务兼容包已验证0014/0018启动校验。
-  云端已创建旧业务兼容过渡灰度版本026；尚未确认其流量接管，生产迁移及新策略发布与原生验收待完成。
+  026属于历史过渡灰度记录；相关迁移及策略实现现已由037交付，完整原生/业务验收仍待完成。
   证据见`docs/quality/evidence/FAIR-REVIEW-PROJECTION-20261007.md`。
 - Local analysis change under verification: `BUG-SPEC-20261006-STAGED-ANALYSIS-01` — default provider
   changed to bounded per-material extraction, consolidation, server-owned history lookup and alias matching.
   Successful stage DTOs resume across retries; cancellation/manual confirmation/delete clean temporary data.
-  This does not describe a deployed release. Evidence and remaining quality gates are in
-  `specs/active/BUG-028-STAGED-ANALYSIS-RELIABILITY.md`.
-- Revision: `FEAT-STATE-20261024-LATEST-037-02`（领域合同不改；保留各增量原生/设备验收边界）
+  This implementation is now included in deployed backend037; remaining acceptance stays separate. Original evidence is in
+  `specs/completed/BUG-028-STAGED-ANALYSIS-RELIABILITY.md`.
+- Revision: `FEAT-STATE-20261105-KNOWLEDGE-SUCCESS-12`（成功率Spec04本地13/16，保留内容03/缓存02边界；实际测试及家长内容review见20261105 EVD；旧FAIL独立保留，无本增量云交付）
 - Review management: `SPEC-20261006-REVIEW-MANAGEMENT-03` 已获用户“落地并实现”批准并本地实现。
   报表独立条目页按明天/后天、单科学习科目、精确复习次数查看；删除清理相关历史和计划，手动改期不计复习。
   今日下一次复习入口移除；后端兼容字段暂保留。预约优先且显式提示预算超量，120项硬上限、幂等及状态冲突由服务端控制。
-  自动化、真实MySQL与独立复查通过，原生视觉/真机验收待补；未发布。证据：`docs/quality/evidence/REVIEW-MANAGEMENT-20261006.md`。
+  自动化、真实MySQL与独立复查通过，原生视觉/真机验收待补；对应实现已随037/0.1.16交付。证据：`docs/quality/evidence/REVIEW-MANAGEMENT-20261006.md`。
 - Last verified: 2026-10-06，`SPEC-20261006-SOURCE-DELETE-02` 精确原图与单知识点删除已本地实现；
-  自动化、隔离 MySQL 5.7 与微信 preview 结果见该 Spec 的 verification record；未部署后端或发布前端。
+  自动化、隔离 MySQL 5.7 与微信 preview 结果见该 Spec 的 verification record；对应实现现已随037/0.1.16交付，原验证日期不变。
   原生三视口、iOS/Android 与独立人员审查仍待完成。
 - Previous verification: 2026-10-02（`SPEC-20261001-VOICE-INPUT-03` 已本地实现：前端 184 passed、后端
   389 passed / 5 optional skipped，ESLint、小程序静态 15 pages/685412 bytes、Ruff check/format、Mypy、
@@ -85,13 +130,13 @@
   revision `BUG-SPEC-20260926-EMPTY-PROPOSAL-QUALITY-02`（固定跨科目轮转与双分母门禁已实现并完成
   40/40 live Ark 验证及终态独立只读审查；后端 `flask-ik19-025` 灰度不可变版本已创建，生产数据
   apply 尚未执行）
-- Pending completion Spec: `specs/active/FEAT-001-ARK-CONTEXT-REUSE-FLAG.md` revision
-  `SPEC-20260919-ARK-CONTEXT-REUSE-01`（默认开启的 attempt-local Ark Responses 会话续接；未部署）
-- Pending verification Spec: `specs/active/FEAT-001-VOICE-INPUT.md` revision
+- Development DONE / acceptance pending Spec: `specs/completed/FEAT-001-ARK-CONTEXT-REUSE-FLAG.md` revision
+  `SPEC-20260919-ARK-CONTEXT-REUSE-01`（默认开启的attempt-local Ark Responses会话续接；已随037交付，真实延迟A/B待补）
+- Pending verification Spec: `specs/completed/FEAT-001-VOICE-INPUT.md` revision
   `SPEC-20261001-VOICE-INPUT-03`（本地实现和自动化已完成；平台后台、隐私与原生真机门禁未完成）
 - Previous applied Spec: `specs/completed/BUG-021-TODAY-REVIEW-PLAN-VISIBILITY.md` revision `BUG-SPEC-20260912-REVIEW-VISIBILITY-01`
 - Previous applied Spec: `specs/completed/SPEC-20260911-SETTINGS-PROFILE-MANAGER-POLISH.md` revision `SPEC-20260911-SETTINGS-PROFILE-MANAGER-POLISH-01`（frontend only）
-- Pending verification Spec: `specs/active/FEAT-001-PRECISE-SOURCE-AND-KNOWLEDGE-DELETION.md`
+- Pending verification Spec: `specs/completed/FEAT-001-PRECISE-SOURCE-AND-KNOWLEDGE-DELETION.md`
   revision `SPEC-20261006-SOURCE-DELETE-02`（本地代码已实现；尚未满足全部原生验收与独立审查门禁）
 - Current visible contract: `docs/design/frontend/prototypes/DREV-20261006-SOURCE-DELETE-01/FRONTEND-SPEC.md`
 - Intermediate design artifact: `docs/design/frontend/prototypes/DREV-20260830-03/index.html`
@@ -99,10 +144,10 @@
 ## Purpose and current behavior
 
 本地视觉增量revision `FEAT-VISUAL-20261021-HERO-ARC-01`：按已批准
-[BUG-SPEC-20261021-HERO-ARC-01](../../../specs/active/BUG-030-HERO-BACKGROUND-ARC.md) 与
+[BUG-SPEC-20261021-HERO-ARC-01](../../../specs/completed/BUG-030-HERO-BACKGROUND-ARC.md) 与
 DREV-20261021-HERO-ARC-REMOVAL-01，所有共享卡片去掉右下角细弧线；今日正常/引导、日程、记录、
 报表与设置四张卡一起生效。原渐变、插画、布局和业务保持现状；本轮验证、原生/真机边界见
-[质量证据](../../quality/evidence/HERO-ARC-REMOVAL-20261021.md)。仅本地实现，未上传/发布。
+[质量证据](../../quality/evidence/HERO-ARC-REMOVAL-20261021.md)。该样式已随0.1.16开发上传，原生/真机缺项保留。
 
 家长记录小学阶段孩子真实学过的内容。照片、手动文字或语音转成的可编辑文字创建异步分析任务；AI 只生成可编辑草稿，
 家长确认实际已学后才写入学习记录、知识点出现历史和复习计划。复习仅安排已经学过的知识；FEAT-004独立提供一项可编辑增量提案，采纳只建立待学，不宣称下一课必须学什么，不自动批改或判断掌握。活动只进入日程、练习记录和温和提醒，不进入记忆曲线。
@@ -199,12 +244,18 @@ DREV-20261021-HERO-ARC-REMOVAL-01，所有共享卡片去掉右下角细弧线�
   输入还包含目标上海
   自然日内最多200个已确认条目，以及发生日为今天时的完整 `today_review_plan`；不一次性加载历史
   LearningRecord 或 KnowledgeItem。今日计划和历史候选都只是匹配上下文，不是本次已复习的证据。
-- 当前本地默认：逐材料最多并发2，精确重复图片保留首图编号；必要时最多两组相邻页联合补充。
-  合并必须完整覆盖每个提取候选，最多20项，不允许漏材料后成功。服务端对合并后的每个名称执行
-  family/child/subject限定历史查询，再让模型只返回短别名；规范名称、数据库ID和证据由服务端装配。
-  所有新阶段使用 `store=false`、显式关闭思考、45秒提取/30秒合并匹配上限，并服从整个租约预算。
-  仅已验证阶段DTO进入24小时临时表，成功、取消、人工确认及家庭/孩子清理即删除；失败阶段不产生
-  部分可确认草稿。原公开proposal、家长确认、计划策略和手动路径保持原合同。
+- 当前启闭验收均使用的Pro生成路径：逐材料最多并发2，精确重复图片保留首图编号；最多两组相邻页联合补充，全部提取受180秒及租约剩余限制。
+  每个提取候选恰好进入知识或有界省略账本一次；只有无学习证据、缺媒体或对象不明确可省略，省略同受质量审查。
+  merge/correction/两次review均核对同批原图、原文字及完整summary/uncertainties。正式evidence最多40条、每item引用1–20条并保存最终confidence；source_checks覆盖实际素材，引用最终items数组从i0起算。提取subject/证据不是已确认事实；空候选仍可核验可读原来源，缺实际来源或空最终提案安全拒绝。
+  质量问题与纠正共用i/o、q及真实素材编号、原members及≤80字符依据，最多一次语义纠正、两次审查；item以正式证据确定素材归属，omission沿候选lineage，q只改摘要/核对文案，无关项与e编号/内容不能漂移。
+  提示要求按同一知识域与一次具体检查整合相关内容，跨科目和独立规则保留，整批最多20项。
+  当前12保留配套字母/词汇、概念/辨析/运用与同语法共同目标、部分可辨内容和有限序列范围规则；原始来源优先，完整集合、作品去重、教学/备注角色、长词表非重叠短组和不同读写集合均需核对。basis建议一句≤40字符（Schema仍≤80）；规则存在不证明模型遵守，固定来源实际结果见12 EVD。
+  服务端按family/child/subject为每个最终名检索，最多20逻辑查询/100不同历史项；历史输入含实际名称、方式和有界证据，别名目录最多420、每候选最多320、序列化≤512KiB，证据截断显式标注。
+  复用只接受严格等价；旧名也须符合命名和范围，accept才装配旧身份，明确reject或null保留已审查新目标，同名不再强制覆盖；uncertain诚实失败。
+  请求先在绝对截止时间内排队，取到两个进程槽后再开始45秒extract/group或30秒其余阶段执行预算；SDK不重试，extract/group/merge/match结构或引用错误各一次有界纠正，review/reuse不重试。正常/最坏核心调用18/33，optional coverage最多另1次。
+  `store=false`、思考关闭；仅成功严格DTO缓存18键/Job、64KiB/键、512KiB/Job、24小时，版本与输入指纹不同不复用。成功、取消、人工确认及家庭/孩子清理即删除；未覆盖材料、全省略或不确定不得发布空/部分草稿。
+  正式合并DTO有/无缓存均检查64KiB；Provider文本512KiB、9张配置上传大小上限，有界读取；原来源SHA前后检查。遥测只留阶段/单元/静态字段类别及字节/token/耗时，运输body仅计长度，不保存内容。SHA读取及精确64KiB存储边缘的未验限制见12 EVD。完全同刻排队/总预算到期的错误标签仍可能local_deadline，原PARTIAL保持。公开proposal、家长确认规范身份、确定性计划与手动路径保持原合同。
+- System One验收只由`proposal_acceptance`拥有固定标准、阈值和静态提示；`system_one_provider`拥有专用HTTP答案校验，Worker拥有事务与迟到保护。不开分类、近期池或历史关系新路由，原Pro匹配/复用及原缓存预算不变。旧classify键仅保留清理兼容，不产生新缓存键；旧覆盖判定字段仅供既有草稿读取，不是本次新产物字段。
 - 以下旧Agent传输流程仅保留作对照工具和回归测试消费者，不是当前默认工厂行为：
   未由同日/今日计划匹配的每个候选，模型先生成关键词调用 `search_history_items`。工具由服务端注入
   family/child，只允许指定分析科目；未配置预设科目安全返回空历史，使用每 Item 最多32个确定性
@@ -225,11 +276,11 @@ DREV-20261021-HERO-ARC-REMOVAL-01，所有共享卡片去掉右下角细弧线�
   `ARK_CONTEXT_CACHE_ENABLED=false` 回退到 `store=false` 完整累计输入重发；它不能关闭 Ark 对当前模型
   自动启用的隐式前缀缓存。两种模式每轮都保留 strict JSON Schema，不发送显式 `caching`，response ID
   只存在于单次 Provider 调用内，不跨 Job/retry/家庭/孩子，也不写数据库或日志。
-- 旧Provider规则在 `agent_processing/prompt.py` 以 `child-aware-history-agent-20260923-08` 版本化；新规则在
+- 旧Provider规则在 `agent_processing/prompt.py` 以 `child-aware-history-agent-20261101-15` 版本化；默认`staged-20261101-12`规则在
   `stage_contracts.py` 版本化，均不读取
   个人SKILL目录。Ark 必须按本次 analysis subjects 返回固定键的 strict JSON Schema，条目明确
   为 `new`、`today_review` 或 `history_item`；模型总输出最多20项、每项1–5分钟，`review_method`
-  只能是主动回忆/变式练习/解释应用。条目按同科目、同目标和同动作聚合为家长可确认的短复习单元；
+  只能是主动回忆/变式练习/解释应用。新提案按同科目、同知识域、兼容范围及一次具体检查整合；历史等价另按严格同范围/规则/技能判断；
   Markdown fence、额外科目/字段和非法引用不再由正则修补。Provider
   校验失败后只把校验代码带入下一轮，不保存原文。输出/引用校验、Agent预算和临时 Provider/存储故障
   由显式 disposition 判为可重试，最多执行3个持久化 Job attempts；schema capability 和确定性输入/配置
@@ -410,8 +461,8 @@ BUG-010 本地实现已通过微信开发者工具 registered AppID preview 编�
   traffic promotion. Leading-wildcard history substring search remains scan-based within the approved 50k-row budget.
 - Registered AppID, HTTPS legal domains, privacy declaration, iOS/Android real-device verification and
   preview/upload remain mandatory before an experience or public build.
-- 小程序尚未留存最低基础库设置证据，也未对 `callContainer`、`uploadFile`、`chooseMedia` 做能力门禁；
-  媒体权限失败、安全错误分类和上传取消恢复按 `BUG-SPEC-20260905-02` 待批准实施。
+- 最低基础库、能力门禁及媒体失败恢复的2026-09-05审计提案
+  [BUG-004](../../../specs/rejected/BUG-004-WECHAT-MINIPROGRAM-API-COMPATIBILITY.md)已于2026-11-05由用户拒绝，不再待实施；本次未重验兼容性，也不将拒绝记录为修复。
 - Live Doubao image analysis remains unverified until a rotated secret and accessible test images are supplied.
 - BUG-005/006 的故障注入及分类回归目前仅在本地隔离环境验证，未重新部署或执行真实云端/MySQL
   故障恢复验收。取消中的 Provider 失败竞争（CR-004）已在BUG-009本地修复；媒体路径清理
@@ -421,7 +472,7 @@ BUG-010 本地实现已通过微信开发者工具 registered AppID preview 编�
 
 ## Change references
 
-- 2026-10-16 — [`BUG-SPEC-20261016-REVIEW-SUBJECT-ORDER-01`](../../../specs/active/BUG-029-REVIEW-SUBJECT-ORDER.md)：恢复反馈后的科目组序，未改SQL/Schema/选题；[证据](../../quality/evidence/REVIEW-SUBJECT-ORDER-20261016.md)及[发布状态](../../deploy/releases/20261016-review-subject-order-backend.md)区分本地与云端。
+- 2026-10-16 — [`BUG-SPEC-20261016-REVIEW-SUBJECT-ORDER-01`](../../../specs/completed/BUG-029-REVIEW-SUBJECT-ORDER.md)：恢复反馈后的科目组序，未改SQL/Schema/选题；[证据](../../quality/evidence/REVIEW-SUBJECT-ORDER-20261016.md)及[发布状态](../../deploy/releases/20261016-review-subject-order-backend.md)区分本地与云端。
 
 - 2026-10-06 — `SPEC-20261006-SOURCE-DELETE-02 / DREV-20261006-SOURCE-DELETE-01`：本地实现Today精确原图、
   单知识删除、关联/计划/通知一致性；验证与未完成门禁见 `docs/quality/evidence/SOURCE-DELETE-20261006.md`。
@@ -608,7 +659,7 @@ BUG-010 本地实现已通过微信开发者工具 registered AppID preview 编�
 - `CLOUD-SPEC-20260903-03`: WeChat Cloud Hosting callContainer, trusted actor binding, MySQL/Alembic,
   private object-storage ticket/claim and single-instance staging Worker.
 - `WX-API-BASELINE-20260905-01 / BUG-SPEC-20260905-02`: current `wx.*` inventory, minimum base-library
-  recommendation and proposed compatibility/permission/error/upload recovery hardening; implementation pending approval.
+  recommendation and historical compatibility/permission/error/upload recovery proposal; rejected by the user on 2026-11-05, no longer pending implementation. See [closure](../../../specs/rejected/BUG-004-WECHAT-MINIPROGRAM-API-COMPATIBILITY.md).
 - `BUG-005 / BUG-SPEC-20260905-03`: Worker 循环恢复、清理隔离、任务准备异常保护和执行器 readiness。
 - `BUG-006 / BUG-SPEC-20260905-04`: 服务端活动分类边界，以及历史活动 Review 的读写和统计隔离。
 - `BUG-007 / BUG-SPEC-20260905-05`: 六项 P2 修复（CR-010–015），上传恢复、UTC 时间、模型证据、

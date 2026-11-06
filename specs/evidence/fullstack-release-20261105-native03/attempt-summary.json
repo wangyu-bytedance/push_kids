@@ -1,0 +1,66 @@
+{
+  "attempts": [
+    {
+      "folder": "native-workday-full-320",
+      "node_files": 16,
+      "png_files": 0,
+      "node_error_cases": 0,
+      "capture_statuses": [
+        "FAIL: App.captureScreenshot timed out",
+        "NOT_RUN_AFTER_CAPTURE_FAILURE: App.captureScreenshot timed out"
+      ],
+      "full_capture": false
+    },
+    {
+      "folder": "native-workday-full-320-unlocked",
+      "node_files": 16,
+      "png_files": 16,
+      "node_error_cases": 0,
+      "capture_statuses": [
+        "CAPTURED_REQUIRES_VISUAL_REVIEW"
+      ],
+      "full_capture": true
+    },
+    {
+      "folder": "native-workday-full-390-unlocked",
+      "node_files": 0,
+      "png_files": 0,
+      "node_error_cases": 0,
+      "capture_statuses": [],
+      "full_capture": false
+    },
+    {
+      "folder": "native-workday-full-390-modal-cleared",
+      "node_files": 16,
+      "png_files": 0,
+      "node_error_cases": 0,
+      "capture_statuses": [
+        "FAIL: App.captureScreenshot timed out",
+        "NOT_RUN_AFTER_CAPTURE_FAILURE: App.captureScreenshot timed out"
+      ],
+      "full_capture": false
+    },
+    {
+      "folder": "native-workday-full-390-reconnected",
+      "node_files": 16,
+      "png_files": 16,
+      "node_error_cases": 0,
+      "capture_statuses": [
+        "CAPTURED_REQUIRES_VISUAL_REVIEW"
+      ],
+      "full_capture": true
+    },
+    {
+      "folder": "native-workday-full-430-reconnected",
+      "node_files": 16,
+      "png_files": 16,
+      "node_error_cases": 0,
+      "capture_statuses": [
+        "CAPTURED_REQUIRES_VISUAL_REVIEW"
+      ],
+      "full_capture": true
+    }
+  ],
+  "zero_exit_does_not_prove_screenshot_pass": true,
+  "original_logs_private": true
+}

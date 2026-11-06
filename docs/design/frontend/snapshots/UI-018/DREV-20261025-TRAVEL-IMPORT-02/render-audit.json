@@ -1,0 +1,1673 @@
+{
+  "status": "PASS",
+  "scope": "candidate design HTML only; no production/native/system-picker/device acceptance",
+  "revision": "DREV-20261025-TRAVEL-IMPORT-02",
+  "source_sha256": "4761538253e21b85f4ac255b36576cfb3e1620c40589367931350427a641e918",
+  "exports": [
+    {
+      "file": "entry-320x568.png",
+      "state": "entry",
+      "viewport": [
+        320,
+        568
+      ],
+      "sha256": "ea7596743bad147758d852ef669a839ea722f88a74f1625a71366c4e4ab21a5c"
+    },
+    {
+      "file": "selecting-320x568.png",
+      "state": "selecting",
+      "viewport": [
+        320,
+        568
+      ],
+      "sha256": "5943210078e3e13b3443879f7b3d3f93b567d8e98ba30b7e7f63c6bbfb503009"
+    },
+    {
+      "file": "uploading-320x568.png",
+      "state": "uploading",
+      "viewport": [
+        320,
+        568
+      ],
+      "sha256": "f3a795c4d0eaa27440b7dc350ead37d82747b5cfae6b3595ff0105c9c4a3ebfa"
+    },
+    {
+      "file": "upload-error-320x568.png",
+      "state": "upload-error",
+      "viewport": [
+        320,
+        568
+      ],
+      "sha256": "cd9cb789e25608ace824028c739d385257f0f9aa381dc307ca7b3d1f3a15ee5d"
+    },
+    {
+      "file": "settings-320x568.png",
+      "state": "settings",
+      "viewport": [
+        320,
+        568
+      ],
+      "sha256": "be9c23506430d9a02e8eb6cdff3824e00948a8d724d02e2cb4992a21240ba590"
+    },
+    {
+      "file": "entry-390x844.png",
+      "state": "entry",
+      "viewport": [
+        390,
+        844
+      ],
+      "sha256": "b050134e9f774551b20d1d0b04169d7f3c1729c0e5ffae5f31a0b6733c150710"
+    },
+    {
+      "file": "selecting-390x844.png",
+      "state": "selecting",
+      "viewport": [
+        390,
+        844
+      ],
+      "sha256": "73a0e88d9c90ae4c24b779da6552d72c40a1f3e4dc3ca016afaa5c87d08447d5"
+    },
+    {
+      "file": "uploading-390x844.png",
+      "state": "uploading",
+      "viewport": [
+        390,
+        844
+      ],
+      "sha256": "57d3aca0d1080abf0c47e31b406fbbea63a2513937dbbacb8502a745d96579ec"
+    },
+    {
+      "file": "upload-error-390x844.png",
+      "state": "upload-error",
+      "viewport": [
+        390,
+        844
+      ],
+      "sha256": "296b104c6733a9920ba149a0b22541a2712c73645549607610193d45951fa3d8"
+    },
+    {
+      "file": "settings-390x844.png",
+      "state": "settings",
+      "viewport": [
+        390,
+        844
+      ],
+      "sha256": "39c51de4a6dc3858207f545a041facbd6b0bb8332bd06ea3396bf575256ae363"
+    },
+    {
+      "file": "entry-430x932.png",
+      "state": "entry",
+      "viewport": [
+        430,
+        932
+      ],
+      "sha256": "91f32188511b373bd0eef905a47181ad9ff70fdad616ec2163e84ee9d1a7f6b0"
+    },
+    {
+      "file": "selecting-430x932.png",
+      "state": "selecting",
+      "viewport": [
+        430,
+        932
+      ],
+      "sha256": "8ee98176bba5cb7df5920a5ca9e2c555cef4cd871c863c260ee44daa01f29bed"
+    },
+    {
+      "file": "uploading-430x932.png",
+      "state": "uploading",
+      "viewport": [
+        430,
+        932
+      ],
+      "sha256": "f9b6f6d6356cdf7db86e3b9b250e6a58bee278c95d23d5538e08daa5cedad766"
+    },
+    {
+      "file": "upload-error-430x932.png",
+      "state": "upload-error",
+      "viewport": [
+        430,
+        932
+      ],
+      "sha256": "03935088534c33775244448ef03febe56c54ffe05cba2cf62e500b40999c7778"
+    },
+    {
+      "file": "settings-430x932.png",
+      "state": "settings",
+      "viewport": [
+        430,
+        932
+      ],
+      "sha256": "2731b31be3f34e38a335cc82b1e2d7d82940922c229e8226410d47526b17a662"
+    }
+  ],
+  "audits": [
+    {
+      "state": "entry",
+      "viewport": [
+        320,
+        568
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "旅行日记",
+          "left": 12,
+          "right": 124,
+          "top": -36,
+          "bottom": 8,
+          "width": 112,
+          "height": 44,
+          "font": 22
+        },
+        {
+          "label": "六六六",
+          "left": 194,
+          "right": 308,
+          "top": -36,
+          "bottom": 8,
+          "width": 114,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "更多足迹操作",
+          "left": 262,
+          "right": 308,
+          "top": 21.1875,
+          "bottom": 65.578125,
+          "width": 46,
+          "height": 44.390625,
+          "font": 14
+        },
+        {
+          "label": "时间线",
+          "left": 15,
+          "right": 111.65625,
+          "top": 81.78125,
+          "bottom": 125.78125,
+          "width": 96.65625,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "轨迹回放",
+          "left": 111.65625,
+          "right": 208.328125,
+          "top": 81.78125,
+          "bottom": 125.78125,
+          "width": 96.671875,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "地图点亮",
+          "left": 208.328125,
+          "right": 304.984375,
+          "top": 81.78125,
+          "bottom": 125.78125,
+          "width": 96.65625,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "查看待整理照片",
+          "left": 12,
+          "right": 308,
+          "top": 128.78125,
+          "bottom": 172.78125,
+          "width": 296,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "手动记录",
+          "left": 120,
+          "right": 200,
+          "top": 325.28125,
+          "bottom": 369.28125,
+          "width": 80,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "导入照片",
+          "left": 12,
+          "right": 308,
+          "top": 412.78125,
+          "bottom": 460.78125,
+          "width": 296,
+          "height": 48,
+          "font": 16
+        },
+        {
+          "label": "今日",
+          "left": 8,
+          "right": 68.796875,
+          "top": 485.609375,
+          "bottom": 544,
+          "width": 60.796875,
+          "height": 58.390625,
+          "font": 14
+        },
+        {
+          "label": "日程",
+          "left": 68.796875,
+          "right": 129.609375,
+          "top": 485.609375,
+          "bottom": 544,
+          "width": 60.8125,
+          "height": 58.390625,
+          "font": 14
+        },
+        {
+          "label": "记录",
+          "left": 129.609375,
+          "right": 190.40625,
+          "top": 485.609375,
+          "bottom": 544,
+          "width": 60.796875,
+          "height": 58.390625,
+          "font": 14
+        },
+        {
+          "label": "报表",
+          "left": 190.40625,
+          "right": 251.203125,
+          "top": 485.609375,
+          "bottom": 544,
+          "width": 60.796875,
+          "height": 58.390625,
+          "font": 14
+        },
+        {
+          "label": "设置",
+          "left": 251.203125,
+          "right": 312,
+          "top": 485.609375,
+          "bottom": 544,
+          "width": 60.796875,
+          "height": 58.390625,
+          "font": 14
+        }
+      ],
+      "sheet": null,
+      "primary": [
+        {
+          "left": 12,
+          "right": 308,
+          "top": 412.78125,
+          "bottom": 460.78125,
+          "width": 296,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "tabTop": 476.609375,
+      "scrollTop": 100
+    },
+    {
+      "state": "selecting",
+      "viewport": [
+        320,
+        568
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "旅行日记",
+          "left": 12,
+          "right": 124,
+          "top": -36,
+          "bottom": 8,
+          "width": 112,
+          "height": 44,
+          "font": 22
+        },
+        {
+          "label": "六六六",
+          "left": 194,
+          "right": 308,
+          "top": -36,
+          "bottom": 8,
+          "width": 114,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "更多足迹操作",
+          "left": 262,
+          "right": 308,
+          "top": 21.1875,
+          "bottom": 65.578125,
+          "width": 46,
+          "height": 44.390625,
+          "font": 14
+        },
+        {
+          "label": "时间线",
+          "left": 15,
+          "right": 111.65625,
+          "top": 81.78125,
+          "bottom": 125.78125,
+          "width": 96.65625,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "轨迹回放",
+          "left": 111.65625,
+          "right": 208.328125,
+          "top": 81.78125,
+          "bottom": 125.78125,
+          "width": 96.671875,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "地图点亮",
+          "left": 208.328125,
+          "right": 304.984375,
+          "top": 81.78125,
+          "bottom": 125.78125,
+          "width": 96.65625,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "查看待整理照片",
+          "left": 12,
+          "right": 308,
+          "top": 128.78125,
+          "bottom": 172.78125,
+          "width": 296,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "手动记录",
+          "left": 120,
+          "right": 200,
+          "top": 325.28125,
+          "bottom": 369.28125,
+          "width": 80,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "正在选择照片…",
+          "left": 12,
+          "right": 308,
+          "top": 412.78125,
+          "bottom": 460.78125,
+          "width": 296,
+          "height": 48,
+          "font": 16
+        },
+        {
+          "label": "今日",
+          "left": 8,
+          "right": 68.796875,
+          "top": 485.609375,
+          "bottom": 544,
+          "width": 60.796875,
+          "height": 58.390625,
+          "font": 14
+        },
+        {
+          "label": "日程",
+          "left": 68.796875,
+          "right": 129.609375,
+          "top": 485.609375,
+          "bottom": 544,
+          "width": 60.8125,
+          "height": 58.390625,
+          "font": 14
+        },
+        {
+          "label": "记录",
+          "left": 129.609375,
+          "right": 190.40625,
+          "top": 485.609375,
+          "bottom": 544,
+          "width": 60.796875,
+          "height": 58.390625,
+          "font": 14
+        },
+        {
+          "label": "报表",
+          "left": 190.40625,
+          "right": 251.203125,
+          "top": 485.609375,
+          "bottom": 544,
+          "width": 60.796875,
+          "height": 58.390625,
+          "font": 14
+        },
+        {
+          "label": "设置",
+          "left": 251.203125,
+          "right": 312,
+          "top": 485.609375,
+          "bottom": 544,
+          "width": 60.796875,
+          "height": 58.390625,
+          "font": 14
+        }
+      ],
+      "sheet": null,
+      "primary": [
+        {
+          "left": 12,
+          "right": 308,
+          "top": 412.78125,
+          "bottom": 460.78125,
+          "width": 296,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "tabTop": 476.609375,
+      "scrollTop": 100
+    },
+    {
+      "state": "uploading",
+      "viewport": [
+        320,
+        568
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "关闭面板",
+          "left": 256,
+          "right": 304,
+          "top": 351.609375,
+          "bottom": 399.609375,
+          "width": 48,
+          "height": 48,
+          "font": 14
+        },
+        {
+          "label": "正在上传 67%",
+          "left": 16,
+          "right": 304,
+          "top": 500,
+          "bottom": 548,
+          "width": 288,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "sheet": {
+        "left": 0,
+        "right": 320,
+        "top": 343.609375,
+        "bottom": 568,
+        "width": 320,
+        "height": 224.390625,
+        "font": 14
+      },
+      "primary": [
+        {
+          "left": 16,
+          "right": 304,
+          "top": 500,
+          "bottom": 548,
+          "width": 288,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "tabTop": 476.609375,
+      "scrollTop": 0
+    },
+    {
+      "state": "upload-error",
+      "viewport": [
+        320,
+        568
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "关闭面板",
+          "left": 256,
+          "right": 304,
+          "top": 297.21875,
+          "bottom": 345.21875,
+          "width": 48,
+          "height": 48,
+          "font": 14
+        },
+        {
+          "label": "重试未完成上传",
+          "left": 16,
+          "right": 304,
+          "top": 456,
+          "bottom": 504,
+          "width": 288,
+          "height": 48,
+          "font": 16
+        },
+        {
+          "label": "核对已上传照片",
+          "left": 16,
+          "right": 304,
+          "top": 504,
+          "bottom": 548,
+          "width": 288,
+          "height": 44,
+          "font": 14
+        }
+      ],
+      "sheet": {
+        "left": 0,
+        "right": 320,
+        "top": 289.21875,
+        "bottom": 568,
+        "width": 320,
+        "height": 278.78125,
+        "font": 14
+      },
+      "primary": [
+        {
+          "left": 16,
+          "right": 304,
+          "top": 456,
+          "bottom": 504,
+          "width": 288,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "tabTop": 476.609375,
+      "scrollTop": 0
+    },
+    {
+      "state": "settings",
+      "viewport": [
+        320,
+        568
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "关闭面板",
+          "left": 256,
+          "right": 304,
+          "top": 350,
+          "bottom": 398,
+          "width": 48,
+          "height": 48,
+          "font": 14
+        },
+        {
+          "label": "AI 地点候选",
+          "left": 256,
+          "right": 304,
+          "top": 425,
+          "bottom": 469,
+          "width": 48,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "保存设置",
+          "left": 16,
+          "right": 304,
+          "top": 500,
+          "bottom": 548,
+          "width": 288,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "sheet": {
+        "left": 0,
+        "right": 320,
+        "top": 342,
+        "bottom": 568,
+        "width": 320,
+        "height": 226,
+        "font": 14
+      },
+      "primary": [
+        {
+          "left": 16,
+          "right": 304,
+          "top": 500,
+          "bottom": 548,
+          "width": 288,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "tabTop": 476.609375,
+      "scrollTop": 0
+    },
+    {
+      "state": "entry",
+      "viewport": [
+        390,
+        844
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "旅行日记",
+          "left": 16,
+          "right": 128,
+          "top": 72,
+          "bottom": 116,
+          "width": 112,
+          "height": 44,
+          "font": 22
+        },
+        {
+          "label": "六六六",
+          "left": 260,
+          "right": 374,
+          "top": 72,
+          "bottom": 116,
+          "width": 114,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "更多足迹操作",
+          "left": 328,
+          "right": 374,
+          "top": 136,
+          "bottom": 180.390625,
+          "width": 46,
+          "height": 44.390625,
+          "font": 14
+        },
+        {
+          "label": "时间线",
+          "left": 19,
+          "right": 136.328125,
+          "top": 195.390625,
+          "bottom": 239.390625,
+          "width": 117.328125,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "轨迹回放",
+          "left": 136.328125,
+          "right": 253.65625,
+          "top": 195.390625,
+          "bottom": 239.390625,
+          "width": 117.328125,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "地图点亮",
+          "left": 253.65625,
+          "right": 371,
+          "top": 195.390625,
+          "bottom": 239.390625,
+          "width": 117.34375,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "查看待整理照片",
+          "left": 16,
+          "right": 374,
+          "top": 242.390625,
+          "bottom": 286.390625,
+          "width": 358,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "手动记录",
+          "left": 155,
+          "right": 235,
+          "top": 438.890625,
+          "bottom": 482.890625,
+          "width": 80,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "导入照片",
+          "left": 16,
+          "right": 374,
+          "top": 526.390625,
+          "bottom": 574.390625,
+          "width": 358,
+          "height": 48,
+          "font": 16
+        },
+        {
+          "label": "今日",
+          "left": 8,
+          "right": 82.796875,
+          "top": 761.609375,
+          "bottom": 820,
+          "width": 74.796875,
+          "height": 58.390625,
+          "font": 14
+        },
+        {
+          "label": "日程",
+          "left": 82.796875,
+          "right": 157.609375,
+          "top": 761.609375,
+          "bottom": 820,
+          "width": 74.8125,
+          "height": 58.390625,
+          "font": 14
+        },
+        {
+          "label": "记录",
+          "left": 157.609375,
+          "right": 232.40625,
+          "top": 761.609375,
+          "bottom": 820,
+          "width": 74.796875,
+          "height": 58.390625,
+          "font": 14
+        },
+        {
+          "label": "报表",
+          "left": 232.40625,
+          "right": 307.203125,
+          "top": 761.609375,
+          "bottom": 820,
+          "width": 74.796875,
+          "height": 58.390625,
+          "font": 14
+        },
+        {
+          "label": "设置",
+          "left": 307.203125,
+          "right": 382,
+          "top": 761.609375,
+          "bottom": 820,
+          "width": 74.796875,
+          "height": 58.390625,
+          "font": 14
+        }
+      ],
+      "sheet": null,
+      "primary": [
+        {
+          "left": 16,
+          "right": 374,
+          "top": 526.390625,
+          "bottom": 574.390625,
+          "width": 358,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "tabTop": 752.609375,
+      "scrollTop": 0
+    },
+    {
+      "state": "selecting",
+      "viewport": [
+        390,
+        844
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "旅行日记",
+          "left": 16,
+          "right": 128,
+          "top": 72,
+          "bottom": 116,
+          "width": 112,
+          "height": 44,
+          "font": 22
+        },
+        {
+          "label": "六六六",
+          "left": 260,
+          "right": 374,
+          "top": 72,
+          "bottom": 116,
+          "width": 114,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "更多足迹操作",
+          "left": 328,
+          "right": 374,
+          "top": 136,
+          "bottom": 180.390625,
+          "width": 46,
+          "height": 44.390625,
+          "font": 14
+        },
+        {
+          "label": "时间线",
+          "left": 19,
+          "right": 136.328125,
+          "top": 195.390625,
+          "bottom": 239.390625,
+          "width": 117.328125,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "轨迹回放",
+          "left": 136.328125,
+          "right": 253.65625,
+          "top": 195.390625,
+          "bottom": 239.390625,
+          "width": 117.328125,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "地图点亮",
+          "left": 253.65625,
+          "right": 371,
+          "top": 195.390625,
+          "bottom": 239.390625,
+          "width": 117.34375,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "查看待整理照片",
+          "left": 16,
+          "right": 374,
+          "top": 242.390625,
+          "bottom": 286.390625,
+          "width": 358,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "手动记录",
+          "left": 155,
+          "right": 235,
+          "top": 438.890625,
+          "bottom": 482.890625,
+          "width": 80,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "正在选择照片…",
+          "left": 16,
+          "right": 374,
+          "top": 526.390625,
+          "bottom": 574.390625,
+          "width": 358,
+          "height": 48,
+          "font": 16
+        },
+        {
+          "label": "今日",
+          "left": 8,
+          "right": 82.796875,
+          "top": 761.609375,
+          "bottom": 820,
+          "width": 74.796875,
+          "height": 58.390625,
+          "font": 14
+        },
+        {
+          "label": "日程",
+          "left": 82.796875,
+          "right": 157.609375,
+          "top": 761.609375,
+          "bottom": 820,
+          "width": 74.8125,
+          "height": 58.390625,
+          "font": 14
+        },
+        {
+          "label": "记录",
+          "left": 157.609375,
+          "right": 232.40625,
+          "top": 761.609375,
+          "bottom": 820,
+          "width": 74.796875,
+          "height": 58.390625,
+          "font": 14
+        },
+        {
+          "label": "报表",
+          "left": 232.40625,
+          "right": 307.203125,
+          "top": 761.609375,
+          "bottom": 820,
+          "width": 74.796875,
+          "height": 58.390625,
+          "font": 14
+        },
+        {
+          "label": "设置",
+          "left": 307.203125,
+          "right": 382,
+          "top": 761.609375,
+          "bottom": 820,
+          "width": 74.796875,
+          "height": 58.390625,
+          "font": 14
+        }
+      ],
+      "sheet": null,
+      "primary": [
+        {
+          "left": 16,
+          "right": 374,
+          "top": 526.390625,
+          "bottom": 574.390625,
+          "width": 358,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "tabTop": 752.609375,
+      "scrollTop": 0
+    },
+    {
+      "state": "uploading",
+      "viewport": [
+        390,
+        844
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "关闭面板",
+          "left": 326,
+          "right": 374,
+          "top": 619.609375,
+          "bottom": 667.609375,
+          "width": 48,
+          "height": 48,
+          "font": 14
+        },
+        {
+          "label": "正在上传 67%",
+          "left": 16,
+          "right": 374,
+          "top": 768,
+          "bottom": 816,
+          "width": 358,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "sheet": {
+        "left": 0,
+        "right": 390,
+        "top": 611.609375,
+        "bottom": 844,
+        "width": 390,
+        "height": 232.390625,
+        "font": 14
+      },
+      "primary": [
+        {
+          "left": 16,
+          "right": 374,
+          "top": 768,
+          "bottom": 816,
+          "width": 358,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "tabTop": 752.609375,
+      "scrollTop": 0
+    },
+    {
+      "state": "upload-error",
+      "viewport": [
+        390,
+        844
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "关闭面板",
+          "left": 326,
+          "right": 374,
+          "top": 565.21875,
+          "bottom": 613.21875,
+          "width": 48,
+          "height": 48,
+          "font": 14
+        },
+        {
+          "label": "重试未完成上传",
+          "left": 16,
+          "right": 374,
+          "top": 724,
+          "bottom": 772,
+          "width": 358,
+          "height": 48,
+          "font": 16
+        },
+        {
+          "label": "核对已上传照片",
+          "left": 16,
+          "right": 374,
+          "top": 772,
+          "bottom": 816,
+          "width": 358,
+          "height": 44,
+          "font": 14
+        }
+      ],
+      "sheet": {
+        "left": 0,
+        "right": 390,
+        "top": 557.21875,
+        "bottom": 844,
+        "width": 390,
+        "height": 286.78125,
+        "font": 14
+      },
+      "primary": [
+        {
+          "left": 16,
+          "right": 374,
+          "top": 724,
+          "bottom": 772,
+          "width": 358,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "tabTop": 752.609375,
+      "scrollTop": 0
+    },
+    {
+      "state": "settings",
+      "viewport": [
+        390,
+        844
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "关闭面板",
+          "left": 326,
+          "right": 374,
+          "top": 618,
+          "bottom": 666,
+          "width": 48,
+          "height": 48,
+          "font": 14
+        },
+        {
+          "label": "AI 地点候选",
+          "left": 326,
+          "right": 374,
+          "top": 693,
+          "bottom": 737,
+          "width": 48,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "保存设置",
+          "left": 16,
+          "right": 374,
+          "top": 768,
+          "bottom": 816,
+          "width": 358,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "sheet": {
+        "left": 0,
+        "right": 390,
+        "top": 610,
+        "bottom": 844,
+        "width": 390,
+        "height": 234,
+        "font": 14
+      },
+      "primary": [
+        {
+          "left": 16,
+          "right": 374,
+          "top": 768,
+          "bottom": 816,
+          "width": 358,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "tabTop": 752.609375,
+      "scrollTop": 0
+    },
+    {
+      "state": "entry",
+      "viewport": [
+        430,
+        932
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "旅行日记",
+          "left": 16,
+          "right": 128,
+          "top": 72,
+          "bottom": 116,
+          "width": 112,
+          "height": 44,
+          "font": 22
+        },
+        {
+          "label": "六六六",
+          "left": 300,
+          "right": 414,
+          "top": 72,
+          "bottom": 116,
+          "width": 114,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "更多足迹操作",
+          "left": 368,
+          "right": 414,
+          "top": 136,
+          "bottom": 180.390625,
+          "width": 46,
+          "height": 44.390625,
+          "font": 14
+        },
+        {
+          "label": "时间线",
+          "left": 19,
+          "right": 149.65625,
+          "top": 195.390625,
+          "bottom": 239.390625,
+          "width": 130.65625,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "轨迹回放",
+          "left": 149.65625,
+          "right": 280.328125,
+          "top": 195.390625,
+          "bottom": 239.390625,
+          "width": 130.671875,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "地图点亮",
+          "left": 280.328125,
+          "right": 411,
+          "top": 195.390625,
+          "bottom": 239.390625,
+          "width": 130.671875,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "查看待整理照片",
+          "left": 16,
+          "right": 414,
+          "top": 242.390625,
+          "bottom": 286.390625,
+          "width": 398,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "手动记录",
+          "left": 175,
+          "right": 255,
+          "top": 438.890625,
+          "bottom": 482.890625,
+          "width": 80,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "导入照片",
+          "left": 16,
+          "right": 414,
+          "top": 526.390625,
+          "bottom": 574.390625,
+          "width": 398,
+          "height": 48,
+          "font": 16
+        },
+        {
+          "label": "今日",
+          "left": 8,
+          "right": 90.796875,
+          "top": 849.609375,
+          "bottom": 908,
+          "width": 82.796875,
+          "height": 58.390625,
+          "font": 14
+        },
+        {
+          "label": "日程",
+          "left": 90.796875,
+          "right": 173.609375,
+          "top": 849.609375,
+          "bottom": 908,
+          "width": 82.8125,
+          "height": 58.390625,
+          "font": 14
+        },
+        {
+          "label": "记录",
+          "left": 173.609375,
+          "right": 256.40625,
+          "top": 849.609375,
+          "bottom": 908,
+          "width": 82.796875,
+          "height": 58.390625,
+          "font": 14
+        },
+        {
+          "label": "报表",
+          "left": 256.40625,
+          "right": 339.203125,
+          "top": 849.609375,
+          "bottom": 908,
+          "width": 82.796875,
+          "height": 58.390625,
+          "font": 14
+        },
+        {
+          "label": "设置",
+          "left": 339.203125,
+          "right": 422,
+          "top": 849.609375,
+          "bottom": 908,
+          "width": 82.796875,
+          "height": 58.390625,
+          "font": 14
+        }
+      ],
+      "sheet": null,
+      "primary": [
+        {
+          "left": 16,
+          "right": 414,
+          "top": 526.390625,
+          "bottom": 574.390625,
+          "width": 398,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "tabTop": 840.609375,
+      "scrollTop": 0
+    },
+    {
+      "state": "selecting",
+      "viewport": [
+        430,
+        932
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "旅行日记",
+          "left": 16,
+          "right": 128,
+          "top": 72,
+          "bottom": 116,
+          "width": 112,
+          "height": 44,
+          "font": 22
+        },
+        {
+          "label": "六六六",
+          "left": 300,
+          "right": 414,
+          "top": 72,
+          "bottom": 116,
+          "width": 114,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "更多足迹操作",
+          "left": 368,
+          "right": 414,
+          "top": 136,
+          "bottom": 180.390625,
+          "width": 46,
+          "height": 44.390625,
+          "font": 14
+        },
+        {
+          "label": "时间线",
+          "left": 19,
+          "right": 149.65625,
+          "top": 195.390625,
+          "bottom": 239.390625,
+          "width": 130.65625,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "轨迹回放",
+          "left": 149.65625,
+          "right": 280.328125,
+          "top": 195.390625,
+          "bottom": 239.390625,
+          "width": 130.671875,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "地图点亮",
+          "left": 280.328125,
+          "right": 411,
+          "top": 195.390625,
+          "bottom": 239.390625,
+          "width": 130.671875,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "查看待整理照片",
+          "left": 16,
+          "right": 414,
+          "top": 242.390625,
+          "bottom": 286.390625,
+          "width": 398,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "手动记录",
+          "left": 175,
+          "right": 255,
+          "top": 438.890625,
+          "bottom": 482.890625,
+          "width": 80,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "正在选择照片…",
+          "left": 16,
+          "right": 414,
+          "top": 526.390625,
+          "bottom": 574.390625,
+          "width": 398,
+          "height": 48,
+          "font": 16
+        },
+        {
+          "label": "今日",
+          "left": 8,
+          "right": 90.796875,
+          "top": 849.609375,
+          "bottom": 908,
+          "width": 82.796875,
+          "height": 58.390625,
+          "font": 14
+        },
+        {
+          "label": "日程",
+          "left": 90.796875,
+          "right": 173.609375,
+          "top": 849.609375,
+          "bottom": 908,
+          "width": 82.8125,
+          "height": 58.390625,
+          "font": 14
+        },
+        {
+          "label": "记录",
+          "left": 173.609375,
+          "right": 256.40625,
+          "top": 849.609375,
+          "bottom": 908,
+          "width": 82.796875,
+          "height": 58.390625,
+          "font": 14
+        },
+        {
+          "label": "报表",
+          "left": 256.40625,
+          "right": 339.203125,
+          "top": 849.609375,
+          "bottom": 908,
+          "width": 82.796875,
+          "height": 58.390625,
+          "font": 14
+        },
+        {
+          "label": "设置",
+          "left": 339.203125,
+          "right": 422,
+          "top": 849.609375,
+          "bottom": 908,
+          "width": 82.796875,
+          "height": 58.390625,
+          "font": 14
+        }
+      ],
+      "sheet": null,
+      "primary": [
+        {
+          "left": 16,
+          "right": 414,
+          "top": 526.390625,
+          "bottom": 574.390625,
+          "width": 398,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "tabTop": 840.609375,
+      "scrollTop": 0
+    },
+    {
+      "state": "uploading",
+      "viewport": [
+        430,
+        932
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "关闭面板",
+          "left": 366,
+          "right": 414,
+          "top": 707.609375,
+          "bottom": 755.609375,
+          "width": 48,
+          "height": 48,
+          "font": 14
+        },
+        {
+          "label": "正在上传 67%",
+          "left": 16,
+          "right": 414,
+          "top": 856,
+          "bottom": 904,
+          "width": 398,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "sheet": {
+        "left": 0,
+        "right": 430,
+        "top": 699.609375,
+        "bottom": 932,
+        "width": 430,
+        "height": 232.390625,
+        "font": 14
+      },
+      "primary": [
+        {
+          "left": 16,
+          "right": 414,
+          "top": 856,
+          "bottom": 904,
+          "width": 398,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "tabTop": 840.609375,
+      "scrollTop": 0
+    },
+    {
+      "state": "upload-error",
+      "viewport": [
+        430,
+        932
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "关闭面板",
+          "left": 366,
+          "right": 414,
+          "top": 653.21875,
+          "bottom": 701.21875,
+          "width": 48,
+          "height": 48,
+          "font": 14
+        },
+        {
+          "label": "重试未完成上传",
+          "left": 16,
+          "right": 414,
+          "top": 812,
+          "bottom": 860,
+          "width": 398,
+          "height": 48,
+          "font": 16
+        },
+        {
+          "label": "核对已上传照片",
+          "left": 16,
+          "right": 414,
+          "top": 860,
+          "bottom": 904,
+          "width": 398,
+          "height": 44,
+          "font": 14
+        }
+      ],
+      "sheet": {
+        "left": 0,
+        "right": 430,
+        "top": 645.21875,
+        "bottom": 932,
+        "width": 430,
+        "height": 286.78125,
+        "font": 14
+      },
+      "primary": [
+        {
+          "left": 16,
+          "right": 414,
+          "top": 812,
+          "bottom": 860,
+          "width": 398,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "tabTop": 840.609375,
+      "scrollTop": 0
+    },
+    {
+      "state": "settings",
+      "viewport": [
+        430,
+        932
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "关闭面板",
+          "left": 366,
+          "right": 414,
+          "top": 706,
+          "bottom": 754,
+          "width": 48,
+          "height": 48,
+          "font": 14
+        },
+        {
+          "label": "AI 地点候选",
+          "left": 366,
+          "right": 414,
+          "top": 781,
+          "bottom": 825,
+          "width": 48,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "保存设置",
+          "left": 16,
+          "right": 414,
+          "top": 856,
+          "bottom": 904,
+          "width": 398,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "sheet": {
+        "left": 0,
+        "right": 430,
+        "top": 698,
+        "bottom": 932,
+        "width": 430,
+        "height": 234,
+        "font": 14
+      },
+      "primary": [
+        {
+          "left": 16,
+          "right": 414,
+          "top": 856,
+          "bottom": 904,
+          "width": 398,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "tabTop": 840.609375,
+      "scrollTop": 0
+    }
+  ],
+  "interaction_viewports": [
+    [
+      320,
+      568
+    ],
+    [
+      390,
+      844
+    ],
+    [
+      430,
+      932
+    ]
+  ],
+  "page_errors": [],
+  "network_requests": 0
+}

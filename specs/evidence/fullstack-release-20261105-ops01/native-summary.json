@@ -1,0 +1,551 @@
+{
+  "state_node_png_pairs": 38,
+  "extra_modal_underlay_capture": 1,
+  "modal_ax_observed": {
+    "viewport": 390,
+    "title": "synthetic archive confirmation",
+    "cancel_action": "dialog nodes removed after actual CUA Cancel click"
+  },
+  "modal_visual": "NOT_VERIFIED; App.captureScreenshot excludes native modal",
+  "blocked": "Mac locked before archive320 switch; tool could not auto-unlock",
+  "full_device_and_action_acceptance": "PARTIAL",
+  "entries": [
+    {
+      "json": "native/native-copy-320/calendar-coverage-320.json",
+      "png": "native/native-copy-320/calendar-coverage-320.png",
+      "screenshot_sha256": "99a4da82926fddc7cf20d4b1caeb1abbeba9b4dc3a19945a432624044cc4058d",
+      "state_geometry": "PASS",
+      "visual_review": "OBSERVED_SYNTHETIC_LAYOUT",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "pixelRatio": 2
+      }
+    },
+    {
+      "json": "native/native-copy-320/calendar-create-320.json",
+      "png": "native/native-copy-320/calendar-create-320.png",
+      "screenshot_sha256": "c833337f39d302b030db95b456fc1954ddcf810393a3c14b5315b2b4ec19e1dd",
+      "state_geometry": "PASS",
+      "visual_review": "OBSERVED_SYNTHETIC_LAYOUT",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "pixelRatio": 2
+      }
+    },
+    {
+      "json": "native/native-copy-320/calendar-edit-320.json",
+      "png": "native/native-copy-320/calendar-edit-320.png",
+      "screenshot_sha256": "cf145378d076fe99edbb3bdc4b57a07ae024bdbb280b46bc8b0c67c1aad7316e",
+      "state_geometry": "PASS",
+      "visual_review": "OBSERVED_SYNTHETIC_LAYOUT",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "pixelRatio": 2
+      }
+    },
+    {
+      "json": "native/native-copy-320/calendar-partial-coverage-320.json",
+      "png": "native/native-copy-320/calendar-partial-coverage-320.png",
+      "screenshot_sha256": "2a9aa64559c7c4636fe33432d0494040f48a76c154014136672deb0436839c88",
+      "state_geometry": "PASS",
+      "visual_review": "OBSERVED_SYNTHETIC_LAYOUT",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "pixelRatio": 2
+      }
+    },
+    {
+      "json": "native/native-copy-320/settings-coverage-320.json",
+      "png": "native/native-copy-320/settings-coverage-320.png",
+      "screenshot_sha256": "66a4eabd2e0eede5415ed2001840cda5c60cfba0586bbcf9dd0e27bc2b7b2a07",
+      "state_geometry": "PASS",
+      "visual_review": "OBSERVED_SYNTHETIC_LAYOUT",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "pixelRatio": 2
+      }
+    },
+    {
+      "json": "native/native-copy-320/settings-workday-320.json",
+      "png": "native/native-copy-320/settings-workday-320.png",
+      "screenshot_sha256": "66a4eabd2e0eede5415ed2001840cda5c60cfba0586bbcf9dd0e27bc2b7b2a07",
+      "state_geometry": "PASS",
+      "visual_review": "OBSERVED_SYNTHETIC_LAYOUT",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "pixelRatio": 2
+      }
+    },
+    {
+      "json": "native/native-copy-320/today-coverage-320.json",
+      "png": "native/native-copy-320/today-coverage-320.png",
+      "screenshot_sha256": "8647528d575979cf92d1a15d6ee7c8451b9b58f1d2a129cd55e1dd93f148cb71",
+      "state_geometry": "PASS",
+      "visual_review": "OBSERVED_SYNTHETIC_LAYOUT",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "pixelRatio": 2
+      }
+    },
+    {
+      "json": "native/native-copy-320/today-partial-coverage-320.json",
+      "png": "native/native-copy-320/today-partial-coverage-320.png",
+      "screenshot_sha256": "5801601106318d3d38a98356f20d8e265163b9b9fca73a16f387e631384cfcae",
+      "state_geometry": "PASS",
+      "visual_review": "OBSERVED_SYNTHETIC_LAYOUT",
+      "viewport": {
+        "width": 320,
+        "height": 568,
+        "screenHeight": 568,
+        "pixelRatio": 2
+      }
+    },
+    {
+      "json": "native/native-copy-390/calendar-coverage-390.json",
+      "png": "native/native-copy-390/calendar-coverage-390.png",
+      "screenshot_sha256": "1ec712187dcf56293126fe942bf1c2fdbe42ea33760fb033b28938a1adfc6103",
+      "state_geometry": "PASS",
+      "visual_review": "OBSERVED_SYNTHETIC_LAYOUT",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "pixelRatio": 3
+      }
+    },
+    {
+      "json": "native/native-copy-390/calendar-create-390.json",
+      "png": "native/native-copy-390/calendar-create-390.png",
+      "screenshot_sha256": "a1a550e24921eb50a5c2cfac7bd5f16cdd731a4840208b88fe056e7fefb45376",
+      "state_geometry": "PASS",
+      "visual_review": "OBSERVED_SYNTHETIC_LAYOUT",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "pixelRatio": 3
+      }
+    },
+    {
+      "json": "native/native-copy-390/calendar-edit-390.json",
+      "png": "native/native-copy-390/calendar-edit-390.png",
+      "screenshot_sha256": "9079db8046938ef12563e989a5a887d7d1a658b28d1fec9bc61e9f47e50440e5",
+      "state_geometry": "PASS",
+      "visual_review": "OBSERVED_SYNTHETIC_LAYOUT",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "pixelRatio": 3
+      }
+    },
+    {
+      "json": "native/native-copy-390/calendar-partial-coverage-390.json",
+      "png": "native/native-copy-390/calendar-partial-coverage-390.png",
+      "screenshot_sha256": "0e06bb3f24f07ef20972883db56eb6c2781cd76d357fb6b8d5dd17e76a32ce94",
+      "state_geometry": "PASS",
+      "visual_review": "OBSERVED_SYNTHETIC_LAYOUT",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "pixelRatio": 3
+      }
+    },
+    {
+      "json": "native/native-copy-390/settings-coverage-390.json",
+      "png": "native/native-copy-390/settings-coverage-390.png",
+      "screenshot_sha256": "a26dc6ac2612e65c736fda3a88142ac107a589f3b742a87a50661512f7d2e01b",
+      "state_geometry": "PASS",
+      "visual_review": "OBSERVED_SYNTHETIC_LAYOUT",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "pixelRatio": 3
+      }
+    },
+    {
+      "json": "native/native-copy-390/settings-workday-390.json",
+      "png": "native/native-copy-390/settings-workday-390.png",
+      "screenshot_sha256": "a26dc6ac2612e65c736fda3a88142ac107a589f3b742a87a50661512f7d2e01b",
+      "state_geometry": "PASS",
+      "visual_review": "OBSERVED_SYNTHETIC_LAYOUT",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "pixelRatio": 3
+      }
+    },
+    {
+      "json": "native/native-copy-390/today-coverage-390.json",
+      "png": "native/native-copy-390/today-coverage-390.png",
+      "screenshot_sha256": "d41f7c17a6e3a9aefa62a219c6e6091d46b5b9f78f816c76efa5d4958c955a68",
+      "state_geometry": "PASS",
+      "visual_review": "OBSERVED_SYNTHETIC_LAYOUT",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "pixelRatio": 3
+      }
+    },
+    {
+      "json": "native/native-copy-390/today-partial-coverage-390.json",
+      "png": "native/native-copy-390/today-partial-coverage-390.png",
+      "screenshot_sha256": "0ecf432f0a7748a786dbb9e87d22536281a9743aa24f3884245169269e468e96",
+      "state_geometry": "PASS",
+      "visual_review": "OBSERVED_SYNTHETIC_LAYOUT",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "pixelRatio": 3
+      }
+    },
+    {
+      "json": "native/native-copy-430/calendar-coverage-430.json",
+      "png": "native/native-copy-430/calendar-coverage-430.png",
+      "screenshot_sha256": "d2da16d9e8581932974c65ebc824092cc4e6f71cfd2ce5cac01691e02b363bf1",
+      "state_geometry": "PASS",
+      "visual_review": "OBSERVED_SYNTHETIC_LAYOUT",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "pixelRatio": 3
+      }
+    },
+    {
+      "json": "native/native-copy-430/calendar-create-430.json",
+      "png": "native/native-copy-430/calendar-create-430.png",
+      "screenshot_sha256": "3d54dfe48e88be58b6c11e36bd4ebb6b9ac9227347b995ebf0059bf8c822eb09",
+      "state_geometry": "PASS",
+      "visual_review": "OBSERVED_SYNTHETIC_LAYOUT",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "pixelRatio": 3
+      }
+    },
+    {
+      "json": "native/native-copy-430/calendar-edit-430.json",
+      "png": "native/native-copy-430/calendar-edit-430.png",
+      "screenshot_sha256": "a4c6625851f86769b92300899049a6edb07b7064f9b6c6409d6ab45e7f354f44",
+      "state_geometry": "PASS",
+      "visual_review": "OBSERVED_SYNTHETIC_LAYOUT",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "pixelRatio": 3
+      }
+    },
+    {
+      "json": "native/native-copy-430/calendar-partial-coverage-430.json",
+      "png": "native/native-copy-430/calendar-partial-coverage-430.png",
+      "screenshot_sha256": "46611b883e761daad16973d16d032c7b0075a87eac18b4a28ce97b8bb29c76f1",
+      "state_geometry": "PASS",
+      "visual_review": "OBSERVED_SYNTHETIC_LAYOUT",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "pixelRatio": 3
+      }
+    },
+    {
+      "json": "native/native-copy-430/settings-coverage-430.json",
+      "png": "native/native-copy-430/settings-coverage-430.png",
+      "screenshot_sha256": "9233459fe0bbe03290f426f2114c997f1d5e57c055d5e3d6124ca40223e5230f",
+      "state_geometry": "PASS",
+      "visual_review": "OBSERVED_SYNTHETIC_LAYOUT",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "pixelRatio": 3
+      }
+    },
+    {
+      "json": "native/native-copy-430/settings-workday-430.json",
+      "png": "native/native-copy-430/settings-workday-430.png",
+      "screenshot_sha256": "9233459fe0bbe03290f426f2114c997f1d5e57c055d5e3d6124ca40223e5230f",
+      "state_geometry": "PASS",
+      "visual_review": "OBSERVED_SYNTHETIC_LAYOUT",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "pixelRatio": 3
+      }
+    },
+    {
+      "json": "native/native-copy-430/today-coverage-430.json",
+      "png": "native/native-copy-430/today-coverage-430.png",
+      "screenshot_sha256": "5df53de101e07431729b9ba8f865b3d6fe1debb3a56622f58152bbdeb9aa8607",
+      "state_geometry": "PASS",
+      "visual_review": "OBSERVED_SYNTHETIC_LAYOUT",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "pixelRatio": 3
+      }
+    },
+    {
+      "json": "native/native-copy-430/today-partial-coverage-430.json",
+      "png": "native/native-copy-430/today-partial-coverage-430.png",
+      "screenshot_sha256": "513029f8f8303430d04c00a5e0da66509d50557fbf1586d7fe227d3c53e06184",
+      "state_geometry": "PASS",
+      "visual_review": "OBSERVED_SYNTHETIC_LAYOUT",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "pixelRatio": 3
+      }
+    },
+    {
+      "json": "native/archive-native/390/active.json",
+      "png": "native/archive-native/390/active.png",
+      "screenshot_sha256": "6250d273777160599b903d0137a150ad58a05b3fe025cf9503fcc6c56e4209d5",
+      "state_geometry": "PASS",
+      "visual_review": "OBSERVED_SYNTHETIC_LAYOUT",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "fontScale": 15,
+        "baseLibrary": "3.17.4"
+      }
+    },
+    {
+      "json": "native/archive-native/390/archived.json",
+      "png": "native/archive-native/390/archived.png",
+      "screenshot_sha256": "2782514eb13f64aa665ca1a38c1f71d0b6e361309f2cdc4a39f463429bac9aab",
+      "state_geometry": "PASS",
+      "visual_review": "OBSERVED_SYNTHETIC_LAYOUT",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "fontScale": 15,
+        "baseLibrary": "3.17.4"
+      }
+    },
+    {
+      "json": "native/archive-native/390/confirm-unfinished.json",
+      "png": "native/archive-native/390/confirm-unfinished.png",
+      "screenshot_sha256": "b9e8df04d1ba6788c0752866b359ab0d76d107b21e74b7c8d9b431bf5ba126e6",
+      "state_geometry": "PASS",
+      "visual_review": "UNDERLAY_ONLY_NOT_MODAL_VISUAL_PASS",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "fontScale": 15,
+        "baseLibrary": "3.17.4"
+      }
+    },
+    {
+      "json": "native/archive-native/390/editor.json",
+      "png": "native/archive-native/390/editor.png",
+      "screenshot_sha256": "d8b02105f72592f00519d2f4e6dee509dfdcb0188a1104fc3382919ed8a835cc",
+      "state_geometry": "PASS",
+      "visual_review": "OBSERVED_SYNTHETIC_LAYOUT",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "fontScale": 15,
+        "baseLibrary": "3.17.4"
+      }
+    },
+    {
+      "json": "native/archive-native/390/error.json",
+      "png": "native/archive-native/390/error.png",
+      "screenshot_sha256": "42a96551f4cf540fb2b33757ac88ff2a5c7b3641946e0700833efcb214071edb",
+      "state_geometry": "PASS",
+      "visual_review": "OBSERVED_SYNTHETIC_LAYOUT",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "fontScale": 15,
+        "baseLibrary": "3.17.4"
+      }
+    },
+    {
+      "json": "native/archive-native/390/restoring.json",
+      "png": "native/archive-native/390/restoring.png",
+      "screenshot_sha256": "f65448729ec0adbca8ac988b8113004def718ecc5f21f3495e8267639a2edd93",
+      "state_geometry": "PASS",
+      "visual_review": "OBSERVED_SYNTHETIC_LAYOUT",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "fontScale": 15,
+        "baseLibrary": "3.17.4"
+      }
+    },
+    {
+      "json": "native/archive-native/390/unfinished.json",
+      "png": "native/archive-native/390/unfinished.png",
+      "screenshot_sha256": "b9e8df04d1ba6788c0752866b359ab0d76d107b21e74b7c8d9b431bf5ba126e6",
+      "state_geometry": "PASS",
+      "visual_review": "OBSERVED_SYNTHETIC_LAYOUT",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "fontScale": 15,
+        "baseLibrary": "3.17.4"
+      }
+    },
+    {
+      "json": "native/archive-native/390/working.json",
+      "png": "native/archive-native/390/working.png",
+      "screenshot_sha256": "a69daadb86a4a3c5073c05d6864fd45aba752ce49cfe1d3a912444fb431e59b2",
+      "state_geometry": "PASS",
+      "visual_review": "OBSERVED_SYNTHETIC_LAYOUT",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "screenHeight": 844,
+        "dpr": 3,
+        "fontScale": 15,
+        "baseLibrary": "3.17.4"
+      }
+    },
+    {
+      "json": "native/archive-native/430/active.json",
+      "png": "native/archive-native/430/active.png",
+      "screenshot_sha256": "bdb497187174e7f4f2ce1a6aef0316a1f99884c1f985f79365ca322c5f364389",
+      "state_geometry": "PASS",
+      "visual_review": "OBSERVED_SYNTHETIC_LAYOUT",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "fontScale": 15,
+        "baseLibrary": "3.17.4"
+      }
+    },
+    {
+      "json": "native/archive-native/430/archived.json",
+      "png": "native/archive-native/430/archived.png",
+      "screenshot_sha256": "d2ea1c55feda8370b0126a954fa796a867c0cf1f8850ea62f381a394084e12d8",
+      "state_geometry": "PASS",
+      "visual_review": "OBSERVED_SYNTHETIC_LAYOUT",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "fontScale": 15,
+        "baseLibrary": "3.17.4"
+      }
+    },
+    {
+      "json": "native/archive-native/430/editor.json",
+      "png": "native/archive-native/430/editor.png",
+      "screenshot_sha256": "fa60481f8104b9aea5b6f8a8fb18533d6ad27d6f189ab582ad726472b85363a4",
+      "state_geometry": "PASS",
+      "visual_review": "OBSERVED_SYNTHETIC_LAYOUT",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "fontScale": 15,
+        "baseLibrary": "3.17.4"
+      }
+    },
+    {
+      "json": "native/archive-native/430/error.json",
+      "png": "native/archive-native/430/error.png",
+      "screenshot_sha256": "66d3eae958e54ff15b963924fcd4d6f665fc2ec317e45aa138572eba74cb79d1",
+      "state_geometry": "PASS",
+      "visual_review": "OBSERVED_SYNTHETIC_LAYOUT",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "fontScale": 15,
+        "baseLibrary": "3.17.4"
+      }
+    },
+    {
+      "json": "native/archive-native/430/restoring.json",
+      "png": "native/archive-native/430/restoring.png",
+      "screenshot_sha256": "a7f21132bb7ca31a9f0ed15c7dc1be5e6b6be36e1674d26b344283950188023b",
+      "state_geometry": "PASS",
+      "visual_review": "OBSERVED_SYNTHETIC_LAYOUT",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "fontScale": 15,
+        "baseLibrary": "3.17.4"
+      }
+    },
+    {
+      "json": "native/archive-native/430/unfinished.json",
+      "png": "native/archive-native/430/unfinished.png",
+      "screenshot_sha256": "d8d5dac76054bf970a064996cf71fb4521ebdadc1cc2533bc5224b0e09740908",
+      "state_geometry": "PASS",
+      "visual_review": "OBSERVED_SYNTHETIC_LAYOUT",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "fontScale": 15,
+        "baseLibrary": "3.17.4"
+      }
+    },
+    {
+      "json": "native/archive-native/430/working.json",
+      "png": "native/archive-native/430/working.png",
+      "screenshot_sha256": "3805a5769a0b954ac8ec37f5fa6f8e4d991797f3a30081c60df0bc90914ef71a",
+      "state_geometry": "PASS",
+      "visual_review": "OBSERVED_SYNTHETIC_LAYOUT",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "screenHeight": 932,
+        "dpr": 3,
+        "fontScale": 15,
+        "baseLibrary": "3.17.4"
+      }
+    }
+  ]
+}

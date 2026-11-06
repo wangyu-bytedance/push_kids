@@ -1,0 +1,32 @@
+{
+  "at": "2026-11-01T08:01:19.007Z",
+  "action": "cloud",
+  "appid": "wx5d2e0014690bf285",
+  "environment": "prod-d2g14rwoycac6b45d",
+  "service": "flask-ik19",
+  "health": {
+    "live": {
+      "status": 200,
+      "elapsed_ms": 170
+    },
+    "ready": {
+      "status": 200,
+      "elapsed_ms": 79
+    }
+  },
+  "writes": 0,
+  "tested_accounts": 1,
+  "scope": "read-only real WeChat transport",
+  "identity_status": 200,
+  "bound": true,
+  "identity_response_fields": [
+    "state",
+    "family",
+    "member",
+    "children",
+    "request"
+  ],
+  "children_count": 2,
+  "visits_status": 200,
+  "result": "PASS_CURRENT_ROUTE_HEALTH"
+}

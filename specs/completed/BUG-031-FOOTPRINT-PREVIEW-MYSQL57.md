@@ -9,7 +9,7 @@
 - Spec revision: BUG-SPEC-20261023-FOOTPRINT-PREVIEW-MYSQL57-01
 - User confirmation: 用户2026-10-23明确回复“批准 Spec01，修复并继续部署准备（推荐）”（`call_a25398bc2711499eb6e75456d52a8a58`），批准本revision的派生表JOIN修复与回归范围。此前只做隔离进程实验，批准后开始生产修改。
 - Feature: [FEAT-012](../../docs/domain/features/FEAT-012-child-photo-footprints.md)，baseline `FEAT-STATE-20261023-PHOTO-FOOTPRINTS-10`；merge owner Codex。
-- Related: [部署Spec02](../active/OPS-20261023-FULLSTACK-TEST-DEPLOYMENT.md)、[主Spec04](../active/FEAT-012-CHILD-PHOTO-FOOTPRINTS.md)。本修复满足既有查询数、内存及500ms预算，不改变产品合同。
+- Related: [部署Spec02](OPS-20261023-FULLSTACK-TEST-DEPLOYMENT.md)、[主Spec04](FEAT-012-CHILD-PHOTO-FOOTPRINTS.md)。本修复满足既有查询数、内存及500ms预算，不改变产品合同。
 
 ## Frontend Design Impact and Repository-native Approval
 

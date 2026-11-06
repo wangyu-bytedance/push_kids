@@ -1,7 +1,7 @@
 # BUG-029 — 复习反馈后科目保序验证
 
 - Date: 2026-10-16
-- Spec: [`BUG-SPEC-20261016-REVIEW-SUBJECT-ORDER-01`](../../../specs/active/BUG-029-REVIEW-SUBJECT-ORDER.md)，用户明确批准实现、Git提交与部署。
+- Spec: [`BUG-SPEC-20261016-REVIEW-SUBJECT-ORDER-01`](../../../specs/completed/BUG-029-REVIEW-SUBJECT-ORDER.md)，用户明确批准实现、Git提交与部署。
 - Baseline: `8b933dae762f6dbdb1bb9c2286155106b0a5fdc6`。
 - Local implementation verified；灰度不可变031已normal但0%流量，定向验收/全量未完成；不以本地通过或旧后端030的生产smoke表示修复已承载生产流量。
 

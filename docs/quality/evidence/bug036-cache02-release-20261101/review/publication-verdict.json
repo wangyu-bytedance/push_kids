@@ -1,0 +1,20 @@
+{
+  "decision": "NOT_READY_BLOCKED_PRE_DEPLOY",
+  "confirmed_code_findings": 0,
+  "confirmed_document_findings": 2,
+  "fixed_document_findings": 2,
+  "unresolved_findings": 0,
+  "quality_gate": {
+    "result": "FAIL",
+    "passed": 34,
+    "total": 40,
+    "required_passed": 38
+  },
+  "container": "NOT_RUN_INCOMPLETE",
+  "actual_cloud_version_created": false,
+  "existing_online": "flask-ik19-039",
+  "traffic_changed": false,
+  "spec": "OPS-SPEC-20261101-BUG036-CACHE-DEPLOY-01",
+  "status": "BLOCKED",
+  "scope": "代码静态审查结论不代表发布验收；质量和其他缺门禁独立保留"
+}

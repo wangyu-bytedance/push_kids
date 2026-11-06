@@ -1,0 +1,103 @@
+{
+  "scope": "Local direct import, offline synthetic native transport; no real child photos",
+  "source_sha256": {
+    "pages/footprints/controller.js": "26352665637a0ac232aaf5a183d1e91a596df75625ce8684ae72b4f3f04fc8cb",
+    "pages/footprints/imports.js": "c2501d9159426b3a11825f2c6f4f173a0edd779bed85eeaa440d98a06e66d7f9",
+    "pages/footprints/photos.js": "0d16b0c87be94788739c29e4a576f5dbd5ba35fa21d019065e2515211829afec",
+    "pages/footprints/presentation.js": "436908ddf87c0f2bfddff9462ee12d3bc0397276402d89ad25ee8b2d07c9e62f",
+    "pages/footprints/embedded.js": "6b34d0c1170527a85c55eb1e881030d1fa3d9ab092b053a64351791abb435e87",
+    "pages/footprints/index.wxml": "3bf2c806db2ac4109eae59848aaf0c739bdaef18c46895a19a029fae358e6ed1",
+    "pages/footprints/index.wxss": "90b70f8037381ab3d54d5fe60f1f8b61ffae38a46369474f14762b18610876d3"
+  },
+  "native": [
+    {
+      "file": "native/entry-320.png",
+      "sha256": "eff7985f5ff9f4c32578e3655449f37b721122e5e112c6a072774e4bc33bf1e4",
+      "nodes": "native/entry-320.json"
+    },
+    {
+      "file": "native/entry-390.png",
+      "sha256": "961d3d325091a57bb51111524eecb54c9bf2e5b399039f1d57c41fc1d72d41f2",
+      "nodes": "native/entry-390.json"
+    },
+    {
+      "file": "native/entry-430.png",
+      "sha256": "bbddd0b98b0204ab261d45c65ba081a4896fb2d362fe26387cdbd716a211dce8",
+      "nodes": "native/entry-430.json"
+    },
+    {
+      "file": "native/selecting-320.png",
+      "sha256": "9f0de5eb6b989a7d92d62f547cff2938a0ea425e8b0143b4d15bd41bbfa68b17",
+      "nodes": "native/selecting-320.json"
+    },
+    {
+      "file": "native/selecting-390.png",
+      "sha256": "eec118cbf246599ee587b75822ffafdbfc3c6fcaae96da65a1d1d38527129cd3",
+      "nodes": "native/selecting-390.json"
+    },
+    {
+      "file": "native/selecting-430.png",
+      "sha256": "f50f85f8085fcbf7e2483ea07b5aa356c35cf6ecb3b3ebbe21f72600a5f8d0ce",
+      "nodes": "native/selecting-430.json"
+    },
+    {
+      "file": "native/uploading-320.png",
+      "sha256": "dbf89fd982c9aedaa4a77091088c8691c2e61a39880f91b205e2df76db2c1618",
+      "nodes": "native/uploading-320.json"
+    },
+    {
+      "file": "native/uploading-390.png",
+      "sha256": "fd452943866921fde3e26c905dcfe5865db6b9c2659c571635514e9e8dcfd0c4",
+      "nodes": "native/uploading-390.json"
+    },
+    {
+      "file": "native/uploading-430.png",
+      "sha256": "0c6b208ad97ccd05a84cefb03858917a14c48fc4c644e19bdb0194a36828468a",
+      "nodes": "native/uploading-430.json"
+    },
+    {
+      "file": "native/upload-error-320.png",
+      "sha256": "aebb14221d40aeb8c4b74a5e14cf5613c9296bb26d82e37eb0dddb29f4e84c1a",
+      "nodes": "native/upload-error-320.json"
+    },
+    {
+      "file": "native/upload-error-390.png",
+      "sha256": "6585de8704259f8ce25ddb05b62eecad757895cd580bb9d590c44f29526e1a92",
+      "nodes": "native/upload-error-390.json"
+    },
+    {
+      "file": "native/upload-error-430.png",
+      "sha256": "70fa9a7c97e5476c748142cdb0e62f91835a7f5d009a7421f9a34b9cf9fc5456",
+      "nodes": "native/upload-error-430.json"
+    },
+    {
+      "file": "native/settings-320.png",
+      "sha256": "fcbbff364683e24cb4c751937c6d3225f4e3e7f4ec13a65c4dbd273b01a161dc",
+      "nodes": "native/settings-320.json"
+    },
+    {
+      "file": "native/settings-390.png",
+      "sha256": "37861b818c330617f458786bf6d34dbbcb1ae87eee2e86e1a4a2e3233d473891",
+      "nodes": "native/settings-390.json"
+    },
+    {
+      "file": "native/settings-430.png",
+      "sha256": "9ac18d0f88eb0c53d7e31c77fa0ae963245940631f31893fe3817caeac5e8b80",
+      "nodes": "native/settings-430.json"
+    }
+  ],
+  "checks": {
+    "npm_test": 349,
+    "frontend_special": 58,
+    "lint": "PASS",
+    "miniprogram_pages": 17,
+    "miniprogram_source_bytes": 1234867,
+    "dag_modules": 150,
+    "design": "DESIGN_EVIDENCE_VALID"
+  },
+  "verification_tool_sha256": {
+    "tools/travel_import_geometry.js": "d74e0fdad6cbcdcc6996a3dcb841a4f7cd7954b9704b35fa68e6a6b01fbff32d",
+    "tools/prepare_travel_diary_native.py": "1699beeaec4487ad432799f0d847ab170c9e7ac6e8d1d7fdbe1d34ceadadcf73",
+    "tools/prepare_record_type_native.py": "019d6674ff015048c043e942b041e82ccd9b47e8bc0e4a150b13e2fb25dd08a8"
+  }
+}

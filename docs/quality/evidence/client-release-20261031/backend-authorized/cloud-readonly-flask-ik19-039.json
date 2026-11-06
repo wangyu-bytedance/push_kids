@@ -1,0 +1,223 @@
+{
+  "queried_at": "2026-10-31T11:24:24.832Z",
+  "appid": "wx5d2e0014690bf285",
+  "version": {
+    "VersionName": "flask-ik19-039",
+    "Status": "normal",
+    "CreatedTime": "2026-10-31 19:15:02",
+    "UpdatedTime": "2026-10-31 19:18:08",
+    "Cpu": 0.25,
+    "Mem": 0.5,
+    "MinNum": 0,
+    "MaxNum": 5,
+    "ContainerPort": 8000,
+    "BuildDir": ".",
+    "Remark": "travel-bug035-20261031-spec01-0576ac3-01",
+    "ServerName": "flask-ik19"
+  },
+  "detail_fields": [
+    "BaseImage",
+    "Branch",
+    "BuildDir",
+    "ContainerPort",
+    "Cpu",
+    "CpuLimit",
+    "CpuSize",
+    "CpuTotalQuota",
+    "CreatedTime",
+    "CustomLogs",
+    "DockerfilePath",
+    "EntryPoint",
+    "EnvParams",
+    "HasDockerfile",
+    "ImageUrl",
+    "InitContainerSpecs",
+    "InitialDelaySeconds",
+    "IsPublic",
+    "MaxNum",
+    "Mem",
+    "MemLimit",
+    "MemSize",
+    "MemTotalQuota",
+    "MinNum",
+    "MountWxToken",
+    "PackageName",
+    "PackageVersion",
+    "PolicyDetail",
+    "PolicyThreshold",
+    "PolicyType",
+    "Remark",
+    "Repo",
+    "RepoLanguage",
+    "RepoType",
+    "RequestId",
+    "ServerName",
+    "SidecarSpecs",
+    "Status",
+    "SubnetIds",
+    "TkeClusterInfo",
+    "TkeWorkloadType",
+    "UpdatedTime",
+    "UploadType",
+    "VersionIP",
+    "VersionName",
+    "VersionPort",
+    "VpcId"
+  ],
+  "base_fields": [
+    "timerScale",
+    "cpu",
+    "mem",
+    "minNum",
+    "maxNum",
+    "policyType",
+    "policyThreshold",
+    "customLogs",
+    "envParams",
+    "initialDelaySeconds",
+    "envId",
+    "serverName",
+    "createTime",
+    "openAccessTypes",
+    "policyDetails",
+    "port",
+    "hasDockerfile",
+    "dockerfile",
+    "buildDir",
+    "logSetId",
+    "logTopicId",
+    "logParseType",
+    "logType",
+    "internalAccess",
+    "internalDomain"
+  ],
+  "query_status": [
+    {
+      "query": "version",
+      "status": "fulfilled"
+    },
+    {
+      "query": "service-config",
+      "status": "fulfilled"
+    },
+    {
+      "query": "versions",
+      "status": "fulfilled"
+    },
+    {
+      "query": "access",
+      "status": "fulfilled"
+    }
+  ],
+  "service_resources": {
+    "cpu": 0.25,
+    "mem": 0.5,
+    "minNum": 0,
+    "maxNum": 5
+  },
+  "versions": [
+    {
+      "VersionName": "flask-ik19-021",
+      "Status": "normal",
+      "CreatedTime": "2026-09-13 14:24:56",
+      "UpdatedTime": "2026-09-13 19:37:03",
+      "Remark": "SPEC-UNIFIED-REVIEW-20260913-02 88ab2093d6b2 unified review agent",
+      "FlowRatio": 0,
+      "Percent": 0
+    },
+    {
+      "VersionName": "flask-ik19-022",
+      "Status": "normal",
+      "CreatedTime": "2026-09-13 19:07:47",
+      "UpdatedTime": "2026-09-19 17:55:38",
+      "Remark": "push-kids-20260913-019-bug015-88ab209",
+      "FlowRatio": 0,
+      "Percent": 0
+    },
+    {
+      "VersionName": "flask-ik19-023",
+      "Status": "normal",
+      "CreatedTime": "2026-09-19 17:23:46",
+      "UpdatedTime": "2026-09-22 22:27:20",
+      "Remark": "push-kids-20260919-023-f4bd997",
+      "FlowRatio": 0,
+      "Percent": 0
+    },
+    {
+      "VersionName": "flask-ik19-024",
+      "Status": "normal",
+      "CreatedTime": "2026-09-22 21:57:18",
+      "UpdatedTime": "2026-10-07 16:16:51",
+      "Remark": "push-kids-20260922-bug026-5397a82",
+      "FlowRatio": 0,
+      "Percent": 0
+    },
+    {
+      "VersionName": "flask-ik19-025",
+      "Status": "normal",
+      "CreatedTime": "2026-09-26 11:26:59",
+      "UpdatedTime": "2026-10-07 17:55:29",
+      "Remark": "push-kids-20260926-bug027-b3db219",
+      "FlowRatio": 0,
+      "Percent": 0
+    },
+    {
+      "VersionName": "flask-ik19-026",
+      "Status": "normal",
+      "CreatedTime": "2026-10-07 17:30:53",
+      "UpdatedTime": "2026-10-07 18:13:10",
+      "Remark": "push-kids-20261007-fair02-bridge-b3db219",
+      "FlowRatio": 0,
+      "Percent": 0
+    },
+    {
+      "VersionName": "flask-ik19-035",
+      "Status": "normal",
+      "CreatedTime": "2026-10-24 10:55:54",
+      "UpdatedTime": "2026-10-24 23:16:52",
+      "Remark": "full-20261024-bug031-ops04-01",
+      "FlowRatio": 0,
+      "Percent": 0
+    },
+    {
+      "VersionName": "flask-ik19-036",
+      "Status": "deploy_failed",
+      "CreatedTime": "2026-10-24 22:36:16",
+      "UpdatedTime": "2026-10-24 23:10:00",
+      "Remark": "latest-20261024-0025-01-26714b9",
+      "FlowRatio": 0,
+      "Percent": 0
+    },
+    {
+      "VersionName": "flask-ik19-038",
+      "Status": "normal",
+      "CreatedTime": "2026-10-31 11:37:07",
+      "UpdatedTime": "2026-10-31 11:40:08",
+      "Remark": "knowledge-prompt-20261031-spec03-01",
+      "FlowRatio": 100,
+      "Percent": 0
+    },
+    {
+      "VersionName": "flask-ik19-039",
+      "Status": "normal",
+      "CreatedTime": "2026-10-31 19:15:02",
+      "UpdatedTime": "2026-10-31 19:18:08",
+      "Remark": "travel-bug035-20261031-spec01-0576ac3-01",
+      "FlowRatio": 0,
+      "Percent": 0
+    }
+  ],
+  "access_types": [
+    "OA",
+    "MINIAPP"
+  ],
+  "runtime_mysql_available": true,
+  "runtime_schema": {
+    "result": "PASS",
+    "mode": "read-only",
+    "credentials": "platform runtime",
+    "endpoint": "approved existing admin endpoint, same runtime account",
+    "revision": "20261024_0025",
+    "runtime_ddl_privileges": false
+  }
+}

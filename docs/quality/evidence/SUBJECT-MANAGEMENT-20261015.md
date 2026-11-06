@@ -1,6 +1,6 @@
 # 学科管理统一 — 2026-10-15本地验证
 
-- Spec: [SPEC-20261014-SUBJECT-MANAGEMENT-01](../../../specs/active/FEAT-001-SUBJECT-MANAGEMENT-CONSISTENCY.md)，VERIFYING。
+- Spec: [SPEC-20261014-SUBJECT-MANAGEMENT-01](../../../specs/completed/FEAT-001-SUBJECT-MANAGEMENT-CONSISTENCY.md)，VERIFYING。
 - Design: DREV-20261014-SUBJECT-MANAGEMENT-01；用户本聊天2026-10-15“落地和实现”批准。
 - Base HEAD: 111ce1b；本次为未提交工作区diff。工作区存在其他任务修改，均保留，不计作本任务交付。
 - Scope: settings/index.js、index.wxml、index.wxss；学科整行进入面板，面板底部移出并二次确认。active=false保持学习记录，服务端合同/权限/数据模型不变。

@@ -1,0 +1,22 @@
+{
+  "version": "flask-ik19-039",
+  "status": "normal",
+  "port": 8000,
+  "cpu": 0.25,
+  "mem": 0.5,
+  "min": 0,
+  "max": 5,
+  "mountWxToken": false,
+  "requiredPresence": {
+    "MYSQL_ADDRESS": true,
+    "MYSQL_USERNAME": true,
+    "MYSQL_PASSWORD": true,
+    "MYSQL_DATABASE": true,
+    "ARK_API_KEY": true,
+    "PUSH_KIDS_ACTOR_HMAC_KEY": true,
+    "COS_BUCKET": true
+  },
+  "systemOneOverride": "DEFAULT_TRUE",
+  "model": "DEFAULT_PRO",
+  "liteModel": "DEFAULT_LITE"
+}

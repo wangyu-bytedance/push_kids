@@ -1,0 +1,182 @@
+.FF                                                                      [100%]
+=================================== FAILURES ===================================
+_ test_material_correction_uses_audited_source_after_candidate_attribution_changes[True] _
+
+tmp_path = PosixPath('/private/var/folders/hq/l74_1q417nbdffshwhtw79640000gn/T/pytest-of-bytedance/pytest-95/test_material_correction_uses_1')
+drift = True
+
+    @pytest.mark.parametrize("drift", [False, True])
+    def test_material_correction_uses_audited_source_after_candidate_attribution_changes(
+        tmp_path, drift
+    ):
+        from push_kids.agent_processing.stage_contracts import ConsolidatedResult
+    
+        class CorrectedSource(StageFake):
+            async def generate_stage(self, stage, instructions, payload, *args):
+                if stage == "extract":
+                    value = await super().generate_stage(stage, instructions, payload, *args)
+                    if payload["materials"] == ["m2"]:
+                        value.items = []
+                    return value
+                if stage == "merge":
+                    corrected = "review_issues" in payload
+                    return ConsolidatedResult.model_validate(
+                        {
+                            "summary": "练习十以内加法",
+                            "uncertainties": [],
+                            "omissions": [],
+                            "items": [
+                                {
+                                    "members": ["c1"],
+                                    "subject": "数学",
+                                    "name": "十以内减法" if corrected and drift else "十以内加法",
+                                    "category": "计算",
+                                    "display_kind": "arithmetic",
+                                    "review_method": "变式练习",
+                                    "estimated_minutes": 2,
+                                    "evidence_keys": ["e0"],
+                                    "confidence": "high",
+                                }
+                            ],
+                            "evidence": [
+                                {"key": "e0", "material": "m2", "detail": "第二页的加法教学"}
+                            ],
+                            "source_checks": [
+                                {
+                                    "material": "m1",
+                                    "disposition": "non_learning" if corrected else "indeterminate",
+                                    "item_aliases": [],
+                                    "basis": "页脚备注" if corrected else "待核对教学角色",
+                                },
+                                {
+                                    "material": "m2",
+                                    "disposition": "covered",
+                                    "item_aliases": ["i0"],
+                                    "basis": "第二页加法教学",
+                                },
+                            ],
+                        }
+                    )
+                if stage == "review":
+                    self.review_calls += 1
+                    return QualityReviewResult(
+                        passed=self.review_calls > 1,
+                        issues=[]
+                        if self.review_calls > 1
+                        else [
+                            QualityIssue(
+                                code="unsupported_by_evidence",
+                                items=["m1"],
+                                basis="第一页仅为备注",
+                            )
+                        ],
+                    )
+                return await super().generate_stage(stage, instructions, payload, *args)
+    
+        images = [tmp_path / "one.png", tmp_path / "two.png"]
+        for index, path in enumerate(images):
+            path.write_bytes(f"source-{index}".encode())
+        provider, queried = CorrectedSource(), []
+        data = AnalysisInput(image_paths=images, existing_subjects=["数学"])
+        if drift:
+>           with pytest.raises(StageFailure) as caught:
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           Failed: DID NOT RAISE <class 'push_kids.agent_processing.failures.StageFailure'>
+
+tests/unit/test_staged_proposal_recovery.py:415: Failed
+_______________ test_request_bytes_match_real_sdk_transport_body _______________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10b0d5700>
+tmp_path = PosixPath('/private/var/folders/hq/l74_1q417nbdffshwhtw79640000gn/T/pytest-of-bytedance/pytest-95/test_request_bytes_match_real_0')
+
+    def test_request_bytes_match_real_sdk_transport_body(monkeypatch, tmp_path):
+        from openai import DefaultAsyncHttpxClient
+    
+        sent = []
+    
+        def transport(request):
+            sent.append(len(request.content))
+            return httpx.Response(
+                200,
+                json={
+                    "id": "synthetic-response",
+                    "object": "response",
+                    "created_at": 0,
+                    "status": "completed",
+                    "model": "synthetic",
+                    "output": [
+                        {
+                            "type": "message",
+                            "id": "synthetic-message",
+                            "status": "completed",
+                            "role": "assistant",
+                            "content": [
+                                {
+                                    "type": "output_text",
+                                    "annotations": [],
+                                    "text": json.dumps(
+                                        {
+                                            "decisions": [
+                                                {"candidate": "i0", "match": None, "uncertain": False}
+                                            ]
+                                        }
+                                    ),
+                                }
+                            ],
+                        }
+                    ],
+                },
+            )
+    
+        monkeypatch.setattr(
+            "push_kids.agent_processing.stage_provider.DefaultAsyncHttpxClient",
+            lambda **kwargs: DefaultAsyncHttpxClient(
+                transport=httpx.MockTransport(transport), **kwargs
+            ),
+            raising=False,
+        )
+        # The pre-repair adapter does not construct a client itself.
+        monkeypatch.setattr(
+            "openai._base_client.AsyncHttpxClientWrapper",
+            lambda **kwargs: DefaultAsyncHttpxClient(
+                transport=httpx.MockTransport(transport), **kwargs
+            ),
+        )
+        path = tmp_path / "synthetic.png"
+        path.write_bytes(b"synthetic-image")
+    
+        class Trace:
+            events = []
+    
+            def info(self, event, **fields):
+                self.events.append((event, fields))
+    
+        trace = Trace()
+        asyncio.run(
+            StagedArkProvider(
+                Settings(ARK_API_KEY="synthetic", ARK_BASE_URL="https://example.invalid/v1")
+            ).generate_stage(
+                "review",
+                "中文说明",
+                {"parent_text": "仅供本地运输边界测试"},
+                MatchingResult,
+                [("m1", path)],
+                monotonic() + 3,
+                trace,
+            )
+        )
+        completed = dict(trace.events)["analysis_stage_completed"]
+>       assert completed["request_bytes"] == sent[0] > 0
+E       assert 1179 == 1070
+
+tests/unit/test_stage_provider.py:423: AssertionError
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /Users/bytedance/Documents/push_kids/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/unit/test_staged_proposal_recovery.py::test_material_correction_uses_audited_source_after_candidate_attribution_changes[True] - Failed: DID NOT RAISE <class 'push_kids.agent_processing.failures.StageFailure'>
+FAILED tests/unit/test_stage_provider.py::test_request_bytes_match_real_sdk_transport_body - assert 1179 == 1070
+2 failed, 1 passed, 68 deselected, 1 warning in 1.82s

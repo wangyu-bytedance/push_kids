@@ -1,7 +1,7 @@
 # 背景细弧线统一清理 — 2026-10-21
 
 - Status: LOCAL_IMPLEMENTED / AUTOMATION_PASS / NATIVE_PARTIAL / DEVICE_PENDING / NOT_RELEASED
-- Task Spec: [BUG-SPEC-20261021-HERO-ARC-01](../../../specs/active/BUG-030-HERO-BACKGROUND-ARC.md)，VERIFYING，保留active。
+- Task Spec: [BUG-SPEC-20261021-HERO-ARC-01](../../../specs/completed/BUG-030-HERO-BACKGROUND-ARC.md)，VERIFYING，保留active。
 - Approved design: [DREV-20261021-HERO-ARC-REMOVAL-01](../../design/frontend/prototypes/DREV-20261021-HERO-ARC-REMOVAL-01/FRONTEND-SPEC.md)
 - Source: 验证时基于HEAD `8f3c5b04e61c96d4c19cf9eefd26514a8a095e1a` 的当前工作树；下列结果的范围为该工作树。
 - Changed production file: `apps/miniprogram/styles/atoms.wxss`
@@ -112,5 +112,5 @@
   这也不代表并行工作树其他任务已完成验收。
 
 生产修复与自动化已完成，但完整原生截图、字体放大/长内容、iOS/Android与用户视觉验收尚未齐全，
-因此Spec为VERIFYING、保留 `specs/active/BUG-030-HERO-BACKGROUND-ARC.md`，不设DONE、不移completed。
+因此Spec为VERIFYING、保留 `specs/completed/BUG-030-HERO-BACKGROUND-ARC.md`，不设DONE、不移completed。
 后续从上述缺失矩阵恢复；满足全部验收后再闭环归档。回滚仅恢复原伪元素和对应注释，无数据迁移。

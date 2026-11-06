@@ -1,0 +1,64 @@
+{
+  "spec_revision": "OPS-SPEC-20261105-FULLSTACK-UPDATE-01",
+  "approval": "user2026-11-05 approved OPS Spec01",
+  "spec_status": "BLOCKED",
+  "stage": "LOCAL_TEST_REPAIRED_QUALITY_GATE_BLOCKED_NOT_UPLOADED",
+  "python": {
+    "passed": 988,
+    "skipped": 56,
+    "failed": 0,
+    "pytest_seconds": 193.68,
+    "wall_seconds": 253.92
+  },
+  "focused": {
+    "passed": 25,
+    "pytest_seconds": 9.35
+  },
+  "mysql": {
+    "passed": 48,
+    "skipped": 0,
+    "failed": 0,
+    "files": 10,
+    "version": "5.7.44",
+    "two_migration_paths": "PASS",
+    "removed": true,
+    "not_all_56_default_skips": true
+  },
+  "frontend": {
+    "passed": 359,
+    "skipped": 0
+  },
+  "statics": "PASS",
+  "production_source_changes": 0,
+  "test_lines_replaced": 2,
+  "quality_gate": {
+    "passed": 37,
+    "total": 40,
+    "rate": 0.925,
+    "status": "FAIL",
+    "not_rerun_or_replaced_by_diagnostics": true
+  },
+  "native_state_pairs": 38,
+  "native_modal_underlay_extra": 1,
+  "native_status": "PARTIAL_MAC_LOCKED",
+  "production_writes": 0,
+  "new_deployment": 0,
+  "upload": 0,
+  "version_bump": 0,
+  "last_confirmed_delivery": {
+    "backend": "039 normal",
+    "schema": "0025",
+    "client_upload_baseline": "0.1.17",
+    "not_requeried_this_increment": true
+  },
+  "material_spec07": "READY_FOR_REVIEW_UNAPPROVED_NOT_IMPLEMENTED",
+  "raw_logs_private": "/private/tmp/push-kids-ops01-20261105",
+  "not_run": [
+    "production migration",
+    "new cloud smoke",
+    "traffic switch",
+    "official upload",
+    "parent content quality acceptance",
+    "complete native/device acceptance"
+  ]
+}

@@ -1,0 +1,5402 @@
+{
+  "status": "PASS",
+  "scope": "candidate design HTML only; not production/native/device verification",
+  "revision": "DREV-20261025-TRAVEL-DIARY-E2E-01",
+  "source_sha256": "efeeb4319869913ec1294524693a6f6aab6d97ea4e485619efd99f877b2aace2",
+  "exports": [
+    {
+      "file": "consent-320x568.png",
+      "state": "consent",
+      "viewport": [
+        320,
+        568
+      ],
+      "sha256": "8479d96d490fb59c3833822e1395385241504e10e5acba7fc8530d62158be63e"
+    },
+    {
+      "file": "uploading-320x568.png",
+      "state": "uploading",
+      "viewport": [
+        320,
+        568
+      ],
+      "sha256": "07d331b8e40e2a331ebc84bec2613d5fd9946f3f25dc6005406903db815ef8b1"
+    },
+    {
+      "file": "review-missing-320x568.png",
+      "state": "review-missing",
+      "viewport": [
+        320,
+        568
+      ],
+      "sha256": "368616abf1da44ce75c79db54e95a99a71efae122f6cfee7ea5f1a447a1aa160"
+    },
+    {
+      "file": "batch-date-320x568.png",
+      "state": "batch-date",
+      "viewport": [
+        320,
+        568
+      ],
+      "sha256": "c80a21a55365089e2c294ba82a99b43327e1a375e4ba5a14916261804c437ed7"
+    },
+    {
+      "file": "edit-320x568.png",
+      "state": "edit",
+      "viewport": [
+        320,
+        568
+      ],
+      "sha256": "c22e7f1c2234ef8a26fbaa5e5a23e4c009aa9e3f38d23531d2c476995f79029f"
+    },
+    {
+      "file": "review-ready-320x568.png",
+      "state": "review-ready",
+      "viewport": [
+        320,
+        568
+      ],
+      "sha256": "775c1830501ee354ed11716bf2308d96f9702816f4952d5d9115a6eb02624776"
+    },
+    {
+      "file": "upload-error-320x568.png",
+      "state": "upload-error",
+      "viewport": [
+        320,
+        568
+      ],
+      "sha256": "ee67cf7921bcb28021a111bed1edd0ea9325280dd4e0d80224d379eb0a3862de"
+    },
+    {
+      "file": "processing-error-320x568.png",
+      "state": "processing-error",
+      "viewport": [
+        320,
+        568
+      ],
+      "sha256": "368616abf1da44ce75c79db54e95a99a71efae122f6cfee7ea5f1a447a1aa160"
+    },
+    {
+      "file": "conflict-320x568.png",
+      "state": "conflict",
+      "viewport": [
+        320,
+        568
+      ],
+      "sha256": "bed885fcb40f5017f905466a6fa9ff0229943a1493ac22e09ab1710120b00b4c"
+    },
+    {
+      "file": "confirm-320x568.png",
+      "state": "confirm",
+      "viewport": [
+        320,
+        568
+      ],
+      "sha256": "2434ed00e9ef93d2dd31a710c1fe4d10727aa5817acdfaa1c3cb11836f3143fe"
+    },
+    {
+      "file": "saved-320x568.png",
+      "state": "saved",
+      "viewport": [
+        320,
+        568
+      ],
+      "sha256": "42d8ebbf6aafe74379df4700077f26e4457b576d85d2c350a9152aecc9fb0acc"
+    },
+    {
+      "file": "gallery-focused-320x568.png",
+      "state": "gallery-focused",
+      "viewport": [
+        320,
+        568
+      ],
+      "sha256": "cceab5a6e4fc8acea40b62e2c557176d48d2cf5bd46c2dea1521d49aededdd10"
+    },
+    {
+      "file": "readonly-320x568.png",
+      "state": "readonly",
+      "viewport": [
+        320,
+        568
+      ],
+      "sha256": "a350e8d91e7d5b403f44dd7a2c0c2352478d6893a2c35adc33cf3f2e00ae978e"
+    },
+    {
+      "file": "edit-keyboard-320x568.png",
+      "state": "edit-keyboard",
+      "viewport": [
+        320,
+        568
+      ],
+      "sha256": "9469e3aee60acce55f2a0725d7dc629c10be43573c4c00bae3b0aad94b155af9"
+    },
+    {
+      "file": "consent-390x844.png",
+      "state": "consent",
+      "viewport": [
+        390,
+        844
+      ],
+      "sha256": "b1a727ce22784ccd84feab2eb976b3c465142d7b3ef513fc43449a81f0c310b3"
+    },
+    {
+      "file": "uploading-390x844.png",
+      "state": "uploading",
+      "viewport": [
+        390,
+        844
+      ],
+      "sha256": "bb0cfbdf4439e2182e25f54ee3b8cd053608659263ebaac93f864d2348eb6642"
+    },
+    {
+      "file": "review-missing-390x844.png",
+      "state": "review-missing",
+      "viewport": [
+        390,
+        844
+      ],
+      "sha256": "e9a04242a6b252cdd8d3d9aab538a6accc31a1141d0b123780b6c10abc1b96b9"
+    },
+    {
+      "file": "batch-date-390x844.png",
+      "state": "batch-date",
+      "viewport": [
+        390,
+        844
+      ],
+      "sha256": "e8e17cab361de8463b960fc582a70b480a2a4dbe82e0284710a9b0af1e945410"
+    },
+    {
+      "file": "edit-390x844.png",
+      "state": "edit",
+      "viewport": [
+        390,
+        844
+      ],
+      "sha256": "d00fdf7d4ec6ba80c95695d03e11343b4ddc2cfe6376f47a42984223259b21b6"
+    },
+    {
+      "file": "review-ready-390x844.png",
+      "state": "review-ready",
+      "viewport": [
+        390,
+        844
+      ],
+      "sha256": "0d446d425b043146a4d157c2de3a52722676c221f9d934afbda6197b1d0f0b40"
+    },
+    {
+      "file": "upload-error-390x844.png",
+      "state": "upload-error",
+      "viewport": [
+        390,
+        844
+      ],
+      "sha256": "a19fef539d1aaeba493ca11c51f55d3598d020ef5e5a8eef55b9cf731871c1f6"
+    },
+    {
+      "file": "processing-error-390x844.png",
+      "state": "processing-error",
+      "viewport": [
+        390,
+        844
+      ],
+      "sha256": "2141fb3b50993a2a138adf18782aac85c3d2636d9a843a8bd5ca60c3ff8b114a"
+    },
+    {
+      "file": "conflict-390x844.png",
+      "state": "conflict",
+      "viewport": [
+        390,
+        844
+      ],
+      "sha256": "6667cdf6bdd0547c72bb812d177d8b57dbb5592e266ae52b0f7a4a8b822cd91d"
+    },
+    {
+      "file": "confirm-390x844.png",
+      "state": "confirm",
+      "viewport": [
+        390,
+        844
+      ],
+      "sha256": "e27312455c913ea7a83e0aacd9ca5ac0b52971189d397c35b9679bfad2f033b4"
+    },
+    {
+      "file": "saved-390x844.png",
+      "state": "saved",
+      "viewport": [
+        390,
+        844
+      ],
+      "sha256": "8ddfcd51ed340d32510485f87f24386efe5e689ba66157caa4ea6d283ad7b511"
+    },
+    {
+      "file": "gallery-focused-390x844.png",
+      "state": "gallery-focused",
+      "viewport": [
+        390,
+        844
+      ],
+      "sha256": "d3667f67d0d51fded857eacfeba721172fe0fcd99a908096bc37d889dd4a1559"
+    },
+    {
+      "file": "readonly-390x844.png",
+      "state": "readonly",
+      "viewport": [
+        390,
+        844
+      ],
+      "sha256": "c6119454731054dbcc6372d6a05c7f5cd6963a3ea45aa08bc65a6fd55bbb58fe"
+    },
+    {
+      "file": "edit-keyboard-390x844.png",
+      "state": "edit-keyboard",
+      "viewport": [
+        390,
+        844
+      ],
+      "sha256": "e9458b478a39b46e852638d873f541d820128bbbd5ce7bc78d1bfefb65fe8b68"
+    },
+    {
+      "file": "consent-430x932.png",
+      "state": "consent",
+      "viewport": [
+        430,
+        932
+      ],
+      "sha256": "067cd607118ee337faee3bc650cb09a44da19be444e11ed2c3adb14127c3fbab"
+    },
+    {
+      "file": "uploading-430x932.png",
+      "state": "uploading",
+      "viewport": [
+        430,
+        932
+      ],
+      "sha256": "dd1dc2c7836e8482ce2f1f46fcb63bbc0e7ab0faa7bea440056dd32ee3058a4d"
+    },
+    {
+      "file": "review-missing-430x932.png",
+      "state": "review-missing",
+      "viewport": [
+        430,
+        932
+      ],
+      "sha256": "8993f7b07dff272c2d180b4013fca1089e13f1c1d4d42d8b5ef14611a4bf2e9a"
+    },
+    {
+      "file": "batch-date-430x932.png",
+      "state": "batch-date",
+      "viewport": [
+        430,
+        932
+      ],
+      "sha256": "87f3f6429785c76736418e6da6831dc385c7766b971f0f8e52c8ff3ba8985ea9"
+    },
+    {
+      "file": "edit-430x932.png",
+      "state": "edit",
+      "viewport": [
+        430,
+        932
+      ],
+      "sha256": "47ae4cc99d26fa35c9a577640da19bae50b24f465b7e940e434a980be817d15c"
+    },
+    {
+      "file": "review-ready-430x932.png",
+      "state": "review-ready",
+      "viewport": [
+        430,
+        932
+      ],
+      "sha256": "91e529d9b7d9a7b2a5ca899bae5f96ae877deb77c6b5090202323d512ec93475"
+    },
+    {
+      "file": "upload-error-430x932.png",
+      "state": "upload-error",
+      "viewport": [
+        430,
+        932
+      ],
+      "sha256": "e2f85c6c01002f0a8c2d7c634b9abe5d49f3a92e0a79630da81f7d6143b81fab"
+    },
+    {
+      "file": "processing-error-430x932.png",
+      "state": "processing-error",
+      "viewport": [
+        430,
+        932
+      ],
+      "sha256": "37748230adaeb3b381104f1eea197183d9e6fd07f443ca55c246940084789405"
+    },
+    {
+      "file": "conflict-430x932.png",
+      "state": "conflict",
+      "viewport": [
+        430,
+        932
+      ],
+      "sha256": "df7c1643d312bf26df66dca2887a41ab1d3814477a4c54007b2a0a7e2f6972a5"
+    },
+    {
+      "file": "confirm-430x932.png",
+      "state": "confirm",
+      "viewport": [
+        430,
+        932
+      ],
+      "sha256": "939587eda92976b5396daf070115030918eb77bda3541bd6187826704751fc49"
+    },
+    {
+      "file": "saved-430x932.png",
+      "state": "saved",
+      "viewport": [
+        430,
+        932
+      ],
+      "sha256": "192a1c3dd21b400ce51775b2567874f9e2b553b6c921b8886d85c33863bd4d07"
+    },
+    {
+      "file": "gallery-focused-430x932.png",
+      "state": "gallery-focused",
+      "viewport": [
+        430,
+        932
+      ],
+      "sha256": "f0901c106188fa11f77b9783c65c62587cff1bfdc8f3f78fc3e35372726ee8b4"
+    },
+    {
+      "file": "readonly-430x932.png",
+      "state": "readonly",
+      "viewport": [
+        430,
+        932
+      ],
+      "sha256": "72b4023bd62a0d9aa302d956d79b0ec6e01bc6586627a662192abe7c4106a655"
+    },
+    {
+      "file": "edit-keyboard-430x932.png",
+      "state": "edit-keyboard",
+      "viewport": [
+        430,
+        932
+      ],
+      "sha256": "5838c34094b93ff26d4a5b4ff91da8e565164f63832046fbdd02a9c734d9c5e2"
+    }
+  ],
+  "audits": [
+    {
+      "state": "consent",
+      "viewport": [
+        320,
+        568
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "关闭面板",
+          "left": 256,
+          "right": 304,
+          "top": 82.046875,
+          "bottom": 130.046875,
+          "width": 48,
+          "height": 48,
+          "font": 14
+        },
+        {
+          "label": "同意并选择照片",
+          "left": 16,
+          "right": 304,
+          "top": 456,
+          "bottom": 504,
+          "width": 288,
+          "height": 48,
+          "font": 16
+        },
+        {
+          "label": "手动记录",
+          "left": 16,
+          "right": 304,
+          "top": 504,
+          "bottom": 548,
+          "width": 288,
+          "height": 44,
+          "font": 14
+        }
+      ],
+      "sheet": {
+        "left": 0,
+        "right": 320,
+        "top": 74.046875,
+        "bottom": 568,
+        "width": 320,
+        "height": 493.953125,
+        "font": 14
+      },
+      "footer": {
+        "left": 0,
+        "right": 320,
+        "top": 443,
+        "bottom": 568,
+        "width": 320,
+        "height": 125,
+        "font": 14
+      },
+      "close": {
+        "left": 256,
+        "right": 304,
+        "top": 82.046875,
+        "bottom": 130.046875,
+        "width": 48,
+        "height": 48,
+        "font": 14
+      },
+      "body": {
+        "left": 0,
+        "right": 320,
+        "top": 139.046875,
+        "bottom": 443,
+        "width": 320,
+        "height": 303.953125,
+        "font": 14
+      },
+      "primary": [
+        {
+          "left": 16,
+          "right": 304,
+          "top": 456,
+          "bottom": 504,
+          "width": 288,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "keyboard": null
+    },
+    {
+      "state": "uploading",
+      "viewport": [
+        320,
+        568
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "关闭面板",
+          "left": 256,
+          "right": 304,
+          "top": 313.21875,
+          "bottom": 361.21875,
+          "width": 48,
+          "height": 48,
+          "font": 14
+        },
+        {
+          "label": "正在上传 67%",
+          "left": 16,
+          "right": 304,
+          "top": 500,
+          "bottom": 548,
+          "width": 288,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "sheet": {
+        "left": 0,
+        "right": 320,
+        "top": 305.21875,
+        "bottom": 568,
+        "width": 320,
+        "height": 262.78125,
+        "font": 14
+      },
+      "footer": {
+        "left": 0,
+        "right": 320,
+        "top": 487,
+        "bottom": 568,
+        "width": 320,
+        "height": 81,
+        "font": 14
+      },
+      "close": {
+        "left": 256,
+        "right": 304,
+        "top": 313.21875,
+        "bottom": 361.21875,
+        "width": 48,
+        "height": 48,
+        "font": 14
+      },
+      "body": {
+        "left": 0,
+        "right": 320,
+        "top": 370.21875,
+        "bottom": 487,
+        "width": 320,
+        "height": 116.78125,
+        "font": 14
+      },
+      "primary": [
+        {
+          "left": 16,
+          "right": 304,
+          "top": 500,
+          "bottom": 548,
+          "width": 288,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "keyboard": null
+    },
+    {
+      "state": "review-missing",
+      "viewport": [
+        320,
+        568
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "关闭面板",
+          "left": 256,
+          "right": 304,
+          "top": 76.171875,
+          "bottom": 124.171875,
+          "width": 48,
+          "height": 48,
+          "font": 14
+        },
+        {
+          "label": "取消选择",
+          "left": 12,
+          "right": 68,
+          "top": 145.171875,
+          "bottom": 189.171875,
+          "width": 56,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "批量修改",
+          "left": 252,
+          "right": 308,
+          "top": 145.171875,
+          "bottom": 189.171875,
+          "width": 56,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "取消选择第1张照片",
+          "left": 12,
+          "right": 56,
+          "top": 251.5625,
+          "bottom": 295.5625,
+          "width": 44,
+          "height": 44,
+          "font": 20
+        },
+        {
+          "label": "核对照片",
+          "left": 12,
+          "right": 88,
+          "top": 335.953125,
+          "bottom": 379.953125,
+          "width": 76,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "取消选择第2张照片",
+          "left": 12,
+          "right": 56,
+          "top": 416.953125,
+          "bottom": 460.953125,
+          "width": 44,
+          "height": 44,
+          "font": 20
+        },
+        {
+          "label": "核对照片",
+          "left": 12,
+          "right": 88,
+          "top": 501.34375,
+          "bottom": 545.34375,
+          "width": 76,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "取消选择第3张照片",
+          "left": 12,
+          "right": 56,
+          "top": 582.34375,
+          "bottom": 626.34375,
+          "width": 44,
+          "height": 44,
+          "font": 20
+        },
+        {
+          "label": "核对照片",
+          "left": 12,
+          "right": 88,
+          "top": 666.734375,
+          "bottom": 710.734375,
+          "width": 76,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "补拍摄日期",
+          "left": 16,
+          "right": 304,
+          "top": 500,
+          "bottom": 548,
+          "width": 288,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "sheet": {
+        "left": 0,
+        "right": 320,
+        "top": 68.171875,
+        "bottom": 568,
+        "width": 320,
+        "height": 499.828125,
+        "font": 14
+      },
+      "footer": {
+        "left": 0,
+        "right": 320,
+        "top": 487,
+        "bottom": 568,
+        "width": 320,
+        "height": 81,
+        "font": 14
+      },
+      "close": {
+        "left": 256,
+        "right": 304,
+        "top": 76.171875,
+        "bottom": 124.171875,
+        "width": 48,
+        "height": 48,
+        "font": 14
+      },
+      "body": {
+        "left": 0,
+        "right": 320,
+        "top": 133.171875,
+        "bottom": 487,
+        "width": 320,
+        "height": 353.828125,
+        "font": 14
+      },
+      "primary": [
+        {
+          "left": 16,
+          "right": 304,
+          "top": 500,
+          "bottom": 548,
+          "width": 288,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "keyboard": null
+    },
+    {
+      "state": "batch-date",
+      "viewport": [
+        320,
+        568
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "关闭面板",
+          "left": 256,
+          "right": 304,
+          "top": 258.828125,
+          "bottom": 306.828125,
+          "width": 48,
+          "height": 48,
+          "font": 14
+        },
+        {
+          "label": "保存修改",
+          "left": 16,
+          "right": 304,
+          "top": 500,
+          "bottom": 548,
+          "width": 288,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "sheet": {
+        "left": 0,
+        "right": 320,
+        "top": 250.828125,
+        "bottom": 568,
+        "width": 320,
+        "height": 317.171875,
+        "font": 14
+      },
+      "footer": {
+        "left": 0,
+        "right": 320,
+        "top": 487,
+        "bottom": 568,
+        "width": 320,
+        "height": 81,
+        "font": 14
+      },
+      "close": {
+        "left": 256,
+        "right": 304,
+        "top": 258.828125,
+        "bottom": 306.828125,
+        "width": 48,
+        "height": 48,
+        "font": 14
+      },
+      "body": {
+        "left": 0,
+        "right": 320,
+        "top": 315.828125,
+        "bottom": 487,
+        "width": 320,
+        "height": 171.171875,
+        "font": 14
+      },
+      "primary": [
+        {
+          "left": 16,
+          "right": 304,
+          "top": 500,
+          "bottom": 548,
+          "width": 288,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "keyboard": null
+    },
+    {
+      "state": "edit",
+      "viewport": [
+        320,
+        568
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "关闭面板",
+          "left": 256,
+          "right": 304,
+          "top": 76.171875,
+          "bottom": 124.171875,
+          "width": 48,
+          "height": 48,
+          "font": 14
+        },
+        {
+          "label": "查找地点",
+          "left": 12,
+          "right": 92,
+          "top": 649.125,
+          "bottom": 693.125,
+          "width": 80,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "地图选点",
+          "left": 100,
+          "right": 180,
+          "top": 649.125,
+          "bottom": 693.125,
+          "width": 80,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "保存修改",
+          "left": 16,
+          "right": 304,
+          "top": 500,
+          "bottom": 548,
+          "width": 288,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "sheet": {
+        "left": 0,
+        "right": 320,
+        "top": 68.171875,
+        "bottom": 568,
+        "width": 320,
+        "height": 499.828125,
+        "font": 14
+      },
+      "footer": {
+        "left": 0,
+        "right": 320,
+        "top": 487,
+        "bottom": 568,
+        "width": 320,
+        "height": 81,
+        "font": 14
+      },
+      "close": {
+        "left": 256,
+        "right": 304,
+        "top": 76.171875,
+        "bottom": 124.171875,
+        "width": 48,
+        "height": 48,
+        "font": 14
+      },
+      "body": {
+        "left": 0,
+        "right": 320,
+        "top": 133.171875,
+        "bottom": 487,
+        "width": 320,
+        "height": 353.828125,
+        "font": 14
+      },
+      "primary": [
+        {
+          "left": 16,
+          "right": 304,
+          "top": 500,
+          "bottom": 548,
+          "width": 288,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "keyboard": null
+    },
+    {
+      "state": "review-ready",
+      "viewport": [
+        320,
+        568
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "关闭面板",
+          "left": 256,
+          "right": 304,
+          "top": 76.171875,
+          "bottom": 124.171875,
+          "width": 48,
+          "height": 48,
+          "font": 14
+        },
+        {
+          "label": "取消选择",
+          "left": 12,
+          "right": 68,
+          "top": 145.171875,
+          "bottom": 189.171875,
+          "width": 56,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "批量修改",
+          "left": 252,
+          "right": 308,
+          "top": 145.171875,
+          "bottom": 189.171875,
+          "width": 56,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "取消选择第1张照片",
+          "left": 12,
+          "right": 56,
+          "top": 251.5625,
+          "bottom": 295.5625,
+          "width": 44,
+          "height": 44,
+          "font": 20
+        },
+        {
+          "label": "核对照片",
+          "left": 12,
+          "right": 88,
+          "top": 335.953125,
+          "bottom": 379.953125,
+          "width": 76,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "取消选择第2张照片",
+          "left": 12,
+          "right": 56,
+          "top": 416.953125,
+          "bottom": 460.953125,
+          "width": 44,
+          "height": 44,
+          "font": 20
+        },
+        {
+          "label": "核对照片",
+          "left": 12,
+          "right": 88,
+          "top": 501.34375,
+          "bottom": 545.34375,
+          "width": 76,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "取消选择第3张照片",
+          "left": 12,
+          "right": 56,
+          "top": 582.34375,
+          "bottom": 626.34375,
+          "width": 44,
+          "height": 44,
+          "font": 20
+        },
+        {
+          "label": "核对照片",
+          "left": 12,
+          "right": 88,
+          "top": 666.734375,
+          "bottom": 710.734375,
+          "width": 76,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "确认选中的 3 张",
+          "left": 16,
+          "right": 304,
+          "top": 500,
+          "bottom": 548,
+          "width": 288,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "sheet": {
+        "left": 0,
+        "right": 320,
+        "top": 68.171875,
+        "bottom": 568,
+        "width": 320,
+        "height": 499.828125,
+        "font": 14
+      },
+      "footer": {
+        "left": 0,
+        "right": 320,
+        "top": 487,
+        "bottom": 568,
+        "width": 320,
+        "height": 81,
+        "font": 14
+      },
+      "close": {
+        "left": 256,
+        "right": 304,
+        "top": 76.171875,
+        "bottom": 124.171875,
+        "width": 48,
+        "height": 48,
+        "font": 14
+      },
+      "body": {
+        "left": 0,
+        "right": 320,
+        "top": 133.171875,
+        "bottom": 487,
+        "width": 320,
+        "height": 353.828125,
+        "font": 14
+      },
+      "primary": [
+        {
+          "left": 16,
+          "right": 304,
+          "top": 500,
+          "bottom": 548,
+          "width": 288,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "keyboard": null
+    },
+    {
+      "state": "upload-error",
+      "viewport": [
+        320,
+        568
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "关闭面板",
+          "left": 256,
+          "right": 304,
+          "top": 226.828125,
+          "bottom": 274.828125,
+          "width": 48,
+          "height": 48,
+          "font": 14
+        },
+        {
+          "label": "重试未完成上传",
+          "left": 16,
+          "right": 304,
+          "top": 456,
+          "bottom": 504,
+          "width": 288,
+          "height": 48,
+          "font": 16
+        },
+        {
+          "label": "核对已上传照片",
+          "left": 16,
+          "right": 304,
+          "top": 504,
+          "bottom": 548,
+          "width": 288,
+          "height": 44,
+          "font": 14
+        }
+      ],
+      "sheet": {
+        "left": 0,
+        "right": 320,
+        "top": 218.828125,
+        "bottom": 568,
+        "width": 320,
+        "height": 349.171875,
+        "font": 14
+      },
+      "footer": {
+        "left": 0,
+        "right": 320,
+        "top": 443,
+        "bottom": 568,
+        "width": 320,
+        "height": 125,
+        "font": 14
+      },
+      "close": {
+        "left": 256,
+        "right": 304,
+        "top": 226.828125,
+        "bottom": 274.828125,
+        "width": 48,
+        "height": 48,
+        "font": 14
+      },
+      "body": {
+        "left": 0,
+        "right": 320,
+        "top": 283.828125,
+        "bottom": 443,
+        "width": 320,
+        "height": 159.171875,
+        "font": 14
+      },
+      "primary": [
+        {
+          "left": 16,
+          "right": 304,
+          "top": 456,
+          "bottom": 504,
+          "width": 288,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "keyboard": null
+    },
+    {
+      "state": "processing-error",
+      "viewport": [
+        320,
+        568
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "关闭面板",
+          "left": 256,
+          "right": 304,
+          "top": 76.171875,
+          "bottom": 124.171875,
+          "width": 48,
+          "height": 48,
+          "font": 14
+        },
+        {
+          "label": "取消选择",
+          "left": 12,
+          "right": 68,
+          "top": 145.171875,
+          "bottom": 189.171875,
+          "width": 56,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "批量修改",
+          "left": 252,
+          "right": 308,
+          "top": 145.171875,
+          "bottom": 189.171875,
+          "width": 56,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "取消选择第1张照片",
+          "left": 12,
+          "right": 56,
+          "top": 251.5625,
+          "bottom": 295.5625,
+          "width": 44,
+          "height": 44,
+          "font": 20
+        },
+        {
+          "label": "核对照片",
+          "left": 12,
+          "right": 88,
+          "top": 335.953125,
+          "bottom": 379.953125,
+          "width": 76,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "取消选择第2张照片",
+          "left": 12,
+          "right": 56,
+          "top": 416.953125,
+          "bottom": 460.953125,
+          "width": 44,
+          "height": 44,
+          "font": 20
+        },
+        {
+          "label": "核对照片",
+          "left": 12,
+          "right": 88,
+          "top": 501.34375,
+          "bottom": 545.34375,
+          "width": 76,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "取消选择第3张照片",
+          "left": 12,
+          "right": 56,
+          "top": 582.34375,
+          "bottom": 626.34375,
+          "width": 44,
+          "height": 44,
+          "font": 20
+        },
+        {
+          "label": "核对照片",
+          "left": 12,
+          "right": 88,
+          "top": 666.734375,
+          "bottom": 710.734375,
+          "width": 76,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "重试处理",
+          "left": 96,
+          "right": 172,
+          "top": 666.734375,
+          "bottom": 710.734375,
+          "width": 76,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "补拍摄日期",
+          "left": 16,
+          "right": 304,
+          "top": 500,
+          "bottom": 548,
+          "width": 288,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "sheet": {
+        "left": 0,
+        "right": 320,
+        "top": 68.171875,
+        "bottom": 568,
+        "width": 320,
+        "height": 499.828125,
+        "font": 14
+      },
+      "footer": {
+        "left": 0,
+        "right": 320,
+        "top": 487,
+        "bottom": 568,
+        "width": 320,
+        "height": 81,
+        "font": 14
+      },
+      "close": {
+        "left": 256,
+        "right": 304,
+        "top": 76.171875,
+        "bottom": 124.171875,
+        "width": 48,
+        "height": 48,
+        "font": 14
+      },
+      "body": {
+        "left": 0,
+        "right": 320,
+        "top": 133.171875,
+        "bottom": 487,
+        "width": 320,
+        "height": 353.828125,
+        "font": 14
+      },
+      "primary": [
+        {
+          "left": 16,
+          "right": 304,
+          "top": 500,
+          "bottom": 548,
+          "width": 288,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "keyboard": null
+    },
+    {
+      "state": "conflict",
+      "viewport": [
+        320,
+        568
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "关闭面板",
+          "left": 256,
+          "right": 304,
+          "top": 76.171875,
+          "bottom": 124.171875,
+          "width": 48,
+          "height": 48,
+          "font": 14
+        },
+        {
+          "label": "取消选择",
+          "left": 12,
+          "right": 68,
+          "top": 233.953125,
+          "bottom": 277.953125,
+          "width": 56,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "批量修改",
+          "left": 252,
+          "right": 308,
+          "top": 233.953125,
+          "bottom": 277.953125,
+          "width": 56,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "取消选择第1张照片",
+          "left": 12,
+          "right": 56,
+          "top": 340.34375,
+          "bottom": 384.34375,
+          "width": 44,
+          "height": 44,
+          "font": 20
+        },
+        {
+          "label": "核对照片",
+          "left": 12,
+          "right": 88,
+          "top": 424.734375,
+          "bottom": 468.734375,
+          "width": 76,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "取消选择第2张照片",
+          "left": 12,
+          "right": 56,
+          "top": 505.734375,
+          "bottom": 549.734375,
+          "width": 44,
+          "height": 44,
+          "font": 20
+        },
+        {
+          "label": "核对照片",
+          "left": 12,
+          "right": 88,
+          "top": 590.125,
+          "bottom": 634.125,
+          "width": 76,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "取消选择第3张照片",
+          "left": 12,
+          "right": 56,
+          "top": 671.125,
+          "bottom": 715.125,
+          "width": 44,
+          "height": 44,
+          "font": 20
+        },
+        {
+          "label": "核对照片",
+          "left": 12,
+          "right": 88,
+          "top": 755.515625,
+          "bottom": 799.515625,
+          "width": 76,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "刷新并继续核对",
+          "left": 16,
+          "right": 304,
+          "top": 500,
+          "bottom": 548,
+          "width": 288,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "sheet": {
+        "left": 0,
+        "right": 320,
+        "top": 68.171875,
+        "bottom": 568,
+        "width": 320,
+        "height": 499.828125,
+        "font": 14
+      },
+      "footer": {
+        "left": 0,
+        "right": 320,
+        "top": 487,
+        "bottom": 568,
+        "width": 320,
+        "height": 81,
+        "font": 14
+      },
+      "close": {
+        "left": 256,
+        "right": 304,
+        "top": 76.171875,
+        "bottom": 124.171875,
+        "width": 48,
+        "height": 48,
+        "font": 14
+      },
+      "body": {
+        "left": 0,
+        "right": 320,
+        "top": 133.171875,
+        "bottom": 487,
+        "width": 320,
+        "height": 353.828125,
+        "font": 14
+      },
+      "primary": [
+        {
+          "left": 16,
+          "right": 304,
+          "top": 500,
+          "bottom": 548,
+          "width": 288,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "keyboard": null
+    },
+    {
+      "state": "confirm",
+      "viewport": [
+        320,
+        568
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "关闭面板",
+          "left": 256,
+          "right": 304,
+          "top": 234.828125,
+          "bottom": 282.828125,
+          "width": 48,
+          "height": 48,
+          "font": 14
+        },
+        {
+          "label": "确认入档",
+          "left": 16,
+          "right": 304,
+          "top": 456,
+          "bottom": 504,
+          "width": 288,
+          "height": 48,
+          "font": 16
+        },
+        {
+          "label": "返回核对",
+          "left": 16,
+          "right": 304,
+          "top": 504,
+          "bottom": 548,
+          "width": 288,
+          "height": 44,
+          "font": 14
+        }
+      ],
+      "sheet": {
+        "left": 0,
+        "right": 320,
+        "top": 226.828125,
+        "bottom": 568,
+        "width": 320,
+        "height": 341.171875,
+        "font": 14
+      },
+      "footer": {
+        "left": 0,
+        "right": 320,
+        "top": 443,
+        "bottom": 568,
+        "width": 320,
+        "height": 125,
+        "font": 14
+      },
+      "close": {
+        "left": 256,
+        "right": 304,
+        "top": 234.828125,
+        "bottom": 282.828125,
+        "width": 48,
+        "height": 48,
+        "font": 14
+      },
+      "body": {
+        "left": 0,
+        "right": 320,
+        "top": 291.828125,
+        "bottom": 443,
+        "width": 320,
+        "height": 151.171875,
+        "font": 14
+      },
+      "primary": [
+        {
+          "left": 16,
+          "right": 304,
+          "top": 456,
+          "bottom": 504,
+          "width": 288,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "keyboard": null
+    },
+    {
+      "state": "saved",
+      "viewport": [
+        320,
+        568
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "旅行日记",
+          "left": 12,
+          "right": 124,
+          "top": 64,
+          "bottom": 108,
+          "width": 112,
+          "height": 44,
+          "font": 22
+        },
+        {
+          "label": "六六六",
+          "left": 194,
+          "right": 308,
+          "top": 64,
+          "bottom": 108,
+          "width": 114,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "更多足迹操作",
+          "left": 264,
+          "right": 308,
+          "top": 120,
+          "bottom": 168.390625,
+          "width": 44,
+          "height": 48.390625,
+          "font": 14
+        },
+        {
+          "label": "时间线",
+          "left": 15,
+          "right": 111.65625,
+          "top": 183.390625,
+          "bottom": 227.390625,
+          "width": 96.65625,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "轨迹回放",
+          "left": 111.65625,
+          "right": 208.328125,
+          "top": 183.390625,
+          "bottom": 227.390625,
+          "width": 96.671875,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "地图点亮",
+          "left": 208.328125,
+          "right": 304.984375,
+          "top": 183.390625,
+          "bottom": 227.390625,
+          "width": 96.65625,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "查看第1张照片",
+          "left": 38,
+          "right": 162.5,
+          "top": 365.765625,
+          "bottom": 492.15625,
+          "width": 124.5,
+          "height": 126.390625,
+          "font": 14
+        },
+        {
+          "label": "查看第2张照片",
+          "left": 170.5,
+          "right": 295,
+          "top": 365.765625,
+          "bottom": 492.15625,
+          "width": 124.5,
+          "height": 126.390625,
+          "font": 14
+        },
+        {
+          "label": "查看第3张照片",
+          "left": 38,
+          "right": 162.5,
+          "top": 500.15625,
+          "bottom": 626.546875,
+          "width": 124.5,
+          "height": 126.390625,
+          "font": 14
+        },
+        {
+          "label": "查看照片",
+          "left": 38,
+          "right": 295,
+          "top": 626.546875,
+          "bottom": 670.546875,
+          "width": 257,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "导入照片",
+          "left": 12,
+          "right": 308,
+          "top": 703.546875,
+          "bottom": 751.546875,
+          "width": 296,
+          "height": 48,
+          "font": 16
+        },
+        {
+          "label": "今日",
+          "left": 8,
+          "right": 68.796875,
+          "top": 485.609375,
+          "bottom": 544,
+          "width": 60.796875,
+          "height": 58.390625,
+          "font": 14
+        },
+        {
+          "label": "日程",
+          "left": 68.796875,
+          "right": 129.609375,
+          "top": 485.609375,
+          "bottom": 544,
+          "width": 60.8125,
+          "height": 58.390625,
+          "font": 14
+        },
+        {
+          "label": "记录",
+          "left": 129.609375,
+          "right": 190.40625,
+          "top": 485.609375,
+          "bottom": 544,
+          "width": 60.796875,
+          "height": 58.390625,
+          "font": 14
+        },
+        {
+          "label": "报表",
+          "left": 190.40625,
+          "right": 251.203125,
+          "top": 485.609375,
+          "bottom": 544,
+          "width": 60.796875,
+          "height": 58.390625,
+          "font": 14
+        },
+        {
+          "label": "设置",
+          "left": 251.203125,
+          "right": 312,
+          "top": 485.609375,
+          "bottom": 544,
+          "width": 60.796875,
+          "height": 58.390625,
+          "font": 14
+        }
+      ],
+      "sheet": null,
+      "footer": null,
+      "close": null,
+      "body": null,
+      "primary": [],
+      "keyboard": null
+    },
+    {
+      "state": "gallery-focused",
+      "viewport": [
+        320,
+        568
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "关闭面板",
+          "left": 256,
+          "right": 304,
+          "top": 101.21875,
+          "bottom": 149.21875,
+          "width": 48,
+          "height": 48,
+          "font": 14
+        },
+        {
+          "label": "上一张",
+          "left": 12,
+          "right": 78,
+          "top": 362.21875,
+          "bottom": 406.21875,
+          "width": 66,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "下一张",
+          "left": 242,
+          "right": 308,
+          "top": 362.21875,
+          "bottom": 406.21875,
+          "width": 66,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "修改日期和地点",
+          "left": 16,
+          "right": 304,
+          "top": 500,
+          "bottom": 548,
+          "width": 288,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "sheet": {
+        "left": 0,
+        "right": 320,
+        "top": 93.21875,
+        "bottom": 568,
+        "width": 320,
+        "height": 474.78125,
+        "font": 14
+      },
+      "footer": {
+        "left": 0,
+        "right": 320,
+        "top": 487,
+        "bottom": 568,
+        "width": 320,
+        "height": 81,
+        "font": 14
+      },
+      "close": {
+        "left": 256,
+        "right": 304,
+        "top": 101.21875,
+        "bottom": 149.21875,
+        "width": 48,
+        "height": 48,
+        "font": 14
+      },
+      "body": {
+        "left": 0,
+        "right": 320,
+        "top": 158.21875,
+        "bottom": 487,
+        "width": 320,
+        "height": 328.78125,
+        "font": 14
+      },
+      "primary": [
+        {
+          "left": 16,
+          "right": 304,
+          "top": 500,
+          "bottom": 548,
+          "width": 288,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "keyboard": null
+    },
+    {
+      "state": "readonly",
+      "viewport": [
+        320,
+        568
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "旅行日记",
+          "left": 12,
+          "right": 124,
+          "top": 64,
+          "bottom": 108,
+          "width": 112,
+          "height": 44,
+          "font": 22
+        },
+        {
+          "label": "六六六",
+          "left": 194,
+          "right": 308,
+          "top": 64,
+          "bottom": 108,
+          "width": 114,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "更多足迹操作",
+          "left": 264,
+          "right": 308,
+          "top": 120,
+          "bottom": 168.390625,
+          "width": 44,
+          "height": 48.390625,
+          "font": 14
+        },
+        {
+          "label": "时间线",
+          "left": 15,
+          "right": 111.65625,
+          "top": 183.390625,
+          "bottom": 227.390625,
+          "width": 96.65625,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "轨迹回放",
+          "left": 111.65625,
+          "right": 208.328125,
+          "top": 183.390625,
+          "bottom": 227.390625,
+          "width": 96.671875,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "地图点亮",
+          "left": 208.328125,
+          "right": 304.984375,
+          "top": 183.390625,
+          "bottom": 227.390625,
+          "width": 96.65625,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "今日",
+          "left": 8,
+          "right": 68.796875,
+          "top": 485.609375,
+          "bottom": 544,
+          "width": 60.796875,
+          "height": 58.390625,
+          "font": 14
+        },
+        {
+          "label": "日程",
+          "left": 68.796875,
+          "right": 129.609375,
+          "top": 485.609375,
+          "bottom": 544,
+          "width": 60.8125,
+          "height": 58.390625,
+          "font": 14
+        },
+        {
+          "label": "记录",
+          "left": 129.609375,
+          "right": 190.40625,
+          "top": 485.609375,
+          "bottom": 544,
+          "width": 60.796875,
+          "height": 58.390625,
+          "font": 14
+        },
+        {
+          "label": "报表",
+          "left": 190.40625,
+          "right": 251.203125,
+          "top": 485.609375,
+          "bottom": 544,
+          "width": 60.796875,
+          "height": 58.390625,
+          "font": 14
+        },
+        {
+          "label": "设置",
+          "left": 251.203125,
+          "right": 312,
+          "top": 485.609375,
+          "bottom": 544,
+          "width": 60.796875,
+          "height": 58.390625,
+          "font": 14
+        }
+      ],
+      "sheet": null,
+      "footer": null,
+      "close": null,
+      "body": null,
+      "primary": [],
+      "keyboard": null
+    },
+    {
+      "state": "edit-keyboard",
+      "viewport": [
+        320,
+        568
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "关闭面板",
+          "left": 256,
+          "right": 304,
+          "top": 40,
+          "bottom": 88,
+          "width": 48,
+          "height": 48,
+          "font": 14
+        },
+        {
+          "label": "查找地点",
+          "left": 12,
+          "right": 92,
+          "top": 380.953125,
+          "bottom": 424.953125,
+          "width": 80,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "地图选点",
+          "left": 100,
+          "right": 180,
+          "top": 380.953125,
+          "bottom": 424.953125,
+          "width": 80,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "保存修改",
+          "left": 16,
+          "right": 304,
+          "top": 302,
+          "bottom": 350,
+          "width": 288,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "sheet": {
+        "left": 0,
+        "right": 320,
+        "top": 40,
+        "bottom": 358,
+        "width": 320,
+        "height": 318,
+        "font": 14
+      },
+      "footer": {
+        "left": 0,
+        "right": 320,
+        "top": 293,
+        "bottom": 358,
+        "width": 320,
+        "height": 65,
+        "font": 14
+      },
+      "close": {
+        "left": 256,
+        "right": 304,
+        "top": 40,
+        "bottom": 88,
+        "width": 48,
+        "height": 48,
+        "font": 14
+      },
+      "body": {
+        "left": 0,
+        "right": 320,
+        "top": 89,
+        "bottom": 293,
+        "width": 320,
+        "height": 204,
+        "font": 14
+      },
+      "primary": [
+        {
+          "left": 16,
+          "right": 304,
+          "top": 302,
+          "bottom": 350,
+          "width": 288,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "keyboard": {
+        "left": 0,
+        "right": 320,
+        "top": 358,
+        "bottom": 568,
+        "width": 320,
+        "height": 210,
+        "font": 14
+      }
+    },
+    {
+      "state": "consent",
+      "viewport": [
+        390,
+        844
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "关闭面板",
+          "left": 326,
+          "right": 374,
+          "top": 372.4375,
+          "bottom": 420.4375,
+          "width": 48,
+          "height": 48,
+          "font": 14
+        },
+        {
+          "label": "同意并选择照片",
+          "left": 16,
+          "right": 374,
+          "top": 724,
+          "bottom": 772,
+          "width": 358,
+          "height": 48,
+          "font": 16
+        },
+        {
+          "label": "手动记录",
+          "left": 16,
+          "right": 374,
+          "top": 772,
+          "bottom": 816,
+          "width": 358,
+          "height": 44,
+          "font": 14
+        }
+      ],
+      "sheet": {
+        "left": 0,
+        "right": 390,
+        "top": 364.4375,
+        "bottom": 844,
+        "width": 390,
+        "height": 479.5625,
+        "font": 14
+      },
+      "footer": {
+        "left": 0,
+        "right": 390,
+        "top": 711,
+        "bottom": 844,
+        "width": 390,
+        "height": 133,
+        "font": 14
+      },
+      "close": {
+        "left": 326,
+        "right": 374,
+        "top": 372.4375,
+        "bottom": 420.4375,
+        "width": 48,
+        "height": 48,
+        "font": 14
+      },
+      "body": {
+        "left": 0,
+        "right": 390,
+        "top": 429.4375,
+        "bottom": 711,
+        "width": 390,
+        "height": 281.5625,
+        "font": 14
+      },
+      "primary": [
+        {
+          "left": 16,
+          "right": 374,
+          "top": 724,
+          "bottom": 772,
+          "width": 358,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "keyboard": null
+    },
+    {
+      "state": "uploading",
+      "viewport": [
+        390,
+        844
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "关闭面板",
+          "left": 326,
+          "right": 374,
+          "top": 581.21875,
+          "bottom": 629.21875,
+          "width": 48,
+          "height": 48,
+          "font": 14
+        },
+        {
+          "label": "正在上传 67%",
+          "left": 16,
+          "right": 374,
+          "top": 768,
+          "bottom": 816,
+          "width": 358,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "sheet": {
+        "left": 0,
+        "right": 390,
+        "top": 573.21875,
+        "bottom": 844,
+        "width": 390,
+        "height": 270.78125,
+        "font": 14
+      },
+      "footer": {
+        "left": 0,
+        "right": 390,
+        "top": 755,
+        "bottom": 844,
+        "width": 390,
+        "height": 89,
+        "font": 14
+      },
+      "close": {
+        "left": 326,
+        "right": 374,
+        "top": 581.21875,
+        "bottom": 629.21875,
+        "width": 48,
+        "height": 48,
+        "font": 14
+      },
+      "body": {
+        "left": 0,
+        "right": 390,
+        "top": 638.21875,
+        "bottom": 755,
+        "width": 390,
+        "height": 116.78125,
+        "font": 14
+      },
+      "primary": [
+        {
+          "left": 16,
+          "right": 374,
+          "top": 768,
+          "bottom": 816,
+          "width": 358,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "keyboard": null
+    },
+    {
+      "state": "review-missing",
+      "viewport": [
+        390,
+        844
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "关闭面板",
+          "left": 326,
+          "right": 374,
+          "top": 109.28125,
+          "bottom": 157.28125,
+          "width": 48,
+          "height": 48,
+          "font": 14
+        },
+        {
+          "label": "取消选择",
+          "left": 16,
+          "right": 72,
+          "top": 178.28125,
+          "bottom": 222.28125,
+          "width": 56,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "批量修改",
+          "left": 318,
+          "right": 374,
+          "top": 178.28125,
+          "bottom": 222.28125,
+          "width": 56,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "取消选择第1张照片",
+          "left": 16,
+          "right": 60,
+          "top": 284.671875,
+          "bottom": 328.671875,
+          "width": 44,
+          "height": 44,
+          "font": 20
+        },
+        {
+          "label": "核对照片",
+          "left": 60,
+          "right": 136,
+          "top": 369.0625,
+          "bottom": 413.0625,
+          "width": 76,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "取消选择第2张照片",
+          "left": 16,
+          "right": 60,
+          "top": 450.0625,
+          "bottom": 494.0625,
+          "width": 44,
+          "height": 44,
+          "font": 20
+        },
+        {
+          "label": "核对照片",
+          "left": 60,
+          "right": 136,
+          "top": 534.453125,
+          "bottom": 578.453125,
+          "width": 76,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "取消选择第3张照片",
+          "left": 16,
+          "right": 60,
+          "top": 615.453125,
+          "bottom": 659.453125,
+          "width": 44,
+          "height": 44,
+          "font": 20
+        },
+        {
+          "label": "核对照片",
+          "left": 60,
+          "right": 136,
+          "top": 699.84375,
+          "bottom": 743.84375,
+          "width": 76,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "补拍摄日期",
+          "left": 16,
+          "right": 374,
+          "top": 768,
+          "bottom": 816,
+          "width": 358,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "sheet": {
+        "left": 0,
+        "right": 390,
+        "top": 101.28125,
+        "bottom": 844,
+        "width": 390,
+        "height": 742.71875,
+        "font": 14
+      },
+      "footer": {
+        "left": 0,
+        "right": 390,
+        "top": 755,
+        "bottom": 844,
+        "width": 390,
+        "height": 89,
+        "font": 14
+      },
+      "close": {
+        "left": 326,
+        "right": 374,
+        "top": 109.28125,
+        "bottom": 157.28125,
+        "width": 48,
+        "height": 48,
+        "font": 14
+      },
+      "body": {
+        "left": 0,
+        "right": 390,
+        "top": 166.28125,
+        "bottom": 755,
+        "width": 390,
+        "height": 588.71875,
+        "font": 14
+      },
+      "primary": [
+        {
+          "left": 16,
+          "right": 374,
+          "top": 768,
+          "bottom": 816,
+          "width": 358,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "keyboard": null
+    },
+    {
+      "state": "batch-date",
+      "viewport": [
+        390,
+        844
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "关闭面板",
+          "left": 326,
+          "right": 374,
+          "top": 526.828125,
+          "bottom": 574.828125,
+          "width": 48,
+          "height": 48,
+          "font": 14
+        },
+        {
+          "label": "保存修改",
+          "left": 16,
+          "right": 374,
+          "top": 768,
+          "bottom": 816,
+          "width": 358,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "sheet": {
+        "left": 0,
+        "right": 390,
+        "top": 518.828125,
+        "bottom": 844,
+        "width": 390,
+        "height": 325.171875,
+        "font": 14
+      },
+      "footer": {
+        "left": 0,
+        "right": 390,
+        "top": 755,
+        "bottom": 844,
+        "width": 390,
+        "height": 89,
+        "font": 14
+      },
+      "close": {
+        "left": 326,
+        "right": 374,
+        "top": 526.828125,
+        "bottom": 574.828125,
+        "width": 48,
+        "height": 48,
+        "font": 14
+      },
+      "body": {
+        "left": 0,
+        "right": 390,
+        "top": 583.828125,
+        "bottom": 755,
+        "width": 390,
+        "height": 171.171875,
+        "font": 14
+      },
+      "primary": [
+        {
+          "left": 16,
+          "right": 374,
+          "top": 768,
+          "bottom": 816,
+          "width": 358,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "keyboard": null
+    },
+    {
+      "state": "edit",
+      "viewport": [
+        390,
+        844
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "关闭面板",
+          "left": 326,
+          "right": 374,
+          "top": 109.28125,
+          "bottom": 157.28125,
+          "width": 48,
+          "height": 48,
+          "font": 14
+        },
+        {
+          "label": "查找地点",
+          "left": 16,
+          "right": 96,
+          "top": 722.234375,
+          "bottom": 766.234375,
+          "width": 80,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "地图选点",
+          "left": 104,
+          "right": 184,
+          "top": 722.234375,
+          "bottom": 766.234375,
+          "width": 80,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "保存修改",
+          "left": 16,
+          "right": 374,
+          "top": 768,
+          "bottom": 816,
+          "width": 358,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "sheet": {
+        "left": 0,
+        "right": 390,
+        "top": 101.28125,
+        "bottom": 844,
+        "width": 390,
+        "height": 742.71875,
+        "font": 14
+      },
+      "footer": {
+        "left": 0,
+        "right": 390,
+        "top": 755,
+        "bottom": 844,
+        "width": 390,
+        "height": 89,
+        "font": 14
+      },
+      "close": {
+        "left": 326,
+        "right": 374,
+        "top": 109.28125,
+        "bottom": 157.28125,
+        "width": 48,
+        "height": 48,
+        "font": 14
+      },
+      "body": {
+        "left": 0,
+        "right": 390,
+        "top": 166.28125,
+        "bottom": 755,
+        "width": 390,
+        "height": 588.71875,
+        "font": 14
+      },
+      "primary": [
+        {
+          "left": 16,
+          "right": 374,
+          "top": 768,
+          "bottom": 816,
+          "width": 358,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "keyboard": null
+    },
+    {
+      "state": "review-ready",
+      "viewport": [
+        390,
+        844
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "关闭面板",
+          "left": 326,
+          "right": 374,
+          "top": 109.28125,
+          "bottom": 157.28125,
+          "width": 48,
+          "height": 48,
+          "font": 14
+        },
+        {
+          "label": "取消选择",
+          "left": 16,
+          "right": 72,
+          "top": 178.28125,
+          "bottom": 222.28125,
+          "width": 56,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "批量修改",
+          "left": 318,
+          "right": 374,
+          "top": 178.28125,
+          "bottom": 222.28125,
+          "width": 56,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "取消选择第1张照片",
+          "left": 16,
+          "right": 60,
+          "top": 284.671875,
+          "bottom": 328.671875,
+          "width": 44,
+          "height": 44,
+          "font": 20
+        },
+        {
+          "label": "核对照片",
+          "left": 60,
+          "right": 136,
+          "top": 369.0625,
+          "bottom": 413.0625,
+          "width": 76,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "取消选择第2张照片",
+          "left": 16,
+          "right": 60,
+          "top": 450.0625,
+          "bottom": 494.0625,
+          "width": 44,
+          "height": 44,
+          "font": 20
+        },
+        {
+          "label": "核对照片",
+          "left": 60,
+          "right": 136,
+          "top": 534.453125,
+          "bottom": 578.453125,
+          "width": 76,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "取消选择第3张照片",
+          "left": 16,
+          "right": 60,
+          "top": 615.453125,
+          "bottom": 659.453125,
+          "width": 44,
+          "height": 44,
+          "font": 20
+        },
+        {
+          "label": "核对照片",
+          "left": 60,
+          "right": 136,
+          "top": 699.84375,
+          "bottom": 743.84375,
+          "width": 76,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "确认选中的 3 张",
+          "left": 16,
+          "right": 374,
+          "top": 768,
+          "bottom": 816,
+          "width": 358,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "sheet": {
+        "left": 0,
+        "right": 390,
+        "top": 101.28125,
+        "bottom": 844,
+        "width": 390,
+        "height": 742.71875,
+        "font": 14
+      },
+      "footer": {
+        "left": 0,
+        "right": 390,
+        "top": 755,
+        "bottom": 844,
+        "width": 390,
+        "height": 89,
+        "font": 14
+      },
+      "close": {
+        "left": 326,
+        "right": 374,
+        "top": 109.28125,
+        "bottom": 157.28125,
+        "width": 48,
+        "height": 48,
+        "font": 14
+      },
+      "body": {
+        "left": 0,
+        "right": 390,
+        "top": 166.28125,
+        "bottom": 755,
+        "width": 390,
+        "height": 588.71875,
+        "font": 14
+      },
+      "primary": [
+        {
+          "left": 16,
+          "right": 374,
+          "top": 768,
+          "bottom": 816,
+          "width": 358,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "keyboard": null
+    },
+    {
+      "state": "upload-error",
+      "viewport": [
+        390,
+        844
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "关闭面板",
+          "left": 326,
+          "right": 374,
+          "top": 494.828125,
+          "bottom": 542.828125,
+          "width": 48,
+          "height": 48,
+          "font": 14
+        },
+        {
+          "label": "重试未完成上传",
+          "left": 16,
+          "right": 374,
+          "top": 724,
+          "bottom": 772,
+          "width": 358,
+          "height": 48,
+          "font": 16
+        },
+        {
+          "label": "核对已上传照片",
+          "left": 16,
+          "right": 374,
+          "top": 772,
+          "bottom": 816,
+          "width": 358,
+          "height": 44,
+          "font": 14
+        }
+      ],
+      "sheet": {
+        "left": 0,
+        "right": 390,
+        "top": 486.828125,
+        "bottom": 844,
+        "width": 390,
+        "height": 357.171875,
+        "font": 14
+      },
+      "footer": {
+        "left": 0,
+        "right": 390,
+        "top": 711,
+        "bottom": 844,
+        "width": 390,
+        "height": 133,
+        "font": 14
+      },
+      "close": {
+        "left": 326,
+        "right": 374,
+        "top": 494.828125,
+        "bottom": 542.828125,
+        "width": 48,
+        "height": 48,
+        "font": 14
+      },
+      "body": {
+        "left": 0,
+        "right": 390,
+        "top": 551.828125,
+        "bottom": 711,
+        "width": 390,
+        "height": 159.171875,
+        "font": 14
+      },
+      "primary": [
+        {
+          "left": 16,
+          "right": 374,
+          "top": 724,
+          "bottom": 772,
+          "width": 358,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "keyboard": null
+    },
+    {
+      "state": "processing-error",
+      "viewport": [
+        390,
+        844
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "关闭面板",
+          "left": 326,
+          "right": 374,
+          "top": 109.28125,
+          "bottom": 157.28125,
+          "width": 48,
+          "height": 48,
+          "font": 14
+        },
+        {
+          "label": "取消选择",
+          "left": 16,
+          "right": 72,
+          "top": 178.28125,
+          "bottom": 222.28125,
+          "width": 56,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "批量修改",
+          "left": 318,
+          "right": 374,
+          "top": 178.28125,
+          "bottom": 222.28125,
+          "width": 56,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "取消选择第1张照片",
+          "left": 16,
+          "right": 60,
+          "top": 284.671875,
+          "bottom": 328.671875,
+          "width": 44,
+          "height": 44,
+          "font": 20
+        },
+        {
+          "label": "核对照片",
+          "left": 60,
+          "right": 136,
+          "top": 369.0625,
+          "bottom": 413.0625,
+          "width": 76,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "取消选择第2张照片",
+          "left": 16,
+          "right": 60,
+          "top": 450.0625,
+          "bottom": 494.0625,
+          "width": 44,
+          "height": 44,
+          "font": 20
+        },
+        {
+          "label": "核对照片",
+          "left": 60,
+          "right": 136,
+          "top": 534.453125,
+          "bottom": 578.453125,
+          "width": 76,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "取消选择第3张照片",
+          "left": 16,
+          "right": 60,
+          "top": 615.453125,
+          "bottom": 659.453125,
+          "width": 44,
+          "height": 44,
+          "font": 20
+        },
+        {
+          "label": "核对照片",
+          "left": 60,
+          "right": 136,
+          "top": 699.84375,
+          "bottom": 743.84375,
+          "width": 76,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "重试处理",
+          "left": 144,
+          "right": 220,
+          "top": 699.84375,
+          "bottom": 743.84375,
+          "width": 76,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "补拍摄日期",
+          "left": 16,
+          "right": 374,
+          "top": 768,
+          "bottom": 816,
+          "width": 358,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "sheet": {
+        "left": 0,
+        "right": 390,
+        "top": 101.28125,
+        "bottom": 844,
+        "width": 390,
+        "height": 742.71875,
+        "font": 14
+      },
+      "footer": {
+        "left": 0,
+        "right": 390,
+        "top": 755,
+        "bottom": 844,
+        "width": 390,
+        "height": 89,
+        "font": 14
+      },
+      "close": {
+        "left": 326,
+        "right": 374,
+        "top": 109.28125,
+        "bottom": 157.28125,
+        "width": 48,
+        "height": 48,
+        "font": 14
+      },
+      "body": {
+        "left": 0,
+        "right": 390,
+        "top": 166.28125,
+        "bottom": 755,
+        "width": 390,
+        "height": 588.71875,
+        "font": 14
+      },
+      "primary": [
+        {
+          "left": 16,
+          "right": 374,
+          "top": 768,
+          "bottom": 816,
+          "width": 358,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "keyboard": null
+    },
+    {
+      "state": "conflict",
+      "viewport": [
+        390,
+        844
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "关闭面板",
+          "left": 326,
+          "right": 374,
+          "top": 109.28125,
+          "bottom": 157.28125,
+          "width": 48,
+          "height": 48,
+          "font": 14
+        },
+        {
+          "label": "取消选择",
+          "left": 16,
+          "right": 72,
+          "top": 267.0625,
+          "bottom": 311.0625,
+          "width": 56,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "批量修改",
+          "left": 318,
+          "right": 374,
+          "top": 267.0625,
+          "bottom": 311.0625,
+          "width": 56,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "取消选择第1张照片",
+          "left": 16,
+          "right": 60,
+          "top": 373.453125,
+          "bottom": 417.453125,
+          "width": 44,
+          "height": 44,
+          "font": 20
+        },
+        {
+          "label": "核对照片",
+          "left": 60,
+          "right": 136,
+          "top": 457.84375,
+          "bottom": 501.84375,
+          "width": 76,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "取消选择第2张照片",
+          "left": 16,
+          "right": 60,
+          "top": 538.84375,
+          "bottom": 582.84375,
+          "width": 44,
+          "height": 44,
+          "font": 20
+        },
+        {
+          "label": "核对照片",
+          "left": 60,
+          "right": 136,
+          "top": 623.234375,
+          "bottom": 667.234375,
+          "width": 76,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "取消选择第3张照片",
+          "left": 16,
+          "right": 60,
+          "top": 704.234375,
+          "bottom": 748.234375,
+          "width": 44,
+          "height": 44,
+          "font": 20
+        },
+        {
+          "label": "核对照片",
+          "left": 60,
+          "right": 136,
+          "top": 788.625,
+          "bottom": 832.625,
+          "width": 76,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "刷新并继续核对",
+          "left": 16,
+          "right": 374,
+          "top": 768,
+          "bottom": 816,
+          "width": 358,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "sheet": {
+        "left": 0,
+        "right": 390,
+        "top": 101.28125,
+        "bottom": 844,
+        "width": 390,
+        "height": 742.71875,
+        "font": 14
+      },
+      "footer": {
+        "left": 0,
+        "right": 390,
+        "top": 755,
+        "bottom": 844,
+        "width": 390,
+        "height": 89,
+        "font": 14
+      },
+      "close": {
+        "left": 326,
+        "right": 374,
+        "top": 109.28125,
+        "bottom": 157.28125,
+        "width": 48,
+        "height": 48,
+        "font": 14
+      },
+      "body": {
+        "left": 0,
+        "right": 390,
+        "top": 166.28125,
+        "bottom": 755,
+        "width": 390,
+        "height": 588.71875,
+        "font": 14
+      },
+      "primary": [
+        {
+          "left": 16,
+          "right": 374,
+          "top": 768,
+          "bottom": 816,
+          "width": 358,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "keyboard": null
+    },
+    {
+      "state": "confirm",
+      "viewport": [
+        390,
+        844
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "关闭面板",
+          "left": 326,
+          "right": 374,
+          "top": 502.828125,
+          "bottom": 550.828125,
+          "width": 48,
+          "height": 48,
+          "font": 14
+        },
+        {
+          "label": "确认入档",
+          "left": 16,
+          "right": 374,
+          "top": 724,
+          "bottom": 772,
+          "width": 358,
+          "height": 48,
+          "font": 16
+        },
+        {
+          "label": "返回核对",
+          "left": 16,
+          "right": 374,
+          "top": 772,
+          "bottom": 816,
+          "width": 358,
+          "height": 44,
+          "font": 14
+        }
+      ],
+      "sheet": {
+        "left": 0,
+        "right": 390,
+        "top": 494.828125,
+        "bottom": 844,
+        "width": 390,
+        "height": 349.171875,
+        "font": 14
+      },
+      "footer": {
+        "left": 0,
+        "right": 390,
+        "top": 711,
+        "bottom": 844,
+        "width": 390,
+        "height": 133,
+        "font": 14
+      },
+      "close": {
+        "left": 326,
+        "right": 374,
+        "top": 502.828125,
+        "bottom": 550.828125,
+        "width": 48,
+        "height": 48,
+        "font": 14
+      },
+      "body": {
+        "left": 0,
+        "right": 390,
+        "top": 559.828125,
+        "bottom": 711,
+        "width": 390,
+        "height": 151.171875,
+        "font": 14
+      },
+      "primary": [
+        {
+          "left": 16,
+          "right": 374,
+          "top": 724,
+          "bottom": 772,
+          "width": 358,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "keyboard": null
+    },
+    {
+      "state": "saved",
+      "viewport": [
+        390,
+        844
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "旅行日记",
+          "left": 16,
+          "right": 128,
+          "top": 72,
+          "bottom": 116,
+          "width": 112,
+          "height": 44,
+          "font": 22
+        },
+        {
+          "label": "六六六",
+          "left": 260,
+          "right": 374,
+          "top": 72,
+          "bottom": 116,
+          "width": 114,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "更多足迹操作",
+          "left": 330,
+          "right": 374,
+          "top": 136,
+          "bottom": 184.390625,
+          "width": 44,
+          "height": 48.390625,
+          "font": 14
+        },
+        {
+          "label": "时间线",
+          "left": 19,
+          "right": 136.328125,
+          "top": 199.390625,
+          "bottom": 243.390625,
+          "width": 117.328125,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "轨迹回放",
+          "left": 136.328125,
+          "right": 253.65625,
+          "top": 199.390625,
+          "bottom": 243.390625,
+          "width": 117.328125,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "地图点亮",
+          "left": 253.65625,
+          "right": 371,
+          "top": 199.390625,
+          "bottom": 243.390625,
+          "width": 117.34375,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "查看第1张照片",
+          "left": 42,
+          "right": 197.5,
+          "top": 381.765625,
+          "bottom": 508.15625,
+          "width": 155.5,
+          "height": 126.390625,
+          "font": 14
+        },
+        {
+          "label": "查看第2张照片",
+          "left": 205.5,
+          "right": 361,
+          "top": 381.765625,
+          "bottom": 508.15625,
+          "width": 155.5,
+          "height": 126.390625,
+          "font": 14
+        },
+        {
+          "label": "查看第3张照片",
+          "left": 42,
+          "right": 197.5,
+          "top": 516.15625,
+          "bottom": 642.546875,
+          "width": 155.5,
+          "height": 126.390625,
+          "font": 14
+        },
+        {
+          "label": "查看照片",
+          "left": 42,
+          "right": 361,
+          "top": 642.546875,
+          "bottom": 686.546875,
+          "width": 319,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "导入照片",
+          "left": 16,
+          "right": 374,
+          "top": 719.546875,
+          "bottom": 767.546875,
+          "width": 358,
+          "height": 48,
+          "font": 16
+        },
+        {
+          "label": "今日",
+          "left": 8,
+          "right": 82.796875,
+          "top": 761.609375,
+          "bottom": 820,
+          "width": 74.796875,
+          "height": 58.390625,
+          "font": 14
+        },
+        {
+          "label": "日程",
+          "left": 82.796875,
+          "right": 157.609375,
+          "top": 761.609375,
+          "bottom": 820,
+          "width": 74.8125,
+          "height": 58.390625,
+          "font": 14
+        },
+        {
+          "label": "记录",
+          "left": 157.609375,
+          "right": 232.40625,
+          "top": 761.609375,
+          "bottom": 820,
+          "width": 74.796875,
+          "height": 58.390625,
+          "font": 14
+        },
+        {
+          "label": "报表",
+          "left": 232.40625,
+          "right": 307.203125,
+          "top": 761.609375,
+          "bottom": 820,
+          "width": 74.796875,
+          "height": 58.390625,
+          "font": 14
+        },
+        {
+          "label": "设置",
+          "left": 307.203125,
+          "right": 382,
+          "top": 761.609375,
+          "bottom": 820,
+          "width": 74.796875,
+          "height": 58.390625,
+          "font": 14
+        }
+      ],
+      "sheet": null,
+      "footer": null,
+      "close": null,
+      "body": null,
+      "primary": [],
+      "keyboard": null
+    },
+    {
+      "state": "gallery-focused",
+      "viewport": [
+        390,
+        844
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "关闭面板",
+          "left": 326,
+          "right": 374,
+          "top": 309.21875,
+          "bottom": 357.21875,
+          "width": 48,
+          "height": 48,
+          "font": 14
+        },
+        {
+          "label": "上一张",
+          "left": 16,
+          "right": 82,
+          "top": 630.21875,
+          "bottom": 674.21875,
+          "width": 66,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "下一张",
+          "left": 308,
+          "right": 374,
+          "top": 630.21875,
+          "bottom": 674.21875,
+          "width": 66,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "修改日期和地点",
+          "left": 16,
+          "right": 374,
+          "top": 768,
+          "bottom": 816,
+          "width": 358,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "sheet": {
+        "left": 0,
+        "right": 390,
+        "top": 301.21875,
+        "bottom": 844,
+        "width": 390,
+        "height": 542.78125,
+        "font": 14
+      },
+      "footer": {
+        "left": 0,
+        "right": 390,
+        "top": 755,
+        "bottom": 844,
+        "width": 390,
+        "height": 89,
+        "font": 14
+      },
+      "close": {
+        "left": 326,
+        "right": 374,
+        "top": 309.21875,
+        "bottom": 357.21875,
+        "width": 48,
+        "height": 48,
+        "font": 14
+      },
+      "body": {
+        "left": 0,
+        "right": 390,
+        "top": 366.21875,
+        "bottom": 755,
+        "width": 390,
+        "height": 388.78125,
+        "font": 14
+      },
+      "primary": [
+        {
+          "left": 16,
+          "right": 374,
+          "top": 768,
+          "bottom": 816,
+          "width": 358,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "keyboard": null
+    },
+    {
+      "state": "readonly",
+      "viewport": [
+        390,
+        844
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "旅行日记",
+          "left": 16,
+          "right": 128,
+          "top": 72,
+          "bottom": 116,
+          "width": 112,
+          "height": 44,
+          "font": 22
+        },
+        {
+          "label": "六六六",
+          "left": 260,
+          "right": 374,
+          "top": 72,
+          "bottom": 116,
+          "width": 114,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "更多足迹操作",
+          "left": 330,
+          "right": 374,
+          "top": 136,
+          "bottom": 184.390625,
+          "width": 44,
+          "height": 48.390625,
+          "font": 14
+        },
+        {
+          "label": "时间线",
+          "left": 19,
+          "right": 136.328125,
+          "top": 199.390625,
+          "bottom": 243.390625,
+          "width": 117.328125,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "轨迹回放",
+          "left": 136.328125,
+          "right": 253.65625,
+          "top": 199.390625,
+          "bottom": 243.390625,
+          "width": 117.328125,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "地图点亮",
+          "left": 253.65625,
+          "right": 371,
+          "top": 199.390625,
+          "bottom": 243.390625,
+          "width": 117.34375,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "今日",
+          "left": 8,
+          "right": 82.796875,
+          "top": 761.609375,
+          "bottom": 820,
+          "width": 74.796875,
+          "height": 58.390625,
+          "font": 14
+        },
+        {
+          "label": "日程",
+          "left": 82.796875,
+          "right": 157.609375,
+          "top": 761.609375,
+          "bottom": 820,
+          "width": 74.8125,
+          "height": 58.390625,
+          "font": 14
+        },
+        {
+          "label": "记录",
+          "left": 157.609375,
+          "right": 232.40625,
+          "top": 761.609375,
+          "bottom": 820,
+          "width": 74.796875,
+          "height": 58.390625,
+          "font": 14
+        },
+        {
+          "label": "报表",
+          "left": 232.40625,
+          "right": 307.203125,
+          "top": 761.609375,
+          "bottom": 820,
+          "width": 74.796875,
+          "height": 58.390625,
+          "font": 14
+        },
+        {
+          "label": "设置",
+          "left": 307.203125,
+          "right": 382,
+          "top": 761.609375,
+          "bottom": 820,
+          "width": 74.796875,
+          "height": 58.390625,
+          "font": 14
+        }
+      ],
+      "sheet": null,
+      "footer": null,
+      "close": null,
+      "body": null,
+      "primary": [],
+      "keyboard": null
+    },
+    {
+      "state": "edit-keyboard",
+      "viewport": [
+        390,
+        844
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "关闭面板",
+          "left": 326,
+          "right": 374,
+          "top": 40,
+          "bottom": 88,
+          "width": 48,
+          "height": 48,
+          "font": 14
+        },
+        {
+          "label": "查找地点",
+          "left": 16,
+          "right": 96,
+          "top": 512.953125,
+          "bottom": 556.953125,
+          "width": 80,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "地图选点",
+          "left": 104,
+          "right": 184,
+          "top": 512.953125,
+          "bottom": 556.953125,
+          "width": 80,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "保存修改",
+          "left": 16,
+          "right": 374,
+          "top": 578,
+          "bottom": 626,
+          "width": 358,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "sheet": {
+        "left": 0,
+        "right": 390,
+        "top": 40,
+        "bottom": 634,
+        "width": 390,
+        "height": 594,
+        "font": 14
+      },
+      "footer": {
+        "left": 0,
+        "right": 390,
+        "top": 569,
+        "bottom": 634,
+        "width": 390,
+        "height": 65,
+        "font": 14
+      },
+      "close": {
+        "left": 326,
+        "right": 374,
+        "top": 40,
+        "bottom": 88,
+        "width": 48,
+        "height": 48,
+        "font": 14
+      },
+      "body": {
+        "left": 0,
+        "right": 390,
+        "top": 89,
+        "bottom": 569,
+        "width": 390,
+        "height": 480,
+        "font": 14
+      },
+      "primary": [
+        {
+          "left": 16,
+          "right": 374,
+          "top": 578,
+          "bottom": 626,
+          "width": 358,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "keyboard": {
+        "left": 0,
+        "right": 390,
+        "top": 634,
+        "bottom": 844,
+        "width": 390,
+        "height": 210,
+        "font": 14
+      }
+    },
+    {
+      "state": "consent",
+      "viewport": [
+        430,
+        932
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "关闭面板",
+          "left": 366,
+          "right": 414,
+          "top": 460.4375,
+          "bottom": 508.4375,
+          "width": 48,
+          "height": 48,
+          "font": 14
+        },
+        {
+          "label": "同意并选择照片",
+          "left": 16,
+          "right": 414,
+          "top": 812,
+          "bottom": 860,
+          "width": 398,
+          "height": 48,
+          "font": 16
+        },
+        {
+          "label": "手动记录",
+          "left": 16,
+          "right": 414,
+          "top": 860,
+          "bottom": 904,
+          "width": 398,
+          "height": 44,
+          "font": 14
+        }
+      ],
+      "sheet": {
+        "left": 0,
+        "right": 430,
+        "top": 452.4375,
+        "bottom": 932,
+        "width": 430,
+        "height": 479.5625,
+        "font": 14
+      },
+      "footer": {
+        "left": 0,
+        "right": 430,
+        "top": 799,
+        "bottom": 932,
+        "width": 430,
+        "height": 133,
+        "font": 14
+      },
+      "close": {
+        "left": 366,
+        "right": 414,
+        "top": 460.4375,
+        "bottom": 508.4375,
+        "width": 48,
+        "height": 48,
+        "font": 14
+      },
+      "body": {
+        "left": 0,
+        "right": 430,
+        "top": 517.4375,
+        "bottom": 799,
+        "width": 430,
+        "height": 281.5625,
+        "font": 14
+      },
+      "primary": [
+        {
+          "left": 16,
+          "right": 414,
+          "top": 812,
+          "bottom": 860,
+          "width": 398,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "keyboard": null
+    },
+    {
+      "state": "uploading",
+      "viewport": [
+        430,
+        932
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "关闭面板",
+          "left": 366,
+          "right": 414,
+          "top": 669.21875,
+          "bottom": 717.21875,
+          "width": 48,
+          "height": 48,
+          "font": 14
+        },
+        {
+          "label": "正在上传 67%",
+          "left": 16,
+          "right": 414,
+          "top": 856,
+          "bottom": 904,
+          "width": 398,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "sheet": {
+        "left": 0,
+        "right": 430,
+        "top": 661.21875,
+        "bottom": 932,
+        "width": 430,
+        "height": 270.78125,
+        "font": 14
+      },
+      "footer": {
+        "left": 0,
+        "right": 430,
+        "top": 843,
+        "bottom": 932,
+        "width": 430,
+        "height": 89,
+        "font": 14
+      },
+      "close": {
+        "left": 366,
+        "right": 414,
+        "top": 669.21875,
+        "bottom": 717.21875,
+        "width": 48,
+        "height": 48,
+        "font": 14
+      },
+      "body": {
+        "left": 0,
+        "right": 430,
+        "top": 726.21875,
+        "bottom": 843,
+        "width": 430,
+        "height": 116.78125,
+        "font": 14
+      },
+      "primary": [
+        {
+          "left": 16,
+          "right": 414,
+          "top": 856,
+          "bottom": 904,
+          "width": 398,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "keyboard": null
+    },
+    {
+      "state": "review-missing",
+      "viewport": [
+        430,
+        932
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "关闭面板",
+          "left": 366,
+          "right": 414,
+          "top": 149.046875,
+          "bottom": 197.046875,
+          "width": 48,
+          "height": 48,
+          "font": 14
+        },
+        {
+          "label": "取消选择",
+          "left": 16,
+          "right": 72,
+          "top": 218.046875,
+          "bottom": 262.046875,
+          "width": 56,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "批量修改",
+          "left": 358,
+          "right": 414,
+          "top": 218.046875,
+          "bottom": 262.046875,
+          "width": 56,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "取消选择第1张照片",
+          "left": 16,
+          "right": 60,
+          "top": 324.4375,
+          "bottom": 368.4375,
+          "width": 44,
+          "height": 44,
+          "font": 20
+        },
+        {
+          "label": "核对照片",
+          "left": 60,
+          "right": 136,
+          "top": 408.828125,
+          "bottom": 452.828125,
+          "width": 76,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "取消选择第2张照片",
+          "left": 16,
+          "right": 60,
+          "top": 489.828125,
+          "bottom": 533.828125,
+          "width": 44,
+          "height": 44,
+          "font": 20
+        },
+        {
+          "label": "核对照片",
+          "left": 60,
+          "right": 136,
+          "top": 574.21875,
+          "bottom": 618.21875,
+          "width": 76,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "取消选择第3张照片",
+          "left": 16,
+          "right": 60,
+          "top": 655.21875,
+          "bottom": 699.21875,
+          "width": 44,
+          "height": 44,
+          "font": 20
+        },
+        {
+          "label": "核对照片",
+          "left": 60,
+          "right": 136,
+          "top": 739.609375,
+          "bottom": 783.609375,
+          "width": 76,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "补拍摄日期",
+          "left": 16,
+          "right": 414,
+          "top": 856,
+          "bottom": 904,
+          "width": 398,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "sheet": {
+        "left": 0,
+        "right": 430,
+        "top": 141.046875,
+        "bottom": 932,
+        "width": 430,
+        "height": 790.953125,
+        "font": 14
+      },
+      "footer": {
+        "left": 0,
+        "right": 430,
+        "top": 843,
+        "bottom": 932,
+        "width": 430,
+        "height": 89,
+        "font": 14
+      },
+      "close": {
+        "left": 366,
+        "right": 414,
+        "top": 149.046875,
+        "bottom": 197.046875,
+        "width": 48,
+        "height": 48,
+        "font": 14
+      },
+      "body": {
+        "left": 0,
+        "right": 430,
+        "top": 206.046875,
+        "bottom": 843,
+        "width": 430,
+        "height": 636.953125,
+        "font": 14
+      },
+      "primary": [
+        {
+          "left": 16,
+          "right": 414,
+          "top": 856,
+          "bottom": 904,
+          "width": 398,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "keyboard": null
+    },
+    {
+      "state": "batch-date",
+      "viewport": [
+        430,
+        932
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "关闭面板",
+          "left": 366,
+          "right": 414,
+          "top": 614.828125,
+          "bottom": 662.828125,
+          "width": 48,
+          "height": 48,
+          "font": 14
+        },
+        {
+          "label": "保存修改",
+          "left": 16,
+          "right": 414,
+          "top": 856,
+          "bottom": 904,
+          "width": 398,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "sheet": {
+        "left": 0,
+        "right": 430,
+        "top": 606.828125,
+        "bottom": 932,
+        "width": 430,
+        "height": 325.171875,
+        "font": 14
+      },
+      "footer": {
+        "left": 0,
+        "right": 430,
+        "top": 843,
+        "bottom": 932,
+        "width": 430,
+        "height": 89,
+        "font": 14
+      },
+      "close": {
+        "left": 366,
+        "right": 414,
+        "top": 614.828125,
+        "bottom": 662.828125,
+        "width": 48,
+        "height": 48,
+        "font": 14
+      },
+      "body": {
+        "left": 0,
+        "right": 430,
+        "top": 671.828125,
+        "bottom": 843,
+        "width": 430,
+        "height": 171.171875,
+        "font": 14
+      },
+      "primary": [
+        {
+          "left": 16,
+          "right": 414,
+          "top": 856,
+          "bottom": 904,
+          "width": 398,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "keyboard": null
+    },
+    {
+      "state": "edit",
+      "viewport": [
+        430,
+        932
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "关闭面板",
+          "left": 366,
+          "right": 414,
+          "top": 174.046875,
+          "bottom": 222.046875,
+          "width": 48,
+          "height": 48,
+          "font": 14
+        },
+        {
+          "label": "查找地点",
+          "left": 16,
+          "right": 96,
+          "top": 787,
+          "bottom": 831,
+          "width": 80,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "地图选点",
+          "left": 104,
+          "right": 184,
+          "top": 787,
+          "bottom": 831,
+          "width": 80,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "保存修改",
+          "left": 16,
+          "right": 414,
+          "top": 856,
+          "bottom": 904,
+          "width": 398,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "sheet": {
+        "left": 0,
+        "right": 430,
+        "top": 166.046875,
+        "bottom": 932,
+        "width": 430,
+        "height": 765.953125,
+        "font": 14
+      },
+      "footer": {
+        "left": 0,
+        "right": 430,
+        "top": 843,
+        "bottom": 932,
+        "width": 430,
+        "height": 89,
+        "font": 14
+      },
+      "close": {
+        "left": 366,
+        "right": 414,
+        "top": 174.046875,
+        "bottom": 222.046875,
+        "width": 48,
+        "height": 48,
+        "font": 14
+      },
+      "body": {
+        "left": 0,
+        "right": 430,
+        "top": 231.046875,
+        "bottom": 843,
+        "width": 430,
+        "height": 611.953125,
+        "font": 14
+      },
+      "primary": [
+        {
+          "left": 16,
+          "right": 414,
+          "top": 856,
+          "bottom": 904,
+          "width": 398,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "keyboard": null
+    },
+    {
+      "state": "review-ready",
+      "viewport": [
+        430,
+        932
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "关闭面板",
+          "left": 366,
+          "right": 414,
+          "top": 149.046875,
+          "bottom": 197.046875,
+          "width": 48,
+          "height": 48,
+          "font": 14
+        },
+        {
+          "label": "取消选择",
+          "left": 16,
+          "right": 72,
+          "top": 218.046875,
+          "bottom": 262.046875,
+          "width": 56,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "批量修改",
+          "left": 358,
+          "right": 414,
+          "top": 218.046875,
+          "bottom": 262.046875,
+          "width": 56,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "取消选择第1张照片",
+          "left": 16,
+          "right": 60,
+          "top": 324.4375,
+          "bottom": 368.4375,
+          "width": 44,
+          "height": 44,
+          "font": 20
+        },
+        {
+          "label": "核对照片",
+          "left": 60,
+          "right": 136,
+          "top": 408.828125,
+          "bottom": 452.828125,
+          "width": 76,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "取消选择第2张照片",
+          "left": 16,
+          "right": 60,
+          "top": 489.828125,
+          "bottom": 533.828125,
+          "width": 44,
+          "height": 44,
+          "font": 20
+        },
+        {
+          "label": "核对照片",
+          "left": 60,
+          "right": 136,
+          "top": 574.21875,
+          "bottom": 618.21875,
+          "width": 76,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "取消选择第3张照片",
+          "left": 16,
+          "right": 60,
+          "top": 655.21875,
+          "bottom": 699.21875,
+          "width": 44,
+          "height": 44,
+          "font": 20
+        },
+        {
+          "label": "核对照片",
+          "left": 60,
+          "right": 136,
+          "top": 739.609375,
+          "bottom": 783.609375,
+          "width": 76,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "确认选中的 3 张",
+          "left": 16,
+          "right": 414,
+          "top": 856,
+          "bottom": 904,
+          "width": 398,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "sheet": {
+        "left": 0,
+        "right": 430,
+        "top": 141.046875,
+        "bottom": 932,
+        "width": 430,
+        "height": 790.953125,
+        "font": 14
+      },
+      "footer": {
+        "left": 0,
+        "right": 430,
+        "top": 843,
+        "bottom": 932,
+        "width": 430,
+        "height": 89,
+        "font": 14
+      },
+      "close": {
+        "left": 366,
+        "right": 414,
+        "top": 149.046875,
+        "bottom": 197.046875,
+        "width": 48,
+        "height": 48,
+        "font": 14
+      },
+      "body": {
+        "left": 0,
+        "right": 430,
+        "top": 206.046875,
+        "bottom": 843,
+        "width": 430,
+        "height": 636.953125,
+        "font": 14
+      },
+      "primary": [
+        {
+          "left": 16,
+          "right": 414,
+          "top": 856,
+          "bottom": 904,
+          "width": 398,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "keyboard": null
+    },
+    {
+      "state": "upload-error",
+      "viewport": [
+        430,
+        932
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "关闭面板",
+          "left": 366,
+          "right": 414,
+          "top": 582.828125,
+          "bottom": 630.828125,
+          "width": 48,
+          "height": 48,
+          "font": 14
+        },
+        {
+          "label": "重试未完成上传",
+          "left": 16,
+          "right": 414,
+          "top": 812,
+          "bottom": 860,
+          "width": 398,
+          "height": 48,
+          "font": 16
+        },
+        {
+          "label": "核对已上传照片",
+          "left": 16,
+          "right": 414,
+          "top": 860,
+          "bottom": 904,
+          "width": 398,
+          "height": 44,
+          "font": 14
+        }
+      ],
+      "sheet": {
+        "left": 0,
+        "right": 430,
+        "top": 574.828125,
+        "bottom": 932,
+        "width": 430,
+        "height": 357.171875,
+        "font": 14
+      },
+      "footer": {
+        "left": 0,
+        "right": 430,
+        "top": 799,
+        "bottom": 932,
+        "width": 430,
+        "height": 133,
+        "font": 14
+      },
+      "close": {
+        "left": 366,
+        "right": 414,
+        "top": 582.828125,
+        "bottom": 630.828125,
+        "width": 48,
+        "height": 48,
+        "font": 14
+      },
+      "body": {
+        "left": 0,
+        "right": 430,
+        "top": 639.828125,
+        "bottom": 799,
+        "width": 430,
+        "height": 159.171875,
+        "font": 14
+      },
+      "primary": [
+        {
+          "left": 16,
+          "right": 414,
+          "top": 812,
+          "bottom": 860,
+          "width": 398,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "keyboard": null
+    },
+    {
+      "state": "processing-error",
+      "viewport": [
+        430,
+        932
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "关闭面板",
+          "left": 366,
+          "right": 414,
+          "top": 149.046875,
+          "bottom": 197.046875,
+          "width": 48,
+          "height": 48,
+          "font": 14
+        },
+        {
+          "label": "取消选择",
+          "left": 16,
+          "right": 72,
+          "top": 218.046875,
+          "bottom": 262.046875,
+          "width": 56,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "批量修改",
+          "left": 358,
+          "right": 414,
+          "top": 218.046875,
+          "bottom": 262.046875,
+          "width": 56,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "取消选择第1张照片",
+          "left": 16,
+          "right": 60,
+          "top": 324.4375,
+          "bottom": 368.4375,
+          "width": 44,
+          "height": 44,
+          "font": 20
+        },
+        {
+          "label": "核对照片",
+          "left": 60,
+          "right": 136,
+          "top": 408.828125,
+          "bottom": 452.828125,
+          "width": 76,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "取消选择第2张照片",
+          "left": 16,
+          "right": 60,
+          "top": 489.828125,
+          "bottom": 533.828125,
+          "width": 44,
+          "height": 44,
+          "font": 20
+        },
+        {
+          "label": "核对照片",
+          "left": 60,
+          "right": 136,
+          "top": 574.21875,
+          "bottom": 618.21875,
+          "width": 76,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "取消选择第3张照片",
+          "left": 16,
+          "right": 60,
+          "top": 655.21875,
+          "bottom": 699.21875,
+          "width": 44,
+          "height": 44,
+          "font": 20
+        },
+        {
+          "label": "核对照片",
+          "left": 60,
+          "right": 136,
+          "top": 739.609375,
+          "bottom": 783.609375,
+          "width": 76,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "重试处理",
+          "left": 144,
+          "right": 220,
+          "top": 739.609375,
+          "bottom": 783.609375,
+          "width": 76,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "补拍摄日期",
+          "left": 16,
+          "right": 414,
+          "top": 856,
+          "bottom": 904,
+          "width": 398,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "sheet": {
+        "left": 0,
+        "right": 430,
+        "top": 141.046875,
+        "bottom": 932,
+        "width": 430,
+        "height": 790.953125,
+        "font": 14
+      },
+      "footer": {
+        "left": 0,
+        "right": 430,
+        "top": 843,
+        "bottom": 932,
+        "width": 430,
+        "height": 89,
+        "font": 14
+      },
+      "close": {
+        "left": 366,
+        "right": 414,
+        "top": 149.046875,
+        "bottom": 197.046875,
+        "width": 48,
+        "height": 48,
+        "font": 14
+      },
+      "body": {
+        "left": 0,
+        "right": 430,
+        "top": 206.046875,
+        "bottom": 843,
+        "width": 430,
+        "height": 636.953125,
+        "font": 14
+      },
+      "primary": [
+        {
+          "left": 16,
+          "right": 414,
+          "top": 856,
+          "bottom": 904,
+          "width": 398,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "keyboard": null
+    },
+    {
+      "state": "conflict",
+      "viewport": [
+        430,
+        932
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "关闭面板",
+          "left": 366,
+          "right": 414,
+          "top": 119.84375,
+          "bottom": 167.84375,
+          "width": 48,
+          "height": 48,
+          "font": 14
+        },
+        {
+          "label": "取消选择",
+          "left": 16,
+          "right": 72,
+          "top": 277.625,
+          "bottom": 321.625,
+          "width": 56,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "批量修改",
+          "left": 358,
+          "right": 414,
+          "top": 277.625,
+          "bottom": 321.625,
+          "width": 56,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "取消选择第1张照片",
+          "left": 16,
+          "right": 60,
+          "top": 384.015625,
+          "bottom": 428.015625,
+          "width": 44,
+          "height": 44,
+          "font": 20
+        },
+        {
+          "label": "核对照片",
+          "left": 60,
+          "right": 136,
+          "top": 468.40625,
+          "bottom": 512.40625,
+          "width": 76,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "取消选择第2张照片",
+          "left": 16,
+          "right": 60,
+          "top": 549.40625,
+          "bottom": 593.40625,
+          "width": 44,
+          "height": 44,
+          "font": 20
+        },
+        {
+          "label": "核对照片",
+          "left": 60,
+          "right": 136,
+          "top": 633.796875,
+          "bottom": 677.796875,
+          "width": 76,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "取消选择第3张照片",
+          "left": 16,
+          "right": 60,
+          "top": 714.796875,
+          "bottom": 758.796875,
+          "width": 44,
+          "height": 44,
+          "font": 20
+        },
+        {
+          "label": "核对照片",
+          "left": 60,
+          "right": 136,
+          "top": 799.1875,
+          "bottom": 843.1875,
+          "width": 76,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "刷新并继续核对",
+          "left": 16,
+          "right": 414,
+          "top": 856,
+          "bottom": 904,
+          "width": 398,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "sheet": {
+        "left": 0,
+        "right": 430,
+        "top": 111.84375,
+        "bottom": 932,
+        "width": 430,
+        "height": 820.15625,
+        "font": 14
+      },
+      "footer": {
+        "left": 0,
+        "right": 430,
+        "top": 843,
+        "bottom": 932,
+        "width": 430,
+        "height": 89,
+        "font": 14
+      },
+      "close": {
+        "left": 366,
+        "right": 414,
+        "top": 119.84375,
+        "bottom": 167.84375,
+        "width": 48,
+        "height": 48,
+        "font": 14
+      },
+      "body": {
+        "left": 0,
+        "right": 430,
+        "top": 176.84375,
+        "bottom": 843,
+        "width": 430,
+        "height": 666.15625,
+        "font": 14
+      },
+      "primary": [
+        {
+          "left": 16,
+          "right": 414,
+          "top": 856,
+          "bottom": 904,
+          "width": 398,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "keyboard": null
+    },
+    {
+      "state": "confirm",
+      "viewport": [
+        430,
+        932
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "关闭面板",
+          "left": 366,
+          "right": 414,
+          "top": 590.828125,
+          "bottom": 638.828125,
+          "width": 48,
+          "height": 48,
+          "font": 14
+        },
+        {
+          "label": "确认入档",
+          "left": 16,
+          "right": 414,
+          "top": 812,
+          "bottom": 860,
+          "width": 398,
+          "height": 48,
+          "font": 16
+        },
+        {
+          "label": "返回核对",
+          "left": 16,
+          "right": 414,
+          "top": 860,
+          "bottom": 904,
+          "width": 398,
+          "height": 44,
+          "font": 14
+        }
+      ],
+      "sheet": {
+        "left": 0,
+        "right": 430,
+        "top": 582.828125,
+        "bottom": 932,
+        "width": 430,
+        "height": 349.171875,
+        "font": 14
+      },
+      "footer": {
+        "left": 0,
+        "right": 430,
+        "top": 799,
+        "bottom": 932,
+        "width": 430,
+        "height": 133,
+        "font": 14
+      },
+      "close": {
+        "left": 366,
+        "right": 414,
+        "top": 590.828125,
+        "bottom": 638.828125,
+        "width": 48,
+        "height": 48,
+        "font": 14
+      },
+      "body": {
+        "left": 0,
+        "right": 430,
+        "top": 647.828125,
+        "bottom": 799,
+        "width": 430,
+        "height": 151.171875,
+        "font": 14
+      },
+      "primary": [
+        {
+          "left": 16,
+          "right": 414,
+          "top": 812,
+          "bottom": 860,
+          "width": 398,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "keyboard": null
+    },
+    {
+      "state": "saved",
+      "viewport": [
+        430,
+        932
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "旅行日记",
+          "left": 16,
+          "right": 128,
+          "top": 72,
+          "bottom": 116,
+          "width": 112,
+          "height": 44,
+          "font": 22
+        },
+        {
+          "label": "六六六",
+          "left": 300,
+          "right": 414,
+          "top": 72,
+          "bottom": 116,
+          "width": 114,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "更多足迹操作",
+          "left": 370,
+          "right": 414,
+          "top": 136,
+          "bottom": 184.390625,
+          "width": 44,
+          "height": 48.390625,
+          "font": 14
+        },
+        {
+          "label": "时间线",
+          "left": 19,
+          "right": 149.65625,
+          "top": 199.390625,
+          "bottom": 243.390625,
+          "width": 130.65625,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "轨迹回放",
+          "left": 149.65625,
+          "right": 280.328125,
+          "top": 199.390625,
+          "bottom": 243.390625,
+          "width": 130.671875,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "地图点亮",
+          "left": 280.328125,
+          "right": 411,
+          "top": 199.390625,
+          "bottom": 243.390625,
+          "width": 130.671875,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "查看第1张照片",
+          "left": 42,
+          "right": 217.5,
+          "top": 381.765625,
+          "bottom": 508.15625,
+          "width": 175.5,
+          "height": 126.390625,
+          "font": 14
+        },
+        {
+          "label": "查看第2张照片",
+          "left": 225.5,
+          "right": 401,
+          "top": 381.765625,
+          "bottom": 508.15625,
+          "width": 175.5,
+          "height": 126.390625,
+          "font": 14
+        },
+        {
+          "label": "查看第3张照片",
+          "left": 42,
+          "right": 217.5,
+          "top": 516.15625,
+          "bottom": 642.546875,
+          "width": 175.5,
+          "height": 126.390625,
+          "font": 14
+        },
+        {
+          "label": "查看照片",
+          "left": 42,
+          "right": 401,
+          "top": 642.546875,
+          "bottom": 686.546875,
+          "width": 359,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "导入照片",
+          "left": 16,
+          "right": 414,
+          "top": 719.546875,
+          "bottom": 767.546875,
+          "width": 398,
+          "height": 48,
+          "font": 16
+        },
+        {
+          "label": "今日",
+          "left": 8,
+          "right": 90.796875,
+          "top": 849.609375,
+          "bottom": 908,
+          "width": 82.796875,
+          "height": 58.390625,
+          "font": 14
+        },
+        {
+          "label": "日程",
+          "left": 90.796875,
+          "right": 173.609375,
+          "top": 849.609375,
+          "bottom": 908,
+          "width": 82.8125,
+          "height": 58.390625,
+          "font": 14
+        },
+        {
+          "label": "记录",
+          "left": 173.609375,
+          "right": 256.40625,
+          "top": 849.609375,
+          "bottom": 908,
+          "width": 82.796875,
+          "height": 58.390625,
+          "font": 14
+        },
+        {
+          "label": "报表",
+          "left": 256.40625,
+          "right": 339.203125,
+          "top": 849.609375,
+          "bottom": 908,
+          "width": 82.796875,
+          "height": 58.390625,
+          "font": 14
+        },
+        {
+          "label": "设置",
+          "left": 339.203125,
+          "right": 422,
+          "top": 849.609375,
+          "bottom": 908,
+          "width": 82.796875,
+          "height": 58.390625,
+          "font": 14
+        }
+      ],
+      "sheet": null,
+      "footer": null,
+      "close": null,
+      "body": null,
+      "primary": [],
+      "keyboard": null
+    },
+    {
+      "state": "gallery-focused",
+      "viewport": [
+        430,
+        932
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "关闭面板",
+          "left": 366,
+          "right": 414,
+          "top": 397.21875,
+          "bottom": 445.21875,
+          "width": 48,
+          "height": 48,
+          "font": 14
+        },
+        {
+          "label": "上一张",
+          "left": 16,
+          "right": 82,
+          "top": 718.21875,
+          "bottom": 762.21875,
+          "width": 66,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "下一张",
+          "left": 348,
+          "right": 414,
+          "top": 718.21875,
+          "bottom": 762.21875,
+          "width": 66,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "修改日期和地点",
+          "left": 16,
+          "right": 414,
+          "top": 856,
+          "bottom": 904,
+          "width": 398,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "sheet": {
+        "left": 0,
+        "right": 430,
+        "top": 389.21875,
+        "bottom": 932,
+        "width": 430,
+        "height": 542.78125,
+        "font": 14
+      },
+      "footer": {
+        "left": 0,
+        "right": 430,
+        "top": 843,
+        "bottom": 932,
+        "width": 430,
+        "height": 89,
+        "font": 14
+      },
+      "close": {
+        "left": 366,
+        "right": 414,
+        "top": 397.21875,
+        "bottom": 445.21875,
+        "width": 48,
+        "height": 48,
+        "font": 14
+      },
+      "body": {
+        "left": 0,
+        "right": 430,
+        "top": 454.21875,
+        "bottom": 843,
+        "width": 430,
+        "height": 388.78125,
+        "font": 14
+      },
+      "primary": [
+        {
+          "left": 16,
+          "right": 414,
+          "top": 856,
+          "bottom": 904,
+          "width": 398,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "keyboard": null
+    },
+    {
+      "state": "readonly",
+      "viewport": [
+        430,
+        932
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "旅行日记",
+          "left": 16,
+          "right": 128,
+          "top": 72,
+          "bottom": 116,
+          "width": 112,
+          "height": 44,
+          "font": 22
+        },
+        {
+          "label": "六六六",
+          "left": 300,
+          "right": 414,
+          "top": 72,
+          "bottom": 116,
+          "width": 114,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "更多足迹操作",
+          "left": 370,
+          "right": 414,
+          "top": 136,
+          "bottom": 184.390625,
+          "width": 44,
+          "height": 48.390625,
+          "font": 14
+        },
+        {
+          "label": "时间线",
+          "left": 19,
+          "right": 149.65625,
+          "top": 199.390625,
+          "bottom": 243.390625,
+          "width": 130.65625,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "轨迹回放",
+          "left": 149.65625,
+          "right": 280.328125,
+          "top": 199.390625,
+          "bottom": 243.390625,
+          "width": 130.671875,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "地图点亮",
+          "left": 280.328125,
+          "right": 411,
+          "top": 199.390625,
+          "bottom": 243.390625,
+          "width": 130.671875,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "今日",
+          "left": 8,
+          "right": 90.796875,
+          "top": 849.609375,
+          "bottom": 908,
+          "width": 82.796875,
+          "height": 58.390625,
+          "font": 14
+        },
+        {
+          "label": "日程",
+          "left": 90.796875,
+          "right": 173.609375,
+          "top": 849.609375,
+          "bottom": 908,
+          "width": 82.8125,
+          "height": 58.390625,
+          "font": 14
+        },
+        {
+          "label": "记录",
+          "left": 173.609375,
+          "right": 256.40625,
+          "top": 849.609375,
+          "bottom": 908,
+          "width": 82.796875,
+          "height": 58.390625,
+          "font": 14
+        },
+        {
+          "label": "报表",
+          "left": 256.40625,
+          "right": 339.203125,
+          "top": 849.609375,
+          "bottom": 908,
+          "width": 82.796875,
+          "height": 58.390625,
+          "font": 14
+        },
+        {
+          "label": "设置",
+          "left": 339.203125,
+          "right": 422,
+          "top": 849.609375,
+          "bottom": 908,
+          "width": 82.796875,
+          "height": 58.390625,
+          "font": 14
+        }
+      ],
+      "sheet": null,
+      "footer": null,
+      "close": null,
+      "body": null,
+      "primary": [],
+      "keyboard": null
+    },
+    {
+      "state": "edit-keyboard",
+      "viewport": [
+        430,
+        932
+      ],
+      "overflow": false,
+      "controls": [
+        {
+          "label": "关闭面板",
+          "left": 366,
+          "right": 414,
+          "top": 40,
+          "bottom": 88,
+          "width": 48,
+          "height": 48,
+          "font": 14
+        },
+        {
+          "label": "查找地点",
+          "left": 16,
+          "right": 96,
+          "top": 600.953125,
+          "bottom": 644.953125,
+          "width": 80,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "地图选点",
+          "left": 104,
+          "right": 184,
+          "top": 600.953125,
+          "bottom": 644.953125,
+          "width": 80,
+          "height": 44,
+          "font": 14
+        },
+        {
+          "label": "保存修改",
+          "left": 16,
+          "right": 414,
+          "top": 666,
+          "bottom": 714,
+          "width": 398,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "sheet": {
+        "left": 0,
+        "right": 430,
+        "top": 40,
+        "bottom": 722,
+        "width": 430,
+        "height": 682,
+        "font": 14
+      },
+      "footer": {
+        "left": 0,
+        "right": 430,
+        "top": 657,
+        "bottom": 722,
+        "width": 430,
+        "height": 65,
+        "font": 14
+      },
+      "close": {
+        "left": 366,
+        "right": 414,
+        "top": 40,
+        "bottom": 88,
+        "width": 48,
+        "height": 48,
+        "font": 14
+      },
+      "body": {
+        "left": 0,
+        "right": 430,
+        "top": 89,
+        "bottom": 657,
+        "width": 430,
+        "height": 568,
+        "font": 14
+      },
+      "primary": [
+        {
+          "left": 16,
+          "right": 414,
+          "top": 666,
+          "bottom": 714,
+          "width": 398,
+          "height": 48,
+          "font": 16
+        }
+      ],
+      "keyboard": {
+        "left": 0,
+        "right": 430,
+        "top": 722,
+        "bottom": 932,
+        "width": 430,
+        "height": 210,
+        "font": 14
+      }
+    }
+  ],
+  "interaction_viewports": [
+    [
+      320,
+      568
+    ],
+    [
+      390,
+      844
+    ],
+    [
+      430,
+      932
+    ]
+  ],
+  "page_errors": [],
+  "network_requests": 0
+}

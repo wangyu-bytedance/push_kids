@@ -1,0 +1,114 @@
+"""Safe, content-free operational failure categories shared by analysis stages."""
+
+from pydantic import ValidationError
+
+_SCHEMA_FIELDS = frozenset(
+    {
+        "fields",
+        "items",
+        "name",
+        "subject",
+        "evidence",
+        "materials",
+        "confidence",
+        "status",
+        "needs_context",
+        "excerpt",
+        "members",
+        "category",
+        "display_kind",
+        "review_method",
+        "estimated_minutes",
+        "summary",
+        "uncertainties",
+        "omissions",
+        "reason",
+        "basis",
+        "decisions",
+        "candidate",
+        "match",
+        "uncertain",
+        "passed",
+        "issues",
+        "code",
+        "verdict",
+    }
+)
+_SCHEMA_ERRORS = frozenset(
+    {
+        "string_too_long",
+        "string_too_short",
+        "too_long",
+        "too_short",
+        "missing",
+        "extra_forbidden",
+        "literal_error",
+        "enum",
+        "int_parsing",
+        "int_type",
+        "bool_type",
+        "bool_parsing",
+        "string_type",
+        "json_invalid",
+        "model_type",
+        "list_type",
+        "dict_type",
+        "value_error",
+        "greater_than_equal",
+        "less_than_equal",
+        "reference",
+        "coverage",
+        "blank",
+        "other",
+    }
+)
+
+
+def safe_stage_diagnostics(codes: list[str] | tuple[str, ...]) -> tuple[str, ...]:
+    """Keep only closed schema paths and categories, including bounded list indexes."""
+    result = []
+    for code in codes[:10]:
+        path, separator, category = code.partition(":")
+        parts = path.split(".")
+        if (
+            separator
+            and parts[0] == "stage"
+            and 2 <= len(parts) <= 6
+            and all(
+                part in _SCHEMA_FIELDS or (part.isascii() and part.isdigit() and int(part) < 200)
+                for part in parts[1:]
+            )
+            and category in _SCHEMA_ERRORS
+            and code not in result
+        ):
+            result.append(code)
+    return tuple(result)
+
+
+def schema_diagnostics(error: ValidationError) -> tuple[str, ...]:
+    codes = []
+    for issue in error.errors(include_input=False, include_context=False, include_url=False)[:10]:
+        parts = [str(part) for part in issue["loc"]]
+        category = issue["type"] if issue["type"] in _SCHEMA_ERRORS else "other"
+        code = "stage." + ".".join(parts or ["fields"]) + ":" + category
+        codes.append(code if safe_stage_diagnostics([code]) else f"stage.fields:{category}")
+    return safe_stage_diagnostics(codes)
+
+
+class StageFailure(Exception):
+    def __init__(
+        self,
+        reason: str,
+        *,
+        retryable: bool = True,
+        retry_after: int = 0,
+        stage: str = "",
+        unit: str = "",
+        diagnostics: tuple[str, ...] = (),
+    ):
+        self.reason = reason
+        self.retryable = retryable
+        self.retry_after = max(0, min(60, retry_after))
+        self.stage, self.unit = stage, unit
+        self.diagnostics = safe_stage_diagnostics(diagnostics)
+        super().__init__(reason)

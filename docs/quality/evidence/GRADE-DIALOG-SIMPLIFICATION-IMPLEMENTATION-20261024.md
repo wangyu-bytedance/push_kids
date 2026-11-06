@@ -1,6 +1,6 @@
 # 年级弹窗精简 · 本地实现与验证 · 2026-10-24
 
-- Spec: [SPEC-20261024-GRADE-DIALOG-SIMPLIFICATION-01](../../../specs/active/FEAT-013-GRADE-DIALOG-SIMPLIFICATION.md)，VERIFYING。
+- Spec: [SPEC-20261024-GRADE-DIALOG-SIMPLIFICATION-01](../../../specs/completed/FEAT-013-GRADE-DIALOG-SIMPLIFICATION.md)，VERIFYING。
 - Design: [DREV02](../../design/frontend/prototypes/DREV-20261024-ANNUAL-GRADE-PROMOTION-02/FRONTEND-SPEC.md) / [批准清单](../../design/frontend/snapshots/UI-015/DREV-20261024-ANNUAL-GRADE-PROMOTION-02/APPROVAL.md)。
 - Approval: 本聊天在展示简化稿并明确请求Spec01＋DREV02后，用户2026-10-24回复“继续”。
 - Source: 当前共享dirty工作区；本轮未提交/推送、未部署/上传。
@@ -49,4 +49,4 @@
 
 已依据实际diff核对Feature013、Behavior BHV-042、Architecture、UI-001/015、主/局部Spec、FrontendDesign、索引、测试证据与本地发布记录。领域/权限/存储/发布事实不变；新布局替代旧弹窗呈现，不替代档案表单。旧UI-015“未采集/锁屏”摘要已按证据澄清，候选状态已换成已批准本地实现，无新增代码/文档冲突。归档区BUG-033候选仍独立待批准。[本次局部只读复核](grade-dialog-simplification-20261024/review.md)无Blocker/Major；同上下文复核，不冒充独立上下文。
 
-Spec保留`specs/active/FEAT-013-GRADE-DIALOG-SIMPLIFICATION.md` / VERIFYING；本地实现、自动化、三尺寸呈现和局部实际交互、文档核对及同上下文只读复核已完成。完成门禁仍缺真实iOS/Android、系统大字体/读屏/焦点及主任务原生业务端到端，不能DONE、不迁completed；独立上下文复核也未由本局部复核替代。主年级Spec02继续VERIFYING。无需重新批准已实现方案，未上传部署。
+Spec保留`specs/completed/FEAT-013-GRADE-DIALOG-SIMPLIFICATION.md` / VERIFYING；本地实现、自动化、三尺寸呈现和局部实际交互、文档核对及同上下文只读复核已完成。完成门禁仍缺真实iOS/Android、系统大字体/读屏/焦点及主任务原生业务端到端，不能DONE、不迁completed；独立上下文复核也未由本局部复核替代。主年级Spec02继续VERIFYING。无需重新批准已实现方案，未上传部署。

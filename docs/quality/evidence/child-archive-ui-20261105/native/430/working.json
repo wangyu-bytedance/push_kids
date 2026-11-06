@@ -1,0 +1,164 @@
+{
+  "nodes": {
+    ".page": [
+      {
+        "left": 0,
+        "right": 430,
+        "top": 0,
+        "bottom": 768,
+        "width": 430,
+        "height": 768,
+        "fontSize": "16px",
+        "lineHeight": "25.6px",
+        "textAlign": "start",
+        "color": "rgb(34, 38, 31)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "overflow": "hidden auto"
+      }
+    ],
+    ".archive-card": [
+      {
+        "left": 20,
+        "right": 410,
+        "top": 396,
+        "bottom": 519,
+        "width": 390,
+        "height": 123,
+        "fontSize": "16px",
+        "lineHeight": "25.6px",
+        "textAlign": "start",
+        "color": "rgb(34, 38, 31)",
+        "backgroundColor": "rgb(255, 253, 248)",
+        "overflow": "visible"
+      }
+    ],
+    ".archive-row": [
+      {
+        "left": 21,
+        "right": 409,
+        "top": 397,
+        "bottom": 481,
+        "width": 388,
+        "height": 84,
+        "fontSize": "16px",
+        "lineHeight": "25.6px",
+        "textAlign": "left",
+        "color": "rgb(34, 38, 31)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "overflow": "visible"
+      }
+    ],
+    ".archive-copy": [
+      {
+        "left": 37,
+        "right": 205,
+        "top": 414.5,
+        "bottom": 463.5,
+        "width": 168,
+        "height": 49,
+        "fontSize": "16px",
+        "lineHeight": "25.6px",
+        "textAlign": "left",
+        "color": "rgb(34, 38, 31)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "overflow": "visible"
+      }
+    ],
+    ".archive-title": [
+      {
+        "left": 37,
+        "right": 205,
+        "top": 414.5,
+        "bottom": 438.5,
+        "width": 168,
+        "height": 24,
+        "fontSize": "17px",
+        "lineHeight": "24.65px",
+        "textAlign": "left",
+        "color": "rgb(34, 38, 31)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "overflow": "visible"
+      }
+    ],
+    ".archive-description": [
+      {
+        "left": 37,
+        "right": 205,
+        "top": 442.5,
+        "bottom": 463.5,
+        "width": 168,
+        "height": 21,
+        "fontSize": "14px",
+        "lineHeight": "21px",
+        "textAlign": "left",
+        "color": "rgb(70, 78, 67)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "overflow": "visible"
+      }
+    ],
+    ".archive-pending": [
+      {
+        "left": 21,
+        "right": 409,
+        "top": 481,
+        "bottom": 518,
+        "width": 388,
+        "height": 37,
+        "fontSize": "14px",
+        "lineHeight": "21px",
+        "textAlign": "left",
+        "color": "rgb(70, 78, 67)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "overflow": "visible"
+      }
+    ],
+    ".archive-row .chev": [],
+    ".form-foot .btn": [
+      {
+        "left": 20,
+        "right": 410,
+        "top": 537,
+        "bottom": 592,
+        "width": 390,
+        "height": 55,
+        "fontSize": "16px",
+        "lineHeight": "19.2px",
+        "textAlign": "start",
+        "color": "rgb(255, 253, 248)",
+        "backgroundColor": "rgb(31, 91, 69)",
+        "overflow": "visible"
+      }
+    ],
+    ".pk-notice.err": []
+  },
+  "scroll": {
+    "id": "",
+    "dataset": {},
+    "scrollLeft": 0,
+    "scrollTop": 0,
+    "scrollWidth": 430,
+    "scrollHeight": 834
+  },
+  "viewport": {
+    "width": 430,
+    "height": 932,
+    "screenHeight": 932,
+    "dpr": 3,
+    "fontScale": 15,
+    "baseLibrary": "3.17.4"
+  },
+  "data": {
+    "active": true,
+    "working": true,
+    "isManager": true,
+    "nameDraft": "合成孩子",
+    "unfinishedCount": 3,
+    "error": ""
+  },
+  "state": "working",
+  "errors": [],
+  "capturedAt": "2026-11-05T06:26:39.323Z",
+  "screenshotSha256": null,
+  "screenshotStatus": "NOT_RUN_AFTER_RPC_TIMEOUT",
+  "scope": "offline synthetic fixture; production WXML/WXSS; no physical device or cloud acceptance"
+}

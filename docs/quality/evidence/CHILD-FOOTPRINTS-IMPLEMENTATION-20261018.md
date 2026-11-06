@@ -1,7 +1,7 @@
 # 孩子照片足迹 — 2026-10-18本地实现与验证
 
 - Feature/UI: FEAT-012 / UI-018，集成FEAT-002/005/006与UI-001入口。
-- Spec: [SPEC-20261017-CHILD-PHOTO-FOOTPRINTS-04](../../../specs/active/FEAT-012-CHILD-PHOTO-FOOTPRINTS.md)，`VERIFYING`。
+- Spec: [SPEC-20261017-CHILD-PHOTO-FOOTPRINTS-04](../../../specs/completed/FEAT-012-CHILD-PHOTO-FOOTPRINTS.md)，`VERIFYING`。
 - Approval: 用户2026-10-18“落地编写代码”，承接唯一Spec04/Architecture03；DREV01已在Q19批准。仅本地开发/合成验证，不包含部署或真实儿童素材外发。
 - Checkout baseline: `8f3c5b04e61c96d4c19cf9eefd26514a8a095e1a`；本轮未提交/推送。原有通知未提交修改保留，不混作足迹改动证据。
 - Architecture: `ARCH-20261017-CHILD-PHOTO-FOOTPRINTS-03`；FDB-20260913-04 / FEC-20261007-NATIVE-GEOMETRY-02沿用。
@@ -88,4 +88,4 @@ Reviewer `footprints_readonly_review`按code-review流程只读审查当前领�
 
 解锁续验的生产diff仅足迹WXSS，工具/原生证据单列。逐项核对：Feature012、UI018、设计/Feature/Spec索引、测试策略、实现证据及本地发布记录同步；Behavior038–040、Architecture03、UI001及关联002/005/006合同无新的语义/边界变化，核对后无需改写。冻结DREV01不变，当前文档无“仍锁屏/没有有效原生导出”的冲突正文。72对节点/PNG、当前工具/样式源码及隔离副本外部manifest哈希由实施者复核通过。后端本次续验没有代码改动，未重复运行639项服务端回归，表内保留本轮实现后的实际结果。
 
-Spec最终为**VERIFYING / specs/active/FEAT-012-CHILD-PHOTO-FOOTPRINTS.md**，尚不能DONE/迁移completed。恢复条件是上述验收/设计门禁完成；真实全球合同若需变更，先明确新Spec revision并批准。未部署、未迁移云DB、未上传、未设体验、未提审、未正式发布。
+Spec最终为**VERIFYING / specs/completed/FEAT-012-CHILD-PHOTO-FOOTPRINTS.md**，尚不能DONE/迁移completed。恢复条件是上述验收/设计门禁完成；真实全球合同若需变更，先明确新Spec revision并批准。未部署、未迁移云DB、未上传、未设体验、未提审、未正式发布。

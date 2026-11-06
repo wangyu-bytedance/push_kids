@@ -1,0 +1,164 @@
+{
+  "nodes": {
+    ".page": [
+      {
+        "left": 0,
+        "right": 430,
+        "top": 0,
+        "bottom": 827,
+        "width": 430,
+        "height": 827,
+        "fontSize": "16px",
+        "lineHeight": "25.6px",
+        "textAlign": "start",
+        "color": "rgb(34, 38, 31)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "overflow": "hidden auto"
+      }
+    ],
+    ".archive-card": [
+      {
+        "left": 20,
+        "right": 410,
+        "top": 492,
+        "bottom": 578,
+        "width": 390,
+        "height": 86,
+        "fontSize": "16px",
+        "lineHeight": "25.6px",
+        "textAlign": "start",
+        "color": "rgb(34, 38, 31)",
+        "backgroundColor": "rgb(255, 253, 248)",
+        "overflow": "visible"
+      }
+    ],
+    ".archive-row": [
+      {
+        "left": 21,
+        "right": 409,
+        "top": 493,
+        "bottom": 577,
+        "width": 388,
+        "height": 84,
+        "fontSize": "16px",
+        "lineHeight": "25.6px",
+        "textAlign": "left",
+        "color": "rgb(34, 38, 31)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "overflow": "visible"
+      }
+    ],
+    ".archive-copy": [
+      {
+        "left": 37,
+        "right": 219,
+        "top": 510.5,
+        "bottom": 559.5,
+        "width": 182,
+        "height": 49,
+        "fontSize": "16px",
+        "lineHeight": "25.6px",
+        "textAlign": "left",
+        "color": "rgb(34, 38, 31)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "overflow": "visible"
+      }
+    ],
+    ".archive-title": [
+      {
+        "left": 37,
+        "right": 219,
+        "top": 510.5,
+        "bottom": 534.5,
+        "width": 182,
+        "height": 24,
+        "fontSize": "17px",
+        "lineHeight": "24.65px",
+        "textAlign": "left",
+        "color": "rgb(34, 38, 31)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "overflow": "visible"
+      }
+    ],
+    ".archive-description": [
+      {
+        "left": 37,
+        "right": 219,
+        "top": 538.5,
+        "bottom": 559.5,
+        "width": 182,
+        "height": 21,
+        "fontSize": "14px",
+        "lineHeight": "21px",
+        "textAlign": "left",
+        "color": "rgb(70, 78, 67)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "overflow": "visible"
+      }
+    ],
+    ".archive-pending": [],
+    ".archive-row .chev": [
+      {
+        "left": 381.13604736328125,
+        "right": 393.86395263671875,
+        "top": 528.6360473632812,
+        "bottom": 541.3639526367188,
+        "width": 12.7279052734375,
+        "height": 12.7279052734375,
+        "fontSize": "16px",
+        "lineHeight": "25.6px",
+        "textAlign": "left",
+        "color": "rgb(34, 38, 31)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "overflow": "visible"
+      }
+    ],
+    ".form-foot .btn": [
+      {
+        "left": 20,
+        "right": 410,
+        "top": 596,
+        "bottom": 651,
+        "width": 390,
+        "height": 55,
+        "fontSize": "16px",
+        "lineHeight": "19.2px",
+        "textAlign": "start",
+        "color": "rgb(255, 253, 248)",
+        "backgroundColor": "rgb(31, 91, 69)",
+        "overflow": "visible"
+      }
+    ],
+    ".pk-notice.err": []
+  },
+  "scroll": {
+    "id": "",
+    "dataset": {},
+    "scrollLeft": 0,
+    "scrollTop": 0,
+    "scrollWidth": 430,
+    "scrollHeight": 834
+  },
+  "viewport": {
+    "width": 430,
+    "height": 932,
+    "screenHeight": 932,
+    "dpr": 3,
+    "fontScale": 15,
+    "baseLibrary": "3.17.4"
+  },
+  "data": {
+    "active": false,
+    "working": false,
+    "isManager": true,
+    "nameDraft": "合成孩子",
+    "unfinishedCount": 0,
+    "error": ""
+  },
+  "state": "archived",
+  "errors": [],
+  "capturedAt": "2026-11-05T14:50:27.270Z",
+  "screenshotSha256": "d2ea1c55feda8370b0126a954fa796a867c0cf1f8850ea62f381a394084e12d8",
+  "screenshotStatus": "CAPTURED",
+  "scope": "offline synthetic fixture; production WXML/WXSS; no physical device or cloud acceptance"
+}

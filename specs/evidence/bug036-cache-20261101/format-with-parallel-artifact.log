@@ -1,0 +1,35 @@
+unformatted: File would be reformatted
+  --> docs/quality/evidence/report-footer-tips-20261101/prepare-native.py:12:78
+   |
+11 | config = json.loads((ROOT / "project.config.json").read_text())
+   - config.update(miniprogramRoot="./", projectname="push-kids-footer-synthetic",
+   -               libVersion="3.16.2")
+12 + config.update(miniprogramRoot="./", projectname="push-kids-footer-synthetic", libVersion="3.16.2")
+13 | (OUT / "project.config.json").write_text(json.dumps(config, ensure_ascii=False, indent=2) + "\n")
+--------------------------------------------------------------------------------
+32 | }}\n""")
+   - files = ["pages/review-inventory/content.wxml", "pages/review-inventory/content.wxss",
+   -          "pages/review-inventory/controller.js", "components/review-inventory/index.wxss",
+   -          "components/review-inventory/index.js", "pages/reports/index.wxml",
+   -          "pages/reports/index.wxss", "app.wxss", "styles/tokens.wxss"]
+   - manifest = {"scope": "production templates/styles/controllers; isolated config and read-only synthetic API",
+   -             "files": {file: hashlib.sha256((OUT / file).read_bytes()).hexdigest() for file in files}}
+33 + files = [
+34 +     "pages/review-inventory/content.wxml",
+35 +     "pages/review-inventory/content.wxss",
+36 +     "pages/review-inventory/controller.js",
+37 +     "components/review-inventory/index.wxss",
+38 +     "components/review-inventory/index.js",
+39 +     "pages/reports/index.wxml",
+40 +     "pages/reports/index.wxss",
+41 +     "app.wxss",
+42 +     "styles/tokens.wxss",
+43 + ]
+44 + manifest = {
+45 +     "scope": "production templates/styles/controllers; isolated config and read-only synthetic API",
+46 +     "files": {file: hashlib.sha256((OUT / file).read_bytes()).hexdigest() for file in files},
+47 + }
+48 | (OUT / "source-baseline.json").write_text(json.dumps(manifest, indent=2) + "\n")
+   |
+
+1 file would be reformatted, 840 files already formatted

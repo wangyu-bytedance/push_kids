@@ -1,0 +1,196 @@
+{
+  "kind": "DIAGNOSTIC_ONLY",
+  "replacement_gate": false,
+  "formal_write_count": 0,
+  "remaining_pending_count": 0,
+  "cases": [
+    {
+      "case_id": "multi-02",
+      "failure_code": null,
+      "attempts": 1,
+      "seconds": 17.383,
+      "final_subjects": [
+        "数学",
+        "英语"
+      ],
+      "stages": [
+        {
+          "stage": "extract",
+          "seconds": 6.675,
+          "item_count": 2,
+          "subjects": [
+            "数学",
+            "英语"
+          ],
+          "omission_reasons": [],
+          "passed": null,
+          "quality_codes": []
+        },
+        {
+          "stage": "merge",
+          "seconds": 5.284,
+          "item_count": 2,
+          "subjects": [
+            "数学",
+            "英语"
+          ],
+          "omission_reasons": [],
+          "passed": null,
+          "quality_codes": []
+        },
+        {
+          "stage": "review",
+          "seconds": 3.008,
+          "item_count": 0,
+          "subjects": [],
+          "omission_reasons": [],
+          "passed": true,
+          "quality_codes": []
+        },
+        {
+          "stage": "match",
+          "seconds": 1.77,
+          "item_count": 0,
+          "subjects": [],
+          "omission_reasons": [],
+          "passed": null,
+          "quality_codes": []
+        }
+      ]
+    },
+    {
+      "case_id": "en-08",
+      "failure_code": null,
+      "attempts": 1,
+      "seconds": 13.633,
+      "final_subjects": [
+        "英语"
+      ],
+      "stages": [
+        {
+          "stage": "extract",
+          "seconds": 2.397,
+          "item_count": 1,
+          "subjects": [
+            "英语"
+          ],
+          "omission_reasons": [],
+          "passed": null,
+          "quality_codes": []
+        },
+        {
+          "stage": "merge",
+          "seconds": 5.42,
+          "item_count": 1,
+          "subjects": [
+            "英语"
+          ],
+          "omission_reasons": [],
+          "passed": null,
+          "quality_codes": []
+        },
+        {
+          "stage": "review",
+          "seconds": 2.755,
+          "item_count": 0,
+          "subjects": [],
+          "omission_reasons": [],
+          "passed": true,
+          "quality_codes": []
+        },
+        {
+          "stage": "match",
+          "seconds": 2.127,
+          "item_count": 0,
+          "subjects": [],
+          "omission_reasons": [],
+          "passed": null,
+          "quality_codes": []
+        }
+      ]
+    },
+    {
+      "case_id": "multi-04",
+      "failure_code": "subject.mismatch",
+      "attempts": 1,
+      "seconds": 29.633,
+      "final_subjects": [
+        "数学",
+        "语文"
+      ],
+      "stages": [
+        {
+          "stage": "extract",
+          "seconds": 4.822,
+          "item_count": 3,
+          "subjects": [
+            "数学",
+            "英语",
+            "语文"
+          ],
+          "omission_reasons": [],
+          "passed": null,
+          "quality_codes": []
+        },
+        {
+          "stage": "merge",
+          "seconds": 8.55,
+          "item_count": 2,
+          "subjects": [
+            "数学",
+            "语文"
+          ],
+          "omission_reasons": [
+            "indeterminate_object"
+          ],
+          "passed": null,
+          "quality_codes": []
+        },
+        {
+          "stage": "review",
+          "seconds": 4.133,
+          "item_count": 0,
+          "subjects": [],
+          "omission_reasons": [],
+          "passed": false,
+          "quality_codes": [
+            "vague_name",
+            "vague_name"
+          ]
+        },
+        {
+          "stage": "merge",
+          "seconds": 7.013,
+          "item_count": 2,
+          "subjects": [
+            "数学",
+            "语文"
+          ],
+          "omission_reasons": [
+            "indeterminate_object"
+          ],
+          "passed": null,
+          "quality_codes": []
+        },
+        {
+          "stage": "review",
+          "seconds": 1.524,
+          "item_count": 0,
+          "subjects": [],
+          "omission_reasons": [],
+          "passed": true,
+          "quality_codes": []
+        },
+        {
+          "stage": "match",
+          "seconds": 3.045,
+          "item_count": 0,
+          "subjects": [],
+          "omission_reasons": [],
+          "passed": null,
+          "quality_codes": []
+        }
+      ]
+    }
+  ]
+}

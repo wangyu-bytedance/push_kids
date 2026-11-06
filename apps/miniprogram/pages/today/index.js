@@ -49,7 +49,7 @@ function defaultSections(dashboard) {
     review: Number(dashboard.todo_count) > 0,
     daily: !!(dashboard.daily_tasks && dashboard.daily_tasks.remaining_count > 0),
     learning: Number(dashboard.daily_summary.record_count) > 0,
-    activity: Number(dashboard.activity_remaining_count) > 0
+    activity: Boolean(dashboard.workday_calendar_warning) || Number(dashboard.activity_remaining_count) > 0
   };
 }
 
@@ -209,7 +209,7 @@ Page({
       const activitiesByName = Object.fromEntries(subjects.filter((item) => item.kind === "activity" && item.active).map((item) => [item.name, item.id]));
       dashboard.schedule_items = dashboard.schedule_items.map((item) => ({ ...item, subject_id: item.subject_id || activitiesByName[item.name] || "",
         kind_label: KIND_LABELS[item.kind] || "其他安排",
-        time_text: `${item.start_time}–${item.end_time}${item.repeat_weekly ? " · 每周重复" : ""}`,
+        time_text: `${item.start_time}–${item.end_time}${item.workday_only ? " · 工作日" : item.repeat_weekly ? " · 每周重复" : ""}`,
         action_text: item.completed ? "查看或补充记录" : item.past ? "补记这次练习" : "记录这次练习" }));
       dashboard.daily_summary.subjects = dashboard.daily_summary.subjects.map((item) => ({ ...item, summary_text: item.summaries.join("；"),
         subject_class: ui.subjectClass(item.subject_name), subject_mark: ui.subjectMark(item.subject_name) }));
@@ -226,7 +226,7 @@ Page({
       dashboard.optional_todo_groups = dashboard.todo_groups.filter((item) => item.optional);
       const scheduledSubjects = new Set(dashboard.schedule_items.map((item) => item.subject_id).filter(Boolean));
       dashboard.optional_activity_suggestions = dashboard.activity_suggestions.filter((item) => item.suggested && !scheduledSubjects.has(item.subject_id));
-      dashboard.is_empty = !dashboard.todo_groups.length && !dashboard.daily_summary.record_count && !dashboard.schedule_items.length && !dashboard.optional_activity_suggestions.length;
+      dashboard.is_empty = !dashboard.workday_calendar_warning && !dashboard.todo_groups.length && !dashboard.daily_summary.record_count && !dashboard.schedule_items.length && !dashboard.optional_activity_suggestions.length;
       dashboard.show_guide = !dashboard.todo_groups.length && !(plan && plan.plannedCount)
         && !dashboard.daily_summary.record_count && !dashboard.next_review;
       dashboard.activity_count = dashboard.schedule_items.length + dashboard.optional_activity_suggestions.length;
@@ -266,7 +266,7 @@ Page({
             ? `${dashboard.daily_tasks.total_count - dashboard.daily_tasks.remaining_count} / ${dashboard.daily_tasks.total_count} 已完成`
             : "还未设置",
           learning: `已确认 ${dashboard.daily_summary.record_count} 条`,
-          activity: `${dashboard.activity_count} 项`
+          activity: dashboard.workday_calendar_warning ? "工作日安排待更新" : `${dashboard.activity_count} 项`
         },
         todoCards: view.cards, hiddenTodoCount: view.hidden + remoteTodoCount,
         loadingMoreTodos: false });

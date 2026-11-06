@@ -1,0 +1,164 @@
+{
+  "nodes": {
+    ".page": [
+      {
+        "left": 0,
+        "right": 320,
+        "top": -177,
+        "bottom": 504,
+        "width": 320,
+        "height": 681,
+        "fontSize": "16px",
+        "lineHeight": "25.6px",
+        "textAlign": "start",
+        "color": "rgb(34, 38, 31)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "overflow": "hidden auto"
+      }
+    ],
+    ".archive-card": [
+      {
+        "left": 15,
+        "right": 305,
+        "top": 280,
+        "bottom": 366,
+        "width": 290,
+        "height": 86,
+        "fontSize": "16px",
+        "lineHeight": "25.6px",
+        "textAlign": "start",
+        "color": "rgb(34, 38, 31)",
+        "backgroundColor": "rgb(255, 253, 248)",
+        "overflow": "visible"
+      }
+    ],
+    ".archive-row": [
+      {
+        "left": 16,
+        "right": 304,
+        "top": 281,
+        "bottom": 365,
+        "width": 288,
+        "height": 84,
+        "fontSize": "16px",
+        "lineHeight": "25.6px",
+        "textAlign": "left",
+        "color": "rgb(34, 38, 31)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "overflow": "visible"
+      }
+    ],
+    ".archive-copy": [
+      {
+        "left": 27,
+        "right": 209,
+        "top": 298.5,
+        "bottom": 347.5,
+        "width": 182,
+        "height": 49,
+        "fontSize": "16px",
+        "lineHeight": "25.6px",
+        "textAlign": "left",
+        "color": "rgb(34, 38, 31)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "overflow": "visible"
+      }
+    ],
+    ".archive-title": [
+      {
+        "left": 27,
+        "right": 209,
+        "top": 298.5,
+        "bottom": 322.5,
+        "width": 182,
+        "height": 24,
+        "fontSize": "17px",
+        "lineHeight": "24.65px",
+        "textAlign": "left",
+        "color": "rgb(34, 38, 31)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "overflow": "visible"
+      }
+    ],
+    ".archive-description": [
+      {
+        "left": 27,
+        "right": 209,
+        "top": 326.5,
+        "bottom": 347.5,
+        "width": 182,
+        "height": 21,
+        "fontSize": "14px",
+        "lineHeight": "21px",
+        "textAlign": "left",
+        "color": "rgb(70, 78, 67)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "overflow": "visible"
+      }
+    ],
+    ".archive-pending": [],
+    ".archive-row .chev": [
+      {
+        "left": 284.7573547363281,
+        "right": 293.2426452636719,
+        "top": 318.7573547363281,
+        "bottom": 327.2426452636719,
+        "width": 8.48529052734375,
+        "height": 8.48529052734375,
+        "fontSize": "16px",
+        "lineHeight": "25.6px",
+        "textAlign": "left",
+        "color": "rgb(34, 38, 31)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "overflow": "visible"
+      }
+    ],
+    ".form-foot .btn": [
+      {
+        "left": 15,
+        "right": 305,
+        "top": 379,
+        "bottom": 423,
+        "width": 290,
+        "height": 44,
+        "fontSize": "16px",
+        "lineHeight": "19.2px",
+        "textAlign": "start",
+        "color": "rgb(255, 253, 248)",
+        "backgroundColor": "rgb(31, 91, 69)",
+        "overflow": "visible"
+      }
+    ],
+    ".pk-notice.err": []
+  },
+  "scroll": {
+    "id": "",
+    "dataset": {},
+    "scrollLeft": 0,
+    "scrollTop": 177,
+    "scrollWidth": 320,
+    "scrollHeight": 681
+  },
+  "viewport": {
+    "width": 320,
+    "height": 568,
+    "screenHeight": 568,
+    "dpr": 2,
+    "fontScale": 15,
+    "baseLibrary": "3.17.4"
+  },
+  "data": {
+    "active": false,
+    "working": false,
+    "isManager": true,
+    "nameDraft": "合成孩子",
+    "unfinishedCount": 0,
+    "error": ""
+  },
+  "state": "archived",
+  "errors": [],
+  "capturedAt": "2026-11-05T15:09:24.752Z",
+  "screenshotSha256": "a16f517380861a0f61cd64732b43c386673608e96b5520a7121490601aacf09c",
+  "screenshotStatus": "CAPTURED",
+  "scope": "offline synthetic fixture; production WXML/WXSS; no physical device or cloud acceptance"
+}

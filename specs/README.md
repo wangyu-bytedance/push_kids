@@ -1,22 +1,38 @@
 # Specs Directory
 
-旅行按钮与倒序时间线：[BUG-034 Spec01 / Architecture01](active/BUG-034-FOOTPRINTS-CONTROLS-TIMELINE.md)及[DREV01](../docs/design/frontend/prototypes/DREV-20261024-FOOTPRINTS-TIMELINE-01/FRONTEND-SPEC.md)获批并本地实施，active/VERIFYING；学习同款胶囊、日期DESC/cursor保持、照片显示HH:mm/未知。335项前端/静态、320/390/430原生54组及390实际点击通过；2026-10-25补齐430，设备/用户验收开放。见[本轮证据](../docs/quality/evidence/footprints-timeline-20261024/README.md)，未上传/部署。
+2026-11-06[当前全栈交付](../docs/deploy/releases/20261106-fullstack-040-client-0.1.18.md)：040 normal/100%、Schema0027，客户端0.1.18官方上传1,200,417字节并bump；尚未设体验版、提审或正式发布。生产迁移0027、040真实微信读取和原生工作日主路径通过；获批v2固定40完整单轮40/40，原37/40及其他历史内容FAIL保持，家长内容PENDING。
 
-最新后端恢复部署：[BUG-SPEC-20261024-CRUD-SCHEMA-READINESS-01](active/BUG-CRUD-SCHEMA-READINESS.md)与Architecture01已获明确批准，VERIFYING。已区分CRUD运行检查和发布账号严格trigger检查，未给应用扩权；后端780项、实库权限6项及相关26项、冻结02/容器、生产两类账号只读门禁通过。生产0025不重复DDL，036失败证据保留；037已normal/100%、真实微信20项GET全200，完整本地客户端供用户测试，OPS与修复Spec留VERIFYING等待业务反馈。详情以[发布记录](../docs/deploy/releases/20261024-latest-backend-test-deployment.md)为准。
+按GOV-002，匹配交付的11份Spec已DONE迁completed。当前`completed/120 + active/3 + rejected/19 = 142`；active是CLOUD-002、DOC-003两份待具体批准，以及锁10/13失败候选的旧缓存OPS（BLOCKED）。新040不能伪称旧候选部署。设备/可访问性、线上成功率和体验/提审/正式发布独立记录；备份保留数量待人工核对。
 
-2026-10-24最新后端部署：[OPS Spec01](active/OPS-20261024-LATEST-BACKEND-TEST-DEPLOYMENT.md)已批准，用户确认本次备份/恢复路径；冻结26714b9。[测试隔离Spec01](completed/BUG-MYSQL-SUPERSESSION-MIGRATION-ISOLATION.md)经具体批准修复并完成：MySQL永久替代13项、年级4项、SQLite迁移4项通过，生产保护未改。部署实际阶段以[本轮记录](../docs/deploy/releases/20261024-latest-backend-test-deployment.md)为准。
+[完整当前状态和归档清单](STATUS.md)。以下按原时点保留历史，不作为当前开发状态；历史链接只做归档路径修正，不追改结果或版本。
 
-学习建议标题约束：[`SPEC-20261024-SUGGESTION-TITLE-LIMIT-01`](active/FEAT-004-SUGGESTION-TITLE-LIMIT.md)，`VERIFYING`。用户明确批准Spec01/Architecture01与[DREV04](../docs/design/frontend/prototypes/DREV-20261024-TODAY-LEARNING-04/FRONTEND-SPEC.md)，已本地实现新生成/重新编辑trim后1–20码点、单行合同与字段计数/错误；旧120字读取/审批/实际记录/删除兼容。后端780通过/40个MySQL环境相关跳过、前端332通过、三视口39态原生及独立复核通过，[当前证据](../docs/quality/evidence/SUGGESTION-TITLE-IMPLEMENTATION-20261024.md)列明真机/实际键盘/读屏/系统大字体缺口。未满足DONE门禁，留active，未上传部署。
+## 历史交付与验收记录（2026-10-26口径调整前）
 
-足迹界面减法及工程UI文案要求：[`SPEC-20261024-FOOTPRINTS-MINIMAL-UI-01`](active/FEAT-012-FOOTPRINTS-MINIMAL-UI.md)，`VERIFYING`。用户明确批准Spec01 / [DREV01](../docs/design/frontend/prototypes/DREV-20261024-FOOTPRINTS-MINIMAL-01/FRONTEND-SPEC.md)并合并UI规范；本地删除重复标题/设置长文，次要入口进原生菜单，设置按内容收高，保留原权限/授权/确认。工程文案规则已进入设计/FEC正文；BUG-032 CR-001在原已批准范围修复并补回归。最终331项前端、三尺寸27态原生和430实际菜单操作通过，[本轮证据](../docs/quality/evidence/footprints-minimal-20261024/README.md)记录设备/独立复核边界，未上传部署。
+本节保留各执行时点的发布和验收记录；其中VERIFYING/不能DONE/保留active是原完成口径，当前开发状态及归档路径以STATUS和各Spec新增完成结论为准。验收缺项仍保持原实际结果，不因开发DONE改为通过。
 
-今日学习空区与风格统一：[`SPEC-20261024-TODAY-CARD-VISIBILITY-01`](active/FEAT-004-TODAY-CARD-VISIBILITY.md)，`VERIFYING`。Spec01/[DREV03](../docs/design/frontend/prototypes/DREV-20261024-TODAY-LEARNING-03/FRONTEND-SPEC.md)已获用户明确批准并在原组件实现：空区隐藏，具体内容沿用今日页字阶、卡片与胶囊按钮，保留必要进度/恢复。前端327项、320/390/430三视口81组原生通过；设备/可访问性和独立复核未齐。[实现证据](../docs/quality/evidence/TODAY-CARD-IMPLEMENTATION-20261024.md)；DREV02弹层与主Spec04领域合同不变，未发布。
+2026-10-25旅行导入精简：[Spec01 / Architecture01](completed/FEAT-012-TRAVEL-IMPORT-SIMPLIFICATION.md)及[DREV02](../docs/design/frontend/prototypes/DREV-20261025-TRAVEL-IMPORT-02/FRONTEND-SPEC.md)获明确批准并本地实施，`active/VERIFYING`。截图整层删除，导入直接系统相册；取消零写、AI仅已有设置、同批上传失败重试。349前端、最终15组原生及430实际取消/选3张/部分失败/重试通过，设置两值为方法级证据。[当前证据](../docs/quality/evidence/travel-import-simplification-20261025/README.md)区分设计/原生/设备，未上传部署。设备/可访问性/家长验收开放，不能迁DONE；旧DREV01冻结，仅导入区域添加Superseded by。
 
-年级弹窗精简：[`SPEC-20261024-GRADE-DIALOG-SIMPLIFICATION-01`](active/FEAT-013-GRADE-DIALOG-SIMPLIFICATION.md)，`VERIFYING`。用户“继续”批准Spec01＋[DREV02](../docs/design/frontend/prototypes/DREV-20261024-ANNUAL-GRADE-PROMOTION-02/FRONTEND-SPEC.md)，已在原组件收敛为孩子名标题、年级选择和并排操作，恢复提示按需显示。33张设计导出冻结，最终327项前端/53项定向、三尺寸51组原生及实际选级/重试/稍后通过；[实施证据](../docs/quality/evidence/GRADE-DIALOG-SIMPLIFICATION-IMPLEMENTATION-20261024.md)保留原生/设备边界，主年级Spec02继续VERIFYING，未上传部署。
+2026-10-25旅行日记全链路：[BUG-035 Spec01 / Architecture01](completed/BUG-035-TRAVEL-DIARY-END-TO-END.md)及[DREV01](../docs/design/frontend/prototypes/DREV-20261025-TRAVEL-DIARY-E2E-01/FRONTEND-SPEC.md)获明确批准，已本地实施选图恢复、核对保选、补日期/续接、有界精确回看及设置保存中返回缩略图恢复。前端347/专项41、后端全量781/46条件skip（最终hint前）、最终专项21/3skip/真实MySQL5.7与SQLite5项、最终源原生42组通过；三张真实字节在隔离API通过。完整真实云客户端已保存六六3草稿，城市“大连”、日期未知、0正式；上传重试/409保留续接/预览已验，AI两失败/一空候选，质量未通过。真实日期/正式确认、新focus云端、设备/可访问性及家长验收仍缺。保持`active/VERIFYING`，本轮未上传代码包或部署，不迁DONE；[当前证据](../docs/quality/evidence/travel-diary-e2e-20261025/README.md)及[本地交付](../docs/deploy/releases/20261025-travel-diary-e2e-local.md)区分此前037/0.1.16。
 
-档案归档区精简：[`BUG-SPEC-20261024-CHILD-ARCHIVE-UI-01`](active/BUG-033-CHILD-ARCHIVE-UI.md)，`READY_FOR_REVIEW`。一条左对齐归档/恢复操作与短说明，详细影响收敛到原确认框；[DREV01](../docs/design/frontend/prototypes/DREV-20261024-CHILD-ARCHIVE-01/FRONTEND-SPEC.md)及21张三视口候选待具体批准。尚未修改生产页面，不改变年级功能验收状态。
+2026-10-25交付：[客户端0.1.16已开发上传](../docs/deploy/releases/20261025-latest-client-upload.md)，冻结来源0576ac3（发布期间外部提交，包含已批准BUG-034），未体验/审核/正式发布。用户已确认旅行照片双账号门禁；其余产品/设备/内容缺口保持。相关产品Spec继续active/VERIFYING，不进行DONE迁移。
 
-学习建议弹层批注修订：[`SPEC-20261024-SUGGESTION-SHEET-REFINEMENT-01`](active/FEAT-004-SUGGESTION-SHEET-REFINEMENT.md)，`VERIFYING`。Spec01/[DREV02](../docs/design/frontend/prototypes/DREV-20261024-TODAY-LEARNING-02/FRONTEND-SPEC.md)获用户「批准，按此实现」，已在原组件精简标题与操作层级、完善等待反馈和长标题滚动。[实现证据](../docs/quality/evidence/SUGGESTION-SHEET-IMPLEMENTATION-20261024.md)：311项前端、专项9项、三视口45组原生几何通过；真机/可访问性与独立复核待补，保留active，主Spec04仍VERIFYING，未上传部署。
+旅行按钮与倒序时间线：[BUG-034 Spec01 / Architecture01](completed/BUG-034-FOOTPRINTS-CONTROLS-TIMELINE.md)及[DREV01](../docs/design/frontend/prototypes/DREV-20261024-FOOTPRINTS-TIMELINE-01/FRONTEND-SPEC.md)获批并本地实施，active/VERIFYING；学习同款胶囊、日期DESC/cursor保持、照片显示HH:mm/未知。335项前端/静态、320/390/430原生54组及390实际点击通过；2026-10-25补齐430，设备/用户验收开放。见[本轮证据](../docs/quality/evidence/footprints-timeline-20261024/README.md)，未上传/部署。
+
+最新后端恢复部署：[BUG-SPEC-20261024-CRUD-SCHEMA-READINESS-01](completed/BUG-CRUD-SCHEMA-READINESS.md)与Architecture01已获明确批准，VERIFYING。已区分CRUD运行检查和发布账号严格trigger检查，未给应用扩权；后端780项、实库权限6项及相关26项、冻结02/容器、生产两类账号只读门禁通过。生产0025不重复DDL，036失败证据保留；037已normal/100%、真实微信20项GET全200，完整本地客户端供用户测试，OPS与修复Spec留VERIFYING等待业务反馈。详情以[发布记录](../docs/deploy/releases/20261024-latest-backend-test-deployment.md)为准。
+
+2026-10-24最新后端部署：[OPS Spec01](completed/OPS-20261024-LATEST-BACKEND-TEST-DEPLOYMENT.md)已批准，用户确认本次备份/恢复路径；冻结26714b9。[测试隔离Spec01](completed/BUG-MYSQL-SUPERSESSION-MIGRATION-ISOLATION.md)经具体批准修复并完成：MySQL永久替代13项、年级4项、SQLite迁移4项通过，生产保护未改。部署实际阶段以[本轮记录](../docs/deploy/releases/20261024-latest-backend-test-deployment.md)为准。
+
+学习建议标题约束：[`SPEC-20261024-SUGGESTION-TITLE-LIMIT-01`](completed/FEAT-004-SUGGESTION-TITLE-LIMIT.md)，`VERIFYING`。用户明确批准Spec01/Architecture01与[DREV04](../docs/design/frontend/prototypes/DREV-20261024-TODAY-LEARNING-04/FRONTEND-SPEC.md)，已本地实现新生成/重新编辑trim后1–20码点、单行合同与字段计数/错误；旧120字读取/审批/实际记录/删除兼容。后端780通过/40个MySQL环境相关跳过、前端332通过、三视口39态原生及独立复核通过，[当前证据](../docs/quality/evidence/SUGGESTION-TITLE-IMPLEMENTATION-20261024.md)列明真机/实际键盘/读屏/系统大字体缺口。未满足DONE门禁，留active，未上传部署。
+
+足迹界面减法及工程UI文案要求：[`SPEC-20261024-FOOTPRINTS-MINIMAL-UI-01`](completed/FEAT-012-FOOTPRINTS-MINIMAL-UI.md)，`VERIFYING`。用户明确批准Spec01 / [DREV01](../docs/design/frontend/prototypes/DREV-20261024-FOOTPRINTS-MINIMAL-01/FRONTEND-SPEC.md)并合并UI规范；本地删除重复标题/设置长文，次要入口进原生菜单，设置按内容收高，保留原权限/授权/确认。工程文案规则已进入设计/FEC正文；BUG-032 CR-001在原已批准范围修复并补回归。最终331项前端、三尺寸27态原生和430实际菜单操作通过，[本轮证据](../docs/quality/evidence/footprints-minimal-20261024/README.md)记录设备/独立复核边界，未上传部署。
+
+今日学习空区与风格统一：[`SPEC-20261024-TODAY-CARD-VISIBILITY-01`](completed/FEAT-004-TODAY-CARD-VISIBILITY.md)，`VERIFYING`。Spec01/[DREV03](../docs/design/frontend/prototypes/DREV-20261024-TODAY-LEARNING-03/FRONTEND-SPEC.md)已获用户明确批准并在原组件实现：空区隐藏，具体内容沿用今日页字阶、卡片与胶囊按钮，保留必要进度/恢复。前端327项、320/390/430三视口81组原生通过；设备/可访问性和独立复核未齐。[实现证据](../docs/quality/evidence/TODAY-CARD-IMPLEMENTATION-20261024.md)；DREV02弹层与主Spec04领域合同不变，未发布。
+
+年级弹窗精简：[`SPEC-20261024-GRADE-DIALOG-SIMPLIFICATION-01`](completed/FEAT-013-GRADE-DIALOG-SIMPLIFICATION.md)，`VERIFYING`。用户“继续”批准Spec01＋[DREV02](../docs/design/frontend/prototypes/DREV-20261024-ANNUAL-GRADE-PROMOTION-02/FRONTEND-SPEC.md)，已在原组件收敛为孩子名标题、年级选择和并排操作，恢复提示按需显示。33张设计导出冻结，最终327项前端/53项定向、三尺寸51组原生及实际选级/重试/稍后通过；[实施证据](../docs/quality/evidence/GRADE-DIALOG-SIMPLIFICATION-IMPLEMENTATION-20261024.md)保留原生/设备边界，主年级Spec02继续VERIFYING，未上传部署。
+
+档案归档区精简：[`BUG-SPEC-20261024-CHILD-ARCHIVE-UI-01`](completed/BUG-033-CHILD-ARCHIVE-UI.md)，用户2026-11-05“批准”对应Spec01+[DREV01](../docs/design/frontend/prototypes/DREV-20261024-CHILD-ARCHIVE-01/FRONTEND-SPEC.md)，现`VERIFYING`。已本地实现左对齐归档/恢复整行与短说明，完整影响收敛到原确认框；21张批准HTML导出冻结，42定向/349前端和21组原生几何通过。原首轮截图RPC超时保持；OPS后续三视口21组状态PNG已补，确认框/设备及完整Review缺项独立，未上传，不改年级原验收状态；[EVD](evidence/EVD-20261105-BUG033-IMPLEMENTATION.md)。
+
+学习建议弹层批注修订：[`SPEC-20261024-SUGGESTION-SHEET-REFINEMENT-01`](completed/FEAT-004-SUGGESTION-SHEET-REFINEMENT.md)，`VERIFYING`。Spec01/[DREV02](../docs/design/frontend/prototypes/DREV-20261024-TODAY-LEARNING-02/FRONTEND-SPEC.md)获用户「批准，按此实现」，已在原组件精简标题与操作层级、完善等待反馈和长标题滚动。[实现证据](../docs/quality/evidence/SUGGESTION-SHEET-IMPLEMENTATION-20261024.md)：311项前端、专项9项、三视口45组原生几何通过；真机/可访问性与独立复核待补，保留active，主Spec04仍VERIFYING，未上传部署。
 
 ## Purpose
 
@@ -32,29 +48,29 @@ FEAT-001 早期实现的历史变更记录为
 
 ## Layout
 
-记录页照片/顶部选择与学习入口修复：[`BUG-SPEC-20261024-RECORD-ENTRY-05`](active/BUG-032-RECORD-ENTRY-CONTEXT.md)，用户2026-10-24「可以」批准Spec05+[DREV01](../docs/design/frontend/prototypes/DREV-20261024-RECORD-ENTRY-01/FRONTEND-SPEC.md)，已本地实现，`VERIFYING`。纸色孩子chip、顶部类型菜单、全部时间有界续看与内容下方48px普通导入按钮；真实今日/报表入口及跨代竞态回归通过。当前原生/设备/review状态见[本轮证据](../docs/quality/evidence/record-entry-20261024/README.md)，不复用历史截图；未上传或部署，剩余验收完成后才DONE迁移。
+记录页照片/顶部选择与学习入口修复：[`BUG-SPEC-20261024-RECORD-ENTRY-05`](completed/BUG-032-RECORD-ENTRY-CONTEXT.md)，用户2026-10-24「可以」批准Spec05+[DREV01](../docs/design/frontend/prototypes/DREV-20261024-RECORD-ENTRY-01/FRONTEND-SPEC.md)，已本地实现，`VERIFYING`。纸色孩子chip、顶部类型菜单、全部时间有界续看与内容下方48px普通导入按钮；真实今日/报表入口及跨代竞态回归通过。当前原生/设备/review状态见[本轮证据](../docs/quality/evidence/record-entry-20261024/README.md)，不复用历史截图；未上传或部署，剩余验收完成后才DONE迁移。
 
-学年升年级建议与家长共享确认：[`SPEC-20261024-ANNUAL-GRADE-PROMOTION-02`](active/FEAT-013-ANNUAL-GRADE-PROMOTION.md)，`VERIFYING`。用户“好的 按照这个方案落地”批准Spec02/Architecture02/[DREV01](../docs/design/frontend/prototypes/DREV-20261024-ANNUAL-GRADE-PROMOTION-01/FRONTEND-SPEC.md)，已本地实现建议、孩子学年共享确认、独立串行弹窗、显式人工定级及0025增量迁移。[本轮证据](../docs/quality/evidence/ANNUAL-GRADE-IMPLEMENTATION-20261024.md)：自动化与隔离MySQL5.7通过；三视口呈现/原生picker/档案控件已采集，独立评审PASS；修复后原生端到端、真实iOS/Android、可访问性及双家长旧端待验收，未部署或上传。
+学年升年级建议与家长共享确认：[`SPEC-20261024-ANNUAL-GRADE-PROMOTION-02`](completed/FEAT-013-ANNUAL-GRADE-PROMOTION.md)，`VERIFYING`。用户“好的 按照这个方案落地”批准Spec02/Architecture02/[DREV01](../docs/design/frontend/prototypes/DREV-20261024-ANNUAL-GRADE-PROMOTION-01/FRONTEND-SPEC.md)，已本地实现建议、孩子学年共享确认、独立串行弹窗、显式人工定级及0025增量迁移。[本轮证据](../docs/quality/evidence/ANNUAL-GRADE-IMPLEMENTATION-20261024.md)：自动化与隔离MySQL5.7通过；三视口呈现/原生picker/档案控件已采集，独立评审PASS；修复后原生端到端、真实iOS/Android、可访问性及双家长旧端待验收，未部署或上传。
 
-两日无新增的单项学习建议：[`SPEC-20261024-INCREMENTAL-LEARNING-PATH-04`](active/FEAT-004-INCREMENTAL-LEARNING-PATH.md)，`VERIFYING`。用户「批准，按此实现」已批准04/Architecture03/DREV01，本地实现可靠自然日计时、共享提示、单项审批待学和实际确认恢复，默认关闭、未部署；真实MySQL5.7、完整原生/真机、独立评审及内容/主体条件仍待验收。[当前证据](../docs/quality/evidence/TODAY-LEARNING-IMPLEMENTATION-20261024.md)。
+两日无新增的单项学习建议：[`SPEC-20261024-INCREMENTAL-LEARNING-PATH-04`](completed/FEAT-004-INCREMENTAL-LEARNING-PATH.md)，`VERIFYING`。用户「批准，按此实现」已批准04/Architecture03/DREV01，本地实现可靠自然日计时、共享提示、单项审批待学和实际确认恢复，默认关闭、未部署；真实MySQL5.7、完整原生/真机、独立评审及内容/主体条件仍待验收。[当前证据](../docs/quality/evidence/TODAY-LEARNING-IMPLEMENTATION-20261024.md)。
 
-空白日少量提前复习：[`SPEC-20261024-EMPTY-DAY-EARLY-REVIEW-04`](active/FEAT-001-EMPTY-DAY-EARLY-REVIEW.md)，`VERIFYING`。04/Architecture02/DREV01已明确批准并本地实现；尊重10分钟/孩子预算、3日/80%/2日条件、人工日期和首次不提前。仅初始空计划按库存代次重判，处理后不补排，旧计划保守固定。迁移0023、槽投影及反馈门禁已本地验证，未部署；剩余门禁见同一证据，未满足DONE。
+空白日少量提前复习：[`SPEC-20261024-EMPTY-DAY-EARLY-REVIEW-04`](completed/FEAT-001-EMPTY-DAY-EARLY-REVIEW.md)，`VERIFYING`。04/Architecture02/DREV01已明确批准并本地实现；尊重10分钟/孩子预算、3日/80%/2日条件、人工日期和首次不提前。仅初始空计划按库存代次重判，处理后不补排，旧计划保守固定。迁移0023、槽投影及反馈门禁已本地验证，未部署；剩余门禁见同一证据，未满足DONE。
 
-完整代码测试部署：[`OPS-SPEC-20261023-FULLSTACK-TEST-DEPLOYMENT-04`](active/OPS-20261023-FULLSTACK-TEST-DEPLOYMENT.md)，`VERIFYING`。用户指定同库直接升级顺序已执行：10:55生产0019→0022/current/check与表/触发器/队列核验通过，035 normal；用户完成100%接管并删除034，03:01官方核验旧实例0、coverage=false。真实微信18项GET均200，完整本地客户端已打开并实际进入旅行日记。全量前定向验收未执行，不冒充通过；真实照片/写入/隔离等仍待用户验收。[未实施Spec03](rejected/OPS-20261024-SPEC03-MAINTENANCE-PROPOSAL.md)撤回归档。见[发布记录](../docs/deploy/releases/20261023-fullstack-test-deployment.md)。
+完整代码测试部署：[`OPS-SPEC-20261023-FULLSTACK-TEST-DEPLOYMENT-04`](completed/OPS-20261023-FULLSTACK-TEST-DEPLOYMENT.md)，`VERIFYING`。用户指定同库直接升级顺序已执行：10:55生产0019→0022/current/check与表/触发器/队列核验通过，035 normal；用户完成100%接管并删除034，03:01官方核验旧实例0、coverage=false。真实微信18项GET均200，完整本地客户端已打开并实际进入旅行日记。全量前定向验收未执行，不冒充通过；真实照片/写入/隔离等仍待用户验收。[未实施Spec03](rejected/OPS-20261024-SPEC03-MAINTENANCE-PROPOSAL.md)撤回归档。见[发布记录](../docs/deploy/releases/20261023-fullstack-test-deployment.md)。
 
 足迹MySQL5.7预览性能：[`BUG-SPEC-20261023-FOOTPRINT-PREVIEW-MYSQL57-01`](completed/BUG-031-FOOTPRINT-PREVIEW-MYSQL57.md)，`DONE`。用户明确批准后只将IN/UNION改为派生表JOIN；真实冻结包31项及两种50k预算/实际索引计划通过，2026-10-24补齐镜像源匹配、非root/health/SIGTERM与文档闭合后归档；不等于产品或部署完成。见[证据](../docs/quality/evidence/FOOTPRINT-PREVIEW-MYSQL57-20261023.md)。
 
-背景细弧线清理：[`BUG-SPEC-20261021-HERO-ARC-01`](active/BUG-030-HERO-BACKGROUND-ARC.md)，`VERIFYING`。用户在Spec01/DREV01确认请求后要求“一起修复掉”，按既有全局方案删除共享 `.pk-hero::after`，七个页面、11处引用统一生效；265项前端回归及静态检查通过，27组当前渲染与批准设计一致。[本轮证据](../docs/quality/evidence/HERO-ARC-REMOVAL-20261021.md)记录原生与真机验收边界；未上传/发布，门禁未全齐，保留active。
+背景细弧线清理：[`BUG-SPEC-20261021-HERO-ARC-01`](completed/BUG-030-HERO-BACKGROUND-ARC.md)，`VERIFYING`。用户在Spec01/DREV01确认请求后要求“一起修复掉”，按既有全局方案删除共享 `.pk-hero::after`，七个页面、11处引用统一生效；265项前端回归及静态检查通过，27组当前渲染与批准设计一致。[本轮证据](../docs/quality/evidence/HERO-ARC-REMOVAL-20261021.md)记录原生与真机验收边界；未上传/发布，门禁未全齐，保留active。
 
-AI自动替代复习词条：[`SPEC-20261020-AUTO-SUPERSEDED-REVIEW-02`](active/FEAT-001-AUTO-SUPERSEDED-REVIEW-STATE.md)，`VERIFYING`。Spec02/Architecture02及具体DREV01均获用户批准；前后端已本地实现，自动化及真实MySQL5.7专项通过，完整原生/真机验收待补。见[证据](../docs/quality/evidence/AUTO-SUPERSEDED-REVIEW-20261020.md)。未部署，未达到完成门禁，保留active。
+AI自动替代复习词条：[`SPEC-20261020-AUTO-SUPERSEDED-REVIEW-02`](completed/FEAT-001-AUTO-SUPERSEDED-REVIEW-STATE.md)，`VERIFYING`。Spec02/Architecture02及具体DREV01均获用户批准；前后端已本地实现，自动化及真实MySQL5.7专项通过，完整原生/真机验收待补。见[证据](../docs/quality/evidence/AUTO-SUPERSEDED-REVIEW-20261020.md)。未部署，未达到完成门禁，保留active。
 
-记录标题切换：[`SPEC-20261023-RECORD-TYPE-SWITCHER-01`](active/FEAT-012-RECORD-TYPE-SWITCHER.md)，`VERIFYING`。用户选中标题方案后于2026-10-23要求完成代码，批准本Spec/Architecture01与DREV01。本地实现学习记录/旅行日记切换、学习表单保留和旅行领域组件复用；自动化及最终29态×3共87份合成原生证据见[实现记录](../docs/quality/evidence/RECORD-TYPES-IMPLEMENTATION-20261023.md)，真机等未闭环，未上传部署。
+记录标题切换：[`SPEC-20261023-RECORD-TYPE-SWITCHER-01`](completed/FEAT-012-RECORD-TYPE-SWITCHER.md)，`VERIFYING`。用户选中标题方案后于2026-10-23要求完成代码，批准本Spec/Architecture01与DREV01。本地实现学习记录/旅行日记切换、学习表单保留和旅行领域组件复用；自动化及最终29态×3共87份合成原生证据见[实现记录](../docs/quality/evidence/RECORD-TYPES-IMPLEMENTATION-20261023.md)，真机等未闭环，未上传部署。
 
-足迹文案精简：[`SPEC-20261018-FOOTPRINTS-UI-COPY-01`](active/FEAT-012-FOOTPRINTS-UI-COPY.md)，`VERIFYING`。2026-10-23用户批准Spec01与[DREV02](../docs/design/frontend/prototypes/DREV-20261018-CHILD-PHOTO-FOOTPRINTS-02/FRONTEND-SPEC.md)，文案清单已应用本地生产路径，当前验证见上述实现记录。完整状态/真机与设计差异验收待补，主功能Spec04仍VERIFYING。
+足迹文案精简：[`SPEC-20261018-FOOTPRINTS-UI-COPY-01`](completed/FEAT-012-FOOTPRINTS-UI-COPY.md)，`VERIFYING`。2026-10-23用户批准Spec01与[DREV02](../docs/design/frontend/prototypes/DREV-20261018-CHILD-PHOTO-FOOTPRINTS-02/FRONTEND-SPEC.md)，文案清单已应用本地生产路径，当前验证见上述实现记录。完整状态/真机与设计差异验收待补，主功能Spec04仍VERIFYING。
 
-孩子照片足迹：[`SPEC-20261017-CHILD-PHOTO-FOOTPRINTS-04`](active/FEAT-012-CHILD-PHOTO-FOOTPRINTS.md)，`VERIFYING`。2026-10-18用户“落地编写代码”批准实施Spec04/Architecture03；本地前后端、五表迁移与自动化已实现，见[Feature](../docs/domain/features/FEAT-012-child-photo-footprints.md)及[实现证据](../docs/quality/evidence/CHILD-FOOTPRINTS-IMPLEMENTATION-20261018.md)。后续29态×3合成原生及BUG-031真实MySQL5.7.44冻结回归已通过；DREV01冻结，完整原生/真机、设计差异、全球底图及真实AI/素材验收未完成，保留active，未部署/上传。
+孩子照片足迹：[`SPEC-20261017-CHILD-PHOTO-FOOTPRINTS-04`](completed/FEAT-012-CHILD-PHOTO-FOOTPRINTS.md)，`VERIFYING`。2026-10-18用户“落地编写代码”批准实施Spec04/Architecture03；本地前后端、五表迁移与自动化已实现，见[Feature](../docs/domain/features/FEAT-012-child-photo-footprints.md)及[实现证据](../docs/quality/evidence/CHILD-FOOTPRINTS-IMPLEMENTATION-20261018.md)。后续29态×3合成原生及BUG-031真实MySQL5.7.44冻结回归已通过；DREV01冻结，完整原生/真机、设计差异、全球底图及真实AI/素材验收未完成，保留active，未部署/上传。
 
-提醒授权自动补充：[`SPEC-20261017-NOTIFICATION-AUTO-RENEWAL-01`](active/FEAT-011-NOTIFICATION-AUTO-RENEWAL.md)，`VERIFYING`。
+提醒授权自动补充：[`SPEC-20261017-NOTIFICATION-AUTO-RENEWAL-01`](completed/FEAT-011-NOTIFICATION-AUTO-RENEWAL.md)，`VERIFYING`。
 用户“按照这个方案落地”批准Spec/架构/DREV；已本地实现成员计数、逐类冷却、事件去重与前端交互。
 自动化及真实MySQL5.7已验证，真机/完整原生验收与独立评审待补；未提交或发布。状态入口为[FEAT-011](../docs/domain/features/FEAT-011-notification-auto-renewal.md)。
 
@@ -68,25 +84,27 @@ AI自动替代复习词条：[`SPEC-20261020-AUTO-SUPERSEDED-REVIEW-02`](active/
 
 通知HTTP失败原因隔离诊断：[`OPS-SPEC-20261017-NOTIFICATION-HTTP-DIAGNOSIS-01`](completed/OPS-20261017-NOTIFICATION-HTTP-DIAGNOSIS.md)，`DONE`；云内502及清理、必要权限缺口证据、-04修复及-05单条成功验证均已闭环；不宣称旧30次精确状态或所有原因已恢复，见[证据](../docs/quality/evidence/NOTIFICATION-HTTP-DIAGNOSIS-20261017.md)。
 
-复习完成后科目跳序修复：[`BUG-SPEC-20261016-REVIEW-SUBJECT-ORDER-01`](active/BUG-029-REVIEW-SUBJECT-ORDER.md)，`VERIFYING`；后端518项、前端244项、补充MySQL18项和冻结镜像门禁通过；灰度031 normal/0%流量，定向smoke与全量人工门禁待完成，见[发布记录](../docs/deploy/releases/20261016-review-subject-order-backend.md)。
+复习完成后科目跳序修复：[`BUG-SPEC-20261016-REVIEW-SUBJECT-ORDER-01`](completed/BUG-029-REVIEW-SUBJECT-ORDER.md)，`VERIFYING`；后端518项、前端244项、补充MySQL18项和冻结镜像门禁通过；灰度031 normal/0%流量，定向smoke与全量人工门禁待完成，见[发布记录](../docs/deploy/releases/20261016-review-subject-order-backend.md)。
 
 历史设计脚本lint清理：[`SPEC-20261016-RELEASE-LINT-01`](completed/CHORE-20261016-RELEASE-LINT.md)，用户明确批准，`DONE`；5个脚本等价整理，新旧168个输出哈希相同，批准快照未变，全仓Ruff通过。
 
-今日按钮与编辑计划分页统一：[`SPEC-20261014-ACTION-PAGER-CONSISTENCY-02`](active/FEAT-010-TODAY-ACTION-STYLE.md)，本地实现，VERIFYING；两项功能提交前联合核对见[`验证记录`](../docs/quality/evidence/TWO-FEATURE-PRECOMMIT-20261015.md)。
+今日按钮与编辑计划分页统一：[`SPEC-20261014-ACTION-PAGER-CONSISTENCY-02`](completed/FEAT-010-TODAY-ACTION-STYLE.md)，本地实现，VERIFYING；两项功能提交前联合核对见[`验证记录`](../docs/quality/evidence/TWO-FEATURE-PRECOMMIT-20261015.md)。
 
-学科管理与移出入口统一：[`SPEC-20261014-SUBJECT-MANAGEMENT-01`](active/FEAT-001-SUBJECT-MANAGEMENT-CONSISTENCY.md)，本地实现，VERIFYING；当前事实见FEAT-001、UI-001及`docs/quality/evidence/SUBJECT-MANAGEMENT-20261015.md`，未上传或发布。
+学科管理与移出入口统一：[`SPEC-20261014-SUBJECT-MANAGEMENT-01`](completed/FEAT-001-SUBJECT-MANAGEMENT-CONSISTENCY.md)，本地实现，VERIFYING；当前事实见FEAT-001、UI-001及`docs/quality/evidence/SUBJECT-MANAGEMENT-20261015.md`，未上传或发布。
 
 ```text
 specs/
 ├── _templates/
 ├── active/
 ├── completed/
+├── evidence/
 └── rejected/
 ```
 
 - `_templates/`：只存模板，不在模板内记录真实任务。
 - `active/`：已批准或正在实现/验证的任务。
-- `completed/`：已通过完成门禁的任务。
+- `completed/`：开发已完成的任务；对应实现已云端交付即可认定开发DONE，未完成验收独立保留。
+- `evidence/`：新EVD的版本绑定与执行索引；模板为[EVIDENCE-TEMPLATE](evidence/EVIDENCE-TEMPLATE.md)，历史 `docs/quality/evidence/` 保持原位置，不因规范合并追认结果。
 - `rejected/`：明确否决或取消且保留理由有价值的任务。
 
 目录可在首次使用时创建。
@@ -207,8 +225,8 @@ specs/active/2026-08-17-AUTH-142-resource-authorization/SPEC.md
 2. `READY_FOR_REVIEW`：完整但未批准。
 3. `APPROVED`：批准人和日期已记录。
 4. `IMPLEMENTING`：仅实现批准范围。
-5. `VERIFYING`：冻结范围，执行验收和修复。
-6. `DONE`：完成门禁通过，移到 `completed/`。
+5. `VERIFYING`：未完成对应交付的实现处于验证阶段；已云端交付的开发不再仅因后续验收待补保留此开发状态。
+6. `DONE`：开发完成，移到 `completed/`。按2026-10-26用户规则，核对匹配范围/源码的后端正常部署或小程序开发版本成功上传即满足；两端分别核对，旧包不能关闭后续本地增量。验收结果与发布阶段独立保留，原必需检查/人工发布门禁继续执行。
 7. `BLOCKED`：记录阻碍、Owner 和恢复条件。
 8. `CANCELLED/REJECTED`：记录原因；有长期价值时移到 `rejected/`。
 

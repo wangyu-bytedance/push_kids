@@ -2,6 +2,8 @@
 
 排除依赖、Git、运行缓存与 dist 生成目录。SHA-256 是本次读取内容的指纹；以后修改会自然变化，不是批准快照。N/A 表示无顶层任务状态，不表示文档错误。本文自身不计算自引用哈希。
 
+2026-11-05引用维护：多家庭Spec已取消并移rejected，仅修复该行链接目标；下表原路径标签、DRAFT及SHA仍保留2026-10-13库存快照含义，不代表当前状态或当前文件指纹。
+
 共 262 份其他 Markdown，加本文 1 份。
 
 | 文件 | 顶层状态 | SHA-256 |
@@ -187,7 +189,7 @@
 | [specs/active/FEAT-001-ACTIVITY-WEEKDAY-ORDER.md](../../../specs/active/FEAT-001-ACTIVITY-WEEKDAY-ORDER.md) | VERIFYING | `c825a34c6671acd2a59efdb695ae7712f9309cfc03829332a1e6d8a97c2da22b` |
 | [specs/active/FEAT-001-ARK-CONTEXT-REUSE-FLAG.md](../../../specs/active/FEAT-001-ARK-CONTEXT-REUSE-FLAG.md) | `VERIFYING` | `645755589bd6d7d4ee80c6ee47a76537ff392e84456c388cb6b9b8eafa30a83c` |
 | [specs/active/FEAT-001-CARD-BACKGROUNDS-COMPLETE.md](../../../specs/active/FEAT-001-CARD-BACKGROUNDS-COMPLETE.md) | VERIFYING | `6b90ad50b4bb9bb0ce0d993109b13c14c797de5cedee5c28e901dd5e8383b408` |
-| [specs/active/FEAT-001-CHINA-WORKDAY-SCHEDULES.md](../../../specs/active/FEAT-001-CHINA-WORKDAY-SCHEDULES.md) | `READY_FOR_REVIEW` | `7e9f60c166da4efc0b113b329bf048258514b2731eafc974cea2bb2f6f7ea5ed` |
+| [specs/completed/FEAT-001-CHINA-WORKDAY-SCHEDULES.md](../../../specs/completed/FEAT-001-CHINA-WORKDAY-SCHEDULES.md) | `READY_FOR_REVIEW` | `7e9f60c166da4efc0b113b329bf048258514b2731eafc974cea2bb2f6f7ea5ed` |
 | [specs/active/FEAT-001-FAIR-DAILY-REVIEW.md](../../../specs/active/FEAT-001-FAIR-DAILY-REVIEW.md) | VERIFYING | `ca6e72c8aee2bb798171d8bb8b2511235c3acd6e2342c67bcb4976f53887ebcf` |
 | [specs/active/FEAT-001-FAIR-REVIEW-PERFORMANCE-AMENDMENT.md](../../../specs/active/FEAT-001-FAIR-REVIEW-PERFORMANCE-AMENDMENT.md) | VERIFYING | `c5c7b03633e53a016c8125125b28a1f33424dcdad707a88a13363a6bbc041455` |
 | [specs/active/FEAT-001-PRECISE-SOURCE-AND-KNOWLEDGE-DELETION.md](../../../specs/active/FEAT-001-PRECISE-SOURCE-AND-KNOWLEDGE-DELETION.md) | VERIFYING | `f183b69ae7adb8d5849823cf5ce1fc823d406c18b4a22cdb7ff5b20019d575c8` |
@@ -200,7 +202,7 @@
 | [specs/active/FEAT-001-SETTINGS-SUBJECT-LIST.md](../../../specs/active/FEAT-001-SETTINGS-SUBJECT-LIST.md) | DRAFT | `9b4d11ff65b75275dd467c0d1fa3074f3331e96939fd61b58db5f87a3f9a619b` |
 | [specs/active/FEAT-001-UNIFIED-ITEM-REVIEW-STRATEGY.md](../../../specs/active/FEAT-001-UNIFIED-ITEM-REVIEW-STRATEGY.md) | `VERIFYING` | `13ca4a302307d06be227df7fc75a03b5016b86c45a7f33425b2d0e0e79c2e00f` |
 | [specs/active/FEAT-001-VOICE-INPUT.md](../../../specs/active/FEAT-001-VOICE-INPUT.md) | VERIFYING | `4d606de8ef6dc9880d8ce06d4b65b55749580c5fbd6364eea49b32886f6efb0b` |
-| [specs/active/FEAT-002-MULTI-FAMILY-CHILD-TENANT-ISOLATION.md](../../../specs/active/FEAT-002-MULTI-FAMILY-CHILD-TENANT-ISOLATION.md) | `DRAFT` | `f091e62cd44bddb3f49a999664584820df05945886e498c1cca0c03964df65de` |
+| [specs/active/FEAT-002-MULTI-FAMILY-CHILD-TENANT-ISOLATION.md](../../../specs/rejected/FEAT-002-MULTI-FAMILY-CHILD-TENANT-ISOLATION.md) | `DRAFT` | `f091e62cd44bddb3f49a999664584820df05945886e498c1cca0c03964df65de` |
 | [specs/active/FEAT-008-DAILY-LEARNING-GAP-REMINDER.md](../../../specs/active/FEAT-008-DAILY-LEARNING-GAP-REMINDER.md) | `READY_FOR_REVIEW — implementation blocked by explicit Spec + Design Revision approval` | `813fcbf8ae0996ffdb45f948cdfcf10eaffda7139daf204639a37f3dab94fdc2` |
 | [specs/active/FEAT-009-WEEKDAY-SPECIFIC-TIMES.md](../../../specs/active/FEAT-009-WEEKDAY-SPECIFIC-TIMES.md) | `IMPLEMENTING — backend/data locally verified; frontend code implemented with passing state/form tests; native视口验收与 repository Design Revision approval 仍未满足` | `70f176d195ab47d75a1e176a2b6e2019fc11f55769e1023e1bb4ccaf849e69c2` |
 | [specs/active/FEAT-010-DAILY-TASKS.md](../../../specs/active/FEAT-010-DAILY-TASKS.md) | VERIFYING | `f41cac8a8d90fd741c5690d5decb877c445b4797822dd697dca4599ad9726319` |

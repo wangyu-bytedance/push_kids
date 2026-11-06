@@ -1,0 +1,222 @@
+ M AGENTS.md
+ M apps/api/src/push_kids/agent_processing/checkpoints.py
+ M apps/api/src/push_kids/agent_processing/contracts.py
+ M apps/api/src/push_kids/agent_processing/failures.py
+ M apps/api/src/push_kids/agent_processing/pipeline.py
+ M apps/api/src/push_kids/agent_processing/prompt.py
+ M apps/api/src/push_kids/agent_processing/stage_contracts.py
+ M apps/api/src/push_kids/agent_processing/stage_provider.py
+ M apps/api/src/push_kids/agent_processing/telemetry.py
+ M apps/api/src/push_kids/footprints/reads.py
+ M apps/api/src/push_kids/footprints/router.py
+ M apps/miniprogram/pages/footprints/controller.js
+ M apps/miniprogram/pages/footprints/embedded.js
+ M apps/miniprogram/pages/footprints/imports.js
+ M apps/miniprogram/pages/footprints/index.wxml
+ M apps/miniprogram/pages/footprints/index.wxss
+ M apps/miniprogram/pages/footprints/photos.js
+ M docs/ai/CODING-CONSTRAINTS.md
+ M docs/ai/DEVELOPMENT-PROTOCOL.md
+ M docs/ai/MAINTENANCE-PLAYBOOK.md
+ M docs/architecture/ARCHITECTURE-CONSTRAINTS.md
+ M docs/architecture/ARCHITECTURE.md
+ M docs/architecture/decisions/ADR-EMPTY-DAY-AND-PARENT-APPROVED-LEARNING.md
+ M docs/decisions/ADR-001-WECHAT-CLOUD-HOSTING-MYSQL.md
+ M docs/deploy/README.md
+ M docs/deploy/releases/20261016-review-subject-order-backend.md
+ M docs/deploy/releases/20261018-child-footprints-local.md
+ M docs/deploy/releases/20261023-fullstack-test-deployment.md
+ M docs/deploy/releases/20261024-annual-grade-local.md
+ M docs/deploy/releases/20261024-footprints-minimal-local.md
+ M docs/deploy/releases/20261024-footprints-timeline-local.md
+ M docs/deploy/releases/20261024-latest-backend-test-deployment.md
+ M docs/deploy/releases/20261024-record-entry-local.md
+ M docs/deploy/releases/20261024-today-learning-local.md
+ M docs/design/frontend/FRONTEND-DESIGN.md
+ M docs/design/frontend/FRONTEND-ENGINEERING-CONSTRAINTS.md
+ M docs/design/frontend/snapshots/UI-018/DREV-20261017-CHILD-PHOTO-FOOTPRINTS-01/APPROVAL.md
+ M docs/design/frontend/snapshots/UI-018/DREV-20261024-FOOTPRINTS-TIMELINE-01/APPROVAL.md
+ M docs/design/frontend/ui/UI-001-parent-miniapp.md
+ M docs/design/frontend/ui/UI-009-family-members.md
+ M docs/design/frontend/ui/UI-011-reminder-settings.md
+ M docs/design/frontend/ui/UI-015-child-profile.md
+ M docs/design/frontend/ui/UI-018-child-photo-footprints.md
+ M docs/domain/BEHAVIOR-CATALOG.md
+ M docs/domain/features/FEAT-001-push-kids-mvp.md
+ M docs/domain/features/FEAT-002-family-collaboration.md
+ M docs/domain/features/FEAT-003-notification-channel.md
+ M docs/domain/features/FEAT-004-daily-learning-suggestions.md
+ M docs/domain/features/FEAT-005-multi-child-profiles.md
+ M docs/domain/features/FEAT-006-data-cleanup-and-family-reset.md
+ M docs/domain/features/FEAT-007-travel-arrangements.md
+ M docs/domain/features/FEAT-010-daily-tasks.md
+ M docs/domain/features/FEAT-011-notification-auto-renewal.md
+ M docs/domain/features/FEAT-012-child-photo-footprints.md
+ M docs/domain/features/FEAT-013-annual-grade-promotion.md
+ M docs/domain/features/README.md
+ M docs/quality/TEST-STRATEGY.md
+ M docs/quality/evidence/ACTION-PAGER-CONSISTENCY-20261015.md
+ M docs/quality/evidence/ANNUAL-GRADE-IMPLEMENTATION-20261024.md
+ M docs/quality/evidence/CHILD-FOOTPRINTS-IMPLEMENTATION-20261018.md
+ M docs/quality/evidence/CHILD-FOOTPRINTS-UI-COPY-20261018.md
+ M docs/quality/evidence/FOOTPRINTS-MINIMAL-DESIGN-20261024.md
+ M docs/quality/evidence/GRADE-DIALOG-SIMPLIFICATION-DESIGN-20261024.md
+ M docs/quality/evidence/GRADE-DIALOG-SIMPLIFICATION-IMPLEMENTATION-20261024.md
+ M docs/quality/evidence/HERO-ARC-REMOVAL-20261021.md
+ M docs/quality/evidence/MARKDOWN-AUDIT-20261013.md
+ M docs/quality/evidence/NOTIFICATION-AUTO-RENEWAL-DESIGN-20261017.md
+ M docs/quality/evidence/NOTIFICATION-AUTO-RENEWAL-IMPLEMENTATION-20261017.md
+ M docs/quality/evidence/RECORD-TYPES-IMPLEMENTATION-20261023.md
+ M docs/quality/evidence/REVIEW-SUBJECT-ORDER-20261016.md
+ M docs/quality/evidence/SOURCE-DELETE-20261006.md
+ M docs/quality/evidence/SUBJECT-MANAGEMENT-20261015.md
+ M docs/quality/evidence/SUGGESTION-SHEET-DESIGN-20261024.md
+ M docs/quality/evidence/SUGGESTION-SHEET-IMPLEMENTATION-20261024.md
+ M docs/quality/evidence/SUGGESTION-TITLE-DESIGN-20261024.md
+ M docs/quality/evidence/SUGGESTION-TITLE-IMPLEMENTATION-20261024.md
+ M docs/quality/evidence/TODAY-CARD-DESIGN-20261024.md
+ M docs/quality/evidence/TODAY-CARD-IMPLEMENTATION-20261024.md
+ M docs/quality/evidence/footprints-minimal-20261024/README.md
+ M docs/quality/evidence/footprints-timeline-20261024/README.md
+ M docs/quality/evidence/record-entry-20261024/README.md
+ M docs/research/child-footprints/20261017-feasibility.md
+ M specs/README.md
+ M specs/_templates/REVIEW-REPORT.md
+ D specs/active/BUG-028-STAGED-ANALYSIS-RELIABILITY.md
+ D specs/active/BUG-029-REVIEW-SUBJECT-ORDER.md
+ D specs/active/BUG-030-HERO-BACKGROUND-ARC.md
+ D specs/active/BUG-032-RECORD-ENTRY-CONTEXT.md
+ D specs/active/BUG-034-FOOTPRINTS-CONTROLS-TIMELINE.md
+ D specs/active/BUG-CRUD-SCHEMA-READINESS.md
+ D specs/active/CLOUD-001-WECHAT-CLOUDBASE-STAGE1.md
+ D specs/active/FEAT-001-ACTIVITY-WEEKDAY-ORDER.md
+ D specs/active/FEAT-001-ARK-CONTEXT-REUSE-FLAG.md
+ D specs/active/FEAT-001-AUTO-SUPERSEDED-REVIEW-STATE.md
+ D specs/active/FEAT-001-CARD-BACKGROUNDS-COMPLETE.md
+ D specs/active/FEAT-001-EMPTY-DAY-EARLY-REVIEW.md
+ D specs/active/FEAT-001-FAIR-DAILY-REVIEW.md
+ D specs/active/FEAT-001-FAIR-REVIEW-PERFORMANCE-AMENDMENT.md
+ D specs/active/FEAT-001-PRECISE-SOURCE-AND-KNOWLEDGE-DELETION.md
+ D specs/active/FEAT-001-RECORD-CALENDAR-ILLUSTRATIONS.md
+ D specs/active/FEAT-001-REPORT-DISCLOSURES.md
+ D specs/active/FEAT-001-REPORT-PANELS-REFINEMENT.md
+ D specs/active/FEAT-001-REVIEW-INVENTORY-AND-RESCHEDULING.md
+ D specs/active/FEAT-001-REVIEW-INVENTORY-GROUPED-CARDS.md
+ D specs/active/FEAT-001-REVIEW-INVENTORY-REDESIGN.md
+ D specs/active/FEAT-001-SETTINGS-CONSISTENCY.md
+ D specs/active/FEAT-001-SUBJECT-MANAGEMENT-CONSISTENCY.md
+ D specs/active/FEAT-001-UNIFIED-ITEM-REVIEW-STRATEGY.md
+ D specs/active/FEAT-001-VOICE-INPUT.md
+ D specs/active/FEAT-004-INCREMENTAL-LEARNING-PATH.md
+ D specs/active/FEAT-004-SUGGESTION-SHEET-REFINEMENT.md
+ D specs/active/FEAT-004-SUGGESTION-TITLE-LIMIT.md
+ D specs/active/FEAT-004-TODAY-CARD-VISIBILITY.md
+ D specs/active/FEAT-009-WEEKDAY-SPECIFIC-TIMES.md
+ D specs/active/FEAT-010-DAILY-TASKS.md
+ D specs/active/FEAT-010-TODAY-ACTION-STYLE.md
+ D specs/active/FEAT-011-NOTIFICATION-AUTO-RENEWAL.md
+ D specs/active/FEAT-012-CHILD-PHOTO-FOOTPRINTS.md
+ D specs/active/FEAT-012-FOOTPRINTS-MINIMAL-UI.md
+ D specs/active/FEAT-012-FOOTPRINTS-UI-COPY.md
+ D specs/active/FEAT-012-RECORD-TYPE-SWITCHER.md
+ D specs/active/FEAT-013-ANNUAL-GRADE-PROMOTION.md
+ D specs/active/FEAT-013-GRADE-DIALOG-SIMPLIFICATION.md
+ D specs/active/OPS-20261023-FULLSTACK-TEST-DEPLOYMENT.md
+ D specs/active/OPS-20261024-LATEST-BACKEND-TEST-DEPLOYMENT.md
+ M specs/completed/BUG-003-CLOUD-NONROOT-PORT.md
+ M specs/completed/BUG-031-FOOTPRINT-PREVIEW-MYSQL57.md
+ M specs/completed/BUG-MYSQL-SUPERSESSION-MIGRATION-ISOLATION.md
+ M specs/completed/GOV-001-REPOSITORY-NATIVE-FRONTEND-DESIGN-EVIDENCE.md
+ M specs/rejected/OPS-20261024-SPEC03-MAINTENANCE-PROPOSAL.md
+ M tests/frontend/footprints.test.js
+ M tests/frontend/record-types.test.js
+ M tests/integration/test_analysis_checkpoints.py
+ M tests/integration/test_footprints.py
+ M tests/integration/test_footprints_mysql.py
+ M tests/performance/test_footprints_reads.py
+ M tests/staged_analysis_fakes.py
+ M tests/unit/test_analysis_context_contract.py
+ M tests/unit/test_provider_evidence.py
+ M tests/unit/test_stage_provider.py
+ M tests/unit/test_staged_analysis.py
+ M tools/benchmark_staged_analysis.py
+ M tools/release/miniprogram_version.json
+?? REVIEW.md
+?? apps/api/src/push_kids/knowledge/maintenance.py
+?? docs/deploy/releases/20261025-latest-client-upload.md
+?? docs/deploy/releases/20261025-travel-diary-e2e-local.md
+?? docs/deploy/releases/20261025-travel-import-simplification-local.md
+?? docs/deploy/releases/20261031-historical-knowledge-cleanup.md
+?? docs/deploy/releases/20261031-knowledge-prompt-backend.md
+?? docs/deploy/releases/20261031-travel-entry-cleanup-local.md
+?? docs/design/frontend/prototypes/DREV-20261025-TRAVEL-DIARY-E2E-01/
+?? docs/design/frontend/prototypes/DREV-20261025-TRAVEL-IMPORT-02/
+?? docs/design/frontend/prototypes/DREV-20261031-TRAVEL-ENTRY-CLEANUP-01/
+?? docs/design/frontend/snapshots/UI-018/DREV-20261025-TRAVEL-DIARY-E2E-01/
+?? docs/design/frontend/snapshots/UI-018/DREV-20261025-TRAVEL-IMPORT-02/
+?? docs/design/frontend/snapshots/UI-018/DREV-20261031-TRAVEL-ENTRY-CLEANUP-01/
+?? docs/quality/evidence/HISTORICAL-KNOWLEDGE-CLEANUP-20261031.md
+?? docs/quality/evidence/KNOWLEDGE-POINT-PROMPT-03-20261031.md
+?? docs/quality/evidence/client-release-20261025/
+?? docs/quality/evidence/travel-diary-e2e-20261025/
+?? docs/quality/evidence/travel-entry-cleanup-20261031/
+?? docs/quality/evidence/travel-import-simplification-20261025/
+?? docs/quality/issues/
+?? docs/quality/regressions/
+?? specs/STATUS.md
+?? specs/active/BUG-035-TRAVEL-DIARY-END-TO-END.md
+?? specs/active/BUG-036-KNOWLEDGE-GENERATION-FINAL-PROPOSAL.md
+?? specs/active/FEAT-012-TRAVEL-ENTRY-CLEANUP.md
+?? specs/active/FEAT-012-TRAVEL-IMPORT-SIMPLIFICATION.md
+?? specs/completed/BUG-028-STAGED-ANALYSIS-RELIABILITY.md
+?? specs/completed/BUG-029-REVIEW-SUBJECT-ORDER.md
+?? specs/completed/BUG-030-HERO-BACKGROUND-ARC.md
+?? specs/completed/BUG-032-RECORD-ENTRY-CONTEXT.md
+?? specs/completed/BUG-034-FOOTPRINTS-CONTROLS-TIMELINE.md
+?? specs/completed/BUG-CRUD-SCHEMA-READINESS.md
+?? specs/completed/CLOUD-001-WECHAT-CLOUDBASE-STAGE1.md
+?? specs/completed/FEAT-001-ACTIVITY-WEEKDAY-ORDER.md
+?? specs/completed/FEAT-001-ARK-CONTEXT-REUSE-FLAG.md
+?? specs/completed/FEAT-001-AUTO-SUPERSEDED-REVIEW-STATE.md
+?? specs/completed/FEAT-001-CARD-BACKGROUNDS-COMPLETE.md
+?? specs/completed/FEAT-001-EMPTY-DAY-EARLY-REVIEW.md
+?? specs/completed/FEAT-001-FAIR-DAILY-REVIEW.md
+?? specs/completed/FEAT-001-FAIR-REVIEW-PERFORMANCE-AMENDMENT.md
+?? specs/completed/FEAT-001-HISTORICAL-KNOWLEDGE-CLEANUP.md
+?? specs/completed/FEAT-001-KNOWLEDGE-POINT-ABSTRACTION-PROMPT.md
+?? specs/completed/FEAT-001-PRECISE-SOURCE-AND-KNOWLEDGE-DELETION.md
+?? specs/completed/FEAT-001-RECORD-CALENDAR-ILLUSTRATIONS.md
+?? specs/completed/FEAT-001-REPORT-DISCLOSURES.md
+?? specs/completed/FEAT-001-REPORT-PANELS-REFINEMENT.md
+?? specs/completed/FEAT-001-REVIEW-INVENTORY-AND-RESCHEDULING.md
+?? specs/completed/FEAT-001-REVIEW-INVENTORY-GROUPED-CARDS.md
+?? specs/completed/FEAT-001-REVIEW-INVENTORY-REDESIGN.md
+?? specs/completed/FEAT-001-SETTINGS-CONSISTENCY.md
+?? specs/completed/FEAT-001-SUBJECT-MANAGEMENT-CONSISTENCY.md
+?? specs/completed/FEAT-001-UNIFIED-ITEM-REVIEW-STRATEGY.md
+?? specs/completed/FEAT-001-VOICE-INPUT.md
+?? specs/completed/FEAT-004-INCREMENTAL-LEARNING-PATH.md
+?? specs/completed/FEAT-004-SUGGESTION-SHEET-REFINEMENT.md
+?? specs/completed/FEAT-004-SUGGESTION-TITLE-LIMIT.md
+?? specs/completed/FEAT-004-TODAY-CARD-VISIBILITY.md
+?? specs/completed/FEAT-009-WEEKDAY-SPECIFIC-TIMES.md
+?? specs/completed/FEAT-010-DAILY-TASKS.md
+?? specs/completed/FEAT-010-TODAY-ACTION-STYLE.md
+?? specs/completed/FEAT-011-NOTIFICATION-AUTO-RENEWAL.md
+?? specs/completed/FEAT-012-CHILD-PHOTO-FOOTPRINTS.md
+?? specs/completed/FEAT-012-FOOTPRINTS-MINIMAL-UI.md
+?? specs/completed/FEAT-012-FOOTPRINTS-UI-COPY.md
+?? specs/completed/FEAT-012-RECORD-TYPE-SWITCHER.md
+?? specs/completed/FEAT-013-ANNUAL-GRADE-PROMOTION.md
+?? specs/completed/FEAT-013-GRADE-DIALOG-SIMPLIFICATION.md
+?? specs/completed/GOV-002-CLOUD-DELIVERY-DEVELOPMENT-COMPLETION.md
+?? specs/completed/GOV-003-TDD-CODING-REVIEW-INCREMENTAL-MERGE.md
+?? specs/completed/OPS-20261023-FULLSTACK-TEST-DEPLOYMENT.md
+?? specs/completed/OPS-20261024-LATEST-BACKEND-TEST-DEPLOYMENT.md
+?? specs/evidence/
+?? tests/integration/test_knowledge_maintenance.py
+?? tests/unit/test_staged_proposal_recovery.py
+?? tools/prepare_travel_diary_native.py
+?? tools/repair_historical_knowledge.py
+?? tools/travel_diary_geometry.js
+?? tools/travel_import_geometry.js

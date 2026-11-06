@@ -1,13 +1,17 @@
 # FEAT-004 — 单项增量学习建议
 
-- Status: BACKEND_037_NORMAL_100_PERCENT / CLIENT_LOCAL / VERIFYING / DEFAULT_OFF / FEATURE_NOT_ENABLED
-- Revision: FEAT-STATE-20261024-INCREMENTAL-LEARNING-09-DEPLOY
-- Current title constraint: 用户明确批准[Title Limit Spec01 / Architecture01](../../../specs/active/FEAT-004-SUGGESTION-TITLE-LIMIT.md)与[DREV04](../../design/frontend/prototypes/DREV-20261024-TODAY-LEARNING-04/FRONTEND-SPEC.md)，已本地实现，VERIFYING。新生成/重新编辑标题trim后1–20个Unicode码点，无内部换行；编辑计数/错误就地显示，超限保留草稿、零PATCH。旧21–120字提案/任务保留原文和读取/审批/实际记录/删除路径，重新编辑须主动精简。后端780通过/40个MySQL环境相关跳过、前端332通过、三视口39态原生及独立复核通过，真实设备/可访问性待补；见[当前证据](../../quality/evidence/SUGGESTION-TITLE-IMPLEMENTATION-20261024.md)。33张批准设计导出冻结，不代替原生结果。
-- Current card refinement: [Visibility Spec01](../../../specs/active/FEAT-004-TODAY-CARD-VISIBILITY.md)/[DREV03](../../design/frontend/prototypes/DREV-20261024-TODAY-LEARNING-03/FRONTEND-SPEC.md)获用户「批准，按此实现」，已在原组件实现。空区整体隐藏，具体内容沿用今日分区/复习卡字阶与胶囊按钮；保留生成/失败恢复与批准待学。前端327项及320/390/430三视口81组原生通过；真实设备/可访问性及独立复核待补，详见[本轮证据](../../quality/evidence/TODAY-CARD-IMPLEMENTATION-20261024.md)。该卡片范围未改领域合同、DREV02弹层和默认开关；当前标题写入合同另由DREV04覆盖。
-- Updated: 2026-10-24
-- Spec / Architecture / Design: [Spec04](../../../specs/active/FEAT-004-INCREMENTAL-LEARNING-PATH.md)、ARCH-20261024-INCREMENTAL-LEARNING-PATH-03、[Design01](../../design/frontend/prototypes/DREV-20261024-TODAY-LEARNING-01/FRONTEND-SPEC.md)，产品负责人已明确批准实施。
+2026-10-26开发归档：已交付037后端/0.1.16客户端所覆盖的需求按用户批准规则标记开发DONE，验收缺项独立保留；后续BUG-035和旅行导入精简尚未交付，继续active。当前归档和待验入口见[Spec状态清单](../../../specs/STATUS.md)，依据为[治理Spec](../../../specs/completed/GOV-002-CLOUD-DELIVERY-DEVELOPMENT-COMPLETION.md)。本轮不改产品合同、测试结论、设计或发布阶段。
+
+2026-10-25交付revision CLIENT-0.1.16-UPLOAD-01：已实现客户端随0.1.16开发上传（1178991字节），用户已确认旅行照片双账号隔离；未体验/审核/正式发布。产品、真机和可访问性未完成项仍开放。[发布记录](../../deploy/releases/20261025-latest-client-upload.md)。
+
+- Status: BACKEND_037_NORMAL_100_PERCENT / DEVELOPMENT_VERSION_0.1.16_UPLOADED / DEVELOPMENT_DONE / VERIFICATION_PENDING / DEFAULT_OFF / FEATURE_NOT_ENABLED
+- Revision: FEAT-STATE-20261026-INCREMENTAL-LEARNING-11-DEVELOPMENT-DONE
+- Current title constraint: 用户明确批准[Title Limit Spec01 / Architecture01](../../../specs/completed/FEAT-004-SUGGESTION-TITLE-LIMIT.md)与[DREV04](../../design/frontend/prototypes/DREV-20261024-TODAY-LEARNING-04/FRONTEND-SPEC.md)，已实现并云端交付，开发DONE、验收待补。新生成/重新编辑标题trim后1–20个Unicode码点，无内部换行；编辑计数/错误就地显示，超限保留草稿、零PATCH。旧21–120字提案/任务保留原文和读取/审批/实际记录/删除路径，重新编辑须主动精简。后端780通过/40个MySQL环境相关跳过、前端332通过、三视口39态原生及独立复核通过，真实设备/可访问性待补；见[当前证据](../../quality/evidence/SUGGESTION-TITLE-IMPLEMENTATION-20261024.md)。33张批准设计导出冻结，不代替原生结果。
+- Current card refinement: [Visibility Spec01](../../../specs/completed/FEAT-004-TODAY-CARD-VISIBILITY.md)/[DREV03](../../design/frontend/prototypes/DREV-20261024-TODAY-LEARNING-03/FRONTEND-SPEC.md)获用户「批准，按此实现」，已在原组件实现。空区整体隐藏，具体内容沿用今日分区/复习卡字阶与胶囊按钮；保留生成/失败恢复与批准待学。前端327项及320/390/430三视口81组原生通过；真实设备/可访问性及独立复核待补，详见[本轮证据](../../quality/evidence/TODAY-CARD-IMPLEMENTATION-20261024.md)。该卡片范围未改领域合同、DREV02弹层和默认开关；当前标题写入合同另由DREV04覆盖。
+- Updated: 2026-10-25
+- Spec / Architecture / Design: [Spec04](../../../specs/completed/FEAT-004-INCREMENTAL-LEARNING-PATH.md)、ARCH-20261024-INCREMENTAL-LEARNING-PATH-03、[Design01](../../design/frontend/prototypes/DREV-20261024-TODAY-LEARNING-01/FRONTEND-SPEC.md)，产品负责人已明确批准实施。
 - Evidence: [当前验证与缺口](../../quality/evidence/TODAY-LEARNING-IMPLEMENTATION-20261024.md)。2026-09-05历史提案继续REJECTED，不代表本次被取消。
-- Current UI refinement: 用户已批准[弹层Spec01](../../../specs/active/FEAT-004-SUGGESTION-SHEET-REFINEMENT.md) / [Design02](../../design/frontend/prototypes/DREV-20261024-TODAY-LEARNING-02/FRONTEND-SPEC.md)，现为本地实现/VERIFYING。建议弹层直接突出标题、科目/时长和简短AI标识；主确认全宽、编辑/换项等宽并排、暂缓居中。等待禁操作，失败保留提案并沿用幂等键；长标题完整可滚动。[本轮证据](../../quality/evidence/SUGGESTION-SHEET-IMPLEMENTATION-20261024.md)：311项前端及三视口45组原生几何通过，真机/可访问性未验；领域行为与主Spec04状态不变。
+- Current UI refinement: 用户已批准[弹层Spec01](../../../specs/completed/FEAT-004-SUGGESTION-SHEET-REFINEMENT.md) / [Design02](../../design/frontend/prototypes/DREV-20261024-TODAY-LEARNING-02/FRONTEND-SPEC.md)，现为开发DONE/已交付，验收待补。建议弹层直接突出标题、科目/时长和简短AI标识；主确认全宽、编辑/换项等宽并排、暂缓居中。等待禁操作，失败保留提案并沿用幂等键；长标题完整可滚动。[本轮证据](../../quality/evidence/SUGGESTION-SHEET-IMPLEMENTATION-20261024.md)：311项前端及三视口45组原生几何通过，真机/可访问性未验；领域行为与主Spec04状态不变。
 
 服务端按北京时间判断：可靠计时覆盖前两个完整自然日，期间及今天没有首次确认的新知识，且孩子有年级、启用的学习科目和至少一项可用已确认知识，才允许自动建议。首次计时当天不算完整观察日；历史补录新知识计在确认日。重复知识、复习、活动和草稿不重置新增日期，删除也不擦除日期。
 
@@ -21,4 +25,4 @@ manager/editor确认后只创建一项待学，不创建LearningRecord、Knowled
 
 今日组件保持挂载，内容区域位于hero后、复习前。无内容/进行中或恢复操作时不渲染标题、卡片或额外间距；eligible纯空快照也隐藏，但既有自动提示继续执行。有提案直接显示具体标题及元信息；Task优先且不受生成开关/资格误隐藏。生成中、失败/失效和删除后恢复保留入口，请求错误保留重试。已确认学习统计仍只消费正式记录。viewer只读已批准待学，未批准提案/生成空区隐藏，不触发生成或审批。切孩子、家庭、成员/角色或离页后丢弃迟到结果，轮询最多8次。普通GET不调用模型。
 
-`PUSH_KIDS_LEARNING_SUGGESTIONS_ENABLED=false`为默认。关闭新生成和审批时仍保留已批准待学读取、删除和实际记录。0024已随生产0025落库，知识计时从迁移日起初始化；获批CRUD readiness修复后的037 normal/100%，当前建议GET真实微信200，开关仍关闭。真实MySQL5.7迁移/新查询规模和相关今日回归通过；真实模型分层样本、iOS/Android及实际类目/隐私/内容义务验收仍须单独完成，不能由mock或家长确认代替。前端未上传/体验/审核，建议未启用。[本轮发布记录](../../deploy/releases/20261024-latest-backend-test-deployment.md)描述实际阶段，036保留为旧失败。
+`PUSH_KIDS_LEARNING_SUGGESTIONS_ENABLED=false`为默认。关闭新生成和审批时仍保留已批准待学读取、删除和实际记录。0024已随生产0025落库，知识计时从迁移日起初始化；获批CRUD readiness修复后的037 normal/100%，当前建议GET真实微信200，开关仍关闭。真实MySQL5.7迁移/新查询规模和相关今日回归通过；真实模型分层样本、iOS/Android及实际类目/隐私/内容义务验收仍须单独完成，不能由mock或家长确认代替。前端已随0.1.16开发上传，未体验/审核/正式发布；建议仍未启用。[本轮发布记录](../../deploy/releases/20261024-latest-backend-test-deployment.md)描述实际阶段，036保留为旧失败。

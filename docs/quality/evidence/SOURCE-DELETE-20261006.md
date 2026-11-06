@@ -1,7 +1,7 @@
 # 精确原图与知识删除：本地实现证据
 
 - Date: 2026-10-06
-- Spec: `specs/active/FEAT-001-PRECISE-SOURCE-AND-KNOWLEDGE-DELETION.md`，`SPEC-20261006-SOURCE-DELETE-02`
+- Spec: `specs/completed/FEAT-001-PRECISE-SOURCE-AND-KNOWLEDGE-DELETION.md`，`SPEC-20261006-SOURCE-DELETE-02`
 - Design: `DREV-20261006-SOURCE-DELETE-01`；已批准manifest不变。
 - Implementation: complete locally；verification: partial；release: not deployed。
 - Owner: Codex；以下为实现者验证与必要性自查，不冒充独立人员审查。
@@ -74,7 +74,7 @@ SQLite删除语句和MySQL读路径均检查索引计划。
 | docs/domain/features/FEAT-001-push-kids-mvp.md | modify | Feature最新事实及未验收范围 |
 | docs/domain/BEHAVIOR-CATALOG.md | modify | BHV-030/031稳定行为条目 |
 | docs/design/frontend/ui/UI-001-parent-miniapp.md | modify | Today精确原图、删除交互与原生验证缺口 |
-| specs/active/FEAT-001-PRECISE-SOURCE-AND-KNOWLEDGE-DELETION.md | add | 用户批准、范围、方案、验收与VERIFYING状态 |
+| specs/completed/FEAT-001-PRECISE-SOURCE-AND-KNOWLEDGE-DELETION.md | add | 用户批准、范围、方案、验收与VERIFYING状态 |
 | docs/quality/evidence/SOURCE-DELETE-20261006.md | add | 持久化验证摘要和逐文件必要性 |
 
 设计目录 `docs/design/frontend/prototypes/DREV-20261006-SOURCE-DELETE-01/` 中

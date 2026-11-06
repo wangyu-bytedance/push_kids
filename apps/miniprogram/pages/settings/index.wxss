@@ -340,3 +340,13 @@
   line-height: 88rpx;
   font-weight: 500;
 }
+/* Approved DREV-20261105-WORKDAY-02: new mode controls use CSS px at every viewport. */
+.activity-schedule-sheet .schedule-mode { margin-bottom: 16px; }
+.activity-schedule-sheet .schedule-mode > view { min-height: 44px; font-size: 14px; }
+.activity-schedule-sheet .pk-picker { min-height: 44px; box-sizing: border-box; }
+.activity-schedule-sheet .sheet-foot .btn { width: 100%; min-height: 44px; }
+.activity-schedule-sheet .sheet-head .icon-btn { width: 44px; height: 44px; min-height: 44px; flex: none; }
+.activity-schedule-sheet .danger-link { display: inline-flex; align-items: center; min-height: 44px; }
+.activity-schedule-sheet .sheet-sub, .activity-schedule-sheet .lbl { font-size: 14px; }
+.activity-schedule-sheet .time-row > .pk-field { min-width: 0; }
+.activity-schedule-sheet .schedule-mode > view[aria-disabled="true"] { opacity: .5; }

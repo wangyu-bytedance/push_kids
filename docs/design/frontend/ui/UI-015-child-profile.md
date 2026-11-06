@@ -1,21 +1,28 @@
 # UI-015 — 学习档案管理与切换入口
 
-2026-10-24运行证据revision LATEST-037-01：年级Schema0025保留旧年级，CRUD启动检查修复已批准并验证；037 normal/100%，真实微信年级候选GET200，用户确认写入尚未验收。完整客户端仍本地未上传，本页呈现/归档合同和批准设计不变。[本轮记录](../../../deploy/releases/20261024-latest-backend-test-deployment.md)。
+2026-11-06归档UI交付revision `UI-RELEASE-20261106-ARCHIVE-07`：[当前交付](../../../deploy/releases/20261106-fullstack-040-client-0.1.18.md)绑定相同child-edit源，三视口21组节点/PNG及320/390/430确认框视觉/取消已完成。DREV01及生命周期不变，0.1.18已上传，BUG033 DONE/completed；设备/可访问性及真实业务待验。
 
-- 当前年级弹窗增量 `UI-STATE-20261024-ANNUAL-GRADE-05`：[精简Spec01](../../../../specs/active/FEAT-013-GRADE-DIALOG-SIMPLIFICATION.md)与[DREV02](../prototypes/DREV-20261024-ANNUAL-GRADE-PROMOTION-02/FRONTEND-SPEC.md)获用户2026-10-24“继续”批准并本地实现，保留孩子名标题、单个年级选择和并排操作，失败/冲突按需显示行内短提示，最新事实不可覆盖。33张批准设计导出冻结，最终327项前端/53项定向、三尺寸51组原生及实际选级/重试/稍后通过；真实设备/可访问性及全业务原生端到端边界见[实施证据](../../../quality/evidence/GRADE-DIALOG-SIMPLIFICATION-IMPLEMENTATION-20261024.md)。档案编辑表单仍用DREV01，归档区候选未实施。
+2026-10-26开发归档：已交付037后端/0.1.16客户端所覆盖的需求按用户批准规则标记开发DONE，验收缺项独立保留；后续BUG-035和旅行导入精简尚未交付，继续active。当前归档和待验入口见[Spec状态清单](../../../../specs/STATUS.md)，依据为[治理Spec](../../../../specs/completed/GOV-002-CLOUD-DELIVERY-DEVELOPMENT-COMPLETION.md)。本轮不改产品合同、测试结论、设计或发布阶段。
 
-- 待批准候选（非当前实现）：用户2026-10-24截图指出档案状态区UI/文字堆砌；[BUG-033 Spec01](../../../../specs/active/BUG-033-CHILD-ARCHIVE-UI.md)及[DREV-20261024-CHILD-ARCHIVE-01](../prototypes/DREV-20261024-CHILD-ARCHIVE-01/FRONTEND-SPEC.md)提议整行操作、短说明、详细影响集中到原确认框。21张合成三视口导出已生成，待具体批准；下面的已实现行为暂不被提案替换。
+2026-10-25交付revision UI-DELIVERY-0.1.16-01：当前实现随0.1.16开发上传，未设体验版、未提审/正式发布；批准设计源/快照及验收缺口保持原范围。[发布记录](../../../deploy/releases/20261025-latest-client-upload.md)。
 
-- Status: `CURRENT_LOCAL / MATRIX_PENDING / HISTORICAL_DESIGN_EVIDENCE`
+2026-10-24运行证据revision LATEST-037-01：年级Schema0025保留旧年级，CRUD启动检查修复已批准并验证；037 normal/100%，真实微信年级候选GET200，用户确认写入尚未验收。客户端已随0.1.16开发上传，未体验或正式发布；本页呈现/归档合同和批准设计不变。[本轮记录](../../../deploy/releases/20261024-latest-backend-test-deployment.md)。
+
+- 当前年级弹窗增量 `UI-STATE-20261024-ANNUAL-GRADE-05`：[精简Spec01](../../../../specs/completed/FEAT-013-GRADE-DIALOG-SIMPLIFICATION.md)与[DREV02](../prototypes/DREV-20261024-ANNUAL-GRADE-PROMOTION-02/FRONTEND-SPEC.md)获用户2026-10-24“继续”批准并本地实现，保留孩子名标题、单个年级选择和并排操作，失败/冲突按需显示行内短提示，最新事实不可覆盖。33张批准设计导出冻结，最终327项前端/53项定向、三尺寸51组原生及实际选级/重试/稍后通过；真实设备/可访问性及全业务原生端到端边界见[实施证据](../../../quality/evidence/GRADE-DIALOG-SIMPLIFICATION-IMPLEMENTATION-20261024.md)。档案字段仍用年级DREV01；归档卡由下述BUG-033局部替代。
+
+- 当前归档增量 `UI-STATE-20261106-CHILD-ARCHIVE-07`：用户2026-11-05“批准”明确批准[BUG-033 Spec01](../../../../specs/completed/BUG-033-CHILD-ARCHIVE-UI.md)及[DREV-20261024-CHILD-ARCHIVE-01](../prototypes/DREV-20261024-CHILD-ARCHIVE-01/FRONTEND-SPEC.md)。已本地实现左对齐整行归档/恢复、短说明及集中确认文案，删除泛标题、长段落、垃圾桶和常驻危险色。批准源/21张HTML导出冻结；[本轮EVD](../../../../specs/evidence/EVD-20261105-BUG033-IMPLEMENTATION.md)分别记录生产回归、原生和未验证项，本增量已由0.1.18上传，验收缺项独立保留。
+
+- Status: `CLOUD_DELIVERED / ARCHIVE_UI_0.1.18_UPLOADED / VERIFICATION_PENDING`
 - Related Feature: `FEAT-005` / `FEAT-013`
-- Related Spec: `SPEC-20260906-MULTI-CHILD-01` / `SPEC-20261024-ANNUAL-GRADE-PROMOTION-02` / `SPEC-20261024-GRADE-DIALOG-SIMPLIFICATION-01`
+- Related Spec: `SPEC-20260906-MULTI-CHILD-01` / `SPEC-20261024-ANNUAL-GRADE-PROMOTION-02` / `SPEC-20261024-GRADE-DIALOG-SIMPLIFICATION-01` / `BUG-SPEC-20261024-CHILD-ARCHIVE-UI-01`
 - Current annual-grade baseline / engineering: `FDB-20260913-04` / `FEC-20261007-NATIVE-GEOMETRY-02`
 - Current annual-grade design: 弹窗`DREV-20261024-ANNUAL-GRADE-PROMOTION-02`；档案表单`DREV-20261024-ANNUAL-GRADE-PROMOTION-01`（均APPROVED / LOCAL / 验收缺口见本轮证据）
 - Historical baseline: `FDB-20260906-02`（PKDS-1.0）
 - Historical engineering contract: `FEC-20260906-04`
 - Historical design revision: `DREV-20260906-CHILD-02`（DRAFT，视觉沿用 `DREV-20260906-PKDS-01` 既有 token 与组件类；
   增量仅为归档危险区的未完成提醒条）
-- Last reviewed artifact date: 2026-10-24
+- Last reviewed artifact date: 2026-11-06（0.1.18交付、三视口原生状态及确认框视觉/取消；设备/业务验收独立）
+- Current archive design/manifest: [DREV-20261024-CHILD-ARCHIVE-01](../prototypes/DREV-20261024-CHILD-ARCHIVE-01/index.html) / [APPROVED](../snapshots/UI-015/DREV-20261024-CHILD-ARCHIVE-01/APPROVAL.md)，仅替代归档卡，年级设计其他范围继续有效。
 - Interactive artifact: [DREV02弹窗](../prototypes/DREV-20261024-ANNUAL-GRADE-PROMOTION-02/index.html) / [DREV01档案表单](../prototypes/DREV-20261024-ANNUAL-GRADE-PROMOTION-01/index.html)
 - Snapshot manifest: [DREV02 APPROVED](../snapshots/UI-015/DREV-20261024-ANNUAL-GRADE-PROMOTION-02/APPROVAL.md) / [DREV01 APPROVED](../snapshots/UI-015/DREV-20261024-ANNUAL-GRADE-PROMOTION-01/APPROVAL.md)；2026-09-06基础档案快照仍为历史pending
 - Editable design source: 上述两个HTML按各自范围冻结，不用DREV01旧弹窗抵扣DREV02验收。
@@ -47,9 +54,9 @@
 | State | Visible contract |
 |---|---|
 | 新建 | 名字、年级、每天复习时长、「已经在学的科目」多选（语文/数学/英语）、主按钮「建立档案」 |
-| 编辑（在用，manager） | 名字/年级/时长 + 「档案状态」卡的归档危险区；有未完成记录时危险区内多一条 `pk-notice quiet` 提醒（含数量） |
-| 编辑（已归档，manager） | 顶部归档说明提示 + 「恢复这个档案」 |
-| 编辑（editor） | 只有资料表单，无「档案状态」卡 |
+| 编辑（在用，manager） | 名字/年级/时长 + 整行「归档档案」及「保留全部记录，随时可恢复」；有未完成时另加左对齐数量短提醒 |
+| 编辑（已归档，manager） | 原顶部归档说明 + 整行「恢复档案」及「重新加入孩子列表，继续记录」 |
+| 编辑（editor） | 只有资料表单，无归档/恢复操作卡 |
 | 只读成员（viewer） | 设置页不展示建档与添加入口；页面级也不进入表单 |
 | 达到上限 | 新建页顶部提示上限文案；设置页隐藏「添加孩子」并显示上限说明 |
 | loading | 表单区骨架屏 `card-sk` |
@@ -64,15 +71,13 @@
 - 创建成功后自动把全局选中孩子切换为新档案并返回上一页，避免「建完却看不到」。
 - 归档与恢复是改变全家可见范围的操作：仅 manager 可见入口，归档需二次确认，
   文案明确说明「不会删除任何记录，报表和历史仍可查看」；服务端拒绝时展示错误而不静默。
-- 归档前把未完成数量（待确认 + 分析中 + 失败）摆给家长：危险区提醒与二次确认弹窗都写明
-  「归档不会丢掉它们，确认和复习反馈仍然可以完成，但归档后档案不在切换列表里，建议先处理完再归档」
-  （`BUG-SPEC-20260906-17`）。这是提醒不是闸门：家长仍可直接归档；数量读不到时退回通用文案，
+- 归档前把未完成数量（待确认 + 分析中 + 失败）摆给家长：卡片只显示“还有 N 条记录待处理，归档后仍可继续完成。”；原生二次确认集中说明隐藏/停止新增/保留/恢复，并补充“归档后仍可完成确认和复习反馈”（BUG-033；领域边界仍为`BUG-SPEC-20260906-17`）。这是提醒不是闸门：家长仍可直接归档；数量读不到时退回通用文案，
   绝不编造数字，也不把编辑页变成错误页；已归档档案不发这个请求。
 - 归档档案的顶部说明补一句「归档前留下的待确认草稿和复习反馈也仍能完成」，与服务端边界一致。
 - 选中的档案被归档或消失时，各 Tab 自动回落到第一个在用档案；全部归档后清空选择并回到空态，
   不出现白屏或 404。
 - 设置页请求带代际标记（race guard），快速切换或重复刷新时丢弃迟到响应，不展示上一个孩子的数据。
-- 保存与归档进行中按钮进入 `is-disabled` 并展示「正在保存…/处理中…」，避免重复提交。
+- 保存仍沿用`is-disabled`和“正在保存…”；归档/恢复整行沿用`working`保护及`aria-disabled`，显示“正在归档…/正在恢复…”并移除箭头，避免重复提交。
 
 ## Visual and responsive contract
 
@@ -86,7 +91,7 @@
 
 DREV02与精简Spec01于2026-10-24获用户“继续”批准，当前实现和验收边界见页首。下面为DREV01初版及历史档案事实：其中旧弹窗的全宽纵向按钮由DREV02并排操作替代；其余领域规则与档案字段保持。
 
-2026-10-24 FEAT-013复核revision `UI-STATE-20261024-ANNUAL-GRADE-03`：[Spec02](../../../../specs/active/FEAT-013-ANNUAL-GRADE-PROMOTION.md)、Architecture02、[DREV01设计合同](../prototypes/DREV-20261024-ANNUAL-GRADE-PROMOTION-01/FRONTEND-SPEC.md)及[19态三视口/SHA清单](../snapshots/UI-015/DREV-20261024-ANNUAL-GRADE-PROMOTION-01/APPROVAL.md)已获用户“好的 按照这个方案落地”批准并本地实现。采用有效FDB-20260913-04/FEC-20261007-NATIVE-GEOMETRY-02；原设计源/57张导出冻结，不追认头部历史快照。三尺寸各17态原生节点/截图、系统picker打开/取消及九年级编辑字段已采集；按钮铺满内容列，320档案保存补足44px。随后恢复/冲突/在途修复通过自动化与独立评审；[本轮证据](../../../quality/evidence/ANNUAL-GRADE-IMPLEMENTATION-20261024.md)明确原生端到端、真实设备与可访问性待验收，状态VERIFYING，未发布。下列94项为2026-09-06历史证据，不冒充当前diff结果。
+2026-10-24 FEAT-013复核revision `UI-STATE-20261024-ANNUAL-GRADE-03`：[Spec02](../../../../specs/completed/FEAT-013-ANNUAL-GRADE-PROMOTION.md)、Architecture02、[DREV01设计合同](../prototypes/DREV-20261024-ANNUAL-GRADE-PROMOTION-01/FRONTEND-SPEC.md)及[19态三视口/SHA清单](../snapshots/UI-015/DREV-20261024-ANNUAL-GRADE-PROMOTION-01/APPROVAL.md)已获用户“好的 按照这个方案落地”批准并本地实现。采用有效FDB-20260913-04/FEC-20261007-NATIVE-GEOMETRY-02；原设计源/57张导出冻结，不追认头部历史快照。三尺寸各17态原生节点/截图、系统picker打开/取消及九年级编辑字段已采集；按钮铺满内容列，320档案保存补足44px。随后恢复/冲突/在途修复通过自动化与独立评审；[本轮证据](../../../quality/evidence/ANNUAL-GRADE-IMPLEMENTATION-20261024.md)明确原生端到端、真实设备与可访问性待验收，开发状态DONE、验收待补，已随037/0.1.16交付，未体验/审核/正式发布。下列94项为2026-09-06历史证据，不冒充当前diff结果。
 
 `SPEC-20260906-MULTI-CHILD-01` 与 `BUG-SPEC-20260906-17` 已在本地实现。自动化证据：`npm test` 94 pass
 （其中 `tests/frontend/child-profiles.test.js` 16 例覆盖回落、上限、只读成员、创建/归档/恢复流程、
@@ -95,6 +100,8 @@ DREV02与精简Spec01于2026-10-24获用户“继续”批准，当前实现和�
 待补齐：repository-native 审批快照、三视口原生节点几何、真机与双账号验证。
 
 ## Change references
+
+- 2026-11-05 — BUG-033 Spec01 / DREV-20261024-CHILD-ARCHIVE-01获“批准”后本地实现归档/恢复整行与短文案；42定向/349前端/21组原生几何通过，原生截图、确认框、设备与独立Review待补，未上传，见本轮EVD。
 
 - 2026-10-24 — `GRADE-DIALOG-SIMPLIFICATION Spec01 / DREV02`：原共享组件收敛为单标题/选择与并排操作，删除说明段落及错误卡；327/53项及三尺寸51组、实际局部交互通过，真实设备/可访问性状态见本轮实施证据，未发布。
 - 2026-10-24 — `Spec02 / Architecture02 / DREV01`：独立学年核对、一至九年级、明确意图/version及冲突保留草稿；本地自动化与独立评审通过，三尺寸呈现已采集，原生端到端/设备验收未完成，见本轮证据。

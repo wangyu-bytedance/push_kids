@@ -29,6 +29,7 @@ def _activity_slots(values: list[ActivityTimeSlot]) -> list[ActivityTimeSlot]:
 class ActivityScheduleCreate(BaseModel):
     child_id: str
     subject_id: str
+    workday_only: bool = False
     weekdays: list[int] | None = Field(default=None, max_length=7)
     time_text: str | None = Field(default=None, max_length=20)
     start_time: time | None = None
@@ -48,6 +49,12 @@ class ActivityScheduleCreate(BaseModel):
 
     @model_validator(mode="after")
     def valid_mode(self):
+        if self.workday_only:
+            if self.weekdays or "time_slots" in self.model_fields_set:
+                raise ValueError("工作日模式不能同时设置星期时段")
+            if self.start_time is None or self.end_time is None or self.end_time <= self.start_time:
+                raise ValueError("工作日模式需要有效的统一起止时间")
+            return self
         if self.time_slots is not None:
             if {"weekdays", "start_time", "end_time"} & self.model_fields_set:
                 raise ValueError("time_slots 不能和旧版星期/时间字段同时提交")
@@ -76,6 +83,7 @@ class ActivityScheduleCreate(BaseModel):
 class ActivityScheduleUpdate(BaseModel):
     child_id: str | None = None
     subject_id: str | None = None
+    workday_only: bool = False
     weekdays: list[int] | None = Field(default=None, max_length=7)
     time_text: str | None = Field(default=None, max_length=20)
     start_time: time | None = None
@@ -118,6 +126,7 @@ class ActivityScheduleView(BaseModel):
     id: str
     child_id: str
     subject_id: str
+    workday_only: bool = False
     weekdays: list[int]
     start_time: time | None
     end_time: time | None
@@ -129,6 +138,7 @@ class ActivityScheduleView(BaseModel):
 
 class ActivityScheduleList(BaseModel):
     items: list[ActivityScheduleView]
+    workday_calendar_warning: dict[str, str] | None = None
 
 
 class CalendarEventWrite(BaseModel):
@@ -139,6 +149,13 @@ class CalendarEventWrite(BaseModel):
     end_time: time
     kind: Literal["class", "activity", "other"] = "other"
     repeat_weekly: bool = False
+    workday_only: bool = False
+
+    @model_validator(mode="after")
+    def valid_repeat_mode(self):
+        if self.workday_only and self.repeat_weekly:
+            raise ValueError("工作日与每周重复不能同时选择")
+        return self
 
     @field_validator("end_time")
     @classmethod
@@ -156,6 +173,7 @@ class CalendarEventPatch(BaseModel):
     end_time: time | None = None
     kind: Literal["class", "activity", "other"] | None = None
     repeat_weekly: bool | None = None
+    workday_only: bool = False
 
 
 class CalendarEventView(BaseModel):
@@ -168,6 +186,7 @@ class CalendarEventView(BaseModel):
     end_time: time
     kind: str
     repeat_weekly: bool
+    workday_only: bool = False
 
 
 class ActivityRecordCreate(BaseModel):

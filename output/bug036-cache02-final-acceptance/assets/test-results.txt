@@ -1,0 +1,20 @@
+focused-final.log
+116 passed, 1 warning in 6.96s
+
+backend-full-final.log
+857 passed, 52 skipped, 108 warnings in 108.67s (0:01:48)
+
+mysql-staged.log
+8 passed, 1 warning in 14.62s
+
+mysql-summary.json
+{
+  "isolated": true,
+  "charset": "utf8mb4",
+  "source": "approved local cache Spec02",
+  "engine": "5.7.18-cynos-2.1.14-log",
+  "migration": 0,
+  "schema": 0,
+  "staged": 0,
+  "disposed": true
+}

@@ -1,0 +1,110 @@
+[
+  {
+    "path": "apps/api/src/push_kids/agent_processing/context.py",
+    "action": "modify",
+    "before_sha256": "2fc87c82d408f0d5c0467df1e10b60d7b1643053b64f5e9deaf99667163773da",
+    "after_sha256": "76000ff78bbd00a1fdb92036929879217bc74685e75886af2b0c11576546b869"
+  },
+  {
+    "path": "apps/api/src/push_kids/agent_processing/contracts.py",
+    "action": "modify",
+    "before_sha256": "cd38a3ddbcc429c72d29d2fe67073be6cb7b5fc353f2391bd8d7da4ade5b6bea",
+    "after_sha256": "8fca70104dc4a7a638c21976c30c09c23becac753dfd7ab6a4f6971faca769a0"
+  },
+  {
+    "path": "apps/api/src/push_kids/agent_processing/decision_contracts.py",
+    "action": "modify",
+    "before_sha256": "3b3e979e99ee49d0e3e735cafc69c9173e7a2ed4ad47b3efddbe8a42e90732d1",
+    "after_sha256": "2bc968ea4af55bdab8886be57b968cb5495c34240eaafbc8b18090a60e0c6cd3"
+  },
+  {
+    "path": "apps/api/src/push_kids/agent_processing/decision_workflow.py",
+    "action": "delete",
+    "before_sha256": "d85978fe0ed5e1f7eb3701c60dda919d4573ec4f0cd7748d39734a060c2440e8",
+    "after_sha256": null
+  },
+  {
+    "path": "apps/api/src/push_kids/agent_processing/history_search.py",
+    "action": "modify",
+    "before_sha256": "9fd92bde2324087b73f7a7fbb2865e2f52250dc17ad4633ae8c6e58752692814",
+    "after_sha256": "951cfbefa128f782e4a4f53035a3e2ca2d3c51c5c554cd89665af6bd3b22c265"
+  },
+  {
+    "path": "apps/api/src/push_kids/agent_processing/pipeline.py",
+    "action": "modify",
+    "before_sha256": "c594dc4e39d1f6b990a700458cf16a744608b86d73a83c202f721958333ebcad",
+    "after_sha256": "6ad87661638b7e273f5a09c6e413828e828473a3343b34a1d5720544bddd36b1"
+  },
+  {
+    "path": "apps/api/src/push_kids/agent_processing/proposal_acceptance.py",
+    "action": "add",
+    "before_sha256": null,
+    "after_sha256": "33b037292c828e5b8bf3f4ba82b63f59806e39d1b632b0281edbb69427b4ce5d"
+  },
+  {
+    "path": "apps/api/src/push_kids/agent_processing/runner.py",
+    "action": "modify",
+    "before_sha256": "bb968cc8df409d81277eaab41a84ea3a4dd253aa96d3e41429438262740da964",
+    "after_sha256": "78a16f4d94ede7d292eb43a01f59533c992d1d98d6f6aeaa22c2fb8821408b75"
+  },
+  {
+    "path": "apps/api/src/push_kids/agent_processing/stage_provider.py",
+    "action": "modify",
+    "before_sha256": "38164cefeef7f975eadda4806980dc606b3962fcf9faf830173733aae83049a4",
+    "after_sha256": "870871480dd353349480ee6dffe15135c99a61935ac2ba1514804674f4858c25"
+  },
+  {
+    "path": "apps/api/src/push_kids/agent_processing/system_one_provider.py",
+    "action": "modify",
+    "before_sha256": "1d809cd19a1d102a864b7fd01d70916e04b944de274a916ebfe2693473749ce2",
+    "after_sha256": "c97a7b4939cead7a3691786108fb4aaf557bb145f3c5bd2695be3e73f7cb0f59"
+  },
+  {
+    "path": "apps/api/src/push_kids/agent_processing/worker.py",
+    "action": "modify",
+    "before_sha256": "32f8cb9f7b4a7e181ae4227bbffadfa5f2c582c4cfabf02ae8528f7172cbc2b8",
+    "after_sha256": "dfd9180ea473dbf6c482d2bc37e6324131d48c22ec6d61bbd8c7811176a0435c"
+  },
+  {
+    "path": "apps/api/src/push_kids/platform/config.py",
+    "action": "modify",
+    "before_sha256": "242ac397bceb5b59ada066d32d98a352c1d6269845245c69600c1c6f0d489037",
+    "after_sha256": "49ad4f3dfe3913c2ae5298dc1fb567476682036270506a060b65054f759c34b2"
+  },
+  {
+    "path": "tests/unit/test_proposal_acceptance.py",
+    "action": "add",
+    "before_sha256": null,
+    "after_sha256": "4037330f13e80a8e55c672e90cf24ebe186398e54d5ed7cb9419d898ade63ff1"
+  },
+  {
+    "path": "tests/unit/test_system_one_provider.py",
+    "action": "modify",
+    "before_sha256": "c7279ac401aeb7ad9a533089a5696557e22e396ddae0512f40aa5cded7847b33",
+    "after_sha256": "f782eab2a351edb0db7c41b61679fe5d52cb95b23209eaa8834a64f27c2cf4d1"
+  },
+  {
+    "path": "tests/unit/test_system_one_workflow.py",
+    "action": "modify",
+    "before_sha256": "27c8bfffd58db9f1b51b946fd302239d165a4b90ea788de26f475e3ba0497b64",
+    "after_sha256": "ea4bbff3ab82b8d1382bc5fa376052826b6903a7c64e3f948ec237f818821c31"
+  },
+  {
+    "path": "tests/integration/test_worker_acceptance.py",
+    "action": "add",
+    "before_sha256": null,
+    "after_sha256": "456893deaf1923edce099ba3b9152a51ae708fa44b7a3e33424f4260ed33b605"
+  },
+  {
+    "path": "tests/integration/test_system_one_history.py",
+    "action": "delete",
+    "before_sha256": "206d0df81859dd1bb01627c7133a7fed1f055a8ec6b20fa9020fc1e09b448a53",
+    "after_sha256": null
+  },
+  {
+    "path": "tests/integration/test_system_one_mysql.py",
+    "action": "modify",
+    "before_sha256": "7405ed4e6f3d05ffdb417703082fcd0e69f1438ef9e2dbc46abdd3dc490efb56",
+    "after_sha256": "76d915c64e289b1ec7f395fc09197a3e787b8d9f7df896538b5041c504fc5e3b"
+  }
+]

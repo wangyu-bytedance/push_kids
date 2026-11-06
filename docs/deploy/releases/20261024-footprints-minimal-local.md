@@ -3,7 +3,7 @@
 - Date: 2026-10-24
 - State: LOCAL_IMPLEMENTATION / VERIFYING / NOT_UPLOADED / NOT_DEPLOYED
 - Approval: 用户明确批准SPEC-20261024-FOOTPRINTS-MINIMAL-UI-01 / DREV-20261024-FOOTPRINTS-MINIMAL-01，并要求合并UI规范。
-- Spec: [当前Spec](../../../specs/active/FEAT-012-FOOTPRINTS-MINIMAL-UI.md)。
+- Spec: [当前Spec](../../../specs/completed/FEAT-012-FOOTPRINTS-MINIMAL-UI.md)。
 - Evidence: [源码绑定检查和验收边界](../../quality/evidence/footprints-minimal-20261024/README.md)。
 
 只改本地足迹控制器/模板/样式、对应前端测试、离线验收工具与文档。重复标题、两行次要入口和设置长文删除；更多/原生归档选择保留现有保护，设置按内容收高。BUG-032 CR-001在已批准迟到保护范围修复，不改API或服务端。

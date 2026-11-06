@@ -1,0 +1,81 @@
+{
+  "algorithm": "SHA-256",
+  "excludes_self": true,
+  "files": [
+    {
+      "path": "attempt01-container-summary.json",
+      "bytes": 161,
+      "sha256": "71d28c2b5fdd25c367fb2ef88027d26539f845976a392934bb1757afb103cb99"
+    },
+    {
+      "path": "attempt01-mysql-summary.json",
+      "bytes": 1077,
+      "sha256": "5686317a4975a0f2073902208b6d832e92ef789f109da233fe42663bfa2a7258"
+    },
+    {
+      "path": "attempt02-mysql-summary.json",
+      "bytes": 1976,
+      "sha256": "99afb4835140f469a8574fdaf2bef48a779ec9eb921983c97ffb8db2e0462937"
+    },
+    {
+      "path": "attempt03-mysql-today-summary.json",
+      "bytes": 638,
+      "sha256": "f2e3563db016e5435bff1f3893776a32e45a81f0a5848d3292469470e91d1dd4"
+    },
+    {
+      "path": "container-summary.json",
+      "bytes": 562,
+      "sha256": "2483eb830a81efbb280e84abc57f6089e041301e044a78001bbfe1653a598a33"
+    },
+    {
+      "path": "documentation-closure.json",
+      "bytes": 605,
+      "sha256": "cd9a0b9d4e6e0380b23b9fdf6f3d51da6fa93092eee2145c912fc46363bec772"
+    },
+    {
+      "path": "dryrun-package.json",
+      "bytes": 9780,
+      "sha256": "a833b3f7919bf509d1026c2b6d1af462679fa7bbc774e5c047f6bb23e35c2e8f"
+    },
+    {
+      "path": "fixed40.json",
+      "bytes": 1085,
+      "sha256": "71a5d01437771fb7ed690a9c9e8f4b6f5cdde16e38f677d01009cbe5fd370600"
+    },
+    {
+      "path": "freeze-manifest.json",
+      "bytes": 66403,
+      "sha256": "c96b30d102d2fff317865040bd8b65c419bbb1374689199c41bcebcd0b157f60"
+    },
+    {
+      "path": "local-command-results.json",
+      "bytes": 1562,
+      "sha256": "f249b2addacbde6f856866f76d34474f2a3294d06b3293ea19c0b52988054d02"
+    },
+    {
+      "path": "preview-info.json",
+      "bytes": 131,
+      "sha256": "64bf12d0df5ff082711baad5e86852869bd5a086624f43673d9ab7d457fd5379"
+    },
+    {
+      "path": "production-schema-readonly.json",
+      "bytes": 191,
+      "sha256": "d9c8b8187166c95be7a12cc75d11a1461f33844858a00f76300804e653c23475"
+    },
+    {
+      "path": "source-integrity.json",
+      "bytes": 694,
+      "sha256": "cb7634e4fe49c6b3ad127a547c463f7a651f52095140c4fc6ff82fa08deab4ff"
+    },
+    {
+      "path": "summary.json",
+      "bytes": 5461,
+      "sha256": "71cc867ccf022b2af2044c84e629494e4f0bbe38c9cd77f47896a971209c7eda"
+    },
+    {
+      "path": "test-run-summaries.json",
+      "bytes": 1091,
+      "sha256": "9069f6e8b8357a98ed4acdf4359763acb2cacaa69eae2779b94c011daa2c751d"
+    }
+  ]
+}

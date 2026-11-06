@@ -1,14 +1,112 @@
 """Synthetic pixels only: parent confirmation, lifecycle and tenant boundaries."""
 
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 from io import BytesIO
 
 import pytest
 from PIL import Image
-from push_kids.footprints.models import FootprintPhoto
+from push_kids.footprints.models import FootprintImport, FootprintPhoto, FootprintVisit
 from push_kids.platform.time import utcnow
 
 ROOT = "/api/v1/footprints"
+
+
+def test_gallery_focus_bidirectional_scope_and_legacy_cursor(client, app, child, family_headers):
+    cid, family, now = child["id"], family_headers["X-Family-ID"], utcnow()
+    scope = {"family_id": family, "child_id": cid}
+    with app.state.database.session_factory() as db:
+        db.add(
+            FootprintImport(
+                **scope,
+                id="focus-batch",
+                member_id="local",
+                request_key="focus",
+                request_fingerprint="synthetic",
+                slot_count=20,
+            )
+        )
+        for visit_id in ["focus-visit", "other-visit"]:
+            db.add(
+                FootprintVisit(
+                    **scope,
+                    id=visit_id,
+                    local_date=date(2020, 1, 1),
+                    place_key=visit_id,
+                    sort_time="24:00:00",
+                    sort_created_at=now,
+                )
+            )
+        db.flush()
+        for i in range(48):
+            db.add(
+                FootprintPhoto(
+                    **{**scope, "family_id": "other" if i == 47 else family},
+                    id=f"focus-{i:02}",
+                    import_id="focus-batch",
+                    visit_id="other-visit" if i == 45 else "focus-visit",
+                    ordinal=47 - i,
+                    state="deleted" if i == 46 else "confirmed",
+                    ticket_expires_at=now,
+                    upload_path="synthetic",
+                    local_date=date(2020, 1, 1),
+                )
+            )
+        db.commit()
+    endpoint = f"{ROOT}/visits/focus-visit/photos"
+
+    def read(**params):
+        response = client.get(endpoint, headers=family_headers, params={"child_id": cid, **params})
+        assert response.status_code == 200, response.text
+        return response.json()
+
+    first = read()
+    assert [p["id"] for p in first["items"]] == [f"focus-{i:02}" for i in range(20)]
+    assert first["previous_cursor"] is None
+    assert read(cursor=first["next_cursor"])["items"][0]["id"] == "focus-20"
+    focused = read(focus_photo_id="focus-30")
+    assert [p["id"] for p in focused["items"]] == [f"focus-{i:02}" for i in range(30, 45)]
+    assert focused["next_cursor"] is None
+    previous = read(cursor=focused["previous_cursor"])
+    assert [p["id"] for p in previous["items"]] == [f"focus-{i:02}" for i in range(10, 30)]
+    assert read(cursor=previous["next_cursor"])["items"][0]["id"] == "focus-30"
+    beginning = read(cursor=previous["previous_cursor"])
+    assert len(beginning["items"]) == 10 and beginning["previous_cursor"] is None
+    assert read(cursor=beginning["next_cursor"])["items"][0]["id"] == "focus-10"
+    for invalid in ["missing", "focus-45", "focus-46", "focus-47"]:
+        assert (
+            client.get(
+                endpoint,
+                headers=family_headers,
+                params={"child_id": cid, "focus_photo_id": invalid},
+            ).status_code
+            == 404
+        )
+    assert (
+        client.get(
+            endpoint,
+            headers=family_headers,
+            params={"child_id": cid, "cursor": first["next_cursor"], "focus_photo_id": "focus-30"},
+        ).status_code
+        == 400
+    )
+    assert (
+        client.get(
+            endpoint,
+            headers={"X-Family-ID": "other"},
+            params={"child_id": cid, "focus_photo_id": "focus-30"},
+        ).status_code
+        == 404
+    )
+    assert (
+        client.get(
+            f"{ROOT}/visits/other-visit/photos",
+            headers=family_headers,
+            params={"child_id": cid, "cursor": focused["previous_cursor"]},
+        ).status_code
+        == 400
+    )
+    assert client.post(f"/api/v1/children/{cid}/archive", headers=family_headers).status_code == 200
+    assert read(focus_photo_id="focus-30")["items"][0]["id"] == "focus-30"
 
 
 def image_bytes(with_date=True):

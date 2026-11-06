@@ -1,0 +1,75 @@
+F............                                                            [100%]
+=================================== FAILURES ===================================
+_______ test_recent_history_mysql_large_inventory_and_actual_query_plan ________
+
+app = <fastapi.applications.FastAPI object at 0x10af2f4a0>
+child = {'active': True, 'created_at': '2026-11-05T10:10:38.224091Z', 'daily_budget_minutes': 15, 'grade': '小学二年级', ...}
+family_headers = {'X-Family-ID': 'family-test-a'}
+
+    def test_recent_history_mysql_large_inventory_and_actual_query_plan(app, child, family_headers):
+        # MySQL5.7 migration DATETIME columns store whole seconds; use a persisted-time shape.
+        family, cid = family_headers["X-Family-ID"], child["id"]
+        as_of = utcnow().replace(microsecond=0)
+        engine = app.state.database.engine
+        with engine.connect() as connection:
+            assert str(connection.scalar(text("SELECT VERSION()"))).startswith("5.7.")
+        names = [f"合成学科{i:02}" for i in range(20)]
+        expected = set()
+        with app.state.database.session_factory() as db:
+            for subject_index, name in enumerate(names):
+                subject = Subject(family_id=family, child_id=cid, name=name, kind="learning")
+                db.add(subject)
+                db.flush()
+                rows = []
+                for index in range(2500):
+                    kid = f"{subject_index:02}{index:030}"
+                    rows.append(
+                        {
+                            "id": kid,
+                            "family_id": family,
+                            "child_id": cid,
+                            "subject_id": subject.id,
+                            "name": f"合成知识{index}",
+                            "normalized_name": f"合成知识{index}",
+                            "created_at": as_of + timedelta(days=1) if index == 2499 else as_of,
+                            "review_status": "superseded" if index == 2498 else "normal",
+                        }
+                    )
+                    if 2458 <= index <= 2497:
+                        expected.add(kid)
+                db.execute(KnowledgeItem.__table__.insert(), rows)
+            db.commit()
+            statements = []
+    
+            def capture(conn, cursor, statement, parameters, context, executemany):
+                statements.append((statement, parameters))
+    
+            event.listen(engine, "before_cursor_execute", capture)
+            try:
+                result = recent_history_items(
+                    db, family_id=family, child_id=cid, subjects=names, as_of=as_of
+                )
+            finally:
+                event.remove(engine, "before_cursor_execute", capture)
+            assert len(result) == 800
+            assert {item.knowledge_id for item in result} == expected
+            assert len(statements) == 11
+            for statement, parameters in statements[1:]:
+                plan = (
+                    db.connection().exec_driver_sql("EXPLAIN " + statement, parameters).mappings().all()
+                )
+                branches = [row for row in plan if row["key"] == "ix_knowledge_recent_subject"]
+                if len(branches) != 2:
+>                   pytest.fail(json.dumps([dict(row) for row in plan], ensure_ascii=False))
+E                   Failed: [{"id": 1, "select_type": "PRIMARY", "table": "<derived2>", "partitions": null, "type": "ALL", "possible_keys": null, "key": null, "key_len": null, "ref": null, "rows": 80, "filtered": 100.0, "Extra": "Using temporary; Using filesort"}, {"id": 1, "select_type": "PRIMARY", "table": "knowledge_items", "partitions": null, "type": "eq_ref", "possible_keys": "PRIMARY,uq_knowledge_identity,ix_knowledge_items_child_id,ix_knowledge_items_family_id,ix_knowledge_items_family_child_created_id,ix_knowledge_scope_minutes_id,ix_knowledge_status,ix_knowledge_recent_subject", "key": "PRIMARY", "key_len": "146", "ref": "anon_1.id", "rows": 1, "filtered": 50.0, "Extra": "Using where"}, {"id": 1, "select_type": "PRIMARY", "table": "review_items", "partitions": null, "type": "eq_ref", "possible_keys": "uq_review_knowledge,ix_review_items_child_id,ix_review_items_family_id,ix_review_items_family_child_active_due_last_id,ix_review_scope_count_knowledge,ix_review_scope_offered_knowledge", "key": "uq_review_knowledge", "key_len": "146", "ref": "anon_1.id", "rows": 1, "filtered": 100.0, "Extra": "Using where"}, {"id": 2, "select_type": "DERIVED", "table": "<derived3>", "partitions": null, "type": "ALL", "possible_keys": null, "key": null, "key_len": null, "ref": null, "rows": 40, "filtered": 100.0, "Extra": null}, {"id": 3, "select_type": "DERIVED", "table": "knowledge_items", "partitions": null, "type": "ref", "possible_keys": "uq_knowledge_identity,ix_knowledge_items_child_id,ix_knowledge_items_family_id,ix_knowledge_items_subject_id,ix_knowledge_items_family_child_created_id,ix_knowledge_scope_minutes_id,ix_knowledge_status,ix_knowledge_discovery,ix_knowledge_recent_subject", "key": "ix_knowledge_recent_subject", "key_len": "696", "ref": "const,const,const,const", "rows": 4692, "filtered": 5.0, "Extra": "Using where; Using index"}, {"id": 4, "select_type": "UNION", "table": "<derived5>", "partitions": null, "type": "ALL", "possible_keys": null, "key": null, "key_len": null, "ref": null, "rows": 40, "filtered": 100.0, "Extra": null}, {"id": 5, "select_type": "DERIVED", "table": "knowledge_items", "partitions": null, "type": "ref", "possible_keys": "uq_knowledge_identity,ix_knowledge_items_child_id,ix_knowledge_items_family_id,ix_knowledge_items_subject_id,ix_knowledge_items_family_child_created_id,ix_knowledge_scope_minutes_id,ix_knowledge_status,ix_knowledge_discovery,ix_knowledge_recent_subject", "key": "ix_knowledge_items_subject_id", "key_len": "146", "ref": "const", "rows": 4570, "filtered": 1.25, "Extra": "Using index condition; Using where; Using filesort"}]
+
+tests/integration/test_system_one_mysql.py:84: Failed
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /Users/bytedance/Documents/push_kids/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/integration/test_system_one_mysql.py::test_recent_history_mysql_large_inventory_and_actual_query_plan
+1 failed, 12 passed, 1 warning in 30.46s

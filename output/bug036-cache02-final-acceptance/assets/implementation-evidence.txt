@@ -1,0 +1,65 @@
+---
+created: "2026-11-01"
+updated: "2026-11-01"
+type: evidence
+status: local_verified
+owner: TRAE
+---
+
+# BUG-036 缓存 Spec02 — 版本绑定证据
+
+- Evidence ID: `EVD-20261101-BUG036-CACHE02`
+- Requirement: [缓存Spec02](../active/BUG-036-CHECKPOINT-RETRY-STRATEGY.md)，AC-C01–05、TP-C01–08。
+- spec_revision: `BUG-SPEC-20261101-KNOWLEDGE-CACHE-02`
+- architecture_revision: `ARCH-20261101-KNOWLEDGE-CACHE-02`
+- subject_revision: 本地`staged-20261101-10` / `child-aware-history-agent-20261031-13`；[源码清单](bug036-cache-20261101/source-manifest.json)，基于`0576ac304649`及实施前已批准未提交09/13快照，未混入旅行/BUG-037。
+- result: passed（声明的本地缓存机制范围）；全库Ruff、真实内容验收和云交付另列，整体发布不作PASS。
+- 环境: macOS、Python3.12 / 项目Python3.11+、uv/pytest；真实MySQL `5.7.18-cynos-2.1.14-log`，独占新utf8mb4库、迁移head0025和Schema无漂移，结束销毁。无生产Job/cache重置。
+- Private intermediates: `/var/folders/hq/l74_1q417nbdffshwhtw79640000gn/T/tmp.QmgzUCkpZn`；只保留无身份/儿童图片/凭据的计数、分类、源码和合成测试报告。
+
+## Coding slices and actual results
+
+| Phase / TP | 命令与实际结果 | 被测版本/解释 |
+|---|---|---|
+| Baseline | `uv run --no-sync pytest tests/unit/test_staged_proposal_recovery.py tests/integration/test_analysis_checkpoints.py tests/integration/test_worker_resilience.py -q`：55PASS，4.37s | 实施前09/13；19份代码/测试/文档快照绑定，既有测试缺终态缓存恢复断言 |
+| Red / TP-C01/C03/C05 | `uv run --no-sync pytest tests/unit/test_staged_proposal_recovery.py tests/integration/test_analysis_checkpoints.py -q`：12FAIL/47PASS，6.36s | 生产仍为09/13，预期行为失败：review1false/reuseuncertain读写、retryable、明确retry不刷新/不重查scope；原Red结果保留，坏夹具不算Red |
+| Green / TP-C01–05 | 最初78PASS/1FAIL；注入提交故障时`Session.dirty`在DELETE autoflush后为空，调整测试注入点为identity_map | 测试基础设施问题，不算生产修复失败；SQL错误仍必须向外传播，lease/cache/state回滚断言不变 |
+| Green fixture | 79PASS/1FAIL/6skip：新uncertain用例没有种Subject；补齐合成Subject | 测试种子问题，不冒充内容/机制Red |
+| Final focused | `uv run --no-sync pytest tests/unit/test_staged_proposal_recovery.py tests/unit/test_staged_analysis.py tests/integration/test_analysis_checkpoints.py tests/integration/test_worker_resilience.py -q`：116PASS，6.96s | 10/13；TP-C01–05，旧18/33调用、18键、指纹/TTL/容量、取消/确认与错误码等相邻合同 |
+| First full | `uv run --no-sync pytest tests/unit tests/integration tests/contract -q`：856PASS/1FAIL/52skip，130.12s | 仅旧pipeline字串断言未随获批revision升级；按Spec10更新，不放宽行为断言 |
+| Final full | 相同全量命令：857PASS/52skip，108.67s | 默认无外部MySQL配置，6个新增MySQL case使46→52skip；隔离MySQL专项独立无skip通过 |
+| Refactor verification | N/A：无必要模块重构；任务源码Ruff、mypy151、format、架构4/151通过 | 只有局部恢复政策、目的明确的双消费者删除函数；Schema/DTO/owner/依赖方向不变 |
+
+新增31个展开case：unit缓存分类12、SQLite retry/terminal/recovery/guard/rollback13、MySQL6；既有两个终态语义unit断言增强及版本断言同步。31/31已通过（其中MySQL6由独立实库专项执行）。不以逐字镜像测试或覆盖率数字代替行为证据。Step6 `CHECK_COV_MODE=skip`：用户未要求覆盖率门槛，项目未配置该卡口，EXEC_SOURCE为空；不宣称新增覆盖率。
+
+## MySQL transaction evidence
+
+| Run | 实际结果 | 原因/处置 |
+|---|---|---|
+| First | migration0/schema0；7PASS/1FAIL | 前面并发retry留下queued合成Job，Worker跨家庭领取了它，`not process_one()`断言失败。新夹具收尾按本人合成family取消Job；不放宽单Job终态断言 |
+| Second | migration0/schema0；7PASS/1FAIL | 一个新连接timeout，属于外部网络基础设施；没有业务改动、没吞异常 |
+| Final | migration0/schema0；8PASS/0skip，14.62s；独占库销毁 | 两并发retry一queued/一conflict（含缺Job）、四表锁顺序、retry对晚checkpoint拒收、rollback、跨家庭和Worker终态→家长retry→待确认，零正式LearningRecord |
+
+每轮创建不同任务独占库，所有销毁结果保留在[汇总](bug036-cache-20261101/mysql-summary.json)。仅服务端现有连接配置在私有运行器内解析，不落凭据或数据库URL。
+
+## Static checks and remaining gates
+
+- `uv run --no-sync ruff check`针对9份本任务代码/测试：PASS。
+- `uv run --no-sync ruff check .`：FAIL，初次本任务收尾仅范围外`tools/prepare_travel_diary_native.py:36`的E501。并行BUG-037随后新增`docs/quality/evidence/report-footer-tips-20261101/prepare-native.py`，最新全库结果为两范围外文件的7项E501；本任务9份代码/测试仍PASS。未修改这些外部文件，发布前必须处理，不能写全库lintPASS。
+- `uv run --no-sync ruff format --check .`：先前工作树PASS，832files；并行新增证据脚本后的最后检查FAIL，仅`docs/quality/evidence/report-footer-tips-20261101/prepare-native.py`需格式化，840files已格式化。本任务9份代码/测试format通过，不把旧对象结果充作新全库PASS。
+- `uv run --no-sync mypy apps/api/src`：PASS，151sourcefiles；已有untyped-body提示不是失败。
+- `uv run --no-sync python tools/check_architecture.py`：PASS，4policies/151modules，runtime/lazy DAG。
+- 前端测试、设计/原生视口/设备：N/A，本Spec没有前端代码/视觉变更。BUG-037独立，不复用其测试。
+- 新10/13真实模型内容、live40-case门禁、部署/灰度/体验/审核/正式发布：NOT_RUN；当前授权仅本地实施和隔离验证。
+- 09/13[原三份六图](../../output/BUG036-20261101-FAILED3-RETEST.md)：2产出/1内容PASS/1FAIL/1NO_OUTPUT、61表指纹一致，已完成且未重测。词表name长度、拼音归类/教学角色反证保留，不归入本缓存机制通过率。
+
+## Independent review and documentation closure
+
+- Reviewer context: bits-code-guard两组独立只读，Group1 pipeline/cache classification，Group2 checkpoints/worker/retry事务；[评审清单](bug036-cache-20261101/review-source-manifest.json)绑定9files，包含untracked测试。
+- Group1/Group2为0确认问题；最终Cross为0代码缺陷、1项P2文档证据计数问题`CROSS-DOC-001`，已修正并核验，0未解决发现。静态Review不冒充运行PASS。Group2末尾发现worker import顺序漂移；Group1和Cross以只读hash证明仅runner/stage_contracts两行顺序变化，body未变。最终manifest已刷新，另44项worker/checkpoint回归PASS。[完整报告](bug036-cache-20261101/review/report.html)与[group1](bug036-cache-20261101/review/group1.md)、[group2](bug036-cache-20261101/review/group2.md)、[cross](bug036-cache-20261101/review/cross.md)保留原发现；[修正处置](bug036-cache-20261101/review/disposition.md)记录最终更正。曾导出的初步0发现汇总不作为最终审查结论，最终HTML/JSON/正文已替换为实际1项P2及其fixed状态。
+- Cross确认审查时9份源/快照与16份文档清单一致、当前cache实现合同无conflicting/stale/missing问题；退出时发现后续EVD计数错误，修正后另做日志计数与链接/hash检查，不追改其原文档hash或声称原审查0发现。已执行Baseline55计数来自前文实际工具结果；原stdout未单独导出，Cross未独立核验该计数，保留限制；实际Red12FAIL/47PASS日志仍在。
+- 当前事实合并：FEAT-001 `FEAT-STATE-20261101-KNOWLEDGE-CACHE-08`，BHV-032/003 `BHV-20261101-KNOWLEDGE-CACHE-04`，Architecture02与当前checkpoints正文，测试策略、父/缓存Spec、Feature/Spec索引及[本地交付记录](../../docs/deploy/releases/20261101-knowledge-cache-local.md)。首次链接核对16份doc/542links均存在；目录实际active12(3VERIFYING/7READY/2DRAFT)、completed109、rejected13，独立BUG-037最新状态未被缓存任务覆盖。
+- API/Schema/ADR、FEC/DREV/UI：N/A，公共字段、确认、排期和前端范围未改；UI-001既有交付与设计revision保持。相关当前摘要只补后端恢复合同，不改变原生验收。源码快照保留为`.py.txt`，只供版本证据读取，不成为生产、pytest或Ruff输入。
+- 证据整理首轮将源码复制为`.py`时，[实际日志](bug036-cache-20261101/ruff-with-evidence.log)为17项：10项证据副本I001，加7项范围外E501。此前误记16项新增证据错误，最终独立审查`CROSS-DOC-001`发现后按该日志修正；改为精确同字节`.py.txt`后10项副本错误消失，生产源未改。数据库错误堆栈中的host/连接表示在导出时改为固定占位，未导出配置、凭据或儿童内容。
+- 生命周期：缓存及父Spec `VERIFYING`，均留`specs/active/`，本轮未云交付10/13；039/0.1.17旧旅行交付不覆盖该源。未来匹配云交付按GOV-002再DONE归档，真实内容/设备/Ruff缺项独立保留。
+- 结论边界：本地缓存机制及联合文档Review通过；TP-C06内容COMPLETE_WITH_FAILURES、TP-C07全库Ruff/format PARTIAL、10/13云交付NOT_RUN。不授权合并、提交、发布或生产数据操作。

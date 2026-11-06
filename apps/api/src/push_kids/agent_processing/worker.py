@@ -11,7 +11,12 @@ from time import monotonic
 from sqlalchemy import or_, select
 from sqlalchemy.exc import SQLAlchemyError
 
-from push_kids.agent_processing.checkpoints import StageCheckpoints, expire_stages, purge_stages
+from push_kids.agent_processing.checkpoints import (
+    StageCheckpoints,
+    expire_stages,
+    purge_decision_stages,
+    purge_stages,
+)
 from push_kids.agent_processing.context import (
     build_analysis_input,
     material_fingerprint,
@@ -24,7 +29,9 @@ from push_kids.agent_processing.contracts import (
     analysis_failure_disposition,
 )
 from push_kids.agent_processing.failures import StageFailure
+from push_kids.agent_processing.proposal_acceptance import ACCEPTANCE_KEY, accept_proposal
 from push_kids.agent_processing.runner import AnalysisAgentRunner
+from push_kids.agent_processing.stage_contracts import PIPELINE_REVISION
 from push_kids.agent_processing.telemetry import AnalysisTrace, safe_validation_codes
 from push_kids.media.store import MediaStore, WeChatCloudMediaStore
 from push_kids.persistence.models import (
@@ -67,19 +74,31 @@ def _lock_active_scope(db, family_id: str, child_id: str) -> bool:
 
 def _safe_job_diagnostic(exc: Exception, *, code: str, reason: str) -> str:
     """Persist only bounded static categories; never provider or child content."""
-    raw_codes = getattr(exc, "codes", ())
+    raw_codes = (
+        getattr(exc, "diagnostics", ())
+        if isinstance(exc, StageFailure)
+        else getattr(exc, "codes", ())
+    )
     codes = safe_validation_codes(tuple(str(item) for item in raw_codes))
     rendered_codes = ",".join(codes) or "none"
-    diagnostic = f"code={code};reason={reason};validation={rendered_codes}"
+    diagnostic = f"code={code};reason={reason}"
     if isinstance(exc, StageFailure):
         safe_stage = (
-            exc.stage if exc.stage in {"extract", "group", "merge", "match"} else "pipeline"
+            exc.stage
+            if exc.stage in {"extract", "group", "merge", "review", "match", "reuse"}
+            else "pipeline"
         )
         safe_unit = (
-            exc.unit if re.fullmatch(r"m[1-9]|t|group[01]|merge|match", exc.unit) else "none"
+            exc.unit
+            if re.fullmatch(
+                r"m[1-9]|t|group[01]|merge(?:-correction)?|review[01]|match|reuse|"
+                r"materials|groups|empty_proposal|history_(?:queries|results|options|payload)|same_day_identity",
+                exc.unit,
+            )
+            else "none"
         )
         diagnostic += f";stage={safe_stage};unit={safe_unit}"
-    return diagnostic[:300]
+    return (diagnostic + f";validation={rendered_codes}")[:300]
 
 
 class AnalysisWorker:
@@ -294,14 +313,14 @@ class AnalysisWorker:
                         job_id,
                         attempt,
                     )
-                    if not submission.family_id or not submission.child_id:
+                    if not family_id or not child_id:
                         raise AnalysisInputError("submission analysis scope is incomplete")
                     checkpoints = (
                         StageCheckpoints(
                             self.database,
-                            submission.family_id,
-                            submission.child_id,
-                            str(submission.id),
+                            family_id,
+                            child_id,
+                            str(submission_id),
                             str(job_id),
                             attempt,
                             lease,
@@ -320,8 +339,8 @@ class AnalysisWorker:
                     )
                     proposal = AnalysisAgentRunner(self.database, self.provider).run(
                         data,
-                        family_id=submission.family_id,
-                        child_id=submission.child_id,
+                        family_id=family_id,
+                        child_id=child_id,
                         trace=trace,
                         time_budget_seconds=provider_time_budget_seconds,
                         checkpoints=checkpoints,
@@ -331,6 +350,32 @@ class AnalysisWorker:
                         job_id,
                         attempt,
                         int((monotonic() - stage_started) * 1000),
+                    )
+
+                    if repeated:
+                        proposal.uncertainties = [
+                            "这份材料与近期提交完全相同，请核对是否为新的学习记录；本次不自动标记Todo完成。"
+                        ] + proposal.uncertainties[:19]
+                        proposal.todo_matches = []
+                    data.validate_proposal(proposal)
+                    if not data.grade or not data.recent_learning:
+                        proposal.uncertainties = (
+                            proposal.uncertainties
+                            + ["年级或已确认历史不完整，请核对知识点粒度；未推断学习阶段。"]
+                        )[-20:]
+                    # Material paths remain alive, and there is no DB transaction during I/O.
+                    acceptance_deadline = monotonic() + max(
+                        0.0,
+                        (lease - utcnow()).total_seconds() - JOB_LEASE_WRITEBACK_RESERVE_SECONDS,
+                    )
+                    proposal, acceptance = asyncio.run(
+                        accept_proposal(
+                            data,
+                            proposal,
+                            getattr(self.provider, "acceptance_provider", None),
+                            acceptance_deadline,
+                            trace,
+                        )
                     )
 
                 stage = "writeback"
@@ -371,20 +416,11 @@ class AnalysisWorker:
                         attempt,
                     )
                     return True
-                if repeated:
-                    proposal.uncertainties = [
-                        "这份材料与近期提交完全相同，请核对是否为新的学习记录；本次不自动标记Todo完成。"
-                    ] + proposal.uncertainties[:19]
-                    proposal.todo_matches = []
                 # A post-provider mutation (for example repeated-material protection) must
                 # not turn an otherwise valid result into an empty confirmable proposal.
                 data.validate_proposal(proposal)
-                if not data.grade or not data.recent_learning:
-                    proposal.uncertainties = (
-                        proposal.uncertainties
-                        + ["年级或已确认历史不完整，请核对知识点粒度；未推断学习阶段。"]
-                    )[-20:]
                 stored = proposal.model_dump()
+                stored[ACCEPTANCE_KEY] = acceptance.model_dump(mode="json")
                 stored[MATERIAL_FINGERPRINT_KEY] = fingerprint
                 submission.proposal_json = json.dumps(stored, ensure_ascii=False)
                 submission.state = SubmissionState.pending_confirmation.value
@@ -479,6 +515,23 @@ class AnalysisWorker:
                     submission.state = SubmissionState.failed.value
                     submission.error_code = terminal_code
                     submission.error_message = message
+                    if (
+                        isinstance(exc, StageFailure)
+                        and not exc.retryable
+                        and (exc.reason, exc.stage, exc.unit)
+                        in {("quality", "review", "review1"), ("validation", "reuse", "reuse")}
+                    ):
+                        cleanup_count = purge_decision_stages(
+                            db, family_id, child_id, str(submission.id)
+                        )
+                        trace.info(
+                            "analysis_stage_cleanup",
+                            stage=exc.stage,
+                            unit=exc.unit,
+                            cleanup_count=cleanup_count,
+                            reason=exc.reason,
+                            revision=PIPELINE_REVISION,
+                        )
                 outcome = job.state
                 db.commit()
                 event = (

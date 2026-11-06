@@ -2,7 +2,7 @@
 
 - Date: 2026-10-24
 - State: LOCAL_IMPLEMENTATION / VERIFYING / NOT_RELEASED
-- Approval: 用户在call_ac391833df284fc7b0afcb71c55abec7明确回复「批准，按此实现」，批准[Spec01](../../../specs/active/FEAT-004-TODAY-CARD-VISIBILITY.md)与[DREV03](../../design/frontend/prototypes/DREV-20261024-TODAY-LEARNING-03/FRONTEND-SPEC.md)。批准记录先于生产修改。
+- Approval: 用户在call_ac391833df284fc7b0afcb71c55abec7明确回复「批准，按此实现」，批准[Spec01](../../../specs/completed/FEAT-004-TODAY-CARD-VISIBILITY.md)与[DREV03](../../design/frontend/prototypes/DREV-20261024-TODAY-LEARNING-03/FRONTEND-SPEC.md)。批准记录先于生产修改。
 - Baseline: main / `82ca52775bc948f2a963a8f4ed614322d8859de8`，共享未提交工作区。只归属本次today-learning组件、专项回归、合成取证工具及相应文档；未覆盖其他会话修改。
 
 原组件保持挂载。唯一快照写入方法setCurrent投影显示状态，权限observer重新投影；不计算服务端两日资格，不增加请求。无实际内容的无资格/未知/eligible纯空快照整块隐藏；自动提示和轮询仍执行。有实际可操作提案则显示标题、科目、可选时长及AI标识；已批准Task优先，含viewer、部分记录和生成开关关闭。生成、失败、失效及删除后恢复保留简短状态和原操作；请求失败保留内容与重新加载。
@@ -36,4 +36,4 @@
 
 Feature004、UI001、Frontend Design、Behavior Catalog BHV-045、测试策略、主Spec/卡片Spec、发布记录和索引按本地事实同步；Architecture/ADR逐项核对，无模块/所有权/依赖方向/API/Schema/扩展点变化，N/A。DREV01只新增卡片范围的Superseded by指针；DREV02仍为弹层基线，旧源/快照/SHA不变。设计阶段记录为历史取证，不冒充当前实现结果。
 
-卡片Spec保留`specs/active/FEAT-004-TODAY-CARD-VISIBILITY.md`、VERIFYING；三视口原生已完成，尚缺真实设备/可访问性及独立复核，不能DONE或迁入completed。恢复条件为补齐这些验收结论；当前没有新的设计/实现批准需求。没有提交、推送、上传、部署、改变默认开关或写入真实学习数据。
+卡片Spec保留`specs/completed/FEAT-004-TODAY-CARD-VISIBILITY.md`、VERIFYING；三视口原生已完成，尚缺真实设备/可访问性及独立复核，不能DONE或迁入completed。恢复条件为补齐这些验收结论；当前没有新的设计/实现批准需求。没有提交、推送、上传、部署、改变默认开关或写入真实学习数据。

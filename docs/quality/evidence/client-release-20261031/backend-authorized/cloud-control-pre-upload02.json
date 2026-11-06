@@ -1,0 +1,24 @@
+{
+  "queried_at": "2026-10-31T11:57:05.102Z",
+  "result": "PASS_CONTROL_PLANE_ONLY",
+  "appid": "wx5d2e0014690bf285",
+  "environment": "prod-d2g14rwoycac6b45d",
+  "service": "flask-ik19",
+  "versions": [
+    {
+      "version": "flask-ik19-038",
+      "status": "normal",
+      "flow_ratio": 100,
+      "updated_at": "2026-10-31 11:40:08"
+    },
+    {
+      "version": "flask-ik19-039",
+      "status": "normal",
+      "flow_ratio": 0,
+      "updated_at": "2026-10-31 19:18:08"
+    }
+  ],
+  "writes": 0,
+  "directed_http": "NOT_RUN",
+  "real_two_accounts": "NOT_RUN"
+}

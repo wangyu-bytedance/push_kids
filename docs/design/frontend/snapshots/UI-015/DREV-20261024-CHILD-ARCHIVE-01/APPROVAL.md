@@ -1,6 +1,6 @@
 # UI-015 — DREV-20261024-CHILD-ARCHIVE-01
 
-- Status: AWAITING_APPROVAL
+- Status: APPROVED
 - UI ID: UI-015
 - Design Revision: DREV-20261024-CHILD-ARCHIVE-01
 - Frontend baseline revision: FDB-20260913-04
@@ -10,9 +10,9 @@
 - Editable design source path(s): docs/design/frontend/prototypes/DREV-20261024-CHILD-ARCHIVE-01/index.html
 - Editable source SHA-256: docs/design/frontend/prototypes/DREV-20261024-CHILD-ARCHIVE-01/index.html=b52125179caf4d795ed9da701f5e5bca12bc400ac73a9e99160051b89aa5f576
 - Prototype generated/updated at: 2026-10-24
-- Approved by: PENDING
-- Approved at: PENDING
-- Approval evidence: PENDING；用户指出截图问题，尚未批准本具体修订。
+- Approved by: 产品负责人（用户）
+- Approved at: 2026-11-05
+- Approval evidence: 当前会话展示390×844 active PNG并请求“批准 BUG-033 Spec01 + DREV01”后，用户直接回复“批准”；批准BUG-SPEC-20261024-CHILD-ARCHIVE-UI-01及本DREV01，源与21张PNG字节冻结。
 - Superseded by: N/A
 
 Chrome 155.0.8059.85 / macOS系统字体 / font scale100% / DPR1。
@@ -47,5 +47,5 @@ Chrome 155.0.8059.85 / macOS系统字体 / font scale100% / DPR1。
 ## Pending gates
 
 - [x] 21导出/几何/字体与HTML取消/焦点/禁用检查。
-- [ ] 具体Spec01+DREV01批准。
+- [x] 具体Spec01+DREV01批准（2026-11-05）。
 - [ ] 生产实现与原生/真机/可访问性验收。

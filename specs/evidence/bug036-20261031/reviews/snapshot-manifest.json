@@ -1,0 +1,16 @@
+{
+  "apps/api/src/push_kids/agent_processing/pipeline.py": "5a58e3a86691ee49f596e6271e9e739f969d0ccca78667134eb60bfe0cc519bb",
+  "apps/api/src/push_kids/agent_processing/stage_contracts.py": "8532c172af3344a03efdcff068376ff2e72f4c7779fbef7e83fc8262c2a60674",
+  "apps/api/src/push_kids/agent_processing/stage_provider.py": "541aa016674b35e215eee052f23bc04e00d09164995f9e169d15c65fedc125e1",
+  "apps/api/src/push_kids/agent_processing/failures.py": "1143c7dd6798a033ad995244314b14f822fb02567f00beacdb8bb054c82d07b6",
+  "apps/api/src/push_kids/agent_processing/telemetry.py": "c19ebc6d7bcfa7de61364e4aa7fa75710e8a3547296c401a60a981ee3dbcb7db",
+  "apps/api/src/push_kids/agent_processing/checkpoints.py": "621c5c593c407b9c624f6cca2b55a58a20e940f72fc167b2ea4a2be82a160ec3",
+  "apps/api/src/push_kids/agent_processing/prompt.py": "bcaad016726eb04d6475a35d25c64394f9cf9f36b037fc0791fd5f03e27986a3",
+  "tests/staged_analysis_fakes.py": "93ed32a815259c915482a4e7b51b7b8540d0987da96b07414dfb20706cf56a02",
+  "tests/unit/test_staged_analysis.py": "5350f8583e92af50cf6e8f3230f627c68cccb118e447a938e075becb8b6bc996",
+  "tests/unit/test_staged_proposal_recovery.py": "95e5ce6e1b4993928a77fc85bcbcd5733623fb41f8f3fe335ed456c8892d97b9",
+  "tests/unit/test_stage_provider.py": "f91ccddcb7f4a1eaa5c1f7f1496a07283555ca0670b43881c388d990df788c41",
+  "tests/unit/test_provider_evidence.py": "8791f3ab6c9149202555709db971a2e30f168006cfb430fe9666579987d928e9",
+  "tests/unit/test_analysis_context_contract.py": "3aaec95f0540bf10b50939252e5190697a6364c24703843a984f435a57adacd9",
+  "tests/integration/test_analysis_checkpoints.py": "3ec8187e178959f3e4741db33d010edc1eacaa9273280c69b7c55244f8c4aad1"
+}

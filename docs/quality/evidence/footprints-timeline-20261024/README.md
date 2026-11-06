@@ -1,8 +1,10 @@
 # BUG-034 旅行控件与倒序时间线 — 本地实施证据
 
-- Status: LOCAL_IMPLEMENTATION / VERIFYING / NOT_UPLOADED
+后续交付：用户2026-10-25要求客户端发布，当前实现随0.1.16开发上传；旅行照片双账号门禁由用户确认，未体验/审核/正式发布。[发布记录](../../../deploy/releases/20261025-latest-client-upload.md)。下方本地实施证据不扩大为真机或完整产品验收。
+
+- Status: IMPLEMENTATION_VERIFYING / DEVELOPMENT_VERSION_0.1.16_UPLOADED / EXPERIENCE_PENDING
 - Approval: 产品负责人（用户），2026-10-24，call_a4e6de3e6be5408fb860b26f20a09323回复「批准 Spec01＋Architecture01＋DREV01，按此实施」。
-- Spec: [BUG-034 Spec01 / Architecture01](../../../../specs/active/BUG-034-FOOTPRINTS-CONTROLS-TIMELINE.md)。
+- Spec: [BUG-034 Spec01 / Architecture01](../../../../specs/completed/BUG-034-FOOTPRINTS-CONTROLS-TIMELINE.md)。
 - Design: [DREV-20261024-FOOTPRINTS-TIMELINE-01](../../../design/frontend/prototypes/DREV-20261024-FOOTPRINTS-TIMELINE-01/FRONTEND-SPEC.md)，批准源与42张HTML快照冻结，不替代原生。
 - Local stage: [本地交付记录](../../../deploy/releases/20261024-footprints-timeline-local.md)。
 
@@ -36,4 +38,4 @@
 
 ## 文档与生命周期
 
-当前Spec保留active/VERIFYING，三尺寸原生已通过，用户业务/设备/读屏/大字体验收尚待闭环；最终单独只读复核结论见本会话收尾报告，不伪称其他代理独立审查。当前事实同步Feature/Behavior/Architecture/UI/设计/测试/发布与Spec索引；旧批准清单仅追加对应范围Superseded by。按实际diff核对未发现本范围当前正文与代码冲突，不把历史原生或037读取结果移作本次界面验收。未提交、推送、上传、部署或操作业务数据。
+当前Spec保留active/VERIFYING，三尺寸原生已通过，用户业务/设备/读屏/大字体验收尚待闭环；最终单独只读复核结论见本会话收尾报告，不伪称其他代理独立审查。当前事实同步Feature/Behavior/Architecture/UI/设计/测试/发布与Spec索引；旧批准清单仅追加对应范围Superseded by。按实际diff核对未发现本范围当前正文与代码冲突，不把历史原生或037读取结果移作本次界面验收。本地实施阶段未提交、推送、上传、部署或操作业务数据；后续单独授权的0.1.16开发上传已执行，产品验收仍开放。

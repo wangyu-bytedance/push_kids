@@ -1,0 +1,64 @@
+{
+  "captured_at": "2026-10-31T19:27:46.148271+08:00",
+  "source": {
+    "scope": "offline synthetic transport, geometry/scroll bindings only in copy",
+    "source_sha256": {
+      "pages/footprints/controller.js": "bc3df707ea0e3999cf0666c5f2652e87f7ad8bc8d09f2937905b9b5fc90658a8",
+      "pages/footprints/imports.js": "c2501d9159426b3a11825f2c6f4f173a0edd779bed85eeaa440d98a06e66d7f9",
+      "pages/footprints/photos.js": "967cf1fbe4f53f668ce8d7ea9b837d2add99494c635210b001c0dbf621ee9ade",
+      "pages/footprints/presentation.js": "436908ddf87c0f2bfddff9462ee12d3bc0397276402d89ad25ee8b2d07c9e62f",
+      "pages/footprints/embedded.js": "6b34d0c1170527a85c55eb1e881030d1fa3d9ab092b053a64351791abb435e87",
+      "pages/footprints/index.wxml": "7e880159f4bd97439e147ef56bae1fb81b70d6a741c63e6f3b1160e7773474fe",
+      "pages/footprints/index.wxss": "90b70f8037381ab3d54d5fe60f1f8b61ffae38a46369474f14762b18610876d3"
+    }
+  },
+  "outputs": {
+    "standalone": {
+      "archived-320.json": "d5d634c243dc5cdeefe63b5ed53eb40b3ca0f3f5898884a7a05a22a5b596a9a7",
+      "archived-320.png": "5cdc963e64f2bd60f026e58dab23d7ea65f888f184838b58368f08877cf2c827",
+      "drafts-320.json": "b58f8da8168ea012fff636245d05e9a17d0501b20c72aa6b1de4bfea473231c3",
+      "drafts-320.png": "2e7cf8d779dcb89d0446eb34dcf409a0b4410d48ada65c59e5ae8c5665b97e54",
+      "empty-320.json": "534b43b543fea634b7eb6ef4f3f896ff342a66c38c5a0255154191872c73d149",
+      "empty-320.png": "57b19c8afdd10b7d29f8bfbcd32fec362f6648409991d5d0d25f2881d280603b",
+      "error-320.json": "7142c8fd19a8033438ccbb09c80a21bc53311c15fb5dbe35d21e2c51e960c7d8",
+      "error-320.png": "5e98fcbe1ef8ada4663ae8c2d8d5faea1d526b19755bc5592e22419278433b94",
+      "legacy-320.json": "d64f1d5713db156ad393f50602689a0c535b837a27e5fe08ac1d01971b04161e",
+      "legacy-320.png": "d8b99626e5bab6453cf110cddfc789ce0454ab4c6d343c81d06daa19c0d38995",
+      "loading-320.json": "4a474969aea3aa979e9db28120b5c28e3274cdb4c66b34fa2d1a6debe084cfc9",
+      "loading-320.png": "d4cb0fc7f9ba9a0070df398895586a1e6499ef27b04398bc96a13609a7ee5b8e",
+      "viewer-320.json": "b152f64193287fca5c9f134b0b11d2c48a274edab338684acfa94672fe0b8db9",
+      "viewer-320.png": "d88e1c12aa252c4f212046877da5f1d08326aef731ab2744f855b992921d9463"
+    },
+    "embedded": {
+      "archived-320.json": "e47adcf2e5b39badb5f6d7b4801a8bdaed0a9f4889ddeab106ee8751a3380f60",
+      "archived-320.png": "3d23917d94e4245bdae6dc52e30b205fac951a11d866a1e5b0d2a577a1b1b20e",
+      "drafts-320.json": "9608f259e3f5147e55cfc458997dc0cfdddd40e4155542ece44a3c7d37cc3e04",
+      "drafts-320.png": "c3bb25e67d90cabbef3eea7b049b5ff2f664a6f629f6ed2a8fb47fe343c8e4b7",
+      "empty-320.json": "b938dcd2f5d2443223efe5f442a245440ad401dcc30b5b57063ca0f4a73d864a",
+      "empty-320.png": "86aa7ef68084fc38f21118f78dc9c7098ae28206fe214149c4a94387354211b3",
+      "error-320.json": "a301ea3b16d153cc26701e874f9160937a065c24b866b79ab8f7f35d2c1feb1f",
+      "error-320.png": "9a31b5244912cd0caa8ab413839be2427117fbda0f23f8898d90f0b4a60371db",
+      "legacy-320.json": "254cce089d8c88c8172770de8139b51b70d3ec0fa4247409d1b8ca794f54b7fb",
+      "legacy-320.png": "bf08d11fa073f6e82bc4e42263f253e8dbdb6220cfb3c500b6d90e06900908ef",
+      "loading-320.json": "fc8af92d8e9a48ce0430cbc572abec221dbcf4f690dc7684703a98159d4c7e5b",
+      "loading-320.png": "b5ef57b5404c339df3757b38438fc4b41a0c47b34ce9579b2a5b430f0195aab2",
+      "viewer-320.json": "2d9424cce843e058a86cc43d6c3ef7271c230cf4d2471596a47bac01c3a023b5",
+      "viewer-320.png": "8ab1b43ddb64f0483611c11b365939037c3f2dba2dff7435cfd990e1b62f0fbd"
+    }
+  },
+  "scope": "320x568 native synthetic offline, standalone and embedded seven states each",
+  "result": "PASS",
+  "harness_changes": [
+    "synthetic offline transport",
+    "voice plugin omitted",
+    "geometry setter and scroll binding in copy only"
+  ],
+  "production_source_changed": false,
+  "not_verified": [
+    "390x844",
+    "430x932",
+    "full action matrix",
+    "device and accessibility",
+    "real cloud behavior"
+  ]
+}

@@ -1,0 +1,6 @@
+{"case": "zh-05", "reason": "coverage", "stage": "group", "unit": "m1", "diagnostics": []}
+{"case": "zh-07", "reason": "quality", "stage": "review", "unit": "review1", "diagnostics": []}
+{"case": "zh-09", "score": null, "subjects": ["zh"]}
+{"case": "multi-01", "reason": "coverage", "stage": "group", "unit": "t", "diagnostics": []}
+{"case": "multi-02", "score": "subject.mismatch", "subjects": ["en"]}
+{"case": "multi-04", "reason": "coverage", "stage": "review", "unit": "empty_proposal", "diagnostics": []}

@@ -12,7 +12,7 @@ Component({
   methods: {
     ...methods,
     async canLeave() {
-      if (this.data.saving || this.uploading) {
+      if (this.data.saving || this.data.selecting || this.uploading) {
         wx.showToast({ title: "请等待本次操作完成", icon: "none" });
         return false;
       }

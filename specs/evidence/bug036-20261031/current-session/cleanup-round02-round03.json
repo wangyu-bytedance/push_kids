@@ -1,0 +1,23 @@
+{
+  "observed_at": "2026-10-31T19:27:00.958180+08:00",
+  "rounds": [
+    {
+      "root": "/private/tmp/push-kids-eval30-bug036-20261031-round02",
+      "files_removed": 36,
+      "bytes_removed": 2471369,
+      "absent_after_cleanup": true
+    },
+    {
+      "root": "/private/tmp/push-kids-eval30-bug036-20261031-round03",
+      "files_removed": 108,
+      "bytes_removed": 29864306,
+      "absent_after_cleanup": true
+    }
+  ],
+  "known_identity_and_runtime_secret_scan_passed": true,
+  "safe_files_scanned": 68,
+  "private_original_images_and_validated_DTOs_cleaned": true,
+  "other_private_roots_modified": false,
+  "earlier_cleanup_preserved": true,
+  "production_data_cleanup_performed": false
+}

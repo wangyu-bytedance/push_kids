@@ -1,0 +1,104 @@
+{
+  "scope": "Review-gallery rendering only. Generated screenshots have no interactive UI nodes.",
+  "checks": [
+    {
+      "viewport": [
+        1440,
+        1000
+      ],
+      "images": [
+        {
+          "src": "../../snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-04/style-a.png",
+          "width": 852,
+          "height": 1846
+        },
+        {
+          "src": "../../snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-04/style-b.png",
+          "width": 852,
+          "height": 1846
+        },
+        {
+          "src": "../../snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-04/style-c.png",
+          "width": 852,
+          "height": 1846
+        },
+        {
+          "src": "../../snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-04/style-d.png",
+          "width": 851,
+          "height": 1847
+        },
+        {
+          "src": "../../snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-04/style-e.png",
+          "width": 852,
+          "height": 1846
+        },
+        {
+          "src": "../../snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-04/style-f.png",
+          "width": 852,
+          "height": 1846
+        }
+      ],
+      "horizontalOverflow": false,
+      "links": [
+        "../../snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-04/style-a.png",
+        "../../snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-04/style-b.png",
+        "../../snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-04/style-c.png",
+        "../../snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-04/style-d.png",
+        "../../snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-04/style-e.png",
+        "../../snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-04/style-f.png"
+      ]
+    },
+    {
+      "viewport": [
+        390,
+        844
+      ],
+      "images": [
+        {
+          "src": "../../snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-04/style-a.png",
+          "width": 852,
+          "height": 1846
+        },
+        {
+          "src": "../../snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-04/style-b.png",
+          "width": 852,
+          "height": 1846
+        },
+        {
+          "src": "../../snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-04/style-c.png",
+          "width": 852,
+          "height": 1846
+        },
+        {
+          "src": "../../snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-04/style-d.png",
+          "width": 851,
+          "height": 1847
+        },
+        {
+          "src": "../../snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-04/style-e.png",
+          "width": 852,
+          "height": 1846
+        },
+        {
+          "src": "../../snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-04/style-f.png",
+          "width": 852,
+          "height": 1846
+        }
+      ],
+      "horizontalOverflow": false,
+      "links": [
+        "../../snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-04/style-a.png",
+        "../../snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-04/style-b.png",
+        "../../snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-04/style-c.png",
+        "../../snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-04/style-d.png",
+        "../../snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-04/style-e.png",
+        "../../snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-04/style-f.png"
+      ]
+    }
+  ],
+  "javascriptErrors": [],
+  "externalRequests": [],
+  "nativeAcceptance": "NOT_RUN",
+  "touchGeometry": "NOT_RUN",
+  "contrastAcceptance": "NOT_RUN"
+}

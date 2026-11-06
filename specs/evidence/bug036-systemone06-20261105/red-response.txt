@@ -1,0 +1,35 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+___________ test_oversized_response_is_stopped_before_full_buffering ___________
+
+    def test_oversized_response_is_stopped_before_full_buffering():
+        provider = configured()
+        chunks_read = []
+    
+        class LargeResponse(httpx.AsyncByteStream):
+            async def __aiter__(self):
+                for index in range(100):
+                    chunks_read.append(index)
+                    yield b"x" * 4096
+    
+        provider.transport = httpx.MockTransport(
+            lambda _: httpx.Response(200, stream=LargeResponse())
+        )
+        with pytest.raises(StageFailure) as caught:
+            evaluate(provider)
+>       assert caught.value.reason == "capacity"
+E       AssertionError: assert 'validation' == 'capacity'
+E         
+E         - capacity
+E         + validation
+
+tests/unit/test_system_one_provider.py:117: AssertionError
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /Users/bytedance/Documents/push_kids/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/unit/test_system_one_provider.py::test_oversized_response_is_stopped_before_full_buffering
+1 failed, 1 warning in 0.12s

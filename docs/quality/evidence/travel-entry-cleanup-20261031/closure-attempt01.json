@@ -1,0 +1,54 @@
+{
+  "result": "FAIL",
+  "spec_revision": "SPEC-20261031-TRAVEL-ENTRY-CLEANUP-01",
+  "source_files": 388,
+  "changed_sources": [
+    "apps/api/src/push_kids/agent_processing/checkpoints.py",
+    "apps/api/src/push_kids/agent_processing/failures.py",
+    "apps/api/src/push_kids/agent_processing/pipeline.py",
+    "apps/api/src/push_kids/agent_processing/prompt.py",
+    "apps/api/src/push_kids/agent_processing/stage_contracts.py",
+    "apps/api/src/push_kids/agent_processing/stage_provider.py",
+    "apps/api/src/push_kids/agent_processing/telemetry.py",
+    "apps/miniprogram/pages/footprints/controller.js",
+    "apps/miniprogram/pages/footprints/index.wxml",
+    "apps/miniprogram/pages/footprints/photos.js",
+    "tests/frontend/footprints.test.js"
+  ],
+  "unchanged_sources": 377,
+  "links_checked": 608,
+  "docs_checked": 18,
+  "doc_sha256": {
+    "specs/active/FEAT-012-TRAVEL-ENTRY-CLEANUP.md": "ec7e68c02709e97f26f7a52e6ecd4ca05c6c8593945b46ee1f5a1268bf03cad8",
+    "specs/README.md": "d14847ae8aadaac33c4f99fab4e625b85e464638fc3ba8a67bee506eefa2b216",
+    "specs/STATUS.md": "623bbc824e2733b32dfc781814606a5c5a6d4dbbaa366a8e85c9fddbec678eee",
+    "docs/domain/features/FEAT-012-child-photo-footprints.md": "c7665b50e26ef301afd274c0da0467b3fa35f42278d289914a6ac36ecd9b70fc",
+    "docs/domain/features/README.md": "bb2ce636c5a4bebc141f681bb75c8f11dc22631c098863ee8b4d226e9a7b1d5f",
+    "docs/domain/BEHAVIOR-CATALOG.md": "1daa90729d0a651e54bba86e774f59af6a856af1f39f34c8fecc309decd31bce",
+    "docs/architecture/ARCHITECTURE.md": "5fd4a67f88f018191ae0ba8dbb041964f2f2c9916c058bd3033231bef27a5646",
+    "docs/design/frontend/ui/UI-018-child-photo-footprints.md": "730a56c517e658b5a27787b15ae959c3a7e2749e37de4e68c81e909518bf9f52",
+    "docs/design/frontend/ui/UI-001-parent-miniapp.md": "2211ff1db9b76b484d74c35c777ce2de70dbcee7f813101900550e3c43f5a6ef",
+    "docs/design/frontend/FRONTEND-DESIGN.md": "aa7d64e4c844913dbd48bf28ea9a6ed1440d9e6258e89849b93b9c75b874c880",
+    "docs/quality/TEST-STRATEGY.md": "6ff4062255bb3068a90392b861642d469cbecfcbe9a456e5cf101553b7262c43",
+    "docs/deploy/releases/20261031-travel-entry-cleanup-local.md": "07dd1648a8788b5cdfb030f35db1453fb9787afbeebaf861ffeecbc61b16e5e4",
+    "docs/design/frontend/prototypes/DREV-20261031-TRAVEL-ENTRY-CLEANUP-01/FRONTEND-SPEC.md": "87a2290725ad67621875273f73afd57577e1ae39232254f8ac526d75ac8d0af7",
+    "docs/quality/evidence/travel-entry-cleanup-20261031/README.md": "130adcea1fe79c1a0612027809fcebe94565df57495c958af3dd8a30e182bc22",
+    "docs/quality/evidence/travel-entry-cleanup-20261031/HANDOFF.md": "8782dc921b0d9e3bb1a225897bd9292986faaea82ed6c75e6ac0449d560e714d",
+    "docs/quality/evidence/travel-entry-cleanup-20261031/REVIEW.md": "b893084d3e818d7c87852d37e9b6ba99fa5a51fdab84cc889d3907f7e5bd4dde",
+    "specs/evidence/EVD-20261031-TRAVEL-ENTRY-BASELINE.md": "62baa6e676523c86f58417bc247d42a1fabf5b16a715d7e24649979087955abf",
+    "specs/evidence/EVD-20261031-TRAVEL-ENTRY-FINAL.md": "82c97e3f1c791968ad7086bfa962627c6391a551e113adcdaa6085842f83bd27"
+  },
+  "spec_counts": {
+    "completed": 105,
+    "active": 13,
+    "rejected": 13
+  },
+  "approved_design_sources_unchanged": true,
+  "native_acceptance": "NOT_RUN",
+  "cloud_delivery": "NOT_UPLOADED_NOT_DEPLOYED",
+  "errors": [
+    "docs/quality/evidence/travel-entry-cleanup-20261031/README.md: missing closure-check.json",
+    "current source differs from verified final source manifest",
+    "source changes exceed approved 4-file scope"
+  ]
+}

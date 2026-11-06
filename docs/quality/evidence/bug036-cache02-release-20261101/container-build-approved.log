@@ -1,0 +1,40 @@
+DEPRECATED: The legacy builder is deprecated and will be removed in a future release.
+            BuildKit is currently disabled; enable it by removing the DOCKER_BUILDKIT=0
+            environment-variable.
+
+Sending build context to Docker daemon  1.716MB
+
+Step 1/10 : FROM python:3.12-slim
+ ---> a0f57064cbdc
+Step 2/10 : WORKDIR /app
+ ---> Running in fa0f5cdeb4dc
+ ---> Removed intermediate container fa0f5cdeb4dc
+ ---> 6f6caea0226c
+Step 3/10 : COPY pyproject.toml uv.lock* ./
+ ---> 4c98103ef90f
+Step 4/10 : RUN pip install --no-cache-dir uv && uv sync --frozen --no-dev
+ ---> Running in df47dbbf357d
+Collecting uv
+  Downloading uv-0.13.6-py3-none-manylinux_2_28_aarch64.whl.metadata (11 kB)
+Downloading uv-0.13.6-py3-none-manylinux_2_28_aarch64.whl (16.5 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 16.5/16.5 MB 51.6 kB/s eta 0:00:00
+Installing collected packages: uv
+Successfully installed uv-0.13.6
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+
+[notice] A new release of pip is available: 25.0.1 -> 26.2.2
+[notice] To update, run: pip install --upgrade pip
+Using CPython 3.12.15 interpreter at: /usr/local/bin/python3
+Creating virtual environment at: .venv
+Downloading openai (1.6MiB)
+Downloading pycryptodome (2.1MiB)
+Downloading sqlalchemy (3.2MiB)
+Downloading pydantic-core (1.9MiB)
+Downloading pillow (5.7MiB)
+Downloading uvloop (4.1MiB)
+   Building crcmod==1.7
+      Built crcmod==1.7
+ Downloaded openai
+ Downloaded pydantic-core
+ Downloaded pycryptodome
+ Downloaded sqlalchemy

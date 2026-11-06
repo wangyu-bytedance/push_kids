@@ -1,0 +1,938 @@
+{
+  "spec_revision": "BUG-SPEC-20261105-SYSTEM-ONE-06",
+  "subject_revision": "Spec05 existing outputs; acceptance01 frozen questions; acceptance02 diagnostic questions; no Spec06 implementation",
+  "purpose": "discovery only",
+  "human_quality_acceptance": "PENDING",
+  "generation_replayed": false,
+  "production_code_changed": false,
+  "first_pass": [
+    {
+      "id": "b-r1-real02",
+      "group": "baseline",
+      "round": 1,
+      "case": "real02",
+      "status": "NO_FINDING",
+      "seconds": 0.869,
+      "failed_questions": [],
+      "expected_pass": null,
+      "expected_fail_keys": null
+    },
+    {
+      "id": "b-r1-real05",
+      "group": "baseline",
+      "round": 1,
+      "case": "real05",
+      "status": "NO_FINDING",
+      "seconds": 0.333,
+      "failed_questions": [],
+      "expected_pass": null,
+      "expected_fail_keys": null
+    },
+    {
+      "id": "b-r1-real06",
+      "group": "baseline",
+      "round": 1,
+      "case": "real06",
+      "status": "NO_FINDING",
+      "seconds": 4.346,
+      "failed_questions": [],
+      "expected_pass": null,
+      "expected_fail_keys": null
+    },
+    {
+      "id": "b-r1-real07",
+      "group": "baseline",
+      "round": 1,
+      "case": "real07",
+      "status": "NEEDS_REVIEW",
+      "seconds": 0.397,
+      "failed_questions": [
+        "separate"
+      ],
+      "expected_pass": null,
+      "expected_fail_keys": null
+    },
+    {
+      "id": "b-r1-real08",
+      "group": "baseline",
+      "round": 1,
+      "case": "real08",
+      "status": "NO_FINDING",
+      "seconds": 0.54,
+      "failed_questions": [],
+      "expected_pass": null,
+      "expected_fail_keys": null
+    },
+    {
+      "id": "b-r1-real09",
+      "group": "baseline",
+      "round": 1,
+      "case": "real09",
+      "status": "NO_FINDING",
+      "seconds": 0.67,
+      "failed_questions": [],
+      "expected_pass": null,
+      "expected_fail_keys": null
+    },
+    {
+      "id": "b-r1-real11",
+      "group": "baseline",
+      "round": 1,
+      "case": "real11",
+      "status": "NEEDS_REVIEW",
+      "seconds": 1.241,
+      "failed_questions": [
+        "separate"
+      ],
+      "expected_pass": null,
+      "expected_fail_keys": null
+    },
+    {
+      "id": "b-r1-real12",
+      "group": "baseline",
+      "round": 1,
+      "case": "real12",
+      "status": "NO_FINDING",
+      "seconds": 4.0,
+      "failed_questions": [],
+      "expected_pass": null,
+      "expected_fail_keys": null
+    },
+    {
+      "id": "b-r1-real13",
+      "group": "baseline",
+      "round": 1,
+      "case": "real13",
+      "status": "NO_FINDING",
+      "seconds": 0.866,
+      "failed_questions": [],
+      "expected_pass": null,
+      "expected_fail_keys": null
+    },
+    {
+      "id": "b-r1-real14",
+      "group": "baseline",
+      "round": 1,
+      "case": "real14",
+      "status": "NO_FINDING",
+      "seconds": 0.849,
+      "failed_questions": [],
+      "expected_pass": null,
+      "expected_fail_keys": null
+    },
+    {
+      "id": "b-r1-real15",
+      "group": "baseline",
+      "round": 1,
+      "case": "real15",
+      "status": "NO_FINDING",
+      "seconds": 0.542,
+      "failed_questions": [],
+      "expected_pass": null,
+      "expected_fail_keys": null
+    },
+    {
+      "id": "b-r1-real16",
+      "group": "baseline",
+      "round": 1,
+      "case": "real16",
+      "status": "NO_FINDING",
+      "seconds": 0.386,
+      "failed_questions": [],
+      "expected_pass": null,
+      "expected_fail_keys": null
+    },
+    {
+      "id": "b-r1-real17",
+      "group": "baseline",
+      "round": 1,
+      "case": "real17",
+      "status": "NEEDS_REVIEW",
+      "seconds": 0.983,
+      "failed_questions": [
+        "separate"
+      ],
+      "expected_pass": null,
+      "expected_fail_keys": null
+    },
+    {
+      "id": "b-r1-real18",
+      "group": "baseline",
+      "round": 1,
+      "case": "real18",
+      "status": "NO_FINDING",
+      "seconds": 0.926,
+      "failed_questions": [],
+      "expected_pass": null,
+      "expected_fail_keys": null
+    },
+    {
+      "id": "b-r2-real02",
+      "group": "baseline",
+      "round": 2,
+      "case": "real02",
+      "status": "NO_FINDING",
+      "seconds": 1.268,
+      "failed_questions": [],
+      "expected_pass": null,
+      "expected_fail_keys": null
+    },
+    {
+      "id": "b-r2-real05",
+      "group": "baseline",
+      "round": 2,
+      "case": "real05",
+      "status": "NO_FINDING",
+      "seconds": 0.352,
+      "failed_questions": [],
+      "expected_pass": null,
+      "expected_fail_keys": null
+    },
+    {
+      "id": "b-r2-real06",
+      "group": "baseline",
+      "round": 2,
+      "case": "real06",
+      "status": "NO_FINDING",
+      "seconds": 1.551,
+      "failed_questions": [],
+      "expected_pass": null,
+      "expected_fail_keys": null
+    },
+    {
+      "id": "b-r2-real07",
+      "group": "baseline",
+      "round": 2,
+      "case": "real07",
+      "status": "NEEDS_REVIEW",
+      "seconds": 1.253,
+      "failed_questions": [
+        "i1_granularity",
+        "separate"
+      ],
+      "expected_pass": null,
+      "expected_fail_keys": null
+    },
+    {
+      "id": "b-r2-real08",
+      "group": "baseline",
+      "round": 2,
+      "case": "real08",
+      "status": "NO_FINDING",
+      "seconds": 0.67,
+      "failed_questions": [],
+      "expected_pass": null,
+      "expected_fail_keys": null
+    },
+    {
+      "id": "b-r2-real09",
+      "group": "baseline",
+      "round": 2,
+      "case": "real09",
+      "status": "NO_FINDING",
+      "seconds": 0.823,
+      "failed_questions": [],
+      "expected_pass": null,
+      "expected_fail_keys": null
+    },
+    {
+      "id": "b-r2-real10",
+      "group": "baseline",
+      "round": 2,
+      "case": "real10",
+      "status": "NEEDS_REVIEW",
+      "seconds": 0.969,
+      "failed_questions": [
+        "separate"
+      ],
+      "expected_pass": null,
+      "expected_fail_keys": null
+    },
+    {
+      "id": "b-r2-real11",
+      "group": "baseline",
+      "round": 2,
+      "case": "real11",
+      "status": "NEEDS_REVIEW",
+      "seconds": 0.862,
+      "failed_questions": [
+        "separate"
+      ],
+      "expected_pass": null,
+      "expected_fail_keys": null
+    },
+    {
+      "id": "b-r2-real12",
+      "group": "baseline",
+      "round": 2,
+      "case": "real12",
+      "status": "NO_FINDING",
+      "seconds": 1.052,
+      "failed_questions": [],
+      "expected_pass": null,
+      "expected_fail_keys": null
+    },
+    {
+      "id": "b-r2-real13",
+      "group": "baseline",
+      "round": 2,
+      "case": "real13",
+      "status": "NO_FINDING",
+      "seconds": 0.743,
+      "failed_questions": [],
+      "expected_pass": null,
+      "expected_fail_keys": null
+    },
+    {
+      "id": "b-r2-real14",
+      "group": "baseline",
+      "round": 2,
+      "case": "real14",
+      "status": "NO_FINDING",
+      "seconds": 0.819,
+      "failed_questions": [],
+      "expected_pass": null,
+      "expected_fail_keys": null
+    },
+    {
+      "id": "b-r2-real15",
+      "group": "baseline",
+      "round": 2,
+      "case": "real15",
+      "status": "NO_FINDING",
+      "seconds": 0.642,
+      "failed_questions": [],
+      "expected_pass": null,
+      "expected_fail_keys": null
+    },
+    {
+      "id": "b-r2-real16",
+      "group": "baseline",
+      "round": 2,
+      "case": "real16",
+      "status": "NO_FINDING",
+      "seconds": 0.312,
+      "failed_questions": [],
+      "expected_pass": null,
+      "expected_fail_keys": null
+    },
+    {
+      "id": "b-r2-real17",
+      "group": "baseline",
+      "round": 2,
+      "case": "real17",
+      "status": "NO_FINDING",
+      "seconds": 1.199,
+      "failed_questions": [],
+      "expected_pass": null,
+      "expected_fail_keys": null
+    },
+    {
+      "id": "b-r2-real18",
+      "group": "baseline",
+      "round": 2,
+      "case": "real18",
+      "status": "NO_FINDING",
+      "seconds": 0.718,
+      "failed_questions": [],
+      "expected_pass": null,
+      "expected_fail_keys": null
+    },
+    {
+      "id": "b-r3-real02",
+      "group": "baseline",
+      "round": 3,
+      "case": "real02",
+      "status": "NO_FINDING",
+      "seconds": 1.294,
+      "failed_questions": [],
+      "expected_pass": null,
+      "expected_fail_keys": null
+    },
+    {
+      "id": "b-r3-real05",
+      "group": "baseline",
+      "round": 3,
+      "case": "real05",
+      "status": "NO_FINDING",
+      "seconds": 0.53,
+      "failed_questions": [],
+      "expected_pass": null,
+      "expected_fail_keys": null
+    },
+    {
+      "id": "b-r3-real06",
+      "group": "baseline",
+      "round": 3,
+      "case": "real06",
+      "status": "NO_FINDING",
+      "seconds": 2.224,
+      "failed_questions": [],
+      "expected_pass": null,
+      "expected_fail_keys": null
+    },
+    {
+      "id": "b-r3-real07",
+      "group": "baseline",
+      "round": 3,
+      "case": "real07",
+      "status": "NEEDS_REVIEW",
+      "seconds": 0.614,
+      "failed_questions": [
+        "separate"
+      ],
+      "expected_pass": null,
+      "expected_fail_keys": null
+    },
+    {
+      "id": "b-r3-real08",
+      "group": "baseline",
+      "round": 3,
+      "case": "real08",
+      "status": "NO_FINDING",
+      "seconds": 0.484,
+      "failed_questions": [],
+      "expected_pass": null,
+      "expected_fail_keys": null
+    },
+    {
+      "id": "b-r3-real09",
+      "group": "baseline",
+      "round": 3,
+      "case": "real09",
+      "status": "NO_FINDING",
+      "seconds": 0.717,
+      "failed_questions": [],
+      "expected_pass": null,
+      "expected_fail_keys": null
+    },
+    {
+      "id": "b-r3-real11",
+      "group": "baseline",
+      "round": 3,
+      "case": "real11",
+      "status": "NO_FINDING",
+      "seconds": 0.682,
+      "failed_questions": [],
+      "expected_pass": null,
+      "expected_fail_keys": null
+    },
+    {
+      "id": "b-r3-real12",
+      "group": "baseline",
+      "round": 3,
+      "case": "real12",
+      "status": "NO_FINDING",
+      "seconds": 0.843,
+      "failed_questions": [],
+      "expected_pass": null,
+      "expected_fail_keys": null
+    },
+    {
+      "id": "b-r3-real13",
+      "group": "baseline",
+      "round": 3,
+      "case": "real13",
+      "status": "NO_FINDING",
+      "seconds": 0.863,
+      "failed_questions": [],
+      "expected_pass": null,
+      "expected_fail_keys": null
+    },
+    {
+      "id": "b-r3-real14",
+      "group": "baseline",
+      "round": 3,
+      "case": "real14",
+      "status": "NEEDS_REVIEW",
+      "seconds": 0.806,
+      "failed_questions": [
+        "i0_source"
+      ],
+      "expected_pass": null,
+      "expected_fail_keys": null
+    },
+    {
+      "id": "b-r3-real15",
+      "group": "baseline",
+      "round": 3,
+      "case": "real15",
+      "status": "NO_FINDING",
+      "seconds": 0.607,
+      "failed_questions": [],
+      "expected_pass": null,
+      "expected_fail_keys": null
+    },
+    {
+      "id": "b-r3-real16",
+      "group": "baseline",
+      "round": 3,
+      "case": "real16",
+      "status": "NO_FINDING",
+      "seconds": 0.391,
+      "failed_questions": [],
+      "expected_pass": null,
+      "expected_fail_keys": null
+    },
+    {
+      "id": "b-r3-real17",
+      "group": "baseline",
+      "round": 3,
+      "case": "real17",
+      "status": "NO_FINDING",
+      "seconds": 2.551,
+      "failed_questions": [],
+      "expected_pass": null,
+      "expected_fail_keys": null
+    },
+    {
+      "id": "b-r3-real18",
+      "group": "baseline",
+      "round": 3,
+      "case": "real18",
+      "status": "NO_FINDING",
+      "seconds": 0.815,
+      "failed_questions": [],
+      "expected_pass": null,
+      "expected_fail_keys": null
+    },
+    {
+      "id": "k-r1-real10",
+      "group": "known_bad",
+      "round": 1,
+      "case": "real10",
+      "status": "NEEDS_REVIEW",
+      "seconds": 1.314,
+      "failed_questions": [
+        "i1_source"
+      ],
+      "expected_pass": false,
+      "expected_fail_keys": [
+        "i1_source",
+        "summary"
+      ],
+      "label_correct": true
+    },
+    {
+      "id": "k-r1-real18",
+      "group": "known_bad",
+      "round": 1,
+      "case": "real18",
+      "status": "NO_FINDING",
+      "seconds": 3.35,
+      "failed_questions": [],
+      "expected_pass": false,
+      "expected_fail_keys": [
+        "i0_source",
+        "summary"
+      ],
+      "label_correct": false
+    },
+    {
+      "id": "k-r2-real18",
+      "group": "known_bad",
+      "round": 2,
+      "case": "real18",
+      "status": "NO_FINDING",
+      "seconds": 2.088,
+      "failed_questions": [],
+      "expected_pass": false,
+      "expected_fail_keys": [
+        "i0_source",
+        "summary"
+      ],
+      "label_correct": false
+    },
+    {
+      "id": "s01",
+      "group": "synthetic",
+      "round": 1,
+      "case": "s01",
+      "status": "NO_FINDING",
+      "seconds": 0.325,
+      "failed_questions": [],
+      "expected_pass": true,
+      "expected_fail_keys": [],
+      "label_correct": true
+    },
+    {
+      "id": "s02",
+      "group": "synthetic",
+      "round": 1,
+      "case": "s02",
+      "status": "NO_FINDING",
+      "seconds": 0.361,
+      "failed_questions": [],
+      "expected_pass": true,
+      "expected_fail_keys": [],
+      "label_correct": true
+    },
+    {
+      "id": "s03",
+      "group": "synthetic",
+      "round": 1,
+      "case": "s03",
+      "status": "NO_FINDING",
+      "seconds": 0.34,
+      "failed_questions": [],
+      "expected_pass": true,
+      "expected_fail_keys": [],
+      "label_correct": true
+    },
+    {
+      "id": "s04",
+      "group": "synthetic",
+      "round": 1,
+      "case": "s04",
+      "status": "NO_FINDING",
+      "seconds": 0.393,
+      "failed_questions": [],
+      "expected_pass": true,
+      "expected_fail_keys": [],
+      "label_correct": true
+    },
+    {
+      "id": "s05",
+      "group": "synthetic",
+      "round": 1,
+      "case": "s05",
+      "status": "NO_FINDING",
+      "seconds": 0.555,
+      "failed_questions": [],
+      "expected_pass": true,
+      "expected_fail_keys": [],
+      "label_correct": true
+    },
+    {
+      "id": "s06",
+      "group": "synthetic",
+      "round": 1,
+      "case": "s06",
+      "status": "NEEDS_REVIEW",
+      "seconds": 0.627,
+      "failed_questions": [
+        "separate"
+      ],
+      "expected_pass": true,
+      "expected_fail_keys": [],
+      "label_correct": false
+    },
+    {
+      "id": "s07",
+      "group": "synthetic",
+      "round": 1,
+      "case": "s07",
+      "status": "NEEDS_REVIEW",
+      "seconds": 2.548,
+      "failed_questions": [
+        "summary",
+        "coverage_t"
+      ],
+      "expected_pass": false,
+      "expected_fail_keys": [
+        "i0_source",
+        "i0_scope"
+      ],
+      "label_correct": false
+    },
+    {
+      "id": "s08",
+      "group": "synthetic",
+      "round": 1,
+      "case": "s08",
+      "status": "NEEDS_REVIEW",
+      "seconds": 0.589,
+      "failed_questions": [
+        "i0_source",
+        "i0_subject",
+        "i0_scope",
+        "i0_action",
+        "summary",
+        "coverage_t"
+      ],
+      "expected_pass": false,
+      "expected_fail_keys": [
+        "i0_source",
+        "i0_scope"
+      ],
+      "label_correct": true
+    },
+    {
+      "id": "s09",
+      "group": "synthetic",
+      "round": 1,
+      "case": "s09",
+      "status": "NEEDS_REVIEW",
+      "seconds": 0.359,
+      "failed_questions": [
+        "i0_source",
+        "summary"
+      ],
+      "expected_pass": false,
+      "expected_fail_keys": [
+        "i0_source",
+        "i0_scope"
+      ],
+      "label_correct": true
+    },
+    {
+      "id": "s10",
+      "group": "synthetic",
+      "round": 1,
+      "case": "s10",
+      "status": "NEEDS_REVIEW",
+      "seconds": 0.478,
+      "failed_questions": [
+        "i0_source",
+        "i0_subject",
+        "i0_scope",
+        "i0_action",
+        "coverage_t"
+      ],
+      "expected_pass": false,
+      "expected_fail_keys": [
+        "i0_subject"
+      ],
+      "label_correct": true
+    },
+    {
+      "id": "s11",
+      "group": "synthetic",
+      "round": 1,
+      "case": "s11",
+      "status": "NEEDS_REVIEW",
+      "seconds": 0.798,
+      "failed_questions": [
+        "i0_source",
+        "i0_scope",
+        "summary",
+        "coverage_t"
+      ],
+      "expected_pass": false,
+      "expected_fail_keys": [
+        "i0_source",
+        "summary"
+      ],
+      "label_correct": true
+    },
+    {
+      "id": "s12",
+      "group": "synthetic",
+      "round": 1,
+      "case": "s12",
+      "status": "NEEDS_REVIEW",
+      "seconds": 0.377,
+      "failed_questions": [
+        "coverage_t"
+      ],
+      "expected_pass": false,
+      "expected_fail_keys": [
+        "coverage_t"
+      ],
+      "label_correct": true
+    }
+  ],
+  "calibration_reused_cases": [
+    {
+      "id": "k-r1-real10",
+      "group": "known_bad",
+      "case": "real10",
+      "status": "NEEDS_REVIEW",
+      "failed_questions": [
+        "i1_source",
+        "title_i1_0",
+        "title_summary_0"
+      ],
+      "seconds": 2.182,
+      "expected_pass": false,
+      "binary_label_correct": true,
+      "naming_detected": true
+    },
+    {
+      "id": "k-r1-real18",
+      "group": "known_bad",
+      "case": "real18",
+      "status": "NEEDS_REVIEW",
+      "failed_questions": [
+        "title_i0_0"
+      ],
+      "seconds": 0.701,
+      "expected_pass": false,
+      "binary_label_correct": true,
+      "naming_detected": true
+    },
+    {
+      "id": "k-r2-real18",
+      "group": "known_bad",
+      "case": "real18",
+      "status": "NEEDS_REVIEW",
+      "failed_questions": [
+        "title_i0_0",
+        "title_summary_0"
+      ],
+      "seconds": 0.765,
+      "expected_pass": false,
+      "binary_label_correct": true,
+      "naming_detected": true
+    },
+    {
+      "id": "s01",
+      "group": "synthetic",
+      "case": "s01",
+      "status": "NEEDS_REVIEW",
+      "failed_questions": [
+        "title_i0_0",
+        "title_summary_0"
+      ],
+      "seconds": 0.425,
+      "expected_pass": true,
+      "binary_label_correct": false
+    },
+    {
+      "id": "s02",
+      "group": "synthetic",
+      "case": "s02",
+      "status": "NO_FINDING",
+      "failed_questions": [],
+      "seconds": 0.429,
+      "expected_pass": true,
+      "binary_label_correct": true
+    },
+    {
+      "id": "s03",
+      "group": "synthetic",
+      "case": "s03",
+      "status": "NO_FINDING",
+      "failed_questions": [],
+      "seconds": 0.501,
+      "expected_pass": true,
+      "binary_label_correct": true
+    },
+    {
+      "id": "s04",
+      "group": "synthetic",
+      "case": "s04",
+      "status": "NO_FINDING",
+      "failed_questions": [],
+      "seconds": 0.314,
+      "expected_pass": true,
+      "binary_label_correct": true
+    },
+    {
+      "id": "s05",
+      "group": "synthetic",
+      "case": "s05",
+      "status": "NEEDS_REVIEW",
+      "failed_questions": [
+        "coverage_t"
+      ],
+      "seconds": 0.778,
+      "expected_pass": true,
+      "binary_label_correct": false
+    },
+    {
+      "id": "s06",
+      "group": "synthetic",
+      "case": "s06",
+      "status": "NO_FINDING",
+      "failed_questions": [],
+      "seconds": 0.477,
+      "expected_pass": true,
+      "binary_label_correct": true
+    },
+    {
+      "id": "s07",
+      "group": "synthetic",
+      "case": "s07",
+      "status": "NEEDS_REVIEW",
+      "failed_questions": [
+        "i0_source",
+        "summary",
+        "title_i0_0",
+        "title_summary_0"
+      ],
+      "seconds": 0.531,
+      "expected_pass": false,
+      "binary_label_correct": true
+    },
+    {
+      "id": "s08",
+      "group": "synthetic",
+      "case": "s08",
+      "status": "NEEDS_REVIEW",
+      "failed_questions": [
+        "i0_source",
+        "i0_subject",
+        "i0_scope",
+        "i0_action",
+        "summary",
+        "coverage_t"
+      ],
+      "seconds": 0.389,
+      "expected_pass": false,
+      "binary_label_correct": true
+    },
+    {
+      "id": "s09",
+      "group": "synthetic",
+      "case": "s09",
+      "status": "NEEDS_REVIEW",
+      "failed_questions": [
+        "i0_source",
+        "i0_scope",
+        "summary",
+        "coverage_t"
+      ],
+      "seconds": 0.384,
+      "expected_pass": false,
+      "binary_label_correct": true
+    },
+    {
+      "id": "s10",
+      "group": "synthetic",
+      "case": "s10",
+      "status": "NEEDS_REVIEW",
+      "failed_questions": [
+        "i0_source",
+        "i0_subject",
+        "i0_scope",
+        "i0_granularity",
+        "i0_action",
+        "summary",
+        "coverage_t"
+      ],
+      "seconds": 0.401,
+      "expected_pass": false,
+      "binary_label_correct": true
+    },
+    {
+      "id": "s11",
+      "group": "synthetic",
+      "case": "s11",
+      "status": "NEEDS_REVIEW",
+      "failed_questions": [
+        "i0_source",
+        "i0_action",
+        "summary",
+        "title_i0_0",
+        "title_summary_0"
+      ],
+      "seconds": 0.651,
+      "expected_pass": false,
+      "binary_label_correct": true
+    },
+    {
+      "id": "s12",
+      "group": "synthetic",
+      "case": "s12",
+      "status": "NEEDS_REVIEW",
+      "failed_questions": [
+        "coverage_t"
+      ],
+      "seconds": 0.378,
+      "expected_pass": false,
+      "binary_label_correct": true
+    }
+  ],
+  "calibration_is_independent_holdout": false
+}

@@ -1,0 +1,456 @@
+{
+  "algorithm": "SHA-256",
+  "excludes_self": true,
+  "files": [
+    {
+      "path": "command-results.json",
+      "bytes": 1741,
+      "sha256": "be524650f23bce8ebbe0273eb5c7ba525d48a5e760099bc7f03868723242e51e"
+    },
+    {
+      "path": "document-sha256.json",
+      "bytes": 2472,
+      "sha256": "0f623ed2b292c4f0ccad2685cdc39607ae653d10cb4a4169cb1c78b04e8b697d"
+    },
+    {
+      "path": "documentation-closure.json",
+      "bytes": 506,
+      "sha256": "e9a6b7011a8679d119d73a03a36542ef8ed63c1cdc0ad27d2c815bfd2bcf0def"
+    },
+    {
+      "path": "grade-source-sha256.json",
+      "bytes": 1313,
+      "sha256": "2e99c80af9147f56fc11fcfb3053a8bdae19373aa2b43cc25a4744928a67f980"
+    },
+    {
+      "path": "mysql-summary.json",
+      "bytes": 1976,
+      "sha256": "99bd188cc6ea6e8a7a21471b6788a05fc5bfbff9be39ea7b9aabd83f3b5774c9"
+    },
+    {
+      "path": "native/archive-native/390/active.json",
+      "bytes": 3949,
+      "sha256": "6adea8393ce189a4240b0a9c639dc5ff53212d7c5347103816c3f33c18d21272"
+    },
+    {
+      "path": "native/archive-native/390/active.png",
+      "bytes": 169854,
+      "sha256": "6250d273777160599b903d0137a150ad58a05b3fe025cf9503fcc6c56e4209d5"
+    },
+    {
+      "path": "native/archive-native/390/archived.json",
+      "bytes": 3955,
+      "sha256": "1da94243d4e0c986faf58b582c9a9586a3a9031d5220303af16dfff76652e282"
+    },
+    {
+      "path": "native/archive-native/390/archived.png",
+      "bytes": 212538,
+      "sha256": "2782514eb13f64aa665ca1a38c1f71d0b6e361309f2cdc4a39f463429bac9aab"
+    },
+    {
+      "path": "native/archive-native/390/confirm-unfinished.json",
+      "bytes": 4312,
+      "sha256": "8514d8449a7b757b67897a3229181576c2a2cd7885495b3f77000f9ece3f5a6c"
+    },
+    {
+      "path": "native/archive-native/390/confirm-unfinished.png",
+      "bytes": 186870,
+      "sha256": "b9e8df04d1ba6788c0752866b359ab0d76d107b21e74b7c8d9b431bf5ba126e6"
+    },
+    {
+      "path": "native/archive-native/390/editor.json",
+      "bytes": 1742,
+      "sha256": "74ed4cacfbf7b4daf2b32a8a2d4f67ab8c36767fdf6b1afe565bf2afd25197dd"
+    },
+    {
+      "path": "native/archive-native/390/editor.png",
+      "bytes": 148760,
+      "sha256": "d8b02105f72592f00519d2f4e6dee509dfdcb0188a1104fc3382919ed8a835cc"
+    },
+    {
+      "path": "native/archive-native/390/error.json",
+      "bytes": 4355,
+      "sha256": "aaab604cb320c12226e8c1fe0f81696be4920311de58054e9f16536718a47982"
+    },
+    {
+      "path": "native/archive-native/390/error.png",
+      "bytes": 184308,
+      "sha256": "42a96551f4cf540fb2b33757ac88ff2a5c7b3641946e0700833efcb214071edb"
+    },
+    {
+      "path": "native/archive-native/390/restoring.json",
+      "bytes": 3521,
+      "sha256": "8f35624e18bc82a3af0178acee497ef8e6712c9a43dbbb3a78ddf6d31c1cc8e6"
+    },
+    {
+      "path": "native/archive-native/390/restoring.png",
+      "bytes": 211587,
+      "sha256": "f65448729ec0adbca8ac988b8113004def718ecc5f21f3495e8267639a2edd93"
+    },
+    {
+      "path": "native/archive-native/390/unfinished.json",
+      "bytes": 4304,
+      "sha256": "87b0d7e500c190aed778f3886505d11cf6e8c373303a5d3906e3213eb82b3a2b"
+    },
+    {
+      "path": "native/archive-native/390/unfinished.png",
+      "bytes": 186870,
+      "sha256": "b9e8df04d1ba6788c0752866b359ab0d76d107b21e74b7c8d9b431bf5ba126e6"
+    },
+    {
+      "path": "native/archive-native/390/working.json",
+      "bytes": 3866,
+      "sha256": "4d00986ee0828730253f8f784c00240d607e16002a06eacd585ff9e19e866e51"
+    },
+    {
+      "path": "native/archive-native/390/working.png",
+      "bytes": 185282,
+      "sha256": "a69daadb86a4a3c5073c05d6864fd45aba752ce49cfe1d3a912444fb431e59b2"
+    },
+    {
+      "path": "native/archive-native/430/active.json",
+      "bytes": 3955,
+      "sha256": "8d9cfdff3e87b04b2fc91bd1f1c4d09bac67fc650e627c2c908746011b0fcb85"
+    },
+    {
+      "path": "native/archive-native/430/active.png",
+      "bytes": 185581,
+      "sha256": "bdb497187174e7f4f2ce1a6aef0316a1f99884c1f985f79365ca322c5f364389"
+    },
+    {
+      "path": "native/archive-native/430/archived.json",
+      "bytes": 3956,
+      "sha256": "3fe66fbae11162f1abc5ab9ba864d01fc7855afa3e4dac9a8d017f0630bf77f6"
+    },
+    {
+      "path": "native/archive-native/430/archived.png",
+      "bytes": 235205,
+      "sha256": "d2ea1c55feda8370b0126a954fa796a867c0cf1f8850ea62f381a394084e12d8"
+    },
+    {
+      "path": "native/archive-native/430/editor.json",
+      "bytes": 1742,
+      "sha256": "32668b545c5567a4490efc067af0dec3ebd8127a2f39719b9fee78d9be2532b6"
+    },
+    {
+      "path": "native/archive-native/430/editor.png",
+      "bytes": 163223,
+      "sha256": "fa60481f8104b9aea5b6f8a8fb18533d6ad27d6f189ab582ad726472b85363a4"
+    },
+    {
+      "path": "native/archive-native/430/error.json",
+      "bytes": 4361,
+      "sha256": "f11d5d8db20bbbfdf1fd2c8045e17909af0dbb3b9ba368d6d5358aed12a76a59"
+    },
+    {
+      "path": "native/archive-native/430/error.png",
+      "bytes": 200356,
+      "sha256": "66d3eae958e54ff15b963924fcd4d6f665fc2ec317e45aa138572eba74cb79d1"
+    },
+    {
+      "path": "native/archive-native/430/restoring.json",
+      "bytes": 3518,
+      "sha256": "061a67d9f569142aa0f4568f3ab39fc7c0b45fe4328506baf57d03f49f57b528"
+    },
+    {
+      "path": "native/archive-native/430/restoring.png",
+      "bytes": 233205,
+      "sha256": "a7f21132bb7ca31a9f0ed15c7dc1be5e6b6be36e1674d26b344283950188023b"
+    },
+    {
+      "path": "native/archive-native/430/unfinished.json",
+      "bytes": 4310,
+      "sha256": "71eb8c309e416078f47ffc409f7b669d17c148bd202dd772d51f63bb3f8e6f83"
+    },
+    {
+      "path": "native/archive-native/430/unfinished.png",
+      "bytes": 203105,
+      "sha256": "d8d5dac76054bf970a064996cf71fb4521ebdadc1cc2533bc5224b0e09740908"
+    },
+    {
+      "path": "native/archive-native/430/working.json",
+      "bytes": 3866,
+      "sha256": "73ae8b143013f6415be6f8d9d918ac8b00403c775ab0718baee82bc00edc4d94"
+    },
+    {
+      "path": "native/archive-native/430/working.png",
+      "bytes": 201937,
+      "sha256": "3805a5769a0b954ac8ec37f5fa6f8e4d991797f3a30081c60df0bc90914ef71a"
+    },
+    {
+      "path": "native/native-copy-320/calendar-coverage-320.json",
+      "bytes": 1208,
+      "sha256": "9e282a33bce4e7a7f4dc21008060abd74fba37dd9200459254dde3e97ab91ea6"
+    },
+    {
+      "path": "native/native-copy-320/calendar-coverage-320.png",
+      "bytes": 223123,
+      "sha256": "99a4da82926fddc7cf20d4b1caeb1abbeba9b4dc3a19945a432624044cc4058d"
+    },
+    {
+      "path": "native/native-copy-320/calendar-create-320.json",
+      "bytes": 3035,
+      "sha256": "d1a04d4a1624b5b1e3cf0af7d88f4e9b1e6d348bed42c090a66b253b1322364c"
+    },
+    {
+      "path": "native/native-copy-320/calendar-create-320.png",
+      "bytes": 132855,
+      "sha256": "c833337f39d302b030db95b456fc1954ddcf810393a3c14b5315b2b4ec19e1dd"
+    },
+    {
+      "path": "native/native-copy-320/calendar-edit-320.json",
+      "bytes": 3032,
+      "sha256": "ae7b0c5a65f0540b8a7384848ae30943ad071b0225a7ab8105a66be099e7dbbd"
+    },
+    {
+      "path": "native/native-copy-320/calendar-edit-320.png",
+      "bytes": 141056,
+      "sha256": "cf145378d076fe99edbb3bdc4b57a07ae024bdbb280b46bc8b0c67c1aad7316e"
+    },
+    {
+      "path": "native/native-copy-320/calendar-partial-coverage-320.json",
+      "bytes": 1433,
+      "sha256": "7be5c94808798cf06b99921f4add83030044ee5ef3d6dabed19321655191a752"
+    },
+    {
+      "path": "native/native-copy-320/calendar-partial-coverage-320.png",
+      "bytes": 219460,
+      "sha256": "2a9aa64559c7c4636fe33432d0494040f48a76c154014136672deb0436839c88"
+    },
+    {
+      "path": "native/native-copy-320/settings-coverage-320.json",
+      "bytes": 2742,
+      "sha256": "af6beb08d62cf86c2024149d2e4bb0bd38f5c09c82ce3d9d066231250b5a1797"
+    },
+    {
+      "path": "native/native-copy-320/settings-coverage-320.png",
+      "bytes": 164849,
+      "sha256": "66a4eabd2e0eede5415ed2001840cda5c60cfba0586bbcf9dd0e27bc2b7b2a07"
+    },
+    {
+      "path": "native/native-copy-320/settings-workday-320.json",
+      "bytes": 2741,
+      "sha256": "1cc3b4224d6646811e2354c74b61f802ce0e8f7df4d9f347baf9434e1e097378"
+    },
+    {
+      "path": "native/native-copy-320/settings-workday-320.png",
+      "bytes": 164849,
+      "sha256": "66a4eabd2e0eede5415ed2001840cda5c60cfba0586bbcf9dd0e27bc2b7b2a07"
+    },
+    {
+      "path": "native/native-copy-320/today-coverage-320.json",
+      "bytes": 944,
+      "sha256": "041902dfc4a6ef28d63304a9d1053b3cd162b463ad9c6498950ebb4204ec9e05"
+    },
+    {
+      "path": "native/native-copy-320/today-coverage-320.png",
+      "bytes": 232569,
+      "sha256": "8647528d575979cf92d1a15d6ee7c8451b9b58f1d2a129cd55e1dd93f148cb71"
+    },
+    {
+      "path": "native/native-copy-320/today-partial-coverage-320.json",
+      "bytes": 1384,
+      "sha256": "948a866287b3c1210aff099b1188dcdd17dca0d2497d2f479f3d5c057afe18f8"
+    },
+    {
+      "path": "native/native-copy-320/today-partial-coverage-320.png",
+      "bytes": 217263,
+      "sha256": "5801601106318d3d38a98356f20d8e265163b9b9fca73a16f387e631384cfcae"
+    },
+    {
+      "path": "native/native-copy-390/calendar-coverage-390.json",
+      "bytes": 1208,
+      "sha256": "326c1aef47af357953666fa5c961b6fea69422f8ae695746ba8bdd932bf37736"
+    },
+    {
+      "path": "native/native-copy-390/calendar-coverage-390.png",
+      "bytes": 232885,
+      "sha256": "1ec712187dcf56293126fe942bf1c2fdbe42ea33760fb033b28938a1adfc6103"
+    },
+    {
+      "path": "native/native-copy-390/calendar-create-390.json",
+      "bytes": 2937,
+      "sha256": "e5ae9e6e512dde849d11402c3e5bfaf9416b76063729ecf4b8161c799e453434"
+    },
+    {
+      "path": "native/native-copy-390/calendar-create-390.png",
+      "bytes": 190204,
+      "sha256": "a1a550e24921eb50a5c2cfac7bd5f16cdd731a4840208b88fe056e7fefb45376"
+    },
+    {
+      "path": "native/native-copy-390/calendar-edit-390.json",
+      "bytes": 3033,
+      "sha256": "57cda290e37ed7cdbfefd83960b9498e59c9d026d25fefc89ba18667d66a15ca"
+    },
+    {
+      "path": "native/native-copy-390/calendar-edit-390.png",
+      "bytes": 184204,
+      "sha256": "9079db8046938ef12563e989a5a887d7d1a658b28d1fec9bc61e9f47e50440e5"
+    },
+    {
+      "path": "native/native-copy-390/calendar-partial-coverage-390.json",
+      "bytes": 1431,
+      "sha256": "6e2da6ee1e89e9cd7259958cb827cae69ccb20d87f71a51922f33f775869ab99"
+    },
+    {
+      "path": "native/native-copy-390/calendar-partial-coverage-390.png",
+      "bytes": 261144,
+      "sha256": "0e06bb3f24f07ef20972883db56eb6c2781cd76d357fb6b8d5dd17e76a32ce94"
+    },
+    {
+      "path": "native/native-copy-390/settings-coverage-390.json",
+      "bytes": 2742,
+      "sha256": "6ece29a3c2ff7c691cef97eb841b123bf9b490417238225bca5c856c8b46ebc6"
+    },
+    {
+      "path": "native/native-copy-390/settings-coverage-390.png",
+      "bytes": 247724,
+      "sha256": "a26dc6ac2612e65c736fda3a88142ac107a589f3b742a87a50661512f7d2e01b"
+    },
+    {
+      "path": "native/native-copy-390/settings-workday-390.json",
+      "bytes": 2741,
+      "sha256": "3ae6f3207f3dcbf392fb5ac56c1f9c5ab71fe14a68ebe0aa71e0c30de0be0e9c"
+    },
+    {
+      "path": "native/native-copy-390/settings-workday-390.png",
+      "bytes": 247724,
+      "sha256": "a26dc6ac2612e65c736fda3a88142ac107a589f3b742a87a50661512f7d2e01b"
+    },
+    {
+      "path": "native/native-copy-390/today-coverage-390.json",
+      "bytes": 944,
+      "sha256": "73353151a0b6284818267103a7ecb985bad8fd231badaf2d818e4b5603b33506"
+    },
+    {
+      "path": "native/native-copy-390/today-coverage-390.png",
+      "bytes": 274769,
+      "sha256": "d41f7c17a6e3a9aefa62a219c6e6091d46b5b9f78f816c76efa5d4958c955a68"
+    },
+    {
+      "path": "native/native-copy-390/today-partial-coverage-390.json",
+      "bytes": 1383,
+      "sha256": "564e4706a2e05bccdd1a3640b17c540b1080ec459bc1da7a4a6af8f7cfd0b149"
+    },
+    {
+      "path": "native/native-copy-390/today-partial-coverage-390.png",
+      "bytes": 283805,
+      "sha256": "0ecf432f0a7748a786dbb9e87d22536281a9743aa24f3884245169269e468e96"
+    },
+    {
+      "path": "native/native-copy-430/calendar-coverage-430.json",
+      "bytes": 1212,
+      "sha256": "3cd66c2a860626b674679ff4dc2c3e1df083531b4cc8acf6a98e7db213d8d36d"
+    },
+    {
+      "path": "native/native-copy-430/calendar-coverage-430.png",
+      "bytes": 251209,
+      "sha256": "d2da16d9e8581932974c65ebc824092cc4e6f71cfd2ce5cac01691e02b363bf1"
+    },
+    {
+      "path": "native/native-copy-430/calendar-create-430.json",
+      "bytes": 2939,
+      "sha256": "2546c8344a75e3a2fcc317be12f5472a1a28107f560b91c05db4b46ea0864f3a"
+    },
+    {
+      "path": "native/native-copy-430/calendar-create-430.png",
+      "bytes": 233428,
+      "sha256": "3d54dfe48e88be58b6c11e36bd4ebb6b9ac9227347b995ebf0059bf8c822eb09"
+    },
+    {
+      "path": "native/native-copy-430/calendar-edit-430.json",
+      "bytes": 2936,
+      "sha256": "14e8060d1b7da4fa1a0f0f1844de0a431d4414648a6ea092838389611f5dbe16"
+    },
+    {
+      "path": "native/native-copy-430/calendar-edit-430.png",
+      "bytes": 212962,
+      "sha256": "a4c6625851f86769b92300899049a6edb07b7064f9b6c6409d6ab45e7f354f44"
+    },
+    {
+      "path": "native/native-copy-430/calendar-partial-coverage-430.json",
+      "bytes": 1435,
+      "sha256": "165257b4695f22a8c6b887b7acb36608b626cb492cbd93b68a381c6ebced166e"
+    },
+    {
+      "path": "native/native-copy-430/calendar-partial-coverage-430.png",
+      "bytes": 285352,
+      "sha256": "46611b883e761daad16973d16d032c7b0075a87eac18b4a28ce97b8bb29c76f1"
+    },
+    {
+      "path": "native/native-copy-430/settings-coverage-430.json",
+      "bytes": 2750,
+      "sha256": "fec3ae569ff51f316f3fc4b4344c7c3f54a8f79b159106a2035c77113e58de66"
+    },
+    {
+      "path": "native/native-copy-430/settings-coverage-430.png",
+      "bytes": 277718,
+      "sha256": "9233459fe0bbe03290f426f2114c997f1d5e57c055d5e3d6124ca40223e5230f"
+    },
+    {
+      "path": "native/native-copy-430/settings-workday-430.json",
+      "bytes": 2749,
+      "sha256": "cfe44ad3e55311a7a86c232faf8fe7113ea9c77bc0f062a48b1520b4ff4ae492"
+    },
+    {
+      "path": "native/native-copy-430/settings-workday-430.png",
+      "bytes": 277718,
+      "sha256": "9233459fe0bbe03290f426f2114c997f1d5e57c055d5e3d6124ca40223e5230f"
+    },
+    {
+      "path": "native/native-copy-430/today-coverage-430.json",
+      "bytes": 945,
+      "sha256": "4d235ca1fe72a402a8f09db018e4d335229e387a726f6499bcb1bc11674ff580"
+    },
+    {
+      "path": "native/native-copy-430/today-coverage-430.png",
+      "bytes": 299930,
+      "sha256": "5df53de101e07431729b9ba8f865b3d6fe1debb3a56622f58152bbdeb9aa8607"
+    },
+    {
+      "path": "native/native-copy-430/today-partial-coverage-430.json",
+      "bytes": 1384,
+      "sha256": "b0cc7427c31b2066e1e19197b034c5389a0352ada66bbefb7eb26ecd86282cf5"
+    },
+    {
+      "path": "native/native-copy-430/today-partial-coverage-430.png",
+      "bytes": 310109,
+      "sha256": "513029f8f8303430d04c00a5e0da66509d50557fbf1586d7fe227d3c53e06184"
+    },
+    {
+      "path": "native-summary.json",
+      "bytes": 18513,
+      "sha256": "4ee2e5d3431a28555e87fd1fd2d2ec3dfee81ea75e805b88577ad48b41d62683"
+    },
+    {
+      "path": "quality-diagnostic-summary.json",
+      "bytes": 4361,
+      "sha256": "c05b2b88b95067b7c2244654723c1aefcb89cccdb40a10e6be16abd7776fe41d"
+    },
+    {
+      "path": "source-integrity.json",
+      "bytes": 1173,
+      "sha256": "67e091a6aaf8b026fbef77e4243931c06449086655daee5c3bafd2e1196521ad"
+    },
+    {
+      "path": "summary.json",
+      "bytes": 1589,
+      "sha256": "afc67ffed4b4a247a090a8dad3c660497e9d6c99badb62f451a8b1642722e5fb"
+    },
+    {
+      "path": "test-changes.json",
+      "bytes": 1471,
+      "sha256": "ef4bb0f12794fd8eb8ac97be5340255b29e2258bd72be11939e6d2c5eb97c532"
+    },
+    {
+      "path": "test-run-summaries.json",
+      "bytes": 892,
+      "sha256": "89245bf15868cd58a736d792bb849c84865bc75db1a10d63396173c70cb3b474"
+    },
+    {
+      "path": "workday-source-sha256.json",
+      "bytes": 16916,
+      "sha256": "21c3ab49a476c250d7587e3d248fe75b233a42e55203c9d87f0f31b6c401e880"
+    }
+  ]
+}

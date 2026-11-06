@@ -1,0 +1,58 @@
+{
+  "revision": "REPORT-FOOTER-TIPS-20261101-01",
+  "date": "2026-11-01",
+  "overall_acceptance": "PARTIAL",
+  "delivery": "LOCAL_ONLY",
+  "spec_status": "VERIFYING",
+  "spec_path": "specs/active/BUG-037-REPORT-FOOTER-TIPS.md",
+  "checks": {
+    "npm_test": {"status": "PASS", "passed": 349, "failed": 0},
+    "lint_miniapp": {"status": "PASS"},
+    "validate_miniprogram": {"status": "PASS", "pages": 17, "source_bytes": 1234665},
+    "architecture": {"status": "PASS", "policies": 4, "modules": 151},
+    "approved_design_and_current_policy": {"status": "PASS", "design_exports": 54},
+    "diff_whitespace": {"status": "PASS"},
+    "new_spec_evidence_release_links": {"status": "PASS", "files": 5, "missing": 0},
+    "native_production_source_match": {"status": "PASS", "files": 9}
+  },
+  "native": {
+    "developer_tools_version": "2.01.2510290",
+    "base_library": "3.16.2",
+    "baseline": {
+      "status": "PARTIAL",
+      "hosts": ["embedded", "standalone"],
+      "screens": ["320x568", "390x844"],
+      "cases": 20,
+      "json": 20,
+      "png": 20,
+      "notice_left_right_padding_px": 0,
+      "pagination_wrap_reproduced": false,
+      "screen_430_status": "NOT_RUN"
+    },
+    "fixed": {
+      "status": "PARTIAL",
+      "screen": "430x932",
+      "hosts": ["embedded", "standalone"],
+      "geometry_cases": 48,
+      "geometry_failures": 0,
+      "method_state_clearance_cases": 16,
+      "method_state_clearance_status": "PASS",
+      "screens_320_390_status": "NOT_RUN",
+      "screenshots_status": "NOT_RUN",
+      "actual_touch_status": "NOT_RUN",
+      "physical_devices_large_font_screen_reader_status": "NOT_RUN"
+    },
+    "mechanism": "Real wx.createSelectorQuery and existing controller methods in an isolated read-only synthetic API/config copy; no production logic/style substitution or viewport mock",
+    "limitations": [
+      "App.captureScreenshot timed out after changing simulator device",
+      "Computer Use get_app_state for com.tencent.webplusdevtools window 39516 returned only the application/menu tree, with no usable image",
+      "Official cli auto --help does not expose simulator device selection"
+    ]
+  },
+  "not_run": {
+    "backend_database_regression": "No backend, schema, transaction or API changes in this Spec",
+    "official_preview": "No preview operation for this increment",
+    "upload_experience_review_production": "No release operation for this increment; existing 0.1.17 frozen package excludes the two changed files",
+    "git_commit_push": "Not requested"
+  }
+}

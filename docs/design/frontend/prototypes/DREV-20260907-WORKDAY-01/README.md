@@ -1,13 +1,13 @@
 # DREV-20260907-WORKDAY-01
 
-- Status: `AWAITING_APPROVAL`
-- Related Spec: `SPEC-20260907-WORKDAY-01`
+- Status: `HISTORICAL_UNAPPROVED_CANDIDATE`
+- Related Spec: 旧`SPEC-20260907-WORKDAY-01`，现由[SPEC-20261105-WORKDAY-02](../../../../../specs/completed/FEAT-001-CHINA-WORKDAY-SCHEDULES.md)替代；本HTML仅作历史参考，不覆盖当前逐星期不同时间兼容和完整结果态。
 - Related UI: `UI-001`
 - Baseline: `FDB-20260906-03 / FEC-20260906-04`
 - Scope: 活动安排与日程编辑器的中国工作日选择。
-- Evidence mode: FEAT-001 scoped Figma Starter waiver 下的本地可审阅原型；公开生产发布前补齐 Figma 节点。
+- Evidence mode: repository-native；新Spec02实施前须补齐对应DREV02可编辑源、三视口状态导出与SHA manifest并明确批准，Figma不是前置条件。
 
-批准对象是：
+以下保留旧候选的交互方向，本候选未获批准；新修订的审批范围以Spec02及待生成DREV02为准：
 
 1. 活动安排使用“指定星期 / 工作日 / 时间不固定”；
 2. 日程使用“不重复 / 每周 / 工作日”；

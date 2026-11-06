@@ -1,12 +1,13 @@
 # UI-009 — 家庭与成员
 
-- Status: `CURRENT_LOCAL / 390_NATIVE_CAPTURED / MATRIX_PENDING`
+- Status: `DELIVERED_CLIENT_0.1.16 / DEVELOPMENT_DONE / 390_NATIVE_CAPTURED / MATRIX_PENDING`
 - Related Feature: `FEAT-002`
 - Related Specs: `SPEC-20260831-09`; `BUG-SPEC-20260913-19`
 - Baseline: `FDB-20260906-02`
 - Engineering contract: `FEC-20260906-04`
 - Design revisions: `DREV-20260906-PKDS-01`（屏 G4）；`DREV-20260913-FAMILY-INVITE-CODE-01`（邀请就绪态）
 - Last reviewed artifact date: 2026-09-13
+- Lifecycle update: 2026-11-05；多家庭 Spec 及附带退出提案已取消，已交付页面与原设计/验收状态保持各自范围。
 - Interactive artifacts: `docs/design/frontend/prototypes/DREV-20260831-07/index.html`;
   `docs/design/frontend/prototypes/DREV-20260913-FAMILY-INVITE-CODE-01/family-invite-flow.html`
 - Current change snapshot manifest: `docs/design/frontend/snapshots/UI-009/DREV-20260913-FAMILY-INVITE-CODE-01/APPROVAL.md`
@@ -14,7 +15,7 @@
 - Design evidence governance: `GOV-SPEC-LOCAL-DESIGN-EVIDENCE-20260913-01`
 
 > BUG-015 revision 19 与邀请就绪态 DREV 已获产品负责人批准并在本地实现；三视口仓库快照已通过
-> manifest 校验。原生三视口、双账号与真机证据仍待补齐，未部署。
+> manifest校验。对应实现已随037/0.1.16交付；完整原生三视口、双账号与真机证据仍待补齐。
 
 ## Information architecture
 
@@ -51,19 +52,19 @@
 
 本地视觉增量revision `UI-VISUAL-20261021-HERO-ARC-01`：家庭邀请卡已随共享样式删除右下角细弧线，
 其余邀请、成员和权限合同保留。批准来源为
-[Spec01](../../../../specs/active/BUG-030-HERO-BACKGROUND-ARC.md) /
+[Spec01](../../../../specs/completed/BUG-030-HERO-BACKGROUND-ARC.md) /
 [DREV-20261021-HERO-ARC-REMOVAL-01](../prototypes/DREV-20261021-HERO-ARC-REMOVAL-01/FRONTEND-SPEC.md)，
-验收范围见[质量证据](../../../quality/evidence/HERO-ARC-REMOVAL-20261021.md)；仅本地实现，未上传/发布。
+验收范围见[质量证据](../../../quality/evidence/HERO-ARC-REMOVAL-20261021.md)；该样式已随0.1.16开发上传，完整原生/设备验收待补。
 
 沿用现有暖纸色、低饱和青绿、系统中文字体、克制分隔线和低阴影；不新增品牌色、字体或
 图像依赖。评审矩阵为 320×568、390×844、430×932。正文不小于 14px，主要触控目标不小于
 44px，权限不只依靠颜色表达。
 
-## Proposed FEAT-002 extensions — not implemented
+## Extension scope and cancellation
 
-`SPEC-20260911-MULTI-FAMILY-06` 只保留非管理员退出交互。成员微信头像/昵称已由产品负责人于
-2026-09-11 确认为非关键 feature，降为低优先级独立后续任务；它不改变上文 CURRENT_LOCAL 事实，
-未来必须另立 Spec 和 Design Revision 并获得批准后才能实现。
+用户于2026-11-05明确取消[多家庭 Spec](../../../../specs/rejected/FEAT-002-MULTI-FAMILY-CHILD-TENANT-ISOLATION.md)，其中附带的非管理员退出与多家庭回落交互一并取消，未实施，不再等待本修订批准。本人详情继续不提供退出入口；当前家庭成员页面与服务端权限保持既有合同。
+
+成员微信头像/昵称已由产品负责人于2026-09-11确认为非关键 feature，仍为独立低优先级后续记录；未来必须另立 Spec 和 Design Revision 并获得批准后才能实现。
 
 ### Deferred low-priority backlog — member row with optional identity
 
@@ -81,25 +82,9 @@
 - 不自动读取微信资料，不从 OpenID/metaid 推导；资料不阻断家庭创建、加入、审批或使用。
 - 当前不新增数据库/API/对象存储字段，不安排实现或验收；成员行继续显示关系称谓与首字头像。
 
-### Leave-family danger zone
+### Cancelled leave-family proposal
 
-viewer/editor 打开本人详情时，在表单之后显示：
-
-```text
-退出家庭
-退出后，你将无法查看或记录「小雨的家」的内容。
-已有的学习记录会保留；以后需要重新申请才能加入。
-
-[退出这个家庭]
-```
-
-- 点击后再次确认具体家庭名；确认按钮为“退出家庭”，pending 时 sheet 不可关闭且不可重复提交。
-- 成功后清当前家庭 cache/preference，刷新 `/me`：有其他家庭则进入已重新验证的选择，无家庭则 onboarding。
-- manager 不显示退出按钮，显示“管理员不能直接退出，请先完成管理权交接并由另一位管理员调整你的权限”。
-- 退出不是数据删除；学习历史不变，历史归属继续使用 member ID + 关系称谓。
-
-当前范围需补齐 320×568、390×844、430×932 的本人非管理员、本人管理员、退出确认、pending/error/success
-及多家庭回落状态；头像/昵称相关矩阵移入未来独立任务。
+非管理员退出确认、pending/error/success、管理员交接提示和多家庭回落矩阵随关联 Spec 取消，历史方案保留在归档 Spec 与 UI-014。它们不再构成本页待实施范围或发布门禁，已有成员管理/角色的验收缺项不受此取消影响。
 
 ## Approval status
 
@@ -109,6 +94,8 @@ viewer/editor 打开本人详情时，在表单之后显示：
 320/430、成员详情真实点击和双账号验证仍是发布门禁。
 
 ## Change references
+
+- 2026-11-05 — 产品负责人取消`SPEC-20260911-MULTI-FAMILY-06`；同步退出交互取消，当前页面未修改，原已批准设计资产不变。
 
 - 2026-09-13 — `BUG-SPEC-20260913-19 / DREV-20260913-FAMILY-INVITE-CODE-01`：邀请就绪卡新增
   六位家庭邀请码和复制入口，同时保留微信分享；候选 320×568、390×844、430×932 快照及 SHA-256

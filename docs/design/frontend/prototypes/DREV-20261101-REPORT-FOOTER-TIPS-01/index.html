@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>知芽 · 编辑计划页脚与提示修改稿</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #eeeae1; color: #22261f; font: 14px/1.5 -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif; }
+    .review-tools { max-width: 900px; margin: 24px auto; padding: 0 16px; }
+    .review-tools h1 { margin: 0 0 8px; font-size: 22px; }
+    .review-tools p { margin: 8px 0 16px; color: #464e43; }
+    .controls { display: flex; flex-wrap: wrap; gap: 12px; }
+    .controls label { display: flex; align-items: center; gap: 8px; }
+    select { min-height: 44px; max-width: 100%; padding: 8px; font: inherit; border: 1px solid #ddd6c4; border-radius: 8px; background: #fffdf8; }
+    .screen {
+      --pk-canvas: #faf7f0; --pk-surface: #fffdf8; --pk-surface-sunken: #f3efe4;
+      --pk-primary: #1f5b45; --pk-primary-tint: #e4ede6; --pk-primary-hairline: #c3d8ca;
+      --pk-ink: #22261f; --pk-ink-2: #464e43; --pk-ink-3: #79826f;
+      --pk-line: #ebe5d7; --pk-attention-bg: #f8efdc; --pk-attention-line: #e9d5ae;
+      --rpx: calc(var(--device-width) / 750);
+      --pk-r-md: calc(24 * var(--rpx)); --pk-r-lg: calc(32 * var(--rpx));
+      width: var(--device-width); height: var(--device-height);
+      margin: 20px auto 36px; background: var(--pk-canvas);
+      display: flex; flex-direction: column; border: 1px solid #ddd6c4;
+      border-radius: 24px; color: var(--pk-ink);
+    }
+    .screen button { font: inherit; cursor: pointer; }
+    .screen button:disabled { cursor: default; }
+    .screen button:focus-visible { outline: 2px solid var(--pk-primary); outline-offset: 2px; }
+    .brand { flex: none; display: flex; justify-content: center; align-items: center; gap: 8px; min-height: 58px; font-size: 18px; font-weight: 600; }
+    .brand svg { width: 24px; height: 24px; stroke: var(--pk-primary); }
+    .content { flex: 1; min-height: 0; overflow-y: auto; padding: 8px 18px 24px; }
+    .panel { padding: 0 16px; border: 1px solid var(--pk-line); border-radius: calc(40 * var(--rpx)); background: linear-gradient(120deg, #fffdf8, #f2f3e8); }
+    .panel-head { display: flex; align-items: center; gap: 12px; min-height: 86px; padding: 16px 0; border-bottom: 1px solid var(--pk-line); }
+    .panel-head svg { flex: none; width: 24px; height: 24px; stroke: var(--pk-primary); }
+    .panel-heading { flex: 1; min-width: 0; }
+    h2 { margin: 0; font-family: "Songti SC", serif; font-size: 20px; }
+    .sub { margin: 4px 0 0; color: var(--pk-ink-3); font-size: 12px; }
+    .disclosure { flex: none; font-size: 12px; color: var(--pk-primary); }
+    .view-tabs { display: flex; gap: 4px; margin: 12px 0; padding: 3px; background: var(--pk-surface-sunken); border-radius: 8px; }
+    .view-tabs button { flex: 1; min-width: 0; min-height: 44px; border: 0; border-radius: 5px; background: transparent; font-size: 14px; }
+    .view-tabs button.on { background: var(--pk-surface); color: var(--pk-primary); font-weight: 600; }
+    .filter { display: flex; justify-content: space-between; align-items: center; min-height: 48px; width: 100%; margin: 0 0 12px; padding: 8px 12px; background: var(--pk-surface); border: 1px solid var(--pk-line); border-radius: var(--pk-r-md); color: var(--pk-ink); }
+    .filter .muted { color: var(--pk-ink-3); margin-right: 16px; }
+    .chevron { width: 9px; height: 9px; border-right: 2px solid var(--pk-primary); border-bottom: 2px solid var(--pk-primary); transform: rotate(45deg); margin: -4px 4px 0; }
+    .inventory-feedback { display: flex; align-items: center; width: 100%; min-height: 44px; margin: 12px 0; padding: 12px 16px; border: 1px solid var(--pk-attention-line); border-radius: var(--pk-r-lg); background: var(--pk-attention-bg); color: var(--pk-primary); }
+    .inventory-feedback-text { display: block; flex: 1; min-width: 0; font-size: 14px; line-height: 1.5; text-align: left; overflow-wrap: anywhere; }
+    .result-head { display: flex; align-items: baseline; justify-content: space-between; margin: 12px 0 6px; font-weight: 600; }
+    .result-head .sort { color: var(--pk-ink-2); font-size: 12px; font-weight: 400; }
+    .item { position: relative; padding: 14px 0; border-bottom: 1px solid var(--pk-line); }
+    .item-top { display: flex; align-items: flex-start; gap: 8px; }
+    .item-main { flex: 1; min-width: 0; }
+    .item-title { font-size: 14px; line-height: 1.55; overflow-wrap: anywhere; }
+    .item-meta, .item-date, .item-state { margin-top: 3px; font-size: 12px; line-height: 1.55; }
+    .item-meta { color: var(--pk-ink-2); }
+    .item-date { color: var(--pk-ink-3); }
+    .item-state { color: var(--pk-primary); }
+    .adjust { flex: none; min-width: 44px; width: 44px; min-height: 44px; padding: 0; border: 0; background: none; font-size: 12px !important; color: var(--pk-primary); }
+    .inventory-pagination { display: flex; align-items: stretch; width: 100%; margin: 16px 0; }
+    .inventory-page-button { flex: 1 1 0; width: 0; min-width: 0; min-height: 44px; margin: 0; padding: 10px 4px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--pk-primary-hairline); border-radius: var(--pk-r-md); background: var(--pk-primary-tint); color: var(--pk-primary); font-size: 14px !important; line-height: 24px; box-shadow: none; overflow-wrap: anywhere; }
+    .inventory-page-button:disabled { background: transparent; color: var(--pk-ink-3); border-color: var(--pk-line); }
+    .inventory-page-button:active:not(:disabled) { background: #d2e1d6; }
+    .inventory-page-label { flex: 0 0 64px; min-width: 0; display: flex; align-items: center; justify-content: center; margin: 0 8px; text-align: center; font-size: 14px; line-height: 20px; color: var(--pk-ink-2); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+    .disclosure-footer { width: 100%; display: flex; align-items: center; justify-content: center; min-height: 44px; margin: 0; padding: 8px 0; border: 0; background: none; color: var(--pk-primary); font-size: 12px !important; }
+    .activity-title { margin: 24px 0 12px; font: 600 18px/1.5 "Songti SC", serif; }
+    .activity-empty { padding: 18px 14px; border: 1px solid var(--pk-line); border-radius: calc(40 * var(--rpx)); background: var(--pk-surface); }
+    .activity-empty p { margin: 0; }
+    .activity-empty .sub { margin-top: 6px; }
+    .tabbar { flex: none; display: flex; align-items: flex-start; min-height: 82px; padding: 10px 0 22px; border-top: 1px solid var(--pk-line); background: var(--pk-surface); border-radius: 0 0 24px 24px; }
+    .nav-item { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; color: var(--pk-ink-3); font-size: 12px; }
+    .nav-item svg { width: 24px; height: 24px; margin-bottom: 4px; stroke: currentColor; }
+    .nav-item.selected { color: var(--pk-primary); font-weight: 600; }
+    .nav-item.record svg { width: 42px; height: 42px; margin-top: -22px; padding: 9px; border-radius: 50%; background: var(--pk-primary); color: var(--pk-surface); box-shadow: 0 0 0 4px var(--pk-surface); }
+    .picker-menu, .action-menu { padding: 4px; margin: -4px 0 12px; border: 1px solid var(--pk-line); border-radius: var(--pk-r-md); background: var(--pk-surface); }
+    .menu-row { display: flex; align-items: center; min-height: 44px; padding: 8px; }
+    .menu-row + .menu-row { border-top: 1px solid var(--pk-line); }
+    .subject-pager { margin: 4px 0; }
+    .subject-pager .inventory-page-button + .inventory-page-button { margin-left: 8px; }
+    .action-menu { width: 220px; max-width: 100%; margin-left: auto; }
+    .danger { color: #a85742; }
+    .standalone .panel { padding: 0; border: 0; border-radius: 0; background: none; }
+    .standalone .panel-head { display: none; }
+    .standalone .tabbar, .standalone .disclosure-footer, .standalone .activity-title, .standalone .activity-empty { display: none; }
+    .standalone .content { padding-bottom: 32px; }
+    .standalone .brand { justify-content: flex-start; padding: 0 18px; }
+    .standalone .item-title { font-size: 15px; font-weight: 600; }
+    .standalone .item-meta, .standalone .item-date, .standalone .item-state { font-size: 14px; }
+    [hidden] { display: none !important; }
+    body.export { background: var(--pk-canvas); }
+    body.export .review-tools { display: none; }
+    body.export .screen { margin: 0; border: 0; border-radius: 0; }
+    body.export .tabbar { border-radius: 0; }
+    @media (max-width: 480px) {
+      body:not(.export) .screen { max-width: 100%; }
+      .review-tools { margin-top: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="review-tools">
+    <h1>编辑计划：页脚与提示修改稿</h1>
+    <p>Spec01 / DREV01 · 待批准。演示内容为合成数据，原生实现与验收尚未进行。</p>
+    <div class="controls">
+      <label>视口<select id="viewport"><option value="320">320 × 568</option><option value="390" selected>390 × 844</option><option value="430">430 × 932</option></select></label>
+      <label>入口<select id="host"><option value="embedded">报表内嵌</option><option value="standalone">独立编辑计划</option></select></label>
+      <label>状态<select id="state"><option value="deleted">删除成功</option><option value="first">首页</option><option value="middle">中间页</option><option value="last">末页</option><option value="loading">正在更新</option><option value="long-notice">长提示</option><option value="long-page">长页码</option><option value="subject-menu">科目目录分页</option><option value="action-menu">展开操作</option></select></label>
+    </div>
+  </header>
+  <div class="screen" style="--device-width:390px;--device-height:844px">
+    <div class="brand">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 21V11M12 12C5 12 3 8 3 4c6 0 9 3 9 8Zm0 0c7 0 9-4 9-8-6 0-9 3-9 8Z"/></svg><span id="brand-title">知芽</span>
+    </div>
+    <main class="content">
+      <section class="panel">
+        <div class="panel-head">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+          <div class="panel-heading"><h2>编辑计划</h2><p class="sub">查看复习安排，按条目调整</p></div><span class="disclosure">收起</span>
+        </div>
+        <div class="view-tabs"><button type="button">按时间</button><button type="button" class="on">按科目</button><button type="button">按次数</button></div>
+        <button type="button" class="filter"><span><span class="muted">科目</span>英语 · 42项</span><span class="chevron"></span></button>
+        <div class="picker-menu" hidden>
+          <div class="menu-row">语文 · 18项</div><div class="menu-row">数学 · 24项</div><div class="menu-row">英语 · 42项</div>
+          <div class="inventory-pagination subject-pager"><button type="button" class="inventory-page-button" disabled>科目首页</button><button type="button" class="inventory-page-button">下一页科目</button></div>
+        </div>
+        <div class="inventory-feedback" role="status" aria-live="polite"><span class="inventory-feedback-text">条目和相关复习历史、计划已删除</span></div>
+        <div class="result-head"><span>42 个知识条目</span><span class="sort">按复习次数排序</span></div>
+        <div class="item">
+          <div class="item-top"><div class="item-main"><div class="item-title">根据运动图片写出对应英文单词</div><div class="item-meta">已复习0次 · 尚未复习</div><div class="item-date">建议10月25日</div><div class="item-state">等待安排</div></div><button type="button" class="adjust">调整</button></div>
+          <div class="action-menu" hidden><div class="menu-row">加入明天复习</div><div class="menu-row">改到后天复习</div><div class="menu-row danger">删除条目</div></div>
+        </div>
+        <div class="item"><div class="item-top"><div class="item-main"><div class="item-title">识听并指读重复 catch、hit、kick、jump、run、throw 六个动作类英语单词</div><div class="item-meta">已复习1次 · 上次10月31日</div><div class="item-date">建议11月3日</div><div class="item-state">今日已完成</div></div><button type="button" class="adjust">调整</button></div></div>
+        <div class="inventory-pagination item-pager">
+          <button type="button" class="inventory-page-button first-page" disabled>回到首页</button>
+          <span class="inventory-page-label">第 1 页</span>
+          <button type="button" class="inventory-page-button next-page">下一页</button>
+        </div>
+        <button type="button" class="disclosure-footer">收起编辑计划</button>
+      </section>
+      <h3 class="activity-title">课外活动投入</h3><div class="activity-empty"><p>这个区间还没有活动练习记录。</p><p class="sub">课外活动只做记录，不进入复习曲线。</p></div>
+    </main>
+    <footer class="tabbar" aria-label="现有五个底部标签，非本次修改范围">
+      <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 21V11M12 12C5 12 3 8 3 4c6 0 9 3 9 8Zm0 0c7 0 9-4 9-8-6 0-9 3-9 8Z"/></svg>今日</div>
+      <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M8 2v6M16 2v6M4 11h16"/></svg>日程</div>
+      <div class="nav-item record"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M8 5l2-3h4l2 3h4v15H4V5Z"/><circle cx="12" cy="12" r="4"/></svg>记录</div>
+      <div class="nav-item selected"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M4 21h16M6 17V9M12 17V4M18 17v-6"/></svg>报表</div>
+      <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M3 7h18M3 17h18"/><circle cx="15" cy="7" r="3" fill="#fffdf8"/><circle cx="8" cy="17" r="3" fill="#fffdf8"/></svg>设置</div>
+    </footer>
+  </div>
+  <script>
+    const params = new URLSearchParams(location.search);
+    const sizes = { 320: 568, 390: 844, 430: 932 };
+    const screen = document.querySelector(".screen");
+    const stateSelect = document.getElementById("state");
+    const hostSelect = document.getElementById("host");
+    const viewportSelect = document.getElementById("viewport");
+    stateSelect.value = params.get("state") || "deleted";
+    hostSelect.value = params.get("host") || "embedded";
+    viewportSelect.value = params.get("width") || "390";
+    if (params.get("export") === "1") document.body.classList.add("export");
+    function render() {
+      const state = stateSelect.value;
+      const width = Number(viewportSelect.value);
+      const standalone = hostSelect.value === "standalone";
+      screen.style.setProperty("--device-width", width + "px");
+      screen.style.setProperty("--device-height", sizes[width] + "px");
+      screen.classList.toggle("standalone", standalone);
+      document.getElementById("brand-title").textContent = standalone ? "编辑计划" : "知芽";
+      document.querySelector(".brand svg").style.display = standalone ? "none" : "";
+      const notice = document.querySelector(".inventory-feedback");
+      notice.hidden = !["deleted", "long-notice"].includes(state);
+      document.querySelector(".inventory-feedback-text").textContent = state === "long-notice"
+        ? "已安排到 2026-11-03，复习次数不变；当天超出日常预算 10 分钟"
+        : "条目和相关复习历史、计划已删除";
+      const number = state === "long-page" ? 123456789 : ["middle", "last", "loading"].includes(state) ? 2 : 1;
+      document.querySelector(".inventory-page-label").textContent = "第 " + number + " 页";
+      document.querySelector(".first-page").disabled = number === 1 || state === "loading";
+      document.querySelector(".next-page").disabled = state === "last" || state === "loading";
+      document.querySelector(".sort").textContent = state === "loading" ? "正在更新…" : "按复习次数排序";
+      document.querySelector(".picker-menu").hidden = state !== "subject-menu";
+      document.querySelector(".action-menu").hidden = state !== "action-menu";
+      document.querySelectorAll(".adjust").forEach(button => { button.disabled = state === "loading"; });
+      document.querySelectorAll(".adjust").forEach(button => { button.textContent = standalone ? "更多" : "调整"; });
+      const href = new URL(location.href);
+      href.searchParams.set("state", state); href.searchParams.set("host", hostSelect.value); href.searchParams.set("width", width);
+      history.replaceState(null, "", href);
+      window.designReady = true;
+    }
+    [stateSelect, hostSelect, viewportSelect].forEach(control => control.addEventListener("change", render));
+    render();
+  </script>
+</body>
+</html>

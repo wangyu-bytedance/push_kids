@@ -1,0 +1,348 @@
+--- revision11/apps/api/src/push_kids/agent_processing/pipeline.py
++++ candidate12/apps/api/src/push_kids/agent_processing/pipeline.py
+@@ -481,9 +481,10 @@
+             target_materials = targets & source_aliases
+ 
+             def entry_materials(entry: dict[str, Any]) -> set[str]:
++                if "evidence_keys" in entry:
++                    return {previous_evidence[key]["material"] for key in entry["evidence_keys"]}
++                # Omissions have no audited directory; their candidate lineage remains needed.
+                 return {
+-                    previous_evidence[key]["material"] for key in entry.get("evidence_keys", [])
+-                } | {
+                     material
+                     for member in entry["members"]
+                     for material in candidates[member].materials
+--- revision11/apps/api/src/push_kids/agent_processing/stage_contracts.py
++++ candidate12/apps/api/src/push_kids/agent_processing/stage_contracts.py
+@@ -8,7 +8,7 @@
+ 
+ from push_kids.agent_processing.contracts import DisplayKind, ReviewMethod
+ 
+-PIPELINE_REVISION = "staged-20261101-11"
++PIPELINE_REVISION = "staged-20261101-12"
+ CONSOLIDATED_MAX_BYTES = 64 * 1024
+ 
+ 
+@@ -195,7 +195,7 @@
+ """.strip()
+ 
+ OUTPUT_RULES = """严格遵循当前阶段Schema、字段长度、枚举和数量限制。
+-name最多120字符、summary最多60字符、提取evidence最多200字符、正式evidence.detail最多160字符、
++name最多120字符、summary最多60字符（建议≤40），提取evidence最多200字符、正式evidence.detail最多160字符、
+ excerpt最多1200字符。正式evidence最多40条，source_checks最多10条；完整合并JSON的UTF-8最多64KiB。
+ 名称压缩为完整学习目标与必要范围，不把证据原文拼入名称；同一规则例题写入证据。
+ 字词过多时按实际短复习的完整对象组分组，保持所有对象被覆盖，不截断字词或条件来凑长度。
+@@ -259,7 +259,9 @@
+ 建立evidence目录：唯一key为e0..e39、真实material为本次t/m编号、detail准确且≤160字符。
+ 每item必须引用1–20个存在且唯一的evidence_keys，confidence针对最终真实对象。
+ 原图新发现对象允许members=[]，必须有直接正式证据；不能因候选为空跳过可读原来源。
+-source_checks对每个实际素材恰好一条：covered引用所有该素材支持的真实i编号；
++source_checks对每个实际素材恰好一条：items为JSON数组，首项固定i0、第二项i1，依此类推；
++covered的item_aliases只引用这些从0开始的i编号，不能用候选c编号、从i1起算或用previous_items旧顺序。
++核对每个引用对应最终items数组的准确位置；引用所有该素材直接支持的项。
+ non_learning/indeterminate的item_aliases=[]并写具体basis，不能用账本掩盖原图对象遗漏。
+ omissions理由仅no_learning_evidence、missing_media_dependency、indeterminate_object；basis给出有界事实依据。
+ 没有可省略项时omissions=[]。summary是60字符以内的肯定事实句。
+@@ -294,6 +296,10 @@
+ should_merge须列至少两个有同一具体检查目标的i编号；不能对单item、q、素材报合并问题。
+ over_merged先指出确需独立检查的具体成员目标；同一完整成员集合不同时要求拆分与合并。
+ 正式evidence是可定位的原始材料概括，不要求逐字抄录，但须核对原图字符、数值、规则、教学角色。
++先逐字对照当前evidence实际写了什么，再报其错误；不能把不存在的描述归入证据，或因同义部件称呼判失败。
++对象集合按可辨字符去重；同一个字母多次出现不产生新对象，不因重复贴纸要求名称重复列字母。
++逐个依据可辨笔画核对旋转字符；不能靠“应该齐全”补齐未辨认字母，也不能凭数量倒推缺字。
++声母对应音节、配套词语与短句若同用该声母拼读，可作为一个具体拼读检查；术语不同不证明独立技能。
+ 逐区域检查枚举对象全集、同作品去重、读写范围、错误科目/术语和非教学备注；
+ summary不能偷换技能范围、写数量、排除过程或内部alias。不确定性须明确家长能定位的对象。
+ 不得仅因缺逐字引文就判unsupported_by_evidence，也不能忽略候选明示的对象或范围。
+--- revision11/apps/api/src/push_kids/agent_processing/stage_provider.py
++++ candidate12/apps/api/src/push_kids/agent_processing/stage_provider.py
+@@ -10,7 +10,13 @@
+ from time import monotonic
+ from typing import Any
+ 
+-from openai import APIConnectionError, APIStatusError, APITimeoutError, AsyncOpenAI
++from openai import (
++    APIConnectionError,
++    APIStatusError,
++    APITimeoutError,
++    AsyncOpenAI,
++    DefaultAsyncHttpxClient,
++)
+ from pydantic import BaseModel, ValidationError
+ 
+ from push_kids.agent_processing.contracts import AnalysisCapabilityError
+@@ -93,11 +99,20 @@
+                             ]
+                         )
+                         del raw
++                    request_bytes = 0
++
++                    async def count_request(request: Any) -> None:
++                        nonlocal request_bytes
++                        request_bytes = len(request.content)
++
+                     async with AsyncOpenAI(
+                         base_url=self.settings.ark_base_url,
+                         api_key=key.get_secret_value(),
+                         max_retries=0,
+                         timeout=max(0.001, execution_deadline - monotonic()),
++                        http_client=DefaultAsyncHttpxClient(
++                            event_hooks={"request": [count_request]}
++                        ),
+                     ) as client:
+                         request: Any = dict(
+                             model=self.model,
+@@ -122,10 +137,6 @@
+                                     "schema": schema.model_json_schema(),
+                                 }
+                             },
+-                        )
+-                        request_bytes = sum(
+-                            len(part.encode("utf-8"))
+-                            for part in json.JSONEncoder(ensure_ascii=False).iterencode(request)
+                         )
+                         response = await client.responses.create(**request)
+                 usage = response.usage
+--- revision11/apps/api/src/push_kids/agent_processing/prompt.py
++++ candidate12/apps/api/src/push_kids/agent_processing/prompt.py
+@@ -7,7 +7,7 @@
+     OUTPUT_RULES,
+ )
+ 
+-PROMPT_REVISION = "child-aware-history-agent-20261101-14"
++PROMPT_REVISION = "child-aware-history-agent-20261101-15"
+ 
+ _TRANSPORT_RULES = """
+ 你正在根据孩子的学习档案和本次材料，生成一份由家长编辑确认的学习/复习提案。
+--- revision11/tests/unit/test_staged_analysis.py
++++ candidate12/tests/unit/test_staged_analysis.py
+@@ -71,7 +71,7 @@
+         REVIEW_INSTRUCTIONS,
+     )
+ 
+-    assert PIPELINE_REVISION == "staged-20261101-11"
++    assert PIPELINE_REVISION == "staged-20261101-12"
+     for instructions in (
+         EXTRACT_INSTRUCTIONS,
+         MERGE_INSTRUCTIONS,
+--- revision11/tests/unit/test_staged_proposal_recovery.py
++++ candidate12/tests/unit/test_staged_proposal_recovery.py
+@@ -338,6 +338,89 @@
+         assert len(run(provider, data).knowledge_points) == 2
+ 
+ 
++@pytest.mark.parametrize("drift", [False, True])
++def test_material_correction_uses_audited_source_after_candidate_attribution_changes(
++    tmp_path, drift
++):
++    from push_kids.agent_processing.stage_contracts import ConsolidatedResult
++
++    class CorrectedSource(StageFake):
++        async def generate_stage(self, stage, instructions, payload, *args):
++            if stage == "extract":
++                value = await super().generate_stage(stage, instructions, payload, *args)
++                if payload["materials"] == ["m2"]:
++                    value.items = []
++                return value
++            if stage == "merge":
++                corrected = "review_issues" in payload
++                return ConsolidatedResult.model_validate(
++                    {
++                        "summary": "练习十以内加法",
++                        "uncertainties": [],
++                        "omissions": [],
++                        "items": [
++                            {
++                                "members": ["c1"],
++                                "subject": "数学",
++                                "name": "十以内减法" if corrected and drift else "十以内加法",
++                                "category": "计算",
++                                "display_kind": "arithmetic",
++                                "review_method": "变式练习",
++                                "estimated_minutes": 2,
++                                "evidence_keys": ["e0"],
++                                "confidence": "high",
++                            }
++                        ],
++                        "evidence": [{"key": "e0", "material": "m2", "detail": "第二页的加法教学"}],
++                        "source_checks": [
++                            {
++                                "material": "m1",
++                                "disposition": "non_learning" if corrected else "indeterminate",
++                                "item_aliases": [],
++                                "basis": "页脚备注" if corrected else "待核对教学角色",
++                            },
++                            {
++                                "material": "m2",
++                                "disposition": "covered",
++                                "item_aliases": ["i0"],
++                                "basis": "第二页加法教学",
++                            },
++                        ],
++                    }
++                )
++            if stage == "review":
++                self.review_calls += 1
++                return QualityReviewResult(
++                    passed=self.review_calls > 1,
++                    issues=[]
++                    if self.review_calls > 1
++                    else [
++                        QualityIssue(
++                            code="unsupported_by_evidence",
++                            items=["m1"],
++                            basis="第一页仅为备注",
++                        )
++                    ],
++                )
++            return await super().generate_stage(stage, instructions, payload, *args)
++
++    images = [tmp_path / "one.png", tmp_path / "two.png"]
++    for index, path in enumerate(images):
++        path.write_bytes(f"source-{index}".encode())
++    provider, queried = CorrectedSource(), []
++    data = AnalysisInput(image_paths=images, existing_subjects=["数学"])
++    if drift:
++        with pytest.raises(StageFailure) as caught:
++            run(provider, data, lambda request: queried.append(request) or [])
++        assert caught.value.reason == "validation" and caught.value.stage == "merge"
++        assert provider.review_calls == 1 and queried == []
++    else:
++        result = run(provider, data)
++        assert [point.name for point in result.knowledge_points] == ["十以内加法"]
++        assert result.knowledge_points[0].direct_evidence[0].image_index == 2
++        assert provider.review_calls == 2
++
++
+ def test_final_review_has_previous_alias_members_and_issue_basis():
+     provider = TwoTargets()
+     result = run(provider)
+--- revision11/tests/unit/test_stage_provider.py
++++ candidate12/tests/unit/test_stage_provider.py
+@@ -23,12 +23,14 @@
+             assert kwargs["max_retries"] == 0
+             state.timeouts.append(kwargs["timeout"])
+             self.responses = self
++            self.http_client = kwargs.get("http_client")
+ 
+         async def __aenter__(self):
+             return self
+ 
+         async def __aexit__(self, *args):
+-            pass
++            if self.http_client:
++                await self.http_client.aclose()
+ 
+         async def create(self, **kwargs):
+             state.requests.append(kwargs)
+@@ -313,7 +315,7 @@
+ 
+ 
+ def test_source_request_records_byte_counts_without_content(monkeypatch, tmp_path):
+-    state = install_client(monkeypatch)
++    install_client(monkeypatch)
+     path = tmp_path / "page.png"
+     path.write_bytes(b"synthetic-image")
+ 
+@@ -340,7 +342,86 @@
+     completed = dict(trace.events)["analysis_stage_completed"]
+     assert completed["payload_bytes"] == len(json.dumps(payload, ensure_ascii=False).encode())
+     assert completed["image_bytes"] == len(b"synthetic-image")
+-    assert completed["request_bytes"] >= len(
+-        json.dumps(state.requests[0], ensure_ascii=False).encode()
+-    )
+     assert "private-child" not in str(trace.events)
++
++
++def test_request_bytes_match_real_sdk_transport_body(monkeypatch, tmp_path):
++    from openai import DefaultAsyncHttpxClient
++
++    sent = []
++
++    def transport(request):
++        sent.append(len(request.content))
++        return httpx.Response(
++            200,
++            json={
++                "id": "synthetic-response",
++                "object": "response",
++                "created_at": 0,
++                "status": "completed",
++                "model": "synthetic",
++                "output": [
++                    {
++                        "type": "message",
++                        "id": "synthetic-message",
++                        "status": "completed",
++                        "role": "assistant",
++                        "content": [
++                            {
++                                "type": "output_text",
++                                "annotations": [],
++                                "text": json.dumps(
++                                    {
++                                        "decisions": [
++                                            {"candidate": "i0", "match": None, "uncertain": False}
++                                        ]
++                                    }
++                                ),
++                            }
++                        ],
++                    }
++                ],
++            },
++        )
++
++    monkeypatch.setattr(
++        "push_kids.agent_processing.stage_provider.DefaultAsyncHttpxClient",
++        lambda **kwargs: DefaultAsyncHttpxClient(
++            transport=httpx.MockTransport(transport), **kwargs
++        ),
++        raising=False,
++    )
++    # The pre-repair adapter does not construct a client itself.
++    monkeypatch.setattr(
++        "openai._base_client.AsyncHttpxClientWrapper",
++        lambda **kwargs: DefaultAsyncHttpxClient(
++            transport=httpx.MockTransport(transport), **kwargs
++        ),
++    )
++    path = tmp_path / "synthetic.png"
++    path.write_bytes(b"synthetic-image")
++
++    class Trace:
++        events = []
++
++        def info(self, event, **fields):
++            self.events.append((event, fields))
++
++    trace = Trace()
++    asyncio.run(
++        StagedArkProvider(
++            Settings(ARK_API_KEY="synthetic", ARK_BASE_URL="https://example.invalid/v1")
++        ).generate_stage(
++            "review",
++            "中文说明",
++            {"parent_text": "仅供本地运输边界测试"},
++            MatchingResult,
++            [("m1", path)],
++            monotonic() + 3,
++            trace,
++        )
++    )
++    completed = dict(trace.events)["analysis_stage_completed"]
++    assert completed["request_bytes"] == sent[0] > 0
++    assert completed["image_bytes"] == len(b"synthetic-image")
++    assert len(sent) == 1
+--- revision11/tests/unit/test_provider_evidence.py
++++ candidate12/tests/unit/test_provider_evidence.py
+@@ -113,7 +113,7 @@
+ def test_prompt_requires_actionable_names_and_parent_readable_source_summary():
+     from push_kids.agent_processing.stage_contracts import KNOWLEDGE_EXAMPLES, KNOWLEDGE_RULES
+ 
+-    assert PROMPT_REVISION == "child-aware-history-agent-20261101-14"
++    assert PROMPT_REVISION == "child-aware-history-agent-20261101-15"
+     assert "candidate_key必须逐字等于最终subjects[subject_name][*].name" in ANALYSIS_RULES
+     assert "查询成功后不得把候选改名、合并或拆分" in ANALYSIS_RULES
+     assert "direct_evidence.detail用一句家长可读的话概括原题或原材料" in ANALYSIS_RULES

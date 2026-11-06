@@ -373,11 +373,11 @@ test("archiving warns how many records are still unfinished but never blocks", a
   await settle();
   assert.equal(page.data.unfinishedCount, 3, "待确认 + 分析中 + 失败都算未完成");
   assert.match(page.data.unfinishedHint, /3 条/);
-  assert.match(page.data.unfinishedHint, /不会丢掉/);
+  assert.match(page.data.unfinishedHint, /归档后仍可.*完成/);
 
   await page.archive();
   assert.match(modals[0].content, /3 条/, "归档确认弹窗必须把未完成数量说清楚");
-  assert.match(modals[0].content, /不能再新增记录/);
+  assert.match(modals[0].content, /不能新增记录/);
   assert.ok(calls.some((call) => call.path === "/children/a/archive"), "提醒只是提醒，不能拦住归档");
 });
 

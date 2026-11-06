@@ -1,0 +1,18 @@
+{
+  "scripts": {
+    "evaluate.py": "53693fc606dd57cbccdda2c719c2c5ea8e9c14cdbec544b900c5a176d42a4a77",
+    "paired.py": "cf3d0e1f330e270bfb2ac19a540ba5de76438927b4cc9f12bd71c2018dc00a82",
+    "gate40.py": "b567495df70621122f6c39721b48e1ad592564b5f7f91200d59bd07935e2e195",
+    "holdout.py": "484247a44dc368b4b5c3bbb0a1129544b3d6ca6eddeed60654aa2995c613353a",
+    "mysql_gate.py": "1bac332b69ae1b3d329f49c2df42f9ed73fcceae0d1908a4808a0de1e85f3e5f",
+    "report.py": "573d7100ed7ea8ddd5086c563f8c0c250af5101c31975a5f7c5ec0aad2573708"
+  },
+  "storage": "local private scripts; no child inputs or credentials copied into repository",
+  "parameters": "frozen Spec05/Criteria01; 15 real inputs, three rounds, two paths; fixed40 original evaluator unchanged",
+  "comparison_limitations": [
+    "two separate processes can call provider concurrently",
+    "same machine also runs local tests; no CPU/network isolation",
+    "cached originals, download not measured",
+    "historic Review/Todo snapshots unavailable; current unversioned knowledge evidence filtered as-of submission"
+  ]
+}

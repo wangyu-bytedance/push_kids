@@ -13,19 +13,24 @@ from push_kids.agent_processing.telemetry import AnalysisTrace
 from push_kids.platform.config import Settings
 
 
-def install_client(monkeypatch, *, error=None, status="completed", invalid=False, delay=0):
-    state = SimpleNamespace(active=0, maximum=0, requests=[])
+def install_client(
+    monkeypatch, *, error=None, status="completed", invalid=False, delay=0, output=None
+):
+    state = SimpleNamespace(active=0, maximum=0, requests=[], timeouts=[])
 
     class Client:
         def __init__(self, **kwargs):
             assert kwargs["max_retries"] == 0
+            state.timeouts.append(kwargs["timeout"])
             self.responses = self
+            self.http_client = kwargs.get("http_client")
 
         async def __aenter__(self):
             return self
 
         async def __aexit__(self, *args):
-            pass
+            if self.http_client:
+                await self.http_client.aclose()
 
         async def create(self, **kwargs):
             state.requests.append(kwargs)
@@ -38,7 +43,9 @@ def install_client(monkeypatch, *, error=None, status="completed", invalid=False
                 return SimpleNamespace(
                     status=status,
                     usage=None,
-                    output_text="private-broken"
+                    output_text=output
+                    if output is not None
+                    else "private-broken"
                     if invalid
                     else json.dumps(
                         {"decisions": [{"candidate": "i0", "match": None, "uncertain": False}]}
@@ -159,3 +166,262 @@ def test_bad_request_preserves_public_capability_code(monkeypatch):
         asyncio.run(call(StagedArkProvider(Settings(ARK_API_KEY="synthetic"))))
     disposition = analysis_failure_disposition(caught.value)
     assert disposition.code == "analysis_schema_unsupported" and not disposition.retryable
+
+
+def test_queued_request_gets_execution_limit_after_capacity_is_available(monkeypatch):
+    clock = [0.0]
+
+    class Slots:
+        def __init__(self):
+            self.calls = 0
+            self.releases = 0
+
+        def acquire(self, blocking=False):
+            self.calls += 1
+            if self.calls == 1:
+                clock[0] = 25.0
+                return False
+            return True
+
+        def release(self):
+            self.releases += 1
+
+    slots = Slots()
+    state = install_client(monkeypatch)
+    monkeypatch.setattr("push_kids.agent_processing.stage_provider._REQUEST_SLOTS", slots)
+    monkeypatch.setattr("push_kids.agent_processing.stage_provider.monotonic", lambda: clock[0])
+    provider = StagedArkProvider(Settings(ARK_API_KEY="synthetic"))
+    result = asyncio.run(
+        provider.generate_stage(
+            "match",
+            "instructions",
+            {},
+            MatchingResult,
+            [],
+            270,
+            AnalysisTrace.disabled(),
+        )
+    )
+    assert result.decisions[0].match is None
+    assert state.timeouts == [30.0] and slots.releases == 1
+
+
+def test_queue_deadline_does_not_start_sdk_or_release_unowned_slot(monkeypatch):
+    class BusySlots:
+        def acquire(self, blocking=False):
+            return False
+
+        def release(self):
+            raise AssertionError("slot was never acquired")
+
+    state = install_client(monkeypatch)
+    monkeypatch.setattr("push_kids.agent_processing.stage_provider._REQUEST_SLOTS", BusySlots())
+    with pytest.raises(StageFailure, match="queue_deadline"):
+        asyncio.run(call(StagedArkProvider(Settings(ARK_API_KEY="synthetic")), seconds=0.03))
+    assert state.requests == []
+
+
+def test_schema_diagnostics_only_expose_static_path_and_category(monkeypatch, caplog):
+    from push_kids.agent_processing.stage_contracts import MaterialResult
+
+    body = {
+        "status": "content",
+        "needs_context": False,
+        "excerpt": "",
+        "items": [
+            {
+                "subject": "数学",
+                "name": "private-child-sentinel" * 10,
+                "evidence": "synthetic",
+                "materials": ["m1"],
+                "confidence": "high",
+            }
+        ],
+    }
+    install_client(monkeypatch, output=json.dumps(body))
+    provider = StagedArkProvider(Settings(ARK_API_KEY="synthetic"))
+    with pytest.raises(StageFailure) as caught:
+        asyncio.run(
+            provider.generate_stage(
+                "extract",
+                "instructions",
+                {},
+                MaterialResult,
+                [],
+                monotonic() + 2,
+                AnalysisTrace("safe-job", 1),
+            )
+        )
+    assert caught.value.diagnostics == ("stage.items.0.name:string_too_long",)
+    assert "private-child" not in str(caught.value) + caplog.text
+
+
+def test_model_field_names_are_never_returned_in_schema_diagnostics(monkeypatch):
+    body = {
+        "decisions": [{"candidate": "i0", "match": None, "uncertain": False}],
+        "secret-sentinel-field": "private-child",
+    }
+    install_client(monkeypatch, output=json.dumps(body))
+    with pytest.raises(StageFailure) as caught:
+        asyncio.run(call(StagedArkProvider(Settings(ARK_API_KEY="synthetic"))))
+    assert caught.value.diagnostics == ("stage.fields:extra_forbidden",)
+    assert "secret" not in str(caught.value.diagnostics)
+
+
+@pytest.mark.parametrize("key", ["0", "0" * 100, "0" * 5000])
+def test_numeric_unknown_model_keys_are_not_mistaken_for_list_indexes(monkeypatch, key):
+    body = {"decisions": [{"candidate": "i0", "match": None, "uncertain": False}], key: "synthetic"}
+    install_client(monkeypatch, output=json.dumps(body))
+    with pytest.raises(StageFailure) as caught:
+        asyncio.run(call(StagedArkProvider(Settings(ARK_API_KEY="synthetic"))))
+    assert caught.value.diagnostics == ("stage.fields:extra_forbidden",)
+
+
+def test_worker_preserves_safe_new_stage_unit_and_schema_diagnostic():
+    from push_kids.agent_processing.worker import _safe_job_diagnostic
+
+    failure = StageFailure(
+        "validation", stage="reuse", unit="reuse", diagnostics=("stage.decisions.match:reference",)
+    )
+    diagnostic = _safe_job_diagnostic(failure, code="analysis_output_invalid", reason="validation")
+    assert "stage=reuse;unit=reuse" in diagnostic
+    assert "validation=stage.decisions.match:reference" in diagnostic
+    assert len(diagnostic) <= 300
+
+
+@pytest.mark.parametrize("oversized", ["text", "image", "count"])
+def test_provider_rejects_source_capacity_before_sdk(monkeypatch, tmp_path, oversized):
+    state = install_client(monkeypatch)
+    path = tmp_path / "page.png"
+    path.write_bytes(b"x" * (33 if oversized == "image" else 1))
+    provider = StagedArkProvider(Settings(ARK_API_KEY="synthetic", upload_max_bytes=32))
+    images = [(f"m{index + 1}", path) for index in range(10 if oversized == "count" else 1)]
+    payload = {"text": "界" * 175000} if oversized == "text" else {}
+    with pytest.raises(StageFailure, match="capacity"):
+        asyncio.run(
+            provider.generate_stage(
+                "review",
+                "instructions",
+                payload,
+                MatchingResult,
+                images,
+                monotonic() + 2,
+                AnalysisTrace.disabled(),
+            )
+        )
+    assert state.requests == []
+    # Capacity refusal must also leave both process slots available.
+    asyncio.run(call(provider))
+
+
+def test_source_request_records_byte_counts_without_content(monkeypatch, tmp_path):
+    install_client(monkeypatch)
+    path = tmp_path / "page.png"
+    path.write_bytes(b"synthetic-image")
+
+    class Trace:
+        def __init__(self):
+            self.events = []
+
+        def info(self, event, **fields):
+            self.events.append((event, fields))
+
+    trace = Trace()
+    payload = {"parent_text": "private-child-sentinel"}
+    asyncio.run(
+        StagedArkProvider(Settings(ARK_API_KEY="synthetic")).generate_stage(
+            "review",
+            "instructions",
+            payload,
+            MatchingResult,
+            [("m1", path)],
+            monotonic() + 2,
+            trace,
+        )
+    )
+    completed = dict(trace.events)["analysis_stage_completed"]
+    assert completed["payload_bytes"] == len(json.dumps(payload, ensure_ascii=False).encode())
+    assert completed["image_bytes"] == len(b"synthetic-image")
+    assert "private-child" not in str(trace.events)
+
+
+def test_request_bytes_match_real_sdk_transport_body(monkeypatch, tmp_path):
+    from openai import DefaultAsyncHttpxClient
+
+    sent = []
+
+    def transport(request):
+        sent.append(len(request.content))
+        return httpx.Response(
+            200,
+            json={
+                "id": "synthetic-response",
+                "object": "response",
+                "created_at": 0,
+                "status": "completed",
+                "model": "synthetic",
+                "output": [
+                    {
+                        "type": "message",
+                        "id": "synthetic-message",
+                        "status": "completed",
+                        "role": "assistant",
+                        "content": [
+                            {
+                                "type": "output_text",
+                                "annotations": [],
+                                "text": json.dumps(
+                                    {
+                                        "decisions": [
+                                            {"candidate": "i0", "match": None, "uncertain": False}
+                                        ]
+                                    }
+                                ),
+                            }
+                        ],
+                    }
+                ],
+            },
+        )
+
+    monkeypatch.setattr(
+        "push_kids.agent_processing.stage_provider.DefaultAsyncHttpxClient",
+        lambda **kwargs: DefaultAsyncHttpxClient(
+            transport=httpx.MockTransport(transport), **kwargs
+        ),
+        raising=False,
+    )
+    # The pre-repair adapter does not construct a client itself.
+    monkeypatch.setattr(
+        "openai._base_client.AsyncHttpxClientWrapper",
+        lambda **kwargs: DefaultAsyncHttpxClient(
+            transport=httpx.MockTransport(transport), **kwargs
+        ),
+    )
+    path = tmp_path / "synthetic.png"
+    path.write_bytes(b"synthetic-image")
+
+    class Trace:
+        events = []
+
+        def info(self, event, **fields):
+            self.events.append((event, fields))
+
+    trace = Trace()
+    asyncio.run(
+        StagedArkProvider(
+            Settings(ARK_API_KEY="synthetic", ARK_BASE_URL="https://example.invalid/v1")
+        ).generate_stage(
+            "review",
+            "中文说明",
+            {"parent_text": "仅供本地运输边界测试"},
+            MatchingResult,
+            [("m1", path)],
+            monotonic() + 30,
+            trace,
+        )
+    )
+    completed = dict(trace.events)["analysis_stage_completed"]
+    assert completed["request_bytes"] == sent[0] > 0
+    assert completed["image_bytes"] == len(b"synthetic-image")
+    assert len(sent) == 1

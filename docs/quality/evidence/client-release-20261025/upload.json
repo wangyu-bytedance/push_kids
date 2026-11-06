@@ -1,0 +1,61 @@
+{
+  "stage": "DEVELOPMENT_VERSION_UPLOADED",
+  "git_commit": "0576ac30464908154c624effed41df6dfa3110cc",
+  "version": "0.1.16",
+  "previous_uploaded_version": "0.1.15",
+  "description": "新增旅行日记与照片时间线，统一按钮样式，优化学习记录、复习与年级确认",
+  "appid": "wx5d2e0014690bf285",
+  "cloud_env": "prod-d2g14rwoycac6b45d",
+  "cloud_service": "flask-ik19",
+  "backend": "flask-ik19-037",
+  "schema_before": "20261024_0025",
+  "schema_after": "20261024_0025",
+  "backend_redeployed": false,
+  "manifest_sha256": "72f5552cc5c4af3a0bb3bd4960bf9dc3c1c4a3261379d0b10ffca5f2e0ef0b49",
+  "source_match_after_upload": true,
+  "files": 168,
+  "source_bytes": 1221792,
+  "preview_size_bytes": 1178893,
+  "uploaded_size_bytes": 1178991,
+  "upload_exit_code": 0,
+  "cli_upload_success": true,
+  "uploaded_on": "2026-10-25 Asia/Shanghai",
+  "version_baseline_after": "0.1.16",
+  "experience_configured": false,
+  "submitted_for_review": false,
+  "officially_published": false,
+  "dual_account_gate": {
+    "triggered": true,
+    "reason": "Since uploaded0.1.15, footprints private download/upload paths and media-owner routes are new.",
+    "status": "PASS_OPERATOR_CONFIRMED",
+    "operator": "产品负责人（用户）",
+    "date": "2026-10-25",
+    "message_reference": "call_fa3043ef407b4441aca5087686394298 reply",
+    "confirmed_scope": "Two real WeChat accounts in separate families: A can access own photos; B cannot read A visits/photo details/thumbnails.",
+    "agent_executed": false
+  },
+  "checks": {
+    "npm_install": "PASS --ignore-scripts --offline --no-audit --no-fund",
+    "frontend": {
+      "tests": 335,
+      "pass": 335,
+      "fail": 0,
+      "skip": 0,
+      "duration_ms": 1361.384416
+    },
+    "eslint": "PASS",
+    "miniapp": "PASS pages17/source_bytes1221792",
+    "architecture": "PASS policies4/modules150",
+    "design": "PASS current-policy",
+    "backend_source": "150 Python files plus pyproject/uv.lock match037 frozen02; no extras",
+    "backend_manifest_sha256": "4c12f38271ec8659e4b7b472bd8d62992c8754260d5b0210aed0079ce36eda23",
+    "known_secret_and_fixture_scan": "PASS tracked assets/source only; no known secret patterns or geometry injection"
+  },
+  "not_run": [
+    "iOS/Android physical device acceptance for full candidate",
+    "screen reader and enlarged font acceptance",
+    "experience-version platform configuration",
+    "privacy/qualification/review and formal publication"
+  ],
+  "rollback": "Previous uploaded candidate0.1.15; actual currently published official client version not independently read. No automatic backend downgrade;035 is incompatible with0025."
+}

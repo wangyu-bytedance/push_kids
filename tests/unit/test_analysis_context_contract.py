@@ -140,8 +140,8 @@ def test_deployed_prompt_covers_core_content_and_missing_stage():
         AnalysisInput(text="今天只练进位", grade="小学二年级", occurred_at="2026-09-05T10:00:00Z")
     )
     for required in [
-        "森林超市",
-        "两位数进位加法",
+        "教学内容",
+        "直接支持的范围和条件",
         "装饰",
         "不得冒充本次直接证据",
         "小学二年级",
@@ -150,7 +150,7 @@ def test_deployed_prompt_covers_core_content_and_missing_stage():
         "不得生成复习日期",
         "本次自然日已确认",
         "today_review_plan",
-        "最多20条",
+        "整批最多20项",
         "主动回忆、变式练习、解释应用",
         "search_history_items",
         "today_review",

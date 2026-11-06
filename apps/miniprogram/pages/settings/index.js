@@ -80,6 +80,7 @@ function buildDayRows(weekdays, prevRows, inheritStart, inheritEnd) {
 
 function scheduleLabel(schedule) {
   if (!schedule) return "尚未设置时间";
+  if (schedule.workday_only) return `工作日 · ${hhmm(schedule.start_time)}–${hhmm(schedule.end_time)}`;
   const slots = schedule.time_slots || [];
   if (!slots.length) return "时间不固定";
   return `每周${slotsSummary(slots)}`;
@@ -129,6 +130,8 @@ Page({
     weekdayLabels: WEEKDAY_LABELS,
     weekdays: [], weekdaySelected: [false, false, false, false, false, false, false],
     startTime: "18:00", endTime: "19:00", flexible: false, scheduleSummary: "请选择至少一天",
+    workdayOnly: false, workdayStartTime: "18:00", workdayEndTime: "19:00",
+    scheduleHadDifferentTimes: false, scheduleConfirming: false,
     perDay: false, dayRows: [], scheduleGroups: [],
     savingSchedule: false, scheduleError: "", removingActivity: false,
     travelArrangements: [], travelPresets: TRAVEL_PRESETS, showTravelEditor: false,
@@ -146,8 +149,14 @@ Page({
     const travelId = app.globalData.openTravelArrangementId;
     app.globalData.openTravelArrangementId = "";
     if (travelId) this.openTravelById(travelId);
+    const activityId = app.globalData.openActivitySubjectId;
+    app.globalData.openActivitySubjectId = "";
+    const activityIndex = this.data.addedActivities.findIndex((item) => item.id === activityId);
+    if (activityIndex >= 0) this.openActivitySchedule({ currentTarget: { dataset: { index: activityIndex } } });
   },
   onHide() {
+    this.scheduleGeneration = (this.scheduleGeneration || 0) + 1;
+    this.setData({ scheduleConfirming: false });
     this.loadGeneration = (this.loadGeneration || 0) + 1;
     this.resetDailyTaskForm();
     this.resetSubjectManager();
@@ -483,9 +492,11 @@ Page({
   },
   setField(event) {
     const field = event.currentTarget.dataset.field;
+    if (["workdayStartTime", "workdayEndTime", "startTime", "endTime"].includes(field)
+      && (!this.data.canWrite || this.data.savingSchedule || this.data.scheduleConfirming)) return;
     this.setData({ [field]: event.detail.value });
     if (field === "customCatalogName") this.setData({ catalogError: "" });
-    if (field === "startTime" || field === "endTime") this.updateScheduleSummary();
+    if (["startTime", "endTime", "workdayStartTime", "workdayEndTime"].includes(field)) this.updateScheduleSummary();
     if (field === "travelName" || field === "travelStartTime" || field === "travelEndTime") {
       const start = field === "travelStartTime" ? event.detail.value : this.data.travelStartTime;
       const end = field === "travelEndTime" ? event.detail.value : this.data.travelEndTime;
@@ -517,6 +528,8 @@ Page({
   },
   openActivitySchedule(event) {
     const item = this.data.addedActivities[Number(event.currentTarget.dataset.index)];
+    if (!item) return;
+    this.scheduleGeneration = (this.scheduleGeneration || 0) + 1;
     const schedule = item.schedule;
     const slots = (schedule && schedule.time_slots) || [];
     const weekdays = slots.map((slot) => slot.weekday).sort((a, b) => a - b);
@@ -528,15 +541,32 @@ Page({
       showSchedule: true, scheduleSubject: item, scheduleId: schedule ? schedule.id : "", weekdays,
       weekdaySelected: Array.from({ length: 7 }, (_, index) => weekdays.includes(index)),
       startTime, endTime, perDay, dayRows: rowsFromSlots(slots),
-      flexible: Boolean(schedule && !slots.length),
+      workdayOnly: Boolean(schedule && schedule.workday_only),
+      workdayStartTime: schedule && schedule.workday_only ? hhmm(schedule.start_time) : groups.length === 1 ? startTime : "18:00",
+      workdayEndTime: schedule && schedule.workday_only ? hhmm(schedule.end_time) : groups.length === 1 ? endTime : "19:00",
+      flexible: Boolean(schedule && !schedule.workday_only && !slots.length),
+      scheduleHadDifferentTimes: perDay, scheduleConfirming: false,
       scheduleError: "", savingSchedule: false, removingActivity: false
     });
     this.updateScheduleSummary();
   },
-  closeSchedule() { if (!this.data.savingSchedule) this.setData({ showSchedule: false }); },
-  chooseScheduleMode(event) { this.setData({ flexible: event.currentTarget.dataset.mode === "flexible", scheduleError: "" }); },
+  closeSchedule() {
+    if (this.data.savingSchedule) return;
+    this.scheduleGeneration = (this.scheduleGeneration || 0) + 1;
+    this.setData({ showSchedule: false, scheduleConfirming: false });
+  },
+  chooseScheduleMode(event) {
+    if (!this.data.canWrite || this.data.savingSchedule || this.data.scheduleConfirming) return;
+    const mode = event.currentTarget.dataset.mode;
+    if (!["fixed", "workday", "flexible"].includes(mode)) return;
+    this.setData({ flexible: mode === "flexible", workdayOnly: mode === "workday", scheduleError: "" });
+    this.updateScheduleSummary();
+  },
   /* 派生分组摘要与提示文案，编辑层始终按星期展开，只有摘要按相同时间合并。 */
   updateScheduleSummary() {
+    if (this.data.workdayOnly) {
+      return this.setData({ scheduleSummary: `工作日 · ${this.data.workdayStartTime}–${this.data.workdayEndTime}` });
+    }
     const slots = stateSlots(this.data.weekdays, this.data.perDay, this.data.dayRows, this.data.startTime, this.data.endTime);
     this.setData({
       scheduleGroups: groupSlots(slots),
@@ -546,6 +576,7 @@ Page({
     });
   },
   toggleWeekday(event) {
+    if (!this.data.canWrite || this.data.savingSchedule || this.data.scheduleConfirming) return;
     const value = Number(event.currentTarget.dataset.value);
     const weekdays = this.data.weekdays.slice();
     const index = weekdays.indexOf(value);
@@ -562,6 +593,7 @@ Page({
   },
   /* 「某些日期时间不同」开关：展开=逐星期各设一行，收起=合并回统一时间。 */
   toggleSchedulePerDay() {
+    if (!this.data.canWrite || this.data.savingSchedule || this.data.scheduleConfirming) return;
     if (!this.data.perDay) {
       const dayRows = buildDayRows(this.data.weekdays, this.data.dayRows, this.data.startTime, this.data.endTime);
       this.setData({ perDay: true, dayRows, scheduleError: "" });
@@ -587,6 +619,7 @@ Page({
     this.updateScheduleSummary();
   },
   setDayTime(event) {
+    if (!this.data.canWrite || this.data.savingSchedule || this.data.scheduleConfirming) return;
     const { index, field } = event.currentTarget.dataset;
     const dayRows = this.data.dayRows.slice();
     dayRows[Number(index)] = { ...dayRows[Number(index)], [field]: event.detail.value };
@@ -594,14 +627,31 @@ Page({
     this.updateScheduleSummary();
   },
   async saveSchedule() {
-    if (!this.guardWrite()) return;
+    if (!this.guardWrite() || this.data.savingSchedule || this.data.scheduleConfirming || this.data.removingActivity) return;
     const flexible = this.data.flexible;
-    if (!flexible && !this.data.weekdays.length) return this.setData({ scheduleError: "请选择至少一天。" });
-    const slots = flexible ? [] : stateSlots(this.data.weekdays, this.data.perDay, this.data.dayRows, this.data.startTime, this.data.endTime);
+    const workdayOnly = this.data.workdayOnly;
+    if (!flexible && !workdayOnly && !this.data.weekdays.length) return this.setData({ scheduleError: "请选择至少一天。" });
+    if (workdayOnly && this.data.workdayEndTime <= this.data.workdayStartTime) {
+      return this.setData({ scheduleError: "结束时间要晚于开始时间。" });
+    }
+    const slots = flexible || workdayOnly ? [] : stateSlots(this.data.weekdays, this.data.perDay, this.data.dayRows, this.data.startTime, this.data.endTime);
     const bad = slots.find((slot) => slot.end_time <= slot.start_time);
     if (bad) return this.setData({ scheduleError: `周${WEEKDAY_LABELS[bad.weekday]}的结束时间要晚于开始时间。` });
+    const generation = this.scheduleGeneration;
+    const childId = this.data.childId;
+    if (this.data.scheduleHadDifferentTimes && (workdayOnly || flexible)) {
+      this.setData({ scheduleConfirming: true });
+      const confirmed = await new Promise((resolve) => wx.showModal({
+        title: "替换原来的安排？", content: "原安排中不同星期的时间将被替换。保存后不能恢复原规则。",
+        confirmText: "确认替换", success: (result) => resolve(result.confirm), fail: () => resolve(false)
+      }));
+      this.setData({ scheduleConfirming: false });
+      if (!confirmed || generation !== this.scheduleGeneration || childId !== this.data.childId || !this.data.showSchedule || !this.guardWrite()) return;
+    }
     this.setData({ savingSchedule: true, scheduleError: "" });
-    const payload = { child_id: this.data.childId, subject_id: this.data.scheduleSubject.id, time_slots: slots, target_per_week: null };
+    const payload = { child_id: childId, subject_id: this.data.scheduleSubject.id, target_per_week: null, workday_only: Boolean(workdayOnly) };
+    if (workdayOnly) { payload.start_time = this.data.workdayStartTime; payload.end_time = this.data.workdayEndTime; }
+    else payload.time_slots = slots;
     try {
       if (this.data.scheduleId) await api.request(`/activity-schedules/${this.data.scheduleId}`, { method: "PATCH", data: payload, capabilities: WEEKLY_SLOTS_CAPABILITY });
       else await api.request("/activity-schedules", { method: "POST", data: payload, capabilities: WEEKLY_SLOTS_CAPABILITY });

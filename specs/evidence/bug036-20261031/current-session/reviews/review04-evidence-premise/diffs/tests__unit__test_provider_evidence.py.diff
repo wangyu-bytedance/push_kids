@@ -1,0 +1,11 @@
+--- review03/tests/unit/test_provider_evidence.py
++++ review04/tests/unit/test_provider_evidence.py
+@@ -113,7 +113,7 @@
+ def test_prompt_requires_actionable_names_and_parent_readable_source_summary():
+     from push_kids.agent_processing.stage_contracts import KNOWLEDGE_EXAMPLES, KNOWLEDGE_RULES
+ 
+-    assert PROMPT_REVISION == "child-aware-history-agent-20261031-12"
++    assert PROMPT_REVISION == "child-aware-history-agent-20261031-13"
+     assert "candidate_key必须逐字等于最终subjects[subject_name][*].name" in ANALYSIS_RULES
+     assert "查询成功后不得把候选改名、合并或拆分" in ANALYSIS_RULES
+     assert "direct_evidence.detail用一句家长可读的话概括原题或原材料" in ANALYSIS_RULES

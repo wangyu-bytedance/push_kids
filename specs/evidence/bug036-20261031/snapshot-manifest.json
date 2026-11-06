@@ -1,0 +1,254 @@
+{
+  "approval": {
+    "apps/api/src/push_kids/agent_processing/checkpoints.py": {
+      "sha256": "54b83115e30467d2b0ac9a9b0d361eed746d02b178b9ed8b34af37867a0f34b5",
+      "retained_path": "specs/evidence/bug036-20261031/snapshots/approval/apps/api/src/push_kids/agent_processing/checkpoints.py.txt"
+    },
+    "apps/api/src/push_kids/agent_processing/contracts.py": {
+      "sha256": "4e5c526aec96626026b86be7799a8d03e58553b60c927af31ef4392048a64515",
+      "retained_path": "specs/evidence/bug036-20261031/snapshots/approval/apps/api/src/push_kids/agent_processing/contracts.py.txt"
+    },
+    "apps/api/src/push_kids/agent_processing/failures.py": {
+      "sha256": "e047a15fd189513218ee982dfef103529fd6348c9d8ddeb8f42803e3497dc70a",
+      "retained_path": "specs/evidence/bug036-20261031/snapshots/approval/apps/api/src/push_kids/agent_processing/failures.py.txt"
+    },
+    "apps/api/src/push_kids/agent_processing/pipeline.py": {
+      "sha256": "ffb42108b3e03d3e8d6f72461e771f40c76082dbdf3d4c3dde04d6f23d410a61",
+      "retained_path": "specs/evidence/bug036-20261031/snapshots/approval/apps/api/src/push_kids/agent_processing/pipeline.py.txt"
+    },
+    "apps/api/src/push_kids/agent_processing/prompt.py": {
+      "sha256": "a675bed74d209021197374b5b37d34ae7520c7bf8100b716d716db21bff19acb",
+      "retained_path": "specs/evidence/bug036-20261031/snapshots/approval/apps/api/src/push_kids/agent_processing/prompt.py.txt"
+    },
+    "apps/api/src/push_kids/agent_processing/stage_contracts.py": {
+      "sha256": "2688887d7f2d613f620dccacf80a996bcd623217490acca22cf59d21a5e681e7",
+      "retained_path": "specs/evidence/bug036-20261031/snapshots/approval/apps/api/src/push_kids/agent_processing/stage_contracts.py.txt"
+    },
+    "apps/api/src/push_kids/agent_processing/stage_provider.py": {
+      "sha256": "b53a6e7dc246e8df0880f7ebee6617fccb46d317845e39184cc944cb3f8667a3",
+      "retained_path": "specs/evidence/bug036-20261031/snapshots/approval/apps/api/src/push_kids/agent_processing/stage_provider.py.txt"
+    },
+    "apps/api/src/push_kids/agent_processing/telemetry.py": {
+      "sha256": "acbebb6a0303f61393b4ecbc458ae26bb77e7d63553e6eb1ad41dc001adedc99",
+      "retained_path": "specs/evidence/bug036-20261031/snapshots/approval/apps/api/src/push_kids/agent_processing/telemetry.py.txt"
+    },
+    "apps/api/src/push_kids/agent_processing/worker.py": {
+      "sha256": "9edb05fe181fba23ee7df65a3718382b28faa4b41075e57c9fb226648d56e674",
+      "retained_path": "specs/evidence/bug036-20261031/snapshots/approval/apps/api/src/push_kids/agent_processing/worker.py.txt"
+    },
+    "tests/staged_analysis_fakes.py": {
+      "sha256": "14c598dafb7b6f9bea9271f07ee1f3658259cfc42b2126f2bdeb5e947d027e11",
+      "retained_path": "specs/evidence/bug036-20261031/snapshots/approval/tests/staged_analysis_fakes.py.txt"
+    },
+    "tests/unit/test_staged_analysis.py": {
+      "sha256": "eee20ee1f2f4eb08f7957edba024ff93873b3b926a7f34cdf5b72fad898777ec",
+      "retained_path": "specs/evidence/bug036-20261031/snapshots/approval/tests/unit/test_staged_analysis.py.txt"
+    },
+    "tests/unit/test_stage_provider.py": {
+      "sha256": "0718ca89a96d64233c3612abfd35463cf344f7da032a2b4565adb331256eb6dc",
+      "retained_path": "specs/evidence/bug036-20261031/snapshots/approval/tests/unit/test_stage_provider.py.txt"
+    },
+    "tests/unit/test_provider_evidence.py": {
+      "sha256": "e37d1bf9e43d6f38943b3d9f8f559a912b4eb07f6ddeb6405dbcab8224b618dd",
+      "retained_path": "specs/evidence/bug036-20261031/snapshots/approval/tests/unit/test_provider_evidence.py.txt"
+    },
+    "tests/unit/test_analysis_context_contract.py": {
+      "sha256": "620a7bcc947cc1701731b5bc96520b69970bfecc2d59ea891aea655fc94fc3d7",
+      "retained_path": "specs/evidence/bug036-20261031/snapshots/approval/tests/unit/test_analysis_context_contract.py.txt"
+    },
+    "tests/integration/test_analysis_checkpoints.py": {
+      "sha256": "5d9c9e58a03d23701b9575c2f8850802106ed9fcfff98dc300f7e0ac84af8f9c",
+      "retained_path": "specs/evidence/bug036-20261031/snapshots/approval/tests/integration/test_analysis_checkpoints.py.txt"
+    }
+  },
+  "review01": {
+    "apps/api/src/push_kids/agent_processing/checkpoints.py": {
+      "sha256": "621c5c593c407b9c624f6cca2b55a58a20e940f72fc167b2ea4a2be82a160ec3",
+      "retained_path": "specs/evidence/bug036-20261031/snapshots/review01/apps/api/src/push_kids/agent_processing/checkpoints.py.txt"
+    },
+    "apps/api/src/push_kids/agent_processing/failures.py": {
+      "sha256": "1143c7dd6798a033ad995244314b14f822fb02567f00beacdb8bb054c82d07b6",
+      "retained_path": "specs/evidence/bug036-20261031/snapshots/review01/apps/api/src/push_kids/agent_processing/failures.py.txt"
+    },
+    "apps/api/src/push_kids/agent_processing/pipeline.py": {
+      "sha256": "5a58e3a86691ee49f596e6271e9e739f969d0ccca78667134eb60bfe0cc519bb",
+      "retained_path": "specs/evidence/bug036-20261031/snapshots/review01/apps/api/src/push_kids/agent_processing/pipeline.py.txt"
+    },
+    "apps/api/src/push_kids/agent_processing/prompt.py": {
+      "sha256": "bcaad016726eb04d6475a35d25c64394f9cf9f36b037fc0791fd5f03e27986a3",
+      "retained_path": "specs/evidence/bug036-20261031/snapshots/review01/apps/api/src/push_kids/agent_processing/prompt.py.txt"
+    },
+    "apps/api/src/push_kids/agent_processing/stage_contracts.py": {
+      "sha256": "8532c172af3344a03efdcff068376ff2e72f4c7779fbef7e83fc8262c2a60674",
+      "retained_path": "specs/evidence/bug036-20261031/snapshots/review01/apps/api/src/push_kids/agent_processing/stage_contracts.py.txt"
+    },
+    "apps/api/src/push_kids/agent_processing/stage_provider.py": {
+      "sha256": "541aa016674b35e215eee052f23bc04e00d09164995f9e169d15c65fedc125e1",
+      "retained_path": "specs/evidence/bug036-20261031/snapshots/review01/apps/api/src/push_kids/agent_processing/stage_provider.py.txt"
+    },
+    "apps/api/src/push_kids/agent_processing/telemetry.py": {
+      "sha256": "c19ebc6d7bcfa7de61364e4aa7fa75710e8a3547296c401a60a981ee3dbcb7db",
+      "retained_path": "specs/evidence/bug036-20261031/snapshots/review01/apps/api/src/push_kids/agent_processing/telemetry.py.txt"
+    },
+    "tests/staged_analysis_fakes.py": {
+      "sha256": "93ed32a815259c915482a4e7b51b7b8540d0987da96b07414dfb20706cf56a02",
+      "retained_path": "specs/evidence/bug036-20261031/snapshots/review01/tests/staged_analysis_fakes.py.txt"
+    },
+    "tests/unit/test_staged_analysis.py": {
+      "sha256": "5350f8583e92af50cf6e8f3230f627c68cccb118e447a938e075becb8b6bc996",
+      "retained_path": "specs/evidence/bug036-20261031/snapshots/review01/tests/unit/test_staged_analysis.py.txt"
+    },
+    "tests/unit/test_staged_proposal_recovery.py": {
+      "sha256": "95e5ce6e1b4993928a77fc85bcbcd5733623fb41f8f3fe335ed456c8892d97b9",
+      "retained_path": "specs/evidence/bug036-20261031/snapshots/review01/tests/unit/test_staged_proposal_recovery.py.txt"
+    },
+    "tests/unit/test_stage_provider.py": {
+      "sha256": "f91ccddcb7f4a1eaa5c1f7f1496a07283555ca0670b43881c388d990df788c41",
+      "retained_path": "specs/evidence/bug036-20261031/snapshots/review01/tests/unit/test_stage_provider.py.txt"
+    },
+    "tests/unit/test_provider_evidence.py": {
+      "sha256": "8791f3ab6c9149202555709db971a2e30f168006cfb430fe9666579987d928e9",
+      "retained_path": "specs/evidence/bug036-20261031/snapshots/review01/tests/unit/test_provider_evidence.py.txt"
+    },
+    "tests/unit/test_analysis_context_contract.py": {
+      "sha256": "3aaec95f0540bf10b50939252e5190697a6364c24703843a984f435a57adacd9",
+      "retained_path": "specs/evidence/bug036-20261031/snapshots/review01/tests/unit/test_analysis_context_contract.py.txt"
+    },
+    "tests/integration/test_analysis_checkpoints.py": {
+      "sha256": "3ec8187e178959f3e4741db33d010edc1eacaa9273280c69b7c55244f8c4aad1",
+      "retained_path": "specs/evidence/bug036-20261031/snapshots/review01/tests/integration/test_analysis_checkpoints.py.txt"
+    }
+  },
+  "review02": {
+    "apps/api/src/push_kids/agent_processing/checkpoints.py": {
+      "sha256": "621c5c593c407b9c624f6cca2b55a58a20e940f72fc167b2ea4a2be82a160ec3",
+      "retained_path": "specs/evidence/bug036-20261031/snapshots/review02/apps/api/src/push_kids/agent_processing/checkpoints.py.txt"
+    },
+    "apps/api/src/push_kids/agent_processing/contracts.py": {
+      "sha256": "7524e52c4ffbc27e1127d54bb7ac33f676165d8f303961374ad68b959df25564",
+      "retained_path": "specs/evidence/bug036-20261031/snapshots/review02/apps/api/src/push_kids/agent_processing/contracts.py.txt"
+    },
+    "apps/api/src/push_kids/agent_processing/failures.py": {
+      "sha256": "73167af67d45a1fad12b127804b29f2c799ebdc1242f61fdccb1387061600bdc",
+      "retained_path": "specs/evidence/bug036-20261031/snapshots/review02/apps/api/src/push_kids/agent_processing/failures.py.txt"
+    },
+    "apps/api/src/push_kids/agent_processing/pipeline.py": {
+      "sha256": "fd4c17b5bca2d2dd6289f06a98b49c5050ab77d45250bde0cdbe3527d07e0221",
+      "retained_path": "specs/evidence/bug036-20261031/snapshots/review02/apps/api/src/push_kids/agent_processing/pipeline.py.txt"
+    },
+    "apps/api/src/push_kids/agent_processing/prompt.py": {
+      "sha256": "bcaad016726eb04d6475a35d25c64394f9cf9f36b037fc0791fd5f03e27986a3",
+      "retained_path": "specs/evidence/bug036-20261031/snapshots/review02/apps/api/src/push_kids/agent_processing/prompt.py.txt"
+    },
+    "apps/api/src/push_kids/agent_processing/stage_contracts.py": {
+      "sha256": "250bae7912b1a686068659b384830aeb851e4ee49d4610bb7a32bfe06b15155e",
+      "retained_path": "specs/evidence/bug036-20261031/snapshots/review02/apps/api/src/push_kids/agent_processing/stage_contracts.py.txt"
+    },
+    "apps/api/src/push_kids/agent_processing/stage_provider.py": {
+      "sha256": "541aa016674b35e215eee052f23bc04e00d09164995f9e169d15c65fedc125e1",
+      "retained_path": "specs/evidence/bug036-20261031/snapshots/review02/apps/api/src/push_kids/agent_processing/stage_provider.py.txt"
+    },
+    "apps/api/src/push_kids/agent_processing/telemetry.py": {
+      "sha256": "c19ebc6d7bcfa7de61364e4aa7fa75710e8a3547296c401a60a981ee3dbcb7db",
+      "retained_path": "specs/evidence/bug036-20261031/snapshots/review02/apps/api/src/push_kids/agent_processing/telemetry.py.txt"
+    },
+    "apps/api/src/push_kids/agent_processing/worker.py": {
+      "sha256": "e17228b806e5d2b4b541c051d479d80ec48bf85c4c6e058a783d1127583d8677",
+      "retained_path": "specs/evidence/bug036-20261031/snapshots/review02/apps/api/src/push_kids/agent_processing/worker.py.txt"
+    },
+    "tests/staged_analysis_fakes.py": {
+      "sha256": "93ed32a815259c915482a4e7b51b7b8540d0987da96b07414dfb20706cf56a02",
+      "retained_path": "specs/evidence/bug036-20261031/snapshots/review02/tests/staged_analysis_fakes.py.txt"
+    },
+    "tests/unit/test_staged_analysis.py": {
+      "sha256": "5350f8583e92af50cf6e8f3230f627c68cccb118e447a938e075becb8b6bc996",
+      "retained_path": "specs/evidence/bug036-20261031/snapshots/review02/tests/unit/test_staged_analysis.py.txt"
+    },
+    "tests/unit/test_staged_proposal_recovery.py": {
+      "sha256": "15fe37bffd9cfa9337b8ad4b952a88188edd95de20dc764457941d2dd42f175e",
+      "retained_path": "specs/evidence/bug036-20261031/snapshots/review02/tests/unit/test_staged_proposal_recovery.py.txt"
+    },
+    "tests/unit/test_stage_provider.py": {
+      "sha256": "60d8385fb1eb36d6d9d8df6aeb1a3007b607af2852850fc07c5de6bff2314c98",
+      "retained_path": "specs/evidence/bug036-20261031/snapshots/review02/tests/unit/test_stage_provider.py.txt"
+    },
+    "tests/unit/test_provider_evidence.py": {
+      "sha256": "1a885f6a478158c435e1b1a8d99ebf5b542a6a6103811b8f89ba009ba9b0de03",
+      "retained_path": "specs/evidence/bug036-20261031/snapshots/review02/tests/unit/test_provider_evidence.py.txt"
+    },
+    "tests/unit/test_analysis_context_contract.py": {
+      "sha256": "3aaec95f0540bf10b50939252e5190697a6364c24703843a984f435a57adacd9",
+      "retained_path": "specs/evidence/bug036-20261031/snapshots/review02/tests/unit/test_analysis_context_contract.py.txt"
+    },
+    "tests/integration/test_analysis_checkpoints.py": {
+      "sha256": "3ec8187e178959f3e4741db33d010edc1eacaa9273280c69b7c55244f8c4aad1",
+      "retained_path": "specs/evidence/bug036-20261031/snapshots/review02/tests/integration/test_analysis_checkpoints.py.txt"
+    }
+  },
+  "revision08": {
+    "apps/api/src/push_kids/agent_processing/checkpoints.py": {
+      "sha256": "621c5c593c407b9c624f6cca2b55a58a20e940f72fc167b2ea4a2be82a160ec3",
+      "retained_path": "specs/evidence/bug036-20261031/snapshots/revision08/apps/api/src/push_kids/agent_processing/checkpoints.py.txt"
+    },
+    "apps/api/src/push_kids/agent_processing/contracts.py": {
+      "sha256": "7524e52c4ffbc27e1127d54bb7ac33f676165d8f303961374ad68b959df25564",
+      "retained_path": "specs/evidence/bug036-20261031/snapshots/revision08/apps/api/src/push_kids/agent_processing/contracts.py.txt"
+    },
+    "apps/api/src/push_kids/agent_processing/failures.py": {
+      "sha256": "73167af67d45a1fad12b127804b29f2c799ebdc1242f61fdccb1387061600bdc",
+      "retained_path": "specs/evidence/bug036-20261031/snapshots/revision08/apps/api/src/push_kids/agent_processing/failures.py.txt"
+    },
+    "apps/api/src/push_kids/agent_processing/pipeline.py": {
+      "sha256": "fd4c17b5bca2d2dd6289f06a98b49c5050ab77d45250bde0cdbe3527d07e0221",
+      "retained_path": "specs/evidence/bug036-20261031/snapshots/revision08/apps/api/src/push_kids/agent_processing/pipeline.py.txt"
+    },
+    "apps/api/src/push_kids/agent_processing/prompt.py": {
+      "sha256": "cbeee804ce78ad21a55d223583a74386531640a8562ba3c78f397ebb16e33cf7",
+      "retained_path": "specs/evidence/bug036-20261031/snapshots/revision08/apps/api/src/push_kids/agent_processing/prompt.py.txt"
+    },
+    "apps/api/src/push_kids/agent_processing/stage_contracts.py": {
+      "sha256": "e9ad60dc39520423da3b2f9857f3dec5ea89c379a0b9bd9d62b5b53a2bb68a7e",
+      "retained_path": "specs/evidence/bug036-20261031/snapshots/revision08/apps/api/src/push_kids/agent_processing/stage_contracts.py.txt"
+    },
+    "apps/api/src/push_kids/agent_processing/stage_provider.py": {
+      "sha256": "541aa016674b35e215eee052f23bc04e00d09164995f9e169d15c65fedc125e1",
+      "retained_path": "specs/evidence/bug036-20261031/snapshots/revision08/apps/api/src/push_kids/agent_processing/stage_provider.py.txt"
+    },
+    "apps/api/src/push_kids/agent_processing/telemetry.py": {
+      "sha256": "c19ebc6d7bcfa7de61364e4aa7fa75710e8a3547296c401a60a981ee3dbcb7db",
+      "retained_path": "specs/evidence/bug036-20261031/snapshots/revision08/apps/api/src/push_kids/agent_processing/telemetry.py.txt"
+    },
+    "apps/api/src/push_kids/agent_processing/worker.py": {
+      "sha256": "e17228b806e5d2b4b541c051d479d80ec48bf85c4c6e058a783d1127583d8677",
+      "retained_path": "specs/evidence/bug036-20261031/snapshots/revision08/apps/api/src/push_kids/agent_processing/worker.py.txt"
+    },
+    "tests/staged_analysis_fakes.py": {
+      "sha256": "93ed32a815259c915482a4e7b51b7b8540d0987da96b07414dfb20706cf56a02",
+      "retained_path": "specs/evidence/bug036-20261031/snapshots/revision08/tests/staged_analysis_fakes.py.txt"
+    },
+    "tests/unit/test_staged_analysis.py": {
+      "sha256": "afd655c1e8cf31d9e0bf39b7346517336343a3723423bad2f9d36a0132a6ecd7",
+      "retained_path": "specs/evidence/bug036-20261031/snapshots/revision08/tests/unit/test_staged_analysis.py.txt"
+    },
+    "tests/unit/test_staged_proposal_recovery.py": {
+      "sha256": "15fe37bffd9cfa9337b8ad4b952a88188edd95de20dc764457941d2dd42f175e",
+      "retained_path": "specs/evidence/bug036-20261031/snapshots/revision08/tests/unit/test_staged_proposal_recovery.py.txt"
+    },
+    "tests/unit/test_stage_provider.py": {
+      "sha256": "60d8385fb1eb36d6d9d8df6aeb1a3007b607af2852850fc07c5de6bff2314c98",
+      "retained_path": "specs/evidence/bug036-20261031/snapshots/revision08/tests/unit/test_stage_provider.py.txt"
+    },
+    "tests/unit/test_provider_evidence.py": {
+      "sha256": "c838a64e59da30e22318b2e5471dc1b0cfce7fcd8af49e31c781a38d80fee6cc",
+      "retained_path": "specs/evidence/bug036-20261031/snapshots/revision08/tests/unit/test_provider_evidence.py.txt"
+    },
+    "tests/unit/test_analysis_context_contract.py": {
+      "sha256": "3aaec95f0540bf10b50939252e5190697a6364c24703843a984f435a57adacd9",
+      "retained_path": "specs/evidence/bug036-20261031/snapshots/revision08/tests/unit/test_analysis_context_contract.py.txt"
+    },
+    "tests/integration/test_analysis_checkpoints.py": {
+      "sha256": "3ec8187e178959f3e4741db33d010edc1eacaa9273280c69b7c55244f8c4aad1",
+      "retained_path": "specs/evidence/bug036-20261031/snapshots/revision08/tests/integration/test_analysis_checkpoints.py.txt"
+    }
+  }
+}

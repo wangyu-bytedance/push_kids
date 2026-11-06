@@ -1,0 +1,43 @@
+{
+  "stage": "CANDIDATE_PREPARED_NOT_UPLOADED",
+  "documents": [
+    "specs/active/FEAT-012-TRAVEL-ENTRY-CLEANUP.md",
+    "docs/domain/features/FEAT-012-child-photo-footprints.md",
+    "docs/domain/BEHAVIOR-CATALOG.md",
+    "docs/architecture/ARCHITECTURE.md",
+    "docs/design/frontend/ui/UI-018-child-photo-footprints.md",
+    "docs/design/frontend/ui/UI-001-parent-miniapp.md",
+    "docs/design/frontend/FRONTEND-DESIGN.md",
+    "docs/quality/TEST-STRATEGY.md",
+    "specs/README.md",
+    "specs/STATUS.md",
+    "docs/deploy/releases/20261031-travel-entry-cleanup-local.md",
+    "docs/deploy/releases/20261031-client-upload-preparation.md",
+    "docs/quality/evidence/travel-entry-cleanup-20261031/README.md",
+    "docs/quality/evidence/client-release-20261031/README.md"
+  ],
+  "code_document_conflicts": [],
+  "missing_links": [],
+  "link_count": 622,
+  "approved_assets_validation": {
+    "exit_code": 0,
+    "output": "DESIGN_EVIDENCE_VALID\n"
+  },
+  "errors": [],
+  "frontend_files": 168,
+  "frontend_manifest_sha256": "04c6668a20a0f99622c78424b4d7c5ba07aadc1fd515f20a494e0e4cfcbb2adb",
+  "frontend_source_match": true,
+  "backend_payload_files": 154,
+  "backend_manifest_sha256": "50a2ea9846fdfe9da13a5ae5b1b7f3ddd0e312d7f72b1961d5c2531060469c62",
+  "backend_changes_from038": [
+    "apps/api/src/push_kids/footprints/reads.py",
+    "apps/api/src/push_kids/footprints/router.py"
+  ],
+  "spec_state": "VERIFYING / specs/active/FEAT-012-TRAVEL-ENTRY-CLEANUP.md",
+  "version_baseline": "0.1.16",
+  "diff_check": {
+    "exit_code": 0,
+    "output": ""
+  },
+  "result": "PASS"
+}

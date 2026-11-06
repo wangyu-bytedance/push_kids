@@ -1,0 +1,117 @@
+{
+  "scope": "验收报告HTML，非微信小程序原生或真机验收",
+  "browser": "Google Chrome / isolated headless Playwright",
+  "browser_bridge_screenshot": "NOT_RUN: viewport unavailable; chart/diagram DOM rendered",
+  "checks": [
+    {
+      "width": 1280,
+      "height": 900,
+      "geometry": {
+        "viewport": 1280,
+        "width": 1280,
+        "chart": 812,
+        "diagram": true,
+        "headings": [
+          "01结论与范围",
+          "02云端交付核验",
+          "03缓存机制验收",
+          "04测试、审查与版本证据",
+          "05原材料内容验收",
+          "06恢复条件与最终状态"
+        ],
+        "sources": 8,
+        "decision": "40例发布质量门禁未通过，灰度部署已停止。冻结缓存10/13版本34/40通过（85%），要求至少38/40；线上保持039，没有新云版本。",
+        "tableWrappers": [
+          {
+            "width": 858,
+            "x": "auto",
+            "y": "auto"
+          },
+          {
+            "width": 858,
+            "x": "auto",
+            "y": "auto"
+          },
+          {
+            "width": 858,
+            "x": "auto",
+            "y": "auto"
+          },
+          {
+            "width": 858,
+            "x": "auto",
+            "y": "auto"
+          },
+          {
+            "width": 858,
+            "x": "auto",
+            "y": "auto"
+          },
+          {
+            "width": 858,
+            "x": "auto",
+            "y": "auto"
+          }
+        ]
+      },
+      "javascript_errors": [],
+      "failed_requests": [],
+      "result": "PASS"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "geometry": {
+        "viewport": 390,
+        "width": 390,
+        "chart": 326,
+        "diagram": true,
+        "headings": [
+          "01结论与范围",
+          "02云端交付核验",
+          "03缓存机制验收",
+          "04测试、审查与版本证据",
+          "05原材料内容验收",
+          "06恢复条件与最终状态"
+        ],
+        "sources": 8,
+        "decision": "40例发布质量门禁未通过，灰度部署已停止。冻结缓存10/13版本34/40通过（85%），要求至少38/40；线上保持039，没有新云版本。",
+        "tableWrappers": [
+          {
+            "width": 358,
+            "x": "auto",
+            "y": "auto"
+          },
+          {
+            "width": 358,
+            "x": "auto",
+            "y": "auto"
+          },
+          {
+            "width": 358,
+            "x": "auto",
+            "y": "auto"
+          },
+          {
+            "width": 358,
+            "x": "auto",
+            "y": "auto"
+          },
+          {
+            "width": 358,
+            "x": "auto",
+            "y": "auto"
+          },
+          {
+            "width": 358,
+            "x": "auto",
+            "y": "auto"
+          }
+        ]
+      },
+      "javascript_errors": [],
+      "failed_requests": [],
+      "result": "PASS"
+    }
+  ]
+}

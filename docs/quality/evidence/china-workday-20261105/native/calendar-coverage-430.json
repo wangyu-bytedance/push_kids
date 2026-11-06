@@ -1,0 +1,140 @@
+{
+  "route": "pages/calendar/index",
+  "viewport": {
+    "width": 430,
+    "height": 932,
+    "screenHeight": 932
+  },
+  "nodes": [
+    {
+      "selector": ".pk-sheet",
+      "left": 0,
+      "right": 430,
+      "top": 139.8125,
+      "bottom": 932,
+      "width": 430,
+      "height": 792.1875,
+      "fontSize": "16px",
+      "lineHeight": "25.6px"
+    },
+    {
+      "selector": ".sheet-head",
+      "left": 20,
+      "right": 410,
+      "top": 163.8125,
+      "bottom": 226.8125,
+      "width": 390,
+      "height": 63,
+      "fontSize": "16px",
+      "lineHeight": "25.6px"
+    },
+    {
+      "selector": ".sheet-body",
+      "left": 20,
+      "right": 410,
+      "top": 226.8125,
+      "bottom": 705,
+      "width": 390,
+      "height": 478.1875,
+      "fontSize": "16px",
+      "lineHeight": "25.6px"
+    },
+    {
+      "selector": ".sheet-foot",
+      "left": 20,
+      "right": 410,
+      "top": 705,
+      "bottom": 821,
+      "width": 390,
+      "height": 116,
+      "fontSize": "16px",
+      "lineHeight": "25.6px"
+    },
+    {
+      "selector": ".repeat-mode",
+      "left": 20,
+      "right": 410,
+      "top": 350.8125,
+      "bottom": 400.8125,
+      "width": 390,
+      "height": 50,
+      "fontSize": "16px",
+      "lineHeight": "25.6px"
+    },
+    {
+      "selector": ".sheet-foot .btn",
+      "left": 20,
+      "right": 410,
+      "top": 718,
+      "bottom": 773,
+      "width": 390,
+      "height": 55,
+      "fontSize": "16px",
+      "lineHeight": "19.2px"
+    },
+    {
+      "selector": ".pk-picker",
+      "left": 20,
+      "right": 410,
+      "top": 658.8125,
+      "bottom": 708.8125,
+      "width": 390,
+      "height": 50,
+      "fontSize": "15px",
+      "lineHeight": "22.5px"
+    },
+    {
+      "selector": ".pk-picker",
+      "left": 20,
+      "right": 197,
+      "top": 752.8125,
+      "bottom": 802.8125,
+      "width": 177,
+      "height": 50,
+      "fontSize": "15px",
+      "lineHeight": "22.5px"
+    },
+    {
+      "selector": ".pk-picker",
+      "left": 233,
+      "right": 410,
+      "top": 752.8125,
+      "bottom": 802.8125,
+      "width": 177,
+      "height": 50,
+      "fontSize": "15px",
+      "lineHeight": "22.5px"
+    },
+    {
+      "selector": ".workday-rule .n-txt",
+      "left": 35,
+      "right": 395,
+      "top": 416.3125,
+      "bottom": 437.3125,
+      "width": 360,
+      "height": 21,
+      "fontSize": "14px",
+      "lineHeight": "21.7px"
+    },
+    {
+      "selector": ".workday-rule .n-txt",
+      "left": 35,
+      "right": 395,
+      "top": 465.8125,
+      "bottom": 507.8125,
+      "width": 360,
+      "height": 42,
+      "fontSize": "14px",
+      "lineHeight": "21.7px"
+    }
+  ],
+  "mode": {
+    "workday": true,
+    "weekly": false
+  },
+  "source": "native wx.createSelectorQuery; synthetic fixtures; production WXML/WXSS exact",
+  "errors": [],
+  "state": "coverage",
+  "host": "calendar",
+  "screenshot_status": "NOT_RUN"
+}

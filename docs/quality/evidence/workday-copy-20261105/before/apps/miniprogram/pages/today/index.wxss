@@ -1,0 +1,75 @@
+/* 今日（B1~B5）：只写本页特有的几何，其余全部复用 tokens / atoms / icons。 */
+.today-page { padding-top: 0; }
+.daily-task-card { padding: 0 28rpx; }
+.today-page .sec-bar { min-height: 44px; }
+.daily-task-row { display: flex; align-items: center; gap: 24rpx; padding: 24rpx 0; }
+.daily-task-row + .daily-task-row { border-top: var(--pk-border-soft); }
+.daily-task-copy { min-width: 0; }
+.daily-task-name { display: block; font-size: 15px; font-weight: 600; line-height: 1.6; overflow-wrap: anywhere; }
+.daily-task-meta { display: block; margin-top: 8rpx; font-size: 13px; line-height: 1.5; color: var(--pk-ink-3); }
+.daily-task-row .daily-task-action { flex: none; width: auto; min-width: 64px; min-height: 44px; height: auto; margin: 0; padding: 10px 14px; border-radius: var(--pk-r-pill); box-shadow: none; font-size: 14px; }
+.pg-head .head-intro { flex: 1; min-width: 0; }
+.child-chip .chip-nm { max-width: 200rpx; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.child-chip.single { padding-right: 28rpx; }
+
+.pk-notice .back-link { flex: none; display: flex; align-items: center; gap: 8rpx; min-height: 88rpx; font-size: 12px; font-weight: 500; color: var(--pk-ink-2); }
+
+/* 复习安排 Hero：左侧结论句，右侧安排环。窄屏整体缩放，不改版式。 */
+.pk-hero .hero-main { position: relative; display: flex; align-items: center; gap: 24rpx; }
+.pk-hero .hero-main .grow { flex: 1; min-width: 0; }
+.pk-hero .hero-main .hero-line { margin-top: 14rpx; }
+.pk-hero .ring { flex: none; }
+.pk-hero .ring .rt { position: absolute; left: 50%; top: 50%; width: 6rpx; height: 20rpx; margin: -10rpx 0 0 -3rpx; border-radius: 3rpx; transform-origin: 50% 50%; }
+.pk-hero .ring .rt.req { background: var(--pk-primary); }
+.pk-hero .ring .rt.opt { background: var(--pk-sprout); }
+.pk-hero .ring .rt.idle { background: var(--pk-line-strong); opacity: .8; }
+.pk-hero .ring-legend { position: relative; }
+.pk-hero .hero-note { margin-top: 16rpx; }
+@media (max-width: 350px) {
+  .pk-hero .ring { transform: scale(.82); transform-origin: 100% 50%; }
+  .pk-hero .hero-main .hero-line { font-size: 17px; }
+}
+
+/* 首次引导 Hero（B3）：三步说明必须写清「你确认后才生效」。 */
+.pk-hero.guide .hero-line { font-family: var(--pk-serif); font-size: 22px; line-height: 1.35; }
+.pk-hero.guide .steps { position: relative; margin-top: 28rpx; }
+.pk-hero.guide .step { display: flex; align-items: flex-start; gap: 16rpx; min-height: 64rpx; }
+.pk-hero.guide .step .sn { flex: none; width: 38rpx; height: 38rpx; margin-top: 6rpx; border-radius: 50%; background: rgba(31, 91, 69, .12); color: var(--pk-primary-strong); font-family: var(--pk-serif); font-size: 12px; font-weight: 600; line-height: 38rpx; text-align: center; }
+.pk-hero.guide .step .sc { flex: 1; min-width: 0; font-size: 13px; line-height: 1.65; color: var(--pk-ink-2); }
+.pk-hero.guide .guide-link { position: relative; display: flex; justify-content: center; margin-top: 8rpx; }
+
+/* 可选 Todo 分组小标题 */
+.opt-head { display: flex; align-items: center; gap: 16rpx; margin-top: 32rpx; padding: 0 4rpx; }
+.opt-head .opt-head-t { flex: none; font-size: 12px; color: var(--pk-sprout); font-weight: 500; letter-spacing: .4px; }
+.opt-head .opt-head-line { flex: 1; min-width: 0; height: 1rpx; background: var(--pk-sprout-line); }
+
+.sec-body .todo-slot { display: block; }
+.sec-body .todo-slot + .todo-slot { margin-top: 20rpx; }
+.sec-body .opt-head + .todo-slot { margin-top: 20rpx; }
+.sec-body .todo-slot.history-focus { position: relative; border-radius: var(--pk-r-xl); box-shadow: 0 0 0 3rpx var(--pk-primary-hairline); }
+.more-todo { display: flex; align-items: center; justify-content: center; gap: 12rpx; min-height: 88rpx; margin-top: 20rpx; border: 1rpx dashed var(--pk-line-strong); border-radius: var(--pk-r-lg); background: var(--pk-surface-warm); color: var(--pk-ink-2); font-size: 13px; font-weight: 500; box-sizing: border-box; }
+
+/* 今日复习空态。 */
+.review-today-clear { display: flex; align-items: center; gap: 14rpx; min-height: 72rpx; color: var(--pk-primary); font-size: 13px; font-weight: 500; }
+.review-clear-mark { flex: none; width: 36rpx; height: 36rpx; border-radius: 50%; background: var(--pk-primary-tint); font-size: 12px; line-height: 36rpx; text-align: center; }
+.sec-body .tl-card .link-btn { min-height: 72rpx; }
+.pk-empty.inline .ea { margin-top: 24rpx; display: flex; justify-content: center; }
+
+/* 孩子切换半屏（B4） */
+.child-sheet .rowitem.on { background: var(--pk-primary-wash); }
+.child-sheet .ava-lg { flex: none; width: 80rpx; height: 80rpx; border-radius: 50%; background: linear-gradient(150deg, var(--pk-primary-mid), var(--pk-primary-strong)); color: var(--pk-ink-inv); font-family: var(--pk-serif); font-size: 15px; font-weight: 600; line-height: 80rpx; text-align: center; }
+
+/* 当前页只读原始材料弹层：不跳历史页，不产生复习写入。 */
+.source-sheet .sheet-head .grow { flex: 1; min-width: 0; }
+.source-sheet-body { padding-bottom: 4rpx; }
+.source-context { margin-bottom: 24rpx; padding: 20rpx 22rpx; border-left: 4rpx solid var(--pk-primary); border-radius: var(--pk-r-sm); background: var(--pk-surface-warm); }
+.source-name { display: block; color: var(--pk-ink); font-size: 14px; line-height: 1.55; font-weight: 600; overflow-wrap: anywhere; }
+.source-summary { display: block; margin-top: 8rpx; color: var(--pk-ink-3); font-size: 13px; line-height: 1.65; overflow-wrap: anywhere; }
+/* 单知识点删除沿用底部弹层；长中文滚动区与底部操作区分离。 */
+.delete-sheet { max-height: 85vh; display: flex; flex-direction: column; }
+.delete-sheet .sheet-body { min-height: 0; overflow-y: auto; }
+.delete-name { display: block; padding: 24rpx; margin-bottom: 24rpx; border-radius: var(--pk-r-sm); background: var(--pk-surface-sunken); font-size: 15px; line-height: 1.6; overflow-wrap: anywhere; }
+.delete-copy { display: block; margin-bottom: 24rpx; font-size: 14px; line-height: 1.7; }
+.delete-actions { display: flex; gap: 24rpx; padding-top: 24rpx; flex: none; }
+.delete-actions .btn { flex: 1; width: 0; min-width: 0; margin: 0; min-height: 44px; box-sizing: border-box; }
+.delete-actions .delete-confirm { background: var(--pk-danger); color: var(--pk-ink-inv); }

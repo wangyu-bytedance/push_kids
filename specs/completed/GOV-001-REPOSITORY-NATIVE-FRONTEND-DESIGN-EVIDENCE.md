@@ -122,7 +122,7 @@ flowchart LR
 - `AGENTS.md` 把 Figma node-specific URL 设为强制前端 gate。
 - `docs/design/frontend/README.md` 把 Figma 定义为唯一可编辑设计源。
 - `docs/design/frontend/snapshots/APPROVAL-TEMPLATE.md` 要求 Figma file key/node URL。
-- `specs/active/FEAT-001-UNIFIED-ITEM-REVIEW-STRATEGY.md` 当前因 Figma waiver 待审批而没有实现前端。
+- `specs/completed/FEAT-001-UNIFIED-ITEM-REVIEW-STRATEGY.md` 当前因 Figma waiver 待审批而没有实现前端。
 - 历史 completed/rejected 文档记录旧流程，不是未来任务的权威模板。
 
 ## 3. Target behavior

@@ -1,0 +1,684 @@
+E501 Line too long (105 > 100)
+  --> docs/quality/evidence/report-footer-tips-20261101/prepare-native.py:24:101
+   |
+22 | request:async function(url,options={}){
+23 |   if(options.method&&options.method!=='GET')throw Error('Synthetic copy forbids writes');
+24 |   if(url==='/me')return {state:'bound',family:{id:'synthetic'},member:{role:'manager'},children:[child]};
+   |                                                                                                     ^^^^^
+25 |   if(url==='/children')return [child];
+26 |   if(url.includes('/history?'))return {items:[],pending_count:0,has_processing:false,next_cursor:null};
+   |
+
+E501 Line too long (103 > 100)
+  --> docs/quality/evidence/report-footer-tips-20261101/prepare-native.py:26:101
+   |
+24 |   if(url==='/me')return {state:'bound',family:{id:'synthetic'},member:{role:'manager'},children:[child]};
+25 |   if(url==='/children')return [child];
+26 |   if(url.includes('/history?'))return {items:[],pending_count:0,has_processing:false,next_cursor:null};
+   |                                                                                                     ^^^
+27 |   if(url.includes('/report?'))return {subjects:[],overview:{learning_records:1,new_knowledge_items:1,
+28 |     review_feedback_count:0,activity_records:0},review_urgency:[],review_activity:[],activity_subjects:[]};
+   |
+
+E501 Line too long (101 > 100)
+  --> docs/quality/evidence/report-footer-tips-20261101/prepare-native.py:27:101
+   |
+25 |   if(url==='/children')return [child];
+26 |   if(url.includes('/history?'))return {items:[],pending_count:0,has_processing:false,next_cursor:null};
+27 |   if(url.includes('/report?'))return {subjects:[],overview:{learning_records:1,new_knowledge_items:1,
+   |                                                                                                     ^
+28 |     review_feedback_count:0,activity_records:0},review_urgency:[],review_activity:[],activity_subjects:[]};
+29 |   if(url.includes('/review-inventory/subjects?'))return {items:[{id:'english',name:'英语',count:42}],next_cursor:null};
+   |
+
+E501 Line too long (119 > 100)
+  --> docs/quality/evidence/report-footer-tips-20261101/prepare-native.py:29:99
+   |
+27 |   if(url.includes('/report?'))return {subjects:[],overview:{learning_records:1,new_knowledge_items:1,
+28 |     review_feedback_count:0,activity_records:0},review_urgency:[],review_activity:[],activity_subjects:[]};
+29 |   if(url.includes('/review-inventory/subjects?'))return {items:[{id:'english',name:'英语',count:42}],next_cursor:null};
+   |                                                                                                     ^^^^^^^^^^^^^^^^^^^
+30 |   if(url.includes('/review-inventory?'))return {items:[],total:0,next_cursor:null,
+31 |     as_of_day:'2026-11-01',child_writable:true};
+   |
+
+E501 Line too long (108 > 100)
+  --> docs/quality/evidence/report-footer-tips-20261101/prepare-native.py:38:101
+   |
+36 |          "components/review-inventory/index.js", "pages/reports/index.wxml",
+37 |          "pages/reports/index.wxss", "app.wxss", "styles/tokens.wxss"]
+38 | manifest = {"scope": "production templates/styles/controllers; isolated config and read-only synthetic API",
+   |                                                                                                     ^^^^^^^^
+39 |             "files": {file: hashlib.sha256((OUT / file).read_bytes()).hexdigest() for file in files}}
+40 | (OUT / "source-baseline.json").write_text(json.dumps(manifest, indent=2) + "\n")
+   |
+
+E501 Line too long (101 > 100)
+  --> docs/quality/evidence/report-footer-tips-20261101/prepare-native.py:39:101
+   |
+37 |          "pages/reports/index.wxss", "app.wxss", "styles/tokens.wxss"]
+38 | manifest = {"scope": "production templates/styles/controllers; isolated config and read-only synthetic API",
+39 |             "files": {file: hashlib.sha256((OUT / file).read_bytes()).hexdigest() for file in files}}
+   |                                                                                                     ^
+40 | (OUT / "source-baseline.json").write_text(json.dumps(manifest, indent=2) + "\n")
+41 | print(str(OUT))
+   |
+
+I001 [*] Import block is un-sorted or un-formatted
+  --> specs/evidence/bug036-cache-20261101/baseline/apps/api/src/push_kids/agent_processing/checkpoints.py:3:1
+   |
+ 1 |   """Owner of validated temporary stage data; all operations are family-scoped."""
+ 2 |
+ 3 | / from __future__ import annotations
+ 4 | |
+ 5 | | import json
+ 6 | | from datetime import datetime, timedelta
+ 7 | | from hashlib import sha256
+ 8 | | from time import monotonic
+ 9 | | from typing import Any
+10 | |
+11 | | from sqlalchemy import delete, select
+12 | | from sqlalchemy.orm import Session
+13 | |
+14 | | from push_kids.agent_processing.failures import StageFailure
+15 | | from push_kids.agent_processing.stage_contracts import PIPELINE_REVISION
+16 | | from push_kids.persistence.models import (
+17 | |     AgentJob,
+18 | |     AnalysisStageResult,
+19 | |     Child,
+20 | |     Family,
+21 | |     LearningSubmission,
+22 | | )
+23 | | from push_kids.platform.database import Database
+24 | | from push_kids.platform.time import utcnow
+   | |__________________________________________^
+help: Organize imports
+   |
+10 |
+   - from sqlalchemy import delete, select
+   - from sqlalchemy.orm import Session
+   -
+11 | from push_kids.agent_processing.failures import StageFailure
+--------------------------------------------------------------------------------
+21 | from push_kids.platform.time import utcnow
+22 + from sqlalchemy import delete, select
+23 + from sqlalchemy.orm import Session
+24 |
+   |
+
+I001 [*] Import block is un-sorted or un-formatted
+  --> specs/evidence/bug036-cache-20261101/baseline/apps/api/src/push_kids/agent_processing/pipeline.py:3:1
+   |
+ 1 |   """Fixed extraction, consolidation and history matching with recoverable stage DTOs."""
+ 2 |
+ 3 | / from __future__ import annotations
+ 4 | |
+ 5 | | import asyncio
+ 6 | | import json
+ 7 | | from collections.abc import Callable
+ 8 | | from functools import partial
+ 9 | | from hashlib import sha256
+10 | | from pathlib import Path
+11 | | from time import monotonic
+12 | | from typing import Any, Protocol, TypeVar
+13 | |
+14 | | from pydantic import BaseModel, ValidationError
+15 | |
+16 | | from push_kids.agent_processing.checkpoints import StageCheckpoints, fingerprint
+17 | | from push_kids.agent_processing.contracts import (
+18 | |     AnalysisInput,
+19 | |     AnalysisProposal,
+20 | |     ModelAnalysisResult,
+21 | |     ModelEvidenceReference,
+22 | |     ModelLearningItem,
+23 | |     _has_runtime_uncertainty,
+24 | |     _model_summary_errors,
+25 | |     explicit_same_day_review,
+26 | | )
+27 | | from push_kids.agent_processing.coverage import propose_coverage
+28 | | from push_kids.agent_processing.failures import StageFailure, schema_diagnostics
+29 | | from push_kids.agent_processing.history_search import HistorySearchRequest
+30 | | from push_kids.agent_processing.stage_contracts import (
+31 | |     EXTRACT_INSTRUCTIONS,
+32 | |     MATCH_INSTRUCTIONS,
+33 | |     MERGE_INSTRUCTIONS,
+34 | |     PIPELINE_REVISION,
+35 | |     REUSE_INSTRUCTIONS,
+36 | |     REVIEW_INSTRUCTIONS,
+37 | |     ConsolidatedResult,
+38 | |     ExtractedPoint,
+39 | |     MatchingResult,
+40 | |     MaterialResult,
+41 | |     QualityReviewResult,
+42 | |     ReuseReviewResult,
+43 | | )
+44 | | from push_kids.agent_processing.stage_io import stage_io
+45 | | from push_kids.agent_processing.telemetry import AnalysisTrace
+46 | | from push_kids.knowledge.normalization import normalize_knowledge_name
+   | |______________________________________________________________________^
+47 |
+48 |   T = TypeVar("T", bound=BaseModel)
+   |
+help: Organize imports
+   |
+13 |
+   - from pydantic import BaseModel, ValidationError
+   -
+14 | from push_kids.agent_processing.checkpoints import StageCheckpoints, fingerprint
+--------------------------------------------------------------------------------
+44 | from push_kids.knowledge.normalization import normalize_knowledge_name
+45 + from pydantic import BaseModel, ValidationError
+46 |
+   |
+
+I001 [*] Import block is un-sorted or un-formatted
+  --> specs/evidence/bug036-cache-20261101/baseline/apps/api/src/push_kids/agent_processing/stage_contracts.py:3:1
+   |
+ 1 |   """Bounded, provider-neutral data for material extraction and alias-only decisions."""
+ 2 |
+ 3 | / from __future__ import annotations
+ 4 | |
+ 5 | | from typing import Literal
+ 6 | |
+ 7 | | from pydantic import BaseModel, ConfigDict, Field
+ 8 | |
+ 9 | | from push_kids.agent_processing.contracts import DisplayKind, ReviewMethod
+   | |__________________________________________________________________________^
+10 |
+11 |   PIPELINE_REVISION = "staged-20261031-09"
+   |
+help: Organize imports
+  |
+6 |
+  - from pydantic import BaseModel, ConfigDict, Field
+  -
+7 | from push_kids.agent_processing.contracts import DisplayKind, ReviewMethod
+8 + from pydantic import BaseModel, ConfigDict, Field
+9 |
+  |
+
+I001 [*] Import block is un-sorted or un-formatted
+  --> specs/evidence/bug036-cache-20261101/baseline/apps/api/src/push_kids/agent_processing/worker.py:1:1
+   |
+ 1 | / from __future__ import annotations
+ 2 | |
+ 3 | | import asyncio
+ 4 | | import json
+ 5 | | import logging
+ 6 | | import re
+ 7 | | from contextlib import ExitStack, suppress
+ 8 | | from datetime import timedelta
+ 9 | | from time import monotonic
+10 | |
+11 | | from sqlalchemy import or_, select
+12 | | from sqlalchemy.exc import SQLAlchemyError
+13 | |
+14 | | from push_kids.agent_processing.checkpoints import StageCheckpoints, expire_stages, purge_stages
+15 | | from push_kids.agent_processing.context import (
+16 | |     build_analysis_input,
+17 | |     material_fingerprint,
+18 | |     repeated_material,
+19 | | )
+20 | | from push_kids.agent_processing.contracts import (
+21 | |     MATERIAL_FINGERPRINT_KEY,
+22 | |     AnalysisInputError,
+23 | |     AnalysisProvider,
+24 | |     analysis_failure_disposition,
+25 | | )
+26 | | from push_kids.agent_processing.failures import StageFailure
+27 | | from push_kids.agent_processing.runner import AnalysisAgentRunner
+28 | | from push_kids.agent_processing.telemetry import AnalysisTrace, safe_validation_codes
+29 | | from push_kids.media.store import MediaStore, WeChatCloudMediaStore
+30 | | from push_kids.persistence.models import (
+31 | |     AgentJob,
+32 | |     Child,
+33 | |     Family,
+34 | |     JobState,
+35 | |     LearningSubmission,
+36 | |     MediaObject,
+37 | |     MediaState,
+38 | |     SubmissionMedia,
+39 | |     SubmissionState,
+40 | | )
+41 | | from push_kids.platform.database import Database
+42 | | from push_kids.platform.time import utcnow
+   | |__________________________________________^
+43 |
+44 |   logger = logging.getLogger("push_kids.worker")
+   |
+help: Organize imports
+   |
+10 |
+   - from sqlalchemy import or_, select
+   - from sqlalchemy.exc import SQLAlchemyError
+   -
+11 | from push_kids.agent_processing.checkpoints import StageCheckpoints, expire_stages, purge_stages
+--------------------------------------------------------------------------------
+39 | from push_kids.platform.time import utcnow
+40 + from sqlalchemy import or_, select
+41 + from sqlalchemy.exc import SQLAlchemyError
+42 |
+   |
+
+I001 [*] Import block is un-sorted or un-formatted
+  --> specs/evidence/bug036-cache-20261101/baseline/apps/api/src/push_kids/learning/service.py:1:1
+   |
+ 1 | / from __future__ import annotations
+ 2 | |
+ 3 | | import hashlib
+ 4 | | import json
+ 5 | | import uuid
+ 6 | | from datetime import UTC, datetime, timedelta
+ 7 | | from hashlib import sha256
+ 8 | | from pathlib import Path
+ 9 | |
+10 | | from fastapi import UploadFile
+11 | | from sqlalchemy import delete, func, select
+12 | | from sqlalchemy.exc import IntegrityError
+13 | | from sqlalchemy.orm import Session
+14 | |
+15 | | from push_kids.agent_processing.checkpoints import purge_stages
+16 | | from push_kids.agent_processing.contracts import (
+17 | |     MATERIAL_FINGERPRINT_KEY,
+18 | |     AnalysisOutputExhaustedError,
+19 | |     AnalysisProposal,
+20 | |     KnowledgeProposal,
+21 | |     TodoCandidate,
+22 | |     review_candidate_key,
+23 | |     unique_knowledge_points,
+24 | | )
+25 | | from push_kids.agent_processing.coverage_jobs import ensure_coverage_job
+26 | | from push_kids.agent_processing.history_search import add_search_terms
+27 | | from push_kids.agent_processing.presentation import project_display_groups
+28 | | from push_kids.agent_processing.subject_routing import (
+29 | |     is_merged_subject_label,
+30 | |     match_subject,
+31 | |     route_subjects,
+32 | | )
+33 | | from push_kids.children.service import ChildrenService, is_custom_subject
+34 | | from push_kids.knowledge.normalization import normalize_knowledge_name
+35 | | from push_kids.learning.coverage import apply_confirmed_coverage
+36 | | from push_kids.learning.schemas import (
+37 | |     ConfirmationResult,
+38 | |     ConfirmedRecord,
+39 | |     ConfirmGroup,
+40 | |     ConfirmSubmission,
+41 | |     MediaClaimRequest,
+42 | |     MediaUploadTicket,
+43 | |     MediaUploadTicketRequest,
+44 | |     PhotoDraftCreate,
+45 | |     SubjectGroupView,
+46 | |     SubmissionCreate,
+47 | |     SubmissionView,
+48 | |     UpdatedReview,
+49 | | )
+50 | | from push_kids.media.store import (
+51 | |     ALLOWED_IMAGE_TYPES,
+52 | |     LocalMediaStore,
+53 | |     MediaStore,
+54 | |     WeChatCloudMediaStore,
+55 | | )
+56 | | from push_kids.persistence.models import (
+57 | |     AgentJob,
+58 | |     Child,
+59 | |     Family,
+60 | |     JobState,
+61 | |     KnowledgeItem,
+62 | |     KnowledgeOccurrence,
+63 | |     LearningRecord,
+64 | |     LearningSubmission,
+65 | |     MediaObject,
+66 | |     MediaState,
+67 | |     ReviewItem,
+68 | |     Subject,
+69 | |     SubmissionMedia,
+70 | |     SubmissionRequest,
+71 | |     SubmissionState,
+72 | | )
+73 | | from push_kids.planning.policies import initial_review_state
+74 | | from push_kids.planning.service import PlanningService
+75 | | from push_kids.platform.context import RequestContext
+76 | | from push_kids.platform.errors import (
+77 | |     ConflictError,
+78 | |     ConsentRequiredError,
+79 | |     NotFoundError,
+80 | | )
+81 | | from push_kids.platform.pagination import decode_cursor, encode_cursor
+82 | | from push_kids.platform.time import local_date, utcnow
+   | |______________________________________________________^
+help: Organize imports
+   |
+10 | from fastapi import UploadFile
+   - from sqlalchemy import delete, func, select
+   - from sqlalchemy.exc import IntegrityError
+   - from sqlalchemy.orm import Session
+   -
+11 | from push_kids.agent_processing.checkpoints import purge_stages
+--------------------------------------------------------------------------------
+78 | from push_kids.platform.time import local_date, utcnow
+79 + from sqlalchemy import delete, func, select
+80 + from sqlalchemy.exc import IntegrityError
+81 + from sqlalchemy.orm import Session
+82 |
+   |
+
+I001 [*] Import block is un-sorted or un-formatted
+  --> specs/evidence/bug036-cache-20261101/final/apps/api/src/push_kids/agent_processing/checkpoints.py:3:1
+   |
+ 1 |   """Owner of validated temporary stage data; all operations are family-scoped."""
+ 2 |
+ 3 | / from __future__ import annotations
+ 4 | |
+ 5 | | import json
+ 6 | | from datetime import datetime, timedelta
+ 7 | | from hashlib import sha256
+ 8 | | from time import monotonic
+ 9 | | from typing import Any, cast
+10 | |
+11 | | from sqlalchemy import delete, select
+12 | | from sqlalchemy.engine import CursorResult
+13 | | from sqlalchemy.orm import Session
+14 | |
+15 | | from push_kids.agent_processing.failures import StageFailure
+16 | | from push_kids.agent_processing.stage_contracts import PIPELINE_REVISION
+17 | | from push_kids.persistence.models import (
+18 | |     AgentJob,
+19 | |     AnalysisStageResult,
+20 | |     Child,
+21 | |     Family,
+22 | |     LearningSubmission,
+23 | | )
+24 | | from push_kids.platform.database import Database
+25 | | from push_kids.platform.time import utcnow
+   | |__________________________________________^
+help: Organize imports
+   |
+10 |
+   - from sqlalchemy import delete, select
+   - from sqlalchemy.engine import CursorResult
+   - from sqlalchemy.orm import Session
+   -
+11 | from push_kids.agent_processing.failures import StageFailure
+--------------------------------------------------------------------------------
+21 | from push_kids.platform.time import utcnow
+22 + from sqlalchemy import delete, select
+23 + from sqlalchemy.engine import CursorResult
+24 + from sqlalchemy.orm import Session
+25 |
+   |
+
+I001 [*] Import block is un-sorted or un-formatted
+  --> specs/evidence/bug036-cache-20261101/final/apps/api/src/push_kids/agent_processing/pipeline.py:3:1
+   |
+ 1 |   """Fixed extraction, consolidation and history matching with recoverable stage DTOs."""
+ 2 |
+ 3 | / from __future__ import annotations
+ 4 | |
+ 5 | | import asyncio
+ 6 | | import json
+ 7 | | from collections.abc import Callable
+ 8 | | from functools import partial
+ 9 | | from hashlib import sha256
+10 | | from pathlib import Path
+11 | | from time import monotonic
+12 | | from typing import Any, Protocol, TypeVar
+13 | |
+14 | | from pydantic import BaseModel, ValidationError
+15 | |
+16 | | from push_kids.agent_processing.checkpoints import StageCheckpoints, fingerprint
+17 | | from push_kids.agent_processing.contracts import (
+18 | |     AnalysisInput,
+19 | |     AnalysisProposal,
+20 | |     ModelAnalysisResult,
+21 | |     ModelEvidenceReference,
+22 | |     ModelLearningItem,
+23 | |     _has_runtime_uncertainty,
+24 | |     _model_summary_errors,
+25 | |     explicit_same_day_review,
+26 | | )
+27 | | from push_kids.agent_processing.coverage import propose_coverage
+28 | | from push_kids.agent_processing.failures import StageFailure, schema_diagnostics
+29 | | from push_kids.agent_processing.history_search import HistorySearchRequest
+30 | | from push_kids.agent_processing.stage_contracts import (
+31 | |     EXTRACT_INSTRUCTIONS,
+32 | |     MATCH_INSTRUCTIONS,
+33 | |     MERGE_INSTRUCTIONS,
+34 | |     PIPELINE_REVISION,
+35 | |     REUSE_INSTRUCTIONS,
+36 | |     REVIEW_INSTRUCTIONS,
+37 | |     ConsolidatedResult,
+38 | |     ExtractedPoint,
+39 | |     MatchingResult,
+40 | |     MaterialResult,
+41 | |     QualityReviewResult,
+42 | |     ReuseReviewResult,
+43 | | )
+44 | | from push_kids.agent_processing.stage_io import stage_io
+45 | | from push_kids.agent_processing.telemetry import AnalysisTrace
+46 | | from push_kids.knowledge.normalization import normalize_knowledge_name
+   | |______________________________________________________________________^
+47 |
+48 |   T = TypeVar("T", bound=BaseModel)
+   |
+help: Organize imports
+   |
+13 |
+   - from pydantic import BaseModel, ValidationError
+   -
+14 | from push_kids.agent_processing.checkpoints import StageCheckpoints, fingerprint
+--------------------------------------------------------------------------------
+44 | from push_kids.knowledge.normalization import normalize_knowledge_name
+45 + from pydantic import BaseModel, ValidationError
+46 |
+   |
+
+I001 [*] Import block is un-sorted or un-formatted
+  --> specs/evidence/bug036-cache-20261101/final/apps/api/src/push_kids/agent_processing/stage_contracts.py:3:1
+   |
+ 1 |   """Bounded, provider-neutral data for material extraction and alias-only decisions."""
+ 2 |
+ 3 | / from __future__ import annotations
+ 4 | |
+ 5 | | from typing import Literal
+ 6 | |
+ 7 | | from pydantic import BaseModel, ConfigDict, Field
+ 8 | |
+ 9 | | from push_kids.agent_processing.contracts import DisplayKind, ReviewMethod
+   | |__________________________________________________________________________^
+10 |
+11 |   PIPELINE_REVISION = "staged-20261101-10"
+   |
+help: Organize imports
+  |
+6 |
+  - from pydantic import BaseModel, ConfigDict, Field
+  -
+7 | from push_kids.agent_processing.contracts import DisplayKind, ReviewMethod
+8 + from pydantic import BaseModel, ConfigDict, Field
+9 |
+  |
+
+I001 [*] Import block is un-sorted or un-formatted
+  --> specs/evidence/bug036-cache-20261101/final/apps/api/src/push_kids/agent_processing/worker.py:1:1
+   |
+ 1 | / from __future__ import annotations
+ 2 | |
+ 3 | | import asyncio
+ 4 | | import json
+ 5 | | import logging
+ 6 | | import re
+ 7 | | from contextlib import ExitStack, suppress
+ 8 | | from datetime import timedelta
+ 9 | | from time import monotonic
+10 | |
+11 | | from sqlalchemy import or_, select
+12 | | from sqlalchemy.exc import SQLAlchemyError
+13 | |
+14 | | from push_kids.agent_processing.checkpoints import (
+15 | |     StageCheckpoints,
+16 | |     expire_stages,
+17 | |     purge_decision_stages,
+18 | |     purge_stages,
+19 | | )
+20 | | from push_kids.agent_processing.context import (
+21 | |     build_analysis_input,
+22 | |     material_fingerprint,
+23 | |     repeated_material,
+24 | | )
+25 | | from push_kids.agent_processing.contracts import (
+26 | |     MATERIAL_FINGERPRINT_KEY,
+27 | |     AnalysisInputError,
+28 | |     AnalysisProvider,
+29 | |     analysis_failure_disposition,
+30 | | )
+31 | | from push_kids.agent_processing.failures import StageFailure
+32 | | from push_kids.agent_processing.runner import AnalysisAgentRunner
+33 | | from push_kids.agent_processing.stage_contracts import PIPELINE_REVISION
+34 | | from push_kids.agent_processing.telemetry import AnalysisTrace, safe_validation_codes
+35 | | from push_kids.media.store import MediaStore, WeChatCloudMediaStore
+36 | | from push_kids.persistence.models import (
+37 | |     AgentJob,
+38 | |     Child,
+39 | |     Family,
+40 | |     JobState,
+41 | |     LearningSubmission,
+42 | |     MediaObject,
+43 | |     MediaState,
+44 | |     SubmissionMedia,
+45 | |     SubmissionState,
+46 | | )
+47 | | from push_kids.platform.database import Database
+48 | | from push_kids.platform.time import utcnow
+   | |__________________________________________^
+49 |
+50 |   logger = logging.getLogger("push_kids.worker")
+   |
+help: Organize imports
+   |
+10 |
+   - from sqlalchemy import or_, select
+   - from sqlalchemy.exc import SQLAlchemyError
+   -
+11 | from push_kids.agent_processing.checkpoints import (
+--------------------------------------------------------------------------------
+45 | from push_kids.platform.time import utcnow
+46 + from sqlalchemy import or_, select
+47 + from sqlalchemy.exc import SQLAlchemyError
+48 |
+   |
+
+I001 [*] Import block is un-sorted or un-formatted
+  --> specs/evidence/bug036-cache-20261101/final/apps/api/src/push_kids/learning/service.py:1:1
+   |
+ 1 | / from __future__ import annotations
+ 2 | |
+ 3 | | import hashlib
+ 4 | | import json
+ 5 | | import uuid
+ 6 | | from datetime import UTC, datetime, timedelta
+ 7 | | from hashlib import sha256
+ 8 | | from pathlib import Path
+ 9 | |
+10 | | from fastapi import UploadFile
+11 | | from sqlalchemy import delete, func, select
+12 | | from sqlalchemy.exc import IntegrityError
+13 | | from sqlalchemy.orm import Session
+14 | |
+15 | | from push_kids.agent_processing.checkpoints import purge_decision_stages, purge_stages
+16 | | from push_kids.agent_processing.contracts import (
+17 | |     MATERIAL_FINGERPRINT_KEY,
+18 | |     AnalysisOutputExhaustedError,
+19 | |     AnalysisProposal,
+20 | |     KnowledgeProposal,
+21 | |     TodoCandidate,
+22 | |     review_candidate_key,
+23 | |     unique_knowledge_points,
+24 | | )
+25 | | from push_kids.agent_processing.coverage_jobs import ensure_coverage_job
+26 | | from push_kids.agent_processing.history_search import add_search_terms
+27 | | from push_kids.agent_processing.presentation import project_display_groups
+28 | | from push_kids.agent_processing.subject_routing import (
+29 | |     is_merged_subject_label,
+30 | |     match_subject,
+31 | |     route_subjects,
+32 | | )
+33 | | from push_kids.children.service import ChildrenService, is_custom_subject
+34 | | from push_kids.knowledge.normalization import normalize_knowledge_name
+35 | | from push_kids.learning.coverage import apply_confirmed_coverage
+36 | | from push_kids.learning.schemas import (
+37 | |     ConfirmationResult,
+38 | |     ConfirmedRecord,
+39 | |     ConfirmGroup,
+40 | |     ConfirmSubmission,
+41 | |     MediaClaimRequest,
+42 | |     MediaUploadTicket,
+43 | |     MediaUploadTicketRequest,
+44 | |     PhotoDraftCreate,
+45 | |     SubjectGroupView,
+46 | |     SubmissionCreate,
+47 | |     SubmissionView,
+48 | |     UpdatedReview,
+49 | | )
+50 | | from push_kids.media.store import (
+51 | |     ALLOWED_IMAGE_TYPES,
+52 | |     LocalMediaStore,
+53 | |     MediaStore,
+54 | |     WeChatCloudMediaStore,
+55 | | )
+56 | | from push_kids.persistence.models import (
+57 | |     AgentJob,
+58 | |     Child,
+59 | |     Family,
+60 | |     JobState,
+61 | |     KnowledgeItem,
+62 | |     KnowledgeOccurrence,
+63 | |     LearningRecord,
+64 | |     LearningSubmission,
+65 | |     MediaObject,
+66 | |     MediaState,
+67 | |     ReviewItem,
+68 | |     Subject,
+69 | |     SubmissionMedia,
+70 | |     SubmissionRequest,
+71 | |     SubmissionState,
+72 | | )
+73 | | from push_kids.planning.policies import initial_review_state
+74 | | from push_kids.planning.service import PlanningService
+75 | | from push_kids.platform.context import RequestContext
+76 | | from push_kids.platform.errors import (
+77 | |     ConflictError,
+78 | |     ConsentRequiredError,
+79 | |     NotFoundError,
+80 | | )
+81 | | from push_kids.platform.pagination import decode_cursor, encode_cursor
+82 | | from push_kids.platform.time import local_date, utcnow
+   | |______________________________________________________^
+help: Organize imports
+   |
+10 | from fastapi import UploadFile
+   - from sqlalchemy import delete, func, select
+   - from sqlalchemy.exc import IntegrityError
+   - from sqlalchemy.orm import Session
+   -
+11 | from push_kids.agent_processing.checkpoints import purge_decision_stages, purge_stages
+--------------------------------------------------------------------------------
+78 | from push_kids.platform.time import local_date, utcnow
+79 + from sqlalchemy import delete, func, select
+80 + from sqlalchemy.exc import IntegrityError
+81 + from sqlalchemy.orm import Session
+82 |
+   |
+
+E501 Line too long (103 > 100)
+  --> tools/prepare_travel_diary_native.py:36:101
+   |
+34 |     return {...batch,photos:rows.map(p=>({...p}))};
+35 |   }
+36 |   if(url==='/footprints/preferences'&&options.method==='PATCH'){aiEnabled=data.ai_enabled;return data;}
+   |                                                                                                     ^^^
+37 |   if(url==='/footprints/preferences')return {ai_enabled:aiEnabled,consented:true};
+38 |   if(url.startsWith('/footprints/drafts?'))return {items:rows.map(p=>({...p})),next_cursor:null};
+   |
+
+Found 17 errors.
+[*] 10 fixable with the `--fix` option.
