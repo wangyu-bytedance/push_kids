@@ -1,0 +1,49 @@
+{
+  "route": "pages/family-members/index",
+  "theme": "space",
+  "viewport": {
+    "width": 390,
+    "height": 844,
+    "screenWidth": 390,
+    "screenHeight": 844
+  },
+  "base_library": "3.17.4",
+  "nodes": [
+    {
+      "host": "page",
+      "selector": ".theme-page",
+      "left": 0,
+      "right": 390,
+      "top": 0,
+      "bottom": 753,
+      "width": 390,
+      "height": 753,
+      "backgroundColor": "rgb(223, 232, 251)",
+      "color": "rgb(32, 53, 93)",
+      "fontSize": "16px",
+      "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif"
+    },
+    {
+      "host": "page",
+      "selector": ".page",
+      "left": 0,
+      "right": 390,
+      "top": 0,
+      "bottom": 548,
+      "width": 390,
+      "height": 548,
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "color": "rgb(32, 53, 93)",
+      "fontSize": "16px",
+      "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif"
+    }
+  ],
+  "source": "native wx.createSelectorQuery; synthetic fixtures; production WXML/WXSS exact; page loading lifecycles suppressed",
+  "screenshot": "space--family-members-index.png",
+  "screenshot_sha256": "c0c141fc274264f40a8b40c8b9cb55cc358a7cf24be1bb7bdf4ced129eaf0540",
+  "fixture": "family-members-index",
+  "category": "route",
+  "screenshot_errors": [],
+  "validation_errors": [],
+  "horizontal_overflow": []
+}

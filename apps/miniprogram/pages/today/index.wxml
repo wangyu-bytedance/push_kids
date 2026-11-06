@@ -1,7 +1,9 @@
+<view class="{{theme.classes}} theme-page" style="{{theme.style}}">
 <view aria-hidden="{{gradeConfirmationVisible}}">
 <view aria-hidden="{{showLearningSheet}}"><primary-nav></primary-nav></view>
 <view class="page today-page" aria-hidden="{{showRenewalGuide}}">
-  <view class="pg-head" aria-hidden="{{showLearningSheet}}">
+  <view class="pg-head theme-header" aria-hidden="{{showLearningSheet}}">
+    <image wx:if="{{theme.assets.hero && !themeArtFailed}}" class="theme-hero-art" src="{{theme.assets.hero}}" mode="aspectFill" binderror="onThemeIllustrationError" aria-hidden="{{true}}" />
     <view class="head-intro">
       <text class="pg-title">今天，也慢慢来</text>
       <text class="pg-context">{{dayLabel}}</text>
@@ -14,9 +16,9 @@
   </view>
 
   <view class="pk-notice err mt2" wx:if="{{error}}">
-    <view class="ico ico-cloud-off-dan sm"></view>
+    <theme-icon class="ico  sm" name="cloud-off" tone="danger" size="sm"></theme-icon>
     <text class="n-txt">{{error}}。已经加载到的内容还能继续看。</text>
-    <view class="ico ico-refresh-dan sm" aria-role="button" aria-label="重试" bindtap="load"></view>
+    <view class="theme-icon-action" aria-role="button" aria-label="重试" bindtap="load"><theme-icon name="refresh" tone="danger" size="sm"></theme-icon></view>
   </view>
 
   <block wx:if="{{loading && !dashboard}}">
@@ -26,7 +28,7 @@
   </block>
 
   <view class="pk-empty" wx:elif="{{!children.length}}">
-    <view class="em"><view class="ico ico-sprout-pri lg"></view></view>
+    <view class="em"><theme-icon class="ico  lg" name="sprout" tone="primary" size="lg"></theme-icon></view>
     <text class="et">还没有学习档案</text>
     <text class="ec">先在设置里建好孩子的学习档案，之后每天的复习安排和课外活动都会出现在这一页。</text>
     <view class="ea"><view class="btn" aria-role="button" aria-label="前往设置" bindtap="openSettings">前往设置</view></view>
@@ -34,17 +36,17 @@
 
   <block wx:elif="{{dashboard}}">
     <view class="pk-notice mt2" wx:if="{{dashboard.pending_confirmation_count || dashboard.analyzing_count}}" bindtap="openPending">
-      <view class="ico ico-sparkle-att sm"></view>
+      <theme-icon class="ico  sm" name="sparkle" tone="attention" size="sm"></theme-icon>
       <text class="n-txt">{{dashboard.pending_confirmation_count}} 条等你确认，{{dashboard.analyzing_count}} 条还在整理</text>
       <view class="chev right"></view>
     </view>
     <view class="pk-notice err mt2" wx:if="{{dashboard.failed_count}}" bindtap="openPending">
-      <view class="ico ico-warn-dan sm"></view>
+      <theme-icon class="ico  sm" name="warn" tone="danger" size="sm"></theme-icon>
       <text class="n-txt">{{dashboard.failed_count}} 条这次没整理出来，可以去记录页重试或改成人工录入</text>
       <view class="chev right"></view>
     </view>
     <view class="pk-notice quiet mt2" wx:if="{{reviewReturn}}">
-      <view class="ico ico-eye sm"></view>
+      <theme-icon class="ico  sm" name="eye" tone="ink" size="sm"></theme-icon>
       <text class="n-txt">{{reviewFocusText}}</text>
       <view class="back-link" aria-role="button" aria-label="返回这条学习记录" bindtap="returnToRecord"><text>返回记录</text><view class="chev right"></view></view>
     </view>
@@ -74,8 +76,8 @@
       </view>
       <text class="hero-note" wx:if="{{hero.note}}">{{hero.note}}</text>
       <view class="btn-row mt4">
-        <view class="btn md" aria-role="button" aria-label="记录学习" bindtap="recordLearning"><view class="ico ico-camera-inv sm"></view><text>记录学习</text></view>
-        <view class="btn md neutral" aria-role="button" aria-label="添加日程" bindtap="addSchedule"><view class="ico ico-plus sm"></view><text>添加日程</text></view>
+        <view class="btn md" aria-role="button" aria-label="记录学习" bindtap="recordLearning"><theme-icon class="ico  sm" name="camera" tone="inverse" size="sm"></theme-icon><text>记录学习</text></view>
+        <view class="btn md neutral" aria-role="button" aria-label="添加日程" bindtap="addSchedule"><theme-icon class="ico  sm" name="plus" tone="ink" size="sm"></theme-icon><text>添加日程</text></view>
       </view>
     </view>
 
@@ -88,7 +90,7 @@
         <view class="step"><text class="sn">2</text><text class="sc">AI 整理成草稿，你确认后才生效</text></view>
         <view class="step"><text class="sn">3</text><text class="sc">确认之后复习日期自动排好，出现在这一页</text></view>
       </view>
-      <view class="mt4"><view class="btn" aria-role="button" aria-label="记录学习" bindtap="recordLearning"><view class="ico ico-camera-inv sm"></view><text>记录学习</text></view></view>
+      <view class="mt4"><view class="btn" aria-role="button" aria-label="记录学习" bindtap="recordLearning"><theme-icon class="ico  sm" name="camera" tone="inverse" size="sm"></theme-icon><text>记录学习</text></view></view>
       <view class="guide-link"><view class="link-btn" aria-role="button" aria-label="也可以先添加日程" bindtap="addSchedule"><text>也可以先添加日程</text><view class="chev right pri"></view></view></view>
     </view>
 
@@ -216,7 +218,7 @@
       <text class="sheet-title">原始学习内容</text>
       <text class="sheet-sub" wx:if="{{sourceSheet.dateLabel}}">{{sourceSheet.dateLabel}}记录</text>
     </view>
-    <view class="icon-btn" aria-role="button" aria-label="关闭原始学习内容" bindtap="closeSourceSheet"><view class="ico ico-close sm"></view></view>
+    <view class="icon-btn" aria-role="button" aria-label="关闭原始学习内容" bindtap="closeSourceSheet"><theme-icon class="ico  sm" name="close" tone="ink" size="sm"></theme-icon></view>
   </view>
   <view class="sheet-body source-sheet-body">
     <view class="source-context">
@@ -230,7 +232,7 @@
 <view class="pk-mask" wx:if="{{deleteTarget}}" bindtap="cancelDelete"></view>
 <view class="pk-sheet delete-sheet" wx:if="{{deleteTarget}}">
   <view class="handle"></view>
-  <view class="sheet-head"><text class="sheet-title grow">删除这个知识点？</text><button class="icon-btn" disabled="{{deleting}}" aria-label="取消删除" bindtap="cancelDelete"><view class="ico ico-close sm"></view></button></view>
+  <view class="sheet-head"><text class="sheet-title grow">删除这个知识点？</text><button class="icon-btn" disabled="{{deleting}}" aria-label="取消删除" bindtap="cancelDelete"><theme-icon class="ico  sm" name="close" tone="ink" size="sm"></theme-icon></button></view>
   <view class="sheet-body">
     <text class="delete-name">{{deleteTarget.name}}</text>
     <text class="delete-copy">将删除这个知识点的学习关联、复习安排和反馈。原始照片、原记录总结及同次上传的其他知识点会保留。</text>
@@ -249,20 +251,22 @@
     <view class="grow">
       <text class="sheet-title">选择孩子</text>
     </view>
-    <view class="icon-btn" aria-role="button" aria-label="关闭" bindtap="closeChildSheet"><view class="ico ico-close sm"></view></view>
+    <view class="icon-btn" aria-role="button" aria-label="关闭" bindtap="closeChildSheet"><theme-icon class="ico  sm" name="close" tone="ink" size="sm"></theme-icon></view>
   </view>
   <view class="sheet-body">
     <view class="rowlist">
       <view class="rowitem {{index === childIndex ? 'on' : ''}}" wx:for="{{children}}" wx:key="id" aria-role="button" aria-label="切换到这个孩子" data-index="{{index}}" bindtap="chooseChild">
         <text class="ava-lg">{{item.avatar}}</text>
         <view class="grow"><text class="r-t">{{item.label}}</text></view>
-        <view class="ico ico-check-pri sm" wx:if="{{index === childIndex}}"></view>
+        <theme-icon class="ico  sm" wx:if="{{index === childIndex}}" name="check" tone="primary" size="sm"></theme-icon>
       </view>
     </view>
     <view class="add-entry" wx:if="{{canAddChild}}" aria-role="button" aria-label="添加孩子" bindtap="addChild">
-      <view class="ico ico-plus-pri sm"></view><text>添加孩子</text>
+      <theme-icon class="ico  sm" name="plus" tone="primary" size="sm"></theme-icon><text>添加孩子</text>
     </view>
   </view>
 </view>
 </view>
 <grade-confirmation id="grade-confirmation" view="{{gradeConfirmation}}" blocked="{{loading || showChildSheet || showSourceSheet || showRenewalGuide || showLearningSheet || deleteTarget || deleting || dailyTaskPendingId}}" bindaction="onGradeConfirmation"></grade-confirmation>
+
+</view>

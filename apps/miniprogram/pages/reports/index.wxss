@@ -11,7 +11,7 @@
 .report-intro .child-chip .chip-nm { min-width: 0; max-width: 160rpx; }
 .report-intro-art { flex: none; width: 220rpx; height: 240rpx; pointer-events: none; }
 .report-page .pk-card, .report-page .metric {
-  background: radial-gradient(120% 130% at 100% 0%, rgba(127, 166, 92, .12), rgba(127, 166, 92, 0) 58%), linear-gradient(158deg, #FFFEFA 0%, #F7F4EA 100%);
+  background: var(--pk-hero-background);
 }
 .report-page .head-intro { flex: 1; min-width: 0; }
 .report-page .child-chip .chip-nm { max-width: 190rpx; }
@@ -61,7 +61,7 @@
   flex: none;
   font-size: 12px;
   line-height: 1.5;
-  color: var(--pk-ink-3);
+  color: var(--pk-text-muted);
 }
 
 .chart-card { padding: 24rpx 20rpx; box-shadow: var(--pk-e1); }
@@ -123,7 +123,7 @@
 .chart-foot .total {
   flex: none;
   font-size: 12px;
-  color: var(--pk-ink-3);
+  color: var(--pk-text-muted);
 }
 
 .list-card { padding: 8rpx 24rpx; }
@@ -147,7 +147,7 @@
   margin-top: 6rpx;
   font-size: 12px;
   line-height: 1.5;
-  color: var(--pk-ink-3);
+  color: var(--pk-text-muted);
 }
 
 /* 活动行与孩子行共用的圆形标记 */
@@ -178,7 +178,7 @@
 .report-disclosure .history-toggle .ico { flex: none; }
 .disclosure-heading { min-width: 0; }
 .disclosure-title { display: block; font-family: var(--pk-serif); font-size: 17px; font-weight: 600; line-height: 1.45; }
-.disclosure-sub { display: block; margin-top: var(--pk-s1); font-size: 12px; line-height: 1.5; color: var(--pk-ink-3); overflow-wrap: anywhere; }
+.disclosure-sub { display: block; margin-top: var(--pk-s1); font-size: 12px; line-height: 1.5; color: var(--pk-text-muted); overflow-wrap: anywhere; }
 .disclosure-action { flex: none; font-size: 12px; color: var(--pk-primary); }
 .disclosure-body { border-top: var(--pk-border-line); }
 .disclosure-footer { display: flex; align-items: center; justify-content: center; gap: var(--pk-s2); min-height: 44px; padding: var(--pk-s2) 0; font-size: 12px; color: var(--pk-primary); }
@@ -195,7 +195,7 @@
 .report-disclosure .h-record-row .h-title { font-size: 14px; font-weight: 500; line-height: 1.55; }
 .report-disclosure .h-record-row .h-sum { font-size: 13px; }
 .report-disclosure .h-record-meta { margin-top: var(--pk-s2); gap: var(--pk-s1); }
-.h-meta-chip { display: flex; align-items: center; gap: var(--pk-s1); font-size: 12px; color: var(--pk-ink-3); line-height: 1.55; }
+.h-meta-chip { display: flex; align-items: center; gap: var(--pk-s1); font-size: 12px; color: var(--pk-text-muted); line-height: 1.55; }
 .h-meta-chip + .h-meta-chip::before { content: '·'; }
 .report-disclosure .safe-tail { display: none; }
 .report-disclosure review-inventory { display: block; width: 100%; }

@@ -1,3 +1,4 @@
+<view class="{{theme.classes}}" style="{{theme.style}}">
 <view class="todo {{view.optional ? 'opt' : ''}}">
   <view class="rail"></view>
   <view class="todo-top">
@@ -12,14 +13,14 @@
     <view class="todo-pt" wx:for="{{view.items}}" wx:key="reviewId">
       <view class="pt-row">
         <view class="pt-dot {{item.done ? 'on' : ''}}">
-          <view class="ico ico-check-inv xs" wx:if="{{item.done}}"></view>
+          <theme-icon class="ico  xs" wx:if="{{item.done}}" name="check" tone="inverse" size="xs"></theme-icon>
         </view>
         <view class="pt-main">
           <text class="pt-n {{item.done ? 'is-done' : ''}}">{{item.name}}</text>
           <text class="pt-summary" wx:if="{{item.arrangementLabel}}">{{item.arrangementLabel}}</text>
           <text class="pt-summary" wx:if="{{item.sourceSummary}}">原题提示：{{item.sourceSummary}}</text>
           <view class="source-link" wx:if="{{item.canOpenSource}}" aria-role="button" aria-label="查看 {{item.name}} 的原始内容" data-review-id="{{item.reviewId}}" catchtap="openSource">
-            <view class="ico ico-image-pri xs"></view><text>查看原始内容</text><view class="chev right pri"></view>
+            <theme-icon class="ico  xs" name="image" tone="primary" size="xs"></theme-icon><text>查看原始内容</text><view class="chev right pri"></view>
           </view>
         </view>
         <view class="pt-done" wx:if="{{item.done}}">
@@ -28,14 +29,14 @@
         <block wx:elif="{{canWrite && item.actionAllowed}}">
           <view class="act-done-hit"><button class="btn sm act-done" disabled="{{busyId === item.reviewId}}" data-review-id="{{item.reviewId}}" data-action="complete" bindtap="feedback">{{busyId === item.reviewId ? '记录中' : '完成'}}</button></view>
           <view class="act-more {{panelId === item.reviewId ? 'on' : ''}}" aria-role="button" aria-label="其他反馈" data-review-id="{{item.reviewId}}" bindtap="openMore">
-            <view class="ico ico-more sm"></view>
+            <theme-icon class="ico  sm" name="more" tone="ink" size="sm"></theme-icon>
           </view>
         </block>
       </view>
       <view class="fb-panel" wx:if="{{panelId === item.reviewId}}">
         <text class="fb-hd">刚才的实际情况是：</text>
         <view class="fb" wx:for="{{item.actions}}" wx:for-item="fb" wx:for-index="fbIndex" wx:key="action" data-review-id="{{item.reviewId}}" data-action="{{fb.action}}" bindtap="feedback">
-          <view class="ico sm {{fb.icon}}"></view>
+          <theme-icon class="ico sm" name="{{fb.icon}}" tone="{{fb.tone}}" size="sm"></theme-icon>
           <view class="grow">
             <text class="fb-t">{{fb.label}}</text>
             <text class="fb-s">{{fb.effect}}</text>
@@ -43,7 +44,7 @@
           <view class="chev right"></view>
         </view>
         <view class="fb fb-delete" wx:if="{{canWrite && item.knowledgeId}}" aria-role="button" aria-label="删除这个知识点的记录" data-review-id="{{item.reviewId}}" bindtap="deleteRecord">
-          <view class="ico ico-trash sm"></view>
+          <theme-icon class="ico  sm" name="trash" tone="ink" size="sm"></theme-icon>
           <view class="grow"><text class="fb-t">删除记录</text><text class="fb-s">删除这个知识点及其复习安排</text></view>
           <view class="chev right"></view>
         </view>
@@ -51,4 +52,6 @@
       </view>
     </view>
   </view>
+</view>
+
 </view>

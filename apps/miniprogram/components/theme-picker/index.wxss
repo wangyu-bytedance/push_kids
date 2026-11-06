@@ -1,0 +1,20 @@
+.theme-picker-mask { position: fixed; inset: 0; z-index: 80; background: var(--pk-overlay); }
+.theme-picker-sheet { position: fixed; z-index: 81; left: 0; right: 0; bottom: 0; max-width: 960rpx; margin: auto; box-sizing: border-box; border-radius: var(--pk-r-2xl) var(--pk-r-2xl) 0 0; background: var(--pk-surface); color: var(--pk-ink); padding: 24rpx 28rpx calc(20rpx + env(safe-area-inset-bottom)); }
+.theme-picker-head { display: flex; align-items: center; gap: 16rpx; padding-bottom: 20rpx; }
+.theme-picker-hint { display: block; color: var(--pk-ink-2); font-size: 12px; line-height: 1.5; margin-top: 6rpx; }
+.theme-picker-head .theme-picker-close { display: flex; align-items: center; justify-content: center; flex: 0 0 44px; min-width: 44px; max-width: 44px; width: 44px; height: 44px; min-height: 44px; padding: 0; margin: 0; border-radius: 50%; background: var(--pk-surface-sunken); }
+.theme-picker-close::after, .theme-choice::after { border: none; }
+.theme-picker-scroll { height: 48vh; max-height: 720rpx; }
+.theme-picker-grid { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 20rpx; padding: 4rpx 4rpx 16rpx; }
+.theme-picker-grid .theme-choice { position: relative; flex: 0 0 calc(50% - 10rpx); width: calc(50% - 10rpx); max-width: calc(50% - 10rpx); min-width: 0; margin: 0; padding: 0; border: 4rpx solid var(--pk-line-strong); border-radius: var(--pk-r-lg); overflow: hidden; background: var(--tile-bg); color: var(--tile-ink); text-align: left; box-sizing: border-box; line-height: 1.4; }
+.theme-choice.is-selected { border-color: var(--pk-primary); }
+.theme-choice-art, .theme-choice-fallback { display: block; width: 100%; height: 132rpx; }
+.theme-choice-fallback { display: flex; align-items: center; justify-content: center; font-size: 14px; }
+.theme-choice-caption { padding: 14rpx 12rpx; }
+.theme-choice-name { display: block; font-size: 14px; font-weight: 600; }
+.theme-choice-description { display: block; font-size: 11px; line-height: 1.5; margin-top: 4rpx; }
+.theme-choice-check { position: absolute; right: 8rpx; top: 8rpx; display: flex; align-items: center; justify-content: center; width: 44rpx; height: 44rpx; border-radius: 50%; background: var(--pk-primary); }
+.theme-choice-current { position: absolute; left: 8rpx; top: 8rpx; border-radius: var(--pk-r-pill); padding: 4rpx 10rpx; font-size: 10px; background: var(--pk-primary); color: var(--pk-on-primary); }
+.theme-picker-foot { border-top: 1rpx solid var(--pk-line); padding-top: 12rpx; }
+.theme-picker-foot .btn { width: 100%; margin-top: 16rpx; min-height: 48px; }
+.theme-picker-sheet .theme-picker-foot .btn.is-disabled { background: var(--pk-surface-sunken); color: var(--pk-ink-2); box-shadow: none; }

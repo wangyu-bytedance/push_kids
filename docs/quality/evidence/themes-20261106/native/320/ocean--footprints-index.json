@@ -1,0 +1,49 @@
+{
+  "route": "pages/footprints/index",
+  "theme": "ocean",
+  "viewport": {
+    "width": 320,
+    "height": 568,
+    "screenWidth": 320,
+    "screenHeight": 568
+  },
+  "base_library": "3.17.4",
+  "nodes": [
+    {
+      "host": "page",
+      "selector": ".theme-page",
+      "left": 0,
+      "right": 320,
+      "top": 0,
+      "bottom": 522,
+      "width": 320,
+      "height": 522,
+      "backgroundColor": "rgb(226, 245, 248)",
+      "color": "rgb(32, 68, 84)",
+      "fontSize": "16px",
+      "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif"
+    },
+    {
+      "host": "page",
+      "selector": ".btn",
+      "left": 12,
+      "right": 308,
+      "top": 442,
+      "bottom": 490,
+      "width": 296,
+      "height": 48,
+      "backgroundColor": "rgb(8, 126, 156)",
+      "color": "rgb(255, 255, 255)",
+      "fontSize": "16px",
+      "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif"
+    }
+  ],
+  "source": "native wx.createSelectorQuery; synthetic fixtures; production WXML/WXSS exact; page loading lifecycles suppressed",
+  "screenshot": "ocean--footprints-index.png",
+  "screenshot_sha256": "a5d23ba73a1d4e7dbcc879c75d76f0b0514d0852243c552afeec9243b90ebe03",
+  "fixture": "footprints-index",
+  "category": "route",
+  "screenshot_errors": [],
+  "validation_errors": [],
+  "horizontal_overflow": []
+}

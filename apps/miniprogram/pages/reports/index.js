@@ -1,3 +1,4 @@
+const { withThemePage } = require("../../presentation/theme/adapters");
 const api = require("../../utils/api");
 const ui = require("../../utils/ui");
 const childContext = require("../../utils/child-context");
@@ -172,7 +173,7 @@ function activityRows(report) {
   }));
 }
 
-Page({
+Page(withThemePage({
   onGradeConfirmation(event) {
     const flow = getApp().gradeConfirmation;
     if (flow) return flow.handle(this, event.detail);
@@ -341,4 +342,4 @@ Page({
     const labelKey = chart === "urgency" ? "urgencyPageLabel" : "activityPageLabel";
     this.setData({ [pageKey]: next, [labelKey]: pages[next].label });
   }
-});
+}));

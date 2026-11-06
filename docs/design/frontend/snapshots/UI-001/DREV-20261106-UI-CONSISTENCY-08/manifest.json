@@ -1,0 +1,623 @@
+{
+  "designRevision": "DREV-20261106-UI-CONSISTENCY-08",
+  "taskSpecRevision": "DESIGN-002-SPEC-08",
+  "architectureRevision": "ARCH-20261106-MINIAPP-THEMES-01",
+  "status": "AWAITING_IMPLEMENTATION_APPROVAL",
+  "generatedAt": "2026-11-06T14:21:11.982594+00:00",
+  "sources": [
+    {
+      "path": "docs/design/frontend/prototypes/DREV-20261106-UI-CONSISTENCY-08/FRONTEND-SPEC.md",
+      "sha256": "fa83fb8bedd0f98e7beed147a5b8af1a8937fb49799f24961d1f033e6c41f23c"
+    },
+    {
+      "path": "docs/design/frontend/prototypes/DREV-20261106-UI-CONSISTENCY-08/build.py",
+      "sha256": "464f7f09da7f03d7571622782183685476c9a31aa1fdb23cec57548559bad356"
+    },
+    {
+      "path": "docs/design/frontend/prototypes/DREV-20261106-UI-CONSISTENCY-08/finalize.py",
+      "sha256": "b7992b6fa16d4053b3f34ae58ca486886f68ab2a2a4553ba109e34dac773a5cc"
+    },
+    {
+      "path": "docs/design/frontend/prototypes/DREV-20261106-UI-CONSISTENCY-08/index.html",
+      "sha256": "1fa17ef66978d6c1a83e59b6d83517cc7d7e08cbea7d9206dc0756e3fb7a324b"
+    },
+    {
+      "path": "docs/design/frontend/prototypes/DREV-20261106-UI-CONSISTENCY-08/source.html",
+      "sha256": "3dcdf71741a618459b806e249641bafbde7c127a020c71cb3e4a965427f268a8"
+    },
+    {
+      "path": "docs/design/frontend/prototypes/DREV-20261106-UI-CONSISTENCY-08/verify.py",
+      "sha256": "8d0ba48367380d6be3b264ebb95a61e5b822684f8835720a50519bf042895ec1"
+    },
+    {
+      "path": "docs/design/frontend/prototypes/DREV-20261106-UI-CONSISTENCY-06/assets/garden.png",
+      "sha256": "89273ffaa7f26cfb488706e12b600b081b018acbac7c3b214386b035b87c0855"
+    },
+    {
+      "path": "docs/design/frontend/prototypes/DREV-20261106-UI-CONSISTENCY-06/assets/midnight.png",
+      "sha256": "4edc81c4abfa4ec40ffff2cb6245f1ff7fd1400ce350ff99584f992d9bf54ec6"
+    },
+    {
+      "path": "docs/design/frontend/prototypes/DREV-20261106-UI-CONSISTENCY-06/assets/ocean.png",
+      "sha256": "39ba3e27d0085cc9184033086579239d1edc6399fad88d45ea2e8db262b9458e"
+    },
+    {
+      "path": "docs/design/frontend/prototypes/DREV-20261106-UI-CONSISTENCY-06/assets/space.png",
+      "sha256": "efd74efccaafd08b02615cf2f70a2472f7a7fef7ded81bf93c8e9919b2ecb736"
+    },
+    {
+      "path": "docs/design/frontend/prototypes/DREV-20261106-UI-CONSISTENCY-06/assets/tech.png",
+      "sha256": "00e10fbcec725b872483c30f1bbf682c98edd0f58cc90992dac71b68f22dde60"
+    },
+    {
+      "path": "apps/miniprogram/assets/illustrations/record-books.png",
+      "sha256": "bdb44f71e0a871929328dce2a339401bb849a53d1fffbfa651d17f0c7a41cd9e"
+    }
+  ],
+  "exports": [
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-08/browser-915x904.png",
+      "sha256": "bcbe6941c5abd3411cb729adf01ff69815d5b0cd923e1917c8b6828ea6dcaa80",
+      "scene": "browser-915x904",
+      "viewport": [
+        915,
+        904
+      ]
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-08/garden-closed-320x568.png",
+      "sha256": "0b554f9b3b621c3251941420b884f118b399c9a6ee4eb952d19df93302023c9b",
+      "theme": "garden",
+      "scene": "settings-closed",
+      "viewport": [
+        320,
+        568
+      ]
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-08/garden-closed-390x844.png",
+      "sha256": "362edfe7a267eb40030968d6a382ad6fb7c441ae925babd037e73d0732e6f1a2",
+      "theme": "garden",
+      "scene": "settings-closed",
+      "viewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-08/garden-closed-430x932.png",
+      "sha256": "b08845031af6b784f715ecbed0271e993ecd04bad1748e87419681b5a00b5163",
+      "theme": "garden",
+      "scene": "settings-closed",
+      "viewport": [
+        430,
+        932
+      ]
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-08/garden-picker-320x568.png",
+      "sha256": "fd5c1993d33451d3f5d3f9c69fd63f41405d813728af89f56a34d93346dd39c8",
+      "theme": "garden",
+      "scene": "settings-picker",
+      "viewport": [
+        320,
+        568
+      ]
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-08/garden-picker-390x844.png",
+      "sha256": "1950c9531f0e94a55d0ecbdf3ec3d6f77ddb87069baa8ea671774619ae07d2ab",
+      "theme": "garden",
+      "scene": "settings-picker",
+      "viewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-08/garden-picker-430x932.png",
+      "sha256": "60d53e8f801c2cedb4398af27ac5b7be9f82caa2cbb54dfdad68ecff4b6425a1",
+      "theme": "garden",
+      "scene": "settings-picker",
+      "viewport": [
+        430,
+        932
+      ]
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-08/garden-storage-error-320x568.png",
+      "sha256": "de100d823bee2f1af2a1e192fb64455339d215ab9db97b8b16ab625f4d5a0ff6",
+      "theme": "garden",
+      "scene": "settings-storage-error",
+      "viewport": [
+        320,
+        568
+      ]
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-08/garden-storage-error-390x844.png",
+      "sha256": "9b27bd80be28a35ac531f74f9b998a8356a42055e512e945f73115a52828a3a1",
+      "theme": "garden",
+      "scene": "settings-storage-error",
+      "viewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-08/garden-storage-error-430x932.png",
+      "sha256": "e95db5ef8c9cc7c1f73b6d53666696857cedb57ebbf1d8199330440a603f0abf",
+      "theme": "garden",
+      "scene": "settings-storage-error",
+      "viewport": [
+        430,
+        932
+      ]
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-08/midnight-closed-320x568.png",
+      "sha256": "68d92b3946607484c0619e487e00d5c444546c98a0acac060c2fe8816702a4c4",
+      "theme": "midnight",
+      "scene": "settings-closed",
+      "viewport": [
+        320,
+        568
+      ]
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-08/midnight-closed-390x844.png",
+      "sha256": "47917fa4d6f113caf3527651185de397126e8c2eaae2f0792dc56b3e82b7a1b2",
+      "theme": "midnight",
+      "scene": "settings-closed",
+      "viewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-08/midnight-closed-430x932.png",
+      "sha256": "78629959ce7bbf04b96ab849a0bbff18c82d2491e4cdbab14c51670ca0e0ec01",
+      "theme": "midnight",
+      "scene": "settings-closed",
+      "viewport": [
+        430,
+        932
+      ]
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-08/midnight-picker-320x568.png",
+      "sha256": "4ffd8724234b6e40c3938f2c23afd8c7c0e86202cc34e7999d8d843bc04e7a0a",
+      "theme": "midnight",
+      "scene": "settings-picker",
+      "viewport": [
+        320,
+        568
+      ]
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-08/midnight-picker-390x844.png",
+      "sha256": "4388fe2d54e096da9e767fb3721dd1eab40ad249dece53f8ae65533e1bba3432",
+      "theme": "midnight",
+      "scene": "settings-picker",
+      "viewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-08/midnight-picker-430x932.png",
+      "sha256": "e618ebf0aa9fa2156ec8ba4da3573d74d0d09e72d4e45d97eacc5865382664fc",
+      "theme": "midnight",
+      "scene": "settings-picker",
+      "viewport": [
+        430,
+        932
+      ]
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-08/midnight-storage-error-320x568.png",
+      "sha256": "766649550c4b11f50770c360f6f525dc3c9583b595397700e36cc11fd0f957c3",
+      "theme": "midnight",
+      "scene": "settings-storage-error",
+      "viewport": [
+        320,
+        568
+      ]
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-08/midnight-storage-error-390x844.png",
+      "sha256": "07a389b405a0350ede947bfd8bfb6e7fa7159e34d8a04ac7cdeca258d4b8a327",
+      "theme": "midnight",
+      "scene": "settings-storage-error",
+      "viewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-08/midnight-storage-error-430x932.png",
+      "sha256": "0329817a8a8f2d12a12329e0b471c81e9b26f4dadaeedfc4d095b47a4b47df67",
+      "theme": "midnight",
+      "scene": "settings-storage-error",
+      "viewport": [
+        430,
+        932
+      ]
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-08/ocean-closed-320x568.png",
+      "sha256": "fd5e50f147cf3497ddd58848e32a9879cb2bc9fa6e2fe2814b34c94b246f2422",
+      "theme": "ocean",
+      "scene": "settings-closed",
+      "viewport": [
+        320,
+        568
+      ]
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-08/ocean-closed-390x844.png",
+      "sha256": "4b43cb7879845824aaa86d3c3235fc9686613f8839d8c08df8837885d362d33a",
+      "theme": "ocean",
+      "scene": "settings-closed",
+      "viewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-08/ocean-closed-430x932.png",
+      "sha256": "ef5fa3c7a18ac4e97dd5c2d99a6fdefc29c8405d321ad0210b641fbe1878e7f9",
+      "theme": "ocean",
+      "scene": "settings-closed",
+      "viewport": [
+        430,
+        932
+      ]
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-08/ocean-picker-320x568.png",
+      "sha256": "1d0653ace4d6cc7ebad40f52930b06d022dad447de0461461b59abeed2b64d71",
+      "theme": "ocean",
+      "scene": "settings-picker",
+      "viewport": [
+        320,
+        568
+      ]
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-08/ocean-picker-390x844.png",
+      "sha256": "a453fa20f70f1a10791d1652ac6595ea1582e06327059ea7f99d2beab04ac187",
+      "theme": "ocean",
+      "scene": "settings-picker",
+      "viewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-08/ocean-picker-430x932.png",
+      "sha256": "f0ccbc2e31fe66fa0aa3c8f818c79ca5199005eaa5a23e082230ebd7bb6bce5d",
+      "theme": "ocean",
+      "scene": "settings-picker",
+      "viewport": [
+        430,
+        932
+      ]
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-08/ocean-storage-error-320x568.png",
+      "sha256": "14f51e94e6a50efcc77b9b6b59b7e67c388983025db5b989cdc9425c087a2133",
+      "theme": "ocean",
+      "scene": "settings-storage-error",
+      "viewport": [
+        320,
+        568
+      ]
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-08/ocean-storage-error-390x844.png",
+      "sha256": "f847f5a1e9b0db61a6b2aeb48a7f6c0e4888bed46436fe48e18f64682ecc544f",
+      "theme": "ocean",
+      "scene": "settings-storage-error",
+      "viewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-08/ocean-storage-error-430x932.png",
+      "sha256": "5095c3fdf1c5be07069bb0c249a6500cb5b8ba202a206d46cfbf9d4d4c90728c",
+      "theme": "ocean",
+      "scene": "settings-storage-error",
+      "viewport": [
+        430,
+        932
+      ]
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-08/original-closed-320x568.png",
+      "sha256": "a0ef91edfb054de175cd1a2ab4aa54937c632a2bc168a34a06cc487125b731cf",
+      "theme": "original",
+      "scene": "settings-closed",
+      "viewport": [
+        320,
+        568
+      ]
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-08/original-closed-390x844.png",
+      "sha256": "2c094056d1fc5ab8db0e2e54c0c837e9fabf2f990cfbe6522e7cf034cf74fdee",
+      "theme": "original",
+      "scene": "settings-closed",
+      "viewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-08/original-closed-430x932.png",
+      "sha256": "62f3392355d3d0e975c47098f5006b531a4191f7b29ceb9382de791551c67766",
+      "theme": "original",
+      "scene": "settings-closed",
+      "viewport": [
+        430,
+        932
+      ]
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-08/original-picker-320x568.png",
+      "sha256": "1fb3c6915abea1232afbbc465de6187c3d0fe01d239a84c842c06351d9030a7f",
+      "theme": "original",
+      "scene": "settings-picker",
+      "viewport": [
+        320,
+        568
+      ]
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-08/original-picker-390x844.png",
+      "sha256": "15b15c6d267d82a0c9696bf851f95cf31876afa28185d3947ccae6ce879d19dc",
+      "theme": "original",
+      "scene": "settings-picker",
+      "viewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-08/original-picker-430x932.png",
+      "sha256": "9f9a4f6f887a9203afa9220e14984631e87252841ebba49b6b0c141ba170bd62",
+      "theme": "original",
+      "scene": "settings-picker",
+      "viewport": [
+        430,
+        932
+      ]
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-08/original-storage-error-320x568.png",
+      "sha256": "6aacf4e88e1f5a3c7a673daf22d1affce9ab209561f12afd131b76ede1ace3ea",
+      "theme": "original",
+      "scene": "settings-storage-error",
+      "viewport": [
+        320,
+        568
+      ]
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-08/original-storage-error-390x844.png",
+      "sha256": "2cfed83e194249daa91c0ae80904571d94dbb2619afbbc1da23381408b55ec77",
+      "theme": "original",
+      "scene": "settings-storage-error",
+      "viewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-08/original-storage-error-430x932.png",
+      "sha256": "c44d250a462b909f4ea4c867473691cfbaa950f0eca52f7c0bcf53dfee3ed955",
+      "theme": "original",
+      "scene": "settings-storage-error",
+      "viewport": [
+        430,
+        932
+      ]
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-08/overview.png",
+      "sha256": "8215f4cdfe08d8db5ec8b45c718f8f241b81fb1620acb928fd427ba0ab8ea75f",
+      "scene": "overview",
+      "viewport": [
+        1770,
+        1434
+      ]
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-08/space-closed-320x568.png",
+      "sha256": "188b59232124b488faea070270cbbd3078aff317b626787a1e1d79dc53b7d1ec",
+      "theme": "space",
+      "scene": "settings-closed",
+      "viewport": [
+        320,
+        568
+      ]
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-08/space-closed-390x844.png",
+      "sha256": "5e9351ca51befb7e9c4235baeba390ba8b5d0841169c4d68e4ed47e2c1a66aa0",
+      "theme": "space",
+      "scene": "settings-closed",
+      "viewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-08/space-closed-430x932.png",
+      "sha256": "56c96a07257b673bb84d705b6c885d657d06090ed88232ba5e90d02d18bf3eea",
+      "theme": "space",
+      "scene": "settings-closed",
+      "viewport": [
+        430,
+        932
+      ]
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-08/space-picker-320x568.png",
+      "sha256": "bbdcf179e3debdc513e2eae4bb0550a9b6a9b7222b35a4041be284640a6af82c",
+      "theme": "space",
+      "scene": "settings-picker",
+      "viewport": [
+        320,
+        568
+      ]
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-08/space-picker-390x844.png",
+      "sha256": "1594128d655993321b4406e429331e2b4b794bd2c755936b999bfc4d980e9c31",
+      "theme": "space",
+      "scene": "settings-picker",
+      "viewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-08/space-picker-430x932.png",
+      "sha256": "ed04b26a256cf387d7e29204ed7e71fb4e20e74564823f074a213b0945616f6e",
+      "theme": "space",
+      "scene": "settings-picker",
+      "viewport": [
+        430,
+        932
+      ]
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-08/space-storage-error-320x568.png",
+      "sha256": "e7a68e4af8d41edaf930dc9822b3c8b4a0379f09de1d322f5e3c0f87b9fc779a",
+      "theme": "space",
+      "scene": "settings-storage-error",
+      "viewport": [
+        320,
+        568
+      ]
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-08/space-storage-error-390x844.png",
+      "sha256": "23849978130cfb640ad78d990364a4dcc85b88b16ff9258a9e8dbbd44038c59f",
+      "theme": "space",
+      "scene": "settings-storage-error",
+      "viewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-08/space-storage-error-430x932.png",
+      "sha256": "d815cc5e2e35df3c723dd71f623edf7aa76cf7ebf446bb4181680875dcdfe646",
+      "theme": "space",
+      "scene": "settings-storage-error",
+      "viewport": [
+        430,
+        932
+      ]
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-08/tech-closed-320x568.png",
+      "sha256": "a999a9582a048db8efca1985b5809d91ee89427c7fcf6cc1aff6eeba1861fc52",
+      "theme": "tech",
+      "scene": "settings-closed",
+      "viewport": [
+        320,
+        568
+      ]
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-08/tech-closed-390x844.png",
+      "sha256": "8b5d2d4bd9219c22a803165b77cb789980f2dc2da4df18c0cfab5f0921befa3d",
+      "theme": "tech",
+      "scene": "settings-closed",
+      "viewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-08/tech-closed-430x932.png",
+      "sha256": "d6aa9c611beb0d21025d7781bf4b7f58454bc90a342f849a8923dba1c4a85541",
+      "theme": "tech",
+      "scene": "settings-closed",
+      "viewport": [
+        430,
+        932
+      ]
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-08/tech-picker-320x568.png",
+      "sha256": "20843043e91341bd5f7733a385b4e9f22fc954589dfbbfc42fd4cac16d798de5",
+      "theme": "tech",
+      "scene": "settings-picker",
+      "viewport": [
+        320,
+        568
+      ]
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-08/tech-picker-390x844.png",
+      "sha256": "ffc1f8015c7f28cc64fb67de40f745324ba76cc15604d8cc7b13dd3ad777e3d1",
+      "theme": "tech",
+      "scene": "settings-picker",
+      "viewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-08/tech-picker-430x932.png",
+      "sha256": "416db403a5f11a1df59ec084fc394c955dd83aebe57451a4788c41216afa617e",
+      "theme": "tech",
+      "scene": "settings-picker",
+      "viewport": [
+        430,
+        932
+      ]
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-08/tech-storage-error-320x568.png",
+      "sha256": "a100514653f0915be7d1fb08b9ebe2e7eca1a9936fcf33cb6dbbea8c3ff3fe3d",
+      "theme": "tech",
+      "scene": "settings-storage-error",
+      "viewport": [
+        320,
+        568
+      ]
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-08/tech-storage-error-390x844.png",
+      "sha256": "12df7bc716a4d73963c3208c94dd8c48171cd03b8f7bf0c658f8ebb760dd3741",
+      "theme": "tech",
+      "scene": "settings-storage-error",
+      "viewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "path": "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-08/tech-storage-error-430x932.png",
+      "sha256": "40acc55d49c4c4ad8a90bcef50ac0ea1546806d2c5d13ebc5bb2156a171fb5c0",
+      "theme": "tech",
+      "scene": "settings-storage-error",
+      "viewport": [
+        430,
+        932
+      ]
+    }
+  ],
+  "evidenceSha256": {
+    "verification.json": "ceeb2e4f9b70a327f4986caf1440751c20cc7f415d386103a79e214c9bdc9ecd",
+    "integrity-check.json": "0d8655a90ce7e1bd7fb87ac73197e012e524f5df8acd2afb11d283276ddb9d08",
+    "production-baseline.json": "4471b83165b8c4adc56f5f193605e91f54ba505420ecd80a81b05ae4a71a9233"
+  },
+  "nativeAcceptance": "NOT_RUN"
+}

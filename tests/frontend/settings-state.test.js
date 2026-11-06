@@ -16,6 +16,7 @@ function loadSettingsPage(overrides = {}) {
   const filename = path.resolve(__dirname, "../../apps/miniprogram/pages/settings/index.js");
   vm.runInNewContext(fs.readFileSync(filename, "utf8"), {
     require(name) {
+      if (name.includes("presentation/theme/")) return require("../../apps/miniprogram/presentation/theme/" + name.split("/").at(-1));
       if (name.includes("child-context")) return childContext;
       return { request: async (...args) => { calls.push(args); return overrides.request ? overrides.request(...args) : {}; }, newIdempotencyKey: () => "key" };
     },

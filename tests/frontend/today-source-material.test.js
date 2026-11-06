@@ -16,7 +16,10 @@ function todoCard() {
   };
   vm.runInNewContext(read("components/todo-card/index.js"), {
     Component(value) { definition = value; },
-    require() { return ui; }
+    require(name) {
+      if (name.includes("presentation/theme/")) return require("../../apps/miniprogram/presentation/theme/" + name.split("/").at(-1));
+      return ui;
+    }
   });
   const events = [];
   const instance = {

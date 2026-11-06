@@ -1,3 +1,4 @@
+const { themeState } = require("../../presentation/theme/state");
 /* PKDS-1.0 · 可编辑草稿（AI 草稿 / 人工录入）的共享逻辑。
    确认页与「待处理记录」页共用同一份数据与方法：家长在待确认页就能直接改、直接确认。
    多科目：一次上传可能混着几个科目，草稿按孩子已配置的科目分组，绝不合成「数学、语文」这种混合科目。 */
@@ -370,7 +371,7 @@ module.exports = {
         title: "删除草稿",
         content: "这不会创建学习记录或复习任务。",
         confirmText: "删除草稿",
-        confirmColor: "#A85742",
+        confirmColor: themeState.current().tokens["pk-native-danger"],
         success: (result) => resolve(result.confirm),
         fail: () => resolve(false)
       }));

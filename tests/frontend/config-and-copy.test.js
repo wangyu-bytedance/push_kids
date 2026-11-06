@@ -151,7 +151,7 @@ test("custom tab bar keeps icon geometry and restores the active tab after direc
   const app = JSON.parse(source("app.json"));
   const tabMarkup = source("custom-tab-bar/index.wxml");
   assert.equal(app.tabBar.custom, true);
-  assert.match(tabMarkup, /<image class="tab-icon"/);
+  assert.match(tabMarkup, /<theme-icon name="\{\{item.glyph\}\}"/);
   assert.match(source("custom-tab-bar/index.wxss"), /width:40rpx;height:40rpx/);
   ["today", "calendar", "records", "reports", "settings"].forEach((page, selected) => {
     assert.match(source(`pages/${page}/index.js`), new RegExp(`setData\\(\\{ selected: ${selected} \\}\\)`));

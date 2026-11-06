@@ -1,5 +1,7 @@
 # UI-010 — 家庭分享、申请与审批
 
+当前本地呈现revision `UI-STATE-20261106-THEMES-01`：[DESIGN-002 Spec08 / Architecture01](../../../../specs/active/DESIGN-002-GLOBAL-UI-CONSISTENCY.md)与DREV08已获用户“好的 按照以上方案落地”批准并实施，DREV06视觉方向保持。创建家庭、六位码加入和申请审批沿用原状态机与授权；表单、错误、禁用和确认色使用六主题语义角色。 本增量尚未上传；原生合成呈现、共享业务回归及真机/独立评审缺项见[当前证据](../../../quality/evidence/themes-20261106/README.md)。下方原特性发布与验收记录保持其版本范围，不能代验六主题。
+
 - Status: `CURRENT_LOCAL / 390_NATIVE_CAPTURED / MATRIX_PENDING`
 - Related Feature: `FEAT-002`
 - Related Specs: `SPEC-20260831-10`; `BUG-SPEC-20260906-18`; `BUG-SPEC-20260913-19`

@@ -1,0 +1,82 @@
+{
+  "checks": [
+    {
+      "check": "theme illustration and default icon",
+      "theme": "garden",
+      "passed": true
+    },
+    {
+      "check": "theme illustration and default icon",
+      "theme": "space",
+      "passed": true
+    },
+    {
+      "check": "theme illustration and default icon",
+      "theme": "midnight",
+      "passed": true
+    },
+    {
+      "check": "theme illustration and default icon",
+      "theme": "ocean",
+      "passed": true
+    },
+    {
+      "check": "theme illustration and default icon",
+      "theme": "tech",
+      "passed": true
+    },
+    {
+      "check": "unsaved input retention and duration selection",
+      "passed": true
+    },
+    {
+      "check": "feedback selection and modal keyboard loop/escape",
+      "passed": true
+    },
+    {
+      "check": "destructive confirmation remains a demonstration",
+      "scene": "delete-confirm",
+      "passed": true
+    },
+    {
+      "check": "destructive confirmation remains a demonstration",
+      "scene": "family-delete",
+      "passed": true
+    },
+    {
+      "check": "record type and travel views",
+      "passed": true
+    },
+    {
+      "check": "draft detail disclosure",
+      "passed": true
+    },
+    {
+      "check": "settings theme selector demonstration",
+      "passed": true
+    },
+    {
+      "check": "error recovery action",
+      "passed": true
+    },
+    {
+      "check": "gallery themes/scenes/exact iframe viewport",
+      "viewport": [
+        1440,
+        1050
+      ],
+      "passed": true
+    },
+    {
+      "check": "gallery themes/scenes/exact iframe viewport",
+      "viewport": [
+        390,
+        844
+      ],
+      "passed": true
+    }
+  ],
+  "javascriptErrors": [],
+  "externalRequests": [],
+  "nativeAcceptance": "NOT_RUN"
+}

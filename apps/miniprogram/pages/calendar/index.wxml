@@ -1,7 +1,9 @@
+<view class="{{theme.classes}} theme-page" style="{{theme.style}}">
 <view aria-hidden="{{gradeConfirmationVisible}}">
 <primary-nav></primary-nav>
 <view class="page calendar-page">
-  <view class="pg-head pk-hero calendar-intro">
+  <view class="pg-head pk-hero calendar-intro theme-header">
+    <image wx:if="{{theme.assets.hero && !themeArtFailed}}" class="theme-hero-art" src="{{theme.assets.hero}}" mode="aspectFill" binderror="onThemeIllustrationError" aria-hidden="{{true}}" />
     <view class="calendar-intro-copy">
       <text class="pg-title">这一周，心里有数</text>
       <text class="pg-context">{{weekKicker}}</text>
@@ -11,18 +13,18 @@
         <view class="chev" wx:if="{{multiChild}}"></view>
       </view>
     </view>
-    <image class="calendar-intro-art" wx:if="{{!introArtFailed}}" src="/assets/illustrations/calendar-still-life.png" mode="aspectFit"
+    <image class="calendar-intro-art" wx:if="{{!introArtFailed}}" src="{{theme.assets.calendar}}" mode="aspectFit"
       aria-hidden="{{true}}" binderror="onIllustrationError"></image>
   </view>
 
   <view class="pk-notice err mt2" wx:if="{{error}}">
-    <view class="ico ico-cloud-off-dan sm"></view>
+    <theme-icon class="ico  sm" name="cloud-off" tone="danger" size="sm"></theme-icon>
     <text class="n-txt">{{error}}。已经加载到的安排还能继续看。</text>
-    <view class="ico ico-refresh-dan sm" aria-role="button" aria-label="重试" bindtap="load"></view>
+    <view class="theme-icon-action" aria-role="button" aria-label="重试" bindtap="load"><theme-icon name="refresh" tone="danger" size="sm"></theme-icon></view>
   </view>
 
   <view class="pk-empty" wx:if="{{!loading && !children.length}}">
-    <view class="em"><view class="ico ico-sprout-pri lg"></view></view>
+    <view class="em"><theme-icon class="ico  lg" name="sprout" tone="primary" size="lg"></theme-icon></view>
     <text class="et">还没有学习档案</text>
     <text class="ec">先在设置里建好孩子的学习档案，之后才能安排课外活动和其他日程。</text>
     <view class="ea"><view class="btn" aria-role="button" aria-label="前往设置" bindtap="openSettings">前往设置</view></view>
@@ -74,7 +76,7 @@
           </view>
           <text class="tl-sub">{{item.time_text}} · {{item.kind_label}}</text>
           <view class="conflict-detail" wx:if="{{item.has_conflict}}">
-            <view class="ico ico-info-dan xs"></view>
+            <theme-icon class="ico  xs" name="info" tone="danger" size="xs"></theme-icon>
             <view class="conflict-copy">
               <text class="conflict-summary" wx:if="{{item.conflict_summary}}">{{item.conflict_summary}}，请逐项核对：</text>
               <text class="conflict-line" wx:for="{{item.conflict_lines}}" wx:for-item="conflictLine" wx:key="*this">{{conflictLine}}</text>
@@ -88,7 +90,7 @@
     </view>
 
     <view class="pk-empty" wx:elif="{{weekEmpty}}">
-      <view class="em"><view class="ico ico-calendar-pri lg"></view></view>
+      <view class="em"><theme-icon class="ico  lg" name="calendar" tone="primary" size="lg"></theme-icon></view>
       <text class="et">这一周还没有安排</text>
       <text class="ec">在设置里配置固定时间后，每周都会自动出现在这里。</text>
       <view class="ea"><view class="btn secondary" aria-role="button" aria-label="去设置固定时间" bindtap="openSettings">去设置固定时间</view></view>
@@ -100,7 +102,7 @@
     </view>
 
     <view class="pk-fab" wx:if="{{canWrite}}" aria-role="button" aria-label="加日程" bindtap="openCreate">
-      <view class="ico ico-plus-inv sm"></view><text>加日程</text>
+      <theme-icon class="ico  sm" name="plus" tone="inverse" size="sm"></theme-icon><text>加日程</text>
     </view>
   </block>
 </view>
@@ -112,18 +114,18 @@
     <view class="grow">
       <text class="sheet-title">选择孩子</text>
     </view>
-    <view class="icon-btn" aria-role="button" aria-label="关闭" bindtap="closeChildSheet"><view class="ico ico-close sm"></view></view>
+    <view class="icon-btn" aria-role="button" aria-label="关闭" bindtap="closeChildSheet"><theme-icon class="ico  sm" name="close" tone="ink" size="sm"></theme-icon></view>
   </view>
   <view class="sheet-body">
     <view class="rowlist">
       <view class="rowitem {{index === childIndex ? 'on' : ''}}" wx:for="{{children}}" wx:key="id" aria-role="button" aria-label="切换到这个孩子" data-index="{{index}}" bindtap="chooseChild">
         <text class="ava-lg">{{item.avatar}}</text>
         <view class="grow"><text class="r-t">{{item.label}}</text></view>
-        <view class="ico ico-check-pri sm" wx:if="{{index === childIndex}}"></view>
+        <theme-icon class="ico  sm" wx:if="{{index === childIndex}}" name="check" tone="primary" size="sm"></theme-icon>
       </view>
     </view>
     <view class="add-entry" wx:if="{{canAddChild}}" aria-role="button" aria-label="添加孩子" bindtap="addChild">
-      <view class="ico ico-plus-pri sm"></view><text>添加孩子</text>
+      <theme-icon class="ico  sm" name="plus" tone="primary" size="sm"></theme-icon><text>添加孩子</text>
     </view>
   </view>
 </view>
@@ -138,7 +140,7 @@
       <text class="sheet-sub" wx:if="{{editingId && workdayOnly}}">修改会作用于整个工作日系列</text>
       <text class="sheet-sub" wx:if="{{!canWrite}}">仅可查看，请联系家庭管理员修改</text>
     </view>
-    <view class="icon-btn" aria-role="button" aria-label="关闭" bindtap="closeEditor"><view class="ico ico-close sm"></view></view>
+    <view class="icon-btn" aria-role="button" aria-label="关闭" bindtap="closeEditor"><theme-icon class="ico  sm" name="close" tone="ink" size="sm"></theme-icon></view>
   </view>
   <view class="sheet-body">
     <view class="pk-field">
@@ -186,10 +188,12 @@
     <button class="btn" loading="{{saving}}" disabled="{{saving || !canWrite}}" bindtap="saveEvent">{{!canWrite ? '仅可查看' : saving ? '保存中…' : editingId ? '保存修改' : '创建日程'}}</button>
     <view class="del-row" wx:if="{{editingId && canWrite}}">
       <view class="link-btn del-link" aria-role="button" aria-label="删除日程" bindtap="deleteEvent">
-        <view class="ico ico-trash-dan sm"></view><text>删除这条日程</text>
+        <theme-icon class="ico  sm" name="trash" tone="danger" size="sm"></theme-icon><text>删除这条日程</text>
       </view>
     </view>
   </view>
 </view>
 </view>
 <grade-confirmation id="grade-confirmation" view="{{gradeConfirmation}}" blocked="{{loading || showChildSheet || showEditor || saving}}" bindaction="onGradeConfirmation"></grade-confirmation>
+
+</view>

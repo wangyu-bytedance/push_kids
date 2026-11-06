@@ -1,3 +1,4 @@
+const { withThemePage } = require("../../presentation/theme/adapters");
 const api = require("../../utils/api");
 const notifications = require("../../utils/notifications");
 const renewal = require("../../utils/notification-renewal");
@@ -14,7 +15,7 @@ const STATUS_TEXT = {
   unavailable: "暂不可用"
 };
 
-Page({
+Page(withThemePage({
   data: {
     loading: true, error: "", supported: true, channelAvailable: false, channelReason: "",
     items: [], grantCount: 0, granting: false, togglingType: "", lastSentLabel: "",
@@ -126,4 +127,4 @@ Page({
   explain() {
     wx.showModal({ title: "关于提醒", content: "每次同意增加一次发送额度，不是永久订阅。自动补充仅在你点击完成复习时尝试；微信仍可能弹窗。普通拒绝或取消后，完成10条复习再询问。可随时关闭，提醒由微信尽力送达。", showCancel: false });
   }
-});
+}));

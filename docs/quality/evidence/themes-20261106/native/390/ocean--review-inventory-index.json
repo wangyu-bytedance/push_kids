@@ -1,0 +1,35 @@
+{
+  "route": "pages/review-inventory/index",
+  "theme": "ocean",
+  "viewport": {
+    "width": 390,
+    "height": 844,
+    "screenWidth": 390,
+    "screenHeight": 844
+  },
+  "base_library": "3.17.4",
+  "nodes": [
+    {
+      "host": "page",
+      "selector": ".theme-page",
+      "left": 0,
+      "right": 390,
+      "top": 0,
+      "bottom": 753,
+      "width": 390,
+      "height": 753,
+      "backgroundColor": "rgb(226, 245, 248)",
+      "color": "rgb(32, 68, 84)",
+      "fontSize": "16px",
+      "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif"
+    }
+  ],
+  "source": "native wx.createSelectorQuery; synthetic fixtures; production WXML/WXSS exact; page loading lifecycles suppressed",
+  "screenshot": "ocean--review-inventory-index.png",
+  "screenshot_sha256": "beaa96b2e5fddd5972dbd61f4b6d062e1c6a2ce2e5d4ce636fbd4a5521871ec7",
+  "fixture": "review-inventory-index",
+  "category": "route",
+  "screenshot_errors": [],
+  "validation_errors": [],
+  "horizontal_overflow": []
+}

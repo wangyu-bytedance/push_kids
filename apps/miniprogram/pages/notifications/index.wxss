@@ -8,16 +8,16 @@
 .notifications-page .help, .notifications-page .noti-state .pill { font-size: 14px; }
 
 .notice-hero .hero-ok { display: flex; align-items: flex-start; gap: 12rpx; margin-top: 20rpx; }
-.notice-hero .hero-ok .ok-txt { flex: 1; min-width: 0; font-size: 14px; line-height: 1.6; color: #464E43; }
+.notice-hero .hero-ok .ok-txt { flex: 1; min-width: 0; font-size: 14px; line-height: 1.6; color: var(--pk-ink-2); }
 .neutral-hero { background: var(--pk-surface-sunken); color: var(--pk-ink); }
 .auto-card { margin-top: 20px; }
 .auto-title { display: block; font-size: 17px; font-weight: 600; }
-.auto-copy { display: block; margin-top: 8px; font-size: 14px; line-height: 1.6; color: #464E43; }
+.auto-copy { display: block; margin-top: 8px; font-size: 14px; line-height: 1.6; color: var(--pk-ink-2); }
 
 .off-hero { margin-top: 8rpx; background: var(--pk-surface-warm); }
 .off-hero .off-mark { flex: none; width: 72rpx; height: 72rpx; border-radius: 50%; background: var(--pk-surface-sunken); display: flex; align-items: center; justify-content: center; }
 .off-hero .off-title { display: block; font-size: 17px; line-height: 1.45; font-weight: 600; }
-.off-hero .off-sub { display: block; margin-top: 4rpx; font-size: 13px; line-height: 1.5; color: var(--pk-ink-3); }
+.off-hero .off-sub { display: block; margin-top: 4rpx; font-size: 13px; line-height: 1.5; color: var(--pk-text-muted); }
 
 .noti-row { align-items: flex-start; gap: 20rpx; }
 .noti-row .noti-mark { flex: none; width: 72rpx; height: 72rpx; margin-top: 4rpx; border-radius: var(--pk-r-lg); background: var(--pk-surface-sunken); display: flex; align-items: center; justify-content: center; }
@@ -32,4 +32,4 @@
 
 .log-row { align-items: flex-start; }
 .log-row .log-meta { display: block; margin-top: 8rpx; font-size: 14px; line-height: 1.45; color: var(--pk-ink-4); }
-.log-row .log-why { display: block; margin-top: 8rpx; font-size: 14px; line-height: 1.5; color: var(--pk-ink-3); }
+.log-row .log-why { display: block; margin-top: 8rpx; font-size: 14px; line-height: 1.5; color: var(--pk-text-muted); }

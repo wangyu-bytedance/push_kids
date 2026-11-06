@@ -75,10 +75,9 @@ FDB/FEC、每日任务按钮、报表展开/收起和其他设计范围保持。
   异常陶土 `#A85742`，信息远山蓝灰。颜色永远不是状态的唯一载体。
 - 字体：标题用衬线族（`Songti SC` / `Noto Serif SC`）制造纸感，正文用系统中文无衬线，
   数字统一 `font-variant-numeric: tabular-nums`。
-- 圆角只允许 8 / 12 / 16 / 24 / 32 / 40 / 999rpx 七个值，每个值有唯一职责，禁止中间值。
+- 原始风格圆角使用 8 / 12 / 16 / 24 / 32 / 40 / 999rpx；Spec08批准的主题形状差异由registry的共享角色管理（含28/44/48rpx），页面不得自建刻度。
 - 页面左右安全边距由 `--pk-gutter` 统一给出；主 CTA 高 96rpx；触控目标不小于 88rpx。
-- 图标统一为 24×24 viewBox、stroke-width 1.8 的线性图标 class，禁止 emoji 或文字符号充当图标；
-  TabBar 位图与线性图标同源（`tools/gen_tabbar_icons.py`）。
+- 图标统一为24×24 viewBox、stroke-width 1.8的线性glyph，由`theme-icon`消费单份生成路径和主题语义色；禁止emoji或文字符号充当图标。自定义TabBar使用同一组件，app.json平台回退图与原生地图标记保留本地PNG。
 - 单位约定：颜色语义 token 无单位，几何量用 rpx，字号用 px，发丝线固定 1rpx。
 
 ### PKDS-2.0 交互立场（可见合同的一部分）
@@ -107,11 +106,9 @@ approval snapshot，获得 Task Spec revision + DREV 的明确批准后才能实
 该增量覆盖 UI-001、UI-009、UI-011，其他可见合同继续沿用各自DREV；验证与未完成项见
 [本轮证据](../../quality/evidence/HERO-ARC-REMOVAL-20261021.md)，本地实现不代表上传或发布。
 
-全局风格以暖白纸面、松绿主色、衬线标题 + 系统中文正文、4px 间距网格、清晰状态文字和
-非游戏化反馈为唯一基线。token 的唯一来源是 `apps/miniprogram/styles/tokens.wxss`，
-组件类的唯一来源是 `styles/atoms.wxss`；页面 wxss 只允许写本页特有几何，不得重复定义
-token 或近似的第二套刻度。详细 token、组件层级和禁止项见第 2、3、6 节与
-`prototypes/DREV-20260906-PKDS-01/FRONTEND-SPEC.md`。
+当前本地实现以获批DESIGN-002 Spec08 / Architecture01扩展为六种风格：原始、成长花园、星际探索、深海夜色、海洋、科技。原始保留纸面/松绿/衬线标题，其他五种采用DREV06的背景角色、系统无衬线字体与主题形状；4px间距、清晰状态文字、非游戏化反馈和同一套业务页面继续适用。主题权威源是`apps/miniprogram/presentation/theme/registry.js`，`styles/tokens.wxss`由其生成，`styles/atoms.wxss`拥有共用组件，`styles/theme.wxss`拥有有限材质差异；页面只写特有几何，不能重复主题值或逐页判断主题。
+
+设置入口位于底部列表“提醒设置”之后、“关于知芽”之前。六选一面板暂存候选，应用才切换并写本机小型ID偏好；取消不改变当前风格。未知科目/活动直接使用当前主题固定默认图标，无AI或联网选图。DREV08[标准批准索引](snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-08/CANONICAL-APPROVAL.md)和DREV06[标准索引](snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-06/CANONICAL-APPROVAL.md)关联原冻结JSON/源/导出与后续用户批准，不改原快照；本次[实现证据](../../quality/evidence/themes-20261106/README.md)区分本地验证、原生合成呈现、真机与尚未上传。六主题尚未进入已上传0.1.18版本。
 
 ## User interaction conventions
 
@@ -183,7 +180,7 @@ MVP 支持手机竖屏 320×568、390×844、430×932 三个逻辑视口，安�
 | Purpose | Repository source | Owner | Notes |
 |---|---|---|---|
 | Product UI | `prototypes/<DREV>/FRONTEND-SPEC.md` + editable SVG/self-contained HTML | 产品负责人 | 当前可编辑、版本化设计源 |
-| Design tokens | `apps/miniprogram/styles/tokens.wxss` | 产品负责人 | PKDS-2.0 语义值唯一来源；PKDS-1.0 原件 `prototypes/DREV-20260906-PKDS-01/tokens.reference.wxss` 降级为设计历史 |
+| Design tokens | `apps/miniprogram/presentation/theme/registry.js` → `styles/tokens.wxss` | 前端呈现域维护者 | 六主题语义角色唯一源与原始首屏生成值；PKDS-1.0 reference为设计历史 |
 | Design components | `apps/miniprogram/styles/atoms.wxss` | 产品负责人 | 组件类唯一来源；页面 wxss 只写本页几何 |
 | Design icons | `apps/miniprogram/styles/icons.wxss` | 产品负责人 | 由 `tools/gen_icon_styles.py` 生成，禁止手工编辑；TabBar 位图由 `tools/gen_tabbar_icons.py` 生成 |
 | 三视口走查 | `tools/preview/` → `dist/ui-preview/` | 产品负责人 | WXML→HTML 近似渲染 + 320/390/430 截图；不能替代原生节点几何验收 |

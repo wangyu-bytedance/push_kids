@@ -1,22 +1,23 @@
+<view class="{{theme.classes}} theme-page" style="{{theme.style}}">
 <view class="page members-page">
   <view class="pk-notice err" wx:if="{{error}}">
-    <view class="ico ico-cloud-off-dan sm"></view>
+    <theme-icon class="ico  sm" name="cloud-off" tone="danger" size="sm"></theme-icon>
     <text class="n-txt">{{error}}。已经读取到的成员信息还能继续看。</text>
-    <view class="ico ico-refresh-dan sm" aria-role="button" aria-label="重试" bindtap="load"></view>
+    <view class="theme-icon-action" aria-role="button" aria-label="重试" bindtap="load"><theme-icon name="refresh" tone="danger" size="sm"></theme-icon></view>
   </view>
 
   <view class="pk-hero family-hero">
     <view class="flex top">
-      <view class="fam-mark"><view class="ico ico-family-pri"></view></view>
+      <view class="fam-mark"><theme-icon class="ico" name="family" tone="primary" size=""></theme-icon></view>
       <view class="grow">
         <text class="hero-eyebrow">一起记录，一起陪伴</text>
         <text class="hero-line fam-name">{{family.display_name || '家庭与成员'}}</text>
       </view>
-      <view class="icon-btn" aria-role="button" aria-label="刷新" bindtap="load"><view class="ico ico-refresh sm"></view></view>
+      <view class="icon-btn" aria-role="button" aria-label="刷新" bindtap="load"><theme-icon class="ico  sm" name="refresh" tone="ink" size="sm"></theme-icon></view>
     </view>
     <view class="manager-panel" wx:if="{{isManager}}">
       <view class="button invite-button {{sharing ? 'is-disabled' : ''}}" aria-role="button" aria-label="邀请家人" aria-disabled="{{sharing}}" bindtap="createInvite">
-        <view class="ico ico-share-inv sm" wx:if="{{!sharing}}"></view>
+        <theme-icon class="ico  sm" wx:if="{{!sharing}}" name="share" tone="inverse" size="sm"></theme-icon>
         <text>{{sharing ? '正在生成…' : '邀请家人'}}</text>
       </view>
     </view>
@@ -40,17 +41,17 @@
       <text class="share-sub" wx:else>当前服务暂不支持手动邀请码，可以先使用微信邀请。</text>
       <view class="btn-row mt3">
         <view class="btn md secondary" wx:if="{{inviteCode}}" aria-role="button" aria-label="复制家庭邀请码" bindtap="copyInviteCode">
-          <view class="ico ico-note-pri sm"></view><text>复制邀请码</text>
+          <theme-icon class="ico  sm" name="note" tone="primary" size="sm"></theme-icon><text>复制邀请码</text>
         </view>
         <button class="btn md" open-type="share">
-          <view class="ico ico-share-inv sm"></view><text>微信邀请</text>
+          <theme-icon class="ico  sm" name="share" tone="inverse" size="sm"></theme-icon><text>微信邀请</text>
         </button>
       </view>
       <view class="help">家人可以输入邀请码，或直接打开微信邀请；提交后仍需你确认。</view>
     </view>
 
     <view class="request-entry" wx:if="{{isManager}}" aria-role="button" aria-label="查看加入申请" bindtap="openRequests">
-      <view class="req-mark {{requestCount ? 'on' : ''}}"><view class="ico {{requestCount ? 'ico-user-dan' : 'ico-user-mute'}} sm"></view></view>
+      <view class="req-mark {{requestCount ? 'on' : ''}}"><theme-icon class="ico  sm" name="user" tone="{{requestCount ? 'danger' : 'muted'}}" size="sm"></theme-icon></view>
       <view class="grow">
         <text class="entry-title">加入申请</text>
         <text class="entry-sub">{{requestText}}</text>
@@ -110,7 +111,7 @@
       <text class="sheet-title">成员详情</text>
       <text class="sheet-sub">{{selectedMember.is_self ? '这是你在家庭中的资料' : '称谓与协作权限都只在这个家庭内生效'}}</text>
     </view>
-    <view class="icon-btn" aria-role="button" aria-label="关闭" bindtap="closeMember"><view class="ico ico-close sm"></view></view>
+    <view class="icon-btn" aria-role="button" aria-label="关闭" bindtap="closeMember"><theme-icon class="ico  sm" name="close" tone="ink" size="sm"></theme-icon></view>
   </view>
   <view class="sheet-body">
     <view class="pk-field">
@@ -135,8 +136,10 @@
     <view class="danger-zone" wx:if="{{isManager && !selectedMember.is_self}}">
       <text class="danger-copy">移除后对方会失去访问权限，历史记录仍然保留。</text>
       <view class="link-btn danger-link" aria-role="button" aria-label="移除这位家人" bindtap="removeSelectedMember">
-        <view class="ico ico-trash-dan sm"></view><text>移除这位家人</text>
+        <theme-icon class="ico  sm" name="trash" tone="danger" size="sm"></theme-icon><text>移除这位家人</text>
       </view>
     </view>
   </view>
+</view>
+
 </view>

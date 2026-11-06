@@ -33,11 +33,11 @@
 
 ## Design tokens and component contracts
 
-- Styles are layered and the layers are one-directional: `styles/tokens.wxss` (semantic values) -> `styles/atoms.wxss` (component classes) -> page `.wxss` (page-only geometry). `app.wxss` only imports the layers and keeps legacy class shims.
-- Global semantic colors, spacing, radii, typography, elevation, motion and safe-area values live in `styles/tokens.wxss` and are the single source of truth. Pages must not redefine them.
+- Styles are layered: `presentation/theme/registry.js` owns semantic values; `tools/gen_theme_styles.py` derives `styles/tokens.wxss` for first paint. `styles/atoms.wxss` owns shared components, `styles/theme.wxss` approved material differences, and page `.wxss` page-only geometry. `app.wxss` imports the layers and keeps compatibility shims.
+- Global semantic colors, spacing, radii, typography, elevation, motion, assets and safe-area roles have one authority in the theme registry. Pages consume roles and must not redefine them. This extension is approved by DESIGN-002 Spec08 / Architecture01; the existing FEC budgets remain unchanged.
 - Pages must not create near-duplicate token scales. Reusable components require shared product semantics, not visual similarity alone.
-- Radii are restricted to 8/12/16/24/32/40/999rpx; intermediate values require an approved Spec.
-- Icons are generated line icons from `tools/gen_icon_styles.py` (24x24 viewBox, stroke-width 2, no fill). Emoji, text glyphs and icon fonts are forbidden as icons. The generator must stay idempotent so `styles/icons.wxss` can be regenerated in verification.
+- Original radii use 8/12/16/24/32/40/999rpx. Spec08 additionally approves theme-owned 28/44/48rpx roles; other intermediate values still require approval.
+- Icons come from `tools/gen_icon_styles.py` (24×24, stroke 1.8; limited filled dots). It generates one glyph body per icon and shared sizing styles; `theme-icon` applies semantic tones, including fixed per-theme unknown-subject fallbacks. Emoji, text icons, icon fonts and duplicated palette sets are forbidden. Both glyph and token generators must be idempotent.
 - Legacy CSS variable aliases in `styles/tokens.wxss` are a temporary compatibility layer owned by the PKDS rollout Spec and must be removed before public release.
 - Touch targets are at least 44 logical pixels; body text is at least 14px; color is never the sole state indicator.
 
@@ -96,7 +96,7 @@
 
 ## Performance and resource budgets
 
-- Initial tab package budget is 1.5 MiB; no chart framework in MVP.
+- Initial tab package budget retains the existing validator's stricter **1,500,000-byte** source limit (the former “1.5 MiB” wording does not raise it); no chart framework in MVP. Spec08 adds≤150,000 bytes of five-theme artwork,≤230,000 bytes total net growth, a32,000-byte theme presentation payload and256-byte preference cap; nonasset net growth target≤80,000 bytes.
 - List pages paginate or cap rendered history; uploads use bounded count/size and show real byte progress only when available.
 - Avoid request waterfalls, duplicate polling, unbounded timers, base64 media persistence and large child images in page state.
 - `FEC-PERF-READ-001`: a page never downloads complete history to build an aggregate or first screen;
@@ -141,9 +141,10 @@
 | repository validator | `uv run python tools/validate_miniprogram.py` |
 | design evidence integrity | `uv run python tools/validate_design_evidence.py --manifest <APPROVAL.md>` |
 | icon asset reproducibility | `uv run python tools/gen_icon_styles.py` then confirm an empty diff |
+| theme roles/resources/contrast/boundaries | `node tools/check_themes.js`; token generator idempotence; canonical registry derives all six-theme checks |
 | architecture boundaries | `uv run python tools/check_architecture.py` |
 | device/visual | WeChat DevTools compile/preview plus representative iOS and Android smoke |
-| viewport/state | 320×568, 390×844, 430×932 captures for changed states |
+| viewport/state | 320×568, 390×844, 430×932 captures for each of six themes and changed states; global Spec08 scope is17 routes×6×3 plus8 shared states×6×3=450 groups. HTML never replaces native evidence; synthetic fixtures do not prove device or business end-to-end acceptance. |
 | native control geometry | three-viewport native rectangles and automated dimension/gap/overlap/containment assertions for changed selector/action groups |
 | privacy/authorization | contract/integration tests plus manual bundle/log inspection |
 

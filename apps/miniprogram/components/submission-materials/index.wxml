@@ -1,6 +1,7 @@
+<view class="{{theme.classes}}" style="{{theme.style}}">
 <view class="materials {{embedded ? 'embedded' : 'pk-card'}}">
   <view class="mat-head" wx:if="{{!embedded}}" aria-role="button" aria-label="展开或收起原始材料" bindtap="toggle">
-    <view class="ico ico-image sm"></view>
+    <theme-icon class="ico  sm" name="image" tone="ink" size="sm"></theme-icon>
     <text class="mat-t">原始材料</text>
     <text class="mat-c">{{countLabel}}</text>
     <view class="chev {{open ? 'up' : ''}}"></view>
@@ -13,9 +14,9 @@
     </block>
 
     <view class="pk-notice err" wx:if="{{error}}">
-      <view class="ico ico-cloud-off-dan sm"></view>
+      <theme-icon class="ico  sm" name="cloud-off" tone="danger" size="sm"></theme-icon>
       <text class="n-txt">{{error}}</text>
-      <view class="ico ico-refresh-dan sm" aria-role="button" aria-label="重新读取原始材料" catchtap="load"></view>
+      <view class="theme-icon-action" aria-role="button" aria-label="重新读取原始材料" catchtap="load"><theme-icon name="refresh" tone="danger" size="sm"></theme-icon></view>
     </view>
 
     <view class="pgrid {{exactSource ? 'exact-source' : ''}}" wx:if="{{media.length}}">
@@ -23,7 +24,7 @@
         aria-role="button" aria-label="第 {{item.index}} 张学习照片{{highlightIndex === item.index ? '，相关图片' : ''}}" data-id="{{item.id}}" bindtap="preview">
         <image class="pimg" wx:if="{{item.thumbnail}}" src="{{item.thumbnail}}" mode="{{exactSource ? 'widthFix' : 'aspectFill'}}"
           data-id="{{item.id}}" binderror="thumbnailFailed" bindload="thumbnailLoaded" />
-        <view class="ph-center" wx:else><view class="ico ico-image-mute sm"></view></view>
+        <view class="ph-center" wx:else><theme-icon class="ico  sm" name="image" tone="muted" size="sm"></theme-icon></view>
         <view class="idx">照片 {{item.index}}{{exactSource ? ' · 对应照片' : ''}}</view>
         <view class="related-label" wx:if="{{!exactSource && highlightIndex === item.index}}">相关图片</view>
         <view class="cnote" wx:if="{{item.hint}}">{{item.hint}}</view>
@@ -45,4 +46,6 @@
       <text class="et">没有可展示的原始材料</text>
     </view>
   </view>
+</view>
+
 </view>

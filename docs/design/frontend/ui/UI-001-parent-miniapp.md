@@ -1,5 +1,7 @@
 # UI-001 — 家长端微信小程序
 
+当前本地呈现revision `UI-STATE-20261106-THEMES-01`：DESIGN-002 Spec08 / Architecture01与DREV08获用户“好的 按照以上方案落地”批准并实施。六主题覆盖17路由、五Tab、隔离组件及表单/弹层；设置底部列表在提醒与关于之间提供风格入口。候选/应用/取消、本机ID偏好、保存失败反馈和未知科目固定默认图标见[本轮证据](../../../quality/evidence/themes-20261106/README.md)。本增量尚未上传，Spec保持active/VERIFYING；下方040/0.1.18是上一次实际交付，不包含本增量。
+
 2026-11-06当前交付revision `UI-RELEASE-20261106-040-0.1.18-01`：[发布报告](../../../deploy/releases/20261106-fullstack-040-client-0.1.18.md)记录040 normal/100%、Schema0027，客户端0.1.18官方上传1,200,417字节并bump；尚未设体验版、提审或正式发布。93组原生状态节点/PNG保持；320/390确认框CUA视觉和取消已补，430原证据保持。工作日两处实际HTTP保存/回填、摘要及来源跳转经原生AX观察PASS；合成SQLite及私有三文件配置例外独立记录，设备/可访问性仍NOT_RUN。固定40 v2自动40/40不等于家长内容通过，原37/40 FAIL保持。当前批准DREV不变，后续平台和设备验收独立。
 
 2026-11-05辅助验收后端合同revision `UI-STATE-20261105-SYSTEM-ONE-03`：[Spec06](../../../../specs/completed/BUG-036-SYSTEM-ONE-ACCEPTANCE.md)获批本地实现。原Pro生成后，Lite疑点按条目合并到既有proposal.uncertainties；不可用/跳过也只加人工核对提示。原条目、证据及历史关联保留，所有草稿仍由家长编辑/删除/确认，不显示自动合格或自动入库。内部_quality_acceptance不进入公开提案。Spec05分类/关系新路由已清退，旧覆盖草稿仅兼容读取。本任务不改页面、组件、表单、样式、DREV/FEC或视口矩阵；现有原生页面兼容性检查与未运行项在[本轮EVD](../../../../specs/evidence/EVD-20261105-BUG036-SYSTEMONE06.md)单列，不以静态检查冒充原生验收。后端合同已由040交付，内容由家长独立review；不新增前端结构。
@@ -278,7 +280,7 @@ OPS BLOCKED/active；本任务没有前端upload、DREV更新或新原生/真机
 
 ## Visual system
 
-当前视觉系统是 PKDS-2.0「纸 · 芽」，可见合同见 `DREV-20260906-PKDS-03`。
+当前本地视觉系统以PKDS-2.0原始风格为基础，按DESIGN-002 Spec08 / Architecture01增加成长花园、星际探索、深海夜色、海洋、科技五种风格。DREV06规定五主题全界面方向，DREV08规定设置底部入口与选择面板；已上传0.1.18仍为原始风格。实现与验收边界见[六主题证据](../../../quality/evidence/themes-20261106/README.md)。
 
 共享背景增量revision `UI-VISUAL-20261021-HERO-ARC-01`：已按获批
 [BUG-SPEC-20261021-HERO-ARC-01](../../../../specs/completed/BUG-030-HERO-BACKGROUND-ARC.md) /
@@ -287,7 +289,7 @@ OPS BLOCKED/active；本任务没有前端upload、DREV更新或新原生/真机
 原纸面渐变、插画、控件与交互保留；本轮验证与验收缺口见[质量证据](../../../quality/evidence/HERO-ARC-REMOVAL-20261021.md)。
 本增量已随0.1.16开发上传并开发DONE；未体验/审核/正式发布，原验收缺项独立保留。
 
-方向是暖白纸面 `#FAF7F0`（卡片 `#FFFDF8`）、松绿主色 `#1F5B45`、嫩芽成长色 `#7FA65C`、
+原始风格方向是暖白纸面 `#FAF7F0`（卡片 `#FFFDF8`）、松绿主色 `#1F5B45`、嫩芽成长色 `#7FA65C`、
 提醒赭石 `#A9762A`、异常陶土 `#A85742`。阴影大而淡，卡片像纸叠在纸上；标题使用衬线族
 （`Songti SC` / `Noto Serif SC`）制造纸感，正文用系统中文无衬线，数字统一 tabular-nums。
 信息依靠排版和留白建立层级，不采用儿童游戏化、排行榜、玻璃拟态或企业 BI 密集卡片。
@@ -307,7 +309,7 @@ PKDS-2.0 相对 PKDS-1.0 的可见变化：
 - 报表第一段标题是「接下来的复习压力」，只陈述待复习数量与是否已全部通过，不含能力评价词。
 - 原生自定义 TabBar 是独立图层，页面内 `fixed` 半屏无法遮住它，因此 `.pk-sheet` 默认预留
   TabBar 高度；非 Tab 页用 `.pk-sheet.plain` 收回这段预留。
-- 五个一级页面由 `primary-nav` 在导航中央显示 `.ico-sprout-pri + 知芽`，状态栏、胶囊与尺寸变化均由
+- 五个一级页面由 `primary-nav` 在导航中央显示 `theme-icon(sprout, nav) + 知芽`，状态栏、胶囊与尺寸变化均由
   同一组件测量并提供保守回退；内容区旧 `brand-head/.under-brand` 已删除。品牌继续复用生成图标体系，
   不引入位图 logo、emoji 或文字符号；深页仍由原生导航负责返回语义。
 
@@ -315,17 +317,18 @@ PKDS-2.0 相对 PKDS-1.0 的可见变化：
 
 | 层 | 文件 | 职责 |
 |---|---|---|
-| token | `apps/miniprogram/styles/tokens.wxss` | 语义色、科目色、圆角、间距、高度、动效、触控尺寸的唯一来源；含旧变量名兼容别名 |
+| token | `apps/miniprogram/presentation/theme/registry.js` → `styles/tokens.wxss` | 六主题语义色/资源/形状/字体唯一源；生成首屏值与兼容别名 |
 | 原子/组件 | `apps/miniprogram/styles/atoms.wxss` | Card / Hero / Section / Button / Pill / SubMark / Confidence / Notice / Segmented / Chips / 表单 / RowList / Timeline / WeekStrip / FAB / Metrics / PhotoUploader / 浮层四件套 / 空态 / 骨架 |
-| 图标 | `apps/miniprogram/styles/icons.wxss` | 43 个线性图标 × 6 个语义色变体（24×24 viewBox，stroke 1.8），由 `tools/gen_icon_styles.py` 生成，禁止手工编辑；TabBar 位图由 `tools/gen_tabbar_icons.py` 用同一图标语法生成 |
+| 图标 | `components/theme-icon` + `presentation/theme/glyphs.js` | 49个共享glyph（24×24，stroke1.8），路径仅生成一次；语义tone随主题绘制，不再生成六组颜色副本；平台回退PNG保留 |
+| 主题材质 | `styles/theme.wxss` | 共用页头背景、有限卡片形状与主题文字角色；业务布局只有一份 |
 | 页面 | `pages/*/**.wxss` | 只写本页特有几何，不重复定义 token |
 
 `apps/miniprogram/utils/ui.js` 承担纯展示派生（科目色/首字标记、活动图标映射、置信度档位、反馈文案、
 月日格式、复习原因文案、本地偏好读写），不发请求、不持有业务状态；这是为了满足 WXML 不支持
-方法调用的平台约束。圆角只允许 8/12/16/24/32/40/999rpx；图标不允许使用 emoji 或文字符号。
-课外活动图标由 `activityIcon(name, tone)` 按名称关键字包含匹配派生（游泳/乒乓球/篮球/羽毛球/
+方法调用的平台约束。共享圆角由registry的已批准角色控制；图标不允许使用emoji或文字符号。
+课外活动图标由 `activityIcon(name)` 按名称关键字包含匹配派生（游泳/乒乓球/篮球/羽毛球/
 足球/网球/棋/钢琴/音乐/舞蹈/武术/书法/绘画/机器人/编程各自一个图标），家长自建且命中不了的活动
-统一使用默认星形图标；页面在 JS 里算好 `iconClass` 后 setData，WXML 只做拼接。
+使用当前主题固定默认图标（书本/嫩芽/小星球/罗盘星/贝壳/芯片）；页面派生语义名称交由theme-icon绘制。自建科目同样使用主题默认图标。
 
 ## Responsive and accessibility
 

@@ -1,3 +1,5 @@
+const { themeState } = require("../../presentation/theme/state");
+const { withThemePage } = require("../../presentation/theme/adapters");
 const api = require("../../utils/api");
 const childContext = require("../../utils/child-context");
 const ui = require("../../utils/ui");
@@ -102,7 +104,7 @@ function travelLabel(item) {
   return `每周${slotsSummary(item.time_slots || [])}`;
 }
 
-Page({
+Page(withThemePage({
   onGradeConfirmation(event) {
     const flow = getApp().gradeConfirmation;
     if (flow) return flow.handle(this, event.detail);
@@ -112,6 +114,7 @@ Page({
     if (field) this.setData({ [field]: true });
   },
   data: {
+    showThemePicker: false, themePersistFailed: false,
     gradeConfirmation: null, gradeConfirmationVisible: false,
     learningArtFailed: false, activityArtFailed: false, travelArtFailed: false, dailyArtFailed: false,
     loading: true, error: "", children: [], childIndex: 0, childId: "", multiChild: false, showChildSheet: false,
@@ -155,6 +158,7 @@ Page({
     if (activityIndex >= 0) this.openActivitySchedule({ currentTarget: { dataset: { index: activityIndex } } });
   },
   onHide() {
+    this.closeThemePicker();
     this.scheduleGeneration = (this.scheduleGeneration || 0) + 1;
     this.setData({ scheduleConfirming: false });
     this.loadGeneration = (this.loadGeneration || 0) + 1;
@@ -169,6 +173,21 @@ Page({
   openFamily() { wx.navigateTo({ url: "/pages/family-members/index" }); },
   openDeleteSettings() { wx.navigateTo({ url: "/pages/delete-settings/index" }); },
   openNotifications() { wx.navigateTo({ url: "/pages/notifications/index" }); },
+  openThemePicker() {
+    this.setData({ showThemePicker: true });
+    const bar = this.getTabBar && this.getTabBar();
+    if (bar) bar.setData({ themePickerVisible: true });
+  },
+  closeThemePicker() {
+    this.setData({ showThemePicker: false });
+    const bar = this.getTabBar && this.getTabBar();
+    if (bar) bar.setData({ themePickerVisible: false });
+  },
+  themeApplied(event) {
+    this.setData({ themePersistFailed: !event.detail.persisted });
+    this.closeThemePicker();
+    wx.showToast({ title: event.detail.persisted ? "风格已更新" : "已切换，本次暂未保存", icon: "none" });
+  },
   openAbout() {
     wx.showModal({
       title: "关于知芽",
@@ -431,7 +450,7 @@ Page({
     this.setData({ subjectConfirming: true, subjectError: "" });
     wx.showModal({ title: `移出「${subject.name}」？`,
       content: "已有的学习记录会保留，只是不再出现在选项里。",
-      confirmText: "移出", confirmColor: "#A85742",
+      confirmText: "移出", confirmColor: themeState.current().tokens["pk-native-danger"],
       success: (result) => {
         if (!this.subjectContextValid(generation, subject)) return;
         this.setData({ subjectConfirming: false });
@@ -605,7 +624,7 @@ Page({
       return wx.showModal({
         title: "合并为同一时间？",
         content: `各天时间不同，合并后所有已选日期都将使用周${WEEKDAY_LABELS[first.weekday]}的 ${first.start}–${first.end}。`,
-        confirmText: "合并", confirmColor: "#A85742",
+        confirmText: "合并", confirmColor: themeState.current().tokens["pk-native-danger"],
         success: (result) => {
           if (!result.confirm) return;
           this.setData({ perDay: false, startTime: first.start, endTime: first.end, scheduleError: "" });
@@ -664,7 +683,7 @@ Page({
   },
   async removeActivity() {
     if (!this.guardWrite()) return;
-    const confirmed = await new Promise((resolve) => wx.showModal({ title: `移除「${this.data.scheduleSubject.name}」？`, content: "已有的练习记录会保留，只是不再出现在活动列表和日程里。", confirmText: "移除", confirmColor: "#A85742", success: (result) => resolve(result.confirm) }));
+    const confirmed = await new Promise((resolve) => wx.showModal({ title: `移除「${this.data.scheduleSubject.name}」？`, content: "已有的练习记录会保留，只是不再出现在活动列表和日程里。", confirmText: "移除", confirmColor: themeState.current().tokens["pk-native-danger"], success: (result) => resolve(result.confirm) }));
     if (!confirmed) return;
     this.setData({ removingActivity: true, scheduleError: "" });
     try {
@@ -758,7 +777,7 @@ Page({
       return wx.showModal({
         title: "合并为同一时间？",
         content: `各天时间不同，合并后所有已选日期都将使用周${WEEKDAY_LABELS[first.weekday]}的 ${first.start}–${first.end}。`,
-        confirmText: "合并", confirmColor: "#A85742",
+        confirmText: "合并", confirmColor: themeState.current().tokens["pk-native-danger"],
         success: (result) => {
           if (!result.confirm) return;
           this.setData({ travelPerDay: false, travelStartTime: first.start, travelEndTime: first.end, travelError: "", travelEndError: false });
@@ -811,7 +830,7 @@ Page({
     const confirmed = await new Promise((resolve) => wx.showModal({
       title: `删除「${this.data.travelName}」？`,
       content: "删除后不会再出现在日程里，其他活动和学习记录不受影响。",
-      confirmText: "删除", confirmColor: "#A6423B",
+      confirmText: "删除", confirmColor: themeState.current().tokens["pk-native-danger"],
       success: (result) => resolve(result.confirm)
     }));
     if (!confirmed) return;
@@ -825,4 +844,4 @@ Page({
       this.setData({ deletingTravel: false, travelError: `${error.message}，这项安排还在，可以再试一次。` });
     }
   }
-});
+}));

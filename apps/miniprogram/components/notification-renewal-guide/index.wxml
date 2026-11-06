@@ -1,3 +1,4 @@
+<view class="{{theme.classes}}" style="{{theme.style}}">
 <view wx:if="{{visible}}" class="renewal-overlay" catchtouchmove="contain">
   <view class="renewal-mask" bindtap="decline" aria-label="暂不开启"></view>
   <view class="renewal-sheet" aria-role="dialog" aria-label="以后少去一次提醒设置">
@@ -15,4 +16,6 @@
       <button class="renewal-secondary" disabled="{{saving}}" loading="{{saving}}" bindtap="decline">暂不开启</button>
     </view>
   </view>
+</view>
+
 </view>

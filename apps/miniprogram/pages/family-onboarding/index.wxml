@@ -1,8 +1,9 @@
+<view class="{{theme.classes}} theme-page" style="{{theme.style}}">
 <view class="page onboarding-page {{mode === 'create' || mode === 'join' ? 'sticky-cta' : ''}}">
   <view class="pk-notice err" wx:if="{{error}}">
-    <view class="ico ico-cloud-off-dan sm"></view>
+    <theme-icon class="ico  sm" name="cloud-off" tone="danger" size="sm"></theme-icon>
     <text class="n-txt">{{error}}。检查网络后可以重试。</text>
-    <view class="ico ico-refresh-dan sm" aria-role="button" aria-label="重试" bindtap="load"></view>
+    <view class="theme-icon-action" aria-role="button" aria-label="重试" bindtap="load"><theme-icon name="refresh" tone="danger" size="sm"></theme-icon></view>
   </view>
 
   <block wx:if="{{loading}}">
@@ -15,7 +16,7 @@
   <!-- A4 申请已发送 · 等待确认 -->
   <block wx:elif="{{state === 'pending'}}">
     <view class="pk-empty pending-empty">
-      <view class="em att"><view class="ico ico-clock-att lg"></view></view>
+      <view class="em att"><theme-icon class="ico  lg" name="clock" tone="attention" size="lg"></theme-icon></view>
       <text class="et">申请已发送</text>
       <text class="ec">等待家庭管理员确认，通常几分钟内就会有结果。</text>
     </view>
@@ -30,7 +31,7 @@
     </view>
 
     <view class="btn secondary mt3 {{refreshing ? 'is-disabled' : ''}}" aria-role="button" aria-label="查看最新结果" bindtap="refreshStatus">
-      <view class="ico ico-refresh-pri sm" wx:if="{{!refreshing}}"></view>
+      <theme-icon class="ico  sm" wx:if="{{!refreshing}}" name="refresh" tone="primary" size="sm"></theme-icon>
       <text>{{refreshing ? '正在查询…' : '查看最新结果'}}</text>
     </view>
     <view class="center-row">
@@ -40,14 +41,15 @@
     </view>
 
     <view class="pk-notice quiet mt2">
-      <view class="ico ico-info sm"></view>
+      <theme-icon class="ico  sm" name="info" tone="ink" size="sm"></theme-icon>
       <text class="n-txt">获批前不会看到孩子的学习记录或照片。</text>
     </view>
   </block>
 
   <!-- A2 创建家庭 -->
   <block wx:elif="{{mode === 'create'}}">
-    <view class="step-head">
+    <view class="step-head theme-header">
+    <image wx:if="{{theme.assets.hero && !themeArtFailed}}" class="theme-hero-art" src="{{theme.assets.hero}}" mode="aspectFill" binderror="onThemeIllustrationError" aria-hidden="{{true}}" />
       <text class="pg-kicker">第 1 步 · 家庭信息</text>
       <text class="pg-title">创建家庭</text>
     </view>
@@ -79,7 +81,8 @@
 
   <!-- A3 使用家庭邀请码 -->
   <block wx:elif="{{mode === 'join'}}">
-    <view class="step-head">
+    <view class="step-head theme-header">
+    <image wx:if="{{theme.assets.hero && !themeArtFailed}}" class="theme-hero-art" src="{{theme.assets.hero}}" mode="aspectFill" binderror="onThemeIllustrationError" aria-hidden="{{true}}" />
       <text class="pg-kicker">从微信邀请进入时无需手动填写</text>
       <text class="pg-title">输入 6 位家庭邀请码</text>
     </view>
@@ -92,7 +95,7 @@
       </view>
     </view>
     <view class="pk-notice quiet mt3">
-      <view class="ico ico-shield sm"></view>
+      <theme-icon class="ico  sm" name="shield" tone="ink" size="sm"></theme-icon>
       <text class="n-txt">邀请码只用来找到这个家庭。管理员确认前，你看不到孩子的学习记录或照片。</text>
     </view>
 
@@ -106,7 +109,7 @@
 
   <!-- A1 首次进入 · 选择路径 -->
   <block wx:elif="{{state === 'unbound'}}">
-    <view class="brand"><view class="ico ico-sprout-inv xl"></view></view>
+    <view class="brand"><theme-icon class="ico  xl" name="sprout" tone="inverse" size="xl"></theme-icon></view>
     <view class="brand-title">
       <text>一起记住</text>
       <text>孩子成长的每一步</text>
@@ -117,7 +120,7 @@
     </view>
 
     <view class="choice-card primary" aria-role="button" aria-label="创建家庭" bindtap="chooseCreate">
-      <view class="choice-mark"><view class="ico ico-plus-inv sm"></view></view>
+      <view class="choice-mark"><theme-icon class="ico  sm" name="plus" tone="inverse" size="sm"></theme-icon></view>
       <view class="grow">
         <text class="choice-t">创建家庭</text>
         <text class="choice-s">先建立家庭，再为孩子建立学习档案</text>
@@ -126,7 +129,7 @@
     </view>
 
     <view class="choice-card" aria-role="button" aria-label="申请加入家庭" bindtap="openJoin">
-      <view class="choice-mark plain"><view class="ico ico-family sm"></view></view>
+      <view class="choice-mark plain"><theme-icon class="ico  sm" name="family" tone="ink" size="sm"></theme-icon></view>
       <view class="grow">
         <text class="choice-t">申请加入家庭</text>
         <text class="choice-s">使用家人发来的微信邀请或 6 位邀请码</text>
@@ -135,8 +138,10 @@
     </view>
 
     <view class="pk-notice quiet mt3">
-      <view class="ico ico-info sm"></view>
+      <theme-icon class="ico  sm" name="info" tone="ink" size="sm"></theme-icon>
       <text class="n-txt">加入家庭需要管理员确认。获批前不会看到孩子的学习记录或照片。</text>
     </view>
   </block>
+</view>
+
 </view>

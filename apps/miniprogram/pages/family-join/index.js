@@ -1,9 +1,10 @@
+const { withThemePage } = require("../../presentation/theme/adapters");
 const api = require("../../utils/api");
 
 /* 与首次引导保持同一套称谓选项：家长选完就能提交，选「其他」再展开自由输入。 */
 const RELATIONS = ["妈妈", "爸爸", "奶奶", "爷爷", "外婆", "外公", "其他"];
 
-Page({
+Page(withThemePage({
   data: {
     loading: true, error: "", preview: null, relationship: "", submitting: false, applied: false,
     relations: RELATIONS, relationIndex: -1, relationText: "请选择", customRelation: false,
@@ -66,4 +67,4 @@ Page({
   },
   goPending() { wx.reLaunch({ url: "/pages/family-onboarding/index" }); },
   goBack() { wx.navigateBack({ fail: () => wx.reLaunch({ url: "/pages/family-onboarding/index" }) }); }
-});
+}));

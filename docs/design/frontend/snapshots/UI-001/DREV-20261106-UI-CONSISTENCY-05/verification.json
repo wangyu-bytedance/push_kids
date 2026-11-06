@@ -1,0 +1,260 @@
+{
+  "scope": "Review gallery only; image switching is not native Mini Program theming.",
+  "gridChecks": [
+    {
+      "mode": "grid",
+      "viewport": [
+        1440,
+        1000
+      ],
+      "images": [
+        {
+          "src": "../../snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-05/style-a.png",
+          "width": 852,
+          "height": 1846
+        },
+        {
+          "src": "../../snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-05/style-b.png",
+          "width": 852,
+          "height": 1846
+        },
+        {
+          "src": "../../snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-05/style-c.png",
+          "width": 852,
+          "height": 1846
+        },
+        {
+          "src": "../../snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-05/style-d.png",
+          "width": 852,
+          "height": 1846
+        },
+        {
+          "src": "../../snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-05/style-e.png",
+          "width": 898,
+          "height": 1751
+        },
+        {
+          "src": "../../snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-05/style-f.png",
+          "width": 887,
+          "height": 1774
+        }
+      ],
+      "horizontalOverflow": false
+    },
+    {
+      "mode": "grid",
+      "viewport": [
+        390,
+        844
+      ],
+      "images": [
+        {
+          "src": "../../snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-05/style-a.png",
+          "width": 852,
+          "height": 1846
+        },
+        {
+          "src": "../../snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-05/style-b.png",
+          "width": 852,
+          "height": 1846
+        },
+        {
+          "src": "../../snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-05/style-c.png",
+          "width": 852,
+          "height": 1846
+        },
+        {
+          "src": "../../snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-05/style-d.png",
+          "width": 852,
+          "height": 1846
+        },
+        {
+          "src": "../../snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-05/style-e.png",
+          "width": 898,
+          "height": 1751
+        },
+        {
+          "src": "../../snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-05/style-f.png",
+          "width": 887,
+          "height": 1774
+        }
+      ],
+      "horizontalOverflow": false
+    }
+  ],
+  "themeSwitchChecks": [
+    {
+      "selected": "a",
+      "title": "原始风格",
+      "fallback": "线性书本",
+      "src": "../../snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-05/style-a.png",
+      "href": "../../snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-05/style-a.png",
+      "selectedCount": 1,
+      "horizontalOverflow": false,
+      "viewport": [
+        1440,
+        1000
+      ],
+      "passed": true
+    },
+    {
+      "selected": "b",
+      "title": "成长花园",
+      "fallback": "嫩芽",
+      "src": "../../snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-05/style-b.png",
+      "href": "../../snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-05/style-b.png",
+      "selectedCount": 1,
+      "horizontalOverflow": false,
+      "viewport": [
+        1440,
+        1000
+      ],
+      "passed": true
+    },
+    {
+      "selected": "c",
+      "title": "星际探索",
+      "fallback": "小星球",
+      "src": "../../snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-05/style-c.png",
+      "href": "../../snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-05/style-c.png",
+      "selectedCount": 1,
+      "horizontalOverflow": false,
+      "viewport": [
+        1440,
+        1000
+      ],
+      "passed": true
+    },
+    {
+      "selected": "d",
+      "title": "深海夜色",
+      "fallback": "罗盘星",
+      "src": "../../snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-05/style-d.png",
+      "href": "../../snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-05/style-d.png",
+      "selectedCount": 1,
+      "horizontalOverflow": false,
+      "viewport": [
+        1440,
+        1000
+      ],
+      "passed": true
+    },
+    {
+      "selected": "e",
+      "title": "海洋风格",
+      "fallback": "贝壳",
+      "src": "../../snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-05/style-e.png",
+      "href": "../../snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-05/style-e.png",
+      "selectedCount": 1,
+      "horizontalOverflow": false,
+      "viewport": [
+        1440,
+        1000
+      ],
+      "passed": true
+    },
+    {
+      "selected": "f",
+      "title": "科技风格",
+      "fallback": "芯片",
+      "src": "../../snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-05/style-f.png",
+      "href": "../../snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-05/style-f.png",
+      "selectedCount": 1,
+      "horizontalOverflow": false,
+      "viewport": [
+        1440,
+        1000
+      ],
+      "passed": true
+    },
+    {
+      "selected": "a",
+      "title": "原始风格",
+      "fallback": "线性书本",
+      "src": "../../snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-05/style-a.png",
+      "href": "../../snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-05/style-a.png",
+      "selectedCount": 1,
+      "horizontalOverflow": false,
+      "viewport": [
+        390,
+        844
+      ],
+      "passed": true
+    },
+    {
+      "selected": "b",
+      "title": "成长花园",
+      "fallback": "嫩芽",
+      "src": "../../snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-05/style-b.png",
+      "href": "../../snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-05/style-b.png",
+      "selectedCount": 1,
+      "horizontalOverflow": false,
+      "viewport": [
+        390,
+        844
+      ],
+      "passed": true
+    },
+    {
+      "selected": "c",
+      "title": "星际探索",
+      "fallback": "小星球",
+      "src": "../../snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-05/style-c.png",
+      "href": "../../snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-05/style-c.png",
+      "selectedCount": 1,
+      "horizontalOverflow": false,
+      "viewport": [
+        390,
+        844
+      ],
+      "passed": true
+    },
+    {
+      "selected": "d",
+      "title": "深海夜色",
+      "fallback": "罗盘星",
+      "src": "../../snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-05/style-d.png",
+      "href": "../../snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-05/style-d.png",
+      "selectedCount": 1,
+      "horizontalOverflow": false,
+      "viewport": [
+        390,
+        844
+      ],
+      "passed": true
+    },
+    {
+      "selected": "e",
+      "title": "海洋风格",
+      "fallback": "贝壳",
+      "src": "../../snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-05/style-e.png",
+      "href": "../../snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-05/style-e.png",
+      "selectedCount": 1,
+      "horizontalOverflow": false,
+      "viewport": [
+        390,
+        844
+      ],
+      "passed": true
+    },
+    {
+      "selected": "f",
+      "title": "科技风格",
+      "fallback": "芯片",
+      "src": "../../snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-05/style-f.png",
+      "href": "../../snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-05/style-f.png",
+      "selectedCount": 1,
+      "horizontalOverflow": false,
+      "viewport": [
+        390,
+        844
+      ],
+      "passed": true
+    }
+  ],
+  "javascriptErrors": [],
+  "externalRequests": [],
+  "nativeAcceptance": "NOT_RUN",
+  "productGeometry": "NOT_RUN",
+  "generatedImageText": "MANUALLY_REVIEWED"
+}

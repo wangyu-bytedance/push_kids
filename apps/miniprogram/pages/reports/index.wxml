@@ -1,8 +1,10 @@
+<view class="{{theme.classes}} theme-page" style="{{theme.style}}">
 <import src="../records/history.wxml" />
 <view aria-hidden="{{gradeConfirmationVisible}}">
 <primary-nav></primary-nav>
 <view class="page report-page">
-  <view class="pg-head pk-hero report-intro">
+  <view class="pg-head pk-hero report-intro theme-header">
+    <image wx:if="{{theme.assets.hero && !themeArtFailed}}" class="theme-hero-art" src="{{theme.assets.hero}}" mode="aspectFill" binderror="onThemeIllustrationError" aria-hidden="{{true}}" />
     <view class="head-intro">
       <text class="pg-title">一点一滴，看得见</text>
       <text class="pg-context">只统计已确认的学习</text>
@@ -12,13 +14,13 @@
         <view class="chev" wx:if="{{multiChild}}"></view>
       </view>
     </view>
-    <image class="report-intro-art" wx:if="{{!introArtFailed}}" src="/assets/illustrations/report-growth.png" mode="aspectFit" aria-hidden="{{true}}" binderror="onIllustrationError"></image>
+    <image class="report-intro-art" wx:if="{{!introArtFailed}}" src="{{theme.assets.report}}" mode="aspectFit" aria-hidden="{{true}}" binderror="onIllustrationError"></image>
   </view>
 
   <view class="pk-notice err" wx:if="{{error}}">
-    <view class="ico ico-cloud-off-dan sm"></view>
+    <theme-icon class="ico  sm" name="cloud-off" tone="danger" size="sm"></theme-icon>
     <text class="n-txt">{{error}}。已经读到的统计还能继续看。</text>
-    <view class="ico ico-refresh-dan sm" aria-role="button" aria-label="重新加载报表" bindtap="load"></view>
+    <view class="theme-icon-action" aria-role="button" aria-label="重新加载报表" bindtap="load"><theme-icon name="refresh" tone="danger" size="sm"></theme-icon></view>
   </view>
 
   <view class="range-seg" wx:if="{{children.length}}">
@@ -34,7 +36,7 @@
   </block>
 
   <view class="pk-empty" wx:elif="{{!children.length}}">
-    <view class="em"><view class="ico ico-family-pri lg"></view></view>
+    <view class="em"><theme-icon class="ico  lg" name="family" tone="primary" size="lg"></theme-icon></view>
     <text class="et">还没有学习档案</text>
     <text class="ec">在设置里建立学习档案后，这里会开始统计已确认的学习与复习。</text>
     <view class="ea">
@@ -60,12 +62,12 @@
     </view>
 
     <view class="pk-empty" wx:if="{{isEmpty}}">
-      <view class="em"><view class="ico ico-list-pri lg"></view></view>
+      <view class="em"><theme-icon class="ico  lg" name="list" tone="primary" size="lg"></theme-icon></view>
       <text class="et">还没有已确认的学习记录</text>
       <text class="ec">记录并确认之后，这里会逐渐留下学习与复习的足迹。</text>
       <view class="ea">
         <view class="btn secondary" aria-role="button" aria-label="去记录学习" bindtap="goRecord">
-          <view class="ico ico-camera-pri sm"></view><text>去记录学习</text>
+          <theme-icon class="ico  sm" name="camera" tone="primary" size="sm"></theme-icon><text>去记录学习</text>
         </view>
       </view>
     </view>
@@ -87,7 +89,7 @@
               <view class="thirty-grid {{days === 7 ? 'week-grid' : ''}}">
                 <view class="ucell" wx:for="{{pageItem.items}}" wx:key="day" wx:for-item="dayItem" aria-label="{{dayItem.reading}}">
                   <view class="udot {{dayItem.dotClass}}">
-                    <view class="ico ico-check-inv xs" wx:if="{{dayItem.passed}}"></view>
+                    <theme-icon class="ico  xs" wx:if="{{dayItem.passed}}" name="check" tone="inverse" size="xs"></theme-icon>
                     <text class="tnum" wx:else>{{dayItem.display}}</text>
                   </view>
                   <text class="cell-label tnum">{{dayItem.dayLabel}}</text>
@@ -161,7 +163,7 @@
       <view id="report-history" class="pk-card report-disclosure history-section {{historyExpanded ? 'expanded' : ''}}">
         <view class="history-toggle" aria-role="button" aria-label="{{historyExpanded ? '收起历史记录' : '展开历史记录'}}" aria-expanded="{{historyExpanded}}" bindtap="toggleHistory">
           <view class="flex">
-            <view class="ico ico-clock sm"></view>
+            <theme-icon class="ico  sm" name="clock" tone="ink" size="sm"></theme-icon>
             <view class="disclosure-heading grow">
               <text class="disclosure-title">历史记录</text>
               <text class="disclosure-sub">回看学习内容<text class="c-att" wx:if="{{pendingCount}}"> · {{pendingCount}} 条待处理</text><text wx:elif="{{historyError}}"> · 读取失败</text></text>
@@ -179,7 +181,7 @@
       <view id="report-edit-plan" class="pk-card report-disclosure {{inventoryExpanded ? 'expanded' : ''}}">
         <view class="history-toggle" aria-role="button" aria-label="{{inventoryExpanded ? '收起编辑计划' : '展开编辑计划'}}" aria-expanded="{{inventoryExpanded}}" bindtap="toggleInventory">
           <view class="flex">
-            <view class="ico ico-list-pri sm"></view>
+            <theme-icon class="ico  sm" name="list" tone="primary" size="sm"></theme-icon>
             <view class="disclosure-heading grow"><text class="disclosure-title">编辑计划</text><text class="disclosure-sub">查看复习安排，按条目调整</text></view>
             <text class="disclosure-action">{{inventoryExpanded ? '收起' : '展开'}}</text>
             <view class="chev {{inventoryExpanded ? 'up' : ''}}"></view>
@@ -198,7 +200,7 @@
         </view>
         <view class="rowlist" wx:if="{{activityRows.length}}">
           <view class="rowitem" wx:for="{{activityRows}}" wx:key="id">
-            <view class="act-mark"><view class="ico {{item.iconClass}} sm"></view></view>
+            <view class="act-mark"><theme-icon class="ico  sm" name="{{item.iconClass}}" tone="primary" size="sm"></theme-icon></view>
             <view class="grow">
               <text class="r-t trunc">{{item.name}}</text>
               <text class="r-s">{{item.meta}}</text>
@@ -206,7 +208,7 @@
           </view>
         </view>
         <view class="pk-notice quiet" wx:elif="{{activityDetailFailed}}">
-          <view class="ico ico-cloud-off-mute sm"></view>
+          <theme-icon class="ico  sm" name="cloud-off" tone="muted" size="sm"></theme-icon>
           <text class="n-txt">活动明细这次没读到，下拉刷新可以再试一次。</text>
         </view>
         <view class="pk-card quiet-card" wx:else>
@@ -226,7 +228,7 @@
     <view class="grow">
       <text class="sheet-title">选择孩子</text>
     </view>
-    <view class="icon-btn" aria-role="button" aria-label="关闭" bindtap="closeChildSheet"><view class="ico ico-close sm"></view></view>
+    <view class="icon-btn" aria-role="button" aria-label="关闭" bindtap="closeChildSheet"><theme-icon class="ico  sm" name="close" tone="ink" size="sm"></theme-icon></view>
   </view>
   <view class="sheet-body">
     <view class="rowlist">
@@ -235,13 +237,15 @@
         <view class="grow">
           <text class="r-t">{{item.label}}</text>
         </view>
-        <view class="ico ico-check-pri sm" wx:if="{{index === childIndex}}"></view>
+        <theme-icon class="ico  sm" wx:if="{{index === childIndex}}" name="check" tone="primary" size="sm"></theme-icon>
       </view>
     </view>
     <view class="add-entry" wx:if="{{canAddChild}}" aria-role="button" aria-label="添加孩子" bindtap="addChild">
-      <view class="ico ico-plus-pri sm"></view><text>添加孩子</text>
+      <theme-icon class="ico  sm" name="plus" tone="primary" size="sm"></theme-icon><text>添加孩子</text>
     </view>
   </view>
 </view>
 </view>
 <grade-confirmation id="grade-confirmation" view="{{gradeConfirmation}}" blocked="{{loading || showChildSheet || inventoryExpanded || filterOpen}}" bindaction="onGradeConfirmation"></grade-confirmation>
+
+</view>

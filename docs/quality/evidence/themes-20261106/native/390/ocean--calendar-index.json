@@ -1,0 +1,77 @@
+{
+  "route": "pages/calendar/index",
+  "theme": "ocean",
+  "viewport": {
+    "width": 390,
+    "height": 844,
+    "screenWidth": 390,
+    "screenHeight": 844
+  },
+  "base_library": "3.17.4",
+  "nodes": [
+    {
+      "host": "page",
+      "selector": ".theme-page",
+      "left": 0,
+      "right": 390,
+      "top": 0,
+      "bottom": 931,
+      "width": 390,
+      "height": 931,
+      "backgroundColor": "rgb(226, 245, 248)",
+      "color": "rgb(32, 68, 84)",
+      "fontSize": "16px",
+      "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif"
+    },
+    {
+      "host": "page",
+      "selector": ".page",
+      "left": 0,
+      "right": 390,
+      "top": 87,
+      "bottom": 931,
+      "width": 390,
+      "height": 844,
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "color": "rgb(32, 68, 84)",
+      "fontSize": "16px",
+      "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif"
+    },
+    {
+      "host": "page",
+      "selector": ".theme-header",
+      "left": 4,
+      "right": 386,
+      "top": 87,
+      "bottom": 236,
+      "width": 382,
+      "height": 149,
+      "backgroundColor": "rgb(242, 251, 253)",
+      "color": "rgb(32, 68, 84)",
+      "fontSize": "16px",
+      "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif"
+    },
+    {
+      "host": "page",
+      "selector": ".pk-card",
+      "left": 18,
+      "right": 372,
+      "top": 250,
+      "bottom": 333,
+      "width": 354,
+      "height": 83,
+      "backgroundColor": "rgb(250, 253, 255)",
+      "color": "rgb(32, 68, 84)",
+      "fontSize": "16px",
+      "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif"
+    }
+  ],
+  "source": "native wx.createSelectorQuery; synthetic fixtures; production WXML/WXSS exact; page loading lifecycles suppressed",
+  "screenshot": "ocean--calendar-index.png",
+  "screenshot_sha256": "7dca13cd25ad00f1acb29eca2d9fc9b3865b75f82896b08d4f5829cfd8a161a8",
+  "fixture": "calendar-index",
+  "category": "route",
+  "screenshot_errors": [],
+  "validation_errors": [],
+  "horizontal_overflow": []
+}

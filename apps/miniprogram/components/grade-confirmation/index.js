@@ -1,4 +1,5 @@
-Component({
+const { withThemeComponent } = require("../../presentation/theme/adapters");
+Component(withThemeComponent({
   properties: { view: { type: Object, value: null }, blocked: Boolean },
   observers: { blocked() { if (this.hostVisible) this.schedule("availability"); } },
   lifetimes: { attached() { this.hostVisible = true; this.schedule("show"); }, detached() { this.hostVisible = false; this.schedule("hide"); } },
@@ -21,4 +22,4 @@ Component({
     choose(event) { this.send("choose", { index: Number(event.detail.value) }); },
     contain() {}
   }
-});
+}));

@@ -46,7 +46,7 @@ test("reports consume server-side activity aggregates without loading raw histor
     count: 101,
     minutes: 3030,
     lastDay: "2026-09-11",
-    iconClass: "ico-swim-pri",
+    iconClass: "swim",
     meta: "101 次 · 共 3030 分钟 · 上次 09-11"
   }]);
   assert.equal(page.data.activityDetailFailed, false);

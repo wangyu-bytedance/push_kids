@@ -22,13 +22,14 @@
 |---|---:|---|
 | completed完成记录 | 119 | 既有108＋本轮11 |
 | completed阶段设计 | 1 | DESIGN-001保留STAGE_COMPLETE |
-| active READY_FOR_REVIEW | 3 | CLOUD-002、DOC-003、DESIGN-002，未批准实施 |
+| active READY_FOR_REVIEW | 2 | CLOUD-002、DOC-003，未批准实施 |
+| active VERIFYING | 1 | DESIGN-002 Spec08已批准并本地实施，未上传；验收缺项独立保留 |
 | active BLOCKED | 1 | 旧10/13候选缓存OPS，34/40 FAIL、未部署，未作取消处置 |
 | rejected | 19 | 原取消/拒绝理由保持 |
 
 合计143份：completed120 / active4 / rejected19；active没有已交付的产品开发Spec。旧[缓存OPS](active/OPS-20261101-BUG036-CACHE02-DEPLOYMENT.md)锁定154文件10/13且排除内容03/DDL；不能用040继承缓存功能冒称该候选曾部署。CLOUD-002与DOC-003继续待具体批准。
 
-2026-11-06 [DESIGN-002 / Spec04](active/DESIGN-002-GLOBAL-UI-CONSISTENCY.md)：用户要求突出儿童教育属性，加入背景、插画、图标与更有想象力的布局。`DREV-20261106-UI-CONSISTENCY-04` 提供成长花园、星际探索、绘本小屋、自然观察站、积木乐园、灵感手帐六张生成概念图及比较板，READY_FOR_REVIEW / CONCEPT_PENDING_STYLE_SELECTION。本轮是位图主题探索，未完成可编辑产品UI或三视口原生门禁；旧18视口检查不作为本轮证据。Spec01–03和对应源、SHA保留。生产实施未开始，当前产品/发布事实不变。
+2026-11-06 [DESIGN-002 / Spec08（Architecture01）](active/DESIGN-002-GLOBAL-UI-CONSISTENCY.md)：用户对DREV07批注“这个放在最下面的设置里”，其后“好的 按照以上方案落地”明确批准Spec08、Architecture01与DREV08实施。六主题已接入17路由/共享组件，入口位于设置底部提醒与关于之间，本机候选/应用/取消/偏好与固定默认图标已实现。DREV06与08冻结证据、Spec01–07及AGENTS约束保持；[本轮证据](../docs/quality/evidence/themes-20261106/README.md)分别记录业务回归、主题合同/资源/原生呈现与未验证项。当前active/VERIFYING；未上传，不满足云交付DONE归档条件。
 
 本轮固定40 v2是获批材料Spec07后唯一完整40/40，各科15/15、零empty/pending/formal；原37/40 FAIL、历史34/40和43/45等保持原版本。实际生产七路GET200只证明读取，不是AI生成、正式确认或线上成功率。归档不推进体验版/审核/正式发布。
 

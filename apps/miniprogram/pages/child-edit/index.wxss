@@ -7,7 +7,7 @@
 /* 初始科目：与设置页同一套三列几何，避免两处观感不一致 */
 .form-card .subj-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16rpx; }
 .form-card .subj { display: flex; align-items: center; justify-content: center; gap: 10rpx; box-sizing: border-box; min-width: 0; height: 104rpx; border-radius: var(--pk-r-lg); background: var(--pk-surface-sunken); color: var(--pk-ink-2); font-size: 16px; line-height: 1.2; font-weight: 600; }
-.form-card .subj.on { background: var(--pk-primary); color: #fff; }
+.form-card .subj.on { background: var(--pk-primary); color: var(--pk-on-primary); }
 
 .archive-card { padding: 0; }
 .archive-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; width: 100%; min-height: 84px; padding: 16px 28rpx; box-sizing: border-box; border-radius: inherit; text-align: left; color: var(--pk-ink); }

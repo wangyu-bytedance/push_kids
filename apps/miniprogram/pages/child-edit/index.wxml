@@ -1,16 +1,17 @@
+<view class="{{theme.classes}} theme-page" style="{{theme.style}}">
 <view class="page child-edit-page">
   <view class="pk-notice err" wx:if="{{error}}">
-    <view class="ico ico-cloud-off-dan sm"></view>
+    <theme-icon class="ico  sm" name="cloud-off" tone="danger" size="sm"></theme-icon>
     <text class="n-txt">{{error}}</text>
   </view>
 
   <view class="pk-notice quiet mt2" wx:if="{{mode === 'edit' && !active}}">
-    <view class="ico ico-eye-mute sm"></view>
+    <theme-icon class="ico  sm" name="eye" tone="muted" size="sm"></theme-icon>
     <text class="n-txt">这个档案已归档，不会出现在切换列表里，也不能再新增记录。已有的记录和报表仍可查看，归档前留下的待确认草稿和复习反馈也仍能完成。</text>
   </view>
 
   <view class="pk-notice quiet mt2" wx:if="{{mode === 'create' && limitReached}}">
-    <view class="ico ico-info-pri sm"></view>
+    <theme-icon class="ico  sm" name="info" tone="primary" size="sm"></theme-icon>
     <text class="n-txt">{{limitHint}}</text>
   </view>
 
@@ -43,7 +44,7 @@
         <view class="subj-grid">
           <view class="subj {{item.selected ? 'on' : ''}}" wx:for="{{presetSubjects}}" wx:key="name" aria-role="button" aria-label="{{item.selected ? '取消' : '选择'}}{{item.name}}" data-index="{{index}}" bindtap="togglePreset">
             <text>{{item.name}}</text>
-            <view class="ico ico-check-inv xs" wx:if="{{item.selected}}"></view>
+            <theme-icon class="ico  xs" wx:if="{{item.selected}}" name="check" tone="inverse" size="xs"></theme-icon>
           </view>
         </view>
         <view class="help">先选已经开始学的科目，其他科目和课外活动可以在设置里继续添加。</view>
@@ -76,4 +77,6 @@
   </block>
 
   <view class="safe-tail"></view>
+</view>
+
 </view>

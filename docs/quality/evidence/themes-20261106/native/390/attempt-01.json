@@ -1,0 +1,1191 @@
+{
+  "width": 390,
+  "themes": [
+    "original",
+    "garden",
+    "space",
+    "midnight",
+    "ocean",
+    "tech"
+  ],
+  "groups": 128,
+  "elapsed_ms": 254698,
+  "results": [
+    {
+      "name": "original--today-index",
+      "route": "pages/today/index",
+      "category": "route",
+      "nodes": 5,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "a1e17fc33ae914c48252374ff5364309309eed83fcebb186c80ad284fc94f650"
+    },
+    {
+      "name": "original--calendar-index",
+      "route": "pages/calendar/index",
+      "category": "route",
+      "nodes": 4,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "1174c7fbc8f0d14649af2afe4366bb1535589452e0fc41dee75ee2f31c2d6213"
+    },
+    {
+      "name": "original--records-index",
+      "route": "pages/records/index",
+      "category": "route",
+      "nodes": 9,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "c1954b22434e5e56bfcac80a6cb71c66ad9dff7cfe4444fa873338d972e82246"
+    },
+    {
+      "name": "original--footprints-index",
+      "route": "pages/footprints/index",
+      "category": "route",
+      "nodes": 2,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "70584fac1345885f852ac93f3f921d08121e1780462bc3483bc7ebcb2e1ec514"
+    },
+    {
+      "name": "original--reports-index",
+      "route": "pages/reports/index",
+      "category": "route",
+      "nodes": 8,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "cbbbfd84217ab465e22797aa6d8febde4971d00b5665b3fec652ccdfcc6c3020"
+    },
+    {
+      "name": "original--review-inventory-index",
+      "route": "pages/review-inventory/index",
+      "category": "route",
+      "nodes": 1,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "ef5865a7f27e9fd80550f1d85e5fe0f4575fb33278730e4c800a0ced67967ec1"
+    },
+    {
+      "name": "original--settings-index",
+      "route": "pages/settings/index",
+      "category": "route",
+      "nodes": 8,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "85316dffc6af2a22975ec5a48feba8f90c08953330502dc69170e37676d24783"
+    },
+    {
+      "name": "original--submission-confirm",
+      "route": "pages/submission/confirm",
+      "category": "route",
+      "nodes": 8,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "5ad94e59a5903da946cf414335cea81ba091371546efc59a8f28be91a3ca5f08"
+    },
+    {
+      "name": "original--record-detail-index",
+      "route": "pages/record-detail/index",
+      "category": "route",
+      "nodes": 4,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "5207f3da132d6e925f9db246f4ee4172d6119fb766c3369f9770750059260e7d"
+    },
+    {
+      "name": "original--activity-edit",
+      "route": "pages/activity/edit",
+      "category": "route",
+      "nodes": 7,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "34fbb4afa0e56a8b434a7daf5dd4b9976a988c3c6c7ae6049c93342c920474df"
+    },
+    {
+      "name": "original--child-edit-index",
+      "route": "pages/child-edit/index",
+      "category": "route",
+      "nodes": 5,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "aee299c1217c3d50ed4a4af92b32d72e1d4c13a92c36d55f44f3319cc4da6220"
+    },
+    {
+      "name": "original--family-join-index",
+      "route": "pages/family-join/index",
+      "category": "route",
+      "nodes": 5,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "71da693d122e35e779c5004510c123464585a6d2f27bffe301c83159a1664223"
+    },
+    {
+      "name": "original--family-members-index",
+      "route": "pages/family-members/index",
+      "category": "route",
+      "nodes": 2,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "6e4758321026abcfdf3f856b81b06c21f71637f36f1d67e1938f6b31948f4bb4"
+    },
+    {
+      "name": "original--family-requests-index",
+      "route": "pages/family-requests/index",
+      "category": "route",
+      "nodes": 5,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "b25075007fbc4f0bda9c6ab494c180f66acfcd19ae0e0884fa60084353b93d21"
+    },
+    {
+      "name": "original--delete-settings-index",
+      "route": "pages/delete-settings/index",
+      "category": "route",
+      "nodes": 6,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "367c3eeafa44518d48657bbdfdf8e2313934d66c1b6472ff6714d3cdc0e6a7c2"
+    },
+    {
+      "name": "original--notifications-index",
+      "route": "pages/notifications/index",
+      "category": "route",
+      "nodes": 5,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "582b9284215d06eeb16e1e8423e483ffd0ffb0974643c372320384b08be6b5f7"
+    },
+    {
+      "name": "original--state-loading",
+      "route": "pages/today/index",
+      "category": "state",
+      "nodes": 6,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "2d2bcc0ce4cf2399d88669d564327abd11bff45b811d473ff48864483ab38d75"
+    },
+    {
+      "name": "original--state-empty",
+      "route": "pages/settings/index",
+      "category": "state",
+      "nodes": 7,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "465b0dc22fdcedf0849a328dab75dc6f205897c0dd4b9e476518f8a94e91aa80"
+    },
+    {
+      "name": "original--state-error",
+      "route": "pages/records/index",
+      "category": "state",
+      "nodes": 10,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "b55cdb06bf42c18ccc9720d15ae0987fe49badd666719564ce864e8c05377566"
+    },
+    {
+      "name": "original--state-readonly",
+      "route": "pages/family-members/index",
+      "category": "state",
+      "nodes": 2,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "32ffbccbfdfdb050040709e065a64d80e229bd1e3c1f7c65c1365ac2ed1261ce"
+    },
+    {
+      "name": "original--state-disabled",
+      "route": "pages/settings/index",
+      "category": "state",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "24ee7e15c3c58deef00c2d4407024235422bdf1f012d228986f5127c43f35426"
+    },
+    {
+      "name": "original--state-sheet",
+      "route": "pages/settings/index",
+      "category": "state",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "311488232bdbea2831360738d34b27a2c7baa9dd1c606a253e2ddd7b103e6303"
+    },
+    {
+      "name": "original--state-dialog",
+      "route": "pages/settings/index",
+      "category": "state",
+      "nodes": 14,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "b34ae144f5ef276454f1bf9244b297fcb46e4d5eb389e599a15014ca4431745c"
+    },
+    {
+      "name": "original--state-long-copy",
+      "route": "pages/child-edit/index",
+      "category": "state",
+      "nodes": 6,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "744f7ef5612774faced5aed3816645baee4404e845f055db8996b615452803fa"
+    },
+    {
+      "name": "garden--family-onboarding-index",
+      "route": "pages/family-onboarding/index",
+      "category": "route",
+      "nodes": 3,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "7fbd3792c7ac08676682bec8d200326157ef14d7807755cf4497bd2f5f759598"
+    },
+    {
+      "name": "garden--today-index",
+      "route": "pages/today/index",
+      "category": "route",
+      "nodes": 5,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "200443188a446b1cc1cc911e09b47606eb47493fd9af2822ee64f865963d677c"
+    },
+    {
+      "name": "garden--calendar-index",
+      "route": "pages/calendar/index",
+      "category": "route",
+      "nodes": 4,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "02504900ed55c504beed1fca5b1e27f74d3fe3dff6d72c1dfcfd9fd21fae2724"
+    },
+    {
+      "name": "garden--records-index",
+      "route": "pages/records/index",
+      "category": "route",
+      "nodes": 9,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "62ddcb6ed3a070e9976ab74ad26234e6d1dc96efd7f47e160aaad31118437031"
+    },
+    {
+      "name": "garden--footprints-index",
+      "route": "pages/footprints/index",
+      "category": "route",
+      "nodes": 2,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "3cae2495f1e431d29ed9dac59528d156d33d85adba3231ac53b1128345c40bd6"
+    },
+    {
+      "name": "garden--review-inventory-index",
+      "route": "pages/review-inventory/index",
+      "category": "route",
+      "nodes": 1,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "414e267116246157024ffdce3615a947819510eb0620607db7c3719907e2e03b"
+    },
+    {
+      "name": "garden--settings-index",
+      "route": "pages/settings/index",
+      "category": "route",
+      "nodes": 8,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "8611de15e8c1d6178176cf5dc13e108c9f89595c50b12126c2ae27c0677d8a56"
+    },
+    {
+      "name": "garden--submission-confirm",
+      "route": "pages/submission/confirm",
+      "category": "route",
+      "nodes": 8,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "3de417c7f9865443ea30585f038e98f1c6c1e53ec06fd3f7c5ba34b0673763fc"
+    },
+    {
+      "name": "garden--record-detail-index",
+      "route": "pages/record-detail/index",
+      "category": "route",
+      "nodes": 4,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "52d5fba61d63799eb51c4a108a00ee8ecee3df508850423b817bbfd5f0ff400a"
+    },
+    {
+      "name": "garden--activity-edit",
+      "route": "pages/activity/edit",
+      "category": "route",
+      "nodes": 7,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "2d47729ccb4f1e24227cebf1a3356f9866cd9902299a38e520bf3365ab148da6"
+    },
+    {
+      "name": "garden--child-edit-index",
+      "route": "pages/child-edit/index",
+      "category": "route",
+      "nodes": 5,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "9856f58279b50af412ae0e3a4276b8d078cd168ac5d644b403964bf8fcd1ca5b"
+    },
+    {
+      "name": "garden--family-join-index",
+      "route": "pages/family-join/index",
+      "category": "route",
+      "nodes": 5,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "0dac92dd3e0805a5f9040d34fe3b127b6ee521c83fef41ecdb5b986e05dbe94a"
+    },
+    {
+      "name": "garden--family-members-index",
+      "route": "pages/family-members/index",
+      "category": "route",
+      "nodes": 2,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "83599ffd5c985082a0649a0b4c9e5670c7d27cf6237b299946efbb9d1e851b1c"
+    },
+    {
+      "name": "garden--family-requests-index",
+      "route": "pages/family-requests/index",
+      "category": "route",
+      "nodes": 5,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "2f989bde3c78c5949e904f9c87eaa517c5b97eab7307f06ed5f9f46ff089becc"
+    },
+    {
+      "name": "garden--delete-settings-index",
+      "route": "pages/delete-settings/index",
+      "category": "route",
+      "nodes": 6,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "6c466c469deaabe23823ef7293c508f2203cd66db736774d9e33dd927b64749f"
+    },
+    {
+      "name": "garden--notifications-index",
+      "route": "pages/notifications/index",
+      "category": "route",
+      "nodes": 5,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "b7d2cf1557f4d91dfbdfea37d5b0d850f3868c8c17df25e99cb8ece5d4285eb2"
+    },
+    {
+      "name": "garden--state-loading",
+      "route": "pages/today/index",
+      "category": "state",
+      "nodes": 6,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "97acf394bf9bbb61a9c6b307c8429df5fc14a51b6bb388aa5c699961020aeb64"
+    },
+    {
+      "name": "garden--state-empty",
+      "route": "pages/settings/index",
+      "category": "state",
+      "nodes": 7,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "03a83a8d44c411ae3cfaeb06ca3ed0847dbb4685b53ecd1ab1ccba4cedf1d8d6"
+    },
+    {
+      "name": "garden--state-error",
+      "route": "pages/records/index",
+      "category": "state",
+      "nodes": 10,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "02738a83a556ff18a8f9fbba52407df76e77e1bfd908ac7ab81fadaa672ad1f5"
+    },
+    {
+      "name": "garden--state-readonly",
+      "route": "pages/family-members/index",
+      "category": "state",
+      "nodes": 2,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "c6982b8686af87e4db4118f3529aa2ca1f761714bb44a99f80f964404a47d5f9"
+    },
+    {
+      "name": "garden--state-disabled",
+      "route": "pages/settings/index",
+      "category": "state",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "70ec762abd92234349e815d39b3313c2cd40064f6964df34157511c557948e00"
+    },
+    {
+      "name": "garden--state-sheet",
+      "route": "pages/settings/index",
+      "category": "state",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "0f338e3f2ea40f1b99338f4519faecfe097fbb711386f392aedabccf2aa05e0e"
+    },
+    {
+      "name": "garden--state-dialog",
+      "route": "pages/settings/index",
+      "category": "state",
+      "nodes": 14,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "2940e62c98a3348a82fcf185f84bcd06440325af9b29cc7615ba45a909deba5a"
+    },
+    {
+      "name": "garden--state-long-copy",
+      "route": "pages/child-edit/index",
+      "category": "state",
+      "nodes": 6,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "a927cec36dd258bdcc0799b992aeaf21288636e44b9d53747a523c493dababa1"
+    },
+    {
+      "name": "space--family-onboarding-index",
+      "route": "pages/family-onboarding/index",
+      "category": "route",
+      "nodes": 3,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "1e06d07625afcccdd61c9ecdd74488241a4cc98e8630812c449caa9f9e900892"
+    },
+    {
+      "name": "space--today-index",
+      "route": "pages/today/index",
+      "category": "route",
+      "nodes": 5,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "f6c7471084f4a5e37994ef0a2db5da3f2cab51ecaceba8b87cd2bd19369ade0c"
+    },
+    {
+      "name": "space--calendar-index",
+      "route": "pages/calendar/index",
+      "category": "route",
+      "nodes": 4,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "51ca31d342a346e44d564d7bd335d11942afbf19b97cc0b452e289ccbb094a89"
+    },
+    {
+      "name": "space--records-index",
+      "route": "pages/records/index",
+      "category": "route",
+      "nodes": 9,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "9147a754c1c885e966fc0e1d527c538d6706dfdd54ed1012b69acb1a3cc91d12"
+    },
+    {
+      "name": "space--footprints-index",
+      "route": "pages/footprints/index",
+      "category": "route",
+      "nodes": 2,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "b64588c9ff14ac6f13f239a7698c66b0daa467ebd810eb14166e24ba0f55bded"
+    },
+    {
+      "name": "space--reports-index",
+      "route": "pages/reports/index",
+      "category": "route",
+      "nodes": 8,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "18e89aa0329a936ac635c1ac5f7a07b0968ce88071a131afa75a2a11e15feaef"
+    },
+    {
+      "name": "space--review-inventory-index",
+      "route": "pages/review-inventory/index",
+      "category": "route",
+      "nodes": 1,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "b19495400afa3c42934c9c7f15676d8f0121b67bbc1453e6f1f7f36ec7125ac5"
+    },
+    {
+      "name": "space--settings-index",
+      "route": "pages/settings/index",
+      "category": "route",
+      "nodes": 8,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "acb307589d110807ce404a1c1aaf6919ebeb6cefed9973a11c57c6c99eb2075a"
+    },
+    {
+      "name": "space--submission-confirm",
+      "route": "pages/submission/confirm",
+      "category": "route",
+      "nodes": 8,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "73611a6f9032f37082ea5d38e704533b0e4483f809b744d65447f985fcd60a46"
+    },
+    {
+      "name": "space--record-detail-index",
+      "route": "pages/record-detail/index",
+      "category": "route",
+      "nodes": 4,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "6680d90f5d41a69616a281fd9a29712bf6be2555721053ea17f22b53277eda6b"
+    },
+    {
+      "name": "space--activity-edit",
+      "route": "pages/activity/edit",
+      "category": "route",
+      "nodes": 7,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "1bbc697d1bf8d3e25c0f58541d1e268a6823851cc205c5e76df14120b0c07e08"
+    },
+    {
+      "name": "space--child-edit-index",
+      "route": "pages/child-edit/index",
+      "category": "route",
+      "nodes": 5,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "72b79b64023814aa457693ca0723d47f4d7f351f4a3c916aa373da791b651999"
+    },
+    {
+      "name": "space--family-join-index",
+      "route": "pages/family-join/index",
+      "category": "route",
+      "nodes": 5,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "495e412fe65a525483565a18f4b6dda6ff08ea2851b8a2eff97f8cacf027f0b2"
+    },
+    {
+      "name": "space--family-members-index",
+      "route": "pages/family-members/index",
+      "category": "route",
+      "nodes": 2,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "39ccfda5314f3ec77f78800749d1e3bfb1c62b4f5c999b4d34fb3eaa257af133"
+    },
+    {
+      "name": "space--family-requests-index",
+      "route": "pages/family-requests/index",
+      "category": "route",
+      "nodes": 5,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "e7f62a8c3996bd7703a652657b7e04edca6c451121ad8c5829f2274ff2f13efc"
+    },
+    {
+      "name": "space--delete-settings-index",
+      "route": "pages/delete-settings/index",
+      "category": "route",
+      "nodes": 6,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "4d324d52272b615a9b0ea76c2d443a8c7dbe2abdb9ee778dce854dd65e8e8c0b"
+    },
+    {
+      "name": "space--notifications-index",
+      "route": "pages/notifications/index",
+      "category": "route",
+      "nodes": 5,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "d5e8e876d6b781d772b895f844bed37bab91fa53bcab42c92ffcd7a2d06610b4"
+    },
+    {
+      "name": "space--state-loading",
+      "route": "pages/today/index",
+      "category": "state",
+      "nodes": 6,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "654844ec55f813dfd3557a738a3412057d01e5c5ed1e30dfcc15629f95803e29"
+    },
+    {
+      "name": "space--state-empty",
+      "route": "pages/settings/index",
+      "category": "state",
+      "nodes": 7,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "74cde5b87d93aa950c4f07436144102b768dac3a7a9bbd3074fd0a994f30c5b2"
+    },
+    {
+      "name": "space--state-error",
+      "route": "pages/records/index",
+      "category": "state",
+      "nodes": 10,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "724a0de46b8f785fd014c0521c6087c9bf4203db9b93403ef484a6ec2d02ad72"
+    },
+    {
+      "name": "space--state-readonly",
+      "route": "pages/family-members/index",
+      "category": "state",
+      "nodes": 2,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "e7c97d425a6d60ea4f1065b36af3d442339e8946b390cfdf3db4c1011a0232e2"
+    },
+    {
+      "name": "space--state-disabled",
+      "route": "pages/settings/index",
+      "category": "state",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "cb431ded239315442b3d95b478704416513bb55ace7a15940f1b74ae2f7e3c18"
+    },
+    {
+      "name": "space--state-sheet",
+      "route": "pages/settings/index",
+      "category": "state",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "85a6bdaf1339491ca4ccbd07725425b5d886fa80bde8e1f12fd5f5ff8b21002e"
+    },
+    {
+      "name": "space--state-dialog",
+      "route": "pages/settings/index",
+      "category": "state",
+      "nodes": 14,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "8a83cef382333006002ed438bd9f96bc354067cbd78336440ba960bae6234e74"
+    },
+    {
+      "name": "space--state-long-copy",
+      "route": "pages/child-edit/index",
+      "category": "state",
+      "nodes": 6,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "e96af3b3a2834184dbd3d1540e5dcb3d42fa881211728817df0cb41ac7b1d996"
+    },
+    {
+      "name": "midnight--family-onboarding-index",
+      "route": "pages/family-onboarding/index",
+      "category": "route",
+      "nodes": 3,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "e703db7b5b7ef1fbed17a0a4de3e0acee6310a4ec93ea364bbcc377cf940240e"
+    },
+    {
+      "name": "midnight--today-index",
+      "route": "pages/today/index",
+      "category": "route",
+      "nodes": 5,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "20da33f5e4b13488492b7502d223b31a79fe1d7752ef4a254d9808dd789f2920"
+    },
+    {
+      "name": "midnight--calendar-index",
+      "route": "pages/calendar/index",
+      "category": "route",
+      "nodes": 4,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "01e97b22aea9cd298cb84dae5a58594360b6b29b425634346eb14abdb48816ec"
+    },
+    {
+      "name": "midnight--records-index",
+      "route": "pages/records/index",
+      "category": "route",
+      "nodes": 9,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "c400002492629ea0dc878ddf3d6062ae355259de6d557c7235c815d328ad7a65"
+    },
+    {
+      "name": "midnight--footprints-index",
+      "route": "pages/footprints/index",
+      "category": "route",
+      "nodes": 2,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "7b531c357aee817cce9cc8079ff593df2b7e1aac3731c45bb257b8168c404860"
+    },
+    {
+      "name": "midnight--reports-index",
+      "route": "pages/reports/index",
+      "category": "route",
+      "nodes": 8,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "b8a177ec64e2382893801cf3ed30d788c9a0ee758e382708bff8918c7381c1f0"
+    },
+    {
+      "name": "midnight--review-inventory-index",
+      "route": "pages/review-inventory/index",
+      "category": "route",
+      "nodes": 1,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "5e9488b9d8c95740ecfc6442ffb6616eeeff7295842d04ae191986a4f8841b10"
+    },
+    {
+      "name": "midnight--settings-index",
+      "route": "pages/settings/index",
+      "category": "route",
+      "nodes": 8,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "3a05100c736cdf1cf0250d70229194da90c26241ce7f263c915d9a71f312f7d7"
+    },
+    {
+      "name": "midnight--submission-confirm",
+      "route": "pages/submission/confirm",
+      "category": "route",
+      "nodes": 8,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "356d5c37055035a76e11882879f096d1a87f995b8b3cab95bc48af0235f781a6"
+    },
+    {
+      "name": "midnight--record-detail-index",
+      "route": "pages/record-detail/index",
+      "category": "route",
+      "nodes": 4,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "c2df3787729f16275fe2755b68eacb8ebb30201d81c0a8074f0bdceab15eeeeb"
+    },
+    {
+      "name": "midnight--activity-edit",
+      "route": "pages/activity/edit",
+      "category": "route",
+      "nodes": 7,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "d00f9774947ac7fa81a89f1f7948e169e80aafd9ab40171746f106f4a804d0b7"
+    },
+    {
+      "name": "midnight--child-edit-index",
+      "route": "pages/child-edit/index",
+      "category": "route",
+      "nodes": 5,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "5d4e7ce812052c233b2bcbe0fd06fa7daff26e6a0d6515f4ac7c22e9cfb86440"
+    },
+    {
+      "name": "midnight--family-join-index",
+      "route": "pages/family-join/index",
+      "category": "route",
+      "nodes": 5,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "bd49d35efb4e659bcc2fab92f4e46b6fc04c77358870b9ab5aa01dddcb0af68d"
+    },
+    {
+      "name": "midnight--family-members-index",
+      "route": "pages/family-members/index",
+      "category": "route",
+      "nodes": 2,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "12752799bbb33bb0da39cca1aa31c489ca380ea1e657f7e3fcf77ebb8a306350"
+    },
+    {
+      "name": "midnight--family-requests-index",
+      "route": "pages/family-requests/index",
+      "category": "route",
+      "nodes": 5,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "06537121ffddc009e57362965be0d61b98f2dce477b74c24c6956dae191ab8ed"
+    },
+    {
+      "name": "midnight--delete-settings-index",
+      "route": "pages/delete-settings/index",
+      "category": "route",
+      "nodes": 6,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "77f6b7c00f3cb4875073d7f52985318e64d47fbafe2045518bd8af26bc9778fc"
+    },
+    {
+      "name": "midnight--notifications-index",
+      "route": "pages/notifications/index",
+      "category": "route",
+      "nodes": 5,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "d2b996290e2c5ca7066bd2b9b7684ef07a48f29236599719c65924ee17790072"
+    },
+    {
+      "name": "midnight--state-loading",
+      "route": "pages/today/index",
+      "category": "state",
+      "nodes": 6,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "f2b1b0e0416aae3f5d29e43e21bd6951388c5cb582564542c354b17d5af12d27"
+    },
+    {
+      "name": "midnight--state-empty",
+      "route": "pages/settings/index",
+      "category": "state",
+      "nodes": 7,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "73de50e6f4ddb9e4f10f281d62060f10c3fc9d9357d70b70f507b06d3feda2e1"
+    },
+    {
+      "name": "midnight--state-error",
+      "route": "pages/records/index",
+      "category": "state",
+      "nodes": 10,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "dcef5597709986f012a8cda7905076f30074c942ded6f61b81fabff09ba9000c"
+    },
+    {
+      "name": "midnight--state-readonly",
+      "route": "pages/family-members/index",
+      "category": "state",
+      "nodes": 2,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "ceffcb7440cdb4d8544cfa15a29fca314c54c799ef5112d374ef45de80be3223"
+    },
+    {
+      "name": "midnight--state-disabled",
+      "route": "pages/settings/index",
+      "category": "state",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "3b17115acc34535c16f085ce17e1f9a2ad118c49cc24127e9f020b102f3c363e"
+    },
+    {
+      "name": "midnight--state-sheet",
+      "route": "pages/settings/index",
+      "category": "state",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "8a6352209abd156807fd64731bbc9b5d90f750f6532eaa3a2c1cabb0296be3b7"
+    },
+    {
+      "name": "midnight--state-dialog",
+      "route": "pages/settings/index",
+      "category": "state",
+      "nodes": 14,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "af4e47cdbeb7fd15d84553c1053a729598052e54766d923fc63bae3842f8d7e3"
+    },
+    {
+      "name": "midnight--state-long-copy",
+      "route": "pages/child-edit/index",
+      "category": "state",
+      "nodes": 6,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "b082f10a95b4bfdd2445388d98031d923d21ada48a6b8f018eb8cb557ad4a695"
+    },
+    {
+      "name": "ocean--family-onboarding-index",
+      "route": "pages/family-onboarding/index",
+      "category": "route",
+      "nodes": 3,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "102b69f32817524cd6ea49f1cd9688859e594533c5f94fce8a1e367deabdd27d"
+    },
+    {
+      "name": "ocean--today-index",
+      "route": "pages/today/index",
+      "category": "route",
+      "nodes": 5,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "b00e96720748806c87da5aeeae1830c0e2782f4f296dc7592d265a7dfee309e7"
+    },
+    {
+      "name": "ocean--calendar-index",
+      "route": "pages/calendar/index",
+      "category": "route",
+      "nodes": 4,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "6340e218b175c52f176bf1d9bc62aa573fd894d3393f112c6578bc25b9206023"
+    },
+    {
+      "name": "ocean--records-index",
+      "route": "pages/records/index",
+      "category": "route",
+      "nodes": 9,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "1363c8549399138d2d637fe30bef62b796e04278148ff8844a0f4f9f54d67401"
+    },
+    {
+      "name": "ocean--footprints-index",
+      "route": "pages/footprints/index",
+      "category": "route",
+      "nodes": 2,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "6451f0b940c73518d2b16f39220baa06bcde45c866b86c0a2f9a11c87886df3e"
+    },
+    {
+      "name": "ocean--review-inventory-index",
+      "route": "pages/review-inventory/index",
+      "category": "route",
+      "nodes": 1,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "2e41acac5d66ee6251fc517d97b92bed915c4c6c8196bd43e6d7ee049813b3c6"
+    },
+    {
+      "name": "ocean--settings-index",
+      "route": "pages/settings/index",
+      "category": "route",
+      "nodes": 8,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "fc1235a187c2949a154078059290a5ec6fe772e0e8870da6f7128642e0c7560d"
+    },
+    {
+      "name": "ocean--submission-confirm",
+      "route": "pages/submission/confirm",
+      "category": "route",
+      "nodes": 8,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "cab8ad565bbb38018ef434baec74414c9dee1af383c9d8f7e128b6ab1545209d"
+    },
+    {
+      "name": "ocean--record-detail-index",
+      "route": "pages/record-detail/index",
+      "category": "route",
+      "nodes": 4,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "113731fb97dfbf1bbca555dcc1473038fa30a7cdcc7b56137ca6428796732880"
+    },
+    {
+      "name": "ocean--activity-edit",
+      "route": "pages/activity/edit",
+      "category": "route",
+      "nodes": 7,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "fd46c66d36b6c02452d7d289ce36f96cd931daa95f1002272ec6152a382cf230"
+    },
+    {
+      "name": "ocean--child-edit-index",
+      "route": "pages/child-edit/index",
+      "category": "route",
+      "nodes": 5,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "a3c90b35ab9a45a71454655c69248dfa8c44e9ef1c36a37f209a97aafb72843d"
+    },
+    {
+      "name": "ocean--family-join-index",
+      "route": "pages/family-join/index",
+      "category": "route",
+      "nodes": 5,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "c836911fee09487229e813ec14c14868ae0c681becb0a6c5f293e9b783b6802b"
+    },
+    {
+      "name": "ocean--family-members-index",
+      "route": "pages/family-members/index",
+      "category": "route",
+      "nodes": 2,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "095746ac8509bc4fa0fb50dfa01b986840e0ae166ba58700c207c9c91960ad67"
+    },
+    {
+      "name": "ocean--family-requests-index",
+      "route": "pages/family-requests/index",
+      "category": "route",
+      "nodes": 5,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "0e9aa969cff08c939da07953e7017f210a848fac73fb2e38f980a7db4d31ff57"
+    },
+    {
+      "name": "ocean--delete-settings-index",
+      "route": "pages/delete-settings/index",
+      "category": "route",
+      "nodes": 6,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "90e8dd43c9f6faa604eef4bff7679d5155fa58a110127f39b710d872a0d02b2e"
+    },
+    {
+      "name": "ocean--notifications-index",
+      "route": "pages/notifications/index",
+      "category": "route",
+      "nodes": 5,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "177d5fd78f800dca03b9f645c6b106ae1191c85050f387beb6580a0897c42677"
+    },
+    {
+      "name": "ocean--state-loading",
+      "route": "pages/today/index",
+      "category": "state",
+      "nodes": 6,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "efbc5b65befae3dcf089ef93ee540409a42ac6fea1845f4cb843eb6aeb8d230c"
+    },
+    {
+      "name": "ocean--state-empty",
+      "route": "pages/settings/index",
+      "category": "state",
+      "nodes": 7,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "b52092039d5be8e4c7cc760e615b310d18b3cede7fb09e58989c305944aeb0e0"
+    },
+    {
+      "name": "ocean--state-error",
+      "route": "pages/records/index",
+      "category": "state",
+      "nodes": 10,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "c4593c5959ba98908d3580a35ef06edc4a9fd819e95f34e36ba77f0960b7727d"
+    },
+    {
+      "name": "ocean--state-readonly",
+      "route": "pages/family-members/index",
+      "category": "state",
+      "nodes": 2,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "941db68aacc4875c624ecbb69f490cb36838c632a8ac92d39e04b0da8693eeda"
+    },
+    {
+      "name": "ocean--state-disabled",
+      "route": "pages/settings/index",
+      "category": "state",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "2dd4da4905898715b12ac52fd1bf410399659348aafc760ff006276394011b05"
+    },
+    {
+      "name": "ocean--state-sheet",
+      "route": "pages/settings/index",
+      "category": "state",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "e0463c99c5d3418556a6a141286d43313925847a12aad99d4b16ebc3b95ed103"
+    },
+    {
+      "name": "ocean--state-dialog",
+      "route": "pages/settings/index",
+      "category": "state",
+      "nodes": 14,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "74712a48deb67f00e26dfaab72aac3cbea9e83f7d5cd640fc8562df685b8182b"
+    },
+    {
+      "name": "ocean--state-long-copy",
+      "route": "pages/child-edit/index",
+      "category": "state",
+      "nodes": 6,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "44e8e0ff82823479f6d9e3101820b05eec9354c4c1735b75e62ccc39c3fb5a02"
+    },
+    {
+      "name": "tech--family-onboarding-index",
+      "route": "pages/family-onboarding/index",
+      "category": "route",
+      "nodes": 3,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "fae28cce03ab7ac8e14fcf4eb2767b378c2090419fdcfb0c084ab7c5b95bdc58"
+    },
+    {
+      "name": "tech--today-index",
+      "route": "pages/today/index",
+      "category": "route",
+      "nodes": 5,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "1b96543742090e707703bce95a9de50157015907a6630918fa14612f8d5d4755"
+    },
+    {
+      "name": "tech--calendar-index",
+      "route": "pages/calendar/index",
+      "category": "route",
+      "nodes": 4,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "e134ef8e2662e2ec10e2e7a1e4811c4d4204dbecb2dcfa36cfbd67ab335faa4b"
+    },
+    {
+      "name": "tech--records-index",
+      "route": "pages/records/index",
+      "category": "route",
+      "nodes": 9,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "933bf288c48f77d5f8c662c11b88adf6fceaef9c68487ce65b53fda6dfd3cf91"
+    },
+    {
+      "name": "tech--footprints-index",
+      "route": "pages/footprints/index",
+      "category": "route",
+      "nodes": 2,
+      "horizontal_overflow": [],
+      "screenshot_errors": [
+        "App.captureScreenshot timed out"
+      ],
+      "screenshot_sha256": "5e68206d1dc833510481ef62a1122fd51960d8810c9906b20aa034d188aed2ca"
+    },
+    {
+      "name": "tech--reports-index",
+      "route": "pages/reports/index",
+      "category": "route",
+      "nodes": 8,
+      "horizontal_overflow": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "49d0c8a523f24c58eadf895b797e6bbb8d35d4c09e7d526dab374c82612874af"
+    }
+  ],
+  "failures": [
+    {
+      "theme": "original",
+      "name": "family-onboarding-index",
+      "error": "App.callFunction timed out"
+    },
+    {
+      "theme": "garden",
+      "name": "reports-index",
+      "error": "App.callFunction timed out"
+    },
+    {
+      "theme": "ocean",
+      "name": "reports-index",
+      "error": "App.captureScreenshot timed out"
+    },
+    {
+      "theme": "tech",
+      "name": "review-inventory-index",
+      "error": "App.captureScreenshot timed out"
+    }
+  ]
+}

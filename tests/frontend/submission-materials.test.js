@@ -6,7 +6,8 @@ const vm = require("node:vm");
 function material(api, wx = {}) {
   let definition;
   vm.runInNewContext(fs.readFileSync("apps/miniprogram/components/submission-materials/index.js", "utf8"), {
-    Component(value) { definition = value; }, require() { return api; }, wx
+    Component(value) { definition = value; }, require(name) {
+      if (name.includes("presentation/theme/")) return require("../../apps/miniprogram/presentation/theme/" + name.split("/").at(-1)); return api; }, wx
   });
   const instance = { ...definition.methods, data: { ...definition.data, childId: "child", submissionId: "sid" } };
   instance.setData = (updates) => {

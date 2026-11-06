@@ -21,6 +21,7 @@ function loadPage(entry, request, overrides = {}) {
   const filename = path.resolve(__dirname, "../../apps/miniprogram", entry);
   vm.runInNewContext(fs.readFileSync(filename, "utf8"), {
     require(name) {
+      if (name.includes("presentation/theme/")) return require("../../apps/miniprogram/presentation/theme/" + name.split("/").at(-1));
       if (name.includes("child-context")) return childContext;
       if (name.includes("utils/ui")) return { readPreference: (key, id, fallback) => fallback, writePreference() {}, subjectClass: () => "", subjectMark: () => "", monthDay: (value) => value };
       return {
@@ -147,7 +148,7 @@ test("settings profile management lives in the sheet instead of the main page", 
   assert.equal((template.match(/<text class="sheet-title">学习档案<\/text>/g) || []).length, 1);
   assert.doesNotMatch(template, /<view class="sec">\s*<view class="sec-bar">\s*<text class="s-t">学习档案<\/text>/);
   assert.equal((template.match(/bindtap="addChild"/g) || []).length, 2, "只保留无孩子空态和右上角面板的创建入口");
-  assert.match(template, /class="profile-edit-hit"[^>]+catchtap="editChild">\s*<view class="ico ico-pen-mute sm"><\/view>/);
+  assert.match(template, /class="profile-edit-hit"[^>]+catchtap="editChild">\s*<theme-icon[^>]+name="pen" tone="muted" size="sm"><\/theme-icon>/);
   assert.doesNotMatch(template, /class="profile-manage-btn"/);
   assert.doesNotMatch(template, />编辑<\/view>/);
   assert.match(template, /class="profile-meta-line"/);

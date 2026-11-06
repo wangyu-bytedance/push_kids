@@ -1,5 +1,7 @@
 # UI-011 — 提醒设置与微信授权入口
 
+当前本地呈现revision `UI-STATE-20261106-THEMES-01`：[DESIGN-002 Spec08 / Architecture01](../../../../specs/active/DESIGN-002-GLOBAL-UI-CONSISTENCY.md)与DREV08已获用户“好的 按照以上方案落地”批准并实施，DREV06视觉方向保持。提醒页、自动补充提示与renewal组件消费六主题语义角色；微信授权系统窗口保持平台控制，原授权与提醒业务合同不变。 本增量尚未上传；原生合成呈现、共享业务回归及真机/独立评审缺项见[当前证据](../../../quality/evidence/themes-20261106/README.md)。下方原特性发布与验收记录保持其版本范围，不能代验六主题。
+
 2026-10-26开发归档：已交付037后端/0.1.16客户端所覆盖的需求按用户批准规则标记开发DONE，验收缺项独立保留；后续BUG-035和旅行导入精简尚未交付，继续active。当前归档和待验入口见[Spec状态清单](../../../../specs/STATUS.md)，依据为[治理Spec](../../../../specs/completed/GOV-002-CLOUD-DELIVERY-DEVELOPMENT-COMPLETION.md)。本轮不改产品合同、测试结论、设计或发布阶段。
 
 2026-10-25交付revision UI-DELIVERY-0.1.16-01：当前实现随0.1.16开发上传，未设体验版、未提审/正式发布；批准设计源/快照及验收缺口保持原范围。[发布记录](../../../deploy/releases/20261025-latest-client-upload.md)。

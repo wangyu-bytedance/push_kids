@@ -23,7 +23,8 @@ function loadPage(request) {
   };
   const filename = path.join(root, "pages/delete-settings/index.js");
   vm.runInNewContext(fs.readFileSync(filename, "utf8"), {
-    require() {
+    require(name) {
+      if (name.includes("presentation/theme/")) return require("../../apps/miniprogram/presentation/theme/" + name.split("/").at(-1));
       return {
         newIdempotencyKey: () => "delete-request-key",
         request: async (requestPath, options = {}) => {

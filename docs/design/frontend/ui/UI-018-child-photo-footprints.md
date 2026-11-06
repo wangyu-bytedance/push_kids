@@ -1,5 +1,7 @@
 # UI-018 — 孩子照片足迹
 
+当前本地呈现revision `UI-STATE-20261106-THEMES-01`：[DESIGN-002 Spec08 / Architecture01](../../../../specs/active/DESIGN-002-GLOBAL-UI-CONSISTENCY.md)与DREV08已获用户“好的 按照以上方案落地”批准并实施，DREV06视觉方向保持。独立足迹页、records嵌入宿主及共享弹层显式接入六主题；导入/核对/三视图/照片编辑及分页原合同保持。原生地图底图和本地PNG标记属平台边界，路线覆盖色集中在registry命名角色，避免随深色背景失去底图对比。 本增量尚未上传；原生合成呈现、共享业务回归及真机/独立评审缺项见[当前证据](../../../quality/evidence/themes-20261106/README.md)。下方原特性发布与验收记录保持其版本范围，不能代验六主题。
+
 当前交付：[Spec01 / Architecture01](../../../../specs/completed/FEAT-012-TRAVEL-ENTRY-CLEANUP.md)＋DREV01批准实现保持，168份冻结源覆盖0.1.17官方上传成功1,191,019字节，基准已bump。039 normal/100%/1、微信健康与三尺寸42组原生/局部动作分别自动留证；用户本轮照片回看/分页与双家庭非owner门禁PASS_OPERATOR_CONFIRMED。三项旅行Spec DONE/completed，设备/可访问性/完整内容缺项开放，未体验/提审/正式发布。[当前上传](../../../deploy/releases/20261101-client-0.1.17-upload.md)保留原失败和证据范围。
 
 2026-10-26开发归档（历史；旅行三项2026-11-01交付见本页当前正文）：已交付037后端/0.1.16客户端所覆盖的需求按用户批准规则标记开发DONE，验收缺项独立保留；后续BUG-035和旅行导入精简尚未交付，继续active。当前归档和待验入口见[Spec状态清单](../../../../specs/STATUS.md)，依据为[治理Spec](../../../../specs/completed/GOV-002-CLOUD-DELIVERY-DEVELOPMENT-COMPLETION.md)。本轮不改产品合同、测试结论、设计或发布阶段。

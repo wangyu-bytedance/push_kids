@@ -1,5 +1,7 @@
 # UI-017 — 出行安排
 
+当前本地呈现revision `UI-STATE-20261106-THEMES-01`：[DESIGN-002 Spec08 / Architecture01](../../../../specs/active/DESIGN-002-GLOBAL-UI-CONSISTENCY.md)与DREV08已获用户“好的 按照以上方案落地”批准并实施，DREV06视觉方向保持。设置出行卡、日程及出行编辑弹层消费六主题角色；原始保留书包/台历装饰，新主题用已批准页头场景，旅行时段、冲突与只读规则不变。 本增量尚未上传；原生合成呈现、共享业务回归及真机/独立评审缺项见[当前证据](../../../quality/evidence/themes-20261106/README.md)。下方原特性发布与验收记录保持其版本范围，不能代验六主题。
+
 - 2026-10-13设置出行卡接入书包路线装饰与统一纸面背景；日程保留台历插画，行为不变。SPEC-20261013-CARD-BACKGROUNDS-01，本地验收证据docs/quality/evidence/CARD-BACKGROUNDS-20261013.md；未发布。
 
 - 2026-10-13本地视觉增量：日程页顶部采用纸面渐变与台历/时钟/叶枝插画；孩子切换、七天选择和出行冲突保持原行为。Design `DREV-20261013-RECORD-CALENDAR-ILLUSTRATIONS-01` 已批准，原生验收待补，未发布。详见 `docs/quality/evidence/RECORD-CALENDAR-ILLUSTRATIONS-20261013.md`。

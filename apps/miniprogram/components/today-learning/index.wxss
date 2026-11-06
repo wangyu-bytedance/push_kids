@@ -20,7 +20,7 @@
 .study-primary::after, .study-secondary::after, .study-quiet::after, .study-close::after { border: 0; }
 .study-busy .study-primary, .study-busy .study-secondary, .study-busy .study-quiet, .study-busy .study-close { opacity: .55; }
 .study-overlay { position: fixed; inset: 0; z-index: 140; display: flex; align-items: flex-end; }
-.study-mask { position: absolute; inset: 0; background: rgba(34,38,31,.38); }
+.study-mask { position: absolute; inset: 0; background: var(--pk-overlay); }
 .study-sheet { position: relative; width: 100%; max-height: 85vh; background: var(--pk-surface); border-radius: var(--pk-r-xl) var(--pk-r-xl) 0 0; display: flex; flex-direction: column; padding-bottom: env(safe-area-inset-bottom); box-sizing: border-box; }
 .study-top { flex: none; padding: 16rpx 32rpx; justify-content: space-between; border-bottom: 1rpx solid var(--pk-line); }
 .study-top .study-close { width: 44px; min-width: 44px; max-width: 44px; height: 44px; margin: 0; padding: 0; flex: none; }
@@ -46,13 +46,13 @@
 .study-field-row { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin: 24rpx 0 12rpx; }
 .study-field-row .study-field-label { margin: 0; }
 .study-title-counter { flex: none; font-size: 14px; line-height: 1.6; color: var(--pk-ink-2); }
-.study-title-counter-error, .study-title-error { color: var(--pk-danger); }
+.study-title-counter-error, .study-title-error { color: var(--pk-danger-ink); }
 .study-title-error { display: block; margin-top: 6px; font-size: 14px; line-height: 1.6; }
-.study-input.study-title-invalid { border-color: var(--pk-danger); }
+.study-input.study-title-invalid { border-color: var(--pk-danger-ink); }
 .study-textarea, .study-input, .study-picker { width: 100%; box-sizing: border-box; background: var(--pk-surface-raised); border: 1rpx solid var(--pk-line-strong); border-radius: var(--pk-r-sm); padding: 20rpx; font-size: 16px; color: var(--pk-ink); line-height: 1.6; }
 .study-textarea { height: 180px; }
 .study-input { min-height: 48px; }
 .study-picker { min-height: 44px; }
 .study-time-picker { flex: 1; min-width: 0; }
-.study-error, .study-error-inline { color: var(--pk-danger); background: var(--pk-danger-bg); padding: 20rpx; border-radius: var(--pk-r-sm); font-size: 14px; line-height: 1.6; }
+.study-error, .study-error-inline { color: var(--pk-danger-ink); background: var(--pk-danger-bg); padding: 20rpx; border-radius: var(--pk-r-sm); font-size: 14px; line-height: 1.6; }
 .study-error-inline { margin-top: 24rpx; }

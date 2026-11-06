@@ -1,3 +1,5 @@
+const { themeState } = require("../../presentation/theme/state");
+const { withThemePage } = require("../../presentation/theme/adapters");
 const api = require("../../utils/api");
 const childContext = require("../../utils/child-context");
 
@@ -9,7 +11,7 @@ function budgetIndex(minutes) {
   return index < 0 ? BUDGET_OPTIONS.indexOf(15) : index;
 }
 
-Page({
+Page(withThemePage({
   data: {
     mode: "create", childId: "", loading: false, error: "", saving: false, working: false,
     title: "新建学习档案", isManager: true, active: true,
@@ -174,7 +176,7 @@ Page({
       title: `归档「${this.data.nameDraft}」？`,
       content: `归档后从孩子列表隐藏，不能新增记录。历史记录和报表保留，随时可恢复。${unfinished}`,
       confirmText: "归档",
-      confirmColor: "#A85742",
+      confirmColor: themeState.current().tokens["pk-native-danger"],
       success: (result) => resolve(result.confirm)
     }));
     if (!confirmed) return;
@@ -197,4 +199,4 @@ Page({
       this.setData({ working: false, error: error.message });
     }
   }
-});
+}));

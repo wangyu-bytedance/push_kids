@@ -1,3 +1,4 @@
+const { withThemeComponent } = require("../../presentation/theme/adapters");
 const api = require("../../utils/api");
 
 function titleState(value) {
@@ -23,7 +24,7 @@ function today() {
   return date.toISOString().slice(0, 10);
 }
 
-Component({
+Component(withThemeComponent({
   options: { addGlobalClass: true },
   properties: {
     childId: { type: String, observer() { this.reset(); if (this.data.childId) this.refresh(true); } },
@@ -243,4 +244,4 @@ Component({
       }
     }
   }
-});
+}));

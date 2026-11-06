@@ -71,7 +71,7 @@ function writePreference(scope, childId, value) {
 }
 
 /* 课外活动图标：关键字包含匹配，家长自己写的「少儿篮球班」也能命中；
-   越具体的关键字排在前面，命中不了用默认星形图标。 */
+   越具体的关键字排在前面，命中不了交由当前主题的固定默认图标。 */
 const ACTIVITY_ICONS = [
   ["swim", ["游泳", "泳", "swim"]],
   ["pingpong", ["乒乓", "pingpong", "ping pong", "table tennis"]],
@@ -89,17 +89,17 @@ const ACTIVITY_ICONS = [
   ["robot", ["机器人", "乐高", "lego", "robot"]],
   ["code", ["编程", "代码", "scratch", "python", "code"]]
 ];
-const ACTIVITY_ICON_FALLBACK = "star";
+const ACTIVITY_ICON_FALLBACK = "default";
 
-/* 返回图标基类名；tone 是 PKDS 色后缀（如 "pri"），留空取默认墨色。 */
-function activityIcon(name, tone) {
+/* 返回语义图标名；颜色由 theme-icon 根据当前主题决定。 */
+function activityIcon(name) {
   const key = String(name || "").trim().toLowerCase();
   let icon = ACTIVITY_ICON_FALLBACK;
   if (key) {
     const hit = ACTIVITY_ICONS.find((entry) => entry[1].some((word) => key.includes(word)));
     if (hit) icon = hit[0];
   }
-  return tone ? `ico-${icon}-${tone}` : `ico-${icon}`;
+  return icon;
 }
 
 module.exports = {

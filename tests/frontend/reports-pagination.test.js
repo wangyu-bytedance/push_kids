@@ -34,7 +34,8 @@ function loadReportsPage() {
   };
   const filename = path.resolve(__dirname, "../../apps/miniprogram/pages/reports/index.js");
   vm.runInNewContext(fs.readFileSync(filename, "utf8"), {
-    require(name) { return name.includes("child-context") ? childContext : api; },
+    require(name) {
+      if (name.includes("presentation/theme/")) return require("../../apps/miniprogram/presentation/theme/" + name.split("/").at(-1)); return name.includes("child-context") ? childContext : api; },
     Page(value) { definition = value; },
     getApp() { return { globalData: { selectedChildId: "child-1" }, selectChild() {} }; }
   }, { filename });

@@ -1,3 +1,5 @@
+const { themeState } = require("../../presentation/theme/state");
+const { withThemePage } = require("../../presentation/theme/adapters");
 const api = require("../../utils/api");
 
 const ROLE_LABELS = { viewer: "仅查看", editor: "可共同记录", manager: "管理员" };
@@ -14,7 +16,7 @@ function timeLabel(value) {
   return text.length >= 16 ? text.slice(5, 16) : text;
 }
 
-Page({
+Page(withThemePage({
   data: {
     loading: true, error: "", family: null, members: [], requests: [], invites: [], inviteListUnavailable: false,
     isManager: false, sharing: false, shareReady: false, sharePath: "", inviteCode: "", inviteCodeDisplay: "", requestCount: 0,
@@ -86,7 +88,7 @@ Page({
   },
   revokeInvite(event) {
     const id = event.currentTarget.dataset.id;
-    wx.showModal({ title: "撤销邀请？", content: "使用这条邀请提交但还未审批的申请也会失效。", confirmText: "撤销", confirmColor: "#A85742", success: async (result) => {
+    wx.showModal({ title: "撤销邀请？", content: "使用这条邀请提交但还未审批的申请也会失效。", confirmText: "撤销", confirmColor: themeState.current().tokens["pk-native-danger"], success: async (result) => {
       if (!result.confirm) return;
       try { await api.request(`/families/current/invites/${id}`, { method: "DELETE" }); wx.showToast({ title: "邀请已撤销", icon: "success" }); await this.load(); }
       catch (error) { this.setData({ error: error.message }); wx.showToast({ title: error.message, icon: "none" }); }
@@ -122,7 +124,7 @@ Page({
   removeSelectedMember() {
     const member = this.data.selectedMember;
     if (!member || member.is_self) return;
-    wx.showModal({ title: "移除这位家人？", content: `移除后，“${member.relationship_label}”不能再查看或记录这个家庭的内容，已有的学习记录会保留。此操作不可撤销。`, confirmText: "移除", confirmColor: "#A85742", success: async (result) => {
+    wx.showModal({ title: "移除这位家人？", content: `移除后，“${member.relationship_label}”不能再查看或记录这个家庭的内容，已有的学习记录会保留。此操作不可撤销。`, confirmText: "移除", confirmColor: themeState.current().tokens["pk-native-danger"], success: async (result) => {
       if (!result.confirm) return;
       this.setData({ savingMember: true, sheetError: "" });
       try {
@@ -134,4 +136,4 @@ Page({
       catch (error) { this.setData({ savingMember: false, sheetError: `${error.message}·这位家人还在家庭里，可以稍后重试` }); }
     } });
   }
-});
+}));

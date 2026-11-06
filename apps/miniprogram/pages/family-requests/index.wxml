@@ -1,20 +1,22 @@
+<view class="{{theme.classes}} theme-page" style="{{theme.style}}">
 <view class="page requests-page">
   <view class="pk-notice err" wx:if="{{error}}">
-    <view class="ico ico-cloud-off-dan sm"></view>
+    <theme-icon class="ico  sm" name="cloud-off" tone="danger" size="sm"></theme-icon>
     <text class="n-txt">{{error}}。已经读取到的申请还能继续处理。</text>
-    <view class="ico ico-refresh-dan sm" aria-role="button" aria-label="重试" bindtap="load"></view>
+    <view class="theme-icon-action" aria-role="button" aria-label="重试" bindtap="load"><theme-icon name="refresh" tone="danger" size="sm"></theme-icon></view>
   </view>
 
-  <view class="pg-head">
+  <view class="pg-head theme-header">
+    <image wx:if="{{theme.assets.hero && !themeArtFailed}}" class="theme-hero-art" src="{{theme.assets.hero}}" mode="aspectFill" binderror="onThemeIllustrationError" aria-hidden="{{true}}" />
     <view class="grow">
       <text class="pg-kicker">管理员确认</text>
       <text class="pg-title">加入申请</text>
     </view>
-    <view class="icon-btn" aria-role="button" aria-label="刷新" bindtap="load"><view class="ico ico-refresh sm"></view></view>
+    <view class="icon-btn" aria-role="button" aria-label="刷新" bindtap="load"><theme-icon class="ico  sm" name="refresh" tone="ink" size="sm"></theme-icon></view>
   </view>
 
   <view class="pk-notice quiet" wx:if="{{isManager}}">
-    <view class="ico ico-info-mute sm"></view>
+    <theme-icon class="ico  sm" name="info" tone="muted" size="sm"></theme-icon>
     <text class="n-txt">同意后，对方就能看到这个家庭所有孩子的学习记录和照片。请先与申请人核对申请核验码。</text>
   </view>
 
@@ -25,7 +27,7 @@
 
   <block wx:elif="{{!isManager}}">
     <view class="pk-empty">
-      <view class="em"><view class="ico ico-shield-pri lg"></view></view>
+      <view class="em"><theme-icon class="ico  lg" name="shield" tone="primary" size="lg"></theme-icon></view>
       <text class="et">只有管理员可以处理加入申请</text>
       <text class="ec">{{roleNote}}</text>
     </view>
@@ -33,7 +35,7 @@
 
   <block wx:else>
     <view class="pk-empty" wx:if="{{!requests.length}}">
-      <view class="em"><view class="ico ico-check-pri lg"></view></view>
+      <view class="em"><theme-icon class="ico  lg" name="check" tone="primary" size="lg"></theme-icon></view>
       <text class="et">暂时没有待处理的申请</text>
       <text class="ec">家人提交申请后会出现在这里，下拉这一页可以重新读取。</text>
     </view>
@@ -50,7 +52,7 @@
       <view class="req-row" aria-role="button" aria-label="申请核验码 {{item.request_code}}，点击复制" data-code="{{item.request_code}}" bindtap="copyVerificationCode">
         <text class="r-lbl">申请核验码</text>
         <text class="r-code grow">{{item.request_code}}</text>
-        <view class="ico ico-note-pri sm"></view>
+        <theme-icon class="ico  sm" name="note" tone="primary" size="sm"></theme-icon>
       </view>
 
       <view class="req-row">
@@ -69,7 +71,7 @@
       <text class="err-text" wx:if="{{item.rowError}}">{{item.rowError}}</text>
 
       <view class="result-line" wx:if="{{item.resultText}}">
-        <view class="ico ico-check-pri sm"></view>
+        <theme-icon class="ico  sm" name="check" tone="primary" size="sm"></theme-icon>
         <text class="res-txt">{{item.resultText}}，这条申请马上会从列表里移出。</text>
       </view>
 
@@ -88,4 +90,6 @@
   </block>
 
   <view class="safe-tail"></view>
+</view>
+
 </view>

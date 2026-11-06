@@ -1,14 +1,16 @@
+<view class="{{theme.classes}} theme-page" style="{{theme.style}}">
 <view aria-hidden="{{gradeConfirmationVisible}}">
 <primary-nav></primary-nav>
 <view class="record-type-dismiss" wx:if="{{recordTypeOpen}}" catchtap="closeRecordTypes" catchtouchmove="closeRecordTypes" aria-hidden="{{true}}"></view>
 <view class="page record-heading" aria-hidden="{{travelOverlayOpen}}">
-  <view class="record-type-anchor {{recordTypeOpen ? 'is-open' : ''}}">
+  <view class="record-type-anchor theme-header {{recordTypeOpen ? 'is-open' : ''}}">
+    <image wx:if="{{theme.assets.hero && !themeArtFailed}}" class="theme-hero-art" src="{{theme.assets.hero}}" mode="aspectFill" binderror="onThemeIllustrationError" aria-hidden="{{true}}" />
     <button class="record-type-title" bindtap="openRecordTypes" aria-label="切换记录类型，当前{{recordType === 'travel' ? '旅行日记' : '学习记录'}}" aria-expanded="{{recordTypeOpen}}">
       <text>{{recordType === 'travel' ? '旅行日记' : '学习记录'}}</text><view class="chev {{recordTypeOpen ? 'up' : ''}}" aria-hidden="{{true}}"></view>
     </button>
     <view class="record-type-menu" wx:if="{{recordTypeOpen}}" catchtap="keepRecordTypesOpen" aria-label="记录类型">
-      <button class="record-type-choice {{recordType === 'learning' ? 'selected' : ''}}" data-type="learning" bindtap="selectRecordType" disabled="{{recordSwitching}}" aria-pressed="{{recordType === 'learning'}}"><view class="ico ico-book-pri sm" aria-hidden="{{true}}"></view><text>学习记录</text><view wx:if="{{recordType === 'learning'}}" class="ico ico-check-pri sm" aria-hidden="{{true}}"></view></button>
-      <button class="record-type-choice {{recordType === 'travel' ? 'selected' : ''}}" data-type="travel" bindtap="selectRecordType" disabled="{{recordSwitching}}" aria-pressed="{{recordType === 'travel'}}"><view class="ico ico-camera-pri sm" aria-hidden="{{true}}"></view><text>旅行日记</text><view wx:if="{{recordType === 'travel'}}" class="ico ico-check-pri sm" aria-hidden="{{true}}"></view></button>
+      <button class="record-type-choice {{recordType === 'learning' ? 'selected' : ''}}" data-type="learning" bindtap="selectRecordType" disabled="{{recordSwitching}}" aria-pressed="{{recordType === 'learning'}}"><theme-icon class="ico  sm" aria-hidden="{{true}}" name="book" tone="primary" size="sm"></theme-icon><text>学习记录</text><theme-icon wx:if="{{recordType === 'learning'}}" class="ico  sm" aria-hidden="{{true}}" name="check" tone="primary" size="sm"></theme-icon></button>
+      <button class="record-type-choice {{recordType === 'travel' ? 'selected' : ''}}" data-type="travel" bindtap="selectRecordType" disabled="{{recordSwitching}}" aria-pressed="{{recordType === 'travel'}}"><theme-icon class="ico  sm" aria-hidden="{{true}}" name="camera" tone="primary" size="sm"></theme-icon><text>旅行日记</text><theme-icon wx:if="{{recordType === 'travel'}}" class="ico  sm" aria-hidden="{{true}}" name="check" tone="primary" size="sm"></theme-icon></button>
     </view>
   </view>
   <picker wx:if="{{recordType === 'learning' && children.length}}" range="{{children}}" range-key="name" value="{{childIndex}}" bindchange="changeChild" disabled="{{saving}}" aria-hidden="{{recordTypeOpen}}" aria-label="切换孩子，当前{{children[childIndex].name}}">
@@ -22,9 +24,9 @@
 <view hidden="{{recordType !== 'learning'}}" aria-hidden="{{recordTypeOpen || recordType !== 'learning'}}" class="page record-page {{canWrite && children.length ? 'sticky-cta' : ''}}">
 
   <view class="pk-notice err" wx:if="{{error}}">
-    <view class="ico ico-cloud-off-dan sm"></view>
+    <theme-icon class="ico  sm" name="cloud-off" tone="danger" size="sm"></theme-icon>
     <text class="n-txt">{{error}}</text>
-    <view class="ico ico-refresh-dan sm" aria-role="button" aria-label="重新读取" bindtap="load"></view>
+    <view class="theme-icon-action" aria-role="button" aria-label="重新读取" bindtap="load"><theme-icon name="refresh" tone="danger" size="sm"></theme-icon></view>
   </view>
 
   <block wx:if="{{loading && !children.length}}">
@@ -34,7 +36,7 @@
   </block>
 
   <view class="pk-empty" wx:if="{{!loading && !children.length}}">
-    <view class="em"><view class="ico ico-family-pri lg"></view></view>
+    <view class="em"><theme-icon class="ico  lg" name="family" tone="primary" size="lg"></theme-icon></view>
     <text class="et">还没有学习档案</text>
     <text class="ec">学习档案由家庭管理员配置，配置好后就能在这里记录学习内容。</text>
   </view>
@@ -42,19 +44,19 @@
   <block wx:if="{{children.length}}">
     <block wx:if="{{canWrite}}">
       <view class="pk-notice mt3" wx:if="{{pendingCount}}" aria-role="button" aria-label="查看待处理记录" bindtap="openHistoryPending">
-        <view class="ico ico-sparkle-att sm"></view>
+        <theme-icon class="ico  sm" name="sparkle" tone="attention" size="sm"></theme-icon>
         <text class="n-txt">有 {{pendingCount}} 条待处理 · 查看</text>
         <view class="chev right"></view>
       </view>
       <view class="pk-notice quiet mt3" wx:if="{{submittedId}}" aria-role="button" aria-label="查看刚提交的这条记录" bindtap="openSubmitted">
-        <view class="ico ico-clock sm"></view>
+        <theme-icon class="ico  sm" name="clock" tone="ink" size="sm"></theme-icon>
         <text class="n-txt">已提交，正在整理 · 查看这条记录</text>
         <view class="chev right"></view>
       </view>
 
       <view class="pk-card tight time-card mt3">
         <view class="flex">
-          <view class="ico ico-clock sm"></view>
+          <theme-icon class="ico  sm" name="clock" tone="ink" size="sm"></theme-icon>
           <view class="grow">
             <text class="t-cap c-ink-3">实际学习时间</text>
             <text class="time-val tnum">{{date}} · {{time}}</text>
@@ -72,7 +74,7 @@
       </view>
 
       <view class="pk-notice info mt2" wx:if="{{backfill}}">
-        <view class="ico ico-info sm"></view>
+        <theme-icon class="ico  sm" name="info" tone="ink" size="sm"></theme-icon>
         <text class="n-txt">历史补录只安排今天起的复习检查，不会补出过去的待办。</text>
       </view>
 
@@ -82,9 +84,9 @@
       </view>
       <view class="up-tile add-photo-tile" wx:if="{{!photos.length}}" aria-role="button"
         aria-label="添加学习照片，可拍摄或从相册选择" bindtap="addPhotos">
-        <image class="record-upload-art" wx:if="{{!uploadArtFailed}}" src="/assets/illustrations/record-camera.png" mode="aspectFit"
+        <image class="record-upload-art" wx:if="{{!uploadArtFailed}}" src="{{theme.assets.upload}}" mode="aspectFit"
           aria-hidden="{{true}}" data-art="upload" binderror="onIllustrationError"></image>
-        <view class="ico ico-camera-pri lg" wx:else></view>
+        <theme-icon class="ico  lg" wx:else name="camera" tone="primary" size="lg"></theme-icon>
         <text>添加学习照片</text>
         <text class="us">拍摄或从相册选择</text>
       </view>
@@ -94,12 +96,12 @@
             <image class="pimg" src="{{item}}" mode="aspectFill"></image>
             <view class="idx tnum">照片 {{index + 1}}</view>
             <view class="rm" wx:if="{{!saving}}" aria-role="button" aria-label="移除第 {{index + 1}} 张照片" data-index="{{index}}" bindtap="removePhoto">
-              <view class="ico ico-close-inv xs"></view>
+              <theme-icon class="ico  xs" name="close" tone="inverse" size="xs"></theme-icon>
             </view>
           </view>
           <view class="pcell add" wx:if="{{photos.length < 9 && !saving}}" aria-role="button"
             aria-label="继续添加照片，可拍摄或从相册选择" bindtap="addPhotos">
-            <view class="ph-center"><view class="ico ico-plus"></view></view>
+            <view class="ph-center"><theme-icon class="ico" name="plus" tone="ink" size=""></theme-icon></view>
           </view>
         </view>
         <view class="mt3" wx:if="{{saving}}">
@@ -127,7 +129,7 @@
             aria-role="button" aria-label="按住录音，松开转成文字，上滑取消"
             catchtouchstart="voiceTouchStart" catchtouchmove="voiceTouchMove"
             catchtouchend="voiceTouchEnd" catchtouchcancel="voiceTouchCancel">
-            <view class="voice-face"><view class="ico ico-mic-pri"></view></view>
+            <view class="voice-face"><theme-icon class="ico" name="mic" tone="primary" size=""></theme-icon></view>
           </view>
         </view>
         <view class="voice-overflow" wx:if="{{voiceOverflowOpen}}">
@@ -145,7 +147,7 @@
     </block>
 
     <view class="pk-notice quiet mt3" wx:if="{{!canWrite}}" aria-role="button" aria-label="到报表查看历史记录" bindtap="openHistoryInReports">
-      <view class="ico ico-clock sm"></view>
+      <theme-icon class="ico  sm" name="clock" tone="ink" size="sm"></theme-icon>
       <text class="n-txt">历史记录已放在报表中 · 前往查看</text>
       <view class="chev right"></view>
     </view>
@@ -155,7 +157,7 @@
 <view class="pk-cta-bar record-cta" aria-hidden="{{recordTypeOpen}}" wx:if="{{recordType === 'learning' && children.length && canWrite}}">
   <view class="action-row submit-row">
     <view class="btn {{saving ? 'is-disabled' : ''}}" aria-role="button" aria-label="{{saving ? (photos.length ? '正在上传照片' : '正在提交文字记录') : (photos.length ? '上传并整理' : (hasText ? '提交整理' : '添加照片或文字后继续'))}}" bindtap="save">
-      <view class="ico ico-sparkle-inv sm" wx:if="{{!saving}}"></view>
+      <theme-icon class="ico  sm" wx:if="{{!saving}}" name="sparkle" tone="inverse" size="sm"></theme-icon>
       <text>{{saving ? (photos.length ? '上传中 ' + uploadProgress + '%' : '正在提交…') : (photos.length ? '上传并整理' : (hasText ? '提交整理' : '添加照片或文字后继续'))}}</text>
     </view>
   </view>
@@ -164,3 +166,5 @@
 
 </view>
 <grade-confirmation id="grade-confirmation" view="{{gradeConfirmation}}" blocked="{{loading || saving || hasText || photos.length || voiceBusy || voiceOverflowOpen || recordTypeOpen || travelOverlayOpen || recordSwitching}}" bindaction="onGradeConfirmation"></grade-confirmation>
+
+</view>

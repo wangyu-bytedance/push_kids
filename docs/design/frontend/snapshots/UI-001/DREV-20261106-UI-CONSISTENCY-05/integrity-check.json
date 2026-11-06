@@ -1,0 +1,61 @@
+{
+  "checkedAt": "2026-11-06T09:38:46.845625+00:00",
+  "manifestChecks": [
+    {
+      "revision": "DREV-20261106-UI-CONSISTENCY-01",
+      "entries": 134,
+      "failures": []
+    },
+    {
+      "revision": "DREV-20261106-UI-CONSISTENCY-02",
+      "entries": 135,
+      "failures": []
+    },
+    {
+      "revision": "DREV-20261106-UI-CONSISTENCY-03",
+      "entries": 22,
+      "failures": []
+    },
+    {
+      "revision": "DREV-20261106-UI-CONSISTENCY-04",
+      "entries": 11,
+      "failures": []
+    },
+    {
+      "revision": "DREV-20261106-UI-CONSISTENCY-05",
+      "entries": 11,
+      "failures": []
+    }
+  ],
+  "generatedOriginalCopies": [
+    {
+      "id": "a",
+      "matches": true
+    },
+    {
+      "id": "b",
+      "matches": true
+    },
+    {
+      "id": "c",
+      "matches": true
+    },
+    {
+      "id": "d",
+      "matches": true
+    },
+    {
+      "id": "e",
+      "matches": true
+    },
+    {
+      "id": "f",
+      "matches": true
+    }
+  ],
+  "metadataChecks": {
+    "assetsSha256": true,
+    "verificationSha256": true
+  },
+  "passed": true
+}

@@ -12,6 +12,7 @@ function loadApp() {
   const filename = path.join(root, "app.js");
   vm.runInNewContext(source("app.js"), {
     require(name) {
+      if (name.includes("presentation/theme/")) return require("../../apps/miniprogram/presentation/theme/" + name.split("/").at(-1));
       if (name === "./utils/grade-confirmation") return require("../../apps/miniprogram/utils/grade-confirmation");
       if (name === "./utils/api") return { request() { throw Error("Unexpected API request in launch routing test"); } };
       if (name === "./config") return {
@@ -40,6 +41,7 @@ function loadOnboarding(request, refreshBootstrap = async () => ({ state: "unbou
   const filename = path.join(root, "pages/family-onboarding/index.js");
   vm.runInNewContext(source("pages/family-onboarding/index.js"), {
     require(_name) {
+      if (_name.includes("presentation/theme/")) return require("../../apps/miniprogram/presentation/theme/" + _name.split("/").at(-1));
       return {
         request: async (requestPath, options = {}) => {
           calls.push({ path: requestPath, options });

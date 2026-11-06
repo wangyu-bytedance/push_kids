@@ -13,6 +13,7 @@ function read(relativePath) {
 function measurePrimaryNavigation(wxMock) {
   let definition;
   vm.runInNewContext(read("components/primary-nav/index.js"), {
+    require(name) { return require(path.resolve(appRoot, "components/primary-nav", name)); },
     Component(value) { definition = value; },
     console: { warn() {} },
     Math,
@@ -73,7 +74,7 @@ test("primary navigation uses the generated icon and has safe platform geometry 
   const script = read("components/primary-nav/index.js");
   const style = read("components/primary-nav/index.wxss");
 
-  assert.match(template, /class="ico ico-sprout-pri sm primary-nav-mark"/);
+  assert.match(template, /<theme-icon[^>]+name="sprout" tone="nav" size="sm"/);
   assert.match(template, /<text class="primary-nav-title">知芽<\/text>/);
   assert.match(template, /aria-label="知芽"/);
   assert.doesNotMatch(template, /<image/);
@@ -84,7 +85,7 @@ test("primary navigation uses the generated icon and has safe platform geometry 
   assert.match(script, /FALLBACK_NAVIGATION_HEIGHT = 44/);
   assert.match(script, /pageLifetimes/);
   assert.match(style, /position: fixed/);
-  assert.match(style, /var\(--pk-canvas\)/);
+  assert.match(style, /var\(--pk-nav-bg\)/);
 });
 
 test("primary navigation derives safe geometry and falls back when platform APIs fail", () => {

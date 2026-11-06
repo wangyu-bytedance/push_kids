@@ -5,14 +5,14 @@
 /* 家庭 Hero */
 .family-hero .fam-mark { flex: none; width: 88rpx; height: 88rpx; border-radius: var(--pk-r-lg); background: var(--pk-surface); display: flex; align-items: center; justify-content: center; }
 .family-hero .fam-name { margin-top: 4rpx; font-size: 20px; }
-.family-hero .icon-btn { background: rgba(255, 255, 255, .82); }
+.family-hero .icon-btn { background: var(--pk-white-wash); }
 .family-hero .hero-note { text-align: center; }
 .manager-panel{display:grid;grid-template-columns:minmax(0,1fr);gap:20rpx;width:100%;margin-top:32rpx;box-sizing:border-box}
 .invite-button { width: 100%; min-width: 0; max-width: none; box-sizing: border-box; }
 
 /* 邀请已准备好 */
 .share-card .share-title { display: block; font-size: 17px; line-height: 1.45; font-weight: 600; }
-.share-card .share-sub { display: block; margin-top: 8rpx; font-size: 13px; line-height: 1.5; color: var(--pk-ink-3); }
+.share-card .share-sub { display: block; margin-top: 8rpx; font-size: 13px; line-height: 1.5; color: var(--pk-text-muted); }
 .share-card .invite-code { display: block; margin: 12rpx 0 4rpx; color: var(--pk-primary); font-size: 36px; font-weight: 700; letter-spacing: .12em; }
 .share-card .btn-row > .btn { width: 100%; min-width: 0; }
 
@@ -21,7 +21,7 @@
 .request-entry .req-mark { flex: none; width: 72rpx; height: 72rpx; border-radius: 50%; background: var(--pk-surface-sunken); display: flex; align-items: center; justify-content: center; }
 .request-entry .req-mark.on { background: var(--pk-danger-bg); }
 .request-entry .entry-title { display: block; font-size: 16px; line-height: 1.45; font-weight: 500; }
-.request-entry .entry-sub { display: block; margin-top: 4rpx; font-size: 13px; line-height: 1.45; color: var(--pk-ink-3); }
+.request-entry .entry-sub { display: block; margin-top: 4rpx; font-size: 13px; line-height: 1.45; color: var(--pk-text-muted); }
 
 /* 成员列表 */
 .members-page .sec-bar .s-m { text-align: right; }
@@ -32,13 +32,13 @@
 .member-row .mem-ava.mine { background: var(--pk-primary); color: var(--pk-ink-inv); }
 .member-row .mem-line { display: flex; align-items: center; gap: 12rpx; min-width: 0; }
 .member-row .mem-name { font-size: 16px; line-height: 1.45; font-weight: 500; max-width: 320rpx; }
-.member-row .mem-sub { display: block; margin-top: 4rpx; font-size: 13px; line-height: 1.45; color: var(--pk-ink-3); }
+.member-row .mem-sub { display: block; margin-top: 4rpx; font-size: 13px; line-height: 1.45; color: var(--pk-text-muted); }
 
 /* 成员详情半屏 */
 .member-sheet .read-value { min-height: 92rpx; padding: 24rpx 28rpx; box-sizing: border-box; border-radius: var(--pk-r-lg); background: var(--pk-surface-sunken); color: var(--pk-ink-2); font-size: 16px; line-height: 1.4; }
 .member-sheet .danger-zone { margin-top: 24rpx; padding-top: 24rpx; border-top: var(--pk-border-soft); text-align: center; }
-.member-sheet .danger-copy { display: block; font-size: 13px; line-height: 1.5; color: var(--pk-ink-3); }
-.member-sheet .danger-link { color: var(--pk-danger); }
+.member-sheet .danger-copy { display: block; font-size: 13px; line-height: 1.5; color: var(--pk-text-muted); }
+.member-sheet .danger-link { color: var(--pk-danger-ink); }
 .member-sheet .err-text { display: block; }
 
 .sk.card-sk { height: 232rpx; }

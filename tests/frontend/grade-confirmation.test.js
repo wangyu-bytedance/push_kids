@@ -327,9 +327,10 @@ test("a failed conflict refresh cannot be bypassed by reselecting the old grade"
 test("component forwards native picker and foreground events after the host data update", async () => {
   let component; const events = [];
   vm.runInNewContext(fs.readFileSync("apps/miniprogram/components/grade-confirmation/index.js", "utf8"), {
-    Component(value) { component = value; }
+    Component(value) { component = value; },
+    require(name) { return require(path.resolve("apps/miniprogram/components/grade-confirmation", name)); }
   });
-  const view = { data: { blocked: false }, ...component.methods,
+  const view = { data: { ...component.data, blocked: false }, setData(value) { Object.assign(this.data, value); }, ...component.methods,
     triggerEvent(name, event) { events.push({ name, event }); } };
   component.lifetimes.attached.call(view);
   assert.equal(events.length, 0, "组件初始化不能同步重入父页setData");

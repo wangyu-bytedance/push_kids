@@ -1,0 +1,91 @@
+{
+  "route": "pages/family-requests/index",
+  "theme": "original",
+  "viewport": {
+    "width": 320,
+    "height": 568,
+    "screenWidth": 320,
+    "screenHeight": 568
+  },
+  "base_library": "3.17.4",
+  "nodes": [
+    {
+      "host": "page",
+      "selector": ".theme-page",
+      "left": 0,
+      "right": 320,
+      "top": 0,
+      "bottom": 504,
+      "width": 320,
+      "height": 504,
+      "backgroundColor": "rgb(250, 247, 240)",
+      "color": "rgb(34, 38, 31)",
+      "fontSize": "16px",
+      "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif"
+    },
+    {
+      "host": "page",
+      "selector": ".page",
+      "left": 0,
+      "right": 320,
+      "top": 0,
+      "bottom": 382,
+      "width": 320,
+      "height": 382,
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "color": "rgb(34, 38, 31)",
+      "fontSize": "16px",
+      "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif"
+    },
+    {
+      "host": "page",
+      "selector": ".theme-header",
+      "left": 15,
+      "right": 305,
+      "top": 10,
+      "bottom": 80,
+      "width": 290,
+      "height": 70,
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "color": "rgb(34, 38, 31)",
+      "fontSize": "16px",
+      "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif"
+    },
+    {
+      "host": "page",
+      "selector": ".pk-notice",
+      "left": 15,
+      "right": 305,
+      "top": 80,
+      "bottom": 160,
+      "width": 290,
+      "height": 80,
+      "backgroundColor": "rgba(255, 253, 248, 0.9)",
+      "color": "rgb(70, 78, 67)",
+      "fontSize": "13px",
+      "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif"
+    },
+    {
+      "host": "page",
+      "selector": ".pk-empty",
+      "left": 15,
+      "right": 305,
+      "top": 160,
+      "bottom": 362,
+      "width": 290,
+      "height": 202,
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "color": "rgb(34, 38, 31)",
+      "fontSize": "16px",
+      "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif"
+    }
+  ],
+  "source": "native wx.createSelectorQuery; synthetic fixtures; production WXML/WXSS exact; page loading lifecycles suppressed",
+  "screenshot": "original--family-requests-index.png",
+  "screenshot_sha256": "5d01baf7bd72ccc86e990834d8ef7e318a27423d1240ee89ad86ad38e4dd19a9",
+  "fixture": "family-requests-index",
+  "category": "route",
+  "screenshot_errors": [],
+  "validation_errors": [],
+  "horizontal_overflow": []
+}

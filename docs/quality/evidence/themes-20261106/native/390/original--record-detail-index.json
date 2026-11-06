@@ -1,0 +1,77 @@
+{
+  "route": "pages/record-detail/index",
+  "theme": "original",
+  "viewport": {
+    "width": 390,
+    "height": 844,
+    "screenWidth": 390,
+    "screenHeight": 844
+  },
+  "base_library": "3.17.4",
+  "nodes": [
+    {
+      "host": "page",
+      "selector": ".theme-page",
+      "left": 0,
+      "right": 390,
+      "top": 0,
+      "bottom": 753,
+      "width": 390,
+      "height": 753,
+      "backgroundColor": "rgb(250, 247, 240)",
+      "color": "rgb(34, 38, 31)",
+      "fontSize": "16px",
+      "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif"
+    },
+    {
+      "host": "page",
+      "selector": ".page",
+      "left": 0,
+      "right": 390,
+      "top": 0,
+      "bottom": 544,
+      "width": 390,
+      "height": 544,
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "color": "rgb(34, 38, 31)",
+      "fontSize": "16px",
+      "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif"
+    },
+    {
+      "host": "page",
+      "selector": ".theme-header",
+      "left": 18,
+      "right": 372,
+      "top": 0,
+      "bottom": 86,
+      "width": 354,
+      "height": 86,
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "color": "rgb(34, 38, 31)",
+      "fontSize": "16px",
+      "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif"
+    },
+    {
+      "host": "page",
+      "selector": ".btn",
+      "left": 18,
+      "right": 372,
+      "top": 247,
+      "bottom": 296,
+      "width": 354,
+      "height": 49,
+      "backgroundColor": "rgb(228, 237, 230)",
+      "color": "rgb(20, 64, 47)",
+      "fontSize": "16px",
+      "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif"
+    }
+  ],
+  "source": "native wx.createSelectorQuery; synthetic fixtures; production WXML/WXSS exact; page loading lifecycles suppressed",
+  "screenshot": "original--record-detail-index.png",
+  "screenshot_sha256": "b43fc4f312e90fb25f071729b4b00ad654ec3f6f0bcbda78c0e1f153948e7a0c",
+  "fixture": "record-detail-index",
+  "category": "route",
+  "screenshot_errors": [],
+  "validation_errors": [],
+  "horizontal_overflow": []
+}

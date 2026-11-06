@@ -1,3 +1,4 @@
+const { withThemePage } = require("../../presentation/theme/adapters");
 const api = require("../../utils/api");
 const { friendlyTime } = require("../../utils/date");
 const detail = require("./detail");
@@ -7,7 +8,7 @@ const STATUS_TONE = { failed: "dan", pending_confirmation: "att", confirmed: "su
 
 /* 深链入口：人工录入、以及旧版「查看并确认」链接仍可用。
    编辑与确认的逻辑全部来自 draft.js，和待确认页上的就地编辑完全一致。 */
-Page({
+Page(withThemePage({
   data: { ...detail.data, ...draft.data, id: "", loading: true, error: "", submission: null },
   ...detail.methods,
   ...draft.methods,
@@ -55,4 +56,4 @@ Page({
     wx.showToast({ title: "草稿已保留，未生成记录", icon: "none" });
     setTimeout(() => wx.navigateBack(), 600);
   }
-});
+}));

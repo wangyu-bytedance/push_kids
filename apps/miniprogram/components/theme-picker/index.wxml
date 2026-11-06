@@ -1,0 +1,21 @@
+<view class="{{theme.classes}}" style="{{theme.style}}" wx:if="{{visible}}" catchtouchmove="contain">
+  <view class="theme-picker-mask" bindtap="close" aria-hidden="{{true}}"></view>
+  <view class="theme-picker-sheet" aria-role="dialog" aria-modal="{{true}}" aria-label="选择界面风格">
+    <view class="theme-picker-head">
+      <view class="grow"><text class="sheet-title">选择界面风格</text><text class="theme-picker-hint">给每一天，换一个小世界</text></view>
+      <button class="theme-picker-close" bindtap="close" aria-label="关闭风格选择"><theme-icon name="close" size="sm"></theme-icon></button>
+    </view>
+    <scroll-view class="theme-picker-scroll" scroll-y="{{true}}" enhanced="{{true}}" aria-label="六种界面风格">
+      <view class="theme-picker-grid" aria-role="radiogroup">
+        <button wx:for="{{choices}}" wx:key="id" class="theme-choice {{selectedId === item.id ? 'is-selected' : ''}}" style="{{item.style}}" data-id="{{item.id}}" bindtap="choose" aria-role="radio" aria-checked="{{selectedId === item.id}}" aria-label="{{item.name}}{{currentId === item.id ? '，正在使用' : ''}}">
+          <image wx:if="{{!item.failed}}" class="theme-choice-art" src="{{item.preview}}" mode="aspectFill" data-index="{{index}}" binderror="imageFailed" aria-hidden="{{true}}" />
+          <view wx:else class="theme-choice-fallback" aria-hidden="{{true}}">{{item.name}}</view>
+          <view class="theme-choice-caption"><text class="theme-choice-name">{{item.name}}</text><text class="theme-choice-description">{{item.description}}</text></view>
+          <view class="theme-choice-check" wx:if="{{selectedId === item.id}}" aria-hidden="{{true}}"><theme-icon name="check" tone="inverse" size="xs"></theme-icon></view>
+          <text class="theme-choice-current" wx:if="{{currentId === item.id}}">正在使用</text>
+        </button>
+      </view>
+    </scroll-view>
+    <view class="theme-picker-foot"><text class="theme-picker-hint">只更换外观，已填内容会保留</text><button class="btn {{selectedId === currentId ? 'is-disabled' : ''}}" bindtap="apply" disabled="{{selectedId === currentId}}">{{selectedId === currentId ? '正在使用' : '使用这个风格'}}</button></view>
+  </view>
+</view>

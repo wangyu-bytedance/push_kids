@@ -45,9 +45,9 @@
     <block wx:if="{{reviewsOpen}}">
       <view class="sk h20 mt2" wx:if="{{reviewsLoading && !reviews.length}}"></view>
       <view class="pk-notice err mt2" wx:if="{{reviewsError}}">
-        <view class="ico ico-cloud-off-dan sm"></view>
+        <theme-icon class="ico  sm" name="cloud-off" tone="danger" size="sm"></theme-icon>
         <text class="n-txt">{{reviewsError}}</text>
-        <view class="ico ico-refresh-dan sm" aria-role="button" aria-label="重试读取复习情况" catchtap="loadReviews"></view>
+        <view class="theme-icon-action" aria-role="button" aria-label="重试读取复习情况" catchtap="loadReviews"><theme-icon name="refresh" tone="danger" size="sm"></theme-icon></view>
       </view>
 
       <view class="rev-item" wx:for="{{reviews}}" wx:key="review_id">
@@ -77,10 +77,10 @@
 <template name="rec-draft-actions">
   <view class="rec-actions">
     <view class="btn" wx:if="{{state === 'failed'}}" aria-role="button" aria-label="重试整理" data-action="retry" bindtap="runDraftAction">
-      <view class="ico ico-refresh-inv sm" wx:if="{{!saving}}"></view><text>{{saving ? '正在重试…' : '重试整理'}}</text>
+      <theme-icon class="ico  sm" wx:if="{{!saving}}" name="refresh" tone="inverse" size="sm"></theme-icon><text>{{saving ? '正在重试…' : '重试整理'}}</text>
     </view>
     <view class="btn secondary" wx:if="{{state !== 'pending_confirmation' && !awaitingUpload}}" aria-role="button" aria-label="改成人工录入" bindtap="startManual">
-      <view class="ico ico-pen-pri sm"></view><text>改成人工录入</text>
+      <theme-icon class="ico  sm" name="pen" tone="primary" size="sm"></theme-icon><text>改成人工录入</text>
     </view>
     <view class="btn-row" wx:if="{{awaitingUpload || canFinalize}}">
       <view class="btn neutral" wx:if="{{awaitingUpload}}" aria-role="button" aria-label="补传照片" bindtap="resumePhotos">{{saving ? '上传中…' : '补传照片'}}</view>
@@ -88,7 +88,7 @@
     </view>
     <view class="rec-danger">
       <view class="link-btn dan" aria-role="button" aria-label="取消这条提交" data-action="cancel" bindtap="runDraftAction">
-        <view class="ico ico-trash-dan sm"></view><text>取消这条提交</text>
+        <theme-icon class="ico  sm" name="trash" tone="danger" size="sm"></theme-icon><text>取消这条提交</text>
       </view>
       <text class="help center">取消后会删除已上传的照片，不可恢复。</text>
     </view>

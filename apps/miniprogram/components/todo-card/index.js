@@ -1,14 +1,15 @@
+const { withThemeComponent } = require("../../presentation/theme/adapters");
 const ui = require("../../utils/ui");
 
 /* 「⋯」里的三种反馈都是家长的主观标记：顺序与文案固定，不含任何评分或掌握度含义。
    effect 描述 planning/domain.apply_feedback 的确定性结果，改策略时必须同步改这里。 */
 const MORE_ACTIONS = [
-  { action: "reinforce", icon: "ico-refresh-att", effect: "明天再出现一次" },
-  { action: "partial", icon: "ico-list", effect: "间隔取一半，会更早再出现" },
-  { action: "defer", icon: "ico-clock-mute", effect: "今天不再提醒，明天再来" }
+  { action: "reinforce", icon: "refresh", tone: "attention", effect: "明天再出现一次" },
+  { action: "partial", icon: "list", tone: "ink", effect: "间隔取一半，会更早再出现" },
+  { action: "defer", icon: "clock", tone: "muted", effect: "今天不再提醒，明天再来" }
 ];
 
-Component({
+Component(withThemeComponent({
   options: { addGlobalClass: true },
   properties: {
     canWrite: { type: Boolean, value: true },
@@ -92,4 +93,4 @@ Component({
       this.triggerEvent("feedback", { reviewId, action });
     }
   }
-});
+}));

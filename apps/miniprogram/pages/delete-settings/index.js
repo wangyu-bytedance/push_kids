@@ -1,6 +1,7 @@
+const { withThemePage } = require("../../presentation/theme/adapters");
 const api = require("../../utils/api");
 
-Page({
+Page(withThemePage({
   data: {
     loading: true, error: "", family: null, children: [], members: [],
     mode: "", targetId: "", targetName: "", confirmationName: "",
@@ -122,4 +123,4 @@ Page({
     wx.showToast({ title: "资料已清理", icon: "success" });
     wx.navigateBack();
   }
-});
+}));

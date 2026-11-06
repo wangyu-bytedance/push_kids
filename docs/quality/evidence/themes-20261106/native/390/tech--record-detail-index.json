@@ -1,0 +1,77 @@
+{
+  "route": "pages/record-detail/index",
+  "theme": "tech",
+  "viewport": {
+    "width": 390,
+    "height": 844,
+    "screenWidth": 390,
+    "screenHeight": 844
+  },
+  "base_library": "3.17.4",
+  "nodes": [
+    {
+      "host": "page",
+      "selector": ".theme-page",
+      "left": 0,
+      "right": 390,
+      "top": 0,
+      "bottom": 753,
+      "width": 390,
+      "height": 753,
+      "backgroundColor": "rgb(234, 242, 246)",
+      "color": "rgb(25, 59, 73)",
+      "fontSize": "16px",
+      "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif"
+    },
+    {
+      "host": "page",
+      "selector": ".page",
+      "left": 0,
+      "right": 390,
+      "top": 0,
+      "bottom": 593,
+      "width": 390,
+      "height": 593,
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "color": "rgb(25, 59, 73)",
+      "fontSize": "16px",
+      "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif"
+    },
+    {
+      "host": "page",
+      "selector": ".theme-header",
+      "left": 4,
+      "right": 386,
+      "top": 0,
+      "bottom": 135,
+      "width": 382,
+      "height": 135,
+      "backgroundColor": "rgb(245, 250, 252)",
+      "color": "rgb(25, 59, 73)",
+      "fontSize": "16px",
+      "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif"
+    },
+    {
+      "host": "page",
+      "selector": ".btn",
+      "left": 18,
+      "right": 372,
+      "top": 296,
+      "bottom": 345,
+      "width": 354,
+      "height": 49,
+      "backgroundColor": "rgb(217, 244, 243)",
+      "color": "rgb(0, 94, 104)",
+      "fontSize": "16px",
+      "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif"
+    }
+  ],
+  "source": "native wx.createSelectorQuery; synthetic fixtures; production WXML/WXSS exact; page loading lifecycles suppressed",
+  "screenshot": "tech--record-detail-index.png",
+  "screenshot_sha256": "a3fe9db211e86499a068ecfc13e2e7f00b10f452b746447a915d446cf4cc48f1",
+  "fixture": "record-detail-index",
+  "category": "route",
+  "screenshot_errors": [],
+  "validation_errors": [],
+  "horizontal_overflow": []
+}

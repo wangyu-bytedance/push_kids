@@ -1,5 +1,7 @@
 # UI-016 — 删除配置
 
+当前本地呈现revision `UI-STATE-20261106-THEMES-01`：[DESIGN-002 Spec08 / Architecture01](../../../../specs/active/DESIGN-002-GLOBAL-UI-CONSISTENCY.md)与DREV08已获用户“好的 按照以上方案落地”批准并实施，DREV06视觉方向保持。删除配置现有页面、表单、错误与危险操作消费六主题角色；系统危险确认使用集中命名的平台色例外，删除授权、范围和冻结规则不变。此主题增量不补认旧删除功能缺少的验收。 本增量尚未上传；原生合成呈现、共享业务回归及真机/独立评审缺项见[当前证据](../../../quality/evidence/themes-20261106/README.md)。下方原特性发布与验收记录保持其版本范围，不能代验六主题。
+
 - Status: `IMPLEMENTING / REPOSITORY_DESIGN_EVIDENCE`
 - Related Feature: `FEAT-006`
 - Related Spec: `SPEC-20260906-DATA-CLEANUP-01`

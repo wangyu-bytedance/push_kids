@@ -3,13 +3,13 @@
 .todo { position: relative; overflow: hidden; padding: 30rpx 30rpx 22rpx 34rpx; box-sizing: border-box; background: var(--pk-surface); border: var(--pk-border); border-radius: var(--pk-r-xl); box-shadow: var(--pk-e0); }
 .todo .rail { position: absolute; left: 0; top: 0; bottom: 0; width: 8rpx; background: linear-gradient(180deg, var(--pk-primary-mid), var(--pk-primary)); }
 .todo.opt { background: var(--pk-surface-warm); box-shadow: none; }
-.todo.opt .rail { background: repeating-linear-gradient(180deg, var(--pk-sprout) 0 18rpx, rgba(127, 166, 92, .25) 18rpx 30rpx); }
+.todo.opt .rail { background: repeating-linear-gradient(180deg, var(--pk-sprout) 0 18rpx, var(--pk-primary-tint) 18rpx 30rpx); }
 
 .todo-top { display: flex; align-items: flex-start; gap: 20rpx; }
 .todo-top .grow { flex: 1; min-width: 0; }
 .todo-top .pill { flex: none; margin-top: 4rpx; }
 .todo-title { display: block; font-size: 16px; line-height: 1.4; font-weight: 600; letter-spacing: .2px; }
-.todo-meta { display: block; margin-top: 6rpx; font-size: 12px; line-height: 1.5; color: var(--pk-ink-3); font-variant-numeric: tabular-nums; }
+.todo-meta { display: block; margin-top: 6rpx; font-size: 12px; line-height: 1.5; color: var(--pk-text-muted); font-variant-numeric: tabular-nums; }
 
 .todo-points { margin-top: 12rpx; }
 .pt-row { display: flex; align-items: center; gap: 16rpx; min-height: 112rpx; padding: 12rpx 0; box-sizing: border-box; }
@@ -18,8 +18,8 @@
 .pt-dot.on { background: var(--pk-primary); border-color: var(--pk-primary); }
 .pt-main { flex: 1; min-width: 0; }
 .pt-n { display: block; font-size: 15px; line-height: 1.45; overflow-wrap: anywhere; }
-.pt-n.is-done { color: var(--pk-ink-3); }
-.pt-summary { display: -webkit-box; margin-top: 8rpx; overflow: hidden; color: var(--pk-ink-3); font-size: 12px; line-height: 1.55; overflow-wrap: anywhere; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+.pt-n.is-done { color: var(--pk-text-muted); }
+.pt-summary { display: -webkit-box; margin-top: 8rpx; overflow: hidden; color: var(--pk-text-muted); font-size: 12px; line-height: 1.55; overflow-wrap: anywhere; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
 .source-link { display: inline-flex; position: relative; align-items: center; gap: 8rpx; min-height: 64rpx; margin-top: 4rpx; color: var(--pk-primary); font-size: 12px; font-weight: 500; }
 .source-link::after { content: ""; position: absolute; left: -12rpx; right: -12rpx; top: -12rpx; bottom: -12rpx; }
 .pt-done { flex: none; display: inline-flex; align-items: center; gap: 10rpx; font-size: 12px; font-weight: 500; color: var(--pk-primary); }
@@ -38,7 +38,7 @@
 .fb + .fb { border-top: var(--pk-border-soft); }
 .fb .grow { flex: 1; min-width: 0; }
 .fb .fb-t { display: block; font-size: 14px; line-height: 1.4; font-weight: 500; }
-.fb .fb-s { display: block; margin-top: 4rpx; font-size: 11px; line-height: 1.5; color: var(--pk-ink-3); }
-.fb-cancel { min-height: 88rpx; display: flex; align-items: center; justify-content: center; border-top: var(--pk-border-soft); font-size: 13px; color: var(--pk-ink-3); }
+.fb .fb-s { display: block; margin-top: 4rpx; font-size: 11px; line-height: 1.5; color: var(--pk-text-muted); }
+.fb-cancel { min-height: 88rpx; display: flex; align-items: center; justify-content: center; border-top: var(--pk-border-soft); font-size: 13px; color: var(--pk-text-muted); }
 .fb-delete { border-top: var(--pk-border-line); margin-top: 8rpx; min-height: 44px; }
 .fb-delete .fb-s { font-size: 13px; }

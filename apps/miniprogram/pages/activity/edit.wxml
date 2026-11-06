@@ -1,5 +1,7 @@
+<view class="{{theme.classes}} theme-page" style="{{theme.style}}">
 <view class="page sticky-cta activity-page">
-  <view class="pg-head">
+  <view class="pg-head theme-header">
+    <image wx:if="{{theme.assets.hero && !themeArtFailed}}" class="theme-hero-art" src="{{theme.assets.hero}}" mode="aspectFill" binderror="onThemeIllustrationError" aria-hidden="{{true}}" />
     <view class="head-intro">
       <text class="pg-kicker">{{kicker}}</text>
       <text class="pg-title">记录这次练习</text>
@@ -7,13 +9,13 @@
   </view>
 
   <view class="pk-notice err" wx:if="{{error}}">
-    <view class="ico ico-cloud-off-dan sm"></view>
+    <theme-icon class="ico  sm" name="cloud-off" tone="danger" size="sm"></theme-icon>
     <text class="n-txt">{{error}}</text>
-    <view class="ico ico-refresh-dan sm" aria-role="button" aria-label="重新加载" bindtap="load"></view>
+    <view class="theme-icon-action" aria-role="button" aria-label="重新加载" bindtap="load"><theme-icon name="refresh" tone="danger" size="sm"></theme-icon></view>
   </view>
 
   <view class="pk-notice quiet mt2" wx:if="{{!canWrite}}">
-    <view class="ico ico-eye-mute sm"></view>
+    <theme-icon class="ico  sm" name="eye" tone="muted" size="sm"></theme-icon>
     <text class="n-txt">你在这个家庭是只读成员，可以查看，记录需要管理员或家长操作。</text>
   </view>
 
@@ -22,7 +24,7 @@
   </block>
 
   <view class="pk-empty" wx:elif="{{!subjects.length}}">
-    <view class="em"><view class="ico {{iconClass}} lg"></view></view>
+    <view class="em"><theme-icon class="ico  lg" name="{{iconClass}}" tone="primary" size="lg"></theme-icon></view>
     <text class="et">还没有课外活动可以记录</text>
     <text class="ec">在设置里添加一项课外活动之后，就可以记下每次练习。</text>
     <view class="ea">
@@ -60,7 +62,7 @@
           <text class="lbl">时长</text>
           <text class="dur-val tnum">{{durationText}}</text>
         </view>
-        <slider min="{{durationMin}}" max="{{durationMax}}" step="5" value="{{duration}}" data-field="duration" bindchange="setField" activeColor="#1F5B45" backgroundColor="#EBE5D7" block-size="24" />
+        <slider min="{{durationMin}}" max="{{durationMax}}" step="5" value="{{duration}}" data-field="duration" bindchange="setField" activeColor="{{theme.colors.primary}}" backgroundColor="{{theme.colors.line}}" block-size="24" />
         <view class="dur-scale">
           <text class="tnum">{{durationMin}}</text>
           <text class="tnum">{{durationMax}}</text>
@@ -75,7 +77,7 @@
     </view>
 
     <view class="pk-notice quiet mt3">
-      <view class="ico ico-info-mute sm"></view>
+      <theme-icon class="ico  sm" name="info" tone="muted" size="sm"></theme-icon>
       <text class="n-txt">课外活动只做记录，不进入复习曲线，也不会产生复习任务。</text>
     </view>
   </block>
@@ -84,4 +86,6 @@
     <text class="err-text cta-err" wx:if="{{saveError}}">{{saveError}}</text>
     <button class="btn" loading="{{saving}}" disabled="{{saving || !canWrite}}" bindtap="save">{{saving ? '保存中…' : '保存练习记录'}}</button>
   </view>
+</view>
+
 </view>

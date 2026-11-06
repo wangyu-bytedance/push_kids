@@ -1,7 +1,8 @@
+const { withThemeComponent } = require("../../presentation/theme/adapters");
 const createController = require("./controller");
 const { data, ...methods } = createController();
 
-Component({
+Component(withThemeComponent({
   options: { addGlobalClass: true },
   properties: { initialChildId: { type: String, value: "" }, menuOpen: { type: Boolean, value: false } },
   observers: {
@@ -30,4 +31,4 @@ Component({
     show() { if (this.hidden) this.onShow(); },
     hide() { this.onHide(); }
   }
-});
+}));

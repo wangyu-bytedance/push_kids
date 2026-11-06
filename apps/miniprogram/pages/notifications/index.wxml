@@ -1,16 +1,18 @@
+<view class="{{theme.classes}} theme-page" style="{{theme.style}}">
 <view class="page notifications-page">
   <view class="pk-notice err" wx:if="{{error}}">
-    <view class="ico ico-cloud-off-dan sm"></view>
+    <theme-icon class="ico  sm" name="cloud-off" tone="danger" size="sm"></theme-icon>
     <text class="n-txt">{{error}}。已经读到的设置还能继续看。</text>
-    <view class="icon-btn" aria-role="button" aria-label="重新加载" bindtap="load"><view class="ico ico-refresh-dan sm"></view></view>
+    <view class="icon-btn" aria-role="button" aria-label="重新加载" bindtap="load"><theme-icon class="ico  sm" name="refresh" tone="danger" size="sm"></theme-icon></view>
   </view>
 
-  <view class="pg-head">
+  <view class="pg-head theme-header">
+    <image wx:if="{{theme.assets.hero && !themeArtFailed}}" class="theme-hero-art" src="{{theme.assets.hero}}" mode="aspectFill" binderror="onThemeIllustrationError" aria-hidden="{{true}}" />
     <view class="grow">
       <text class="pg-kicker">该记得的事，不用你记</text>
       <text class="pg-title">提醒设置</text>
     </view>
-    <view class="icon-btn" aria-role="button" aria-label="关于提醒" bindtap="explain"><view class="ico ico-info sm"></view></view>
+    <view class="icon-btn" aria-role="button" aria-label="关于提醒" bindtap="explain"><theme-icon class="ico  sm" name="info" tone="ink" size="sm"></theme-icon></view>
   </view>
 
   <block wx:if="{{loading && !items.length}}">
@@ -29,14 +31,14 @@
         <text>{{granting ? '正在等微信确认…' : '手动补充次数'}}</text>
       </button>
       <view class="hero-ok">
-        <view class="ico ico-info-pri sm"></view>
+        <theme-icon class="ico  sm" name="info" tone="primary" size="sm"></theme-icon>
         <text class="ok-txt">每次同意只增加一次发送额度，不是永久订阅。</text>
       </view>
     </view>
 
     <view class="pk-card off-hero" wx:else>
       <view class="flex top">
-        <view class="off-mark"><view class="ico ico-cloud-off-mute sm"></view></view>
+        <view class="off-mark"><theme-icon class="ico  sm" name="cloud-off" tone="muted" size="sm"></theme-icon></view>
         <view class="grow">
           <text class="off-title">提醒服务暂不可用</text>
           <text class="off-sub">{{channelReason || '当前版本还没有接通微信服务通知'}}</text>
@@ -46,14 +48,14 @@
     </view>
 
     <view class="pk-notice quiet mt3" wx:if="{{!supported}}">
-      <view class="ico ico-warn-mute sm"></view>
+      <theme-icon class="ico  sm" name="warn" tone="muted" size="sm"></theme-icon>
       <text class="n-txt">当前微信版本不支持订阅消息，更新微信后就能开启提醒。</text>
     </view>
 
     <view class="pk-card auto-card">
       <view class="flex top">
         <view class="grow"><text class="auto-title">完成复习时自动补充</text><text class="auto-copy">仅补充你的提醒；可随时关闭。</text></view>
-        <switch class="auto-switch" checked="{{autoEnabled}}" disabled="{{loading || autoSaving || error || !channelAvailable || !supported}}" color="#1F5B45" aria-label="完成复习时自动补充" bindchange="toggleAuto" />
+        <switch class="auto-switch" checked="{{autoEnabled}}" disabled="{{loading || autoSaving || error || !channelAvailable || !supported}}" color="{{theme.colors.primary}}" aria-label="完成复习时自动补充" bindchange="toggleAuto" />
       </view>
       <text class="auto-copy">微信记住允许后可以减少询问。普通拒绝或取消后，完成 10 条复习再询问；明确关闭后不再自动申请。</text>
       <text class="auto-copy" wx:if="{{autoSaving}}">正在保存…</text>
@@ -78,7 +80,7 @@
             <button class="grant-link" wx:if="{{item.needsWxSettings}}" bindtap="openWxSettings">去微信调整</button>
             <button class="grant-link" wx:elif="{{item.needsGrant && supported && channelAvailable}}" disabled="{{granting || error}}" aria-label="为{{item.label}}补充次数" data-type="{{item.type}}" bindtap="requestGrant">手动补充次数</button>
           </view>
-          <switch class="noti-switch" checked="{{item.enabled}}" aria-label="{{item.label}}" color="#1F5B45" disabled="{{!!togglingType || loading || error}}" data-type="{{item.type}}" bindchange="toggle" />
+          <switch class="noti-switch" checked="{{item.enabled}}" aria-label="{{item.label}}" color="{{theme.colors.primary}}" disabled="{{!!togglingType || loading || error}}" data-type="{{item.type}}" bindchange="toggle" />
         </view>
       </view>
       <view class="help">开关记录的是「你想不想收」；能不能发到微信，取决于上面的授权状态。</view>
@@ -90,7 +92,7 @@
       <view class="sec-rule"></view>
 
       <view class="pk-notice quiet" wx:if="{{deliveriesError}}">
-        <view class="ico ico-cloud-off-mute sm"></view>
+        <theme-icon class="ico  sm" name="cloud-off" tone="muted" size="sm"></theme-icon>
         <text class="n-txt">{{deliveriesError}}。这只影响记录展示，提醒本身照常。</text>
       </view>
 
@@ -117,4 +119,6 @@
   </block>
 
   <view class="safe-tail"></view>
+</view>
+
 </view>

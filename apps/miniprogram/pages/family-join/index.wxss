@@ -15,13 +15,13 @@
 .applied-empty { padding: 64rpx 48rpx 32rpx; }
 .pk-empty .em.att { background: var(--pk-attention-bg); }
 .code-card { text-align: center; }
-.code-card .code-cap { display: block; font-size: 13px; line-height: 1.45; color: var(--pk-ink-3); }
+.code-card .code-cap { display: block; font-size: 13px; line-height: 1.45; color: var(--pk-text-muted); }
 .code-card .code-val { display: block; margin-top: 12rpx; font-size: 28px; line-height: 1.15; font-weight: 700; letter-spacing: 8rpx; color: var(--pk-primary-strong); }
-.code-card .code-help { display: block; margin-top: 12rpx; font-size: 13px; line-height: 1.5; color: var(--pk-ink-3); }
+.code-card .code-help { display: block; margin-top: 12rpx; font-size: 13px; line-height: 1.5; color: var(--pk-text-muted); }
 .code-card .code-copy { display: flex; justify-content: center; margin-top: 24rpx; }
 
 .pk-cta-bar .cta-err { display: block; margin: 0 0 16rpx; text-align: center; }
-.pk-cta-bar .cta-hint { display: block; margin-top: 12rpx; text-align: center; font-size: 13px; line-height: 1.45; color: var(--pk-ink-3); }
+.pk-cta-bar .cta-hint { display: block; margin-top: 12rpx; text-align: center; font-size: 13px; line-height: 1.45; color: var(--pk-text-muted); }
 .center-row { display: flex; align-items: center; justify-content: center; }
 
 .sk.card-sk { height: 232rpx; }

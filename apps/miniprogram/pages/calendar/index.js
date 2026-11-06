@@ -1,3 +1,5 @@
+const { themeState } = require("../../presentation/theme/state");
+const { withThemePage } = require("../../presentation/theme/adapters");
 const api = require("../../utils/api");
 const ui = require("../../utils/ui");
 const childContext = require("../../utils/child-context");
@@ -52,7 +54,7 @@ function decorateItem(item) {
   };
 }
 
-Page({
+Page(withThemePage({
   onGradeConfirmation(event) {
     const flow = getApp().gradeConfirmation;
     if (flow) return flow.handle(this, event.detail);
@@ -273,7 +275,7 @@ Page({
       title: "删除这条日程？",
       content: "删除后它不会再出现在日程和今日；重复安排会删除整个系列，已经记录的练习不受影响。",
       confirmText: "删除",
-      confirmColor: "#A85742",
+      confirmColor: themeState.current().tokens["pk-native-danger"],
       success: (result) => resolve(result.confirm)
     }));
     if (!confirmed) return;
@@ -285,4 +287,4 @@ Page({
       await this.load();
     } catch (error) { wx.showToast({ title: error.message, icon: "none" }); }
   }
-});
+}));

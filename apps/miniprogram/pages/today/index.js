@@ -1,3 +1,4 @@
+const { withThemePage } = require("../../presentation/theme/adapters");
 const api = require("../../utils/api");
 const ui = require("../../utils/ui");
 const childContext = require("../../utils/child-context");
@@ -112,7 +113,7 @@ function stableReviewPlan(dashboard) {
   };
 }
 
-Page({
+Page(withThemePage({
   onGradeConfirmation(event) {
     const flow = getApp().gradeConfirmation;
     if (flow) return flow.handle(this, event.detail);
@@ -527,4 +528,4 @@ Page({
       // 未确认服务端选择不伪造成功；说明保留，允许再次操作。
     } finally { this.setData({ renewalGuideSaving: false }); }
   }
-});
+}));

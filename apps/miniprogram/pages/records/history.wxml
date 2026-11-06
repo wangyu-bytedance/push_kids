@@ -10,13 +10,13 @@
 
   <view class="h-search mt3">
     <view class="s-box">
-      <view class="ico ico-search-mute sm"></view>
+      <theme-icon class="ico  sm" name="search" tone="muted" size="sm"></theme-icon>
       <input class="s-input" value="{{searchText}}" bindinput="setHistorySearch" bindconfirm="searchHistory"
         confirm-type="search" maxlength="100" placeholder="搜索学习内容或上传文字" placeholder-class="pk-ph"
         aria-label="搜索学习内容或上传文字" />
     </view>
     <view class="btn sm neutral s-filter" aria-role="button" aria-label="筛选记录" bindtap="openHistoryFilters">
-      <view class="ico ico-filter xs"></view><text>筛选</text>
+      <theme-icon class="ico  xs" name="filter" tone="ink" size="xs"></theme-icon><text>筛选</text>
       <view class="dot" wx:if="{{hasFilters}}"></view>
     </view>
   </view>
@@ -24,23 +24,23 @@
   <view class="flex between h-cap">
     <text class="t-cap c-ink-3 tnum">按{{historyView === 'confirmed' ? '学习' : '提交'}}时间 · 第 {{historyPage}} 页{{pendingProcessing ? ' · 正在自动刷新' : ''}}</text>
     <view class="link-btn" aria-role="button" aria-label="刷新列表" bindtap="reloadHistory">
-      <view class="ico ico-refresh-pri xs"></view><text>刷新</text>
+      <theme-icon class="ico  xs" name="refresh" tone="primary" size="xs"></theme-icon><text>刷新</text>
     </view>
   </view>
 
   <view class="pk-notice quiet" wx:if="{{hasFilters}}">
-    <view class="ico ico-filter sm"></view>
+    <theme-icon class="ico  sm" name="filter" tone="ink" size="sm"></theme-icon>
     <text class="n-txt">已筛选{{historyFilters.q ? ' · ' + historyFilters.q : ''}}{{historyFilters.from ? ' · ' + historyFilters.from : ''}}{{historyFilters.to ? ' 至 ' + historyFilters.to : ''}}{{historyFilters.cancelled ? ' · 只看已取消' : ''}}</text>
     <view class="link-btn" aria-role="button" aria-label="清除筛选" bindtap="clearHistoryFilters">清除</view>
   </view>
 
   <view class="pk-notice err mt2" wx:if="{{historyError}}">
-    <view class="ico ico-cloud-off-dan sm"></view>
+    <theme-icon class="ico  sm" name="cloud-off" tone="danger" size="sm"></theme-icon>
     <view class="n-txt">
       <text class="n-t">{{historyError}}</text>
       <text class="n-c">下面还是刚才读到的内容，可以重试。</text>
     </view>
-    <view class="ico ico-refresh-dan sm" aria-role="button" aria-label="重试读取记录" bindtap="reloadHistory"></view>
+    <view class="theme-icon-action" aria-role="button" aria-label="重试读取记录" bindtap="reloadHistory"><theme-icon name="refresh" tone="danger" size="sm"></theme-icon></view>
   </view>
 
   <block wx:if="{{historyLoading && !historyItems.length}}">
@@ -57,9 +57,9 @@
       <block wx:if="{{item.isPending}}">
         <view class="flex between">
           <view class="pill {{item.stateTone}}">
-            <view class="ico ico-sparkle-att xs" wx:if="{{item.state === 'pending_confirmation'}}"></view>
-            <view class="ico ico-refresh xs" wx:elif="{{item.working}}"></view>
-            <view class="ico ico-warn-dan xs" wx:else></view>
+            <theme-icon class="ico  xs" wx:if="{{item.state === 'pending_confirmation'}}" name="sparkle" tone="attention" size="xs"></theme-icon>
+            <theme-icon class="ico  xs" wx:elif="{{item.working}}" name="refresh" tone="ink" size="xs"></theme-icon>
+            <theme-icon class="ico  xs" wx:else name="warn" tone="danger" size="xs"></theme-icon>
             <text>{{item.stateLabel}}</text>
           </view>
           <view class="chev right"></view>
@@ -86,8 +86,8 @@
         </view>
         <view class="flex wrap h-pills {{embedded ? 'h-record-meta' : ''}}">
           <view class="{{embedded ? 'h-meta-chip' : 'pill neutral'}}">
-            <view class="ico ico-image xs" wx:if="{{item.source === 'photo'}}"></view>
-            <view class="ico ico-note xs" wx:else></view>
+            <theme-icon class="ico  xs" wx:if="{{item.source === 'photo'}}" name="image" tone="ink" size="xs"></theme-icon>
+            <theme-icon class="ico  xs" wx:else name="note" tone="ink" size="xs"></theme-icon>
             <text>{{item.sourceLabel}}</text>
           </view>
           <view class="{{embedded ? 'h-meta-chip' : 'pill neutral'}} tnum" wx:if="{{item.knowledgeLabel}}">{{item.knowledgeLabel}}</view>
@@ -98,7 +98,7 @@
   </block>
 
   <view class="pk-empty" wx:if="{{!historyLoading && !historyItems.length}}">
-    <view class="em"><view class="ico ico-list-pri lg"></view></view>
+    <view class="em"><theme-icon class="ico  lg" name="list" tone="primary" size="lg"></theme-icon></view>
     <text class="et">{{hasFilters ? '没有符合筛选条件的记录' : (historyView === 'pending' ? '现在没有待处理的记录' : '这里还没有学习记录')}}</text>
     <text class="ec">{{hasFilters ? '换个时间范围或科目再看看。' : '拍一张作业照片，或直接写几句，就能开始记录。'}}</text>
     <view class="ea" wx:if="{{hasFilters}}">
@@ -123,7 +123,7 @@
           <text class="sheet-sub">筛选条件只留在这台手机上，不会写入分享链接</text>
         </view>
         <view class="icon-btn" aria-role="button" aria-label="关闭筛选" bindtap="closeHistoryFilters">
-          <view class="ico ico-close sm"></view>
+          <theme-icon class="ico  sm" name="close" tone="ink" size="sm"></theme-icon>
         </view>
       </view>
 
@@ -165,12 +165,12 @@
               <text class="t-body-m">只看已取消</text>
               <text class="t-cap c-ink-3">仅在「全部」视图下可用</text>
             </view>
-            <switch checked="{{filterDraft.cancelled}}" data-field="cancelled" bindchange="setHistoryFilter" color="#1F5B45" aria-label="只看已取消" />
+            <switch checked="{{filterDraft.cancelled}}" data-field="cancelled" bindchange="setHistoryFilter" color="{{theme.colors.primary}}" aria-label="只看已取消" />
           </view>
         </view>
 
         <view class="pk-notice err mt3" wx:if="{{filterError}}">
-          <view class="ico ico-warn-dan sm"></view>
+          <theme-icon class="ico  sm" name="warn" tone="danger" size="sm"></theme-icon>
           <text class="n-txt">{{filterError}}</text>
         </view>
       </view>

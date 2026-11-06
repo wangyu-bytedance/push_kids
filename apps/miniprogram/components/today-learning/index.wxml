@@ -1,3 +1,4 @@
+<view class="{{theme.classes}}" style="{{theme.style}}">
 <view class="sec study-region" wx:if="{{card}}" aria-hidden="{{!!sheet}}">
   <view class="sec-bar"><text class="s-t">今日学习</text></view>
   <view class="sec-rule"></view>
@@ -36,7 +37,7 @@
         <scroll-view class="study-title-scroll" wx:if="{{current.proposal.title.length > 60}}" scroll-y enhanced show-scrollbar="{{true}}"><text class="study-title study-proposal-title">{{current.proposal.title}}</text><view class="study-proposal-meta"><text class="study-meta">{{current.proposal.subject_name}}{{current.proposal.estimated_minutes ? ' · 预计 ' + current.proposal.estimated_minutes + ' 分钟' : ''}}</text><text class="study-meta">AI 建议</text></view></scroll-view>
         <block wx:else><text class="study-title study-proposal-title">{{current.proposal.title}}</text><view class="study-proposal-meta"><text class="study-meta">{{current.proposal.subject_name}}{{current.proposal.estimated_minutes ? ' · 预计 ' + current.proposal.estimated_minutes + ' 分钟' : ''}}</text><text class="study-meta">AI 建议</text></view></block>
       </view>
-      <button class="study-close" disabled="{{busy}}" hover-class="study-control-pressed" bindtap="close" aria-label="关闭学习建议"><view class="ico ico-close" aria-hidden="true"></view></button>
+      <button class="study-close" disabled="{{busy}}" hover-class="study-control-pressed" bindtap="close" aria-label="关闭学习建议"><theme-icon class="ico" aria-hidden="true" name="close" tone="ink" size=""></theme-icon></button>
     </view>
     <view class="study-top" wx:else><text class="study-label">{{sheet === 'record' ? '记录实际学习' : sheet === 'remove' ? '删除这项待学' : sheet === 'edit' ? '编辑学习建议' : '学习建议'}}</text><button class="study-close" disabled="{{busy}}" bindtap="close" aria-label="关闭">关闭</button></view>
     <scroll-view class="study-body" scroll-y enhanced show-scrollbar="{{true}}" enable-flex="{{true}}">
@@ -86,4 +87,6 @@
       <button wx:else class="study-secondary" bindtap="close">知道了</button>
     </view>
   </view>
+</view>
+
 </view>

@@ -1,0 +1,19 @@
+/* Page and component roots receive the same semantic roles, without business forks. */
+.pk-theme { color: var(--pk-ink); font-family: var(--pk-sans); }
+.theme-page { min-height: 100vh; background: var(--pk-page-background); }
+.theme-illustrated .theme-header { position: relative; isolation: isolate; min-height: 260rpx; box-sizing: border-box; padding: 40rpx 28rpx 30rpx; margin: 0 -28rpx 28rpx; overflow: hidden; background: var(--pk-nav-bg); display: block; }
+.theme-illustrated .theme-header > view, .theme-illustrated .theme-header > text, .theme-illustrated .theme-header > button { position: relative; z-index: 1; }
+.theme-hero-art { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; }
+.theme-illustrated .theme-header .pg-title, .theme-illustrated .theme-header .screen-heading, .theme-illustrated .theme-header .title { color: var(--pk-header-ink); max-width: 66%; }
+.theme-illustrated .theme-header .pg-sub, .theme-illustrated .theme-header .screen-kicker, .theme-illustrated .theme-header .eyebrow, .theme-illustrated .theme-header .pg-context, .theme-illustrated .theme-header .pg-kicker, .theme-illustrated .theme-header .rec-meta { color: var(--pk-header-muted); }
+.theme-illustrated .theme-header .rec-title, .theme-illustrated .theme-header .record-type-title { color: var(--pk-header-ink); }
+.theme-illustrated .theme-header .child-chip { margin-top: 20rpx; width: fit-content; }
+.theme-illustrated .theme-header .head-intro { width: 100%; }
+.theme-illustrated .settings-card-art, .theme-illustrated .calendar-intro-art, .theme-illustrated .report-intro-art { display: none; }
+.theme-illustrated .add-entry { background: var(--pk-primary); color: var(--pk-on-primary); border-color: var(--pk-primary); }
+.theme-garden .pk-card { border-bottom-left-radius: 12rpx; }
+.theme-tech .pk-card { border-top-left-radius: 8rpx; border-bottom-right-radius: 8rpx; }
+.theme-tech .card-head { border-left: 4rpx solid var(--pk-primary); padding-left: 18rpx; }
+.theme-ocean .pk-card { border-radius: var(--pk-r-2xl); }
+.theme-preference-notice { display: block; color: var(--pk-danger-ink); font-size: 14px; padding: 12rpx 28rpx; }
+.theme-icon-action { display: flex; flex: none; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; }

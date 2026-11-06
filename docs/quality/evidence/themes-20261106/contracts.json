@@ -1,0 +1,250 @@
+{
+  "registry": "apps/miniprogram/presentation/theme/registry.js",
+  "themes": [
+    {
+      "id": "original",
+      "theme_setData_bytes": 4420,
+      "contrast": [
+        {
+          "role": "body",
+          "ratio": 15.13
+        },
+        {
+          "role": "secondary",
+          "ratio": 8.5
+        },
+        {
+          "role": "muted text",
+          "ratio": 5.35
+        },
+        {
+          "role": "primary button",
+          "ratio": 7.82
+        },
+        {
+          "role": "danger",
+          "ratio": 6.12
+        },
+        {
+          "role": "attention",
+          "ratio": 5.68
+        },
+        {
+          "role": "success",
+          "ratio": 5.94
+        }
+      ]
+    },
+    {
+      "id": "garden",
+      "theme_setData_bytes": 3857,
+      "contrast": [
+        {
+          "role": "body",
+          "ratio": 11.04
+        },
+        {
+          "role": "secondary",
+          "ratio": 5.46
+        },
+        {
+          "role": "muted text",
+          "ratio": 5.46
+        },
+        {
+          "role": "primary button",
+          "ratio": 5.04
+        },
+        {
+          "role": "danger",
+          "ratio": 6.12
+        },
+        {
+          "role": "attention",
+          "ratio": 5.68
+        },
+        {
+          "role": "success",
+          "ratio": 5.94
+        }
+      ]
+    },
+    {
+      "id": "space",
+      "theme_setData_bytes": 3846,
+      "contrast": [
+        {
+          "role": "body",
+          "ratio": 11.61
+        },
+        {
+          "role": "secondary",
+          "ratio": 5.58
+        },
+        {
+          "role": "muted text",
+          "ratio": 5.58
+        },
+        {
+          "role": "primary button",
+          "ratio": 5.68
+        },
+        {
+          "role": "danger",
+          "ratio": 6.12
+        },
+        {
+          "role": "attention",
+          "ratio": 5.68
+        },
+        {
+          "role": "success",
+          "ratio": 5.94
+        }
+      ]
+    },
+    {
+      "id": "midnight",
+      "theme_setData_bytes": 3878,
+      "contrast": [
+        {
+          "role": "body",
+          "ratio": 11.76
+        },
+        {
+          "role": "secondary",
+          "ratio": 7.39
+        },
+        {
+          "role": "muted text",
+          "ratio": 7.39
+        },
+        {
+          "role": "primary button",
+          "ratio": 7.94
+        },
+        {
+          "role": "danger",
+          "ratio": 6.56
+        },
+        {
+          "role": "attention",
+          "ratio": 6.48
+        },
+        {
+          "role": "success",
+          "ratio": 6.64
+        }
+      ]
+    },
+    {
+      "id": "ocean",
+      "theme_setData_bytes": 3845,
+      "contrast": [
+        {
+          "role": "body",
+          "ratio": 10.2
+        },
+        {
+          "role": "secondary",
+          "ratio": 5.31
+        },
+        {
+          "role": "muted text",
+          "ratio": 5.31
+        },
+        {
+          "role": "primary button",
+          "ratio": 4.69
+        },
+        {
+          "role": "danger",
+          "ratio": 6.12
+        },
+        {
+          "role": "attention",
+          "ratio": 5.68
+        },
+        {
+          "role": "success",
+          "ratio": 5.94
+        }
+      ]
+    },
+    {
+      "id": "tech",
+      "theme_setData_bytes": 3833,
+      "contrast": [
+        {
+          "role": "body",
+          "ratio": 11.91
+        },
+        {
+          "role": "secondary",
+          "ratio": 5.52
+        },
+        {
+          "role": "muted text",
+          "ratio": 5.52
+        },
+        {
+          "role": "primary button",
+          "ratio": 4.92
+        },
+        {
+          "role": "danger",
+          "ratio": 6.12
+        },
+        {
+          "role": "attention",
+          "ratio": 5.68
+        },
+        {
+          "role": "success",
+          "ratio": 5.94
+        }
+      ]
+    }
+  ],
+  "assets": [
+    {
+      "path": "assets/themes/garden.jpg",
+      "bytes": 33619,
+      "sha256": "c4ce04b5ad0b613fe41345d435be5ff75ce9467170013592c31402943d3f8971"
+    },
+    {
+      "path": "assets/themes/midnight.jpg",
+      "bytes": 16501,
+      "sha256": "17875150e9ac505173b21028669924b84ba303304e97c58c7574b68e92ac6036"
+    },
+    {
+      "path": "assets/themes/ocean.jpg",
+      "bytes": 33004,
+      "sha256": "bc519b41721a58808752952c94e56f20043dd45602f7b323458cfbe98b9f7556"
+    },
+    {
+      "path": "assets/themes/space.jpg",
+      "bytes": 33870,
+      "sha256": "e75abec6393ad37bad3d3828263f1a3d09b68947f02975816bba0263f2783e2b"
+    },
+    {
+      "path": "assets/themes/tech.jpg",
+      "bytes": 24505,
+      "sha256": "70336feb5273c34aaa7919e5fadad27115978da5b22e4bfb088f6314d7825106"
+    }
+  ],
+  "asset_bytes": 141499,
+  "source_bytes": 1320284,
+  "baseline_bytes": 1244228,
+  "net_growth_bytes": 76056,
+  "non_asset_net_growth_bytes": -65443,
+  "matrix": {
+    "routes": 306,
+    "shared_states": 144
+  },
+  "native_color_exceptions": [
+    "pk-native-danger: platform modal palette",
+    "pk-map-route: platform basemap overlay",
+    "activity color: stable persisted domain metadata"
+  ]
+}

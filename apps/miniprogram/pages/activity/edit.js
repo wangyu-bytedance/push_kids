@@ -1,3 +1,4 @@
+const { withThemePage } = require("../../presentation/theme/adapters");
 const api = require("../../utils/api");
 const ui = require("../../utils/ui");
 const { localParts, toIso } = require("../../utils/date");
@@ -6,7 +7,7 @@ const childContext = require("../../utils/child-context");
 const DURATION_MIN = 5;
 const DURATION_MAX = 180;
 
-Page({
+Page(withThemePage({
   data: {
     loading: true, error: "", saveError: "", canWrite: true,
     childId: "", childName: "", kicker: "课外活动",
@@ -83,4 +84,4 @@ Page({
       this.setData({ saving: false, saveError: `${error.message}，这次练习还没保存，可以再试一次。` });
     }
   }
-});
+}));

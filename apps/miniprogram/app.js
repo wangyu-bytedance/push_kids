@@ -1,4 +1,5 @@
 const config = require("./config");
+const { themeState } = require("./presentation/theme/state");
 
 App({
   globalData: {
@@ -16,6 +17,8 @@ App({
     apiBaseUrl: config.localApiBaseUrl
   },
   onLaunch(options = {}) {
+    this.theme = themeState;
+    themeState.initialize();
     this.gradeConfirmation = require("./utils/grade-confirmation").createController(
       this, require("./utils/api"), () => getCurrentPages().slice(-1)[0]
     );

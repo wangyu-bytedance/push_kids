@@ -1,5 +1,7 @@
 # UI-015 — 学习档案管理与切换入口
 
+当前本地呈现revision `UI-STATE-20261106-THEMES-01`：[DESIGN-002 Spec08 / Architecture01](../../../../specs/active/DESIGN-002-GLOBAL-UI-CONSISTENCY.md)与DREV08已获用户“好的 按照以上方案落地”批准并实施，DREV06视觉方向保持。档案字段、复习预算、归档/恢复和年级确认保留；child-edit及隔离grade-confirmation组件显式接入六主题，年级建议/共享确认合同不变。 本增量尚未上传；原生合成呈现、共享业务回归及真机/独立评审缺项见[当前证据](../../../quality/evidence/themes-20261106/README.md)。下方原特性发布与验收记录保持其版本范围，不能代验六主题。
+
 2026-11-06归档UI交付revision `UI-RELEASE-20261106-ARCHIVE-07`：[当前交付](../../../deploy/releases/20261106-fullstack-040-client-0.1.18.md)绑定相同child-edit源，三视口21组节点/PNG及320/390/430确认框视觉/取消已完成。DREV01及生命周期不变，0.1.18已上传，BUG033 DONE/completed；设备/可访问性及真实业务待验。
 
 2026-10-26开发归档：已交付037后端/0.1.16客户端所覆盖的需求按用户批准规则标记开发DONE，验收缺项独立保留；后续BUG-035和旅行导入精简尚未交付，继续active。当前归档和待验入口见[Spec状态清单](../../../../specs/STATUS.md)，依据为[治理Spec](../../../../specs/completed/GOV-002-CLOUD-DELIVERY-DEVELOPMENT-COMPLETION.md)。本轮不改产品合同、测试结论、设计或发布阶段。

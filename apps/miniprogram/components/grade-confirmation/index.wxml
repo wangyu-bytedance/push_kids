@@ -1,3 +1,4 @@
+<view class="{{theme.classes}}" style="{{theme.style}}">
 <view class="grade-overlay" wx:if="{{view}}" catchtouchmove="contain">
   <view class="grade-mask" bindtap="later" aria-hidden="{{true}}"></view>
   <view class="grade-sheet" aria-role="dialog" aria-label="{{view.name}}的年级" aria-modal="{{true}}">
@@ -16,8 +17,10 @@
       <text class="grade-error {{view.status === 'conflict' ? 'grade-info' : ''}}" wx:if="{{view.error}}" aria-role="alert">{{view.error}}</text>
     </scroll-view>
     <view class="grade-actions">
-      <button class="grade-secondary" wx:if="{{view.status !== 'latest'}}" disabled="{{view.status === 'saving'}}" bindtap="later">稍后</button>
-      <button class="grade-primary" disabled="{{view.status === 'saving'}}" bindtap="confirm">{{view.status === 'saving' ? '保存中…' : view.status === 'latest' ? '继续' : view.status === 'conflict' ? '查看最新' : '确认'}}</button>
+      <button class="grade-secondary {{view.status === 'saving' ? 'grade-disabled' : ''}}" wx:if="{{view.status !== 'latest'}}" disabled="{{view.status === 'saving'}}" bindtap="later">稍后</button>
+      <button class="grade-primary {{view.status === 'saving' ? 'grade-disabled' : ''}}" disabled="{{view.status === 'saving'}}" bindtap="confirm">{{view.status === 'saving' ? '保存中…' : view.status === 'latest' ? '继续' : view.status === 'conflict' ? '查看最新' : '确认'}}</button>
     </view>
   </view>
+</view>
+
 </view>

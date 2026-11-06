@@ -1,0 +1,77 @@
+{
+  "route": "pages/calendar/index",
+  "theme": "tech",
+  "viewport": {
+    "width": 390,
+    "height": 844,
+    "screenWidth": 390,
+    "screenHeight": 844
+  },
+  "base_library": "3.17.4",
+  "nodes": [
+    {
+      "host": "page",
+      "selector": ".theme-page",
+      "left": 0,
+      "right": 390,
+      "top": 0,
+      "bottom": 931,
+      "width": 390,
+      "height": 931,
+      "backgroundColor": "rgb(234, 242, 246)",
+      "color": "rgb(25, 59, 73)",
+      "fontSize": "16px",
+      "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif"
+    },
+    {
+      "host": "page",
+      "selector": ".page",
+      "left": 0,
+      "right": 390,
+      "top": 87,
+      "bottom": 931,
+      "width": 390,
+      "height": 844,
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "color": "rgb(25, 59, 73)",
+      "fontSize": "16px",
+      "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif"
+    },
+    {
+      "host": "page",
+      "selector": ".theme-header",
+      "left": 4,
+      "right": 386,
+      "top": 87,
+      "bottom": 236,
+      "width": 382,
+      "height": 149,
+      "backgroundColor": "rgb(245, 250, 252)",
+      "color": "rgb(25, 59, 73)",
+      "fontSize": "16px",
+      "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif"
+    },
+    {
+      "host": "page",
+      "selector": ".pk-card",
+      "left": 18,
+      "right": 372,
+      "top": 250,
+      "bottom": 333,
+      "width": 354,
+      "height": 83,
+      "backgroundColor": "rgb(255, 255, 255)",
+      "color": "rgb(25, 59, 73)",
+      "fontSize": "16px",
+      "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif"
+    }
+  ],
+  "source": "native wx.createSelectorQuery; synthetic fixtures; production WXML/WXSS exact; page loading lifecycles suppressed",
+  "screenshot": "tech--calendar-index.png",
+  "screenshot_sha256": "44a49fb7705b8f53aa292e29760f5bb968329674c0c769979487ee0cfccf2b57",
+  "fixture": "calendar-index",
+  "category": "route",
+  "screenshot_errors": [],
+  "validation_errors": [],
+  "horizontal_overflow": []
+}

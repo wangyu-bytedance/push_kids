@@ -1,0 +1,1050 @@
+{
+  "kind": "implementer_scope_audit_not_independent_review",
+  "base": "e221d8d61bc164dc27b2309e62f04d3bcf4360ba",
+  "files": [
+    {
+      "path": "AGENTS.md",
+      "change": "modify",
+      "sha256": "5c6ede76e435665c010b650ca9d14072c4ecbba5e321f26a3461ac45bdf95945",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "User-requested future six-theme UI adaptation rule; runtime status remains separately documented."
+    },
+    {
+      "path": "apps/miniprogram/app.js",
+      "change": "modify",
+      "sha256": "1ba67b2a33d5a6821924afa4fbd19d479d4ea37db40b0fbfb18e23c7b578d60f",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/app.json",
+      "change": "modify",
+      "sha256": "737aec675df2a7a444ea6d9c093e12f4725769302ea617dbd719f4ce6ce117fb",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/app.wxss",
+      "change": "modify",
+      "sha256": "23b12070e0cd9da76495ba164c76bc9ac4b42932ad08ab28a40f15a5f9e6aea6",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/assets/themes/garden.jpg",
+      "change": "add",
+      "sha256": "c4ce04b5ad0b613fe41345d435be5ff75ce9467170013592c31402943d3f8971",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Five compressed approved local theme scenes; total resource budget retained."
+    },
+    {
+      "path": "apps/miniprogram/assets/themes/midnight.jpg",
+      "change": "add",
+      "sha256": "17875150e9ac505173b21028669924b84ba303304e97c58c7574b68e92ac6036",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Five compressed approved local theme scenes; total resource budget retained."
+    },
+    {
+      "path": "apps/miniprogram/assets/themes/ocean.jpg",
+      "change": "add",
+      "sha256": "bc519b41721a58808752952c94e56f20043dd45602f7b323458cfbe98b9f7556",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Five compressed approved local theme scenes; total resource budget retained."
+    },
+    {
+      "path": "apps/miniprogram/assets/themes/space.jpg",
+      "change": "add",
+      "sha256": "e75abec6393ad37bad3d3828263f1a3d09b68947f02975816bba0263f2783e2b",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Five compressed approved local theme scenes; total resource budget retained."
+    },
+    {
+      "path": "apps/miniprogram/assets/themes/tech.jpg",
+      "change": "add",
+      "sha256": "70336feb5273c34aaa7919e5fadad27115978da5b22e4bfb088f6314d7825106",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Five compressed approved local theme scenes; total resource budget retained."
+    },
+    {
+      "path": "apps/miniprogram/components/grade-confirmation/index.js",
+      "change": "modify",
+      "sha256": "2837b5a237bb13562367bd17f35495bf56bbfeaa6dfe9dd860dbb45aa2d5c85f",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/components/grade-confirmation/index.wxml",
+      "change": "modify",
+      "sha256": "2d63f0909e6f097137710e437aeff84a3ef20b407cff17a7001087e0c33502a2",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/components/grade-confirmation/index.wxss",
+      "change": "modify",
+      "sha256": "ac700b348b20b2ac92edea1b20e3cd414ff1030b438dbfa1d112ed2665c37f63",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/components/notification-renewal-guide/index.js",
+      "change": "modify",
+      "sha256": "d1a892f3da0c165500d2be192cc3cc45277bc1f3837f95cebe3431d1a57d143f",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/components/notification-renewal-guide/index.wxml",
+      "change": "modify",
+      "sha256": "aa9e99e9ca0a6e5497931560825b035c22a2b24691b451871e2c31e9c3ea0c1f",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/components/notification-renewal-guide/index.wxss",
+      "change": "modify",
+      "sha256": "622caca348d47b6b5802b13966e98b8510b6669e1accd4038fab1c97be89249f",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/components/primary-nav/index.js",
+      "change": "modify",
+      "sha256": "b1c803273234db41d228aec9baa2ae59d80277626fffa1466a071eafa2fcc3d1",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/components/primary-nav/index.wxml",
+      "change": "modify",
+      "sha256": "ad98c6c3cb40c150f31833e3de8647b42982105c4f8bc241f9e0901799a26354",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/components/primary-nav/index.wxss",
+      "change": "modify",
+      "sha256": "17b1f9bfe2bd1e8b4c9ab35168067845eaf9d59615da6e21bed8aafc8e9d0d5e",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/components/review-inventory/index.js",
+      "change": "modify",
+      "sha256": "c48d018c2ee4231bc46164a1ce715d314160c561e3a1f98a8e3a164221ec8d04",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/components/review-inventory/index.wxml",
+      "change": "modify",
+      "sha256": "443cc58454044106172457725179d93d3509b3e048177d0ac2e0c6b0dc4acf00",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/components/submission-materials/index.js",
+      "change": "modify",
+      "sha256": "071d5f5919a825a22f6120457100b33fc8cf2dfe477c1d0763be04eb3ac57cc8",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/components/submission-materials/index.wxml",
+      "change": "modify",
+      "sha256": "d103ab2a123e25863ade93be98be06f589999f02523319f236bc2eb830cf1bca",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/components/submission-materials/index.wxss",
+      "change": "modify",
+      "sha256": "95d54f33b26299638db6c22e746546a56e8f5e31a96cba160b725bb40aacd761",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/components/theme-icon/index.js",
+      "change": "add",
+      "sha256": "a54e29b274a759943359608f79dfcdc7e0a6fd1000e5f98b06462cfc0c6ac90c",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Approved shared picker or semantic glyph renderer; keeps business pages single."
+    },
+    {
+      "path": "apps/miniprogram/components/theme-icon/index.json",
+      "change": "add",
+      "sha256": "e7b657f5a4b032a68e9e084639b3a5564ce552896d269c3f8c4463bf7a7fa3b5",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Approved shared picker or semantic glyph renderer; keeps business pages single."
+    },
+    {
+      "path": "apps/miniprogram/components/theme-icon/index.wxml",
+      "change": "add",
+      "sha256": "1d92fa8770c2a5d10624113a868a92362d4bdf91b57df9ec6c505abd370bbb1a",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Approved shared picker or semantic glyph renderer; keeps business pages single."
+    },
+    {
+      "path": "apps/miniprogram/components/theme-icon/index.wxss",
+      "change": "add",
+      "sha256": "abe6e3a441065f3417569ec1650c82bf9345d84a5c78c7bf08d901eb4b3b5c8c",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Approved shared picker or semantic glyph renderer; keeps business pages single."
+    },
+    {
+      "path": "apps/miniprogram/components/theme-picker/index.js",
+      "change": "add",
+      "sha256": "7286b1532cd22ee3fe4c6614e96184f8fadfe94a1c7aea0f874e4a0543cc97d7",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Approved shared picker or semantic glyph renderer; keeps business pages single."
+    },
+    {
+      "path": "apps/miniprogram/components/theme-picker/index.json",
+      "change": "add",
+      "sha256": "e7b657f5a4b032a68e9e084639b3a5564ce552896d269c3f8c4463bf7a7fa3b5",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Approved shared picker or semantic glyph renderer; keeps business pages single."
+    },
+    {
+      "path": "apps/miniprogram/components/theme-picker/index.wxml",
+      "change": "add",
+      "sha256": "e3c8f629ce3bc29b91ece533b67f2aa3f612fc2c02b4ac57afb8bcde01bcfc44",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Approved shared picker or semantic glyph renderer; keeps business pages single."
+    },
+    {
+      "path": "apps/miniprogram/components/theme-picker/index.wxss",
+      "change": "add",
+      "sha256": "dc3daf3c10d533a6f2e925ea8ea3eb795e4ad3943c2ce531f0a5a4c00025064f",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Approved shared picker or semantic glyph renderer; keeps business pages single."
+    },
+    {
+      "path": "apps/miniprogram/components/today-learning/index.js",
+      "change": "modify",
+      "sha256": "ae0fb3eaab1fccd558cef972d67123181b3adcf69564518f320a9d5fc464f30d",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/components/today-learning/index.wxml",
+      "change": "modify",
+      "sha256": "6a7768db7a142dabc11695549b5379039f87474142887c9d25a41645c6849896",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/components/today-learning/index.wxss",
+      "change": "modify",
+      "sha256": "ba4cdbe323abff47a762349a2204f5f9a44afab83f166a46438b557d79d2de68",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/components/todo-card/index.js",
+      "change": "modify",
+      "sha256": "025b44830963a9f51df858f35f1d49b94284fc67ee197c577892ede9f6befeda",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/components/todo-card/index.wxml",
+      "change": "modify",
+      "sha256": "c5eb82088e4d59da7d0b5ef08486db01685bb9083eaf6d9109c05e552ff3b238",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/components/todo-card/index.wxss",
+      "change": "modify",
+      "sha256": "da5b8bce2afe0d39e6b46f5e3c8036985c06c1160b6af436a827e9d7dc3ad64d",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/custom-tab-bar/index.js",
+      "change": "modify",
+      "sha256": "250634c0690081fd272ce588cb23cb529c0a47901784f2ce93d6c56b8d1f46f5",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/custom-tab-bar/index.wxml",
+      "change": "modify",
+      "sha256": "ed5cfc125e40fb5449c4e000522db687f9e35009da18e530b577985d1d90cfe5",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/custom-tab-bar/index.wxss",
+      "change": "modify",
+      "sha256": "ffb257b54b93c88f779c8efc5c78853e2a4bbd13e51cb5941b09fc1775245e44",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/pages/activity/edit.js",
+      "change": "modify",
+      "sha256": "6a65dbf80e298e845099af008ba82407b02e341daf861d4bc4a56f2ccdc301be",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/pages/activity/edit.wxml",
+      "change": "modify",
+      "sha256": "cbf6985ffcc65b1e26f01b5c6303a3b39fb8a4f88e81b69b7529a85c5d835d52",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/pages/calendar/index.js",
+      "change": "modify",
+      "sha256": "b82241127d3a565b92c989e6b957cc7e264756c910288866d76c4490e3ebfdac",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/pages/calendar/index.wxml",
+      "change": "modify",
+      "sha256": "43312c6ab05bcc7ebb9a4cb1442928e4360485c207af69eef230230d2f5aab01",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/pages/calendar/index.wxss",
+      "change": "modify",
+      "sha256": "f1a706a1efcbd2cc97feadd6683581745ff8abaab4e9d80d4bc364a320c65ba0",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/pages/child-edit/index.js",
+      "change": "modify",
+      "sha256": "10648ab813a45620f07ffcc8869797225f3cab661d809dbbf5a735fb05017acf",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/pages/child-edit/index.wxml",
+      "change": "modify",
+      "sha256": "b5e85038d981dcfea708f7d0886290b3a3938a5e361bdbc130818e926f7a429d",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/pages/child-edit/index.wxss",
+      "change": "modify",
+      "sha256": "59644f96bf64368aff21254fe017e01743e2e8afc4cd5f7a1f65f1ac13b85fc4",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/pages/delete-settings/index.js",
+      "change": "modify",
+      "sha256": "b27b7244156e68be16f4933d9528a8ac869e3ac9739b7392e326d2fb19b13c66",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/pages/delete-settings/index.wxml",
+      "change": "modify",
+      "sha256": "68b8ea8942e785d5008f25708df21a638103f2688c925880661472948888eb7b",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/pages/delete-settings/index.wxss",
+      "change": "modify",
+      "sha256": "6299e04ad5fb7d15e8e76fe4e19012dccc7ec3ae975422e54ce66a1d2ddc0393",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/pages/family-join/index.js",
+      "change": "modify",
+      "sha256": "234d7b5afa9980fe0435578b4b228f52151fff6d80d7b02d980e147762805c2f",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/pages/family-join/index.wxml",
+      "change": "modify",
+      "sha256": "c7f957e24ba6a681d78ba559b6cb28da5e393cb0385b710113dd13c335a8f3a3",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/pages/family-join/index.wxss",
+      "change": "modify",
+      "sha256": "55fc64560b884722b007bf9ed9e8550522e0bb9c538e826b505d7b18dcb146a8",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/pages/family-members/index.js",
+      "change": "modify",
+      "sha256": "8bf765b159424f9cc70b7e92817013aabf6b452053d0dcd100863be0e53f3c15",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/pages/family-members/index.wxml",
+      "change": "modify",
+      "sha256": "73cf3daf350cbe48b9f4e23df8a2f8138f796d3fd0995895c4968d5a0d231042",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/pages/family-members/index.wxss",
+      "change": "modify",
+      "sha256": "7d47f7f404e7c0d8fcfc200746d7ce7aaf3a712dffb5f16f9696f41df4733499",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/pages/family-onboarding/index.js",
+      "change": "modify",
+      "sha256": "5799903a2d564cf99bc062b8008657061629ae115fda542b4a6cc21be80d6d72",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/pages/family-onboarding/index.wxml",
+      "change": "modify",
+      "sha256": "315ffd14e057b4228e3dd0c604cf95ec76c272bd09eb1ef5d8024f6b3b2f61de",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/pages/family-onboarding/index.wxss",
+      "change": "modify",
+      "sha256": "31817fa31fdba831e73fa59e6b49dc2ce40a9a29cf4c0a96d2f1c886ad541c61",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/pages/family-requests/index.js",
+      "change": "modify",
+      "sha256": "9ab5b8ad7bb91c50d13da4d5f9ceb8434e2a02183b05bfd50c5fc7026c730552",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/pages/family-requests/index.wxml",
+      "change": "modify",
+      "sha256": "6f25bd370b2f2c3ad73b32dd853bda9344e971b554eb5deca07804fd25f46c62",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/pages/family-requests/index.wxss",
+      "change": "modify",
+      "sha256": "363b8d440bb312ba9a6454806b770d93deb78f058a1a3d7fe228b258097a3257",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/pages/footprints/embedded.js",
+      "change": "modify",
+      "sha256": "80ab684205deb88e15976bf47e46393d5834a43794715c17a6c0400399f9e357",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/pages/footprints/embedded.wxml",
+      "change": "modify",
+      "sha256": "671b973406a40a7f0b13ebef6fc67388497d7e865baabfbd24578bd1a9b3388b",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/pages/footprints/index.js",
+      "change": "modify",
+      "sha256": "79f13b27e033de4210f5e1bf759473843ff01eb4f3efc1d170a8348862eccae7",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/pages/footprints/index.wxml",
+      "change": "modify",
+      "sha256": "952dda327a41487432083d1a170d97734c96363bb98ed592da3330328233d29a",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/pages/footprints/index.wxss",
+      "change": "modify",
+      "sha256": "29ac48a16025a26c128b6845eb97cc7b4f337aba7bea1488804041834bb2d9a2",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/pages/footprints/maps.js",
+      "change": "modify",
+      "sha256": "750afef3d3b49c113d2baff6425769218e920fde87be5500382933b6c2e7bcff",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/pages/notifications/index.js",
+      "change": "modify",
+      "sha256": "6d8dba86c1f08a3d723fed0fbbd4a992398d1e4bdc84b83a000c6cc81bb9bcca",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/pages/notifications/index.wxml",
+      "change": "modify",
+      "sha256": "4e53cd477e915bec81ec526a0c25e9ad9e69105f7898218c55f5952a9821f7cb",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/pages/notifications/index.wxss",
+      "change": "modify",
+      "sha256": "e94b0621ac9c9668b793429b10748d38d142bc1d8638275f7f82a9d7cda0bfbd",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/pages/record-detail/index.js",
+      "change": "modify",
+      "sha256": "b8f90b52fb70924bf2a5091af5344db3035731bc8364c589096370f4221d2e66",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/pages/record-detail/index.wxml",
+      "change": "modify",
+      "sha256": "1cf6a45a473eff9a5696e0fab7a3bdc20d517dc24dff3eb8f0d902d77af2b9a7",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/pages/records/history.wxml",
+      "change": "modify",
+      "sha256": "748e98dc369f3f96c2fa0ff93a7dca64b759523ccdc61da4d15c7c2a0ad09603",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/pages/records/history.wxss",
+      "change": "modify",
+      "sha256": "60dbb6037b1f6862613cc566b174a5e53a5e662ab3480e6d6689687a5e9050d8",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/pages/records/index.js",
+      "change": "modify",
+      "sha256": "e668ff17e213c4a95c8b7626e5c5a16bcae013f6aeebff5301222a987bdf5bac",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/pages/records/index.wxml",
+      "change": "modify",
+      "sha256": "2c5eb86b9cfbe7b07c65dc9934abedc6d1eec85d0a640fd8c20c63246febac2d",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/pages/records/index.wxss",
+      "change": "modify",
+      "sha256": "7b917f907dd35364dc54e6e6eb36ce5927142c2c38c6664e839011cbb967c851",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/pages/reports/index.js",
+      "change": "modify",
+      "sha256": "18a23f9be52375fc9215cd46b03b8f95c79e7bfddcfeeca68ab995f6171f454e",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/pages/reports/index.wxml",
+      "change": "modify",
+      "sha256": "8ae9b2d865dee23fa4d580d1864d55b4db1dd356c8926cbfc95f5f482cc421eb",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/pages/reports/index.wxss",
+      "change": "modify",
+      "sha256": "6e87df2638248644c6b2383ae508e28cd1538385120b0130279852fd6ac72f13",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/pages/review-inventory/content.wxml",
+      "change": "modify",
+      "sha256": "aa2e2bec7b8a84e768e8615283edb3419dcd8f6588ff9aed6944b294a5663f7f",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/pages/review-inventory/content.wxss",
+      "change": "modify",
+      "sha256": "428ecdb6646c70d5a622b8be5b99f056d216c795fc07ca42f9cf1d88e3cc5b24",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/pages/review-inventory/index.js",
+      "change": "modify",
+      "sha256": "e61710c603cde65ff2204c9dca299e31c12a29a838209fbabdf98d9616f0738c",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/pages/review-inventory/index.wxml",
+      "change": "modify",
+      "sha256": "0801558f34471ba2b2e201299472ca54d3b96373f9f50873ba5a1564949e35ba",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/pages/settings/index.js",
+      "change": "modify",
+      "sha256": "018b3c43af05cc983e05d2337ecefe6802b7dd3254790d5ed57c84f78375fad1",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/pages/settings/index.json",
+      "change": "modify",
+      "sha256": "e8ba3b0f6280de95a2cc433aaad56cdcace39ea3904bff979b98ef7a69c49852",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/pages/settings/index.wxml",
+      "change": "modify",
+      "sha256": "494684d82f0af5efe55d2501e9b4acb88c792352c5d21d6f6ee854df08cb712e",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/pages/settings/index.wxss",
+      "change": "modify",
+      "sha256": "222704ede80f129655100f0bc4e7cc9137213e155149f6ef9df9d7ce41b1872f",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/pages/submission/confirm.js",
+      "change": "modify",
+      "sha256": "4c00e519dbee918527d8a636bd55aa54357a5214b1fefb922c138b727c71fa93",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/pages/submission/confirm.wxml",
+      "change": "modify",
+      "sha256": "115fbe81611ba9c28c02c3d5f37714b8ee73ee5d375acfe8a6e9091060e539ff",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/pages/submission/detail.js",
+      "change": "modify",
+      "sha256": "dcd62776c0c4f34f012060dbf47926eac3d8e38ea68795d4edf9828ad5be8183",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/pages/submission/detail.wxml",
+      "change": "modify",
+      "sha256": "2bb9656b5771f6dc306a8b88665d5437ab4d290832c6bb72430c391d483d941e",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/pages/submission/detail.wxss",
+      "change": "modify",
+      "sha256": "cd76e97cbc77836c3dad3cd5f2602668abb48473d88e731b24d7c1c042cc862c",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/pages/submission/draft.js",
+      "change": "modify",
+      "sha256": "28e5676c8dc8bf55f82967dd4ca4e71dc88a152273516cd163386f7947ccce27",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/pages/submission/draft.wxml",
+      "change": "modify",
+      "sha256": "77a0d0496e42231990861245c5e0157bc02e0ce14d8db91747fc99c5243509ae",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/pages/submission/draft.wxss",
+      "change": "modify",
+      "sha256": "362ad5108913a90eec1676cda65899ace3e3f0ae7a8df5cb30305d65649c1b3b",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/pages/today/index.js",
+      "change": "modify",
+      "sha256": "46f3ebf6a20d0bc22f909058b6899663fd57f044dc115c4b5a4d5c66ac4bc693",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/pages/today/index.wxml",
+      "change": "modify",
+      "sha256": "60d1fdf66b2ffe6247ab3d337f9510b4c3b7c1e4271f74a40a82c9d1d2b5d7f3",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/pages/today/index.wxss",
+      "change": "modify",
+      "sha256": "33fd239dcecc6c3e90c05b9d1924ed349fcdad5be450d67a51c4b70d2754a6ea",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/presentation/theme/adapters.js",
+      "change": "add",
+      "sha256": "638fc11aab279640f97086b38d5a74ea08ca384d38291e0eba5ca0118ee59456",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Approved theme-domain owner: registry/state/adapters or generated glyph bodies; no business/API dependency."
+    },
+    {
+      "path": "apps/miniprogram/presentation/theme/glyphs.js",
+      "change": "add",
+      "sha256": "0cd59614e8a0bdcabd2e0274299753d3ccb2034167912c6dd51895edcc1ee561",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Approved theme-domain owner: registry/state/adapters or generated glyph bodies; no business/API dependency."
+    },
+    {
+      "path": "apps/miniprogram/presentation/theme/registry.js",
+      "change": "add",
+      "sha256": "4d1091bf0e5b368bb06d516b845b28f8302b12d06fd98e0b1bf835af31e91ae9",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Approved theme-domain owner: registry/state/adapters or generated glyph bodies; no business/API dependency."
+    },
+    {
+      "path": "apps/miniprogram/presentation/theme/state.js",
+      "change": "add",
+      "sha256": "6bb4de2e581fb34d5a909a9b4fea874a51b6d257b0300bf40ed2cdd8dffa8af1",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Approved theme-domain owner: registry/state/adapters or generated glyph bodies; no business/API dependency."
+    },
+    {
+      "path": "apps/miniprogram/styles/atoms.wxss",
+      "change": "modify",
+      "sha256": "50cc23b27bae8f0e90e01cf028d632d5124eca0d53dca6c8fa3207afdd8e3b68",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/styles/icons.wxss",
+      "change": "modify",
+      "sha256": "aea05a98a5b96dd93105daa66688c2bd478345313c8e27b5f98e93aa5a8bd503",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/styles/theme.wxss",
+      "change": "add",
+      "sha256": "e9985c2e25e2c892d7918aa780461cf277b0d8dbfbf4842ab288647ac1d65aaf",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/styles/tokens.wxss",
+      "change": "modify",
+      "sha256": "0c6128b677b90ec71cf755b4e54e1de3b985d1fbae7272dd6417f3703dd7ba77",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "apps/miniprogram/utils/ui.js",
+      "change": "modify",
+      "sha256": "d1543ecb25fad971b3e7a8c370b03c9105d74708a1ae26c9995b2821472f65a0",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
+    },
+    {
+      "path": "tests/frontend/activity-icon.test.js",
+      "change": "modify",
+      "sha256": "733b3c20e30c9fcefa6e461d6733d644b3002e674f261c1dc1536bbe7ceade54",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Retain business assertions while resolving the real theme adapter in VM harnesses; independent semantic icon and theme behavior expectations."
+    },
+    {
+      "path": "tests/frontend/bounded-read-pagination.test.js",
+      "change": "modify",
+      "sha256": "481b3760627cc675b92f98a2286083aa5254e9c35443befebef36fbe4cf8e1be",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Retain business assertions while resolving the real theme adapter in VM harnesses; independent semantic icon and theme behavior expectations."
+    },
+    {
+      "path": "tests/frontend/brand-header-and-copy.test.js",
+      "change": "modify",
+      "sha256": "f311601126b69af6cb7b16b042707415a8535d5e77bf33c81686a03ba310a2ee",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Retain business assertions while resolving the real theme adapter in VM harnesses; independent semantic icon and theme behavior expectations."
+    },
+    {
+      "path": "tests/frontend/child-profiles.test.js",
+      "change": "modify",
+      "sha256": "87d4fb85139d834adceea9f2c39a4e1c7c226a43efbee61d566645b6f593ef40",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Retain business assertions while resolving the real theme adapter in VM harnesses; independent semantic icon and theme behavior expectations."
+    },
+    {
+      "path": "tests/frontend/config-and-copy.test.js",
+      "change": "modify",
+      "sha256": "0b8ccd5f1a7eab614d045f9e14da380e06e4aabd91f3258681537873354926d6",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Retain business assertions while resolving the real theme adapter in VM harnesses; independent semantic icon and theme behavior expectations."
+    },
+    {
+      "path": "tests/frontend/daily-tasks.test.js",
+      "change": "modify",
+      "sha256": "c145485e82d10cf75c8d21c0b853726d767c7d4df5935ae02ad9530302788dc3",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Retain business assertions while resolving the real theme adapter in VM harnesses; independent semantic icon and theme behavior expectations."
+    },
+    {
+      "path": "tests/frontend/data-deletion.test.js",
+      "change": "modify",
+      "sha256": "7d2336c2d4b8a101bafa7f8fa31563b2bff22f3d2249807a3f507a62237be537",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Retain business assertions while resolving the real theme adapter in VM harnesses; independent semantic icon and theme behavior expectations."
+    },
+    {
+      "path": "tests/frontend/family-onboarding.test.js",
+      "change": "modify",
+      "sha256": "3bd7c51110ddac0b9cd630baffd2deae68b72ee91bc1194e44a3c5af9e8a5930",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Retain business assertions while resolving the real theme adapter in VM harnesses; independent semantic icon and theme behavior expectations."
+    },
+    {
+      "path": "tests/frontend/grade-confirmation.test.js",
+      "change": "modify",
+      "sha256": "df559a0a9b1539aa19cd48d0a0133bf0686c5c259d7b3b71141964df7cca4fa4",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Retain business assertions while resolving the real theme adapter in VM harnesses; independent semantic icon and theme behavior expectations."
+    },
+    {
+      "path": "tests/frontend/reports-pagination.test.js",
+      "change": "modify",
+      "sha256": "a27c8b2ed2001bc95f5227645420f46923d119c62d5c91f31c7a5ddaec49ca35",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Retain business assertions while resolving the real theme adapter in VM harnesses; independent semantic icon and theme behavior expectations."
+    },
+    {
+      "path": "tests/frontend/settings-state.test.js",
+      "change": "modify",
+      "sha256": "f3d6b3de0abe91aacb5690448dafca27d4ecf22d21ee29611cedad9c1a822544",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Retain business assertions while resolving the real theme adapter in VM harnesses; independent semantic icon and theme behavior expectations."
+    },
+    {
+      "path": "tests/frontend/submission-materials.test.js",
+      "change": "modify",
+      "sha256": "7cb1ce6c69227d71cc5520cd282c87bc8529f7a543ef471ee7de95283af33d54",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Retain business assertions while resolving the real theme adapter in VM harnesses; independent semantic icon and theme behavior expectations."
+    },
+    {
+      "path": "tests/frontend/theme-adapters.test.js",
+      "change": "add",
+      "sha256": "ab38b5e99e9fb51168596c2bc35e87d5d784bffb433518d46d8fb499d9580bf5",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Retain business assertions while resolving the real theme adapter in VM harnesses; independent semantic icon and theme behavior expectations."
+    },
+    {
+      "path": "tests/frontend/theme-state.test.js",
+      "change": "add",
+      "sha256": "747475dc2da6b116bc48b1b536a691f772d0834ae005d155c06795dd92a92567",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Retain business assertions while resolving the real theme adapter in VM harnesses; independent semantic icon and theme behavior expectations."
+    },
+    {
+      "path": "tests/frontend/today-source-material.test.js",
+      "change": "modify",
+      "sha256": "192ec76929b058eb3f57298e5fb9a20075fe52c9ddee7ff113618dbf4ff559ee",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Retain business assertions while resolving the real theme adapter in VM harnesses; independent semantic icon and theme behavior expectations."
+    },
+    {
+      "path": "tools/check_themes.js",
+      "change": "add",
+      "sha256": "bb2193d47080d27f9d19baf74f1e5e40fbfda303d623687fc980fe09f4756f42",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Reproducible glyph/token generation or source-bound theme budget/boundary/native presentation verification."
+    },
+    {
+      "path": "tools/gen_icon_styles.py",
+      "change": "modify",
+      "sha256": "9adccec55515623bec26fb4475ab8bdb6ada6cea682b97e2016c86b8d5c09354",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Reproducible glyph/token generation or source-bound theme budget/boundary/native presentation verification."
+    },
+    {
+      "path": "tools/gen_theme_styles.py",
+      "change": "add",
+      "sha256": "0e2e5ca4e45651f180f85032e120fe440765282d7387cb4be4afa98fddfbad9c",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Reproducible glyph/token generation or source-bound theme budget/boundary/native presentation verification."
+    },
+    {
+      "path": "tools/prepare_theme_native.py",
+      "change": "add",
+      "sha256": "cfaccd175ebb59bd3926f7d4b245aa17ee6760f19152a11e8ebae3915c4cd90d",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Reproducible glyph/token generation or source-bound theme budget/boundary/native presentation verification."
+    },
+    {
+      "path": "tools/theme_native.js",
+      "change": "add",
+      "sha256": "182cf86d59e9d4d7c170d5e952c3a4359312463d50f8458daa84c1a188d7fa34",
+      "necessity": "necessary_for_approved_scope",
+      "placement": "existing_consumer_or_approved_presentation_owner",
+      "rationale": "Reproducible glyph/token generation or source-bound theme budget/boundary/native presentation verification."
+    }
+  ],
+  "remaining": [
+    "R2 fresh-context independent read-only review NOT_RUN",
+    "Native synthetic matrix is presentation evidence, not device/business end-to-end acceptance"
+  ]
+}

@@ -1,0 +1,72 @@
+TAP version 13
+# Subtest: page adapters retain lifecycle arguments, Promise identity, drafts and current-page chrome ownership
+ok 1 - page adapters retain lifecycle arguments, Promise identity, drafts and current-page chrome ownership
+  ---
+  duration_ms: 5.809792
+  type: 'test'
+  ...
+# Subtest: isolated components synchronize once and unsubscribe even when original detach throws
+ok 2 - isolated components synchronize once and unsubscribe even when original detach throws
+  ---
+  duration_ms: 3.088
+  type: 'test'
+  ...
+# Subtest: component adapters preserve legacy root lifecycle and native lifetimes precedence
+not ok 3 - component adapters preserve legacy root lifecycle and native lifetimes precedence
+  ---
+  duration_ms: 4.053667
+  type: 'test'
+  location: '/Users/bytedance/Documents/push_kids/tests/frontend/theme-adapters.test.js:71:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+    + []
+    - [
+    -   [
+    -     '待复习',
+    -     'native'
+    -   ],
+    -   'detach'
+    - ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0:
+      0: '待复习'
+      1: 'native'
+    1: 'detach'
+  actual:
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (/Users/bytedance/Documents/push_kids/tests/frontend/theme-adapters.test.js:77:10)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: unknown subject icons use the six fixed local glyphs, with no user-controlled URL
+ok 4 - unknown subject icons use the six fixed local glyphs, with no user-controlled URL
+  ---
+  duration_ms: 3.53625
+  type: 'test'
+  ...
+# Subtest: picker stages choices, cancels without persistence and emits application failures honestly
+ok 5 - picker stages choices, cancels without persistence and emits application failures honestly
+  ---
+  duration_ms: 2.409084
+  type: 'test'
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 4
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 68.394291

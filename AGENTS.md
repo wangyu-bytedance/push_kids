@@ -115,3 +115,12 @@ Before initial production coding, or before changing module boundaries, shared a
 User-visible frontend work requires an approved baseline covering style consistency, user interaction conventions, and an exact resolution/viewport matrix; affected UI current state; a repository-local editable SVG or self-contained HTML design source; required viewport/state exports with matching SHA-256 manifest; and explicit approval of the Task Spec revision + Design Revision. Figma, external design URLs, node IDs, and tool-availability waivers are not required. Frontend engineering impact independently requires the approved FEC revision and affected component/state/form, accessibility, browser/device, performance/resource, security/privacy, and observability evidence.
 
 Native Mini Program viewport acceptance follows `docs/design/frontend/FRONTEND-ENGINEERING-CONSTRAINTS.md` and `docs/quality/TEST-STRATEGY.md`; repository previews, hidden overflow, or HTML rendering cannot replace native node geometry and three-viewport evidence. Approved manifests are immutable except for a `Superseded by` pointer; visible divergence requires a new Design Revision and approval.
+
+### Multi-theme UI contract
+
+- 用户于2026-11-06明确要求六种风格：原始风格、成长花园、星际探索、深海夜色、海洋风格、科技风格。修改任何 UI（页面、复用组件、导航、表单、图表、空态、加载、错误、禁用、只读、弹层）均须检查全部六种风格，不能只适配默认或浅色风格。该约束是本次明确授权的工程规则，不表示六主题运行时已经实现；实施与验收状态见 `specs/active/DESIGN-002-GLOBAL-UI-CONSISTENCY.md` 及其后续归档位置。
+- 主题颜色、材质、字体角色、共享圆角、插画引用、图标语义和未知科目的默认图标由有明确 owner 的主题配置统一管理。页面和组件消费语义 token/资源角色；禁止新增散落的品牌色、固定浅色背景、逐页主题判断或六套业务页面。业务枚举、平台要求的固定值和必要的页面几何不因“减少硬编码”被无差别抽象。
+- 未预置的科目/活动直接使用当前主题的固定默认图标：原始书本、花园嫩芽、星际小星球、夜色罗盘星、海洋贝壳、科技芯片。不得增加逐科目 AI 生成、联网等待或强制选图流程。
+- 主题清单及适配检查必须从同一权威注册表派生；新增风格必须同步完整 token/资源角色、回退规则和检查矩阵，删除/改名必须兼容已保存的主题 ID。禁止全局改写 `Page`/`Component` 或复制业务控制器来接入主题。
+- 每次 UI diff 提交六主题适配记录：共用业务逻辑只验证受影响流程；每个主题仍需验证受影响页面/组件的三视口（320×568、390×844、430×932）及相关状态，保留原生节点几何与截图证据。共享组件变更还须覆盖实际宿主、深色对比度、长文案、弹层及导航；HTML 预览不能代替原生或真机验收。未运行项如实记为 NOT_RUN，不能用默认主题结果代替。
+- 继续执行现有包体与性能预算；主题不得引入新的运行时 UI/图标框架，不得把评审 HTML、原始大插画或图片 base64 全量放入页面 data/本地存储。变更后记录资源字节、源码总量、切换同步与偏好恢复结果。新主题机制的具体批准版本与交付证据仍遵守上方 Spec / Design / FEC 门禁。

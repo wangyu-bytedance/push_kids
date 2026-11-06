@@ -1,3 +1,4 @@
+const { withThemeComponent } = require("../../presentation/theme/adapters");
 const FALLBACK_STATUS_BAR_HEIGHT = 20;
 const FALLBACK_NAVIGATION_HEIGHT = 44;
 const FALLBACK_SIDE_INSET = 88;
@@ -55,7 +56,7 @@ function measureNavigation() {
   };
 }
 
-Component({
+Component(withThemeComponent({
   options: { addGlobalClass: true },
   data: {
     statusBarHeight: FALLBACK_STATUS_BAR_HEIGHT,
@@ -73,4 +74,4 @@ Component({
       this.setData(measureNavigation());
     }
   }
-});
+}));

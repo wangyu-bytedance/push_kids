@@ -1,0 +1,37 @@
+TAP version 13
+# THEME_PREFERENCE_READ_FAILED
+# THEME_PREFERENCE_WRITE_FAILED
+# THEME_PREFERENCE_WRITE_FAILED
+# Subtest: every registered theme restores a small versioned display preference
+ok 1 - every registered theme restores a small versioned display preference
+  ---
+  duration_ms: 0.462959
+  type: 'test'
+  ...
+# Subtest: invalid, corrupt or unreadable preference restores original without writing
+ok 2 - invalid, corrupt or unreadable preference restores original without writing
+  ---
+  duration_ms: 0.356792
+  type: 'test'
+  ...
+# Subtest: selection persists once, notifies live consumers and ignores invalid or repeated IDs
+ok 3 - selection persists once, notifies live consumers and ignores invalid or repeated IDs
+  ---
+  duration_ms: 0.37925
+  type: 'test'
+  ...
+# Subtest: failed persistence applies only this session and initialize cannot overwrite it
+ok 4 - failed persistence applies only this session and initialize cannot overwrite it
+  ---
+  duration_ms: 0.173208
+  type: 'test'
+  ...
+1..4
+# tests 4
+# suites 0
+# pass 4
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 45.104208

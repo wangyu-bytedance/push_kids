@@ -20,7 +20,7 @@
 
 .day-bar { display: flex; align-items: baseline; justify-content: space-between; gap: 16rpx; padding: 40rpx 4rpx 24rpx; }
 .day-bar .day-title { font-size: 17px; line-height: 1.45; font-weight: 600; }
-.day-bar .day-count { flex: none; font-size: 13px; color: var(--pk-ink-3); }
+.day-bar .day-count { flex: none; font-size: 13px; color: var(--pk-text-muted); }
 
 .calendar-conflict-summary {
   display: flex;
@@ -28,7 +28,7 @@
   gap: 12rpx;
   min-height: 56rpx;
   padding: 0 4rpx 20rpx;
-  color: var(--pk-danger);
+  color: var(--pk-danger-ink);
   font-size: 13px;
   line-height: 1.45;
   font-weight: 500;
@@ -49,14 +49,14 @@
 .pill.danger-outline {
   border: 1rpx solid var(--pk-danger-line);
   background: var(--pk-surface);
-  color: var(--pk-danger);
+  color: var(--pk-danger-ink);
 }
 .conflict-detail {
   display: flex;
   align-items: flex-start;
   gap: 10rpx;
   margin-top: 16rpx;
-  color: var(--pk-danger);
+  color: var(--pk-danger-ink);
   font-size: 13px;
   line-height: 1.5;
 }
@@ -71,11 +71,11 @@
 /* 编辑半屏（C3） */
 .editor-sheet .time-row { display: flex; align-items: center; gap: 20rpx; }
 .editor-sheet .time-row .grow { flex: 1; min-width: 0; }
-.editor-sheet .time-to { flex: none; font-size: 14px; color: var(--pk-ink-3); }
-.editor-sheet .pk-picker.is-error { border-color: var(--pk-danger); }
+.editor-sheet .time-to { flex: none; font-size: 14px; color: var(--pk-text-muted); }
+.editor-sheet .pk-picker.is-error { border-color: var(--pk-danger-ink); }
 .editor-sheet .repeat-card { margin-top: 32rpx; }
 .editor-sheet .del-row { display: flex; justify-content: center; margin-top: 8rpx; }
-.editor-sheet .del-link { color: var(--pk-danger); }
+.editor-sheet .del-link { color: var(--pk-danger-ink); }
 
 /* 孩子切换半屏 */
 .child-sheet .rowitem.on { background: var(--pk-primary-tint); }

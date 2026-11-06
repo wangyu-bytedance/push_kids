@@ -4,6 +4,8 @@ These constraints originated in `ARCH-20260830-01`; the enforceable rules below 
 architecture revision. Historical `FDB`/`FEC`/`DREV-20260830-*` references are frontend design revisions, not
 architecture-revision pointers.
 
+Approved frontend extension `ARCH-20261106-MINIAPP-THEMES-01` (DESIGN-002 Spec08): `presentation/theme` owns bounded compiled theme registration, local display state and explicit lifecycle adapters. It must not import pages, API or business utilities; pages/components depend toward the presentation domain. Registry values generate first-paint tokens and all theme checks. No global Page/Component replacement, business reload on switching, remote theme injection or duplicated business controllers. `node tools/check_themes.js` enforces the frontend boundary/schema/resource contract alongside the existing architecture checker. Existing server constraints remain unchanged.
+
 - `ARC-001`: planning and normalization policies MUST be framework/database/network independent. Enforced by `tools/check_architecture.py` and unit tests.
 - `ARC-002`: routers MUST only validate/map transport and call services; no review scheduling or provider calls in routers.
 - `ARC-003`: module imports MUST remain acyclic; deep imports into another domain's persistence internals are forbidden.

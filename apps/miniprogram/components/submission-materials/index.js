@@ -1,7 +1,8 @@
+const { withThemeComponent } = require("../../presentation/theme/adapters");
 const api = require("../../utils/api");
 
 /* 展示层只做「可核对的原始材料」：不判断内容、不生成结论，缩略图按后端 sort_order 顺序渲染。 */
-Component({
+Component(withThemeComponent({
   options: { addGlobalClass: true },
   properties: {
     childId: String,
@@ -137,4 +138,4 @@ Component({
       } finally { if (generation === this.generation) this.setData({ previewBusy: false }); }
     }
   }
-});
+}));

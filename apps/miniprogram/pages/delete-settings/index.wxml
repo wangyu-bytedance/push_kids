@@ -1,3 +1,4 @@
+<view class="{{theme.classes}} theme-page" style="{{theme.style}}">
 <view class="page delete-page">
   <view class="pk-notice err" wx:if="{{error}}"><text class="n-txt">{{error}}</text></view>
 
@@ -8,12 +9,12 @@
 
   <block wx:elif="{{request}}">
     <view class="pk-empty" wx:if="{{request.state === 'queued' || request.state === 'running'}}">
-      <view class="em att"><view class="ico ico-clock-att lg"></view></view>
+      <view class="em att"><theme-icon class="ico  lg" name="clock" tone="attention" size="lg"></theme-icon></view>
       <text class="et">正在清理资料</text>
       <text class="ec">清理期间相关配置不可修改。离开页面不会中断，稍后回来仍可查看进度。</text>
     </view>
     <view class="pk-empty" wx:elif="{{request.state === 'failed'}}">
-      <view class="em danger-mark"><view class="ico ico-info-dan lg"></view></view>
+      <view class="em danger-mark"><theme-icon class="ico  lg" name="info" tone="danger" size="lg"></theme-icon></view>
       <text class="et">本次清理未完成</text>
       <text class="ec">资料仍处于保护状态，可以重试；如果持续失败，请联系维护人员。</text>
     </view>
@@ -24,7 +25,8 @@
   </block>
 
   <block wx:elif="{{mode}}">
-    <view class="screen-intro">
+    <view class="screen-intro theme-header">
+    <image wx:if="{{theme.assets.hero && !themeArtFailed}}" class="theme-hero-art" src="{{theme.assets.hero}}" mode="aspectFill" binderror="onThemeIllustrationError" aria-hidden="{{true}}" />
       <text class="screen-kicker">最终确认</text>
       <text class="screen-heading">清理「{{targetName}}」的资料</text>
     </view>
@@ -43,7 +45,8 @@
   </block>
 
   <block wx:else>
-    <view class="screen-intro">
+    <view class="screen-intro theme-header">
+    <image wx:if="{{theme.assets.hero && !themeArtFailed}}" class="theme-hero-art" src="{{theme.assets.hero}}" mode="aspectFill" binderror="onThemeIllustrationError" aria-hidden="{{true}}" />
       <text class="screen-kicker">数据管理</text>
       <text class="screen-heading">删除配置</text>
     </view>
@@ -69,4 +72,6 @@
       <button class="btn danger mt3" disabled="{{members.length !== 1}}" bindtap="chooseFamily">清理当前家庭</button>
     </view>
   </block>
+</view>
+
 </view>

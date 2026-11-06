@@ -1,1 +1,4 @@
+<view class="{{theme.classes}} theme-page" style="{{theme.style}}">
 <include src="content.wxml" />
+
+</view>

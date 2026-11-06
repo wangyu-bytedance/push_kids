@@ -1,3 +1,4 @@
+const { withThemePage } = require("../../presentation/theme/adapters");
 const api = require("../../utils/api");
 const cloudMedia = require("../../utils/cloud-media");
 const { localParts, toIso } = require("../../utils/date");
@@ -11,7 +12,7 @@ function shortDate(value) {
   return `${parts[1]}月${parts[2]}日`;
 }
 
-Page({
+Page(withThemePage({
   onGradeConfirmation(event) {
     const flow = getApp().gradeConfirmation;
     if (flow) return flow.handle(this, event.detail);
@@ -306,4 +307,4 @@ Page({
       await this.load();
     } catch (error) { this.setData({ saving: false }); wx.showToast({ title: error.message, icon: "none", duration: 2600 }); }
   }
-});
+}));

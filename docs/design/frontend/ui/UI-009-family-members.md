@@ -1,5 +1,7 @@
 # UI-009 — 家庭与成员
 
+当前本地呈现revision `UI-STATE-20261106-THEMES-01`：[DESIGN-002 Spec08 / Architecture01](../../../../specs/active/DESIGN-002-GLOBAL-UI-CONSISTENCY.md)与DREV08已获用户“好的 按照以上方案落地”批准并实施，DREV06视觉方向保持。家庭与成员页、只读提示、邀请及申请相关操作沿用原权限与字段；页面、导航和共用弹层通过显式适配器消费主题角色。 本增量尚未上传；原生合成呈现、共享业务回归及真机/独立评审缺项见[当前证据](../../../quality/evidence/themes-20261106/README.md)。下方原特性发布与验收记录保持其版本范围，不能代验六主题。
+
 - Status: `DELIVERED_CLIENT_0.1.16 / DEVELOPMENT_DONE / 390_NATIVE_CAPTURED / MATRIX_PENDING`
 - Related Feature: `FEAT-002`
 - Related Specs: `SPEC-20260831-09`; `BUG-SPEC-20260913-19`

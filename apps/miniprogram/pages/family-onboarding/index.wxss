@@ -8,7 +8,7 @@
 .brand-title { display: block; margin-top: 40rpx; }
 .brand-title text { display: block; font-family: var(--pk-serif); font-size: 24px; line-height: 1.35; font-weight: 600; letter-spacing: .6px; color: var(--pk-ink); }
 .brand-copy { display: block; margin-top: 28rpx; }
-.brand-copy text { display: block; font-size: 14px; line-height: 1.75; color: var(--pk-ink-3); }
+.brand-copy text { display: block; font-size: 14px; line-height: 1.75; color: var(--pk-text-muted); }
 
 /* A1 两张路径卡：整卡可点，右侧 chevron */
 .choice-card { display: flex; align-items: center; gap: 24rpx; min-height: 176rpx; margin-top: 40rpx; padding: 28rpx; box-sizing: border-box; background: var(--pk-surface); border: var(--pk-border); border-radius: var(--pk-r-xl); }
@@ -18,23 +18,23 @@
 .choice-card .choice-mark.plain { background: var(--pk-surface-sunken); }
 .choice-card .choice-t { display: block; font-size: 17px; line-height: 1.45; font-weight: 600; color: var(--pk-primary-strong); }
 .choice-card:not(.primary) .choice-t { color: var(--pk-ink); }
-.choice-card .choice-s { display: block; margin-top: 6rpx; font-size: 13px; line-height: 1.5; color: var(--pk-ink-3); }
+.choice-card .choice-s { display: block; margin-top: 6rpx; font-size: 13px; line-height: 1.5; color: var(--pk-text-muted); }
 
 /* A2 / A3 页内头部与吸底条 */
 .step-head { padding: 8rpx 0 32rpx; }
 .token-input { font-size: 15px; }
-.pk-cta-bar .cta-hint { display: block; margin-top: 12rpx; text-align: center; font-size: 13px; line-height: 1.45; color: var(--pk-ink-3); }
+.pk-cta-bar .cta-hint { display: block; margin-top: 12rpx; text-align: center; font-size: 13px; line-height: 1.45; color: var(--pk-text-muted); }
 .center-row { display: flex; align-items: center; justify-content: center; }
 
 /* A4 等待确认：琥珀色空态图 + 申请核验码卡 */
 .pending-empty { padding: 72rpx 48rpx 32rpx; }
 .pk-empty .em.att { background: var(--pk-attention-bg); }
 .code-card { text-align: center; }
-.code-card .code-cap { display: block; font-size: 13px; line-height: 1.45; color: var(--pk-ink-3); }
+.code-card .code-cap { display: block; font-size: 13px; line-height: 1.45; color: var(--pk-text-muted); }
 .code-card .code-val { display: block; margin-top: 12rpx; font-size: 28px; line-height: 1.15; font-weight: 700; letter-spacing: 8rpx; color: var(--pk-primary-strong); }
-.code-card .code-help { display: block; margin-top: 12rpx; font-size: 13px; line-height: 1.5; color: var(--pk-ink-3); }
+.code-card .code-help { display: block; margin-top: 12rpx; font-size: 13px; line-height: 1.5; color: var(--pk-text-muted); }
 .code-card .code-copy { display: flex; justify-content: center; margin-top: 24rpx; }
-.danger-link { color: var(--pk-danger); }
+.danger-link { color: var(--pk-danger-ink); }
 
 /* 首屏骨架：沿用真实布局的圆角 */
 .sk.brand-sk { width: 112rpx; height: 112rpx; border-radius: var(--pk-r-xl); }

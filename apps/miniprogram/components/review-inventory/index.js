@@ -1,9 +1,10 @@
+const { withThemeComponent } = require("../../presentation/theme/adapters");
 const controller = require("../../pages/review-inventory/controller");
 
 const methods = Object.fromEntries(Object.entries(controller).filter(([name]) =>
   !["data", "onLoad", "onShow", "onHide", "onUnload", "onPullDownRefresh"].includes(name)));
 
-Component({
+Component(withThemeComponent({
   options: { styleIsolation: "apply-shared" },
   properties: { contextChildId: { type: String, value: "" }, embedded: { type: Boolean, value: false } },
   data: { ...controller.data },
@@ -20,4 +21,4 @@ Component({
       this.subjectGeneration = (this.subjectGeneration || 0) + 1;
     }
   }
-});
+}));

@@ -1,13 +1,15 @@
+<view class="{{theme.classes}} theme-page" style="{{theme.style}}">
 <view class="page join-page {{preview && !applied ? 'sticky-cta' : ''}}">
-  <view class="step-head">
+  <view class="step-head theme-header">
+    <image wx:if="{{theme.assets.hero && !themeArtFailed}}" class="theme-hero-art" src="{{theme.assets.hero}}" mode="aspectFill" binderror="onThemeIllustrationError" aria-hidden="{{true}}" />
     <text class="pg-kicker">使用家人发来的邀请</text>
     <text class="pg-title">申请加入家庭</text>
   </view>
 
   <view class="pk-notice err" wx:if="{{error && !preview && !tokenMissing}}">
-    <view class="ico ico-cloud-off-dan sm"></view>
+    <theme-icon class="ico  sm" name="cloud-off" tone="danger" size="sm"></theme-icon>
     <text class="n-txt">{{error}}。可以点右侧重试，或向家人重新获取邀请。</text>
-    <view class="ico ico-refresh-dan sm" aria-role="button" aria-label="重试" bindtap="load"></view>
+    <view class="theme-icon-action" aria-role="button" aria-label="重试" bindtap="load"><theme-icon name="refresh" tone="danger" size="sm"></theme-icon></view>
   </view>
 
   <block wx:if="{{loading}}">
@@ -18,7 +20,7 @@
   <!-- 申请已发送：等待管理员确认 -->
   <block wx:elif="{{applied}}">
     <view class="pk-empty applied-empty">
-      <view class="em att"><view class="ico ico-clock-att lg"></view></view>
+      <view class="em att"><theme-icon class="ico  lg" name="clock" tone="attention" size="lg"></theme-icon></view>
       <text class="et">申请已发送</text>
       <text class="ec">管理员确认后，你才会看到这个家庭的内容。</text>
     </view>
@@ -33,10 +35,10 @@
     </view>
 
     <view class="btn secondary mt3" aria-role="button" aria-label="查看申请状态" bindtap="goPending">
-      <view class="ico ico-refresh-pri sm"></view><text>查看申请状态</text>
+      <theme-icon class="ico  sm" name="refresh" tone="primary" size="sm"></theme-icon><text>查看申请状态</text>
     </view>
     <view class="pk-notice quiet mt3">
-      <view class="ico ico-info sm"></view>
+      <theme-icon class="ico  sm" name="info" tone="ink" size="sm"></theme-icon>
       <text class="n-txt">获批前不会看到孩子的学习记录或照片。</text>
     </view>
   </block>
@@ -67,7 +69,7 @@
     </view>
 
     <view class="pk-notice quiet mt3">
-      <view class="ico ico-shield sm"></view>
+      <theme-icon class="ico  sm" name="shield" tone="ink" size="sm"></theme-icon>
       <text class="n-txt">这里只展示家庭称呼和孩子称呼。加入前不会展示学习记录、照片或成员名单。</text>
     </view>
 
@@ -85,9 +87,11 @@
 
   <!-- 邀请凭证缺失或失效 -->
   <view class="pk-empty" wx:else>
-    <view class="em"><view class="ico ico-family-pri lg"></view></view>
+    <view class="em"><theme-icon class="ico  lg" name="family" tone="primary" size="lg"></theme-icon></view>
     <text class="et">这条邀请用不了</text>
     <text class="ec">家庭邀请码或微信邀请可能已过期、被撤销。请向家人重新获取邀请后再试。</text>
     <view class="ea"><view class="btn secondary" aria-role="button" aria-label="返回" bindtap="goBack">返回上一步</view></view>
   </view>
+</view>
+
 </view>

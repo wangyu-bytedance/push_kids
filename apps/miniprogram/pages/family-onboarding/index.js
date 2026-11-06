@@ -1,8 +1,10 @@
+const { themeState } = require("../../presentation/theme/state");
+const { withThemePage } = require("../../presentation/theme/adapters");
 const api = require("../../utils/api");
 
 const RELATIONS = ["妈妈", "爸爸", "奶奶", "爷爷", "外婆", "外公", "其他"];
 
-Page({
+Page(withThemePage({
   data: {
     loading: true, state: "unbound", mode: "choice", error: "", submitting: false,
     familyName: "", relationship: RELATIONS[0],
@@ -91,7 +93,7 @@ Page({
     wx.showModal({
       title: "撤回这次申请？",
       content: "撤回后管理员就看不到这条申请了，你可以重新用家庭邀请码或微信邀请再申请一次。",
-      confirmText: "撤回申请", confirmColor: "#A85742",
+      confirmText: "撤回申请", confirmColor: themeState.current().tokens["pk-native-danger"],
       success: async (result) => {
         if (!result.confirm) return;
         this.setData({ canceling: true, error: "" });
@@ -104,4 +106,4 @@ Page({
       }
     });
   }
-});
+}));

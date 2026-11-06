@@ -32,24 +32,56 @@
     "backgroundColor": "#FFFDF8",
     "borderStyle": "white",
     "list": [
-      { "pagePath": "pages/today/index", "text": "今日", "iconPath": "assets/tab-today.png", "selectedIconPath": "assets/tab-today-active.png" },
-      { "pagePath": "pages/calendar/index", "text": "日程", "iconPath": "assets/tab-calendar.png", "selectedIconPath": "assets/tab-calendar-active.png" },
-      { "pagePath": "pages/records/index", "text": "记录", "iconPath": "assets/tab-records.png", "selectedIconPath": "assets/tab-records-active.png" },
-      { "pagePath": "pages/reports/index", "text": "报表", "iconPath": "assets/tab-reports.png", "selectedIconPath": "assets/tab-reports-active.png" },
-      { "pagePath": "pages/settings/index", "text": "设置", "iconPath": "assets/tab-settings.png", "selectedIconPath": "assets/tab-settings-active.png" }
+      {
+        "pagePath": "pages/today/index",
+        "text": "今日",
+        "iconPath": "assets/tab-today.png",
+        "selectedIconPath": "assets/tab-today-active.png"
+      },
+      {
+        "pagePath": "pages/calendar/index",
+        "text": "日程",
+        "iconPath": "assets/tab-calendar.png",
+        "selectedIconPath": "assets/tab-calendar-active.png"
+      },
+      {
+        "pagePath": "pages/records/index",
+        "text": "记录",
+        "iconPath": "assets/tab-records.png",
+        "selectedIconPath": "assets/tab-records-active.png"
+      },
+      {
+        "pagePath": "pages/reports/index",
+        "text": "报表",
+        "iconPath": "assets/tab-reports.png",
+        "selectedIconPath": "assets/tab-reports-active.png"
+      },
+      {
+        "pagePath": "pages/settings/index",
+        "text": "设置",
+        "iconPath": "assets/tab-settings.png",
+        "selectedIconPath": "assets/tab-settings-active.png"
+      }
     ]
   },
   "style": "v2",
   "sitemapLocation": "sitemap.json",
   "lazyCodeLoading": "requiredComponents",
-  "requiredPrivateInfos": ["chooseLocation"],
+  "requiredPrivateInfos": [
+    "chooseLocation"
+  ],
   "permission": {
-    "scope.userLocation": { "desc": "用于家长主动在地图上选择历史出游地点" }
+    "scope.userLocation": {
+      "desc": "用于家长主动在地图上选择历史出游地点"
+    }
   },
   "plugins": {
     "WechatSI": {
       "version": "0.3.1",
       "provider": "wx069ba97219f66d99"
     }
+  },
+  "usingComponents": {
+    "theme-icon": "/components/theme-icon/index"
   }
 }

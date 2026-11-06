@@ -1,3 +1,4 @@
+const { withThemePage } = require("../../presentation/theme/adapters");
 const api = require("../../utils/api");
 const detail = require("../submission/detail");
 const draft = require("../submission/draft");
@@ -28,7 +29,7 @@ function titleOf(submission, view) {
   return "文字记录";
 }
 
-Page({
+Page(withThemePage({
   data: {
     ...detail.data,
     ...draft.data,
@@ -113,4 +114,4 @@ Page({
   },
   /* 人工录入要换一套输入（没有 AI 草稿），仍走确认页的深链。 */
   startManual() { wx.navigateTo({ url: `/pages/submission/confirm?id=${this.data.id}&manual=1` }); }
-});
+}));

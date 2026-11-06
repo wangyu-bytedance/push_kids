@@ -7,9 +7,9 @@
 .subject-sheet { height: 450px; max-height: 85vh; }
 .subject-manager-body { box-sizing: border-box; max-height: 65vh; }
 .subject-name { display: block; font-size: 18px; font-weight: 600; overflow-wrap: anywhere; }
-.subject-status, .subject-note { display: block; margin-top: 16px; font-size: 14px; line-height: 1.5; color: var(--pk-ink-3); }
+.subject-status, .subject-note { display: block; margin-top: 16px; font-size: 14px; line-height: 1.5; color: var(--pk-text-muted); }
 .subject-change { width: 100%; min-height: 44px; height: auto; margin: 32px 0 16px; }
-.subject-change.subject-remove { color: var(--pk-danger); background: var(--pk-danger-bg); }
+.subject-change.subject-remove { color: var(--pk-danger-ink); background: var(--pk-danger-bg); }
 .subject-close { flex: none; min-width: 44px; min-height: 44px; margin: 0; padding: 0; }
 .subject-close::after { border: 0; }
 .daily-task-candidate { min-height: 44px; }
@@ -42,7 +42,7 @@
   font-size: 12px;
   line-height: 1.5;
 }
-.profile-grade { min-width: 0; color: var(--pk-ink-3); }
+.profile-grade { min-width: 0; color: var(--pk-text-muted); }
 .profile-current {
   flex: none;
   color: var(--pk-primary-strong);
@@ -66,7 +66,7 @@
 .profile-sheet-label {
   display: block;
   padding: 0 8rpx 12rpx;
-  color: var(--pk-ink-3);
+  color: var(--pk-text-muted);
   font-size: 13px;
   line-height: 1.45;
 }
@@ -95,7 +95,7 @@
   margin-top: 4rpx;
   font-size: 13px;
   line-height: 1.5;
-  color: var(--pk-ink-3);
+  color: var(--pk-text-muted);
 }
 
 /* 课外活动行 */
@@ -119,7 +119,7 @@
   margin-top: 4rpx;
   font-size: 13px;
   line-height: 1.45;
-  color: var(--pk-ink-3);
+  color: var(--pk-text-muted);
 }
 .act-mark {
   display: flex;
@@ -140,7 +140,7 @@
   padding: 40rpx 0;
   text-align: center;
   font-size: 14px;
-  color: var(--pk-ink-3);
+  color: var(--pk-text-muted);
 }
 
 .travel-presets {
@@ -168,7 +168,7 @@
   color: var(--pk-primary-strong);
   font-weight: 600;
 }
-.travel-sheet .pk-picker.is-error { border-color: var(--pk-danger); }
+.travel-sheet .pk-picker.is-error { border-color: var(--pk-danger-ink); }
 
 .rowlist .rowitem .pill { flex: none; }
 
@@ -279,7 +279,7 @@
 .time-row .time-dash {
   flex: none;
   padding-bottom: 28rpx;
-  color: var(--pk-ink-3);
+  color: var(--pk-text-muted);
 }
 .sum-note { margin-top: 28rpx; align-items: flex-start; }
 
@@ -299,7 +299,7 @@
 }
 .perday-row .perday-picker { flex: 1; min-width: 0; }
 .perday-row .perday-picker .pk-picker { min-height: 88rpx; }
-.perday-row .time-dash { flex: none; padding: 0; color: var(--pk-ink-3); }
+.perday-row .time-dash { flex: none; padding: 0; color: var(--pk-text-muted); }
 .perday-toggle {
   display: flex;
   align-items: center;
@@ -322,7 +322,7 @@
   margin-top: 12rpx;
   font-size: 14px;
   line-height: 1.5;
-  color: var(--pk-ink-3);
+  color: var(--pk-text-muted);
 }
 
 .danger-row {
@@ -335,7 +335,7 @@
 .danger-row .danger-link {
   min-height: 88rpx;
   padding: 0 24rpx;
-  color: var(--pk-danger);
+  color: var(--pk-danger-ink);
   font-size: 15px;
   line-height: 88rpx;
   font-weight: 500;

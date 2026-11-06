@@ -1,3 +1,4 @@
+const { withThemePage } = require("../../presentation/theme/adapters");
 const createController = require("./controller");
 
-Page(createController());
+Page(withThemePage(createController()));

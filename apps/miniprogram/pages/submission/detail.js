@@ -1,3 +1,4 @@
+const { themeState } = require("../../presentation/theme/state");
 const api = require("../../utils/api");
 const cloudMedia = require("../../utils/cloud-media");
 const ui = require("../../utils/ui");
@@ -109,7 +110,7 @@ module.exports = {
       const action = event.currentTarget.dataset.action;
       if (!["retry", "finalize", "cancel"].includes(action)) return;
       if (action === "cancel") {
-        const confirmed = await new Promise((resolve) => wx.showModal({ title: "取消这条提交？", content: "取消后会停止整理并删除已上传的照片，不会创建学习记录，也不能恢复。", confirmText: "取消提交", confirmColor: "#A85742", success: (r) => resolve(r.confirm), fail: () => resolve(false) }));
+        const confirmed = await new Promise((resolve) => wx.showModal({ title: "取消这条提交？", content: "取消后会停止整理并删除已上传的照片，不会创建学习记录，也不能恢复。", confirmText: "取消提交", confirmColor: themeState.current().tokens["pk-native-danger"], success: (r) => resolve(r.confirm), fail: () => resolve(false) }));
         if (!confirmed) return;
       }
       this.setData({ saving: true, actionError: "" });

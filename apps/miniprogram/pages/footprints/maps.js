@@ -1,3 +1,5 @@
+// Native basemap tiles retain their platform palette; overlay contrast is stable across UI themes.
+const MAP_ROUTE_COLOR = require("../../presentation/theme/registry").baseTokens["pk-map-route"];
 const api = require("../../utils/api");
 
 module.exports = {
@@ -19,7 +21,7 @@ module.exports = {
       if (this.stale(seq) || requestId !== this.mapRequest) return;
       const markers = result.items.map((point) => ({ id: point.id, latitude: point.latitude, longitude: point.longitude,
         iconPath: "/assets/tab-records-active.png", width: 28, height: 28,
-        callout: { content: point.label || "照片拍摄位置", display: "ALWAYS", color: "#1F5B45", fontSize: 14, padding: 8, borderRadius: 8 } }));
+        callout: { content: point.label || "照片拍摄位置", display: "ALWAYS", color: MAP_ROUTE_COLOR, fontSize: 14, padding: 8, borderRadius: 8 } }));
       const box = result.bounds;
       result.items = result.items.map((point) => ({ ...point,
         worldX: 5 + (point.longitude + 180) / 360 * 90,
@@ -80,7 +82,7 @@ module.exports = {
       markers: [{ id: 1, latitude: point.latitude, longitude: point.longitude,
         iconPath: "/assets/tab-records-active.png", width: 32, height: 32 }],
       polyline: index ? [{ points: [previous, point].map((item) => ({ latitude: item.latitude, longitude: item.longitude })),
-        color: "#1F5B45", width: 2, dottedLine: true }] : [] });
+        color: MAP_ROUTE_COLOR, width: 2, dottedLine: true }] : [] });
   },
   pausePlayback() { if (this.playTimer) clearTimeout(this.playTimer); this.playTimer = null; this.setData({ playing: false }); },
   togglePlayback() {
