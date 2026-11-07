@@ -39,11 +39,14 @@
     }
   ],
   "source": "native wx.createSelectorQuery; synthetic fixtures; production WXML/WXSS exact; page loading lifecycles suppressed",
-  "screenshot": "original--footprints-index.png",
-  "screenshot_sha256": "86739d1b272c90ea0694759418c13887bd6a0e5e7ff1ed709109cf6057d8c105",
+  "screenshot": null,
+  "screenshot_sha256": null,
   "fixture": "footprints-index",
   "category": "route",
-  "screenshot_errors": [],
+  "screenshot_errors": [
+    "App.captureScreenshot timed out"
+  ],
   "validation_errors": [],
+  "touch_errors": [],
   "horizontal_overflow": []
 }

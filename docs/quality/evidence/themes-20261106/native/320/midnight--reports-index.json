@@ -124,10 +124,11 @@
   ],
   "source": "native wx.createSelectorQuery; synthetic fixtures; production WXML/WXSS exact; page loading lifecycles suppressed",
   "screenshot": "midnight--reports-index.png",
-  "screenshot_sha256": "7e90670b613d23fba1f5c8f65d0145729669944048ba814f92f04d0b5fbe7e8a",
+  "screenshot_sha256": "1a6e5d0ea86d855a05d64b2474048111cf0275fd46bb13e65a2fca4838956651",
   "fixture": "reports-index",
   "category": "route",
   "screenshot_errors": [],
   "validation_errors": [],
+  "touch_errors": [],
   "horizontal_overflow": []
 }

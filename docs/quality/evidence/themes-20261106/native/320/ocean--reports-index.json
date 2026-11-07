@@ -124,10 +124,11 @@
   ],
   "source": "native wx.createSelectorQuery; synthetic fixtures; production WXML/WXSS exact; page loading lifecycles suppressed",
   "screenshot": "ocean--reports-index.png",
-  "screenshot_sha256": "64307141ea41536950ddfdee1ad95b3b6c6970ec3e87a4f618262d4cf5e806b0",
+  "screenshot_sha256": "e0c3a7fb8ec5171a2b5f61fdbd08050e0ef0a70d9e8a4ce204cb62a2596b13dd",
   "fixture": "reports-index",
   "category": "route",
   "screenshot_errors": [],
   "validation_errors": [],
+  "touch_errors": [],
   "horizontal_overflow": []
 }

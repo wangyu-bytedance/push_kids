@@ -57,21 +57,52 @@
       "left": 15,
       "right": 305,
       "top": 238,
-      "bottom": 307,
+      "bottom": 314,
       "width": 290,
-      "height": 69,
+      "height": 76,
       "backgroundColor": "rgb(255, 253, 248)",
+      "color": "rgb(34, 38, 31)",
+      "fontSize": "16px",
+      "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif"
+    },
+    {
+      "host": "page",
+      "selector": ".icon-btn",
+      "left": 27,
+      "right": 71,
+      "top": 250,
+      "bottom": 294,
+      "width": 44,
+      "height": 44,
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "color": "rgb(34, 38, 31)",
+      "fontSize": "16px",
+      "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif"
+    },
+    {
+      "host": "page",
+      "selector": ".icon-btn",
+      "left": 256,
+      "right": 300,
+      "top": 250,
+      "bottom": 294,
+      "width": 44,
+      "height": 44,
+      "backgroundColor": "rgba(0, 0, 0, 0)",
       "color": "rgb(34, 38, 31)",
       "fontSize": "16px",
       "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif"
     }
   ],
   "source": "native wx.createSelectorQuery; synthetic fixtures; production WXML/WXSS exact; page loading lifecycles suppressed",
-  "screenshot": "original--calendar-index.png",
-  "screenshot_sha256": "7b201e05f52062a9c0113898adfe579a5cad4c447eea82b9e2cf84d7fed054d5",
+  "screenshot": null,
+  "screenshot_sha256": null,
   "fixture": "calendar-index",
   "category": "route",
-  "screenshot_errors": [],
+  "screenshot_errors": [
+    "App.captureScreenshot timed out"
+  ],
   "validation_errors": [],
+  "touch_errors": [],
   "horizontal_overflow": []
 }

@@ -78,14 +78,43 @@
       "color": "rgb(237, 244, 244)",
       "fontSize": "16px",
       "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif"
+    },
+    {
+      "host": "page",
+      "selector": ".hero-note",
+      "left": 31,
+      "right": 289,
+      "top": 213,
+      "bottom": 259,
+      "width": 258,
+      "height": 46,
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "color": "rgb(179, 198, 202)",
+      "fontSize": "14px",
+      "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif"
+    },
+    {
+      "host": "page",
+      "selector": ".icon-btn",
+      "left": 15,
+      "right": 59,
+      "top": 76,
+      "bottom": 120,
+      "width": 44,
+      "height": 44,
+      "backgroundColor": "rgb(27, 52, 60)",
+      "color": "rgb(237, 244, 244)",
+      "fontSize": "16px",
+      "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif"
     }
   ],
   "source": "native wx.createSelectorQuery; synthetic fixtures; production WXML/WXSS exact; page loading lifecycles suppressed",
   "screenshot": "midnight--notifications-index.png",
-  "screenshot_sha256": "c1f7ae1aea89754c56e2c268052f2baf482bc0d5f07db9be7c4b1cbca01cf991",
+  "screenshot_sha256": "df101de287decfbd90ea5a4733a49572b8e22594948c5e48d97c07de3fa5174c",
   "fixture": "notifications-index",
   "category": "route",
   "screenshot_errors": [],
   "validation_errors": [],
+  "touch_errors": [],
   "horizontal_overflow": []
 }

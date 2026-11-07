@@ -29,7 +29,7 @@
     {
       "path": "apps/miniprogram/app.wxss",
       "change": "modify",
-      "sha256": "23b12070e0cd9da76495ba164c76bc9ac4b42932ad08ab28a40f15a5f9e6aea6",
+      "sha256": "9dfc9851a6caafba6d0562b68afdb1728a391d70743128b4e6d516f7412def87",
       "necessity": "necessary_for_approved_scope",
       "placement": "existing_consumer_or_approved_presentation_owner",
       "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
@@ -357,7 +357,7 @@
     {
       "path": "apps/miniprogram/pages/calendar/index.wxss",
       "change": "modify",
-      "sha256": "f1a706a1efcbd2cc97feadd6683581745ff8abaab4e9d80d4bc364a320c65ba0",
+      "sha256": "945efbcd3fffbd9e99d797ec6563637ce0d72109edf03dec584019a6603e09da",
       "necessity": "necessary_for_approved_scope",
       "placement": "existing_consumer_or_approved_presentation_owner",
       "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
@@ -829,7 +829,7 @@
     {
       "path": "apps/miniprogram/presentation/theme/registry.js",
       "change": "add",
-      "sha256": "4d1091bf0e5b368bb06d516b845b28f8302b12d06fd98e0b1bf835af31e91ae9",
+      "sha256": "0db038f4a283ed5961727c5bdb7b5ef762c1688f84e5a093e50af2760ab75e50",
       "necessity": "necessary_for_approved_scope",
       "placement": "existing_consumer_or_approved_presentation_owner",
       "rationale": "Approved theme-domain owner: registry/state/adapters or generated glyph bodies; no business/API dependency."
@@ -845,7 +845,7 @@
     {
       "path": "apps/miniprogram/styles/atoms.wxss",
       "change": "modify",
-      "sha256": "50cc23b27bae8f0e90e01cf028d632d5124eca0d53dca6c8fa3207afdd8e3b68",
+      "sha256": "86a25b0672f47a458d9e7380eb1de95b3e3c5eb472a8ac5a36c7d0226d6dda5c",
       "necessity": "necessary_for_approved_scope",
       "placement": "existing_consumer_or_approved_presentation_owner",
       "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
@@ -869,7 +869,7 @@
     {
       "path": "apps/miniprogram/styles/tokens.wxss",
       "change": "modify",
-      "sha256": "0c6128b677b90ec71cf755b4e54e1de3b985d1fbae7272dd6417f3703dd7ba77",
+      "sha256": "e86cf3ab5c0507852721d4955a61ad652752edaff4d112e7e4c403c65daf856b",
       "necessity": "necessary_for_approved_scope",
       "placement": "existing_consumer_or_approved_presentation_owner",
       "rationale": "Explicit theme lifecycle/root/semantic token, icon, illustration or native control integration at the existing consumer; business fields retained."
@@ -1005,7 +1005,7 @@
     {
       "path": "tools/check_themes.js",
       "change": "add",
-      "sha256": "bb2193d47080d27f9d19baf74f1e5e40fbfda303d623687fc980fe09f4756f42",
+      "sha256": "8ea8ff70b618e9ee97031ac4edb281cf0ad055cff353843485b48fab527e6d30",
       "necessity": "necessary_for_approved_scope",
       "placement": "existing_consumer_or_approved_presentation_owner",
       "rationale": "Reproducible glyph/token generation or source-bound theme budget/boundary/native presentation verification."
@@ -1029,7 +1029,7 @@
     {
       "path": "tools/prepare_theme_native.py",
       "change": "add",
-      "sha256": "cfaccd175ebb59bd3926f7d4b245aa17ee6760f19152a11e8ebae3915c4cd90d",
+      "sha256": "5b9e04b2939096c7d35f656e175a2d5699d8e560fdb1e09194df90b344b29196",
       "necessity": "necessary_for_approved_scope",
       "placement": "existing_consumer_or_approved_presentation_owner",
       "rationale": "Reproducible glyph/token generation or source-bound theme budget/boundary/native presentation verification."
@@ -1037,7 +1037,7 @@
     {
       "path": "tools/theme_native.js",
       "change": "add",
-      "sha256": "182cf86d59e9d4d7c170d5e952c3a4359312463d50f8458daa84c1a188d7fa34",
+      "sha256": "e286b9b7537892d080875146538781b0b44ae47933989fc84f4eb804d0cae8b8",
       "necessity": "necessary_for_approved_scope",
       "placement": "existing_consumer_or_approved_presentation_owner",
       "rationale": "Reproducible glyph/token generation or source-bound theme budget/boundary/native presentation verification."
@@ -1045,6 +1045,8 @@
   ],
   "remaining": [
     "R2 fresh-context independent read-only review NOT_RUN",
-    "Native synthetic matrix is presentation evidence, not device/business end-to-end acceptance"
-  ]
+    "Native synthetic matrix is presentation evidence, not device/business end-to-end acceptance",
+    "Final native matrix PARTIAL; see source-bound native-summary.json; no release performed."
+  ],
+  "scope_count": 130
 }

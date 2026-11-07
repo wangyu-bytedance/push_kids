@@ -1,0 +1,2628 @@
+{
+  "status": "PARTIAL_NOT_NATIVE_ACCEPTED",
+  "planned_groups": 450,
+  "scope": "Synthetic presentation only; captured groups are not full visual, device or business acceptance.",
+  "blocker_evidence": "native-tool-blocker.md",
+  "current_source_manifest": {
+    "app.js": "1ba67b2a33d5a6821924afa4fbd19d479d4ea37db40b0fbfb18e23c7b578d60f",
+    "app.json": "737aec675df2a7a444ea6d9c093e12f4725769302ea617dbd719f4ce6ce117fb",
+    "app.wxss": "9dfc9851a6caafba6d0562b68afdb1728a391d70743128b4e6d516f7412def87",
+    "assets/icon-ball.png": "933033655556f7e68d9a7d0ce1f55698aac6d8cb94f4ea97711c58c949e15e04",
+    "assets/icon-camera.png": "a26bd58f2b8b5c382872aea38f133d62e06a9fa095316e419c25f0ef3806d636",
+    "assets/icon-family.png": "e13e114ee4df3bd2d933b6f23c76dbb0423f990c92511f7407acf0eb39d4c569",
+    "assets/icon-leaf.png": "051205f6ef4316cce2c2b450558a320ecd4fcb57df9be3414d48b72e7be52469",
+    "assets/icon-photo.png": "3ae8c4b454b2f867cf58bbe647b92a3fa29097ee91ed58f2e614a94478f7ae8e",
+    "assets/icon-refresh.png": "a3d3661cfab8e0a06eed7fef065d3642685beb3399fce66e5febb0a85cad1c5d",
+    "assets/icon-shield.png": "e668befc8d769a9aa75ae39023394d855e52db82e3a9979bd401ba9e0745752f",
+    "assets/illustrations/calendar-still-life.png": "f2636f6673094fec3427f12c27f0039a8a72caaaff73efef057c6df83b7b8589",
+    "assets/illustrations/record-books.png": "bdb44f71e0a871929328dce2a339401bb849a53d1fffbfa651d17f0c7a41cd9e",
+    "assets/illustrations/record-camera.png": "e4bb92f47a9688a608bae556e67823fb4aa1eebb40ab3b1cafd2ce45c467f0b5",
+    "assets/illustrations/report-growth.png": "381e725f6091e6606d6f5ba6b641c71f2b1c60d7268cdbfdab4749ec6246ef6b",
+    "assets/illustrations/settings-activity.png": "b13b2cce04fb17d07f7c9e06dd7fa8facde598ecb69a4a6b1926f4550c966993",
+    "assets/illustrations/settings-daily.png": "003eb8a2d92a7809c5ed3e4b1b6a40cdb2d1ab05f08e288a7b21841cd8e3d2a7",
+    "assets/illustrations/settings-travel.png": "01cd1f65fd081aeecf3bc52abf11263a71f694572e49d33579fc2e7498022040",
+    "assets/tab-calendar-active.png": "5f3ce3374124316e3d0b3527f3fb0429dd0c439bf0aff1f45600a0e273d13d6c",
+    "assets/tab-calendar.png": "e16cb2c710d6a74810b29dde829c55c7857489966a4c35c4c5ed0d8da8f5b165",
+    "assets/tab-records-active.png": "26ca6229ca3bb67ea9ae994c6ac4996c4affc9e20f21b31a2879464bf3c7d682",
+    "assets/tab-records-key.png": "f5946ef4681f66349ffadcb973b7d94b717fdbc8a0b5597cac8feec28e7d2762",
+    "assets/tab-records.png": "8df737b7ebe4d793b55ad294488770066e7d18ebfa77694625edf111a252f705",
+    "assets/tab-reports-active.png": "95a2fe1f86338314e7c1ed5dbc464eaec0b862340a21f01c9a7bac1068f0941b",
+    "assets/tab-reports.png": "20f7b40ca8050537fb022b3f44de26229e2240716a3166d8c76eaca894efb5da",
+    "assets/tab-settings-active.png": "58d6ea06f14a6d7c0450845f50451217aac78121b056277426db96c9bc16c4ec",
+    "assets/tab-settings.png": "6201666cf721c9b985d5f459f31be4d42bf232e9352917a47469fdc938d56240",
+    "assets/tab-today-active.png": "e0293b5f14e6d159eebcc1d745975d6734cfc7c96e451b576e028737a5e4cd24",
+    "assets/tab-today.png": "682c30f5041ed7c84993ef5c320225e6a6a637b6fac57d9293b0d273a406c8e6",
+    "assets/themes/garden.jpg": "c4ce04b5ad0b613fe41345d435be5ff75ce9467170013592c31402943d3f8971",
+    "assets/themes/midnight.jpg": "17875150e9ac505173b21028669924b84ba303304e97c58c7574b68e92ac6036",
+    "assets/themes/ocean.jpg": "bc519b41721a58808752952c94e56f20043dd45602f7b323458cfbe98b9f7556",
+    "assets/themes/space.jpg": "e75abec6393ad37bad3d3828263f1a3d09b68947f02975816bba0263f2783e2b",
+    "assets/themes/tech.jpg": "70336feb5273c34aaa7919e5fadad27115978da5b22e4bfb088f6314d7825106",
+    "assets/zhiyayouji-icon-144.png": "3ae213a432339f07f1ed4ddbe3c01045ae754d3cfe3c3e86f4a61978900cf037",
+    "components/grade-confirmation/index.js": "2837b5a237bb13562367bd17f35495bf56bbfeaa6dfe9dd860dbb45aa2d5c85f",
+    "components/grade-confirmation/index.json": "e7b657f5a4b032a68e9e084639b3a5564ce552896d269c3f8c4463bf7a7fa3b5",
+    "components/grade-confirmation/index.wxml": "2d63f0909e6f097137710e437aeff84a3ef20b407cff17a7001087e0c33502a2",
+    "components/grade-confirmation/index.wxss": "ac700b348b20b2ac92edea1b20e3cd414ff1030b438dbfa1d112ed2665c37f63",
+    "components/notification-renewal-guide/index.js": "d1a892f3da0c165500d2be192cc3cc45277bc1f3837f95cebe3431d1a57d143f",
+    "components/notification-renewal-guide/index.json": "2f97104a3787d98b5058f0cab2aec29b5ff87542f95111dc6b2f2108ea38fb8a",
+    "components/notification-renewal-guide/index.wxml": "aa9e99e9ca0a6e5497931560825b035c22a2b24691b451871e2c31e9c3ea0c1f",
+    "components/notification-renewal-guide/index.wxss": "622caca348d47b6b5802b13966e98b8510b6669e1accd4038fab1c97be89249f",
+    "components/primary-nav/index.js": "b1c803273234db41d228aec9baa2ae59d80277626fffa1466a071eafa2fcc3d1",
+    "components/primary-nav/index.json": "e7b657f5a4b032a68e9e084639b3a5564ce552896d269c3f8c4463bf7a7fa3b5",
+    "components/primary-nav/index.wxml": "ad98c6c3cb40c150f31833e3de8647b42982105c4f8bc241f9e0901799a26354",
+    "components/primary-nav/index.wxss": "17b1f9bfe2bd1e8b4c9ab35168067845eaf9d59615da6e21bed8aafc8e9d0d5e",
+    "components/review-inventory/index.js": "c48d018c2ee4231bc46164a1ce715d314160c561e3a1f98a8e3a164221ec8d04",
+    "components/review-inventory/index.json": "e7b657f5a4b032a68e9e084639b3a5564ce552896d269c3f8c4463bf7a7fa3b5",
+    "components/review-inventory/index.wxml": "443cc58454044106172457725179d93d3509b3e048177d0ac2e0c6b0dc4acf00",
+    "components/review-inventory/index.wxss": "40017238b1eba4e9090ea2bcb3061b869c81203fd69e4e852bea0719974b59ed",
+    "components/submission-materials/index.js": "071d5f5919a825a22f6120457100b33fc8cf2dfe477c1d0763be04eb3ac57cc8",
+    "components/submission-materials/index.json": "e7b657f5a4b032a68e9e084639b3a5564ce552896d269c3f8c4463bf7a7fa3b5",
+    "components/submission-materials/index.wxml": "d103ab2a123e25863ade93be98be06f589999f02523319f236bc2eb830cf1bca",
+    "components/submission-materials/index.wxss": "95d54f33b26299638db6c22e746546a56e8f5e31a96cba160b725bb40aacd761",
+    "components/theme-icon/index.js": "a54e29b274a759943359608f79dfcdc7e0a6fd1000e5f98b06462cfc0c6ac90c",
+    "components/theme-icon/index.json": "e7b657f5a4b032a68e9e084639b3a5564ce552896d269c3f8c4463bf7a7fa3b5",
+    "components/theme-icon/index.wxml": "1d92fa8770c2a5d10624113a868a92362d4bdf91b57df9ec6c505abd370bbb1a",
+    "components/theme-icon/index.wxss": "abe6e3a441065f3417569ec1650c82bf9345d84a5c78c7bf08d901eb4b3b5c8c",
+    "components/theme-picker/index.js": "7286b1532cd22ee3fe4c6614e96184f8fadfe94a1c7aea0f874e4a0543cc97d7",
+    "components/theme-picker/index.json": "e7b657f5a4b032a68e9e084639b3a5564ce552896d269c3f8c4463bf7a7fa3b5",
+    "components/theme-picker/index.wxml": "e3c8f629ce3bc29b91ece533b67f2aa3f612fc2c02b4ac57afb8bcde01bcfc44",
+    "components/theme-picker/index.wxss": "dc3daf3c10d533a6f2e925ea8ea3eb795e4ad3943c2ce531f0a5a4c00025064f",
+    "components/today-learning/index.js": "ae0fb3eaab1fccd558cef972d67123181b3adcf69564518f320a9d5fc464f30d",
+    "components/today-learning/index.json": "2f97104a3787d98b5058f0cab2aec29b5ff87542f95111dc6b2f2108ea38fb8a",
+    "components/today-learning/index.wxml": "6a7768db7a142dabc11695549b5379039f87474142887c9d25a41645c6849896",
+    "components/today-learning/index.wxss": "ba4cdbe323abff47a762349a2204f5f9a44afab83f166a46438b557d79d2de68",
+    "components/todo-card/index.js": "025b44830963a9f51df858f35f1d49b94284fc67ee197c577892ede9f6befeda",
+    "components/todo-card/index.json": "e7b657f5a4b032a68e9e084639b3a5564ce552896d269c3f8c4463bf7a7fa3b5",
+    "components/todo-card/index.wxml": "c5eb82088e4d59da7d0b5ef08486db01685bb9083eaf6d9109c05e552ff3b238",
+    "components/todo-card/index.wxss": "da5b8bce2afe0d39e6b46f5e3c8036985c06c1160b6af436a827e9d7dc3ad64d",
+    "config.js": "07fffb51fccdf09b4fdc88f086fccabc2b66c1ac517603b3cecf7fc34051395d",
+    "custom-tab-bar/index.js": "250634c0690081fd272ce588cb23cb529c0a47901784f2ce93d6c56b8d1f46f5",
+    "custom-tab-bar/index.json": "6bcc2e9e536384851fcfbdd823aee8ae4331243636adc4a656a64a44d9cf9318",
+    "custom-tab-bar/index.wxml": "ed5cfc125e40fb5449c4e000522db687f9e35009da18e530b577985d1d90cfe5",
+    "custom-tab-bar/index.wxss": "ffb257b54b93c88f779c8efc5c78853e2a4bbd13e51cb5941b09fc1775245e44",
+    "pages/activity/edit.js": "6a65dbf80e298e845099af008ba82407b02e341daf861d4bc4a56f2ccdc301be",
+    "pages/activity/edit.json": "c7fd1eb5f07b78da66c339aa8442d3a1afedd23e1af6b1a9430f3efd2e3b2b8e",
+    "pages/activity/edit.wxml": "cbf6985ffcc65b1e26f01b5c6303a3b39fb8a4f88e81b69b7529a85c5d835d52",
+    "pages/activity/edit.wxss": "406860b09bae1c2f5d063a0a37c9c9b232a8d64563f7e843c7b18e582b7e691d",
+    "pages/calendar/index.js": "b82241127d3a565b92c989e6b957cc7e264756c910288866d76c4490e3ebfdac",
+    "pages/calendar/index.json": "7daf4e3de858082c98914b8779586d4f9f3c786eb13e42aa81a737301b25dd85",
+    "pages/calendar/index.wxml": "43312c6ab05bcc7ebb9a4cb1442928e4360485c207af69eef230230d2f5aab01",
+    "pages/calendar/index.wxss": "945efbcd3fffbd9e99d797ec6563637ce0d72109edf03dec584019a6603e09da",
+    "pages/child-edit/index.js": "10648ab813a45620f07ffcc8869797225f3cab661d809dbbf5a735fb05017acf",
+    "pages/child-edit/index.json": "09cbeb117ea0533b3299c0cd618e63b18d8673e18f4621e6487b75da41dd9e76",
+    "pages/child-edit/index.wxml": "b5e85038d981dcfea708f7d0886290b3a3938a5e361bdbc130818e926f7a429d",
+    "pages/child-edit/index.wxss": "59644f96bf64368aff21254fe017e01743e2e8afc4cd5f7a1f65f1ac13b85fc4",
+    "pages/delete-settings/index.js": "b27b7244156e68be16f4933d9528a8ac869e3ac9739b7392e326d2fb19b13c66",
+    "pages/delete-settings/index.json": "e1510cd3b87ca3d18e36c08c3c6d7994949ebc5dc22f37ff0336ff09bae230e0",
+    "pages/delete-settings/index.wxml": "68b8ea8942e785d5008f25708df21a638103f2688c925880661472948888eb7b",
+    "pages/delete-settings/index.wxss": "6299e04ad5fb7d15e8e76fe4e19012dccc7ec3ae975422e54ce66a1d2ddc0393",
+    "pages/family-join/index.js": "234d7b5afa9980fe0435578b4b228f52151fff6d80d7b02d980e147762805c2f",
+    "pages/family-join/index.json": "db3716691b783faf0533ad15635edf5cb97e2c1ea21d73b9386b0b93d7cc771b",
+    "pages/family-join/index.wxml": "c7f957e24ba6a681d78ba559b6cb28da5e393cb0385b710113dd13c335a8f3a3",
+    "pages/family-join/index.wxss": "55fc64560b884722b007bf9ed9e8550522e0bb9c538e826b505d7b18dcb146a8",
+    "pages/family-members/index.js": "8bf765b159424f9cc70b7e92817013aabf6b452053d0dcd100863be0e53f3c15",
+    "pages/family-members/index.json": "e10f20a818790e65d9de00b6cc8b09fde265b098db75886533e2ae90009fa8d3",
+    "pages/family-members/index.wxml": "73cf3daf350cbe48b9f4e23df8a2f8138f796d3fd0995895c4968d5a0d231042",
+    "pages/family-members/index.wxss": "7d47f7f404e7c0d8fcfc200746d7ce7aaf3a712dffb5f16f9696f41df4733499",
+    "pages/family-onboarding/index.js": "5799903a2d564cf99bc062b8008657061629ae115fda542b4a6cc21be80d6d72",
+    "pages/family-onboarding/index.json": "4e8d8cb29a515564923e674ce7f0d6819df74e0edf727715ba714dc291d14f4d",
+    "pages/family-onboarding/index.wxml": "315ffd14e057b4228e3dd0c604cf95ec76c272bd09eb1ef5d8024f6b3b2f61de",
+    "pages/family-onboarding/index.wxss": "31817fa31fdba831e73fa59e6b49dc2ce40a9a29cf4c0a96d2f1c886ad541c61",
+    "pages/family-requests/index.js": "9ab5b8ad7bb91c50d13da4d5f9ceb8434e2a02183b05bfd50c5fc7026c730552",
+    "pages/family-requests/index.json": "fdeec77a2d09fb9fab6eab53d0f1ce1d4b13f8ab266432cd1d193db8f6c07d94",
+    "pages/family-requests/index.wxml": "6f25bd370b2f2c3ad73b32dd853bda9344e971b554eb5deca07804fd25f46c62",
+    "pages/family-requests/index.wxss": "363b8d440bb312ba9a6454806b770d93deb78f058a1a3d7fe228b258097a3257",
+    "pages/footprints/controller.js": "bc3df707ea0e3999cf0666c5f2652e87f7ad8bc8d09f2937905b9b5fc90658a8",
+    "pages/footprints/embedded.js": "80ab684205deb88e15976bf47e46393d5834a43794715c17a6c0400399f9e357",
+    "pages/footprints/embedded.json": "e7b657f5a4b032a68e9e084639b3a5564ce552896d269c3f8c4463bf7a7fa3b5",
+    "pages/footprints/embedded.wxml": "671b973406a40a7f0b13ebef6fc67388497d7e865baabfbd24578bd1a9b3388b",
+    "pages/footprints/embedded.wxss": "79b3d56e5857268ebbee310a892f2a6b576bed8eee94d8d387f0f17d03bbfbe6",
+    "pages/footprints/imports.js": "c2501d9159426b3a11825f2c6f4f173a0edd779bed85eeaa440d98a06e66d7f9",
+    "pages/footprints/index.js": "79f13b27e033de4210f5e1bf759473843ff01eb4f3efc1d170a8348862eccae7",
+    "pages/footprints/index.json": "4d5f2737965214440bae333d3224cec6ddcff3b10507de561fd5f1a4af4a03ed",
+    "pages/footprints/index.wxml": "952dda327a41487432083d1a170d97734c96363bb98ed592da3330328233d29a",
+    "pages/footprints/index.wxss": "29ac48a16025a26c128b6845eb97cc7b4f337aba7bea1488804041834bb2d9a2",
+    "pages/footprints/maps.js": "750afef3d3b49c113d2baff6425769218e920fde87be5500382933b6c2e7bcff",
+    "pages/footprints/photos.js": "967cf1fbe4f53f668ce8d7ea9b837d2add99494c635210b001c0dbf621ee9ade",
+    "pages/footprints/presentation.js": "436908ddf87c0f2bfddff9462ee12d3bc0397276402d89ad25ee8b2d07c9e62f",
+    "pages/notifications/index.js": "6d8dba86c1f08a3d723fed0fbbd4a992398d1e4bdc84b83a000c6cc81bb9bcca",
+    "pages/notifications/index.json": "2b55c33fc8a9e315081edea1dcc06b4ec3bbea2fba9acd8fa846ad8edabea99a",
+    "pages/notifications/index.wxml": "4e53cd477e915bec81ec526a0c25e9ad9e69105f7898218c55f5952a9821f7cb",
+    "pages/notifications/index.wxss": "e94b0621ac9c9668b793429b10748d38d142bc1d8638275f7f82a9d7cda0bfbd",
+    "pages/record-detail/index.js": "b8f90b52fb70924bf2a5091af5344db3035731bc8364c589096370f4221d2e66",
+    "pages/record-detail/index.json": "b50a6bb435fc30832f6291390625b054c5f32488921d59cd13aec876faa95170",
+    "pages/record-detail/index.wxml": "1cf6a45a473eff9a5696e0fab7a3bdc20d517dc24dff3eb8f0d902d77af2b9a7",
+    "pages/record-detail/index.wxss": "8717ba2832adfe6b6e298fb72f0b7ffc49f7f1de3420e1aea0a8fc0a324899ec",
+    "pages/records/history.js": "da6c67d51ce9e8c366b04060eb97484c434d70654b36ba32e989b68d0e735ab4",
+    "pages/records/history.wxml": "748e98dc369f3f96c2fa0ff93a7dca64b759523ccdc61da4d15c7c2a0ad09603",
+    "pages/records/history.wxss": "60dbb6037b1f6862613cc566b174a5e53a5e662ab3480e6d6689687a5e9050d8",
+    "pages/records/index.js": "e668ff17e213c4a95c8b7626e5c5a16bcae013f6aeebff5301222a987bdf5bac",
+    "pages/records/index.json": "a50bcea528afb0295ed3c1f496ade4c56fca52b6a86c0fbd72aa550e1a06f616",
+    "pages/records/index.wxml": "2c5eb86b9cfbe7b07c65dc9934abedc6d1eec85d0a640fd8c20c63246febac2d",
+    "pages/records/index.wxss": "7b917f907dd35364dc54e6e6eb36ce5927142c2c38c6664e839011cbb967c851",
+    "pages/records/record-types.js": "36cd51138d7af17b3d3cc7a1567ad706c08d6dbf4b8fce81fc1320cef13de093",
+    "pages/records/voice-input.js": "1c4c283cde1154db848e61b5609dfa7e5636109fb67d8c0fea0ff4511aced873",
+    "pages/reports/index.js": "18a23f9be52375fc9215cd46b03b8f95c79e7bfddcfeeca68ab995f6171f454e",
+    "pages/reports/index.json": "cbaee4826845fdc8be15f4037ae79df7a325bbf17ea4384d0f700343ed1cac14",
+    "pages/reports/index.wxml": "8ae9b2d865dee23fa4d580d1864d55b4db1dd356c8926cbfc95f5f482cc421eb",
+    "pages/reports/index.wxss": "6e87df2638248644c6b2383ae508e28cd1538385120b0130279852fd6ac72f13",
+    "pages/review-inventory/content.wxml": "aa2e2bec7b8a84e768e8615283edb3419dcd8f6588ff9aed6944b294a5663f7f",
+    "pages/review-inventory/content.wxss": "428ecdb6646c70d5a622b8be5b99f056d216c795fc07ca42f9cf1d88e3cc5b24",
+    "pages/review-inventory/controller.js": "73fae9064a6544479f071c2ffd779b3ecde80ddd6c0b71a1a70f27948cd1e89e",
+    "pages/review-inventory/index.js": "e61710c603cde65ff2204c9dca299e31c12a29a838209fbabdf98d9616f0738c",
+    "pages/review-inventory/index.json": "d4122f2730f43f3dc8c6046184325af2a90b0acc6f3e2b576e90617008b813df",
+    "pages/review-inventory/index.wxml": "0801558f34471ba2b2e201299472ca54d3b96373f9f50873ba5a1564949e35ba",
+    "pages/review-inventory/index.wxss": "944e4cee4ec39a8ba5b3c4a3904d6e5f4c3956678bc80057c97a3dd85dc76e45",
+    "pages/settings/index.js": "018b3c43af05cc983e05d2337ecefe6802b7dd3254790d5ed57c84f78375fad1",
+    "pages/settings/index.json": "e8ba3b0f6280de95a2cc433aaad56cdcace39ea3904bff979b98ef7a69c49852",
+    "pages/settings/index.wxml": "494684d82f0af5efe55d2501e9b4acb88c792352c5d21d6f6ee854df08cb712e",
+    "pages/settings/index.wxss": "222704ede80f129655100f0bc4e7cc9137213e155149f6ef9df9d7ce41b1872f",
+    "pages/submission/confirm.js": "4c00e519dbee918527d8a636bd55aa54357a5214b1fefb922c138b727c71fa93",
+    "pages/submission/confirm.json": "ff6856376089579f6b1704e42dec7b2a2c4bdb127dbd7ef0c73496fd628ea949",
+    "pages/submission/confirm.wxml": "115fbe81611ba9c28c02c3d5f37714b8ee73ee5d375acfe8a6e9091060e539ff",
+    "pages/submission/confirm.wxss": "c2fc2bd2db8b1e77934022b10c8993b7df74fa99298349a4d6a4b210eba2805b",
+    "pages/submission/detail.js": "dcd62776c0c4f34f012060dbf47926eac3d8e38ea68795d4edf9828ad5be8183",
+    "pages/submission/detail.wxml": "2bb9656b5771f6dc306a8b88665d5437ab4d290832c6bb72430c391d483d941e",
+    "pages/submission/detail.wxss": "cd76e97cbc77836c3dad3cd5f2602668abb48473d88e731b24d7c1c042cc862c",
+    "pages/submission/draft.js": "28e5676c8dc8bf55f82967dd4ca4e71dc88a152273516cd163386f7947ccce27",
+    "pages/submission/draft.wxml": "77a0d0496e42231990861245c5e0157bc02e0ce14d8db91747fc99c5243509ae",
+    "pages/submission/draft.wxss": "362ad5108913a90eec1676cda65899ace3e3f0ae7a8df5cb30305d65649c1b3b",
+    "pages/today/index.js": "46f3ebf6a20d0bc22f909058b6899663fd57f044dc115c4b5a4d5c66ac4bc693",
+    "pages/today/index.json": "35f5195cbcc51040db4fb927e4f5e7a9287472666ec765dcde71b7312989dc0f",
+    "pages/today/index.wxml": "60d1fdf66b2ffe6247ab3d337f9510b4c3b7c1e4271f74a40a82c9d1d2b5d7f3",
+    "pages/today/index.wxss": "33fd239dcecc6c3e90c05b9d1924ed349fcdad5be450d67a51c4b70d2754a6ea",
+    "presentation/theme/adapters.js": "638fc11aab279640f97086b38d5a74ea08ca384d38291e0eba5ca0118ee59456",
+    "presentation/theme/glyphs.js": "0cd59614e8a0bdcabd2e0274299753d3ccb2034167912c6dd51895edcc1ee561",
+    "presentation/theme/registry.js": "0db038f4a283ed5961727c5bdb7b5ef762c1688f84e5a093e50af2760ab75e50",
+    "presentation/theme/state.js": "6bb4de2e581fb34d5a909a9b4fea874a51b6d257b0300bf40ed2cdd8dffa8af1",
+    "project.config.json": "ce3a28e595da63fa60ad3bb146dc464a4f2eda0685fe671a854a69dc3168f5a3",
+    "sitemap.json": "a9f9a54c638deb8f319a3ec6434229c82e2d6eb9d6c8fa25019d3094473d95cc",
+    "styles/atoms.wxss": "86a25b0672f47a458d9e7380eb1de95b3e3c5eb472a8ac5a36c7d0226d6dda5c",
+    "styles/icons.wxss": "aea05a98a5b96dd93105daa66688c2bd478345313c8e27b5f98e93aa5a8bd503",
+    "styles/theme.wxss": "e9985c2e25e2c892d7918aa780461cf277b0d8dbfbf4842ab288647ac1d65aaf",
+    "styles/tokens.wxss": "e86cf3ab5c0507852721d4955a61ad652752edaff4d112e7e4c403c65daf856b",
+    "utils/api.js": "24ef2ed783a33662a4e630695e53de0d6a7aa10b752f38b50d260a06c803797c",
+    "utils/child-context.js": "1f9a214957b254bd5251523aa8df035ed43d1b3e50ee48453a8bd0eced9612b6",
+    "utils/cloud-media.js": "a6aa35760d9de765813c22186192903e79eebc6a29d5f4bb31097d06f0407a89",
+    "utils/date.js": "b42f3af3d4108179dccf55d9d051e076ab5d53b8dde09735bd0d43a090b70979",
+    "utils/family.js": "8921d516be628316f7d821a06fa8720b76de65b57b982c7d677dfd2743ea3bfe",
+    "utils/grade-confirmation.js": "235f8f37961079c9cd22118fd61bc33d36a5181794a18c9802d3f772e4ab4b8f",
+    "utils/notification-renewal.js": "baa0bf7ed10aec04184fe5febd0b556ec4ce813052fffddf6ee8f2998dfbbaf7",
+    "utils/notifications.js": "ba725c59daef3ccce0602518ba252c25b22b40d4f9d503fc0244e46af76439c9",
+    "utils/ui.js": "d1543ecb25fad971b3e7a8c370b03c9105d74708a1ae26c9995b2821472f65a0",
+    "utils/view-state.js": "17f16897d1c8ffaa1159953bc4b241f6b77d98bde1e6e0186af05c8d77428b0d"
+  },
+  "viewports": [
+    {
+      "viewport": "320x568",
+      "source_bound": true,
+      "historical_report": "native/320/matrix.json",
+      "stale_source_paths": [],
+      "counts": {
+        "CAPTURED_WITH_GEOMETRY_CHECKS": 25,
+        "GEOMETRY_ONLY": 5,
+        "CAPTURE_FAILED": 9,
+        "NOT_RUN": 111
+      },
+      "groups": [
+        {
+          "name": "original--family-onboarding-index",
+          "status": "CAPTURED_WITH_GEOMETRY_CHECKS",
+          "nodes": 3,
+          "validation_errors": [],
+          "screenshot": "native/320/original--family-onboarding-index.png",
+          "screenshot_sha256": "91a7639e893d5b025c921785213346f79d02cc473fc576cff926fe11f8197f23",
+          "screenshot_errors": []
+        },
+        {
+          "name": "garden--family-onboarding-index",
+          "status": "CAPTURED_WITH_GEOMETRY_CHECKS",
+          "nodes": 3,
+          "validation_errors": [],
+          "screenshot": "native/320/garden--family-onboarding-index.png",
+          "screenshot_sha256": "925df3482652d6eeb7aaf53a5be3ea07f60bc4286c8d07d0c425105615597c5f",
+          "screenshot_errors": []
+        },
+        {
+          "name": "space--family-onboarding-index",
+          "status": "CAPTURED_WITH_GEOMETRY_CHECKS",
+          "nodes": 3,
+          "validation_errors": [],
+          "screenshot": "native/320/space--family-onboarding-index.png",
+          "screenshot_sha256": "dc9dda9d995fbaeb4e442c4fb19ffa1163524f17facd75cdde76ac0329751f27",
+          "screenshot_errors": []
+        },
+        {
+          "name": "midnight--family-onboarding-index",
+          "status": "CAPTURED_WITH_GEOMETRY_CHECKS",
+          "nodes": 3,
+          "validation_errors": [],
+          "screenshot": "native/320/midnight--family-onboarding-index.png",
+          "screenshot_sha256": "63d60bbb76715c4393d196b09415c970e6effb634c7619166930a26ddde3aed2",
+          "screenshot_errors": []
+        },
+        {
+          "name": "ocean--family-onboarding-index",
+          "status": "CAPTURED_WITH_GEOMETRY_CHECKS",
+          "nodes": 3,
+          "validation_errors": [],
+          "screenshot": "native/320/ocean--family-onboarding-index.png",
+          "screenshot_sha256": "46bb2ee0b767513ee1896347ac21591a56f2ae9ef6696bf55e0fb02e06829002",
+          "screenshot_errors": []
+        },
+        {
+          "name": "tech--family-onboarding-index",
+          "status": "CAPTURED_WITH_GEOMETRY_CHECKS",
+          "nodes": 3,
+          "validation_errors": [],
+          "screenshot": "native/320/tech--family-onboarding-index.png",
+          "screenshot_sha256": "c444dc8e92dcb7082d58ffb12328a1398559efffec3298e31ca95abf511218e1",
+          "screenshot_errors": []
+        },
+        {
+          "name": "original--today-index",
+          "status": "CAPTURED_WITH_GEOMETRY_CHECKS",
+          "nodes": 6,
+          "validation_errors": [],
+          "screenshot": "native/320/original--today-index.png",
+          "screenshot_sha256": "3187899d90431bb9b78fe1f6a5e5a2352b90d8d7132500674a05c1b7001ed23e",
+          "screenshot_errors": []
+        },
+        {
+          "name": "garden--today-index",
+          "status": "CAPTURED_WITH_GEOMETRY_CHECKS",
+          "nodes": 6,
+          "validation_errors": [],
+          "screenshot": "native/320/garden--today-index.png",
+          "screenshot_sha256": "f1eaa79f99d5088e9a5d156b865779bd454ab33604c1e9ea513aa3707b85f733",
+          "screenshot_errors": []
+        },
+        {
+          "name": "space--today-index",
+          "status": "CAPTURED_WITH_GEOMETRY_CHECKS",
+          "nodes": 6,
+          "validation_errors": [],
+          "screenshot": "native/320/space--today-index.png",
+          "screenshot_sha256": "aefbb2845a6ab82ebc4b7ed70ae6b387439d9a093086935c18ff89042ba14f3c",
+          "screenshot_errors": []
+        },
+        {
+          "name": "midnight--today-index",
+          "status": "CAPTURED_WITH_GEOMETRY_CHECKS",
+          "nodes": 6,
+          "validation_errors": [],
+          "screenshot": "native/320/midnight--today-index.png",
+          "screenshot_sha256": "df17d2e382684e65360a303121132bdcde081669868e8ede12560d65473e1520",
+          "screenshot_errors": []
+        },
+        {
+          "name": "ocean--today-index",
+          "status": "CAPTURED_WITH_GEOMETRY_CHECKS",
+          "nodes": 6,
+          "validation_errors": [],
+          "screenshot": "native/320/ocean--today-index.png",
+          "screenshot_sha256": "46141dd4ad2f8890464f8b84ad51f0d530693d75451c42190116c291306910b0",
+          "screenshot_errors": []
+        },
+        {
+          "name": "tech--today-index",
+          "status": "CAPTURED_WITH_GEOMETRY_CHECKS",
+          "nodes": 6,
+          "validation_errors": [],
+          "screenshot": "native/320/tech--today-index.png",
+          "screenshot_sha256": "de44c02105df149726f11fb52518283cf33f22315b0c5ed6d9de3b3c41a3cc97",
+          "screenshot_errors": []
+        },
+        {
+          "name": "original--calendar-index",
+          "status": "GEOMETRY_ONLY",
+          "nodes": 6,
+          "validation_errors": [],
+          "screenshot": null,
+          "screenshot_sha256": null,
+          "screenshot_errors": [
+            "App.captureScreenshot timed out"
+          ]
+        },
+        {
+          "name": "garden--calendar-index",
+          "status": "GEOMETRY_ONLY",
+          "nodes": 6,
+          "validation_errors": [],
+          "screenshot": null,
+          "screenshot_sha256": null,
+          "screenshot_errors": [
+            "App.captureScreenshot timed out"
+          ]
+        },
+        {
+          "name": "space--calendar-index",
+          "status": "GEOMETRY_ONLY",
+          "nodes": 6,
+          "validation_errors": [],
+          "screenshot": null,
+          "screenshot_sha256": null,
+          "screenshot_errors": [
+            "App.captureScreenshot timed out"
+          ]
+        },
+        {
+          "name": "midnight--calendar-index",
+          "status": "CAPTURED_WITH_GEOMETRY_CHECKS",
+          "nodes": 6,
+          "validation_errors": [],
+          "screenshot": "native/320/midnight--calendar-index.png",
+          "screenshot_sha256": "612a3775b21c8a67e08b97463f56593e58cd3ef0078c7786d6505bdab85bc40e",
+          "screenshot_errors": []
+        },
+        {
+          "name": "ocean--calendar-index",
+          "status": "CAPTURED_WITH_GEOMETRY_CHECKS",
+          "nodes": 6,
+          "validation_errors": [],
+          "screenshot": "native/320/ocean--calendar-index.png",
+          "screenshot_sha256": "3787087876d665414209c8dc4562569f8ea61c7452a27dc6adb7cac3096d331c",
+          "screenshot_errors": []
+        },
+        {
+          "name": "tech--calendar-index",
+          "status": "CAPTURED_WITH_GEOMETRY_CHECKS",
+          "nodes": 6,
+          "validation_errors": [],
+          "screenshot": "native/320/tech--calendar-index.png",
+          "screenshot_sha256": "9208bba0892ae9e169c92e0ea447aacd4586612b97307f0ba633bc1efa482832",
+          "screenshot_errors": []
+        },
+        {
+          "name": "original--records-index",
+          "status": "CAPTURED_WITH_GEOMETRY_CHECKS",
+          "nodes": 9,
+          "validation_errors": [],
+          "screenshot": "native/320/original--records-index.png",
+          "screenshot_sha256": "4fc7ddde63ed600d9d5edbb8d437bb9866ffb4b674c236e0bb8892ef049f865b",
+          "screenshot_errors": []
+        },
+        {
+          "name": "garden--records-index",
+          "status": "CAPTURED_WITH_GEOMETRY_CHECKS",
+          "nodes": 9,
+          "validation_errors": [],
+          "screenshot": "native/320/garden--records-index.png",
+          "screenshot_sha256": "c1103cfd3ed4d3c55ba1abbcbfd9cf6f9e1acb8e841c230cd3205480e399c43a",
+          "screenshot_errors": []
+        },
+        {
+          "name": "space--records-index",
+          "status": "CAPTURED_WITH_GEOMETRY_CHECKS",
+          "nodes": 9,
+          "validation_errors": [],
+          "screenshot": "native/320/space--records-index.png",
+          "screenshot_sha256": "82c680f8958e008659b80f8f17ce315ef49268ea7c15f02e92db015474a7b997",
+          "screenshot_errors": []
+        },
+        {
+          "name": "midnight--records-index",
+          "status": "CAPTURED_WITH_GEOMETRY_CHECKS",
+          "nodes": 9,
+          "validation_errors": [],
+          "screenshot": "native/320/midnight--records-index.png",
+          "screenshot_sha256": "23b9da9d50efefbef02e9f0a7727e39b16a0fc24de26542da95a8bb4fb12b3ce",
+          "screenshot_errors": []
+        },
+        {
+          "name": "ocean--records-index",
+          "status": "CAPTURED_WITH_GEOMETRY_CHECKS",
+          "nodes": 9,
+          "validation_errors": [],
+          "screenshot": "native/320/ocean--records-index.png",
+          "screenshot_sha256": "ff86e589ddf6e5e64cce79a3f99feeecb8bdad89a62e7543ee047fbcea709945",
+          "screenshot_errors": []
+        },
+        {
+          "name": "tech--records-index",
+          "status": "CAPTURED_WITH_GEOMETRY_CHECKS",
+          "nodes": 9,
+          "validation_errors": [],
+          "screenshot": "native/320/tech--records-index.png",
+          "screenshot_sha256": "af10e26d8c75d4cdb639c2fbd4feb279f75233c2b7a14544c8390ce23e6070cc",
+          "screenshot_errors": []
+        },
+        {
+          "name": "original--footprints-index",
+          "status": "GEOMETRY_ONLY",
+          "nodes": 2,
+          "validation_errors": [],
+          "screenshot": null,
+          "screenshot_sha256": null,
+          "screenshot_errors": [
+            "App.captureScreenshot timed out"
+          ]
+        },
+        {
+          "name": "garden--footprints-index",
+          "status": "GEOMETRY_ONLY",
+          "nodes": 2,
+          "validation_errors": [],
+          "screenshot": null,
+          "screenshot_sha256": null,
+          "screenshot_errors": [
+            "App.captureScreenshot timed out"
+          ]
+        },
+        {
+          "name": "space--footprints-index",
+          "status": "CAPTURED_WITH_GEOMETRY_CHECKS",
+          "nodes": 2,
+          "validation_errors": [],
+          "screenshot": "native/320/space--footprints-index.png",
+          "screenshot_sha256": "f0244953ceac4b7c5b528489afd142aa18f83bd1fbd081789b05ac02c54a2c02",
+          "screenshot_errors": []
+        },
+        {
+          "name": "midnight--footprints-index",
+          "status": "CAPTURED_WITH_GEOMETRY_CHECKS",
+          "nodes": 2,
+          "validation_errors": [],
+          "screenshot": "native/320/midnight--footprints-index.png",
+          "screenshot_sha256": "aa8f4cb35359c9850c5f81560e7795a76a80b95700a23e30802493bdc4b2ad2c",
+          "screenshot_errors": []
+        },
+        {
+          "name": "ocean--footprints-index",
+          "status": "CAPTURED_WITH_GEOMETRY_CHECKS",
+          "nodes": 2,
+          "validation_errors": [],
+          "screenshot": "native/320/ocean--footprints-index.png",
+          "screenshot_sha256": "da8c438e33682a23707485807d32f3c107cb69d7dd8ae596a97e196a21513f71",
+          "screenshot_errors": []
+        },
+        {
+          "name": "tech--footprints-index",
+          "status": "CAPTURED_WITH_GEOMETRY_CHECKS",
+          "nodes": 2,
+          "validation_errors": [],
+          "screenshot": "native/320/tech--footprints-index.png",
+          "screenshot_sha256": "b04fa3b04fbc6504be8d996802cc7d934ed38497c9601f5d9298d6b2317fa04a",
+          "screenshot_errors": []
+        },
+        {
+          "name": "original--reports-index",
+          "status": "CAPTURE_FAILED",
+          "reason": "App.callWxMethod timed out"
+        },
+        {
+          "name": "garden--reports-index",
+          "status": "CAPTURE_FAILED",
+          "reason": "App.callFunction timed out"
+        },
+        {
+          "name": "space--reports-index",
+          "status": "CAPTURE_FAILED",
+          "reason": "App.callFunction timed out"
+        },
+        {
+          "name": "midnight--reports-index",
+          "status": "CAPTURE_FAILED",
+          "reason": "App.callFunction timed out"
+        },
+        {
+          "name": "ocean--reports-index",
+          "status": "CAPTURE_FAILED",
+          "reason": "App.callFunction timed out"
+        },
+        {
+          "name": "tech--reports-index",
+          "status": "CAPTURE_FAILED",
+          "reason": "App.callFunction timed out"
+        },
+        {
+          "name": "original--review-inventory-index",
+          "status": "CAPTURE_FAILED",
+          "reason": "App.callFunction timed out"
+        },
+        {
+          "name": "garden--review-inventory-index",
+          "status": "CAPTURE_FAILED",
+          "reason": "App.callFunction timed out"
+        },
+        {
+          "name": "space--review-inventory-index",
+          "status": "CAPTURE_FAILED",
+          "reason": "App.callFunction timed out"
+        },
+        {
+          "name": "midnight--review-inventory-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "ocean--review-inventory-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "tech--review-inventory-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "original--settings-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "garden--settings-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "space--settings-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "midnight--settings-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "ocean--settings-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "tech--settings-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "original--submission-confirm",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "garden--submission-confirm",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "space--submission-confirm",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "midnight--submission-confirm",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "ocean--submission-confirm",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "tech--submission-confirm",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "original--record-detail-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "garden--record-detail-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "space--record-detail-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "midnight--record-detail-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "ocean--record-detail-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "tech--record-detail-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "original--activity-edit",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "garden--activity-edit",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "space--activity-edit",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "midnight--activity-edit",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "ocean--activity-edit",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "tech--activity-edit",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "original--child-edit-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "garden--child-edit-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "space--child-edit-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "midnight--child-edit-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "ocean--child-edit-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "tech--child-edit-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "original--family-join-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "garden--family-join-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "space--family-join-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "midnight--family-join-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "ocean--family-join-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "tech--family-join-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "original--family-members-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "garden--family-members-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "space--family-members-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "midnight--family-members-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "ocean--family-members-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "tech--family-members-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "original--family-requests-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "garden--family-requests-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "space--family-requests-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "midnight--family-requests-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "ocean--family-requests-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "tech--family-requests-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "original--delete-settings-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "garden--delete-settings-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "space--delete-settings-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "midnight--delete-settings-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "ocean--delete-settings-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "tech--delete-settings-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "original--notifications-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "garden--notifications-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "space--notifications-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "midnight--notifications-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "ocean--notifications-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "tech--notifications-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "original--state-loading",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "garden--state-loading",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "space--state-loading",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "midnight--state-loading",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "ocean--state-loading",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "tech--state-loading",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "original--state-empty",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "garden--state-empty",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "space--state-empty",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "midnight--state-empty",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "ocean--state-empty",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "tech--state-empty",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "original--state-error",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "garden--state-error",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "space--state-error",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "midnight--state-error",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "ocean--state-error",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "tech--state-error",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "original--state-readonly",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "garden--state-readonly",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "space--state-readonly",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "midnight--state-readonly",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "ocean--state-readonly",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "tech--state-readonly",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "original--state-disabled",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "garden--state-disabled",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "space--state-disabled",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "midnight--state-disabled",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "ocean--state-disabled",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "tech--state-disabled",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "original--state-sheet",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "garden--state-sheet",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "space--state-sheet",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "midnight--state-sheet",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "ocean--state-sheet",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "tech--state-sheet",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "original--state-dialog",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "garden--state-dialog",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "space--state-dialog",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "midnight--state-dialog",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "ocean--state-dialog",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "tech--state-dialog",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "original--state-long-copy",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "garden--state-long-copy",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "space--state-long-copy",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "midnight--state-long-copy",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "ocean--state-long-copy",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "tech--state-long-copy",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        }
+      ]
+    },
+    {
+      "viewport": "390x844",
+      "source_bound": false,
+      "historical_report": "native/390/matrix.json",
+      "stale_source_paths": [
+        "app.wxss",
+        "pages/calendar/index.wxss",
+        "presentation/theme/registry.js",
+        "styles/atoms.wxss",
+        "styles/tokens.wxss"
+      ],
+      "counts": {
+        "NOT_RUN": 150
+      },
+      "groups": [
+        {
+          "name": "original--family-onboarding-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "garden--family-onboarding-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "space--family-onboarding-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "midnight--family-onboarding-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "ocean--family-onboarding-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "tech--family-onboarding-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "original--today-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "garden--today-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "space--today-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "midnight--today-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "ocean--today-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "tech--today-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "original--calendar-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "garden--calendar-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "space--calendar-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "midnight--calendar-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "ocean--calendar-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "tech--calendar-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "original--records-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "garden--records-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "space--records-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "midnight--records-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "ocean--records-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "tech--records-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "original--footprints-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "garden--footprints-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "space--footprints-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "midnight--footprints-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "ocean--footprints-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "tech--footprints-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "original--reports-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "garden--reports-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "space--reports-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "midnight--reports-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "ocean--reports-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "tech--reports-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "original--review-inventory-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "garden--review-inventory-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "space--review-inventory-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "midnight--review-inventory-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "ocean--review-inventory-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "tech--review-inventory-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "original--settings-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "garden--settings-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "space--settings-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "midnight--settings-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "ocean--settings-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "tech--settings-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "original--submission-confirm",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "garden--submission-confirm",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "space--submission-confirm",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "midnight--submission-confirm",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "ocean--submission-confirm",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "tech--submission-confirm",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "original--record-detail-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "garden--record-detail-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "space--record-detail-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "midnight--record-detail-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "ocean--record-detail-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "tech--record-detail-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "original--activity-edit",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "garden--activity-edit",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "space--activity-edit",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "midnight--activity-edit",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "ocean--activity-edit",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "tech--activity-edit",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "original--child-edit-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "garden--child-edit-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "space--child-edit-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "midnight--child-edit-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "ocean--child-edit-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "tech--child-edit-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "original--family-join-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "garden--family-join-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "space--family-join-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "midnight--family-join-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "ocean--family-join-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "tech--family-join-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "original--family-members-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "garden--family-members-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "space--family-members-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "midnight--family-members-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "ocean--family-members-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "tech--family-members-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "original--family-requests-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "garden--family-requests-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "space--family-requests-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "midnight--family-requests-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "ocean--family-requests-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "tech--family-requests-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "original--delete-settings-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "garden--delete-settings-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "space--delete-settings-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "midnight--delete-settings-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "ocean--delete-settings-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "tech--delete-settings-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "original--notifications-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "garden--notifications-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "space--notifications-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "midnight--notifications-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "ocean--notifications-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "tech--notifications-index",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "original--state-loading",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "garden--state-loading",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "space--state-loading",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "midnight--state-loading",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "ocean--state-loading",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "tech--state-loading",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "original--state-empty",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "garden--state-empty",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "space--state-empty",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "midnight--state-empty",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "ocean--state-empty",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "tech--state-empty",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "original--state-error",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "garden--state-error",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "space--state-error",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "midnight--state-error",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "ocean--state-error",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "tech--state-error",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "original--state-readonly",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "garden--state-readonly",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "space--state-readonly",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "midnight--state-readonly",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "ocean--state-readonly",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "tech--state-readonly",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "original--state-disabled",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "garden--state-disabled",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "space--state-disabled",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "midnight--state-disabled",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "ocean--state-disabled",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "tech--state-disabled",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "original--state-sheet",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "garden--state-sheet",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "space--state-sheet",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "midnight--state-sheet",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "ocean--state-sheet",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "tech--state-sheet",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "original--state-dialog",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "garden--state-dialog",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "space--state-dialog",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "midnight--state-dialog",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "ocean--state-dialog",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "tech--state-dialog",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "original--state-long-copy",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "garden--state-long-copy",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "space--state-long-copy",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "midnight--state-long-copy",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "ocean--state-long-copy",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        },
+        {
+          "name": "tech--state-long-copy",
+          "status": "NOT_RUN",
+          "reason": "STALE_SOURCE_OR_UNBOUND_HISTORICAL_REPORT"
+        }
+      ]
+    },
+    {
+      "viewport": "430x932",
+      "source_bound": false,
+      "historical_report": null,
+      "stale_source_paths": [],
+      "counts": {
+        "NOT_RUN": 150
+      },
+      "groups": [
+        {
+          "name": "original--family-onboarding-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "garden--family-onboarding-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "space--family-onboarding-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "midnight--family-onboarding-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "ocean--family-onboarding-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "tech--family-onboarding-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "original--today-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "garden--today-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "space--today-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "midnight--today-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "ocean--today-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "tech--today-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "original--calendar-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "garden--calendar-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "space--calendar-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "midnight--calendar-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "ocean--calendar-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "tech--calendar-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "original--records-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "garden--records-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "space--records-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "midnight--records-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "ocean--records-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "tech--records-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "original--footprints-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "garden--footprints-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "space--footprints-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "midnight--footprints-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "ocean--footprints-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "tech--footprints-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "original--reports-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "garden--reports-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "space--reports-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "midnight--reports-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "ocean--reports-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "tech--reports-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "original--review-inventory-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "garden--review-inventory-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "space--review-inventory-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "midnight--review-inventory-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "ocean--review-inventory-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "tech--review-inventory-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "original--settings-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "garden--settings-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "space--settings-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "midnight--settings-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "ocean--settings-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "tech--settings-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "original--submission-confirm",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "garden--submission-confirm",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "space--submission-confirm",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "midnight--submission-confirm",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "ocean--submission-confirm",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "tech--submission-confirm",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "original--record-detail-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "garden--record-detail-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "space--record-detail-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "midnight--record-detail-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "ocean--record-detail-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "tech--record-detail-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "original--activity-edit",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "garden--activity-edit",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "space--activity-edit",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "midnight--activity-edit",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "ocean--activity-edit",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "tech--activity-edit",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "original--child-edit-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "garden--child-edit-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "space--child-edit-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "midnight--child-edit-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "ocean--child-edit-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "tech--child-edit-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "original--family-join-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "garden--family-join-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "space--family-join-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "midnight--family-join-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "ocean--family-join-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "tech--family-join-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "original--family-members-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "garden--family-members-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "space--family-members-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "midnight--family-members-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "ocean--family-members-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "tech--family-members-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "original--family-requests-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "garden--family-requests-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "space--family-requests-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "midnight--family-requests-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "ocean--family-requests-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "tech--family-requests-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "original--delete-settings-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "garden--delete-settings-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "space--delete-settings-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "midnight--delete-settings-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "ocean--delete-settings-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "tech--delete-settings-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "original--notifications-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "garden--notifications-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "space--notifications-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "midnight--notifications-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "ocean--notifications-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "tech--notifications-index",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "original--state-loading",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "garden--state-loading",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "space--state-loading",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "midnight--state-loading",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "ocean--state-loading",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "tech--state-loading",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "original--state-empty",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "garden--state-empty",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "space--state-empty",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "midnight--state-empty",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "ocean--state-empty",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "tech--state-empty",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "original--state-error",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "garden--state-error",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "space--state-error",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "midnight--state-error",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "ocean--state-error",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "tech--state-error",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "original--state-readonly",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "garden--state-readonly",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "space--state-readonly",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "midnight--state-readonly",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "ocean--state-readonly",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "tech--state-readonly",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "original--state-disabled",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "garden--state-disabled",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "space--state-disabled",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "midnight--state-disabled",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "ocean--state-disabled",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "tech--state-disabled",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "original--state-sheet",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "garden--state-sheet",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "space--state-sheet",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "midnight--state-sheet",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "ocean--state-sheet",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "tech--state-sheet",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "original--state-dialog",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "garden--state-dialog",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "space--state-dialog",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "midnight--state-dialog",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "ocean--state-dialog",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "tech--state-dialog",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "original--state-long-copy",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "garden--state-long-copy",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "space--state-long-copy",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "midnight--state-long-copy",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "ocean--state-long-copy",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        },
+        {
+          "name": "tech--state-long-copy",
+          "status": "NOT_RUN",
+          "reason": "NATIVE_TOOL_UNAVAILABLE"
+        }
+      ]
+    }
+  ],
+  "counts": {
+    "CAPTURED_WITH_GEOMETRY_CHECKS": 25,
+    "GEOMETRY_ONLY": 5,
+    "CAPTURE_FAILED": 9,
+    "NOT_RUN": 411
+  },
+  "actions": {
+    "current_native": "NOT_RUN",
+    "historical_six_theme_probe": "Retained as diagnosis; no final-source binding."
+  }
+}

@@ -57,21 +57,52 @@
       "left": 15,
       "right": 305,
       "top": 240,
-      "bottom": 309,
+      "bottom": 316,
       "width": 290,
-      "height": 69,
+      "height": 76,
       "backgroundColor": "rgb(255, 251, 238)",
+      "color": "rgb(41, 63, 41)",
+      "fontSize": "16px",
+      "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif"
+    },
+    {
+      "host": "page",
+      "selector": ".icon-btn",
+      "left": 27,
+      "right": 71,
+      "top": 252,
+      "bottom": 296,
+      "width": 44,
+      "height": 44,
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "color": "rgb(41, 63, 41)",
+      "fontSize": "16px",
+      "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif"
+    },
+    {
+      "host": "page",
+      "selector": ".icon-btn",
+      "left": 256,
+      "right": 300,
+      "top": 252,
+      "bottom": 296,
+      "width": 44,
+      "height": 44,
+      "backgroundColor": "rgba(0, 0, 0, 0)",
       "color": "rgb(41, 63, 41)",
       "fontSize": "16px",
       "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif"
     }
   ],
   "source": "native wx.createSelectorQuery; synthetic fixtures; production WXML/WXSS exact; page loading lifecycles suppressed",
-  "screenshot": "garden--calendar-index.png",
-  "screenshot_sha256": "b0a7022181c7058f9efd37ac4fba64f938e97ab11f5c051183b058fd92e4ebef",
+  "screenshot": null,
+  "screenshot_sha256": null,
   "fixture": "calendar-index",
   "category": "route",
-  "screenshot_errors": [],
+  "screenshot_errors": [
+    "App.captureScreenshot timed out"
+  ],
   "validation_errors": [],
+  "touch_errors": [],
   "horizontal_overflow": []
 }

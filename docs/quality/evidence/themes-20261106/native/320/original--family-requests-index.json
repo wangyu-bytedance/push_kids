@@ -78,14 +78,29 @@
       "color": "rgb(34, 38, 31)",
       "fontSize": "16px",
       "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif"
+    },
+    {
+      "host": "page",
+      "selector": ".icon-btn",
+      "left": 261,
+      "right": 305,
+      "top": 21,
+      "bottom": 65,
+      "width": 44,
+      "height": 44,
+      "backgroundColor": "rgb(255, 253, 248)",
+      "color": "rgb(34, 38, 31)",
+      "fontSize": "16px",
+      "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif"
     }
   ],
   "source": "native wx.createSelectorQuery; synthetic fixtures; production WXML/WXSS exact; page loading lifecycles suppressed",
   "screenshot": "original--family-requests-index.png",
-  "screenshot_sha256": "5d01baf7bd72ccc86e990834d8ef7e318a27423d1240ee89ad86ad38e4dd19a9",
+  "screenshot_sha256": "ba581a22c3f9878ef5c9f0db7ab0c85f876d1606e5a2b5d76fe6fce27ce36ad1",
   "fixture": "family-requests-index",
   "category": "route",
   "screenshot_errors": [],
   "validation_errors": [],
+  "touch_errors": [],
   "horizontal_overflow": []
 }

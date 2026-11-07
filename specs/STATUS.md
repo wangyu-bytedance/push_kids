@@ -22,12 +22,14 @@
 |---|---:|---|
 | completed完成记录 | 119 | 既有108＋本轮11 |
 | completed阶段设计 | 1 | DESIGN-001保留STAGE_COMPLETE |
-| active READY_FOR_REVIEW | 2 | CLOUD-002、DOC-003，未批准实施 |
+| active READY_FOR_REVIEW | 3 | CLOUD-002、DOC-003、DESIGN-003 Spec01，未批准实施 |
 | active VERIFYING | 1 | DESIGN-002 Spec08已批准并本地实施，未上传；验收缺项独立保留 |
 | active BLOCKED | 1 | 旧10/13候选缓存OPS，34/40 FAIL、未部署，未作取消处置 |
 | rejected | 19 | 原取消/拒绝理由保持 |
 
-合计143份：completed120 / active4 / rejected19；active没有已交付的产品开发Spec。旧[缓存OPS](active/OPS-20261101-BUG036-CACHE02-DEPLOYMENT.md)锁定154文件10/13且排除内容03/DDL；不能用040继承缓存功能冒称该候选曾部署。CLOUD-002与DOC-003继续待具体批准。
+合计144份：completed120 / active5 / rejected19；active没有已交付的产品开发Spec。旧[缓存OPS](active/OPS-20261101-BUG036-CACHE02-DEPLOYMENT.md)锁定154文件10/13且排除内容03/DDL；不能用040继承缓存功能冒称该候选曾部署。CLOUD-002、DOC-003及DESIGN-003继续待具体批准。
+
+2026-11-06 [DESIGN-003 / Spec01](active/DESIGN-003-THEME-VISUAL-REFINEMENT.md)：针对六主题报表标题末字换行、记录头图裁切、上传装饰背景不协调和嵌套边框提出DREV09视觉调优，保持现有Architecture01及六主题/底部入口。当前READY_FOR_REVIEW，仅准备设计和SHA导出，未修改生产代码；DESIGN-002 Spec08的本地实现与未完成验收保持独立。
 
 2026-11-06 [DESIGN-002 / Spec08（Architecture01）](active/DESIGN-002-GLOBAL-UI-CONSISTENCY.md)：用户对DREV07批注“这个放在最下面的设置里”，其后“好的 按照以上方案落地”明确批准Spec08、Architecture01与DREV08实施。六主题已接入17路由/共享组件，入口位于设置底部提醒与关于之间，本机候选/应用/取消/偏好与固定默认图标已实现。DREV06与08冻结证据、Spec01–07及AGENTS约束保持；[本轮证据](../docs/quality/evidence/themes-20261106/README.md)分别记录业务回归、主题合同/资源/原生呈现与未验证项。当前active/VERIFYING；未上传，不满足云交付DONE归档条件。
 

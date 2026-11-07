@@ -78,6 +78,34 @@
       "color": "rgb(32, 53, 93)",
       "fontSize": "16px",
       "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif"
+    },
+    {
+      "host": "page",
+      "selector": ".hero-note",
+      "left": 31,
+      "right": 289,
+      "top": 213,
+      "bottom": 259,
+      "width": 258,
+      "height": 46,
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "color": "rgb(82, 101, 140)",
+      "fontSize": "14px",
+      "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif"
+    },
+    {
+      "host": "page",
+      "selector": ".icon-btn",
+      "left": 15,
+      "right": 59,
+      "top": 76,
+      "bottom": 120,
+      "width": 44,
+      "height": 44,
+      "backgroundColor": "rgb(247, 250, 255)",
+      "color": "rgb(32, 53, 93)",
+      "fontSize": "16px",
+      "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif"
     }
   ],
   "source": "native wx.createSelectorQuery; synthetic fixtures; production WXML/WXSS exact; page loading lifecycles suppressed",
@@ -87,5 +115,6 @@
   "category": "route",
   "screenshot_errors": [],
   "validation_errors": [],
+  "touch_errors": [],
   "horizontal_overflow": []
 }

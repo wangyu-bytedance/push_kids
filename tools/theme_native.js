@@ -79,18 +79,21 @@ socket.onmessage = (event) => { const m = JSON.parse(event.data); const handler 
   if (handler) { pending.delete(m.id); handler(m); } };
 function send(method, params = {}) {
   return new Promise((resolve, reject) => { const id = String(++seq), timer = setTimeout(() => {
-    pending.delete(id); reject(Error(method + " timed out")); }, 15000);
+    pending.delete(id); reject(Error(method + " timed out")); }, method === "App.captureScreenshot" ? 4000 : 15000);
   pending.set(id, (m) => { clearTimeout(timer); m.error ? reject(Error(JSON.stringify(m.error))) : resolve(m.result); });
   socket.send(JSON.stringify({ id, method, params })); });
 }
 const call = async (functionDeclaration, args = []) => (await send("App.callFunction", { functionDeclaration, args })).result;
 const pause = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 let lastRoute;
+const unavailableScreenshotCases = new Set();
+const navigationDiagnostics = [];
 const geometry = `function(){return new Promise(resolve=>{
   const p=getCurrentPages().slice(-1)[0], info=wx.getWindowInfo();
   const selectors=['.theme-page','.page','.theme-header','.pk-card','.btn','.theme-entry','.pk-sheet','.pk-cta-bar',
     '.pk-notice','.sk','.pk-empty','.grade-sheet','.grade-primary','.grade-secondary','.theme-picker-sheet',
-    '.theme-picker-head','.theme-picker-foot','.theme-picker-close','.theme-choice','.record-type-title','.hero-note','.manager-panel'];
+    '.theme-picker-head','.theme-picker-foot','.theme-picker-close','.theme-choice','.record-type-title',
+    '.hero-note','.manager-panel','.icon-btn','.add-entry'];
   function collect(host,label){return new Promise(done=>{const q=wx.createSelectorQuery().in(host);
     selectors.forEach(s=>q.selectAll(s).fields({rect:true,size:true,computedStyle:['backgroundColor','color','fontSize','fontFamily']}));
     q.exec(result=>done(selectors.flatMap((selector,i)=>(result[i]||[]).map(n=>({host:label,selector,...n})))));});}
@@ -107,10 +110,22 @@ const geometry = `function(){return new Promise(resolve=>{
 async function navigate(route) {
   if (lastRoute === route) return;
   const current = await call("function(){const p=getCurrentPages().slice(-1)[0];return p&&p.route;}");
-  if (current !== route) await send("App.callWxMethod", {
-    method: appConfig.tabBar.list.some((t) => t.pagePath === route) ? "switchTab" : "reLaunch",
-    args: [{ url: "/" + route }]
-  });
+  if (current !== route) {
+    const isTab = appConfig.tabBar.list.some((t) => t.pagePath === route);
+    if (!isTab) {
+      const depth = await call("function(){return getCurrentPages().length;}");
+      if (depth > 1) await send("App.callWxMethod", { method: "navigateBack", args: [{ delta: depth - 1 }] });
+    }
+    try { await send("App.callWxMethod", {
+      method: isTab ? "switchTab" : "navigateTo",
+      args: [{ url: "/" + route }]
+    }); }
+    catch (error) {
+      const observed = await call("function(){const p=getCurrentPages().slice(-1)[0];return p&&p.route;}");
+      navigationDiagnostics.push({ route, observed, error: error.message });
+      if (observed !== route) throw error;
+    }
+  }
   await pause(700);
   lastRoute = route;
 }
@@ -125,27 +140,32 @@ async function capture(theme, item) {
   [theme.id, item.data, item.action || ""]);
   await pause(140);
   const measured = await call(geometry);
-  if (!measured || measured.viewport.screenWidth !== width || measured.route !== item.route || measured.theme !== theme.id)
+  if (!measured || measured.viewport.screenWidth !== width || measured.viewport.screenHeight !== ({320:568,390:844,430:932})[width]
+      || measured.route !== item.route || measured.theme !== theme.id)
     throw Error("Unexpected native viewport, route or theme: " + JSON.stringify(measured && { viewport: measured.viewport, route: measured.route, theme: measured.theme }));
-  // The simulator occasionally times out once while a newly opened WebView settles.
-  // Retry this read once; preserve the timeout in the evidence instead of hiding it.
+  // A failed simulator screenshot must not discard successfully measured native nodes.
   const screenshotErrors = [];
   let png;
-  for (let attempt = 0; attempt < 2; attempt++) {
-    try { png = await send("App.captureScreenshot"); break; }
-    catch (error) { screenshotErrors.push(error.message); if (attempt === 1) throw error; }
+  if (unavailableScreenshotCases.has(item.name)) screenshotErrors.push("NOT_RUN: capture timed out for this scene; native geometry still measured");
+  else {
+    try { png = await send("App.captureScreenshot"); }
+    catch (error) { screenshotErrors.push(error.message); unavailableScreenshotCases.add(item.name); }
   }
-  const name = theme.id + "--" + item.name, bytes = Buffer.from(png.data, "base64");
-  measured.screenshot = name + ".png"; measured.screenshot_sha256 = crypto.createHash("sha256").update(bytes).digest("hex");
+  const name = theme.id + "--" + item.name, bytes = png && Buffer.from(png.data, "base64");
+  measured.screenshot = bytes ? name + ".png" : null;
+  measured.screenshot_sha256 = bytes ? crypto.createHash("sha256").update(bytes).digest("hex") : null;
   measured.fixture = item.name; measured.category = item.category; measured.screenshot_errors = screenshotErrors;
   const required = { "state-loading": ".sk", "state-empty": ".pk-empty", "state-error": ".pk-notice",
     "state-readonly": ".hero-note", "state-disabled": ".pk-sheet", "state-sheet": ".theme-picker-sheet",
     "state-dialog": ".grade-sheet", "state-long-copy": ".pk-notice" }[item.name];
   measured.validation_errors = required && !measured.nodes.some((n) => n.selector === required)
     ? ["Expected state is absent: " + required] : [];
+  measured.touch_errors = measured.nodes.filter((n) => [".btn", ".theme-picker-close", ".theme-choice", ".icon-btn", ".add-entry"].includes(n.selector)
+    && (n.height < 43.5 || n.width < 43.5)).map((n) => ({ selector: n.selector, width: n.width, height: n.height }));
+  if (measured.touch_errors.length) measured.validation_errors.push("Native control touch target below44px");
   measured.horizontal_overflow = measured.nodes.filter((n) => [".page", ".theme-picker-sheet", ".grade-sheet", ".pk-sheet"].includes(n.selector)
     && (n.left < -1 || n.right > width + 1)).map((n) => ({ selector: n.selector, left: n.left, right: n.right }));
-  fs.writeFileSync(path.join(out, name + ".png"), bytes);
+  if (bytes) fs.writeFileSync(path.join(out, name + ".png"), bytes);
   fs.writeFileSync(path.join(out, name + ".json"), JSON.stringify(measured, null, 2) + "\n");
   return { name, route: item.route, category: item.category, nodes: measured.nodes.length,
     horizontal_overflow: measured.horizontal_overflow, validation_errors: measured.validation_errors,
@@ -159,7 +179,8 @@ async function run() {
   const reportFile = path.join(out, "matrix" + (only ? "-" + only : "") + (caseFilter ? "-" + caseFilter : "") +
     ".json");
   const saveReport = () => fs.writeFileSync(reportFile, JSON.stringify({ width, themes: themes.map((t) => t.id),
-    groups: results.length, elapsed_ms: Date.now() - start, results, failures }, null, 2) + "\n");
+    groups: results.length, elapsed_ms: Date.now() - start, results, failures, navigation_diagnostics: navigationDiagnostics,
+    source_manifest_sha256: crypto.createHash("sha256").update(fs.readFileSync(path.join(out, "source-sha256.json"))).digest("hex") }, null, 2) + "\n");
   fs.copyFileSync("/private/tmp/push-kids-themes-native-20261106/theme-source-sha256.json", path.join(out, "source-sha256.json"));
   if (process.argv.includes("--actions")) {
     await navigate("pages/settings/index");
@@ -197,17 +218,23 @@ async function run() {
   const allItems = [...appConfig.pages.map((route) => ({ name: route.replace(/^pages\//, "").replace(/\//g, "-"),
     category: "route", route, data: { ...common, ...fixtures[route] } })), ...shared.map((s) => ({ ...s, name: "state-" + s.name, category: "state" }))];
   const items = caseFilter ? allItems.filter((item) => caseFilter.split(",").includes(item.name)) : allItems;
+  saveReport();
   // Keep each native route open while checking its themes; this bounds WebView churn.
-  for (const item of items) {
+  let consecutiveFailures = 0;
+  matrixLoop: for (const item of items) {
     for (const theme of themes) {
-      try { results.push(await capture(theme, item)); }
-      catch (error) { failures.push({ theme: theme.id, name: item.name, error: error.message }); console.error(error.message); }
+      try { results.push(await capture(theme, item)); consecutiveFailures = 0; }
+      catch (error) {
+        failures.push({ theme: theme.id, name: item.name, error: error.message }); console.error(error.message);
+        consecutiveFailures++;
+      }
       saveReport();
+      if (consecutiveFailures >= 3) { console.error("NATIVE_BRIDGE_UNAVAILABLE: remaining groups NOT_RUN"); break matrixLoop; }
     }
     console.log("NATIVE_CASE_CAPTURED " + width + " " + item.name + " " + themes.length);
   }
   console.log(JSON.stringify({ width, groups: results.length, failures, elapsed_ms: Date.now() - start,
     overflow_groups: results.filter((r) => r.horizontal_overflow.length).map((r) => r.name) }));
-  if (failures.length || results.some((r) => r.validation_errors.length || r.horizontal_overflow.length)) process.exitCode = 1;
+  if (failures.length || results.some((r) => r.validation_errors.length || r.horizontal_overflow.length || r.screenshot_errors.length)) process.exitCode = 1;
 }
 run().catch((error) => { console.error(error); process.exitCode = 1; }).finally(() => socket.close());

@@ -36,14 +36,57 @@
       "color": "rgb(32, 68, 84)",
       "fontSize": "16px",
       "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif"
+    },
+    {
+      "host": "page",
+      "selector": ".hero-note",
+      "left": 31,
+      "right": 289,
+      "top": 130,
+      "bottom": 151,
+      "width": 258,
+      "height": 21,
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "color": "rgb(82, 110, 123)",
+      "fontSize": "13px",
+      "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif"
+    },
+    {
+      "host": "page",
+      "selector": ".manager-panel",
+      "left": 31,
+      "right": 289,
+      "top": 85,
+      "bottom": 125,
+      "width": 258,
+      "height": 40,
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "color": "rgb(32, 68, 84)",
+      "fontSize": "16px",
+      "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif"
+    },
+    {
+      "host": "page",
+      "selector": ".icon-btn",
+      "left": 245,
+      "right": 289,
+      "top": 28,
+      "bottom": 72,
+      "width": 44,
+      "height": 44,
+      "backgroundColor": "rgb(250, 253, 255)",
+      "color": "rgb(32, 68, 84)",
+      "fontSize": "16px",
+      "fontFamily": "-apple-system, system-ui, \"PingFang SC\", \"Noto Sans SC\", \"Microsoft YaHei\", sans-serif"
     }
   ],
   "source": "native wx.createSelectorQuery; synthetic fixtures; production WXML/WXSS exact; page loading lifecycles suppressed",
   "screenshot": "ocean--family-members-index.png",
-  "screenshot_sha256": "0941998681bbd3a39a65f814f28c6e1c9380e495e1e2a48a0111612f5b32e31f",
+  "screenshot_sha256": "14af0c5a80a4db4e5504ed42a1af1f89658d4ac9f812761ef9fe5571afe67d60",
   "fixture": "family-members-index",
   "category": "route",
   "screenshot_errors": [],
   "validation_errors": [],
+  "touch_errors": [],
   "horizontal_overflow": []
 }

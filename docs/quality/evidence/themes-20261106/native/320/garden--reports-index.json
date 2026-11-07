@@ -124,10 +124,11 @@
   ],
   "source": "native wx.createSelectorQuery; synthetic fixtures; production WXML/WXSS exact; page loading lifecycles suppressed",
   "screenshot": "garden--reports-index.png",
-  "screenshot_sha256": "36dd784a76b364321dc784c10ee9ef1ec04bceff5e7583a83ca88504ab369306",
+  "screenshot_sha256": "d4d0f97b4455d9335c31c0858c602f8aaff8b7b830066d84e4ea755f054f27bb",
   "fixture": "reports-index",
   "category": "route",
   "screenshot_errors": [],
   "validation_errors": [],
+  "touch_errors": [],
   "horizontal_overflow": []
 }

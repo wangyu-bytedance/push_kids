@@ -54,10 +54,11 @@
   ],
   "source": "native wx.createSelectorQuery; synthetic fixtures; production WXML/WXSS exact; page loading lifecycles suppressed",
   "screenshot": "space--family-onboarding-index.png",
-  "screenshot_sha256": "280b4ca33957668a64b3e091c8e35ad612611abbf65e810b66b57d6303ecf7c2",
+  "screenshot_sha256": "dc9dda9d995fbaeb4e442c4fb19ffa1163524f17facd75cdde76ac0329751f27",
   "fixture": "family-onboarding-index",
   "category": "route",
   "screenshot_errors": [],
   "validation_errors": [],
+  "touch_errors": [],
   "horizontal_overflow": []
 }

@@ -1,5 +1,7 @@
 # UI-001 — 家长端微信小程序
 
+待评审增量：[DESIGN-003 Spec01](../../../../specs/active/DESIGN-003-THEME-VISUAL-REFINEMENT.md) / [DREV09](../prototypes/DREV-20261106-UI-CONSISTENCY-09/FRONTEND-SPEC.md)准备固定标题单行、完整记录头图、主题化上传装饰与减少嵌套边框。仅设计HTML验证，生产实现/原生/真机NOT_RUN；当前运行代码仍为下方Spec08，不能将提案视为已实施。
+
 当前本地呈现revision `UI-STATE-20261106-THEMES-01`：DESIGN-002 Spec08 / Architecture01与DREV08获用户“好的 按照以上方案落地”批准并实施。六主题覆盖17路由、五Tab、隔离组件及表单/弹层；设置底部列表在提醒与关于之间提供风格入口。候选/应用/取消、本机ID偏好、保存失败反馈和未知科目固定默认图标见[本轮证据](../../../quality/evidence/themes-20261106/README.md)。本增量尚未上传，Spec保持active/VERIFYING；下方040/0.1.18是上一次实际交付，不包含本增量。
 
 2026-11-06当前交付revision `UI-RELEASE-20261106-040-0.1.18-01`：[发布报告](../../../deploy/releases/20261106-fullstack-040-client-0.1.18.md)记录040 normal/100%、Schema0027，客户端0.1.18官方上传1,200,417字节并bump；尚未设体验版、提审或正式发布。93组原生状态节点/PNG保持；320/390确认框CUA视觉和取消已补，430原证据保持。工作日两处实际HTTP保存/回填、摘要及来源跳转经原生AX观察PASS；合成SQLite及私有三文件配置例外独立记录，设备/可访问性仍NOT_RUN。固定40 v2自动40/40不等于家长内容通过，原37/40 FAIL保持。当前批准DREV不变，后续平台和设备验收独立。

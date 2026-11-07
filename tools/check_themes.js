@@ -31,7 +31,7 @@ for (const t of themes) {
   }
   assert.equal(typeof glyphs[t.fallback], "string");
   const payload = Buffer.byteLength(JSON.stringify({ theme: registry.presentation(t.id), themeArtFailed: false }));
-  assert.ok(payload <= 32768, t.id + " payload");
+  assert.ok(payload <= 32000, t.id + " payload");
   assert.ok(Buffer.byteLength(JSON.stringify({ version: 1, id: t.id })) <= 256);
   const pairs = [["body", "pk-ink", "pk-surface"], ["secondary", "pk-ink-2", "pk-surface"],
     ["muted text", "pk-text-muted", "pk-surface"], ["primary button", "pk-on-primary", "pk-primary"],
@@ -60,12 +60,13 @@ for (const p of sourceFiles.filter((p) => p.endsWith(".wxss") && !p.endsWith("/t
 const assets = files(path.join(root, "assets/themes")).map((p) => ({
   path: path.relative(root, p), bytes: fs.statSync(p).size, sha256: crypto.createHash("sha256").update(fs.readFileSync(p)).digest("hex") }));
 const assetBytes = assets.reduce((n, a) => n + a.bytes, 0), sourceBytes = sourceFiles.reduce((n, p) => n + fs.statSync(p).size, 0);
-const baseTree = execFileSync("git", ["ls-tree", "-rl", "HEAD", "apps/miniprogram"], { cwd: path.resolve(__dirname, ".."), encoding: "utf8" });
+const baselineRef = process.argv.find((v) => v.startsWith("--baseline="))?.slice(11) || "HEAD";
+const baseTree = execFileSync("git", ["ls-tree", "-rl", baselineRef, "apps/miniprogram"], { cwd: path.resolve(__dirname, ".."), encoding: "utf8" });
 const baselineBytes = baseTree.trim().split("\n").reduce((n, line) => n + Number(line.split(/\s+/)[3]), 0);
 assert.ok(assetBytes <= 150000); assert.ok(sourceBytes <= 1500000);
 assert.ok(sourceBytes - baselineBytes <= 230000); assert.ok(sourceBytes - baselineBytes - assetBytes <= 80000);
 const report = { registry: "apps/miniprogram/presentation/theme/registry.js", themes: checks, assets, asset_bytes: assetBytes,
-  source_bytes: sourceBytes, baseline_bytes: baselineBytes, net_growth_bytes: sourceBytes - baselineBytes,
+  source_bytes: sourceBytes, baseline_ref: baselineRef, baseline_bytes: baselineBytes, net_growth_bytes: sourceBytes - baselineBytes,
   non_asset_net_growth_bytes: sourceBytes - baselineBytes - assetBytes,
   matrix: { routes: config.pages.length * themes.length * 3, shared_states: 8 * themes.length * 3 },
   native_color_exceptions: ["pk-native-danger: platform modal palette", "pk-map-route: platform basemap overlay", "activity color: stable persisted domain metadata"] };

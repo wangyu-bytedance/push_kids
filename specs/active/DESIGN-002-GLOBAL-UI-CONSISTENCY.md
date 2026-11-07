@@ -253,6 +253,7 @@ ADR：完整Architecture01随Spec记录；独立ADR N/A（不改变服务端/部
 ## 10. 本地实施结果与未执行项
 
 - 已实施：唯一六主题registry、版本化本机state、显式page/component适配器、theme-icon/选择面板、17路由与共享宿主/导航/状态语义迁移、五张离线压缩插画及guard。设置入口在底部列表；未知科目固定回退，无新增运行时依赖/网络/AI。只更新呈现，保留原业务字段和生命周期。
+- 原生320检查发现共用rpx按钮触区低于现有FEC44px下限，已将共享touch角色改为44px并用于共用btn/添加/图标操作；沿用已批准触区要求，不新增业务/主题机制。最终三尺寸矩阵必须重新绑定该diff，不能沿用修复前截图；当前只有320的30组取得当前源码节点，其中25组有匹配截图。9组RPC失败，其余当前矩阵NOT_RUN，详见实施证据。重启恢复时CLI报告服务端口关闭，未改安全设置；不能宣称450组或三视口通过。
 - 当前源/测试/资源/原生矩阵及剩余项集中在[实施证据](../../docs/quality/evidence/themes-20261106/README.md)。baseline359、主题状态Red→Green与legacy attached反例分别留证；同一最终diff的实际检查结果以该证据为准，不借历史结果代验。
 - DREV08[RESULTS](../../docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-08/RESULTS.md)和DREV06批准源/快照保持冻结；生产小图不是修改批准源。HTML导出不算原生验收。
 - Feature/Behavior/Architecture/UI/FDB/FEC已按本地实现同步正文，旧token唯一源、图标颜色副本、未知星形与仅原始风格等冲突已修订；其他领域/API/Schema/发布事实核对为无变更，UI-014取消草案不接入。

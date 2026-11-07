@@ -1,5 +1,7 @@
 # Push Kids 前端设计基线
 
+待评审局部调优：[DESIGN-003 Spec01](../../../specs/active/DESIGN-003-THEME-VISUAL-REFINEMENT.md) / [DREV09](prototypes/DREV-20261106-UI-CONSISTENCY-09/FRONTEND-SPEC.md)针对报表标题、记录头图、上传装饰与嵌套边框。当前只完成可编辑设计及六主题三视口162组HTML导出，尚未批准/实施；不替换下方已批准基线或DESIGN-002 Spec08本地实现事实，原生与真机未验。
+
 当前[旅行入口Spec01/Architecture01](../../../specs/completed/FEAT-012-TRAVEL-ENTRY-CLEANUP.md)与DREV01批准源/22张导出保持冻结，其余DREV/FDB/FEC不变。2026-11-01交付revision `DESIGN-EVD-20261101-0.1.17-UPLOAD-01`：168份冻结源覆盖0.1.17官方成功上传1,191,019字节；三尺寸两宿主42组原生节点/PNG/SHA与局部动作证据保持，用户正向focus/分页/双账号门禁确认PASS。设备/读屏/键盘仍未验，体验/审核/正式发布未执行；开发DONE归档不代全部验收。[当前上传](../../deploy/releases/20261101-client-0.1.17-upload.md)与[原生矩阵](../../quality/evidence/client-release-20261101/native-matrix-resumed.json)分别绑定；批准资产不因Spec迁移改写。
 
 编辑计划局部验证revision `DESIGN-EVD-20261101-REPORT-FOOTER-TIPS-03-NATIVE`：
@@ -76,7 +78,7 @@ FDB/FEC、每日任务按钮、报表展开/收起和其他设计范围保持。
 - 字体：标题用衬线族（`Songti SC` / `Noto Serif SC`）制造纸感，正文用系统中文无衬线，
   数字统一 `font-variant-numeric: tabular-nums`。
 - 原始风格圆角使用 8 / 12 / 16 / 24 / 32 / 40 / 999rpx；Spec08批准的主题形状差异由registry的共享角色管理（含28/44/48rpx），页面不得自建刻度。
-- 页面左右安全边距由 `--pk-gutter` 统一给出；主 CTA 高 96rpx；触控目标不小于 88rpx。
+- 页面左右安全边距由 `--pk-gutter` 统一给出；主CTA名义高96rpx，共用按钮/添加/图标操作的触区通过`--pk-touch-min:44px`兜底，避免320屏幕上88rpx不足44px。
 - 图标统一为24×24 viewBox、stroke-width 1.8的线性glyph，由`theme-icon`消费单份生成路径和主题语义色；禁止emoji或文字符号充当图标。自定义TabBar使用同一组件，app.json平台回退图与原生地图标记保留本地PNG。
 - 单位约定：颜色语义 token 无单位，几何量用 rpx，字号用 px，发丝线固定 1rpx。
 
