@@ -1,6 +1,8 @@
 # 六主题本地实现 — DESIGN-002 Spec08
 
-批准：用户2026-11-06“好的 按照以上方案落地”，对应[Spec08 / Architecture01](../../../../specs/active/DESIGN-002-GLOBAL-UI-CONSISTENCY.md)、DREV08设置底部入口及DREV06五主题视觉方向。当前是 **IMPLEMENTED_LOCAL / VERIFYING / NOT_UPLOADED**，没有推进体验、审核或正式发布。
+本页保留原执行时点的结果。后续 0.1.19 上传及补充原生验证见[发布证据](../../../../specs/evidence/client-release-20261108/README.md)。
+
+批准：用户2026-11-06“好的 按照以上方案落地”，对应[Spec08 / Architecture01](../../../../specs/completed/DESIGN-002-GLOBAL-UI-CONSISTENCY.md)、DREV08设置底部入口及DREV06五主题视觉方向。当前是 **IMPLEMENTED_LOCAL / VERIFYING / NOT_UPLOADED**，没有推进体验、审核或正式发布。
 
 ## 实现与回退
 

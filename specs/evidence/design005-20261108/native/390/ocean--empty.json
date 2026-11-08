@@ -1,0 +1,122 @@
+{
+  "route": "pages/today/index",
+  "theme": "ocean",
+  "base_library": "3.17.4",
+  "viewport": {
+    "width": 390,
+    "height": 844,
+    "screenWidth": 390,
+    "screenHeight": 844
+  },
+  "nodes": [
+    {
+      "host": "page",
+      "selector": ".theme-header",
+      "left": 18,
+      "right": 372,
+      "top": 87,
+      "bottom": 238.5,
+      "width": 354,
+      "height": 151.5
+    },
+    {
+      "host": "page",
+      "selector": ".theme-header-art",
+      "left": 0,
+      "right": 390,
+      "top": 87,
+      "bottom": 238.5,
+      "width": 390,
+      "height": 151.5
+    },
+    {
+      "host": "page",
+      "selector": ".theme-header-content",
+      "left": 18,
+      "right": 372,
+      "top": 87,
+      "bottom": 188,
+      "width": 354,
+      "height": 101
+    },
+    {
+      "host": "page",
+      "selector": ".theme-header .pg-title",
+      "left": 18,
+      "right": 186,
+      "top": 113.640625,
+      "bottom": 144.359375,
+      "width": 168,
+      "height": 30.71875
+    },
+    {
+      "host": "page",
+      "selector": ".theme-heading-row",
+      "left": 18,
+      "right": 372,
+      "top": 107,
+      "bottom": 151,
+      "width": 354,
+      "height": 44
+    },
+    {
+      "host": "page",
+      "selector": ".theme-heading-title",
+      "left": 18,
+      "right": 372,
+      "top": 107,
+      "bottom": 151,
+      "width": 354,
+      "height": 44
+    },
+    {
+      "host": "page",
+      "selector": ".theme-heading-title .pg-title",
+      "left": 18,
+      "right": 186,
+      "top": 113.640625,
+      "bottom": 144.359375,
+      "width": 168,
+      "height": 30.71875
+    },
+    {
+      "host": "page",
+      "selector": ".pg-context",
+      "left": 18,
+      "right": 372,
+      "top": 155,
+      "bottom": 173,
+      "width": 354,
+      "height": 18
+    }
+  ],
+  "source": "native selector bounds and DevTools Element.getStyles; isolated fixture, production WXML/WXSS exact",
+  "screenshot": "ocean--empty.png",
+  "screenshot_sha256": "83987662c0eefe95f4596e457c6a877d02ac8f83d06f170fd3d63c300d1b81d0",
+  "fixture": "empty",
+  "category": "child-heading",
+  "screenshot_errors": [],
+  "validation_errors": [],
+  "touch_errors": [],
+  "horizontal_overflow": [],
+  "styles": {
+    ".theme-header": {
+      "background-color": "rgba(0, 0, 0, 0)",
+      "border-top-left-radius": "0px",
+      "border-top-width": "0px",
+      "box-shadow": "none",
+      "font-size": "16px",
+      "line-height": "25.6px",
+      "color": "rgb(32, 68, 84)"
+    },
+    ".theme-header .pg-title": {
+      "background-color": "rgba(0, 0, 0, 0)",
+      "border-top-left-radius": "0px",
+      "border-top-width": "0px",
+      "box-shadow": "none",
+      "font-size": "24px",
+      "line-height": "30.72px",
+      "color": "rgb(22, 69, 84)"
+    }
+  }
+}

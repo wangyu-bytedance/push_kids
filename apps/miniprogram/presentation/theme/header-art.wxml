@@ -1,0 +1,3 @@
+<view wx:if="{{theme.assets.hero && !themeArtFailed}}" class="theme-header-art" aria-hidden="{{true}}">
+  <image src="{{theme.assets.hero}}" mode="widthFix" binderror="onThemeIllustrationError" />
+</view>

@@ -1,0 +1,82 @@
+{
+  "route": "pages/records/index",
+  "theme": "garden",
+  "base_library": "3.17.4",
+  "viewport": {
+    "width": 430,
+    "height": 932,
+    "screenWidth": 430,
+    "screenHeight": 932
+  },
+  "nodes": [
+    {
+      "host": "page",
+      "selector": ".theme-header",
+      "left": 0,
+      "right": 430,
+      "top": 94,
+      "bottom": 234,
+      "width": 430,
+      "height": 140
+    },
+    {
+      "host": "page",
+      "selector": ".theme-header-content",
+      "left": 20,
+      "right": 410,
+      "top": 94,
+      "bottom": 234,
+      "width": 390,
+      "height": 140
+    },
+    {
+      "host": "page",
+      "selector": ".theme-header .child-chip",
+      "left": 20,
+      "right": 104,
+      "top": 173,
+      "bottom": 217,
+      "width": 84,
+      "height": 44
+    },
+    {
+      "host": "page",
+      "selector": ".record-type-title",
+      "left": 20,
+      "right": 125,
+      "top": 116,
+      "bottom": 165,
+      "width": 105,
+      "height": 49
+    },
+    {
+      "host": "page",
+      "selector": ".record-page",
+      "left": 0,
+      "right": 430,
+      "top": 234,
+      "bottom": 979.7890625,
+      "width": 430,
+      "height": 745.7890625
+    },
+    {
+      "host": "page",
+      "selector": ".record-upload-glyph",
+      "left": 176.5,
+      "right": 253.5,
+      "top": 418.2421875,
+      "bottom": 495.2421875,
+      "width": 77,
+      "height": 77
+    }
+  ],
+  "source": "native selector bounds and DevTools Element.getStyles; isolated fixture, production WXML/WXSS exact",
+  "screenshot": "garden--refine-media-failure.png",
+  "screenshot_sha256": "c62b0054f07e2f8396acbd8808d9bef6cc3ea4e0127e1f62ae2fcf53633af2a9",
+  "fixture": "refine-media-failure",
+  "category": "refinement",
+  "screenshot_errors": [],
+  "validation_errors": [],
+  "touch_errors": [],
+  "horizontal_overflow": []
+}

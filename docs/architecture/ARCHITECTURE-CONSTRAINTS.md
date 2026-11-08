@@ -40,7 +40,7 @@ Approved frontend extension `ARCH-20261106-MINIAPP-THEMES-01` (DESIGN-002 Spec08
   Task Spec revision and Design Revision backed by a repository-local editable SVG or self-contained HTML
   source, required viewport/state exports and a matching SHA-256 approval manifest. Figma, external design
   URLs, node IDs and tool-availability waivers are not required. Repository previews do not replace native
-  Mini Program geometry, interaction, accessibility or three-viewport evidence.
+  Mini Program geometry, interaction, accessibility or evidence at the [current required viewports](../design/frontend/FRONTEND-DESIGN.md#9-视口与适配).
 
 ## AI Native maintainability constraints
 

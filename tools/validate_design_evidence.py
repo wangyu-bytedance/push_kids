@@ -2,12 +2,13 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import json
 import re
 import struct
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-REQUIRED_VIEWPORTS = {(320, 568), (390, 844), (430, 932)}
+VIEWPORT_POLICY = json.loads(Path(__file__).with_name("frontend_viewports.json").read_text())
 HASH_RE = re.compile(r"^[0-9a-f]{64}$")
 DIMENSION_RE = re.compile(r"^(\d+)\s*[×xX]\s*(\d+)$")
 SCALE_RE = re.compile(r"^(\d+(?:\.\d+)?)x$")
@@ -236,7 +237,12 @@ def validate_manifest(
         elif _sha256(export_path) != digest:
             errors.append(f"export hash mismatch: {raw_file}")
 
-    missing_viewports = REQUIRED_VIEWPORTS - seen_viewports
+    matrices = VIEWPORT_POLICY["byBaseline"]
+    baseline = meta.get("Frontend baseline revision", "")
+    # Unversioned and older manifests keep the validation they had before this policy.
+    required_viewports = matrices.get(baseline, matrices[VIEWPORT_POLICY["legacy"]])
+    missing_viewports = {(int(width), height) for width, height in required_viewports.items()}
+    missing_viewports -= seen_viewports
     if missing_viewports:
         formatted = ", ".join(f"{width}x{height}" for width, height in sorted(missing_viewports))
         errors.append(f"missing required viewport exports: {formatted}")

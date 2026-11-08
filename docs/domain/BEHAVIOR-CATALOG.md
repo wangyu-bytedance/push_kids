@@ -1,6 +1,10 @@
 # Behavior catalog — FEAT-001 / FEAT-004 / FEAT-002 / FEAT-005 / FEAT-007 / FEAT-012 / FEAT-013
 
-> 当前本地呈现revision `BHV-20261106-THEMES-01`：[DESIGN-002 Spec08](../../specs/active/DESIGN-002-GLOBAL-UI-CONSISTENCY.md)与DREV08获用户“好的 按照以上方案落地”批准。新增BHV-046仅为本机主题偏好，不改变其他领域/授权/API/排期合同，未进入0.1.18上传包；[当前证据](../quality/evidence/themes-20261106/README.md)记录本地、原生合成呈现与未完成验收。
+> 本地呈现修订 `BHV-20261108-CHILD-SWITCH-01` 在五个主 Tab 与独立足迹统一孩子入口的位置。记录类型、活动档案、权限与主题偏好继续走既有行为合同。[DESIGN-005 Spec01](../../specs/active/DESIGN-005-CHILD-SWITCH-HEADER.md)
+
+> 0.1.19 开发上传包含六主题页头和前序装饰调优，继续沿用 BHV-046 的偏好与切换合同。记录菜单、上传和反馈走既有业务入口。[版本证据](../../specs/evidence/client-release-20261108/README.md)
+
+> 呈现修订 `BHV-20261106-THEMES-01`：[DESIGN-002 Spec08](../../specs/completed/DESIGN-002-GLOBAL-UI-CONSISTENCY.md)与DREV08获用户“好的 按照以上方案落地”批准。BHV-046 的本机主题偏好随 0.1.19 开发上传，既有领域、授权、API 和排期合同继续适用。[版本证据](../../specs/evidence/client-release-20261108/README.md)
 
 > 辅助验收revision `BHV-20261105-SYSTEM-ONE-09`：[Spec06](../../specs/completed/BUG-036-SYSTEM-ONE-ACCEPTANCE.md)获批实现，已由040交付，DONE/completed；真实内容验收独立。BHV-032的Pro生成/100历史项合同对启闭均适用；BHV-032a仅在有效产物形成后加静态核对意见，所有草稿仍需家长确认。旧Spec05分类/近期池/关系与硬纠正路由已退役，历史37/45对43/45及内容FAIL保留在[旧EVD](../../specs/evidence/EVD-20261105-BUG036-SYSTEMONE05.md)，不作为本次成功率。当前真实同期生成、内容review和检查见[本轮EVD](../../specs/evidence/EVD-20261105-BUG036-SYSTEMONE06.md)。
 

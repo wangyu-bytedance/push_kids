@@ -1,4 +1,4 @@
-/* WXML/WXSS 近似渲染器：把小程序页面渲染成静态 HTML，供三档视口截图走查。
+/* WXML/WXSS 近似渲染器：把小程序页面渲染成静态 HTML，按当前视口矩阵走查。
    仅用于设计验收，不参与构建；表达式用真 JS 求值，组件视图直接调用组件自身的 buildView，
    因此除了排版引擎（WebView vs 小程序渲染层）之外，与真机结构一致。
 
@@ -7,11 +7,12 @@
 
 const fs = require("fs");
 const path = require("path");
+const { current, byBaseline } = require("../frontend_viewports.json");
 
 const ROOT = path.resolve(__dirname, "..", "..");
 const APP = path.join(ROOT, "apps", "miniprogram");
 const OUT = path.join(ROOT, "dist", "ui-preview");
-const WIDTHS = [320, 390, 430];
+const WIDTHS = Object.keys(byBaseline[current]).map(Number);
 
 /* 标签保持小程序原名（HTML 自定义元素），这样 WXSS 里的 `view.on`、`.seg > view`
    这类标签选择器在预览里也能命中，避免出现只在预览中失效的样式。 */

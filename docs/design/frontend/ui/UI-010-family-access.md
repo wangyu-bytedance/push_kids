@@ -1,6 +1,10 @@
 # UI-010 — 家庭分享、申请与审批
 
-当前本地呈现revision `UI-STATE-20261106-THEMES-01`：[DESIGN-002 Spec08 / Architecture01](../../../../specs/active/DESIGN-002-GLOBAL-UI-CONSISTENCY.md)与DREV08已获用户“好的 按照以上方案落地”批准并实施，DREV06视觉方向保持。创建家庭、六位码加入和申请审批沿用原状态机与授权；表单、错误、禁用和确认色使用六主题语义角色。 本增量尚未上传；原生合成呈现、共享业务回归及真机/独立评审缺项见[当前证据](../../../quality/evidence/themes-20261106/README.md)。下方原特性发布与验收记录保持其版本范围，不能代验六主题。
+当前页头修订 `UI-STATE-20261107-THEMES-03` 应用于创建、邀请码引导、加入申请与申请审批。标题和说明在插画上方流动，表单与状态控件继续使用各自的语义边界。[两档六主题原生证据](../../../../specs/evidence/client-release-20261108/README.md)
+
+视觉增量 `UI-STATE-20261107-THEMES-02`：申请与审批容器继承DREV09装饰边框角色；输入、错误与状态控件边界保留。[本轮EVD](../../../../specs/evidence/design003-20261107/README.md)记录原实现和自动检查。该修订随 0.1.19 开发上传，真机与完整原生状态矩阵待验。
+
+当前呈现revision `UI-STATE-20261106-THEMES-01`：[DESIGN-002 Spec08 / Architecture01](../../../../specs/completed/DESIGN-002-GLOBAL-UI-CONSISTENCY.md)与DREV08已获用户“好的 按照以上方案落地”批准并实施，DREV06视觉方向保持。创建家庭、六位码加入和申请审批沿用原状态机与授权；表单、错误、禁用和确认色使用六主题语义角色。 六主题随 0.1.19 开发上传。真机与独立 Review 待验。[版本证据](../../../../specs/evidence/client-release-20261108/README.md)
 
 - Status: `CURRENT_LOCAL / 390_NATIVE_CAPTURED / MATRIX_PENDING`
 - Related Feature: `FEAT-002`
@@ -58,8 +62,8 @@ manager → 邀请家人 ──────────────────�
 
 ## Visual and responsive contract
 
-沿用 `FDB-20260830-01` 的暖纸色、墨绿色主操作、系统中文字体与单列卡片。评审矩阵为
-320×568、390×844、430×932；小屏内容允许纵向滚动，主操作不得被永久裁切。没有外部图片、
+沿用 `FDB-20260830-01` 的暖纸色、墨绿色主操作、系统中文字体与单列卡片。日常检查按
+[当前视口矩阵](../FRONTEND-DESIGN.md#9-视口与适配)执行；内容可纵向滚动，主操作不得被永久裁切。没有外部图片、
 字体、图标库或儿童内容进入原型。
 
 ## Approval status

@@ -1,0 +1,83 @@
+{
+  "route": "pages/footprints/index",
+  "theme": "space",
+  "base_library": "3.17.4",
+  "viewport": {
+    "width": 320,
+    "height": 568,
+    "screenWidth": 320,
+    "screenHeight": 568
+  },
+  "nodes": [
+    {
+      "host": "page",
+      "selector": ".theme-heading-row",
+      "left": 12,
+      "right": 308,
+      "top": 12,
+      "bottom": 56,
+      "width": 296,
+      "height": 44
+    },
+    {
+      "host": "page",
+      "selector": ".theme-heading-title",
+      "left": 12,
+      "right": 226,
+      "top": 12,
+      "bottom": 56,
+      "width": 214,
+      "height": 44
+    },
+    {
+      "host": "page",
+      "selector": ".theme-heading-row .child-chip",
+      "left": 234,
+      "right": 308,
+      "top": 12,
+      "bottom": 56,
+      "width": 74,
+      "height": 44
+    },
+    {
+      "host": "page",
+      "selector": ".theme-heading-row .chip-nm",
+      "left": 267,
+      "right": 293,
+      "top": 24.8984375,
+      "bottom": 43.09375,
+      "width": 26,
+      "height": 18.1953125
+    },
+    {
+      "host": "page",
+      "selector": ".theme-heading-row .chev",
+      "left": 296.4644775390625,
+      "right": 304.9497375488281,
+      "top": 29.05025291442871,
+      "bottom": 37.5355339050293,
+      "width": 8.485260009765625,
+      "height": 8.485280990600586
+    },
+    {
+      "host": "page",
+      "selector": ".theme-heading-title .pg-title",
+      "left": 12,
+      "right": 108,
+      "top": 18.640625,
+      "bottom": 49.359375,
+      "width": 96,
+      "height": 30.71875
+    }
+  ],
+  "source": "native selector bounds and DevTools Element.getStyles; isolated fixture, production WXML/WXSS exact",
+  "screenshot": "space--footprints.png",
+  "screenshot_sha256": "72c51ec4876b8804b3238caa2abb83469a0b9cd4e28e90bf5e04e4c7939447a0",
+  "fixture": "footprints",
+  "category": "child-heading",
+  "screenshot_errors": [],
+  "validation_errors": [],
+  "touch_errors": [],
+  "horizontal_overflow": [],
+  "styles": {}
+}

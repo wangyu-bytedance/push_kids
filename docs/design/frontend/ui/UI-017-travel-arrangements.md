@@ -1,6 +1,8 @@
 # UI-017 — 出行安排
 
-当前本地呈现revision `UI-STATE-20261106-THEMES-01`：[DESIGN-002 Spec08 / Architecture01](../../../../specs/active/DESIGN-002-GLOBAL-UI-CONSISTENCY.md)与DREV08已获用户“好的 按照以上方案落地”批准并实施，DREV06视觉方向保持。设置出行卡、日程及出行编辑弹层消费六主题角色；原始保留书包/台历装饰，新主题用已批准页头场景，旅行时段、冲突与只读规则不变。 本增量尚未上传；原生合成呈现、共享业务回归及真机/独立评审缺项见[当前证据](../../../quality/evidence/themes-20261106/README.md)。下方原特性发布与验收记录保持其版本范围，不能代验六主题。
+视觉增量 `UI-STATE-20261107-THEMES-02`：出行卡片继承DREV09装饰边框角色；时间、冲突与保存状态保持。[本轮EVD](../../../../specs/evidence/design003-20261107/README.md)记录原实现和自动检查。该修订随 0.1.19 开发上传，真机与完整原生状态矩阵待验。
+
+当前呈现revision `UI-STATE-20261106-THEMES-01`：[DESIGN-002 Spec08 / Architecture01](../../../../specs/completed/DESIGN-002-GLOBAL-UI-CONSISTENCY.md)与DREV08已获用户“好的 按照以上方案落地”批准并实施，DREV06视觉方向保持。设置出行卡、日程及出行编辑弹层消费六主题角色；原始保留书包/台历装饰，新主题用已批准页头场景，旅行时段、冲突与只读规则不变。 六主题随 0.1.19 开发上传。真机与独立 Review 待验。[版本证据](../../../../specs/evidence/client-release-20261108/README.md)
 
 - 2026-10-13设置出行卡接入书包路线装饰与统一纸面背景；日程保留台历插画，行为不变。SPEC-20261013-CARD-BACKGROUNDS-01，本地验收证据docs/quality/evidence/CARD-BACKGROUNDS-20261013.md；未发布。
 
@@ -65,8 +67,8 @@
 
 ## Responsive, accessibility and privacy
 
-- 视口：320×568、390×844、430×932；普通页面不横向滚动。
-- 触控目标 ≥44px，正文 ≥14px；星期在 320px 仍完整显示且不裁切。
+- 按[当前视口矩阵](../FRONTEND-DESIGN.md#9-视口与适配)检查，普通页面不横向滚动。
+- 触控目标 ≥44px，正文 ≥14px；星期在每个检查视口均完整显示。
 - 冲突摘要和行项目有可读名称；不能只用红色、图标或振动表达。
 - 名称最大 30 个 Unicode code points，安全换行；不进 URL、日志或 analytics。
 - 地点、路线、接送人不在本 revision 收集，降低儿童行踪隐私风险。

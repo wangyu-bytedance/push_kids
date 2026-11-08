@@ -1,9 +1,11 @@
 <view class="{{theme.classes}} theme-page" style="{{theme.style}}">
 <view class="page join-page {{preview && !applied ? 'sticky-cta' : ''}}">
-  <view class="step-head theme-header">
-    <image wx:if="{{theme.assets.hero && !themeArtFailed}}" class="theme-hero-art" src="{{theme.assets.hero}}" mode="aspectFill" binderror="onThemeIllustrationError" aria-hidden="{{true}}" />
-    <text class="pg-kicker">使用家人发来的邀请</text>
-    <text class="pg-title">申请加入家庭</text>
+  <view class="theme-header">
+    <view class="step-head">
+      <text class="pg-kicker">使用家人发来的邀请</text>
+      <text class="pg-title">申请加入家庭</text>
+    </view>
+    <include src="../../presentation/theme/header-art.wxml" />
   </view>
 
   <view class="pk-notice err" wx:if="{{error && !preview && !tokenMissing}}">

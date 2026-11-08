@@ -1,0 +1,8 @@
+CAPTURE original today
+Unexpected native viewport, route or theme: {"viewport":{"width":430,"height":932,"screenWidth":430,"screenHeight":932},"route":"pages/today/index","theme":"original"}
+CAPTURE garden today
+Unexpected native viewport, route or theme: {"viewport":{"width":430,"height":932,"screenWidth":430,"screenHeight":932},"route":"pages/today/index","theme":"garden"}
+CAPTURE space today
+Unexpected native viewport, route or theme: {"viewport":{"width":430,"height":932,"screenWidth":430,"screenHeight":932},"route":"pages/today/index","theme":"space"}
+NATIVE_BRIDGE_UNAVAILABLE: remaining groups NOT_RUN
+{"width":390,"groups":0,"failures":[{"theme":"original","name":"today","error":"Unexpected native viewport, route or theme: {\"viewport\":{\"width\":430,\"height\":932,\"screenWidth\":430,\"screenHeight\":932},\"route\":\"pages/today/index\",\"theme\":\"original\"}"},{"theme":"garden","name":"today","error":"Unexpected native viewport, route or theme: {\"viewport\":{\"width\":430,\"height\":932,\"screenWidth\":430,\"screenHeight\":932},\"route\":\"pages/today/index\",\"theme\":\"garden\"}"},{"theme":"space","name":"today","error":"Unexpected native viewport, route or theme: {\"viewport\":{\"width\":430,\"height\":932,\"screenWidth\":430,\"screenHeight\":932},\"route\":\"pages/today/index\",\"theme\":\"space\"}"}],"elapsed_ms":1587,"overflow_groups":[]}

@@ -15,13 +15,15 @@
   </view>
 
   <block wx:if="{{submission}}">
-    <view class="rec-head theme-header">
-    <image wx:if="{{theme.assets.hero && !themeArtFailed}}" class="theme-hero-art" src="{{theme.assets.hero}}" mode="aspectFill" binderror="onThemeIllustrationError" aria-hidden="{{true}}" />
-      <view class="grow">
-        <text class="rec-meta">学习于 {{submission.time_label}} · 提交于 {{submission.submitted_label}}</text>
-        <text class="rec-title">{{titleText}}</text>
+    <view class="theme-header">
+      <view class="rec-head">
+        <view class="grow">
+          <text class="rec-meta">学习于 {{submission.time_label}} · 提交于 {{submission.submitted_label}}</text>
+          <text class="rec-title">{{titleText}}</text>
+        </view>
+        <view class="pill {{statusTone}}">{{statusLabel}}</view>
       </view>
-      <view class="pill {{statusTone}}">{{statusLabel}}</view>
+      <include src="../../presentation/theme/header-art.wxml" />
     </view>
 
     <!-- 待确认草稿：就地编辑、就地确认，不再跳「查看并确认」 -->

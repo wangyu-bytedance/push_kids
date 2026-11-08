@@ -1,8 +1,14 @@
 # FEAT-001 — 家庭学习持续跟进系统 MVP
 
-当前本地呈现revision `FEAT-STATE-20261106-THEMES-01`：用户“好的 按照以上方案落地”批准[DESIGN-002 Spec08 / Architecture01](../../../specs/active/DESIGN-002-GLOBAL-UI-CONSISTENCY.md)与DREV08（DREV06视觉方向保持）。17路由及共享组件已接入原始、成长花园、星际探索、深海夜色、海洋、科技六种风格。设置底部列表“提醒设置”之后、“关于知芽”之前进入选择面板，选择暂存、应用才切换、关闭取消；只保存本机版本化主题ID，全孩子共享，读取失败回原始，写失败保留会话并提示未记住。主题切换只更新呈现，不重启页面、不调用业务API或重置草稿。未知自建科目/活动直接使用主题固定默认glyph，无逐科目AI生成或联网等待。单一registry管理token/材质/字体/插画/默认图标，单套业务逻辑显式组合生命周期。此次只在本地实现，尚未上传；[当前验证与缺项](../../quality/evidence/themes-20261106/README.md)独立于下方已交付040/0.1.18和各领域历史验收。
+当前本地呈现修订 `FEAT-STATE-20261108-CHILD-SWITCH-01` 将五个主 Tab 已有的孩子切换移到标题右侧。原始风格的日程和报表使用右下角背景装饰。各页继续按既有档案范围、选择和保存保护处理切换。该增量待开发上传。[DESIGN-005 Spec01](../../../specs/active/DESIGN-005-CHILD-SWITCH-HEADER.md)
 
-2026-11-06当前交付revision `FEAT-RELEASE-20261106-040-0.1.18-01`：[发布报告](../../deploy/releases/20261106-fullstack-040-client-0.1.18.md)绑定冻结160/168份源及manifest SHA。040 normal/100%、Schema0027，客户端0.1.18官方上传1,200,417字节并bump；尚未设体验版、提审或正式发布。生产升级0025→0027、严格Schema/17触发器/投影/实际CRUD与微信七路读取通过。93组原生状态节点/PNG保持；320/390确认框CUA视觉和取消已补，430原证据保持。工作日两处实际HTTP保存/回填、摘要及来源跳转经原生AX观察PASS；合成SQLite及私有三文件配置例外独立记录，设备/可访问性仍NOT_RUN。固定40 v2唯一完整单轮40/40、三科各15/15、零empty/pending/formal，原v1 37/40 FAIL及历史43/45保持；家长内容PENDING，不能称线上成功率100%。对应11份Spec开发DONE归档，旧10/13发布尝试仍BLOCKED；备份保留数量尚待管理员核对。
+已交付呈现修订 `FEAT-STATE-20261107-THEMES-03` 实施获批的六主题统一页头。带横幅的主 Tab 使用自然比例的无框插画，子页让标题先排版，缺图态回到主题底色。主题偏好和记录类型切换沿用现有业务合同。[DESIGN-004 Spec01](../../../specs/completed/DESIGN-004-HEADER-BLEND.md) · [0.1.19 发布记录](../../deploy/releases/20261108-client-0.1.19-upload.md)
+
+2026-11-07 呈现修订 `FEAT-STATE-20261107-THEMES-02`：获批[DESIGN-003 Spec01 / DREV09](../../../specs/completed/DESIGN-003-THEME-VISUAL-REFINEMENT.md)调整报表标题、记录完整比例头图、上传装饰和卡片/反馈边界。六主题入口和本机偏好遵循下方Spec08，学习/旅行类型、上传照片、表单、家长确认及复习规则不变。该修订随 0.1.19 开发上传。430×932 补齐 30 组照片入口及异常状态，完整状态和设备待验。[版本证据](../../../specs/evidence/client-release-20261108/README.md)
+
+呈现修订 `FEAT-STATE-20261106-THEMES-01`：用户“好的 按照以上方案落地”批准[DESIGN-002 Spec08 / Architecture01](../../../specs/completed/DESIGN-002-GLOBAL-UI-CONSISTENCY.md)与DREV08（DREV06视觉方向保持）。17路由及共享组件已接入原始、成长花园、星际探索、深海夜色、海洋、科技六种风格。设置底部列表“提醒设置”之后、“关于知芽”之前进入选择面板，选择暂存、应用才切换、关闭取消；只保存本机版本化主题ID，全孩子共享，读取失败回原始，写失败保留会话并提示未记住。主题切换只更新呈现，不重启页面、不调用业务API或重置草稿。未知自建科目/活动直接使用主题固定默认glyph，无逐科目AI生成或联网等待。单一registry管理token/材质/字体/插画/默认图标，单套业务逻辑显式组合生命周期。六主题随 0.1.19 开发上传。完整原生状态矩阵、真机及独立 Review 待验。[版本证据](../../../specs/evidence/client-release-20261108/README.md)
+
+2026-11-06 前次交付修订 `FEAT-RELEASE-20261106-040-0.1.18-01`：[发布报告](../../deploy/releases/20261106-fullstack-040-client-0.1.18.md)绑定冻结160/168份源及manifest SHA。040 normal/100%、Schema0027，客户端0.1.18官方上传1,200,417字节并bump；尚未设体验版、提审或正式发布。生产升级0025→0027、严格Schema/17触发器/投影/实际CRUD与微信七路读取通过。93组原生状态节点/PNG保持；320/390确认框CUA视觉和取消已补，430原证据保持。工作日两处实际HTTP保存/回填、摘要及来源跳转经原生AX观察PASS；合成SQLite及私有三文件配置例外独立记录，设备/可访问性仍NOT_RUN。固定40 v2唯一完整单轮40/40、三科各15/15、零empty/pending/formal，原v1 37/40 FAIL及历史43/45保持；家长内容PENDING，不能称线上成功率100%。对应11份Spec开发DONE归档，旧10/13发布尝试仍BLOCKED；备份保留数量尚待管理员核对。
 
 当前辅助验收revision `FEAT-STATE-20261106-SYSTEM-ONE-15`：[Spec06 / Architecture06](../../../specs/completed/BUG-036-SYSTEM-ONE-ACCEPTANCE.md)获用户明确批准并本地实现。启闭均使用原13/16 Pro生成、审查、历史检索/等价核验及100历史项上限；Lite仅在有效产物形成后提供来源、学科、范围、粒度、复习方式及完整性核对意见。同条目意见合并到既有uncertainties，未报问题也必须家长确认；所有验收结果均不修改学习条目/证据/关联，不自动重生成，不创建正式学习或复习事实。超时、错误、超容量和预算不足保留原产物并提示人工核对。现有人工录入和旧草稿确认保持。
 040的`PUSH_KIDS_SYSTEM_ONE_ENABLED`沿默认true且仅代表辅助验收；平台既有秘密配置保持。一次验收总计≤5秒、≤2外呼/256问题，每片≤128问题/96KiB文字/9图、响应流≤64KiB，和Pro共享2请求槽；不得挤占租约30秒写回预留。Worker在事务外执行外部调用，写回时重核family/child删除冻结、lease/attempt及提交状态；归档按FEAT-005继续允许已有任务完成。共享match uncertain缓存修复保留。新验收元数据只存服务端草稿JSON且不进入公开确认字段。真实同期成功率、旧产物保持、内容待家长review和实际检查见[本轮EVD](../../../specs/evidence/EVD-20261105-BUG036-SYSTEMONE06.md)。已由040匹配交付，Spec DONE/completed，家长验收独立保留。
@@ -470,7 +476,7 @@ BUG-010 本地实现已通过微信开发者工具 registered AppID preview 编�
   故障恢复验收。取消中的 Provider 失败竞争（CR-004）已在BUG-009本地修复；媒体路径清理
   （CR-005）仍属独立问题。
 - 当前设计门禁按 `GOV-SPEC-LOCAL-DESIGN-EVIDENCE-20260913-01` 要求仓库内可编辑 SVG/HTML、视口/状态导出与匹配 SHA-256 审批清单；旧工具 waiver 仅为历史审批记录。
-- 三视口、字体放大、键盘和 iOS/Android 实机证据仍待补齐。
+- 后续 Agent 按[GOV-004](../../../specs/completed/GOV-004-AGENT-DEVICE-CHECK-MATRIX.md)和[当前视口矩阵](../../design/frontend/FRONTEND-DESIGN.md#9-视口与适配)检查。各版本原生、字体放大、键盘及专项真机证据按各自任务记录补齐。
 
 ## Change references
 

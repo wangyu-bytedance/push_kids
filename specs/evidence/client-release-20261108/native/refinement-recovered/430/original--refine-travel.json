@@ -1,0 +1,82 @@
+{
+  "route": "pages/records/index",
+  "theme": "original",
+  "base_library": "3.17.4",
+  "viewport": {
+    "width": 430,
+    "height": 932,
+    "screenWidth": 430,
+    "screenHeight": 932
+  },
+  "nodes": [
+    {
+      "host": "page",
+      "selector": ".theme-header",
+      "left": 0,
+      "right": 430,
+      "top": 94,
+      "bottom": 234,
+      "width": 430,
+      "height": 140
+    },
+    {
+      "host": "page",
+      "selector": ".theme-header-content",
+      "left": 20,
+      "right": 410,
+      "top": 94,
+      "bottom": 234,
+      "width": 390,
+      "height": 140
+    },
+    {
+      "host": "page",
+      "selector": ".theme-header .child-chip",
+      "left": 20,
+      "right": 104,
+      "top": 173,
+      "bottom": 217,
+      "width": 84,
+      "height": 44
+    },
+    {
+      "host": "page",
+      "selector": ".record-type-title",
+      "left": 20,
+      "right": 125,
+      "top": 116,
+      "bottom": 165,
+      "width": 105,
+      "height": 49
+    },
+    {
+      "host": "page",
+      "selector": ".record-page",
+      "left": 0,
+      "right": 0,
+      "top": 0,
+      "bottom": 0,
+      "width": 0,
+      "height": 0
+    },
+    {
+      "host": "page",
+      "selector": ".record-upload-art",
+      "left": 0,
+      "right": 0,
+      "top": 0,
+      "bottom": 0,
+      "width": 0,
+      "height": 0
+    }
+  ],
+  "source": "native selector bounds and DevTools Element.getStyles; isolated fixture, production WXML/WXSS exact",
+  "screenshot": "original--refine-travel.png",
+  "screenshot_sha256": "23db26b02be0dd8c5d170206ab49d4ebe655c1ab32bb46dc527852781b924a34",
+  "fixture": "refine-travel",
+  "category": "refinement",
+  "screenshot_errors": [],
+  "validation_errors": [],
+  "touch_errors": [],
+  "horizontal_overflow": []
+}

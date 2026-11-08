@@ -1,0 +1,122 @@
+{
+  "route": "pages/today/index",
+  "theme": "ocean",
+  "base_library": "3.17.4",
+  "viewport": {
+    "width": 430,
+    "height": 932,
+    "screenWidth": 430,
+    "screenHeight": 932
+  },
+  "nodes": [
+    {
+      "host": "page",
+      "selector": ".theme-header",
+      "left": 20,
+      "right": 410,
+      "top": 94,
+      "bottom": 261.03125,
+      "width": 390,
+      "height": 167.03125
+    },
+    {
+      "host": "page",
+      "selector": ".theme-header-art",
+      "left": 0,
+      "right": 430,
+      "top": 94,
+      "bottom": 261.03125,
+      "width": 430,
+      "height": 167.03125
+    },
+    {
+      "host": "page",
+      "selector": ".theme-header-content",
+      "left": 20,
+      "right": 410,
+      "top": 94,
+      "bottom": 199,
+      "width": 390,
+      "height": 105
+    },
+    {
+      "host": "page",
+      "selector": ".theme-header .pg-title",
+      "left": 20,
+      "right": 188,
+      "top": 122.640625,
+      "bottom": 153.359375,
+      "width": 168,
+      "height": 30.71875
+    },
+    {
+      "host": "page",
+      "selector": ".theme-heading-row",
+      "left": 20,
+      "right": 410,
+      "top": 116,
+      "bottom": 160,
+      "width": 390,
+      "height": 44
+    },
+    {
+      "host": "page",
+      "selector": ".theme-heading-title",
+      "left": 20,
+      "right": 410,
+      "top": 116,
+      "bottom": 160,
+      "width": 390,
+      "height": 44
+    },
+    {
+      "host": "page",
+      "selector": ".theme-heading-title .pg-title",
+      "left": 20,
+      "right": 188,
+      "top": 122.640625,
+      "bottom": 153.359375,
+      "width": 168,
+      "height": 30.71875
+    },
+    {
+      "host": "page",
+      "selector": ".pg-context",
+      "left": 20,
+      "right": 410,
+      "top": 164,
+      "bottom": 182,
+      "width": 390,
+      "height": 18
+    }
+  ],
+  "source": "native selector bounds and DevTools Element.getStyles; isolated fixture, production WXML/WXSS exact",
+  "screenshot": "ocean--empty.png",
+  "screenshot_sha256": "98a89354de86df3903b42c57a2f685b4f39e20791ded9cf2502dac2a804c845f",
+  "fixture": "empty",
+  "category": "child-heading",
+  "screenshot_errors": [],
+  "validation_errors": [],
+  "touch_errors": [],
+  "horizontal_overflow": [],
+  "styles": {
+    ".theme-header": {
+      "background-color": "rgba(0, 0, 0, 0)",
+      "border-top-left-radius": "0px",
+      "border-top-width": "0px",
+      "box-shadow": "none",
+      "font-size": "16px",
+      "line-height": "25.6px",
+      "color": "rgb(32, 68, 84)"
+    },
+    ".theme-header .pg-title": {
+      "background-color": "rgba(0, 0, 0, 0)",
+      "border-top-left-radius": "0px",
+      "border-top-width": "0px",
+      "box-shadow": "none",
+      "font-size": "24px",
+      "line-height": "30.72px",
+      "color": "rgb(22, 69, 84)"
+    }
+  }
+}

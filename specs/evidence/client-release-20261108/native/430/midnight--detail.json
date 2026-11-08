@@ -1,0 +1,72 @@
+{
+  "route": "pages/record-detail/index",
+  "theme": "midnight",
+  "base_library": "3.17.4",
+  "viewport": {
+    "width": 430,
+    "height": 932,
+    "screenWidth": 430,
+    "screenHeight": 932
+  },
+  "nodes": [
+    {
+      "host": "page",
+      "selector": ".theme-header",
+      "left": 20,
+      "right": 410,
+      "top": 0,
+      "bottom": 239.0234375,
+      "width": 390,
+      "height": 239.0234375
+    },
+    {
+      "host": "page",
+      "selector": ".theme-header-art",
+      "left": 0,
+      "right": 430,
+      "top": 71.4375,
+      "bottom": 239.0234375,
+      "width": 430,
+      "height": 167.5859375
+    },
+    {
+      "host": "page",
+      "selector": ".theme-header .rec-title",
+      "left": 20,
+      "right": 343.3984375,
+      "top": 29.84375,
+      "bottom": 58.4375,
+      "width": 323.3984375,
+      "height": 28.59375
+    }
+  ],
+  "source": "native selector bounds and DevTools Element.getStyles; isolated fixture, production WXML/WXSS exact",
+  "screenshot": "midnight--detail.png",
+  "screenshot_sha256": "df4106b9dab6da6b5f72c220fdcfaadc3bd4d44931fc53e87420265151c7519e",
+  "fixture": "detail",
+  "category": "header-blend",
+  "screenshot_errors": [],
+  "validation_errors": [],
+  "touch_errors": [],
+  "horizontal_overflow": [],
+  "styles": {
+    ".theme-header": {
+      "background-color": "rgba(0, 0, 0, 0)",
+      "border-top-left-radius": "0px",
+      "border-top-width": "0px",
+      "box-shadow": "none",
+      "font-size": "16px",
+      "line-height": "25.6px",
+      "color": "rgb(237, 244, 244)"
+    },
+    ".theme-header .rec-title": {
+      "background-color": "rgba(0, 0, 0, 0)",
+      "border-top-left-radius": "0px",
+      "border-top-width": "0px",
+      "box-shadow": "none",
+      "font-size": "22px",
+      "line-height": "28.6px",
+      "color": "rgb(237, 244, 244)"
+    }
+  }
+}

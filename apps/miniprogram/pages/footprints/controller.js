@@ -1,4 +1,5 @@
 const api = require("../../utils/api");
+const { decorate } = require("../../utils/child-context");
 const { photoView, timelineVisit, query } = require("./presentation");
 const imports = require("./imports");
 const photos = require("./photos");
@@ -74,7 +75,7 @@ module.exports = function createController() { return {
       ]);
       if (this.stale(seq)) return;
       const member = getApp().globalData.currentMember;
-      const all = profiles.map((child) => ({ ...child, label: child.name + (child.active === false ? "（已归档）" : "") }));
+      const all = profiles.map((child) => ({ ...decorate(child), label: child.name + (child.active === false ? "（已归档）" : "") }));
       const selected = this.requestedChild || this.data.childId || getApp().globalData.selectedChildId;
       const chosen = all.find((child) => child.id === selected) || all.find((child) => child.active !== false) || all[0];
       const archivedVisible = this.data.archivedVisible || Boolean(chosen && chosen.active === false);

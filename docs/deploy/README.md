@@ -1,10 +1,18 @@
 # Push Kids 发布手册
 
-2026-11-06[当前交付](releases/20261106-fullstack-040-client-0.1.18.md)：040 normal/100%、Schema0027，客户端0.1.18官方上传1,200,417字节并bump；尚未设体验版、提审或正式发布。生产迁移/current/check/strict17触发器、投影对账、实际040CRUD/schema及微信七路GET全200。93组原生状态节点/PNG保持；320/390确认框CUA视觉和取消已补，430原证据保持。工作日两处实际HTTP保存/回填、摘要及来源跳转经原生AX观察PASS；合成SQLite及私有三文件配置例外独立记录，设备/可访问性仍NOT_RUN。获批fixed40 v2单轮40/40、三科各15/15；原37/40 FAIL和家长内容PENDING保持，线上生成成功率未测。11份对应Spec开发DONE归档，旧10/13候选OPS仍BLOCKED。备份保留列表受浏览器站点安全策略拦截，数量/清理NOT_RUN，需管理员核对。
+自动化发布按 [AGENTS.md](../../AGENTS.md#release-workflow) 优先使用官方 API 或 SDK 提交、查状态并获取回执。接口不可用或权限不覆盖时使用官方 CLI，规定的人工操作进入控制台。发布校验、授权和取证按下文执行。
+
+2026-11-08 [前端 0.1.19 开发版上传](releases/20261108-client-0.1.19-upload.md)覆盖 DESIGN-002、003 和 004。390×844 与 430×932 六主题页头及记录菜单通过，真机与完整验收待补。当前后端为 040，最近核实的 Schema 为 0027。下一阶段由管理员设置体验版。
+
+[DESIGN-005](../../specs/active/DESIGN-005-CHILD-SWITCH-HEADER.md) 的标题行与背景增量目前为本地实现，下一次前端开发上传按独立发布任务取证。
+
+2026-11-06 [前次全栈交付](releases/20261106-fullstack-040-client-0.1.18.md)：040 normal/100%、Schema0027，客户端0.1.18官方上传1,200,417字节并bump；尚未设体验版、提审或正式发布。生产迁移/current/check/strict17触发器、投影对账、实际040CRUD/schema及微信七路GET全200。93组原生状态节点/PNG保持；320/390确认框CUA视觉和取消已补，430原证据保持。工作日两处实际HTTP保存/回填、摘要及来源跳转经原生AX观察PASS；合成SQLite及私有三文件配置例外独立记录，设备/可访问性仍NOT_RUN。获批fixed40 v2单轮40/40、三科各15/15；原37/40 FAIL和家长内容PENDING保持，线上生成成功率未测。11份对应Spec开发DONE归档，旧10/13候选OPS仍BLOCKED。备份保留列表受浏览器站点安全策略拦截，数量/清理NOT_RUN，需管理员核对。
 
 本目录是 Push Kids 后续发布的执行入口。详细架构和平台约束仍以
 [`docs/operations/WECHAT-CLOUD-HOSTING.md`](../operations/WECHAT-CLOUD-HOSTING.md) 为准；这里仅保留
 每次发布都需要执行的顺序、门禁、人工操作和直达入口。
+
+前端原生取证采用[当前视口矩阵](../design/frontend/FRONTEND-DESIGN.md#9-视口与适配)。真机设备选择与相册、相机、隐私授权及后台恢复门禁见[前端发布指引](FRONTEND-RELEASE.md#4-体验版人工门禁)。
 
 当前System One是[Spec06辅助验收](../../specs/completed/BUG-036-SYSTEM-ONE-ACCEPTANCE.md)，已由040交付，默认开启；保留同一Pro生成后只加人工核对意见，所有草稿仍需家长确认。旧Spec05生成实验已退役；当前上线/内容/成功率分别记录，不把测试40/40当作线上结果。
 
@@ -50,7 +58,7 @@
 - [前端发布](FRONTEND-RELEASE.md)
 - [后端与数据库发布](BACKEND-RELEASE.md)
 
-工作日、归档和页脚增量已由[040/0.1.18](releases/20261106-fullstack-040-client-0.1.18.md)匹配交付并开发DONE；原内容/设备验收缺项独立保留，下一阶段为管理员设置体验版。039不兼容0027，恢复须用兼容0027的新代码/前向修复或受控备份恢复。
+工作日、归档和页脚增量已由[040/0.1.18](releases/20261106-fullstack-040-client-0.1.18.md)匹配交付并开发 DONE，原内容和设备验收缺项独立保留。039 不兼容 0027，恢复须用兼容 0027 的新代码、前向修复或受控备份恢复。
 
 ## 人工操作输出约定
 

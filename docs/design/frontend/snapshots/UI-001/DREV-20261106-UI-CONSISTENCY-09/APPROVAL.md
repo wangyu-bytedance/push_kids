@@ -1,6 +1,6 @@
 # DREV-20261106-UI-CONSISTENCY-09 — candidate approval manifest
 
-- Status: AWAITING_APPROVAL
+- Status: APPROVED
 - UI ID: UI-001
 - Design Revision: DREV-20261106-UI-CONSISTENCY-09
 - Frontend baseline revision: FDB-20260913-04
@@ -9,9 +9,10 @@
 - Frontend spec path: docs/design/frontend/prototypes/DREV-20261106-UI-CONSISTENCY-09/FRONTEND-SPEC.md
 - Editable design source path(s): docs/design/frontend/prototypes/DREV-20261106-UI-CONSISTENCY-09/index.html
 - Editable source SHA-256: docs/design/frontend/prototypes/DREV-20261106-UI-CONSISTENCY-09/index.html=2eaa3be52d043668b460b8715f4a4a772b95cff0f828e6d8dc944247057b46f4
-- Approved by: PENDING
-- Approved at: PENDING
-- Approval evidence: PENDING — 用户本轮四项反馈授权准备调优，未提前记为具体Spec01和DREV09批准。
+- Approved by: 用户
+- Approved at: 2026-11-07
+- Approval evidence: 当前会话用户明确回复“批准 Spec01 + DREV09，完成本地开发”，批准DESIGN-003-SPEC-01及本DREV09；仅本地交付供Review，不含上传发布。源与导出SHA保持原值，本清单自批准后冻结。
+- Superseded by: [DREV-20261107-HEADER-BLEND-01](../DREV-20261107-HEADER-BLEND-01/APPROVAL.md) 接管重叠的页头装饰与布局。报表标题、记录自然比例、上传装饰和容器边界规则继续有效。
 
 本清单只有设计HTML的162组几何与截图，另2张六主题总览；不是生产实现、原生或设备验收。原DREV06/08及已有生产/测试/工具不改。完整源/导出哈希见manifest.json。
 

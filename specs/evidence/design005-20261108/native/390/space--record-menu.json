@@ -1,0 +1,182 @@
+{
+  "route": "pages/records/index",
+  "theme": "space",
+  "base_library": "3.17.4",
+  "viewport": {
+    "width": 390,
+    "height": 844,
+    "screenWidth": 390,
+    "screenHeight": 844
+  },
+  "nodes": [
+    {
+      "host": "page",
+      "selector": ".theme-header",
+      "left": 0,
+      "right": 390,
+      "top": 87,
+      "bottom": 238.5,
+      "width": 390,
+      "height": 151.5
+    },
+    {
+      "host": "page",
+      "selector": ".theme-header-art",
+      "left": 0,
+      "right": 390,
+      "top": 87,
+      "bottom": 238.5,
+      "width": 390,
+      "height": 151.5
+    },
+    {
+      "host": "page",
+      "selector": ".theme-header-content",
+      "left": 18,
+      "right": 372,
+      "top": 87,
+      "bottom": 166.59375,
+      "width": 354,
+      "height": 79.59375
+    },
+    {
+      "host": "page",
+      "selector": ".theme-header .child-chip",
+      "left": 288,
+      "right": 372,
+      "top": 107,
+      "bottom": 151,
+      "width": 84,
+      "height": 44
+    },
+    {
+      "host": "page",
+      "selector": ".record-type-title",
+      "left": 18,
+      "right": 122,
+      "top": 107,
+      "bottom": 151.59375,
+      "width": 104,
+      "height": 44.59375
+    },
+    {
+      "host": "page",
+      "selector": ".record-type-menu",
+      "left": 18,
+      "right": 218,
+      "top": 159.59375,
+      "bottom": 265.59375,
+      "width": 200,
+      "height": 106
+    },
+    {
+      "host": "page",
+      "selector": ".record-type-choice",
+      "left": 23,
+      "right": 213,
+      "top": 164.59375,
+      "bottom": 212.59375,
+      "width": 190,
+      "height": 48
+    },
+    {
+      "host": "page",
+      "selector": ".record-type-choice",
+      "left": 23,
+      "right": 213,
+      "top": 212.59375,
+      "bottom": 260.59375,
+      "width": 190,
+      "height": 48
+    },
+    {
+      "host": "page",
+      "selector": ".theme-heading-row",
+      "left": 18,
+      "right": 372,
+      "top": 107,
+      "bottom": 151.59375,
+      "width": 354,
+      "height": 44.59375
+    },
+    {
+      "host": "page",
+      "selector": ".theme-heading-title",
+      "left": 18,
+      "right": 280,
+      "top": 107,
+      "bottom": 151.59375,
+      "width": 262,
+      "height": 44.59375
+    },
+    {
+      "host": "page",
+      "selector": ".theme-heading-row .child-chip",
+      "left": 288,
+      "right": 372,
+      "top": 107,
+      "bottom": 151,
+      "width": 84,
+      "height": 44
+    },
+    {
+      "host": "page",
+      "selector": ".theme-heading-row .chip-nm",
+      "left": 324,
+      "right": 350,
+      "top": 119.8984375,
+      "bottom": 138.09375,
+      "width": 26,
+      "height": 18.1953125
+    },
+    {
+      "host": "page",
+      "selector": ".theme-heading-row .chev",
+      "left": 112.34314727783203,
+      "right": 123.65685272216797,
+      "top": 125.05422973632812,
+      "bottom": 136.36795043945312,
+      "width": 11.313705444335938,
+      "height": 11.313720703125
+    },
+    {
+      "host": "page",
+      "selector": ".theme-heading-row .chev",
+      "left": 354.7573547363281,
+      "right": 366.0710754394531,
+      "top": 121.9289321899414,
+      "bottom": 133.24264526367188,
+      "width": 11.313720703125,
+      "height": 11.313713073730469
+    }
+  ],
+  "source": "native selector bounds and DevTools Element.getStyles; isolated fixture, production WXML/WXSS exact",
+  "screenshot": "space--record-menu.png",
+  "screenshot_sha256": "ccdb89601529adb2ce7d96d441f31108b870d3e1742c8ed6efce38dea0d00923",
+  "fixture": "record-menu",
+  "category": "child-heading",
+  "screenshot_errors": [],
+  "validation_errors": [],
+  "touch_errors": [],
+  "horizontal_overflow": [],
+  "styles": {
+    ".theme-header": {
+      "background-color": "rgba(0, 0, 0, 0)",
+      "border-top-left-radius": "0px",
+      "border-top-width": "0px",
+      "box-shadow": "none",
+      "font-size": "16px",
+      "line-height": "25.6px",
+      "color": "rgb(32, 53, 93)"
+    },
+    ".record-type-title": {
+      "background-color": "rgba(0, 0, 0, 0)",
+      "border-top-left-radius": "12px",
+      "border-top-width": "0px",
+      "box-shadow": "none",
+      "font-size": "22px",
+      "line-height": "28.6px",
+      "color": "rgb(255, 255, 255)"
+    }
+  }
+}

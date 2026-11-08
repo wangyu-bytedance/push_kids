@@ -1,0 +1,59 @@
+[
+  {
+    "width": 320,
+    "height": 568,
+    "groups": 90,
+    "recovered_groups": 0,
+    "source_manifest_sha256": "080f39c9d1010925ea87d62db5780b1ca4d8819cf622f8e139c048ebdd9e8b4b",
+    "background_comparisons": [
+      {
+        "present": "original--calendar",
+        "absent": "original--calendar-no-spot",
+        "exact_identical_nodes": 11
+      },
+      {
+        "present": "original--reports",
+        "absent": "original--missing-art",
+        "exact_identical_nodes": 11
+      }
+    ]
+  },
+  {
+    "width": 390,
+    "height": 844,
+    "groups": 90,
+    "recovered_groups": 1,
+    "source_manifest_sha256": "080f39c9d1010925ea87d62db5780b1ca4d8819cf622f8e139c048ebdd9e8b4b",
+    "background_comparisons": [
+      {
+        "present": "original--calendar",
+        "absent": "original--calendar-no-spot",
+        "exact_identical_nodes": 11
+      },
+      {
+        "present": "original--reports",
+        "absent": "original--missing-art",
+        "exact_identical_nodes": 11
+      }
+    ]
+  },
+  {
+    "width": 430,
+    "height": 932,
+    "groups": 90,
+    "recovered_groups": 0,
+    "source_manifest_sha256": "080f39c9d1010925ea87d62db5780b1ca4d8819cf622f8e139c048ebdd9e8b4b",
+    "background_comparisons": [
+      {
+        "present": "original--calendar",
+        "absent": "original--calendar-no-spot",
+        "exact_identical_nodes": 11
+      },
+      {
+        "present": "original--reports",
+        "absent": "original--missing-art",
+        "exact_identical_nodes": 11
+      }
+    ]
+  }
+]

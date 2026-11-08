@@ -1,0 +1,24 @@
+{
+  "source_sha256": "38583f8eaccd58a9f92c8b60dd04838b567ac2da904fa4dd10f50bda4a235a82",
+  "changed_paths": [
+    "pages/calendar/index.wxml",
+    "pages/calendar/index.wxss",
+    "pages/footprints/controller.js",
+    "pages/footprints/index.wxml",
+    "pages/footprints/index.wxss",
+    "pages/records/index.wxml",
+    "pages/records/index.wxss",
+    "pages/reports/index.wxml",
+    "pages/reports/index.wxss",
+    "pages/settings/index.wxml",
+    "pages/settings/index.wxss",
+    "pages/today/index.wxml",
+    "pages/today/index.wxss",
+    "styles/theme.wxss"
+  ],
+  "security_gate": "NOT_APPLICABLE",
+  "security_reason": "Only header layout, decoration and the existing child avatar formatting changed. No identity, roles, storage, media access or tenant authorization code changed.",
+  "design_manifest": "docs/design/frontend/snapshots/UI-001/DREV-20261108-CHILD-SWITCH-01/APPROVAL.md",
+  "backend_version": "flask-ik19-040",
+  "backend_manifest": "specs/evidence/fullstack-release-20261106/freeze-manifest.json"
+}

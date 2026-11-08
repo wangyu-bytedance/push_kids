@@ -5,7 +5,12 @@ import struct
 import zlib
 from pathlib import Path
 
+import pytest
+
 from tools.validate_design_evidence import validate_current_policy, validate_manifest
+
+CURRENT_BASELINE = "FDB-20261107-05"
+LEGACY_BASELINE = "FDB-20260913-04"
 
 
 def _sha256(path: Path) -> str:
@@ -29,7 +34,13 @@ def _png(path: Path, width: int, height: int) -> None:
     path.write_bytes(data)
 
 
-def _fixture(tmp_path: Path, *, approved: bool = True, omit_viewport: bool = False) -> Path:
+def _fixture(
+    tmp_path: Path,
+    *,
+    approved: bool = True,
+    baseline: str = LEGACY_BASELINE,
+    omit_width: int | None = None,
+) -> Path:
     drev = "DREV-TEST-01"
     source_dir = tmp_path / "docs" / "design" / "frontend" / "prototypes" / drev
     snapshot_dir = tmp_path / "docs" / "design" / "frontend" / "snapshots" / "UI-TEST" / drev
@@ -43,10 +54,10 @@ def _fixture(tmp_path: Path, *, approved: bool = True, omit_viewport: bool = Fal
         encoding="utf-8",
     )
     viewports = [(320, 568), (390, 844), (430, 932)]
-    if omit_viewport:
-        viewports.pop()
     rows = []
     for width, height in viewports:
+        if width == omit_width:
+            continue
         export = snapshot_dir / f"screen-{width}.png"
         _png(export, width, height)
         rows.append(
@@ -67,7 +78,7 @@ def _fixture(tmp_path: Path, *, approved: bool = True, omit_viewport: bool = Fal
                 f"- Status: `{status}`",
                 "- UI ID: `UI-TEST`",
                 f"- Design Revision: `{drev}`",
-                "- Frontend baseline revision: `FDB-TEST`",
+                f"- Frontend baseline revision: `{baseline}`",
                 "- Frontend engineering revision: `FEC-TEST`",
                 "- Task Spec path and revision: `specs/active/test.md#SPEC-TEST`",
                 f"- Frontend spec path: `{spec_path}`",
@@ -133,12 +144,29 @@ def test_export_cannot_reference_another_design_directory(tmp_path: Path) -> Non
     assert "export must stay in the manifest directory: ../other.png" in errors
 
 
-def test_missing_required_viewport_is_rejected(tmp_path: Path) -> None:
-    manifest = _fixture(tmp_path, omit_viewport=True)
+@pytest.mark.parametrize(
+    "baseline, width, height",
+    [
+        (LEGACY_BASELINE, 320, 568),
+        (CURRENT_BASELINE, 390, 844),
+        (CURRENT_BASELINE, 430, 932),
+    ],
+)
+def test_missing_required_viewport_is_rejected(
+    tmp_path: Path, baseline: str, width: int, height: int
+) -> None:
+    manifest = _fixture(tmp_path, baseline=baseline, omit_width=width)
 
     errors = validate_manifest(manifest, repo_root=tmp_path)
 
-    assert "missing required viewport exports: 430x932" in errors
+    assert f"missing required viewport exports: {width}x{height}" in errors
+
+
+@pytest.mark.parametrize("approved", [False, True])
+def test_current_manifest_accepts_two_viewports(tmp_path: Path, approved: bool) -> None:
+    manifest = _fixture(tmp_path, baseline=CURRENT_BASELINE, omit_width=320, approved=approved)
+
+    assert validate_manifest(manifest, repo_root=tmp_path, require_approved=approved) == []
 
 
 def test_pending_manifest_requires_explicit_allowance(tmp_path: Path) -> None:

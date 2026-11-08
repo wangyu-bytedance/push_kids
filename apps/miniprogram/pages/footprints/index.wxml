@@ -1,8 +1,13 @@
 <view class="{{theme.classes}} theme-page" style="{{theme.style}}">
 <view class="footprints-page {{embedded ? 'fp-embedded' : ''}}" aria-hidden="{{!!sheet}}">
-  <view class="fp-toolbar" wx:if="{{!embedded && children.length}}">
-    <picker class="fp-picker" wx:if="{{!embedded && children.length}}" range="{{children}}" range-key="label" value="{{childIndex}}" bindchange="changeChild" disabled="{{saving}}">
-      <view class="fp-child"><text>{{child.label}}</text><text>⌄</text></view>
+  <view class="theme-heading-row" wx:if="{{!embedded}}">
+    <view class="theme-heading-title"><text class="pg-title">孩子足迹</text></view>
+    <picker class="theme-heading-picker {{saving ? 'is-disabled' : ''}}" wx:if="{{children.length}}" range="{{children}}" range-key="label" value="{{childIndex}}" bindchange="changeChild" disabled="{{saving}}" aria-label="切换孩子，当前{{child.label}}">
+      <view class="child-chip">
+        <text class="ava" aria-hidden="{{true}}">{{child.avatar}}</text>
+        <text class="chip-nm trunc">{{child.label}}</text>
+        <view class="chev" aria-hidden="{{true}}"></view>
+      </view>
     </picker>
   </view>
   <view class="fp-notice" wx:if="{{child.active === false}}">已归档</view>

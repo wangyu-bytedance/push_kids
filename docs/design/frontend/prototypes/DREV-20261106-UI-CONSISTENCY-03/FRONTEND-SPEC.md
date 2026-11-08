@@ -1,6 +1,6 @@
 # 知芽 · 设置页六种风格探索
 
-- Task Spec: [DESIGN-002-SPEC-03](../../../../../specs/active/DESIGN-002-GLOBAL-UI-CONSISTENCY.md)
+- Task Spec: [DESIGN-002-SPEC-03](../../../../../specs/completed/DESIGN-002-GLOBAL-UI-CONSISTENCY.md)
 - Design Revision: `DREV-20261106-UI-CONSISTENCY-03`
 - Status: PENDING_STYLE_SELECTION，2026-11-06
 - Source: [index.html](index.html)，独立 HTML / CSS / SVG / JS，无外部资源。

@@ -2,15 +2,17 @@
 <view aria-hidden="{{gradeConfirmationVisible || showThemePicker}}">
 <primary-nav></primary-nav>
 <view class="page settings-page">
-  <view class="pg-head theme-header">
-    <image wx:if="{{theme.assets.hero && !themeArtFailed}}" class="theme-hero-art" src="{{theme.assets.hero}}" mode="aspectFill" binderror="onThemeIllustrationError" aria-hidden="{{true}}" />
-    <view class="head-intro">
-      <text class="pg-title">按你们的节奏来</text>
-    </view>
-    <view class="child-chip" wx:if="{{children.length}}" aria-role="button" aria-label="选择或管理学习档案" bindtap="openChildSheet">
-      <text class="ava">{{children[childIndex].avatar}}</text>
-      <text class="chip-nm trunc">{{children[childIndex].name}}</text>
-      <view class="chev"></view>
+  <view class="theme-header theme-header--overlay">
+    <include src="../../presentation/theme/header-art.wxml" />
+    <view class="pg-head theme-header-content">
+      <view class="theme-heading-row">
+        <view class="theme-heading-title"><text class="pg-title">按你们的节奏来</text></view>
+        <view class="child-chip" wx:if="{{children.length}}" aria-role="button" aria-label="选择或管理学习档案，当前{{children[childIndex].name}}" bindtap="openChildSheet">
+          <text class="ava" aria-hidden="{{true}}">{{children[childIndex].avatar}}</text>
+          <text class="chip-nm trunc">{{children[childIndex].name}}</text>
+          <view class="chev" aria-hidden="{{true}}"></view>
+        </view>
+      </view>
     </view>
   </view>
 

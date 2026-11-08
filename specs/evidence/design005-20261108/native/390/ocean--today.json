@@ -1,0 +1,162 @@
+{
+  "route": "pages/today/index",
+  "theme": "ocean",
+  "base_library": "3.17.4",
+  "viewport": {
+    "width": 390,
+    "height": 844,
+    "screenWidth": 390,
+    "screenHeight": 844
+  },
+  "nodes": [
+    {
+      "host": "page",
+      "selector": ".theme-header",
+      "left": 18,
+      "right": 372,
+      "top": 87,
+      "bottom": 238.5,
+      "width": 354,
+      "height": 151.5
+    },
+    {
+      "host": "page",
+      "selector": ".theme-header-art",
+      "left": 0,
+      "right": 390,
+      "top": 87,
+      "bottom": 238.5,
+      "width": 390,
+      "height": 151.5
+    },
+    {
+      "host": "page",
+      "selector": ".theme-header-content",
+      "left": 18,
+      "right": 372,
+      "top": 87,
+      "bottom": 188,
+      "width": 354,
+      "height": 101
+    },
+    {
+      "host": "page",
+      "selector": ".theme-header .pg-title",
+      "left": 18,
+      "right": 186,
+      "top": 113.640625,
+      "bottom": 144.359375,
+      "width": 168,
+      "height": 30.71875
+    },
+    {
+      "host": "page",
+      "selector": ".theme-header .child-chip",
+      "left": 288,
+      "right": 372,
+      "top": 107,
+      "bottom": 151,
+      "width": 84,
+      "height": 44
+    },
+    {
+      "host": "page",
+      "selector": ".theme-heading-row",
+      "left": 18,
+      "right": 372,
+      "top": 107,
+      "bottom": 151,
+      "width": 354,
+      "height": 44
+    },
+    {
+      "host": "page",
+      "selector": ".theme-heading-title",
+      "left": 18,
+      "right": 280,
+      "top": 107,
+      "bottom": 151,
+      "width": 262,
+      "height": 44
+    },
+    {
+      "host": "page",
+      "selector": ".theme-heading-row .child-chip",
+      "left": 288,
+      "right": 372,
+      "top": 107,
+      "bottom": 151,
+      "width": 84,
+      "height": 44
+    },
+    {
+      "host": "page",
+      "selector": ".theme-heading-row .chip-nm",
+      "left": 324,
+      "right": 350,
+      "top": 119.8984375,
+      "bottom": 138.09375,
+      "width": 26,
+      "height": 18.1953125
+    },
+    {
+      "host": "page",
+      "selector": ".theme-heading-row .chev",
+      "left": 354.7573547363281,
+      "right": 366.0710754394531,
+      "top": 121.9289321899414,
+      "bottom": 133.24264526367188,
+      "width": 11.313720703125,
+      "height": 11.313713073730469
+    },
+    {
+      "host": "page",
+      "selector": ".theme-heading-title .pg-title",
+      "left": 18,
+      "right": 186,
+      "top": 113.640625,
+      "bottom": 144.359375,
+      "width": 168,
+      "height": 30.71875
+    },
+    {
+      "host": "page",
+      "selector": ".pg-context",
+      "left": 18,
+      "right": 372,
+      "top": 155,
+      "bottom": 173,
+      "width": 354,
+      "height": 18
+    }
+  ],
+  "source": "native selector bounds and DevTools Element.getStyles; isolated fixture, production WXML/WXSS exact",
+  "screenshot": "ocean--today.png",
+  "screenshot_sha256": "75f3f443e81e6e9bd827e74cc190bdc3309e61ec0409ab75f232bc9d90e76e4a",
+  "fixture": "today",
+  "category": "child-heading",
+  "screenshot_errors": [],
+  "validation_errors": [],
+  "touch_errors": [],
+  "horizontal_overflow": [],
+  "styles": {
+    ".theme-header": {
+      "background-color": "rgba(0, 0, 0, 0)",
+      "border-top-left-radius": "0px",
+      "border-top-width": "0px",
+      "box-shadow": "none",
+      "font-size": "16px",
+      "line-height": "25.6px",
+      "color": "rgb(32, 68, 84)"
+    },
+    ".theme-header .pg-title": {
+      "background-color": "rgba(0, 0, 0, 0)",
+      "border-top-left-radius": "0px",
+      "border-top-width": "0px",
+      "box-shadow": "none",
+      "font-size": "24px",
+      "line-height": "30.72px",
+      "color": "rgb(22, 69, 84)"
+    }
+  }
+}

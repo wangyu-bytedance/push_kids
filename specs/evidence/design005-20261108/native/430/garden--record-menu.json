@@ -1,0 +1,182 @@
+{
+  "route": "pages/records/index",
+  "theme": "garden",
+  "base_library": "3.17.4",
+  "viewport": {
+    "width": 430,
+    "height": 932,
+    "screenWidth": 430,
+    "screenHeight": 932
+  },
+  "nodes": [
+    {
+      "host": "page",
+      "selector": ".theme-header",
+      "left": 0,
+      "right": 430,
+      "top": 94,
+      "bottom": 261.5859375,
+      "width": 430,
+      "height": 167.5859375
+    },
+    {
+      "host": "page",
+      "selector": ".theme-header-art",
+      "left": 0,
+      "right": 430,
+      "top": 94,
+      "bottom": 261.5859375,
+      "width": 430,
+      "height": 167.5859375
+    },
+    {
+      "host": "page",
+      "selector": ".theme-header-content",
+      "left": 20,
+      "right": 410,
+      "top": 94,
+      "bottom": 177.59375,
+      "width": 390,
+      "height": 83.59375
+    },
+    {
+      "host": "page",
+      "selector": ".theme-header .child-chip",
+      "left": 325,
+      "right": 410,
+      "top": 116,
+      "bottom": 160,
+      "width": 85,
+      "height": 44
+    },
+    {
+      "host": "page",
+      "selector": ".record-type-title",
+      "left": 20,
+      "right": 125,
+      "top": 116,
+      "bottom": 160.59375,
+      "width": 105,
+      "height": 44.59375
+    },
+    {
+      "host": "page",
+      "selector": ".record-type-menu",
+      "left": 20,
+      "right": 220,
+      "top": 168.59375,
+      "bottom": 274.59375,
+      "width": 200,
+      "height": 106
+    },
+    {
+      "host": "page",
+      "selector": ".record-type-choice",
+      "left": 25,
+      "right": 215,
+      "top": 173.59375,
+      "bottom": 221.59375,
+      "width": 190,
+      "height": 48
+    },
+    {
+      "host": "page",
+      "selector": ".record-type-choice",
+      "left": 25,
+      "right": 215,
+      "top": 221.59375,
+      "bottom": 269.59375,
+      "width": 190,
+      "height": 48
+    },
+    {
+      "host": "page",
+      "selector": ".theme-heading-row",
+      "left": 20,
+      "right": 410,
+      "top": 116,
+      "bottom": 160.59375,
+      "width": 390,
+      "height": 44.59375
+    },
+    {
+      "host": "page",
+      "selector": ".theme-heading-title",
+      "left": 20,
+      "right": 317,
+      "top": 116,
+      "bottom": 160.59375,
+      "width": 297,
+      "height": 44.59375
+    },
+    {
+      "host": "page",
+      "selector": ".theme-heading-row .child-chip",
+      "left": 325,
+      "right": 410,
+      "top": 116,
+      "bottom": 160,
+      "width": 85,
+      "height": 44
+    },
+    {
+      "host": "page",
+      "selector": ".theme-heading-row .chip-nm",
+      "left": 361,
+      "right": 387,
+      "top": 128.8984375,
+      "bottom": 147.09375,
+      "width": 26,
+      "height": 18.1953125
+    },
+    {
+      "host": "page",
+      "selector": ".theme-heading-row .chev",
+      "left": 114.13603973388672,
+      "right": 126.86396026611328,
+      "top": 133.3471221923828,
+      "bottom": 146.07504272460938,
+      "width": 12.727920532226562,
+      "height": 12.727920532226562
+    },
+    {
+      "host": "page",
+      "selector": ".theme-heading-row .chev",
+      "left": 391.5502624511719,
+      "right": 404.2781677246094,
+      "top": 130.22183227539062,
+      "bottom": 142.9497528076172,
+      "width": 12.7279052734375,
+      "height": 12.727920532226562
+    }
+  ],
+  "source": "native selector bounds and DevTools Element.getStyles; isolated fixture, production WXML/WXSS exact",
+  "screenshot": "garden--record-menu.png",
+  "screenshot_sha256": "cb3356044840a034e4d6dc21523b99c259fd34b452a077d82485cc6a0abf96f7",
+  "fixture": "record-menu",
+  "category": "child-heading",
+  "screenshot_errors": [],
+  "validation_errors": [],
+  "touch_errors": [],
+  "horizontal_overflow": [],
+  "styles": {
+    ".theme-header": {
+      "background-color": "rgba(0, 0, 0, 0)",
+      "border-top-left-radius": "0px",
+      "border-top-width": "0px",
+      "box-shadow": "none",
+      "font-size": "16px",
+      "line-height": "25.6px",
+      "color": "rgb(41, 63, 41)"
+    },
+    ".record-type-title": {
+      "background-color": "rgba(0, 0, 0, 0)",
+      "border-top-left-radius": "13px",
+      "border-top-width": "0px",
+      "box-shadow": "none",
+      "font-size": "22px",
+      "line-height": "28.6px",
+      "color": "rgb(35, 61, 41)"
+    }
+  }
+}

@@ -1,0 +1,8 @@
+CAPTURE original records-index
+{"message":"timeout waiting for automator response"}
+CAPTURE garden records-index
+{"message":"Uncaught Error: An object could not be cloned."}
+CAPTURE space records-index
+{"message":"Uncaught Error: An object could not be cloned."}
+NATIVE_BRIDGE_UNAVAILABLE: remaining groups NOT_RUN
+{"width":390,"groups":0,"failures":[{"theme":"original","name":"records-index","error":"{\"message\":\"timeout waiting for automator response\"}"},{"theme":"garden","name":"records-index","error":"{\"message\":\"Uncaught Error: An object could not be cloned.\"}"},{"theme":"space","name":"records-index","error":"{\"message\":\"Uncaught Error: An object could not be cloned.\"}"}],"elapsed_ms":11261,"overflow_groups":[]}

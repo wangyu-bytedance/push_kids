@@ -1,0 +1,72 @@
+{
+  "route": "pages/activity/edit",
+  "theme": "tech",
+  "base_library": "3.17.4",
+  "viewport": {
+    "width": 390,
+    "height": 844,
+    "screenWidth": 390,
+    "screenHeight": 844
+  },
+  "nodes": [
+    {
+      "host": "page",
+      "selector": ".theme-header",
+      "left": 18,
+      "right": 372,
+      "top": 0,
+      "bottom": 229.015625,
+      "width": 354,
+      "height": 229.015625
+    },
+    {
+      "host": "page",
+      "selector": ".theme-header-art",
+      "left": 0,
+      "right": 390,
+      "top": 77.515625,
+      "bottom": 229.015625,
+      "width": 390,
+      "height": 151.5
+    },
+    {
+      "host": "page",
+      "selector": ".theme-header .pg-title",
+      "left": 18,
+      "right": 372,
+      "top": 34.796875,
+      "bottom": 65.515625,
+      "width": 354,
+      "height": 30.71875
+    }
+  ],
+  "source": "native selector bounds and DevTools Element.getStyles; isolated fixture, production WXML/WXSS exact",
+  "screenshot": "tech--activity.png",
+  "screenshot_sha256": "0c5c37c2ce516221e392b6ff82f080e1dc155f76623a116771d8ed143c0dac6b",
+  "fixture": "activity",
+  "category": "header-blend",
+  "screenshot_errors": [],
+  "validation_errors": [],
+  "touch_errors": [],
+  "horizontal_overflow": [],
+  "styles": {
+    ".theme-header": {
+      "background-color": "rgba(0, 0, 0, 0)",
+      "border-top-left-radius": "0px",
+      "border-top-width": "0px",
+      "box-shadow": "none",
+      "font-size": "16px",
+      "line-height": "25.6px",
+      "color": "rgb(25, 59, 73)"
+    },
+    ".theme-header .pg-title": {
+      "background-color": "rgba(0, 0, 0, 0)",
+      "border-top-left-radius": "0px",
+      "border-top-width": "0px",
+      "box-shadow": "none",
+      "font-size": "24px",
+      "line-height": "30.72px",
+      "color": "rgb(25, 59, 73)"
+    }
+  }
+}

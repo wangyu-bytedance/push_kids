@@ -4,13 +4,13 @@
 
 - Frontend engineering scope: PRESENT
 - Constraint status: APPROVED
-- Constraint revision: FEC-20261007-NATIVE-GEOMETRY-02
+- Constraint revision: FEC-20261107-AGENT-DEVICE-MATRIX-03
 - Owner: 产品负责人（用户）
 - Approved by: 产品负责人（用户）
-- Approved at: 2026-10-07
-- Approval evidence: 用户在本会话针对三张原生界面错误截图要求增加同类检查及约束，随后以“修改代码 并测试”批准 `SPEC-20261007-REVIEW-GROUP-CARDS-05`，其中明确提出本修订；既有预算与规则继续有效
-- Superseded revision: FEC-20260913-LOCAL-DESIGN-EVIDENCE-01（有界读取、视觉、视口、样式分层与图标条款不变）
-- Related frontend design baseline: FDB-20260913-04
+- Approved at: 2026-11-07
+- Approval evidence: 用户“批准 GOV-004-SPEC-01，按此更新”，见 [GOV-004](../../../specs/completed/GOV-004-AGENT-DEVICE-CHECK-MATRIX.md)。既有原生几何、可访问性和资源预算沿用。
+- Superseded revision: FEC-20261007-NATIVE-GEOMETRY-02（仅替换当前设备和视口检查范围）
+- Related frontend design baseline: FDB-20261107-05
 - Applies to: `apps/miniprogram`
 
 ## Engineering priorities and stack boundary
@@ -25,7 +25,7 @@
 2026-10-24已批准文案附加条款：[UI文案减法要求](prototypes/DREV-20261024-FOOTPRINTS-MINIMAL-01/UI-COPY-REQUIREMENTS.md)，对应[SPEC-20261024-FOOTPRINTS-MINIMAL-UI-01](../../../specs/completed/FEAT-012-FOOTPRINTS-MINIMAL-UI.md)及DREV01；产品负责人明确回复“批准 Spec01 + DREV01，按此实施并合并 UI 规范”。本条不改变 FEC 主revision、预算或授权/错误恢复合同。
 
 - 每次 UI 变更按[通用设计“界面文案与减法”](FRONTEND-DESIGN.md#界面文案与减法)执行删字检查；文案、必要后果与真实未知状态由该正文统一约束，不维护重复清单。2026-11-05批准[工作日备注Spec01 / DREV03](../../../specs/completed/FEAT-001-WORKDAY-COPY-CLEANUP.md)后，维护年份/假想后果备注与同一异常重复说明也按该规则删除；FEC主revision与必要授权/错误恢复合同不变。
-- 删除文案同步收紧布局、清除空容器和无消费者样式，保留44px/14px下限。用真实操作及三视口渲染验证，不新增逐字镜像测试；不以“可能有人不懂”为由堆提示。
+- 删除文案同步收紧布局、清除空容器和无消费者样式，保留44px/14px下限。用真实操作及当前视口矩阵的原生渲染验证，不新增逐字镜像测试；不以“可能有人不懂”为由堆提示。
 
 - Primary tabs remain 今日、日程、记录、报表、设置; onboarding, submission, confirmation, family application and approval are deep flows.
 - Each page exposes one dominant action. Secondary and destructive actions are visually separated.
@@ -35,6 +35,8 @@
 
 - Styles are layered: `presentation/theme/registry.js` owns semantic values; `tools/gen_theme_styles.py` derives `styles/tokens.wxss` for first paint. `styles/atoms.wxss` owns shared components, `styles/theme.wxss` approved material differences, and page `.wxss` page-only geometry. `app.wxss` imports the layers and keeps compatibility shims.
 - Global semantic colors, spacing, radii, typography, elevation, motion, assets and safe-area roles have one authority in the theme registry. Pages consume roles and must not redefine them. This extension is approved by DESIGN-002 Spec08 / Architecture01; the existing FEC budgets remain unchanged.
+- Approved [DESIGN-003 Spec01 / DREV09](../../../specs/completed/DESIGN-003-THEME-VISUAL-REFINEMENT.md) distinguishes decorative card/feedback edges from fields, selection, focus, errors and chart guides. Registry supplies the decorative edges and the upload art role; only the original theme supplies upload art, with local camera glyph fallback. The record menu anchors independently of the full-width image, and the fixed report title uses full-width reflow. The original design exports are frozen. Future routine checks use the current viewport matrix below.
+- Approved [DESIGN-004 Spec01](../../../specs/completed/DESIGN-004-HEADER-BLEND.md) owns the shared header material and layout. The WXML include `presentation/theme/header-art.wxml` renders a decorative, assistive-technology-hidden `widthFix` image. `styles/theme.wxss` owns canvas-colored feathering and fallback foreground colors. The five tab headers overlay their content while subpages flow text ahead of the image. The record menu remains a separate foreground layer. Use the native geometry, screenshot and tap checks linked in the [header evidence](../../../specs/evidence/design004-20261107/README.md).
 - Pages must not create near-duplicate token scales. Reusable components require shared product semantics, not visual similarity alone.
 - Original radii use 8/12/16/24/32/40/999rpx. Spec08 additionally approves theme-owned 28/44/48rpx roles; other intermediate values still require approval.
 - Icons come from `tools/gen_icon_styles.py` (24×24, stroke 1.8; limited filled dots). It generates one glyph body per icon and shared sizing styles; `theme-icon` applies semantic tones, including fixed per-theme unknown-subject fallbacks. Emoji, text icons, icon fonts and duplicated palette sets are forbidden. Both glyph and token generators must be idempotent.
@@ -64,7 +66,7 @@
 
 ## Responsive layout, content, and input modes
 
-- Required portrait viewports are 320×568, 390×844 and 430×932 logical pixels with safe-area insets.
+- Use the [current portrait viewport matrix](FRONTEND-DESIGN.md#9-视口与适配) with safe-area insets.
 - Layout is single column with maximum content width 480px; long CJK labels wrap and key actions remain reachable with the keyboard open.
 - Ordinary pages and sheets never require horizontal dragging to find a field, date, option, or action. Seven-day, three-range, three-subject and seven-weekday controls use shrinkable tracks and remain fully visible.
 - The 100-day report is the single approved horizontal gesture surface: it paginates inside its own swiper as 30/30/30/10 items, while the root page remains horizontally fixed.
@@ -72,8 +74,8 @@
 - In a two- or three-column selector, the track owns its width and the native button fits that track with border-box sizing. Buttons in one row differ in rendered width by at most 1 logical pixel, with at least 8px between adjacent button edges and between rows; a partial final row retains the same column width. No selector or child may overlap or extend past the content boundary.
 - A one-entry dropdown selector fills its entire content row, and its opened option list stays within that row and the viewport; each option is at least 44px high. The partial-row check applies only where a multi-column selector actually has a partial row. Verify the rendered native width: a WeChat button's default maximum can silently shrink a `width: 100%` selector, so source CSS alone is insufficient.
 - An item-level ellipsis action is a fixed 44×44 logical-pixel target (±1px native-renderer tolerance), never a flex-growing sibling. Reserve its width in the adjacent title layout so long text and metadata remain readable. The anchored menu must remain inside the viewport.
-- Hiding horizontal overflow is not acceptance evidence. At all three required viewports every required control must stay within its container by no more than 1px and every regular touch target remains at least 44px.
-- Every changed selector/action group requires WeChat native-node rectangle evidence at 320×568, 390×844 and 430×932, including each applicable filter state, long text and an open action menu. Assert dimensions, equal columns where applicable, horizontal/vertical gaps, overlap, containment and text clearance; retain screenshots for reading and wrapping review. Static CSS assertions, HTML previews and screenshots without native node rectangles cannot pass this geometry gate.
+- Hiding horizontal overflow is not acceptance evidence. At each required viewport every required control must stay within its container with at most 1px tolerance, and every regular touch target remains at least 44px.
+- Every changed selector/action group requires WeChat native-node rectangle evidence at each required viewport, including each applicable filter state, long text and an open action menu. Assert dimensions, equal columns where applicable, horizontal/vertical gaps, overlap, containment and text clearance; retain screenshots for reading and wrapping review. Static CSS assertions, HTML previews and screenshots without native node rectangles cannot pass this geometry gate.
 - Landscape needs a safe return/basic-action path but no dedicated MVP composition.
 
 ## Accessibility and inclusive content
@@ -91,6 +93,7 @@
 ## Browser, device, and progressive enhancement
 
 - Supported runtime is the current production WeChat client on representative iOS and Android devices plus WeChat DevTools.
+- Routine Agent checks use the iPhone-focused viewport matrix. Where release or a task requires physical platform testing, use iPhone 14 or later (excluding mini) for iOS and a non-Huawei device for Android.
 - Optional APIs require feature detection and an actionable fallback; unavailable camera/album access must not block manual text input.
 - Web, desktop and dedicated tablet layouts are outside MVP scope.
 
@@ -143,9 +146,9 @@
 | icon asset reproducibility | `uv run python tools/gen_icon_styles.py` then confirm an empty diff |
 | theme roles/resources/contrast/boundaries | `node tools/check_themes.js`; token generator idempotence; canonical registry derives all six-theme checks |
 | architecture boundaries | `uv run python tools/check_architecture.py` |
-| device/visual | WeChat DevTools compile/preview plus representative iOS and Android smoke |
-| viewport/state | 320×568, 390×844, 430×932 captures for each of six themes and changed states; global Spec08 scope is17 routes×6×3 plus8 shared states×6×3=450 groups. HTML never replaces native evidence; synthetic fixtures do not prove device or business end-to-end acceptance. |
-| native control geometry | three-viewport native rectangles and automated dimension/gap/overlap/containment assertions for changed selector/action groups |
+| device/visual | WeChat DevTools compile/preview plus representative physical-device smoke where release or task scope requires it |
+| viewport/state | Current matrix for each of six themes and changed states. A full pass over 17 routes and 8 shared states is 300 groups across the two current viewports. HTML is auxiliary and synthetic fixtures cannot establish device or business end-to-end acceptance. |
+| native control geometry | Native rectangles at each required viewport and automated dimension/gap/overlap/containment assertions for changed selector/action groups |
 | privacy/authorization | contract/integration tests plus manual bundle/log inspection |
 
 ## Design evidence, exceptions, enforcement, and review

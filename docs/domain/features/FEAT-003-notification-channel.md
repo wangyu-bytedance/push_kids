@@ -1,5 +1,7 @@
 # FEAT-003 — 通知消息通道
 
+随 0.1.19 开发上传的呈现修订 `FEAT-STATE-20261107-THEMES-03` 覆盖提醒设置页头，订阅授权和发送流程继续按本 Feature 定义执行。[当前 UI](../../design/frontend/ui/UI-011-reminder-settings.md)
+
 当前工作日兼容revision `FEAT-STATE-20261106-NOTIFICATION-WORKDAY-05`：获批[工作日Spec02](../../../specs/completed/FEAT-001-CHINA-WORKDAY-SCHEDULES.md)由activities统一计算有效日期和时段，既有通知planner继续消费其公开occurrence合同。法定假期和覆盖外工作日项不入队，调休周末按有效时段提醒一次；一次/每周旧规则、去重、授权、加密接收者和发送渠道保持。真实planner队列测试通过，未发送真实微信提醒；该兼容代码已由040交付，[本轮证据](../../quality/evidence/china-workday-20261105/README.md)独立于历史通知交付。
 
 - 2026-10-20本地排期兼容：复习摘要重新计算的未复习量排除永久已替代知识，保留既有人工预约的一次例外。无额外替代通知，不改变模板/授权/投递规则；见[替代状态证据](../../quality/evidence/AUTO-SUPERSEDED-REVIEW-20261020.md)，对应实现现已在037中交付，原验收范围不变。

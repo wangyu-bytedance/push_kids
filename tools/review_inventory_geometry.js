@@ -1,6 +1,9 @@
 #!/usr/bin/env node
 // Audit rectangles returned by the native Mini Program renderer, not HTML previews.
 const fs = require("node:fs");
+const { current, legacy, byBaseline } = require("./frontend_viewports.json");
+const currentViewports = byBaseline[current];
+const captureViewports = { ...byBaseline[legacy], ...currentViewports };
 
 const SELECTORS = [".inventory-page", ".filter-row", ".segment", ".filter-trigger", ".filter-panel", ".filter-option", ".more", ".item-main", ".item-title", ".item-meta", ".action-menu", ".group-toggle", ".status-row", ".status-segment", ".source-link", ".item-coverage", ".menu-option"];
 const QUERY = `function() {
@@ -11,7 +14,7 @@ const QUERY = `function() {
       const info = typeof wx.getWindowInfo === "function" ? wx.getWindowInfo() : wx.getSystemInfoSync();
       resolve({
         view: getCurrentPages().slice(-1)[0].data.view,
-        viewport: { width: info.windowWidth, height: info.windowHeight },
+        viewport: { width: info.windowWidth, height: info.windowHeight, screenWidth: info.screenWidth, screenHeight: info.screenHeight },
         nodes: results.map(group => (group || []).map(node => ({
           left: node.left, right: node.right, top: node.top, bottom: node.bottom,
           width: node.width, height: node.height
@@ -146,11 +149,15 @@ async function main() {
   } else if (mode === "capture") {
     const [view, widthText, file, ...flags] = args;
     const width = Number(widthText);
-    if (!["time", "subject", "count"].includes(view) || ![320, 390, 430].includes(width) || !file || flags.some(flag => !["--open-menu", "--open-menu-middle", "--open-menu-last", "--open-filter"].includes(flag))) {
-      throw new Error("usage: capture <time|subject|count> <320|390|430> <output.json> [--open-menu|--open-menu-middle|--open-menu-last] [--open-filter]");
+    if (!["time", "subject", "count"].includes(view) || !Object.hasOwn(captureViewports, width)
+        || !file || flags.some(flag => !["--open-menu", "--open-menu-middle", "--open-menu-last", "--open-filter"].includes(flag))) {
+      throw new Error(`usage: capture <time|subject|count> <${Object.keys(currentViewports).join("|")}> <output.json> [--open-menu|--open-menu-middle|--open-menu-last] [--open-filter] (320 for legacy capture)`);
     }
     const menuMode = flags.includes("--open-menu-last") ? "last" : flags.includes("--open-menu-middle") ? "middle" : flags.includes("--open-menu") ? "first" : "";
     const payload = { ...(await capture(process.env.MINIPROGRAM_AUTOMATION_WS || "ws://127.0.0.1:9420", view, menuMode, flags.includes("--open-filter"))), expectedWidth: width };
+    if (payload.viewport.screenWidth !== width || payload.viewport.screenHeight !== captureViewports[width]) {
+      throw new Error(`Expected native screen ${width}x${captureViewports[width]}`);
+    }
     if (menuMode === "last") payload.menuTriggerIndex = (payload.nodes[6] || []).length - 1;
     if (menuMode === "middle") payload.menuTriggerIndex = Math.floor(((payload.nodes[6] || []).length - 1) / 2);
     if (menuMode && !payload.nodes[10]?.length) throw new Error("native action menu missing");

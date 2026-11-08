@@ -1,6 +1,10 @@
-# Spec 开发状态与独立验收清单 — 2026-11-06
+# Spec 开发状态与独立验收清单 — 2026-11-08
 
-当前交付：[040 / 0.1.18](../docs/deploy/releases/20261106-fullstack-040-client-0.1.18.md)，后端normal/100%、生产0027，客户端官方上传1,200,417字节并bump。适用自动化、v2质量、原生主路径及生产只读smoke通过；完整验收PARTIAL。家长内容PENDING、线上生成成功率NOT_MEASURED、设备/可访问性NOT_RUN，体验/提审/正式发布未推进，备份保留数量因站点策略待人工核对。
+当前前端交付 [0.1.19](../docs/deploy/releases/20261108-client-0.1.19-upload.md)已完成微信开发上传。生产后端为 040，最近核实的 Schema 为 0027。当前完整验收为 PARTIAL，体验版、审核与正式发布待后续门禁。
+
+[GOV-004](completed/GOV-004-AGENT-DEVICE-CHECK-MATRIX.md) 已完成本地治理交付，`DONE/completed`。Agent 日常检查采用 iPhone 14 系列代表的 390×844、430×932 两档；在途主题任务的产品验收和云交付状态独立记录。
+
+前次全栈交付：[040 / 0.1.18](../docs/deploy/releases/20261106-fullstack-040-client-0.1.18.md)，后端normal/100%、生产0027，客户端官方上传1,200,417字节并bump。适用自动化、v2质量、原生主路径及生产只读smoke通过；完整验收PARTIAL。家长内容PENDING、线上生成成功率NOT_MEASURED、设备/可访问性NOT_RUN，体验/提审/正式发布未推进，备份保留数量因站点策略待人工核对。
 
 按用户批准的[GOV-002](completed/GOV-002-CLOUD-DELIVERY-DEVELOPMENT-COMPLETION.md)，云交付匹配实现即开发DONE；不追认缺失批准或把验收缺项改PASS。040与0.1.18覆盖下列11份，均已DONE并迁completed：
 
@@ -20,18 +24,18 @@
 
 | 分类 | 数量 | 当前含义 |
 |---|---:|---|
-| completed完成记录 | 119 | 既有108＋本轮11 |
+| completed完成记录 | 123 | 既有108＋全栈交付11＋GOV-004＋前端主题交付3 |
 | completed阶段设计 | 1 | DESIGN-001保留STAGE_COMPLETE |
-| active READY_FOR_REVIEW | 3 | CLOUD-002、DOC-003、DESIGN-003 Spec01，未批准实施 |
-| active VERIFYING | 1 | DESIGN-002 Spec08已批准并本地实施，未上传；验收缺项独立保留 |
+| active READY_FOR_REVIEW | 2 | CLOUD-002、DOC-003，待批准实施 |
+| active VERIFYING | 1 | DESIGN-005，已获批并本地实施，待匹配开发上传 |
 | active BLOCKED | 1 | 旧10/13候选缓存OPS，34/40 FAIL、未部署，未作取消处置 |
 | rejected | 19 | 原取消/拒绝理由保持 |
 
-合计144份：completed120 / active5 / rejected19；active没有已交付的产品开发Spec。旧[缓存OPS](active/OPS-20261101-BUG036-CACHE02-DEPLOYMENT.md)锁定154文件10/13且排除内容03/DDL；不能用040继承缓存功能冒称该候选曾部署。CLOUD-002、DOC-003及DESIGN-003继续待具体批准。
+合计 147 份，completed 124 / active 4 / rejected 19。旧[缓存OPS](active/OPS-20261101-BUG036-CACHE02-DEPLOYMENT.md)锁定154文件10/13且排除内容03/DDL；不能用040继承缓存功能冒称该候选曾部署。DOC-003 继续待具体批准。
 
-2026-11-06 [DESIGN-003 / Spec01](active/DESIGN-003-THEME-VISUAL-REFINEMENT.md)：针对六主题报表标题末字换行、记录头图裁切、上传装饰背景不协调和嵌套边框提出DREV09视觉调优，保持现有Architecture01及六主题/底部入口。当前READY_FOR_REVIEW，仅准备设计和SHA导出，未修改生产代码；DESIGN-002 Spec08的本地实现与未完成验收保持独立。
+[DESIGN-005 Spec01](active/DESIGN-005-CHILD-SWITCH-HEADER.md)和 DREV-20261108-CHILD-SWITCH-01 已获批。孩子切换统一在标题行右侧，原始风格日程与报表插画改作页头背景，当前为 VERIFYING。[本地证据](evidence/design005-20261108/README.md)。[CLOUD-002 Spec02](active/CLOUD-002-DETERMINISTIC-RELEASE-AUTOMATION.md)提出两个独立的确定性发布命令，仍待具体修订批准。
 
-2026-11-06 [DESIGN-002 / Spec08（Architecture01）](active/DESIGN-002-GLOBAL-UI-CONSISTENCY.md)：用户对DREV07批注“这个放在最下面的设置里”，其后“好的 按照以上方案落地”明确批准Spec08、Architecture01与DREV08实施。六主题已接入17路由/共享组件，入口位于设置底部提醒与关于之间，本机候选/应用/取消/偏好与固定默认图标已实现。DREV06与08冻结证据、Spec01–07及AGENTS约束保持；[本轮证据](../docs/quality/evidence/themes-20261106/README.md)分别记录业务回归、主题合同/资源/原生呈现与未验证项。当前active/VERIFYING；未上传，不满足云交付DONE归档条件。
+随 0.1.19 交付的 [DESIGN-002 Spec08](completed/DESIGN-002-GLOBAL-UI-CONSISTENCY.md)、[DESIGN-003 Spec01](completed/DESIGN-003-THEME-VISUAL-REFINEMENT.md) 和 [DESIGN-004 Spec01](completed/DESIGN-004-HEADER-BLEND.md) 均为 DONE / completed。370 项前端回归、两档 216 组页头及六主题记录菜单、风格切换通过。430×932 另有 30 组照片入口和异常状态通过。完整矩阵、真机、辅助功能及独立 Review 待验。[本轮证据](evidence/client-release-20261108/README.md)
 
 本轮固定40 v2是获批材料Spec07后唯一完整40/40，各科15/15、零empty/pending/formal；原37/40 FAIL、历史34/40和43/45等保持原版本。实际生产七路GET200只证明读取，不是AI生成、正式确认或线上成功率。归档不推进体验版/审核/正式发布。
 

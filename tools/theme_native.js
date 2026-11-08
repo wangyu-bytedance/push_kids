@@ -2,10 +2,25 @@
 const fs = require("node:fs"), path = require("node:path"), crypto = require("node:crypto");
 const registry = require("../apps/miniprogram/presentation/theme/registry");
 const appConfig = require("../apps/miniprogram/app.json");
-const width = Number(process.argv[2] || 390), port = Number(process.argv[3] || 9631);
-const out = path.resolve("docs/quality/evidence/themes-20261106/native", String(width));
+const { current, legacy, byBaseline } = require("./frontend_viewports.json");
+const currentViewports = byBaseline[current];
+const captureViewports = { ...byBaseline[legacy], ...currentViewports };
+if (process.argv.includes("--list-viewports")) {
+  for (const [width, height] of Object.entries(currentViewports)) console.log(`${width}x${height}`);
+  process.exit(0);
+}
+const width = Number(process.argv[2] || Object.keys(currentViewports)[0]), port = Number(process.argv[3] || 9631);
+if (!Object.hasOwn(captureViewports, width)) {
+  throw Error(`Expected width ${Object.keys(currentViewports).join(" or ")} (320 for legacy capture)`);
+}
+const outputRoot = process.argv.find((v) => v.startsWith("--output="))?.slice(9) || "dist/theme-native";
+const project = process.argv.find((v) => v.startsWith("--project="))?.slice(10) || "/private/tmp/push-kids-themes-native-20261106";
+const out = path.resolve(outputRoot, String(width));
 const only = process.argv.find((v) => v.startsWith("--only="))?.slice(7);
 const caseFilter = process.argv.find((v) => v.startsWith("--case="))?.slice(7);
+const headerBlend = process.argv.includes("--header-blend");
+const childHeading = process.argv.includes("--child-heading");
+const headerCapture = headerBlend || childHeading;
 const themes = only ? registry.listThemes().filter((t) => t.id === only) : registry.listThemes();
 const child = { id: "synthetic", name: "小满", label: "小满", avatar: "满", active: true,
   grade: "小学二年级", gradeLabel: "小学二年级", daily_budget_minutes: 15 };
@@ -74,6 +89,54 @@ const shared = [
   { name: "long-copy", route: "pages/child-edit/index", data: { ...common, ...fixtures["pages/child-edit/index"], nameDraft: "这是一个用于小屏验证的较长孩子昵称",
     error: "暂时无法保存这次修改。你已填写的姓名、年级、每日复习预算和科目选择仍然保留，可以检查网络后重试。" } }
 ];
+// Opt-in DREV09 states extend the frozen Spec08 matrix without rewriting it.
+const recordScene = (name, data) => ({ name: "refine-" + name, category: "refinement",
+  route: "pages/records/index", data: { ...common, ...fixtures["pages/records/index"],
+    date: "2026-11-07", time: "18:30", text: "保留的学习草稿", hasText: true, ...data } });
+const refinement = [
+  recordScene("menu", { recordTypeOpen: true }),
+  recordScene("long-name", { children: [{ ...child, name: "用于三视口检查的较长孩子昵称" }], recordTypeOpen: true }),
+  recordScene("media-failure", { themeArtFailed: true, uploadArtFailed: true }),
+  recordScene("travel", { recordType: "travel", travelChildren: [child], travelChildIndex: 0, travelChildId: child.id }),
+  recordScene("photos", { photos: ["/assets/illustrations/record-books.png"] }),
+  recordScene("uploading", { photos: ["/assets/illustrations/record-books.png"], saving: true, uploadProgress: 45 }),
+  recordScene("upload-error", { photos: ["/assets/illustrations/record-books.png"], error: "上传暂未完成，照片与文字仍保留。" })
+];
+const headerScenarios = [
+  ["today", "today/index"], ["reports", "reports/index"], ["records", "records/index"],
+  ["calendar", "calendar/index"], ["settings", "settings/index"], ["activity", "activity/edit"],
+  ["detail", "record-detail/index"], ["confirm", "submission/confirm", { readOnly: true }],
+  ["create", "family-onboarding/index", { mode: "create" }],
+  ["invite", "family-onboarding/index", { mode: "join" }],
+  ["join", "family-join/index"], ["requests", "family-requests/index"],
+  ["notifications", "notifications/index"], ["cleanup", "delete-settings/index"],
+  ["cleanup-confirm", "delete-settings/index", { mode: "child", targetName: "小满" }],
+  ["image-failure", "reports/index", { themeArtFailed: true }],
+  ["long-title", "delete-settings/index", { mode: "child", targetName: "用于检查长标题换行的孩子昵称需要完整显示" }],
+  ["record-menu", "records/index", { recordTypeOpen: true }]
+].map(([name, suffix, extra]) => {
+  const route = "pages/" + suffix;
+  return { name, route, category: "header-blend", data: { ...common, ...fixtures[route], ...extra } };
+});
+const anotherChild = { ...child, id: "another", name: "小秋", label: "小秋", avatar: "秋" };
+const childChoices = [child, anotherChild];
+const childHeadingScenarios = [
+  ["today", "today"], ["calendar", "calendar"], ["records", "records"],
+  ["travel", "records", { recordType: "travel", travelChildren: childChoices, travelChildIndex: 0 }],
+  ["reports", "reports"], ["settings", "settings"], ["footprints", "footprints"],
+  ["empty", "today", { children: [], dashboard: null }],
+  ["single", "calendar", { children: [child], multiChild: false }],
+  ["long-name", "reports", { children: [{ ...child, name: "一个用于窄屏检查的很长的孩子昵称" }, anotherChild] }],
+  ["record-menu", "records", { recordTypeOpen: true }],
+  ["record-saving", "records", { saving: true }],
+  ["missing-art", "reports", { themeArtFailed: true, introArtFailed: true }],
+  ["calendar-no-spot", "calendar", { introArtFailed: true }],
+  ["readonly", "settings", { canWrite: false, isManager: false }]
+].map(([name, suffix, extra]) => {
+  const route = "pages/" + suffix + "/index";
+  const data = { ...common, ...fixtures[route], children: childChoices, multiChild: true, ...extra };
+  return { name, route, category: "child-heading", data };
+});
 const socket = new WebSocket("ws://127.0.0.1:" + port), pending = new Map(); let seq = 0;
 socket.onmessage = (event) => { const m = JSON.parse(event.data); const handler = pending.get(m.id);
   if (handler) { pending.delete(m.id); handler(m); } };
@@ -93,9 +156,10 @@ const geometry = `function(){return new Promise(resolve=>{
   const selectors=['.theme-page','.page','.theme-header','.pk-card','.btn','.theme-entry','.pk-sheet','.pk-cta-bar',
     '.pk-notice','.sk','.pk-empty','.grade-sheet','.grade-primary','.grade-secondary','.theme-picker-sheet',
     '.theme-picker-head','.theme-picker-foot','.theme-picker-close','.theme-choice','.record-type-title',
-    '.hero-note','.manager-panel','.icon-btn','.add-entry'];
+    '.hero-note','.manager-panel','.icon-btn','.add-entry','.report-intro .pg-title',
+    '.theme-header-art','.record-heading-content','.record-type-menu','.record-upload-glyph','.record-upload-art'];
   function collect(host,label){return new Promise(done=>{const q=wx.createSelectorQuery().in(host);
-    selectors.forEach(s=>q.selectAll(s).fields({rect:true,size:true,computedStyle:['backgroundColor','color','fontSize','fontFamily']}));
+    selectors.forEach(s=>q.selectAll(s).fields({rect:true,size:true,computedStyle:['backgroundColor','color','fontSize','fontFamily','lineHeight']}));
     q.exec(result=>done(selectors.flatMap((selector,i)=>(result[i]||[]).map(n=>({host:label,selector,...n})))));});}
   const hosts=[[p,'page']];
   const picker=getApp().getThemeFixturePicker();if(picker&&picker.data.visible)hosts.push([picker,'theme-picker']);
@@ -107,6 +171,101 @@ const geometry = `function(){return new Promise(resolve=>{
     base_library:wx.getAppBaseInfo().SDKVersion,nodes:[].concat(...rows),
     source:'native wx.createSelectorQuery; synthetic fixtures; production WXML/WXSS exact; page loading lifecycles suppressed'}));
 })}`;
+// Keep style reads separate from bounds. DevTools can reject computedStyle on the selector bridge.
+const headerGeometry = `function(){return new Promise(resolve=>{
+  const p=getCurrentPages().slice(-1)[0], info=wx.getWindowInfo();
+  const selectors=['.theme-header','.theme-header-art','.theme-header-content','.theme-header .pg-title',
+    '.theme-header .screen-heading','.theme-header .rec-title','.theme-header .child-chip',
+    '.record-type-title','.record-type-menu','.record-type-choice','.theme-heading-row',
+    '.theme-heading-title','.theme-heading-row .child-chip','.theme-heading-row .chip-nm',
+    '.theme-heading-row .chev','.theme-heading-title .pg-title','.theme-header-spot','.pg-context'];
+  const query=wx.createSelectorQuery();
+  selectors.forEach(s=>query.selectAll(s).boundingClientRect());
+  query.exec(groups=>resolve({route:p.route,theme:p.data.theme.id,base_library:wx.getAppBaseInfo().SDKVersion,
+    viewport:{width:info.windowWidth,height:info.windowHeight,screenWidth:info.screenWidth,screenHeight:info.screenHeight},
+    nodes:selectors.flatMap((selector,i)=>(groups[i]||[]).map(({left,right,top,bottom,width,height})=>
+      ({host:'page',selector,left,right,top,bottom,width,height}))),
+    source:'native selector bounds and DevTools Element.getStyles; isolated fixture, production WXML/WXSS exact'}));
+})}`;
+const headingSelectors = [".theme-header .pg-title", ".theme-header .screen-heading",
+  ".theme-header .rec-title", ".record-type-title"];
+async function readHeaderStyles() {
+  const { pageId } = await send("App.getCurrentPage");
+  const styles = {};
+  const names = ["background-color", "border-top-left-radius", "border-top-width", "box-shadow",
+    "font-size", "line-height", "color"];
+  for (const selector of [".theme-header", ...headingSelectors]) {
+    const { elements } = await send("Page.getElements", { pageId, selector });
+    if (!elements.length) continue;
+    const { elementId } = elements[0];
+    const result = await send("Element.getStyles", { pageId, elementId, names });
+    styles[selector] = Object.fromEntries(names.map((name, i) => [name, result.styles[i]]));
+  }
+  return styles;
+}
+
+function validateHeader(measured, theme, item) {
+  const errors = [];
+  const node = (selector) => measured.nodes.find((entry) => entry.selector === selector);
+  const frame = node(".theme-header");
+  const art = node(".theme-header-art");
+  const content = node(".theme-header-content");
+  const title = headingSelectors.map(node).find(Boolean);
+  const inViewport = (entry) => entry.left >= -1 && entry.right <= measured.viewport.width + 1;
+  const shell = measured.styles[".theme-header"];
+  if (!frame || !title || !shell) return ["Page header or heading is missing"];
+  if (shell["background-color"] !== "rgba(0, 0, 0, 0)" ||
+    (shell["border-top-left-radius"] && parseFloat(shell["border-top-left-radius"]) !== 0) ||
+    (shell["border-top-width"] && parseFloat(shell["border-top-width"]) !== 0) ||
+    (shell["box-shadow"] && shell["box-shadow"] !== "none")) errors.push("Header still has card framing");
+  if (Boolean(art) !== Boolean(theme.assets.hero && !item.data.themeArtFailed)) errors.push("Unexpected artwork presence");
+  if (art && (!inViewport(art) || Math.abs(art.width - measured.viewport.width) > 1 ||
+    Math.abs(art.height - art.width * 304 / 780) > 1 ||
+    (content ? Math.abs(art.top - content.top) > 1 : art.top < title.bottom - 1)))
+    errors.push("Artwork alignment or natural aspect ratio differs from the design");
+  if (!inViewport(frame) || !inViewport(title) || title.bottom > frame.bottom + 1) errors.push("Heading exceeds its frame");
+  if (item.route === "pages/reports/index") {
+    const style = measured.styles[title.selector];
+    if (parseFloat(style["font-size"]) !== 24 || title.height > parseFloat(style["line-height"]) + 1)
+      errors.push("Report title must fit a single 24px line");
+  }
+  if (item.name === "long-title" && title.height <= parseFloat(measured.styles[title.selector]["line-height"]) + 1)
+    errors.push("Long heading must wrap");
+  if (item.name === "record-menu") {
+    const menu = node(".record-type-menu");
+    if (!menu || !inViewport(menu) || menu.top < title.bottom - 1) errors.push("Record menu must fit below its trigger");
+  }
+  for (const entry of measured.nodes.filter((n) => [".theme-header .child-chip", ".record-type-title", ".record-type-choice"].includes(n.selector))) {
+    if (entry.height < 43.5 || entry.width < 43.5 || !inViewport(entry)) errors.push("Header control is too small or out of bounds");
+  }
+  return errors;
+}
+function validateChildHeading(measured, theme, item) {
+  const errors = item.name === "footprints" ? [] : validateHeader(measured, theme, item);
+  const all = (selector) => measured.nodes.filter((entry) => entry.selector === selector);
+  const [row] = all(".theme-heading-row");
+  const [title] = all(".theme-heading-title");
+  const chips = all(".theme-heading-row .child-chip");
+  const chip = chips[0];
+  if (!row || !title || row.left < -1 || row.right > measured.viewport.width + 1) {
+    errors.push("Shared title row is missing or exceeds the viewport");
+    return errors;
+  }
+  if (chips.length !== (item.name === "empty" ? 0 : 1)) errors.push("Unexpected number of child selectors");
+  if (chip && (Math.abs(chip.right - row.right) > 1 || Math.abs(chip.top - row.top) > 1 ||
+      chip.left < title.right || chip.height < 43.5 || chip.width < 43.5)) {
+    errors.push("Child selector is not at the top-right of the title row");
+  }
+  const [name] = all(".theme-heading-row .chip-nm");
+  if (item.name === "long-name" && (!chip || !name || name.right > chip.right || name.height > 24)) {
+    errors.push("Long child name must stay within a single chip line");
+  }
+  if (item.name === "single" && all(".theme-heading-row .chev").length) errors.push("Single child shows a switch arrow");
+  const showSpot = !theme.assets.hero && !item.data.introArtFailed &&
+    ["pages/calendar/index", "pages/reports/index"].includes(item.route);
+  if (all(".theme-header-spot").length !== Number(showSpot)) errors.push("Unexpected spot background presence");
+  return errors;
+}
 async function navigate(route) {
   if (lastRoute === route) return;
   const current = await call("function(){const p=getCurrentPages().slice(-1)[0];return p&&p.route;}");
@@ -136,11 +295,11 @@ async function capture(theme, item) {
     "const p=getCurrentPages().slice(-1)[0],bar=p.getTabBar&&p.getTabBar();" +
     "if(bar){const tabs=['pages/today/index','pages/calendar/index','pages/records/index','pages/reports/index','pages/settings/index'];" +
     "bar.setData({selected:tabs.indexOf(p.route)});}" +
-    "if(action==='picker')p.openThemePicker();wx.pageScrollTo({scrollTop:0,duration:0});return true;}",
-  [theme.id, item.data, item.action || ""]);
+    "if(action==='picker')p.openThemePicker();if(action!=='header')wx.pageScrollTo({scrollTop:0,duration:0});return true;}",
+  [theme.id, item.data, headerCapture ? "header" : item.action || ""]);
   await pause(140);
-  const measured = await call(geometry);
-  if (!measured || measured.viewport.screenWidth !== width || measured.viewport.screenHeight !== ({320:568,390:844,430:932})[width]
+  const measured = await call(headerCapture ? headerGeometry : geometry);
+  if (!measured || measured.viewport.screenWidth !== width || measured.viewport.screenHeight !== captureViewports[width]
       || measured.route !== item.route || measured.theme !== theme.id)
     throw Error("Unexpected native viewport, route or theme: " + JSON.stringify(measured && { viewport: measured.viewport, route: measured.route, theme: measured.theme }));
   // A failed simulator screenshot must not discard successfully measured native nodes.
@@ -160,28 +319,138 @@ async function capture(theme, item) {
     "state-dialog": ".grade-sheet", "state-long-copy": ".pk-notice" }[item.name];
   measured.validation_errors = required && !measured.nodes.some((n) => n.selector === required)
     ? ["Expected state is absent: " + required] : [];
+  const title = measured.nodes.find((n) => n.host === "page" && n.selector === ".report-intro .pg-title");
+  if (item.route === "pages/reports/index" && (!title || Math.abs(parseFloat(title.fontSize) - 24) > .5 ||
+      title.height > parseFloat(title.lineHeight) + 1 || title.left < -1 || title.right > width + 1))
+    measured.validation_errors.push("Fixed report title must remain a full 24px line");
+  const banner = measured.nodes.find((n) => n.host === "page" && n.selector === ".theme-header-art");
+  if (item.route === "pages/records/index" && theme.assets.hero && !item.data.themeArtFailed && !banner)
+    measured.validation_errors.push("Expected record banner is absent");
+  if (banner && (Math.abs(banner.height - banner.width * 304 / 780) > 1 || banner.left < -1 || banner.right > width + 1))
+    measured.validation_errors.push("Record banner must retain its natural ratio inside the viewport");
+  if (item.name === "refine-menu" || item.name === "refine-long-name") {
+    const menu = measured.nodes.find((n) => n.host === "page" && n.selector === ".record-type-menu");
+    if (!menu || menu.left < -1 || menu.right > width + 1) measured.validation_errors.push("Record menu must be visible inside the viewport");
+  }
   measured.touch_errors = measured.nodes.filter((n) => [".btn", ".theme-picker-close", ".theme-choice", ".icon-btn", ".add-entry"].includes(n.selector)
     && (n.height < 43.5 || n.width < 43.5)).map((n) => ({ selector: n.selector, width: n.width, height: n.height }));
   if (measured.touch_errors.length) measured.validation_errors.push("Native control touch target below44px");
   measured.horizontal_overflow = measured.nodes.filter((n) => [".page", ".theme-picker-sheet", ".grade-sheet", ".pk-sheet"].includes(n.selector)
     && (n.left < -1 || n.right > width + 1)).map((n) => ({ selector: n.selector, left: n.left, right: n.right }));
+  if (headerCapture) {
+    measured.styles = await readHeaderStyles();
+    measured.validation_errors = childHeading
+      ? validateChildHeading(measured, theme, item) : validateHeader(measured, theme, item);
+  }
   if (bytes) fs.writeFileSync(path.join(out, name + ".png"), bytes);
   fs.writeFileSync(path.join(out, name + ".json"), JSON.stringify(measured, null, 2) + "\n");
   return { name, route: item.route, category: item.category, nodes: measured.nodes.length,
     horizontal_overflow: measured.horizontal_overflow, validation_errors: measured.validation_errors,
     screenshot_errors: screenshotErrors, screenshot_sha256: measured.screenshot_sha256 };
 }
+async function tapElement(selector, index = 0) {
+  const { pageId } = await send("App.getCurrentPage");
+  const { elements } = await send("Page.getElements", { pageId, selector });
+  if (!elements[index]) throw Error("Native tap target missing: " + selector);
+  await send("Element.tap", { pageId, elementId: elements[index].elementId });
+  await pause(250);
+}
+async function childSheetActions() {
+  const rows = [];
+  for (const suffix of ["today", "calendar", "reports", "settings"]) {
+    const route = "pages/" + suffix + "/index";
+    await navigate(route);
+    for (const theme of themes) {
+      await call(`function(id,data){
+        const app=getApp(),p=getCurrentPages().slice(-1)[0];
+        app.theme.setTheme(id);app.selectChild(data.childId);app.themeFixture(data);
+        p.load=async()=>{};return true;
+      }`, [theme.id, { ...common, ...fixtures[route], children: childChoices, multiChild: true, showChildSheet: false }]);
+      const observe = () => call(`function(){
+        const p=getCurrentPages().slice(-1)[0],w=wx.getWindowInfo();
+        return {open:p.data.showChildSheet,index:p.data.childIndex,id:getApp().globalData.selectedChildId,
+          theme:p.data.theme.id,width:w.screenWidth,height:w.screenHeight};
+      }`);
+      await tapElement(".theme-heading-row .child-chip");
+      const open = await observe();
+      await tapElement(".child-sheet .icon-btn");
+      const cancel = await observe();
+      await tapElement(".theme-heading-row .child-chip");
+      await tapElement(".child-sheet .rowitem", 1);
+      const select = await observe();
+      const row = { route, theme: theme.id, open, cancel, select };
+      if ([open, cancel, select].some((step) =>
+        step.theme !== theme.id || step.width !== width || step.height !== captureViewports[width]) ||
+        !open.open || cancel.open || cancel.index !== 0 || cancel.id !== child.id ||
+        select.open || select.index !== 1 || select.id !== anotherChild.id) {
+        throw Error("Native child sheet flow failed: " + JSON.stringify(row));
+      }
+      rows.push(row);
+      fs.writeFileSync(path.join(out, "child-sheet-actions.json"), JSON.stringify(rows, null, 2) + "\n");
+    }
+  }
+  console.log("NATIVE_CHILD_SHEET_ACTIONS_PASS " + rows.length);
+}
+async function recordMenuActions() {
+  await navigate("pages/records/index");
+  async function tap(selector, index) {
+    await tapElement(selector, index);
+    return call("function(){const p=getCurrentPages().slice(-1)[0],w=wx.getWindowInfo();" +
+      "return {type:p.data.recordType,open:p.data.recordTypeOpen,theme:p.data.theme.id,width:w.screenWidth,height:w.screenHeight};}");
+  }
+  const rows = [];
+  for (const theme of themes) {
+    await call("function(id,data){const p=getCurrentPages().slice(-1)[0];p.pageVisible=true;" +
+      "getApp().theme.setTheme(id);getApp().themeFixture(data);return true;}",
+    [theme.id, { ...common, ...fixtures["pages/records/index"], recordTypeOpen: false }]);
+    await pause(180);
+    const open = await tap(".record-type-title");
+    const dismiss = await tap(".record-type-dismiss");
+    const reopen = await tap(".record-type-title");
+    const travel = await tap(".record-type-choice", 1);
+    const embedded = childHeading ? await call(`function(){
+      const page=getCurrentPages().slice(-1)[0],view=page.selectComponent('#travel-diary');
+      if(!view)return {present:false,extraChildHeading:false};
+      return new Promise(resolve=>{
+        const query=wx.createSelectorQuery().in(view);
+        query.select('.fp-embedded').boundingClientRect();
+        query.select('.theme-heading-row').boundingClientRect();
+        query.exec(([host,heading])=>resolve({present:!!host,extraChildHeading:!!heading}));
+      });
+    }`) : undefined;
+    const reopenTravel = await tap(".record-type-title");
+    const learning = await tap(".record-type-choice");
+    const result = { theme: theme.id, open, dismiss, reopen, travel, embedded, reopenTravel, learning };
+    const steps = [open, dismiss, reopen, travel, reopenTravel, learning];
+    if (steps.some((step) => step.theme !== theme.id || step.width !== width || step.height !== captureViewports[width]) ||
+      !open.open || dismiss.open || !reopen.open || travel.open || travel.type !== "travel" ||
+      (childHeading && (!embedded.present || embedded.extraChildHeading)) ||
+      !reopenTravel.open || learning.open || learning.type !== "learning")
+      throw Error("Native record menu flow failed: " + JSON.stringify(result));
+    rows.push(result);
+    fs.writeFileSync(path.join(out, "header-record-actions.json"), JSON.stringify(rows, null, 2) + "\n");
+  }
+  console.log("NATIVE_RECORD_MENU_ACTIONS_PASS " + rows.length);
+}
 async function run() {
-  if (![320, 390, 430].includes(width)) throw Error("Expected one of the approved screen widths");
   await new Promise((resolve, reject) => { socket.onopen = resolve; socket.onerror = reject; });
   fs.mkdirSync(out, { recursive: true });
   const start = Date.now(), results = [], failures = [];
-  const reportFile = path.join(out, "matrix" + (only ? "-" + only : "") + (caseFilter ? "-" + caseFilter : "") +
+  const matrixKind = childHeading ? "-child-heading" : headerBlend ? "-headers" : "";
+  const reportFile = path.join(out, "matrix" + matrixKind + (only ? "-" + only : "") + (caseFilter ? "-" + caseFilter : "") +
     ".json");
   const saveReport = () => fs.writeFileSync(reportFile, JSON.stringify({ width, themes: themes.map((t) => t.id),
     groups: results.length, elapsed_ms: Date.now() - start, results, failures, navigation_diagnostics: navigationDiagnostics,
     source_manifest_sha256: crypto.createHash("sha256").update(fs.readFileSync(path.join(out, "source-sha256.json"))).digest("hex") }, null, 2) + "\n");
-  fs.copyFileSync("/private/tmp/push-kids-themes-native-20261106/theme-source-sha256.json", path.join(out, "source-sha256.json"));
+  fs.copyFileSync(path.join(project, "theme-source-sha256.json"), path.join(out, "source-sha256.json"));
+  if (process.argv.includes("--child-sheet-actions")) {
+    await childSheetActions();
+    return;
+  }
+  if (process.argv.includes("--header-actions")) {
+    await recordMenuActions();
+    return;
+  }
   if (process.argv.includes("--actions")) {
     await navigate("pages/settings/index");
     await call("function(data){getApp().themeFixture(data);return true;}", [{ ...common, ...fixtures["pages/settings/index"] }]);
@@ -215,8 +484,9 @@ async function run() {
     fs.writeFileSync(path.join(out, "actions.json"), JSON.stringify(actions, null, 2) + "\n");
     console.log("NATIVE_THEME_ACTIONS_PASS " + actions.length);return;
   }
-  const allItems = [...appConfig.pages.map((route) => ({ name: route.replace(/^pages\//, "").replace(/\//g, "-"),
-    category: "route", route, data: { ...common, ...fixtures[route] } })), ...shared.map((s) => ({ ...s, name: "state-" + s.name, category: "state" }))];
+  const allItems = childHeading ? childHeadingScenarios : headerBlend ? headerScenarios : [...appConfig.pages.map((route) => ({ name: route.replace(/^pages\//, "").replace(/\//g, "-"),
+    category: "route", route, data: { ...common, ...fixtures[route] } })), ...shared.map((s) => ({ ...s, name: "state-" + s.name, category: "state" })),
+    ...(process.argv.includes("--refinement") ? refinement : [])];
   const items = caseFilter ? allItems.filter((item) => caseFilter.split(",").includes(item.name)) : allItems;
   saveReport();
   // Keep each native route open while checking its themes; this bounds WebView churn.

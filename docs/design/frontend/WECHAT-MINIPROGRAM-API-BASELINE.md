@@ -118,7 +118,7 @@ WechatSI 当前按官方示例声明 `version=0.3.1`、`provider=wx069ba97219f66
 | `TP-API-005` | 1/9 图进度、中断、恢复、取消、重复点击和 orphan 清理 |
 | `TP-API-006` | Storage、日志、错误、埋点不含 OpenID、fileID、图片和儿童正文 |
 | `TP-API-007` | `npm test`、`npm run lint:miniapp`、`tools/validate_miniprogram.py` |
-| `TP-API-008` | iOS、Android、DevTools 在 320×568、390×844、430×932 的相关状态证据 |
+| `TP-API-008` | DevTools 按[当前检查矩阵](FRONTEND-DESIGN.md#9-视口与适配)收集状态证据，iOS、Android 按适用的平台能力单独留真机证据 |
 | `TP-API-009` | 首次隐私/麦克风授权后不自动开录；拒绝、上滑取消、touchcancel、60 秒、通话/后台/弱网可恢复 |
 
 以上保留历史审计与测试点，不代表本轮已经实施或验收。BUG-004已拒绝；未来若有新的平台兼容需求，

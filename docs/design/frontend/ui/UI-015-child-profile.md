@@ -1,6 +1,8 @@
 # UI-015 — 学习档案管理与切换入口
 
-当前本地呈现revision `UI-STATE-20261106-THEMES-01`：[DESIGN-002 Spec08 / Architecture01](../../../../specs/active/DESIGN-002-GLOBAL-UI-CONSISTENCY.md)与DREV08已获用户“好的 按照以上方案落地”批准并实施，DREV06视觉方向保持。档案字段、复习预算、归档/恢复和年级确认保留；child-edit及隔离grade-confirmation组件显式接入六主题，年级建议/共享确认合同不变。 本增量尚未上传；原生合成呈现、共享业务回归及真机/独立评审缺项见[当前证据](../../../quality/evidence/themes-20261106/README.md)。下方原特性发布与验收记录保持其版本范围，不能代验六主题。
+视觉增量 `UI-STATE-20261107-THEMES-02`：学习档案卡片继承DREV09装饰边框角色；字段、档案操作和年级确认语义保留。[本轮EVD](../../../../specs/evidence/design003-20261107/README.md)记录原实现和自动检查。该修订随 0.1.19 开发上传，真机与完整原生状态矩阵待验。
+
+当前呈现revision `UI-STATE-20261106-THEMES-01`：[DESIGN-002 Spec08 / Architecture01](../../../../specs/completed/DESIGN-002-GLOBAL-UI-CONSISTENCY.md)与DREV08已获用户“好的 按照以上方案落地”批准并实施，DREV06视觉方向保持。档案字段、复习预算、归档/恢复和年级确认保留；child-edit及隔离grade-confirmation组件显式接入六主题，年级建议/共享确认合同不变。 六主题随 0.1.19 开发上传。真机与独立 Review 待验。[版本证据](../../../../specs/evidence/client-release-20261108/README.md)
 
 2026-11-06归档UI交付revision `UI-RELEASE-20261106-ARCHIVE-07`：[当前交付](../../../deploy/releases/20261106-fullstack-040-client-0.1.18.md)绑定相同child-edit源，三视口21组节点/PNG及320/390/430确认框视觉/取消已完成。DREV01及生命周期不变，0.1.18已上传，BUG033 DONE/completed；设备/可访问性及真实业务待验。
 
@@ -85,8 +87,8 @@
 
 沿用 PKDS-1.0：`pk-card`、`pk-field`、`pk-input`、`pk-picker`、`pk-notice`、`rowlist/rowitem`、
 `btn`、`link-btn`、`add-entry`、`pill`、`sk`。不新增配色、字号、圆角或图像依赖；`add-entry` 由
-设置页局部样式提升为 `styles/atoms.wxss` 中的全局原子，供四个弹层与设置页复用。评审矩阵为
-320×568、390×844、430×932；正文不小于 14px，主要触控目标不小于 44px；「当前 / 已归档」状态
+设置页局部样式提升为 `styles/atoms.wxss` 中的全局原子，供四个弹层与设置页复用。日常检查按
+[当前视口矩阵](../FRONTEND-DESIGN.md#9-视口与适配)执行；正文不小于 14px，主要触控目标不小于 44px；「当前 / 已归档」状态
 同时用文字标签表达，不只依赖颜色。图标均带 `aria-role` / `aria-label`。
 
 ## Approval status

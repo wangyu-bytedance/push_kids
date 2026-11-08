@@ -6,13 +6,15 @@
     <view class="theme-icon-action" aria-role="button" aria-label="重试" bindtap="load"><theme-icon name="refresh" tone="danger" size="sm"></theme-icon></view>
   </view>
 
-  <view class="pg-head theme-header">
-    <image wx:if="{{theme.assets.hero && !themeArtFailed}}" class="theme-hero-art" src="{{theme.assets.hero}}" mode="aspectFill" binderror="onThemeIllustrationError" aria-hidden="{{true}}" />
-    <view class="grow">
-      <text class="pg-kicker">管理员确认</text>
-      <text class="pg-title">加入申请</text>
+  <view class="theme-header">
+    <view class="pg-head">
+      <view class="grow">
+        <text class="pg-kicker">管理员确认</text>
+        <text class="pg-title">加入申请</text>
+      </view>
+      <view class="icon-btn" aria-role="button" aria-label="刷新" bindtap="load"><theme-icon class="ico  sm" name="refresh" tone="ink" size="sm"></theme-icon></view>
     </view>
-    <view class="icon-btn" aria-role="button" aria-label="刷新" bindtap="load"><theme-icon class="ico  sm" name="refresh" tone="ink" size="sm"></theme-icon></view>
+    <include src="../../presentation/theme/header-art.wxml" />
   </view>
 
   <view class="pk-notice quiet" wx:if="{{isManager}}">

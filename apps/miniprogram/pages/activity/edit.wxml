@@ -1,11 +1,13 @@
 <view class="{{theme.classes}} theme-page" style="{{theme.style}}">
 <view class="page sticky-cta activity-page">
-  <view class="pg-head theme-header">
-    <image wx:if="{{theme.assets.hero && !themeArtFailed}}" class="theme-hero-art" src="{{theme.assets.hero}}" mode="aspectFill" binderror="onThemeIllustrationError" aria-hidden="{{true}}" />
-    <view class="head-intro">
-      <text class="pg-kicker">{{kicker}}</text>
-      <text class="pg-title">记录这次练习</text>
+  <view class="theme-header">
+    <view class="pg-head">
+      <view class="head-intro">
+        <text class="pg-kicker">{{kicker}}</text>
+        <text class="pg-title">记录这次练习</text>
+      </view>
     </view>
+    <include src="../../presentation/theme/header-art.wxml" />
   </view>
 
   <view class="pk-notice err" wx:if="{{error}}">

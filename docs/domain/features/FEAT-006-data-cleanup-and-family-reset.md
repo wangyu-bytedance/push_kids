@@ -1,5 +1,7 @@
 # FEAT-006 — 家庭资料清理与重新开始
 
+随 0.1.19 开发上传的呈现修订 `FEAT-STATE-20261107-THEMES-03` 覆盖删除配置列表与内页确认的页头，危险确认、范围和冻结规则继续按本 Feature 定义执行。[当前 UI](../../design/frontend/ui/UI-016-data-cleanup.md)
+
 2026-10-26开发归档：已交付037后端/0.1.16客户端所覆盖的需求按用户批准规则标记开发DONE，验收缺项独立保留；后续BUG-035和旅行导入精简尚未交付，继续active。当前归档和待验入口见[Spec状态清单](../../../specs/STATUS.md)，依据为[治理Spec](../../../specs/completed/GOV-002-CLOUD-DELIVERY-DEVELOPMENT-COMPLETION.md)。本轮不改产品合同、测试结论、设计或发布阶段。
 
 2026-10-24运行证据revision LATEST-037-01：用户批准0022→0025维护窗口并确认备份/隔离恢复路径，代理未独立恢复；迁移完成，无降级/清库/合成业务写入，停用覆盖队列保留。获批CRUD readiness修复后037 normal/100%；实际CRUD默认结构检查及发布账号严格trigger检查分别PASS，不授予应用TRIGGER/admin，修复不重复DDL。真实删除/恢复与设备验收未执行，本轮读取smoke不关闭这些门禁。[本轮记录](../../deploy/releases/20261024-latest-backend-test-deployment.md)。

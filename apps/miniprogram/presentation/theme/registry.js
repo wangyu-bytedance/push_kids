@@ -64,6 +64,8 @@ const BASE = {
   "pk-border": "1rpx solid rgba(34, 38, 31, .06)",
   "pk-border-line": "1rpx solid var(--pk-line)",
   "pk-border-soft": "1rpx solid var(--pk-line-soft)",
+  "pk-feedback-border": "1rpx solid var(--pk-line)",
+  "pk-feedback-background": "var(--pk-surface-warm)",
   "pk-border-primary": "1rpx solid var(--pk-primary-hairline)",
   "pk-e0": "0 2rpx 4rpx rgba(34, 38, 31, .04)",
   "pk-e1": "0 2rpx 4rpx rgba(34, 38, 31, .04)",
@@ -141,7 +143,8 @@ function palette(p) {
     "pk-page-background": "var(--pk-canvas)", "pk-hero-background": "var(--pk-primary-wash)",
     "pk-serif": BASE["pk-sans"], "pk-r-2xl": p.radius, "pk-r-xl": p.radius,
     "pk-white-wash": p.surface, "pk-white-line": p.line,
-    "pk-border": "1rpx solid var(--pk-line)",
+    "pk-border": "1rpx solid transparent",
+    "pk-feedback-border": "1rpx solid transparent", "pk-feedback-background": p.wash,
     "pk-soft-shadow": "transparent", "pk-e0": "none", "pk-e1": "none",
     "pk-e2": "none", "pk-e3": "none", "pk-e-btn": "none",
     "pk-e-fab": "0 8rpx 24rpx var(--pk-soft-shadow)",
@@ -198,7 +201,7 @@ const originalAssets = {
 const themes = definitions.map((item) => {
   const hero = item.id === "original" ? "" : `/assets/themes/${item.id}.jpg`;
   const tokens = Object.freeze({ ...BASE, ...item.tokens });
-  const art = hero ? Object.fromEntries(Object.keys(originalAssets).map((role) => [role, hero])) : originalAssets;
+  const art = hero ? { ...Object.fromEntries(Object.keys(originalAssets).map((role) => [role, hero])), upload: "" } : originalAssets;
   const assets = Object.freeze({ hero, preview: item.preview || hero, ...art });
   return Object.freeze({ ...item, tokens, assets, style: Object.entries(tokens).map(([key, value]) => `--${key}:${value}`).join(";"),
     classes: `pk-theme theme-${item.id}${item.id === "original" ? "" : " theme-illustrated"}`, chrome: Object.freeze({

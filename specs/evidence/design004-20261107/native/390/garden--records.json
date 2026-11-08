@@ -1,0 +1,92 @@
+{
+  "route": "pages/records/index",
+  "theme": "garden",
+  "base_library": "3.17.4",
+  "viewport": {
+    "width": 390,
+    "height": 844,
+    "screenWidth": 390,
+    "screenHeight": 844
+  },
+  "nodes": [
+    {
+      "host": "page",
+      "selector": ".theme-header",
+      "left": 0,
+      "right": 390,
+      "top": 87,
+      "bottom": 239,
+      "width": 390,
+      "height": 152
+    },
+    {
+      "host": "page",
+      "selector": ".theme-header-art",
+      "left": 0,
+      "right": 390,
+      "top": 87,
+      "bottom": 239,
+      "width": 390,
+      "height": 152
+    },
+    {
+      "host": "page",
+      "selector": ".theme-header-content",
+      "left": 18,
+      "right": 372,
+      "top": 87,
+      "bottom": 223,
+      "width": 354,
+      "height": 136
+    },
+    {
+      "host": "page",
+      "selector": ".theme-header .child-chip",
+      "left": 18,
+      "right": 102,
+      "top": 164,
+      "bottom": 208,
+      "width": 84,
+      "height": 44
+    },
+    {
+      "host": "page",
+      "selector": ".record-type-title",
+      "left": 18,
+      "right": 122,
+      "top": 107,
+      "bottom": 156,
+      "width": 104,
+      "height": 49
+    }
+  ],
+  "source": "native selector bounds and DevTools Element.getStyles; isolated fixture, production WXML/WXSS exact",
+  "screenshot": "garden--records.png",
+  "screenshot_sha256": "b7c2bcb685f91bc91ca441671e264a6724dbad72125b94db24607fcf76d89b82",
+  "fixture": "records",
+  "category": "header-blend",
+  "screenshot_errors": [],
+  "validation_errors": [],
+  "touch_errors": [],
+  "horizontal_overflow": [],
+  "styles": {
+    ".theme-header": {
+      "background-color": "rgba(0, 0, 0, 0)",
+      "border-top-left-radius": "0px",
+      "border-top-width": "0px",
+      "box-shadow": "none",
+      "font-size": "16px",
+      "line-height": "25.6px",
+      "color": "rgb(41, 63, 41)"
+    },
+    ".record-type-title": {
+      "background-color": "rgba(0, 0, 0, 0)",
+      "border-top-left-radius": "12px",
+      "border-top-width": "0px",
+      "box-shadow": "none",
+      "font-size": "22px",
+      "line-height": "33px",
+      "color": "rgb(35, 61, 41)"
+    }
+  }
+}

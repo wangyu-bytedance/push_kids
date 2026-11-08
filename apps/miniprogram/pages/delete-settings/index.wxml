@@ -25,10 +25,12 @@
   </block>
 
   <block wx:elif="{{mode}}">
-    <view class="screen-intro theme-header">
-    <image wx:if="{{theme.assets.hero && !themeArtFailed}}" class="theme-hero-art" src="{{theme.assets.hero}}" mode="aspectFill" binderror="onThemeIllustrationError" aria-hidden="{{true}}" />
-      <text class="screen-kicker">最终确认</text>
-      <text class="screen-heading">清理「{{targetName}}」的资料</text>
+    <view class="theme-header">
+      <view class="screen-intro">
+        <text class="screen-kicker">最终确认</text>
+        <text class="screen-heading">清理「{{targetName}}」的资料</text>
+      </view>
+      <include src="../../presentation/theme/header-art.wxml" />
     </view>
     <view class="pk-notice err">
       <text class="n-txt" wx:if="{{mode === 'child'}}">孩子的学习记录、复习、活动、日程和照片会永久删除，无法恢复。</text>
@@ -45,10 +47,12 @@
   </block>
 
   <block wx:else>
-    <view class="screen-intro theme-header">
-    <image wx:if="{{theme.assets.hero && !themeArtFailed}}" class="theme-hero-art" src="{{theme.assets.hero}}" mode="aspectFill" binderror="onThemeIllustrationError" aria-hidden="{{true}}" />
-      <text class="screen-kicker">数据管理</text>
-      <text class="screen-heading">删除配置</text>
+    <view class="theme-header">
+      <view class="screen-intro">
+        <text class="screen-kicker">数据管理</text>
+        <text class="screen-heading">删除配置</text>
+      </view>
+      <include src="../../presentation/theme/header-art.wxml" />
     </view>
     <view class="pk-notice quiet"><text class="n-txt">归档适合暂时停用；这里的清理会永久移除资料，请谨慎操作。</text></view>
 

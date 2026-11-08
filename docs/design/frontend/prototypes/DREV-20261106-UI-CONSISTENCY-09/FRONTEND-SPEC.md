@@ -1,7 +1,7 @@
 # DREV-20261106-UI-CONSISTENCY-09 — 视觉减法
 
 - Status: AWAITING_APPROVAL
-- Task: [DESIGN-003-SPEC-01](../../../../../specs/active/DESIGN-003-THEME-VISUAL-REFINEMENT.md)
+- Task: [DESIGN-003-SPEC-01](../../../../../specs/completed/DESIGN-003-THEME-VISUAL-REFINEMENT.md)
 - Architecture: 保持`ARCH-20261106-MINIAPP-THEMES-01`
 - Baseline: `FDB-20260913-04` / `FEC-20261007-NATIVE-GEOMETRY-02`
 - Authority: 用户本轮四项反馈；六主题ID、DREV06视觉个性、DREV08设置底部入口保持。

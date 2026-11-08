@@ -1,0 +1,33 @@
+{
+  "width": 390,
+  "themes": [
+    "original",
+    "garden",
+    "space",
+    "midnight",
+    "ocean",
+    "tech"
+  ],
+  "groups": 0,
+  "elapsed_ms": 11260,
+  "results": [],
+  "failures": [
+    {
+      "theme": "original",
+      "name": "records-index",
+      "error": "{\"message\":\"timeout waiting for automator response\"}"
+    },
+    {
+      "theme": "garden",
+      "name": "records-index",
+      "error": "{\"message\":\"Uncaught Error: An object could not be cloned.\"}"
+    },
+    {
+      "theme": "space",
+      "name": "records-index",
+      "error": "{\"message\":\"Uncaught Error: An object could not be cloned.\"}"
+    }
+  ],
+  "navigation_diagnostics": [],
+  "source_manifest_sha256": "f32c8e9fa7f82557d83febce6870bedd35510a22ef09bbf32d053fff3b5986f7"
+}

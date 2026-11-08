@@ -2,12 +2,17 @@
 
 import hashlib
 import json
+import sys
 from pathlib import Path
 
 import prepare_grade_confirmation_native as base
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT = Path("/private/tmp/push-kids-themes-native-20261106")
+OUT = (
+    Path(sys.argv[1])
+    if len(sys.argv) > 1
+    else Path("/private/tmp/push-kids-themes-native-20261106")
+)
 
 
 def main():

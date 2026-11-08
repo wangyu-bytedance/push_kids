@@ -1,10 +1,14 @@
 # UI-001 — 家长端微信小程序
 
-待评审增量：[DESIGN-003 Spec01](../../../../specs/active/DESIGN-003-THEME-VISUAL-REFINEMENT.md) / [DREV09](../prototypes/DREV-20261106-UI-CONSISTENCY-09/FRONTEND-SPEC.md)准备固定标题单行、完整记录头图、主题化上传装饰与减少嵌套边框。仅设计HTML验证，生产实现/原生/真机NOT_RUN；当前运行代码仍为下方Spec08，不能将提案视为已实施。
+当前本地修订 `UI-STATE-20261108-CHILD-SWITCH-01` 按 [DESIGN-005 Spec01](../../../../specs/active/DESIGN-005-CHILD-SWITCH-HEADER.md) 将五个 Tab 的孩子切换统一到标题行右侧。报表标准标题保持 24px 单行，副文案在下。原始风格的日程与报表插画以淡色背景装饰呈现。记录标题菜单和孩子选择各有自己的触区，学习与旅行模式共用同一位置，保存中保留禁用语义。无孩子时隐藏入口，单孩子按原宿主规则展示。长昵称限制视觉宽度，完整名字保留在无障碍标签。六主题三档的 270 组原生布局通过。本修订待开发上传和真机 Review。[本地证据](../../../../specs/evidence/design005-20261108/README.md)
 
-当前本地呈现revision `UI-STATE-20261106-THEMES-01`：DESIGN-002 Spec08 / Architecture01与DREV08获用户“好的 按照以上方案落地”批准并实施。六主题覆盖17路由、五Tab、隔离组件及表单/弹层；设置底部列表在提醒与关于之间提供风格入口。候选/应用/取消、本机ID偏好、保存失败反馈和未知科目固定默认图标见[本轮证据](../../../quality/evidence/themes-20261106/README.md)。本增量尚未上传，Spec保持active/VERIFYING；下方040/0.1.18是上一次实际交付，不包含本增量。
+已交付修订 `UI-STATE-20261107-THEMES-03` 落地 [DESIGN-004 Spec01](../../../../specs/completed/DESIGN-004-HEADER-BLEND.md)。五个 Tab 共用无框渐变页头，横幅保留自然比例，内容独立叠放。详情和表单的标题位于插画上方，支持多行。其他主题缺图时恢复主题前景色。记录菜单可以独立展开、点击外部关闭，并切换学习记录和旅行日记。390×844 与 430×932 共 216 组原生验证通过，随 0.1.19 开发上传。真机及用户 Review 待验。[版本证据](../../../../specs/evidence/client-release-20261108/README.md)
 
-2026-11-06当前交付revision `UI-RELEASE-20261106-040-0.1.18-01`：[发布报告](../../../deploy/releases/20261106-fullstack-040-client-0.1.18.md)记录040 normal/100%、Schema0027，客户端0.1.18官方上传1,200,417字节并bump；尚未设体验版、提审或正式发布。93组原生状态节点/PNG保持；320/390确认框CUA视觉和取消已补，430原证据保持。工作日两处实际HTTP保存/回填、摘要及来源跳转经原生AX观察PASS；合成SQLite及私有三文件配置例外独立记录，设备/可访问性仍NOT_RUN。固定40 v2自动40/40不等于家长内容通过，原37/40 FAIL保持。当前批准DREV不变，后续平台和设备验收独立。
+前序视觉修订 `UI-STATE-20261107-THEMES-02` 定义上传相机和装饰边界。原始上传装饰保留相机插画，五新主题使用本地相机图标和语义色。卡片与内嵌反馈减少装饰描边，控件、错误和危险状态保留边界。报表标题和记录自然比例现由上述页头遵守。[DREV09 批准清单](../snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-09/APPROVAL.md) · [原调优证据](../../../../specs/evidence/design003-20261107/README.md)
+
+当前呈现revision `UI-STATE-20261106-THEMES-01`：DESIGN-002 Spec08 / Architecture01与DREV08获用户“好的 按照以上方案落地”批准并实施。六主题覆盖17路由、五Tab、隔离组件及表单/弹层；设置底部列表在提醒与关于之间提供风格入口。候选/应用/取消、本机ID偏好、保存失败反馈和未知科目固定默认图标见[本轮证据](../../../quality/evidence/themes-20261106/README.md)。随 0.1.19 开发上传，Spec 已归档 DONE。
+
+2026-11-06 前次交付修订 `UI-RELEASE-20261106-040-0.1.18-01`：[发布报告](../../../deploy/releases/20261106-fullstack-040-client-0.1.18.md)记录040 normal/100%、Schema0027，客户端0.1.18官方上传1,200,417字节并bump；尚未设体验版、提审或正式发布。93组原生状态节点/PNG保持；320/390确认框CUA视觉和取消已补，430原证据保持。工作日两处实际HTTP保存/回填、摘要及来源跳转经原生AX观察PASS；合成SQLite及私有三文件配置例外独立记录，设备/可访问性仍NOT_RUN。固定40 v2自动40/40不等于家长内容通过，原37/40 FAIL保持。当前批准DREV不变，后续平台和设备验收独立。
 
 2026-11-05辅助验收后端合同revision `UI-STATE-20261105-SYSTEM-ONE-03`：[Spec06](../../../../specs/completed/BUG-036-SYSTEM-ONE-ACCEPTANCE.md)获批本地实现。原Pro生成后，Lite疑点按条目合并到既有proposal.uncertainties；不可用/跳过也只加人工核对提示。原条目、证据及历史关联保留，所有草稿仍由家长编辑/删除/确认，不显示自动合格或自动入库。内部_quality_acceptance不进入公开提案。Spec05分类/关系新路由已清退，旧覆盖草稿仅兼容读取。本任务不改页面、组件、表单、样式、DREV/FEC或视口矩阵；现有原生页面兼容性检查与未运行项在[本轮EVD](../../../../specs/evidence/EVD-20261105-BUG036-SYSTEMONE06.md)单列，不以静态检查冒充原生验收。后端合同已由040交付，内容由家长独立review；不新增前端结构。
 
@@ -282,7 +286,7 @@ OPS BLOCKED/active；本任务没有前端upload、DREV更新或新原生/真机
 
 ## Visual system
 
-当前本地视觉系统以PKDS-2.0原始风格为基础，按DESIGN-002 Spec08 / Architecture01增加成长花园、星际探索、深海夜色、海洋、科技五种风格。DREV06规定五主题全界面方向，DREV08规定设置底部入口与选择面板；已上传0.1.18仍为原始风格。实现与验收边界见[六主题证据](../../../quality/evidence/themes-20261106/README.md)。
+当前视觉系统以PKDS-2.0原始风格为基础，按DESIGN-002 Spec08 / Architecture01增加成长花园、星际探索、深海夜色、海洋、科技五种风格。DREV06规定五主题全界面方向，DREV08规定设置底部入口与选择面板。六主题随 0.1.19 开发上传。[版本证据](../../../../specs/evidence/client-release-20261108/README.md)
 
 共享背景增量revision `UI-VISUAL-20261021-HERO-ARC-01`：已按获批
 [BUG-SPEC-20261021-HERO-ARC-01](../../../../specs/completed/BUG-030-HERO-BACKGROUND-ARC.md) /
@@ -322,7 +326,7 @@ PKDS-2.0 相对 PKDS-1.0 的可见变化：
 | token | `apps/miniprogram/presentation/theme/registry.js` → `styles/tokens.wxss` | 六主题语义色/资源/形状/字体唯一源；生成首屏值与兼容别名 |
 | 原子/组件 | `apps/miniprogram/styles/atoms.wxss` | Card / Hero / Section / Button / Pill / SubMark / Confidence / Notice / Segmented / Chips / 表单 / RowList / Timeline / WeekStrip / FAB / Metrics / PhotoUploader / 浮层四件套 / 空态 / 骨架 |
 | 图标 | `components/theme-icon` + `presentation/theme/glyphs.js` | 49个共享glyph（24×24，stroke1.8），路径仅生成一次；语义tone随主题绘制，不再生成六组颜色副本；平台回退PNG保留 |
-| 主题材质 | `styles/theme.wxss` | 共用页头背景、有限卡片形状与主题文字角色；业务布局只有一份 |
+| 主题材质 | `presentation/theme/header-art.wxml` + `styles/theme.wxss` | 共用页头画面、主题底色渐变与缺图前景回退；有限卡片形状与主题文字角色 |
 | 页面 | `pages/*/**.wxss` | 只写本页特有几何，不重复定义 token |
 
 `apps/miniprogram/utils/ui.js` 承担纯展示派生（科目色/首字标记、活动图标映射、置信度档位、反馈文案、
@@ -334,7 +338,7 @@ PKDS-2.0 相对 PKDS-1.0 的可见变化：
 
 ## Responsive and accessibility
 
-目标竖屏视口为 320×568、390×844、430×932。触控目标不小于 44px；长内容垂直滚动；
+Agent 竖屏检查按[GOV-004](../../../../specs/completed/GOV-004-AGENT-DEVICE-CHECK-MATRIX.md)批准的[当前矩阵](../FRONTEND-DESIGN.md#9-视口与适配)覆盖六主题。触控目标不小于 44px；长内容垂直滚动；
 普通业务页面不使用横向滚动；七天、报表范围、基础科目和活动星期均在当前视口完整显示。关键状态有文字语义，表单保留输入，错误不只
 依靠 Toast。图片不进入本地存储或日志。云环境 JSON 统一走 `wx.cloud.callContainer`，图片按
 服务端 ticket 使用 `wx.cloud.uploadFile` 后 claim；页面不持久化 fileID 或 OpenID。

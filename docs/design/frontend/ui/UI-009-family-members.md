@@ -1,6 +1,10 @@
 # UI-009 — 家庭与成员
 
-当前本地呈现revision `UI-STATE-20261106-THEMES-01`：[DESIGN-002 Spec08 / Architecture01](../../../../specs/active/DESIGN-002-GLOBAL-UI-CONSISTENCY.md)与DREV08已获用户“好的 按照以上方案落地”批准并实施，DREV06视觉方向保持。家庭与成员页、只读提示、邀请及申请相关操作沿用原权限与字段；页面、导航和共用弹层通过显式适配器消费主题角色。 本增量尚未上传；原生合成呈现、共享业务回归及真机/独立评审缺项见[当前证据](../../../quality/evidence/themes-20261106/README.md)。下方原特性发布与验收记录保持其版本范围，不能代验六主题。
+当前页头修订 `UI-STATE-20261107-THEMES-03` 应用于家庭申请列表宿主，使用可换行标题和同底色的无框插画。成员列表继续使用原布局。[两档六主题原生证据](../../../../specs/evidence/client-release-20261108/README.md)
+
+视觉增量 `UI-STATE-20261107-THEMES-02`：家庭成员卡片沿用DREV09装饰边框角色；成员权限、只读状态与操作边界保持。[本轮EVD](../../../../specs/evidence/design003-20261107/README.md)记录原实现和自动检查。该修订随 0.1.19 开发上传，真机与完整原生状态矩阵待验。
+
+当前呈现revision `UI-STATE-20261106-THEMES-01`：[DESIGN-002 Spec08 / Architecture01](../../../../specs/completed/DESIGN-002-GLOBAL-UI-CONSISTENCY.md)与DREV08已获用户“好的 按照以上方案落地”批准并实施，DREV06视觉方向保持。家庭与成员页、只读提示、邀请及申请相关操作沿用原权限与字段；页面、导航和共用弹层通过显式适配器消费主题角色。 六主题随 0.1.19 开发上传。真机与独立 Review 待验。[版本证据](../../../../specs/evidence/client-release-20261108/README.md)
 
 - Status: `DELIVERED_CLIENT_0.1.16 / DEVELOPMENT_DONE / 390_NATIVE_CAPTURED / MATRIX_PENDING`
 - Related Feature: `FEAT-002`

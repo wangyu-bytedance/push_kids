@@ -1,0 +1,82 @@
+{
+  "route": "pages/reports/index",
+  "theme": "space",
+  "base_library": "3.17.4",
+  "viewport": {
+    "width": 430,
+    "height": 932,
+    "screenWidth": 430,
+    "screenHeight": 932
+  },
+  "nodes": [
+    {
+      "host": "page",
+      "selector": ".theme-header",
+      "left": 20,
+      "right": 410,
+      "top": 94,
+      "bottom": 236.1953125,
+      "width": 390,
+      "height": 142.1953125
+    },
+    {
+      "host": "page",
+      "selector": ".theme-header-content",
+      "left": 20,
+      "right": 410,
+      "top": 94,
+      "bottom": 236.1953125,
+      "width": 390,
+      "height": 142.1953125
+    },
+    {
+      "host": "page",
+      "selector": ".theme-header .pg-title",
+      "left": 20,
+      "right": 410,
+      "top": 116,
+      "bottom": 147.1953125,
+      "width": 390,
+      "height": 31.1953125
+    },
+    {
+      "host": "page",
+      "selector": ".theme-header .child-chip",
+      "left": 20,
+      "right": 106,
+      "top": 175.1953125,
+      "bottom": 219.1953125,
+      "width": 86,
+      "height": 44
+    }
+  ],
+  "source": "native selector bounds and DevTools Element.getStyles; isolated fixture, production WXML/WXSS exact",
+  "screenshot": "space--image-failure.png",
+  "screenshot_sha256": "55541959ce6d3375637b7cf653a9bad27a479b8d9cfe1c18119c329e358cdaea",
+  "fixture": "image-failure",
+  "category": "header-blend",
+  "screenshot_errors": [],
+  "validation_errors": [],
+  "touch_errors": [],
+  "horizontal_overflow": [],
+  "styles": {
+    ".theme-header": {
+      "background-color": "rgba(0, 0, 0, 0)",
+      "border-top-left-radius": "0px",
+      "border-top-width": "0px",
+      "box-shadow": "none",
+      "font-size": "16px",
+      "line-height": "25.6px",
+      "color": "rgb(32, 53, 93)"
+    },
+    ".theme-header .pg-title": {
+      "background-color": "rgba(0, 0, 0, 0)",
+      "border-top-left-radius": "0px",
+      "border-top-width": "0px",
+      "box-shadow": "none",
+      "font-size": "24px",
+      "line-height": "31.2px",
+      "color": "rgb(32, 53, 93)"
+    }
+  }
+}

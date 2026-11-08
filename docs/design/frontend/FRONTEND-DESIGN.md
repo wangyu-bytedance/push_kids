@@ -1,6 +1,10 @@
 # Push Kids 前端设计基线
 
-待评审局部调优：[DESIGN-003 Spec01](../../../specs/active/DESIGN-003-THEME-VISUAL-REFINEMENT.md) / [DREV09](prototypes/DREV-20261106-UI-CONSISTENCY-09/FRONTEND-SPEC.md)针对报表标题、记录头图、上传装饰与嵌套边框。当前只完成可编辑设计及六主题三视口162组HTML导出，尚未批准/实施；不替换下方已批准基线或DESIGN-002 Spec08本地实现事实，原生与真机未验。
+获批的 `DREV-20261108-CHILD-SWITCH-01` 已在本地接管五个 Tab 与独立孩子足迹的标题行。标题在左，已有孩子切换在右。原始风格的日程和报表插画移到页头右下背景，脱离布局和触控。记录页两种模式各保留一个孩子入口。252 张批准导出已冻结。[DESIGN-005 Spec01](../../../specs/active/DESIGN-005-CHILD-SWITCH-HEADER.md) · [批准设计](snapshots/UI-001/DREV-20261108-CHILD-SWITCH-01/APPROVAL.md)
+
+随 0.1.19 开发上传的 `DREV-20261107-HEADER-BLEND-01` 定义 13 个页面的共用无框装饰层。五个有横幅的主题按原图比例渲染，四边渐入主题底色。主 Tab 标题叠图，子页标题可在图上方换行，原始风格和缺图态用主题底色。216 张批准设计导出保持冻结。390×844 与 430×932 的六主题原生矩阵及记录菜单已验证。真机与用户 Review 待验。[DESIGN-004 Spec01](../../../specs/completed/DESIGN-004-HEADER-BLEND.md) · [页头对照稿](prototypes/DREV-20261107-HEADER-BLEND-01/index.html) · [版本证据](../../../specs/evidence/client-release-20261108/README.md)
+
+前序视觉调优 [DESIGN-003 Spec01](../../../specs/completed/DESIGN-003-THEME-VISUAL-REFINEMENT.md) / [DREV09 批准清单](snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-09/APPROVAL.md)定义报表首行标题、记录完整比例横幅、上传相机装饰和容器描边。其报表标题和记录比例继续由现行页头实现遵守。162 组设计 HTML 导出及两张总览保持冻结，DREV06 视觉方向与 DREV08 设置入口继续有效。[原调优证据](../../../specs/evidence/design003-20261107/README.md)
 
 当前[旅行入口Spec01/Architecture01](../../../specs/completed/FEAT-012-TRAVEL-ENTRY-CLEANUP.md)与DREV01批准源/22张导出保持冻结，其余DREV/FDB/FEC不变。2026-11-01交付revision `DESIGN-EVD-20261101-0.1.17-UPLOAD-01`：168份冻结源覆盖0.1.17官方成功上传1,191,019字节；三尺寸两宿主42组原生节点/PNG/SHA与局部动作证据保持，用户正向focus/分页/双账号门禁确认PASS。设备/读屏/键盘仍未验，体验/审核/正式发布未执行；开发DONE归档不代全部验收。[当前上传](../../deploy/releases/20261101-client-0.1.17-upload.md)与[原生矩阵](../../quality/evidence/client-release-20261101/native-matrix-resumed.json)分别绑定；批准资产不因Spec迁移改写。
 
@@ -45,18 +49,17 @@ FDB/FEC、每日任务按钮、报表展开/收起和其他设计范围保持。
 
 - Frontend scope: PRESENT
 - Baseline status: APPROVED
-- Baseline revision: FDB-20260913-04
+- Baseline revision: FDB-20261107-05
 - Owner: 产品负责人（用户）
-- Proposed by: Codex（FDB-20260830-01）、Aime（FDB-20260906-02、FDB-20260906-03）
+- Proposed by: Codex
 - Approved by: 产品负责人（用户）
-- Approved at: 2026-09-13
-- Approval evidence: FDB-20260906-03 的视觉/交互批准继续有效；用户 2026-09-13 批准
-  `GOV-SPEC-LOCAL-DESIGN-EVIDENCE-20260913-01`，将证据源迁移为仓库原生文件
-- Last verified: 2026-09-13（仓库原生设计证据治理、模板和离线校验器通过；PKDS-2.0 视觉/交互未改变，三视口原生几何证据仍为 NOT_RUN）
+- Approved at: 2026-11-07
+- Approval evidence: 用户“批准 GOV-004-SPEC-01，按此更新”，见 [GOV-004](../../../specs/completed/GOV-004-AGENT-DEVICE-CHECK-MATRIX.md)。既有视觉/交互及仓库原生证据合同沿用。
+- Last verified: 2026-11-07（当前矩阵的离线工具验证见 GOV-004；原生和真机实测独立记录）
 - Applies to: 家长使用的微信小程序；未来手机 Web 应保持相同信息架构
 - Related current implementation Spec: `specs/completed/SPEC-20260906-PKDS-03-PAPER-SPROUT-UI.md` revision `SPEC-20260906-PKDS-03`（前序：`SPEC-20260906-PKDS-01`）
-- Superseded baseline revision: `FDB-20260830-01`、`FDB-20260906-02`、`FDB-20260906-03`（本 revision 不改变 PKDS-2.0 视觉/交互，只替换设计证据方式）
-- Frontend engineering constraints: approved `FEC-20260913-LOCAL-DESIGN-EVIDENCE-01`
+- Superseded baseline revision: `FDB-20260913-04`（仅切换当前检查矩阵，旧清单按原版本复核）
+- Frontend engineering constraints: approved `FEC-20261107-AGENT-DEVICE-MATRIX-03`
 
 本 baseline 的可见合同由 `DREV-20260906-PKDS-03`（PKDS-2.0「纸 · 芽」）定义，
 落地记录见 `specs/completed/SPEC-20260906-PKDS-03-PAPER-SPROUT-UI.md`，三视口走查产物由
@@ -108,9 +111,9 @@ approval snapshot，获得 Task Spec revision + DREV 的明确批准后才能实
 该增量覆盖 UI-001、UI-009、UI-011，其他可见合同继续沿用各自DREV；验证与未完成项见
 [本轮证据](../../quality/evidence/HERO-ARC-REMOVAL-20261021.md)，本地实现不代表上传或发布。
 
-当前本地实现以获批DESIGN-002 Spec08 / Architecture01扩展为六种风格：原始、成长花园、星际探索、深海夜色、海洋、科技。原始保留纸面/松绿/衬线标题，其他五种采用DREV06的背景角色、系统无衬线字体与主题形状；4px间距、清晰状态文字、非游戏化反馈和同一套业务页面继续适用。主题权威源是`apps/miniprogram/presentation/theme/registry.js`，`styles/tokens.wxss`由其生成，`styles/atoms.wxss`拥有共用组件，`styles/theme.wxss`拥有有限材质差异；页面只写特有几何，不能重复主题值或逐页判断主题。
+当前实现以获批 DESIGN-002 Spec08 / Architecture01扩展为六种风格：原始、成长花园、星际探索、深海夜色、海洋、科技。原始保留纸面/松绿/衬线标题，其他五种采用DREV06的背景角色、系统无衬线字体与主题形状；4px间距、清晰状态文字、非游戏化反馈和同一套业务页面继续适用。主题权威源是`apps/miniprogram/presentation/theme/registry.js`，`styles/tokens.wxss`由其生成，`styles/atoms.wxss`拥有共用组件，`styles/theme.wxss`拥有有限材质差异；页面只写特有几何，不能重复主题值或逐页判断主题。
 
-设置入口位于底部列表“提醒设置”之后、“关于知芽”之前。六选一面板暂存候选，应用才切换并写本机小型ID偏好；取消不改变当前风格。未知科目/活动直接使用当前主题固定默认图标，无AI或联网选图。DREV08[标准批准索引](snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-08/CANONICAL-APPROVAL.md)和DREV06[标准索引](snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-06/CANONICAL-APPROVAL.md)关联原冻结JSON/源/导出与后续用户批准，不改原快照；本次[实现证据](../../quality/evidence/themes-20261106/README.md)区分本地验证、原生合成呈现、真机与尚未上传。六主题尚未进入已上传0.1.18版本。
+设置入口位于底部列表“提醒设置”之后、“关于知芽”之前。六选一面板暂存候选，应用才切换并写本机小型ID偏好；取消不改变当前风格。未知科目/活动直接使用当前主题固定默认图标，无AI或联网选图。DREV08[标准批准索引](snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-08/CANONICAL-APPROVAL.md)和DREV06[标准索引](snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-06/CANONICAL-APPROVAL.md)关联原冻结JSON/源/导出与后续用户批准，不改原快照。六主题已随 0.1.19 开发上传。原生和待验范围见[版本证据](../../../specs/evidence/client-release-20261108/README.md)。
 
 ## User interaction conventions
 
@@ -121,12 +124,12 @@ approval snapshot，获得 Task Spec revision + DREV 的明确批准后才能实
 
 ## Resolution and responsive support
 
-MVP 支持手机竖屏 320×568、390×844、430×932 三个逻辑视口，安全区、文字放大、
-长内容和键盘态均不得裁切关键操作。Required viewport matrix 和响应规则见第 9 节。
+Agent 按第 9 节的 iPhone 14 及以后代表视口检查手机竖屏。安全区、文字放大、
+长内容和键盘态均须保持关键操作可达。
 
 ## Frontend implementation and quality baseline
 
-实现必须同时遵循批准的 `FEC-20260913-LOCAL-DESIGN-EVIDENCE-01`。仓库内获批 DREV 决定可见合同，FEC 决定组件、
+实现必须同时遵循批准的 [FEC](FRONTEND-ENGINEERING-CONSTRAINTS.md)。仓库内获批 DREV 决定可见合同，FEC 决定组件、
 状态、表单、可访问性、性能、安全隐私、AI 内容和证据要求；两者互不替代。
 
 ## 2. 设计立场
@@ -185,7 +188,7 @@ MVP 支持手机竖屏 320×568、390×844、430×932 三个逻辑视口，安�
 | Design tokens | `apps/miniprogram/presentation/theme/registry.js` → `styles/tokens.wxss` | 前端呈现域维护者 | 六主题语义角色唯一源与原始首屏生成值；PKDS-1.0 reference为设计历史 |
 | Design components | `apps/miniprogram/styles/atoms.wxss` | 产品负责人 | 组件类唯一来源；页面 wxss 只写本页几何 |
 | Design icons | `apps/miniprogram/styles/icons.wxss` | 产品负责人 | 由 `tools/gen_icon_styles.py` 生成，禁止手工编辑；TabBar 位图由 `tools/gen_tabbar_icons.py` 生成 |
-| 三视口走查 | `tools/preview/` → `dist/ui-preview/` | 产品负责人 | WXML→HTML 近似渲染 + 320/390/430 截图；不能替代原生节点几何验收 |
+| 当前视口走查 | `tools/preview/` → `dist/ui-preview/` | 产品负责人 | WXML→HTML 近似渲染，按当前矩阵截图；原生节点几何单独验收 |
 | Approval evidence | `snapshots/<UI-ID>/<DREV>/APPROVAL.md` + PNG exports | 产品负责人 | Task Spec/DREV identity、尺寸和 SHA-256 不可变清单 |
 | Screen-level spec | `prototypes/DREV-20260906-PKDS-01/FRONTEND-SPEC.md` | 产品负责人 | 39 屏逐屏规格与参考屏；旧 Figma 说明只作历史记录 |
 | WeUI reference | 微信官方 WeUI / weui-wxss | 微信设计团队 | 参考平台行为，不直接决定业务视觉 |
@@ -406,9 +409,8 @@ Todo 卡片必须包含：
 ## 9. 视口与适配
 
 - Device classes: 微信小程序内手机；桌面和 Pad 专用布局不在 MVP。
-- Minimum supported logical viewport: 320×568 px。
-- Primary design viewport: 390×844 px。
-- Wide phone verification: 430×932 px。
+- Agent 日常设备范围：iPhone 14 或更新的非 mini 机型，按标准和大屏视口抽样。320×568 等低分辨率、iPhone mini 和华为系列不纳入日常矩阵。平台专项的真机验收按[发布指引](../../deploy/FRONTEND-RELEASE.md#4-体验版人工门禁)执行。
+- 新设计证据和默认走查工具由[版本化视口配置](../../../tools/frontend_viewports.json)选用对应矩阵。旧设计清单按原 FDB 校验并保留原结果。
 - Orientation: portrait required；landscape 保证可返回和基本操作，但不做专用布局。
 - Maximum content width: 480 px；更宽环境居中显示。
 - DPR: 使用矢量图标；位图按 2x/3x 与原始质量策略导出。
@@ -419,9 +421,8 @@ Todo 卡片必须包含：
 
 | ID | Device/use | Logical viewport | Orientation | Required states | Evidence after approval |
 |---|---|---|---|---|---|
-| VP-MIN | 小屏边界 | 320×568 | portrait | happy、long-content、keyboard、error | local DREV export + device/E2E |
-| VP-PRIMARY | 主设计基线 | 390×844 | portrait | 全部核心状态 | local DREV export + visual/E2E |
-| VP-WIDE | 大屏手机 | 430×932 | portrait | happy、report、bottom-sheet | local DREV export + visual/E2E |
+| VP-PRIMARY | iPhone 14，标准档 | 390×844 | portrait | 受影响状态，含适用的长文案、键盘、错误 | local DREV export + native nodes/screenshots |
+| VP-WIDE | iPhone 14 Pro Max，大屏档 | 430×932 | portrait | 受影响状态，含适用的报表、弹层、安全区 | local DREV export + native nodes/screenshots |
 
 ### 响应规则
 
@@ -480,3 +481,4 @@ Todo 卡片必须包含：
 | Date | Revision | Change | Approved by |
 |---|---|---|---|
 | 2026-08-30 | FDB-20260830-01 | 首版微信小程序交互与视觉基线草案 | pending |
+| 2026-11-07 | FDB-20261107-05 | Agent 日常检查改为 iPhone 14 及以后两档代表视口 | 产品负责人 |

@@ -1,0 +1,152 @@
+{
+  "route": "pages/calendar/index",
+  "theme": "tech",
+  "base_library": "3.17.4",
+  "viewport": {
+    "width": 320,
+    "height": 568,
+    "screenWidth": 320,
+    "screenHeight": 568
+  },
+  "nodes": [
+    {
+      "host": "page",
+      "selector": ".theme-header",
+      "left": 15,
+      "right": 305,
+      "top": 68,
+      "bottom": 192.3046875,
+      "width": 290,
+      "height": 124.3046875
+    },
+    {
+      "host": "page",
+      "selector": ".theme-header-art",
+      "left": 0,
+      "right": 320,
+      "top": 68,
+      "bottom": 192.3046875,
+      "width": 320,
+      "height": 124.3046875
+    },
+    {
+      "host": "page",
+      "selector": ".theme-header-content",
+      "left": 15,
+      "right": 305,
+      "top": 68,
+      "bottom": 162,
+      "width": 290,
+      "height": 94
+    },
+    {
+      "host": "page",
+      "selector": ".theme-header .pg-title",
+      "left": 15,
+      "right": 207,
+      "top": 91.640625,
+      "bottom": 122.359375,
+      "width": 192,
+      "height": 30.71875
+    },
+    {
+      "host": "page",
+      "selector": ".theme-header .child-chip",
+      "left": 241,
+      "right": 305,
+      "top": 85,
+      "bottom": 129,
+      "width": 64,
+      "height": 44
+    },
+    {
+      "host": "page",
+      "selector": ".theme-heading-row",
+      "left": 15,
+      "right": 305,
+      "top": 85,
+      "bottom": 129,
+      "width": 290,
+      "height": 44
+    },
+    {
+      "host": "page",
+      "selector": ".theme-heading-title",
+      "left": 15,
+      "right": 233,
+      "top": 85,
+      "bottom": 129,
+      "width": 218,
+      "height": 44
+    },
+    {
+      "host": "page",
+      "selector": ".theme-heading-row .child-chip",
+      "left": 241,
+      "right": 305,
+      "top": 85,
+      "bottom": 129,
+      "width": 64,
+      "height": 44
+    },
+    {
+      "host": "page",
+      "selector": ".theme-heading-row .chip-nm",
+      "left": 274,
+      "right": 300,
+      "top": 97.8984375,
+      "bottom": 116.09375,
+      "width": 26,
+      "height": 18.1953125
+    },
+    {
+      "host": "page",
+      "selector": ".theme-heading-title .pg-title",
+      "left": 15,
+      "right": 207,
+      "top": 91.640625,
+      "bottom": 122.359375,
+      "width": 192,
+      "height": 30.71875
+    },
+    {
+      "host": "page",
+      "selector": ".pg-context",
+      "left": 15,
+      "right": 305,
+      "top": 132,
+      "bottom": 150,
+      "width": 290,
+      "height": 18
+    }
+  ],
+  "source": "native selector bounds and DevTools Element.getStyles; isolated fixture, production WXML/WXSS exact",
+  "screenshot": "tech--single.png",
+  "screenshot_sha256": "18bc91ad2e1e945721b4be4e54863815efb5334ee5139e39dc940bdac7678066",
+  "fixture": "single",
+  "category": "child-heading",
+  "screenshot_errors": [],
+  "validation_errors": [],
+  "touch_errors": [],
+  "horizontal_overflow": [],
+  "styles": {
+    ".theme-header": {
+      "background-color": "rgba(0, 0, 0, 0)",
+      "border-top-left-radius": "0px",
+      "border-top-width": "0px",
+      "box-shadow": "none",
+      "font-size": "16px",
+      "line-height": "25.6px",
+      "color": "rgb(25, 59, 73)"
+    },
+    ".theme-header .pg-title": {
+      "background-color": "rgba(0, 0, 0, 0)",
+      "border-top-left-radius": "0px",
+      "border-top-width": "0px",
+      "box-shadow": "none",
+      "font-size": "24px",
+      "line-height": "30.72px",
+      "color": "rgb(23, 60, 73)"
+    }
+  }
+}

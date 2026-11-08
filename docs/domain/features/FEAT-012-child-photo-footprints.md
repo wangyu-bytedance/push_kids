@@ -1,5 +1,7 @@
 # FEAT-012 — 孩子照片足迹
 
+本地呈现修订 `FEAT-STATE-20261108-CHILD-SWITCH-01` 统一独立足迹与记录页旅行分支的孩子入口位置。嵌入式足迹由宿主提供孩子上下文，独立页沿用既有档案选择、归档和只读合同。该增量待开发上传。[DESIGN-005 Spec01](../../../specs/active/DESIGN-005-CHILD-SWITCH-HEADER.md)
+
 当前已交付：[入口精简Spec01 / Architecture01](../../../specs/completed/FEAT-012-TRAVEL-ENTRY-CLEANUP.md)与DREV01删除零草稿/空态手动创建，实际草稿、导入与历史保留；导入精简和BUG-035其余恢复合同保持。2026-11-01用户确认039照片回看/前后分页及双家庭非owner验收，记PASS_OPERATOR_CONFIRMED；官方从168份冻结源成功上传0.1.17/1,191,019字节，版本基准已推进。039 normal/100%/1、PUBLIC关闭、微信live/ready/me/visits200与三尺寸双宿主42组原生/本地动作保持自动证据；三项Spec DONE/completed。完整设备、EXIF/AI内容和可访问性缺项独立，尚未体验/提审/正式发布。[当前上传](../../deploy/releases/20261101-client-0.1.17-upload.md)区分用户验收、自动化和平台阶段；并行BUG-037两份页脚工作区增量未入包。
 
 2026-10-26开发归档（历史；旅行三项2026-11-01交付见本页当前正文）：已交付037后端/0.1.16客户端所覆盖的需求按用户批准规则标记开发DONE，验收缺项独立保留；后续BUG-035和旅行导入精简尚未交付，继续active。当前归档和待验入口见[Spec状态清单](../../../specs/STATUS.md)，依据为[治理Spec](../../../specs/completed/GOV-002-CLOUD-DELIVERY-DEVELOPMENT-COMPLETION.md)。本轮不改产品合同、测试结论、设计或发布阶段。

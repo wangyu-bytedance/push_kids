@@ -1,0 +1,92 @@
+{
+  "route": "pages/reports/index",
+  "theme": "garden",
+  "base_library": "3.17.4",
+  "viewport": {
+    "width": 430,
+    "height": 932,
+    "screenWidth": 430,
+    "screenHeight": 932
+  },
+  "nodes": [
+    {
+      "host": "page",
+      "selector": ".theme-header",
+      "left": 20,
+      "right": 410,
+      "top": 94,
+      "bottom": 261.5859375,
+      "width": 390,
+      "height": 167.5859375
+    },
+    {
+      "host": "page",
+      "selector": ".theme-header-art",
+      "left": 0,
+      "right": 430,
+      "top": 94,
+      "bottom": 261.5859375,
+      "width": 430,
+      "height": 167.5859375
+    },
+    {
+      "host": "page",
+      "selector": ".theme-header-content",
+      "left": 20,
+      "right": 410,
+      "top": 94,
+      "bottom": 236.1953125,
+      "width": 390,
+      "height": 142.1953125
+    },
+    {
+      "host": "page",
+      "selector": ".theme-header .pg-title",
+      "left": 20,
+      "right": 410,
+      "top": 116,
+      "bottom": 147.1953125,
+      "width": 390,
+      "height": 31.1953125
+    },
+    {
+      "host": "page",
+      "selector": ".theme-header .child-chip",
+      "left": 20,
+      "right": 106,
+      "top": 175.1953125,
+      "bottom": 219.1953125,
+      "width": 86,
+      "height": 44
+    }
+  ],
+  "source": "native selector bounds and DevTools Element.getStyles; isolated fixture, production WXML/WXSS exact",
+  "screenshot": "garden--reports.png",
+  "screenshot_sha256": "0143718c38c088aa8af86e59ef6c707b3bbcdb1a32fe5345c15cb6c85e299413",
+  "fixture": "reports",
+  "category": "header-blend",
+  "screenshot_errors": [],
+  "validation_errors": [],
+  "touch_errors": [],
+  "horizontal_overflow": [],
+  "styles": {
+    ".theme-header": {
+      "background-color": "rgba(0, 0, 0, 0)",
+      "border-top-left-radius": "0px",
+      "border-top-width": "0px",
+      "box-shadow": "none",
+      "font-size": "16px",
+      "line-height": "25.6px",
+      "color": "rgb(41, 63, 41)"
+    },
+    ".theme-header .pg-title": {
+      "background-color": "rgba(0, 0, 0, 0)",
+      "border-top-left-radius": "0px",
+      "border-top-width": "0px",
+      "box-shadow": "none",
+      "font-size": "24px",
+      "line-height": "31.2px",
+      "color": "rgb(35, 61, 41)"
+    }
+  }
+}

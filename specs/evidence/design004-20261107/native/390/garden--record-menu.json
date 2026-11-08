@@ -1,0 +1,122 @@
+{
+  "route": "pages/records/index",
+  "theme": "garden",
+  "base_library": "3.17.4",
+  "viewport": {
+    "width": 390,
+    "height": 844,
+    "screenWidth": 390,
+    "screenHeight": 844
+  },
+  "nodes": [
+    {
+      "host": "page",
+      "selector": ".theme-header",
+      "left": 0,
+      "right": 390,
+      "top": 87,
+      "bottom": 239,
+      "width": 390,
+      "height": 152
+    },
+    {
+      "host": "page",
+      "selector": ".theme-header-art",
+      "left": 0,
+      "right": 390,
+      "top": 87,
+      "bottom": 239,
+      "width": 390,
+      "height": 152
+    },
+    {
+      "host": "page",
+      "selector": ".theme-header-content",
+      "left": 18,
+      "right": 372,
+      "top": 87,
+      "bottom": 223,
+      "width": 354,
+      "height": 136
+    },
+    {
+      "host": "page",
+      "selector": ".theme-header .child-chip",
+      "left": 18,
+      "right": 102,
+      "top": 164,
+      "bottom": 208,
+      "width": 84,
+      "height": 44
+    },
+    {
+      "host": "page",
+      "selector": ".record-type-title",
+      "left": 18,
+      "right": 122,
+      "top": 107,
+      "bottom": 156,
+      "width": 104,
+      "height": 49
+    },
+    {
+      "host": "page",
+      "selector": ".record-type-menu",
+      "left": 18,
+      "right": 218,
+      "top": 164,
+      "bottom": 270,
+      "width": 200,
+      "height": 106
+    },
+    {
+      "host": "page",
+      "selector": ".record-type-choice",
+      "left": 23,
+      "right": 213,
+      "top": 169,
+      "bottom": 217,
+      "width": 190,
+      "height": 48
+    },
+    {
+      "host": "page",
+      "selector": ".record-type-choice",
+      "left": 23,
+      "right": 213,
+      "top": 217,
+      "bottom": 265,
+      "width": 190,
+      "height": 48
+    }
+  ],
+  "source": "native selector bounds and DevTools Element.getStyles; isolated fixture, production WXML/WXSS exact",
+  "screenshot": "garden--record-menu.png",
+  "screenshot_sha256": "f01326bf07802e2782a7c062bc36ebf261184ab53943e14e7d2e6be1bb9578f2",
+  "fixture": "record-menu",
+  "category": "header-blend",
+  "screenshot_errors": [],
+  "validation_errors": [],
+  "touch_errors": [],
+  "horizontal_overflow": [],
+  "styles": {
+    ".theme-header": {
+      "background-color": "rgba(0, 0, 0, 0)",
+      "border-top-left-radius": "0px",
+      "border-top-width": "0px",
+      "box-shadow": "none",
+      "font-size": "16px",
+      "line-height": "25.6px",
+      "color": "rgb(41, 63, 41)"
+    },
+    ".record-type-title": {
+      "background-color": "rgba(0, 0, 0, 0)",
+      "border-top-left-radius": "12px",
+      "border-top-width": "0px",
+      "box-shadow": "none",
+      "font-size": "22px",
+      "line-height": "33px",
+      "color": "rgb(35, 61, 41)"
+    }
+  }
+}

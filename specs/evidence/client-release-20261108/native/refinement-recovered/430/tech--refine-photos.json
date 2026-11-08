@@ -1,0 +1,92 @@
+{
+  "route": "pages/records/index",
+  "theme": "tech",
+  "base_library": "3.17.4",
+  "viewport": {
+    "width": 430,
+    "height": 932,
+    "screenWidth": 430,
+    "screenHeight": 932
+  },
+  "nodes": [
+    {
+      "host": "page",
+      "selector": ".theme-header",
+      "left": 0,
+      "right": 430,
+      "top": 94,
+      "bottom": 261.03125,
+      "width": 430,
+      "height": 167.03125
+    },
+    {
+      "host": "page",
+      "selector": ".theme-header-art",
+      "left": 0,
+      "right": 430,
+      "top": 94,
+      "bottom": 261.03125,
+      "width": 430,
+      "height": 167.03125
+    },
+    {
+      "host": "page",
+      "selector": ".theme-header-content",
+      "left": 20,
+      "right": 410,
+      "top": 94,
+      "bottom": 234,
+      "width": 390,
+      "height": 140
+    },
+    {
+      "host": "page",
+      "selector": ".theme-header .child-chip",
+      "left": 20,
+      "right": 104,
+      "top": 173,
+      "bottom": 217,
+      "width": 84,
+      "height": 44
+    },
+    {
+      "host": "page",
+      "selector": ".record-type-title",
+      "left": 20,
+      "right": 125,
+      "top": 116,
+      "bottom": 165,
+      "width": 105,
+      "height": 49
+    },
+    {
+      "host": "page",
+      "selector": ".record-page",
+      "left": 0,
+      "right": 430,
+      "top": 261.03125,
+      "bottom": 949.8203125,
+      "width": 430,
+      "height": 688.7890625
+    },
+    {
+      "host": "page",
+      "selector": ".pcell .rm",
+      "left": 114,
+      "right": 139,
+      "top": 426.0234375,
+      "bottom": 451.0234375,
+      "width": 25,
+      "height": 25
+    }
+  ],
+  "source": "native selector bounds and DevTools Element.getStyles; isolated fixture, production WXML/WXSS exact",
+  "screenshot": "tech--refine-photos.png",
+  "screenshot_sha256": "fab516cc4fd324d8597660886c3ec5342aa6b5cb3ffc913f39589e9dadf235f7",
+  "fixture": "refine-photos",
+  "category": "refinement",
+  "screenshot_errors": [],
+  "validation_errors": [],
+  "touch_errors": [],
+  "horizontal_overflow": []
+}

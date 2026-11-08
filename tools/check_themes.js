@@ -70,6 +70,7 @@ const report = { registry: "apps/miniprogram/presentation/theme/registry.js", th
   non_asset_net_growth_bytes: sourceBytes - baselineBytes - assetBytes,
   matrix: { routes: config.pages.length * themes.length * 3, shared_states: 8 * themes.length * 3 },
   native_color_exceptions: ["pk-native-danger: platform modal palette", "pk-map-route: platform basemap overlay", "activity color: stable persisted domain metadata"] };
-const target = path.resolve(__dirname, "../docs/quality/evidence/themes-20261106/contracts.json");
+const output = process.argv.find((v) => v.startsWith("--output="))?.slice(9);
+const target = output ? path.resolve(output) : path.resolve(__dirname, "../docs/quality/evidence/themes-20261106/contracts.json");
 fs.writeFileSync(target, JSON.stringify(report, null, 2) + "\n");
 console.log(JSON.stringify({ status: "PASS", themes: themes.length, assetBytes, sourceBytes, netGrowth: sourceBytes - baselineBytes }));

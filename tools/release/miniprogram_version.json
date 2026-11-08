@@ -1,4 +1,6 @@
 {
-  "released": "0.1.18",
-  "note": "线上/已上传给微信的最新小程序版本号（体验版基准）。发布上传后由 tools/release/miniprogram_version.py bump 递增，禁止手工复用旧号。"
+  "released": "0.1.20",
+  "note": "线上/已上传给微信的最新小程序版本号（体验版基准）。发布上传后由 tools/release/miniprogram_version.py bump 递增，禁止手工复用旧号。",
+  "source_sha256": "38583f8eaccd58a9f92c8b60dd04838b567ac2da904fa4dd10f50bda4a235a82",
+  "upload_bytes": 1254616
 }

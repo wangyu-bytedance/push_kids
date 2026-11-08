@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>知芽 · 标题右侧的孩子切换</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #ebeeeb; color: #243629; font: 15px/1.5 -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif; }
+  .toolbar { max-width: 1040px; margin: auto; padding: 18px; }
+  .toolbar h1 { margin: 0 0 5px; font-size: 22px; }
+  .toolbar p { margin: 0 0 10px; }
+  label { display: inline-flex; align-items: center; gap: 6px; margin: 0 12px 6px 0; }
+  select { min-height: 44px; border: 1px solid #b5c2b6; border-radius: 8px; padding: 4px 8px; background: white; color: inherit; font: inherit; }
+  main { display: flex; flex-wrap: wrap; justify-content: center; align-items: start; gap: 20px; padding: 0 16px 24px; }
+  figure { width: min(100%, var(--viewport-width)); margin: 0; }
+  figcaption { margin-bottom: 4px; }
+  .phone { display: flex; flex-direction: column; min-height: var(--viewport-height); background: var(--pk-page-background); color: var(--pk-ink); }
+  .nav { height: 65px; display: grid; place-items: end center; padding: 0 16px 10px; background: var(--pk-nav-bg); color: var(--pk-nav-ink); font-size: 18px; font-weight: 650; }
+  .hero { position: relative; display: grid; grid-template-columns: minmax(0, 1fr); isolation: isolate; }
+  .hero--spot::before { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .32;
+    background: var(--spot-art) right 10px bottom 5px / 112px 76px no-repeat; }
+  .art, .content { grid-area: 1 / 1; align-self: start; }
+  .art { position: relative; pointer-events: none; }
+  .art img { display: block; width: 100%; height: auto; }
+  .art::after { content: ""; position: absolute; inset: 0; background:
+    linear-gradient(90deg, var(--pk-canvas), transparent 4%, transparent 96%, var(--pk-canvas)),
+    linear-gradient(180deg, var(--pk-canvas), transparent 12%, transparent 66%, var(--pk-canvas)); }
+  .content { z-index: 1; padding: 20px 18px 18px; min-width: 0; }
+  .title-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: start; gap: 8px; }
+  .title-cell { min-width: 0; margin: 0; min-height: 44px; display: flex; align-items: center; }
+  .title { margin: 0; color: var(--pk-ink); font: 650 24px/1.3 var(--pk-serif); overflow-wrap: anywhere; }
+  .art + .content .title { color: var(--pk-header-ink); }
+  .subtitle { min-width: 0; margin: 4px 0 0; color: var(--pk-text-muted); font-size: 14px; }
+  .art + .content .subtitle { color: var(--pk-header-muted); }
+  .large .title { font-size: 36px; }
+  button { color: inherit; font: inherit; }
+  .child { justify-self: end; display: flex; align-items: center; gap: 5px; min-width: 44px; min-height: 44px; max-width: 106px; padding: 4px 8px 4px 5px; border: 1px solid var(--pk-line); border-radius: 999px; background: var(--pk-surface); color: var(--pk-ink); }
+  .child[disabled] { color: var(--pk-text-muted); }
+  .avatar { flex: none; display: grid; place-items: center; width: 25px; height: 25px; border-radius: 50%; background: var(--pk-primary-tint); color: var(--pk-primary-strong); font-size: 12px; }
+  .name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14px; font-weight: 650; }
+  .chevron { flex: none; width: 7px; height: 7px; margin: -3px 2px 0; border-right: 1px solid; border-bottom: 1px solid; transform: rotate(45deg); }
+  .record { position: relative; }
+  .record-trigger { display: inline-flex; align-items: center; gap: 7px; min-height: 44px; max-width: 100%; padding: 0; border: 0; background: none; text-align: left; }
+  .menu { position: absolute; top: calc(100% + 4px); left: 0; width: 164px; padding: 5px; border: 1px solid var(--pk-line); border-radius: 12px; background: var(--pk-surface); z-index: 2; }
+  .menu button { display: block; min-height: 44px; width: 100%; padding: 0 9px; border: 0; border-radius: 8px; background: transparent; text-align: left; }
+  .menu button:first-child { background: var(--pk-primary-tint); }
+  .body { margin: 8px 18px 18px; padding: 18px; border-radius: var(--pk-r-xl); background: var(--pk-surface); }
+  .body h3 { margin: 0 0 4px; font-size: 17px; }
+  .body p { margin: 0; color: var(--pk-text-muted); }
+  footer { display: flex; justify-content: space-evenly; margin-top: auto; padding: 14px 0 24px; border-top: 1px solid var(--pk-line); background: var(--pk-surface); color: var(--pk-text-muted); font-size: 13px; }
+  footer b { color: var(--pk-primary-strong); }
+  .export .toolbar, .export figcaption { display: none; }
+  .export main { display: block; padding: 0; }
+  .compact .child { max-width: 84px; gap: 4px; padding-inline: 4px; }
+  .compact .avatar { width: 24px; height: 24px; }
+</style>
+<div class="toolbar">
+  <h1>知芽 · 标题右侧的孩子切换</h1>
+  <p>选择主题、页面或边界状态，查看标题和切换入口的相对位置。</p>
+  <label>主题 <select id="theme"></select></label>
+  <label>页面 <select id="scene"></select></label>
+  <label>视口 <select id="width"></select></label>
+</div>
+<main id="screens"></main>
+<script>
+  const themes = __THEMES__;
+  const media = __MEDIA__;
+  const sizes = __SIZES__;
+  const scenes = {
+    today: {tab: "今日", title: "今天，也慢慢来", detail: "11 月 8 日 星期日", card: "今日复习"},
+    calendar: {tab: "日程", title: "这一周，心里有数", detail: "11 月 2 日 – 11 月 8 日", card: "本周日程", role: "calendar"},
+    records: {tab: "记录", title: "学习记录", card: "学习照片", record: true},
+    travel: {tab: "记录", title: "旅行日记", card: "旅行时间线", record: true},
+    reports: {tab: "报表", title: "一点一滴，看得见", detail: "只统计已确认的学习", card: "最近 7 天", role: "report"},
+    settings: {tab: "设置", title: "按你们的节奏来", card: "在学科目"},
+    footprints: {title: "孩子足迹", card: "照片时间线"},
+    empty: {tab: "今日", title: "今天，也慢慢来", card: "还没有学习档案", empty: true},
+    single: {tab: "日程", title: "这一周，心里有数", detail: "11 月 2 日 – 11 月 8 日", card: "本周日程", role: "calendar", single: true},
+    "long-name": {tab: "报表", title: "一点一滴，看得见", detail: "只统计已确认的学习", card: "最近 7 天", role: "report", name: "小满的很长的学习档案昵称"},
+    "large-text": {tab: "设置", title: "按你们的节奏来", card: "在学科目", large: true, name: "小满的很长的学习档案昵称"},
+    "record-menu": {tab: "记录", title: "学习记录", card: "学习照片", record: true, menu: true},
+    "record-saving": {tab: "记录", title: "学习记录", card: "正在保存", record: true, disabled: true},
+    "missing-art": {tab: "报表", title: "一点一滴，看得见", detail: "只统计已确认的学习", card: "最近 7 天", missing: true}
+  };
+  const query = new URLSearchParams(location.search);
+  const fields = ["theme", "scene", "width"].map(id => document.getElementById(id));
+  const [themeField, sceneField, widthField] = fields;
+  const screens = document.getElementById("screens");
+  const options = (field, choices) => {
+    for (const [id, label] of choices) field.add(new Option(label, id));
+  };
+  options(themeField, themes.map(theme => [theme.id, theme.name]));
+  options(sceneField, [["overview", "全部入口"], ...Object.entries(scenes).map(([id, scene]) => [id, scene.title + (id === "empty" ? " · 无档案" : "") + (["single", "long-name", "large-text", "record-menu", "record-saving", "missing-art"].includes(id) ? " · " + ({single:"单孩子", "long-name":"长昵称", "large-text":"大字", "record-menu":"菜单打开", "record-saving":"保存中", "missing-art":"缺图"}[id]) : "")])]);
+  options(widthField, Object.entries(sizes).map(([width, height]) => [width, width + "×" + height]));
+  themeField.value = query.get("theme") || "original";
+  sceneField.value = query.get("scene") || "overview";
+  widthField.value = query.get("width") || "390";
+  document.body.classList.toggle("export", query.has("export"));
+
+  function frame(theme, width, id) {
+    const scene = scenes[id];
+    const name = scene.name || "小满";
+    const picture = scene.tab && !scene.missing && theme.assets.hero;
+    const local = scene.role && theme.id === "original" && theme.assets[scene.role];
+    const recordTitle = '<button class="title record-trigger" aria-expanded="' + !!scene.menu + '">' + scene.title + '<span class="chevron" aria-hidden="true"></span></button>';
+    const menu = scene.menu ? '<div class="menu"><button>学习记录</button><button>旅行日记</button></div>' : '';
+    const child = scene.empty ? '' :
+      '<button class="child" aria-label="' + (scene.tab === "设置" ? "选择或管理学习档案" : "切换孩子") + '，当前' + name + '"' +
+      (scene.disabled ? ' disabled' : '') + (scene.menu ? ' aria-hidden="true" tabindex="-1"' : '') +
+      '><span class="avatar" aria-hidden="true">满</span><span class="name">' + name + '</span>' +
+      (scene.single ? '' : '<span class="chevron" aria-hidden="true"></span>') + '</button>';
+    const title = scene.record ? '<div class="title-cell record">' + recordTitle + menu + '</div>' :
+      '<div class="title-cell"><h2 class="title">' + scene.title + '</h2></div>';
+    const tabs = scene.tab ? '<footer>' + ["今日","日程","记录","报表","设置"].map(tab =>
+      tab === scene.tab ? "<b>" + tab + "</b>" : "<span>" + tab + "</span>").join("") + '</footer>' : '';
+    const figure = document.createElement("figure");
+    figure.style.cssText = theme.style.replace(/([\d.]+)rpx/g, (_, n) => (Number(n) * width / 750) + "px") +
+      ";--viewport-width:" + width + "px;--viewport-height:" + sizes[width] + "px";
+    if (local) figure.style.setProperty("--spot-art", 'url("' + media[local] + '")');
+    figure.innerHTML = '<figcaption>' + (scene.tab || scene.title) + '</figcaption><div class="phone' + (width <= 320 ? ' compact' : '') + '">' +
+      '<div class="nav">' + (scene.tab ? "知芽" : "孩子足迹") + '</div><header class="hero' + (scene.large ? ' large' : '') + (local ? ' hero--spot' : '') + '">' +
+      (picture ? '<div class="art" aria-hidden="true"><img alt="" src="' + media[picture] + '"></div>' : '') +
+      '<div class="content"><div class="title-row">' + title + child + '</div>' +
+      (scene.detail ? '<p class="subtitle">' + scene.detail + '</p>' : '') +
+      '</div></header>' +
+      '<section class="body"><h3>' + scene.card + '</h3><p>' + (scene.empty ? "前往设置创建档案" : "") + '</p></section>' + tabs + '</div>';
+    return figure;
+  }
+  function render() {
+    const theme = themes.find(theme => theme.id === themeField.value) || themes[0];
+    const selected = sceneField.value === "overview" ? ["today","calendar","records","travel","reports","settings","footprints"] : [sceneField.value];
+    screens.replaceChildren(...selected.map(id => frame(theme, Number(widthField.value), id)));
+  }
+  fields.forEach(field => field.addEventListener("change", render));
+  render();
+</script>
+</html>

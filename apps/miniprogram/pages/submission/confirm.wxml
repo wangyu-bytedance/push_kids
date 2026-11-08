@@ -17,13 +17,15 @@
   <block wx:else>
     <!-- 只读态：已确认 / 已取消 / 还在整理 / 只读成员（D7、D8） -->
     <block wx:if="{{readOnly}}">
-      <view class="rec-head theme-header">
-    <image wx:if="{{theme.assets.hero && !themeArtFailed}}" class="theme-hero-art" src="{{theme.assets.hero}}" mode="aspectFill" binderror="onThemeIllustrationError" aria-hidden="{{true}}" />
-        <view class="grow">
-          <text class="rec-meta">学习于 {{submission.time_label}} · 提交于 {{submission.submitted_label}}</text>
-          <text class="rec-title">{{titleText}}</text>
+      <view class="theme-header">
+        <view class="rec-head">
+          <view class="grow">
+            <text class="rec-meta">学习于 {{submission.time_label}} · 提交于 {{submission.submitted_label}}</text>
+            <text class="rec-title">{{titleText}}</text>
+          </view>
+          <view class="pill {{statusTone}}">{{statusLabel}}</view>
         </view>
-        <view class="pill {{statusTone}}">{{statusLabel}}</view>
+        <include src="../../presentation/theme/header-art.wxml" />
       </view>
 
       <view class="pk-notice err" wx:if="{{submission.state === 'failed'}}">

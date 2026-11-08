@@ -1,0 +1,162 @@
+{
+  "route": "pages/calendar/index",
+  "theme": "ocean",
+  "base_library": "3.17.4",
+  "viewport": {
+    "width": 430,
+    "height": 932,
+    "screenWidth": 430,
+    "screenHeight": 932
+  },
+  "nodes": [
+    {
+      "host": "page",
+      "selector": ".theme-header",
+      "left": 20,
+      "right": 410,
+      "top": 94,
+      "bottom": 261.03125,
+      "width": 390,
+      "height": 167.03125
+    },
+    {
+      "host": "page",
+      "selector": ".theme-header-art",
+      "left": 0,
+      "right": 430,
+      "top": 94,
+      "bottom": 261.03125,
+      "width": 430,
+      "height": 167.03125
+    },
+    {
+      "host": "page",
+      "selector": ".theme-header-content",
+      "left": 20,
+      "right": 410,
+      "top": 94,
+      "bottom": 199,
+      "width": 390,
+      "height": 105
+    },
+    {
+      "host": "page",
+      "selector": ".theme-header .pg-title",
+      "left": 20,
+      "right": 212,
+      "top": 122.640625,
+      "bottom": 153.359375,
+      "width": 192,
+      "height": 30.71875
+    },
+    {
+      "host": "page",
+      "selector": ".theme-header .child-chip",
+      "left": 325,
+      "right": 410,
+      "top": 116,
+      "bottom": 160,
+      "width": 85,
+      "height": 44
+    },
+    {
+      "host": "page",
+      "selector": ".theme-heading-row",
+      "left": 20,
+      "right": 410,
+      "top": 116,
+      "bottom": 160,
+      "width": 390,
+      "height": 44
+    },
+    {
+      "host": "page",
+      "selector": ".theme-heading-title",
+      "left": 20,
+      "right": 317,
+      "top": 116,
+      "bottom": 160,
+      "width": 297,
+      "height": 44
+    },
+    {
+      "host": "page",
+      "selector": ".theme-heading-row .child-chip",
+      "left": 325,
+      "right": 410,
+      "top": 116,
+      "bottom": 160,
+      "width": 85,
+      "height": 44
+    },
+    {
+      "host": "page",
+      "selector": ".theme-heading-row .chip-nm",
+      "left": 361,
+      "right": 387,
+      "top": 128.8984375,
+      "bottom": 147.09375,
+      "width": 26,
+      "height": 18.1953125
+    },
+    {
+      "host": "page",
+      "selector": ".theme-heading-row .chev",
+      "left": 391.5502624511719,
+      "right": 404.2781677246094,
+      "top": 130.22183227539062,
+      "bottom": 142.9497528076172,
+      "width": 12.7279052734375,
+      "height": 12.727920532226562
+    },
+    {
+      "host": "page",
+      "selector": ".theme-heading-title .pg-title",
+      "left": 20,
+      "right": 212,
+      "top": 122.640625,
+      "bottom": 153.359375,
+      "width": 192,
+      "height": 30.71875
+    },
+    {
+      "host": "page",
+      "selector": ".pg-context",
+      "left": 20,
+      "right": 410,
+      "top": 164,
+      "bottom": 182,
+      "width": 390,
+      "height": 18
+    }
+  ],
+  "source": "native selector bounds and DevTools Element.getStyles; isolated fixture, production WXML/WXSS exact",
+  "screenshot": "ocean--calendar-no-spot.png",
+  "screenshot_sha256": "bc68ffccaa9006c8cfea8c677379b2be9d3cfcf9d4afac537f5ad7b17fb68818",
+  "fixture": "calendar-no-spot",
+  "category": "child-heading",
+  "screenshot_errors": [],
+  "validation_errors": [],
+  "touch_errors": [],
+  "horizontal_overflow": [],
+  "styles": {
+    ".theme-header": {
+      "background-color": "rgba(0, 0, 0, 0)",
+      "border-top-left-radius": "0px",
+      "border-top-width": "0px",
+      "box-shadow": "none",
+      "font-size": "16px",
+      "line-height": "25.6px",
+      "color": "rgb(32, 68, 84)"
+    },
+    ".theme-header .pg-title": {
+      "background-color": "rgba(0, 0, 0, 0)",
+      "border-top-left-radius": "0px",
+      "border-top-width": "0px",
+      "box-shadow": "none",
+      "font-size": "24px",
+      "line-height": "30.72px",
+      "color": "rgb(22, 69, 84)"
+    }
+  }
+}

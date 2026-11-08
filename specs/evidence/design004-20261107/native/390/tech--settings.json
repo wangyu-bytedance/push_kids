@@ -1,0 +1,92 @@
+{
+  "route": "pages/settings/index",
+  "theme": "tech",
+  "base_library": "3.17.4",
+  "viewport": {
+    "width": 390,
+    "height": 844,
+    "screenWidth": 390,
+    "screenHeight": 844
+  },
+  "nodes": [
+    {
+      "host": "page",
+      "selector": ".theme-header",
+      "left": 18,
+      "right": 372,
+      "top": 87,
+      "bottom": 238.5,
+      "width": 354,
+      "height": 151.5
+    },
+    {
+      "host": "page",
+      "selector": ".theme-header-art",
+      "left": 0,
+      "right": 390,
+      "top": 87,
+      "bottom": 238.5,
+      "width": 390,
+      "height": 151.5
+    },
+    {
+      "host": "page",
+      "selector": ".theme-header-content",
+      "left": 18,
+      "right": 372,
+      "top": 87,
+      "bottom": 202.71875,
+      "width": 354,
+      "height": 115.71875
+    },
+    {
+      "host": "page",
+      "selector": ".theme-header .pg-title",
+      "left": 18,
+      "right": 372,
+      "top": 107,
+      "bottom": 137.71875,
+      "width": 354,
+      "height": 30.71875
+    },
+    {
+      "host": "page",
+      "selector": ".theme-header .child-chip",
+      "left": 18,
+      "right": 109,
+      "top": 143.71875,
+      "bottom": 187.71875,
+      "width": 91,
+      "height": 44
+    }
+  ],
+  "source": "native selector bounds and DevTools Element.getStyles; isolated fixture, production WXML/WXSS exact",
+  "screenshot": "tech--settings.png",
+  "screenshot_sha256": "284fabde611d35cefd8c4fcadad17293eae7ed28db338a2d54b7c8248a9d813e",
+  "fixture": "settings",
+  "category": "header-blend",
+  "screenshot_errors": [],
+  "validation_errors": [],
+  "touch_errors": [],
+  "horizontal_overflow": [],
+  "styles": {
+    ".theme-header": {
+      "background-color": "rgba(0, 0, 0, 0)",
+      "border-top-left-radius": "0px",
+      "border-top-width": "0px",
+      "box-shadow": "none",
+      "font-size": "16px",
+      "line-height": "25.6px",
+      "color": "rgb(25, 59, 73)"
+    },
+    ".theme-header .pg-title": {
+      "background-color": "rgba(0, 0, 0, 0)",
+      "border-top-left-radius": "0px",
+      "border-top-width": "0px",
+      "box-shadow": "none",
+      "font-size": "24px",
+      "line-height": "30.72px",
+      "color": "rgb(23, 60, 73)"
+    }
+  }
+}

@@ -1,15 +1,47 @@
 /* Page and component roots receive the same semantic roles, without business forks. */
 .pk-theme { color: var(--pk-ink); font-family: var(--pk-sans); }
 .theme-page { min-height: 100vh; background: var(--pk-page-background); }
-.theme-illustrated .theme-header { position: relative; isolation: isolate; min-height: 260rpx; box-sizing: border-box; padding: 40rpx 28rpx 30rpx; margin: 0 -28rpx 28rpx; overflow: hidden; background: var(--pk-nav-bg); display: block; }
-.theme-illustrated .theme-header > view, .theme-illustrated .theme-header > text, .theme-illustrated .theme-header > button { position: relative; z-index: 1; }
-.theme-hero-art { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; }
-.theme-illustrated .theme-header .pg-title, .theme-illustrated .theme-header .screen-heading, .theme-illustrated .theme-header .title { color: var(--pk-header-ink); max-width: 66%; }
-.theme-illustrated .theme-header .pg-sub, .theme-illustrated .theme-header .screen-kicker, .theme-illustrated .theme-header .eyebrow, .theme-illustrated .theme-header .pg-context, .theme-illustrated .theme-header .pg-kicker, .theme-illustrated .theme-header .rec-meta { color: var(--pk-header-muted); }
-.theme-illustrated .theme-header .rec-title, .theme-illustrated .theme-header .record-type-title { color: var(--pk-header-ink); }
-.theme-illustrated .theme-header .child-chip { margin-top: 20rpx; width: fit-content; }
-.theme-illustrated .theme-header .head-intro { width: 100%; }
-.theme-illustrated .settings-card-art, .theme-illustrated .calendar-intro-art, .theme-illustrated .report-intro-art { display: none; }
+
+/* Only the decorative layer blends. Text and controls never share its clipping or hit area. */
+.theme-header { position: relative; min-width: 0; }
+.theme-header-art { position: relative; margin: 0 calc(0rpx - var(--pk-gutter)); pointer-events: none; }
+.theme-header-art image { display: block; width: 100%; height: auto; }
+.theme-header-art::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, var(--pk-canvas), transparent 4%, transparent 96%, var(--pk-canvas)),
+    linear-gradient(180deg, var(--pk-canvas), transparent 12%, transparent 66%, var(--pk-canvas));
+}
+.theme-header--overlay { display: grid; grid-template-columns: minmax(0, 1fr); margin-bottom: 16rpx; }
+.theme-header--overlay > .theme-header-art,
+.theme-header--overlay > .theme-header-content { grid-area: 1 / 1; align-self: start; }
+.theme-header--overlay > .theme-header-content { position: relative; z-index: 1; padding: 40rpx 0 30rpx; }
+.theme-header--overlay > .pg-head { display: block; }
+.theme-header .pg-title, .theme-header .screen-heading { overflow-wrap: anywhere; }
+.theme-header--overlay .pg-title { margin-top: 0; }
+.theme-header .pg-kicker, .theme-header .screen-kicker { color: var(--pk-text-muted); }
+.theme-header--overlay .theme-header-art + .theme-header-content .pg-title,
+.theme-header--overlay .theme-header-art + .theme-header-content .record-type-title { color: var(--pk-header-ink); }
+.theme-header--overlay .theme-header-art + .theme-header-content .pg-context { color: var(--pk-header-muted); }
+.theme-header-spot { position: absolute; right: 0; bottom: 5px; width: 112px; height: 76px; opacity: .32; pointer-events: none; }
+.theme-heading-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+.theme-heading-title { display: flex; flex: 1; align-items: center; min-width: 0; min-height: var(--pk-touch-min); }
+.theme-heading-title .pg-title { margin-top: 0; letter-spacing: 0; overflow-wrap: anywhere; }
+.theme-heading-picker { flex: none; min-width: var(--pk-touch-min); }
+.theme-heading-row .child-chip {
+  width: fit-content; min-width: var(--pk-touch-min); max-width: 106px;
+  height: auto; min-height: var(--pk-touch-min); margin: 0; padding: 4px 8px 4px 5px; gap: 5px;
+}
+.theme-heading-row .child-chip .ava { width: 25px; height: 25px; line-height: 25px; }
+.theme-heading-row .chip-nm { display: block; min-width: 0; }
+.theme-heading-picker.is-disabled .child-chip { color: var(--pk-text-muted); }
+@media (max-width: 340px) {
+  .theme-heading-row .child-chip { max-width: 84px; gap: 4px; padding-inline: 4px; }
+  .theme-heading-row .child-chip .ava { width: 24px; height: 24px; line-height: 24px; }
+}
+.theme-illustrated .settings-card-art { display: none; }
 .theme-illustrated .add-entry { background: var(--pk-primary); color: var(--pk-on-primary); border-color: var(--pk-primary); }
 .theme-garden .pk-card { border-bottom-left-radius: 12rpx; }
 .theme-tech .pk-card { border-top-left-radius: 8rpx; border-bottom-right-radius: 8rpx; }

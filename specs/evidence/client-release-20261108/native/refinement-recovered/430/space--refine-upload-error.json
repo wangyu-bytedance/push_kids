@@ -1,0 +1,102 @@
+{
+  "route": "pages/records/index",
+  "theme": "space",
+  "base_library": "3.17.4",
+  "viewport": {
+    "width": 430,
+    "height": 932,
+    "screenWidth": 430,
+    "screenHeight": 932
+  },
+  "nodes": [
+    {
+      "host": "page",
+      "selector": ".theme-header",
+      "left": 0,
+      "right": 430,
+      "top": 94,
+      "bottom": 261.03125,
+      "width": 430,
+      "height": 167.03125
+    },
+    {
+      "host": "page",
+      "selector": ".theme-header-art",
+      "left": 0,
+      "right": 430,
+      "top": 94,
+      "bottom": 261.03125,
+      "width": 430,
+      "height": 167.03125
+    },
+    {
+      "host": "page",
+      "selector": ".theme-header-content",
+      "left": 20,
+      "right": 410,
+      "top": 94,
+      "bottom": 234,
+      "width": 390,
+      "height": 140
+    },
+    {
+      "host": "page",
+      "selector": ".theme-header .child-chip",
+      "left": 20,
+      "right": 104,
+      "top": 173,
+      "bottom": 217,
+      "width": 84,
+      "height": 44
+    },
+    {
+      "host": "page",
+      "selector": ".record-type-title",
+      "left": 20,
+      "right": 125,
+      "top": 116,
+      "bottom": 165,
+      "width": 105,
+      "height": 49
+    },
+    {
+      "host": "page",
+      "selector": ".record-page",
+      "left": 0,
+      "right": 430,
+      "top": 261.03125,
+      "bottom": 1019.8203125,
+      "width": 430,
+      "height": 758.7890625
+    },
+    {
+      "host": "page",
+      "selector": ".pk-notice.err",
+      "left": 20,
+      "right": 410,
+      "top": 274.03125,
+      "bottom": 344.03125,
+      "width": 390,
+      "height": 70
+    },
+    {
+      "host": "page",
+      "selector": ".pcell .rm",
+      "left": 114,
+      "right": 139,
+      "top": 496.0234375,
+      "bottom": 521.0234375,
+      "width": 25,
+      "height": 25
+    }
+  ],
+  "source": "native selector bounds and DevTools Element.getStyles; isolated fixture, production WXML/WXSS exact",
+  "screenshot": "space--refine-upload-error.png",
+  "screenshot_sha256": "49e0a67f15d5e9b0b46a856638bf683579ad25f158444d3dc2390f3bb62f009e",
+  "fixture": "refine-upload-error",
+  "category": "refinement",
+  "screenshot_errors": [],
+  "validation_errors": [],
+  "touch_errors": [],
+  "horizontal_overflow": []
+}

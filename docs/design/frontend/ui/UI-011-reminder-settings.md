@@ -1,6 +1,10 @@
 # UI-011 — 提醒设置与微信授权入口
 
-当前本地呈现revision `UI-STATE-20261106-THEMES-01`：[DESIGN-002 Spec08 / Architecture01](../../../../specs/active/DESIGN-002-GLOBAL-UI-CONSISTENCY.md)与DREV08已获用户“好的 按照以上方案落地”批准并实施，DREV06视觉方向保持。提醒页、自动补充提示与renewal组件消费六主题语义角色；微信授权系统窗口保持平台控制，原授权与提醒业务合同不变。 本增量尚未上传；原生合成呈现、共享业务回归及真机/独立评审缺项见[当前证据](../../../quality/evidence/themes-20261106/README.md)。下方原特性发布与验收记录保持其版本范围，不能代验六主题。
+当前页头修订 `UI-STATE-20261107-THEMES-03` 让提醒设置的标题、说明与插画过渡到主题底色。微信授权仍由系统界面承载。[两档六主题原生证据](../../../../specs/evidence/client-release-20261108/README.md)
+
+视觉增量 `UI-STATE-20261107-THEMES-02`：提醒卡片继承DREV09装饰边框角色；授权、开关和错误语义保留。[本轮EVD](../../../../specs/evidence/design003-20261107/README.md)记录原实现和自动检查。该修订随 0.1.19 开发上传，真机与完整原生状态矩阵待验。
+
+当前呈现revision `UI-STATE-20261106-THEMES-01`：[DESIGN-002 Spec08 / Architecture01](../../../../specs/completed/DESIGN-002-GLOBAL-UI-CONSISTENCY.md)与DREV08已获用户“好的 按照以上方案落地”批准并实施，DREV06视觉方向保持。提醒页、自动补充提示与renewal组件消费六主题语义角色；微信授权系统窗口保持平台控制，原授权与提醒业务合同不变。 六主题随 0.1.19 开发上传。真机与独立 Review 待验。[版本证据](../../../../specs/evidence/client-release-20261108/README.md)
 
 2026-10-26开发归档：已交付037后端/0.1.16客户端所覆盖的需求按用户批准规则标记开发DONE，验收缺项独立保留；后续BUG-035和旅行导入精简尚未交付，继续active。当前归档和待验入口见[Spec状态清单](../../../../specs/STATUS.md)，依据为[治理Spec](../../../../specs/completed/GOV-002-CLOUD-DELIVERY-DEVELOPMENT-COMPLETION.md)。本轮不改产品合同、测试结论、设计或发布阶段。
 

@@ -1,7 +1,7 @@
 # 知芽 · 轻盈的陪伴 / 视觉评审稿 02
 
 - Design Revision: `DREV-20261106-UI-CONSISTENCY-02`
-- Task Spec: [DESIGN-002 / SPEC-02](../../../../../specs/active/DESIGN-002-GLOBAL-UI-CONSISTENCY.md)
+- Task Spec: [DESIGN-002 / SPEC-02](../../../../../specs/completed/DESIGN-002-GLOBAL-UI-CONSISTENCY.md)
 - Status: **PENDING_REVIEW / NOT_APPROVED**
 - Date: 2026-11-06
 - Source: [index.html](index.html)，可编辑、自包含、无业务接口或外部资源

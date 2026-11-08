@@ -12,7 +12,7 @@
 
     python3 tools/release/miniprogram_version.py current   # 打印当前基准版本
     python3 tools/release/miniprogram_version.py next      # 打印下一个上传版本（patch+1）
-    python3 tools/release/miniprogram_version.py bump       # 上传成功后：把基准推进到 next 并写回
+    python3 tools/release/miniprogram_version.py bump       # 旧手工版本基准
 
 约定：patch 版本号不可复用；``next`` 恒为 ``current`` 的第三位 +1。
 """
@@ -61,8 +61,10 @@ def cmd_next() -> str:
 
 
 def cmd_bump() -> str:
-    """把基准版本推进到 next 并写回状态文件（上传成功后调用）。"""
+    """旧手工流程的版本推进；自动化已接管时，只能凭上传回执推进。"""
     data = json.loads(STATE_PATH.read_text(encoding="utf-8"))
+    if "source_sha256" in data:
+        raise ValueError("版本基准已由 frontend.py 的上传回执管理")
     new_version = _next(data["released"])
     data["released"] = new_version
     STATE_PATH.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

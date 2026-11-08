@@ -1,0 +1,198 @@
+[
+  {
+    "name": "frontend",
+    "command": [
+      "npm",
+      "test"
+    ],
+    "exit_code": 0,
+    "log": "frontend.log",
+    "output_tail": [
+      "  ...",
+      "1..369",
+      "# tests 369",
+      "# suites 0",
+      "# pass 369",
+      "# fail 0",
+      "# cancelled 0",
+      "# skipped 0",
+      "# todo 0",
+      "# duration_ms 1592.368"
+    ]
+  },
+  {
+    "name": "lint",
+    "command": [
+      "npm",
+      "run",
+      "lint:miniapp"
+    ],
+    "exit_code": 0,
+    "log": "lint.log",
+    "output_tail": [
+      "",
+      "> push-kids-workspace@0.1.0 lint:miniapp",
+      "> eslint apps/miniprogram tests/frontend --ext .js",
+      ""
+    ]
+  },
+  {
+    "name": "green-media",
+    "command": [
+      "node",
+      "--test",
+      "tests/frontend/theme-media.test.js"
+    ],
+    "exit_code": 0,
+    "log": "green-media.log",
+    "output_tail": [
+      "  ...",
+      "1..1",
+      "# tests 1",
+      "# suites 0",
+      "# pass 1",
+      "# fail 0",
+      "# cancelled 0",
+      "# skipped 0",
+      "# todo 0",
+      "# duration_ms 70.352292"
+    ]
+  },
+  {
+    "name": "miniapp",
+    "command": [
+      "uv",
+      "run",
+      "python",
+      "tools/validate_miniprogram.py"
+    ],
+    "exit_code": 0,
+    "log": "miniapp.log",
+    "output_tail": [
+      "MINIPROGRAM_VALID pages=17 source_bytes=1322435"
+    ]
+  },
+  {
+    "name": "theme-contracts",
+    "command": [
+      "node",
+      "tools/check_themes.js",
+      "--baseline=e221d8d61bc164dc27b2309e62f04d3bcf4360ba",
+      "--output=specs/evidence/design003-20261107/contracts.json"
+    ],
+    "exit_code": 0,
+    "log": "theme-contracts.log",
+    "output_tail": [
+      "{\"status\":\"PASS\",\"themes\":6,\"assetBytes\":141499,\"sourceBytes\":1322435,\"netGrowth\":78207}"
+    ]
+  },
+  {
+    "name": "architecture",
+    "command": [
+      "uv",
+      "run",
+      "python",
+      "tools/check_architecture.py"
+    ],
+    "exit_code": 0,
+    "log": "architecture.log",
+    "output_tail": [
+      "ARCHITECTURE_VALID policies=5 modules=156 (runtime/lazy DAG)"
+    ]
+  },
+  {
+    "name": "design-policy",
+    "command": [
+      "uv",
+      "run",
+      "python",
+      "tools/validate_design_evidence.py",
+      "--check-current-policy"
+    ],
+    "exit_code": 0,
+    "log": "design-policy.log",
+    "output_tail": [
+      "DESIGN_EVIDENCE_VALID"
+    ]
+  },
+  {
+    "name": "drev09",
+    "command": [
+      "uv",
+      "run",
+      "python",
+      "tools/validate_design_evidence.py",
+      "--manifest",
+      "docs/design/frontend/snapshots/UI-001/DREV-20261106-UI-CONSISTENCY-09/APPROVAL.md"
+    ],
+    "exit_code": 0,
+    "log": "drev09.log",
+    "output_tail": [
+      "DESIGN_EVIDENCE_VALID"
+    ]
+  },
+  {
+    "name": "native-js-syntax",
+    "command": [
+      "node",
+      "--check",
+      "tools/theme_native.js"
+    ],
+    "exit_code": 0,
+    "log": "native-js-syntax.log",
+    "output_tail": []
+  },
+  {
+    "name": "contracts-js-syntax",
+    "command": [
+      "node",
+      "--check",
+      "tools/check_themes.js"
+    ],
+    "exit_code": 0,
+    "log": "contracts-js-syntax.log",
+    "output_tail": []
+  },
+  {
+    "name": "tool-ruff",
+    "command": [
+      "uv",
+      "run",
+      "ruff",
+      "check",
+      "tools/prepare_theme_native.py"
+    ],
+    "exit_code": 0,
+    "log": "tool-ruff.log",
+    "output_tail": [
+      "All checks passed!"
+    ]
+  },
+  {
+    "name": "tool-format",
+    "command": [
+      "uv",
+      "run",
+      "ruff",
+      "format",
+      "--check",
+      "tools/prepare_theme_native.py"
+    ],
+    "exit_code": 0,
+    "log": "tool-format.log",
+    "output_tail": [
+      "1 file already formatted"
+    ]
+  },
+  {
+    "name": "diff",
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exit_code": 0,
+    "log": "diff.log",
+    "output_tail": []
+  }
+]

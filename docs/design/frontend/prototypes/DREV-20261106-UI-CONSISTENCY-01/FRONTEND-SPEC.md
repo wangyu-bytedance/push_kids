@@ -1,7 +1,7 @@
 # 全界面 UI 优化 · Design Revision 01
 
 - Design: `DREV-20261106-UI-CONSISTENCY-01`
-- Spec: [DESIGN-002-SPEC-01](../../../../../specs/active/DESIGN-002-GLOBAL-UI-CONSISTENCY.md)
+- Spec: [DESIGN-002-SPEC-01](../../../../../specs/completed/DESIGN-002-GLOBAL-UI-CONSISTENCY.md)
 - Status: **PENDING_REVIEW**，生产实施 NOT_STARTED
 - Updated: 2026-11-06
 - Source: [index.html](index.html)，自包含，无 CDN、字体或业务请求

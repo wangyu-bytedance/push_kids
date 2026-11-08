@@ -65,6 +65,8 @@ page {
   --pk-border: 1rpx solid rgba(34, 38, 31, .06);
   --pk-border-line: 1rpx solid var(--pk-line);
   --pk-border-soft: 1rpx solid var(--pk-line-soft);
+  --pk-feedback-border: 1rpx solid var(--pk-line);
+  --pk-feedback-background: var(--pk-surface-warm);
   --pk-border-primary: 1rpx solid var(--pk-primary-hairline);
   --pk-e0: 0 2rpx 4rpx rgba(34, 38, 31, .04);
   --pk-e1: 0 2rpx 4rpx rgba(34, 38, 31, .04);

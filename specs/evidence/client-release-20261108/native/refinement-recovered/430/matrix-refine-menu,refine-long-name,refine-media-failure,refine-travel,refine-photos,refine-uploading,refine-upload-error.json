@@ -1,0 +1,33 @@
+{
+  "width": 430,
+  "themes": [
+    "original",
+    "garden",
+    "space",
+    "midnight",
+    "ocean",
+    "tech"
+  ],
+  "groups": 0,
+  "elapsed_ms": 866,
+  "results": [],
+  "failures": [
+    {
+      "theme": "original",
+      "name": "refine-menu",
+      "error": "{\"message\":\"Uncaught Error: An object could not be cloned.\"}"
+    },
+    {
+      "theme": "garden",
+      "name": "refine-menu",
+      "error": "{\"message\":\"Uncaught Error: An object could not be cloned.\"}"
+    },
+    {
+      "theme": "space",
+      "name": "refine-menu",
+      "error": "{\"message\":\"Uncaught Error: An object could not be cloned.\"}"
+    }
+  ],
+  "navigation_diagnostics": [],
+  "source_manifest_sha256": "236abc75fc0220c6ac1cc92c4417a046c5fbc2146f1cf38d0e2ff93de6c67217"
+}

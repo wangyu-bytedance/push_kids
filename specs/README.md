@@ -1,8 +1,10 @@
 # Specs Directory
 
-2026-11-06[当前全栈交付](../docs/deploy/releases/20261106-fullstack-040-client-0.1.18.md)：040 normal/100%、Schema0027，客户端0.1.18官方上传1,200,417字节并bump；尚未设体验版、提审或正式发布。生产迁移0027、040真实微信读取和原生工作日主路径通过；获批v2固定40完整单轮40/40，原37/40及其他历史内容FAIL保持，家长内容PENDING。
+2026-11-06 [前次全栈交付](../docs/deploy/releases/20261106-fullstack-040-client-0.1.18.md)：040 normal/100%、Schema0027，客户端0.1.18官方上传1,200,417字节并bump；尚未设体验版、提审或正式发布。生产迁移0027、040真实微信读取和原生工作日主路径通过；获批v2固定40完整单轮40/40，原37/40及其他历史内容FAIL保持，家长内容PENDING。
 
-按GOV-002，匹配交付的11份Spec已DONE迁completed。当前`completed/120 + active/3 + rejected/19 = 142`；active是CLOUD-002、DOC-003两份待具体批准，以及锁10/13失败候选的旧缓存OPS（BLOCKED）。新040不能伪称旧候选部署。设备/可访问性、线上成功率和体验/提审/正式发布独立记录；备份保留数量待人工核对。
+2026-11-08 [前端 0.1.19](../docs/deploy/releases/20261108-client-0.1.19-upload.md)开发上传覆盖 [DESIGN-002 Spec08](completed/DESIGN-002-GLOBAL-UI-CONSISTENCY.md)、[DESIGN-003 Spec01](completed/DESIGN-003-THEME-VISUAL-REFINEMENT.md) 和 [DESIGN-004 Spec01](completed/DESIGN-004-HEADER-BLEND.md)。三份已按 GOV-002 归档 DONE，完整验收为 PARTIAL。两档共 216 组页头原生验证及 370 项前端回归通过，真机与用户 Review 待验。[验证证据](evidence/client-release-20261108/README.md)
+
+[孩子切换标题右侧 DESIGN-005 Spec01](active/DESIGN-005-CHILD-SWITCH-HEADER.md)及 DREV-20261108-CHILD-SWITCH-01 已获批并本地实施，`VERIFYING`，待匹配开发上传。[本地证据](evidence/design005-20261108/README.md)。[前后端发布脚本 CLOUD-002 Spec02](active/CLOUD-002-DETERMINISTIC-RELEASE-AUTOMATION.md)仍待具体修订批准。
 
 [完整当前状态和归档清单](STATUS.md)。以下按原时点保留历史，不作为当前开发状态；历史链接只做归档路径修正，不追改结果或版本。
 

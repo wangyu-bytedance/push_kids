@@ -1,372 +1,138 @@
-# CLOUD-002 — 前后端确定性发布自动化
+# CLOUD-002 — 前后端确定性发布脚本
 
-- Status: `READY_FOR_REVIEW`
-- Risk: `R3`（生产 Schema、云流量、微信版本、未成年人数据恢复能力）
-- Spec owner: 产品负责人（用户）
-- Implementer: Codex
-- Reviewer: independent read-only release/security reviewer
-- Verifier: 产品负责人 + Codex
-- Created: 2026-09-13
-- Last updated: 2026-09-13
-- Target release: next repository tooling release；不自动触发当前生产发布
-- Spec revision: `CLOUD-SPEC-RELEASE-AUTOMATION-20260913-01`
-- Architecture revision: `ARCH-RELEASE-AUTOMATION-20260913-01`
-- User confirmation: `PENDING`；用户已提出脚本化与减少门禁，本 revision 尚待明确批准
-- Additional R3 approval: 实现后必须完成独立只读安全/架构 Review
-- Affected Feature IDs: `FEAT-001`（仅发布与验证证据，不改变产品行为）
-- Feature current-state documents: `docs/domain/features/FEAT-001-push-kids-mvp.md`
-- Feature baseline revision: `FEAT-STATE-20260913-UNIFIED-REVIEW-BACKEND-02-LOCAL`
-- Feature merge owner: Codex（实现和验证完成后）
+- Status: `APPROVED`
+- Risk: R3，脚本可在显式执行后创建微信开发版或生产后端灰度版本。
+- Spec revision: `CLOUD-002-SPEC-02`，接替未批准的 `CLOUD-SPEC-RELEASE-AUTOMATION-20260913-01`。
+- Architecture revision: `ARCH-RELEASE-AUTOMATION-20261108-02`
+- Date: 2026-11-08
+- User confirmation: APPROVED。产品负责人于 2026-11-08 回复“批准，然后上传前端”，批准 CLOUD-002-SPEC-02 / ARCH-RELEASE-AUTOMATION-20261108-02，授权上传前端开发版。
+- Owner: 产品负责人。实现及验证: Codex。独立只读安全/发布 Review: 待安排。
+- Affected Feature: FEAT-001 的发布和验证记录。[当前 Feature](../../docs/domain/features/FEAT-001-push-kids-mvp.md)基线为 `FEAT-STATE-20261107-THEMES-03` 与 0.1.19 开发交付。验证后仅更新发布工具、范围和证据事实。
 
 ## Frontend Design Impact and Repository-native Approval
 
-- Frontend impact: no；不修改小程序可见界面或交互
-- Frontend impact reason: 只新增仓库内发布 CLI、自动检查和发布记录
-- Frontend engineering impact: yes；改变前端检查、预览、上传和版本状态的工具链入口
-- Frontend engineering impact reason: 统一版本差异检测、自动校验、上传与原子更新版本状态
-- Affected UI IDs: `UI-001`（仅发布证据）
-- UI current-state documents: `docs/design/frontend/ui/UI-001-parent-miniapp.md`
-- Frontend baseline revision: `FDB-20260906-02`
-- Frontend engineering constraint revision: `FEC-20260911-READ-PERF-01`
-- Affected frontend quality dimensions: performance/resource、security/privacy、observability
-- Frontend quality budgets/requirements: 初始包 `<1.5 MiB`；真实 AppID/生产 env/service/urlCheck；包内无秘密、OpenID、数据库地址、儿童材料或测试数据
-- Frontend quality verification plan: release CLI unit/integration tests；`npm test`、ESLint、Mini Program validator；伪 DevTools CLI 验证失败与成功分支
-- Approved frontend engineering deviations: none；生产上传不存在 `--no-verify`
-- Current Design Revision(s): N/A；无可见变化
-- Editable design source path(s): N/A；无可见变化
-- Design source SHA-256: N/A；无可见变化
-- Proposed Design Revision: N/A
-- Required viewport/state exports: N/A；不修改渲染代码
-- Prototype status: N/A
-- Approved Task Spec revision: PENDING
-- Approved Design Revision: N/A
-- Design approval evidence: N/A；不触发设计门禁
-- Snapshot manifest path: N/A
-- Permitted implementation deviations: none
-- UI current-state merge owner/evidence: Codex / pending
-- Frontend visual/a11y/resolution verification: N/A；不修改 UI
-- Frontend engineering verification evidence: pending automated release-tool tests
-- External design dependency: none
+- Frontend impact: NO，发布脚本不改小程序可见界面、交互或业务行为。
+- Frontend engineering impact: YES，改变冻结、检查、预览、上传和版本记录工具链。UI-001 仅涉及发布证据。
+- Baseline: `FDB-20261107-05` / `FEC-20261107-AGENT-DEVICE-MATRIX-03`。真实 AppID、云环境、服务、urlCheck、资源预算和敏感内容门禁沿用。
+- Design Revision、可编辑原型、设计导出和 UI 设备测试：N/A，本 Spec 无 UI diff。实际候选需要的设计、原生与真机证据按发布阶段分别校验和记录。
+- Approved Task Spec revision: CLOUD-002-SPEC-02。Engineering deviation: none。
 
-## 0. Executive summary
+## 1. 结果与边界
 
-### Problem
+日常发布由两条本地命令运行，重复检查、打包、等待和报告全部使用确定性代码。运行时无需 Agent 或模型。
 
-当前发布依赖 Agent/LLM 逐条读取手册、拼接命令、等待状态并手写报告。仓库已有
-`tools/prepare_cloud_release.py` 与 `tools/release/miniprogram_version.py`，但缺少统一状态机，导致：
+```bash
+uv run python tools/release/frontend.py --execute --description "用户可见变化"
+uv run python tools/release/backend.py --execute
+```
 
-- 相同步骤每次重新编排，人工往返多；
-- CLI 参数容易漂移，曾发生 `--noConfirm` 把预期灰度变成全量；
-- 无前端差异时仍可能重复上传；
-- 数据库、后端、小程序和平台状态容易被混称为“已发布”；
-- 失败后只能依赖聊天历史判断从哪里继续。
+不带 `--execute` 时预检或输出计划，无生产写入。每次运行输出精简终态和证据目录，完整日志留在本机。授权编写并测试脚本与实际发布是两步。本轮实现验收采用假 CLI 和本地预检，生产发布另由调用方明确执行。
 
-### Intended outcome
+以[当前前端手册](../../docs/deploy/FRONTEND-RELEASE.md)和[当前后端手册](../../docs/deploy/BACKEND-RELEASE.md)为准。相比旧提案，本修订聚焦两个独立入口和普通同 Schema 的后端发布。自动生产迁移、自动备份/删除、组合发布和自动切流暂缓，已有数据库、平台账号和管理员门禁照常执行。
 
-仓库提供一个确定性 Python CLI；普通发布由脚本完成检查、冻结、迁移判定、后端灰度、前端差异检测、
-上传、状态轮询和发布报告，不调用 LLM。脚本可安全重入并从本地非敏感状态文件续跑。
-
-### 对用户提出的三项调整的结论
-
-| 请求 | 结论 | 最终规则 |
-|---|---|---|
-| 数据库不需要备份 | 部分接受 | **无 Schema 变化时**自动跳过数据库连接、迁移和备份；**有 Schema 变化时**必须存在可恢复备份，不提供生产 `--skip-backup` |
-| 数据库不需要关闭公网 | 不接受长期公网 | 推荐路径从内网 migration runner 执行，数据库公网始终关闭，因此日常不再出现“打开/关闭公网”步骤；若只能临时公网访问，脚本必须等待并验证关闭后才能继续 |
-| 前端不需要验证 | 部分接受 | 取消 LLM/人工逐项检查，保留秒级自动门禁；无前端差异直接跳过上传。体验成员、提审、隐私声明和正式发布仍是微信平台人工门禁 |
-
-这些限制保护可恢复性、数据库网络边界和真实微信版本，不允许通过 `--force`、`--no-verify` 或环境变量绕过。
-
-## 1. Current behavior
+## 2. 架构和责任
 
 ```mermaid
 flowchart LR
-  USER[发布负责人] --> LLM[Agent / LLM 编排]
-  LLM --> DOCS[读取发布手册]
-  LLM --> TEST[逐条执行检查]
-  LLM --> DB[人工备份 + 公网迁移]
-  LLM --> PACK[prepare_cloud_release.py]
-  LLM --> WX[wxcloud 灰度发布]
-  LLM --> DEV[DevTools 预览/上传]
-  LLM --> REPORT[手写发布记录]
+  OP[发布操作者] --> F[frontend.py]
+  OP --> B[backend.py]
+  F --> V[现有版本工具]
+  F --> W[微信 DevTools CLI]
+  B --> P[现有后端白名单工具]
+  B --> S[现有 Schema 校验]
+  B --> C[wxcloud / 当前只读状态]
+  F --> E[运行状态与脱敏报告]
+  B --> E
 ```
 
-| Responsibility | Current location | Problem |
-|---|---|---|
-| 后端白名单包 | `tools/prepare_cloud_release.py` | 只打包，不编排测试、迁移、状态和报告 |
-| 前端版本号 | `tools/release/miniprogram_version.py` | 只存版本号，不存 source SHA/package hash，无法判断重复包 |
-| 发布规则 | `docs/deploy/*.md` | 面向人阅读，不能可靠重入执行 |
-| 云端状态 | `wxcloud` / DevTools CLI | 结果未进入统一状态机 |
-| 发布证据 | `docs/deploy/releases/*.md` | 人工汇总，易遗漏 PASS/FAIL/NOT_RUN |
+前端入口负责微信项目、包体和上传状态。后端入口负责 Schema 证据、白名单包和灰度状态。仅在两端具有相同状态语义时共享一小份本地锁、原子记录和脱敏执行逻辑。现有业务模块和专用脚本无需依赖新入口。脚本支持的云平台、发布目标和风险门禁为 closed，新增平台或生产迁移需要新 Spec。
 
-## 2. Target behavior and architecture
-
-### Architecture
+### 前端序列
 
 ```mermaid
-flowchart LR
-  USER[发布负责人] --> CLI[tools/release/release.py]
-  CLI --> CFG[deploy/release-config.json\n非秘密配置]
-  CLI --> CHECKS[checks.py\n确定性检查]
-  CLI --> BACKEND[backend.py\nSchema/package/gray/status]
-  CLI --> FRONTEND[frontend.py\ndiff/preview/upload]
-  CLI --> RUNNER[command_runner.py\n无 shell + 脱敏输出]
-  BACKEND --> ALEMBIC[Alembic]
-  BACKEND --> PACK[prepare_cloud_release.py]
-  BACKEND --> WXCLOUD[wxcloud CLI]
-  FRONTEND --> DEVTOOLS[WeChat DevTools CLI]
-  CLI --> STATE[dist/release-runs/<id>/state.json]
-  CLI --> REPORT[docs/deploy/releases/<id>.md]
+sequenceDiagram
+    participant U as 操作者
+    participant F as 前端脚本
+    participant W as 微信开发者工具
+    U->>F: 预检或显式执行
+    F->>F: 冻结、比对已上传摘要、运行适用门禁
+    F->>W: 登录状态、官方预览与包体
+    F->>F: 校验候选摘要与版本基准
+    F->>W: 上传开发版
+    W-->>F: 上传结果
+    F->>F: 仅成功后原子记版与报告
 ```
 
-Dependency direction：`release.py → backend/frontend/checks → command_runner`；步骤模块可使用现有专用工具，
-专用工具不得反向导入 orchestrator。生产应用代码不得导入 `tools/release`。
+1. 从明确的工作区/提交范围冻结生产文件到新目录，保存文件白名单、Git HEAD、差异与哈希。执行真实 AppID、云环境、生产配置和敏感内容校验。上传前复核冻结包与通过门禁的摘要一致。
+2. 同一已上传源码摘要直接跳过，版本不推进。基准取最近一次可核实的开发上传，本地 `0.1.19` 的摘要可从[现有上传证据](../evidence/client-release-20261108/README.md)引入。证据缺失或本地版本与回执冲突时停止。
+3. 改动包执行适用的前端测试、lint、静态与设计/架构检查，核对原生或其他人工证据。官方预览成功且包体合规、生产兼容和只读健康门禁满足后，执行开发版上传。
+4. 官方成功回执先落盘，再以本地事务推进版本号及源码摘要。上传结果不明确时记录待核对并保护已预留版本。后续运行读取回执或管理员核实结果，避免重复上传。
+5. 按已到达阶段生成报告，体验、审核、正式发布和备份保留的人工步骤沿用仓库手册。
 
-### Public CLI
+### 后端序列
 
-```text
-python3 tools/release/release.py plan --target all
-python3 tools/release/release.py run --target backend --execute
-python3 tools/release/release.py run --target frontend --execute --description "<真实变化>"
-python3 tools/release/release.py run --target all --execute --description "<真实变化>"
-python3 tools/release/release.py status --run-id <id>
-python3 tools/release/release.py resume --run-id <id> --execute
+```mermaid
+sequenceDiagram
+    participant U as 操作者
+    participant B as 后端脚本
+    participant R as 现有 Schema 取证
+    participant W as 微信云托管
+    U->>B: 预检或显式执行
+    B->>R: 校验目标生产 Schema
+    alt Schema 一致且证据有效
+        B->>B: 冻结、打包、跑必需检查
+        B->>W: dry run
+        B->>W: GRAY，操作者核对确认表
+        W-->>B: 唯一版本与可查询状态
+        B->>W: 轮询状态和适用的只读 smoke
+    else Schema 不一致或证据缺失
+        B-->>U: 停在数据库门禁
+    end
 ```
 
-- `plan` 永远只读，列出将运行、跳过和阻塞的步骤。
-- `run` 默认 dry-run；生产写操作必须显式 `--execute`。
-- `resume` 只重试未完成/可重试步骤，已成功且输入摘要未变的步骤不重跑。
-- 不提供 `--no-verify`、`--skip-backup`、`--keep-db-public`、`--noConfirm`。
-- secret 只从进程环境或批准的本机环境文件注入，绝不进入参数、state、report 或日志。
+1. 从受控只读来源核对真实生产 Schema、唯一代码 head、预期应用 revision 和手册要求的现状证据。只认同一环境、可复核且当前有效的结果。无法证明相等时停止，输出手册的迁移/备份操作。当前无迁移时略过新建迁移前备份。
+2. 复用现有后端测试、Schema 校验、容器和白名单打包工具。检查 manifest/密钥/启动门禁后运行 `wxcloud deploy --dryRun`。
+3. 通过带唯一版本备注、固定 `GRAY`、显式 Dockerfile/目标目录/端口的 `run:deploy` 创建版本。保留原有交互确认表，禁止使用 `--noConfirm`。只读轮询以目标版本和服务状态为准，日志 Topic 订阅错误单独记录。
+4. 记录灰度版本、适用 smoke、实际流量和回滚目标。当前备份保留数量无法安全读取时给出管理员步骤。全量切流由管理员按手册处理。
 
-### Release state machine
+### 状态与重入
 
 ```mermaid
 stateDiagram-v2
-  [*] --> Planned
-  Planned --> Checked: deterministic gates pass
-  Checked --> DbSkipped: production revision == code head
-  Checked --> BackupVerified: schema change + backup evidence
-  BackupVerified --> Migrated: internal migration succeeds
-  DbSkipped --> BackendFrozen
-  Migrated --> BackendFrozen
-  BackendFrozen --> BackendGray: upload/build/status normal
-  BackendGray --> FrontendSkipped: no frontend diff
-  BackendGray --> FrontendUploaded: diff + checks + upload success
-  FrontendSkipped --> AwaitingPlatformAction
-  FrontendUploaded --> AwaitingPlatformAction
-  AwaitingPlatformAction --> Completed: recorded requested stage
-  Planned --> Failed: blocking check
-  Checked --> Failed: migration/backup failure
-  BackendFrozen --> Failed: build/deploy failure
-  FrontendUploaded --> Failed: state update failure
+    [*] --> Planned
+    Planned --> Verified: checks and candidate evidence match
+    Planned --> Blocked: evidence missing or hard gate fails
+    Verified --> Mutating: explicit execute
+    Mutating --> UploadedDevelopment: official upload receipt
+    Mutating --> BackendGray: authoritative gray version normal
+    Mutating --> NeedsReconciliation: result uncertain
+    Verified --> SkippedUnchanged: identical acknowledged candidate
+    UploadedDevelopment --> PendingOperator
+    BackendGray --> PendingOperator
 ```
 
-`Completed` 表示脚本请求的阶段已完成，不把开发版本上传等同于体验版、审核中或正式版。
+已确认的外部成功只执行一次。摘要变更要求新运行。原子记录和同目标互斥保护版本号和唯一备注。CLI 超时或被中断时保留可核对状态。凭证只经既有已批准环境进入专用工具，日志、命令参数和报告只保存脱敏信息。禁止自动重试未知写入、自动回退或破坏性操作。
 
-### All-in-one sequence — no Schema or frontend change
+## 3. 取舍与预计文件
 
-```mermaid
-sequenceDiagram
-  participant U as Operator
-  participant R as Release CLI
-  participant DB as Production DB
-  participant WX as wxcloud
-  participant FS as Release state/report
-  U->>R: run --target all --execute
-  R->>R: freeze + deterministic checks
-  R->>DB: current (read-only)
-  DB-->>R: equals code head
-  R->>R: skip backup and migration
-  R->>WX: dry-run + interactive GRAY deploy
-  WX-->>R: immutable version normal
-  R->>R: frontend source hash equals uploaded hash
-  R->>R: skip duplicate upload
-  R->>FS: state + release report
-  R-->>U: exact achieved stage + remaining platform actions
-```
+| 方案 | 决策 |
+|---|---|
+| 两个独立入口复用现有工具 | 采用。前后端可分开预检和发布，单条命令生成证据 |
+| 继续由对话执行手册 | 仅保留作人工恢复手段 |
+| 自动迁移、备份、组合发布 | 当前缺少可验证的自动化生产迁移与恢复接口，留待独立修订 |
+| Bash 拼接生产命令 | 状态、超时、脱敏和未知结果核对由 Python 结构化处理 |
 
-### Schema-change sequence
+预计新增 `tools/release/frontend.py`、`tools/release/backend.py`、必需的共用运行记录/锁逻辑、假 CLI 回归测试。复用并按需更新 `tools/release/miniprogram_version.py`、发布版本记录和 `docs/deploy/`。业务、API、数据与 Schema 范围 N/A。合并后保留现有手册作为人工恢复入口。
 
-```mermaid
-sequenceDiagram
-  participant U as Operator
-  participant R as Release CLI
-  participant B as Backup provider/operator evidence
-  participant M as Internal migration runner
-  participant DB as Production DB
-  participant WX as wxcloud
-  U->>R: run --target all --execute
-  R->>DB: current (through approved runner)
-  R->>R: detect head mismatch
-  R->>B: create/query or require backup reference
-  B-->>R: successful recoverable backup
-  R->>M: alembic current/heads/upgrade/check
-  M->>DB: internal network only
-  DB-->>M: head + no drift
-  R->>WX: deploy compatible backend as GRAY
-  WX-->>R: normal
-  R->>R: frontend automatic check/diff/upload decision
-  R-->>U: platform-only gates, if requested
-```
+## 4. 验收和顺序
 
-## 3. Deterministic policies
+| 点位 | 验收 |
+|---|---|
+| TP-REL-01 | 两条入口默认零生产写入。假 CLI 记录参数，覆盖前端、后端和缺少授权 |
+| TP-REL-02 | 冻结包来源明确，错误目标、缺证据、含秘密、包过大、改动竞态或任一必需检查失败时停止 |
+| TP-REL-03 | 0.1.19 同摘要跳过。新包官方预览后成功上传且只推进一次版本。中断、回执未知或并行执行不能重复上传 |
+| TP-REL-04 | 后端仅在证据一致时进入 dry run，Schema 不一致或不可核实即停。灰度 argv 和确认表强约束，目标版本轮询不依赖 Topic，验证无切流 |
+| TP-REL-05 | 假 CLI 注入凭证哨兵，报告和日志无泄露。状态原子恢复、超时、部分成功以及旧版回退目标可核对 |
+| TP-REL-06 | 适用全量测试、lint/format、架构和发布手册交叉核对。真实生产写入为 NOT_RUN，直到另行发布 |
 
-### Database
-
-1. Read code head and application expected revision; mismatch is a hard failure.
-2. Read production current revision through an approved migration runner.
-3. If equal: emit `database=SKIPPED_NO_SCHEMA_CHANGE`; do not connect with DDL credentials and do not create backup.
-4. If different: require successful backup evidence before `upgrade head`.
-5. Default network mode is `internal`; public TencentDB endpoints are rejected unless a separately approved temporary-window
-   mode is configured. That mode must verify the endpoint becomes unreachable before backend deployment continues.
-6. Schema migration remains additive/expand-first；application account remains CRUD-only.
-
-Phase 1 may accept an operator-provided non-secret backup reference because wxcloud CLI 2.3.3 has no MySQL backup API。
-Automatic provider snapshot creation is an open extension point only after an authenticated, testable provider API is selected.
-
-### Backend
-
-- Freeze Git SHA, dirty-file list, Alembic head and package manifest before deployment.
-- Run checks from a versioned profile (`fast` or `full`); production defaults to `full`.
-- Always create a whitelist package and secret-scan it.
-- Always dry-run before `run:deploy`.
-- Always pass `--releaseType GRAY` and preserve interactive confirmation；never pass `--noConfirm`.
-- Poll `version:list` and `service:list`; Topic subscription errors are non-authoritative.
-- Stop after immutable gray version is `normal`; full traffic stays an explicit platform decision.
-
-### Frontend
-
-- State file records latest uploaded `version`, `source_sha`, deterministic package hash, upload timestamp and description.
-- If source/package hash is unchanged, output `frontend=SKIPPED_NO_CHANGE` and do not bump/upload.
-- A changed package must pass automatic config, secret, syntax/test, lint, validator and size checks.
-- DevTools login/preview/upload run without LLM；upload success atomically advances version state.
-- Production upload has no `--no-verify` path. Slow device/two-account validation moves to the experience/review stage and
-  remains explicit `NOT_RUN` until actually performed.
-- Selecting experience members, declaring privacy/category, submitting review and final publishing remain platform-owner actions.
-
-### Fast versus full profile
-
-| Check | `fast` | `full` production default |
-|---|---:|---:|
-| source/config/secret scan | required | required |
-| targeted unit/contract tests | required | required |
-| full backend/frontend suites | optional, recorded | required |
-| migration compatibility | when Schema changes | when Schema changes |
-| package/dry-run/status | required | required |
-| device/two-account smoke | NOT_RUN allowed for dev upload | required before formal public release |
-
-## 4. Security, failure and idempotency
-
-- Subprocess uses argument arrays with `shell=False`; sanitized environment is allowlisted.
-- Output redactor covers configured secret values and URL userinfo; reports contain only names/status/digests.
-- State writes use temporary file + atomic replace; state contains no child/family content.
-- Every external mutation has a precondition and postcondition. Unknown results become `NEEDS_RECONCILIATION`，not blind retry.
-- Version creation/upload detects already-existing version before retrying.
-- Git or package hash change invalidates downstream successful steps and requires a new run id.
-- SIGINT leaves resumable state and never performs automatic rollback or destructive downgrade.
-- Production database backup, full traffic, experience membership, privacy declarations, review submission and formal publish
-  cannot be silently converted into boolean flags that bypass accountable platform decisions.
-
-## 5. Trade-offs and alternatives
-
-| Option | Benefit | Cost/risk | Decision |
-|---|---|---|---|
-| 继续由 LLM 执行手册 | 灵活 | 慢、不可重入、易受聊天上下文影响 | reject |
-| 一个大型 Bash 脚本 | 编写快 | 引号/secret/JSON/状态恢复脆弱，难单测 | reject |
-| Python 确定性状态机 | 可测试、跨步骤校验、原子状态、结构化报告 | 初始代码较多 | **selected** |
-| Schema 变化也跳过备份 | 少一步 | migration/误操作无可靠恢复点 | reject |
-| 数据库永久公网 | 本机迁移方便 | 长期扩大攻击面，不符合当前云边界 | reject |
-| 前端完全不验证 | 最快 | 可上传错误 AppID/env、秘密或不可编译包 | reject |
-| 无变化自动跳过 + 快速自动门禁 | 快且诚实 | 仍需数秒到数分钟 | **selected** |
-
-## 6. Extensibility policy
-
-| Variation axis | Status | Mechanism/contract | Requirements | Revisit condition |
-|---|---|---|---|---|
-| release target backend/frontend/all | open, bounded | enum subcommands | same state/report/security contract | new deployable unit |
-| check profile | open, bounded | named immutable profile | cannot omit hard security/schema gates | CI runtime budget changes |
-| backup provider | open | provider protocol returning non-secret evidence | authentication isolation, idempotency, status polling, contract tests | provider API selected |
-| cloud platform | closed | wxcloud/DevTools adapters only | new Spec for another platform | platform migration |
-| production bypass flags | closed | no mechanism | N/A | never without R3 Spec revision |
-| LLM release planner | deferred | none | must not be required for execution | only for advisory analysis |
-
-## 7. Expected file changes
-
-| File/path | Action | Responsibility | Verification |
-|---|---|---|---|
-| `tools/release/release.py` | add | CLI, state transitions, plan/run/resume/status | CLI integration tests |
-| `tools/release/command_runner.py` | add | shell-free subprocess, timeout, redaction | secret/timeout/error tests |
-| `tools/release/checks.py` | add | Git/config/schema/package predicates | unit tests |
-| `tools/release/backend.py` | add | migration decision, package, wxcloud gray/status | fake-command integration tests |
-| `tools/release/frontend.py` | add | diff/hash/version/preview/upload | fake DevTools tests |
-| `tools/release/miniprogram_version.py` | modify | atomically persist version + source/package identity | version tests |
-| `tools/release/miniprogram_version.json` | modify schema | latest uploaded identity; no secret | fixture tests |
-| `deploy/release-config.json` | add | fixed non-secret AppID/env/service/paths/check profiles | schema/config test |
-| `package.json` | modify | `release:plan` / `release:all` convenience commands | command smoke |
-| `tests/unit/test_release_*.py` | add | policies, redaction, hashes, state machine | pytest |
-| `tests/integration/test_release_cli.py` | add | fail/retry/resume with fake external CLIs | pytest |
-| `docs/deploy/*.md` | modify | script-first runbook and remaining manual platform actions | doc assertions/diff check |
-| `docs/operations/WECHAT-CLOUD-HOSTING.md` | modify | internal migration runner/default-closed DB boundary | architecture review |
-| `docs/domain/features/FEAT-001-push-kids-mvp.md` | modify after verification | release automation evidence reference only | final current-state audit |
-
-No application runtime module, API, database table or visible Mini Program file should change.
-
-## 8. Required test points
-
-| ID | Acceptance | Required evidence |
-|---|---|---|
-| `TP-REL-001` | plan is read-only | fake CLIs/filesystem prove zero external writes |
-| `TP-REL-002` | no-Schema path skips backup/migration | equal current/head fixture |
-| `TP-REL-003` | Schema mismatch cannot skip backup | missing/failed backup evidence hard-fails |
-| `TP-REL-004` | default path never requires DB public access | internal-mode contract and public-endpoint rejection |
-| `TP-REL-005` | temporary public mode cannot continue while reachable | fake network state blocks backend deploy |
-| `TP-REL-006` | `--noConfirm` is impossible | argv contract assertion |
-| `TP-REL-007` | topic error does not decide status | version/service status fixtures |
-| `TP-REL-008` | unchanged frontend skips upload/version bump | source/package hash fixture |
-| `TP-REL-009` | changed frontend runs hard automatic gates | fail each config/secret/test/lint/size branch |
-| `TP-REL-010` | upload state is atomic | interrupted upload and state-write recovery |
-| `TP-REL-011` | secrets never enter argv/output/state/report | canary secrets across all artifacts |
-| `TP-REL-012` | resume is idempotent | kill after each mutation boundary, then resume |
-| `TP-REL-013` | stage reporting is honest | gray/upload/experience/review/formal are distinct enums |
-| `TP-REL-014` | repository remains valid | full backend/frontend/architecture commands from `AGENTS.md` |
-
-Implementation verification commands:
-
-```bash
-uv run pytest tests/unit/test_release_*.py tests/integration/test_release_cli.py -q
-uv run pytest tests/unit tests/integration tests/contract -q
-uv run ruff check .
-uv run ruff format --check .
-uv run mypy apps/api/src tools/release
-npm test
-npm run lint:miniapp
-npm run check:miniapp
-uv run python tools/check_architecture.py
-uv run python tools/validate_miniprogram.py
-git diff --check
-```
-
-## 9. Rollout and rollback
-
-1. Implement `plan/status` and fake-CLI tests first；no production mutation.
-2. Add backend dry-run/package/status orchestration，compare output with current manual runbook.
-3. Add no-Schema skip and schema-change backup enforcement；do not deploy a migration runner until its environment exists.
-4. Add frontend diff/hash/preview/upload orchestration.
-5. Run one shadow release：script plans and validates while the old runbook remains authority.
-6. After evidence matches, make script the documented default; retain manual runbook as disaster fallback.
-
-Rollback is repository-level：revert script/docs and use the existing manual runbook。Already-created cloud versions, uploaded
-Mini Program versions and additive Schema are never deleted or downgraded automatically.
-
-## 10. Approval decision
-
-Recommended approval is this exact revision with the following boundary:
-
-- approve deterministic script execution and removal of LLM from routine release;
-- approve automatic skip of database work only when production revision already equals code head;
-- approve default-closed/internal database migration, not permanent public MySQL;
-- approve automatic fast frontend validation and unchanged-package skip, not zero validation;
-- retain platform-owner gates for full traffic, experience members, privacy/category, review submission and formal publish.
-
-Implementation must not begin until the user explicitly approves
-`CLOUD-SPEC-RELEASE-AUTOMATION-20260913-01`。
+先批准此 Spec/Architecture，再用假 CLI 实现安全路径和回归，最后运行本地影子预检并更新文档。回退为停用脚本并按手册使用已有不可变产物，生产状态由相应管理员核实。

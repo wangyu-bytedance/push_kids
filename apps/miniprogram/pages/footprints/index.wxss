@@ -2,13 +2,11 @@
 .footprints-page.fp-embedded { padding-bottom: calc(var(--pk-tabbar-h) + 32px + env(safe-area-inset-bottom)); }
 .fp-text-button, .fp-more, .fp-close, .fp-select, .fp-world-row, .fp-candidate { min-width: 0; max-width: none; margin: 0; font-size: 14px; font-weight: 500; box-sizing: border-box; line-height: 1.45; white-space: normal; }
 .fp-button::after, .fp-text-button::after, .fp-more::after, .fp-tab::after, .fp-close::after, .fp-select::after, .fp-drafts::after, .fp-world-row::after, .fp-candidate::after { border: none; }
-.fp-toolbar, .fp-summary, .fp-stats, .fp-scope, .fp-place-title, .fp-sheet-head, .fp-pager, .fp-switch, .fp-draft-top, .fp-player-controls, .fp-review-tools, .fp-draft-actions, .fp-inline-actions { display: flex; align-items: center; gap: 8px; }
-.fp-toolbar, .fp-place-title, .fp-sheet-head, .fp-pager { justify-content: space-between; }
-.fp-toolbar .fp-picker { flex: 1; min-width: 0; }
+.fp-summary, .fp-stats, .fp-scope, .fp-place-title, .fp-sheet-head, .fp-pager, .fp-switch, .fp-draft-top, .fp-player-controls, .fp-review-tools, .fp-draft-actions, .fp-inline-actions { display: flex; align-items: center; gap: 8px; }
+.fp-place-title, .fp-sheet-head, .fp-pager { justify-content: space-between; }
 .fp-summary { min-height: 44px; }
 .footprints-page .fp-more { display: flex; align-items: center; justify-content: center; flex: none; width: 44px; height: 44px; margin: 0; padding: 0; background: transparent; }
 .fp-more .ico { width: 20px; height: 20px; }
-.fp-child { display: flex; gap: 12px; align-items: center; min-height: 44px; overflow-wrap: anywhere; }
 .fp-title { display: block; font-family: var(--pk-font-title, serif); font-size: 24px; font-weight: 600; line-height: 1.4; }
 .fp-eyebrow, .fp-muted { color: var(--pk-ink-2); font-size: 14px; }
 .fp-stats { flex: 1; min-width: 0; flex-wrap: wrap; color: var(--pk-ink-2); font-size: 14px; column-gap: 14px; }

@@ -1,6 +1,10 @@
 # UI-016 — 删除配置
 
-当前本地呈现revision `UI-STATE-20261106-THEMES-01`：[DESIGN-002 Spec08 / Architecture01](../../../../specs/active/DESIGN-002-GLOBAL-UI-CONSISTENCY.md)与DREV08已获用户“好的 按照以上方案落地”批准并实施，DREV06视觉方向保持。删除配置现有页面、表单、错误与危险操作消费六主题角色；系统危险确认使用集中命名的平台色例外，删除授权、范围和冻结规则不变。此主题增量不补认旧删除功能缺少的验收。 本增量尚未上传；原生合成呈现、共享业务回归及真机/独立评审缺项见[当前证据](../../../quality/evidence/themes-20261106/README.md)。下方原特性发布与验收记录保持其版本范围，不能代验六主题。
+当前页头修订 `UI-STATE-20261107-THEMES-03` 应用于删除配置列表和内页确认。页头使用同底色的无框插画，危险操作继续使用其语义边界。[两档六主题原生证据](../../../../specs/evidence/client-release-20261108/README.md)
+
+视觉增量 `UI-STATE-20261107-THEMES-02`：删除页的装饰容器继承DREV09边框角色；危险提示、确认与控制边界保留。[本轮EVD](../../../../specs/evidence/design003-20261107/README.md)记录原实现和自动检查。该修订随 0.1.19 开发上传，真机与完整原生状态矩阵待验。
+
+当前呈现revision `UI-STATE-20261106-THEMES-01`：[DESIGN-002 Spec08 / Architecture01](../../../../specs/completed/DESIGN-002-GLOBAL-UI-CONSISTENCY.md)与DREV08已获用户“好的 按照以上方案落地”批准并实施，DREV06视觉方向保持。删除配置现有页面、表单、错误与危险操作消费六主题角色；系统危险确认使用集中命名的平台色例外，删除授权、范围和冻结规则不变。此主题增量不补认旧删除功能缺少的验收。 六主题随 0.1.19 开发上传。真机与独立 Review 待验。[版本证据](../../../../specs/evidence/client-release-20261108/README.md)
 
 - Status: `IMPLEMENTING / REPOSITORY_DESIGN_EVIDENCE`
 - Related Feature: `FEAT-006`
@@ -61,12 +65,11 @@
 ## Visual and responsive proposal
 
 沿用 PKDS-1.0 `pk-card / rowitem / pk-notice / pk-field / btn / link-btn` 与现有 danger semantic token，
-不新增颜色、圆角、字体、依赖或图标风格。危险色只用于最终确认和影响提示。要求 320×568、390×844、
-430×932；长家庭/孩子名称换行；键盘打开时确认与取消均可达；触控目标 ≥44px，正文 ≥14px，状态不只靠颜色。
+不新增颜色、圆角、字体、依赖或图标风格。危险色只用于最终确认和影响提示。按[当前视口矩阵](../FRONTEND-DESIGN.md#9-视口与适配)检查；长家庭/孩子名称换行；键盘打开时确认与取消均可达；触控目标 ≥44px，正文 ≥14px，状态不只靠颜色。
 
 ## Approval and evidence status
 
 - Task Spec approval: `SPEC-20260906-DATA-CLEANUP-01` approved 2026-09-06.
-- DREV/evidence: `DREV-20260906-DATA-01` 的旧 waiver 是历史批准证据；继续可见实现前补齐 editable source、hash manifest 与三视口证据。
+- DREV/evidence: `DREV-20260906-DATA-01` 的旧 waiver 是历史批准证据；继续可见实现前按现行门禁补齐 editable source、hash manifest 和所需视口证据。
 - Frontend code/tests/native viewport/device evidence: not started/not run.
 - 当前不再使用外部设计工具 waiver；其他 Feature 各自按 repository-native DREV 审批。

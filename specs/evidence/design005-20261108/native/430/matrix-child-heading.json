@@ -1,0 +1,918 @@
+{
+  "width": 430,
+  "themes": [
+    "original",
+    "garden",
+    "space",
+    "midnight",
+    "ocean",
+    "tech"
+  ],
+  "groups": 90,
+  "elapsed_ms": 105262,
+  "results": [
+    {
+      "name": "original--today",
+      "route": "pages/today/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "4208b1b096952701ef13ce4b9c404a6fb0618890ea3002ee78a27c4ea68432ee"
+    },
+    {
+      "name": "garden--today",
+      "route": "pages/today/index",
+      "category": "child-heading",
+      "nodes": 12,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "3bab6822d15370d607f7b867c5c168efd31af74b1042e348ca5a5605bb34f5ad"
+    },
+    {
+      "name": "space--today",
+      "route": "pages/today/index",
+      "category": "child-heading",
+      "nodes": 12,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "6285355cff05f0c5ba1a1fb53834ff34283cfd38e4b0f68805de0dac8b39cefd"
+    },
+    {
+      "name": "midnight--today",
+      "route": "pages/today/index",
+      "category": "child-heading",
+      "nodes": 12,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "d269ca3fcc5c70abc3dc667f2a0c9b3690c59d4abf0810ce97123cbbea4613c2"
+    },
+    {
+      "name": "ocean--today",
+      "route": "pages/today/index",
+      "category": "child-heading",
+      "nodes": 12,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "c0fd1d84114637cb45b7ac5ad3610dcfe45ca805a6cc632cc431439938cac42d"
+    },
+    {
+      "name": "tech--today",
+      "route": "pages/today/index",
+      "category": "child-heading",
+      "nodes": 12,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "4cea25feefa843efa174823aa552b4e137c9b914626d11ce1847830f20cc7d65"
+    },
+    {
+      "name": "original--calendar",
+      "route": "pages/calendar/index",
+      "category": "child-heading",
+      "nodes": 12,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "1dd366914b6c17a57618bc2cc116cecc76dd3b4ba4e9addff876f149af604350"
+    },
+    {
+      "name": "garden--calendar",
+      "route": "pages/calendar/index",
+      "category": "child-heading",
+      "nodes": 12,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "f6b025b5ef3e0abc700dc3c08f8dea4669c1b1ab82738059f3c35b50e5c2f77d"
+    },
+    {
+      "name": "space--calendar",
+      "route": "pages/calendar/index",
+      "category": "child-heading",
+      "nodes": 12,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "a54358e6ba8a36a3ce249c5edee08c2f012d52ff5ba79829eaa9817439c9d6ce"
+    },
+    {
+      "name": "midnight--calendar",
+      "route": "pages/calendar/index",
+      "category": "child-heading",
+      "nodes": 12,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "2bde1fc74e07d48d3cc6ea5826f3be729ab52773c35eaa6cdb9c6911a346998e"
+    },
+    {
+      "name": "ocean--calendar",
+      "route": "pages/calendar/index",
+      "category": "child-heading",
+      "nodes": 12,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "06b63bfe25bb3a8c07096b38a9e5f2ba237491a384561ad348b421cb75605bac"
+    },
+    {
+      "name": "tech--calendar",
+      "route": "pages/calendar/index",
+      "category": "child-heading",
+      "nodes": 12,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "5ab27a2116a3053733f19112c16dfc4b5da5cb4b2096621ee6545dd8171e3941"
+    },
+    {
+      "name": "original--records",
+      "route": "pages/records/index",
+      "category": "child-heading",
+      "nodes": 10,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "e8168db15b76b0caa710962002feaa12414dd38d36bc7ae793ce37b69be48e9e"
+    },
+    {
+      "name": "garden--records",
+      "route": "pages/records/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "17f9a50173d21811c9098a7395e3b452cb86ab823cc8efe79cefe155e2bef44c"
+    },
+    {
+      "name": "space--records",
+      "route": "pages/records/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "293bcfbf1cd4e0c6043a873884289a64c6fac05c4483b89e405d39f7d58d9356"
+    },
+    {
+      "name": "midnight--records",
+      "route": "pages/records/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "3833668b68c421289a598bf23a295ddca6d8cdf55abed267b3154b77689735d8"
+    },
+    {
+      "name": "ocean--records",
+      "route": "pages/records/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "517b953456e2300394d3379f6c40e8241fd6a5289e6abd35483b39c66e8e2daf"
+    },
+    {
+      "name": "tech--records",
+      "route": "pages/records/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "c9572188b521c4ff0a68e9414dfcd35d20da68b6ab302cf70c9d5f6097154ba5"
+    },
+    {
+      "name": "original--travel",
+      "route": "pages/records/index",
+      "category": "child-heading",
+      "nodes": 10,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "79131c329ae267813909a00d9f4acc742d1f86039e607c6735b4eb1fd04ac4db"
+    },
+    {
+      "name": "garden--travel",
+      "route": "pages/records/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "70038c69f9733b55473e13a57392d323e69668ed381c896998c12386fdaecfe5"
+    },
+    {
+      "name": "space--travel",
+      "route": "pages/records/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "dfecc36e842d14cdb93b405de664890aeae4067e08790b9d002359d8c04a2bc6"
+    },
+    {
+      "name": "midnight--travel",
+      "route": "pages/records/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "a374bfeca33286c9f7a08ed6493a38d7d94612aae9da99972bd6a74a42b0cfd6"
+    },
+    {
+      "name": "ocean--travel",
+      "route": "pages/records/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "bfc10c904b88a7966377ce62b6ef446d2ecb51a25bbb425817fdc1c22fcb69da"
+    },
+    {
+      "name": "tech--travel",
+      "route": "pages/records/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "b78471c80a5386fde3be896e81e4d25bd50cededfaddc6a871f2998bccbf83db"
+    },
+    {
+      "name": "original--reports",
+      "route": "pages/reports/index",
+      "category": "child-heading",
+      "nodes": 12,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "6946243d2d980d5a1adb23ebba451981f58dc1347d77b1d6039ded6e57f31718"
+    },
+    {
+      "name": "garden--reports",
+      "route": "pages/reports/index",
+      "category": "child-heading",
+      "nodes": 12,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "ba9e4bd9280ee02ceeabbe4fff88daf15747a7a04d47dff928f1ef6a737164c9"
+    },
+    {
+      "name": "space--reports",
+      "route": "pages/reports/index",
+      "category": "child-heading",
+      "nodes": 12,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "549ee2f45d67152ad7c0b4b77e304bbf882464233f1d40dcce7d505f278ebf97"
+    },
+    {
+      "name": "midnight--reports",
+      "route": "pages/reports/index",
+      "category": "child-heading",
+      "nodes": 12,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "fdbfca5fc6f6bcb710790e431c7e7aa099de168a7eb3a8f2f64af487d3ed8ca7"
+    },
+    {
+      "name": "ocean--reports",
+      "route": "pages/reports/index",
+      "category": "child-heading",
+      "nodes": 12,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "b8a8708dd24dfdaefd3d516e6bd575be42ede5034f6d01513598f189fef4c084"
+    },
+    {
+      "name": "tech--reports",
+      "route": "pages/reports/index",
+      "category": "child-heading",
+      "nodes": 12,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "afa00454fd3d1fabcb9dc315b59fbe77f827839ca6d55a6d637a6a638ae8b607"
+    },
+    {
+      "name": "original--settings",
+      "route": "pages/settings/index",
+      "category": "child-heading",
+      "nodes": 10,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "fc8164d9bf52add7b7e5352f18e97ae7085a17f3a7088bcb0a67a5a3f15f0ec9"
+    },
+    {
+      "name": "garden--settings",
+      "route": "pages/settings/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "ac1fe95fdb83864d572cf3b7cd98fb6ec0fe7a0bb68f69c864bbd9663f5c9a76"
+    },
+    {
+      "name": "space--settings",
+      "route": "pages/settings/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "08cf0b51dc8a86f23f1383ffa5474d02e5ccb4673159e22b553c6726fed0071d"
+    },
+    {
+      "name": "midnight--settings",
+      "route": "pages/settings/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "772e5671d882a0837c82deca7f000810608b77781033654f5788787309bfb318"
+    },
+    {
+      "name": "ocean--settings",
+      "route": "pages/settings/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "8dc405e093bc4ad79c060338bb2232e4877011bcd725cff75de321eccd6c54ac"
+    },
+    {
+      "name": "tech--settings",
+      "route": "pages/settings/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "84e9d9d763410868e8d447e409eef0da491059e2d7f1edc4b39070c7aadeac3e"
+    },
+    {
+      "name": "original--footprints",
+      "route": "pages/footprints/index",
+      "category": "child-heading",
+      "nodes": 6,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "338e88236097445fa6672af42e6223c792b877f969df1b2c9ced341fcdf5b04b"
+    },
+    {
+      "name": "garden--footprints",
+      "route": "pages/footprints/index",
+      "category": "child-heading",
+      "nodes": 6,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "8d60800c7f184fd629b8c4b79a8e231655bfc1c2f9563c85402489b58dd134a0"
+    },
+    {
+      "name": "space--footprints",
+      "route": "pages/footprints/index",
+      "category": "child-heading",
+      "nodes": 6,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "ed6754b859f0623e3a8b07130115bf9f231007df1e5481acfbfe28bfc16b86af"
+    },
+    {
+      "name": "midnight--footprints",
+      "route": "pages/footprints/index",
+      "category": "child-heading",
+      "nodes": 6,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "df3d6daa6e428ab5218a35f9ccbea00077d5e8b3ab1697b25fabe81a9c1442a9"
+    },
+    {
+      "name": "ocean--footprints",
+      "route": "pages/footprints/index",
+      "category": "child-heading",
+      "nodes": 6,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "1261cf76786202aaa8165cad6c0e585bef993bb43aa064ae39286208d5d01c28"
+    },
+    {
+      "name": "tech--footprints",
+      "route": "pages/footprints/index",
+      "category": "child-heading",
+      "nodes": 6,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "3e7b6c2305878b49ea915f25a501cba95266f996cc21ed4eae48eb66d5795029"
+    },
+    {
+      "name": "original--empty",
+      "route": "pages/today/index",
+      "category": "child-heading",
+      "nodes": 7,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "064654248d2cd4ae958f9cbcdcc402856eea0732d7e2e663c8c900015cc7fd13"
+    },
+    {
+      "name": "garden--empty",
+      "route": "pages/today/index",
+      "category": "child-heading",
+      "nodes": 8,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "fc566d58c9d4598c4d1c935099e29d15cc4ac803e23d544c4eeabede381257dc"
+    },
+    {
+      "name": "space--empty",
+      "route": "pages/today/index",
+      "category": "child-heading",
+      "nodes": 8,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "288bd9c817682bd60116e5d5f7ee8f6e3dfe64898d9618c55b7cbcb6ae57d977"
+    },
+    {
+      "name": "midnight--empty",
+      "route": "pages/today/index",
+      "category": "child-heading",
+      "nodes": 8,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "96715846a649e58876ebde04b57975c735a6f656b49100c63953762194081b15"
+    },
+    {
+      "name": "ocean--empty",
+      "route": "pages/today/index",
+      "category": "child-heading",
+      "nodes": 8,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "98a89354de86df3903b42c57a2f685b4f39e20791ded9cf2502dac2a804c845f"
+    },
+    {
+      "name": "tech--empty",
+      "route": "pages/today/index",
+      "category": "child-heading",
+      "nodes": 8,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "1dc1b99d7a93585cf4344c349b03c268905117f06f61aced938127b5929ab6f2"
+    },
+    {
+      "name": "original--single",
+      "route": "pages/calendar/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "d3711f7228550b8ebe6d2c0bd3ec819e9b2474d6b94c8935b9fc3cde6e60f1f9"
+    },
+    {
+      "name": "garden--single",
+      "route": "pages/calendar/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "dafa47e5a6b50d7cb9597fd474870c2cd771e777d3c09b2d46bf720ac781a992"
+    },
+    {
+      "name": "space--single",
+      "route": "pages/calendar/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "b50d54cb289113d4d1eca9dbf6b95b5521851b52a62f4efb2d3283d9a2e1de1f"
+    },
+    {
+      "name": "midnight--single",
+      "route": "pages/calendar/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "d042a206f5e6784b78cb708c6da7dd8e381240460b5e89b13c0423e3c3d9870e"
+    },
+    {
+      "name": "ocean--single",
+      "route": "pages/calendar/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "75760a893df046870c3f871f40bc69984c63d2df2fed21c30cf3bc0f154bce13"
+    },
+    {
+      "name": "tech--single",
+      "route": "pages/calendar/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "640799f06a4191a2e420f10930ae6716ab40ab604d5eb16a11beb9bbc24b61d5"
+    },
+    {
+      "name": "original--long-name",
+      "route": "pages/reports/index",
+      "category": "child-heading",
+      "nodes": 12,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "716e96eb17c940db143ddbde9f627d179e2f71eb50d4a7f136f096195f9bdca3"
+    },
+    {
+      "name": "garden--long-name",
+      "route": "pages/reports/index",
+      "category": "child-heading",
+      "nodes": 12,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "e8b22a9bee1567fb78e964d885e7c848ba9d8ebfccedd3d356c595f1fb40dcd9"
+    },
+    {
+      "name": "space--long-name",
+      "route": "pages/reports/index",
+      "category": "child-heading",
+      "nodes": 12,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "e0b91cb79229e4086bb90696958a90ff61b67ff3fe787d18b49b98231dd5590d"
+    },
+    {
+      "name": "midnight--long-name",
+      "route": "pages/reports/index",
+      "category": "child-heading",
+      "nodes": 12,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "b399625205ffc05c7e725b539484ea57185aed4de62d0371e1068fa2996a0e93"
+    },
+    {
+      "name": "ocean--long-name",
+      "route": "pages/reports/index",
+      "category": "child-heading",
+      "nodes": 12,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "0e8168793d62746e1b41f0ea801ad6a7b256272f8e2789f0d2a7343ac9b8b766"
+    },
+    {
+      "name": "tech--long-name",
+      "route": "pages/reports/index",
+      "category": "child-heading",
+      "nodes": 12,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "5e8140af7d0c2f900917dc3e4998fbf7c595ca96aefac317828671ce881d58d1"
+    },
+    {
+      "name": "original--record-menu",
+      "route": "pages/records/index",
+      "category": "child-heading",
+      "nodes": 13,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "9a2b367ca033050c953284fe22137eff4d51c3a32327b66042c43dcde7ceb6ca"
+    },
+    {
+      "name": "garden--record-menu",
+      "route": "pages/records/index",
+      "category": "child-heading",
+      "nodes": 14,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "cb3356044840a034e4d6dc21523b99c259fd34b452a077d82485cc6a0abf96f7"
+    },
+    {
+      "name": "space--record-menu",
+      "route": "pages/records/index",
+      "category": "child-heading",
+      "nodes": 14,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "b5ff2e7387970632610ff62f938d3d4d22d205d40c000569f2522fb864196148"
+    },
+    {
+      "name": "midnight--record-menu",
+      "route": "pages/records/index",
+      "category": "child-heading",
+      "nodes": 14,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "36d99d23f0a676aa1aed092244d21b4338a25b6c7e9acb5e48c6d7a9cd6145c7"
+    },
+    {
+      "name": "ocean--record-menu",
+      "route": "pages/records/index",
+      "category": "child-heading",
+      "nodes": 14,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "aca4e83bdfd268c77de14fa25b4db223b3b3438d0ed80cf973b6c363052877a0"
+    },
+    {
+      "name": "tech--record-menu",
+      "route": "pages/records/index",
+      "category": "child-heading",
+      "nodes": 14,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "a247d61efd00bf30a4660171ad0cdefd192944e94ea1eef8964a5a1eb9e3472e"
+    },
+    {
+      "name": "original--record-saving",
+      "route": "pages/records/index",
+      "category": "child-heading",
+      "nodes": 10,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "31f51cc340ede66ffb459487f1f5561acc36f88f5e02b535078b96d5b42c194c"
+    },
+    {
+      "name": "garden--record-saving",
+      "route": "pages/records/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "999d1200c8afd743a216635d6ed56a693942628915a3660fff6308e6fa934f40"
+    },
+    {
+      "name": "space--record-saving",
+      "route": "pages/records/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "fd02b032eb82f1469b24453943e5f446834eaf21d598cea98a103c78d20e22d8"
+    },
+    {
+      "name": "midnight--record-saving",
+      "route": "pages/records/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "faa072a4961108a20e4abf498b062cdafc9d5c1105ae2c168bfec72ddd36dc29"
+    },
+    {
+      "name": "ocean--record-saving",
+      "route": "pages/records/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "030050aa80955266d14b88d7202c69caa4fb58027ea98bbe0111d27877b2a667"
+    },
+    {
+      "name": "tech--record-saving",
+      "route": "pages/records/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "a6c6ba36f7bdb3da864ce6ff7d7348d368df51c246b6ff24584acfba5a883716"
+    },
+    {
+      "name": "original--missing-art",
+      "route": "pages/reports/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "2177823de2e34998a9c3e95ef2e1091b6b6f86c60f1c3ab22ed47b0546cd34a5"
+    },
+    {
+      "name": "garden--missing-art",
+      "route": "pages/reports/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "e840cb0dcc2ac89456bfa0776d8ddb2d531e09530f76cf55f35ccefc6fde8ae6"
+    },
+    {
+      "name": "space--missing-art",
+      "route": "pages/reports/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "e4706ba50cc3c409002f97b18dcfbe1ec4e385b1dd3be9b2a981d79cdf0406fb"
+    },
+    {
+      "name": "midnight--missing-art",
+      "route": "pages/reports/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "6abf93a89843e2d793565df7181a5a30b87afc643da63f0164a7b7bdd5d02fe9"
+    },
+    {
+      "name": "ocean--missing-art",
+      "route": "pages/reports/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "4d757980af6689aa23ed9aff052484accd7ef3a8d77d7ffeb1c438fb8f40df23"
+    },
+    {
+      "name": "tech--missing-art",
+      "route": "pages/reports/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "998b5f29ce8a49953600971c9144a27c2198afe73d9a02f411fb86252dab2486"
+    },
+    {
+      "name": "original--calendar-no-spot",
+      "route": "pages/calendar/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "a60bd452c39ad8678ace5dbe88e933830543409f8f032fb2e831fe12c3408363"
+    },
+    {
+      "name": "garden--calendar-no-spot",
+      "route": "pages/calendar/index",
+      "category": "child-heading",
+      "nodes": 12,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "a2eeeb52a7d2259f33c84770aae7f913d5b4c12ef47b74cb8379033ae956707f"
+    },
+    {
+      "name": "space--calendar-no-spot",
+      "route": "pages/calendar/index",
+      "category": "child-heading",
+      "nodes": 12,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "b2d0a2773a77f3ea17b9ee08e3600e34fcda7544ab9961341e19ea549fb20c2a"
+    },
+    {
+      "name": "midnight--calendar-no-spot",
+      "route": "pages/calendar/index",
+      "category": "child-heading",
+      "nodes": 12,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "50c43aeaf218effc559c84ab2974f5a252c09a3de6295f569593a1f1c9e275d8"
+    },
+    {
+      "name": "ocean--calendar-no-spot",
+      "route": "pages/calendar/index",
+      "category": "child-heading",
+      "nodes": 12,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "bc68ffccaa9006c8cfea8c677379b2be9d3cfcf9d4afac537f5ad7b17fb68818"
+    },
+    {
+      "name": "tech--calendar-no-spot",
+      "route": "pages/calendar/index",
+      "category": "child-heading",
+      "nodes": 12,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "f8ee8e99fbe7fcaa638d4116af024d15227eceb1724d779d161d8f0ab2fd957c"
+    },
+    {
+      "name": "original--readonly",
+      "route": "pages/settings/index",
+      "category": "child-heading",
+      "nodes": 10,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "1cdf52d7c81138858620ab7e683021a6eb241010eaa6422a1d1e8d718bc42591"
+    },
+    {
+      "name": "garden--readonly",
+      "route": "pages/settings/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "da303e6f1f8986b14d458ac7d1f4fd680cb3a7e3a18feda492e552c26b173a95"
+    },
+    {
+      "name": "space--readonly",
+      "route": "pages/settings/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "1a1a91a3f13e3b4489d2daacf30755e67105a334ac77ca0923057fe08dddb3e8"
+    },
+    {
+      "name": "midnight--readonly",
+      "route": "pages/settings/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "f3c05fd063987f7847bdac5827f87c13ff0faf2f6c1d42a337819dee33ae7f91"
+    },
+    {
+      "name": "ocean--readonly",
+      "route": "pages/settings/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "5300411a23d5189d3cb74d047a0aa7fb7fe31d917d9fc14f4a5373a5b327898f"
+    },
+    {
+      "name": "tech--readonly",
+      "route": "pages/settings/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "b03fc41a2f8c258614860760d3956e4f366a4b30b5a7fb581178140fd5a98431"
+    }
+  ],
+  "failures": [],
+  "navigation_diagnostics": [],
+  "source_manifest_sha256": "080f39c9d1010925ea87d62db5780b1ca4d8819cf622f8e139c048ebdd9e8b4b"
+}

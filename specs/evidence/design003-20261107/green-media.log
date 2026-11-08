@@ -1,0 +1,16 @@
+TAP version 13
+# Subtest: upload decoration has its own local media role rather than reusing the page banner
+ok 1 - upload decoration has its own local media role rather than reusing the page banner
+  ---
+  duration_ms: 0.556834
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 70.352292

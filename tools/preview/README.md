@@ -1,8 +1,8 @@
 # tools/preview — 小程序设计走查预览
 
-在没有微信开发者工具的环境里，把 WXML/WXSS 近似渲染成 HTML，用来做 320 / 390 / 430
-三档视口的设计走查。**它不是验收工具**：原生节点几何、真机字体、`backdrop-filter`
-行为必须仍在微信开发者工具或真机上验证（见 `docs/quality/TEST-STRATEGY.md`）。
+在没有微信开发者工具的环境里，把 WXML/WXSS 近似渲染成 HTML，按[当前矩阵](../frontend_viewports.json)
+生成 390×844、430×932 的走查图。截图只读取当前矩阵的 HTML。原生节点几何、真机字体和
+`backdrop-filter` 行为在微信开发者工具或真机上验证，见[测试策略](../../docs/quality/TEST-STRATEGY.md)。
 
 ## 用法
 

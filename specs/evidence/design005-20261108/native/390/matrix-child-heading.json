@@ -1,0 +1,914 @@
+{
+  "width": 390,
+  "themes": [
+    "original",
+    "garden",
+    "space",
+    "midnight",
+    "ocean",
+    "tech"
+  ],
+  "groups": 89,
+  "elapsed_ms": 114724,
+  "results": [
+    {
+      "name": "garden--today",
+      "route": "pages/today/index",
+      "category": "child-heading",
+      "nodes": 12,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "1a94dfe6d7f7c83786cb88fc34d25d6ba26d202454553f6ffe517a694c5fa1b5"
+    },
+    {
+      "name": "space--today",
+      "route": "pages/today/index",
+      "category": "child-heading",
+      "nodes": 12,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "53d125d1db2d184ec7ec35c659568446d9cefc4a51f402e555ae34d31e487415"
+    },
+    {
+      "name": "midnight--today",
+      "route": "pages/today/index",
+      "category": "child-heading",
+      "nodes": 12,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "52ad5be0ce09a19b31de4f7f430529a85eda657b8ce467971cb31b5451a482ca"
+    },
+    {
+      "name": "ocean--today",
+      "route": "pages/today/index",
+      "category": "child-heading",
+      "nodes": 12,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "75f3f443e81e6e9bd827e74cc190bdc3309e61ec0409ab75f232bc9d90e76e4a"
+    },
+    {
+      "name": "tech--today",
+      "route": "pages/today/index",
+      "category": "child-heading",
+      "nodes": 12,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "c33cca10da8ae64e8dd47265efbd2d5abb1a1ca1e0eb10b0bce1d1254921b045"
+    },
+    {
+      "name": "original--calendar",
+      "route": "pages/calendar/index",
+      "category": "child-heading",
+      "nodes": 12,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "05791a10f5c481507d9b27fca2a500a71f09f617cfd843cb20251081c29801d0"
+    },
+    {
+      "name": "garden--calendar",
+      "route": "pages/calendar/index",
+      "category": "child-heading",
+      "nodes": 12,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "1eba71133c655573061119a3981f9218728968b339c75e25da56dc3cce6cc153"
+    },
+    {
+      "name": "space--calendar",
+      "route": "pages/calendar/index",
+      "category": "child-heading",
+      "nodes": 12,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "31f872254cd3bfc2c88f22b559755efb693441d13662bb38de335bdae726d02c"
+    },
+    {
+      "name": "midnight--calendar",
+      "route": "pages/calendar/index",
+      "category": "child-heading",
+      "nodes": 12,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "d1e30b0e7f7a63e207c90a8abc554ae5a17c256a12e38f73140b77ec28f1e56e"
+    },
+    {
+      "name": "ocean--calendar",
+      "route": "pages/calendar/index",
+      "category": "child-heading",
+      "nodes": 12,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "9aa27f221473d22ac63f0892e5f9bb3bba25ea1dab07482d1bbccd183e8aa833"
+    },
+    {
+      "name": "tech--calendar",
+      "route": "pages/calendar/index",
+      "category": "child-heading",
+      "nodes": 12,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "b5a6e1368efefa659943732a4b79a4c9ae561e1b19e1131262bc8ecf5019f9e2"
+    },
+    {
+      "name": "original--records",
+      "route": "pages/records/index",
+      "category": "child-heading",
+      "nodes": 10,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "cf2c0b9436da56ad355d700dcb1ce3d6e63a50efaf456c688f5d823386dc9bd0"
+    },
+    {
+      "name": "garden--records",
+      "route": "pages/records/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "67c416424f362f9c2adf02efb0464181eb92c5d75c80ba0177abc3587095893e"
+    },
+    {
+      "name": "space--records",
+      "route": "pages/records/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "f8a8bfedf0e64313e2c18f2d6423066e95ceadfca0cc12609e6550a210194acd"
+    },
+    {
+      "name": "midnight--records",
+      "route": "pages/records/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "4edcb2d42701b42dd803f5f417e58c3ab74b5fa42066a81356ff62376bb6c328"
+    },
+    {
+      "name": "ocean--records",
+      "route": "pages/records/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "afa732c6ab141b60dc91f1df5ef0e7a682c3da0f5caacf8a279cb508ceb6d835"
+    },
+    {
+      "name": "tech--records",
+      "route": "pages/records/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "0b6da2f3201a7d76a4a4d92938c03779b4ef152b2132cba622e7e07b287e74df"
+    },
+    {
+      "name": "original--travel",
+      "route": "pages/records/index",
+      "category": "child-heading",
+      "nodes": 10,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "c8305b387febe9c087a27c34870ac58cf4e019de0fb80458e500ab04797350f1"
+    },
+    {
+      "name": "garden--travel",
+      "route": "pages/records/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "eea98d5b7850fcfb1374127892b5e68cb3cdeee2e7241ff1360c9b3492b6099c"
+    },
+    {
+      "name": "space--travel",
+      "route": "pages/records/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "a8260b4d0706e50bb733fbe5376ed0d53189e0a27b30865757e5ec25b8966e98"
+    },
+    {
+      "name": "midnight--travel",
+      "route": "pages/records/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "41f8731b78a1d0fc4290fe0626b26566cfe04d14811761d8ad89d724138de56c"
+    },
+    {
+      "name": "ocean--travel",
+      "route": "pages/records/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "54113ed452d24ed41f1acc30b95c902ef6c9a304ab4bc5b093b1542bb3ff4696"
+    },
+    {
+      "name": "tech--travel",
+      "route": "pages/records/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "5c771d5a60771694d4c39358674386e13d4532226f881fe5cb7a4145f5890a20"
+    },
+    {
+      "name": "original--reports",
+      "route": "pages/reports/index",
+      "category": "child-heading",
+      "nodes": 12,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "aa4e9f8c32d3290682d8fdf03957c96859cfa463c4e0f8070549a8500bdc6439"
+    },
+    {
+      "name": "garden--reports",
+      "route": "pages/reports/index",
+      "category": "child-heading",
+      "nodes": 12,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "d0259a1ac571dc280e954ab7e7eb999e0d586aca11cf7e640ded8a59e390c3b9"
+    },
+    {
+      "name": "space--reports",
+      "route": "pages/reports/index",
+      "category": "child-heading",
+      "nodes": 12,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "9c1b64685516289165878633a3a1bf57fd6afcc39ee164cdfef4f3b0cab026ef"
+    },
+    {
+      "name": "midnight--reports",
+      "route": "pages/reports/index",
+      "category": "child-heading",
+      "nodes": 12,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "4f904ea55f2d76ae4e6d4871e34fbd400823d263ee921c5b723fc510ad4de496"
+    },
+    {
+      "name": "ocean--reports",
+      "route": "pages/reports/index",
+      "category": "child-heading",
+      "nodes": 12,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "734a7164640ce8e29fe2211a61f060946046d84161d796a96750925c3d41eb57"
+    },
+    {
+      "name": "tech--reports",
+      "route": "pages/reports/index",
+      "category": "child-heading",
+      "nodes": 12,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "80744837ec27f07312cb01f6e1676a2ea93558d834f51d337049442415cbfcb7"
+    },
+    {
+      "name": "original--settings",
+      "route": "pages/settings/index",
+      "category": "child-heading",
+      "nodes": 10,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "af0ad9b51d43618e5a98e4eb4d241a517414bb6cd992cc230ce7cc75ef6f1b92"
+    },
+    {
+      "name": "garden--settings",
+      "route": "pages/settings/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "8fedf31c061993c30a99f9cd786f721291b9566b21c7cf297a82fe422e518a6a"
+    },
+    {
+      "name": "space--settings",
+      "route": "pages/settings/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "eebf89b86f8502f7f2fc331fbfb25743c4c677f11d9a5d6114c0e9e643a168b3"
+    },
+    {
+      "name": "midnight--settings",
+      "route": "pages/settings/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "4e676476d1d2bbd6fe063a5eaaddd698d0be756b358cdaf9f6992c409639dfc6"
+    },
+    {
+      "name": "ocean--settings",
+      "route": "pages/settings/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "c7226e79ec047492b74d918556ddd799f0a6ca7a638e9a22c79980a0c1f9a12c"
+    },
+    {
+      "name": "tech--settings",
+      "route": "pages/settings/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "824d055b248f0f92310b27a659589c137b396ac14772f28b0560cf546700e979"
+    },
+    {
+      "name": "original--footprints",
+      "route": "pages/footprints/index",
+      "category": "child-heading",
+      "nodes": 6,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "c071567ae436fab4ea5e0d339619947def06b92f634b5908beb597e3728daea4"
+    },
+    {
+      "name": "garden--footprints",
+      "route": "pages/footprints/index",
+      "category": "child-heading",
+      "nodes": 6,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "8aa8d089b5149e67ad8022c37e45a7ae2a8ae82e297f40b5db1f30842e90c05c"
+    },
+    {
+      "name": "space--footprints",
+      "route": "pages/footprints/index",
+      "category": "child-heading",
+      "nodes": 6,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "d98e66066299f61b7c633359f39dad3e56b6177def94ceda253c08090fd867a5"
+    },
+    {
+      "name": "midnight--footprints",
+      "route": "pages/footprints/index",
+      "category": "child-heading",
+      "nodes": 6,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "c1a1336e2a248d13870330048c9b59a639ea05f3c093e9a334c69cde331e8758"
+    },
+    {
+      "name": "ocean--footprints",
+      "route": "pages/footprints/index",
+      "category": "child-heading",
+      "nodes": 6,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "cc5bb267a705a12aaabfac5121c9d9b894de19d274da74393b089fa0d41456db"
+    },
+    {
+      "name": "tech--footprints",
+      "route": "pages/footprints/index",
+      "category": "child-heading",
+      "nodes": 6,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "71a29e57bf39f2456077fface4c82ca030d9c7ede173f39828f59fcff7d5b226"
+    },
+    {
+      "name": "original--empty",
+      "route": "pages/today/index",
+      "category": "child-heading",
+      "nodes": 7,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "b5a1d3b6fa67f74d621f63540c073758b447c95026fbf7132316e7aa98d88b51"
+    },
+    {
+      "name": "garden--empty",
+      "route": "pages/today/index",
+      "category": "child-heading",
+      "nodes": 8,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "af60075cbc6863595a65624a3ffc8ace5e061391d54d8a5f0504a31f1f27059c"
+    },
+    {
+      "name": "space--empty",
+      "route": "pages/today/index",
+      "category": "child-heading",
+      "nodes": 8,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "5ed525887175c213a4f150184218de08ea108a98da1d68b18e5551fdf8ea2791"
+    },
+    {
+      "name": "midnight--empty",
+      "route": "pages/today/index",
+      "category": "child-heading",
+      "nodes": 8,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "600b1118fe121ebc045cb2b1cda753d37b0044c3ee3503eb806e7666afeb682c"
+    },
+    {
+      "name": "ocean--empty",
+      "route": "pages/today/index",
+      "category": "child-heading",
+      "nodes": 8,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "83987662c0eefe95f4596e457c6a877d02ac8f83d06f170fd3d63c300d1b81d0"
+    },
+    {
+      "name": "tech--empty",
+      "route": "pages/today/index",
+      "category": "child-heading",
+      "nodes": 8,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "a53f657fa3f275726c16c3ccb572644939d6471101cdeb25271c50ffefea0883"
+    },
+    {
+      "name": "original--single",
+      "route": "pages/calendar/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "5db7eca337110218cf45d1ae9dfbad75162fe0a918ece9448ef109f6354bb52e"
+    },
+    {
+      "name": "garden--single",
+      "route": "pages/calendar/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "8471bd4dba07c4e7bce6acd38e936f96933085ee5dd00dd336d6d80b116d1fa7"
+    },
+    {
+      "name": "space--single",
+      "route": "pages/calendar/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "4b608fe9139cf9fb2d922aaadd09d8d749cb50445e4ded8962e307376b865c9a"
+    },
+    {
+      "name": "midnight--single",
+      "route": "pages/calendar/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "ca739f08941c44c89e82ce8a235b8b8018165c102a8016ba7d7757ecbdf22160"
+    },
+    {
+      "name": "ocean--single",
+      "route": "pages/calendar/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "24c2f9f7e8463379c0306fe0227a0ed019725413b5b793afdd1a3dac2e8a3d8c"
+    },
+    {
+      "name": "tech--single",
+      "route": "pages/calendar/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "059f969f8d66f7ce04065678736a848741eeeb82391eeed2bc4696e0953d1de2"
+    },
+    {
+      "name": "original--long-name",
+      "route": "pages/reports/index",
+      "category": "child-heading",
+      "nodes": 12,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "274484f82ab6a91b6e0203faebb9ebe187495070394467a857141ed08a241440"
+    },
+    {
+      "name": "garden--long-name",
+      "route": "pages/reports/index",
+      "category": "child-heading",
+      "nodes": 12,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "e3813d6bb669b6c9b8eb1a4d4c7bb81d1495ad84f2c93e2635a8a317081fb148"
+    },
+    {
+      "name": "space--long-name",
+      "route": "pages/reports/index",
+      "category": "child-heading",
+      "nodes": 12,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "c4972ceb80bc9af026d0b96d0dbf1c7ef9e61fbd6d2a1753ad89bef5a149af2b"
+    },
+    {
+      "name": "midnight--long-name",
+      "route": "pages/reports/index",
+      "category": "child-heading",
+      "nodes": 12,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "b47b2b88f80fdcb51245bebb122ee583dfcb27b6c62d35c46447582fd8ec2b24"
+    },
+    {
+      "name": "ocean--long-name",
+      "route": "pages/reports/index",
+      "category": "child-heading",
+      "nodes": 12,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "c38df1d0646a92a1198e04b7ed5740c63f3007ee4bb41557c5aaa1fc1bea6e99"
+    },
+    {
+      "name": "tech--long-name",
+      "route": "pages/reports/index",
+      "category": "child-heading",
+      "nodes": 12,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "040a2711c3f1d5e42e667596c769730371eb8be29d86895d5bc7aea298a3e9f8"
+    },
+    {
+      "name": "original--record-menu",
+      "route": "pages/records/index",
+      "category": "child-heading",
+      "nodes": 13,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "e190447336eb5d6cab01a1d791e3f7b29e0e5efa489e674b4484df142a3cfc60"
+    },
+    {
+      "name": "garden--record-menu",
+      "route": "pages/records/index",
+      "category": "child-heading",
+      "nodes": 14,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "7b34f1d8317f976545d724dcb0e9eeba9344c086d0f8ad22683a9677ea74eb93"
+    },
+    {
+      "name": "space--record-menu",
+      "route": "pages/records/index",
+      "category": "child-heading",
+      "nodes": 14,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "ccdb89601529adb2ce7d96d441f31108b870d3e1742c8ed6efce38dea0d00923"
+    },
+    {
+      "name": "midnight--record-menu",
+      "route": "pages/records/index",
+      "category": "child-heading",
+      "nodes": 14,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "05a3a210acb85452c57809d0ad4713f88c044a3c83b0ac8f62301cc58b6bd27d"
+    },
+    {
+      "name": "ocean--record-menu",
+      "route": "pages/records/index",
+      "category": "child-heading",
+      "nodes": 14,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "f57c53a60bd147b931567ccf98faecf1fe67aba7791f4d12ea0f85e39ae0cd37"
+    },
+    {
+      "name": "tech--record-menu",
+      "route": "pages/records/index",
+      "category": "child-heading",
+      "nodes": 14,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "a005d7486d522c96fb3c36e4a24fe4c3f471d193cf98a625c36ed9a1ee4b5863"
+    },
+    {
+      "name": "original--record-saving",
+      "route": "pages/records/index",
+      "category": "child-heading",
+      "nodes": 10,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "09321638905bb685ff1d583ade55712f6c4602b66cadbf30e19084f1d6228631"
+    },
+    {
+      "name": "garden--record-saving",
+      "route": "pages/records/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "9f16235fd11990ad783d40f8605bce8c96a6c0c3b24dbe0646eb1c8be5a325a4"
+    },
+    {
+      "name": "space--record-saving",
+      "route": "pages/records/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "45df25e91ecc0b4508ae3b4ba459610f63126fc7e54b7c65206464e989cf3234"
+    },
+    {
+      "name": "midnight--record-saving",
+      "route": "pages/records/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "06d14cf8c5f7caa8ef245e92a49c1eb1842318d533d1e4469efe770608b6f710"
+    },
+    {
+      "name": "ocean--record-saving",
+      "route": "pages/records/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "57bbd77901a8e46e9ffbd905e84702437ece5f2dd0a6b10fc732591d2251e082"
+    },
+    {
+      "name": "tech--record-saving",
+      "route": "pages/records/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "ee84aa6fbed16cfec49198b0b5b65217fc0899128762afcb9bab9a78bddf037d"
+    },
+    {
+      "name": "original--missing-art",
+      "route": "pages/reports/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "4ce99a8abc9dfb4a1de96da9f38149dd19556a98a2ba8e638d40f3664369c9f5"
+    },
+    {
+      "name": "garden--missing-art",
+      "route": "pages/reports/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "be9dc7a8a42cc0b3bb631493ada8391122196d0af2c745b1a63d7bad5e463f54"
+    },
+    {
+      "name": "space--missing-art",
+      "route": "pages/reports/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "09cd1adf26fa333c93dca60d978689d38b93460371c414cbbfe95927156910bf"
+    },
+    {
+      "name": "midnight--missing-art",
+      "route": "pages/reports/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "087c64e6cb59acd1ad9ceaf99520709d3e26c387a9b33d9c4ae7927eecf4ba2b"
+    },
+    {
+      "name": "ocean--missing-art",
+      "route": "pages/reports/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "0993e40357866b890f73b87567f899932d54114ea647f630dc494685303623e2"
+    },
+    {
+      "name": "tech--missing-art",
+      "route": "pages/reports/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "2ccb7a5484f301c5808c4f12fa692c7d4e059d476a09ba0f6f9f5291c7a4fb6e"
+    },
+    {
+      "name": "original--calendar-no-spot",
+      "route": "pages/calendar/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "ae68495bd57993e1840d9eaf8f8c36ce95bea6ecd5beaa1e905a5704ad0003db"
+    },
+    {
+      "name": "garden--calendar-no-spot",
+      "route": "pages/calendar/index",
+      "category": "child-heading",
+      "nodes": 12,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "ef399411571d43b8fc3f6ae4bff8886cef4586c6987fdd02e901059255c96ae3"
+    },
+    {
+      "name": "space--calendar-no-spot",
+      "route": "pages/calendar/index",
+      "category": "child-heading",
+      "nodes": 12,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "34069e3796fac02dc33beb2539eb86b2b2b69bc065a0a2214a6d06a590e940fd"
+    },
+    {
+      "name": "midnight--calendar-no-spot",
+      "route": "pages/calendar/index",
+      "category": "child-heading",
+      "nodes": 12,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "f52847401914bff192fd8b673deb92655dcbc888bd80d10732547a6ea0655d75"
+    },
+    {
+      "name": "ocean--calendar-no-spot",
+      "route": "pages/calendar/index",
+      "category": "child-heading",
+      "nodes": 12,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "0359fed33a09f66087c1ba29f81c008ac039009896230bb0b8b846e35009456b"
+    },
+    {
+      "name": "tech--calendar-no-spot",
+      "route": "pages/calendar/index",
+      "category": "child-heading",
+      "nodes": 12,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "ab49c2968c267dcee65ae8a1fb3e3289df6fd2c54a661e824067d95efe2a89e6"
+    },
+    {
+      "name": "original--readonly",
+      "route": "pages/settings/index",
+      "category": "child-heading",
+      "nodes": 10,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "b20a6c39017eb9b394cee12d5666e059621b1ddd3d141c2c77ef6385c9ce9832"
+    },
+    {
+      "name": "garden--readonly",
+      "route": "pages/settings/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "55d8d12a7ca3f04c884e8d94e470d83ccc8f36d8417fcf2934cde062563513b4"
+    },
+    {
+      "name": "space--readonly",
+      "route": "pages/settings/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "9b0133f68be0f37d8cbb61bf795d166a1c18a7e6aabfad776b8db614622a9bc5"
+    },
+    {
+      "name": "midnight--readonly",
+      "route": "pages/settings/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "55af4f383d1189a36048e91b2c812157c794f1b8bd46678bb8d86ef49f581f9b"
+    },
+    {
+      "name": "ocean--readonly",
+      "route": "pages/settings/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "ddaf39439b1d6bd5905f06a20c233f73e62b63bff2fcf51765fc80ca9f653cec"
+    },
+    {
+      "name": "tech--readonly",
+      "route": "pages/settings/index",
+      "category": "child-heading",
+      "nodes": 11,
+      "horizontal_overflow": [],
+      "validation_errors": [],
+      "screenshot_errors": [],
+      "screenshot_sha256": "72d7b7302a1d3215069c51e85f76656e8f2c801214cbd69670f0b1d9be958c9e"
+    }
+  ],
+  "failures": [
+    {
+      "theme": "original",
+      "name": "today",
+      "error": "{\"message\":\"timeout waiting for automator response\"}"
+    }
+  ],
+  "navigation_diagnostics": [],
+  "source_manifest_sha256": "080f39c9d1010925ea87d62db5780b1ca4d8819cf622f8e139c048ebdd9e8b4b"
+}

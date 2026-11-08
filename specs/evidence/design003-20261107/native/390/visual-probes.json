@@ -1,0 +1,34 @@
+{
+  "kind": "screenshot-only; geometry unavailable; isolated synthetic fixture",
+  "entries": [
+    {
+      "route": "pages/records/index",
+      "theme": "original",
+      "width": 390,
+      "height": 844,
+      "name": "visual-probe--original--records.png",
+      "sha256": "7b25450e43f18e79d9edaa74fc1158cc05a4362aa98c1dbd99003c8aaa4d07c2",
+      "png_width": 640,
+      "png_height": 1386,
+      "manual_frame_observation": "Original record layout and camera illustration visible; no native geometry."
+    },
+    {
+      "route": "pages/records/index",
+      "theme": "garden",
+      "width": 390,
+      "height": 844,
+      "name": "visual-probe--garden--records.png",
+      "sha256": "c157474241223102fdac0c9f6dd16039e608ced863d6bc189ef739f89b99a6f4",
+      "png_width": 640,
+      "png_height": 1386,
+      "manual_frame_observation": "Frame still showed the original theme after the app service reported garden; not valid garden visual evidence."
+    }
+  ],
+  "errors": [
+    {
+      "route": "pages/reports/index",
+      "theme": "garden",
+      "message": "Uncaught Cannot read properties of undefined (reading 'route')"
+    }
+  ]
+}

@@ -1,0 +1,142 @@
+{
+  "route": "pages/records/index",
+  "theme": "original",
+  "base_library": "3.17.4",
+  "viewport": {
+    "width": 320,
+    "height": 568,
+    "screenWidth": 320,
+    "screenHeight": 568
+  },
+  "nodes": [
+    {
+      "host": "page",
+      "selector": ".theme-header",
+      "left": 0,
+      "right": 320,
+      "top": 68,
+      "bottom": 141.59375,
+      "width": 320,
+      "height": 73.59375
+    },
+    {
+      "host": "page",
+      "selector": ".theme-header-content",
+      "left": 15,
+      "right": 305,
+      "top": 68,
+      "bottom": 141.59375,
+      "width": 290,
+      "height": 73.59375
+    },
+    {
+      "host": "page",
+      "selector": ".theme-header .child-chip",
+      "left": 231,
+      "right": 305,
+      "top": 85,
+      "bottom": 129,
+      "width": 74,
+      "height": 44
+    },
+    {
+      "host": "page",
+      "selector": ".record-type-title",
+      "left": 15,
+      "right": 117,
+      "top": 85,
+      "bottom": 129.59375,
+      "width": 102,
+      "height": 44.59375
+    },
+    {
+      "host": "page",
+      "selector": ".theme-heading-row",
+      "left": 15,
+      "right": 305,
+      "top": 85,
+      "bottom": 129.59375,
+      "width": 290,
+      "height": 44.59375
+    },
+    {
+      "host": "page",
+      "selector": ".theme-heading-title",
+      "left": 15,
+      "right": 223,
+      "top": 85,
+      "bottom": 129.59375,
+      "width": 208,
+      "height": 44.59375
+    },
+    {
+      "host": "page",
+      "selector": ".theme-heading-row .child-chip",
+      "left": 231,
+      "right": 305,
+      "top": 85,
+      "bottom": 129,
+      "width": 74,
+      "height": 44
+    },
+    {
+      "host": "page",
+      "selector": ".theme-heading-row .chip-nm",
+      "left": 264,
+      "right": 290,
+      "top": 97.8984375,
+      "bottom": 116.09375,
+      "width": 26,
+      "height": 18.1953125
+    },
+    {
+      "host": "page",
+      "selector": ".theme-heading-row .chev",
+      "left": 110.59040069580078,
+      "right": 118.96979522705078,
+      "top": 102.47949981689453,
+      "bottom": 110.85889434814453,
+      "width": 8.37939453125,
+      "height": 8.37939453125
+    },
+    {
+      "host": "page",
+      "selector": ".theme-heading-row .chev",
+      "left": 293.4644775390625,
+      "right": 301.9497375488281,
+      "top": 102.05025482177734,
+      "bottom": 110.53553771972656,
+      "width": 8.485260009765625,
+      "height": 8.485282897949219
+    }
+  ],
+  "source": "native selector bounds and DevTools Element.getStyles; isolated fixture, production WXML/WXSS exact",
+  "screenshot": "original--record-saving.png",
+  "screenshot_sha256": "d5be808b95fb67ef03c37ec8215586d00fd9e3c835939072c91aeb66047705b6",
+  "fixture": "record-saving",
+  "category": "child-heading",
+  "screenshot_errors": [],
+  "validation_errors": [],
+  "touch_errors": [],
+  "horizontal_overflow": [],
+  "styles": {
+    ".theme-header": {
+      "background-color": "rgba(0, 0, 0, 0)",
+      "border-top-left-radius": "0px",
+      "border-top-width": "0px",
+      "box-shadow": "none",
+      "font-size": "16px",
+      "line-height": "25.6px",
+      "color": "rgb(34, 38, 31)"
+    },
+    ".record-type-title": {
+      "background-color": "rgba(0, 0, 0, 0)",
+      "border-top-left-radius": "10px",
+      "border-top-width": "0px",
+      "box-shadow": "none",
+      "font-size": "22px",
+      "line-height": "28.6px",
+      "color": "rgb(34, 38, 31)"
+    }
+  }
+}

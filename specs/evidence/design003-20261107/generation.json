@@ -1,0 +1,27 @@
+{
+  "commands": [
+    [
+      "uv",
+      "run",
+      "python",
+      "tools/gen_theme_styles.py"
+    ],
+    [
+      "uv",
+      "run",
+      "python",
+      "tools/gen_icon_styles.py"
+    ]
+  ],
+  "before": {
+    "apps/miniprogram/styles/tokens.wxss": "40afacdd5eaf8691a232b2084532b115d2be73423133573356a2ba045fa4787e",
+    "apps/miniprogram/styles/icons.wxss": "aea05a98a5b96dd93105daa66688c2bd478345313c8e27b5f98e93aa5a8bd503",
+    "apps/miniprogram/presentation/theme/glyphs.js": "0cd59614e8a0bdcabd2e0274299753d3ccb2034167912c6dd51895edcc1ee561"
+  },
+  "after": {
+    "apps/miniprogram/styles/tokens.wxss": "40afacdd5eaf8691a232b2084532b115d2be73423133573356a2ba045fa4787e",
+    "apps/miniprogram/styles/icons.wxss": "aea05a98a5b96dd93105daa66688c2bd478345313c8e27b5f98e93aa5a8bd503",
+    "apps/miniprogram/presentation/theme/glyphs.js": "0cd59614e8a0bdcabd2e0274299753d3ccb2034167912c6dd51895edcc1ee561"
+  },
+  "unchanged": true
+}

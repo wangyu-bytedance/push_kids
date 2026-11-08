@@ -1,0 +1,83 @@
+{
+  "route": "pages/footprints/index",
+  "theme": "ocean",
+  "base_library": "3.17.4",
+  "viewport": {
+    "width": 390,
+    "height": 844,
+    "screenWidth": 390,
+    "screenHeight": 844
+  },
+  "nodes": [
+    {
+      "host": "page",
+      "selector": ".theme-heading-row",
+      "left": 16,
+      "right": 374,
+      "top": 12,
+      "bottom": 56,
+      "width": 358,
+      "height": 44
+    },
+    {
+      "host": "page",
+      "selector": ".theme-heading-title",
+      "left": 16,
+      "right": 282,
+      "top": 12,
+      "bottom": 56,
+      "width": 266,
+      "height": 44
+    },
+    {
+      "host": "page",
+      "selector": ".theme-heading-row .child-chip",
+      "left": 290,
+      "right": 374,
+      "top": 12,
+      "bottom": 56,
+      "width": 84,
+      "height": 44
+    },
+    {
+      "host": "page",
+      "selector": ".theme-heading-row .chip-nm",
+      "left": 326,
+      "right": 352,
+      "top": 24.8984375,
+      "bottom": 43.09375,
+      "width": 26,
+      "height": 18.1953125
+    },
+    {
+      "host": "page",
+      "selector": ".theme-heading-row .chev",
+      "left": 356.7573547363281,
+      "right": 368.0710754394531,
+      "top": 26.928932189941406,
+      "bottom": 38.24264144897461,
+      "width": 11.313720703125,
+      "height": 11.313709259033203
+    },
+    {
+      "host": "page",
+      "selector": ".theme-heading-title .pg-title",
+      "left": 16,
+      "right": 112,
+      "top": 18.640625,
+      "bottom": 49.359375,
+      "width": 96,
+      "height": 30.71875
+    }
+  ],
+  "source": "native selector bounds and DevTools Element.getStyles; isolated fixture, production WXML/WXSS exact",
+  "screenshot": "ocean--footprints.png",
+  "screenshot_sha256": "cc5bb267a705a12aaabfac5121c9d9b894de19d274da74393b089fa0d41456db",
+  "fixture": "footprints",
+  "category": "child-heading",
+  "screenshot_errors": [],
+  "validation_errors": [],
+  "touch_errors": [],
+  "horizontal_overflow": [],
+  "styles": {}
+}

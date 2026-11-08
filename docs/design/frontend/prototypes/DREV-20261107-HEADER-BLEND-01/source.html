@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>知芽 · 统一页头</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #e8ece8; color: #233329; font: 15px/1.5 -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif; }
+  .toolbar { max-width: 1020px; margin: auto; padding: 20px; }
+  .toolbar h1 { margin: 0 0 6px; font-size: 22px; }
+  .toolbar p { margin: 0 0 12px; }
+  label { display: inline-flex; align-items: center; gap: 6px; margin: 0 12px 6px 0; }
+  select { min-height: 44px; border: 1px solid #bcc7bd; border-radius: 8px; padding: 4px 8px; background: #fff; color: inherit; font: inherit; }
+  #phones { display: flex; flex-wrap: wrap; justify-content: center; align-items: start; gap: 24px; padding: 0 20px 24px; }
+  figure { width: min(100%, var(--device-width)); margin: 0; }
+  figcaption { margin-bottom: 6px; color: #3e5143; }
+  .phone { position: relative; display: flex; flex-direction: column; min-height: var(--device-height); background: var(--pk-page-background); color: var(--pk-ink); }
+  .nav { height: 65px; display: grid; place-items: end center; padding: 0 16px 10px; background: var(--pk-nav-bg); color: var(--pk-nav-ink); font-size: 18px; font-weight: 650; }
+  .page-header { position: relative; isolation: isolate; display: grid; grid-template-columns: minmax(0, 1fr); }
+  .hero-picture, .heading { grid-area: 1 / 1; }
+  .hero-picture { position: relative; align-self: start; pointer-events: none; }
+  .hero-picture img { display: block; width: 100%; height: auto; }
+  .hero-picture::after { content: ""; position: absolute; inset: 0; background:
+    linear-gradient(90deg, var(--pk-canvas), transparent 4%, transparent 96%, var(--pk-canvas)),
+    linear-gradient(180deg, var(--pk-canvas), transparent 12%, transparent 66%, var(--pk-canvas)); }
+  .heading { z-index: 1; align-self: start; padding: 22px 18px 18px; min-width: 0; }
+  .heading h2 { max-width: 70%; margin: 0; color: var(--pk-header-ink); font: 650 24px/1.3 var(--pk-serif); overflow-wrap: anywhere; }
+  .heading p { max-width: 65%; margin: 6px 0 0; color: var(--pk-header-muted); font-size: 14px; overflow-wrap: anywhere; }
+  .report-heading h2 { max-width: 100%; }
+  .plain .heading h2, .plain .record-trigger, .readable .heading h2 { color: var(--pk-ink); }
+  .plain .heading p, .readable .heading p { color: var(--pk-text-muted); }
+  .readable .heading { grid-area: 1 / 1; }
+  .readable .hero-picture { grid-area: 2 / 1; }
+  .readable .heading h2, .readable .heading p { max-width: 100%; }
+  .large-heading .heading h2 { font-size: 30px; }
+  .inline-art { width: 88px; height: 60px; object-fit: contain; }
+  .inline-row { display: flex; align-items: center; gap: 8px; justify-content: space-between; }
+  button { color: inherit; font: inherit; cursor: pointer; }
+  .child { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; margin-top: 7px; padding: 4px 12px 4px 5px; border: 1px solid var(--pk-line); border-radius: 999px; background: var(--pk-surface); color: var(--pk-ink); }
+  .child i { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--pk-primary-tint); color: var(--pk-primary-strong); font-size: 13px; font-style: normal; }
+  .record-anchor { position: relative; width: max-content; max-width: 100%; }
+  .record-trigger { display: block; min-height: 44px; border: 0; padding: 0; background: none; color: var(--pk-header-ink); font: 650 22px/1.3 var(--pk-serif); }
+  .menu { position: absolute; top: calc(100% + 8px); left: 0; width: 200px; z-index: 2; padding: 4px; border: 1px solid var(--pk-line); border-radius: 12px; background: var(--pk-surface); }
+  .menu button { display: block; min-height: 44px; width: 100%; border: 0; border-radius: 8px; text-align: left; padding: 0 12px; background: transparent; }
+  .menu button:first-child { background: var(--pk-primary-tint); }
+  .body { margin: 8px 18px 24px; padding: 19px; border-radius: var(--pk-r-xl); background: var(--pk-surface); }
+  .body h3 { margin: 0 0 6px; font-size: 17px; font-weight: 650; }
+  .body p { margin: 0; color: var(--pk-text-muted); font-size: 14px; }
+  .tabs { display: flex; justify-content: space-evenly; margin-top: auto; padding: 14px 4px 24px; border-top: 1px solid var(--pk-line); background: var(--pk-surface); color: var(--pk-text-muted); font-size: 13px; }
+  .tabs b { color: var(--pk-primary-strong); }
+  .before:not(.plain) .hero-picture::after { display: none; }
+  .before:not(.plain) .page-header { margin-inline: 4px; overflow: hidden; background: var(--pk-nav-bg); }
+  .before:not(.plain) .report-heading { border: 1px solid var(--pk-line); border-radius: var(--pk-r-2xl); }
+  .single { background: none; }
+  .single .toolbar { display: none; }
+  .single #phones { display: block; padding: 0; }
+  .single figcaption { display: none; }
+</style>
+<div class="toolbar">
+  <h1>知芽 · 统一页头</h1>
+  <p>左边是今日，右边是报表。切换风格或页面，查看插画边缘和页面底色如何过渡。</p>
+  <label>风格 <select id="theme" aria-label="风格"></select></label>
+  <label>页面 <select id="scene" aria-label="页面"></select></label>
+  <label>视口 <select id="size" aria-label="视口"></select></label>
+</div>
+<main id="phones"></main>
+<script>
+  const themes = __THEMES__;
+  const media = __MEDIA__;
+  const sizes = __SIZES__;
+  const scenes = {
+    today: ["今日", "今天，也慢慢来", "11 月 7 日 星期六", "今日复习", "按自己的节奏，一点点来", "child"],
+    reports: ["报表", "一点一滴，看得见", "只统计已确认的学习", "学习记录", "最近 7 天", "child"],
+    records: ["记录", "学习记录", "", "学习照片", "添加学习照片", "record"],
+    calendar: ["日程", "这一周，心里有数", "11 月 2 日 – 11 月 8 日", "本周日程", "周六 · 18:00 阅读", "child"],
+    settings: ["设置", "按你们的节奏来", "", "孩子资料", "小满 · 小学二年级"],
+    activity: ["课外活动记录", "记录这次练习", "", "活动内容", "填写这次练习"],
+    detail: ["学习详情", "阅读了新的故事", "11 月 7 日 18:30", "学习内容", "阅读并复述了故事"],
+    confirm: ["草稿确认", "一起确认今天的学习", "待确认", "学习内容", "阅读并复述了故事"],
+    create: ["创建家庭", "创建家庭", "", "家庭资料", "填写家庭名称"],
+    invite: ["输入家庭邀请码", "输入 6 位家庭邀请码", "", "邀请码", "填写家人提供的邀请码"],
+    join: ["申请加入家庭", "申请加入家庭", "", "家庭邀请码", "填写后提交申请"],
+    requests: ["加入申请", "加入申请", "", "待处理申请", "暂无待处理申请"],
+    notifications: ["提醒设置", "提醒设置", "", "每日提醒", "查看和设置提醒"],
+    cleanup: ["删除配置", "删除配置", "", "数据清理", "查看可清理的数据"],
+    "cleanup-confirm": ["清理确认", "清理「小满」的资料", "", "清理范围", "确认前先核对资料"],
+    "image-failure": ["头图加载失败", "一点一滴，看得见", "只统计已确认的学习", "学习记录", "最近 7 天", "child"],
+    "long-title": ["长标题 / 大字", "清理「一个需要更大字号的长孩子昵称」的资料", "", "清理范围", "确认前先核对资料"],
+    "record-menu": ["记录类型菜单", "学习记录", "", "学习照片", "添加学习照片", "menu"]
+  };
+  const query = new URLSearchParams(location.search);
+  const themeField = document.querySelector("#theme");
+  const sceneField = document.querySelector("#scene");
+  const sizeField = document.querySelector("#size");
+  const phones = document.querySelector("#phones");
+  const options = (select, entries) => {
+    for (const [value, label] of entries) select.add(new Option(label, value));
+  };
+  options(themeField, themes.map(t => [t.id, t.name]));
+  options(sceneField, [["compare", "今日与报表对照"], ...Object.entries(scenes).map(([id, s]) => [id, s[0]])]);
+  options(sizeField, Object.entries(sizes).map(([w, h]) => [w, w + "×" + h]));
+  themeField.value = query.get("theme") || "garden";
+  sceneField.value = query.get("scene") || "compare";
+  sizeField.value = query.get("width") || "390";
+  const single = query.has("single");
+  document.body.classList.toggle("single", single);
+  const chip = '<button class="child"><i aria-hidden="true">满</i>小满</button>';
+  function phone(theme, scene, width, before = false) {
+    const [label, title, detail, cardTitle, cardText, control] = scenes[scene];
+    const report = scene === "reports" || scene === "image-failure";
+    const tabsPage = ["today", "reports", "records", "calendar", "settings", "record-menu", "image-failure"].includes(scene);
+    const asset = scene === "image-failure" ? "" : theme.assets.hero;
+    const picture = asset ? '<div class="hero-picture" aria-hidden="true"><img alt="" src="' + media[asset] + '"></div>' : "";
+    const isRecord = control === "record" || control === "menu";
+    const art = theme.id === "original" && (report || scene === "calendar") ?
+      '<img class="inline-art" alt="" src="' + media[report ? theme.assets.report : theme.assets.calendar] + '">' : "";
+    const menu = control === "menu" ? '<div class="menu"><button>学习记录</button><button>旅行日记</button></div>' : "";
+    const header = isRecord ?
+      '<div class="record-anchor"><button class="record-trigger" aria-expanded="' + !!menu + '">' + title + ' ﹀</button>' + menu + '</div>' + chip :
+      '<h2>' + title + '</h2>' + (detail ? '<p>' + detail + '</p>' : "") + '<div class="inline-row">' + (control === "child" ? chip : "") + art + '</div>';
+    const tabs = tabsPage ?
+      '<footer class="tabs">' + ["今日", "日程", "记录", "报表", "设置"].map(t => t === label ? "<b>" + t + "</b>" : "<span>" + t + "</span>").join("") + '</footer>' : "";
+    const frame = document.createElement("figure");
+    frame.style.cssText = theme.style.replace(/([\d.]+)rpx/g, (_, n) => (Number(n) * width / 750) + "px") +
+      ";--device-width:" + width + "px;--device-height:" + sizes[width] + "px";
+    frame.innerHTML = '<figcaption>' + label + (before ? " · 当前" : " · 统一后") + '</figcaption>' +
+      '<div class="phone' + (asset ? '' : ' plain') + (before ? ' before' : '') + '">' +
+      '<div class="nav">知芽</div><header class="page-header' + (report ? ' report-heading' : '') +
+      (tabsPage ? '' : ' readable') + (scene === "long-title" ? ' large-heading' : '') + '">' +
+      picture + '<div class="heading">' + header +
+      '</div></header><section class="body"><h3>' + cardTitle + '</h3><p>' + cardText + '</p></section>' + tabs + '</div>';
+    return frame;
+  }
+  function render() {
+    const theme = themes.find(t => t.id === themeField.value) || themes[0];
+    const width = Number(sizeField.value);
+    const scene = sceneField.value;
+    const screens = scene === "compare" ? ["today", "reports"] : [scene];
+    phones.replaceChildren(...screens.map(id => phone(theme, id, width)));
+    if (scene === "compare" && !single) phones.append(...screens.map(id => phone(theme, id, width, true)));
+  }
+  for (const field of [themeField, sceneField, sizeField]) field.addEventListener("change", render);
+  render();
+</script>
+</html>

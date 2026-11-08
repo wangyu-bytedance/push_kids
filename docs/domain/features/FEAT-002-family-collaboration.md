@@ -1,5 +1,7 @@
 # FEAT-002 — 家庭协作与孩子授权
 
+随 0.1.19 开发上传的呈现修订 `FEAT-STATE-20261107-THEMES-03` 覆盖创建、加入与审批页头，授权和家庭范围继续按本 Feature 定义执行。[当前 UI](../../design/frontend/ui/UI-010-family-access.md)
+
 - 2026-10-24本地年级确认增量：沿用bound家庭及manager/editor权限，每孩子学年确认全家共享，viewer无可操作候选。App前台/后台会话与bootstrap接线在身份变化时失效旧窗口和迟到响应，人工确认/归档清理缓存并失效旧在途候选，恢复后安全刷新。家庭关系、成员角色和邀请流程不变；[FEAT-013](FEAT-013-annual-grade-promotion.md)拥有业务规则，[本轮证据](../../quality/evidence/ANNUAL-GRADE-IMPLEMENTATION-20261024.md)记录真API双家长权限/隔离、前端竞态自动化及独立评审PASS；真机双账号未验收；对应实现现已随037/0.1.16交付，未体验/审核/正式发布。
 
 - Feature ID: `FEAT-002`

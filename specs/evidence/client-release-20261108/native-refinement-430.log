@@ -1,0 +1,8 @@
+CAPTURE original refine-media-failure
+{"message":"timeout waiting for automator response"}
+CAPTURE garden refine-media-failure
+{"message":"Uncaught Error: An object could not be cloned."}
+CAPTURE space refine-media-failure
+{"message":"Uncaught Error: An object could not be cloned."}
+NATIVE_BRIDGE_UNAVAILABLE: remaining groups NOT_RUN
+{"width":430,"groups":0,"failures":[{"theme":"original","name":"refine-media-failure","error":"{\"message\":\"timeout waiting for automator response\"}"},{"theme":"garden","name":"refine-media-failure","error":"{\"message\":\"Uncaught Error: An object could not be cloned.\"}"},{"theme":"space","name":"refine-media-failure","error":"{\"message\":\"Uncaught Error: An object could not be cloned.\"}"}],"elapsed_ms":11210,"overflow_groups":[]}

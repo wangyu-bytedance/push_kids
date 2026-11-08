@@ -2,6 +2,7 @@
 
 - Policy revision: REVIEW-20261028-01
 - Approval: [GOV-003 Spec01](specs/completed/GOV-003-TDD-CODING-REVIEW-INCREMENTAL-MERGE.md)，用户2026-10-28“批准 Spec01，按方案合并”。
+- 视口检查修订：[GOV-004 Spec01](specs/completed/GOV-004-AGENT-DEVICE-CHECK-MATRIX.md)，2026-11-07 获批。
 - Owner: 产品负责人（用户）；获授权实现者协调修复，Reviewer只读。
 
 这是仓库审查规则，单次报告使用 [REVIEW-REPORT](specs/_templates/REVIEW-REPORT.md)。
@@ -20,7 +21,7 @@ Review同时发现发布前缺陷，并核对团队能否从仓库理解当前�
 | `apps/api/src/push_kids/planning/`、学习确认/记录及建议调用链 | 纯确定性策略、家长确认、发生/创建时间、事务和正式事实边界 |
 | 身份/家庭/孩子、媒体、删除、worker及`agent_processing/` | 服务端scope、归档/冻结、输入/模型验证、租约/恢复/取消、隐私 |
 | 各domain读取、`apps/api/migrations/`、`tools/`中发布/Schema路径 | 有界查询、MySQL5.7真实兼容、索引/计划、迁移/回滚及平台CPU边界 |
-| `apps/miniprogram/`、相关前端测试及设计规范 | 批准Spec+DREV/FEC、状态/竞态/表单、原生三视口、44px触控及真实设备缺口 |
+| `apps/miniprogram/`、相关前端测试及设计规范 | 批准Spec+DREV/FEC、状态/竞态/表单、当前原生视口矩阵、44px触控及真实设备缺口 |
 | `docs/`、`specs/`、`AGENTS.md`和本规则 | 当前事实/批准/历史/假设分开，证据版本、文档同步和发布阶段准确 |
 
 排除逐行人工阅读的范围：依赖安装目录和工具缓存、确定生成且源/再生命令可追溯的
@@ -65,8 +66,7 @@ necessary/questionable/unnecessary及理由、correct/acceptable/misplaced、冗
 文件、可安全删除项及哪些正确性结论有证据、哪些仍缺证据。
 
 前端审查完整沿用现有模板章节和 [FEC](docs/design/frontend/FRONTEND-ENGINEERING-CONSTRAINTS.md)：
-HTML、CSS静态检查或隐藏overflow不能代替原生节点/截图和320×568、390×844、430×932
-证据；设备、读屏、键盘、大字与真实内容缺项单独记录。可见偏离需新DREV批准。
+HTML、CSS静态检查或隐藏overflow不能代替[当前视口矩阵](docs/design/frontend/FRONTEND-DESIGN.md#9-视口与适配)的原生节点和截图。设备、读屏、键盘、大字与真实内容缺项单独记录。可见偏离需新DREV批准。
 
 ## 4. Findings and disposition
 

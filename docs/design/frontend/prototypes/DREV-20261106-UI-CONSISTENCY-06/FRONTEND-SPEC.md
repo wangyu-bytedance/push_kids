@@ -6,7 +6,7 @@
 - Authorization: 用户要求“按照以上方案生成6套的全部界面，其中原始的不需要生成了”。
 - Scope: 成长花园、星际探索、深海夜色、海洋、科技共五套；原始风格不重绘。
 - Matrix: 65个页面/关键状态 × 5主题 × 320×568、390×844、430×932，DPR=1。
-- Entry: [交互预览](index.html)；[Spec06](../../../../../specs/active/DESIGN-002-GLOBAL-UI-CONSISTENCY.md)。
+- Entry: [交互预览](index.html)；[Spec06](../../../../../specs/completed/DESIGN-002-GLOBAL-UI-CONSISTENCY.md)。
 
 ## 视觉与内容合同
 
