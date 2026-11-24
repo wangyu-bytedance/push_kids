@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>知芽 · 竞赛学习设计</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #e7e9e3; font: 15px/1.5 system-ui, sans-serif; color: #242a20; }
+  button, input, select { font: inherit; }
+  button { cursor: pointer; }
+  button:focus-visible, input:focus-visible, summary:focus-visible, select:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
+  .controls { position: sticky; top: 0; z-index: 2; display: flex; align-items: center; flex-wrap: wrap; gap: 8px 16px; padding: 10px max(16px, calc((100% - 920px) / 2)); background: #f6f7f3; font-size: 13px; }
+  .controls select { margin-inline-start: 4px; min-height: 32px; max-width: 158px; }
+  .phone { position: relative; width: min(100%, var(--preview-width, 390px)); height: var(--preview-height, 844px); margin: 18px auto; overflow: hidden; background: var(--pk-canvas); color: var(--pk-ink); font-family: var(--pk-sans); display: flex; flex-direction: column; border-radius: 22px; }
+  .export .controls, [hidden] { display: none !important; }
+  .export .phone { width: 100%; height: 100dvh; margin: 0; border-radius: 0; }
+  @media (max-width: 480px) { .phone { margin: 0 auto; border-radius: 0; } }
+  .shell { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+  .system, .brand { display: flex; align-items: center; justify-content: space-between; padding: 0 20px; background: var(--pk-nav-bg); color: var(--pk-nav-ink); }
+  .system { height: 36px; font-size: 13px; font-weight: 700; }
+  .brand { height: 44px; border-bottom: 1px solid var(--pk-line); }
+  .brand-name, h1, h2 { font-family: var(--pk-serif); font-weight: 750; }
+  .brand-name, .brand-end { display: flex; align-items: center; gap: 6px; }
+  .brand-end { padding: 4px 10px; border: 1px solid var(--pk-line); border-radius: 99px; }
+  .back { height: 44px; min-width: 44px; border: 0; background: none; color: inherit; padding: 0; }
+  .icon { width: 20px; height: 20px; display: inline-block; vertical-align: middle; flex: none; }
+  .main { flex: 1; min-height: 0; overflow: auto; padding: 16px; overscroll-behavior: contain; }
+  h1, h2, p { margin: 0; }
+  h1 { font-size: 25px; line-height: 1.35; overflow-wrap: anywhere; }
+  h2 { font-size: 17px; line-height: 1.4; }
+  .header { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 13px; }
+  .child, .soft, .pill { min-height: 44px; min-width: 44px; padding: 4px 12px; color: var(--pk-ink); background: var(--pk-surface); border: 1px solid var(--pk-line); border-radius: 22px; }
+  .child { white-space: nowrap; flex-shrink: 0; max-width: 49%; overflow: hidden; text-overflow: ellipsis; }
+  .seg { display: flex; gap: 4px; padding: 4px; margin-bottom: 12px; border: 1px solid var(--pk-line); border-radius: 14px; background: var(--pk-surface-sunken); }
+  .seg button { flex: 1; min-height: 44px; border-radius: 10px; color: var(--pk-ink); background: transparent; border: 1px solid transparent; }
+  .seg button[aria-pressed="true"] { font-weight: 700; background: var(--pk-surface); border-color: var(--pk-line); }
+  .seg .icon { margin-right: 4px; }
+  input[type="search"] { width: 100%; min-height: 44px; margin-bottom: 9px; background: var(--pk-surface); color: var(--pk-ink); padding: 0 11px; border: 1px solid var(--pk-line); border-radius: 10px; }
+  input::placeholder { color: var(--pk-text-muted); }
+  .filter, .mode { display: flex; gap: 7px; flex-wrap: wrap; margin-bottom: 12px; }
+  .pill { font-size: 13px; }
+  .soft[aria-pressed="true"], .pill[aria-pressed="true"] { font-weight: 700; background: var(--pk-primary-tint); border-color: var(--pk-primary); }
+  .grades { display: grid; grid-template-columns: repeat(5,minmax(44px,1fr)); gap: 6px; margin-bottom: 12px; }
+  .grades .soft { border-radius: 10px; padding: 4px; font-size: 13px; }
+  .label, .meta { font-size: 13px; color: var(--pk-text-muted); }
+  .label { margin-bottom: 6px; }
+  .rows, .card { background: var(--pk-surface); border: 1px solid var(--pk-line); border-radius: var(--pk-r-md); }
+  .row { display: flex; align-items: center; gap: 8px; width: 100%; min-height: 48px; text-align: left; padding: 7px 12px; color: var(--pk-ink); background: transparent; border: 0; }
+  .row + .row { border-top: 1px solid var(--pk-line); }
+  .grow { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+  .row .code { font-size: 12px; color: var(--pk-text-muted); font-variant-numeric: tabular-nums; }
+  .badge { font-size: 12px; font-weight: 680; flex-shrink: 0; align-self: center; padding: 2px 7px; border-radius: 99px; background: var(--pk-neutral-fill); color: var(--pk-ink); }
+  .badge.learn, .badge.complete { background: var(--pk-success-bg); color: var(--pk-success-ink); }
+  .badge.review { background: var(--pk-attention-bg); color: var(--pk-attention-ink); }
+  .badge.studied { background: var(--pk-info-bg); color: var(--pk-ink); }
+  .card { padding: 11px 13px; margin-bottom: 9px; }
+  .card h2 + p, .card p + p { margin-top: 4px; }
+  .progress { display: grid; gap: 6px; }
+  .progress .badge { justify-self: start; }
+  .action { width: 100%; min-height: 44px; margin-top: 3px; border: 0; border-radius: 10px; font-weight: 700; background: var(--pk-primary-strong); color: var(--pk-on-primary); }
+  .action:disabled { background: var(--pk-surface-sunken); color: var(--pk-ink); cursor: default; }
+  .question { border-top: 1px solid var(--pk-line); padding-top: 7px; margin-top: 7px; }
+  summary { display: flex; align-items: center; min-height: 44px; color: var(--pk-ink); font-weight: 650; cursor: pointer; gap: 5px; }
+  summary::before { content: "›"; }
+  details[open] > summary::before { content: "⌄"; }
+  .notice { text-align: center; padding: 19px 13px; }
+  .notice .soft { margin-top: 10px; }
+  .error { color: var(--pk-danger-ink); }
+  .nav { flex: none; display: grid; grid-template-columns: repeat(5,minmax(0,1fr)); padding: 3px 8px 19px; background: var(--pk-nav-bg); border-top: 1px solid var(--pk-line); }
+  .nav button { display: grid; justify-items: center; align-content: center; gap: 1px; min-width: 44px; min-height: 51px; background: transparent; border: 0; color: var(--pk-nav-ink); font-size: 12px; }
+  .nav button[aria-current="page"] { font-weight: 800; background: var(--pk-primary-tint); border-radius: 13px; color: var(--pk-ink); }
+  .nav .central .icon { box-sizing: content-box; border-radius: 50%; padding: 5px; color: var(--pk-on-primary); background: var(--pk-primary-strong); }
+  .mask { position: absolute; z-index: 1; inset: 0; display: flex; align-items: flex-end; background: var(--pk-overlay); }
+  .sheet { background: var(--pk-surface-raised); color: var(--pk-ink); border: 1px solid var(--pk-line); border-radius: 23px 23px 0 0; width: 100%; padding: 9px 16px 24px; box-shadow: var(--pk-e-sheet); }
+  .sheet .row { padding-inline: 10px; }
+  .sheet .settings-row { margin-top: 10px; border: 1px solid var(--pk-line); border-radius: 10px; }
+  .handle { width: 32px; height: 4px; border-radius: 4px; margin: 0 auto 8px; background: var(--pk-line-strong); }
+</style>
+<div class="controls" aria-label="评审预览设置">
+  <label>场景 <select id="scenes"></select></label><label>主题 <select id="themes"></select></label><label>视口 <select id="sizes"></select></label>
+</div>
+<section id="phone" class="phone" aria-label="知芽小程序预览">
+  <div id="shell" class="shell">
+    <div class="system" aria-hidden="true"><span>9:41</span><span>●●●　▰</span></div>
+    <div class="brand" id="brand"></div>
+    <main class="main" id="main"></main>
+    <nav class="nav" id="nav" aria-label="底部导航"></nav>
+  </div>
+  <div class="mask" id="mask" hidden><section class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title" id="sheet"></section></div>
+</section>
+<script>
+  const themeData = __THEMES__;
+  const sizes = __SIZES__;
+  const glyphs = __GLYPHS__;
+  const scenes = {
+    catalog: "目录 · 按年级", module: "目录 · 按模块", search: "搜索知识点",
+    "empty-review": "该复习 · 无到期", "next-lesson": "详情 · 该学习",
+    studied: "详情 · 已学习", review: "详情 · 该复习", complete: "详情 · 复习完成",
+    question: "详情 · 真题与答案", readonly: "详情 · 只读", pending: "详情 · 保存中", "write-error": "详情 · 保存失败",
+    "load-error": "目录 · 加载失败", loading: "目录 · 加载中",
+    children: "选择孩子 · 多孩子", "one-child": "选择孩子 · 单孩子", "no-child": "选择孩子 · 无孩子",
+    settings: "二级设置", "calendar-settings": "日程直达设置"
+  };
+  const tabs = [["今日","sprout"],["日程","calendar"],["记录","camera"],["报表","chart"],["竞赛","star"]];
+  const marks = { unstudied: "未学习", learn: "该学习", studied: "已学习", review: "该复习", complete: "复习完成" };
+  const lessons = {
+    数学: [
+      ["整数加减法","代数基础",1],["集合","代数基础",1],["分类与分步计数","计数与组合",1],
+      ["奇偶性","整数与数论",1],["几何变换","平面几何",1],["圆周角","平面几何",7],
+      ["蝴蝶模型的面积关系","平面几何",7],["阿氏圆（阿波罗尼斯圆）","平面几何",8],["导数与瞬时变化率","函数",9]
+    ],
+    物理: [
+      ["位置","力学",1],["路程","力学",1],["平面镜成像","光学",1],["浮力","力学",1],
+      ["温度","热学",1],["声波","振动与波",1],["回声与往返时间","振动与波",7],
+      ["视深与平行玻璃板","光学",8],["霍尔效应","电磁学",9]
+    ]
+  };
+  const $ = id => document.getElementById(id);
+  const params = new URLSearchParams(location.search);
+  const icon = name => `<svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${glyphs[name] || ""}</svg>`;
+  const esc = value => String(value).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[c]);
+  const button = (text, action, style = "soft", attrs = "") => `<button class="${style}" data-action="${action}" ${attrs}>${text}</button>`;
+  const badge = status => `<span class="badge ${status}">${marks[status]}</span>`;
+  let view;
+  const options = (select, entries, selected) => {
+    $(select).replaceChildren(...entries.map(([value, label]) => new Option(label, value, false, value === selected)));
+  };
+  options("scenes", Object.entries(scenes), params.get("scene") || "catalog");
+  options("themes", themeData.map(theme => [theme.id, theme.name]), params.get("theme") || "original");
+  options("sizes", Object.entries(sizes).map(([w, h]) => [w, `${w} × ${h}`]), params.get("size") || "390");
+  document.body.classList.toggle("export", params.has("export"));
+  function applyTheme() {
+    const theme = themeData.find(theme => theme.id === $("themes").value);
+    $("phone").style.cssText = Object.entries(theme.tokens).map(([k, v]) =>
+      `--${k}:${String(v).replace(/(-?[\d.]+)rpx/g, (_, size) => `${Number(size) / 2}px`)}`).join(";");
+    $("phone").style.setProperty("--preview-width", `${$("sizes").value}px`);
+    $("phone").style.setProperty("--preview-height", `${sizes[$("sizes").value]}px`);
+  }
+  function start(scene) {
+    view = { tab: "竞赛", child: "小禾", subject: "数学", grade: 1, mode: "grade", query: "", filter: "", screen: "catalog",
+      picked: null, statuses: {}, rounds: {}, open: false, scroll: 0, scene, settingsOrigin: "catalog", originAnchor: false };
+    if (scene === "module") view.mode = "module";
+    if (scene === "search") view.query = "阿氏圆";
+    if (scene === "empty-review") view.filter = "review";
+    if (["next-lesson","studied","review","complete","question","readonly","pending","write-error"].includes(scene)) {
+      view.screen = "detail";
+      view.picked = scene === "question" ? 5 : 0;
+      if (scene === "question") view.grade = 7;
+      if (["studied","review","complete"].includes(scene)) view.statuses[statusKey(0)] = scene;
+      if (scene === "review" || scene === "complete") view.rounds[statusKey(0)] = scene === "review" ? 1 : 5;
+    }
+    if (["children","one-child","no-child"].includes(scene)) view.open = true;
+    if (scene === "no-child") view.child = "";
+    if (scene === "settings" || scene === "calendar-settings") {
+      view.screen = "settings";
+      view.originAnchor = scene === "calendar-settings";
+      if (view.originAnchor) view.tab = "日程";
+    }
+    render();
+  }
+  function statusKey(id) { return `${view.child}/${view.subject}/${id}`; }
+  function status(id) {
+    if (view.statuses[statusKey(id)]) return view.statuses[statusKey(id)];
+    return id === lessons[view.subject].findIndex((_, i) => !view.statuses[statusKey(i)]) ? "learn" : "unstudied";
+  }
+  function heading(text) {
+    return `<div class="header"><h1>${text}</h1>${button(`${esc(view.child || "选择孩子")} ⌄`, "children", "child", 'aria-label="打开孩子选择框" aria-haspopup="dialog"')}</div>`;
+  }
+  function settings() {
+    const items = ["科目","课外活动","每日任务","出行安排","家庭成员","提醒","风格"];
+    return `<div class="header"><h1>设置</h1></div><p class="label">${esc(view.child || "家庭设置")}</p>
+      <div class="rows">${items.map(item => `<div class="row" ${view.originAnchor && item === "出行安排" ? 'id="schedule-anchor"' : ""}><span class="grow">${item}</span><span aria-hidden="true">›</span></div>`).join("")}</div>`;
+  }
+  function otherTab() {
+    const label = { 今日: "复习安排", 日程: "课外活动", 记录: "学习记录", 报表: "学习概览" }[view.tab];
+    return `${heading(view.tab)}<section class="card"><h2>${label}</h2>${view.tab === "日程" ? button("去设置固定时间","settings-anchor") : ""}</section>`;
+  }
+  function notice(title, hint, control = "") { return `<section class="card notice"><h2>${title}</h2><p class="meta">${hint}</p>${control}</section>`; }
+  function catalogue() {
+    if (!view.child) return heading("竞赛") + notice("选择孩子后查看竞赛", "从右上方打开孩子选择框。");
+    if (view.scene === "loading") return heading("竞赛") + notice("正在加载课程", "稍等片刻。");
+    if (view.scene === "load-error") return heading("竞赛") + notice("课程暂时无法加载", "请稍后重试。", button("重试","retry"));
+    const items = lessons[view.subject].map(([name,module,grade], id) => ({name,module,grade,id,status:status(id)}));
+    const visible = items.filter(p => view.query ? `${p.name} ${p.module}`.includes(view.query.trim().replace("阿式圆","阿氏圆"))
+      : view.filter ? p.status === view.filter : view.mode === "module" || p.grade === view.grade);
+    const row = p => button(`${p.grade === 1 && view.mode === "grade" && !view.filter && !view.query ? `<span class="code">${String(p.id+1).padStart(2,"0")}</span>` : ""}<span class="grow">${esc(p.name)}</span>${badge(p.status)}`, `lesson:${p.id}`, "row");
+    const groups = view.mode === "module" && !view.filter && !view.query;
+    const label = view.query ? "搜索结果" : view.filter ? marks[view.filter] : view.mode === "grade" ? ["一","二","三","四","五","六","七","八","九"][view.grade - 1] + "年级" : "知识模块";
+    return heading("竞赛") +
+      `<div class="seg" role="group" aria-label="学科">${Object.keys(lessons).map(s => button(icon(s === "数学" ? "book" : "chip") + s, `subject:${s}`, "", `aria-pressed="${s === view.subject}"`)).join("")}</div>
+      <input id="search" type="search" value="${esc(view.query)}" aria-label="搜索知识点" placeholder="搜索知识点、题型或教材">
+      <div class="filter">${["learn","review"].map(f => button(marks[f] + " " + items.filter(p => p.status === f).length, `filter:${f}`, "pill", `aria-pressed="${view.filter === f}"`)).join("")}</div>
+      <div class="mode">${button("按年级","mode:grade","soft",`aria-pressed="${view.mode === "grade"}"`)}${button("按模块","mode:module","soft",`aria-pressed="${view.mode === "module"}"`)}</div>
+      ${!view.filter && !view.query && view.mode === "grade" ? `<div class="grades" aria-label="年级">${Array.from({length:9}, (_, i) => button(`${i+1} 年级`, `grade:${i+1}`, "soft", `aria-pressed="${view.grade === i+1}"`)).join("")}</div>` : ""}
+      <p class="label">${label}</p>
+      ${visible.length ? groups ? [...new Set(visible.map(p => p.module))].map((m, i) => `<details class="card" ${i === 0 ? "open" : ""}><summary>${m}</summary><div class="rows">${visible.filter(p => p.module === m).map(row).join("")}</div></details>`).join("") : `<div class="rows">${visible.map(row).join("")}</div>` : notice(view.filter === "review" ? "今天没有到期复习" : "没有匹配的示例", view.filter === "review" ? "到期的知识点会出现在这里。" : "可换一个关键词或年级。")}`;
+  }
+  function detail() {
+    const [name, module, grade] = lessons[view.subject][view.picked];
+    const state = status(view.picked);
+    const completed = view.rounds[statusKey(view.picked)] || 0;
+    const isCircle = name === "圆周角";
+    const isOption = name.includes("导数");
+    const write = ["learn","review"].includes(state) || isOption && state === "unstudied";
+    const pending = view.scene === "pending";
+    const prompt = state === "review" ? "先独立做一道验证题，再说说每一步为什么成立。" :
+      state === "studied" ? `下次复习 · 11 月 ${completed === 2 ? 22 : 16} 日` : "";
+    const action = state === "review" ? `完成第 ${completed + 1} 轮复习` : isOption ? "记录选学完成" : "学习完成";
+    const samples = {
+      整数加减法: ["用两种颜色的积木摆出两个数，让孩子演示添上、移走和合并。",
+        "加法可以表示合并。减法可以表示拿走，也可以表示两个数量相差多少。",
+        "原来有 8 块积木，拿走 3 块，再添上 2 块。现在有多少块？", "8 − 3 + 2 = 7，共 7 块。"],
+      位置: ["从家里的一个固定点出发，用方格纸画出玩具所在的位置。", "要描述位置，先约定参照物和方向。",
+        "小车在桌子左边 20 厘米，是以什么为参照物？", "桌子。"],
+      圆周角: ["在同一条弧上选两个顶点，量一量它们所对的圆周角。",
+        "同弧所对圆周角相等。直径所对的圆周角是直角。", "AB 是圆的直径，C 在圆上。∠ACB 等于多少？", "90°。直径所对的圆周角是直角。"],
+      "阿氏圆（阿波罗尼斯圆）": ["先在纸上找出到两个固定点距离比为 2 的点，再观察轨迹。",
+        "给定两定点 A、B 和常数 k>0，且 k≠1，满足 PA/PB=k 的点构成一个圆。",
+        "到两点距离相等的动点形成什么轨迹？", "两点连线的垂直平分线。此时 k=1。"]
+    };
+    const sample = samples[name];
+    return `<p class="label">${view.subject} · ${module} · ${grade} 年级</p><div class="header"><h1>${name}</h1></div>
+      <section class="card progress" aria-label="学习进度"><div>${badge(state)}
+      ${["review","studied","complete"].includes(state) ? ` <span class="meta">已复习 ${completed} / 5 轮</span>` : ""}</div>
+      ${prompt ? `<p class="meta">${prompt}</p>` : ""}
+      ${view.scene === "readonly" ? '<p class="meta">当前仅可查看。</p>' : write ? button(pending ? "保存中…" : view.scene === "write-error" ? "重试保存" : action, "finish", "action", pending ? 'disabled aria-busy="true"' : "") : ""}
+      ${view.scene === "write-error" ? '<p class="error" role="alert">没有保存成功，请重试。</p>' : ""}</section>
+      <section class="card"><h2>学习顺序</h2><p>${grade} 年级 · ${isCircle ? "第 14 项" : "按目录顺序"}${isOption ? " · 选学" : ""}</p></section>
+      <section class="card"><h2>讲解方法</h2>${sample ? `<p>${sample[0]}</p><details><summary>定义与适用条件</summary><p>${sample[1]}</p></details>` : '<p class="meta">该节点在预览中只展示位置和进度。</p>'}</section>
+      <section class="card"><h2>验证题目</h2>
+        ${isCircle ? '<details class="question" open><summary>2023 年 CMO 决赛 · 第 5 题</summary><p class="meta">历年竞赛原题 · 查阅试卷与题号。</p>' + button("查看原题出处","source") + '</details>' : ""}
+        ${sample ? `<div class="question"><p class="meta">自拟验证题</p><p>${sample[2]}</p>
+          <details ${isCircle ? "open" : ""}><summary>参考答案</summary><p>${sample[3]}</p></details></div>` : ""}
+      </section>`;
+  }
+  function render() {
+    const subpage = view.screen !== "catalog";
+    $("brand").innerHTML = subpage
+      ? button("‹ 返回", "back", "back", 'aria-label="返回"') + '<strong>知芽</strong><span class="brand-end" aria-hidden="true">•••</span>'
+      : `<span class="brand-name">${icon("sprout")}知芽</span><span class="brand-end" aria-hidden="true">•••　◉</span>`;
+    $("nav").hidden = subpage;
+    $("nav").innerHTML = tabs.map(([name, glyph]) => button(icon(glyph) + name, `tab:${name}`, name === "记录" ? "central" : "", name === view.tab ? 'aria-current="page"' : "")).join("");
+    $("main").innerHTML = view.screen === "settings" ? settings() : view.screen === "detail" ? detail() : view.tab === "竞赛" ? catalogue() : otherTab();
+    $("mask").hidden = !view.open;
+    $("shell").inert = view.open;
+    $("sheet").innerHTML = view.open ? `<div class="handle"></div><div class="header"><h2 id="sheet-title">选择孩子</h2>${button("关闭","dismiss")}</div>
+      <div class="rows">${(view.child ? (view.scene === "one-child" ? ["小禾"] : ["小禾","小满"]) : []).map(child => button(`${icon("user")}<span class="grow">${child}</span>${child === view.child ? icon("check") : ""}`, `child:${child}`, "row", `aria-label="切换到${child}${child === view.child ? '，当前孩子' : ''}"`)).join("") ||
+      '<p class="row meta">还没有孩子档案</p>'}${button(icon("plus") + "添加孩子","add-child","row")}</div>
+      ${button(icon("sliders") + '<span class="grow">设置</span><span aria-hidden="true">›</span>', "settings", "row settings-row")}` : "";
+  }
+  $("main").addEventListener("input", event => {
+    if (event.target.id !== "search") return;
+    view.query = event.target.value;
+    view.filter = "";
+    const position = event.target.selectionStart;
+    render();
+    $("search").focus();
+    if (position !== null) $("search").setSelectionRange(position, position);
+  });
+  function closeSheet() { view.open = false; render(); $("main").querySelector(".child")?.focus(); }
+  $("phone").addEventListener("keydown", event => {
+    if (!view.open) return;
+    if (event.key === "Escape") closeSheet();
+    if (event.key === "Tab") {
+      const controls = [...$("sheet").querySelectorAll("button")];
+      if (event.shiftKey && document.activeElement === controls[0]) { event.preventDefault(); controls.at(-1).focus(); }
+      if (!event.shiftKey && document.activeElement === controls.at(-1)) { event.preventDefault(); controls[0].focus(); }
+    }
+  });
+  $("phone").addEventListener("click", event => {
+    const control = event.target.closest("[data-action]");
+    if (!control) { if (event.target === $("mask")) closeSheet(); return; }
+    const [action, value] = control.dataset.action.split(":");
+    if (action === "dismiss") { closeSheet(); return; }
+    if (action === "source") {
+      control.insertAdjacentHTML("afterend", '<p class="meta" role="status">查找 2023 年 CMO 冬令营决赛试卷，第 5 题。</p>');
+      control.disabled = true;
+      return;
+    }
+    if (action === "tab") { view.tab = value; view.scroll = 0; }
+    if (action === "children") view.open = true;
+    if (action === "child" || action === "add-child") { view.child = value || "小禾"; view.open = false; view.filter = ""; view.query = ""; view.grade = 1; view.scroll = 0; }
+    if (action === "settings" || action === "settings-anchor") { view.open = false; view.settingsOrigin = view.screen; view.screen = "settings"; view.originAnchor = action === "settings-anchor"; }
+    if (action === "subject") { view.subject = value; view.query = ""; view.filter = ""; }
+    if (action === "filter") { view.filter = view.filter === value ? "" : value; view.query = ""; }
+    if (action === "mode") { view.mode = value; view.query = ""; view.filter = ""; }
+    if (action === "grade") view.grade = Number(value);
+    if (action === "retry") view.scene = "catalog";
+    if (action === "lesson") { view.scroll = $("main").scrollTop; view.picked = Number(value); view.screen = "detail"; }
+    if (action === "back") view.screen = view.screen === "settings" ? view.settingsOrigin : "catalog";
+    if (action === "finish") {
+      const key = statusKey(view.picked);
+      if (status(view.picked) === "review") view.rounds[key] = (view.rounds[key] || 0) + 1;
+      view.statuses[key] = view.rounds[key] === 5 ? "complete" : "studied";
+      view.scene = "catalog";
+    }
+    render();
+    $("main").scrollTop = action === "back" ? view.scroll : 0;
+    if (view.open) $("sheet").querySelector("button")?.focus({preventScroll:true});
+    if (action === "settings-anchor") $("schedule-anchor")?.scrollIntoView({block:"nearest"});
+  });
+  $("scenes").addEventListener("change", () => start($("scenes").value));
+  $("themes").addEventListener("change", applyTheme);
+  $("sizes").addEventListener("change", applyTheme);
+  applyTheme();
+  start($("scenes").value);
+</script>
