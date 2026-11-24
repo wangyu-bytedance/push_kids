@@ -19,6 +19,12 @@ from push_kids.persistence.review_queue_v2 import install as install_review_queu
 from push_kids.platform.config import Settings
 
 
+def begin_sqlite_write(db: Session) -> None:
+    """Serialize a new local write transaction before its first snapshot read."""
+    if db.get_bind().dialect.name == "sqlite" and not db.in_transaction():
+        db.connection().exec_driver_sql("BEGIN IMMEDIATE")
+
+
 class Database:
     expected_cloud_revision = "20261105_0027"
 

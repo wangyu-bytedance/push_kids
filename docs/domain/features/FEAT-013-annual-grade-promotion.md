@@ -36,7 +36,7 @@
 
 - `GET /api/v1/children/grade-confirmations`：学年、权限及最多5项，数据库LIMIT6一致性哨兵；第6个在用档案返回异常，不静默截断。
 - `POST /api/v1/children/{id}/grade-confirmation`：school_year、expected_grade_revision、支持级；事务返回正式ChildView与outcome。
-- `PATCH /children/{id}`：明确改级必须携带confirm_grade和expected_grade_revision；未带grade不改变元数据。旧表单同级普通保存可用，旧改级返回升级要求409，不能覆盖新确认。
+- `PATCH /children/{id}`：明确改级（包括以 `grade: null` 清空已填年级）必须携带 `confirm_grade` 和 `expected_grade_revision`；未带 `grade` 不改变元数据。旧表单同级普通保存可用，旧改级返回升级要求 409，不能覆盖新确认。档案字段修复的清空兼容回归见[本轮证据](../../../specs/evidence/EVD-20261124-CORE-REVIEW-IMPLEMENTATION.md)。
 - 原有canonical字符串兼容存储，前端显示一至九年级；精确旧别名可识别，未知值原样保留。
 - 迁移`20261024_0025`接0024，仅新增children两列及tenant-leading索引；旧grade和NULL基准不回填。存在确认事实时拒绝删列降级，重启不重置。
 

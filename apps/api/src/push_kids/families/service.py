@@ -348,14 +348,19 @@ class FamilyService:
         cls, db: Session, family_id: str, member_id: str, *, expected_role: str | None = None
     ) -> bool:
         """Serialize notification delivery with family deletion acceptance."""
+        family = db.scalar(
+            select(Family.id)
+            .where(Family.id == family_id, Family.status == FamilyStatus.active.value)
+            .with_for_update()
+        )
+        if family is None:
+            return False
         item = db.scalar(
             select(FamilyMember.role)
-            .join(Family, Family.id == FamilyMember.family_id)
             .where(
                 FamilyMember.id == member_id,
                 FamilyMember.family_id == family_id,
                 FamilyMember.status == MemberStatus.active.value,
-                Family.status == FamilyStatus.active.value,
             )
             .with_for_update()
         )
@@ -456,6 +461,8 @@ class FamilyService:
         )
         if member is None:
             raise NotFoundError("没有找到这个家庭成员")
+        if member.id == context.member_id:
+            raise ConflictError("不能在成员管理中移除自己")
         manager_count = db.scalar(
             select(func.count())
             .select_from(FamilyMember)

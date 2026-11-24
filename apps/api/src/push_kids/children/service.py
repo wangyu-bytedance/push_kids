@@ -220,7 +220,7 @@ class ChildrenService:
                 )
             elif grade != child.grade:
                 raise ClientUpgradeRequiredError("请更新小程序后修改年级，刚才填写的内容仍保留")
-        if "name" in values and values["name"] is not None:
+        if "name" in values:
             values["name"] = cls._require_free_name(
                 db, family_id, values["name"], exclude_child_id=child_id
             )

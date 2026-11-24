@@ -6,6 +6,7 @@ import os
 import time
 from concurrent.futures import ThreadPoolExecutor
 from datetime import timedelta
+from threading import Event
 from uuid import uuid4
 
 import pytest
@@ -13,7 +14,7 @@ from fastapi.testclient import TestClient
 from push_kids.activities.service import ActivitiesService
 from push_kids.agent_processing.providers import DeterministicTestProvider
 from push_kids.bootstrap.app import create_app
-from push_kids.families.schemas import JoinDecision
+from push_kids.families.schemas import JoinDecision, MemberUpdate
 from push_kids.families.service import FamilyService
 from push_kids.learning.service import LearningService
 from push_kids.persistence.models import (
@@ -21,6 +22,7 @@ from push_kids.persistence.models import (
     AgentJob,
     Child,
     Family,
+    FamilyAuditEvent,
     FamilyMember,
     JobState,
     KnowledgeItem,
@@ -478,6 +480,104 @@ def test_mysql_family_onboarding_invite_and_approval() -> None:
         assert replayed_approval.status_code == 200
         assert second_approval.json()["id"] == replayed_approval.json()["id"]
         assert second_approval.json()["id"] != member_ids[0]
+
+
+@pytest.mark.parametrize("membership_change", ["demote", "remove"])
+def test_waiting_family_write_uses_current_membership(membership_change) -> None:
+    assert MYSQL_URL
+    app = create_app(
+        Settings(
+            PUSH_KIDS_ENV="cloud",
+            PUSH_KIDS_DATABASE_URL=MYSQL_URL,
+            PUSH_KIDS_MEDIA_BACKEND="wechat_cloud",
+            CBR_ENV_ID="mysql-test",
+            WECHAT_APP_ID="wx-mysql-test",
+            COS_BUCKET="bucket-test",
+            PUSH_KIDS_ACTOR_HMAC_KEY="mysql-test-hmac-key-that-is-long-enough",
+            PUSH_KIDS_RUN_WORKER=True,
+            ARK_API_KEY="synthetic-mysql-test-key",
+        )
+    )
+    database = app.state.database
+    suffix = uuid4().hex
+    manager = _headers(f"race-manager-{suffix}")
+    editor = _headers(f"race-editor-{suffix}")
+    with TestClient(app) as client:
+        created = client.post(
+            "/api/v1/families",
+            headers={**manager, "Idempotency-Key": "race-family-create"},
+            json={
+                "display_name": "Synthetic race family",
+                "relationship_label": "parent",
+                "child": {"name": "Synthetic child"},
+            },
+        )
+        assert created.status_code == 201, created.text
+        family_id = created.json()["family"]["id"]
+        manager_id = created.json()["member"]["id"]
+        child_id = created.json()["children"][0]["id"]
+        child_path = f"/api/v1/children/{child_id}"
+        invite = client.post(
+            "/api/v1/families/current/invites",
+            headers={**manager, "Idempotency-Key": "race-family-invite"},
+            json={},
+        )
+        assert invite.status_code == 201
+        join = client.post(
+            "/api/v1/family-requests",
+            headers={**editor, "Idempotency-Key": "race-family-join"},
+            json={"token": invite.json()["token"], "relationship_label": "parent"},
+        )
+        assert join.status_code == 201
+        approved = client.post(
+            f"/api/v1/family-requests/{join.json()['id']}/approve",
+            headers={**manager, "Idempotency-Key": "race-family-approve"},
+            json={"role": "editor"},
+        )
+        assert approved.status_code == 200
+        editor_id = approved.json()["id"]
+        allowed = client.patch(child_path, headers=editor, json={"daily_budget_minutes": 25})
+        assert allowed.status_code == 200
+
+        family_lock_attempted = Event()
+
+        def observe_family_lock(_conn, _cursor, statement, _params, _ctx, _many):
+            if "from families" in statement.lower() and "for update" in statement.lower():
+                family_lock_attempted.set()
+
+        with ThreadPoolExecutor(max_workers=1) as executor, database.session_factory() as admin:
+            assert admin.scalar(select(Family.id).where(Family.id == family_id).with_for_update())
+            manager_binding_id = admin.scalar(
+                select(FamilyMember.actor_binding_id).where(FamilyMember.id == manager_id)
+            )
+            context = RequestContext(
+                family_id, None, None, None, manager_binding_id, manager_id, "manager"
+            )
+            current_audits = select(FamilyAuditEvent.action).where(
+                FamilyAuditEvent.family_id == family_id
+            )
+            audits_before = len(admin.scalars(current_audits).all())
+            event.listen(database.engine, "before_cursor_execute", observe_family_lock)
+            try:
+                later_write = executor.submit(
+                    client.patch, child_path, headers=editor, json={"daily_budget_minutes": 60}
+                )
+                assert family_lock_attempted.wait(timeout=5)
+                assert not later_write.done()
+                if membership_change == "demote":
+                    FamilyService.update_member(
+                        admin, context, editor_id, MemberUpdate(role="viewer")
+                    )
+                else:
+                    FamilyService.remove_member(admin, context, editor_id)
+                rejected = later_write.result(timeout=8)
+            finally:
+                event.remove(database.engine, "before_cursor_execute", observe_family_lock)
+        assert rejected.status_code == 403, rejected.text
+        current = client.get("/api/v1/children", headers=manager)
+        assert current.json() == [allowed.json()]
+        with database.session_factory() as db:
+            assert len(db.scalars(current_audits).all()) == audits_before + 1
 
 
 def test_mysql_history_reviews_supports_empty_feedback_and_stable_pagination() -> None:

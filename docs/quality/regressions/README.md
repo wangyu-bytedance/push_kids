@@ -32,6 +32,8 @@ Owner和期限且不计通过；retired注明不再适用的契约/替代案例�
 
 ## Current cases
 
+[家庭写入与通知状态回放](REG-20261124-CORE-TRANSACTION-REPAIR.md)覆盖成员撤权、自移除、档案边界、租约竞争、旧规划快照及授权额度竞争。
+
 [System One辅助验收REG](REG-20261105-SYSTEM-ONE-ACCEPTANCE.md)为当前可执行消费者，绑定Spec06事实保持、降级/阈值/资源、事务与迟到写回及原Pro路由。旧[判定与确认REG](REG-20261105-SYSTEM-ONE-DECISIONS.md)已retired，仅保留Spec05历史；其固定40/关系召回FAIL不重标，旧覆盖/迁移兼容和match缓存仍有当前回归。
 
 [单份来源核验与空结果终态REG](REG-20261105-SINGLE-SOURCE-AUDIT.md)为active behavior，绑定冻结12/15的5个预期Red和13/16源码/Green。覆盖文字/图像、有候选/空候选、不可读及隔离Worker retry/cancel；不以机制通过代替模型内容或家长验收。

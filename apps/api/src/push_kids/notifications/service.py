@@ -11,9 +11,11 @@ from __future__ import annotations
 import json
 import logging
 from dataclasses import dataclass
-from datetime import datetime, timedelta
+from datetime import UTC, datetime, timedelta
+from typing import cast
 
 from sqlalchemy import delete, exists, or_, select, update
+from sqlalchemy.engine import CursorResult
 from sqlalchemy.orm import Session
 
 from push_kids.children.service import ChildrenService
@@ -53,6 +55,7 @@ from push_kids.persistence.models import (
 from push_kids.planning.service import PlanningService
 from push_kids.platform.config import Settings
 from push_kids.platform.context import RequestContext
+from push_kids.platform.database import begin_sqlite_write
 from push_kids.platform.errors import ForbiddenError, NotFoundError
 from push_kids.platform.time import local_date, utcnow
 
@@ -69,6 +72,16 @@ TERMINAL_STATES = (
     DeliveryState.failed.value,
     DeliveryState.cancelled.value,
 )
+
+
+@dataclass(frozen=True)
+class DeliveryClaim:
+    id: str
+    family_id: str
+    member_id: str
+    type: str
+    attempt: int
+    lease_until: datetime
 
 
 @dataclass(frozen=True)
@@ -129,31 +142,39 @@ def build_channel(settings: Settings) -> NotificationChannel:
 
 class NotificationsService:
     @staticmethod
-    def _lock_claimed_delivery(db: Session, delivery_id: str) -> NotificationDelivery | None:
+    def _lock_claimed_delivery(
+        db: Session, claim: DeliveryClaim, now: datetime | None
+    ) -> NotificationDelivery | None:
         """Revalidate a claimed row after target locks and before external delivery.
 
         Deletion locks the target before purging notification rows. Dispatch follows the same
         target-then-delivery lock order, so a purge that wins the race is observed as a missing row
         and its in-memory payload is never sent.
         """
-        return db.scalar(
+        row = db.scalar(
             select(NotificationDelivery)
             .where(
-                NotificationDelivery.id == delivery_id,
+                NotificationDelivery.id == claim.id,
                 NotificationDelivery.state == DeliveryState.sending.value,
+                NotificationDelivery.attempts == claim.attempt,
+                NotificationDelivery.lease_until == claim.lease_until,
             )
             .with_for_update()
+            .execution_options(populate_existing=True)
         )
+        if row is None or claim.lease_until < (now or utcnow()):
+            return None
+        return row
 
     @staticmethod
-    def _delivery_target_result_code(db: Session, row: NotificationDelivery) -> str | None:
-        family_id = str(row.family_id)
-        member_id = str(row.member_id)
+    def _delivery_target_result_code(db: Session, claim: DeliveryClaim) -> str | None:
+        family_id = claim.family_id
+        member_id = claim.member_id
         if not FamilyService.notification_member_is_active(db, family_id, member_id):
             if FamilyService.notification_family_is_active(db, family_id):
                 return "member_departed"
             return "target_deleting"
-        if row.type not in (
+        if claim.type not in (
             NotificationType.schedule_reminder.value,
             NotificationType.review_digest.value,
         ):
@@ -162,7 +183,7 @@ class NotificationsService:
             child_id
             for child_id in db.scalars(
                 select(NotificationDeliveryChild.child_id).where(
-                    NotificationDeliveryChild.delivery_id == row.id
+                    NotificationDeliveryChild.delivery_id == claim.id
                 )
             )
             if child_id is not None
@@ -469,29 +490,41 @@ class NotificationsService:
         return views
 
     @staticmethod
-    def _claim(
-        db: Session, now: datetime, limit: int
-    ) -> list[NotificationDelivery]:  # pragma: no cover - exercised through dispatch_due
-        statement = (
+    def _claim(db: Session, due_before: datetime, now: datetime | None) -> DeliveryClaim | None:
+        begin_sqlite_write(db)
+        row = db.scalar(
             select(NotificationDelivery)
             .where(
                 NotificationDelivery.state == DeliveryState.pending.value,
-                NotificationDelivery.scheduled_at <= now,
-                NotificationDelivery.available_at <= now,
+                NotificationDelivery.scheduled_at <= due_before,
+                NotificationDelivery.available_at <= due_before,
             )
-            .order_by(NotificationDelivery.scheduled_at)
-            .limit(limit)
+            .order_by(NotificationDelivery.scheduled_at, NotificationDelivery.id)
+            .limit(1)
+            .with_for_update()
+            .execution_options(populate_existing=True)
         )
-        if db.bind is not None and db.bind.dialect.name == "mysql":
-            statement = statement.with_for_update()
-        rows = list(db.scalars(statement))
-        for row in rows:
-            row.state = DeliveryState.sending.value
-            row.attempts = int(row.attempts or 0) + 1
-            row.lease_until = now + timedelta(seconds=LEASE_SECONDS)
-            row.updated_at = now
+        if row is None:
+            db.rollback()
+            return None
+        started = now or utcnow()
+        # The existing MySQL DATETIME column stores whole seconds. Match its persisted
+        # precision so the same attempt can be verified by the next transaction.
+        expiry = started.replace(microsecond=0) + timedelta(seconds=LEASE_SECONDS)
+        claim = DeliveryClaim(
+            str(row.id),
+            str(row.family_id),
+            str(row.member_id),
+            str(row.type),
+            int(row.attempts or 0) + 1,
+            expiry,
+        )
+        row.state = DeliveryState.sending.value
+        row.attempts = claim.attempt
+        row.lease_until = claim.lease_until
+        row.updated_at = started
         db.commit()
-        return rows
+        return claim
 
     @classmethod
     def _terminate(
@@ -499,36 +532,53 @@ class NotificationsService:
     ) -> None:
         row.state = state.value
         row.result_code = code
-        row.updated_at = utcnow()
+        row.lease_until = None
+        finished = utcnow()
+        row.updated_at = finished
         if state is DeliveryState.sent:
-            row.sent_at = utcnow()
+            row.sent_at = finished
         db.commit()
 
     @classmethod
     def reclaim_expired(cls, db: Session, now: datetime | None = None) -> int:
         """Return leases abandoned by a crashed dispatcher so a message is not silently lost."""
         current = now or utcnow()
-        rows = list(
-            db.scalars(
-                select(NotificationDelivery).where(
+        candidates = db.execute(
+            select(
+                NotificationDelivery.id,
+                NotificationDelivery.attempts,
+                NotificationDelivery.max_attempts,
+                NotificationDelivery.lease_until,
+            )
+            .where(
+                NotificationDelivery.state == DeliveryState.sending.value,
+                NotificationDelivery.lease_until < current,
+            )
+            .order_by(NotificationDelivery.lease_until, NotificationDelivery.id)
+            .limit(DISPATCH_BATCH)
+        ).all()
+        reclaimed = 0
+        for delivery_id, attempts, max_attempts, lease_until in candidates:
+            changes: dict[str, str | datetime]
+            if attempts >= max_attempts:
+                changes = {"state": DeliveryState.failed.value, "result_code": "lease_expired"}
+            else:
+                changes = {"state": DeliveryState.pending.value, "available_at": current}
+            result = db.execute(
+                update(NotificationDelivery)
+                .where(
+                    NotificationDelivery.id == delivery_id,
                     NotificationDelivery.state == DeliveryState.sending.value,
-                    NotificationDelivery.lease_until.is_not(None),
+                    NotificationDelivery.attempts == attempts,
+                    NotificationDelivery.lease_until == lease_until,
                     NotificationDelivery.lease_until < current,
                 )
+                .values(**changes, lease_until=None, updated_at=current)
+                .execution_options(synchronize_session=False)
             )
-        )
-        for row in rows:
-            if int(row.attempts or 0) >= int(row.max_attempts or 3):
-                row.state = DeliveryState.failed.value
-                row.result_code = "lease_expired"
-            else:
-                row.state = DeliveryState.pending.value
-                row.available_at = current
-            row.lease_until = None
-            row.updated_at = current
-        if rows:
-            db.commit()
-        return len(rows)
+            reclaimed += cast(CursorResult, result).rowcount
+        db.commit()
+        return reclaimed
 
     @classmethod
     def revoke_departed(cls, db: Session) -> int:
@@ -603,18 +653,22 @@ class NotificationsService:
             subscription.status = SubscriptionStatus.revoked.value
             subscription.remaining_quota = 0
             subscription.updated_at = now
-        for delivery in db.scalars(
-            select(NotificationDelivery).where(
+        db.execute(
+            update(NotificationDelivery)
+            .where(
                 NotificationDelivery.member_id.in_(departed),
                 NotificationDelivery.state.in_(
                     (DeliveryState.pending.value, DeliveryState.sending.value)
                 ),
             )
-        ):
-            delivery.state = DeliveryState.cancelled.value
-            delivery.result_code = "member_departed"
-            delivery.lease_until = None
-            delivery.updated_at = now
+            .values(
+                state=DeliveryState.cancelled.value,
+                result_code="member_departed",
+                lease_until=None,
+                updated_at=now,
+            )
+            .execution_options(synchronize_session=False)
+        )
         db.commit()
         logger.info("notification_channel_revoked members=%s", len(departed))
         return len(departed)
@@ -662,20 +716,24 @@ class NotificationsService:
         now: datetime | None = None,
         limit: int = DISPATCH_BATCH,
     ) -> dict[str, int]:
+        if now is not None and now.tzinfo is None:
+            now = now.replace(tzinfo=UTC)
         current = now or utcnow()
         counts = {"sent": 0, "skipped": 0, "retried": 0, "failed": 0, "dropped": 0}
         cls.reclaim_expired(db, current)
-        claimed = cls._claim(db, current, limit)
-        for claimed_row in claimed:
-            type_name = str(claimed_row.type)
-            member_id = str(claimed_row.member_id)
+        for _ in range(min(limit, DISPATCH_BATCH)):
+            claim = cls._claim(db, current, now)
+            if claim is None:
+                break
+            type_name = claim.type
+            member_id = claim.member_id
+            begin_sqlite_write(db)
             # Locks make deletion acceptance and external delivery serial: whichever acquires the
             # family/child rows first completes before the other can claim the newer state.
-            result_code = cls._delivery_target_result_code(db, claimed_row)
-            row = cls._lock_claimed_delivery(db, str(claimed_row.id))
+            result_code = cls._delivery_target_result_code(db, claim)
+            row = cls._lock_claimed_delivery(db, claim, now)
             if row is None:
-                # A deletion worker may have purged the claimed row while it was waiting for the
-                # target lock. Roll back the read transaction to release any locks it acquired.
+                # A purge or lease recovery may have won while we waited for the target.
                 db.rollback()
                 counts["dropped"] += 1
                 continue
@@ -726,10 +784,12 @@ class NotificationsService:
                 counts["skipped"] += 1
                 continue
             subscription = db.scalar(
-                select(NotificationSubscription).where(
+                select(NotificationSubscription)
+                .where(
                     NotificationSubscription.member_id == member_id,
                     NotificationSubscription.type == type_name,
                 )
+                .execution_options(populate_existing=True)
             )
             quota = int(subscription.remaining_quota or 0) if subscription is not None else 0
             authorised = (
@@ -741,18 +801,18 @@ class NotificationsService:
                 cls._terminate(db, row, DeliveryState.skipped, "not_authorized")
                 counts["skipped"] += 1
                 continue
-            destination = db.scalar(
-                select(NotificationDestination).where(
+            ciphertext = db.scalar(
+                select(NotificationDestination.ciphertext).where(
                     NotificationDestination.member_id == member_id,
                     NotificationDestination.status == "active",
                 )
             )
-            if destination is None or channel.cipher is None:
+            if ciphertext is None or channel.cipher is None:
                 cls._terminate(db, row, DeliveryState.skipped, "no_destination")
                 counts["skipped"] += 1
                 continue
             try:
-                receiver = channel.cipher.decrypt(str(destination.ciphertext))
+                receiver = channel.cipher.decrypt(ciphertext)
             except DestinationCipherError:
                 logger.warning("notification_destination_undecryptable type=%s", type_name)
                 cls._terminate(db, row, DeliveryState.failed, "destination_unreadable")
@@ -789,13 +849,14 @@ class NotificationsService:
                 counts["sent"] += 1
                 continue
             if outcome.status == "retry" and int(row.attempts or 0) < int(row.max_attempts or 3):
+                finished = now or utcnow()
                 row.state = DeliveryState.pending.value
-                row.available_at = current + timedelta(
+                row.available_at = finished + timedelta(
                     seconds=retry_delay_seconds(int(row.attempts or 1))
                 )
                 row.lease_until = None
                 row.result_code = outcome.code
-                row.updated_at = current
+                row.updated_at = finished
                 db.commit()
                 counts["retried"] += 1
                 continue

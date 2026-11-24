@@ -1,5 +1,7 @@
 # Specs Directory
 
+[2026-11-24 评审修复](active/BUG-20261124-CORE-REVIEW-REMEDIATION.md)已获批准。当前主分支候选包含家庭写入授权、通知租约、成员自移除和档案 PATCH 校验，待匹配云交付。[主分支验证](evidence/EVD-20261124-CORE-REVIEW-MAIN.md)
+
 2026-11-06 [前次全栈交付](../docs/deploy/releases/20261106-fullstack-040-client-0.1.18.md)：040 normal/100%、Schema0027，客户端0.1.18官方上传1,200,417字节并bump；尚未设体验版、提审或正式发布。生产迁移0027、040真实微信读取和原生工作日主路径通过；获批v2固定40完整单轮40/40，原37/40及其他历史内容FAIL保持，家长内容PENDING。
 
 2026-11-08 [前端 0.1.19](../docs/deploy/releases/20261108-client-0.1.19-upload.md)开发上传覆盖 [DESIGN-002 Spec08](completed/DESIGN-002-GLOBAL-UI-CONSISTENCY.md)、[DESIGN-003 Spec01](completed/DESIGN-003-THEME-VISUAL-REFINEMENT.md) 和 [DESIGN-004 Spec01](completed/DESIGN-004-HEADER-BLEND.md)。三份已按 GOV-002 归档 DONE，完整验收为 PARTIAL。两档共 216 组页头原生验证及 370 项前端回归通过，真机与用户 Review 待验。[验证证据](evidence/client-release-20261108/README.md)

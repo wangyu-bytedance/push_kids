@@ -1,0 +1,117 @@
+{
+  "base": "a1ea8f61e642271b906575c5b4d202b21a2b0fe3",
+  "files": {
+    "README.md": {
+      "sha256": "c07800ce3961fce406728bba0c10725528e8767d4a63a0b0052d7d83269060b5",
+      "tracked": true
+    },
+    "apps/api/src/push_kids/children/schemas.py": {
+      "sha256": "ee6177f439ebc96191828e70ab9828d64868a900b64b9c6a55bf8409a6110f22",
+      "tracked": true
+    },
+    "apps/api/src/push_kids/children/service.py": {
+      "sha256": "fb1879e471e4d1661dfbd17babb42ae81a18e832c8b3d3e16486260e530e0c45",
+      "tracked": true
+    },
+    "apps/api/src/push_kids/families/service.py": {
+      "sha256": "5767fac4731de9d0e0bfe8a1f135015aeb0a03a431c3982e5574c3c3a4b76695",
+      "tracked": true
+    },
+    "apps/api/src/push_kids/knowledge/review_router.py": {
+      "sha256": "61acf86dfec1bfa1a6a4815e538a5991aba3a1015de11cca86c7b2bfe30d78fb",
+      "tracked": false
+    },
+    "apps/api/src/push_kids/notifications/outbox.py": {
+      "sha256": "45945870d79ac8f2553ee8100978734cb992ec5f82764d3c5f2f5a27d08511d7",
+      "tracked": true
+    },
+    "apps/api/src/push_kids/notifications/planner.py": {
+      "sha256": "dd7d22aa1c0122fe3954da2dcea5c11708d1d414e92615cc9320cc4c1d84c9b8",
+      "tracked": true
+    },
+    "apps/api/src/push_kids/notifications/service.py": {
+      "sha256": "b36db3bdfdd7b818844ddcc7bdc9b5220d339a7f88904db870778b147a623164",
+      "tracked": true
+    },
+    "apps/api/src/push_kids/platform/context.py": {
+      "sha256": "4332d9977ebc7718c633e6bc7588842d2c1d250f9661cd787cd4a9d51fb3e9da",
+      "tracked": true
+    },
+    "apps/api/src/push_kids/platform/database.py": {
+      "sha256": "719575ccf96400a6f6d437edfe5240993feb087f149a200addfd788685f6aa90",
+      "tracked": true
+    },
+    "apps/api/src/push_kids/review_worksheets/router.py": {
+      "sha256": "6c1394c10c600ee87d882ab29119c971f8be7391272b78c540038b5b620e2ecc",
+      "tracked": false
+    },
+    "docs/architecture/ARCHITECTURE.md": {
+      "sha256": "f6eec24b05c218fad2826632f6d38a3bdfa90f3296176242bf3c2e512fc9410b",
+      "tracked": true
+    },
+    "docs/architecture/decisions/ADR-20261124-CORE-TRANSACTION-BOUNDARIES.md": {
+      "sha256": "c8b85087cba094138fca69124560f1f35905134cac51f85ab229b13ea4af5596",
+      "tracked": false
+    },
+    "docs/domain/BEHAVIOR-CATALOG.md": {
+      "sha256": "653885887e8005aad67634956b4702f4347a13867df2153eb053a9f045a1bb3b",
+      "tracked": true
+    },
+    "docs/domain/features/FEAT-002-family-collaboration.md": {
+      "sha256": "297f18d54d6cbf13e1ae4d2c25c25afe43a445c86ef77168d89277644d340f55",
+      "tracked": true
+    },
+    "docs/domain/features/FEAT-003-notification-channel.md": {
+      "sha256": "39e824073c6e04ea66f2d814b949c79cc7dcf149cfa5af4f5e6ddfed8a48612c",
+      "tracked": true
+    },
+    "docs/domain/features/FEAT-005-multi-child-profiles.md": {
+      "sha256": "497838ed788fbaa6efe7eec159bf905d9f40e71a9fbb0035e6ee9c6771ed245b",
+      "tracked": true
+    },
+    "docs/domain/features/FEAT-013-annual-grade-promotion.md": {
+      "sha256": "eae33ea9ec1d57c62330af8010fc9a5519da4cff8ff2316137aca945711fcfe0",
+      "tracked": true
+    },
+    "specs/README.md": {
+      "sha256": "200bc707c0d6abd0d3423ffc7598cad09f6afc0d03b23872ba69ebc39cace753",
+      "tracked": true
+    },
+    "specs/STATUS.md": {
+      "sha256": "26a271971e7bf48187e0796bfb42537ff8a90110d052024926b75c3001851a79",
+      "tracked": true
+    },
+    "specs/active/BUG-20261124-CORE-REVIEW-REMEDIATION.md": {
+      "sha256": "ddf1d56a8cea8d12101ed24eec5b1de8d979ab131db125031ab81cab5ade56dc",
+      "tracked": false
+    },
+    "tests/integration/test_family_onboarding.py": {
+      "sha256": "bb120d0c3246b9e6072569aeb4bdd35ef873f1db7a854c0698b021cb3e7566ab",
+      "tracked": true
+    },
+    "tests/integration/test_multi_child_profiles.py": {
+      "sha256": "77c0437a2d93b5bb44d51bde1d0fce77a266939a1e271b8a35198148b7c82629",
+      "tracked": true
+    },
+    "tests/integration/test_mysql_runtime.py": {
+      "sha256": "38e804f675c38c049234f29b61967fec6b8758592de3da784cbdc5d06ead1b1b",
+      "tracked": true
+    },
+    "tests/integration/test_notification_channel.py": {
+      "sha256": "8f33251eb52b7c365647ac14e01f4b3ab789117c0fa18a827c99c278a20ef558",
+      "tracked": true
+    },
+    "tests/integration/test_notification_resilience.py": {
+      "sha256": "d0a906530d1c8102b744fc298f40cf529d0786cc177d056c0c64a87920b38e10",
+      "tracked": true
+    },
+    "tests/integration/test_review_worksheet_mysql.py": {
+      "sha256": "6bc40906c6d5e6a6ef2a9eba8d80ff62a0b21f6f61e55612e44af8a1b47fef6f",
+      "tracked": false
+    },
+    "tests/integration/test_review_worksheets.py": {
+      "sha256": "b03fb656612e2f3394186e678dbe479b1621c4068ce8ef5cfe438c2fd39c5607",
+      "tracked": false
+    }
+  }
+}

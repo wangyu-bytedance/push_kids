@@ -6,7 +6,7 @@ from pathlib import Path
 
 from fastapi.testclient import TestClient
 from push_kids.families import service as family_service
-from push_kids.persistence.models import FamilyInvite
+from push_kids.persistence.models import FamilyAuditEvent, FamilyInvite
 from push_kids.platform.config import Settings
 from push_kids.platform.database import Database
 from sqlalchemy import inspect, select
@@ -295,7 +295,7 @@ def test_removed_members_can_rejoin_or_create_their_own_family(client: TestClien
     assert own_family.json()["family"]["display_name"] == "新的家庭"
 
 
-def test_invite_is_single_use_and_self_removal_is_forbidden(client: TestClient) -> None:
+def test_invite_is_single_use_and_self_removal_is_forbidden(client: TestClient, app) -> None:
     created = client.post(
         "/api/v1/families",
         headers=_idempotent("single-use-manager", "family-single-use"),
@@ -342,9 +342,10 @@ def test_invite_is_single_use_and_self_removal_is_forbidden(client: TestClient) 
     approved = client.post(
         f"/api/v1/family-requests/{first['id']}/approve",
         headers=_idempotent("single-use-manager", "approve-single-use"),
-        json={"role": "editor"},
+        json={"role": "manager"},
     )
     assert approved.status_code == 200
+    assert approved.json()["role"] == "manager"
     assert client.get("/api/v1/me", headers=_actor("single-use-first")).json()["state"] == "bound"
     second_state = client.get("/api/v1/me", headers=_actor("single-use-second")).json()["state"]
     assert second_state == "unbound"
@@ -372,6 +373,27 @@ def test_invite_is_single_use_and_self_removal_is_forbidden(client: TestClient) 
         ).status_code
         == 410
     )
+
+    manager = _actor("single-use-manager")
+    members_path = "/api/v1/families/current/members"
+    members_before = client.get(members_path, headers=manager).json()
+    assert len(members_before) == 2
+    rejected = client.delete(f"{members_path}/{own_member_id}", headers=manager)
+    assert rejected.status_code == 409
+    assert client.get(members_path, headers=manager).json() == members_before
+    assert client.get("/api/v1/me", headers=manager).json()["member"]["id"] == own_member_id
+
+    other_id = approved.json()["id"]
+    assert client.delete(f"{members_path}/{other_id}", headers=manager).status_code == 204
+    assert client.get("/api/v1/me", headers=_actor("single-use-first")).json()["state"] == "unbound"
+    with app.state.database.session_factory() as db:
+        removed = db.scalars(
+            select(FamilyAuditEvent.resource_id).where(
+                FamilyAuditEvent.family_id == created["family"]["id"],
+                FamilyAuditEvent.action == "member.removed",
+            )
+        ).all()
+    assert removed == [other_id]
 
 
 def test_revoking_invite_unbinds_pending_applicant(client: TestClient) -> None:

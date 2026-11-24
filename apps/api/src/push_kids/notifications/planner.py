@@ -29,6 +29,7 @@ from push_kids.notifications.domain import (
 )
 from push_kids.notifications.outbox import EnqueueOutcome, NotificationOutbox
 from push_kids.planning.service import PlanningService
+from push_kids.platform.database import begin_sqlite_write
 from push_kids.platform.time import SHANGHAI, local_date, utcnow
 
 # A reminder is planned only shortly before it is needed: a wider horizon would keep rows for
@@ -65,6 +66,7 @@ class NotificationPlanner:
     @classmethod
     def plan_member_applications(cls, db: Session, now: datetime | None = None) -> PlanResult:
         """Ask every manager of the family to review a still-pending join request."""
+        begin_sqlite_write(db)
         current = now or utcnow()
         outcomes: list[EnqueueOutcome] = []
         keep: set[str] = set()
@@ -104,6 +106,7 @@ class NotificationPlanner:
     @classmethod
     def plan_schedule_reminders(cls, db: Session, now: datetime | None = None) -> PlanResult:
         """Tell the whole family which child has what, and when, one hour ahead."""
+        begin_sqlite_write(db)
         current = now or utcnow()
         window_end = current + SCHEDULE_LOOKAHEAD
         occurrences = ActivitiesService.occurrences_in_window(db, current, window_end)
@@ -162,6 +165,7 @@ class NotificationPlanner:
         local = current.astimezone(SHANGHAI)
         if local.hour < DIGEST_HOUR:
             return PlanResult()
+        begin_sqlite_write(db)
         day = local_date(current)
         by_family: dict[str, list[tuple[str, ChildReviewLoad]]] = {}
         for load in PlanningService.pending_review_loads(db, day):

@@ -10,9 +10,9 @@
 
 - Feature ID: `FEAT-003`
 - Status: `WORKDAY_INCREMENT_040_DELIVERED / BASE_NOTIFICATION_DEVELOPMENT_DONE / VERIFICATION_PENDING`
-- Current-state revision: `FEAT-STATE-20261106-NOTIFICATION-WORKDAY-05`
+- Current-state revision: `FEAT-STATE-20261124-NOTIFICATION-LEASE-01`（本地增量，云交付待补）
 - Owner: 产品负责人（用户）
-- Last verified: 2026-11-06（040/0027结构、17触发器及双投影核验；工作日planner合成队列测试沿用11-05，真实收件仍为10-17，本次未发送消息）
+- Last verified: 2026-11-24（本地租约并发和通知相邻行为；真实收件仍为 10-17 历史证据。[本轮验证](../../../specs/evidence/EVD-20261124-CORE-REVIEW-IMPLEMENTATION.md)）
 - Authoritative implementation: `apps/api/src/push_kids/notifications/`、通知持久化模型、
   Alembic `20260906_0008_notification_channel` + `20260907_0009_notification_deletion_scope`、`apps/miniprogram/pages/notifications/`、
   `apps/miniprogram/utils/notifications.js`、`apps/miniprogram/utils/notification-renewal.js`、`tools/notification_config.py`
@@ -70,9 +70,7 @@
   每个值按所属微信字段类型的上限裁剪（`thing` 20 字、`short_thing` 5 字，时间类不裁剪）。
 - 模板配错时不烧额度：若某个已映射槽位当次没有内容，dispatch 在调用微信之前就落
   `skipped / template_field_missing` 并只记录字段名（不记内容），修正映射后同一条提醒可重新排队。
-- 投递：租约 claim（单实例 MySQL 5.7 使用有界、排序的普通 `FOR UPDATE`，不使用 8.0 才支持的
-  `SKIP LOCKED`）、有界退避重试、崩溃租约回收，
-  终态为 `sent / skipped / failed / cancelled`，每条都有结果码。
+- 本地投递实现按到期顺序逐条领取，每轮最多 50 条；待发项保留 `pending` 直到实际领取。MySQL 5.7 使用普通 `FOR UPDATE`。每条发送前验证同一 attempt 和有效截止时间，再读当前偏好、授权额度和接收标识，成功结果与扣额在同一事务提交。回收只更新仍匹配的过期租约，规划刷新、可恢复重排和取消依据当前状态。保留有界退避重试；终态为 `sent / skipped / failed / cancelled`，每条都有结果码。
 - 时间语义：19:00 与「开始前 60 分钟」按 Asia/Shanghai 计算，落库为 UTC；时间永不取自客户端；
   距开始不足一小时的日程仍发一条（发送时间钳到当前）。
 - 成员离开家庭立即切断通道：授权 `revoked`、接收标识 `revoked`、在途消息 `cancelled / member_departed`；

@@ -42,6 +42,7 @@ GOV-002开发DONE与ISS是否closed是独立维度。
 
 ## Current records
 
+- [家庭写入、通知投递和档案输入缺陷](ISS-20261124-CORE-TRANSACTION-REPAIR.md)已本地修复和回归验证。上线观察待补。
 - [学习记录索引漂移](ISS-20261105-LEARNING-RECORD-INDEX-DRIFT.md)：工作日任务全库Alembic check发现，隔离0025/0026同样四个旧索引差异；triaged，未修复，工作日两表无新增漂移不等于全库门禁通过。
 
 - [匹配不确定缓存空转](ISS-20261105-MATCH-UNCERTAINTY-CACHE.md)：成功率Spec04真实回放与无模型探针确认；获批Spec05本地修复，Spec06保留并完成独立代码复核，云观察未完成，triaged/open；不将机制测试PASS或停止重试当产出成功。

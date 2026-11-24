@@ -7,9 +7,9 @@
 - Feature ID: `FEAT-002`
 - Release gate policy: `SPEC-20261011-RISK-BASED-RELEASE-GATES-01` 已批准；身份、账号绑定、家庭成员/角色/邀请、租户权限或图片归属发生变化时，双账号隔离与 owner 验收仍是当次发布阻断项。其他发布不重复执行，但不能把未执行记为 `PASS`；本 Feature 未完成的角色生命周期验收状态不变。
 - Status: `APPROVED_SCOPE_DELIVERED / VERIFICATION_PENDING / MULTI_FAMILY_CANCELLED`
-- Current-state revision: `FEAT-STATE-20261105-FAMILY-SCOPE-CLOSURE-03`
+- Current-state revision: `FEAT-STATE-20261124-FAMILY-WRITE-AUTH-01`（本地增量，云交付待补）
 - Owner: 产品负责人（用户）
-- Last verified: 2026-09-13
+- Last verified: 2026-11-24（本地写权限和自移除回归。[验证证据](../../../specs/evidence/EVD-20261124-CORE-REVIEW-IMPLEMENTATION.md)）
 - Authoritative implementation: `apps/api/src/push_kids/families/`, family persistence models,
   `apps/miniprogram/pages/family-*`
 - Applied Specs: `specs/completed/FEAT-002-USER-FAMILY-BINDING.md` revision `SPEC-20260905-12`;
@@ -40,6 +40,7 @@
   `family-join`；已绑定但零孩子的家庭仍进入业务区空态，不会被误判为未绑定。
 - 云环境拒绝客户端家庭标识，并从可信微信 actor 解析 active membership；本地家庭流程可用
   `X-Debug-Actor`，旧的 `X-Family-ID` 仅保留给非家庭流程兼容测试。
+- 本地修复后的已绑定写请求先锁住 active 家庭，再核验同一 actor 绑定和成员的当前角色。成员降级或移除先提交时，请求按变更后的权限处理；active viewer 可继续修改本人的通知设置。
 - active member 角色为 manager/editor/viewer；被移除成员保留历史记录，但 active 唯一投影被释放，
   因而可以再次加入原家庭或创建新家庭。
 - 创建家庭、邀请、申请、审批和拒绝具有服务端幂等语义；小程序在失败重试时复用同一幂等键。
@@ -47,7 +48,7 @@
   也可以继续通过原有长 token 分享路径完成最小预览与申请。六位码查询按可信 actor 执行更严格限流。
 - `/api/v1/me` 与邀请预览的 `child_names` 只列在用学习档案，已归档档案不会出现在受邀家人面前（FEAT-005）。
 - 邀请是单次批准凭据：首个批准将邀请置为 exhausted，并使同邀请的其他 pending 申请失效；撤销邀请也同步释放 pending actor。
-- 成员管理接口无条件拒绝自移除；客户端本人详情不提供移除或角色修改。有效邀请列表不返回 token
+- 成员管理接口拒绝自移除并返回 409，即使家庭还有其他管理员；客户端本人详情不提供移除或角色修改。有效邀请列表不返回 token
   或邀请码。申请提交后另行生成六位纯数字“申请核验码”，只供申请双方核对，不作为加入凭证。
 - 当前学习/活动记录没有可信的上传人、监督人、确认人和编辑版本归属。
 - FEAT-001云身份链路的既有双actor、owner/metaid与公网拒绝证据保留原范围；FEAT-002相关迁移已随后续版本交付。
@@ -74,15 +75,16 @@ only the nullable active actor projection is unique.
 
 ## Current contracts
 
-`SPEC-20260905-12` is approved and implemented in the local working tree. Its API/UI contract is not yet the cloud
-current state because the migration and service release have not been deployed.
+`SPEC-20260905-12` defines the collaboration API/UI contract delivered with 037/0.1.16. The current authorization
+and self-removal repairs are local under [the 2026-11-24 Spec](../../../specs/active/BUG-20261124-CORE-REVIEW-REMEDIATION.md).
 
 ## Data and permissions
 
 The local target schema contains families, members, invites, join requests and audit events. A nullable unique
 `active_actor_binding_id` enforces one active family without preventing removed actors from rejoining. Active
 six-digit invite codes use a nullable unique HMAC digest plus a deterministic nonce; neither invite codes nor share
-tokens are stored in plaintext. Cloud MySQL still remains on the previous revision until the controlled migration window.
+tokens are stored in plaintext. The collaboration migrations were delivered in earlier releases. The local authorization
+and self-removal repairs use the existing schema.
 
 ## Architecture mapping
 
@@ -91,8 +93,7 @@ tokens are stored in plaintext. Cloud MySQL still remains on the previous revisi
 - Implemented module: `families` plus a narrow evolution of the existing cloud actor context. The first release keeps
   one active family per actor and family-wide roles; multi-family access is cancelled by the product owner on
   2026-11-05, while per-child grants remain explicitly deferred.
-- The earlier single-host SQLite production target is superseded by `ARCH-TARGET-20260903-06` for FEAT-001.
-  FEAT-002 must be revised against the cloud runtime before implementation.
+- Cloud deployment uses `ARCH-TARGET-20260903-06`, which superseded the original single-host SQLite production target.
 
 ## Frontend UI current-state mapping
 
@@ -123,7 +124,7 @@ tokens are stored in plaintext. Cloud MySQL still remains on the previous revisi
   继续使用关系称谓和首字头像，不增加资料采集、数据库字段或头像对象存储。
 - Base two-account gateway trust and media-owner evidence passed staging on 2026-09-06; FEAT-002 collaboration
   lifecycle evidence is still pending.
-- FEAT-002 cloud migration/deployment evidence remains pending; this is distinct from the completed base actor test.
+- Cloud delivery of the 2026-11-24 authorization repair and its real two-account write verification are pending.
 - Invite-preview in-process limiting is implemented for controlled staging; shared multi-instance limiting is still required before public production.
 - Session/account lifecycle and public-production privacy evidence remain incomplete.
 

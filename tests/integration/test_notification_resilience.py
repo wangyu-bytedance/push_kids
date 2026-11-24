@@ -7,22 +7,38 @@
 from __future__ import annotations
 
 import dataclasses
+import os
+from concurrent.futures import ThreadPoolExecutor
 from datetime import UTC, datetime, time, timedelta
+from pathlib import Path
+from threading import Event, get_ident
+from uuid import uuid4
 
 import pytest
+from alembic import command
+from alembic.config import Config
 from fastapi.testclient import TestClient
-from push_kids.notifications.domain import RETRY_DELAYS_SECONDS
+from push_kids.bootstrap.app import create_app
+from push_kids.notifications import service as notification_service
+from push_kids.notifications.domain import RETRY_DELAYS_SECONDS, NotificationContent
+from push_kids.notifications.outbox import EnqueueOutcome, NotificationOutbox
 from push_kids.notifications.planner import NotificationPlanner
 from push_kids.notifications.providers import SendOutcome
-from push_kids.notifications.service import NotificationsService
+from push_kids.notifications.service import LEASE_SECONDS, NotificationsService
 from push_kids.notifications.templates import TemplateBinding
 from push_kids.persistence.models import (
     DeliveryState,
     NotificationDelivery,
+    NotificationDeliveryChild,
     NotificationDestination,
+    NotificationSubscription,
 )
+from push_kids.platform.config import Settings
 from push_kids.platform.time import SHANGHAI, local_date
-from sqlalchemy import select
+from sqlalchemy import create_engine, event, select
+from sqlalchemy.engine import make_url
+
+from tests.conftest import NOTIFICATION_TEMPLATES
 
 
 class ScriptedSender:
@@ -193,6 +209,348 @@ def test_abandoned_lease_is_reclaimed_instead_of_lost(client: TestClient, app) -
     exhausted = _row(app)
     assert exhausted.state == DeliveryState.failed.value
     assert exhausted.result_code == "lease_expired"
+
+
+@pytest.fixture
+def mysql_notification_app(tmp_path, monkeypatch):
+    configured = os.getenv("PUSH_KIDS_TEST_MYSQL_URL")
+    if not configured:
+        pytest.skip("isolated MySQL 5.7 not configured")
+    server_url = make_url(configured)
+    assert server_url.host in {"127.0.0.1", "localhost"}
+    server = create_engine(server_url.set(database=None))
+    database_name = "notification_lease_" + uuid4().hex[:12]
+    with server.begin() as db:
+        assert db.exec_driver_sql("SELECT VERSION()").scalar_one().startswith("5.7.")
+        db.exec_driver_sql(f"CREATE DATABASE `{database_name}` CHARACTER SET utf8mb4")
+    url = server_url.set(database=database_name).render_as_string(hide_password=False)
+    try:
+        monkeypatch.setenv("PUSH_KIDS_DATABASE_URL", url)
+        config = Config()
+        config.set_main_option(
+            "script_location", str(Path(__file__).parents[2] / "apps/api/migrations")
+        )
+        command.upgrade(config, "head")
+        app = create_app(
+            Settings(
+                PUSH_KIDS_ENV="test",
+                PUSH_KIDS_DATABASE_URL=url,
+                PUSH_KIDS_MEDIA_ROOT=tmp_path,
+                PUSH_KIDS_AI_PROVIDER="test",
+                PUSH_KIDS_RUN_WORKER=False,
+                PUSH_KIDS_RUN_NOTIFICATION_SCHEDULER=False,
+                PUSH_KIDS_NOTIFICATION_CHANNEL="recording",
+                PUSH_KIDS_NOTIFICATION_TEMPLATES=NOTIFICATION_TEMPLATES,
+            )
+        )
+        try:
+            yield app
+        finally:
+            app.state.database.engine.dispose()
+    finally:
+        with server.begin() as db:
+            db.exec_driver_sql(f"DROP DATABASE `{database_name}`")
+        server.dispose()
+
+
+def test_mysql_reclaim_cannot_replace_a_committed_send(mysql_notification_app) -> None:
+    app = mysql_notification_app
+    database = app.state.database
+    entered_sender, resume_sender, reclaim_update = Event(), Event(), Event()
+    reclaimer_thread = None
+
+    class PausedSender(ScriptedSender):
+        def send(self, **kwargs):
+            entered_sender.set()
+            assert resume_sender.wait(timeout=8)
+            return super().send(**kwargs)
+
+    def observe_reclaimer(_conn, _cursor, statement, _params, _ctx, _many):
+        if get_ident() == reclaimer_thread and statement.startswith(
+            "UPDATE notification_deliveries"
+        ):
+            reclaim_update.set()
+
+    with TestClient(app) as client:
+        due = _queued_reminder(client, app, datetime(2026, 1, 1, 17, 30))
+        delivery = _row(app)
+        sender = PausedSender([])
+
+        def send():
+            with database.session_factory() as db:
+                return NotificationsService.dispatch_due(db, _channel_with(app, sender), due)
+
+        def reclaim():
+            nonlocal reclaimer_thread
+            reclaimer_thread = get_ident()
+            with database.session_factory() as db:
+                return NotificationsService.reclaim_expired(db, due + timedelta(seconds=121))
+
+        event.listen(database.engine, "before_cursor_execute", observe_reclaimer)
+        try:
+            with ThreadPoolExecutor(max_workers=2) as pool:
+                sending = pool.submit(send)
+                try:
+                    assert entered_sender.wait(timeout=5)
+                    recovering = pool.submit(reclaim)
+                    assert reclaim_update.wait(timeout=5)
+                    assert not recovering.done()
+                finally:
+                    resume_sender.set()
+                assert sending.result(timeout=8)["sent"] == 1
+                assert recovering.result(timeout=8) == 0
+        finally:
+            event.remove(database.engine, "before_cursor_execute", observe_reclaimer)
+
+        with database.session_factory() as db:
+            saved = db.get(NotificationDelivery, delivery.id)
+            assert saved.state == DeliveryState.sent.value
+            quota = db.scalar(
+                select(NotificationSubscription.remaining_quota).where(
+                    NotificationSubscription.member_id == delivery.member_id,
+                    NotificationSubscription.type == delivery.type,
+                )
+            )
+            assert quota == 0
+        assert sender.calls == 1
+
+
+def test_mysql_planner_cannot_cancel_a_delivery_from_an_old_pending_snapshot(
+    mysql_notification_app,
+) -> None:
+    app = mysql_notification_app
+    database = app.state.database
+    with TestClient(app) as client:
+        due = _queued_reminder(client, app, datetime(2026, 1, 1, 17, 30))
+        delivery = _row(app)
+        with database.session_factory() as planner:
+            assert (
+                planner.scalar(
+                    select(NotificationDelivery.state).where(NotificationDelivery.id == delivery.id)
+                )
+                == DeliveryState.pending.value
+            )
+            with database.session_factory() as dispatcher:
+                sent = NotificationsService.dispatch_due(
+                    dispatcher, _channel_with(app, ScriptedSender([])), due
+                )
+                assert sent["sent"] == 1
+            cancelled = NotificationOutbox.cancel_pending_outside(
+                planner,
+                type_name=str(delivery.type),
+                window_start=due - timedelta(minutes=1),
+                window_end=due + timedelta(minutes=1),
+                keep_keys=set(),
+            )
+            planner.commit()
+        assert cancelled == 0
+        assert _row(app).state == DeliveryState.sent.value
+
+
+def test_mysql_planner_cannot_rearm_a_delivery_from_an_old_skipped_snapshot(
+    mysql_notification_app,
+) -> None:
+    app = mysql_notification_app
+    database = app.state.database
+    with TestClient(app) as client:
+        due = _queued_reminder(client, app, datetime(2026, 1, 1, 17, 30))
+        unavailable = dataclasses.replace(app.state.notification_channel, bindings={})
+        with database.session_factory() as initial:
+            assert NotificationsService.dispatch_due(initial, unavailable, due)["skipped"] == 1
+            delivery = _row(app)
+            child_id = initial.scalar(select(NotificationDeliveryChild.child_id))
+        content = NotificationContent("活动", "合成提醒", "合成提醒", "/")
+        with database.session_factory() as stale_planner:
+            assert (
+                stale_planner.scalar(
+                    select(NotificationDelivery.state).where(NotificationDelivery.id == delivery.id)
+                )
+                == DeliveryState.skipped.value
+            )
+            with database.session_factory() as dispatcher:
+                current = dispatcher.get(NotificationDelivery, delivery.id)
+                current.state = DeliveryState.pending.value
+                dispatcher.commit()
+                sent = NotificationsService.dispatch_due(
+                    dispatcher, _channel_with(app, ScriptedSender([])), due
+                )
+                assert sent["sent"] == 1
+            outcome = NotificationOutbox.enqueue(
+                stale_planner,
+                family_id=str(delivery.family_id),
+                type_name=str(delivery.type),
+                member_id=str(delivery.member_id),
+                dedupe_key=str(delivery.dedupe_key),
+                content=content,
+                scheduled_at=due,
+                child_ids=(child_id,),
+            )
+            stale_planner.commit()
+        assert outcome is EnqueueOutcome.skipped
+        assert _row(app).state == DeliveryState.sent.value
+
+
+def test_old_dispatcher_cannot_send_under_replacement_lease(client, app, monkeypatch):
+    due = _queued_reminder(client, app, datetime(2026, 1, 1, 17, 30))
+    replacement_time = due + timedelta(seconds=LEASE_SECONDS + 1)
+    sender = ScriptedSender([])
+    original_claim = NotificationsService._claim
+
+    def replace_after_claim(db, *args, **kwargs):
+        claimed = original_claim(db, *args, **kwargs)
+        if claimed:
+            with app.state.database.session_factory() as other:
+                assert NotificationsService.reclaim_expired(other, replacement_time) == 1
+                row = other.scalar(select(NotificationDelivery))
+                assert row.state == DeliveryState.pending.value
+                row.state = DeliveryState.sending.value
+                row.attempts += 1
+                row.lease_until = replacement_time + timedelta(seconds=LEASE_SECONDS)
+                other.commit()
+        return claimed
+
+    monkeypatch.setattr(NotificationsService, "_claim", staticmethod(replace_after_claim))
+    with app.state.database.session_factory() as db:
+        report = NotificationsService.dispatch_due(db, _channel_with(app, sender), due)
+    row = _row(app)
+    assert report["dropped"] == 1
+    assert sender.calls == 0
+    assert (row.state, row.attempts, row.lease_until) == (
+        DeliveryState.sending.value,
+        2,
+        replacement_time + timedelta(seconds=LEASE_SECONDS),
+    )
+
+
+def test_dispatch_does_not_lease_queue_tail_before_it_can_send(client, app, monkeypatch):
+    due = _queued_reminder(client, app, datetime(2026, 1, 1, 17, 30))
+    current = due
+    monkeypatch.setattr(notification_service, "utcnow", lambda: current)
+    with app.state.database.session_factory() as db:
+        head = db.scalar(select(NotificationDelivery))
+        child_id = db.scalar(select(NotificationDeliveryChild.child_id))
+        tail = NotificationDelivery(
+            family_id=head.family_id,
+            member_id=head.member_id,
+            type=head.type,
+            dedupe_key="resilience-queue-tail",
+            payload_json=head.payload_json,
+            scheduled_at=due,
+            available_at=due,
+        )
+        head.scheduled_at = due - timedelta(seconds=1)
+        db.add(tail)
+        db.flush()
+        db.add(NotificationDeliveryChild(delivery_id=tail.id, child_id=child_id))
+        subscription = db.scalar(select(NotificationSubscription))
+        subscription.remaining_quota = 2
+        db.commit()
+
+        class SlowFirstSender(ScriptedSender):
+            def send(self, **kwargs):
+                nonlocal current
+                if not self.calls:
+                    current += timedelta(seconds=LEASE_SECONDS + 1)
+                    assert (
+                        db.scalar(
+                            select(NotificationDelivery.state).where(
+                                NotificationDelivery.id == tail.id
+                            )
+                        )
+                        == DeliveryState.pending.value
+                    )
+                else:
+                    expiry = db.scalar(
+                        select(NotificationDelivery.lease_until).where(
+                            NotificationDelivery.id == tail.id
+                        )
+                    )
+                    assert expiry > current
+                return super().send(**kwargs)
+
+        sender = SlowFirstSender([])
+        report = NotificationsService.dispatch_due(db, _channel_with(app, sender))
+        assert report["sent"] == 2
+        assert sender.calls == 2
+        assert db.scalars(select(NotificationDelivery.state)).all() == [
+            DeliveryState.sent.value,
+            DeliveryState.sent.value,
+        ]
+
+
+@pytest.mark.parametrize("storage", ["sqlite", "mysql"])
+def test_dispatch_refreshes_quota_between_claims(storage, request, tmp_path, monkeypatch):
+    if storage == "mysql":
+        app = request.getfixturevalue("mysql_notification_app")
+    else:
+        app = create_app(
+            Settings(
+                PUSH_KIDS_ENV="test",
+                PUSH_KIDS_DATABASE_URL=f"sqlite:///{tmp_path / 'notification-lease.db'}",
+                PUSH_KIDS_MEDIA_ROOT=tmp_path / "uploads",
+                PUSH_KIDS_AI_PROVIDER="test",
+                PUSH_KIDS_RUN_WORKER=False,
+                PUSH_KIDS_RUN_NOTIFICATION_SCHEDULER=False,
+                PUSH_KIDS_NOTIFICATION_CHANNEL="recording",
+                PUSH_KIDS_NOTIFICATION_TEMPLATES=NOTIFICATION_TEMPLATES,
+            )
+        )
+    with TestClient(app) as client:
+        due = _queued_reminder(client, app, datetime(2026, 1, 1, 17, 30))
+    database = app.state.database
+    with database.session_factory() as db:
+        first = db.scalar(select(NotificationDelivery))
+        child_id = db.scalar(select(NotificationDeliveryChild.child_id))
+        for seconds in (1, 2):
+            reminder = NotificationDelivery(
+                family_id=first.family_id,
+                member_id=first.member_id,
+                type=first.type,
+                dedupe_key=f"resilience-quota-race-{seconds}",
+                payload_json=first.payload_json,
+                scheduled_at=due + timedelta(seconds=seconds),
+                available_at=due,
+            )
+            db.add(reminder)
+            db.flush()
+            db.add(NotificationDeliveryChild(delivery_id=reminder.id, child_id=child_id))
+        subscription = db.scalar(select(NotificationSubscription))
+        subscription.remaining_quota = 2
+        db.commit()
+
+    sender = ScriptedSender([])
+    channel = _channel_with(app, sender)
+    tick = due + timedelta(seconds=2)
+    claim_next = NotificationsService._claim
+    intervened = False
+
+    with database.session_factory() as outer:
+
+        def dispatch_between_claims(db, *args, **kwargs):
+            nonlocal intervened
+            if db is outer and sender.calls == 1 and not intervened:
+                intervened = True
+                with database.session_factory() as inner:
+                    assert (
+                        NotificationsService.dispatch_due(inner, channel, tick, limit=1)["sent"]
+                        == 1
+                    )
+            return claim_next(db, *args, **kwargs)
+
+        monkeypatch.setattr(NotificationsService, "_claim", staticmethod(dispatch_between_claims))
+        report = NotificationsService.dispatch_due(outer, channel, tick)
+    assert intervened
+    assert report == {"sent": 1, "skipped": 1, "retried": 0, "failed": 0, "dropped": 0}
+    assert sender.calls == 2
+    with database.session_factory() as db:
+        states = db.execute(
+            select(NotificationDelivery.state, NotificationDelivery.result_code).order_by(
+                NotificationDelivery.scheduled_at
+            )
+        ).all()
+        assert states == [("sent", "ok"), ("sent", "ok"), ("skipped", "not_authorized")]
+        subscription = db.scalar(select(NotificationSubscription))
+        assert (subscription.status, subscription.remaining_quota) == ("expired", 0)
 
 
 def test_unusable_receiver_record_fails_loudly(client: TestClient, app) -> None:

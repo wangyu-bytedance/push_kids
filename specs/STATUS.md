@@ -1,4 +1,6 @@
-# Spec 开发状态与独立验收清单 — 2026-11-08
+# Spec 开发状态与独立验收清单 — 2026-11-24
+
+[2026-11-24 评审修复](active/BUG-20261124-CORE-REVIEW-REMEDIATION.md)为 `VERIFYING`，主分支候选已单独验证，云交付待补。[主分支验证](evidence/EVD-20261124-CORE-REVIEW-MAIN.md)
 
 当前前端交付 [0.1.19](../docs/deploy/releases/20261108-client-0.1.19-upload.md)已完成微信开发上传。生产后端为 040，最近核实的 Schema 为 0027。当前完整验收为 PARTIAL，体验版、审核与正式发布待后续门禁。
 
@@ -27,11 +29,11 @@
 | completed完成记录 | 123 | 既有108＋全栈交付11＋GOV-004＋前端主题交付3 |
 | completed阶段设计 | 1 | DESIGN-001保留STAGE_COMPLETE |
 | active READY_FOR_REVIEW | 2 | CLOUD-002、DOC-003，待批准实施 |
-| active VERIFYING | 1 | DESIGN-005，已获批并本地实施，待匹配开发上传 |
+| active VERIFYING | 2 | DESIGN-005 和 2026-11-24 评审修复，待匹配云交付 |
 | active BLOCKED | 1 | 旧10/13候选缓存OPS，34/40 FAIL、未部署，未作取消处置 |
 | rejected | 19 | 原取消/拒绝理由保持 |
 
-合计 147 份，completed 124 / active 4 / rejected 19。旧[缓存OPS](active/OPS-20261101-BUG036-CACHE02-DEPLOYMENT.md)锁定154文件10/13且排除内容03/DDL；不能用040继承缓存功能冒称该候选曾部署。DOC-003 继续待具体批准。
+合计 148 份，completed 124 / active 5 / rejected 19。旧[缓存OPS](active/OPS-20261101-BUG036-CACHE02-DEPLOYMENT.md)锁定154文件10/13且排除内容03/DDL；不能用040继承缓存功能冒称该候选曾部署。DOC-003 继续待具体批准。
 
 [DESIGN-005 Spec01](active/DESIGN-005-CHILD-SWITCH-HEADER.md)和 DREV-20261108-CHILD-SWITCH-01 已获批。孩子切换统一在标题行右侧，原始风格日程与报表插画改作页头背景，当前为 VERIFYING。[本地证据](evidence/design005-20261108/README.md)。[CLOUD-002 Spec02](active/CLOUD-002-DETERMINISTIC-RELEASE-AUTOMATION.md)提出两个独立的确定性发布命令，仍待具体修订批准。
 

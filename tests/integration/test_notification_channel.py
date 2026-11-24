@@ -673,11 +673,11 @@ def test_claimed_child_notification_is_dropped_when_purge_wins_before_send(
 
     original_claim = NotificationsService._claim
 
-    def claim_then_purge(db, now, limit):
-        rows = original_claim(db, now, limit)
-        assert rows
-        assert app.state.deletion_worker.process_one() is True
-        return rows
+    def claim_then_purge(db, due_before, now):
+        claim = original_claim(db, due_before, now)
+        if claim is not None:
+            assert app.state.deletion_worker.process_one() is True
+        return claim
 
     monkeypatch.setattr(NotificationsService, "_claim", staticmethod(claim_then_purge))
     dispatched = _dispatch(app, start_at - timedelta(hours=1))
@@ -702,11 +702,11 @@ def test_claimed_family_notification_is_dropped_when_purge_wins_before_send(
 
     original_claim = NotificationsService._claim
 
-    def claim_then_purge(db, now, limit):
-        rows = original_claim(db, now, limit)
-        assert rows
-        assert app.state.deletion_worker.process_one() is True
-        return rows
+    def claim_then_purge(db, due_before, now):
+        claim = original_claim(db, due_before, now)
+        if claim is not None:
+            assert app.state.deletion_worker.process_one() is True
+        return claim
 
     monkeypatch.setattr(NotificationsService, "_claim", staticmethod(claim_then_purge))
     dispatched = _dispatch(app)

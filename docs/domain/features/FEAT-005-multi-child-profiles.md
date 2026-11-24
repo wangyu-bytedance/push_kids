@@ -14,9 +14,9 @@
 
 - Feature ID: `FEAT-005`
 - Status: `CLOUD_DELIVERED / ARCHIVE_UI_0.1.18_UPLOADED / VERIFICATION_PENDING`
-- Current-state revision: `FEAT-STATE-20261106-CHILD-ARCHIVE-UI-05`
+- Current-state revision: `FEAT-STATE-20261124-CHILD-PATCH-01`（本地档案 API 增量，云交付待补）
 - Owner: 产品负责人（用户 王宇）
-- Last verified: 2026-11-06（0.1.18上传；三视口原生状态及确认框视觉/取消；真实业务、设备和可访问性仍待验）
+- Last verified: 2026-11-24（本地档案 PATCH 回归。[验证证据](../../../specs/evidence/EVD-20261124-CORE-REVIEW-IMPLEMENTATION.md)）
 - Authoritative implementation: `apps/api/src/push_kids/children/`、`apps/api/migrations/versions/20260906_0005_child_profile_lifecycle.py`、
   `apps/miniprogram/utils/child-context.js`、`apps/miniprogram/pages/child-edit/`
 - Applied Spec: `specs/completed/FEAT-005-MULTI-CHILD-PROFILE-MANAGEMENT.md` revision `SPEC-20260906-MULTI-CHILD-01`；
@@ -105,7 +105,7 @@ archived --restore--> active（受上限与在用重名校验约束）
 |---|---|---|
 | `GET /api/v1/children` | 新增 `include_archived` 查询参数，响应新增 `active` | 默认只返回在用档案 |
 | `POST /api/v1/children` | 请求新增可选 `subject_names` | 409 覆盖上限与重名 |
-| `PATCH /api/v1/children/{child_id}` | 重命名走在用重名校验 | — |
+| `PATCH /api/v1/children/{child_id}` | 重命名走在用重名校验。省略字段保持原值；显式将 `name` 或 `daily_budget_minutes` 设为 `null` 返回 422；`grade` 可按[现行年级合同](FEAT-013-annual-grade-promotion.md)清空 | 本地修复，云交付待补 |
 | `POST /api/v1/children/{child_id}/archive` | 新增，manager only，幂等 | 200 返回 `active:false` |
 | `POST /api/v1/children/{child_id}/restore` | 新增，manager only | 超限或重名返回 409 |
 | `POST /api/v1/families` | `child` 由必填改为可选 | 旧客户端不受影响 |

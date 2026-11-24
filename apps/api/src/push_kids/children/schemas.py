@@ -1,9 +1,10 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Literal
+from typing import Annotated, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
+from pydantic.json_schema import SkipJsonSchema
 
 from push_kids.children.grade_policy import canonical_grade
 
@@ -18,11 +19,22 @@ class ChildCreate(BaseModel):
 
 
 class ChildUpdate(BaseModel):
-    name: str | None = Field(default=None, min_length=1, max_length=40)
+    name: Annotated[str, Field(min_length=1, max_length=40)] | SkipJsonSchema[None] = Field(
+        default_factory=lambda: None
+    )
     grade: str | None = Field(default=None, max_length=20)
-    daily_budget_minutes: int | None = Field(default=None, ge=5, le=120)
+    daily_budget_minutes: Annotated[int, Field(ge=5, le=120)] | SkipJsonSchema[None] = Field(
+        default_factory=lambda: None
+    )
     confirm_grade: bool = False
     expected_grade_revision: int | None = Field(default=None, ge=0)
+
+    @field_validator("name", "daily_budget_minutes", mode="before")
+    @classmethod
+    def reject_explicit_null(cls, value: object) -> object:
+        if value is None:
+            raise ValueError("不可清空此字段")
+        return value
 
     @model_validator(mode="after")
     def explicit_grade_confirmation(self):

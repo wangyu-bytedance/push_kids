@@ -3,7 +3,7 @@ from __future__ import annotations
 import hashlib
 import hmac
 from dataclasses import dataclass
-from typing import Annotated, cast
+from typing import Annotated
 
 from fastapi import Depends, Header, HTTPException, Request
 from sqlalchemy import select
@@ -17,6 +17,7 @@ from push_kids.persistence.models import (
     MemberStatus,
     WeChatActorBinding,
 )
+from push_kids.platform.database import begin_sqlite_write
 from push_kids.platform.dependencies import get_db
 from push_kids.platform.errors import ForbiddenError, UnauthorizedError
 
@@ -102,50 +103,63 @@ def _member_context(
     if x_family_id is not None:
         raise ForbiddenError("云环境不接受客户端家庭标识")
     actor = _trusted_actor(request, x_wx_source, x_wx_openid, x_wx_appid, x_wx_env, x_debug_actor)
-    binding = db.scalar(
-        select(WeChatActorBinding).where(
-            WeChatActorBinding.app_id == actor.app_id,
-            WeChatActorBinding.subject_hmac == actor.subject_hmac,
-            WeChatActorBinding.status == "active",
-        )
+    writing = request.method not in {"GET", "HEAD", "OPTIONS"}
+    if writing:
+        begin_sqlite_write(db)
+
+    actor_scope = (
+        WeChatActorBinding.app_id == actor.app_id,
+        WeChatActorBinding.subject_hmac == actor.subject_hmac,
+        WeChatActorBinding.status == "active",
     )
+    binding = db.execute(
+        select(WeChatActorBinding.id, WeChatActorBinding.family_id).where(*actor_scope)
+    ).one_or_none()
     if binding is None:
         raise ForbiddenError("当前微信用户尚未绑定家庭")
-    if not binding.family_id:
+    binding_id, bound_family_id = binding
+    if not bound_family_id:
         raise RuntimeError("微信用户绑定缺少家庭标识")
-    member = db.scalar(
-        select(FamilyMember).where(
-            FamilyMember.actor_binding_id == binding.id,
-            FamilyMember.family_id == binding.family_id,
-            FamilyMember.status == MemberStatus.active.value,
-        )
-    )
-    family_statement = select(Family).where(
-        Family.id == binding.family_id,
+
+    family_statement = select(Family.id).where(
+        Family.id == bound_family_id,
         Family.status == FamilyStatus.active.value,
     )
-    # Every authenticated family mutation takes the same row lock. A deletion request can
-    # therefore freeze its target only after older writes commit, while later writes observe
-    # the deleting state instead of slipping behind the cleanup inventory.
-    if request.method not in {"GET", "HEAD", "OPTIONS"}:
+    member_statement = (
+        select(FamilyMember.id, FamilyMember.role)
+        .join(WeChatActorBinding, WeChatActorBinding.id == FamilyMember.actor_binding_id)
+        .where(
+            FamilyMember.family_id == bound_family_id,
+            FamilyMember.status == MemberStatus.active.value,
+            WeChatActorBinding.id == binding_id,
+            WeChatActorBinding.family_id == bound_family_id,
+            *actor_scope,
+        )
+    )
+    if writing:
+        # The first read locates the family. After the family lock, a locking read checks
+        # the binding and role outside MySQL's earlier repeatable-read snapshot.
         family_statement = family_statement.with_for_update()
-    family = db.scalar(family_statement)
-    if member is None or family is None:
+        member_statement = member_statement.with_for_update()
+    if db.scalar(family_statement) is None:
         raise ForbiddenError("当前微信用户尚未获得家庭权限")
-    role = cast(str, member.role)
+    member = db.execute(member_statement).one_or_none()
+    if member is None:
+        raise ForbiddenError("当前微信用户尚未获得家庭权限")
+    member_id, role = member
     if (
         enforce_write_role
-        and request.method not in {"GET", "HEAD", "OPTIONS"}
-        and role not in {"editor", "manager"}
+        and writing
+        and role not in {MemberRole.editor.value, MemberRole.manager.value}
     ):
         raise ForbiddenError("当前家庭角色只有查看权限")
     return RequestContext(
-        binding.family_id,
+        bound_family_id,
         actor.subject_hmac,
         actor.app_id,
         actor.openid,
-        binding.id,
-        member.id,
+        binding_id,
+        member_id,
         role,
     )
 

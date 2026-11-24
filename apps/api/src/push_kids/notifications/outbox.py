@@ -11,8 +11,10 @@ from __future__ import annotations
 import enum
 import json
 from datetime import datetime
+from typing import cast
 
-from sqlalchemy import select
+from sqlalchemy import select, update
+from sqlalchemy.engine import CursorResult
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
@@ -70,15 +72,15 @@ class NotificationOutbox:
     @staticmethod
     def is_enabled(db: Session, member_id: str, type_name: str) -> bool:
         kind = kind_for(type_name)
-        row = db.scalar(
-            select(NotificationPreference).where(
+        enabled = db.scalar(
+            select(NotificationPreference.enabled).where(
                 NotificationPreference.member_id == member_id,
                 NotificationPreference.type == type_name,
             )
         )
-        if row is None:
+        if enabled is None:
             return kind.default_enabled
-        return bool(row.enabled)
+        return bool(enabled)
 
     @staticmethod
     def is_authorized(db: Session, member_id: str, type_name: str) -> bool:
@@ -87,12 +89,12 @@ class NotificationOutbox:
         Queueing without a grant would create rows that can only ever be skipped, so the check
         belongs here rather than only in the dispatcher.
         """
-        row = db.scalar(
-            select(NotificationSubscription).where(
+        row = db.execute(
+            select(NotificationSubscription.status, NotificationSubscription.remaining_quota).where(
                 NotificationSubscription.member_id == member_id,
                 NotificationSubscription.type == type_name,
             )
-        )
+        ).one_or_none()
         if row is None or row.status != SubscriptionStatus.accepted.value:
             return False
         quota = int(row.remaining_quota or 0)
@@ -134,7 +136,10 @@ class NotificationOutbox:
         if not cls.can_receive(db, member_id, type_name):
             return EnqueueOutcome.skipped
         existing = db.scalar(
-            select(NotificationDelivery).where(NotificationDelivery.dedupe_key == dedupe_key)
+            select(NotificationDelivery)
+            .where(NotificationDelivery.dedupe_key == dedupe_key)
+            .with_for_update()
+            .execution_options(populate_existing=True)
         )
         payload = json.dumps(content.as_payload(), ensure_ascii=False)
         if existing is not None:
@@ -192,22 +197,31 @@ class NotificationOutbox:
 
         This is how a deleted or moved schedule stops reminding: the recomputed desired set wins.
         """
-        rows = list(
-            db.scalars(
-                select(NotificationDelivery).where(
-                    NotificationDelivery.type == type_name,
-                    NotificationDelivery.state == DeliveryState.pending.value,
-                    NotificationDelivery.scheduled_at >= window_start,
-                    NotificationDelivery.scheduled_at <= window_end,
-                )
-            )
+        scope = (
+            NotificationDelivery.type == type_name,
+            NotificationDelivery.state == DeliveryState.pending.value,
+            NotificationDelivery.scheduled_at >= window_start,
+            NotificationDelivery.scheduled_at <= window_end,
         )
+        rows = db.execute(
+            select(NotificationDelivery.id, NotificationDelivery.dedupe_key)
+            .where(*scope)
+            .order_by(NotificationDelivery.id)
+        ).all()
+        now = utcnow()
         cancelled = 0
-        for row in rows:
-            if row.dedupe_key in keep_keys:
+        for delivery_id, dedupe_key in rows:
+            if dedupe_key in keep_keys:
                 continue
-            row.state = DeliveryState.cancelled.value
-            row.result_code = "source_changed"
-            row.updated_at = utcnow()
-            cancelled += 1
+            result = db.execute(
+                update(NotificationDelivery)
+                .where(NotificationDelivery.id == delivery_id, *scope)
+                .values(
+                    state=DeliveryState.cancelled.value,
+                    result_code="source_changed",
+                    updated_at=now,
+                )
+                .execution_options(synchronize_session=False)
+            )
+            cancelled += cast(CursorResult, result).rowcount
         return cancelled

@@ -8,6 +8,7 @@ from __future__ import annotations
 
 from datetime import UTC, datetime, timedelta
 
+import pytest
 from fastapi.testclient import TestClient
 from push_kids.persistence.models import FamilyAuditEvent
 from sqlalchemy import select
@@ -27,6 +28,45 @@ def _create_child(client: TestClient, headers: dict[str, str], name: str, **extr
     payload: dict[str, object] = {"name": name, "daily_budget_minutes": 15}
     payload.update(extra)
     return client.post(f"{API}/children", headers=headers, json=payload).json()
+
+
+@pytest.mark.parametrize("field", ["name", "daily_budget_minutes"])
+def test_patch_rejects_explicit_null_without_changing_child(
+    app, client, child, family_headers, field
+):
+    api = TestClient(app, raise_server_exceptions=False)
+    path = f"{API}/children/{child['id']}"
+    response = api.patch(path, headers=family_headers, json={field: None})
+    assert response.status_code == 422, response.text
+    assert response.json()["detail"][0]["loc"] == ["body", field]
+    assert client.get(f"{API}/children", headers=family_headers).json() == [child]
+
+
+def test_patch_omission_preserves_values_and_explicit_grade_can_clear(
+    client, child, family_headers
+):
+    path = f"{API}/children/{child['id']}"
+    response = client.patch(
+        path,
+        headers=family_headers,
+        json={
+            "grade": None,
+            "confirm_grade": True,
+            "expected_grade_revision": child["grade_revision"],
+        },
+    )
+    assert response.status_code == 200, response.text
+    updated = response.json()
+    assert updated["grade"] is None
+    assert updated["grade_revision"] == child["grade_revision"] + 1
+    assert updated["name"] == child["name"]
+    assert updated["daily_budget_minutes"] == child["daily_budget_minutes"]
+    for minutes in (5, 120):
+        response = client.patch(
+            path, headers=family_headers, json={"daily_budget_minutes": minutes}
+        )
+        assert response.status_code == 200
+        assert response.json()["daily_budget_minutes"] == minutes
 
 
 def _open_family(client: TestClient, actor: str, key: str, child_name: str | None) -> dict:
@@ -426,6 +466,13 @@ def test_child_profiles_are_scoped_to_their_own_family(client: TestClient) -> No
         ).status_code
         == 404
     )
+    denied = client.patch(
+        f"{API}/children/{second_child}",
+        headers=_actor("family-one"),
+        json={"name": "跨家庭修改"},
+    )
+    assert denied.status_code == 404
+    assert client.get(f"{API}/children", headers=_actor("family-two")).json() == second["children"]
     # 同名不同家庭互不干扰。
     assert (
         client.post(
@@ -475,6 +522,15 @@ def test_role_boundaries_for_profile_management(client: TestClient) -> None:
     assert (
         client.post(f"{API}/children/{child_id}/archive", headers=_actor("role-viewer")).status_code
         == 403
+    )
+    denied = client.patch(
+        f"{API}/children/{child_id}",
+        headers=_actor("role-viewer"),
+        json={"daily_budget_minutes": 25},
+    )
+    assert denied.status_code == 403
+    assert (
+        client.get(f"{API}/children", headers=_actor("role-manager")).json() == manager["children"]
     )
 
     # editor 可以建档案（属于日常记录工作），但不能改变全家可见范围。

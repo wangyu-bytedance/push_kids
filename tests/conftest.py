@@ -17,6 +17,7 @@ def app(tmp_path: Path):
         PUSH_KIDS_MEDIA_ROOT=tmp_path / "uploads",
         PUSH_KIDS_AI_PROVIDER="test",
         PUSH_KIDS_RUN_WORKER=False,
+        PUSH_KIDS_RUN_NOTIFICATION_SCHEDULER=False,
     )
     return create_app(settings)
 

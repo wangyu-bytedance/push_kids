@@ -129,6 +129,10 @@ generic deletion framework or planning → learning/agent dependency is introduc
 
 - Every business row includes `family_id`; all lookups enforce it. Cloud family scope comes from an active
   HMAC actor binding, never from the client's `X-Family-ID`.
+- Family mutations authorize the current binding and membership after locking the active family. The
+  mutation holds the lock until commit. File SQLite starts its write transaction before resolving identity.
+  Notification dispatch locks the family, member and relevant children before checking the current
+  delivery attempt. Lease recovery updates only matching expired leases. [Transaction ADR](decisions/ADR-20261124-CORE-TRANSACTION-BOUNDARIES.md)
 - Timestamp columns use persistence-owned `UTCDateTime`: normalize aware input to UTC on bind, restore
   UTC on read on SQLite/MySQL. Existing naive timestamps retain the previous UTC interpretation; no schema
   migration or speculative correction of historical offsets is performed (`BUG-SPEC-20260905-05`).
